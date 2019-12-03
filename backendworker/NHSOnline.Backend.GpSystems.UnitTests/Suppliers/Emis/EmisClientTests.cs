@@ -175,7 +175,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             // Assert
             response.ExceptionErrorResponse.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(500);
-            response.Body.Should().BeEquivalentTo(new MeApplicationsPostResponse());
         }
 
         [TestMethod]
@@ -324,7 +323,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             var response = await _systemUnderTest.SessionsPost(endUserSessionId, requestBody);
 
             // Assert
-            response.Body.Should().BeEquivalentTo(new SessionsPostResponse());
             response.ExceptionErrorResponse.Should().BeNull();
             response.ErrorResponseBadRequest.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);

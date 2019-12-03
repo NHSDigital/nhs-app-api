@@ -14,7 +14,8 @@ open class MorePage : HybridPageObject() {
     private val dataSharingDescription =
             "Find out how the NHS uses your confidential patient " +
                     "information and choose whether or not it can be used for research and planning."
-    val messagesTitle = "Your messages"
+    private val messagesTitle = "Your messages"
+    private val messagesDescription = "Get messages from your GP surgery and other NHS services."
 
     // online consultations menu item
     private val requestGpHelpTitle = "Additional GP services"

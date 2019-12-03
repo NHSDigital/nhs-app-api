@@ -66,6 +66,7 @@ import {
   ORGAN_DONATION_WITHDRAWN,
   ORGAN_DONATION_YOUR_CHOICE,
   PATIENT_PRACTICE_MESSAGING,
+  PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_CONFIRM_COURSES,
@@ -484,6 +485,10 @@ export default function ({ route, store, app }) {
     case REFERRALS.name:
       route.meta.headerKey = 'pageHeaders.referrals';
       route.meta.pageTitleKey = 'pageTitles.referrals';
+      break;
+    case PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.name:
+      route.meta.headerKey = 'pageHeaders.messageDetails';
+      route.meta.pageTitleKey = 'pageTitles.messageDetails';
       break;
     case LINKED_PROFILES_SHUTTER_MORE.name: {
       store.dispatch('navigation/setNewMenuItem', 4);

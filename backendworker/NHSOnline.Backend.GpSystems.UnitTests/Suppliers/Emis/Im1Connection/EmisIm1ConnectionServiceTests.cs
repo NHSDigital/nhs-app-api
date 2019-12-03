@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 using Im1ConnectionErrorCodes = NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
@@ -40,6 +41,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         private ILogger<EmisIm1ConnectionService> _logger;
         private Mock<IIm1CacheKeyGenerator> _mockIm1CacheKeyGenerator;
         private Mock<IIm1CacheService> _mockIm1CacheService;
+        private static List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
         public void TestInitialize()
@@ -52,9 +54,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _mockIm1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            {
+                HttpStatusCode.OK
+            };
             _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsEndUserSessionPost, _sampleSuccessStatusCodes)
                     {
                         Body = _fixture.Create<SessionsEndUserSessionPostResponse>()
                     }));
@@ -258,7 +264,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             emisClientMock
                 .Setup(x => x.SessionsEndUserSessionPost())
                 .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsEndUserSessionPost, _sampleSuccessStatusCodes)
                     {
                         Body = endUserSessionResponse
                     });
@@ -266,7 +272,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             emisClientMock
                 .Setup(x => x.SessionsPost(DefaultEndUserSessionId, It.IsAny<SessionsPostRequest>()))
                 .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.Forbidden)
+                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.SessionsPost, _sampleSuccessStatusCodes)
                     {
                         ExceptionErrorResponse = errorResponse
                     });
@@ -301,7 +307,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var endUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
             _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsEndUserSessionPost, _sampleSuccessStatusCodes)
                     {
                         Body = endUserSessionResponse
                     }));
@@ -318,7 +324,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var sessionResponse = _fixture.Create<SessionsPostResponse>();
             _mockEmisClient.Setup(x => x.SessionsPost(It.IsAny<string>(), It.IsAny<SessionsPostRequest>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsPost, _sampleSuccessStatusCodes)
                     {
                         Body = sessionResponse
                     }));
@@ -326,7 +332,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
             _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes)
                     {
                         Body = demographicsResponse
                     }));
@@ -408,7 +414,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             _mockEmisClient.Setup(x =>
                     x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode.Conflict)));
+                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode.Conflict, RequestsForSuccessOutcome.MeApplicationsPost, _sampleSuccessStatusCodes)));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -433,7 +439,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) { ExceptionErrorResponse = errorResponse }));
+                        .InternalServerError, RequestsForSuccessOutcome.MeApplicationsPost, _sampleSuccessStatusCodes) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -458,7 +464,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) { ExceptionErrorResponse = errorResponse }));
+                        .InternalServerError, RequestsForSuccessOutcome.MeApplicationsPost, _sampleSuccessStatusCodes) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -484,7 +490,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) { ExceptionErrorResponse = errorResponse }));
+                        .InternalServerError, RequestsForSuccessOutcome.MeApplicationsPost, _sampleSuccessStatusCodes) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -510,7 +516,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) { ExceptionErrorResponse = errorResponse }));
+                        .InternalServerError, RequestsForSuccessOutcome.MeApplicationsPost, _sampleSuccessStatusCodes) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -530,7 +536,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .BadRequest)));
+                        .BadRequest, RequestsForSuccessOutcome.MeApplicationsPost, _sampleSuccessStatusCodes)));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -553,7 +559,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .BadRequest) { ExceptionErrorResponse = errorResponse }));
+                        .BadRequest, RequestsForSuccessOutcome.MeApplicationsPost, _sampleSuccessStatusCodes) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -576,7 +582,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .BadRequest) { ExceptionErrorResponse = errorResponse }));
+                        .BadRequest, RequestsForSuccessOutcome.MeApplicationsPost, _sampleSuccessStatusCodes) { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -640,7 +646,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             emisClientMock
                 .Setup(x => x.SessionsEndUserSessionPost())
                 .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsEndUserSessionPost, _sampleSuccessStatusCodes)
                     {
                         Body = endUserSessionResponse
                     });
@@ -648,7 +654,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             emisClientMock
                 .Setup(x => x.SessionsPost(endUserSessionId, It.IsAny<SessionsPostRequest>()))
                 .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsPost, _sampleSuccessStatusCodes)
                     {
                         Body = sessionResponse
                     });
@@ -662,7 +668,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                                  StringComparison.Ordinal)
                     )))
                 .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes)
                     {
                         Body = demographicsResponse
                     });
@@ -674,7 +680,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var endUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
             emisClientMock.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsEndUserSessionPost, _sampleSuccessStatusCodes)
                     {
                         Body = endUserSessionResponse
                     }));
@@ -682,7 +688,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var meApplicationsResponse = _fixture.Create<MeApplicationsPostResponse>();
             emisClientMock.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.MeApplicationsPost, _sampleSuccessStatusCodes)
                     {
                         Body = meApplicationsResponse
                     }));
@@ -690,7 +696,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var sessionResponse = _fixture.Create<SessionsPostResponse>();
             emisClientMock.Setup(x => x.SessionsPost(It.IsAny<string>(), It.IsAny<SessionsPostRequest>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.SessionsPost, _sampleSuccessStatusCodes)
                     {
                         Body = sessionResponse
                     }));
@@ -698,7 +704,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
             emisClientMock.Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes)
                     {
                         Body = demographicsResponse
                     }));

@@ -14,6 +14,7 @@ using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
@@ -42,6 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const int CoursesMaxCoursesLimit = 100;
         private const string Environment = "testEnv";
+        private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
         public void TestInitialize()
@@ -52,6 +54,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             _patientLinkToken = _fixture.Create<string>();
             _linkedAccountPatientId = Guid.NewGuid();
             _linkedAccountLinkToken = _fixture.Create<string>();
+            
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            {
+                HttpStatusCode.OK
+            };
 
             _emisUserSession = new EmisUserSession
             {
@@ -106,7 +113,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)),
                     date, toDate))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PrescriptionsGet, _sampleSuccessStatusCodes)
                     {
                         Body = prescriptionsResponse,
                         ExceptionErrorResponse = null,
@@ -197,7 +204,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                          e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)),
                 date, toDate))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PrescriptionsGet, _sampleSuccessStatusCodes)
                     {
                         Body = prescriptionsResponse,
                         ExceptionErrorResponse = null,
@@ -307,7 +314,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                          e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)),
                 date, toDate))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PrescriptionsGet, _sampleSuccessStatusCodes)
                     {
                         Body = prescriptionsResponse,
                         ExceptionErrorResponse = null,
@@ -397,7 +404,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)),
                     date, toDate))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PrescriptionsGet, _sampleSuccessStatusCodes)
                     {
                         Body = prescriptionsResponse,
                         ExceptionErrorResponse = null,
@@ -443,7 +450,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     date, toDate))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode
-                            .InternalServerError)
+                            .InternalServerError, RequestsForSuccessOutcome.PrescriptionsGet, _sampleSuccessStatusCodes)
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act
@@ -494,7 +501,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)),
                     date, toDate))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PrescriptionsGet, _sampleSuccessStatusCodes)
                     {
                         Body = null,
                         ExceptionErrorResponse = null,
@@ -527,7 +534,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                              e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)),
                     date, toDate))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.Forbidden)
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.PrescriptionsGet, _sampleSuccessStatusCodes)
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act
@@ -551,7 +558,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     _emisUserSession.EndUserSessionId,
                     It.IsAny<PrescriptionRequestsPost>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.OK)))
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PrescriptionsPost, _sampleSuccessStatusCodes)))
                 .Callback((string sessionId, string endUserSessionId, PrescriptionRequestsPost request) =>
                     {
                         CollectionAssert.AreEqual(
@@ -585,7 +592,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     _emisUserSession.EndUserSessionId,
                     It.IsAny<PrescriptionRequestsPost>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.OK)))
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PrescriptionsPost, _sampleSuccessStatusCodes)))
                 .Callback((string sessionId, string endUserSessionId, PrescriptionRequestsPost request) =>
                 {
                     CollectionAssert.AreEqual(
@@ -619,7 +626,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             _emisClient.Setup(x => x.PrescriptionsPost(_emisUserSession.SessionId,
                     _emisUserSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.InternalServerError)
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.PrescriptionsPost, _sampleSuccessStatusCodes)
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act
@@ -640,7 +647,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             _emisClient.Setup(x => x.PrescriptionsPost(_emisUserSession.SessionId,
                     _emisUserSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.Forbidden)
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.PrescriptionsPost, _sampleSuccessStatusCodes)
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act
@@ -664,7 +671,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             _emisClient.Setup(x => x.PrescriptionsPost(_emisUserSession.SessionId,
                     _emisUserSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.BadRequest)
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.BadRequest, RequestsForSuccessOutcome.PrescriptionsPost, _sampleSuccessStatusCodes)
                         { ErrorResponseBadRequest = errorResponse }));
 
             // Act
@@ -686,7 +693,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     _emisUserSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode
-                            .InternalServerError)
+                            .InternalServerError, RequestsForSuccessOutcome.PrescriptionsPost, _sampleSuccessStatusCodes)
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act

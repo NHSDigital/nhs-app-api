@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 {
@@ -25,8 +26,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
         private Mock<IEmisClient> _mockClient;
         private Mock<IEmisPatientMessagesMapper> _mockMapper;
+        private Mock<IEmisPatientMessageMapper> _mockMessageMapper;
 
         private EmisUserSession _userSession;
+        private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         private EmisPatientMessagesService _systemUnderTest;
 
@@ -37,10 +40,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient = _fixture.Freeze<Mock<IEmisClient>>();
             _mockMapper = _fixture.Freeze<Mock<IEmisPatientMessagesMapper>>();
+            _mockMessageMapper = _fixture.Freeze<Mock<IEmisPatientMessageMapper>>();
 
             _userSession = _fixture.Create<EmisUserSession>();
 
             _systemUnderTest = _fixture.Create<EmisPatientMessagesService>();
+            
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            {
+                HttpStatusCode.OK
+            };
         }
 
         [TestMethod]
@@ -52,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _mockClient
                 .Setup(GetMatchingExpression())
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessagesGetResponse>(HttpStatusCode.OK)
+                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessagesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PatientMessagesGet, _sampleSuccessStatusCodes)
                 {
                     Body = messagesGetResponse
                 }))
@@ -72,6 +81,107 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             result.Should().BeAssignableTo<GetPatientMessagesResult.Success>()
                 .Subject.Response.Should().NotBeNull();
         }
+        
+        [TestMethod]
+        public async Task GetPatientMessage_WhenSuccessfulResponseFromEmis_ReturnsSuccess()
+        {
+            // Arrange
+            var messageGetResponse = _fixture.Create<MessageGetResponse>();
+            var getPatientMessageResponse = _fixture.Create<GetPatientMessageResponse>();
+
+            getPatientMessageResponse.MessageDetails.Content = messageGetResponse.Message.Content;
+            getPatientMessageResponse.MessageDetails.Recipient = messageGetResponse.Message.Recipients[0].Name;
+            getPatientMessageResponse.MessageDetails.Subject = messageGetResponse.Message.Subject;
+            getPatientMessageResponse.MessageDetails.MessageId = messageGetResponse.Message.MessageId;
+            getPatientMessageResponse.MessageDetails.MessageReplies = messageGetResponse.Message.MessageReplies;
+            
+
+            _mockClient
+                .Setup(GetMessageExpression())
+                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessageGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PatientMessageDetailsGet, _sampleSuccessStatusCodes)
+                {
+                    Body = messageGetResponse
+                }))
+                .Verifiable();
+            _mockMessageMapper
+                .Setup(e => e.Map(It.Is<MessageGetResponse>(m => m.Equals(messageGetResponse))))
+                .Returns(getPatientMessageResponse)
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.GetMessageDetails("1", _userSession);
+
+            // Assert
+            _mockClient.Verify();
+            _mockMessageMapper.Verify();
+
+            result.Should().BeAssignableTo<GetPatientMessageResult.Success>()
+                .Subject.Response.Should().NotBeNull();
+        }
+        
+        [TestMethod]
+        public async Task GetPatientMessage_WhenBadRequestFromEmis_ReturnsBadRequest()
+        {
+            // Arrange
+            var badRequestErrorResponse = _fixture.Create<BadRequestErrorResponse>();
+
+            _mockClient
+                .Setup(GetMessageExpression())
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MessageGetResponse>(HttpStatusCode.BadRequest, RequestsForSuccessOutcome.PatientMessageDetailsGet, _sampleSuccessStatusCodes)
+                    {
+                        ErrorResponseBadRequest = badRequestErrorResponse
+                    }))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.GetMessageDetails("1", _userSession);
+
+            // Assert
+            _mockClient.Verify();
+
+            result.Should().BeAssignableTo<GetPatientMessageResult.BadRequest>();
+        }
+        
+        [TestMethod]
+        public async Task GetPatientMessage_WhenInternalServerErrorFromEmis_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockClient
+                .Setup(GetMatchingExpression())
+                .Throws<Exception>();
+
+            // Act
+            var result = await _systemUnderTest.GetMessageDetails("1", _userSession);
+
+            // Assert
+            result.Should().BeAssignableTo<GetPatientMessageResult.InternalServerError>();
+        }
+        
+        [TestMethod]
+        public async Task GetPatientMessage_WhenForbiddenResponseFromEmis_ReturnsForbidden()
+        {
+            // Arrange
+            var exceptionErrorResponse = _fixture.Create<ExceptionErrorResponse>();
+            exceptionErrorResponse.Exceptions.First().Message = EmisApiErrorMessages.EmisService_NotEnabledForUser;
+
+            _mockClient
+                .Setup(GetMessageExpression())
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MessageGetResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.PatientMessageDetailsGet, _sampleSuccessStatusCodes)
+                    {
+                        ExceptionErrorResponse = exceptionErrorResponse
+                    }))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.GetMessageDetails("1", _userSession);
+
+            // Assert
+            _mockClient.Verify();
+
+            result.Should().BeAssignableTo<GetPatientMessageResult.Forbidden>();
+        }
 
         [TestMethod]
         public async Task GetPatientMessages_WhenForbiddenResponseFromEmis_ReturnsForbidden()
@@ -83,7 +193,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient
                 .Setup(GetMatchingExpression())
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MessagesGetResponse>(HttpStatusCode.Forbidden)
+                    new EmisClient.EmisApiObjectResponse<MessagesGetResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.PatientMessagesGet, _sampleSuccessStatusCodes)
                     {
                         ExceptionErrorResponse = exceptionErrorResponse
                     }))
@@ -125,7 +235,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient
                 .Setup(GetMatchingExpression())
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MessagesGetResponse>(HttpStatusCode.BadRequest)
+                    new EmisClient.EmisApiObjectResponse<MessagesGetResponse>(HttpStatusCode.BadRequest, RequestsForSuccessOutcome.PatientMessagesGet, _sampleSuccessStatusCodes)
                     {
                         ErrorResponseBadRequest = badRequestErrorResponse
                     }))
@@ -150,7 +260,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient
                 .Setup(GetMatchingExpression())
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MessagesGetResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<MessagesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.PatientMessagesGet, _sampleSuccessStatusCodes)
                     {
                         Body = messagesGetResponse
                     }));
@@ -188,7 +298,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient
                 .Setup(GetMatchingExpression())
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<MessagesGetResponse>(HttpStatusCode.InternalServerError)
+                    new EmisClient.EmisApiObjectResponse<MessagesGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.PatientMessagesGet, _sampleSuccessStatusCodes)
                     {
                         ExceptionErrorResponse = exceptionErrorResponse
                     }))
@@ -207,6 +317,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             GetMatchingExpression()
         {
             return c => c.PatientMessagesGet(It.Is<EmisRequestParameters>(e =>
+                _userSession.SessionId.Equals(e.SessionId, StringComparison.Ordinal) &&
+                _userSession.EndUserSessionId.Equals(e.EndUserSessionId, StringComparison.Ordinal) &&
+                _userSession.UserPatientLinkToken.Equals(e.UserPatientLinkToken, StringComparison.Ordinal)));
+        }
+        
+        private Expression<Func<IEmisClient, Task<EmisClient.EmisApiObjectResponse<MessageGetResponse>>>>
+            GetMessageExpression()
+        {
+            return c => c.PatientMessageDetailsGet("1", It.Is<EmisRequestParameters>(e =>
                 _userSession.SessionId.Equals(e.SessionId, StringComparison.Ordinal) &&
                 _userSession.EndUserSessionId.Equals(e.EndUserSessionId, StringComparison.Ordinal) &&
                 _userSession.UserPatientLinkToken.Equals(e.UserPatientLinkToken, StringComparison.Ordinal)));

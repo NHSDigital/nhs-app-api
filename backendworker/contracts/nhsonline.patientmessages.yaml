@@ -41,6 +41,50 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+  /messages/{id}:
+    get:
+      tags:
+        - patientMessages
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the message
+          schema:
+            type: string
+      summary: Get details for a conversation between the user and their practice
+      description: Get details for a conversation between the user and their practice
+      responses:
+        "200":
+          description: Successfully retrieved message details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientMessageResponse"
+        "400":
+          description: Upstream system returned BadRequest status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "403":
+          description: Upstream system returned Forbidden status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "500":
+          description: An unknown error occured when processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "502":
+          description: Upstream system returned BadGateway status or an invalid response.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   schemas:
     PatientMessagesResponse:
@@ -51,6 +95,14 @@ components:
           description: A list of meta data about each available conversation between the patient and their practice
           items:
             $ref: "#/components/schemas/PatientMessageSummary"
+    PatientMessageResponse:
+      type: object
+      properties:
+        messageDetails:
+          type: array
+          description: Details for a conversation between the patient and their practice
+          items:
+            $ref: "#/components/schemas/PatientMessageDetails"
     PatientMessageSummary:
       type: object
       properties:
@@ -75,3 +127,41 @@ components:
           type: boolean
           nullable: true
           description: Indicates whether there are messages the patient has not read
+    PatientMessageDetails:
+      type: object
+      properties:
+        MessageId:
+          type: integer
+          nullable: true
+          description: A unique indentifier for this conversation
+        subject:
+          type: string
+          description: A message summary provided by the patient when initiating the conversation
+        content:
+          type: string
+          description: Content of the message sent by the user
+        recipient:
+          type: string
+          description: recipient of the message sent by the user
+        messageReplies:
+          type: array
+          description: array of message replies
+          items:
+            $ref: "#/components/schemas/MessageReplies"
+    MessageReplies:
+      type: object
+      properties:
+        sender:
+          type: string
+          description: Name of the sender
+        sentDateTime:
+          type: string
+          format: date-time
+          description: The datetime the reply was sent
+        isUnread:
+          type: boolean
+          nullable: true
+          description: Indicator to show if the message has already been read
+        replyContent:
+          type: string
+          description: Content of the reply to the user

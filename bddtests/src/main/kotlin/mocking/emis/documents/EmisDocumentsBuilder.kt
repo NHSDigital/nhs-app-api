@@ -55,13 +55,13 @@ class EmisDocumentsBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithExceptionWhenNotEnabled(): Mapping {
-        val exceptionResponse = ExceptionResponse(HttpStatus.SC_INTERNAL_SERVER_ERROR.toLong(),
+        val exceptionResponse = ExceptionResponse(HttpStatus.SC_FORBIDDEN.toLong(),
                 "Requested record access is disabled by the practice")
-        return respondWithException(exceptionResponse)
+        return respondWithException(exceptionResponse, HttpStatus.SC_FORBIDDEN )
     }
 
-    private fun respondWithException(exceptionResponse: ExceptionResponse): Mapping {
-        return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+    private fun respondWithException(exceptionResponse: ExceptionResponse, statusCode: Int): Mapping {
+        return respondWith(statusCode) {
             andJsonBody(exceptionResponse, GsonFactory.asPascal)
         }
     }

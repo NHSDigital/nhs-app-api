@@ -27,4 +27,59 @@ describe('patient practice messaging store mutations', () => {
       });
     });
   });
+
+  describe('SET_DETAILS', () => {
+    describe('with data', () => {
+      const data = 'test state';
+
+      beforeEach(() => {
+        mutations.LOADED_MESSAGE(state, false);
+        mutations.SET_DETAILS(state, data);
+      });
+
+      it('will set the message summaries state to the received value', () => {
+        expect(state.selectedMessageDetails).toBe(data);
+      });
+    });
+
+    describe('no data', () => {
+      beforeEach(() => {
+        mutations.LOADED_MESSAGE(state, false);
+        mutations.SET_DETAILS(state, null);
+      });
+
+      it('will set the message details state to undefined', () => {
+        expect(state.selectedMessageDetails).toEqual(undefined);
+      });
+    });
+  });
+
+  describe('SET_SELECTED_MESSAGE_ID', () => {
+    describe('with data', () => {
+      const id = '1';
+
+      beforeEach(() => {
+        mutations.SET_SELECTED_MESSAGE_ID(state, id);
+      });
+
+      it('will set the message summaries state to the received value', () => {
+        expect(state.selectedMessageId).toBe(id);
+      });
+    });
+  });
+  describe('SET_SELECTED_MESSAGE_ID', () => {
+    describe('with data', () => {
+      const id = '1';
+
+      beforeEach(() => {
+        mutations.SET_SELECTED_MESSAGE_ID(state, id);
+      });
+
+      it('will set the message summaries state to the received value', () => {
+        expect(state.selectedMessageId).toBe(id);
+        mutations.CLEAR(state, id);
+        expect(state.selectedMessageId).toBe(undefined);
+      });
+    });
+  });
 });

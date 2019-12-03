@@ -1,15 +1,16 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Messages
 {
-    [Route("patient/messages")]
     public class PatientMessagesController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;
@@ -30,6 +31,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         }
         
         [HttpGet]
+        [Route("patient/messages")]
         public async Task<IActionResult> GetMessages()
         {
             _logger.LogEnter();
@@ -54,6 +56,33 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             
             await result.Accept(new PatientMessagesResultAuditingVisitor(_auditor, _logger));
             return result.Accept(new PatientMessagesResultVisitor(_errorReferenceGenerator, userSession));
+        }
+        
+        [HttpGet]
+        [Route("patient/messages/{messageId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetMessageDetails(
+            [FromRoute(Name = "messageId")] string messageId)
+        {
+            _logger.LogEnter();
+            
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+
+            var userSession = HttpContext.GetUserSession();
+            var gpUserSession = userSession.GpUserSession;
+            
+            _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
+            
+            var patientMessagesService = _gpSystemFactory
+                .CreateGpSystem(gpUserSession.Supplier)
+                .GetPatientMessagesService();
+
+            var result = await patientMessagesService.GetMessageDetails(messageId, gpUserSession);
+            
+            return result.Accept(new PatientMessageResultVisitor(_errorReferenceGenerator, userSession));
         }
     }
 }

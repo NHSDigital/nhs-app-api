@@ -13,7 +13,8 @@
                            :date-time="summary.lastMessageDateTime"
                            :aria-label="getMessageLabel(summary)"
                            :has-unread-messages="true"
-                           date-format="D MMMM YYYY"/>
+                           date-format="D MMMM YYYY"
+                           @click="goToMessageDetails(summary.id, summary.recipient)"/>
         </li>
       </ul>
     </template>
@@ -22,8 +23,8 @@
 
 <script>
 import SummaryMessage from '@/components/messaging/SummaryMessage';
-import { INDEX } from '@/lib/routes';
-import { isFalsy } from '@/lib/utils';
+import { INDEX, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE } from '@/lib/routes';
+import { isFalsy, redirectTo } from '@/lib/utils';
 import { formatDate } from '@/plugins/filters';
 
 export default {
@@ -57,6 +58,11 @@ export default {
         subject: summary.subject,
         date: formatDate(summary.lastMessageDateTime, 'D MMMM YYYY'),
       });
+    },
+    goToMessageDetails(id, recipient) {
+      this.$store.dispatch('patientPracticeMessaging/setSelectedMessageID', id);
+      this.$store.dispatch('patientPracticeMessaging/setSelectedRecipient', recipient);
+      redirectTo(this, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path);
     },
   },
 };

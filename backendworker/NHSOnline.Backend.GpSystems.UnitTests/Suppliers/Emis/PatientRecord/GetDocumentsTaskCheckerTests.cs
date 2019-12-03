@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -8,6 +9,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 {
@@ -16,12 +18,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
     {
         private GetDocumentsTaskChecker _systemUnderTest;
         private IFixture _fixture;
+        private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _systemUnderTest = _fixture.Create<GetDocumentsTaskChecker>();
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            {
+                HttpStatusCode.OK
+            };
         }
 
         [TestMethod]
@@ -40,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         private Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> MedicationRootObjectResponse()
         {
             return Task.FromResult(
-                new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalDocumentGet, _sampleSuccessStatusCodes)
                 {
                     Body = null,
                     StatusCode = HttpStatusCode.OK

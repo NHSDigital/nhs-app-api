@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Session;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 {
@@ -28,6 +30,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         private IFixture _fixture;
         private Mock<IIm1CacheKeyGenerator> _mockIm1CacheKeyGenerator;
         private Mock<IIm1CacheService> _mockIm1CacheService;
+        private List<HttpStatusCode> _sampleSuccessStatusCodes;
         
         [TestInitialize]
         public void TestInitialize()
@@ -40,6 +43,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             _mockIm1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _systemUnderTest = _fixture.Create<EmisLinkageService>();
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            {
+                HttpStatusCode.OK
+            };
         }
 
         [TestMethod]
@@ -54,6 +61,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var odsCode = _fixture.Create<string>();
             var identityToken = _fixture.Create<string>();
             var endUserSessionId = _fixture.Create<string>();
+            _sampleSuccessStatusCodes.Add(HttpStatusCode.Conflict);
 
             var endUserSessionResponse = new SessionsEndUserSessionPostResponse
             {
@@ -67,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                 req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
                 req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(httpStatusCode)
+                    new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(httpStatusCode, RequestsForSuccessOutcome.VerificationPost, _sampleSuccessStatusCodes)
                     {
                         Body = addVerificationResponse,
                     }));
@@ -99,6 +107,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var odsCode = _fixture.Create<string>();
             var identityToken = _fixture.Create<string>();
             var endUserSessionId = _fixture.Create<string>();
+            _sampleSuccessStatusCodes.Add(HttpStatusCode.Conflict);
 
             var endUserSessionResponse = new SessionsEndUserSessionPostResponse
             {
@@ -112,7 +121,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                            req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
                            req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(HttpStatusCode.Conflict)
+                    new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(HttpStatusCode.Conflict, RequestsForSuccessOutcome.VerificationPost, _sampleSuccessStatusCodes)
                     {
                         Body = addVerificationResponse,
                     }));
@@ -186,6 +195,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var dateOfBirth = _fixture.Create<DateTime>();
             var identityToken = _fixture.Create<string>();
             var endUserSessionId = _fixture.Create<string>();
+            _sampleSuccessStatusCodes.Add(HttpStatusCode.Conflict);
 
             var endUserSessionResponse = new SessionsEndUserSessionPostResponse
             {
@@ -194,7 +204,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
-            var mockResponse = new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(httpStatusCodeResponse)
+            var mockResponse = new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(httpStatusCodeResponse, RequestsForSuccessOutcome.VerificationPost, _sampleSuccessStatusCodes)
             {
                 StandardErrorResponse = new StandardErrorResponse { InternalResponseCode = emisApiErrorCode ?? 0, }
             };
@@ -268,6 +278,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             var addNhsUserResponse = _fixture.Create<AddNhsUserResponse>();
             var addVerificationResponse = _fixture.Create<AddVerificationResponse>();
             var endUserSessionId = _fixture.Create<string>();
+            _sampleSuccessStatusCodes.Add(HttpStatusCode.Conflict);
             var endUserSessionResponse = new SessionsEndUserSessionPostResponse
             {
                 EndUserSessionId = endUserSessionId,
@@ -282,7 +293,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                     request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
                     && request.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal))))
                 .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.VerificationPost, _sampleSuccessStatusCodes)
                     {
                         Body = addNhsUserResponse,
                     });
@@ -292,7 +303,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                 req.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.OrdinalIgnoreCase) &&
                 req.Token.Equals(createLinkageRequest.IdentityToken, StringComparison.OrdinalIgnoreCase))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.VerificationPost, _sampleSuccessStatusCodes)
                     {
                         Body = addVerificationResponse,
                     }))
@@ -384,7 +395,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
             // Add EMIS specific error code if unit test requires it.
-            var mockResponse = new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(httpStatusCodeResponse)
+            var mockResponse = new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(httpStatusCodeResponse, RequestsForSuccessOutcome.NhsUserPost, _sampleSuccessStatusCodes)
             {
                 StandardErrorResponse = new StandardErrorResponse { InternalResponseCode = emisApiErrorCode, }
             };
@@ -422,7 +433,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
                    request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
                    && request.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal))))
                .ReturnsAsync(
-                   new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.Conflict))
+                   new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.Conflict, RequestsForSuccessOutcome.NhsUserPost, _sampleSuccessStatusCodes))
                    .Verifiable();
    
            // Act

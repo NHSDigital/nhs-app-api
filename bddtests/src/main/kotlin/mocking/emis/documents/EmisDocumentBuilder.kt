@@ -25,6 +25,4 @@ class EmisDocumentBuilder(configuration: EmisConfiguration,
                     .build()
         }
     }
-
-
 }

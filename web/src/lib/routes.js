@@ -1015,6 +1015,17 @@ const routes = {
     },
     helpUrl: baseNhsAppHelpUrl,
   },
+  PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE: {
+    name: 'patient-practice-messaging-view-details',
+    path: '/patient-practice-messaging/view-details',
+    crumb: {
+      i18nKey: 'patientPracticeMessagingViewDetails',
+      get parentRoute() {
+        return this.allRoutes.PATIENT_PRACTICE_MESSAGING;
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+  },
   PRESCRIPTIONS: {
     name: 'prescriptions',
     path: '/prescriptions',
@@ -1374,6 +1385,7 @@ export const {
   ORGAN_DONATION_WITHDRAWN,
   ORGAN_DONATION_YOUR_CHOICE,
   PATIENT_PRACTICE_MESSAGING,
+  PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_REPEAT_COURSES,

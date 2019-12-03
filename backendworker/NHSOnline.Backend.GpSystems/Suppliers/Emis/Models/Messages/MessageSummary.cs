@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages
         {
             Recipients = new List<UserMessageRecipient>();
         }
-        
+
         public int MessageId { get; set;}
         public string Subject { get; set;}
         public string SentDateTime { get; set;}

@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
@@ -40,6 +41,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         private const int DefaultHttpTimeoutSeconds = 2;
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const string Environment = "environment";
+        private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
         public void TestInitialize()
@@ -60,6 +62,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             _fixture.Inject(_demographicsService);
             _fixture.Inject(_emisClient);
             _systemUnderTest = _fixture.Create<EmisLinkedAccountsService>();
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            {
+                HttpStatusCode.OK
+            };
         }
 
         [TestMethod]
@@ -288,7 +294,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             var proxyAccountToUse = _emisUserSession.ProxyPatients.First();
 
             var settingsResponse = _fixture.Create<MeSettingsGetResponse>();
-            var settingsResult = new EmisClient.EmisApiObjectResponse<MeSettingsGetResponse>(HttpStatusCode.Accepted)
+            var settingsResult = new EmisClient.EmisApiObjectResponse<MeSettingsGetResponse>(HttpStatusCode.Accepted, RequestsForSuccessOutcome.MeSettingsGet, _sampleSuccessStatusCodes)
             {
                 Body = settingsResponse,
             };
@@ -319,7 +325,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             var proxyAccountToUse = _emisUserSession.ProxyPatients.First();
 
             var settingsResult =
-                new EmisClient.EmisApiObjectResponse<MeSettingsGetResponse>(HttpStatusCode.InternalServerError);
+                new EmisClient.EmisApiObjectResponse<MeSettingsGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.MeSettingsGet, _sampleSuccessStatusCodes);
 
             _emisClient.Setup(x => x.MeSettingsGet(
                 It.Is<EmisRequestParameters>(e =>

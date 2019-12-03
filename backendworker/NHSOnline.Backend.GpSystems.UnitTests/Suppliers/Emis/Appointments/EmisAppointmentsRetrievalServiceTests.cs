@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,6 +14,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
@@ -29,6 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private AppointmentsResponse _mappedResponse;
         private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
+        private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
         public void TestInitialize()
@@ -40,9 +43,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 .With(x => x.Id, _patientId)
                 .Create();
 
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            {
+                HttpStatusCode.OK
+            };
+            
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisClientGetResponse = _fixture.Create<AppointmentsGetResponse>();
-            var response = new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.OK)
+            var response = new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
             {
                 Body = _emisClientGetResponse
             };
@@ -110,7 +118,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public async Task GetAppointments_EmisClientReturnsForbiddenCode_ReturnsForbidden()
         {
             // Arrange
-            var emisResponse = new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden);
+            var emisResponse = new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes);
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
             // Act
@@ -126,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
             var emisResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden)
+                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
                 {
                     StandardErrorResponse = errorResponse
                 };
@@ -147,7 +155,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.Exceptions.First().Message =
                 "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
             var emisResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.InternalServerError)
+                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.InternalServerError, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
                 {
                     ExceptionErrorResponse = errorResponse
                 };
@@ -167,7 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message ="Extra info: UnknownError";
             var emisResponse =
-                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Ambiguous)
+                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Ambiguous, RequestsForSuccessOutcome.AppointmentsGet, _sampleSuccessStatusCodes)
                 {
                     ExceptionErrorResponse = errorResponse
                 };

@@ -1406,6 +1406,20 @@ export default {
         retryButtonText: 'Try again',
       },
     },
+    view_details: {
+      backButtonText: {
+        text: 'Back',
+      },
+      errors: {
+        400: {
+          pageTitle: 'Message error',
+          pageHeader: 'Message error',
+          header: 'There is a problem getting your message',
+          message: 'Try again now. If the problem continues and you need this information now, contact the person directly.',
+          retryButtonText: 'Try again',
+        },
+      },
+    },
   },
   messaging: {
     index: {
@@ -1548,6 +1562,7 @@ export default {
     serviceUnavailable: 'Service unavailable',
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
     messaging: 'Messages',
+    messageDetails: 'Messages',
   },
   pageTitles: {
     home: 'Home',
@@ -1616,6 +1631,7 @@ export default {
     serviceUnavailable: 'Service unavailable',
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
     messaging: 'Messages',
+    messageDetails: 'Messages',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',
@@ -1650,6 +1666,7 @@ export default {
     switchProfile: 'Home',
     organ_donation: 'Organ Donation',
     patientPracticeMessaging: 'Messages',
+    patientPracticeMessagingViewDetails: 'Message Details',
     prescriptions: 'Your repeat prescriptions',
     prescriptionRepeatCourses: 'Your repeat prescriptions',
     prescriptionConfirmCourses: 'Your repeat prescriptions',

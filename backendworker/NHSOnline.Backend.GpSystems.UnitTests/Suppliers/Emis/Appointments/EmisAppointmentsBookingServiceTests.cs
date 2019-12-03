@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -14,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
@@ -36,6 +38,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private EmisUserSession _emisUserSession;
         private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
+
+        private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
         public void TestInitialize()
@@ -61,13 +65,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 SlotId = SlotId,
                 TelephoneNumber = TelephoneNumber
             };
+            
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            {
+                HttpStatusCode.OK
+            };
         }
 
         [TestMethod]
         public async Task Book_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
-            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode.OK)
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes)
             {
                 Body = new BookAppointmentSlotPostResponse { BookingCreated = true },
                 ExceptionErrorResponse = null,
@@ -109,7 +118,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var errorResponse = _fixture.Create<StandardErrorResponse>();
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                .NotFound) {StandardErrorResponse = errorResponse};
+                .NotFound, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes) {StandardErrorResponse = errorResponse};
 
             MockEmisClientAppointmentPostMethod(response);
 
@@ -129,7 +138,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.Exceptions.First().Message = EmisApiErrorMessages.AppointmentsPost_NotFound;
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                .InternalServerError) {ExceptionErrorResponse = errorResponse};
+                .InternalServerError, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes) {ExceptionErrorResponse = errorResponse};
 
             MockEmisClientAppointmentPostMethod(response);
 
@@ -149,7 +158,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.InternalResponseCode = ProvidedAppointmentSlotInPast;
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                .BadRequest) {StandardErrorResponse = errorResponse};
+                .BadRequest, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes) {StandardErrorResponse = errorResponse};
 
             MockEmisClientAppointmentPostMethod(response);
 
@@ -169,7 +178,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.Exceptions.First().Message = EmisApiErrorMessages.AppointmentsPost_InThePast;
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                .InternalServerError) { ExceptionErrorResponse = errorResponse };
+                .InternalServerError, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes) { ExceptionErrorResponse = errorResponse };
 
             MockEmisClientAppointmentPostMethod(response);
 
@@ -186,7 +195,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                .Conflict);
+                .Conflict, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes);
 
             MockEmisClientAppointmentPostMethod(response);
 
@@ -208,7 +217,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.InternalResponseCode = emisErrorCode;
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                    .BadRequest)
+                    .BadRequest, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes)
                 { StandardErrorResponse = errorResponse };
 
             MockEmisClientAppointmentPostMethod(response);
@@ -226,7 +235,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                .Forbidden);
+                .Forbidden, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes);
 
             MockEmisClientAppointmentPostMethod(response);
 
@@ -244,7 +253,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                    .Forbidden)
+                    .Forbidden, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes)
                 { StandardErrorResponse = errorResponse };
 
             MockEmisClientAppointmentPostMethod(response);
@@ -265,7 +274,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                .InternalServerError)
+                    .InternalServerError, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes)
             { ExceptionErrorResponse = errorResponse };
 
             MockEmisClientAppointmentPostMethod(response);
@@ -286,7 +295,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.InternalResponseCode = OnlineUserMaxAppointmentBookCount;
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                    .BadRequest)
+                    .BadRequest, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes)
                 { StandardErrorResponse = errorResponse };
 
             MockEmisClientAppointmentPostMethod(response);
@@ -307,7 +316,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.Exceptions.First().Message = $"{EmisApiErrorMessages.EmisService_BookedAppointmentLimit} to 35 by the practice";
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                .InternalServerError)
+                    .InternalServerError, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes)
             { ExceptionErrorResponse = errorResponse };
 
             MockEmisClientAppointmentPostMethod(response);
@@ -328,7 +337,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.Exceptions.First().Message = "Extra info: Unhandled Error";
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                    .InternalServerError)
+                    .InternalServerError, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes)
                 { ExceptionErrorResponse = errorResponse };
 
             MockEmisClientAppointmentPostMethod(response);
@@ -380,7 +389,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.InternalResponseCode = RequiredFieldValueMissing;
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                    .BadRequest)
+                    .BadRequest, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes)
                 { StandardErrorResponse = errorResponse };
 
             MockEmisClientAppointmentPostMethod(response);
@@ -401,7 +410,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             errorResponse.Exceptions.First().Message = $"{EmisApiErrorMessages.EmisService_TelephoneNumberRequired}";
 
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                    .BadRequest)
+                    .BadRequest, RequestsForSuccessOutcome.AppointmentsPost, _sampleSuccessStatusCodes)
                 { ExceptionErrorResponse = errorResponse };
 
             MockEmisClientAppointmentPostMethod(response);

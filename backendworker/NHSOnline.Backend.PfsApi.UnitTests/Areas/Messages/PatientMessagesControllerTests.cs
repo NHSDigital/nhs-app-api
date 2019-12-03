@@ -100,7 +100,68 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Subject.Value.Should().Be(successResponse);
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Patient messages successfully retrieved"));
         }
+        
+        [TestMethod]
+        public async Task GetMessageDetaisl_ReturnsSuccessResult_WhenServiceReturnsSuccessfulResponse()
+        {
+            // Arrange
+            var successResponse = _fixture.Create<GetPatientMessageResponse>();
+            var successResult = new GetPatientMessageResult.Success(successResponse);
 
+            _mockPatientMessagesService
+                .Setup(s => s.GetMessageDetails("1",
+                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                .Returns(Task.FromResult((GetPatientMessageResult) successResult));
+
+            // Act
+            var result = await _systemUnderTest.GetMessageDetails("1");
+
+            // Assert
+            result
+                .Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().Be(successResponse);
+        }
+        
+        [DataTestMethod]
+        [DataRow(typeof(GetPatientMessageResult.Forbidden), StatusCodes.Status403Forbidden)]
+        [DataRow(typeof(GetPatientMessageResult.InternalServerError), StatusCodes.Status500InternalServerError)]
+        [DataRow(typeof(GetPatientMessageResult.BadGateway), StatusCodes.Status502BadGateway)]
+        [DataRow(typeof(GetPatientMessageResult.BadRequest), StatusCodes.Status400BadRequest)]
+        public async Task Get_ServiceReturnsErrorResultForGetMessageDetails_ReturnsAppropriateResultObject(
+            Type serviceResultType,
+            int expectedStatusCode)
+        {
+            // Arrange
+            var serviceResult = (GetPatientMessageResult) Activator.CreateInstance(serviceResultType);
+            _mockPatientMessagesService
+                .Setup(s => s.GetMessageDetails("1",
+                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                .Returns(Task.FromResult(serviceResult))
+                .Verifiable();
+            _mockErrorReferenceGenerator
+                .Setup(x => x.GenerateAndLogErrorReference(
+                    ErrorCategory.PatientPracticeMessages,
+                    expectedStatusCode,
+                    _userSession.GpUserSession.Supplier))
+                .Returns(_serviceDeskReference)
+                .Verifiable();
+
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
+
+            // Act
+            var result = await _systemUnderTest.GetMessageDetails("1");
+
+            // Assert
+            _mockPatientMessagesService.Verify();
+            _mockErrorReferenceGenerator.Verify();
+
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            objectResult.StatusCode.Should().Be(expectedStatusCode);
+            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+        }
 
         [DataTestMethod]
         [DataRow(typeof(GetPatientMessagesResult.Forbidden), StatusCodes.Status403Forbidden,

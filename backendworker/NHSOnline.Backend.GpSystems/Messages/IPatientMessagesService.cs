@@ -6,5 +6,6 @@ namespace NHSOnline.Backend.GpSystems.Messages
     public interface IPatientMessagesService
     {
         Task<GetPatientMessagesResult> GetMessages(GpUserSession gpUserSession);
+        Task<GetPatientMessageResult> GetMessageDetails(string messageId, GpUserSession gpUserSession);
     }
 }

@@ -2950,6 +2950,133 @@
                     serviceDeskReference: 
                       type: "string"
                       description: "Six character service desk reference code."
+    /v1/patient/messages/{id}: 
+      get: 
+        tags: 
+          - "patientMessages"
+        parameters: 
+          - 
+            in: "path"
+            name: "id"
+            required: true
+            description: "The id of the message"
+            schema: 
+              type: "string"
+        summary: "Get details for a conversation between the user and their practice"
+        description: "Get details for a conversation between the user and their practice"
+        responses: 
+          200: 
+            description: "Successfully retrieved message details"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    messageDetails: 
+                      type: "array"
+                      description: "Details for a conversation between the patient and their practice"
+                      items: 
+                        type: "object"
+                        properties: 
+                          MessageId: 
+                            type: "integer"
+                            description: "A unique indentifier for this conversation"
+                          subject: 
+                            type: "string"
+                            description: "A message summary provided by the patient when initiating the conversation"
+                          content: 
+                            type: "string"
+                            description: "Content of the message sent by the user"
+                          recipient: 
+                            type: "string"
+                            description: "recipient of the message sent by the user"
+                          messageReplies: 
+                            type: "array"
+                            description: "array of message replies"
+                            items: 
+                              type: "object"
+                              properties: 
+                                sender: 
+                                  type: "string"
+                                  description: "Name of the sender"
+                                sentDateTime: 
+                                  type: "string"
+                                  format: "date-time"
+                                  description: "The datetime the reply was sent"
+                                isUnread: 
+                                  type: "boolean"
+                                  description: "Indicator to show if the message has already been read"
+                                replyContent: 
+                                  type: "string"
+                                  description: "Content of the reply to the user"
+          400: 
+            description: "Upstream system returned BadRequest status."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          403: 
+            description: "Upstream system returned Forbidden status."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          500: 
+            description: "An unknown error occured when processing the request."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          502: 
+            description: "Upstream system returned BadGateway status or an invalid response."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/gpsearch: 
       post: 
         tags: 

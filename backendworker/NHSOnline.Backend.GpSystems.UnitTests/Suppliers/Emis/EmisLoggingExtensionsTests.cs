@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using AutoFixture;
@@ -11,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Session;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
@@ -21,6 +23,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         private IFixture _fixture;
         private static Regex _guidRegex;
         private static Mock<ILogger<EmisSessionService>> _logger;
+        private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
         public void TestInitialize()
@@ -28,6 +31,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _logger =  _fixture.Freeze<Mock<ILogger<EmisSessionService>>>();
             _guidRegex = new Regex(Constants.Regex.GuidRegex, RegexOptions.IgnoreCase);
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            {
+                HttpStatusCode.OK
+            };
         }
 
         [TestMethod]
@@ -35,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             // Arrange
             var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
-            var demoResponse = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.Conflict)
+            var demoResponse = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.Conflict, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes)
             {
                 Body = demographicsResponse
             };
@@ -59,7 +66,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = userIdentityGuid;
             var sampleResponse = new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) {ExceptionErrorResponse = errorResponse};
+                .InternalServerError, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes) {ExceptionErrorResponse = errorResponse};
             
             // Act
             var response = EmisLoggingExtensions.CensorResponse(_logger.Object, sampleResponse);

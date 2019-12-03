@@ -9,6 +9,8 @@ import mocking.stubs.appointments.BookAppoinmentStubs
 import mocking.stubs.appointments.CancelAppointmentsStubs
 import mocking.stubs.appointments.ViewAppointmentsStubs
 import mocking.stubs.myMedicalRecord.MedicalRecordStubs
+import mocking.stubs.patientPracticeMessaging.PatientPracticeConversationStubs
+import mocking.stubs.patientPracticeMessaging.PatientPracticeMessagingStubs
 import mocking.stubs.pds.ViewSpinePdsStubs
 import mocking.stubs.prescriptions.OrderRepeatPrescriptionsStubs
 import mocking.stubs.prescriptions.ViewCoursesStubs
@@ -26,6 +28,7 @@ class EmisStubbedEnvironment(private val mockingClient: MockingClient) {
         generateMyMedicalRecordsStubs()
         generatePrescriptionStubs()
         generateSpineStubs()
+        generatePatientPracticeMessagingStubs()
     }
 
     private fun generateAppointmentStubs() {
@@ -37,6 +40,11 @@ class EmisStubbedEnvironment(private val mockingClient: MockingClient) {
 
     private fun generateMyMedicalRecordsStubs() {
         MedicalRecordStubs(mockingClient).generateStubs(gpSupplier)
+    }
+
+    private fun generatePatientPracticeMessagingStubs() {
+        PatientPracticeMessagingStubs(mockingClient).generateEMISStubs()
+        PatientPracticeConversationStubs(mockingClient).generateEMISStubs()
     }
 
     private fun generatePrescriptionStubs() {

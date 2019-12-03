@@ -76,5 +76,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         // Practice to Patient Messages
         Task<EmisApiObjectResponse<MessagesGetResponse>> PatientMessagesGet(
             EmisRequestParameters requestParameters);
+        
+        Task<EmisApiObjectResponse<MessageGetResponse>> PatientMessageDetailsGet(
+            string messageId, EmisRequestParameters requestParameters);
     }
 }
