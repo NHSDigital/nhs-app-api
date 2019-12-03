@@ -10,7 +10,8 @@ import mocking.emis.documents.Observation
 object DocumentsData {
 
     const val DEFAULT_NUMBER_OF_DOCUMENTS = 3
-    private const val DOCUMENT_SIZE = 1000000
+    private const val LARGE_DOCUMENT_SIZE = 4000000
+    private const val REGULAR_DOCUMENT_SIZE = 1000000
 
     fun getNoDocumentData() : DocumentsResponseModel {
         return DocumentsResponseModel(
@@ -30,7 +31,7 @@ object DocumentsData {
         for(documentNumber in 1..DEFAULT_NUMBER_OF_DOCUMENTS){
             documents.add(DocumentsResponse(
                 "document-$documentNumber",
-                DOCUMENT_SIZE,
+                REGULAR_DOCUMENT_SIZE,
                 "pdf",
                 true,
                 Observation(
@@ -44,6 +45,29 @@ object DocumentsData {
             medicalRecord = DocumentsMedicalRecord(
                 documents = documents
             )
+        )
+    }
+
+    fun getLargeDocumentData() : DocumentsResponseModel {
+        val documents = mutableListOf<DocumentsResponse>()
+
+        for(documentNumber in 1..DEFAULT_NUMBER_OF_DOCUMENTS){
+            documents.add(DocumentsResponse(
+                    "document-$documentNumber",
+                    LARGE_DOCUMENT_SIZE,
+                    "pdf",
+                    true,
+                    Observation(
+                            "History $documentNumber",
+                            mutableListOf(AssociatedText(String.format("", documentNumber))),
+                            EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")
+                    )))
+        }
+
+        return DocumentsResponseModel(
+                medicalRecord = DocumentsMedicalRecord(
+                        documents = documents
+                )
         )
     }
 }

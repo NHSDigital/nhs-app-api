@@ -1,7 +1,7 @@
 package pages.myrecord
 
-import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.HybridPageElement
 import pages.assertIsVisible
 import java.lang.IllegalArgumentException
 
@@ -17,8 +17,7 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
                 helpfulName = "$id Link")
     }
 
-    private fun documentInfo(date: String): HybridPageElement {
-        val infoText = "Document added on $date"
+    private fun documentInfo(infoText: String): HybridPageElement {
         return HybridPageElement(
                 webDesktopLocator = "$documentInfoPath${String.format(containsTextXpathSubstring, infoText)}",
                 androidLocator = null,
@@ -51,7 +50,8 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
         header(headerText).waitForElement()
     }
 
-    fun documentInfoContainsDate(date: String) {
-        documentInfo(date).waitForElement()
+
+    fun documentInfoContains(text: String) {
+        documentInfo(text).waitForElement()
     }
 }

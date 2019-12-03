@@ -4,7 +4,6 @@ using System.IO.Compression;
 using System.Text;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Support.Logging;
@@ -39,7 +38,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 _logger.LogInformation("Decompressing retrieved document content");
 
                 var documentContent = DecompressGzip(documentGetResponse.CompressedEncodedDocumentContent);
-                
+
                 if (!string.IsNullOrEmpty(documentType)
                     && !string.IsNullOrEmpty(documentName)
                     && Constants.FileConstants.FileTypes.ImageTypes.Contains(documentType))
@@ -57,24 +56,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         {
             var gzipBuffer = Convert.FromBase64String(str);
 
-            using (var memoryStream = new MemoryStream())
+            using (var memoryStream = new MemoryStream(gzipBuffer))
+            using (var memoryStreamOut = new MemoryStream())
             {
-                var msgLength = BitConverter.ToInt32(gzipBuffer, 0);
-                memoryStream.Write(gzipBuffer, 0, gzipBuffer.Length);
-
-                var buffer = new byte[msgLength];
-
-                memoryStream.Position = 0;
-                int length;
                 using (var zip = new GZipStream(memoryStream, CompressionMode.Decompress))
                 {
-                    length = zip.Read(buffer, 0, buffer.Length);
+                    zip.CopyTo(memoryStreamOut);
                 }
-
-                var data = new byte[length];
-                Array.Copy(buffer, data, length);
-                return Encoding.UTF8.GetString(data);
-
+                return Encoding.UTF8.GetString(memoryStreamOut.ToArray());
             }
         }
 

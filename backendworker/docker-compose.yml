@@ -133,7 +133,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8083
       - AUDIT_SINK_TYPE=FILE
-      - AUDIT_FILE audit.txt
+      - AUDIT_FILE=audit.txt
       - AUDIT_MONGO_DATABASE_NAME=development
       - AUDIT_MONGO_DATABASE_COLLECTION=audit_devices
       - AUDIT_MONGO_DATABASE_HOST=nhsonline.mongodb
@@ -161,7 +161,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8091
       - AUDIT_SINK_TYPE=FILE
-      - AUDIT_FILE audit.txt
+      - AUDIT_FILE=audit.txt
       - AUDIT_MONGO_DATABASE_NAME=development
       - AUDIT_MONGO_DATABASE_COLLECTION=audit_info
       - AUDIT_MONGO_DATABASE_HOST=nhsonline.mongodb
@@ -193,7 +193,7 @@ services:
       - MESSAGES_MONGO_DATABASE_USERNAME=
       - MESSAGES_MONGO_DATABASE_PASSWORD=
       - AUDIT_SINK_TYPE=FILE
-      - AUDIT_FILE audit.txt
+      - AUDIT_FILE=audit.txt
       - AUDIT_MONGO_DATABASE_NAME=development
       - AUDIT_MONGO_DATABASE_COLLECTION=audit_messages
       - AUDIT_MONGO_DATABASE_HOST=nhsonline.mongodb

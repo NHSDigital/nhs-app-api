@@ -10,7 +10,11 @@ import models.ExpectedDocument
 import models.Patient
 import utils.SerenityHelpers
 
+const val LARGE_DOCUMENT_SIZE = 4
+const val REGULAR_DOCUMENT_SIZE = 1
+
 class DocumentsFactoryEmis: DocumentsFactory() {
+
     override fun disabled(patient: Patient) {
         mockingClient.forEmis {
             myRecord.documentsRequest(patient)
@@ -25,9 +29,10 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         }
     }
 
-    override fun enabledWithDocuments(patient: Patient, mockUnavailableDocument: Boolean) {
+    override fun enabledWithDocuments(patient: Patient, isLarge: Boolean, mockUnavailableDocument: Boolean) {
         val documents = DocumentsData.getDefaultDocumentsData()
-        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(documents.medicalRecord.documents)
+
+        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents)
         setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, expectedDocuments)
 
         val availableDocument = expectedDocuments[0]
@@ -48,9 +53,12 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         }
     }
 
-    override fun enabledWithDocumentsWithNoName(patient: Patient) {
-        val documents = DocumentsData.getDefaultDocumentsData(false)
-        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(documents.medicalRecord.documents, false)
+    override fun enabledWithDocumentsWithNoName(patient: Patient, isLarge: Boolean) {
+        val documents = if (isLarge) DocumentsData.getLargeDocumentData()
+            else DocumentsData.getDefaultDocumentsData(false)
+
+        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents,
+                false)
         setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, expectedDocuments)
 
         val availableDocument = expectedDocuments[0]
@@ -70,13 +78,15 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         SerenityHelpers.setSerenityVariableIfNotAlreadySet(key, value)
     }
 
-    private fun getExpectedDocumentsFromEmisDocuments(
+    private fun getExpectedDocumentsFromEmisDocuments(isLarge: Boolean,
         documents: List<DocumentsResponse>,
         includeName: Boolean = true): List<ExpectedDocument> {
+        val size = if (isLarge) LARGE_DOCUMENT_SIZE else REGULAR_DOCUMENT_SIZE
+
         return documents.mapIndexed(fun(index, document): ExpectedDocument {
             val expectedDocument = ExpectedDocument(
                 document.documentGuid,
-                "18 February 2018 (${document.extension.toUpperCase()}, 1MB)",
+                "18 February 2018 (${document.extension.toUpperCase()}, ${size}MB)",
                 "18 February 2018",
                 mutableListOf("View"),
                 "History ${index + 1}")

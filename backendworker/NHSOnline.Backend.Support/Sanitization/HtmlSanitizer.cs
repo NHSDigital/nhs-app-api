@@ -67,8 +67,9 @@ namespace NHSOnline.Backend.Support.Sanitization
             {
                 OptionWriteEmptyNodes = true,
             };
-
+            
             html = RemoveEmptyAnchorTags(html);
+            doc.OptionOutputOriginalCase = true;
             
             doc.LoadHtml(html);
 

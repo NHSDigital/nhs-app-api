@@ -75,7 +75,7 @@ describe('document view', () => {
 
     it('will set the header and page title to the document name', async () => {
       // Arrange
-      const document = { name: 'Document1', date: { value: '2019-08-08T12:03:44+00:00' } };
+      const document = { name: 'Document1', size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' } };
       $store = newStore({ document });
       const page = mountPage({ $store });
 
@@ -88,7 +88,7 @@ describe('document view', () => {
 
     it('will set the header to the document date if no name exists', async () => {
       // Arrange
-      const document = { name: undefined, date: { value: '2019-08-08T12:03:44+00:00' } };
+      const document = { name: undefined, size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' } };
       $store = newStore({ document });
       const page = mountPage({ $store });
 
@@ -130,14 +130,18 @@ describe('document view', () => {
       const data = () => ({
         name: 'Document1',
         comments: [],
+        size: 1000000,
+        dateString: 'translate_my_record.documents.documentPageSubtext 8 August 2019',
       });
       const page = mountPage({ $store, data });
 
       // Act
       const documentInfo = page.find('#documentInfo p');
+      const dateString = 'translate_my_record.documents.documentPageSubtext 8 August 2019';
 
       // Assert
       expect(documentInfo.exists()).toBe(true);
+      expect(documentInfo.text()).toEqual(dateString);
     });
 
     it('will display a comment when there is a single comment', () => {
@@ -259,6 +263,7 @@ describe('document view', () => {
       const data = () => ({
         name: undefined,
         comments: [],
+        size: 1000000,
       });
       const page = mountPage({ $store, data });
 
@@ -267,22 +272,6 @@ describe('document view', () => {
 
       // Assert
       expect(documentInfo.exists()).toBe(false);
-    });
-
-    it('will display a download warning', () => {
-      // Arrange
-      const data = () => ({
-        name: undefined,
-        comments: [],
-      });
-      const page = mountPage({ $store, data });
-
-      // Act
-      const downloadWarning = page.find('#downloadWarning');
-
-      // Assert
-      expect(downloadWarning.exists()).toBe(true);
-      expect(downloadWarning.text()).toEqual('translate_my_record.documents.downloadWarning');
     });
 
     it('will display the actions for the document', () => {
@@ -298,6 +287,59 @@ describe('document view', () => {
       expect(downloadItem.text()).toEqual('translate_my_record.documents.actions.download');
       expect(viewItem.exists()).toBe(true);
       expect(downloadItem.exists()).toBe(true);
+    });
+
+    it('will not display the actions for the document if the document is too large', () => {
+      const data = () => ({
+        name: undefined,
+        comments: [],
+        size: 4000000,
+      });
+
+      // Arrange
+      const page = mountPage({ $store, data });
+
+      // Act
+      const viewItem = page.find('#btn_viewDocument');
+      const downloadItem = page.find('#btn_downloadDocument');
+
+      // Assert
+      expect(viewItem.exists()).toBe(false);
+      expect(downloadItem.exists()).toBe(false);
+    });
+
+    it('will display a different header if the document is too large', async () => {
+      // Arrange
+      const document = { name: undefined, size: 4000000, date: { value: '2019-08-08T12:03:44+00:00' } };
+      const documentComments = [{
+        documentKey: {
+          eventGuid: 'test',
+          term: 'test',
+          codeId: 1234,
+        },
+        comments: ['this is a test', 'this is a second test', 'this is a third test'],
+      }];
+      $store = newStore({ document, documentComments });
+      const page = mountPage({ $store });
+
+      // Act
+      await page.vm.$options.asyncData({ store: $store, redirect });
+
+      // Assert
+      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_my_record.documents.documentTooLargeHeader');
+    });
+
+    it('will display a different subtext if the document is too large', async () => {
+      // Arrange
+      const data = () => ({ size: 4000000, comments: [] });
+      const page = mountPage({ $store, data });
+
+      // Act
+      const documentInfo = page.find('#documentInfo p');
+
+      // Assert
+      expect(documentInfo.exists()).toBe(true);
+      expect(documentInfo.text()).toEqual('translate_my_record.documents.documentTooLargeSubtext');
     });
   });
 });

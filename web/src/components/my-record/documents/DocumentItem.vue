@@ -1,8 +1,8 @@
 <template>
   <card :id="`document-${id}`"
         tabindex="0"
-        :component="documentTag"
-        :class="['document', documentAvailable && 'available']"
+        component="a"
+        class="document"
         @click.prevent="documentClicked">
     <p class="document__date-and-type">
       {{ date.value | datePart('YearMonthDay') }}
@@ -64,26 +64,18 @@ export default {
       default: undefined,
     },
   },
-  data() {
-    const documentAvailable = this.available && this.id;
-    return {
-      documentAvailable,
-      documentTag: documentAvailable ? 'a' : 'div',
-    };
-  },
   methods: {
     documentClicked() {
-      if (this.documentAvailable) {
-        this.$store.dispatch('myRecord/setSelectedDocumentInfo', {
-          type: this.type,
-          name: this.name,
-          date: this.date,
-          codeId: this.codeId,
-          term: this.term,
-          eventGuid: this.eventGuid,
-        });
-        this.$router.push({ name: MY_RECORD_DOCUMENT.name, params: { id: this.id } });
-      }
+      this.$store.dispatch('myRecord/setSelectedDocumentInfo', {
+        type: this.type,
+        name: this.name,
+        date: this.date,
+        codeId: this.codeId,
+        term: this.term,
+        eventGuid: this.eventGuid,
+        size: this.sizeInBytes,
+      });
+      this.$router.push({ name: MY_RECORD_DOCUMENT.name, params: { id: this.id } });
     },
   },
 };
@@ -91,12 +83,10 @@ export default {
 
 <style lang="scss">
   .document {
-    &.available {
       padding-right: 2em;
       background-repeat: no-repeat;
       background-image: url(~assets/icon_arrow_left.svg);
       background-position: right 1em center;
-    }
 
     .document__name,
     .document__term {

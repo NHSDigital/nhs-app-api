@@ -16,8 +16,8 @@
 import NativeAppCallbacks from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
-import { MYRECORD, MY_RECORD_DOCUMENTS, LOGIN, LOGOUT } from '@/lib/routes';
-import { isFalsy, redirectTo } from '@/lib/utils';
+import { MYRECORD, LOGIN, LOGOUT } from '@/lib/routes';
+import { isFalsy } from '@/lib/utils';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
@@ -29,7 +29,6 @@ export default {
   },
   data() {
     return {
-      documentsPath: `${MY_RECORD_DOCUMENTS.path}#document-${this.$route.params.id}`,
       glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
     };
   },
@@ -73,7 +72,7 @@ export default {
   },
   methods: {
     backToDocumentsClicked() {
-      redirectTo(this, this.documentsPath, null);
+      this.$router.go(-1);
     },
     setZoom(zoomable) {
       const viewport = document.getElementsByName('viewport')[0];

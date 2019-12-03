@@ -52,6 +52,13 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
             .enabledWithDocuments(EmisMockDefaults.patientEmis)
     }
 
+    @Given("^the GP Practice has multiple large documents$")
+    fun theGpPracticeHasMultipleLargeDocuments() {
+        DocumentsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithDocumentsWithNoName(EmisMockDefaults.patientEmis, true)
+    }
+
     @Given("^the GP Practice has multiple documents with no name$")
     fun theGpPracticeHasMultipleDocumentsWithNoName() {
         DocumentsFactory
@@ -64,7 +71,7 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
         theGpPracticeHasMultipleDocuments()
         DocumentsFactory
             .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithDocuments(EmisMockDefaults.patientEmis, true)
+            .enabledWithDocuments(EmisMockDefaults.patientEmis, mockUnavailableDocument = true)
     }
 
     @When("^I select to view my documents")
@@ -91,13 +98,22 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
         }
     }
 
-    @Then("^I see the document information page$")
-    fun iSeeTheDocumentInformationPage() {
+    @Then("^I see the document information page with actions$")
+    fun iSeeTheDocumentInformationPageWithActions() {
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
         myRecordDocumentInformationPage.assertDocumentActionsVisible(selectedDocument.actions)
-        myRecordDocumentInformationPage.documentInfoContainsDate(selectedDocument.date)
+        myRecordDocumentInformationPage.documentInfoContains(selectedDocument.date)
         myRecordDocumentInformationPage.headerContainsText(selectedDocument.name!!)
     }
+
+    @Then("^I see the document information page without actions")
+    fun iSeeTheDocumentInformationPageWithNoActions() {
+        val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
+        myRecordDocumentInformationPage.documentInfoContains("To access it, contact your GP surgery")
+        myRecordDocumentInformationPage.headerContainsText(
+                "The document added on " + selectedDocument.date + " is not available through the NHS App.")
+    }
+
 
     @Then("^I see a list of documents$")
     fun iSeeAListOfDocuments() {

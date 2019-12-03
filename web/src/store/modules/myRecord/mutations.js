@@ -96,6 +96,7 @@ export default {
       state.document.term = documentInfo.term;
       state.document.eventGuid = documentInfo.eventGuid;
       state.document.codeId = documentInfo.codeId;
+      state.document.size = documentInfo.size;
     }
   },
   [RESET_TERMS](state) {

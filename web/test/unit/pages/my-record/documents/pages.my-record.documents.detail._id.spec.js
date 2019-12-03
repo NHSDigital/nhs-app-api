@@ -96,12 +96,6 @@ describe('my-record documents', () => {
       expect(NativeCallbacks.hideMenuBar).not.toHaveBeenCalled();
     });
   });
-  describe('data', () => {
-    it('will set documents path to documents route with current id as #', () => {
-      mountPage();
-      expect(page.vm.documentsPath).toEqual('/my-record/documents#document-document-id');
-    });
-  });
   describe('methods', () => {
     it('will set the viewport accordingly when setZoom is called', () => {
       mountPage();

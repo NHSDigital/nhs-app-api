@@ -5,7 +5,8 @@
                                         'pull-content',
                                         !$store.state.device.isNativeApp && $style.desktopWeb]">
         <div id="documentInfo" :class="$style.info" data-purpose="info">
-          <p v-if="name">{{ dateString }}</p>
+          <p v-if="name && !isTooLarge">{{ dateString }}</p>
+          <p v-if="isTooLarge">{{ $t('my_record.documents.documentTooLargeSubtext') }}</p>
         </div>
         <div v-if="hasComments" :class="$style.comments">
           <b>{{ $t('my_record.documents.commentsHeader') }}</b>
@@ -16,9 +17,8 @@
             <p :data-purpose="'documentComment'+index">{{ comment }}</p>
           </div>
         </div>
-        <menu-item-list data-sid="action-list-menu">
-          <menu-item v-if="!isTGAFile"
-                     id="btn_viewDocument"
+        <menu-item-list v-if="!isTooLarge" data-sid="action-list-menu">
+          <menu-item id="btn_viewDocument"
                      :text="$t('my_record.documents.actions.view')"
                      :aria-label="$t('my_record.documents.actions.view')"
                      :click-func="navigateToView"/>
@@ -33,6 +33,9 @@
         <p>
           <glossary/>
         </p>
+        <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
+                                :path="documentsPath"
+                                @clickAndPrevent="backToDocumentsClicked"/>
       </div>
     </div>
   </div>
@@ -41,9 +44,10 @@
 import get from 'lodash/fp/get';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import { MY_RECORD_DOCUMENT_DETAIL, MYRECORD } from '@/lib/routes';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import { MY_RECORD_DOCUMENT_DETAIL, MY_RECORD_DOCUMENTS, MYRECORD } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
-import { isFalsy, datePart } from '@/lib/utils';
+import { isFalsy, redirectTo, datePart } from '@/lib/utils';
 import NativeCallbacks from '@/services/native-app';
 import Glossary from '@/components/Glossary';
 
@@ -53,16 +57,20 @@ export default {
     MenuItem,
     MenuItemList,
     Glossary,
+    DesktopGenericBackLink,
   },
   computed: {
-    isTGAFile() {
-      return this.type === 'tga' || this.type === 'TGA';
+    isTooLarge() {
+      return this.size >= 4000000;
     },
     hasComments() {
       return (this.comments !== null && this.comments.length > 0);
     },
     retrieveComments() {
       return this.comments;
+    },
+    documentsPath() {
+      return MY_RECORD_DOCUMENTS.path;
     },
     getMimeType() {
       switch (this.type.toUpperCase()) {
@@ -108,14 +116,16 @@ export default {
       return {};
     }
 
+    const datePartString = datePart(date, 'YearMonthDay');
     const name = get('state.myRecord.document.name', store);
-    const dateString = `${store.app.i18n.t('my_record.documents.documentPageSubtext')} ${datePart(date, 'YearMonthDay')}`;
+    const dateString = `${store.app.i18n.t('my_record.documents.documentPageSubtext')} ${datePartString}`;
     const type = get('state.myRecord.document.type', store);
     const codeId = get('state.myRecord.document.codeId', store);
     const term = get('state.myRecord.document.term', store);
     const eventGuid = get('state.myRecord.document.eventGuid', store);
     const documentConsultationsWithComments = get('state.myRecord.documentConsultationsWithComments', store);
     const comments = [];
+    const size = get('state.myRecord.document.size', store);
 
     if (documentConsultationsWithComments !== null
       && documentConsultationsWithComments.length > 0) {
@@ -136,10 +146,16 @@ export default {
         });
       }
     }
-    if (name) {
-      store.dispatch('header/updateHeaderText', name);
+
+    if (size < 4000000) {
+      if (name) {
+        store.dispatch('header/updateHeaderText', name);
+      } else {
+        store.dispatch('header/updateHeaderText', dateString);
+      }
     } else {
-      store.dispatch('header/updateHeaderText', dateString);
+      store.dispatch('header/updateHeaderText',
+        store.app.i18n.t('my_record.documents.documentTooLargeHeader', { date: datePartString }));
     }
 
     return {
@@ -148,6 +164,7 @@ export default {
       name,
       type,
       comments,
+      size,
     };
   },
   methods: {
@@ -156,6 +173,9 @@ export default {
         name: MY_RECORD_DOCUMENT_DETAIL.name,
         params: { id: this.$route.params.id },
       });
+    },
+    backToDocumentsClicked() {
+      redirectTo(this, MY_RECORD_DOCUMENTS.path, null);
     },
     startDownload() {
       /* eslint-disable func-names */
