@@ -26,10 +26,15 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         private Uri _citizenIdApiBaseUrl;
         private string _clientId;
         private string _clientSecret;
+        private string _issuer;
+        private string _nhsLoginKeyPath;
+        private string _nhsLoginKeyPassword;
+        private string _nhsLoginTokenPath;
         private Mock<ICitizenIdConfig> _mockConfig;
         private CitizenIdClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private CitizenIdHttpClient _httpClient;
+        private Mock<ICitizenIdJwtHelper> _mockCitizenIdJwtHelper;
 
         [TestInitialize]
         public void TestInitialize()
@@ -39,6 +44,10 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _citizenIdApiBaseUrl = _fixture.Create<Uri>();
             _clientId = _fixture.Create<string>();
             _clientSecret = _fixture.Create<string>();
+            _issuer = _fixture.Create<string>();
+            _nhsLoginKeyPath = _fixture.Create<string>();
+            _nhsLoginKeyPassword = _fixture.Create<string>();
+            _nhsLoginTokenPath = _fixture.Create<string>();
 
             _mockHttpHandler = new MockHttpMessageHandler();
             _mockConfig = _fixture.Freeze<Mock<ICitizenIdConfig>>();
@@ -46,10 +55,18 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _mockConfig.SetupGet(x => x.CitizenIdApiBaseUrl).Returns(_citizenIdApiBaseUrl);
             _mockConfig.SetupGet(x => x.ClientId).Returns(_clientId);
             _mockConfig.SetupGet(x => x.ClientSecret).Returns(_clientSecret);
+            _mockConfig.SetupGet(x => x.Issuer).Returns(_issuer);
+            _mockConfig.SetupGet(x => x.NhsLoginKeyPath).Returns(_nhsLoginKeyPath);
+            _mockConfig.SetupGet(x => x.NhsLoginKeyPassword).Returns(_nhsLoginKeyPassword);
+            _mockConfig.SetupGet(x => x.TokenPath).Returns(_nhsLoginTokenPath);
+            _mockConfig.SetupGet(x => x.AuthenticationType).Returns(CitizenIdAuthenticationType.Jwt);
 
             _httpClient = new CitizenIdHttpClient(new HttpClient(_mockHttpHandler), _mockConfig.Object);
             _fixture.Inject(_httpClient);
 
+            _mockCitizenIdJwtHelper = _fixture.Freeze<Mock<ICitizenIdJwtHelper>>();
+            _fixture.Inject(_mockCitizenIdJwtHelper);
+            
             _systemUnderTest = _fixture.Create<CitizenIdClient>();
         }
 
@@ -60,18 +77,52 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
             var redirectUrl = _fixture.Create<string>();
+            var jwt = _fixture.Create<string>();
+            var expectedTokenResponse = _fixture.Create<Token>();
+
+            _mockCitizenIdJwtHelper.Setup(x => x.CreateClientAuthJwt())
+                .Returns(jwt);
+
+            var dict = CreateTokenBody(authCode, redirectUrl, codeVerifier, jwt);
+            
+            _mockHttpHandler
+                .When(HttpMethod.Post, new Uri(_citizenIdApiBaseUrl, _nhsLoginTokenPath).ToString())
+                .WithFormData(dict)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedTokenResponse));
+
+            // Act
+            var response = await _systemUnderTest.ExchangeAuthToken(authCode, codeVerifier, redirectUrl);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedTokenResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ErrorResponse.Should().BeNull();
+            _mockHttpHandler.VerifyNoOutstandingExpectation();
+        }
+        
+        [TestMethod]
+        public async Task ExchangeAuthToken_HappyPath_Basic_Auth()
+        {
+            // Arrange
+            var authCode = _fixture.Create<string>();
+            var codeVerifier = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<string>();
             var expectedTokenResponse = _fixture.Create<Token>();
 
             var dict = CreateTokenBody(authCode, redirectUrl, codeVerifier);
+            
+            _mockConfig.SetupGet(x => x.AuthenticationType).Returns(CitizenIdAuthenticationType.Basic);
 
             var basicAuthString = Convert.ToBase64String(
                 System.Text.Encoding.ASCII.GetBytes($"{_clientId}:{_clientSecret}"));
 
             _mockHttpHandler
-                .When(HttpMethod.Post, new Uri(_citizenIdApiBaseUrl, "token").ToString())
+                .When(HttpMethod.Post, new Uri(_citizenIdApiBaseUrl, _nhsLoginTokenPath).ToString())
                 .WithFormData(dict)
                 .WithHeaders("Authorization", $"Basic {basicAuthString}")
                 .Respond("application/json", JsonConvert.SerializeObject(expectedTokenResponse));
+            
+            _systemUnderTest = _fixture.Create<CitizenIdClient>();
 
             // Act
             var response = await _systemUnderTest.ExchangeAuthToken(authCode, codeVerifier, redirectUrl);
@@ -90,17 +141,17 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
             var redirectUrl = _fixture.Create<string>();
+            var jwt = _fixture.Create<string>();
             var expectedErrorResponse = _fixture.Create<ErrorResponse>();
 
-            var dict = CreateTokenBody(authCode, redirectUrl, codeVerifier);
+            _mockCitizenIdJwtHelper.Setup(x => x.CreateClientAuthJwt())
+                .Returns(jwt);
 
-            var basicAuthString = Convert.ToBase64String(
-                System.Text.Encoding.ASCII.GetBytes($"{_clientId}:{_clientSecret}"));
+            var dict = CreateTokenBody(authCode, redirectUrl, codeVerifier, jwt);
 
             _mockHttpHandler
-                .When(HttpMethod.Post, new Uri(_citizenIdApiBaseUrl, "token").ToString())
+                .When(HttpMethod.Post, new Uri(_citizenIdApiBaseUrl, _nhsLoginTokenPath).ToString())
                 .WithFormData(dict)
-                .WithHeaders("Authorization", $"Basic {basicAuthString}")
                 .Respond(HttpStatusCode.Forbidden, "application/json",
                     JsonConvert.SerializeObject(expectedErrorResponse));
 
@@ -275,6 +326,21 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _mockHttpHandler.Dispose();
         }
 
+        private Dictionary<string, string> CreateTokenBody(string authCode, string redirectUrl, string codeVerifier, string token)
+        {
+            var dict = new Dictionary<string, string>
+            {
+                { "grant_type", "authorization_code" },
+                { "code", authCode },
+                { "redirect_uri", redirectUrl },
+                { "code_verifier", codeVerifier },
+                { "code_challenge_method", "S256" },
+                { "client_assertion", token },
+                { "client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer" },
+            };
+            return dict;
+        }
+        
         private Dictionary<string, string> CreateTokenBody(string authCode, string redirectUrl, string codeVerifier)
         {
             var dict = new Dictionary<string, string>

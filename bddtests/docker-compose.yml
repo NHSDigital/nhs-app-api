@@ -47,6 +47,11 @@ services:
       - PORT=8082
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
+      - CITIZEN_ID_AUTHENTICATION_TYPE=JWT
+      - CITIZEN_ID_CLIENT_ID=nhs-online
+      - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
+      - NHSLOGIN_KEY_PATH=/app/bddcerts/private_key.pem
+      - NHSLOGIN_KEY_PASSWORD=test
       - ConfigurationSettings__DefaultSessionExpiryMinutes=3
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/

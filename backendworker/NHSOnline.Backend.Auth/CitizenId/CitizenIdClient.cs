@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.ResponseParsers;
 
@@ -16,28 +15,33 @@ namespace NHSOnline.Backend.Auth.CitizenId
     public class CitizenIdClient : ICitizenIdClient
     {
         private readonly ILogger<CitizenIdClient> _logger;
-        private const string TokenPath = "token";
         private const string SigningKeysPath = ".well-known/jwks.json";
         private const string UserInfoPath = "userinfo";
 
         private readonly CitizenIdHttpClient _httpClient;
-        private readonly string _clientId;
-        private readonly string _basicAuthCredentials;
+        private readonly ICitizenIdConfig _config;
         private readonly IJsonResponseParser _responseParser;
+        private readonly ICitizenIdJwtHelper _citizenIdJwtHelper;
+        private readonly string _basicAuthCredentials;
 
         public CitizenIdClient(
             CitizenIdHttpClient httpClient,
             ICitizenIdConfig config,
             ILogger<CitizenIdClient> logger,
-            IJsonResponseParser responseParser)
+            IJsonResponseParser responseParser,
+            ICitizenIdJwtHelper citizenIdJwtHelper)
         {
             _logger = logger;
             _httpClient = httpClient;
 
             _responseParser = responseParser;
-            _clientId = config.ClientId;
-            _basicAuthCredentials = Convert.ToBase64String(
+            _config = config;
+            _citizenIdJwtHelper = citizenIdJwtHelper;
+            if (_config.AuthenticationType == CitizenIdAuthenticationType.Basic)
+            {
+                _basicAuthCredentials = Convert.ToBase64String(
                 System.Text.Encoding.ASCII.GetBytes($"{config.ClientId}:{config.ClientSecret}"));
+            }
         }
 
         [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
@@ -47,6 +51,8 @@ namespace NHSOnline.Backend.Auth.CitizenId
             try
             {
                 _logger.LogEnter();
+                
+                var request = new HttpRequestMessage(HttpMethod.Post, _config.TokenPath);
 
                 var dict = new Dictionary<string, string>
                 {
@@ -54,16 +60,24 @@ namespace NHSOnline.Backend.Auth.CitizenId
                     { "code", authCode },
                     { "redirect_uri", redirectUrl },
                     { "code_verifier", codeVerifier },
-                    { "client_id", _clientId },
                     { "code_challenge_method", "S256" }
                 };
-
-                var request = new HttpRequestMessage(HttpMethod.Post, TokenPath)
+                
+                if (_config.AuthenticationType == CitizenIdAuthenticationType.Basic)
                 {
-                    Content = new FormUrlEncodedContent(dict)
-                };
+                    dict.Add("client_id", _config.ClientId);
+    
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Basic", _basicAuthCredentials);
+                } 
+                else 
+                {
+                    var token = _citizenIdJwtHelper.CreateClientAuthJwt();
 
-                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", _basicAuthCredentials);
+                    dict.Add("client_assertion", token);
+                    dict.Add("client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer");
+                }
+                
+                request.Content = new FormUrlEncodedContent(dict);
 
                 var response = await SendRequestAndParseResponse<Token>(request);
                 return response;

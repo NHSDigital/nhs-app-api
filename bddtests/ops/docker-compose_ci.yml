@@ -47,6 +47,11 @@ services:
       - GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE=
       - PROXY_ACCESS_ENABLED=true
       - NHS_APP_PARTY_ID_FOR_SPINE=xxx
+      - CITIZEN_ID_AUTHENTICATION_TYPE=JWT
+      - CITIZEN_ID_CLIENT_ID=nhs-online
+      - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
+      - NHSLOGIN_KEY_PATH=/app/bddcerts/private_key.pem
+      - NHSLOGIN_KEY_PASSWORD=test
     volumes:
       - ../src/main/kotlin/mocking/dummycerts:/app/bddcerts
   cid.local.bitraft.io:
@@ -132,6 +137,8 @@ services:
       - USERINFO_MONGO_DATABASE_PORT=27017
       - USERINFO_MONGO_DATABASE_USERNAME=
       - USERINFO_MONGO_DATABASE_PASSWORD=
+    volumes:
+      - ../src/main/kotlin/mocking/dummycerts:/app/bddcerts
   messages.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-backendmessagesapi:${BACKEND_TAG}
     env_file:

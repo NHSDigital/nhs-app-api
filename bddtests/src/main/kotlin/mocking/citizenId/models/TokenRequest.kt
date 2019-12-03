@@ -8,5 +8,6 @@ data class TokenRequest(
         val clientId: String = "nhs-online",
         val redirectUri: String = Config.instance.cidRedirectUri,
         val code: String?,
-        val code_challenge_method: String = "S256"
+        val code_challenge_method: String = "S256",
+        val client_assertion_type: String = "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
         )

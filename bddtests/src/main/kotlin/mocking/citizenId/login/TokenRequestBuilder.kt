@@ -14,7 +14,6 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRe
 
     init {
         requestBuilder
-                .andHeader("Authorization", "Basic", "contains")
                 .andHeader("Content-Type", "application/x-www-form-urlencoded")
 
         // add token query parameters
@@ -33,8 +32,9 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRe
         }
         map["redirect_uri"] = tokenRequest.redirectUri
         map["code_verifier"] = ".*"
-        map["client_id"] = tokenRequest.clientId
         map["code_challenge_method"] = tokenRequest.code_challenge_method
+        map["client_assertion"] = ".*"
+        map["client_assertion_type"] = tokenRequest.client_assertion_type
 
         val stringBuilder = StringBuilder()
 
