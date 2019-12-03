@@ -12,7 +12,6 @@ export const initialState = () => ({
   items: [],
   selectedLinkedAccount: null,
   actingAsUser: null,
-  hasLoaded: false,
   hasErrored: false,
   config: {
     hasLoaded: false,

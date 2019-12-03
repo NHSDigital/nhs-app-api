@@ -5,6 +5,7 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
+import features.myrecord.factories.DemographicsFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
@@ -106,6 +107,10 @@ class AuthenticationErrorStepDefinitions {
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+
+        DemographicsFactory
+                .getForSupplier(gpSystem)
+                .enableForPatientProxyAccounts(patient)
 
         browser.goToApp()
         login.using(patient)

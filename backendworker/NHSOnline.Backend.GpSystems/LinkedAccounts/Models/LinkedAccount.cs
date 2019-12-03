@@ -9,11 +9,9 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts.Models
         public string GivenName { get; set; }
 
         public string Name { get; set; }
-        
+
         public int? AgeMonths { get; set; }
-        
+
         public int? AgeYears { get; set; }
-        
-        public string NhsNumber { get; set; }
     }
 }

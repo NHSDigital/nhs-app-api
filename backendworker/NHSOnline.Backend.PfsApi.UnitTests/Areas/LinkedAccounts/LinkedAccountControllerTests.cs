@@ -77,9 +77,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             // Arrange
             _linkedAccountAuditInfo.IsProxyMode = true;
             _userSession.GpUserSession.NhsNumber = "123 456 789";
-            
+
             var id = Guid.NewGuid();
-        
+
             _linkedAccountService.Setup(x => x.IsValidAccountOrLinkedAccountId(_userSession.GpUserSession, id))
                 .Returns(true)
                 .Verifiable();
@@ -92,22 +92,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _linkedAccountService.Verify();
             result.Should().BeAssignableTo<OkResult>();
         }
-        
-        
+
+
         [TestMethod]
         public async Task SwitchToProxy_Returns200_WhenLinkedAccountIdIsFound()
         {
             // Arrange
             _linkedAccountAuditInfo.IsProxyMode = false;
             _userSession.GpUserSession.NhsNumber = "123 456 789";
-        
+
             var id = Guid.NewGuid();
-        
+
             _linkedAccountService.Setup(x => x.IsValidAccountOrLinkedAccountId(_userSession.GpUserSession, id))
                 .Returns(true)
                 .Verifiable();
-            
-                        
+
+
             _linkedAccountService.Setup(x => x.GetNhsNumberForProxyUser(_userSession.GpUserSession, id))
                 .Returns("123")
                 .Verifiable();
@@ -144,15 +144,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         public async Task Get_ReturnsSuccessfulResultAndUserSessionUpdated_WhenServiceReturnsSuccessfully()
         {
             LinkedAccountsResult linkedAccountResult = new LinkedAccountsResult.Success(
-                _fixture.Create<GetLinkedAccountsResponse>());
+                _fixture.Create<LinkedAccountsBreakdownSummary>(), true);
 
             // Arrange
             _linkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
                 .ReturnsAsync(linkedAccountResult)
-                .Verifiable();
-            
-            _linkedAccountService.Setup(x => x.HasProxyNhsNumbers(_userSession.GpUserSession))
-                .Returns(false)
                 .Verifiable();
 
             // Act
@@ -162,34 +158,31 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _mockSessionCacheService.Verify(x => x.UpdateUserSession(_userSession));
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             _linkedAccountService.VerifyAll();
-            
+
             var subject = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             subject.StatusCode.Value.Should().Equals(HttpStatusCode.OK);
             subject.Value.Should().NotBeNull();
         }
-        
-        
+
+
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResultAndUserSessionNotUpdated_WhenServiceReturnsSuccessfully()
         {
             LinkedAccountsResult linkedAccountResult = new LinkedAccountsResult.Success(
-                _fixture.Create<GetLinkedAccountsResponse>());
+                _fixture.Create<LinkedAccountsBreakdownSummary>(), false);
 
             // Arrange
             _linkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
                 .ReturnsAsync(linkedAccountResult)
-                .Verifiable();
-            
-            _linkedAccountService.Setup(x => x.HasProxyNhsNumbers(_userSession.GpUserSession))
-                .Returns(true)
                 .Verifiable();
 
             // Act
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier)); 
-            
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
+            _mockSessionCacheService.Verify(x => x.UpdateUserSession(It.IsAny<UserSession>()), Times.Never());
+
             var subject = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             subject.StatusCode.Value.Should().Equals(HttpStatusCode.OK);
             subject.Value.Should().NotBeNull();

@@ -29,7 +29,7 @@ export default {
   async initialiseConfig({ commit }) {
     const patientConfigResponse = await this.app.$http.getV1PatientConfiguration();
     if (patientConfigResponse) {
-      commit(SET_LINKED_ACCOUNTS_CONFIG, patientConfigResponse.response);
+      commit(SET_LINKED_ACCOUNTS_CONFIG, patientConfigResponse);
     }
   },
   init({ commit }) {

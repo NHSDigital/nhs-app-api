@@ -9,6 +9,7 @@ import cucumber.api.java.en.When
 import features.authentication.steps.CIDAccountCreationSteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
+import features.myrecord.factories.DemographicsFactory
 import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -56,8 +57,12 @@ class AuthenticationStepDefinitions {
 
     @Given("^I have just logged out$")
     fun iHaveJustLoggedOut() {
+        val patient = EmisMockDefaults.patientEmis
+        DemographicsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enableForPatientProxyAccounts(patient)
         browser.goToApp()
-        login.using(EmisMockDefaults.patientEmis)
+        login.using(patient)
         navHeader.clickMyAccount()
         myAccount.signOutButton.click()
     }

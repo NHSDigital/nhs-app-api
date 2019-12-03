@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Support;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 {
@@ -28,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         private EmisConfigurationSettings _settings;
         private EmisUserSession _emisUserSession;
         private IFixture _fixture;
-        private ILogger<EmisLinkedAccountsService> _logger;
+        private Mock<ILogger<EmisLinkedAccountsService>> _logger;
         private const string DefaultEmisVersion = "2.1.0.0";
         private static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
         private static readonly Uri BaseUri = new Uri("http://emis_base_url/");
@@ -47,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             _emisUserSession = _fixture.Create<EmisUserSession>();
 
-            _logger = Mock.Of<ILogger<EmisLinkedAccountsService>>();
+            _logger = _fixture.Freeze<Mock<ILogger<EmisLinkedAccountsService>>>();
 
             _demographicsService = new Mock<IEmisDemographicsService>();
             _emisClient = new Mock<IEmisClient>();
@@ -56,7 +57,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit,
                 Environment);
             _fixture.Inject(_settings);
-            _fixture.Inject(_logger);
             _fixture.Inject(_demographicsService);
             _fixture.Inject(_emisClient);
             _systemUnderTest = _fixture.Create<EmisLinkedAccountsService>();
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             // Assert
             resultOdsCode.Should().Be(proxyOdsCode);
         }
-        
+
         [TestMethod]
         public void CalculateAgeInMonthsAndYears_ReturnsEmptyAgeDataObjectWhenDateOfBirthIsNull()
         {
@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 AgeMonths = null,
                 AgeYears = null
             };
-            
+
             // Act
             var calculatedAge = _systemUnderTest.CalculateAgeInMonthsAndYears(dateOfBirth);
 
@@ -111,21 +111,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
             calculatedAge.AgeYears.Should().Be(ageDataObject.AgeYears);
         }
-        
+
         [TestMethod]
         public void CalculateAgeInMonthsAndYears_ReturnsCorrectAgeDataObjectWhenDateOfBirthIsValidAndGreaterThan1Year()
         {
             // Arrange
             DateTime? dateOfBirth = (DateTime.Now).AddMonths(-2);
             dateOfBirth = dateOfBirth.Value.AddYears(-5);
-            
+
             var ageDataObject = new AgeData
             {
                 //If the age is above 1, then the ageMonths will be 0
                 AgeMonths = 0,
                 AgeYears = 5
             };
-            
+
             // Act
             var calculatedAge = _systemUnderTest.CalculateAgeInMonthsAndYears(dateOfBirth);
 
@@ -133,20 +133,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
             calculatedAge.AgeYears.Should().Be(ageDataObject.AgeYears);
         }
-        
+
         [TestMethod]
         public void CalculateAgeInMonthsAndYears_ReturnsCorrectAgeDataObjectWhenDateOfBirthIsValidAndLessThan1Year()
         {
             // Arrange
             DateTime? dateOfBirth = (DateTime.Now).AddMonths(-5);
             dateOfBirth = dateOfBirth.Value.AddYears(0);
-            
+
             var ageDataObject = new AgeData
             {
                 AgeMonths = 5,
                 AgeYears = 0
             };
-            
+
             // Act
             var calculatedAge = _systemUnderTest.CalculateAgeInMonthsAndYears(dateOfBirth);
 
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
             calculatedAge.AgeYears.Should().Be(ageDataObject.AgeYears);
         }
-        
+
 
         [TestMethod]
         public void GetOdsCodeForLinkedAccount_ReturnsNull_WhenLinkedAccountWithMatchingIdFoundInUserSession()
@@ -213,8 +213,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             // Assert
             result.Should().BeTrue();
         }
-        
-        
+
+
         [TestMethod]
         public void IsValidAccountOrLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
         {
@@ -337,12 +337,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             _demographicsService.Verify();
             _emisClient.Verify();
         }
-        
+
       [TestMethod]
         public async Task GetLinkedAccounts_ReturnsSuccessResponse_WhenSuccessfulResponseFromEmis()
         {
+            var proxyPatients = _fixture.Create<List<EmisProxyUserSession>>();
+            proxyPatients.ForEach(x => x.OdsCode = _emisUserSession.OdsCode); // set all to have same Ods code
+            proxyPatients.ForEach(x => x.NhsNumber = null); // set all to have null NhsNumber (simulate first time)
             _emisUserSession.HasLinkedAccounts = true;
-            _emisUserSession.ProxyPatients = _fixture.Create<List<EmisProxyUserSession>>();
+            _emisUserSession.ProxyPatients = proxyPatients;
 
             var demographicsResponses = new Dictionary<Guid, DemographicsResponse>();
 
@@ -366,21 +369,174 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
-            successResult.Response.Should().NotBeNull();
-            successResult.Response.LinkedAccounts.Count().Should().Be(_emisUserSession.ProxyPatients.Count);
+            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
+            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(_emisUserSession.ProxyPatients.Count);
+            successResult.HasAnyProxyInfoBeenUpdatedInSession.Should().BeTrue();
 
             for (var i = 0; i < _emisUserSession.ProxyPatients.Count; i++)
             {
                 var emisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(i);
                 var demographicsResponseForUser = demographicsResponses[emisProxyPatient.Id];
-                var linkedAccountDetail = successResult.Response.LinkedAccounts.ElementAt(i);
+                var linkedAccountDetail = successResult.LinkedAccountsBreakdown.ValidAccounts.ElementAt(i);
+
+                emisProxyPatient.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
 
                 linkedAccountDetail.Id.Should().Be(emisProxyPatient.Id);
                 linkedAccountDetail.Name.Should().Be(demographicsResponseForUser.PatientName);
-        linkedAccountDetail.AgeMonths.Should()
-        .Be(_systemUnderTest.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
-        linkedAccountDetail.AgeYears.Should()
-        .Be(_systemUnderTest.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
+                linkedAccountDetail.AgeMonths.Should().Be(_systemUnderTest.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
+                linkedAccountDetail.AgeYears.Should().Be(_systemUnderTest.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
+            }
+
+            _demographicsService.VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task GetLinkedAccounts_ReturnsFalseForNeedsSessionUpdate_WhenNhsNumbersAlreadySetOnSession()
+        {
+            var proxyPatients = _fixture.Create<List<EmisProxyUserSession>>(); // will auto set all NHS numbers
+            proxyPatients.ForEach(x => x.OdsCode = _emisUserSession.OdsCode); // set all to have same Ods code
+            _emisUserSession.HasLinkedAccounts = true;
+            _emisUserSession.ProxyPatients = proxyPatients;
+
+            var demographicsResponses = new Dictionary<Guid, DemographicsResponse>();
+
+            foreach (var user in _emisUserSession.ProxyPatients)
+            {
+                var demographicsResponse = _fixture.Create<DemographicsResponse>();
+                demographicsResponse.NhsNumber = user.NhsNumber; // make sure it's not different
+                demographicsResponses.Add(user.Id, demographicsResponse);
+                DemographicsResult demographicsResult = new DemographicsResult.Success(demographicsResponse);
+
+                _demographicsService
+                    .Setup(x => x.GetDemographics(
+                        It.Is<GpLinkedAccountModel>(e => string.Equals( ((EmisUserSession) e.GpUserSession).SessionId, _emisUserSession.SessionId, StringComparison.Ordinal)
+                        && string.Equals(((EmisUserSession) e.GpUserSession).EndUserSessionId, _emisUserSession.EndUserSessionId, StringComparison.Ordinal)
+                        && string.Equals(((EmisUserSession) e.GpUserSession).UserPatientLinkToken, user.UserPatientLinkToken, StringComparison.Ordinal))))
+                    .Returns(Task.FromResult(demographicsResult))
+                    .Verifiable();
+            }
+
+            // Act
+            var result = await _systemUnderTest.GetLinkedAccounts(_emisUserSession);
+
+            // Assert
+            var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
+            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
+            successResult.HasAnyProxyInfoBeenUpdatedInSession.Should().BeFalse();
+
+            _demographicsService.VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task GetLinkedAccounts_ReturnsSuccessResponse_CorrectlyFiltersLinkedAccounts()
+        {
+            _emisUserSession.ProxyPatients = new List<EmisProxyUserSession>();
+
+            var patientSetup = new []
+            {
+                new
+                {
+                    // non-matching ODS code
+                    Id = Guid.NewGuid(), UserPatientLinkToken = "501", NhsNumber = "9000000001", OdsCode = "123"
+                },
+                new
+                {
+                    Id = Guid.NewGuid(), UserPatientLinkToken = "502", NhsNumber = "9000000002", OdsCode = _emisUserSession.OdsCode,
+                },
+                new
+                {
+                    // null NHS number
+                    Id = Guid.NewGuid(), UserPatientLinkToken = "503", NhsNumber = (string)null, OdsCode = _emisUserSession.OdsCode,
+                },
+            };
+
+            foreach (var patient in patientSetup)
+            {
+                _emisUserSession.ProxyPatients.Add(new EmisProxyUserSession
+                {
+                    Id = patient.Id,
+                    OdsCode = patient.OdsCode,
+                    UserPatientLinkToken = patient.UserPatientLinkToken,
+                });
+            }
+
+            _emisUserSession.HasLinkedAccounts = true;
+
+            var demographicsResponses = new Dictionary<Guid, DemographicsResponse>();
+
+            foreach (var patient in patientSetup)
+            {
+                var demographicsResponse = _fixture.Create<DemographicsResponse>();
+                demographicsResponse.NhsNumber = patient.NhsNumber;
+                demographicsResponses.Add(patient.Id, demographicsResponse);
+                DemographicsResult demographicsResult = new DemographicsResult.Success(demographicsResponse);
+
+                _demographicsService
+                    .Setup(x => x.GetDemographics(
+                        It.Is<GpLinkedAccountModel>(e => string.Equals( ((EmisUserSession) e.GpUserSession).SessionId, _emisUserSession.SessionId, StringComparison.Ordinal)
+                        && string.Equals(((EmisUserSession) e.GpUserSession).EndUserSessionId, _emisUserSession.EndUserSessionId, StringComparison.Ordinal)
+                        && string.Equals(((EmisUserSession) e.GpUserSession).UserPatientLinkToken, patient.UserPatientLinkToken, StringComparison.Ordinal))))
+                    .Returns(Task.FromResult(demographicsResult))
+                    .Verifiable();
+            }
+
+            // Act
+            var result = await _systemUnderTest.GetLinkedAccounts(_emisUserSession);
+
+            // Assert
+            var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
+            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
+            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(1);
+            successResult.LinkedAccountsBreakdown.AccountsWithMismatchingOdsCode.Count().Should().Be(1);
+            successResult.LinkedAccountsBreakdown.AccountsWithNoNhsNumber.Count().Should().Be(1);
+
+            var expectedLogMessage =
+                $"Linked_profiles_count={3}, " +
+                $"excluded_for_not_having_NHS_number={1}, " +
+                $"excluding_for_having_different_ODS_code={1}, " +
+                $"valid_and_being_returned: {1}";
+            _logger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
+
+            var validEmisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(1);
+            var demographicsResponseForValidUser = demographicsResponses[validEmisProxyPatient.Id];
+            var validLinkedAccountDetail = successResult.LinkedAccountsBreakdown.ValidAccounts.ElementAt(0);
+
+            var noNhsNumberEmisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(2);
+            var demographicsResponseForNoNhsNumberUser = demographicsResponses[noNhsNumberEmisProxyPatient.Id];
+            var noNhsNumberLinkedAccountDetail = successResult.LinkedAccountsBreakdown.AccountsWithNoNhsNumber.ElementAt(0);
+
+            var notMatchingOdsCodeEmisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(0);
+            var demographicsResponseForNotMatchingOdsCodeUser = demographicsResponses[notMatchingOdsCodeEmisProxyPatient.Id];
+            var notMatchingOdsCodeLinkedAccountDetail = successResult.LinkedAccountsBreakdown.AccountsWithMismatchingOdsCode.ElementAt(0);
+
+            var groupedPatientData = new[]
+            {
+                new
+                {
+                    Patient = validEmisProxyPatient,
+                    DemographicsResponse = demographicsResponseForValidUser,
+                    LinkedAccountDetail = validLinkedAccountDetail,
+                },
+                new
+                {
+                    Patient = noNhsNumberEmisProxyPatient,
+                    DemographicsResponse = demographicsResponseForNoNhsNumberUser,
+                    LinkedAccountDetail = noNhsNumberLinkedAccountDetail,
+                },
+                new
+                {
+                    Patient = notMatchingOdsCodeEmisProxyPatient,
+                    DemographicsResponse = demographicsResponseForNotMatchingOdsCodeUser,
+                    LinkedAccountDetail = notMatchingOdsCodeLinkedAccountDetail,
+                },
+            };
+
+            foreach (var patientData in groupedPatientData)
+            {
+                patientData.Patient.NhsNumber.Should().Be(patientData.DemographicsResponse.NhsNumber);
+                patientData.LinkedAccountDetail.Id.Should().Be(patientData.Patient.Id);
+                patientData.LinkedAccountDetail.Name.Should().Be(patientData.DemographicsResponse.PatientName);
+                patientData.LinkedAccountDetail.GivenName.Should().Be(patientData.DemographicsResponse.NameParts.Given);
             }
 
             _demographicsService.VerifyAll();
@@ -390,15 +546,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         public async Task GetLinkedAccounts_ReturnsEmptyResponse_WhenHasLinkedAccountsIsFalse()
         {
             _emisUserSession.HasLinkedAccounts = false;
-            _emisUserSession.ProxyPatients = _fixture.Create<List<EmisProxyUserSession>>();
 
             // Act
             var result = await _systemUnderTest.GetLinkedAccounts(_emisUserSession);
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
-            successResult.Response.Should().NotBeNull();
-            successResult.Response.LinkedAccounts.Count().Should().Be(0);
+            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
+            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(0);
             _demographicsService.VerifyAll();
         }
 
@@ -413,8 +568,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
-            successResult.Response.Should().NotBeNull();
-            successResult.Response.LinkedAccounts.Count().Should().Be(0);
+            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
+            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(0);
             _demographicsService.VerifyAll();
         }
 
@@ -426,13 +581,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             //Arrange
             var patientId = Guid.NewGuid();
             var proxyNhsNumber = _fixture.Create<string>();
-            
+
             _emisUserSession = new EmisUserSession
             {
                 Id = Guid.NewGuid(),
                 ProxyPatients = new List<EmisProxyUserSession>
                 {
-                    new EmisProxyUserSession 
+                    new EmisProxyUserSession
                     {
                         Id = Guid.NewGuid(),
                         NhsNumber = _fixture.Create<string>()
@@ -447,25 +602,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             //Act
             var result = _systemUnderTest.GetProxyAuditData(_emisUserSession, patientId);
-            
+
             //Assert
             result.IsProxyMode.Should().Be(true);
             result.ProxyNhsNumber.Should().Be(proxyNhsNumber);
         }
-        
-        
+
+
         [TestMethod]
         public void GetProxyAuditData_WhenPatientIdFoundInMainUser()
         {
             //Arrange
             var patientId = Guid.NewGuid();
-            
+
             _emisUserSession = new EmisUserSession
             {
                 Id = patientId,
                 ProxyPatients = new List<EmisProxyUserSession>
                 {
-                    new EmisProxyUserSession 
+                    new EmisProxyUserSession
                     {
                         Id = Guid.NewGuid(),
                         NhsNumber = _fixture.Create<string>()
@@ -480,24 +635,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             //Act
             var result = _systemUnderTest.GetProxyAuditData(_emisUserSession, patientId);
-            
+
             //Assert
             result.IsProxyMode.Should().Be(false);
             result.ProxyNhsNumber.Should().Be(null);
         }
-        
+
         [TestMethod]
         public void GetProxyAuditData_WhenPatientIdNotFound()
         {
             //Arrange
             var patientId = Guid.NewGuid();
-            
+
             _emisUserSession = new EmisUserSession
             {
                 Id = Guid.NewGuid(),
                 ProxyPatients = new List<EmisProxyUserSession>
                 {
-                    new EmisProxyUserSession 
+                    new EmisProxyUserSession
                     {
                         Id = Guid.NewGuid(),
                         NhsNumber = _fixture.Create<string>()
@@ -512,49 +667,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             //Act
             var result = _systemUnderTest.GetProxyAuditData(_emisUserSession, patientId);
-            
+
             //Assert
             result.IsProxyMode.Should().Be(false);
             result.ProxyNhsNumber.Should().Be(null);
-        }
-
-        [DataTestMethod]
-        [DataRow("")]
-        [DataRow(null)]
-        public void HasProxyNhsNumbers_ReturnsFalse_WhenNoNhsNumbersHaveValues(string nhsNumber)
-        {
-            //Arrange
-            _emisUserSession.ProxyPatients.ToList().ForEach(x => x.NhsNumber = nhsNumber);
-
-            //Act
-            var result = _systemUnderTest.HasProxyNhsNumbers(_emisUserSession);
-            
-            //Assert
-            result.Should().BeFalse();
-        }
-        
-        [TestMethod]
-        public void HasProxyNhsNumbers_ReturnsTrue_WhenAllNhsNumbersHaveValues()
-        {
-            //Act
-            var result = _systemUnderTest.HasProxyNhsNumbers(_emisUserSession);
-            
-            //Assert
-            result.Should().BeTrue();
-        }
-        
-        [TestMethod]
-        public void HasProxyNhsNumbers_ReturnsTrue_WhenAtLeastOneNhsNumberHasAValue()
-        {
-            //Arrange
-            _emisUserSession.ProxyPatients.ToList().ForEach(x => x.NhsNumber = null);
-            _emisUserSession.ProxyPatients.ToList()[1].NhsNumber = "123 456 789";
-
-            //Act
-            var result = _systemUnderTest.HasProxyNhsNumbers(_emisUserSession);
-            
-            //Assert
-            result.Should().BeTrue();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
 {
     public class ProxyAuditingMiddleware
     {
-        private readonly RequestDelegate _next;      
+        private readonly RequestDelegate _next;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<ProxyAuditingMiddleware> _logger;
 
@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 if (gpSystem.SupportsLinkedAccounts)
                 {
                     try
-                    {            
+                    {
                         var patientId = Guid.Parse(context.Request.Headers[PatientId]);
                         var linkedAccountsService = gpSystem.GetLinkedAccountsService();
                         var result = linkedAccountsService.GetProxyAuditData(userSession.GpUserSession, patientId);
@@ -41,11 +41,11 @@ namespace NHSOnline.Backend.PfsApi.Filters
                     }
                     catch (ArgumentNullException e)
                     {
-                        _logger.LogError("Error - PatientId Header not found", e);
+                        _logger.LogWarning(e, "PatientId Header not found");
                     }
                     catch (FormatException e)
                     {
-                        _logger.LogError($"Error - Could not parse Guid from PatientId Header value", e);
+                        _logger.LogError(e, "Could not parse Guid from PatientId Header value");
                     }
                 }
             }

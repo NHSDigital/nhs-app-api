@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
 {
@@ -8,7 +9,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
     {
         public async Task<IActionResult> Visit(LinkedAccountsResult.Success result)
         {
-            return await Task.FromResult(new OkObjectResult(result.Response));
+            var response = new GetLinkedAccountsResponse
+            {
+                LinkedAccounts = result.LinkedAccountsBreakdown.ValidAccounts,
+            };
+
+            return await Task.FromResult(new OkObjectResult(response));
         }
     }
 }

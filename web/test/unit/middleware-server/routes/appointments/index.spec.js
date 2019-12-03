@@ -15,7 +15,7 @@ describe('middleware-server/routes/appointments', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     api = {
-      getV1PatientConfiguration: jest.fn(() => Promise.resolve({ response: { id: patientId } })),
+      getV1PatientConfiguration: jest.fn(() => Promise.resolve({ id: patientId })),
       deleteV1PatientAppointments: jest.fn(() => Promise.resolve()),
     };
     apiFn = jest.fn(() => api);

@@ -7,6 +7,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.linkedProfiles.LinkedProfilesSerenityHelpers
+import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.MyRecordFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -59,9 +60,16 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         val supplier = Supplier.valueOf(gpSystem)
         SerenityHelpers.setGpSupplier(supplier)
         setPatientToDefaultFor(supplier)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(supplier).enabledWithBlankRecord(SerenityHelpers.getPatient())
+        val patient = SerenityHelpers.getPatient()
+
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+
+        DemographicsFactory
+                .getForSupplier(supplier)
+                .enableForPatientProxyAccounts(patient)
+
+        MyRecordFactory.getForSupplier(supplier).enabledWithBlankRecord(patient)
     }
 
     @Given("^the GP Practice has disabled summary care record functionality$")

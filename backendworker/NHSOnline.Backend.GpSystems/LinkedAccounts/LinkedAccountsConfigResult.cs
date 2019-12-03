@@ -1,4 +1,6 @@
+using System;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
+using NHSOnline.Backend.GpSystems.Session;
 
 namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 {
@@ -8,17 +10,26 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 
         public class Success : LinkedAccountsConfigResult
         {
-            public LinkedAccountsConfigResponse Response { get; }
+            public Guid PatientId { get; }
 
-            public Success(LinkedAccountsConfigResponse response)
+            public SessionConfigurationSettings SessionSettings { get; }
+
+            public LinkedAccountsBreakdownSummary LinkedAccountsBreakdownSummary { get; }
+
+            public Success(
+                Guid patientId,
+                SessionConfigurationSettings sessionSettings,
+                LinkedAccountsBreakdownSummary linkedAccountsBreakdownSummary)
             {
-                Response = response;
+                PatientId = patientId;
+                SessionSettings = sessionSettings;
+                LinkedAccountsBreakdownSummary = linkedAccountsBreakdownSummary;
             }
 
             public override T Accept<T>(ILinkedAccountsConfigResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
-        }        
+        }
     }
 }

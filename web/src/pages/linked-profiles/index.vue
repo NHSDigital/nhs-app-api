@@ -41,20 +41,15 @@ export default {
     MenuItemList,
     MenuItem,
   },
+  data() {
+    return {
+      linkedAccounts: this.$store.state.linkedAccounts.items,
+    };
+  },
   computed: {
-    linkedAccounts() {
-      return this.$store.state.linkedAccounts.items;
-    },
     linkedProfileSummaryPath() {
       return LINKED_PROFILES_SUMMARY.path;
     },
-  },
-  asyncData({ store }) {
-    store.dispatch('linkedAccounts/clear');
-    return store.dispatch('linkedAccounts/load');
-  },
-  beforeDestroy() {
-    this.$store.dispatch('linkedAccounts/clearLinkedAccounts');
   },
   methods: {
     onLinkedProfileClicked(id) {

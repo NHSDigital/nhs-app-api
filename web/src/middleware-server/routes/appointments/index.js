@@ -40,7 +40,7 @@ export default (apiFn) => {
       appointmentCancelRequest,
       cookie: get('headers.cookie')(req),
       csrfToken,
-      patientId: patientConfig.response.id,
+      patientId: patientConfig.id,
     }).then(() => {
       const successMessage = {
         flashMessage: {

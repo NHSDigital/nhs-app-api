@@ -73,7 +73,8 @@ namespace NHSOnline.Backend.Auditing
         public const string GetUserInfoAuditTypeResponse = "User_Info_Get_Response";
         public const string PostUserInfoAuditTypeRequest = "User_Info_Post_Request";
         public const string PostUserInfoAuditTypeResponse = "User_Info_Post_Response";
-        public const string GetPatientGuid = "Patient_Guid_Get_Response";
+        public const string GetPatientConfigRequest = "Patient_Config_Get_Request";
+        public const string GetPatientConfigResponse = "Patient_Config_Get_Response";
         public const string GetServiceJourneyRulesAuditForLinkedAccountRequest = "ServiceJourneyRules_LinkedAccount_Get_Request";
         public const string GetLinkedAccountsRequest = "LinkedAccounts_Get_Request";
         public const string GetLinkedAccountsResponse = "LinkedAccounts_Get_Response";

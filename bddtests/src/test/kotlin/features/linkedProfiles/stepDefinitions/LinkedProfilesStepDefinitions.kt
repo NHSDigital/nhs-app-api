@@ -87,6 +87,10 @@ class LinkedProfilesStepDefinitions {
                 .getForSupplier(gpSystem, mockingClient)
                 .createFor(patient)
 
+        DemographicsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enableForPatientProxyAccounts(patient)
+
         browser.goToApp()
         login.using(patient)
     }
@@ -103,14 +107,6 @@ class LinkedProfilesStepDefinitions {
 
     @Then("^I select the linked profiles link from the home page$")
     fun iSelectTheLinkedProfilesLink() {
-        // make sure demographics is setup for each linked profile
-        val patient = SerenityHelpers.getPatient()
-        patient.linkedAccounts.forEach {
-            DemographicsFactory
-                    .getForSupplier(SerenityHelpers.getGpSupplier())
-                    .enabledViaProxy(patient, it)
-        }
-
         home.linkedProfilesLink.click()
     }
 

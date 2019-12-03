@@ -1,5 +1,6 @@
 package worker.models.linkedAccounts
 
 data class LinkedAccountsConfigResponse (
-        val response: LinkedAccountsConfigResponseData
+        val id: String,
+        val hasLinkedAccounts: Boolean
 )

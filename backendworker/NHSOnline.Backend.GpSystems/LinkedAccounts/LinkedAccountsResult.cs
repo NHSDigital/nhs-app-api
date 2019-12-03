@@ -8,11 +8,14 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 
         public class Success : LinkedAccountsResult
         {
-            public GetLinkedAccountsResponse Response { get; }
+            public LinkedAccountsBreakdownSummary LinkedAccountsBreakdown { get; }
 
-            public Success(GetLinkedAccountsResponse response)
+            public bool HasAnyProxyInfoBeenUpdatedInSession { get; }
+
+            public Success(LinkedAccountsBreakdownSummary linkedAccountsBreakdown, bool hasAnyProxyInfoBeenUpdatedInSession)
             {
-                Response = response;
+                LinkedAccountsBreakdown = linkedAccountsBreakdown;
+                HasAnyProxyInfoBeenUpdatedInSession = hasAnyProxyInfoBeenUpdatedInSession;
             }
 
             public override T Accept<T>(ILinkedAccountsResultVisitor<T> visitor)

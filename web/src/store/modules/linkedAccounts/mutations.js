@@ -15,7 +15,6 @@ import {
 
 const clearLinkedAccounts = (state) => {
   state.items = [];
-  state.hasLoaded = false;
   state.hasErrored = false;
 };
 const clearSelectedLinkedAccount = (state) => {
@@ -24,7 +23,6 @@ const clearSelectedLinkedAccount = (state) => {
 export default {
   [LOADED](state, data) {
     state.items = data.linkedAccounts;
-    state.hasLoaded = true;
   },
   [INIT](state) {
     const blank = initialState();
@@ -52,6 +50,7 @@ export default {
     state.config.hasLoaded = true;
     state.config.patientId = config.id;
     state.config.hasLinkedAccounts = config.hasLinkedAccounts;
+    state.items = config.linkedAccounts;
   },
   [SWITCH_TO_LINKED_ACCOUNT](state, profile) {
     state.actingAsUser = profile;

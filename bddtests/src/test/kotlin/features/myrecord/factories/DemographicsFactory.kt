@@ -17,6 +17,14 @@ abstract class DemographicsFactory {
     abstract fun throwForbiddenError(patient: Patient)
     abstract fun throwBadGateway(patient: Patient)
 
+    fun enableForPatientProxyAccounts(callingPatient: Patient) {
+        if (callingPatient.linkedAccounts.isNotEmpty()) {
+            callingPatient.linkedAccounts.forEach {
+                enabledViaProxy(callingPatient, it)
+            }
+        }
+    }
+
     companion object : SupplierSpecificFactory<DemographicsFactory>() {
 
         override val map: HashMap<Supplier, (() -> DemographicsFactory)>

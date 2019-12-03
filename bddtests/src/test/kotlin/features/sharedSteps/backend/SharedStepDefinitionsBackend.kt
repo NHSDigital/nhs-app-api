@@ -6,6 +6,7 @@ import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.linkedProfiles.LinkedProfilesSerenityHelpers
+import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -37,12 +38,17 @@ open class SharedStepDefinitionsBackend{
         val patient = SerenityHelpers.getPatientOrNull()
                 ?: Patient.getDefault(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-                SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .postSessionConnection(patient.cidUserSession)
+
+        DemographicsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enableForPatientProxyAccounts(patient)
+
         val patientConfig = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .getPatientLinkedAccountsConfiguration()
-        LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.set(patientConfig.response.id)
+        LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.set(patientConfig.id)
     }
 
     @When("I allow my session to expire")

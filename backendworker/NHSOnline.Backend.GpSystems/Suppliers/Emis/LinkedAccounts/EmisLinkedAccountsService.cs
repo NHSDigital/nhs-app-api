@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
@@ -103,13 +102,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
         public LinkedAccountAuditInfo GetProxyAuditData(GpUserSession gpUserSession, Guid id)
         {
             var linkedAccountAuditResult = new LinkedAccountAuditInfo();
-                
+
             if (IsValidLinkedAccount(gpUserSession, id))
-            {                
+            {
                 var emisUserSession = (EmisUserSession) gpUserSession;
 
                 linkedAccountAuditResult.IsProxyMode = true;
-                linkedAccountAuditResult.ProxyNhsNumber 
+                linkedAccountAuditResult.ProxyNhsNumber
                     = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id)?.NhsNumber;
 
             }
@@ -122,23 +121,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             var emisUserSession = (EmisUserSession)gpUserSession;
             var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
 
-            return proxy?.NhsNumber;        
-        }
-
-        public bool HasProxyNhsNumbers(GpUserSession gpUserSession)
-        {
-            var emisUserSession = (EmisUserSession) gpUserSession;
-            return emisUserSession.ProxyPatients.Any(x => !string.IsNullOrEmpty(x.NhsNumber));
+            return proxy?.NhsNumber;
         }
 
         public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession)
         {
-            GetLinkedAccountsResponse response = new GetLinkedAccountsResponse();
+            var emisUserSession = (EmisUserSession)gpUserSession;
+            LinkedAccountsBreakdownSummary summary = new LinkedAccountsBreakdownSummary();
+            bool hasAnyNhsNumberBeenUpdatedInSession = false;
 
             if (gpUserSession.HasLinkedAccounts)
             {
-                var emisUserSession = (EmisUserSession)gpUserSession;
-
                 var tasks = new Dictionary<Guid, Task<DemographicsResult>>();
 
                 foreach (var user in emisUserSession.ProxyPatients)
@@ -166,10 +159,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                     .Where(x => x.Value.Result is DemographicsResult.Success)
                     .ToList();
 
-                response.LinkedAccounts = successResults.Select(x =>
-                {
+                var linkedAccounts = successResults.Select(x => {
                     var demographics = (DemographicsResult.Success)x.Value.Result;
-                    
+
                     var dateOfBirth = demographics.Response.DateOfBirth;
                     return new LinkedAccount
                     {
@@ -179,30 +171,39 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                         AgeMonths = CalculateAgeInMonthsAndYears(dateOfBirth).AgeMonths,
                         AgeYears = CalculateAgeInMonthsAndYears(dateOfBirth).AgeYears
                     };
-                    
                 });
-                
+
                 foreach (var proxy in emisUserSession.ProxyPatients)
                 {
-                    proxy.NhsNumber = ((DemographicsResult.Success) successResults.First(p => p.Key == proxy.Id).Value.Result).Response.NhsNumber;
+                    var nhsNumberFromDemographics = ((DemographicsResult.Success) successResults.First(p => p.Key == proxy.Id).Value.Result).Response.NhsNumber;
+
+                    if (!string.Equals(nhsNumberFromDemographics, proxy.NhsNumber, StringComparison.OrdinalIgnoreCase))
+                    {
+                        hasAnyNhsNumberBeenUpdatedInSession = true;
+                        proxy.NhsNumber = nhsNumberFromDemographics;
+                    }
                 }
+
+                summary = GroupLinkedAccounts(emisUserSession, linkedAccounts);
             }
-            return new LinkedAccountsResult.Success(response);
+
+            return new LinkedAccountsResult.Success(summary, hasAnyNhsNumberBeenUpdatedInSession);
         }
         private Boolean IsValidLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
             return IsValidAccountOrLinkedAccountId(gpUserSession, id) && (id != gpUserSession.Id);
         }
+
         public AgeData CalculateAgeInMonthsAndYears(DateTime? dateOfBirth)
         {
             if (dateOfBirth != null)
             {
-                DateTime now = DateTime.Now;  
+                DateTime now = DateTime.Now;
 
                 int ageMonths = 0;
                 int ageInYears = now.Year - dateOfBirth.Value.Year -
                                  (dateOfBirth.Value.DayOfYear < now.DayOfYear ? 0 : 1);
-                
+
                 if (ageInYears == 0)
                 {
                     TimeSpan timeDifference = now - dateOfBirth.Value;
@@ -217,9 +218,70 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
                 return calculatedAge;
             }
-            
-            return new AgeData();
 
+            return new AgeData();
+        }
+
+        private static EmisProxyUserSession GetLinkedAccountFromGpUserSession(GpUserSession gpUserSession, Guid linkedAccountId)
+        {
+            var emisUserSession = (EmisUserSession)gpUserSession;
+            var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == linkedAccountId);
+            return proxy;
+        }
+
+        private LinkedAccountsBreakdownSummary GroupLinkedAccounts(EmisUserSession emisUserSession, IEnumerable<LinkedAccount> linkedAccounts)
+        {
+            var withNhsNumbers = new List<LinkedAccount>();
+            var withoutNhsNumbers = new List<LinkedAccount>();
+            var validAccounts = new List<LinkedAccount>();
+            var mismatchingOdsCodes = new List<LinkedAccount>();
+
+            foreach (var account in linkedAccounts)
+            {
+                var accountInSession = emisUserSession.ProxyPatients.FirstOrDefault(pp => pp.Id == account.Id);
+
+                if (!string.IsNullOrEmpty(accountInSession?.NhsNumber))
+                {
+                    withNhsNumbers.Add(account);
+                }
+                else
+                {
+                    withoutNhsNumbers.Add(account);
+                }
+            }
+
+            foreach (var item in withNhsNumbers)
+            {
+                var proxyUserInSession = GetLinkedAccountFromGpUserSession(emisUserSession, item.Id);
+
+                if (proxyUserInSession != null)
+                {
+                    if (string.Equals(emisUserSession.OdsCode, proxyUserInSession.OdsCode, StringComparison.OrdinalIgnoreCase))
+                    {
+                        validAccounts.Add(item);
+                    }
+                    else
+                    {
+                        mismatchingOdsCodes.Add(item);
+                    }
+                }
+                else
+                {
+                    _logger.LogInformation($"Proxy id {item.Id} not found in user session");
+                }
+            }
+
+            _logger.LogInformation($"Linked_profiles_count={linkedAccounts.Count()}, " +
+                                   $"excluded_for_not_having_NHS_number={withoutNhsNumbers.Count()}, " +
+                                   $"excluding_for_having_different_ODS_code={mismatchingOdsCodes.Count}, " +
+                                   $"valid_and_being_returned: {validAccounts.Count}");
+
+            return new LinkedAccountsBreakdownSummary
+            {
+                ValidAccounts = validAccounts,
+                AccountsWithNoNhsNumber = withoutNhsNumbers,
+                AccountsWithMismatchingOdsCode = mismatchingOdsCodes,
+            };
         }
     }
 }

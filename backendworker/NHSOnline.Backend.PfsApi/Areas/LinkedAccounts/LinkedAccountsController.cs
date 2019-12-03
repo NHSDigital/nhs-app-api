@@ -50,11 +50,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetLinkedAccountsService();
 
-            var hasProxyNhsNumbers = linkedAccountsService.HasProxyNhsNumbers(userSession.GpUserSession);
-            
             var result = await linkedAccountsService.GetLinkedAccounts(userSession.GpUserSession);
-            
-            if (!hasProxyNhsNumbers)
+
+            if (result is LinkedAccountsResult.Success success && success.HasAnyProxyInfoBeenUpdatedInSession)
             {
                 _logger.LogInformation($"Updating user session to store Nhs Numbers for linked accounts");
                 await _sessionCacheService.UpdateUserSession(userSession);
@@ -73,13 +71,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                 $"Retrieving linked account summary detail for Id {id}");
 
             var auditResponse = AuditingOperations.LinkedAccountsAccessSummaryResponse;
-            
+
             if (!ModelState.IsValid)
             {
                 await _auditor.Audit(auditResponse, "ModelState is not valid.");
                 return new BadRequestObjectResult(ModelState);
             }
-            
+
             var userSession = HttpContext.GetUserSession();
 
             var linkedAccountsService = _gpSystemFactory
@@ -119,13 +117,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                     CanViewMedicalRecord = linkedAccountSuccess.Response.CanViewMedicalRecord,
                     GpPracticeName = gpPracticeName,
                 };
-               
-                await _auditor.Audit(auditResponse, 
+
+                await _auditor.Audit(auditResponse,
                     $"Successfully returned linked account summary detail for id {id}");
                 return new OkObjectResult(response);
             }
 
-            await _auditor.Audit(auditResponse, 
+            await _auditor.Audit(auditResponse,
                 "Error retrieving linked account summary details: bad gateway");
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
@@ -137,7 +135,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             _logger.LogInformation($"Attempt to switch to profile id {id}");
             var userSession = HttpContext.GetUserSession();
 
-            await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchRequest, 
+            await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchRequest,
                 $"Request to switch to linked account {id}");
 
             var linkedAccountsService = _gpSystemFactory
@@ -149,7 +147,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             if (IsValidAccountOrLinkedAccountId)
             {
                 var linkedAccountAuditInfo = HttpContext.GetLinkedAccountAuditInfo();
-                
+
                 var fromNhsNumber = "";
                 var toNhsNumber = "";
                 if (linkedAccountAuditInfo.IsProxyMode)
@@ -163,21 +161,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                     //switching from main a/c
                     fromNhsNumber = userSession.GpUserSession.NhsNumber;
                     toNhsNumber = linkedAccountsService.GetNhsNumberForProxyUser(userSession.GpUserSession, id);
-                } 
-                
+                }
+
                 fromNhsNumber = fromNhsNumber.RemoveWhiteSpace();
                 toNhsNumber = toNhsNumber.RemoveWhiteSpace();
 
                 _logger.LogInformation($"Switching profile from nhsnumber={fromNhsNumber} to nhsnumber={toNhsNumber}");
 
-                await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchResponse, 
+                await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchResponse,
                     $"Successfully switched profile to NhsNumber {toNhsNumber}");
-                
+
                 return Ok();
             }
 
             _logger.LogInformation($"Couldn't find profile with id {id} to switch to");
-            await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchResponse, 
+            await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchResponse,
                 $"Couldn't find profile with id {id} to switch to");
             return new NotFoundResult();
         }
