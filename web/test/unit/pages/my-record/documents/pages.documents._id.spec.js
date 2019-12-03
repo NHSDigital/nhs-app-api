@@ -341,5 +341,19 @@ describe('document view', () => {
       expect(documentInfo.exists()).toBe(true);
       expect(documentInfo.text()).toEqual('translate_my_record.documents.documentTooLargeSubtext');
     });
+
+    it('will not display the glossary or the warning if the document is too large', async () => {
+      // Arrange
+      const data = () => ({ size: 4000000, comments: [] });
+      const page = mountPage({ $store, data });
+
+      // Act
+      const downloadWarning = page.find('#downloadWarning');
+      const glossary = page.find('#glossary');
+
+      // Assert
+      expect(glossary.exists()).toBe(false);
+      expect(downloadWarning.exists()).toBe(false);
+    });
   });
 });

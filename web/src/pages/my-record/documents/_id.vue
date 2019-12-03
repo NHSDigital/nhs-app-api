@@ -27,11 +27,11 @@
                      :text="$t('my_record.documents.actions.download')"
                      :aria-label="$t('my_record.documents.actions.download')"/>
         </menu-item-list>
-        <p id="downloadWarning">
+        <p v-if="!isTooLarge" id="downloadWarning">
           {{ $t('my_record.documents.downloadWarning') }}
         </p>
-        <p>
-          <glossary/>
+        <p v-if="!isTooLarge">
+          <glossary id="glossary"/>
         </p>
         <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                 :path="documentsPath"
@@ -264,7 +264,6 @@ export default {
   .info {
     font-size: 1em;
     margin-bottom: 1em;
-    margin-top: -1em;
 
     p {
       margin-bottom: 0
