@@ -3,14 +3,14 @@
      :class="$style['nhs-app-message__link']"
      :aria-label="messageLabel"
      @click.stop.prevent="goToMessages(sender)">
-    <h2 :class="$style['nhsuk-heading-xs']" aria-hidden="true">
+    <h2 class="nhsuk-heading-xs" aria-hidden="true">
       {{ sender }}
       <span :class="{
         [$style['nhs-app-message__date']]: true,
         [$style['nhs-app-message__date--unread']]: unreadCount
       }">{{ message.sentTime | formatDate('DD/MM/YYYY') }}</span>
     </h2>
-    <p :class="[$style['nhsuk-body-s'], $style['nhs-app-message__subject-line']]"
+    <p class="nhsuk-body-s" :class="$style['nhs-app-message__subject-line']"
        aria-hidden="true">
       <span v-if="unreadCount" :class="$style['nhs-app-message__meta']">
         <span :class="$style['nhs-app-message__count']">{{ unreadCount }}</span>
@@ -78,7 +78,16 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '~nhsuk-frontend/packages/nhsuk';
+@import '~nhsuk-frontend/packages/core/settings/breakpoints';
+@import '~nhsuk-frontend/packages/core/settings/colours';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/settings/typography';
+@import '~nhsuk-frontend/packages/core/tools/functions';
+@import '~nhsuk-frontend/packages/core/tools/ifff';
+@import '~nhsuk-frontend/packages/core/tools/sass-mq';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
+@import '~nhsuk-frontend/packages/core/tools/typography';
 
 @mixin overflow-ellipsis {
   white-space: nowrap;
@@ -87,11 +96,9 @@ export default {
 }
 
 .nhs-app-message__link {
-  font-size: 1em;
-  display: block;
+  @include nhsuk-responsive-padding(3);
+  padding-left: $nhsuk-gutter-half;
   text-decoration: none;
-  font-weight: $nhsuk-font-bold;
-  padding: 0.8em 1em;
   &:hover,
   &:focus {
     background-color: transparent;
@@ -99,25 +106,34 @@ export default {
     outline: none;
   }
   h2 {
-    padding: 0 6.5em 0 0;
-    font-family: $nhsuk-font, $nhsuk-font-fallback;
-    margin: nhsuk-spacing(0);
-    position: relative;
-    @include overflow-ellipsis;
+    @include nhsuk-responsive-padding(0);
+    @include nhsuk-responsive-margin(0);
+    width: calc(100% - 130px);
   }
 }
 
-.nhs-app-message__meta {
-  float: right;
+.nhs-app-message__date {
+  @include nhsuk-typography-responsive(16);
   position: absolute;
-  right: 42px;
+  right: nhsuk-spacing(7);
+  top: 3px;
+  @include nhsuk-responsive-margin(3, "top");
+  font-weight: $nhsuk-font-normal;
+  color: $nhsuk-secondary-text-color;
+  @include govuk-media-query($until: tablet) {
+    top: 1px;
+  }
+  &.nhs-app-message__date--unread {
+    font-weight: $nhsuk-font-bold;
+    color: $nhsuk-text-color;
+  }
 }
 
 .nhs-app-message__subject-line {
-  padding-top: 2px;
-  padding-bottom: nhsuk-spacing(0);
-  padding-right: 3em;
-  margin-bottom: nhsuk-spacing(0);
+  @include nhsuk-responsive-padding(1, "top");
+  @include nhsuk-responsive-padding(0, "bottom");
+  @include nhsuk-responsive-margin(0, "bottom");
+  padding-right: 80px;
   color: $nhsuk-secondary-text-color;
   @include overflow-ellipsis;
   @include govuk-media-query($until: tablet) {
@@ -125,35 +141,26 @@ export default {
   }
 }
 
-.nhs-app-message__date {
+.nhs-app-message__meta {
   float: right;
-  font-size: 0.875rem;
-  font-weight: $nhsuk-font-normal;
   position: absolute;
-  right: nhsuk-spacing(4);
-  top: 2px;
-  color: $nhsuk-secondary-text-color;
-}
-
-.nhs-app-message__count {
-  font-size: 0.75rem;
-  font-weight: $nhsuk-font-bold;
-  background-color: #FFC107;
-  border-radius: nhsuk-spacing(3);
-  padding: 1px nhsuk-spacing(1);
-  color: $nhsuk-text-color;
-  border: 1px solid #B58F1C;
+  right: nhsuk-spacing(7);
+  .nhs-app-message__count {
+    @include nhsuk-responsive-padding(1, "left");
+    @include nhsuk-responsive-padding(1, "right");
+    @include nhsuk-typography-responsive(14);
+    font-weight: $nhsuk-font-bold;
+    background-color: #FFC107;
+    border-radius: nhsuk-spacing(3);
+    color: $nhsuk-text-color;
+    border: 1px solid #B58F1C;
     display: inline-block;
     min-width: nhsuk-spacing(4);
     text-align: center;
-}
-
-.nhs-app-message__count--long {
-  padding: nhsuk-spacing(1) 6px;
-}
-
-.nhs-app-message__date--unread {
-  font-weight: $nhsuk-font-bold;
-  color: $nhsuk-text-color;
+    @include govuk-media-query($until: tablet) {
+      padding-top: 1px;
+      padding-bottom: 1px;
+    }
+  }
 }
 </style>

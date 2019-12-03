@@ -1,11 +1,12 @@
 <template>
-  <li :class="$style['nhsuk-panel-group__item']">
+  <li :class="$style['message-panel__item']">
     <div>
-      <h3>{{ message.sender }}</h3>
-      <div :class="$style['nhsuk-panel']">
+      <h3 :class="$style['message-panel__sender']">{{ message.sender }}</h3>
+      <div :class="$style['message-panel__content']">
         <linkify-content class="panel-content" :content="message.body" tag="p" />
       </div>
-      <time :datetime="sentTime | formatDate('YYYY-MM-DD h:mma')"
+      <time :class="$style['message-panel__time']"
+            :datetime="sentTime | formatDate('YYYY-MM-DD h:mma')"
       >Sent {{ sentTime | formatDate('h:mma, DD MMMM YYYY') }}</time>
     </div>
   </li>
@@ -48,40 +49,54 @@ export default {
 </style>
 
 <style module lang="scss" scoped>
-  @import "~nhsuk-frontend/packages/nhsuk";
+@import '~nhsuk-frontend/packages/core/settings/breakpoints';
+@import '~nhsuk-frontend/packages/core/settings/colours';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/settings/typography';
+@import '~nhsuk-frontend/packages/core/tools/functions';
+@import '~nhsuk-frontend/packages/core/tools/ifff';
+@import '~nhsuk-frontend/packages/core/tools/mixins';
+@import '~nhsuk-frontend/packages/core/tools/sass-mq';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
+@import '~nhsuk-frontend/packages/core/tools/typography';
 
-  .nhsuk-panel-group__item{
-    @extend .nhsuk-panel-group__item;
-    margin-bottom: nhsuk-spacing(3);
-    width: 100%;
-    > div {
-      width: 100%;
-    }
-    h3{
-      @extend %nhsuk-heading-xs;
-      margin: nhsuk-spacing(0) nhsuk-spacing(0) nhsuk-spacing(2) nhsuk-spacing(0);
-      padding: nhsuk-spacing(0);
-    }
-    .nhsuk-panel {
-      margin: nhsuk-spacing(0);
-      padding: nhsuk-spacing(2);
-      border-radius: nhsuk-spacing(1);
-      border: 1px solid $color_nhsuk-grey-4;
-      width: 80%;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-      -ms-word-break: break-all;
-      word-break: break-all;
-      word-break: break-word;
-      -ms-hyphens: auto;
-      -moz-hyphens: auto;
-      -webkit-hyphens: auto;
-      hyphens: auto;
-    }
-    time{
-      @include nhsuk-typography-responsive(14);
-      margin: nhsuk-spacing(0);
-    }
+.message-panel__item{
+  @include nhsuk-responsive-margin(4, "bottom");
+  list-style: none;
+  width: 80%;
+  &:last-child {
+    @include nhsuk-responsive-margin(0, "bottom");
   }
+}
 
+.message-panel__sender{
+  @include nhsuk-responsive-padding(0);
+  @include nhsuk-responsive-margin(0);
+  @include nhsuk-typography-responsive(16);
+  color: $color_nhsuk-grey-1;
+}
+
+.message-panel__time{
+  @include nhsuk-responsive-padding(0);
+  @include nhsuk-responsive-margin(0);
+  @include nhsuk-typography-responsive(14);
+}
+
+.message-panel__content{
+  @include panel($color_nhsuk-white, $nhsuk-text-color);
+  @include nhsuk-responsive-padding(2);
+  @include nhsuk-responsive-margin(0);
+  border-radius: nhsuk-spacing(1);
+  border: 1px solid $color_nhsuk-grey-4;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
 </style>

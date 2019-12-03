@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter
 
 class MessageBlockElements(private val page:HybridPageObject) {
 
-    private val unreadMessagesBar = "div/span[normalize-space(text())='Unread messages']"
+    private val unreadMessagesBar = "div/div/span[normalize-space(text())='Unread messages']"
 
     private fun messagesXpathAboveUnreadLine(aboveUnreadLine: Boolean): String {
         val followingOrPrecedingUnread = if (aboveUnreadLine) "following" else  "preceding"

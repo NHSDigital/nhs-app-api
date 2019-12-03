@@ -43,16 +43,19 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '~nhsuk-frontend/packages/nhsuk';
+@import '~nhsuk-frontend/packages/core/settings/breakpoints';
+@import '~nhsuk-frontend/packages/core/settings/colours';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/tools/sass-mq';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
 @import '../../style/arrow';
+
 ul.nhs-app-message {
   list-style: none;
-}
-
-.nhs-app-message {
-  margin-bottom: 1em;
-  border-top: 1px $nhsuk-border-color solid;
+  margin-bottom: nhsuk-spacing(3);
   padding-left: nhsuk-spacing(0);
+  border-top: 1px $nhsuk-border-color solid;
   @include govuk-media-query($until: desktop) {
     margin-left: (-$nhsuk-gutter-half);
     margin-right: (-$nhsuk-gutter-half);
@@ -60,12 +63,11 @@ ul.nhs-app-message {
 }
 
 .nhs-app-message__item {
-  margin-bottom: nhsuk-spacing(0);
-  box-sizing: border-box;
   @include icon-arrow-left-white-background;
+  box-sizing: border-box;
   position: relative;
-  margin-left: nhsuk-spacing(0);
-  border-bottom: 1px $nhsuk-border-color solid;
   padding: nhsuk-spacing(0);
+  margin: nhsuk-spacing(0);
+  border-bottom: 1px $nhsuk-border-color solid;
 }
 </style>

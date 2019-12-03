@@ -2,22 +2,22 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <page-title>
-          <span :class="$style['messages-title']">
-            <span :class="$style['messages-title-prefix']">
-              {{ $t('messaging.messages.titlePrefix') }}
-            </span>{{ sender }}</span>
+        <page-title css-class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
+          <span class="nhsuk-caption-l nhsuk-u-margin-bottom-0">
+            {{ $t('messaging.messages.titlePrefix') }}
+          </span>
+          {{ sender }}
         </page-title>
       </div>
     </div>
 
-    <ul v-if="hasReadMessages" id="readSection" :class="$style['panel-group-nomargin']">
+    <ul v-if="hasReadMessages" id="readSection" :class="$style['message-panel__list']">
       <message v-for="(message, index) in readMessages" :key="index" :message="message" />
     </ul>
 
     <page-divider v-if="hasUnreadMessages" :text="$t('messaging.messages.unreadMessages')" />
 
-    <ul v-if="hasUnreadMessages" id="unreadSection" :class="$style['panel-group-nomargin']">
+    <ul v-if="hasUnreadMessages" id="unreadSection" :class="$style['message-panel__list']">
       <message v-for="(message, index) in unreadMessages" :key="index" :message="message" />
     </ul>
   </div>
@@ -77,20 +77,15 @@ export default {
 </script>
 
 <style module lang='scss' scoped>
-@import '~nhsuk-frontend/packages/nhsuk';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/tools/ifff';
+@import '~nhsuk-frontend/packages/core/tools/sass-mq';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
 
-ul.panel-group-nomargin {
-  @extend .nhsuk-panel-group;
-  padding-left: 0;
-}
-
-.messages-title {
-  @include nhsuk-typography-responsive(32);
-  .messages-title-prefix {
-    @include nhsuk-typography-responsive(19);
-    display: block;
-    color: $nhsuk-secondary-text-color;
-    font-weight: 400;
-  }
+.message-panel__list {
+  @include nhsuk-responsive-margin(2, "top");
+  @include nhsuk-responsive-margin(2, "bottom");
+  @include nhsuk-responsive-padding(0, "left");
+  list-style: none;
 }
 </style>

@@ -5,7 +5,7 @@ import { createStore, mount } from '../../helpers';
 
 describe('messaging messages', () => {
   const pageDividerClass = 'page-divider';
-  const panelItemClass = 'nhsuk-panel-group__item';
+  const panelItemClass = 'message-panel__item';
   const readSectionId = 'readSection';
   const unreadSectionId = 'unreadSection';
   const sender = 'test sender';

@@ -10,8 +10,8 @@ class MessagesPage : HybridPageObject() {
     val messages = MessageBlockElements(this)
 
     fun assertDisplayed(sender: String) {
-        val path = "//h1[span[span[normalize-space(text())='Messages from:']]]" +
-                "[span[normalize-space(text())='$sender']]"
+        val path = "//h1[normalize-space(text())='$sender']" +
+                "[span[normalize-space(text())='Messages from:']]"
         val header = HybridPageElement(
                 path,
                 path,
