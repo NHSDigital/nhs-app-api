@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div :class="$style[fixBreadCrumb ? 'fix-breadcrumb' : '']">
-      <bread-crumb-trail v-if="showBreadCrumb" id="bread-crumb"
+    <div :class="$style[isNative ? 'fix-breadcrumb' : '']">
+      <bread-crumb-trail v-if="isBreadCrumbVisible" id="bread-crumb"
                          :routes="currentBreadCrumbs"/>
       <yellow-banner v-if="showYellowBanner"
                      id="yellow-banner-line"
                      :class="$style['bannerLine']"/>
     </div>
-    <div :class="[$style[fixBreadCrumb ? 'native-padding' : '']]">
-      <yellow-banner v-if="showYellowBanner" id="yellow-banner">
+    <div :class="[$style[isNative && isBreadCrumbVisible ? 'native-padding' : '']]">
+      <yellow-banner v-if="showYellowBanner" id="yellow-banner"
+                     :class="$style['bannerLine-padding']">
         <div v-if="showExternalServiceWarning" id="external-service-warning">
-          <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-1 nhsuk-u-margin-bottom-0">
+          <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
+              nhsuk-u-margin-bottom-0 nhsuk-body-s">
             <b>
               {{ $t('externalServiceWarning.warningText') }}
             </b>
@@ -20,11 +22,10 @@
              :class="$style['banner']" tabindex="0"
              @keypress.enter="proxyBannerClicked"
              @click="proxyBannerClicked">
-          <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-1 nhsuk-u-margin-bottom-0">
+          <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
+              nhsuk-u-margin-bottom-0 nhsuk-body-s">
             {{ $t('linkedProfiles.actingAsOtherUserBannerWarningText') }}
-            <b class="nhsuk-u-margin-top-2">
-              {{ actingAsPersonName }}
-            </b>
+            <b>{{ actingAsPersonName }}</b>
           </p>
         </div>
       </yellow-banner>
@@ -78,6 +79,9 @@ export default {
     isProxying() {
       return this.$store.getters['session/isProxying'];
     },
+    isNative() {
+      return this.$store.state.device.isNativeApp;
+    },
     currentBreadCrumbs() {
       return getCrumbTrailForRoute(findByName(this.$route.name));
     },
@@ -89,9 +93,9 @@ export default {
     demographicsQuestionAnswered() {
       return this.$store.state.onlineConsultations.demographicsQuestionAnswered;
     },
-    fixBreadCrumb() {
+    isBreadCrumbVisible() {
       return this.showBreadCrumb &&
-        !isEmpty(this.currentBreadCrumbs) && this.$store.state.device.isNativeApp;
+        !isEmpty(this.currentBreadCrumbs);
     },
     showYellowBanner() {
       return this.showExternalServiceWarning || this.isProxying;
@@ -149,6 +153,10 @@ export default {
     height: 5px;
   }
 
+  .bannerLine-padding {
+    padding-top: 7px;
+  }
+
   .native-padding {
     padding-top: 46px;
   }
@@ -156,15 +164,21 @@ export default {
   .banner {
     @include icon-arrow-left;
 
+    padding: 0 10px;
+    margin: 0 -10px;
+
     &:hover {
-      outline-color: $focus_highlight;
-      box-shadow: inset 0 0 0 4px $focus_highlight;
-      outline-offset: -5px;
+      text-decoration: underline;
+      cursor: pointer;
     }
 
     &:focus {
       @include focusStyleLightMenuItem;
-      color: #000;
+      outline-color: $black;
+      box-shadow: inset 0 0 0 4px $black;
+      outline-offset: -5px;
+      color: $black;
+      text-decoration: none;
     }
   }
 

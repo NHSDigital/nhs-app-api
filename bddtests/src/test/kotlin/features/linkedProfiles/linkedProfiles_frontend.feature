@@ -1,12 +1,13 @@
 @linked-profiles
 Feature: Login with proxy access
 
+  @smoketest
   Scenario: An EMIS user with proxy accounts can see proxy details and switch back to their own account
     Given I am logged in as a EMIS user with linked profiles and appointments provider IM1
     When I select the linked profiles link from the home page
     And I select a linked profile
     And I click the Switch to this profile button for the proxy user
-    And I click the yellow banner
+    And I click the proxy warning
     Then the switch profiles page is displayed
     And the correct proxy user details are displayed
     Then I click the Switch to my profile button for the main user

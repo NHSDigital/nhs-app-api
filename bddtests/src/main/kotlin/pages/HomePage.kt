@@ -59,6 +59,12 @@ open class HomePage : HybridPageObject() {
             page = this
     )
 
+    val actingAsOtherUserWarning = HybridPageElement(
+            webDesktopLocator = "//*[@id='acting-as-other-user-warning']",
+            webMobileLocator = "//*[@id='acting-as-other-user-warning']",
+            page = this
+    )
+
     private fun listOfLinks(): HybridPageElement {
         return HybridPageElement(
                 webDesktopLocator = listMenuPath,
