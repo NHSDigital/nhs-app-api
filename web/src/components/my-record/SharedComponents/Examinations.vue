@@ -13,7 +13,7 @@
          :href="examinationsPath + nojsQuery"
          tabindex="0"
          @click.prevent="viewExaminations"
-         @keypress="onKeyDown($event)">
+         @keypress.enter="viewExaminations">
         {{ $t('my_record.examinations.visionDetailsLink') }}
       </a>
     </div>
@@ -23,7 +23,7 @@
 
 <script>
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
-import { key, redirectTo } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import { MY_RECORD_VISION_EXAMINATIONS_DETAIL } from '@/lib/routes';
 
 export default {
@@ -70,11 +70,6 @@ export default {
   methods: {
     viewExaminations() {
       redirectTo(this, this.examinationsPath);
-    },
-    onKeyDown(e) {
-      if (e.key === key.Enter) {
-        this.viewExaminations();
-      }
     },
   },
 };

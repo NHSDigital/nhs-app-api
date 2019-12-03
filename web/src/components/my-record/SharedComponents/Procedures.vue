@@ -13,7 +13,7 @@
          :href="proceduresPath + nojsQuery"
          tabindex="0"
          @click.prevent="viewProcedures"
-         @keypress="onKeyDown($event)">
+         @keypress.enter="viewProcedures">
         {{ $t('my_record.procedures.visionDetailsLink') }}
       </a>
     </div>
@@ -23,7 +23,7 @@
 
 <script>
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
-import { key, redirectTo } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import { MY_RECORD_VISION_PROCEDURES_DETAIL } from '@/lib/routes';
 
 export default {
@@ -70,11 +70,6 @@ export default {
   methods: {
     viewProcedures() {
       redirectTo(this, this.proceduresPath);
-    },
-    onKeyDown(e) {
-      if (e.key === key.Enter) {
-        this.viewProcedures();
-      }
     },
   },
 };

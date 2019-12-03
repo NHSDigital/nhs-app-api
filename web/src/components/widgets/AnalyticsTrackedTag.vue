@@ -7,16 +7,13 @@
              :role="tag === 'a' && !href ? 'link': undefined"
              :target="tag === 'a' ? target : undefined"
              :tabindex="tabindex"
-             @click="trackClick($event)"
-             @keypress="onKeyDown($event)">
+             @click="trackClick"
+             @keypress.enter="trackClick">
     <slot/>
   </component>
 </template>
 
 <script>
-import { key } from '@/lib/utils';
-
-/* eslint-disable no-unreachable */
 export default {
   name: 'AnalyticsTrackedTag',
   props: {
@@ -105,11 +102,6 @@ export default {
           return 'accordion';
         default:
           return `unhandled_tag:${tagName}`;
-      }
-    },
-    onKeyDown(e) {
-      if (e.key === key.Enter) {
-        this.trackClick(e);
       }
     },
   },

@@ -70,7 +70,7 @@
                          @change="selected">
                   <label :for="patientTelephoneNumber.telephoneNumber"
                          class="nhsuk-label nhsuk-radios__label"
-                         @keypress="onKeyDown" @click="selected">
+                         @keypress.enter.stop="selected" @click.stop="selected">
                     {{ patientTelephoneNumber.telephoneNumber }}
                   </label>
                 </div>
@@ -79,10 +79,10 @@
                          type="radio"
                          name="radio"
                          class="nhsuk-radios__input"
-                         @change="selected">
+                         @change.stop="selected">
                   <label :for="'otherPhoneNumberRadioInput'"
                          class="nhsuk-label nhsuk-radios__label"
-                         @keypress="onKeyDown" @click="selected">
+                         @keypress.enter.stop="selected" @click.stop="selected">
                     {{ $t('appointments.confirmation.useOtherPhoneNumberLabel') }}
                   </label>
                 </div>
@@ -184,7 +184,7 @@ import MessageList from '@/components/widgets/MessageList';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import { createUri } from '@/lib/noJs';
 import { getMessage } from '@/lib/errors';
-import { key, redirectTo } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import { APPOINTMENT_BOOKING, APPOINTMENT_CONFIRMATIONS, APPOINTMENTS } from '@/lib/routes';
 
 export default {
@@ -414,11 +414,6 @@ export default {
         */
       }
     },
-    onKeyDown(e) {
-      if (e.key === key.Enter) {
-        this.selected(e);
-      }
-    },
     otherPhoneNumberSelected() {
       this.telephoneNumber = '';
       this.showPhoneNumberTextBox = true;
@@ -430,7 +425,6 @@ export default {
         this.telephoneNumber = event.currentTarget.id;
         this.hidePhoneNumberTextBox();
       }
-      event.stopPropagation();
     },
     showBookingReason() {
       return this.$store.state.availableAppointments

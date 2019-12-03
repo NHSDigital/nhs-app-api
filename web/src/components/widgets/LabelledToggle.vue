@@ -19,6 +19,10 @@ export default {
     Toggle,
   },
   props: {
+    checkboxId: {
+      type: String,
+      default: 'default-id',
+    },
     isWaiting: {
       type: Boolean,
       default: false,
@@ -26,10 +30,6 @@ export default {
     label: {
       type: String,
       required: true,
-    },
-    checkboxId: {
-      type: String,
-      default: 'default-id',
     },
     // eslint-disable-next-line vue/require-prop-types
     value: {

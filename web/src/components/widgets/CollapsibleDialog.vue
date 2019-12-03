@@ -6,7 +6,7 @@
          role="button"
          tabindex="0"
          @click="toggle"
-         @keypress.13="toggle">
+         @keypress.enter.prevent="toggle">
       <plus-minus-icon :icon-plus="!showContent" />
       <p :class="$style['info-message-title']">
         <slot name="header" />
@@ -22,7 +22,6 @@
 <script>
 /* eslint-disable import/extensions */
 import PlusMinusIcon from '@/components/icons/PlusMinusIcon';
-import { key } from '@/lib/utils';
 
 export default {
   name: 'CollapsibleDialog',
@@ -42,12 +41,6 @@ export default {
   methods: {
     toggle() {
       this.showContent = !this.showContent;
-    },
-    keyPress(event) {
-      if (event.key === key.Enter) {
-        event.preventDefault();
-        this.toggle();
-      }
     },
   },
 };

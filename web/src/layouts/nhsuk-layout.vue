@@ -257,8 +257,6 @@ export default {
 
       if (this.$store.state.device.isNativeApp) {
         this.$store.dispatch('auth/nativeLogin');
-      }
-      if (this.$store.state.device.isNativeApp) {
         NativeCallbacks.resetPageFocus();
       }
     }

@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/no-template-shadow -->
 <template>
   <div v-if="showTemplate" class="content">
     <div :class="$style['page']" aria-live="polite">
@@ -6,9 +5,9 @@
         {{ $t('ds01.mainHeader') }}
       </h2>
       <ul id="contents" :class="$style['list-menu']">
-        <li v-for="pageId in pageIds" :key="pageId">
-          <a :class="isLinkActive(pageId)" tabindex="0" role="link" @click="goToPage(pageId)"
-             @keypress="contentsKeyPressed($event, pageId)">{{ $t('ds01.titles.' + pageId) }}</a>
+        <li v-for="_pageId in pageIds" :key="_pageId">
+          <a :class="isLinkActive(_pageId)" tabindex="0" role="link" @click="goToPage(_pageId)"
+             @keypress.enter.prevent="goToPage(_pageId)">{{ $t('ds01.titles.' + _pageId) }}</a>
         </li>
       </ul>
       <h2 :key="`${pageId}header`" :class="$style['title']">
@@ -41,7 +40,7 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
+import keys from 'lodash/fp/keys';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import BottomNav from '@/components/data-sharing/BottomNav';
 import GenericButton from '@/components/widgets/GenericButton';
@@ -49,9 +48,6 @@ import MakeYourChoice from '@/components/data-sharing/MakeYourChoice';
 import Overview from '@/components/data-sharing/Overview';
 import WhereConfidentialPatientInformationIsUsed from '@/components/data-sharing/WhereConfidentialPatientInformationIsUsed';
 import WhereYourChoiceDoesNotApply from '@/components/data-sharing/WhereYourChoiceDoesNotApply';
-import { key } from '@/lib/utils';
-
-import keys from 'lodash/fp/keys';
 
 export default {
   components: {
@@ -88,12 +84,6 @@ export default {
     changePage(index) {
       window.scrollTo(0, 0);
       this.pageIndex = index;
-    },
-    contentsKeyPressed(event, pageId) {
-      if (event.key === key.Enter) {
-        event.preventDefault();
-        this.goToPage(pageId);
-      }
     },
     goToPage(pageId) {
       this.changePage(this.pageIds.indexOf(pageId));

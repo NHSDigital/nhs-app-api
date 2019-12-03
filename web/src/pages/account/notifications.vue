@@ -1,28 +1,23 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
   <div v-if="showTemplate">
-    <div>
-      <p v-for="(paragraph, index) of $t('account.notifications.paragraphs')" :key="index">
-        {{ paragraph }}
-      </p>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <p v-for="(paragraph, index) of $t('account.notifications.paragraphs')" :key="index">
+          {{ paragraph }}
+        </p>
+        <labelled-toggle v-model="registered"
+                         checkbox-id="allow_notifications"
+                         :is-waiting="isWaiting"
+                         :label="$t('account.notifications.toggleLabel')"/>
+        <nhs-arrow-banner :banner-text="$t('account.notifications.settingsLinkText')"
+                          :open-new-window="false"
+                          :click-action="openAppSettings"/>
+      </div>
     </div>
-
-    <labelled-toggle
-      v-model="registered"
-      checkbox-id="allow_notifications"
-      :is-waiting="isWaiting"
-      :label="$t('account.notifications.toggleLabel')"
-    />
-
-    <nhs-arrow-banner :banner-text="$t('account.notifications.settingsLinkText')"
-                      :open-new-window="false"
-                      :click-action="openAppSettings" />
-
-    <back-button />
   </div>
 </template>
 
 <script>
-import BackButton from '@/components/BackButton';
 import LabelledToggle from '@/components/widgets/LabelledToggle';
 import NativeApp from '@/services/native-app';
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
@@ -30,7 +25,6 @@ import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 export default {
   layout: 'nhsuk-layout',
   components: {
-    BackButton,
     LabelledToggle,
     NhsArrowBanner,
   },

@@ -33,8 +33,8 @@
                    :class="$style.viewTestResult"
                    data-purpose="record-item-detail"
                    tabindex="0"
-                   @click="activateTestResult(testResult.id, $event)"
-                   @keypress="onKeyDown(testResult.id, $event)">
+                   @click.prevent="activateTestResult(testResult.id)"
+                   @keypress.enter.prevent="activateTestResult(testResult.id)">
                   {{ testResult.description }}
                 </a>
               </p>
@@ -85,7 +85,7 @@ import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedCompo
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
-import { key, redirectTo } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import { MYRECORD } from '@/lib/routes';
 
 export default {
@@ -131,8 +131,7 @@ export default {
     };
   },
   methods: {
-    activateTestResult(testResultId, event) {
-      event.preventDefault();
+    activateTestResult(testResultId) {
       redirectTo(this, this.getTestResultPath(testResultId));
     },
     backButtonClicked() {
@@ -142,11 +141,6 @@ export default {
       return effectiveDate && effectiveDate.value
         ? effectiveDate.value
         : defaultValue;
-    },
-    onKeyDown(testResultId, e) {
-      if (e.key === key.Enter) {
-        this.activateTestResult(testResultId, e);
-      }
     },
     getTestResultPath(testResultId) {
       return `/gp-medical-record/testresultdetail/${testResultId}`;

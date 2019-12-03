@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import { formatDate } from '@/plugins/filters';
 import { createUri } from '@/lib/noJs';
+import { formatDate } from '@/plugins/filters';
 import { redirectTo, stripHtml } from '@/lib/utils';
 import { MESSAGING_MESSAGES } from '@/lib/routes';
 
@@ -109,6 +109,7 @@ export default {
     @include nhsuk-responsive-padding(0);
     @include nhsuk-responsive-margin(0);
     width: calc(100% - 130px);
+    overflow-wrap: break-word;
   }
 }
 

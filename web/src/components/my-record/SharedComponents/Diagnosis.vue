@@ -13,7 +13,7 @@
          :href="diagnosisPath + nojsQuery"
          tabindex="0"
          @click.prevent="viewDiagnosis"
-         @keypress="onKeyDown($event)">
+         @keypress.enter="viewDiagnosis">
         {{ $t('my_record.diagnosis.visionDetailsLink') }}
       </a>
     </div>
@@ -22,7 +22,7 @@
 </template>
 <script>
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
-import { key, redirectTo } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import { MY_RECORD_VISION_DIAGNOSIS_DETAIL } from '@/lib/routes';
 
 export default {
@@ -69,11 +69,6 @@ export default {
   methods: {
     viewDiagnosis() {
       redirectTo(this, this.diagnosisPath);
-    },
-    onKeyDown(e) {
-      if (e.key === key.Enter) {
-        this.viewDiagnosis();
-      }
     },
   },
 };

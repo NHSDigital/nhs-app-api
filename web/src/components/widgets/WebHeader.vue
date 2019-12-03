@@ -12,8 +12,8 @@
                     :class="$style.menuButton"
                     aria-controls="header-navigation"
                     aria-label="Open menu"
-                    @click.prevent="toggleMiniMenu()"
-                    @keyup.13="toggleMiniMenu()">Menu</button>
+                    @click.prevent="toggleMiniMenu"
+                    @keyup.enter="toggleMiniMenu">Menu</button>
           </div>
           <header-links v-if="showLinks" :anchor-links="links"/>
         </div>

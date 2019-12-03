@@ -2,13 +2,16 @@
   <div :class="{ [$style.toggleWrapper]: true, [$style.waiting]: isWaiting }">
     <toggle-spinner :id="`${checkboxId}_spinner`" v-visible="isWaiting" :class="$style.spinner" />
     <input :id="checkboxId"
-           ref="checkbox"
            :class="$style.toggle"
            type="checkbox"
            :name="name"
            :checked="value"
-           role="switch">
-    <label v-visible="!isWaiting" :for="checkboxId" @click.stop.prevent="onClick"/>
+           role="switch"
+           @click.stop.prevent="onClick"
+           @keypress.space.prevent="onClick">
+    <label v-visible="!isWaiting"
+           :for="checkboxId"
+           @click.stop.prevent="onClick"/>
   </div>
 </template>
 
@@ -83,6 +86,7 @@ export default {
   input.toggle {
     opacity: 0; // hides checkbox
     position: absolute;
+    z-index: -1;
     & + label {
       position: relative;
       display: inline-block;

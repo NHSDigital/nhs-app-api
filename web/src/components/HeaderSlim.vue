@@ -2,7 +2,7 @@
   <header v-if="showHeader" :class="[$style.slim]">
     <h1 :class="[$style.h1, 'nhsuk-u-margin-top-1']"><slot/></h1>
     <form :action="backUrl" method="get">
-      <button tabindex="0" @click="backClick($event)" @keypress="keyPress($event)">
+      <button tabindex="0" @click.prevent="goBack" @keypress.enter.prevent="goBack">
         <back-icon/>
       </button>
     </form>
@@ -13,7 +13,6 @@
 <script>
 /* eslint-disable import/extensions */
 import BackIcon from '@/components/icons/BackIcon';
-import { key } from '@/lib/utils';
 import { ACCOUNT_SIGNOUT } from '@/lib/routes';
 
 export default {
@@ -45,14 +44,8 @@ export default {
     },
   },
   methods: {
-    backClick(event) {
-      event.preventDefault();
+    goBack() {
       this.goToUrl(this.backUrl);
-    },
-    keyPress(event) {
-      if (event.key === key.Enter) {
-        this.backClick(event);
-      }
     },
   },
 };

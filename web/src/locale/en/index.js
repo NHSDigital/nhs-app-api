@@ -1474,7 +1474,7 @@ export default {
     medicalHistory: 'Medical history',
     myRecord: 'Your GP medical record',
     myRecordDocuments: 'Documents',
-    notifications: 'Notifications',
+    notifications: 'Manage notifications',
     organDonation: 'Your organ donation decision',
     symptoms: 'Check your symptoms',
     /* Data sharing header should be updated in Android, iOS, and Web if changed */
@@ -1537,7 +1537,7 @@ export default {
     examinationsV2: 'Examinations - Your GP medical record',
     proceduresV2: 'Procedures - Your GP medical record',
     medicalHistory: 'Medical history - Your GP medical record',
-    notifications: 'Notifications',
+    notifications: 'Manage notifications',
     organDonation: 'Your organ donation decision',
     organDonationWithdraw: 'Withdraw your organ donation decision',
     symptoms: 'Check your symptoms',
@@ -1688,7 +1688,7 @@ export default {
         'If you share this device with other people, they may be able to see your notifications.',
       ],
       toggleLabel: 'Allow notifications',
-      settingsLinkText: 'Manage your device\'s notifications settings',
+      settingsLinkText: 'Manage how notifications appear on your device',
       errors: {
         pageTitle: 'Notifications error',
         pageHeader: 'Notifications error',
@@ -1727,7 +1727,7 @@ export default {
     },
     messaging: {
       subheader: 'Your messages',
-      body: 'Get messages from your GP Practice and other NHS services.',
+      body: 'Get messages from your GP surgery and other NHS services.',
     },
   },
   webHeader: {

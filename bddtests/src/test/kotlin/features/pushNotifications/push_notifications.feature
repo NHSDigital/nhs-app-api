@@ -65,7 +65,7 @@ Feature: Push Notifications
     When I navigate to the Account page for mobile devices
     And I click the Notifications link on the Account page
     Then the Notifications Settings page is displayed
-    When I click the 'Back' button
+    When I click the 'Back' breadcrumb
     Then the Account page for mobile devices is displayed
 
   Scenario: A user viewing notifications settings when an internal server error occurs sees an error

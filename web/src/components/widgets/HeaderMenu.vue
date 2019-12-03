@@ -5,7 +5,7 @@
       <span id="label-navigation" style="color:#212b32;">Menu</span>
       <button id="close-menu" class="nhsuk-header__navigation-close"
               @click.prevent="closeMiniMenu"
-              @keyup.13="closeMiniMenu">
+              @keyup.enter="closeMiniMenu">
         <svg class="nhsuk-icon nhsuk-icon__close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path
             d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42

@@ -30,8 +30,8 @@
           <a :href="getTestResultPath(testResult.id)"
              style="display:inline-block;"
              tabindex="0"
-             @click="activateTestResult(testResult.id, $event)"
-             @keypress="onKeyDown(testResult.id, $event)">{{ testResult.description }}
+             @keypress.enter.prevent="activateTestResult(testResult.id)"
+             @click.prevent="activateTestResult(testResult.id)">{{ testResult.description }}
           </a>
         </p>
         <p v-if="supplier === 'EMIS'" data-purpose="record-item-detail"
@@ -87,7 +87,7 @@
       <a :href="testResultsPath + nojsQuery"
          tabindex="0"
          @click.prevent="viewVisionTestResults"
-         @keypress="onKeyDownVision($event)">
+         @keypress.enter="viewVisionTestResults">
         {{ $t('my_record.testResults.visionDetailsLink') }}
       </a>
     </div>
@@ -97,7 +97,7 @@
 <script>
 import orderBy from 'lodash/fp/orderBy';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
-import { key, redirectTo } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import { MY_RECORD_VISION_TEST_RESULTS_DETAIL } from '@/lib/routes';
 
 export default {
@@ -145,8 +145,7 @@ export default {
     },
   },
   methods: {
-    activateTestResult(testResultId, event) {
-      event.preventDefault();
+    activateTestResult(testResultId) {
       redirectTo(this, this.getTestResultPath(testResultId));
     },
     viewVisionTestResults() {
@@ -154,16 +153,6 @@ export default {
     },
     getTestResultPath(testResultId) {
       return `/my-record/testresultdetail/${testResultId}`;
-    },
-    onKeyDownVision(e) {
-      if (e.key === key.Enter) {
-        this.viewVisionTestResults();
-      }
-    },
-    onKeyDown(testResultId, e) {
-      if (e.key === key.Enter) {
-        this.activateTestResult(testResultId, e);
-      }
     },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;

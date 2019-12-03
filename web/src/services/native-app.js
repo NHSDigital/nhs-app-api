@@ -175,17 +175,6 @@ export default {
     return false;
   },
 
-
-  /* Android only - for document zoom */
-  setZoomable(canZoom) {
-    const app = window.nativeApp;
-    if (app && app.setZoomable) {
-      app.setZoomable(canZoom);
-      return true;
-    }
-    return false;
-  },
-
   /**
    * @deprecated since version 1.21, here for backwards compatability
    * */
@@ -198,10 +187,11 @@ export default {
     return false;
   },
 
-  startDownload(base64Data, fileName, mimeType) {
+  /* Android only - for document zoom */
+  setZoomable(canZoom) {
     const app = window.nativeApp;
-    if (app && app.startDownload) {
-      app.startDownload(base64Data, fileName, mimeType);
+    if (app && app.setZoomable) {
+      app.setZoomable(canZoom);
       return true;
     }
     return false;
@@ -238,6 +228,15 @@ export default {
     const app = window.nativeApp;
     if (app && app.showMenuBar) {
       app.showMenuBar();
+      return true;
+    }
+    return false;
+  },
+
+  startDownload(base64Data, fileName, mimeType) {
+    const app = window.nativeApp;
+    if (app && app.startDownload) {
+      app.startDownload(base64Data, fileName, mimeType);
       return true;
     }
     return false;

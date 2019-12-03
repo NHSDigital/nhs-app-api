@@ -2,7 +2,7 @@
   <li
     v-tabbing="defaultClasses"
     :class="getStyleClasses"
-    @keypress="onKeyDown">
+    @keypress.enter="select">
     <a :href="createLink()" @click.prevent="select">
       <span >
         <span :class="$style.strong"
@@ -25,7 +25,6 @@
 import DateProvider from '@/services/DateProvider';
 import TabFocusMixin from '@/components/widgets/TabFocusMixin';
 import { createUri } from '@/lib/noJs';
-import { key } from '@/lib/utils';
 import { APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
 
 export default {
@@ -70,11 +69,6 @@ export default {
     deselect() {
       this.isSelected = false;
       this.$store.dispatch('availableAppointments/deselect');
-    },
-    onKeyDown(e) {
-      if (e.key === key.Enter) {
-        this.select();
-      }
     },
   },
 };
