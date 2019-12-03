@@ -217,7 +217,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             _mockTppSessionMapper
                 .Setup(x => x.Map(reply, odsCode, _nhsNumber))
-                .Returns(Option.Some(CreateUserSession(odsCode, _nhsNumber)));
+                .Returns(Option.Some(CreateUserSession(expectedName, odsCode, _nhsNumber)));
 
             _systemUnderTest = _fixture.Create<TppSessionService>();
 
@@ -226,13 +226,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             // Assert
             var created = (GpSessionCreateResult.Success) result;
-            created.Name.Should().Be(expectedName);
+            created.UserSession.Name.Should().Be(expectedName);
         }
 
         [TestMethod]
         public async Task Create_WhenCalledSuccessfully_SetsTheUserSessionAsATppUserSession()
         {
             // Arrange
+            const string expectedPatientName = "Mr Test User";
             const string expectedSessionId = "ff5246bc-ef03-458a-a1ff-4b6e80268671";
             const string expectedOnlineUserId = "abcde";
             const string expectedPatientId = "12345";
@@ -242,7 +243,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 onlineUserId: expectedOnlineUserId,
                 patientId: expectedPatientId);
 
-            var userSession = CreateUserSession(odsCode, expectedSessionId,
+            var userSession = CreateUserSession(expectedPatientName, odsCode, expectedSessionId,
                 expectedOnlineUserId, expectedPatientId, _nhsNumber);
 
             _mockTppClient.Setup(x => x
@@ -262,6 +263,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
             var tppUserSession = createdResult.UserSession.Should().BeAssignableTo<TppUserSession>().Subject;
 
+            tppUserSession.Name.Should().Be(expectedPatientName);
             tppUserSession.Suid.Should().Be(expectedSessionId);
             tppUserSession.OnlineUserId.Should().Be(expectedOnlineUserId);
             tppUserSession.PatientId.Should().Be(expectedPatientId);
@@ -533,8 +535,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         private static string CreateConnectionTokenJson(string accountId = "", string passphrase = "") =>
             $"{{ \"accountId\": \"{accountId}\", \"passphrase\": \"{passphrase}\" }}";
 
-        private TppClient.TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie", string suid = "dimsum",
-            string onlineUserId = "123", string patientId = "123")
+        private TppClient.TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie",
+            string suid = "dimsum", string onlineUserId = "123", string patientId = "123")
         {
             var response = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
             {
@@ -570,11 +572,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             return response;
         }
 
-        private static TppUserSession CreateUserSession( string odsCode, string sessionId = "dimsum", string onlineUserId = "123",
-            string patientId = "123", string nhsNumber = "123456789")
+        private static TppUserSession CreateUserSession(string patientName, string odsCode, string sessionId = "dimsum",
+            string onlineUserId = "123", string patientId = "123", string nhsNumber = "123456789")
         {
-            return new TppUserSession()
+            return new TppUserSession
             {
+                Name = patientName,
                 Suid = sessionId,
                 OnlineUserId = onlineUserId,
                 PatientId = patientId,

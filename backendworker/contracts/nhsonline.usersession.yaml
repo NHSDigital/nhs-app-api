@@ -5,6 +5,22 @@ info:
   description: NHS App Sub-API - endpoints pertaining to User Sessions.
 paths:
   /session:
+    get:
+      tags:
+        - session
+      summary: Returns the user session created and returned from the POST to /session
+      description: Returns the user session created and returned from the POST to /session
+      responses:
+        "200":
+          description: Successfully retrieved user session
+          content:
+            application/json:
+              scheme:
+                $ref: "#/components/schemas/UserSessionResponse"
+        "401":
+          description: User session has expired.
+        "500":
+          description: An unexpected error occurred during the processing of the request.
     post:
       tags:
         - session
@@ -27,7 +43,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserSessionResponse"
+                $ref: "#/components/schemas/PostUserSessionResponse"
         "400":
           description: Bad request. Supplied OAuth details are incomplete or invalid
           content:
@@ -151,5 +167,13 @@ components:
         accessToken:
           type: string
           description: User's access token which allows NHS Login to identify them
-        serviceJourneyRules:
-          $ref: servicejourneyrules.yaml#/components/schemas/ServiceJourneyRulesResponse
+        im1MessagingEnabled:
+          type: boolean
+          description: Patient to Practice Messaging has been enabled at the practice level for the current user
+    PostUserSessionResponse:
+      allOf:
+        - $ref: "#/components/schemas/UserSessionResponse"
+        - type: object
+          properties:
+            serviceJourneyRules:
+              $ref: servicejourneyrules.yaml#/components/schemas/ServiceJourneyRulesResponse

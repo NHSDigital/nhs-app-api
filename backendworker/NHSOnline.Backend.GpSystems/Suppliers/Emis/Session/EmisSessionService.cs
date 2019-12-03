@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.SharedModels;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
@@ -168,29 +167,25 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 {
                     var practiceResponse = new EmisRequestTaskChecker<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>>(_logger, "GetPracticeDetails").Check(practiceSettingsTask);
 
-                    try
-                    {
-                        JsonConvert.DeserializeObject<PracticeSettingsRawResponse>(
-                            practiceResponse?.RawResponse)
-                            .Services.PrintIsPracticePatientCommunicationSupportedEnabled(_logger, session.OdsCode);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, "Failed in trying to convert raw response to json.");
-                    }
-
                     session.AppointmentBookingReasonNecessity =
                         _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.AppointmentBookingReason, Necessity.Mandatory);
 
                     session.PrescriptionSpecialRequestNecessity =
                         _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.PrescribingComment, Necessity.Optional);
+
+                    session.Im1MessagingEnabled =
+                        practiceResponse?.Body?.Services?.PracticePatientCommunicationSupported ?? false;
+
+                    session.Name = patientName;
+                    
+                    _logger.LogInformation($"Enabled services for practice {session.OdsCode}: {practiceResponse?.Body?.Services}");
                 }
                 catch (HttpRequestException e)
                 {
                     _logger.LogError(e, "Failed request to retrieve practice settings, HttpRequestException has been thrown.");
                 }
 
-                return new GpSessionCreateResult.Success(patientName, session);
+                return new GpSessionCreateResult.Success(session);
             }
             catch (EmisSessionResponseErrorException responseError)
             {

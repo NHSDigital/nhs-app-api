@@ -24,6 +24,7 @@ import {
   NOMINATED_PHARMACY_SEARCH,
   ORGAN_DONATION,
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
+  PATIENT_PRACTICE_MESSAGING,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -176,6 +177,12 @@ export default {
         1: 'organDonation/submitDecision',
       },
       additionalInfoComponent: 'ContactOrganDonation',
+    },
+    {
+      route: PATIENT_PRACTICE_MESSAGING.path,
+      action: {
+        400: 'patientPracticeMessaging/clearErrorsAndLoad',
+      },
     },
     {
       route: PRESCRIPTIONS.path,

@@ -1,5 +1,4 @@
-﻿using System;
-using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
+using System;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
 {
@@ -19,6 +18,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
 
         public string AccessToken { get; set; }
         
-        public ServiceJourneyRulesResponse ServiceJourneyRules { get; set; }
+        public bool Im1MessagingEnabled { get; set; }
     }
 }

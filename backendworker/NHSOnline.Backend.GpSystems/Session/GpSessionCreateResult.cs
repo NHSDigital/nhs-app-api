@@ -13,13 +13,9 @@ namespace NHSOnline.Backend.GpSystems.Session
         public class Success : GpSessionCreateResult
         {
             public GpUserSession UserSession { get; }
-            public string Name { get; }
-
-            public Success(
-                string name, 
-                GpUserSession userSession)
+            
+            public Success(GpUserSession userSession)
             {
-                Name = name;
                 UserSession = userSession;
             }
 

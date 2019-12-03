@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
@@ -49,7 +50,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         private EmisConfigurationSettings _emisConfig;
         private EmisHttpClient _httpClient;
         private IFixture _fixture;
-        private EmisConfigurationSettings _configurationSettings;
         private Mock<HttpMessageHandler> _mockedHandler;
 
         [TestInitialize]
@@ -59,15 +59,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
 
             _mockHttpHandler = new MockHttpMessageHandler();
-            _configurationSettings = _fixture.Freeze<EmisConfigurationSettings>();
 
             _emisConfig = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath,
                 CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit,
                 Environment);
-
-            _configurationSettings = _fixture.Create<EmisConfigurationSettings>();
-            _configurationSettings.DefaultHttpTimeoutSeconds = 2;
-            _configurationSettings.EmisExtendedHttpTimeoutSeconds = 6;
 
             _httpClient = new EmisHttpClient(new HttpClient(_mockHttpHandler), _emisConfig);
 
@@ -649,6 +644,41 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         }
 
         [TestMethod]
+        public async Task PatientMessagesGet_ReturnsAMessagesGetResponse_ForValidRequest()
+        {
+            // Arrange
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+
+            var expectedResponse = _fixture.Create<MessagesGetResponse>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Get, "messages?userPatientLinkToken=" + userPatientLinkToken)
+                .WithEmisHeaders(additionalHeaders)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // Act
+            var response = await _systemUnderTest.PatientMessagesGet(new EmisRequestParameters
+            {
+                SessionId = sessionId,
+                EndUserSessionId = endUserSessionId,
+                UserPatientLinkToken = userPatientLinkToken
+            });
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ExceptionErrorResponse.Should().Be(null);
+        }
+
+        [TestMethod]
         public async Task SessionsEndUserSessionPost_VerifyCustomTimeoutHeaderPresent()
         {
             // Arrange
@@ -774,7 +804,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 ItExpr.Is<HttpRequestMessage>(req =>
                     req.Properties.Count == 1
                     && (int)req.Properties[HttpRequestConstants.CustomTimeout]
-                    == _configurationSettings.EmisExtendedHttpTimeoutSeconds
+                    == _emisConfig.EmisExtendedHttpTimeoutSeconds
                 ),
                 ItExpr.IsAny<CancellationToken>()
             );

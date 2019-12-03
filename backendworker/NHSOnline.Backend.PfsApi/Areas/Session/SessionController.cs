@@ -70,6 +70,30 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _userInfoService = userInfoService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                _logger.LogEnter();
+                await _auditor.Audit(AuditingOperations.SessionGetRequest, "Session Get called.");
+
+                var userSession = HttpContext.GetUserSession();
+
+                var responseBody = new UserSessionResponse();
+                
+                PopulateUserSessionResponse(responseBody, userSession);
+                
+                await _auditor.Audit(AuditingOperations.SessionGetResponse, "Successfully retrieved session.");
+
+                return new OkObjectResult(responseBody);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+    
         [HttpPost, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] UserSessionRequest model)
         {
@@ -253,8 +277,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             _logger.LogDebug($"Finished session post with status code {gpSessionCreatedResultVisited.StatusCode}");
 
-            return await Task.FromResult(CreateCreatedResult(gpSessionCreatedResultVisited, userSession,
-                serviceJourneyRulesVisitorOutput.Response, citizenIdSessionResult.DateOfBirth));
+            return await Task.FromResult(CreateCreatedResult(userSession, serviceJourneyRulesVisitorOutput.Response));
         }
 
         [HttpDelete]
@@ -336,22 +359,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             }
         }
 
-        private CreatedResult CreateCreatedResult(GpSessionCreateResultVisitorOutput sessionCreatedResultVisited,
-            UserSession userSession, ServiceJourneyRulesResponse serviceJourneyRules, DateTime dateOfBirth)
+        private CreatedResult CreateCreatedResult(UserSession userSession,
+            ServiceJourneyRulesResponse serviceJourneyRules)
         {
-
-
-            var responseBody = new UserSessionResponse
+            var responseBody = new PostUserSessionResponse
             {
-                Name = sessionCreatedResultVisited.Name,
-                SessionTimeout = _settings.DefaultSessionExpiryMinutes * 60,
-                Token = userSession.CsrfToken,
-                OdsCode = userSession.GpUserSession.OdsCode,
-                DateOfBirth = dateOfBirth,
-                NhsNumber = userSession.GpUserSession.NhsNumber,
-                AccessToken = userSession.CitizenIdUserSession.AccessToken,
-                ServiceJourneyRules = serviceJourneyRules,
+                ServiceJourneyRules = serviceJourneyRules
             };
+            
+            PopulateUserSessionResponse(responseBody, userSession);
 
             return new CreatedResult(string.Empty, responseBody);
         }
@@ -468,6 +484,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     await _im1CacheService.DeleteIm1ConnectionToken(cacheKey.ToString());
                 }
             }
+        }
+
+        private void PopulateUserSessionResponse(UserSessionResponse response, UserSession userSession)
+        {
+            response.Name = userSession.GpUserSession.Name;
+            response.SessionTimeout = _settings.DefaultSessionExpiryMinutes * 60;
+            response.Token = userSession.CsrfToken;
+            response.OdsCode = userSession.GpUserSession.OdsCode;
+            response.DateOfBirth = userSession.CitizenIdUserSession.DateOfBirth;
+            response.NhsNumber = userSession.GpUserSession.NhsNumber;
+            response.AccessToken = userSession.CitizenIdUserSession.AccessToken;
+            response.Im1MessagingEnabled = userSession.GpUserSession.Im1MessagingEnabled;
         }
     }
 }

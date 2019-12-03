@@ -2,6 +2,8 @@ import NativeCallbacks from '@/services/native-app';
 import { setCookie } from '@/lib/cookie-manager';
 import {
   CLEAR,
+  INIT,
+  LOADED,
   END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
   SET_INFO,
@@ -13,14 +15,36 @@ import {
 } from './mutation-types';
 import SessionExpiryModal from '@/components/modal/content/SessionExpiryModal';
 
-
 export default {
+  init:
+    ({ commit }) => commit(INIT),
   clear:
     ({ commit }) => commit(CLEAR),
   hideExpiryMessage:
     ({ commit }) => commit(HIDE_EXPIRY_MESSAGE),
   showExpiryMessage:
     ({ commit }) => commit(SHOW_EXPIRY_MESSAGE),
+  async getSession({ commit }) {
+    await this.app.$http.getV1Session()
+      .then((session) => {
+        const { name, odsCode, sessionTimeout, token,
+          nhsNumber, dateOfBirth, accessToken, im1MessagingEnabled } = (session || {});
+        commit(SET_INFO, {
+          name,
+          durationSeconds: sessionTimeout,
+          gpOdsCode: odsCode,
+          token,
+          nhsNumber,
+          dateOfBirth,
+          accessToken,
+        });
+        commit(LOADED);
+        this.dispatch('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
+      })
+      .catch(() => {});
+
+    return Promise.resolve();
+  },
   updateLastCalledAt({ commit }, lastCalledAt = new Date()) {
     if (process.client || !this.app.context.res.locals.LastCalledAtUpdated) {
       if (process.server) {
@@ -45,11 +69,11 @@ export default {
     commit(SET_LAST_CALLED_AT, lastCalledAt);
     commit(HIDE_SESSION_EXPIRING);
   },
-  setInfo({ commit }, info) {
+  setInfo({ commit, state }, info) {
     const value = !info
       ? undefined
       : ({
-        name: info.name,
+        name: info.name || state.user,
         durationSeconds: info.durationSeconds,
         gpOdsCode: info.gpOdsCode,
         token: info.token,

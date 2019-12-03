@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
@@ -49,6 +50,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         private const string AppointmentsPath = "appointments";
         private const string MeVerificationsPath = "me/verifications";
         private const string UsersNhsPath = "users/nhs";
+        private const string GetMessagesPath = "messages?userPatientLinkToken={0}";
 
         private readonly EmisHttpClient _httpClient;
         private readonly EmisConfigurationSettings _settings;
@@ -263,6 +265,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 _settings.EmisExtendedHttpTimeoutSeconds);
         }
 
+        public async Task<EmisApiObjectResponse<MessagesGetResponse>> PatientMessagesGet(
+            EmisRequestParameters requestParameters)
+        {
+            return await Get<MessagesGetResponse>(
+                string.Format(CultureInfo.InvariantCulture, GetMessagesPath, requestParameters.UserPatientLinkToken),
+                requestParameters.EndUserSessionId,
+                requestParameters.SessionId);
+        }
+
         private async Task<EmisApiObjectResponse<TResponse>> Delete<TRequest, TResponse>(TRequest model, string path,
             string endUserSessionId = null, string sessionId = null)
         {
@@ -415,7 +426,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                                              $"Error Message:'{StandardErrorResponse?.Message}'. ";
 
         }
-
+        
         public class EmisApiObjectResponse<TBody> : EmisApiResponse
         {
             public TBody Body { get; set; }

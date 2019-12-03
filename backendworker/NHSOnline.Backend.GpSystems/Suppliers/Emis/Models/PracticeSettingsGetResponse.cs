@@ -5,5 +5,7 @@
         public PracticeSettingsMessages Messages { get; set; }
         
         public PracticeSettingsInputRequirements InputRequirements { get; set; }
+        
+        public PracticeSettingsServices Services { get; set; }
     }
 }

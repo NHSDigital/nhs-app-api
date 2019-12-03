@@ -35,6 +35,8 @@ paths:
     $ref: ./nhsonline.termsandconditions.yaml#/paths/~1toggle-analytics-cookie-acceptance
   /v1/patient/test-result:
     $ref: ./nhsonline.myrecord.yaml#/paths/~1test-result
+  /v1/patient/messages:
+    $ref: ./nhsonline.patientmessages.yaml#/paths/~1messages
   /v1/gpsearch:
     $ref: ./nhsonline.gpsearch.yaml#/paths/~1gpsearch
   /v1/brothermailer:

@@ -91,19 +91,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                             }
                         }
                     }));
-            
-            var expectedResult = new GpSessionCreateResult.Success(accountName, 
-                new VisionUserSession
-                {
-                    NhsNumber = _nhsNumber, 
-                    PatientId = patientId, 
-                    OdsCode =  DefaultOdsCode,
-                    ApiKey = DefaultApiKey,
-                    RosuAccountId = DefaultRosuAccountId,
-                    IsRepeatPrescriptionsEnabled = true,
-                    IsAppointmentsEnabled = false,
-                    LocationIds = locations.Select(l => l.Id).ToList()
-                });
+
+            var expectedResult = new GpSessionCreateResult.Success(new VisionUserSession
+            {
+                Name = accountName,
+                NhsNumber = _nhsNumber,
+                PatientId = patientId,
+                OdsCode = DefaultOdsCode,
+                ApiKey = DefaultApiKey,
+                RosuAccountId = DefaultRosuAccountId,
+                IsRepeatPrescriptionsEnabled = true,
+                IsAppointmentsEnabled = false,
+                LocationIds = locations.Select(l => l.Id).ToList()
+            });
             
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object, _mockLogger);
 

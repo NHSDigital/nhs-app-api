@@ -41,13 +41,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var expectedResponse = 
                 new TppUserSession
                 {
+                    Name = response.Body.User.Person.PersonName.Name,
                     Suid = _suid,
                     OnlineUserId = response.Body.OnlineUserId,
                     PatientId = response.Body.User.Person.PatientId,
                     OdsCode = _odsCode,
                     NhsNumber = _nhsNumber
                 };
-
+            
             // Act
             var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
             

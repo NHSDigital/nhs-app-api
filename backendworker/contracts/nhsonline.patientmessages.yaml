@@ -1,0 +1,77 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: NHS App Practice to Patient Messages API
+  description: NHS App Practice to Patient Messages API - endpoints pertaining to Practice to Patient Secure Messaging. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+paths:
+  /messages:
+    get:
+      tags:
+        - patientMessages
+      summary: Get a list of summaries for each conversation between the user and their practice
+      description: Get a list of summaries for each conversation between the user and their practice
+      responses:
+        "200":
+          description: Successfully retrieved a list of message summaries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientMessagesResponse"
+        "400":
+          description: Upstream system returned BadRequest status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "403":
+          description: Upstream system returned Forbidden status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "500":
+          description: An unknown error occured when processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "502":
+          description: Upstream system returned BadGateway status or an invalid response.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+components:
+  schemas:
+    PatientMessagesResponse:
+      type: object
+      properties:
+        messageSummaries:
+          type: array
+          description: A list of meta data about each available conversation between the patient and their practice
+          items:
+            $ref: "#/components/schemas/PatientMessageSummary"
+    PatientMessageSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: A unique indentifier for this conversation
+        subject:
+          type: string
+          description: A message summary provided by the patient when initiating the conversation
+        lastMessageDateTime:
+          type: string
+          format: date-time
+          description: The datetime the last message in the conversation was sent
+        recipient:
+          type: string
+          description: The current owner of the conversation according to the GPSS
+        replyCount:
+          type: integer
+          nullable: true
+          description: The number of replies to the initial message sent by the patient  -  NHSO-6530 confirm this is not just unread messages
+        hasUnreadReplies:
+          type: boolean
+          nullable: true
+          description: Indicates whether there are messages the patient has not read

@@ -28,6 +28,7 @@ describe('actions', () => {
     };
     mutation = {
       commit: jest.fn(),
+      state: { },
     };
   });
 

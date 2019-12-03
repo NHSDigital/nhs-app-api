@@ -74,9 +74,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 LogAccessInformation(tppUserSession);
 
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
-                return new GpSessionCreateResult.Success(
-                    reply.Body.User?.Person?.PersonName?.Name,
-                    tppUserSession);
+                return new GpSessionCreateResult.Success(tppUserSession);
             }
             catch (HttpRequestException e)
             {

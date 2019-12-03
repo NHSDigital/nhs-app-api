@@ -14,11 +14,11 @@
                    'sc04.messaging.subheader',
                    'sc04.messaging.body')"/>
 
-      <menu-item v-if="isCdssAdmin"
+      <menu-item v-if="adminHelpEnabled"
                  id="btn_gp_help"
                  header-tag="h2"
                  data-purpose="text_link"
-                 :href="requestAdminHelpPath"
+                 :href="adminHelpPath"
                  :text="$t('sc04.requestGpHelp.subheader')"
                  :description="$t('sc04.requestGpHelp.body')"
                  :click-func="navigate"
@@ -52,7 +52,13 @@ import srjIf from '@/lib/sjrIf';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { APPOINTMENT_ADMIN_HELP, DATA_SHARING_PREFERENCES, MESSAGING, MORE } from '@/lib/routes';
+import {
+  APPOINTMENT_ADMIN_HELP,
+  DATA_SHARING_PREFERENCES,
+  MESSAGING,
+  MORE,
+  PATIENT_PRACTICE_MESSAGING,
+} from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
 
@@ -63,27 +69,32 @@ export default {
     MenuItem,
     OrganDonationLink,
   },
-  computed: {
-    dataSharingPath() {
-      return DATA_SHARING_PREFERENCES.path;
-    },
-    requestAdminHelpPath() {
-      return createUri({
+  data() {
+    return {
+      appMessagingEnabled: srjIf({ $store: this.$store, journey: 'messaging' }),
+      adminHelpEnabled: srjIf({ $store: this.$store, journey: 'cdssAdmin' }),
+      dataSharingPath: DATA_SHARING_PREFERENCES.path,
+      patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
+      appMessagingPath: MESSAGING.path,
+      morePath: MORE.path,
+      adminHelpPath: createUri({
         path: APPOINTMENT_ADMIN_HELP.path,
         noJs: { onlineConsultations: { previousRoute: MORE.path } },
-      });
-    },
-    messagingPath() {
-      return MESSAGING.path;
-    },
-    isCdssAdmin() {
-      return srjIf({ $store: this.$store, journey: 'cdssAdmin' });
+      }),
+    };
+  },
+  computed: {
+    patientPracticeMessagingEnabled() {
+      return this.$store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED
+        && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
     messagingEnabled() {
-      return srjIf({ $store: this.$store, journey: 'messaging' });
+      return this.patientPracticeMessagingEnabled || this.appMessagingEnabled;
     },
-    morePath() {
-      return MORE.path;
+    messagingPath() {
+      return this.patientPracticeMessagingEnabled
+        ? this.patientPracticeMessagingPath
+        : this.appMessagingPath;
     },
   },
   mounted() {

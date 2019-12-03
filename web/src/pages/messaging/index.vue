@@ -1,6 +1,6 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
-    <ul v-if="hasSenderMessages" :class="$style['nhs-app-message']">
+    <ul v-if="hasSenderMessages" id="inboxMessages" :class="$style['nhs-app-message']">
       <li v-for="(senderMessage, index) in senderMessages"
           :key="index"
           :class="{
@@ -9,16 +9,24 @@
           }">
         <summary-message v-for="(message, messageIndex) in senderMessage.messages"
                          :key="messageIndex"
-                         :message="message"
-                         :sender="senderMessage.sender"
-                         :unread-count="senderMessage.unreadCount"/>
+                         :title="senderMessage.sender"
+                         :sub-title="sanitizedContent(message.body)"
+                         :date-time="message.sentTime"
+                         :unread-count="senderMessage.unreadCount"
+                         :aria-label="messageLabel(senderMessage, message)"
+                         :href="generateMessageUrl(senderMessage.sender)"
+                         @click="goToMessages(senderMessage.sender)"/>
       </li>
     </ul>
-    <span v-else>{{ $t('messaging.index.noMessages') }}</span>
+    <span v-else id="noMessages">{{ $t('messaging.index.noMessages') }}</span>
   </div>
 </template>
 
 <script>
+import { formatDate } from '@/plugins/filters';
+import { createUri } from '@/lib/noJs';
+import { redirectTo, stripHtml } from '@/lib/utils';
+import { MESSAGING_MESSAGES } from '@/lib/routes';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
 
 export default {
@@ -39,6 +47,33 @@ export default {
   async fetch({ store }) {
     await store.dispatch('messaging/load');
   },
+  methods: {
+    generateMessageUrl(sender) {
+      return createUri({
+        path: MESSAGING_MESSAGES.path,
+        noJs: { messaging: { selectedSender: sender } },
+      });
+    },
+    goToMessages(sender) {
+      this.$store.dispatch('messaging/selectSender', sender);
+      redirectTo(this, MESSAGING_MESSAGES.path);
+    },
+    messageLabel(senderMessage, message) {
+      let label = this.$t('messaging.index.hidden.intro')
+        .replace('{sender}', senderMessage.sender)
+        .replace('{date}', formatDate(message.sentTime, 'DD MMMM YYYY'));
+
+      if (this.unreadCount > 0) {
+        label += this.$t('messaging.index.hidden.unread')
+          .replace('{count}', senderMessage.unreadCount)
+          .replace('{plural}', senderMessage.unreadCount > 1 ? 's' : '');
+      }
+      return label;
+    },
+    sanitizedContent(text) {
+      return stripHtml(text);
+    },
+  },
 };
 </script>
 
@@ -50,24 +85,5 @@ export default {
 @import '~nhsuk-frontend/packages/core/tools/sass-mq';
 @import '~nhsuk-frontend/packages/core/tools/spacing';
 @import '../../style/arrow';
-
-ul.nhs-app-message {
-  list-style: none;
-  margin-bottom: nhsuk-spacing(3);
-  padding-left: nhsuk-spacing(0);
-  border-top: 1px $nhsuk-border-color solid;
-  @include govuk-media-query($until: desktop) {
-    margin-left: (-$nhsuk-gutter-half);
-    margin-right: (-$nhsuk-gutter-half);
-  }
-}
-
-.nhs-app-message__item {
-  @include icon-arrow-left-white-background;
-  box-sizing: border-box;
-  position: relative;
-  padding: nhsuk-spacing(0);
-  margin: nhsuk-spacing(0);
-  border-bottom: 1px $nhsuk-border-color solid;
-}
+@import '../../style/messaging';
 </style>

@@ -10,7 +10,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             return new GpSessionCreateResultVisitorOutput
             {
                 SessionWasCreated = true,
-                Name = result.Name,
                 UserSession = result.UserSession
             };
         }

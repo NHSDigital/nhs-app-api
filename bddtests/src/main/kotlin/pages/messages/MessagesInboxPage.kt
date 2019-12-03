@@ -4,6 +4,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertSingleElementPresent
 
 @DefaultUrl("http://web.local.bitraft.io:3000/more/messaging/inbox")
 class MessagesInboxPage : HybridPageObject() {
@@ -25,10 +26,16 @@ class MessagesInboxPage : HybridPageObject() {
     }
 
     fun assertNoMessages() {
+        val noMessages = HybridPageElement(
+                "//span[@id='noMessages']",
+                page = this,
+                helpfulName = "no messages tag"
+        )
         val allTextInMainPage = HybridPageElement(
                 "//div[@id='mainDiv']",
                 page = this,
                 helpfulName = "container for entire page")
+        noMessages.assertSingleElementPresent()
         Assert.assertEquals("All text in main page","You have no messages", allTextInMainPage.textValue)
     }
 }

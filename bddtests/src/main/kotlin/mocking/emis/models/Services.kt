@@ -6,7 +6,7 @@ data class Services(
         var prescribingSupported: Boolean = true,
         var epsSupported: Boolean = false,
         var demographicsUpdateSupported: Boolean = true,
-        var practicePatientCommunicationSupported: Boolean = true,
+        var practicePatientCommunicationSupported: Boolean = false,
         var onlineRegistrationSupported: Boolean = true,
         var preRegistrationSupported: Boolean = true,
         var medicalRecordSupported: Boolean = true,

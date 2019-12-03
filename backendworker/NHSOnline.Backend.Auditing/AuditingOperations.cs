@@ -4,6 +4,8 @@ namespace NHSOnline.Backend.Auditing
     {
         public const string Im1ConnectionVerifyResponse = "Im1Connection_Verify_Response";
         public const string Im1ConnectionRegisterResponse = "Im1Connection_Register_Response";
+        public const string SessionGetRequest = "Session_Get_Request";
+        public const string SessionGetResponse = "Session_Get_Response";
         public const string SessionCreateRequest = "Session_Create_Request";
         public const string SessionCreateResponse = "Session_Create_Response";
         public const string SessionDeleteRequest = "Session_Delete_Request";
@@ -84,5 +86,7 @@ namespace NHSOnline.Backend.Auditing
         public const string LinkedAccountsAccessSummaryResponse = "LinkedAccounts_Access_Summary_Response";
         public const string LinkedAccountsSwitchRequest = "LinkedAccounts_Switch_Request";
         public const string LinkedAccountsSwitchResponse = "LinkedAccounts_Switch_Response";
+        public const string ViewPracticePatientMessagesRequest = "PracticePatientMessages_View_Request";
+        public const string ViewPracticePatientMessagesResponse = "PracticePatientMessages_View_Response";
     }
 }

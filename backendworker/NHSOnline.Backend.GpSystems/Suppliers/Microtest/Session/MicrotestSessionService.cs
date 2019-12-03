@@ -37,7 +37,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session
                 return new GpSessionCreateResult.BadGateway();
             }
 
-            return new GpSessionCreateResult.Success(successfulDemographicsResult.Response.PatientName, session);
+            session.Name = successfulDemographicsResult.Response.PatientName;
+            return new GpSessionCreateResult.Success(session);
         }
 
         public Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession)

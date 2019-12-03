@@ -274,8 +274,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _mockEmisClient.VerifyAll();
             var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
 
-            var expectedResult = new GpSessionCreateResult.Success(expected, new EmisUserSession
+            var expectedResult = new GpSessionCreateResult.Success(new EmisUserSession
             {
+                Name = expected,
                 Id = createdResult.UserSession.Id,
                 NhsNumber = _nhsNumber,
                 OdsCode = _odsCode,
@@ -415,8 +416,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _mockEmisClient.VerifyAll();
             var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
 
-            var expectedResult = new GpSessionCreateResult.Success(expectedName, new EmisUserSession
+            var expectedResult = new GpSessionCreateResult.Success(new EmisUserSession
             {
+                Name = expectedName,
                 Id = createdResult.UserSession.Id, NhsNumber = _nhsNumber, OdsCode = _odsCode
             });
 
@@ -445,8 +447,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _mockEmisClient.VerifyAll();
             var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
 
-            var expectedResult = new GpSessionCreateResult.Success(expectedName, new EmisUserSession
+            var expectedResult = new GpSessionCreateResult.Success(new EmisUserSession
             {
+                Name = expectedName,
                 Id = createdResult.UserSession.Id,
                 NhsNumber = _nhsNumber,
                 OdsCode = _odsCode,

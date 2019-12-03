@@ -65,6 +65,7 @@ import {
   ORGAN_DONATION_WITHDRAW_REASON,
   ORGAN_DONATION_WITHDRAWN,
   ORGAN_DONATION_YOUR_CHOICE,
+  PATIENT_PRACTICE_MESSAGING,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_CONFIRM_COURSES,
@@ -294,6 +295,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 4);
       route.meta.headerKey = 'pageHeaders.organDonation';
       route.meta.pageTitleKey = 'pageTitles.organDonationWithdraw';
+      break;
+    case PATIENT_PRACTICE_MESSAGING.name:
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'pageHeaders.patientPracticeMessaging';
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessaging';
       break;
     case PRESCRIPTIONS.name:
       store.dispatch('navigation/setNewMenuItem', 2);

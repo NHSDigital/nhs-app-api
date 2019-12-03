@@ -1,5 +1,8 @@
+import mapKeys from 'lodash/fp/mapKeys';
 import {
+  INIT,
   CLEAR,
+  LOADED,
   END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
   SET_INFO,
@@ -8,13 +11,23 @@ import {
   START_VALIDATION_CHECKING,
   SHOW_SESSION_EXPIRING,
   HIDE_SESSION_EXPIRING,
+  initialState,
 } from './mutation-types';
 
 export default {
+  [INIT](state) {
+    const blank = initialState();
+    return mapKeys((key) => {
+      state[key] = blank[key];
+    })(state);
+  },
   [CLEAR](state) {
     state.lastCalledAt = undefined;
     state.durationSeconds = undefined;
     state.gpOdsCode = undefined;
+  },
+  [LOADED](state) {
+    state.hasLoaded = true;
   },
   [END_VALIDATION_CHECKING](state) {
     state.validationInterval = undefined;

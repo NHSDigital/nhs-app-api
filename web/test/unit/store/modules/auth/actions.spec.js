@@ -41,8 +41,10 @@ describe('actions', () => {
       'organDonation/init',
       'repeatPrescriptionCourses/init',
       'serviceJourneyRules/init',
-      'session/setInfo',
+      'session/init',
       'termsAndConditions/init',
+      'patientPracticeMessaging/init',
+      'practiceSettings/init',
     ]).it('will dispatch the `%s` event', (action) => {
       expect(actions.dispatch).toHaveBeenCalledWith(action);
     });

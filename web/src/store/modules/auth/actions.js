@@ -23,13 +23,15 @@ const final = ({ self, commit }) => {
   self.dispatch('navigation/init');
   self.dispatch('repeatPrescriptionCourses/init');
   self.dispatch('errors/clearAllApiErrors');
-  self.dispatch('session/setInfo');
+  self.dispatch('session/init');
   self.dispatch('flashMessage/init');
   self.dispatch('termsAndConditions/init');
   self.dispatch('appVersion/init');
   self.dispatch('organDonation/init');
   self.dispatch('myRecord/init');
   self.dispatch('serviceJourneyRules/init');
+  self.dispatch('patientPracticeMessaging/init');
+  self.dispatch('practiceSettings/init');
 
   if (sourceValue === Sources.Web) {
     self.app.context.redirect(LOGIN.path);
@@ -99,7 +101,6 @@ export default {
         });
       });
   },
-
   logoutWhenExpired() {
     this.dispatch('modal/hide');
     this.dispatch('session/showExpiryMessage');

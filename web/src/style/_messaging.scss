@@ -1,0 +1,19 @@
+ul.nhs-app-message {
+  list-style: none;
+  margin-bottom: nhsuk-spacing(3);
+  padding-left: nhsuk-spacing(0);
+  border-top: 1px $nhsuk-border-color solid;
+  @include govuk-media-query($until: desktop) {
+    margin-left: (-$nhsuk-gutter-half);
+    margin-right: (-$nhsuk-gutter-half);
+  }
+}
+
+.nhs-app-message__item {
+  @include icon-arrow-left-white-background;
+  box-sizing: border-box;
+  position: relative;
+  padding: nhsuk-spacing(0);
+  margin: nhsuk-spacing(0);
+  border-bottom: 1px $nhsuk-border-color solid;
+}

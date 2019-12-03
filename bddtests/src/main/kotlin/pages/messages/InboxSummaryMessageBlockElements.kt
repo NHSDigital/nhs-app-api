@@ -8,6 +8,8 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import worker.models.messages.MessagesSummaryFacade
 
+private const val SPAN_COUNT_WITH_UNREAD: Int = 3
+
 class InboxSummaryMessageBlockElements(private val page: HybridPageObject) {
 
     fun assertMessages(expectedMessages: ArrayList<MessagesSummaryFacade>) {
@@ -29,7 +31,7 @@ class InboxSummaryMessageBlockElements(private val page: HybridPageObject) {
     }
 
     private fun getMessages(): List<InboxMessageBlockElement> {
-        val locator = "//ul/li/a"
+        val locator = "//ul[@id='inboxMessages']/li/a"
         val messagesLocator = HybridPageElement(
                 locator,
                 locator,
@@ -44,15 +46,16 @@ class InboxSummaryMessageBlockElements(private val page: HybridPageObject) {
     }
 
     private class InboxMessageBlockElement(private val element: WebElementFacade) {
-        private val headerElements: List<String> = element.findElement<WebElement>(By.xpath("./h2")).text.split("\n")
-        private val bodyElements = element.findElement<WebElement>(By.xpath("./p")).text.split("\n")
+        private val headerElement = element.findElement<WebElement>(By.xpath(".//h2"))
+        private val paragraphElement = element.findElement<WebElement>(By.xpath(".//p"))
+        private val spanElements = element.findElements<WebElement>(By.xpath(".//span"))
 
-        private val hasUnread = bodyElements.count() == 2
+        private val hasUnread = spanElements.count() == SPAN_COUNT_WITH_UNREAD
 
-        val sender: String = headerElements[0]
-        val sentTime: String = headerElements[1]
-        val messageBody: String = if (hasUnread) bodyElements[1] else bodyElements.single()
-        val unreadCount: Int? = if (hasUnread) bodyElements[0].toInt() else 0
+        val sender: String = headerElement.text
+        val sentTime: String = spanElements[0].text
+        val messageBody: String = paragraphElement.text
+        val unreadCount: Int? = if (hasUnread) spanElements[2].text.toInt() else 0
 
         fun click() {
             element.click()

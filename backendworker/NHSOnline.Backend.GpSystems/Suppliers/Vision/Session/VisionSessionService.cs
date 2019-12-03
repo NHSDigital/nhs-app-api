@@ -43,9 +43,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
                 }
 
                 return new GpSessionCreateResult.Success(
-                    response.Body.Configuration.Account.Name,
                     new VisionUserSession
                     {
+                        Name = response.Body.Configuration.Account.Name,
                         RosuAccountId = visionConnectionToken.RosuAccountId,
                         OdsCode = odsCode,
                         ApiKey = visionConnectionToken.ApiKey,

@@ -20,13 +20,14 @@ describe('messaging index', () => {
     $t,
   });
 
-  const createSummaryMessage = ({ body, sender, unreadCount = 0 }) => {
+  const createSummaryMessage = ({ body, sender, unreadCount = 0, sentTime = '2019-09-14T02:15:12.356Z' }) => {
     $store.state.messaging.senderMessages.push({
       sender,
       unreadCount,
       messages: [{
         sender,
         body,
+        sentTime,
       }],
     });
   };

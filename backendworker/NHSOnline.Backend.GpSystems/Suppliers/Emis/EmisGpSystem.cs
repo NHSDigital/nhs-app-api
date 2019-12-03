@@ -17,7 +17,9 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
@@ -107,6 +109,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public ILinkedAccountsService GetLinkedAccountsService()
         {
             return _serviceProvider.GetService<EmisLinkedAccountsService>();
+        }
+
+        public IPatientMessagesService GetPatientMessagesService()
+        {
+            return _serviceProvider.GetService<EmisPatientMessagesService>();
         }
 
         public bool SupportsLinkedAccounts => true;

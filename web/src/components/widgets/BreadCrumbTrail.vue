@@ -11,7 +11,7 @@
               <li v-for="(route, index) in routes" :key="index"
                   class="nhsuk-breadcrumb__item">
                 <nuxt-link class="nhsuk-breadcrumb__link" :to="route.path" tabindex="0" >
-                  {{ $t(`crumbName.${route.crumb.i8nKey}`) }}
+                  {{ $t(`crumbName.${route.crumb.i18nKey}`) }}
                 </nuxt-link>
               </li>
             </ol>
@@ -22,9 +22,9 @@
                          :to="lastCrumb.path"
                          tabindex="0"
                          :aria-label="$t('crumbName.backTo',
-                                         { crumbName: $t(`crumbName.${lastCrumb.crumb.i8nKey}`)})">
+                                         { crumbName: $t(`crumbName.${lastCrumb.crumb.i18nKey}`)})">
                 {{ $t('crumbName.backTo',
-                      { crumbName: $t(`crumbName.${lastCrumb.crumb.i8nKey}`)}) }}
+                      { crumbName: $t(`crumbName.${lastCrumb.crumb.i18nKey}`)}) }}
               </nuxt-link>
             </p>
           </div>

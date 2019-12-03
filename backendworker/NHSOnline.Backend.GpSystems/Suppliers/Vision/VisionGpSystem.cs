@@ -17,6 +17,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.Messages;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 {
@@ -105,6 +106,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         }
 
         public ILinkedAccountsService GetLinkedAccountsService()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPatientMessagesService GetPatientMessagesService()
         {
             throw new NotImplementedException();
         }

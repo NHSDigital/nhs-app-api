@@ -78,7 +78,7 @@ const routes = {
     path: '/account',
     crumb: {
       nativeDisabled: true,
-      i8nKey: 'account',
+      i18nKey: 'account',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -95,7 +95,7 @@ const routes = {
     path: '/account/cookies',
     crumb: {
       nativeDisabled: false,
-      i8nKey: 'accountCookies',
+      i18nKey: 'accountCookies',
       get parentRoute() {
         return this.allRoutes.ACCOUNT;
       },
@@ -106,7 +106,7 @@ const routes = {
     name: 'account-notifications',
     path: '/account/notifications',
     crumb: {
-      i8nKey: 'accountNotifications',
+      i18nKey: 'accountNotifications',
       get parentRoute() {
         return this.allRoutes.ACCOUNT;
       },
@@ -130,7 +130,7 @@ const routes = {
     name: 'account-signout',
     path: '/account/signout',
     crumb: {
-      i8nKey: 'accountSignOut',
+      i18nKey: 'accountSignOut',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -141,7 +141,7 @@ const routes = {
     name: 'gp-medical-record-medicines-acute-medicines',
     path: '/gp-medical-record/medicines/acute-medicines',
     crumb: {
-      i8nKey: 'medicines',
+      i18nKey: 'medicines',
       get parentRoute() {
         return this.allRoutes.MEDICINES;
       },
@@ -153,7 +153,7 @@ const routes = {
     path: '/appointments',
     crumb: {
       nativeDisabled: true,
-      i8nKey: 'appointments',
+      i18nKey: 'appointments',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -171,7 +171,7 @@ const routes = {
     path: '/appointments/admin-help',
     warningBanner: true,
     crumb: {
-      i8nKey: 'appointmentsAdminHelp',
+      i18nKey: 'appointmentsAdminHelp',
       get parentRoute() {
         return undefined;
       },
@@ -186,7 +186,7 @@ const routes = {
     path: '/appointments/gp-advice',
     warningBanner: true,
     crumb: {
-      i8nKey: 'appointmentsGpAdvice',
+      i18nKey: 'appointmentsGpAdvice',
       get parentRoute() {
         return undefined;
       },
@@ -200,7 +200,7 @@ const routes = {
     name: 'appointments-booking',
     path: '/appointments/booking',
     crumb: {
-      i8nKey: 'appointmentsBooking',
+      i18nKey: 'appointmentsBooking',
       get parentRoute() {
         return this.allRoutes.APPOINTMENTS;
       },
@@ -212,7 +212,7 @@ const routes = {
     path: '/appointments/booking-guidance',
     crumb: {
       enabled: true,
-      i8nKey: 'appointmentsGuidanceBooking',
+      i18nKey: 'appointmentsGuidanceBooking',
       get parentRoute() {
         return this.allRoutes.APPOINTMENTS;
       },
@@ -227,7 +227,7 @@ const routes = {
     name: 'appointments-cancel-noJs',
     path: '/nojs/appointments/cancel',
     crumb: {
-      i8nKey: 'appointmentsCancelling',
+      i18nKey: 'appointmentsCancelling',
       get parentRoute() {
         return this.allRoutes.APPOINTMENTS;
       },
@@ -238,7 +238,7 @@ const routes = {
     name: 'appointments-cancelling',
     path: '/appointments/cancelling',
     crumb: {
-      i8nKey: 'appointmentsCancelling',
+      i18nKey: 'appointmentsCancelling',
       get parentRoute() {
         return this.allRoutes.APPOINTMENTS;
       },
@@ -255,7 +255,7 @@ const routes = {
     name: 'appointments-confirmation',
     path: '/appointments/confirmation',
     crumb: {
-      i8nKey: 'appointmentsConfirmation',
+      i18nKey: 'appointmentsConfirmation',
       get parentRoute() {
         return this.allRoutes.APPOINTMENTS;
       },
@@ -273,7 +273,7 @@ const routes = {
     path: '/appointments/gp-at-hand',
     crumb: {
       enabled: true,
-      i8nKey: 'appointmentsGpAtHand',
+      i18nKey: 'appointmentsGpAtHand',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -289,7 +289,7 @@ const routes = {
     path: '/appointments/informatica',
     crumb: {
       enabled: true,
-      i8nKey: 'appointmentsInformatica',
+      i18nKey: 'appointmentsInformatica',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -305,7 +305,7 @@ const routes = {
     path: '/auth-return',
     isAnonymous: true,
     crumb: {
-      i8nKey: 'authReturn',
+      i18nKey: 'authReturn',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -317,7 +317,7 @@ const routes = {
     path: '/begin-login',
     isAnonymous: true,
     crumb: {
-      i8nKey: 'beginLogin',
+      i18nKey: 'beginLogin',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -328,7 +328,7 @@ const routes = {
     name: 'gp-medical-record-medicines-current-medicines',
     path: '/gp-medical-record/medicines/current-medicines',
     crumb: {
-      i8nKey: 'current_medicines',
+      i18nKey: 'current_medicines',
       get parentRoute() {
         return this.allRoutes.MEDICINES;
       },
@@ -340,7 +340,7 @@ const routes = {
     path: '/check-your-symptoms',
     isAnonymous: true,
     crumb: {
-      i8nKey: 'checkYourSymptoms',
+      i18nKey: 'checkYourSymptoms',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -351,7 +351,7 @@ const routes = {
     name: 'gp-medical-record-consultations',
     path: '/gp-medical-record/consultations',
     crumb: {
-      i8nKey: 'consultations',
+      i18nKey: 'consultations',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -372,7 +372,7 @@ const routes = {
     name: 'gp-medical-record-events',
     path: '/gp-medical-record/events',
     crumb: {
-      i8nKey: 'events',
+      i18nKey: 'events',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -383,7 +383,7 @@ const routes = {
     name: 'gp-medical-record-medicines-discontinued-medicines',
     path: '/gp-medical-record/medicines/discontinued-medicines',
     crumb: {
-      i8nKey: 'medicines',
+      i18nKey: 'medicines',
       get parentRoute() {
         return this.allRoutes.MEDICINES;
       },
@@ -449,7 +449,7 @@ const routes = {
     name: 'index',
     path: '/',
     crumb: {
-      i8nKey: 'home',
+      i18nKey: 'home',
       get parentRoute() {
         return undefined;
       },
@@ -483,7 +483,7 @@ const routes = {
     name: 'messaging',
     path: '/messaging',
     crumb: {
-      i8nKey: 'messaging',
+      i18nKey: 'messaging',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -522,7 +522,7 @@ const routes = {
     path: '/more',
     crumb: {
       nativeDisabled: true,
-      i8nKey: 'more',
+      i18nKey: 'more',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -543,7 +543,7 @@ const routes = {
     path: '/my-record',
     crumb: {
       nativeDisabled: true,
-      i8nKey: 'myRecord',
+      i18nKey: 'myRecord',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -560,7 +560,7 @@ const routes = {
     path: '/gp-medical-record',
     crumb: {
       nativeDisabled: true,
-      i8nKey: 'myRecord',
+      i18nKey: 'myRecord',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -572,7 +572,7 @@ const routes = {
     path: '/my-record/gp-at-hand',
     crumb: {
       enabled: true,
-      i8nKey: 'myRecordGpAtHand',
+      i18nKey: 'myRecordGpAtHand',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -587,7 +587,7 @@ const routes = {
     path: '/gp-medical-record/gp-at-hand',
     crumb: {
       enabled: true,
-      i8nKey: 'myRecordGpAtHand',
+      i18nKey: 'myRecordGpAtHand',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -601,7 +601,7 @@ const routes = {
     name: 'my-record-noaccess',
     path: '/my-record/noaccess',
     crumb: {
-      i8nKey: 'myRecordNoAccess',
+      i18nKey: 'myRecordNoAccess',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -612,7 +612,7 @@ const routes = {
     name: 'gp-medical-record-allergies-and-reactions',
     path: '/gp-medical-record/allergies-and-reactions',
     crumb: {
-      i8nKey: 'allergiesAndReactions',
+      i18nKey: 'allergiesAndReactions',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -623,7 +623,7 @@ const routes = {
     name: 'gp-medical-record-encounters',
     path: '/gp-medical-record/encounters',
     crumb: {
-      i8nKey: 'encounters',
+      i18nKey: 'encounters',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -634,7 +634,7 @@ const routes = {
     name: 'gp-medical-record-test-results',
     path: '/gp-medical-record/test-results',
     crumb: {
-      i8nKey: 'testResults',
+      i18nKey: 'testResults',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -645,7 +645,7 @@ const routes = {
     name: 'gp-medical-record-test-results-detail',
     path: '/gp-medical-record/test-results-detail',
     crumb: {
-      i8nKey: 'gpMedicalRecordTestResultsDetail',
+      i18nKey: 'gpMedicalRecordTestResultsDetail',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -656,7 +656,7 @@ const routes = {
     name: 'gp-medical-record-testresultdetail-testResultId',
     path: '/gp-medical-record/testresultdetail/:testResultId',
     crumb: {
-      i8nKey: 'gpMedicalRecordTestResult',
+      i18nKey: 'gpMedicalRecordTestResult',
       get parentRoute() {
         return this.allRoutes.TESTRESULTS;
       },
@@ -667,7 +667,7 @@ const routes = {
     name: 'gp-medical-record-immunisations',
     path: '/gp-medical-record/immunisations',
     crumb: {
-      i8nKey: 'immunisations',
+      i18nKey: 'immunisations',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -678,7 +678,7 @@ const routes = {
     name: 'gp-medical-record-diagnosis',
     path: '/gp-medical-record/diagnosis',
     crumb: {
-      i8nKey: 'diagnosis',
+      i18nKey: 'diagnosis',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -689,7 +689,7 @@ const routes = {
     name: 'gp-medical-record-examinations',
     path: '/gp-medical-record/examinations',
     crumb: {
-      i8nKey: 'examinations',
+      i18nKey: 'examinations',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -700,7 +700,7 @@ const routes = {
     name: 'gp-medical-record-procedures',
     path: '/gp-medical-record/procedures',
     crumb: {
-      i8nKey: 'procedures',
+      i18nKey: 'procedures',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -711,7 +711,7 @@ const routes = {
     name: 'gp-medical-record-medicines',
     path: '/gp-medical-record/medicines-index',
     crumb: {
-      i8nKey: 'medicines',
+      i18nKey: 'medicines',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -722,7 +722,7 @@ const routes = {
     name: 'gp-medical-record-medical-history',
     path: '/gp-medical-record/medical-history',
     crumb: {
-      i8nKey: 'medicalHistory',
+      i18nKey: 'medicalHistory',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -733,7 +733,7 @@ const routes = {
     name: 'my-record-testresultdetail-testResultId',
     path: '/my-record/testresultdetail/:testResultId',
     crumb: {
-      i8nKey: 'myRecordTestResult',
+      i18nKey: 'myRecordTestResult',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -744,7 +744,7 @@ const routes = {
     name: 'my-record-diagnosis-detail',
     path: '/my-record/diagnosis-detail',
     crumb: {
-      i8nKey: 'myRecordDiagnosisDetail',
+      i18nKey: 'myRecordDiagnosisDetail',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -755,7 +755,7 @@ const routes = {
     name: 'my-record-examinations-detail',
     path: '/my-record/examinations-detail',
     crumb: {
-      i8nKey: 'myRecordExaminationsDetail',
+      i18nKey: 'myRecordExaminationsDetail',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -766,7 +766,7 @@ const routes = {
     name: 'my-record-procedures-detail',
     path: '/my-record/procedures-detail',
     crumb: {
-      i8nKey: 'myRecordProceduresDetail',
+      i18nKey: 'myRecordProceduresDetail',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -777,7 +777,7 @@ const routes = {
     name: 'my-record-test-results-detail',
     path: '/my-record/test-results-detail',
     crumb: {
-      i8nKey: 'myRecordTestResultsDetail',
+      i18nKey: 'myRecordTestResultsDetail',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -788,7 +788,7 @@ const routes = {
     name: 'gp-medical-record-documents',
     path: '/gp-medical-record/documents',
     crumb: {
-      i8nKey: 'myRecordDocuments',
+      i18nKey: 'myRecordDocuments',
       get parentRoute() {
         return this.allRoutes.GP_MEDICAL_RECORD;
       },
@@ -820,7 +820,7 @@ const routes = {
     name: 'nominated-pharmacy',
     path: '/nominated-pharmacy',
     crumb: {
-      i8nKey: 'nominatedPharmacy',
+      i18nKey: 'nominatedPharmacy',
       get parentRoute() {
         return this.allRoutes.PRESCRIPTIONS;
       },
@@ -887,7 +887,7 @@ const routes = {
     name: 'organ-donation',
     path: '/organ-donation',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.MORE;
       },
@@ -898,7 +898,7 @@ const routes = {
     name: 'organ-donation-additional-details',
     path: '/organ-donation/additional-details',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.ORGAN_DONATION;
       },
@@ -909,7 +909,7 @@ const routes = {
     name: 'organ-donation-amend',
     path: '/organ-donation/amend',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.ORGAN_DONATION;
       },
@@ -920,7 +920,7 @@ const routes = {
     name: 'organ-donation-faith',
     path: '/organ-donation/faith',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.ORGAN_DONATION;
       },
@@ -931,7 +931,7 @@ const routes = {
     name: 'organ-donation-more-about-organs',
     path: '/organ-donation/more-about-organs',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.ORGAN_DONATION;
       },
@@ -942,7 +942,7 @@ const routes = {
     name: 'organ-donation-some-organs',
     path: '/organ-donation/some-organs',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.ORGAN_DONATION;
       },
@@ -953,7 +953,7 @@ const routes = {
     name: 'organ-donation-review-your-decision',
     path: '/organ-donation/review-your-decision',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.ORGAN_DONATION;
       },
@@ -964,7 +964,7 @@ const routes = {
     name: 'organ-donation-view-decision',
     path: '/organ-donation/view-decision',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.MORE;
       },
@@ -975,7 +975,7 @@ const routes = {
     name: 'organ-donation-withdraw-reason',
     path: '/organ-donation/withdraw-reason',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.ORGAN_DONATION;
       },
@@ -986,7 +986,7 @@ const routes = {
     name: 'organ-donation-withdrawn',
     path: '/organ-donation/withdrawn',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.ORGAN_DONATION;
       },
@@ -997,19 +997,30 @@ const routes = {
     name: 'organ-donation-your-choice',
     path: '/organ-donation/your-choice',
     crumb: {
-      i8nKey: 'organ_donation',
+      i18nKey: 'organ_donation',
       get parentRoute() {
         return this.allRoutes.ORGAN_DONATION;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
   },
+  PATIENT_PRACTICE_MESSAGING: {
+    name: 'patient-practice-messaging',
+    path: '/patient-practice-messaging',
+    crumb: {
+      i18nKey: 'patientPracticeMessaging',
+      get parentRoute() {
+        return this.allRoutes.MORE;
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+  },
   PRESCRIPTIONS: {
     name: 'prescriptions',
     path: '/prescriptions',
     crumb: {
       nativeDisabled: true,
-      i8nKey: 'prescriptions',
+      i18nKey: 'prescriptions',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -1024,7 +1035,7 @@ const routes = {
     name: 'prescriptions-confirm-prescription-details',
     path: '/prescriptions/confirm-prescription-details',
     crumb: {
-      i8nKey: 'prescriptionConfirmCourses',
+      i18nKey: 'prescriptionConfirmCourses',
       get parentRoute() {
         return this.allRoutes.PRESCRIPTIONS;
       },
@@ -1036,7 +1047,7 @@ const routes = {
     path: '/prescriptions/gp-at-hand',
     crumb: {
       enabled: true,
-      i8nKey: 'prescriptionsGpAtHand',
+      i18nKey: 'prescriptionsGpAtHand',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -1050,7 +1061,7 @@ const routes = {
     name: 'prescriptions-repeat-courses',
     path: '/prescriptions/repeat-courses',
     crumb: {
-      i8nKey: 'prescriptionRepeatCourses',
+      i18nKey: 'prescriptionRepeatCourses',
       get parentRoute() {
         return this.allRoutes.PRESCRIPTIONS;
       },
@@ -1061,7 +1072,7 @@ const routes = {
     name: 'prescriptions-repeat-partial-success',
     path: '/prescriptions/repeat-partial-success',
     crumb: {
-      i8nKey: 'prescriptionRepeatPartialSuccess',
+      i18nKey: 'prescriptionRepeatPartialSuccess',
       get parentRoute() {
         return this.allRoutes.PRESCRIPTIONS;
       },
@@ -1078,7 +1089,7 @@ const routes = {
     name: 'gp-medical-record-recalls',
     path: '/gp-medical-record/recalls',
     crumb: {
-      i8nKey: 'recalls',
+      i18nKey: 'recalls',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -1089,7 +1100,7 @@ const routes = {
     name: 'gp-medical-record-referrals',
     path: '/gp-medical-record/referrals',
     crumb: {
-      i8nKey: 'referrals',
+      i18nKey: 'referrals',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -1100,7 +1111,7 @@ const routes = {
     name: 'gp-medical-record-health-conditions',
     path: '/gp-medical-record/health-conditions',
     crumb: {
-      i8nKey: 'healthConditions',
+      i18nKey: 'healthConditions',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -1112,7 +1123,7 @@ const routes = {
     path: '/symptoms',
     crumb: {
       nativeDisabled: true,
-      i8nKey: 'symptoms',
+      i18nKey: 'symptoms',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -1128,7 +1139,7 @@ const routes = {
     name: 'terms-and-conditions',
     path: '/terms-and-conditions',
     crumb: {
-      i8nKey: 'termsAndConditions',
+      i18nKey: 'termsAndConditions',
       get parentRoute() {
         return undefined;
       },
@@ -1139,7 +1150,7 @@ const routes = {
     name: 'linked-profiles',
     path: '/linked-profiles',
     crumb: {
-      i8nKey: 'linkedProfiles',
+      i18nKey: 'linkedProfiles',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -1150,7 +1161,7 @@ const routes = {
     name: 'linked-profiles-summary',
     path: '/linked-profiles/summary',
     crumb: {
-      i8nKey: 'linkedProfiles',
+      i18nKey: 'linkedProfiles',
       get parentRoute() {
         return this.allRoutes.LINKED_PROFILES;
       },
@@ -1161,7 +1172,7 @@ const routes = {
     name: 'linked-profiles-shutter-more',
     path: '/linked-profiles/shutter/more',
     crumb: {
-      i8nKey: 'linkedProfiles',
+      i18nKey: 'linkedProfiles',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -1172,7 +1183,7 @@ const routes = {
     name: 'linked-profiles-shutter-symptoms',
     path: '/linked-profiles/shutter/symptoms',
     crumb: {
-      i8nKey: 'linkedProfiles',
+      i18nKey: 'linkedProfiles',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -1183,7 +1194,7 @@ const routes = {
     name: 'linked-profiles-shutter-settings',
     path: '/linked-profiles/shutter/settings',
     crumb: {
-      i8nKey: 'linkedProfiles',
+      i18nKey: 'linkedProfiles',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -1194,7 +1205,7 @@ const routes = {
     name: 'linked-profiles-shutter-appointments',
     path: '/linked-profiles/shutter/appointments',
     crumb: {
-      i8nKey: 'linkedProfiles',
+      i18nKey: 'linkedProfiles',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -1205,7 +1216,7 @@ const routes = {
     name: 'linked-profiles-shutter-prescriptions',
     path: '/linked-profiles/shutter/prescriptions',
     crumb: {
-      i8nKey: 'linkedProfiles',
+      i18nKey: 'linkedProfiles',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -1216,7 +1227,7 @@ const routes = {
     name: 'switch-profile',
     path: '/switch-profile',
     crumb: {
-      i8nKey: 'switchProfile',
+      i18nKey: 'switchProfile',
       get parentRoute() {
         return this.allRoutes.INDEX;
       },
@@ -1228,7 +1239,7 @@ const routes = {
     name: 'my-record-warning',
     path: '/my-record-warning',
     crumb: {
-      i8nKey: 'legacyMyRecordWarning',
+      i18nKey: 'legacyMyRecordWarning',
       get parentRoute() {
         return this.allRoutes.MYRECORD;
       },
@@ -1362,6 +1373,7 @@ export const {
   ORGAN_DONATION_WITHDRAW_REASON,
   ORGAN_DONATION_WITHDRAWN,
   ORGAN_DONATION_YOUR_CHOICE,
+  PATIENT_PRACTICE_MESSAGING,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_REPEAT_COURSES,

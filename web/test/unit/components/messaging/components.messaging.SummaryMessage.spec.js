@@ -1,12 +1,14 @@
 import SummaryMessage from '@/components/messaging/SummaryMessage';
-import { MESSAGING_MESSAGES } from '@/lib/routes';
 import { createRouter, createStore, mount } from '../../helpers';
 
 describe('summary message', () => {
   const dateTimeClass = 'nhs-app-message__date';
   const metaClass = 'nhs-app-message__meta';
   const subjectLineClass = 'nhs-app-message__subject-line';
-  const sender = 'Test sender';
+  const title = 'Test sender';
+  const subTitle = 'Test subject';
+  const dateTime = '2019-09-14T02:15:12.356Z';
+  const href = '/messaging/messages';
   const unreadCountClass = 'nhs-app-message__count';
   let $router;
   let $store;
@@ -22,11 +24,11 @@ describe('summary message', () => {
       [unreadCountClass]: unreadCountClass,
     },
     propsData: {
-      message: {
-        sentTime: '2019-09-14T02:15:12.356Z',
-      },
-      sender,
+      title,
+      subTitle,
+      dateTime,
       unreadCount,
+      href,
     },
   });
 
@@ -36,8 +38,8 @@ describe('summary message', () => {
     wrapper = mountSummaryMessage();
   });
 
-  it('will contain a link to `MESSAGING_MESSAGES`', () => {
-    expect(wrapper.attributes().href).toContain(MESSAGING_MESSAGES.path);
+  it('will set the href on the root element', () => {
+    expect(wrapper.attributes().href).toContain(href);
   });
 
   describe('unread count', () => {
@@ -69,7 +71,7 @@ describe('summary message', () => {
     });
   });
 
-  describe('sent time', () => {
+  describe('dateTime', () => {
     let sentTime;
 
     beforeEach(() => {
@@ -86,12 +88,8 @@ describe('summary message', () => {
       wrapper.trigger('click');
     });
 
-    it('will dispatch `messaging/selectSender` with sender', () => {
-      expect($store.dispatch).toBeCalledWith('messaging/selectSender', sender);
-    });
-
-    it('will push `MESSAGING_MESSAGES` to the router', () => {
-      expect($router.push).toHaveBeenCalledWith(MESSAGING_MESSAGES.path);
+    it('will emit a click event', () => {
+      expect(wrapper.emitted().click.length).toBe(1);
     });
   });
 });

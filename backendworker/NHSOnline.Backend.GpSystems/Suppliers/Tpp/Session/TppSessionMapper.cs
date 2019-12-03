@@ -38,7 +38,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 OnlineUserId = authenticateResponse.Body.OnlineUserId,
                 PatientId = authenticateResponse.Body.User.Person.PatientId,
                 OdsCode = odsCode,
-                NhsNumber = nhsNumber
+                NhsNumber = nhsNumber,
+                Name = authenticateResponse.Body.User?.Person?.PersonName?.Name
             });
         }
         

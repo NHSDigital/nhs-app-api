@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Verifications;
@@ -71,5 +72,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         Task<EmisApiObjectResponse<AddNhsUserResponse>> NhsUserPost(
             EmisRequestParameters requestParameters, AddNhsUserRequest addNhsUserRequest);
+
+        // Practice to Patient Messages
+        Task<EmisApiObjectResponse<MessagesGetResponse>> PatientMessagesGet(
+            EmisRequestParameters requestParameters);
     }
 }

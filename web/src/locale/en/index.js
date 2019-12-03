@@ -1389,6 +1389,24 @@ export default {
     },
     noStartDate: 'Unknown Date',
   },
+  im01: {
+    subheader: 'Your messages',
+    noMessages: 'You have no messages.',
+    summary: {
+      hidden: 'Conversation with {recipient}. {subject}. The last message in this conversation was sent on {date}.',
+    },
+  },
+  patient_practice_messaging: {
+    errors: {
+      400: {
+        pageTitle: 'Messages error',
+        pageHeader: 'Messages error',
+        header: 'There is a problem getting your messages',
+        message: 'Try again now.',
+        retryButtonText: 'Try again',
+      },
+    },
+  },
   messaging: {
     index: {
       hidden: {
@@ -1475,6 +1493,7 @@ export default {
     gpFinderParticipation: 'GP surgery features',
     gpFinderWaitingListSignup: 'Waiting list',
     gpFinderWaitingListJoined: 'Next steps',
+    patientPracticeMessaging: 'Messages',
     prescriptions: 'Your repeat prescriptions',
     proceduresV2: 'Procedures',
     repeatPrescriptionCourses: 'Select medication',
@@ -1545,6 +1564,7 @@ export default {
     gpFinderParticipation: 'Features used by your GP surgery',
     gpFinderWaitingListSignup: 'Want us to email you when all features are available at your GP surgery?',
     gpFinderWaitingListJoined: 'What happens next',
+    patientPracticeMessaging: 'Messages',
     prescriptions: 'Your repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication - Repeat prescriptions',
     confirmPrescription: 'Confirm prescription - Repeat prescriptions',
@@ -1629,6 +1649,7 @@ export default {
     myRecordDocuments: 'Documents',
     switchProfile: 'Home',
     organ_donation: 'Organ Donation',
+    patientPracticeMessaging: 'Messages',
     prescriptions: 'Your repeat prescriptions',
     prescriptionRepeatCourses: 'Your repeat prescriptions',
     prescriptionConfirmCourses: 'Your repeat prescriptions',

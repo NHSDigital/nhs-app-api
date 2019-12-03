@@ -100,9 +100,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _emisUserSession = _fixture.Create<EmisUserSession>();
             _emisUserSession.OdsCode = _userProfile.OdsCode;
             _emisUserSession.NhsNumber = _userProfile.NhsNumber;
+            _emisUserSession.Name = _name;
 
             _sessionCreateResult =
-                new GpSessionCreateResult.Success(_name, _emisUserSession);
+                new GpSessionCreateResult.Success(_emisUserSession);
 
             _citizenIdUserSession = new CitizenIdUserSession { AccessToken = _userProfile.AccessToken };
 
@@ -616,13 +617,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var result = await _systemUnderTest.Post(_userSessionRequest);
 
             // Assert
-            var expectedUserSessionResponse = new UserSessionResponse
+            var expectedUserSessionResponse = new PostUserSessionResponse
             {
                 Name = _name,
                 SessionTimeout = _sessionTimeoutSeconds,
                 OdsCode = _userProfile.OdsCode,
-                DateOfBirth = DateTime.ParseExact(_userProfile.DateOfBirth, DateFormat,
-                    CultureInfo.InvariantCulture),
+                DateOfBirth = _citizenIdUserSession.DateOfBirth,
                 NhsNumber = _userProfile.NhsNumber,
                 AccessToken = _userProfile.AccessToken,
                 ServiceJourneyRules = _serviceJourneyRulesResponse
@@ -632,7 +632,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 var createdResultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
                 var actualUserSessionResponse =
-                    createdResultValue.Should().BeAssignableTo<UserSessionResponse>().Subject;
+                    createdResultValue.Should().BeAssignableTo<PostUserSessionResponse>().Subject;
                 actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
                 actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
                 actualUserSessionResponse.Token.Should().Be(CsrfRequestToken);
