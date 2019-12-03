@@ -68,6 +68,25 @@ Feature: View prescriptions Frontend
       | TPP       |
       | MICROTEST |
 
+  Scenario: The Ordered by label does exist if the prescription was ordered by proxy
+    Given I am patient using the EMIS GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 3 courses of which 2 are repeats
+    And the prescription was ordered by proxy user
+    And I am logged in
+    And I see the home page
+    When I navigate to Prescriptions
+    Then I see the name of the proxy user who ordered the prescription
+    
+  Scenario: The Ordered by label does not exist if the prescription was not ordered by proxy
+    Given I am patient using the EMIS GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 3 courses of which 2 are repeats
+    And I am logged in
+    And I see the home page
+    When I navigate to Prescriptions
+    Then I do not see the name of the proxy user who ordered the prescription
+
   Scenario Outline: <GP System> patient who has only one prescription containing multiple courses
     Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions

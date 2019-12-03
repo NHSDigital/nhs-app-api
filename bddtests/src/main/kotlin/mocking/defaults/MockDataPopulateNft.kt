@@ -14,6 +14,7 @@ import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.patients.EmisPatients
 import models.Patient
 import models.prescriptions.MedicationCourse
+import models.prescriptions.PrescriptionLoaderConfiguration
 import worker.models.session.UserSessionRequest
 import java.io.File
 
@@ -113,12 +114,15 @@ class MockDataPopulateNft(private val mockingClient: MockingClient) {
         // Prescriptions
         // GET /emis/prescriptionrequests
         val prescriptionsDataLoader = EmisPrescriptionLoader
+
+
+        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+                noPrescriptions = NUMBER_OF_PRESCRIPTIONS,noCourses = NUMBER_OF_COURSES,
+                noRepeats = NUMBER_OF_REPEAT_PRESCRIPTIONS, showDosage = true, showQuantity = true
+        )
+
         prescriptionsDataLoader.loadData(
-                noPrescriptions = NUMBER_OF_PRESCRIPTIONS,
-                noCourses = NUMBER_OF_COURSES,
-                noRepeats = NUMBER_OF_REPEAT_PRESCRIPTIONS,
-                showDosage = true,
-                showQuantity = true
+              prescriptionLoaderConfig
         )
 
         mockingClient.forEmis {

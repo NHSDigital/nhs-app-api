@@ -10,6 +10,8 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions.Models
         public List<CourseEntry> Courses { get; set; }
         
         public DateTimeOffset? OrderDate { get; set; }
+        
+        public string OrderedBy { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public Status? Status { get; set; }

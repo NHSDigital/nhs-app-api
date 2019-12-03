@@ -27,6 +27,7 @@ import mocking.stubs.TppStubsPatientFactory
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.prescriptions.TppPrescriptionsBuilder
 import models.Patient
+import models.prescriptions.PrescriptionLoaderConfiguration
 import java.time.Duration
 
 class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
@@ -56,12 +57,15 @@ class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
 
     private fun prescriptionLoaderTPP(): ListRepeatMedicationReply {
         val prescriptionLoader = TppPrescriptionLoader
-        prescriptionLoader.loadData(
-                noPrescriptions = NUMBER_OF_PRESCRIPTIONS,
-                noCourses = NUMBER_OF_COURSES,
-                noRepeats = NUMBER_OF_REPEAT_PRESCRIPTIONS,
-                showDosage = true,
+
+        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+                noPrescriptions = NUMBER_OF_PRESCRIPTIONS,noCourses = NUMBER_OF_COURSES,
+                noRepeats = NUMBER_OF_REPEAT_PRESCRIPTIONS, showDosage = true,
                 showQuantity = true
+        )
+
+        prescriptionLoader.loadData(
+                prescriptionLoaderConfig
         )
         return prescriptionLoader.data
     }
@@ -344,14 +348,17 @@ class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
 
     private fun prescriptionLoaderEMIS(): PrescriptionRequestsGetResponse {
         val prescriptionLoader = EmisPrescriptionLoader
-        prescriptionLoader.loadData(
-                noPrescriptions = NUMBER_OF_PRESCRIPTIONS,
-                noCourses = NUMBER_OF_COURSES,
-                noRepeats = NUMBER_OF_REPEAT_PRESCRIPTIONS,
-                showDosage = true,
+
+        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+                noPrescriptions = NUMBER_OF_PRESCRIPTIONS,noCourses = NUMBER_OF_COURSES,
+                noRepeats = NUMBER_OF_REPEAT_PRESCRIPTIONS, showDosage = true,
                 showQuantity = true
         )
 
+        prescriptionLoader.loadData(
+                prescriptionLoaderConfig
+        )
+        
         return prescriptionLoader.data
     }
 }

@@ -2,6 +2,7 @@ package mocking.data.prescriptions
 
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.Medication
+import models.prescriptions.PrescriptionLoaderConfiguration
 import java.util.*
 
 object TppPrescriptionLoader : IPrescriptionLoader<ListRepeatMedicationReply> {
@@ -11,24 +12,22 @@ object TppPrescriptionLoader : IPrescriptionLoader<ListRepeatMedicationReply> {
     private const val MAX_RANDOM_ID_VALUE = 999999
     private const val ITERATIONS_NUMBER = 100
 
-    override fun loadData(noPrescriptions: Int,
-                          noCourses: Int,
-                          noRepeats: Int,
-                          showDosage: Boolean,
-                          showQuantity: Boolean) {
+    override fun loadData(prescriptionLoaderConfig: PrescriptionLoaderConfiguration,
+                          prescriptionCompletedByProxy: Boolean) {
+
         val medicationList = ListRepeatMedicationReply()
         medicationList.patientId = generateRandomId()
         medicationList.onlineUserId = generateRandomId()
         medicationList.uuid = UUID.randomUUID().toString()
 
-        if (noPrescriptions == 0) {
+        if (prescriptionLoaderConfig.noPrescriptions == 0) {
             data = medicationList
             return
         }
 
-        val totalPrescriptions = minOf(noPrescriptions, ITERATIONS_NUMBER)
-        val totalRequestable = minOf(noCourses, ITERATIONS_NUMBER)
-        val totalRepeats = minOf(noRepeats, ITERATIONS_NUMBER)
+        val totalPrescriptions = minOf(prescriptionLoaderConfig.noPrescriptions, ITERATIONS_NUMBER)
+        val totalRequestable = minOf(prescriptionLoaderConfig.noCourses, ITERATIONS_NUMBER)
+        val totalRepeats = minOf(prescriptionLoaderConfig.noRepeats, ITERATIONS_NUMBER)
 
         val higherNumber: Int
 
@@ -43,7 +42,8 @@ object TppPrescriptionLoader : IPrescriptionLoader<ListRepeatMedicationReply> {
             medication.drugId = generateRandomId()
             medication.type = "Acute"
             medication.drug = getCourseName()
-            medication.details = getMedicationDetails(showQuantity, showDosage, counter)
+            medication.details = getMedicationDetails(prescriptionLoaderConfig.showQuantity,
+                    prescriptionLoaderConfig.showDosage, counter)
 
             medicationList.Medication.add(medication)
         }

@@ -5,22 +5,20 @@ import mocking.microtest.prescriptions.PrescriptionCourse
 import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
 import mocking.microtest.prescriptions.PrescriptionStatus
 import mocking.microtest.prescriptions.PrescriptionType
+import models.prescriptions.PrescriptionLoaderConfiguration
 import java.time.OffsetDateTime
 
 object MicrotestPrescriptionLoader : IPrescriptionLoader<PrescriptionHistoryGetResponse> {
 
     override lateinit var data: PrescriptionHistoryGetResponse
 
-    override fun loadData(noPrescriptions: Int,
-                          noCourses: Int,
-                          noRepeats: Int,
-                          showDosage: Boolean,
-                          showQuantity: Boolean) {
+    override fun loadData(prescriptionLoaderConfig: PrescriptionLoaderConfiguration,
+                          prescriptionCompletedByProxy: Boolean) {
 
         val medicationCourses = mutableListOf<PrescriptionCourse>()
 
-        if (noPrescriptions > 0) {
-            for (i in 1..noPrescriptions) {
+        if (prescriptionLoaderConfig.noPrescriptions > 0) {
+            for (i in 1..prescriptionLoaderConfig.noPrescriptions) {
                 val medication = PrescriptionCourse(
                         i.toString(),
                         OffsetDateTime.now().toString(),

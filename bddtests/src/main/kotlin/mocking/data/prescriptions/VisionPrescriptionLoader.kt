@@ -6,6 +6,7 @@ import mocking.vision.models.PrescriptionHistory
 import mocking.vision.models.Repeat
 import mocking.vision.models.Request
 import mocking.vision.models.StatusCode
+import models.prescriptions.PrescriptionLoaderConfiguration
 import org.joda.time.DateTime
 import java.util.*
 
@@ -14,26 +15,23 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
 
     private const val MAX_RANDOM_NUMBER = 2
 
-    override fun loadData(noPrescriptions: Int,
-                          noCourses: Int,
-                          noRepeats: Int,
-                          showDosage: Boolean,
-                          showQuantity: Boolean) {
+    override fun loadData(prescriptionLoaderConfig: PrescriptionLoaderConfiguration,
+                          prescriptionCompletedByProxy: Boolean) {
 
         val prescriptions = mutableListOf<Request>()
 
-        if (noPrescriptions != 0) {
+        if (prescriptionLoaderConfig.noPrescriptions != 0) {
             // Create courses first as these will be used in the prescriptions
             VisionCoursesLoader.loadData(
-                    maxCourses = noCourses,
-                    numOfRepeats = noRepeats,
-                    numCanBeRequested = noRepeats,
-                    includeDosage = showDosage,
-                    includeQuantity = showQuantity)
+                    maxCourses = prescriptionLoaderConfig.noCourses,
+                    numOfRepeats = prescriptionLoaderConfig.noRepeats,
+                    numCanBeRequested = prescriptionLoaderConfig.noRepeats,
+                    includeDosage = prescriptionLoaderConfig.showDosage,
+                    includeQuantity = prescriptionLoaderConfig.showQuantity)
 
             val repeatCourse = VisionCoursesLoader.data.repeat
 
-            var maxNumberOfPrescriptions = noPrescriptions.minus(1)
+            var maxNumberOfPrescriptions = prescriptionLoaderConfig.noPrescriptions.minus(1)
             var isSecondIteration = false
             var prescriptionNumber = 0
             var courseNumber = repeatCourse.count().minus(1)
@@ -66,7 +64,7 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
 
                 if (prescriptionNumber == maxNumberOfPrescriptions && courseNumber >= 0) {
                     isSecondIteration = true
-                    maxNumberOfPrescriptions = noPrescriptions.minus(1)
+                    maxNumberOfPrescriptions = prescriptionLoaderConfig.noPrescriptions.minus(1)
                     prescriptionNumber = 0
                 } else if (prescriptionNumber < maxNumberOfPrescriptions && courseNumber == -1) {
                     prescriptionNumber++

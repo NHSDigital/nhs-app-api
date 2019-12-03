@@ -4,6 +4,7 @@ import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.tpp.models.ListRepeatMedicationReply
 import models.prescriptions.MedicationCourse
+import models.prescriptions.PrescriptionLoaderConfiguration
 
 object TppCoursesLoader: ICoursesLoader<ListRepeatMedicationReply> {
     override lateinit var data: ListRepeatMedicationReply
@@ -15,7 +16,13 @@ object TppCoursesLoader: ICoursesLoader<ListRepeatMedicationReply> {
                           includeDosage: Boolean,
                           includeQuantity: Boolean) {
 
-        TppPrescriptionLoader.loadData(maxCourses, numCanBeRequested, numOfRepeats, includeDosage, includeQuantity)
+        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+                noPrescriptions = maxCourses,noCourses = numCanBeRequested, noRepeats = numOfRepeats,
+                showDosage = includeDosage, showQuantity = includeQuantity
+        )
+
+
+        TppPrescriptionLoader.loadData(prescriptionLoaderConfig)
         data = TppPrescriptionLoader.data
     }
 

@@ -46,7 +46,10 @@ object PrescriptionsData {
                             RequestedMedicationCourseStatus.Requested))
                     prescriptionRequests.add(PrescriptionRequest(
                             time.toString(), requestedMedicationCourses,
-                            RequestedMedicationCourseStatus.Requested.toString()))
+                            RequestedMedicationCourseStatus.Requested.toString(),
+                            "Made by main user", "Made by",
+                            "main user" )
+                            )
                 } else {
                     requestedMedicationCourses.add(RequestedMedicationCourse(
                             medicationCourses.get(courseNum).medicationCourseGuid,

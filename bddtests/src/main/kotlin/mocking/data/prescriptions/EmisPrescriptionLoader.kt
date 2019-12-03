@@ -6,34 +6,37 @@ import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourse
 import mocking.emis.models.RequestedMedicationCourseStatus
 import models.prescriptions.MedicationCourse
+import models.prescriptions.PrescriptionLoaderConfiguration
 import java.time.OffsetDateTime
 
 object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetResponse> {
     override lateinit var data: PrescriptionRequestsGetResponse
 
     private const val MAX_RANDOM_NUMBER = 6
+    private var requestedByDisplayName = ""
+    private var requestedByForenames = ""
+    private var requestedBySurname = ""
 
-    override fun loadData(noPrescriptions: Int,
-                          noCourses: Int,
-                          noRepeats: Int,
-                          showDosage: Boolean,
-                          showQuantity: Boolean) {
+    override fun loadData(prescriptionLoaderConfig: PrescriptionLoaderConfiguration,
+                          prescriptionCompletedByProxy: Boolean) {
 
         val prescriptionRequests = mutableListOf<PrescriptionRequest>()
         var medicationCourses = mutableListOf<MedicationCourse>()
 
-        if (noPrescriptions != 0) {
+        getValuesForRequestedByFields(prescriptionCompletedByProxy)
+
+        if (prescriptionLoaderConfig.noPrescriptions != 0) {
             // Create courses first as these will be used in the prescriptions
             EmisCoursesLoader.loadData(
-                    maxCourses = noCourses,
-                    numOfRepeats = noRepeats,
-                    numCanBeRequested = noRepeats,
-                    includeDosage = showDosage,
-                    includeQuantity = showQuantity)
+                    maxCourses = prescriptionLoaderConfig.noCourses,
+                    numOfRepeats = prescriptionLoaderConfig.noRepeats,
+                    numCanBeRequested = prescriptionLoaderConfig.noRepeats,
+                    includeDosage = prescriptionLoaderConfig.showDosage,
+                    includeQuantity = prescriptionLoaderConfig.showQuantity)
 
             medicationCourses = medicationCourses.union(EmisCoursesLoader.data).toMutableList()
 
-            var maxNumberOfPrescriptions = noPrescriptions.minus(1)
+            var maxNumberOfPrescriptions = prescriptionLoaderConfig.noPrescriptions.minus(1)
             var isSecondIteration = false
             var prescriptionNumber = 0
             var courseNumber = medicationCourses.count().minus(1)
@@ -49,9 +52,12 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
                             RequestedMedicationCourse(
                                     medicationCourses.get(courseNumber).medicationCourseGuid,
                                     RequestedMedicationCourseStatus.Requested))
+
                     prescriptionRequests.add(
                             PrescriptionRequest(
-                                    time.toString(), requestedMedicationCourses, getPrescriptionStatus().toString()))
+                                    time.toString(), requestedMedicationCourses, getPrescriptionStatus().toString(),
+                                    requestedByDisplayName, requestedByForenames,
+                                    requestedBySurname))
                 } else {
                     requestedMedicationCourses.add(
                             RequestedMedicationCourse(medicationCourses.get(courseNumber).medicationCourseGuid,
@@ -65,7 +71,7 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
 
                 if (prescriptionNumber == maxNumberOfPrescriptions && courseNumber >= 0) {
                     isSecondIteration = true
-                    maxNumberOfPrescriptions = noPrescriptions.minus(1)
+                    maxNumberOfPrescriptions = prescriptionLoaderConfig.noPrescriptions.minus(1)
                     prescriptionNumber = 0
                 } else if (prescriptionNumber < maxNumberOfPrescriptions && courseNumber == -1) {
                     prescriptionNumber++
@@ -77,6 +83,19 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
         }
 
         data = PrescriptionRequestsGetResponse(prescriptionRequests, medicationCourses)
+    }
+
+    private fun getValuesForRequestedByFields(completedByProxy: Boolean){
+        if(completedByProxy){
+            requestedByDisplayName = "Completed by proxy"
+            requestedByForenames = "Main"
+            requestedBySurname = "user"
+        }
+        else {
+            requestedByDisplayName = "Completed by main user"
+            requestedByForenames = "Completed by"
+            requestedBySurname = "main user"
+        }
     }
 
     private fun getPrescriptionStatus(): RequestedMedicationCourseStatus {
@@ -97,7 +116,9 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
 
         val prescriptionsList = mutableListOf<PrescriptionRequest>()
         prescriptionsList.add(PrescriptionRequest(OffsetDateTime.now().toString(),
-                newCourses, RequestedMedicationCourseStatus.Requested.toString()))
+                newCourses, RequestedMedicationCourseStatus.Requested.toString(),
+                "Ordered by main", "Ordered by",
+                "main"))
 
         //2 add all the old prescriptions to the list
         oldPrescriptions.prescriptionRequests.forEach { pr ->

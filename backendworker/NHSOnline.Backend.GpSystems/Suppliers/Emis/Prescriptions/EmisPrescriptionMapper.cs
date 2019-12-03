@@ -46,8 +46,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                     }
                     else
                     {
+                        string checkMainUserName = prescription.RequestedByForenames + ' ' + prescription.RequestedBySurname;
+                        string requestedBy = null;
+                        if (!checkMainUserName.Equals(prescription.RequestedByDisplayName,StringComparison.Ordinal))
+                        {
+                            requestedBy = prescription.RequestedByDisplayName;
+                        }
+                        
                         allPrescriptionsGrouped.Add(new PrescriptionItem
                         {
+                            OrderedBy = requestedBy,
                             OrderDate = prescription.DateRequested,
                             Status = MapStatus(course.RequestedMedicationCourseStatus),
                             Courses = new List<CourseEntry>

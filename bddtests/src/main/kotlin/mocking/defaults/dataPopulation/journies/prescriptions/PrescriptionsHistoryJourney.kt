@@ -5,6 +5,7 @@ import mocking.data.prescriptions.MicrotestPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.defaults.VisionMockDefaults
 import models.Patient
+import models.prescriptions.PrescriptionLoaderConfiguration
 
 private const val SEVEN_PRESCRIPTIONS = 7
 private const val SEVEN_COURSES = 7
@@ -30,14 +31,19 @@ class PrescriptionsHistoryJourney(private val client: MockingClient) {
                             .respondWithSuccess(PrescriptionsData.addResponses(prescriptionsToCreate))
                 }
 
-        VisionPrescriptionLoader.loadData(1,1,1)
+
+        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+                noPrescriptions = 1,noCourses = 1, noRepeats = 1
+        )
+
+                VisionPrescriptionLoader.loadData(prescriptionLoaderConfig)
         client
                 .forVision {
                     prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithSuccess(VisionPrescriptionLoader.data)
                 }
 
-        MicrotestPrescriptionLoader.loadData(1,1,1)
+        MicrotestPrescriptionLoader.loadData(prescriptionLoaderConfig)
         client
                 .forMicrotest {
                     prescriptions.getPrescriptionHistoryRequest(patient)

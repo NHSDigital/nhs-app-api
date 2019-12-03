@@ -1,14 +1,14 @@
 package mocking.data.prescriptions
 
 import constants.Supplier
+import models.prescriptions.PrescriptionLoaderConfiguration
 import java.util.*
 
 interface IPrescriptionLoader<T> {
     var data: T
 
-    fun loadData(noPrescriptions: Int, noCourses: Int,
-                 noRepeats: Int, showDosage: Boolean = true,
-                 showQuantity: Boolean = true)
+    fun loadData(prescriptionLoaderConfig: PrescriptionLoaderConfiguration,
+                 prescriptionCompletedByProxy: Boolean = false)
 
     fun getCourseName(): String {
         return getStringValue(getMedicationCourseNames())

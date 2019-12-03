@@ -342,7 +342,8 @@ export default {
   },
   rp02: {
     pageTitle: 'TBC',
-    orderDate: 'Order date',
+    orderDate: 'Ordered',
+    proxyOrderedByDisplayPrefix: 'by ',
     status: 'Status',
     statusRejected: {
       subHeader: 'Rejected',

@@ -9,6 +9,7 @@ import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.RequestMedicationReply
 import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
+import models.prescriptions.PrescriptionLoaderConfiguration
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_FORBIDDEN
 import utils.SerenityHelpers
@@ -47,9 +48,15 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory(Supplier.TPP) {
                     .whenScenarioStateIs(initialScenarioState)
         }
         val numberOfPrescriptionsAfterSubmit = amount + initialHistoricPrescriptionsCount
-        getPrescriptionsLoader.loadData(numberOfPrescriptionsAfterSubmit,
-                numberOfPrescriptionsAfterSubmit,
-                numberOfPrescriptionsAfterSubmit)
+
+        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+            noPrescriptions = numberOfPrescriptionsAfterSubmit,
+            noCourses = numberOfPrescriptionsAfterSubmit,
+            noRepeats = numberOfPrescriptionsAfterSubmit
+        )
+
+        getPrescriptionsLoader.loadData(prescriptionLoaderConfig)
+
         val newPrescriptions = getPrescriptionsLoader.data as ListRepeatMedicationReply
         mockingClient.forTpp {
             prescriptions.listRepeatMedication(patient)

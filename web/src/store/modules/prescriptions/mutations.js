@@ -27,6 +27,7 @@ export default {
             prescriptionCourses[prescription.status].push({
               courseId: prescriptionCourse.courseId,
               orderDate: prescription.orderDate,
+              orderedBy: prescription.orderedBy,
               name: course.name,
               status: prescription.status,
               details: course.details,

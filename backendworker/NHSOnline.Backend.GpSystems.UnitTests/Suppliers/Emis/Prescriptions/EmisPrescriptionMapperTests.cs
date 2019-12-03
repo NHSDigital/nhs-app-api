@@ -266,6 +266,149 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
 
             result.Should().BeEquivalentTo(expectedResult);
         }
+        
+        [TestMethod]
+        public void MapPrescriptionRequestsGetResponseToPrescriptionMapsTheOrderedByCorrectly()
+        {
+            // Arrange
+            var item = new PrescriptionRequestsGetResponse
+            {
+                PrescriptionRequests = new List<PrescriptionRequest>
+                {
+                    new PrescriptionRequest
+                    {
+                        RequestedByDisplayName = "Main user forename Main user surname",
+                        RequestedByForenames = "Main user forename",
+                        RequestedBySurname = "Main user surname",
+                        DateRequested = _fixture.Create<DateTimeOffset>(),
+                        RequestedMedicationCourses = new List<RequestedMedicationCourse>
+                        {
+                            // 2 courses with issued status should be grouped, 1 course with requested status should be standalone.
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Issued,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Issued,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Requested,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                        },
+                    },
+                    new PrescriptionRequest
+                    {
+                        RequestedByDisplayName = "Completed By Proxy",
+                        RequestedByForenames = "Main user forename",
+                        RequestedBySurname = "Main user surname",
+                        // 2 courses with issued status should be grouped, 1 course with requested status should be standalone.
+                        DateRequested = _fixture.Create<DateTimeOffset>(),
+                        RequestedMedicationCourses = new List<RequestedMedicationCourse>
+                        {
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Issued,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Issued,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Requested,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                        },
+                    },
+                },
+                MedicationCourses = Enumerable.Empty<MedicationCourse>(),
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Prescriptions.Should().HaveCount(4);
+            result.Courses.Should().HaveCount(item.MedicationCourses.Count());
+
+            var expectedResult = new PrescriptionListResponse
+            {
+                Prescriptions = new List<PrescriptionItem>
+                {
+                    new PrescriptionItem
+                    {
+                        OrderedBy = null,
+                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
+                        Status = Status.Approved,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseGuid,
+                            },
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(1).RequestedMedicationCourseGuid,
+                            },
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderedBy = null,
+                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
+                        Status = Status.Requested,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(2).RequestedMedicationCourseGuid,
+                            },
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderedBy = "Completed By Proxy",
+                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested,
+                        Status = Status.Approved,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(1).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseGuid,
+                            },
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(1).RequestedMedicationCourses.ElementAt(1).RequestedMedicationCourseGuid,
+                            },
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderedBy = "Completed By Proxy",
+                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested,
+                        Status = Status.Requested,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(1).RequestedMedicationCourses.ElementAt(2).RequestedMedicationCourseGuid,
+                            }
+                        }
+                    }
+                },
+                Courses = new List<Course>()
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
 
         [TestMethod]
         public void MapCoursesGetResponseToCourseListResponse_WhenPassingNull_ThrowsNullReferenceException()

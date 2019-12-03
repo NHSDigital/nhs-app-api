@@ -14,6 +14,7 @@ import mocking.vision.models.PrescriptionHistory
 import mocking.vision.models.VisionUserSession
 import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
+import models.prescriptions.PrescriptionLoaderConfiguration
 import org.apache.http.HttpStatus
 import utils.SerenityHelpers
 import java.time.Duration
@@ -60,9 +61,14 @@ class PrescriptionsFactoryVision: PrescriptionsFactory(Supplier.VISION) {
                     .willSetStateTo(statusSubmitted)
         }
         val numberOfPrescriptionsAfterSubmit = amount + initialHistoricPrescriptionsCount
-        getPrescriptionsLoader.loadData(numberOfPrescriptionsAfterSubmit,
-                numberOfPrescriptionsAfterSubmit,
-                numberOfPrescriptionsAfterSubmit)
+
+        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+                noPrescriptions = numberOfPrescriptionsAfterSubmit,
+                noCourses = numberOfPrescriptionsAfterSubmit,
+                noRepeats = numberOfPrescriptionsAfterSubmit
+        )
+
+        getPrescriptionsLoader.loadData(prescriptionLoaderConfig)
         val newPrescriptions = getPrescriptionsLoader.data as PrescriptionHistory
         mockingClient.forVision {
             prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))

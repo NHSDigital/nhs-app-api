@@ -30,6 +30,7 @@ import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.vision.models.PrescriptionHistory
 import mockingFacade.prescriptions.PartialSuccessFacade
 import models.Patient
+import models.prescriptions.PrescriptionLoaderConfiguration
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -219,7 +220,12 @@ open class PrescriptionsSubmissionStepDefinitions {
     fun iHaveXHistoricPrescriptionsInThisScenario(amount: Int) {
         ViewSpinePdsStubs(mockingClient).generateSpineStubs()
         initialHistoricPrescriptionsCount = amount
-        prescriptionLoader.loadData(amount, amount, amount)
+        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+                noPrescriptions = amount,
+                noCourses = amount,
+                noRepeats = amount
+        )
+        prescriptionLoader.loadData(prescriptionLoaderConfig)
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
 
         val currentPatient = SerenityHelpers.getPatient()

@@ -11,6 +11,7 @@ import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
 import mocking.MockingClient
+import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.VisionMockDefaults
@@ -23,6 +24,8 @@ import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import models.prescriptions.HistoricPrescription
+import models.prescriptions.PrescriptionLoaderConfiguration
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import pages.prescription.PrescriptionsPage
 import pages.prescription.RepeatPrescriptionsPage
@@ -161,6 +164,31 @@ open class PrescriptionsStepDefinitions {
         PrescriptionsDataSetup.disabled(currentPatient, currentProvider!!)
     }
 
+    @Given("the prescription was ordered by proxy user")
+    fun thePrescriptionWasOrderedByProxyUser() {
+        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
+
+        val prescriptionLoader = EmisPrescriptionLoader
+
+        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+            noPrescriptions = numberOfPrescriptions,noCourses = numOfRepeats, noRepeats = numOfRepeats
+            )
+
+
+        prescriptionLoader.loadData(
+               prescriptionLoaderConfig,
+                true)
+
+        mockingClient
+                .forEmis {
+                    prescriptions.prescriptionsRequest(
+                            EmisMockDefaults.patientEmis,
+                            expectedDefaultFromDate,
+                            toDate)
+                            .respondWithSuccess(prescriptionLoader.data)
+                }
+    }
+
     @Given("each course has (.*)")
     fun eachCourseHasX(contents: String) {
         val showDosage = contents.toLowerCase().contains("dosage")
@@ -171,11 +199,16 @@ open class PrescriptionsStepDefinitions {
         val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
 
         val prescriptionLoader = PrescriptionsSerenityHelpers.PRESCRIPTIONS_LOADER.getOrFail<IPrescriptionLoader<*>>()
-        prescriptionLoader.loadData(
-                numberOfPrescriptions,
-                numOfRepeats,
-                numOfRepeats,
-                showDosage, showQuantity)
+
+
+        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+                noPrescriptions = numberOfPrescriptions,noCourses = numOfRepeats,
+                noRepeats = numOfRepeats, showDosage = showDosage,
+                showQuantity = showQuantity
+        )
+
+
+        prescriptionLoader.loadData(prescriptionLoaderConfig)
 
         when (currentProvider) {
             Supplier.EMIS -> {
@@ -260,6 +293,16 @@ open class PrescriptionsStepDefinitions {
                 toDate = toDate,
                 numberOfPrescriptions = numberOfPrescriptions,
                 numOfRepeats = numOfRepeats )
+    }
+
+    @Then("^I see the name of the proxy user who ordered the prescription$")
+    fun thenISeeTheNameOfTheProxyUseWhoOrderedThePrescription() {
+        assertTrue(prescriptions.isOrderedByLabelVisible())
+    }
+
+    @Then("^I do not see the name of the proxy user who ordered the prescription$")
+    fun thenIDoNotSeeTheNameOfTheProxyUseWhoOrderedThePrescription() {
+        assertFalse(prescriptions.isOrderedByLabelVisible())
     }
 
     @Then("^I see a message indicating that I have no repeat prescriptions$")

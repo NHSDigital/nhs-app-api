@@ -10,6 +10,10 @@
         <p class="nhsuk-body-l nhsuk-u-margin-bottom-0" data-label="order-date">
           <strong>{{ prescriptionCourse.orderDate | longDate }}</strong>
         </p>
+        <p v-if="prescriptionCourse.orderedBy != null && prescriptionCourse.orderedBy != ''"
+           id="orderedByValue">
+          {{ $t('rp02.proxyOrderedByDisplayPrefix') + prescriptionCourse.orderedBy }}
+        </p>
       </div>
     </component>
 

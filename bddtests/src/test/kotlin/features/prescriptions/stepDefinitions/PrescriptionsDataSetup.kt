@@ -8,6 +8,7 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.defaults.VisionMockDefaults
 import mocking.tpp.models.Error
 import models.Patient
+import models.prescriptions.PrescriptionLoaderConfiguration
 import utils.SerenityHelpers
 import utils.getOrNull
 import utils.set
@@ -37,10 +38,11 @@ class PrescriptionsDataSetup {
 
             val prescriptionLoader = getPrescriptionLoader()
 
-            prescriptionLoader.loadData(
-                    numberOfPrescriptions,
-                    numOfCourses,
-                    numOfRepeats)
+            val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+                    numberOfPrescriptions, numOfCourses, numOfRepeats
+            )
+
+            prescriptionLoader.loadData(prescriptionLoaderConfig)
 
             PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
                     .setupWiremockAndDataWithDelay(null, prescriptionLoader, fromdate, toDate)
@@ -53,10 +55,11 @@ class PrescriptionsDataSetup {
 
             val prescriptionLoader = getPrescriptionLoader()
 
-            prescriptionLoader.loadData(
-                    numberOfPrescriptions,
-                    numOfRepeats,
-                    numOfRepeats)
+            val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
+                   noPrescriptions = numberOfPrescriptions, noRepeats = numOfRepeats, noCourses = numOfRepeats
+            )
+
+            prescriptionLoader.loadData(prescriptionLoaderConfig)
 
             PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
                     .setupWiremockAndDataWithDelay(DELAY_IN_SECONDS, prescriptionLoader, fromdate, toDate)

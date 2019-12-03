@@ -7,8 +7,9 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import org.openqa.selenium.WebElement
 import pages.HybridPageObject
-import pages.HybridPageElement
+import pages.isPresent
 import pages.asciiText
+import pages.HybridPageElement
 import pages.navigation.WebHeader
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions")
@@ -31,6 +32,12 @@ open class PrescriptionsPage : HybridPageObject() {
             page = this
     )
 
+    val orderedByLabel = HybridPageElement(
+            webDesktopLocator = "//p[@id='orderedByValue']",
+            helpfulName = "ordered by label",
+            page = this
+    )
+
     fun getNominatedPharmacyName(): String {
         val nomPharmacyComponent = findByXpath("//*[@id='nominated-pharmacy']")
         val descriptionTextParagraph = nomPharmacyComponent.findElement<WebElement>(org.openqa.selenium.By.tagName("p"))
@@ -47,6 +54,10 @@ open class PrescriptionsPage : HybridPageObject() {
         // note: needs double quotes in "contains" expression because message has apostrophe
         val message = "You don't currently have any repeat prescriptions ordered"
         return findByXpath("//h2[contains(., \"$message\")]").isVisible
+    }
+
+    fun isOrderedByLabelVisible(): Boolean {
+        return orderedByLabel.isPresent
     }
 
     fun isOrderSuccessfullTextVisible(): Boolean {
