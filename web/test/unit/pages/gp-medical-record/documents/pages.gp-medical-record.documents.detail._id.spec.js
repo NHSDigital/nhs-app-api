@@ -1,10 +1,10 @@
 import each from 'jest-each';
-import DocumentPage from '@/pages/my-record/documents/detail/_id';
+import DocumentPage from '@/pages/gp-medical-record/documents/detail/_id';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
 import { createStore, shallowMount } from '../../../helpers';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import NativeCallbacks from '@/services/native-app';
-import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
+import Glossary from '@/components/Glossary';
 
 jest.mock('@/lib/sessionStorage');
 jest.mock('@/services/native-app');
@@ -24,7 +24,7 @@ const mountPage = () => {
   });
 };
 
-describe('my-record documents', () => {
+describe('gp-medical-record documents', () => {
   dummyMetaTag = document.createElement('meta');
   document.getElementsByName = jest.fn().mockReturnValue([dummyMetaTag]);
   beforeEach(() => {
@@ -48,15 +48,15 @@ describe('my-record documents', () => {
     beforeEach(() => redirect.mockClear());
 
     describe('redirect', () => {
-      it('will redirect to my-record if feature toggle is off', async () => {
+      it('will redirect to gp-medical-record if feature toggle is off', async () => {
         $store.app.$env.MY_RECORD_DOCUMENTS_ENABLED = false;
         await DocumentPage.asyncData({ redirect, store: $store });
-        expect(redirect).toHaveBeenCalledWith('/my-record');
+        expect(redirect).toHaveBeenCalledWith('/gp-medical-record');
       });
-      it('will redirect to my-record if not accepted terms and not hasAgreedToMedicalWarning', async () => {
+      it('will redirect to gp-medical-record if not accepted terms and not hasAgreedToMedicalWarning', async () => {
         hasAgreedToMedicalWarning.mockReturnValue(false);
         await DocumentPage.asyncData({ redirect, store: $store });
-        expect(redirect).toHaveBeenCalledWith('/my-record');
+        expect(redirect).toHaveBeenCalledWith('/gp-medical-record');
       });
       it('will load document and not redirect if toggle on and accepted terms even if type and name not set', async () => {
         $store.state.myRecord.hasAcceptedTerms = true;
@@ -144,7 +144,7 @@ describe('my-record documents', () => {
     describe('glossary', () => {
       it('will display an abbreviations glossary', () => {
         mountPage();
-        const glossaryExists = page.find(NhsArrowBanner).exists();
+        const glossaryExists = page.find(Glossary).exists();
         expect(glossaryExists).toBe(true);
       });
     });

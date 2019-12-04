@@ -64,7 +64,7 @@ import {
   isAnonymous,
   LOGIN,
   MESSAGING_MESSAGES,
-  MY_RECORD_DOCUMENT_DETAIL,
+  DOCUMENT_DETAIL,
 } from '@/lib/routes';
 
 export default {
@@ -153,12 +153,12 @@ export default {
     // document needs to stretch to make use of
     // more of the screen
     getColumnClass() {
-      return this.$route.name === MY_RECORD_DOCUMENT_DETAIL.name &&
+      return this.$route.name === DOCUMENT_DETAIL.name &&
         !this.$store.state.device.isNativeApp ?
         'nhsuk-grid-column-full-width' : 'nhsuk-grid-column-two-thirds';
     },
     getRowClass() {
-      return this.$route.name === MY_RECORD_DOCUMENT_DETAIL.name &&
+      return this.$route.name === DOCUMENT_DETAIL.name &&
         !this.$store.state.device.isNativeApp ?
         '' : 'nhsuk-grid-row';
     },

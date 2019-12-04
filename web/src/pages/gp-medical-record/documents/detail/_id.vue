@@ -2,10 +2,8 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <nhs-arrow-banner :banner-text="$t('rp01.glossary.linkText')"
-                        :click-action="glossaryLinkURL"
-                        :is-analytics-tracked="true"/>
       <div class="documentContainer" v-html="document"/>
+      <glossary/>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
                                  @clickAndPrevent="backToDocumentsClicked"/>
     </div>
@@ -15,8 +13,8 @@
 <script>
 import NativeAppCallbacks from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
-import { MYRECORD, LOGIN, LOGOUT } from '@/lib/routes';
+import Glossary from '@/components/Glossary';
+import { GP_MEDICAL_RECORD, LOGIN, LOGOUT } from '@/lib/routes';
 import { isFalsy } from '@/lib/utils';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
@@ -25,7 +23,7 @@ export default {
   layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
-    NhsArrowBanner,
+    Glossary,
   },
   data() {
     return {
@@ -44,7 +42,7 @@ export default {
     if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED)
       || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning())
     ) {
-      redirect(MYRECORD.path);
+      redirect(GP_MEDICAL_RECORD.path);
       return;
     }
 

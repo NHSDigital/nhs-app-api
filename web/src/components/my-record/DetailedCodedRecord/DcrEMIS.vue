@@ -61,24 +61,6 @@
     </analytics-tracked-tag>
     <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
                   :supplier="record.supplier" />
-    <template v-if="myRecordDocumentsEnabled">
-      <analytics-tracked-tag id="documentsHeader"
-                             :class="['nhsuk-heading-s',
-                                      'nhsuk-u-padding-3',
-                                      $style['record-title'],
-                                      getCollapsedState(isDocumentsCollapsed)]"
-                             :click-func="myRecordSectionClick"
-                             :click-param="DOCUMENTS"
-                             :text="$t('my_record.documents.sectionHeader')"
-                             :aria-expanded="!isDocumentsCollapsed ? 'true' : 'false'"
-                             data-purpose="accordion"
-                             role="button"
-                             tag="a">
-        {{ $t('my_record.documents.sectionHeader') }}
-      </analytics-tracked-tag>
-      <documents :is-collapsed="isDocumentsCollapsed" :documents="record.documents"
-                 :supplier="record.supplier" />
-    </template>
   </div>
 </template>
 
@@ -87,16 +69,12 @@ import Immunisations from '@/components/my-record/SharedComponents/Immunisations
 import Problems from '@/components/my-record/SharedComponents/Problems';
 import Consultations from '@/components/my-record/SharedComponents/Consultations';
 import TestResults from '@/components/my-record/SharedComponents/TestResults';
-import Documents from '@/components/my-record/SharedComponents/Documents';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { MY_RECORD_DOCUMENTS } from '@/lib/routes';
-import { isTruthy } from '@/lib/utils';
 
 const IMMUNISATIONS = 'immunisations';
 const TESTRESULTS = 'testresults';
 const PROBLEMS = 'problems';
 const CONSULTATIONS = 'consultations';
-const DOCUMENTS = 'documents';
 
 export default {
   name: 'DcrEMIS',
@@ -106,7 +84,6 @@ export default {
     Problems,
     Consultations,
     TestResults,
-    Documents,
   },
   props: {
     record: {
@@ -120,19 +97,13 @@ export default {
       TESTRESULTS,
       PROBLEMS,
       CONSULTATIONS,
-      DOCUMENTS,
       isImmunisationsCollapsed: process.client,
       isTestResultsCollapsed: process.client,
       isProblemsCollapsed: process.client,
       isConsultationsCollapsed: process.client,
-      isDocumentsCollapsed: process.client,
-      myRecordDocumentsEnabled: isTruthy(this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED),
     };
   },
   methods: {
-    goToDocuments() {
-      this.$router.push(MY_RECORD_DOCUMENTS.path);
-    },
     getCollapsedState(collapsed) {
       return collapsed ? this.$style.closed : this.$style.opened;
     },
@@ -153,10 +124,6 @@ export default {
         case CONSULTATIONS:
           this.isConsultationsCollapsed =
             !this.isConsultationsCollapsed;
-          break;
-        case DOCUMENTS:
-          this.isDocumentsCollapsed =
-            !this.isDocumentsCollapsed;
           break;
         default:
           break;

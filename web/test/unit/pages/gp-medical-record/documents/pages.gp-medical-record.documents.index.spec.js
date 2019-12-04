@@ -1,11 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 // import Vue from 'vue';
 import chunk from 'lodash/fp/chunk';
-import DocumentsPage from '@/pages/my-record/documents/index';
+import DocumentsPage from '@/pages/gp-medical-record/documents/index';
 import CardGroup from '@/components/widgets/card/CardGroup';
-import { initialState } from '@/store/modules/myRecord/mutation-types';
 import { createStore, shallowMount } from '../../../helpers';
-import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
+import Glossary from '@/components/Glossary';
 
 jest.mock('lodash/fp/chunk');
 let chunkCallback;
@@ -13,8 +12,14 @@ let chunkCallback;
 let page;
 let $store;
 const defaultDocuments = ['data', 'to', 'be', 'chunked'];
+const documents = {
+  data: defaultDocuments,
+  hasErrored: false,
+  hasAccess: true,
+};
+
 const expectedChunkedData = [['data', 'to'], ['be', 'chunked']];
-const expectedPageData = { documentChunks: expectedChunkedData };
+const expectedPageData = { documentChunks: expectedChunkedData, documents };
 
 const mountPage = ({ data } = {}) => {
   page = shallowMount(DocumentsPage, {
@@ -23,14 +28,21 @@ const mountPage = ({ data } = {}) => {
   });
 };
 
-describe('my-record documents', () => {
+describe('gp-medical-record documents', () => {
   beforeEach(() => {
     $store = createStore({
       $env: {
         CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
         MY_RECORD_DOCUMENTS_ENABLED: true,
       },
-      state: { myRecord: initialState(), device: { isNativeApp: false } },
+      state: {
+        device: { isNativeApp: false },
+        myRecord: {
+          record: {
+            documents,
+          },
+        },
+      },
     });
 
     chunkCallback = jest.fn().mockReturnValue(expectedChunkedData);
@@ -43,23 +55,14 @@ describe('my-record documents', () => {
 
     beforeEach(() => redirect.mockClear());
 
-    it('will redirect to my-record if feature toggle is off', async () => {
+    it('will redirect to gp-medical-record if feature toggle is off', async () => {
       $store.app.$env.MY_RECORD_DOCUMENTS_ENABLED = false;
 
       await DocumentsPage.asyncData({ redirect, store: $store });
 
-      expect(redirect).toHaveBeenCalledWith('/my-record');
+      expect(redirect).toHaveBeenCalledWith('/gp-medical-record');
     });
-    it('will redirect to my-record if no documents found in record', async () => {
-      $store.state.myRecord.hasAcceptedTerms = true;
-
-      await DocumentsPage.asyncData({ redirect, store: $store });
-
-      expect(redirect).toHaveBeenCalledWith('/my-record');
-    });
-    it('will chunk my-record documents into chunks of 2', async () => {
-      $store.state.myRecord.record.documents = { data: defaultDocuments };
-
+    it('will chunk gp-medical-record documents into chunks of 2', async () => {
       const pageData = await DocumentsPage.asyncData({ store: $store });
 
       expect(chunk).toHaveBeenCalledWith(2);
@@ -70,16 +73,16 @@ describe('my-record documents', () => {
   describe('template', () => {
     describe('glossary', () => {
       it('will display an abbreviations glossary', () => {
-        mountPage();
+        mountPage({ data: () => ({ documents }) });
 
-        const glossaryExists = page.find(NhsArrowBanner).exists();
+        const glossaryExists = page.find(Glossary).exists();
         expect(glossaryExists).toBe(true);
       });
     });
     describe('document items', () => {
       it('will render a card group for every chunk', () => {
         const documentChunks = [[], []];
-        mountPage({ data: () => ({ documentChunks }) });
+        mountPage({ data: () => ({ documentChunks, documents }) });
 
         const cardGroups = page.findAll(CardGroup);
         expect(cardGroups.length).toEqual(2);
@@ -89,7 +92,7 @@ describe('my-record documents', () => {
           [{ documentGuid: '1', extension: 'pdf', effectiveDate: {}, size: 10 }],
           [{ documentGuid: '3', extension: 'pdf', effectiveDate: {}, size: 10 }],
         ];
-        mountPage({ data: () => ({ documentChunks }) });
+        mountPage({ data: () => ({ documentChunks, documents }) });
 
         const cardGroupItems = page.findAll('card-group-stub card-group-item-stub');
         const firstDocumentItems = cardGroupItems.wrappers[0].find('document-item-stub[id="1"]');
@@ -108,7 +111,7 @@ describe('my-record documents', () => {
           name: 'Document name',
           isAvailable: true,
         };
-        mountPage({ data: () => ({ documentChunks: [[document]] }) });
+        mountPage({ data: () => ({ documentChunks: [[document]], documents }) });
 
         const documentItem = page.find('document-item-stub[id="1"]');
         expect(documentItem.vm.id).toEqual(document.documentGuid);

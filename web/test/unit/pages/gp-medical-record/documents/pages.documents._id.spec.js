@@ -1,6 +1,6 @@
 import { mount, createRouter, createStore } from '../../../helpers';
-import DocumentInformation from '@/pages/my-record/documents/_id';
-import { MY_RECORD_DOCUMENT_DETAIL, MYRECORD } from '@/lib/routes';
+import DocumentInformation from '@/pages/gp-medical-record/documents/_id';
+import { DOCUMENT_DETAIL, GP_MEDICAL_RECORD } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { datePart } from '@/lib/utils';
 
@@ -57,7 +57,7 @@ describe('document view', () => {
       await page.vm.$options.asyncData({ store: $store, redirect });
 
       // Assert
-      expect(redirect).toBeCalledWith(MYRECORD.path);
+      expect(redirect).toBeCalledWith(GP_MEDICAL_RECORD.path);
     });
 
     it('will redirect to the my record page if there is no document date', async () => {
@@ -70,7 +70,7 @@ describe('document view', () => {
       await page.vm.$options.asyncData({ store: $store, redirect });
 
       // Assert
-      expect(redirect).toBeCalledWith(MYRECORD.path);
+      expect(redirect).toBeCalledWith(GP_MEDICAL_RECORD.path);
     });
 
     it('will set the header and page title to the document name', async () => {
@@ -105,7 +105,7 @@ describe('document view', () => {
   describe('methods', () => {
     it('will navigate to the view document page with the correct id in the path', () => {
       // Arrange
-      const route = { name: MY_RECORD_DOCUMENT_DETAIL.name, params: { id: 1 } };
+      const route = { name: DOCUMENT_DETAIL.name, params: { id: 1 } };
       const page = mountPage({ $store });
 
       // Act

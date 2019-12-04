@@ -19,7 +19,7 @@
 
 <script>
 import Card from '@/components/widgets/card/Card';
-import { MY_RECORD_DOCUMENT } from '@/lib/routes';
+import { DOCUMENT } from '@/lib/routes';
 
 export default {
   name: 'DocumentItem',
@@ -75,7 +75,7 @@ export default {
         eventGuid: this.eventGuid,
         size: this.sizeInBytes,
       });
-      this.$router.push({ name: MY_RECORD_DOCUMENT.name, params: { id: this.id } });
+      this.$router.push({ name: DOCUMENT.name, params: { id: this.id } });
     },
   },
 };

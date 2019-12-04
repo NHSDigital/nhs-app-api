@@ -43,15 +43,30 @@
                :click-func="goToUrl"
                :click-param="consultationsPath"
                :count="record.consultations.data.length"/>
+
+    <menu-item v-if="documentsEnabled"
+               id="documents"
+               data-purpose="documents"
+               :href="documentsPath"
+               :header-tag="'h2'"
+               :text="$t('my_record.documents.sectionHeader')"
+               :aria-label="
+                 getAriaLabel($t('my_record.documents.sectionHeader'),
+                              record.documents.data.length)"
+               :click-func="goToUrl"
+               :click-param="documentsPath"
+               :count="record.documents.data.length"/>
   </div>
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
+import { isTruthy } from '@/lib/utils';
 import { TESTRESULTS,
   IMMUNISATIONS,
   CONSULTATIONS,
   HEALTH_CONDITIONS,
+  DOCUMENTS,
 } from '@/lib/routes';
 
 export default {
@@ -66,6 +81,8 @@ export default {
       immunisationsPath: IMMUNISATIONS.path,
       consultationsPath: CONSULTATIONS.path,
       healthConditionsPath: HEALTH_CONDITIONS.path,
+      documentsPath: DOCUMENTS.path,
+      documentsEnabled: isTruthy(this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED),
     };
   },
   methods: {

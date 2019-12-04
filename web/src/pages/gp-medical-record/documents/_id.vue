@@ -1,14 +1,14 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div v-if="showTemplate" :class="[$style.content,
-                                        'pull-content',
-                                        !$store.state.device.isNativeApp && $style.desktopWeb]">
-        <div id="documentInfo" :class="$style.info" data-purpose="info">
+      <div :class="[$style.content,
+                    'pull-content',
+                    !$store.state.device.isNativeApp && $style.desktopWeb]">
+        <div id="documentInfo" class="nhsuk-u-margin-bottom-1" data-purpose="info">
           <p v-if="name && !isTooLarge">{{ dateString }}</p>
           <p v-if="isTooLarge">{{ $t('my_record.documents.documentTooLargeSubtext') }}</p>
         </div>
-        <div v-if="hasComments" :class="$style.comments">
+        <div v-if="hasComments">
           <b>{{ $t('my_record.documents.commentsHeader') }}</b>
           <div v-for="(comment, index) in retrieveComments"
                :id="'documentComment' + index"
@@ -45,7 +45,7 @@ import get from 'lodash/fp/get';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { MY_RECORD_DOCUMENT_DETAIL, MY_RECORD_DOCUMENTS, MYRECORD } from '@/lib/routes';
+import { DOCUMENT_DETAIL, DOCUMENTS, GP_MEDICAL_RECORD } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { isFalsy, redirectTo, datePart } from '@/lib/utils';
 import NativeCallbacks from '@/services/native-app';
@@ -70,7 +70,7 @@ export default {
       return this.comments;
     },
     documentsPath() {
-      return MY_RECORD_DOCUMENTS.path;
+      return DOCUMENTS.path;
     },
     getMimeType() {
       switch (this.type.toUpperCase()) {
@@ -112,7 +112,7 @@ export default {
     if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED)
           || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) || !date
     ) {
-      redirect(MYRECORD.path);
+      redirect(GP_MEDICAL_RECORD.path);
       return {};
     }
 
@@ -170,12 +170,12 @@ export default {
   methods: {
     navigateToView() {
       this.$router.push({
-        name: MY_RECORD_DOCUMENT_DETAIL.name,
+        name: DOCUMENT_DETAIL.name,
         params: { id: this.$route.params.id },
       });
     },
     backToDocumentsClicked() {
-      redirectTo(this, MY_RECORD_DOCUMENTS.path, null);
+      redirectTo(this, this.documentsPath, null);
     },
     startDownload() {
       /* eslint-disable func-names */
@@ -253,26 +253,5 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-  @import '../../../style/spacings';
   @import '../../../style/textstyles';
-
-  p {
-    font-family: $default_web;
-    font-weight: normal;
-    margin-bottom: 1em;
-  }
-  .info {
-    font-size: 1em;
-    margin-bottom: 1em;
-
-    p {
-      margin-bottom: 0
-    }
-  }
-  .comments {
-    margin-bottom: 1em;
-    p {
-      margin-bottom: 0;
-    }
-  }
 </style>

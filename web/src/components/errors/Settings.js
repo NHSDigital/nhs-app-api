@@ -16,8 +16,8 @@ import {
   MESSAGING_MESSAGES,
   MYRECORD,
   MYRECORDTESTRESULT,
-  MY_RECORD_DOCUMENT,
-  MY_RECORD_DOCUMENTS,
+  DOCUMENT,
+  DOCUMENTS,
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_SEARCH,
   ORGAN_DONATION,
@@ -130,15 +130,15 @@ export default {
       },
     },
     {
-      route: MY_RECORD_DOCUMENT.path,
+      route: DOCUMENT.path,
       redirectUrl: {
-        default: MYRECORD.path,
+        default: GP_MEDICAL_RECORD.path,
       },
     },
     {
-      route: MY_RECORD_DOCUMENTS.path,
+      route: DOCUMENTS.path,
       redirectUrl: {
-        default: MYRECORD.path,
+        default: GP_MEDICAL_RECORD.path,
       },
     },
     {

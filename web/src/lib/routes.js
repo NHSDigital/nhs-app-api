@@ -758,33 +758,33 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
-  MY_RECORD_DOCUMENTS: {
-    name: 'my-record-documents',
-    path: '/my-record/documents',
+  DOCUMENTS: {
+    name: 'gp-medical-record-documents',
+    path: '/gp-medical-record/documents',
     crumb: {
       i8nKey: 'myRecordDocuments',
       get parentRoute() {
-        return this.allRoutes.MYRECORD;
+        return this.allRoutes.GP_MEDICAL_RECORD;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
-  MY_RECORD_DOCUMENT: {
-    name: 'my-record-documents-id',
-    path: '/my-record/documents/:id',
+  DOCUMENT: {
+    name: 'gp-medical-record-documents-id',
+    path: '/gp-medical-record/documents/:id',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.MY_RECORD_DOCUMENTS;
+        return this.allRoutes.DOCUMENTS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
-  MY_RECORD_DOCUMENT_DETAIL: {
-    name: 'my-record-documents-detail-id',
-    path: '/my-record/documents/detail/:id',
+  DOCUMENT_DETAIL: {
+    name: 'gp-medical-record-documents-detail-id',
+    path: '/gp-medical-record/documents/detail/:id',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.MY_RECORD_DOCUMENTS;
+        return this.allRoutes.DOCUMENTS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
@@ -1299,9 +1299,9 @@ export const {
   MY_RECORD_VISION_EXAMINATIONS_DETAIL,
   MY_RECORD_VISION_PROCEDURES_DETAIL,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
-  MY_RECORD_DOCUMENTS,
-  MY_RECORD_DOCUMENT,
-  MY_RECORD_DOCUMENT_DETAIL,
+  DOCUMENTS,
+  DOCUMENT,
+  DOCUMENT_DETAIL,
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_CONFIRM,
