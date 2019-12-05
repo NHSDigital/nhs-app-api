@@ -11,6 +11,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
@@ -72,6 +73,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             var response = await Post<Authenticate, AuthenticateReply>(authenticate);
 
             return response;
+        }
+
+        public async Task<TppApiObjectResponse<ListServiceAccessesReply>> ListServiceAccessesPost(TppUserSession tppUserSession)
+        {
+            var listServiceAccesses = new ListServiceAccesses
+            {
+                PatientId = tppUserSession.PatientId,
+                OnlineUserId = tppUserSession.OnlineUserId,
+                UnitId = tppUserSession.OdsCode
+            };
+
+            return await Post<ListServiceAccesses, ListServiceAccessesReply>(listServiceAccesses, tppUserSession.Suid);
         }
 
         public async Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession)

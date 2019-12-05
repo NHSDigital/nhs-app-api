@@ -70,6 +70,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 var tppUserSession = userSession.ValueOrFailure();
                 await _client.PatientSelectedPost(tppUserSession);
+                
+                LogAccessInformation(tppUserSession);
 
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
                 return new GpSessionCreateResult.Success(
@@ -118,6 +120,31 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             finally
             {
                 _logger.LogExit();
+            }
+        }
+
+        private async void LogAccessInformation(TppUserSession userSession)
+        {
+            try
+            {
+                var response = await _client.ListServiceAccessesPost(userSession);
+                response.Body?.ServiceAccess?.ForEach(x =>
+                {
+                    if (string.Equals(x.Description, "Messaging", StringComparison.Ordinal))
+                    {
+                        _logger.LogInformation($"ODSCode {userSession.OdsCode}  " +
+                                               $"PFS messaging enabled: {x.Status} " +
+                                               $"with description: {x.StatusDesc}");
+                    }
+                });
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Failed request to get list of service accesses, HttpRequestException has been thrown.");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed request to get list of service accesses, Exception has been thrown");
             }
         }
 

@@ -3,6 +3,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 using static NHSOnline.Backend.GpSystems.Suppliers.Tpp.TppClient;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
@@ -14,6 +15,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         Task<TppApiObjectResponse<LinkAccountReply>> LinkAccountPost(LinkAccount linkAccountModel);
         
         Task<TppApiObjectResponse<ListRepeatMedicationReply>> ListRepeatMedicationPost(TppUserSession tppUserSession);
+        
+        Task<TppApiObjectResponse<ListServiceAccessesReply>> ListServiceAccessesPost(TppUserSession tppUserSession);
 
         Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession);
         

@@ -12,6 +12,7 @@ using Moq;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
 using NHSOnline.Backend.Support;
@@ -267,6 +268,105 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             tppUserSession.OdsCode.Should().Be(odsCode);
             tppUserSession.NhsNumber.Should().Be(_nhsNumber);
         }
+        
+        [TestMethod]
+        public async Task Create_WhenCalledSuccessfully_LogsMessaging()
+        {
+            // Arrange
+            const string expectedSessionId = "ff5246bc-ef03-458a-a1ff-4b6e80268671";
+            const string expectedOnlineUserId = "abcde";
+            const string expectedPatientId = "12345";
+            const string odsCode = "1234";
+            var reply = CreateReply(
+                suid: expectedSessionId,
+                onlineUserId: expectedOnlineUserId,
+                patientId: expectedPatientId);
+
+            var userSession = CreateUserSession(odsCode, expectedSessionId,
+                expectedOnlineUserId, expectedPatientId, _nhsNumber);
+
+            _mockTppClient.Setup(x => x
+                    .AuthenticatePost(It.IsAny<Authenticate>()))
+                .ReturnsAsync(() => reply);
+
+            var listServicesAccessesResponse = new ListServiceAccessesReply
+            {
+                ServiceAccess = new List<ServiceAccess> { new ServiceAccess 
+                    {
+                        Description = "Messaging", Status = "A", StatusDesc = "Enabled"
+                    } 
+                }
+            };
+            
+            _mockTppClient.Setup(x => x
+                    .ListServiceAccessesPost(It.IsAny<TppUserSession>()))
+                .ReturnsAsync(() => ListServiceAccessesReply(listServicesAccessesResponse));
+            
+            _mockTppSessionMapper
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber))
+                .Returns(Option.Some(userSession));
+
+            _systemUnderTest = _fixture.Create<TppSessionService>();
+
+            // Act
+            await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
+
+            // Assert
+            _logger.VerifyLogger(LogLevel.Information,
+                $"ODSCode {userSession.OdsCode}  " +
+                $"PFS messaging enabled: A " +
+                $"with description: Enabled",
+                Times.Once());
+        }
+        
+        [TestMethod]
+        public async Task Create_WhenCalledSuccessfully_LogsNothingIfNoMessaging()
+        {
+            // Arrange
+            const string expectedSessionId = "ff5246bc-ef03-458a-a1ff-4b6e80268671";
+            const string expectedOnlineUserId = "abcde";
+            const string expectedPatientId = "12345";
+            const string odsCode = "1234";
+            var reply = CreateReply(
+                suid: expectedSessionId,
+                onlineUserId: expectedOnlineUserId,
+                patientId: expectedPatientId);
+
+            var userSession = CreateUserSession(odsCode, expectedSessionId,
+                expectedOnlineUserId, expectedPatientId, _nhsNumber);
+
+            _mockTppClient.Setup(x => x
+                    .AuthenticatePost(It.IsAny<Authenticate>()))
+                .ReturnsAsync(() => reply);
+            var listServicesAccessesResponse = new ListServiceAccessesReply
+            {
+                ServiceAccess = new List<ServiceAccess> { new ServiceAccess 
+                    {
+                        Description = "PaperTrail", Status = "A", StatusDesc = "Not Enabled"
+                    }
+                }
+            };
+            
+            _mockTppClient.Setup(x => x
+                    .ListServiceAccessesPost(It.IsAny<TppUserSession>()))
+                .ReturnsAsync(() => ListServiceAccessesReply(listServicesAccessesResponse));
+            
+            _mockTppSessionMapper
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber))
+                .Returns(Option.Some(userSession));
+
+            _systemUnderTest = _fixture.Create<TppSessionService>();
+
+            // Act
+            await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
+
+            // Assert
+            _logger.VerifyLogger(LogLevel.Information,
+                $"ODSCode {userSession.OdsCode}  " +
+                $"PFS messaging enabled: A " +
+                $"with description: Not Enabled",
+                Times.Never());
+        }
 
         [TestMethod]
         public async Task Create_WhenCalledWithErrorResponseProblemLoggingOn_ReturnsForbidden()
@@ -494,6 +594,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 Headers = new Dictionary<string, string>
                 {
                     { ResponseSuidHeader, "dimsum" }
+                }
+            };
+
+            return response;
+        }
+        
+        private static TppClient.TppApiObjectResponse<ListServiceAccessesReply> ListServiceAccessesReply(ListServiceAccessesReply reply)
+        {
+            var response = new TppClient.TppApiObjectResponse<ListServiceAccessesReply>(HttpStatusCode.OK)
+            {
+                Body = reply,
+                Headers = new Dictionary<string, string>
+                {
+                    { ResponseSuidHeader, "suid" }
                 }
             };
 
