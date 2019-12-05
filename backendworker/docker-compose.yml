@@ -67,6 +67,7 @@ services:
       - SPINE_LDAP_LOOKUP_ENABLED=true
       - USERINFO_API_BASE_URL=http://userinfo.local.bitraft.io:8091/v1/api/me/info
       - PROXY_ACCESS_ENABLED=true
+      - CITIZEN_ID_JWT_ISSUER=https://auth.ext.signin.nhs.uk
   cid.local.bitraft.io:
     image: nhsonline.backend.cidapi
     build:
