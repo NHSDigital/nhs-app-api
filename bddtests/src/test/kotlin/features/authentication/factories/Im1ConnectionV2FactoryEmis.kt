@@ -126,10 +126,6 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
     }
 
     override fun successfulLinkagePost(linkageInformationFacade: LinkageInformationFacade) {
-        mockingClient.forEmis {
-            authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade))
-                    .respondWithSuccessfullyRetrieved(verificationResponse(linkageInformationFacade))
-        }
         endUserSessionSetup()
         mockingClient.forEmis {
             authentication.linkageKeyPOSTRequest(
@@ -138,6 +134,14 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
                             linkageInformationFacade.nhsNumber,
                             linkageInformationFacade.emailAddress))
                     .respondWithSuccessfullyCreated(AddNhsUserResponse(EmisMockDefaults.patientEmis.connectionToken))
+                    .inScenario("LinkageCreation")
+                    .willSetStateTo("Linkage key created")
+        }
+        mockingClient.forEmis {
+            authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade))
+                    .respondWithSuccessfullyRetrieved(verificationResponse(linkageInformationFacade))
+                    .inScenario("LinkageCreation")
+                    .whenScenarioStateIs("Linkage key created")
         }
     }
 

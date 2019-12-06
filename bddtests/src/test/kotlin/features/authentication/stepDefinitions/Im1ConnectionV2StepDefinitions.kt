@@ -36,8 +36,7 @@ class Im1ConnectionV2StepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
-        val connectionRequest =factory.validIm1Request
-        connectionRequest.AccountId = null
+        val connectionRequest =factory.validCreateLinkageRequest
         val linkage = factory.validLinkageDetails
         factory.successfulLinkageGet(linkage)
         factory.successfulIm1Register(linkage)
@@ -50,7 +49,7 @@ class Im1ConnectionV2StepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
-        val connectionRequest = factory.validIm1Request
+        val connectionRequest = factory.validCreateLinkageRequest
         val linkage = factory.validLinkageDetails
         factory.linkageGet(linkage) {x -> x.respondWithError(HttpStatus.SC_NOT_FOUND, "0")}
         factory.successfulLinkagePost(linkage)

@@ -52,6 +52,12 @@ abstract class Im1ConnectionV2Factory(protected val gpSystem: Supplier) {
             LinkageKey = patient.linkageKey,
             OdsCode = patient.odsCode,
             Surname = patient.surname,
+            DateOfBirth = patient.dateOfBirth)
+
+    val validCreateLinkageRequest: Im1ConnectionRequest
+            = Im1ConnectionRequest(
+            OdsCode = patient.odsCode,
+            Surname = patient.surname,
             DateOfBirth = patient.dateOfBirth,
             NhsNumber = patient.nhsNumbers.first(),
             IdentityToken = identityToken,

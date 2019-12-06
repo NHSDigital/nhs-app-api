@@ -27,6 +27,7 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
         mockingClient.forTpp {
             authentication.linkAccountRequest(patient).respondWithSuccess(
                     LinkAccountReply(
+                            accountId = patient.accountId,
                             passphrase = patient.passphrase,
                             uuid = TppMockDefaults.DEFAULT_TPP_UUID,
                             passphraseToLink = "passphraseToLink"
@@ -62,6 +63,19 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
         val linkAccount = LinkAccount.forPatient(Patient.getDefault(gpSystem))
         mockingClient.forTpp {
             authentication.linkageKeyPOSTRequest(linkAccount).respondWithSuccessfullyCreated(linkageInformationFacade)
+                    .inScenario("LinkageCreation")
+                    .willSetStateTo("Linkage key created")
+        }
+        mockingClient.forTpp {
+            authentication.linkAccountRequest(patient).respondWithSuccess(
+                    LinkAccountReply(
+                            accountId = patient.accountId,
+                            passphrase = patient.passphrase,
+                            uuid = TppMockDefaults.DEFAULT_TPP_UUID,
+                            passphraseToLink = "passphraseToLink"
+                    ))
+                    .inScenario("LinkageCreation")
+                    .whenScenarioStateIs("Linkage key created")
         }
     }
 

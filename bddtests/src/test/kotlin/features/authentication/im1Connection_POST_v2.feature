@@ -202,22 +202,14 @@ Feature: Im1 Connection V2 POST
     Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
       | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message |
-      | EMIS      | 400        | 1001   | 403            | 101  ||
-      | EMIS      | 400        | 1401   | 403            | 101  ||
-      | EMIS      | 400        | 1107   | 403            | 102  ||
       | VISION    | 200        | -34    | 403            | 102  ||
-      | EMIS      | 400        | 1552   | 403            | 102  ||
       | VISION    | 200        | -19    | 403            | 102  ||
-      | EMIS      | 400        | 1106   | 404            | 103  ||
-      | EMIS      | 404        | 1104   | 404            | 103  ||
       | VISION    | 200        | -33    | 404            | 103  ||
-      | EMIS      | 400        | 1108   | 409            | 105  ||
       | VISION    | 200        | -2     | 409            | 105  ||
-      | EMIS      | 400        | 1105   | 400            | 106  ||
       | VISION    | 200        | -31    | 400            | 106  ||
       | VISION    | 400        | V4205  | 400            | 108  ||
       | VISION    | 404        | V4205  | 400            | 108  ||
-    #If TPP has a successful linkage creation, the register endpoint is not called
+    #If TPP or EMIS has a successful linkage creation, the register endpoint is not called (IM1 token caching)
 
   Scenario Outline: A <GP System> user registering with created linkage details can get <ExpectedCode> error from a <GPCode> error with <Message>
     Given I am a <GP System> user with created linkage key but registering returns '<GPHttpCode>' '<GPCode>' '<Message>'
@@ -225,16 +217,11 @@ Feature: Im1 Connection V2 POST
     When I register the user's IM1 credentials using the v2 endpoint
     Then I receive a '<ExpectedStatus>' IM1 error status code with code '<ExpectedCode>'
     Examples:
-      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message                                                        |
-      | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services API v2 is not enabled at this practice |
-      | EMIS      | 403        | 1030   | 403            | 101          | Patient Facing Services are not enabled by this practice       |
-      | EMIS      | 400        |        | 400            | 106          | Other length outside of valid range.                           |
-      | VISION    | 200        | -100   | 502            | 107          | Connection to external service failed                          |
-      | EMIS      | 400        |        | 400            | 110          | AccountId length outside of valid range.                       |
-      | EMIS      | 400        |        | 400            | 111          | LinkageKey length outside of valid range.                      |
-      | VISION    | 200        | -100   | 502            | 107          | Unknown Error                                                  |
-      | EMIS      | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
-      | VISION    | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
+      | GP System | GPHttpCode | GPCode | ExpectedStatus | ExpectedCode | Message                               |
+      | VISION    | 200        | -100   | 502            | 107          | Connection to external service failed |
+      | VISION    | 200        | -100   | 502            | 107          | Unknown Error                         |
+      | VISION    | 400        | 1      | 502            | 100          | Unmapped Error                        |
+    #If TPP or EMIS has a successful linkage creation, the register endpoint is not called (IM1 token caching)
 
   Scenario Outline: A <GP System> user registering with provided linkage details can get a <ExpectedCode> error from a <GPCode> error
     Given I am a <GP System> user with provided linkage key but registering returns '<GPHttpCode>' '<GPCode>' '<Message>'

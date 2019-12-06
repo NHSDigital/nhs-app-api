@@ -135,7 +135,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 
                 var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
 
-                _logger.LogDebug("Checking cache for IM1 connection token");
+                _logger.LogInformation("Checking cache for IM1 connection token");
                 var key = _im1CacheKeyGenerator.GenerateCacheKey(
                     request.AccountId, request.OdsCode, request.LinkageKey);
                 var cachedConnectionToken =
@@ -146,10 +146,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 if (cachedConnectionToken.HasValue)
                 {
                     connectionToken = cachedConnectionToken.ValueOrFailure();
-                    _logger.LogDebug("IM1 connection token found in cache.");
+                    _logger.LogInformation("IM1 connection token found in cache.");
                 }
                 else
                 {
+                    _logger.LogInformation("IM1 connection token not found in cache.");
                     var meApplicationsPostRequest = CreateMeApplicationsPostRequest(request);
 
                     var meApplicationsResponse =

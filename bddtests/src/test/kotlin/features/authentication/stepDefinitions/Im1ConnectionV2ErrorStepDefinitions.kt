@@ -28,7 +28,7 @@ class Im1ConnectionV2ErrorStepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
-        val connectionRequest = factory.validIm1Request
+        val connectionRequest = factory.validCreateLinkageRequest
         val linkage = factory.validLinkageDetails
         factory.linkageGet(linkage) {x -> x.respondWithError(gpHttpCode, gpError, message)}
         factory.successfulLinkagePost(linkage)
@@ -115,8 +115,7 @@ class Im1ConnectionV2ErrorStepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         SerenityHelpers.setPatient(factory.patient)
-        val connectionRequest = factory.validIm1Request
-        connectionRequest.AccountId = null
+        val connectionRequest = factory.validCreateLinkageRequest
         val linkage = factory.validLinkageDetails
 
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
@@ -132,8 +131,7 @@ class Im1ConnectionV2ErrorStepDefinitions {
                                                                      gpErrorMessage:String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
-        val connectionRequest = factory.validIm1Request
-        connectionRequest.AccountId = null
+        val connectionRequest = factory.validCreateLinkageRequest
         val linkage = factory.validLinkageDetails
 
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
@@ -150,8 +148,7 @@ class Im1ConnectionV2ErrorStepDefinitions {
                                                                     message:String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
-        val connectionRequest = factory.validIm1Request
-        connectionRequest.AccountId = null
+        val connectionRequest = factory.validCreateLinkageRequest
         val linkage = factory.validLinkageDetails
 
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
@@ -192,8 +189,7 @@ class Im1ConnectionV2ErrorStepDefinitions {
                                                                       gpError:String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
-        val connectionRequest = factory.validIm1Request
-        connectionRequest.AccountId = null
+        val connectionRequest = factory.validCreateLinkageRequest
         val linkage = factory.validLinkageDetails
 
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
@@ -209,8 +205,7 @@ class Im1ConnectionV2ErrorStepDefinitions {
         val factory = Im1ConnectionV2Factory.getForSupplier(supplier)
         val linkageDateOfBirthFormat = Im1ConnectionV2Factory.getForSupplier(supplier).linkageDateOfBirthFormat
         val dob = DateTime.now().minusYears(MINIMUM_AGE).plusDays(1).toString(linkageDateOfBirthFormat)
-        val connectionRequest = factory.validIm1Request
-        connectionRequest.AccountId = null
+        val connectionRequest = factory.validCreateLinkageRequest
         connectionRequest.DateOfBirth = dob
         val linkage = factory.validLinkageDetails
         linkage.dateOfBirth = dob
