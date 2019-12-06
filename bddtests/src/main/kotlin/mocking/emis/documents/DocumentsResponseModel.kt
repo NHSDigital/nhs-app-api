@@ -22,7 +22,7 @@ data class EffectiveDate(
 )
 
 data class Observation(
-        var term: String,
+        var term: String? = null,
         var associatedText: MutableList<AssociatedText> = arrayListOf(),
         var effectiveDate: EffectiveDate
 )

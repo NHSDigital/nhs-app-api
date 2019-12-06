@@ -53,12 +53,12 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         }
     }
 
-    override fun enabledWithDocumentsWithNoName(patient: Patient, isLarge: Boolean) {
+    override fun enabledWithDocumentsWithNoNameOrTerm(patient: Patient, isLarge: Boolean) {
         val documents = if (isLarge) DocumentsData.getLargeDocumentData()
-            else DocumentsData.getDefaultDocumentsData(false)
+            else DocumentsData.getDefaultDocumentsData(false, false)
 
         val expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents,
-                false)
+                false, false)
         setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, expectedDocuments)
 
         val availableDocument = expectedDocuments[0]
@@ -80,18 +80,20 @@ class DocumentsFactoryEmis: DocumentsFactory() {
 
     private fun getExpectedDocumentsFromEmisDocuments(isLarge: Boolean,
         documents: List<DocumentsResponse>,
-        includeName: Boolean = true): List<ExpectedDocument> {
+        includeName: Boolean = true, includeTerm: Boolean = true): List<ExpectedDocument> {
         val size = if (isLarge) LARGE_DOCUMENT_SIZE else REGULAR_DOCUMENT_SIZE
 
         return documents.mapIndexed(fun(index, document): ExpectedDocument {
             val expectedDocument = ExpectedDocument(
                 document.documentGuid,
-                "18 February 2018 (${document.extension.toUpperCase()}, ${size}MB)",
+                "(${document.extension.toUpperCase()}, ${size}MB)",
                 "18 February 2018",
-                mutableListOf("View"),
-                "History ${index + 1}")
+                mutableListOf("View"))
             if (includeName) {
                 expectedDocument.name = "Name ${index + 1}"
+            }
+            if (includeTerm) {
+                expectedDocument.term = "Letter ${index + 1}"
             }
             return expectedDocument
         })

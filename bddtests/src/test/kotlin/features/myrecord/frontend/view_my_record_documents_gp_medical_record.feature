@@ -32,7 +32,7 @@ Feature: View My Medical Record Information - Documents Frontend
   Scenario: An EMIS user who views a document with no name sees the document date as the header
     Given I am a EMIS user setup to use medical record version 2
     And the my record wiremocks are initialised when the patient is already set for EMIS
-    And the GP Practice has multiple documents with no name
+    And the GP Practice has multiple documents with no name or term
     And I am logged in
     And I am on my record information page and glossary is visible - GP Medical Record
     When I click the Documents link on my record - GP Medical Record

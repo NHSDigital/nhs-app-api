@@ -1214,6 +1214,7 @@ export default {
       },
       sectionHeader: 'Documents',
       documentsLink: 'View your documents',
+      documentMenuItemTitle: 'added on {date}',
       documentPageSubtext: 'Document added on',
       documentTooLargeSubtext: 'To access it, contact your GP surgery directly.',
       documentTooLargeHeader: 'The document added on {date} is not available through the NHS App.',

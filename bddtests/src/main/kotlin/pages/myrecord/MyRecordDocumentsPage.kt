@@ -11,7 +11,7 @@ class MyRecordDocumentsPage : HybridPageObject() {
     private var baseDocumentItemPath: String = ""
 
     private fun setBaseDocumentItemPath(documentId: String) {
-        baseDocumentItemPath = "//*[@id='document-$documentId']"
+        baseDocumentItemPath = "//*[@id='$documentId']"
     }
 
     private fun getIndividualDocumentItem(): HybridPageElement {
@@ -23,21 +23,14 @@ class MyRecordDocumentsPage : HybridPageObject() {
 
     private fun getDocumentDateAndType(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$baseDocumentItemPath/p[@class='document__date-and-type']",
-                androidLocator = null,
-                page = this)
-    }
-
-    private fun getDocumentName(): HybridPageElement {
-        return HybridPageElement(
-                webDesktopLocator = "$baseDocumentItemPath/p[@class='document__name']",
+                webDesktopLocator = "$baseDocumentItemPath//span//p",
                 androidLocator = null,
                 page = this)
     }
 
     private fun getDocumentTerm(): HybridPageElement {
         return HybridPageElement(
-                webDesktopLocator = "$baseDocumentItemPath//p[@class='document__term']",
+                webDesktopLocator = "$baseDocumentItemPath//span//h2",
                 androidLocator = null,
                 page = this)
     }
@@ -45,16 +38,17 @@ class MyRecordDocumentsPage : HybridPageObject() {
     fun assertDocumentItemsVisible(expectedDocuments: List<ExpectedDocument>) {
         for(expectedDocument in expectedDocuments){
             setBaseDocumentItemPath(expectedDocument.id)
-            assertEquals("Document date or type incorrect",
-                expectedDocument.dateTypeAndSize,
+            assertEquals("Document type or size incorrect",
+                expectedDocument.typeAndSize,
                 getDocumentDateAndType().text)
-            assertEquals("Document term incorrect",
-                expectedDocument.documentTerm,
-                getDocumentTerm().text)
-            if (expectedDocument.name != null) {
-                assertEquals("Document name incorrect",
-                    expectedDocument.name,
-                    getDocumentName().text)
+            if (expectedDocument.term != null) {
+                assertEquals("Document name or date incorrect",
+                    "${expectedDocument.term} added on ${expectedDocument.date}",
+                    getDocumentTerm().text)
+            } else {
+                assertEquals("Document date is incorrect",
+                        expectedDocument.date,
+                        getDocumentTerm().text)
             }
         }
     }

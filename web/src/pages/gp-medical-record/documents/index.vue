@@ -6,23 +6,19 @@
       :has-access="documents.hasAccess"/>
     <div v-if="showTemplate" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <card-group v-for="(documentChunk, chunkIndex) in documentChunks"
-                    :key="`document-chunk-${chunkIndex}`"
-                    class="nhsuk-grid-row">
-          <card-group-item v-for="(document, documentIndex) in documentChunk"
-                           :key="`document-${documentIndex}`"
-                           class="nhsuk-grid-column-one-half">
-            <document-item :id="document.documentGuid"
-                           :date="document.effectiveDate"
-                           :type="document.extension"
-                           :size-in-bytes="document.size"
-                           :term="document.term"
-                           :name="document.name"
-                           :available="document.isAvailable"
-                           :event-guid="document.eventGuid"
-                           :code-id="document.codeId"/>
-          </card-group-item>
-        </card-group>
+        <menu-item-list>
+          <menu-item v-for="(document, index) in documents.data"
+                     :id="document.documentGuid"
+                     :key="index"
+                     header-tag="h2"
+                     :target="'_blank'"
+                     :text="documentTitle(document.term, document.effectiveDate.value)"
+                     :click-func="documentClicked"
+                     :click-param="document"
+                     :description="documentDescription(document.extension, document.size)"
+                     :aria-label="`${documentTitle(document.term, document.effectiveDate.value)}.
+                                ${documentDescription(document.extension, document.size)}`"/>
+        </menu-item-list>
       </div>
     </div>
     <glossary v-if="!showError"/>
@@ -34,25 +30,22 @@
 </template>
 
 <script>
-import chunk from 'lodash/fp/chunk';
-import CardGroup from '@/components/widgets/card/CardGroup';
-import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
-import DocumentItem from '@/components/gp-medical-record/documents/DocumentItem';
 import Glossary from '@/components/Glossary';
-import { GP_MEDICAL_RECORD } from '@/lib/routes';
-import { isFalsy, redirectTo } from '@/lib/utils';
+import { GP_MEDICAL_RECORD, DOCUMENT } from '@/lib/routes';
+import { isFalsy, redirectTo, readableBytes, datePart } from '@/lib/utils';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    CardGroup,
-    CardGroupItem,
-    DocumentItem,
     DesktopGenericBackLink,
     Glossary,
     DcrErrorNoAccessGpRecord,
+    MenuItem,
+    MenuItemList,
   },
   data() {
     return {
@@ -80,12 +73,33 @@ export default {
 
     return {
       documents,
-      documentChunks: chunk(2)(documents.data),
     };
   },
   methods: {
     backButtonClicked() {
       redirectTo(this, this.backPath);
+    },
+    documentDescription(extension, size) {
+      return `(${extension.toUpperCase()}, ${readableBytes(size)})`;
+    },
+    documentTitle(title, date) {
+      const dateString = datePart(date, 'YearMonthDay');
+      if (title) {
+        return `${title} ${this.$t('my_record.documents.documentMenuItemTitle', { date: dateString })}`;
+      }
+      return dateString;
+    },
+    documentClicked(document) {
+      this.$store.dispatch('myRecord/setSelectedDocumentInfo', {
+        type: document.extension,
+        name: document.name,
+        date: document.effectiveDate,
+        codeId: document.codeId,
+        term: document.term,
+        eventGuid: document.eventGuid,
+        size: document.size,
+      });
+      this.$router.push({ name: DOCUMENT.name, params: { id: document.documentGuid } });
     },
   },
 };

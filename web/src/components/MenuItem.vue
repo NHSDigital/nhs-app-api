@@ -74,8 +74,8 @@ export default {
       default: undefined,
     },
     clickParam: {
-      type: String,
-      default: '',
+      type: [String, Object],
+      default: undefined,
     },
     count: {
       type: Number,

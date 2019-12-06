@@ -56,14 +56,14 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
     fun theGpPracticeHasMultipleLargeDocuments() {
         DocumentsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabledWithDocumentsWithNoName(EmisMockDefaults.patientEmis, true)
+                .enabledWithDocumentsWithNoNameOrTerm(EmisMockDefaults.patientEmis, true)
     }
 
-    @Given("^the GP Practice has multiple documents with no name$")
-    fun theGpPracticeHasMultipleDocumentsWithNoName() {
+    @Given("^the GP Practice has multiple documents with no name or term$")
+    fun theGpPracticeHasMultipleDocumentsWithNoNameOrTerm() {
         DocumentsFactory
             .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithDocumentsWithNoName(EmisMockDefaults.patientEmis)
+            .enabledWithDocumentsWithNoNameOrTerm(EmisMockDefaults.patientEmis)
     }
 
     @Given("^the GP Practice has multiple documents where one has an invalid id$")
@@ -103,7 +103,7 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
         myRecordDocumentInformationPage.assertDocumentActionsVisible(selectedDocument.actions)
         myRecordDocumentInformationPage.documentInfoContains(selectedDocument.date)
-        myRecordDocumentInformationPage.headerContainsText(selectedDocument.name!!)
+        myRecordDocumentInformationPage.headerContainsText("Name")
     }
 
     @Then("^I see the document information page without actions")

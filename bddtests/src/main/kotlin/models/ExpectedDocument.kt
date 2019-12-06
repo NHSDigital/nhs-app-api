@@ -2,9 +2,9 @@ package models
 
 data class ExpectedDocument (
     val id: String,
-    val dateTypeAndSize: String,
+    val typeAndSize: String,
     val date: String,
     val actions: List<String>,
-    val documentTerm: String,
+    var term: String? = null,
     var name: String? = null
 )

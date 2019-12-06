@@ -21,11 +21,17 @@ object DocumentsData {
         )
     }
 
-    fun getDefaultDocumentsData(includeName: Boolean = true) : DocumentsResponseModel {
+    fun getDefaultDocumentsData(includeName: Boolean = true, includeTerm: Boolean = true) : DocumentsResponseModel {
         val documents = mutableListOf<DocumentsResponse>()
         var nameFormat = "Name %d"
+        var termFormat = "Letter %d"
+
         if (!includeName) {
             nameFormat = ""
+        }
+
+        if (!includeTerm) {
+            termFormat = ""
         }
 
         for(documentNumber in 1..DEFAULT_NUMBER_OF_DOCUMENTS){
@@ -35,7 +41,7 @@ object DocumentsData {
                 "pdf",
                 true,
                 Observation(
-                    "History $documentNumber",
+                    String.format(termFormat, documentNumber),
                     mutableListOf(AssociatedText(String.format(nameFormat, documentNumber))),
                     EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")
                 )))
@@ -58,7 +64,7 @@ object DocumentsData {
                     "pdf",
                     true,
                     Observation(
-                            "History $documentNumber",
+                            null,
                             mutableListOf(AssociatedText(String.format("", documentNumber))),
                             EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")
                     )))
