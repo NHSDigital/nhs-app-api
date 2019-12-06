@@ -5,6 +5,9 @@ import WebKit
 class HomeViewControllerTests: XCTestCase {
     var vcHome: HomeViewController!
     var testWebview: WKWebView!
+
+    var mockConfigurationService: MockConfigurationService!
+
     let app = XCUIApplication.self
 
     override func setUp() {
@@ -15,6 +18,9 @@ class HomeViewControllerTests: XCTestCase {
         testWebview = WKWebView()
         vcHome = vc
         _ = vcHome.view
+
+        mockConfigurationService = MockConfigurationService();
+        vcHome?.configurationService = mockConfigurationService
     }
     
     func test_hasCidUrlSuffix_nilUrl_Returns_False() {
@@ -82,6 +88,22 @@ class HomeViewControllerTests: XCTestCase {
         XCTAssert(vcHome?.selectedTab == nil)
     }
     
+    func test_biometricsShownIfAppVersionIsValidAndBiometricsIsAvailable() {
+        self.mockConfigurationService?.isValidConfiguration = true
+        
+        vcHome.attemptBiometricLoginIfAppVersionValid()
+
+        assert(vcHome.biometricsHasBeenAttempted == true)
+    }
+    
+    func test_biometricsNotShownIfAppVersionIsInvalid() {
+        self.mockConfigurationService?.isValidConfiguration = false
+        
+        vcHome.attemptBiometricLoginIfAppVersionValid()
+
+        assert(vcHome.biometricsHasBeenAttempted == false)
+    }
+    
     func test_startDownload_image() {
         
         let documentInteractionController = MockDocumentInteractionController()
@@ -126,6 +148,16 @@ class HomeViewControllerTests: XCTestCase {
         menuOpened = true;
         return true;        }
     }
+    
+    
+    class MockConfigurationService: ConfigurationServiceProtocol {
+        var isValidConfiguration = false
+        
+        func isUserDeviceAllowed(homeViewController: HomeViewController, completionHandler: @escaping (ConfigurationResponse?) -> Void) {
+            
+            let response = ConfigurationResponse(isValidConfiguration, "", false)
+            completionHandler(response)
+        }
+    }
 }
-
 

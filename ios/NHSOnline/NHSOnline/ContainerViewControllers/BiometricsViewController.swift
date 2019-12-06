@@ -102,17 +102,7 @@ class BiometricsViewController: UIViewController {
             alert.addAction(help)
         
         }
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    func getAlert(title: String, message: String) -> UIAlertController {
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) -> Void in
-            alertController.dismiss(animated: true, completion: nil)
-        }
-        alertController.addAction(cancel)
-        return alertController
+        alert.show()
     }
     
     func showBiometricRegistrationError() {

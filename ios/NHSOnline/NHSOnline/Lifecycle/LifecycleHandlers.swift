@@ -93,13 +93,8 @@ class LifecycleHandlers: NSObject {
             self.hasCheckedAppVersionSinceAppOpened = false
             UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
         }))
-        let win = UIWindow(frame: UIScreen.main.bounds)
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = .clear
-        win.rootViewController = viewController
-        win.windowLevel = UIWindowLevelAlert + 1
-        win.makeKeyAndVisible()
-        viewController.present(alert, animated: true, completion: nil)
+        
+        alert.show()
         self.hasCheckedAppVersionSinceAppOpened = true
     }
     

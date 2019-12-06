@@ -3,7 +3,7 @@ import XCTest
 
 class LifecycleHandlersTests: XCTestCase {
     
-    var lifecycleHandlers: LifecycleHandlers?
+    var lifecycleHandlers: MockLifecycleHandlers?
     var knownServices: KnownServices?
     var homeController: HomeViewController?
     var mockConfigurationService: MockConfigurationService?
@@ -21,7 +21,7 @@ class LifecycleHandlersTests: XCTestCase {
         
         mockConfigurationService = MockConfigurationService()
         
-        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices!, webViewController: webViewController!, homeViewController: homeController!)
+        lifecycleHandlers = MockLifecycleHandlers(knownServices: knownServices!, webViewController: webViewController!, homeViewController: homeController!)
         lifecycleHandlers?.configurationService = mockConfigurationService
     }
     
@@ -33,18 +33,20 @@ class LifecycleHandlersTests: XCTestCase {
         XCTAssertFalse(lifecycleHandlers!.hasCheckedAppVersionSinceAppOpened)
     }
     
-    func test_ensureValueForHasCheckedAppVersionSinceAppOpened_isTrueIfUserDeviceIsNotAllowed() {
+    func test_ensureValueForHasCheckedAppVersionSinceAppOpened_verifyDisplayAppVersionOutOfDateIsCalled() {
         self.mockConfigurationService?.isValidConfiguration = false
         lifecycleHandlers?.performAppVersionCheck(onQueue: queue)
         queue.sync {}
-        XCTAssertTrue(lifecycleHandlers!.hasCheckedAppVersionSinceAppOpened)
+        assert(lifecycleHandlers?.displayAppVersionOutOfDateWasCalled == true,
+               "Expected the displayAppVersionOutOfDate() Method to be invoked")
     }
     
-    func test_ensureValueForHasCheckedAppVersionSinceAppOpened_isFalseIfUserDeviceIsAllowed() {
+    func test_ensureValueForHasCheckedAppVersionSinceAppOpened_verifyDisplayAppVersionOutOfDateIsNotCalled() {
         self.mockConfigurationService?.isValidConfiguration = true
         lifecycleHandlers?.performAppVersionCheck(onQueue: queue)
         queue.sync {}
-        XCTAssertFalse(lifecycleHandlers!.hasCheckedAppVersionSinceAppOpened)
+        assert(lifecycleHandlers?.displayAppVersionOutOfDateWasCalled == false,
+               "Expected the displayAppVersionOutOfDate() Method not to be invoked")
     }
     
     class MockConfigurationService: ConfigurationServiceProtocol {
@@ -55,6 +57,17 @@ class LifecycleHandlersTests: XCTestCase {
             let response = ConfigurationResponse(isValidConfiguration, "", false)
             
             completionHandler(response)
+        }
+    }
+    
+    class MockLifecycleHandlers : LifecycleHandlers {
+        var displayAppVersionOutOfDateWasCalled = false
+
+        override init(knownServices: KnownServices, webViewController: WebViewController, homeViewController: HomeViewController) {
+            super.init(knownServices: knownServices, webViewController: webViewController, homeViewController: homeViewController)
+        }
+        override func displayAppVersionOutOfDate() {
+            displayAppVersionOutOfDateWasCalled = true
         }
     }
 }

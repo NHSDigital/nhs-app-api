@@ -36,6 +36,7 @@ class HomeViewController : UIViewController {
     var myAccountUrl = config().MyAccountUrlPath
     var appVersionCheckError: Bool = false
     var apiConfigCallError: Bool = false
+    var biometricsHasBeenAttempted: Bool = false
     var appWebInterface: AppWebInterface?
     var webAppInterface: WebAppInterface?
     var extendSessionOverdue: Bool = false
@@ -43,7 +44,7 @@ class HomeViewController : UIViewController {
     var isPresented: Bool = false
     var goingBack: Bool = false
     var biometricService: BiometricService?
-    var configurationService: ConfigurationService?
+    var configurationService: ConfigurationServiceProtocol?
     var notificationsService: NotificationsService?
     
     public var selectedTab: Int?
@@ -119,7 +120,9 @@ class HomeViewController : UIViewController {
             clearSelectedTab()
             self.showWebViewContainer()
             if #available(iOS 10.0, *) {
-                Timer.scheduledTimer(timeInterval: timer, target: self, selector: #selector(self.attemptBiometricLogin), userInfo: nil, repeats: false)
+                self.configurationService = ConfigurationService.shared()
+                
+                Timer.scheduledTimer(timeInterval: timer, target: self, selector: #selector(self.attemptBiometricLoginIfAppVersionValid), userInfo: nil, repeats: false)
             }
         }
     }
@@ -136,9 +139,25 @@ class HomeViewController : UIViewController {
     }
     
     @objc @available(iOS 10.0, *)
-    public func attemptBiometricLogin() {
+    public func attemptBiometricLoginIfAppVersionValid() {
         do {
-            
+            configurationService!.isUserDeviceAllowed(homeViewController: self) { (response) in
+                if let result = response {
+                    if (result.isValidConfiguration == true) {
+                        self.attemptBiometricLogin()
+                        self.biometricsHasBeenAttempted = true
+                    }
+                    else {
+                        return
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc @available(iOS 10.0, *)
+    func attemptBiometricLogin() {
+        do {
             if(UserDefaultsManager.getBiometricAvailability() == BiometricState.Registered) {
                 biometricService?.authenticate()
             } else if (UserDefaultsManager.getBiometricAvailability() == BiometricState.Invalidated) {
@@ -147,9 +166,10 @@ class HomeViewController : UIViewController {
             }
         }
     }
-    
+
     func showBiometricsAlert(_ alertType: BiometricAlertType) {
-        self.present(BiometricStringHandler().getBiometricAlert(type: alertType), animated: true, completion: nil)
+        let alert = BiometricStringHandler().getBiometricAlert(type: alertType)
+        alert.show()
     }
     
     func reloadLoginPage() {
@@ -461,7 +481,8 @@ class HomeViewController : UIViewController {
         
         NotificationCenter.default.addObserver(alert, selector: #selector(alert.close), name: CustomNotifications.dismissAllAlerts, object: nil)
         
-        self.present(alert, animated: true, completion: { self.resetDisplayExtendSessionDialogueFlags() })
+        alert.show()
+        self.resetDisplayExtendSessionDialogueFlags()
     }
     
     func dimissAlert(){
@@ -474,16 +495,6 @@ class HomeViewController : UIViewController {
             extendSessionOverdue = false
             currentSessionDuration = nil
         }
-    }
-    
-    func getAlert(title: String, message: String) -> UIAlertController{
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) -> Void in
-            alertController.dismiss(animated: true, completion: nil)
-        }
-        alertController.addAction(cancel)
-        return alertController
     }
     
     func isCheckYourSymptomsPath(webview: WKWebView!) -> Bool {
@@ -542,7 +553,7 @@ class HomeViewController : UIViewController {
     
     func showDataDownloadAlert(alertType: DataDownloadAlertType) {
         let alert = DataDownloadAlertHandler().getDownloadAlert(type: alertType)
-        self.present(alert, animated: true, completion: nil)
+        alert.show()
     }
     
     func downloadFile(messageBody: String) {
