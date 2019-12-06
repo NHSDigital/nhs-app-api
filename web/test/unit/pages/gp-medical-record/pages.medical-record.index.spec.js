@@ -4,13 +4,18 @@ import GPMedicalRecord from '@/pages/gp-medical-record/';
 import Warning from '@/components/my-record/Warning';
 import Glossary from '@/components/Glossary';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
-import { createStore, mount } from '../../helpers';
+import { createStore, mount, createRouter } from '../../helpers';
+import agreedToMedicalWarning from '@/lib/sessionStorage';
+
+jest.mock('@/lib/sessionStorage');
 
 const $style = {
   info: 'info',
   h2: 'h2',
   button: [],
 };
+
+const $router = createRouter();
 
 const createState = () => ({
   myRecord: initialState(),
@@ -29,8 +34,10 @@ const createHttp = () => ({
   }),
 });
 
-const mountPage = ({ $http = createHttp(), $state = createState(), $store }) =>
-  mount(GPMedicalRecord, { $http, $store: ($store || createStore({ $http, $state })), $style });
+const mountPage =
+({ $http = createHttp(), $state = createState(), $store }) =>
+  mount(GPMedicalRecord,
+    { $http, $router, $store: ($store || createStore({ $http, $state })), $style });
 
 describe('gp-medical-record', () => {
   let $store;
@@ -44,6 +51,7 @@ describe('gp-medical-record', () => {
         CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
         MY_RECORD_DOCUMENTS_ENABLED: true,
       } });
+    $router.previousPaths = ['/', '/gp-medical-record/medicines'];
   });
 
 
@@ -82,6 +90,65 @@ describe('gp-medical-record', () => {
 
     it('will display the clinical feedback updates', () => {
       expect(page.find(Glossary).exists()).toBe(true);
+    });
+  });
+
+  describe('should load medical record', () => {
+    beforeEach(() => {
+      process.client = true;
+      process.server = false;
+    });
+
+    it('should not load the medical record if the terms are not accepted', () => {
+      agreedToMedicalWarning.mockImplementation(() => false);
+
+      page = mountPage({ $store });
+
+      expect(page.vm.shouldLoadRecord()).toBe(false);
+    });
+
+    it('should load the medical record if the medical record is not loaded ' +
+       'and the user comes from an external page', () => {
+      agreedToMedicalWarning.mockImplementation(() => true);
+      $store.state.myRecord.hasLoaded = false;
+      $router.previousPaths = ['/', '/symptoms'];
+
+      page = mountPage({ $store, $router });
+
+      expect(page.vm.shouldLoadRecord()).toBe(true);
+    });
+
+    it('should load the medical record if the medical record is not loaded ' +
+       'and the user comes from within the medical record', () => {
+      agreedToMedicalWarning.mockImplementation(() => true);
+      $store.state.myRecord.hasLoaded = false;
+      $router.previousPaths = ['/', '/gp-medical-record/medicines'];
+
+      page = mountPage({ $store, $router });
+
+      expect(page.vm.shouldLoadRecord()).toBe(true);
+    });
+
+    it('should load the medical record if the medical record is already loaded ' +
+       'and the user comes from an external page', () => {
+      agreedToMedicalWarning.mockImplementation(() => true);
+      $store.state.myRecord.hasLoaded = true;
+      $router.previousPaths = ['/', '/symptoms'];
+
+      page = mountPage({ $store, $router });
+
+      expect(page.vm.shouldLoadRecord()).toBe(true);
+    });
+
+    it('should not load the medical record if the medical record is already loaded ' +
+       'and the user comes from within the medical record', () => {
+      agreedToMedicalWarning.mockImplementation(() => true);
+      $store.state.myRecord.hasLoaded = true;
+      $router.previousPaths = ['/', '/gp-medical-record/medicines'];
+
+      page = mountPage({ $store, $router });
+
+      expect(page.vm.shouldLoadRecord()).toBe(false);
     });
   });
 });

@@ -167,7 +167,7 @@ export default {
     window.scrollTo(0, 0);
   },
   async mounted() {
-    if (this.hasAgreed) {
+    if (this.shouldLoadRecord()) {
       await this.$store.dispatch('myRecord/clear');
       await this.$store.dispatch('myRecord/acceptTerms');
       await this.$store.dispatch('myRecord/load');
@@ -181,6 +181,14 @@ export default {
     hasAgreedToMedicalWarning() {
       this.hasAgreed = agreedToMedicalWarning();
       return this.hasAgreed;
+    },
+    shouldLoadRecord() {
+      const previousPath = this.$router.previousPaths[this.$router.previousPaths.length - 1];
+
+      if (!this.hasAgreed) return false;
+      if (!this.hasLoaded || !previousPath.includes('gp-medical-record')) return true;
+
+      return false;
     },
   },
 };
