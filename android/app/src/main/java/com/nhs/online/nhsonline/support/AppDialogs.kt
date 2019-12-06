@@ -15,7 +15,6 @@ class AppDialogs(private val activity: Activity) {
     private var upgradeDialog: AlertDialog? = null
     private var extendSessionDialogue: AlertDialog? = null
     private var exitDialog: AlertDialog? = null
-    private var overlayDialog: AlertDialog? = null
 
     fun showVersionUpgradeDialog() {
         if (!activity.isFinishing) {
@@ -31,17 +30,6 @@ class AppDialogs(private val activity: Activity) {
             upgradeDialog = showNonCancellableDialog(title, content)
         }
         return
-    }
-
-    fun showOverlayDetectedDialog() {
-        if(!activity.isFinishing) {
-            val showing = showDialogIfAvailable(overlayDialog)
-            if (showing) return
-
-            val title = getResourceString(R.string.OverlayDetectedHeader)
-            val content = getResourceString(R.string.OverlayDetectedContent)
-            overlayDialog = showNonCancellableDialog(title,content)
-        }
     }
 
     private fun showNonCancellableDialog(
