@@ -16,11 +16,13 @@ class WebViewController: UIViewController, WKUIDelegate {
         
         let contentController = WKUserContentController()
         let script = WKUserScript(source: javascript, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         contentController.addUserScript(script)
         
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
         config.suppressesIncrementalRendering = true
+        config.applicationNameForUserAgent = " nhsapp-ios/" + versionNumber
         
         webView = WKWebView(frame: .zero, configuration: config)
         webView.uiDelegate = self

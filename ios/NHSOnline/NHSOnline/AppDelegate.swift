@@ -20,7 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         setLocale()
-        setUserAgent()
         return true
     }
     
@@ -71,11 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UserDefaults.standard.set([locale], forKey: "AppleLanguages")
     }
     
-    func setUserAgent() {
-        let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        let userAgent = UIWebView().stringByEvaluatingJavaScript(from: "navigator.userAgent")! + " nhsapp-ios/" + versionNumber;
-        UserDefaults.standard.register(defaults: ["UserAgent" : userAgent])
-    }  
     func resolveAppScheme(url: URL) -> String {
         var webPageUrl = url.absoluteString;
         if(url.scheme == config().AppScheme) {
