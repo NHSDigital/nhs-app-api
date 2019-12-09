@@ -21,7 +21,6 @@
         </menu-item-list>
       </div>
     </div>
-    <glossary v-if="!showError"/>
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"
                             :button-text="'rp03.backButton'"
@@ -31,7 +30,6 @@
 
 <script>
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
-import Glossary from '@/components/Glossary';
 import { GP_MEDICAL_RECORD, DOCUMENT } from '@/lib/routes';
 import { isFalsy, redirectTo, readableBytes, datePart } from '@/lib/utils';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
@@ -42,7 +40,6 @@ export default {
   layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
-    Glossary,
     DcrErrorNoAccessGpRecord,
     MenuItem,
     MenuItemList,
