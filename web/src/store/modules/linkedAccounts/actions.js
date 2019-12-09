@@ -5,6 +5,8 @@ import {
   CLEAR,
   LOADED,
   INIT,
+  LOSS_PROXY,
+  LOSS_PROXY_RESET,
   SELECT,
   CLEAR_SELECTED_LINKED_ACCOUNT,
   CLEAR_LINKED_ACCOUNTS,
@@ -78,7 +80,10 @@ export default {
       });
   },
   redirectAfterInvalidPatientIdDetected({ commit }) {
-    commit(INIT);
+    commit(LOSS_PROXY);
     this.app.context.redirect(302, `${INDEX.path}?ts=${moment().unix()}`);
+  },
+  proxyRecoveryComplete({ commit }) {
+    commit(LOSS_PROXY_RESET);
   },
 };

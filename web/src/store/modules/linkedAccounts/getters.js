@@ -7,4 +7,7 @@ export default {
   mainPatientId(state) {
     return get('config.patientId')(state);
   },
+  isRecoveringFromProxyLoss(state) {
+    return get('recoverFromProxyLoss')(state);
+  },
 };

@@ -1,8 +1,8 @@
 import get from 'lodash/fp/get';
 import CheckProxyNoAccessMixin from '@/plugins/mixinDefinitions/CheckProxyNoAccessMixin';
-import { createStore, mount } from '../helpers';
+import { createStore, createRouter, mount } from '../helpers';
 import { redirectTo } from '@/lib/utils';
-import { findByPath } from '@/lib/routes';
+import { findByName } from '@/lib/routes';
 
 jest.mock('@/lib/utils');
 jest.mock('@/lib/routes');
@@ -10,7 +10,9 @@ jest.mock('lodash/fp/get');
 
 describe('CheckProxyNoAccessMixin mounted mixin', () => {
   let $store;
+  let $router;
   let component;
+  const currentRouteName = 'example';
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -21,6 +23,10 @@ describe('CheckProxyNoAccessMixin mounted mixin', () => {
         },
       },
     });
+    $router = createRouter();
+    $router.currentRoute = {
+      name: currentRouteName,
+    };
     component = {
       template: '<div></div>',
       mixins: [CheckProxyNoAccessMixin],
@@ -41,13 +47,13 @@ describe('CheckProxyNoAccessMixin mounted mixin', () => {
     get.mockImplementation(() => getFunction);
 
     const route = {
-      path: '/example',
+      name: 'example',
       proxyShutterPath: '/shutter/example',
     };
-    findByPath.mockImplementation(() => route);
+    findByName.mockImplementation(() => route);
 
     // act
-    const wrapper = mount(component, { $store });
+    const wrapper = mount(component, { $store, $router });
 
     // assert
     expect(get).toHaveBeenCalledWith('$store.state.errors.apiErrors[0].status');
@@ -68,12 +74,12 @@ describe('CheckProxyNoAccessMixin mounted mixin', () => {
     get.mockImplementation(() => getFunction);
 
     const route = {
-      path: '/example',
+      name: 'example',
     };
-    findByPath.mockImplementation(() => route);
+    findByName.mockImplementation(() => route);
 
     // act
-    mount(component, { $store });
+    mount(component, { $store, $router });
 
     // assert
     expect(get).toHaveBeenCalledWith('$store.state.errors.apiErrors[0].status');
@@ -94,13 +100,13 @@ describe('CheckProxyNoAccessMixin mounted mixin', () => {
     get.mockImplementation(() => getFunction);
 
     const route = {
-      path: '/example',
+      name: '/example',
       proxyShutterPath: '/shutter/example',
     };
-    findByPath.mockImplementation(() => route);
+    findByName.mockImplementation(() => route);
 
     // act
-    mount(component, { $store });
+    mount(component, { $store, $router });
 
     // assert
     expect(get).not.toHaveBeenCalled();
@@ -121,13 +127,13 @@ describe('CheckProxyNoAccessMixin mounted mixin', () => {
     get.mockImplementation(() => getFunction);
 
     const route = {
-      path: '/example',
+      name: 'example',
       proxyShutterPath: '/shutter/example',
     };
-    findByPath.mockImplementation(() => route);
+    findByName.mockImplementation(() => route);
 
     // act
-    mount(component, { $store });
+    mount(component, { $store, $router });
 
     // assert
     expect(get).toHaveBeenCalledWith('$store.state.errors.apiErrors[0].status');

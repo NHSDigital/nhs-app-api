@@ -63,7 +63,6 @@ Vue.mixin({
     configureWebContext(currentHelpUrl) {
       if (this.$store.state.device.isNativeApp) {
         const retryPath = getOr('', 'state.errors.pageSettings.redirectUrl.default', this.$store);
-
         NativeCallbacks.configureWebContext(currentHelpUrl, retryPath);
       } else {
         // TODO: Add code when help function is added to the web version (Jira ticket NHSO-6388)

@@ -6,7 +6,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import android.app.onResume
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.widget.TextView
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
@@ -16,7 +15,9 @@ import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.support.AppDialogs
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
+import kotlinx.android.synthetic.main.error_layout.retryButton
 import org.junit.Assert
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.mockito.internal.util.reflection.FieldSetter
 import org.robolectric.Robolectric
@@ -304,13 +305,26 @@ class MainActivityTest {
             on { showBiometricLoginIfEnabled() }.thenReturn(false)
         }
         FieldSetter.setField(spyActivity,
-            spyActivity::class.java.getDeclaredField("biometricsInterface"),
-            biometricsInterfaceMock)
+                spyActivity::class.java.getDeclaredField("biometricsInterface"),
+                biometricsInterfaceMock)
 
         val result = spyActivity.showBiometricLoginIfEnabled()
 
         Assert.assertFalse(result)
         verify(biometricsInterfaceMock, times(0)).showBiometricLoginIfEnabled()
+    }
+
+    @Test
+    fun selectingRetryButton_clearsSelectedMenuItem() {
+        // arrange
+        mainActivity.isSuccessfulConfigCheck = true
+        mainActivity.menuBar.switchActiveMenuItemTo(R.id.symptoms)
+
+        // act
+        mainActivity.retryButton.callOnClick()
+
+        // assert
+        assertFalse(mainActivity.menuBar.isSelected)
     }
 
     private fun getStringById(resId: Int): String = mainActivity.resources.getString(resId)

@@ -18,6 +18,7 @@ import isObject from 'lodash/fp/isObject';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
+import { INDEX } from '@/lib/routes';
 
 export default {
   name: 'ConnectionError',
@@ -63,7 +64,11 @@ export default {
   },
   methods: {
     onRetryButtonClicked() {
-      this.$router.go();
+      if (this.$store.getters['session/isProxying']) {
+        this.$router.push(INDEX.path);
+      } else {
+        this.$router.go();
+      }
     },
     showError() {
       return this.hasConnectionError;

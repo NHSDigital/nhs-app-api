@@ -13,6 +13,9 @@ export default {
   addWarning({ commit }, flashMessage) {
     commit(ADD, { message: flashMessage, type: 'warning' });
   },
+  addError({ commit }, flashMessage) {
+    commit(ADD, { message: flashMessage, type: 'error' });
+  },
   clear({ commit }) {
     commit(CLEAR);
   },

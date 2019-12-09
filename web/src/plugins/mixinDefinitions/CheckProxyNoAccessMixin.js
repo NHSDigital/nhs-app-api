@@ -1,5 +1,5 @@
 import get from 'lodash/fp/get';
-import { findByPath } from '@/lib/routes';
+import { findByName } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -8,7 +8,7 @@ export default {
     if (this.$store.getters['session/isProxying']
        && this.$store.getters['errors/showApiError']
        && get('$store.state.errors.apiErrors[0].status')(this) === 403) {
-      const route = findByPath(this.$store.state.errors.routePath);
+      const route = findByName(this.$router.currentRoute.name);
       if (route && route.proxyShutterPath) {
         redirectTo(this, route.proxyShutterPath);
       }

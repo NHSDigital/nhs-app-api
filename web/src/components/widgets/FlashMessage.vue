@@ -4,6 +4,10 @@
                     message-type="warning" >
       <message-text>{{ message }}</message-text>
     </message-dialog>
+    <message-dialog v-else-if="isError()" :extra-classes="[$style['flash-message']]"
+                    message-type="error" >
+      <message-text>{{ message }}</message-text>
+    </message-dialog>
     <message-dialog v-else :extra-classes="[$style['flash-message']]"
                     message-id="success-dialog"
                     message-type="success">
@@ -50,6 +54,9 @@ export default {
     },
     isWarning() {
       return this.$store.state.flashMessage.type === 'warning';
+    },
+    isError() {
+      return this.$store.state.flashMessage.type === 'error';
     },
   },
 };

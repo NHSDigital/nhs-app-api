@@ -1,5 +1,10 @@
 import meta from '@/middleware/meta';
-import { ACCOUNT, LINKED_PROFILES_SHUTTER_APPOINTMENTS } from '@/lib/routes';
+import {
+  ACCOUNT,
+  INDEX,
+  LINKED_PROFILES_SHUTTER_APPOINTMENTS,
+  PROXY_LOST_REDIRECT,
+} from '@/lib/routes';
 
 describe('tests for meta.js', () => {
   let route;
@@ -13,6 +18,9 @@ describe('tests for meta.js', () => {
         device: {
           source: 'web',
         },
+      },
+      getters: {
+        'session/isProxying': false,
       },
     };
 
@@ -71,5 +79,35 @@ describe('tests for meta.js', () => {
       .toHaveBeenCalledWith(route.meta.headerKey, null, route.meta.formatArguments);
     expect(app.i18n.tc)
       .toHaveBeenCalledWith(route.meta.pageTitleKey, null, route.meta.formatArguments);
+  });
+
+  it('will call setRoutePath with PROXY_LOST_REDIRECT when proxying', () => {
+    // arrange
+    store.getters['session/isProxying'] = true;
+    route.name = INDEX.name;
+
+    // act
+    meta({ route, store, app });
+
+    // assert
+    expect(store.dispatch).toHaveBeenCalledWith('errors/setRoutePath', PROXY_LOST_REDIRECT);
+  });
+
+  it('will call setRoutePath with the matched route when not proxying', () => {
+    // arrange
+    store.getters['session/isProxying'] = false;
+    route.name = INDEX.name;
+
+    const expectedRouteData = route;
+    expectedRouteData.meta = {
+      headerKey: 'pageHeaders.home',
+      pageTitleKey: 'pageTitles.home',
+    };
+
+    // act
+    meta({ route, store, app });
+
+    // assert
+    expect(store.dispatch).toHaveBeenCalledWith('errors/setRoutePath', expectedRouteData);
   });
 });

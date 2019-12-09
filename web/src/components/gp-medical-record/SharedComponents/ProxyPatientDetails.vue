@@ -1,7 +1,6 @@
 <template>
   <div class="nhsuk-u-padding-bottom-3"
-       data-sid="proxy-patient-details"
-       :aria-hidden="isCollapsed">
+       data-sid="proxy-patient-details">
     <p data-purpose="record-item-header"
        class="nhsuk-label nhsuk-u-margin-top-0
                 nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">

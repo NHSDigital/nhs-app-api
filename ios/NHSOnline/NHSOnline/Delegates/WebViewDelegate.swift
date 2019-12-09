@@ -73,10 +73,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 return
             }
             
-            if (!knownServices.shouldURLOpenExternally( url)) {
-                self.failedUrl = url
-            }
-            
             if(!Reachability.isConnectedToNetwork()) {
                 decisionHandler(.cancel)
                 self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
@@ -88,6 +84,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 openInSafari(url: url)
                 return
             }
+            
+            self.failedUrl = url
             
             let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host)
             

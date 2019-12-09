@@ -1622,6 +1622,7 @@ export default {
     accessibilityStatement: 'Accessibility statement',
   },
   linkedProfiles: {
+    lossProxyError: 'Sorry, there is a problem with this service. It may not be possible to access services in the app on behalf of other people right now.',
     actingAsOtherUserBannerWarningText: 'Acting on behalf of',
     linkedInformation: 'You can access services in the app for the following people.',
     informationHeaders: {

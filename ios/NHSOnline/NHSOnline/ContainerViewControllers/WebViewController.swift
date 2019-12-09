@@ -113,14 +113,19 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
     
     func loadPage(url: String) {
-        self.webViewDelegate?.failedUrl = URL(string: url)
+        loadPage(url: url, isConnectedToNetwork: Reachability.isConnectedToNetwork())
+    }
+    
+    func loadPage(url: String, isConnectedToNetwork: Bool) {
+        
         self.webViewDelegate?.clearTimer()
         self.webViewDelegate?.stopActivityIndicator()
         
-        if(!Reachability.isConnectedToNetwork()) {
+        if(!isConnectedToNetwork) {
             webViewDelegate?.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
             return
         }
+        self.webViewDelegate?.failedUrl = URL(string: url)
         
         var urlToNavigateTo = url        
         let urlIsValid = verifyUrl(urlString: urlToNavigateTo)
@@ -157,13 +162,14 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
     
     func reloadWebView() {
+        let viewController = webViewDelegate?.viewController
+        viewController!.clearSelectedTab()
+        
         if let failedUrl = webViewDelegate!.failedUrl {
             let urlToReload = knownServices.getPostRequestReloadUrl(url:failedUrl) ?? failedUrl
             webView.load(URLRequest(url: urlToReload))
         } else {
             webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
-            let viewController = webViewDelegate?.viewController
-            viewController!.tabBar.selectedItem = nil
         }
     }
     

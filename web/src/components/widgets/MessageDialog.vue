@@ -61,7 +61,6 @@ export default {
       return this.showIcon ? [this.$style.msg, this.$style[this.messageType]] : [];
     },
     plainStyle() {
-      // return this.overrideStyle === 'plain' ? this.$style.plain : '';
       return this.overrideStyle === 'plain' ? this.$style.plain : '';
     },
     nhsHeaderStyle() {

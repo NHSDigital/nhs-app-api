@@ -56,6 +56,7 @@ const config = {
       'conditionalRedirect',
       'sjrRedirect',
       'meta',
+      'proxyRecovery',
       'termsAndConditions',
       'myRecordAcceptance',
       'urlResolution',

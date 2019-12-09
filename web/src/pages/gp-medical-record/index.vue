@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <proxy-patient-details v-else-if="isProxying"
+    <proxy-patient-details v-else-if="showTemplate && isProxying"
                            :proxy-patient-details="$store.state.linkedAccounts.actingAsUser"/>
 
     <div v-if="showTemplate && hasRecordAccess()" :class="$style.summaryRecordContainer"

@@ -29,7 +29,12 @@ describe('errors actions', () => {
 
     describe('route path string', () => {
       it('will commit the route path', () => {
-        actions.setRoutePath(app, '/boo/hoo');
+        const that = {
+          getters: {
+            'session/isProxying': false,
+          },
+        };
+        actions.setRoutePath.call(that, app, '/boo/hoo');
         expect(app.commit).toHaveBeenCalledWith(SET_ROUTE_PATH, '/boo/hoo');
       });
     });

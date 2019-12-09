@@ -1096,6 +1096,12 @@ const routes = {
     },
     helpUrl: baseNhsAppHelpUrl,
   },
+  PROXY_LOST_REDIRECT: {
+    name: 'proxy-lost-redirect',
+    path: '/proxy-lost-redirect',
+    crumb: {},
+    helpUrl: baseNhsAppHelpUrl,
+  },
   LINKED_PROFILES: {
     name: 'linked-profiles',
     path: '/linked-profiles',
@@ -1334,6 +1340,7 @@ export const {
   TESTRESULTSDETAIL,
   TESTRESULTID,
   IMMUNISATIONS,
+  PROXY_LOST_REDIRECT,
   LINKED_PROFILES,
   LINKED_PROFILES_SUMMARY,
   LINKED_PROFILES_SHUTTER_MORE,

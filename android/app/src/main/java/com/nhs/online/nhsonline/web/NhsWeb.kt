@@ -88,17 +88,12 @@ class NhsWeb(
             return
         }
 
-        var knownService = knownServices.findNHSAppInternalServiceInfoByPath(path)
-        if (knownService == null) {
-            knownService = knownServices.findMatchingServiceInfo(path)
-        }
-        val url = urlLoader.produceValidUrl(path)
-        reloadUrl = url
-
         if (!isConnectedToNetwork) {
             showNoConnectionError()
             return
         }
+        val url = urlLoader.produceValidUrl(path)
+        reloadUrl = url
 
         val loginUrl = readResourceString(R.string.baseURL) + readResourceString(R.string.loginPath)
         if (path.startsWith(loginUrl)) {

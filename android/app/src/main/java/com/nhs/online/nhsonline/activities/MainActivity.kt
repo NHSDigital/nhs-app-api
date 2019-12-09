@@ -132,6 +132,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         }
 
         if (isSuccessfulConfigCheck) {
+            clearMenuBarItem()
             showProgressDialog()
             nhsWeb.reloadCurrentUrl()
             return

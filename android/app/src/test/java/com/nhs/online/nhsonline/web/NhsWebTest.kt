@@ -13,7 +13,10 @@ import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.UrlLoader
-import junit.framework.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -64,7 +67,7 @@ class NhsWebTest {
         whenever(urlLoader.produceValidUrl(url)).thenReturn(url)
         nhsWeb.loadUrl(url)
         verify(urlLoader).loadUrl(url, true)
-        Assert.assertEquals(url, nhsWeb.reloadUrl)
+        assertEquals(url, nhsWeb.reloadUrl)
     }
 
     @Test
@@ -74,7 +77,7 @@ class NhsWebTest {
         whenever(urlLoader.produceValidUrl(url)).thenReturn(url)
         nhsWeb.loadUrl(url)
         verify(urlLoader).loadUrl(url, false)
-        Assert.assertEquals(url, nhsWeb.reloadUrl)
+        assertEquals(url, nhsWeb.reloadUrl)
     }
 
     @Test
@@ -88,6 +91,8 @@ class NhsWebTest {
 
         nhsWeb.loadUrl(url)
         verify(interactorMock).showUnavailabilityError(any())
+        assertNull(nhsWeb.reloadUrl)
+        verifyZeroInteractions(urlLoader)
     }
 
     @Test
@@ -125,7 +130,7 @@ class NhsWebTest {
         verify(urlLoader).loadUrl(loginUrl, true)
 
         // assert
-        Assert.assertEquals(loginUrl, nhsWeb.reloadUrl)
+        assertEquals(loginUrl, nhsWeb.reloadUrl)
     }
 
     @Test
@@ -229,7 +234,7 @@ class NhsWebTest {
     @Test
     fun onWebLoggedIn_Sets_IsLoginToTrue_And_ShowsHeaders_And_Menu_And_Clears_MenuBarItem() {
         nhsWeb.onWebLoggedIn()
-        Assert.assertTrue(nhsWeb.isUserLoggedIn)
+        assertTrue(nhsWeb.isUserLoggedIn)
         verify(interactorMock).showHeader()
         verify(interactorMock).showMenuBar()
         verify(interactorMock).clearMenuBarItem()
@@ -238,8 +243,8 @@ class NhsWebTest {
     @Test
     fun onWebLoggedOut_Sets_IsLoginToFalse_And_DismissSessionExtensionDialog_And_CallsShowBiometricLoginIfEnabled() {
         nhsWeb.onWebLoggedOut()
-        Assert.assertFalse(nhsWeb.isUserLoggedIn)
-        Assert.assertFalse(webViewMock.settings.builtInZoomControls)
+        assertFalse(nhsWeb.isUserLoggedIn)
+        assertFalse(webViewMock.settings.builtInZoomControls)
         verify(interactorMock).dismissSessionExtensionDialog()
         verify(interactorMock).showBiometricLoginIfEnabled(false)
     }
@@ -256,7 +261,7 @@ class NhsWebTest {
 
         val result = nhsWeb.shouldReloadHomepageOnBackReturn(url)
 
-        Assert.assertTrue(result)
+        assertTrue(result)
     }
 
     @Test
@@ -271,7 +276,7 @@ class NhsWebTest {
 
         val result = nhsWeb.shouldReloadHomepageOnBackReturn(url)
 
-        Assert.assertFalse(result)
+        assertFalse(result)
     }
 
     @Test
@@ -286,7 +291,7 @@ class NhsWebTest {
 
         val result = nhsWeb.shouldReloadHomepageOnBackReturn(url)
 
-        Assert.assertFalse(result)
+        assertFalse(result)
     }
 
     @Test

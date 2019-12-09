@@ -3,6 +3,8 @@ import {
   CLEAR,
   LOADED,
   INIT,
+  LOSS_PROXY,
+  LOSS_PROXY_RESET,
   SELECT,
   CLEAR_SELECTED_LINKED_ACCOUNT,
   CLEAR_LINKED_ACCOUNTS,
@@ -20,15 +22,18 @@ const clearLinkedAccounts = (state) => {
 const clearSelectedLinkedAccount = (state) => {
   state.selectedLinkedAccount = null;
 };
+const init = (state) => {
+  const blank = initialState();
+  mapKeys((key) => {
+    state[key] = blank[key];
+  })(state);
+};
 export default {
   [LOADED](state, data) {
     state.items = data.linkedAccounts;
   },
   [INIT](state) {
-    const blank = initialState();
-    mapKeys((key) => {
-      state[key] = blank[key];
-    })(state);
+    init(state);
   },
   [CLEAR](state) {
     clearLinkedAccounts(state);
@@ -57,5 +62,12 @@ export default {
   },
   [SWITCH_TO_MAIN_USER_ACCOUNT](state) {
     state.actingAsUser = null;
+  },
+  [LOSS_PROXY](state) {
+    init(state);
+    state.recoverFromProxyLoss = true;
+  },
+  [LOSS_PROXY_RESET](state) {
+    state.recoverFromProxyLoss = false;
   },
 };

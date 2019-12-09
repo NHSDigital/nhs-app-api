@@ -1,7 +1,7 @@
 import actions from '@/store/modules/flashMessage/actions';
 import { ADD, HAS_BEEN_SHOWN, CLEAR, INIT, SHOW } from '@/store/modules/flashMessage/mutation-types';
 
-const { addSuccess, addWarning, clear, init, hasBeenShown, show } = actions;
+const { addSuccess, addWarning, addError, clear, init, hasBeenShown, show } = actions;
 describe('addSuccess', () => {
   it('will call addSuccess with the flashMessage', () => {
     const flashMessage = 'This is a message';
@@ -17,6 +17,15 @@ describe('addWarning', () => {
     const commit = jest.fn();
     addWarning({ commit }, flashMessage);
     expect(commit).toBeCalledWith(ADD, { message: flashMessage, type: 'warning' });
+  });
+});
+
+describe('addError', () => {
+  it('will call addError with the sent value', () => {
+    const flashMessage = 'This is a message';
+    const commit = jest.fn();
+    addError({ commit }, flashMessage);
+    expect(commit).toBeCalledWith(ADD, { message: flashMessage, type: 'error' });
   });
 });
 

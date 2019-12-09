@@ -89,6 +89,7 @@ import {
   LINKED_PROFILES_SHUTTER_SETTINGS,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS,
+  PROXY_LOST_REDIRECT,
 } from '@/lib/routes';
 
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
@@ -479,7 +480,7 @@ export default function ({ route, store, app }) {
   }
   store.dispatch('http/cancelRequests');
   store.dispatch('flashMessage/clear');
-  store.dispatch('errors/setRoutePath', route);
+  store.dispatch('errors/setRoutePath', !store.getters['session/isProxying'] ? route : PROXY_LOST_REDIRECT);
 
   setPageTitle(route, store, app);
 }
