@@ -80,7 +80,7 @@ class HomeViewControllerTests: XCTestCase {
     func test_delayedBiometricsStart_shouldClearMenuBar() {
         
         testWebview.load(URLRequest(url: ((URL(string:
-            config().HomeUrl + "login" + config().NhsOnlineRequiredQueryString)!))))
+            config().HomeUrl + "login")!))))
         vcHome.selectedTab = 1
         
         vcHome.checkForLoginPageAndTriggerBiometricTimer(testWebview, 10)

@@ -59,8 +59,6 @@
     <string name="menuTimeoutSeconds">10</string>
     <string name="secureFlag">enabled</string>
 
-    <string name="nhsOnlineRequiredQueries">\?source=android</string>
-
     <string-array name="externalSiteUrls">
         <item>@string/hotjarLink</item>
         <item>@string/biometricsHelpURL</item>

@@ -1,5 +1,6 @@
 package features.sharedSteps
 
+import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import net.thucydides.core.annotations.Steps
 
@@ -8,15 +9,14 @@ class NavigationStepDefinitions {
     @Steps
     private lateinit var browser: BrowserSteps
 
-    @When("I navigate to the (.*) page for mobile devices")
-    fun iNavigateToThePageForMobileDevices(pageName: String) {
-        val url = PageUrl().getPageWithMobileSource(pageName)
-        browser.browseTo(url)
+    @Given("^I am using the native app user agent$")
+    fun iAmUsingTheNativeAppUserAgent() {
+        browser.setUserAgentSource("ios")
     }
 
-    @When("I navigate to the (.*) page for desktop")
-    fun iNavigateToThePageForDesktop(pageName: String) {
-        val url = PageUrl().getPageWithoutSource(pageName)
+    @When("^I navigate to the (.*) page$")
+    fun iNavigateToThePage(pageName: String) {
+        val url = PageUrl().getPage(pageName)
         browser.browseTo(url)
     }
 }

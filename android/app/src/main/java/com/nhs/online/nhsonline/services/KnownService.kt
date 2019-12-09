@@ -1,7 +1,6 @@
 package com.nhs.online.nhsonline.services
 
 import android.net.Uri
-import com.nhs.online.nhsonline.data.ErrorMessage
 import java.net.URI
 import java.net.URL
 
@@ -9,12 +8,10 @@ class KnownService(
     serviceUrl: String,
     header: String? = null,
     nativeHeaderDescription: String? = null,
-    shouldValidateSession: Boolean = true,
-    queryStrings: String? = null
+    shouldValidateSession: Boolean = true
 ) {
     private val url: URL
     private val pathInfos = mutableMapOf<String, Info>()
-    private val serviceQueryMap: Map<String, String>? = buildQueryStringMap(queryStrings)
     private val default: Info
 
     init {
@@ -45,50 +42,6 @@ class KnownService(
 
     fun hasDefaultNativeHeader(): Boolean {
         return default.header != null
-    }
-
-    fun addMissingQueryStrings(urlString: String): String {
-        if (urlString.isEmpty() || serviceQueryMap == null) {
-            return urlString
-        }
-        val uri = Uri.parse(urlString)
-        if (uri.host.equals(url.host, true)) {
-            val uriBuilder = uri.buildUpon()
-            serviceQueryMap.keys.forEach { queryKey ->
-                val queryValue = uri.getQueryParameter(queryKey)
-                if (queryValue == null || queryValue != serviceQueryMap[queryKey]) {
-                    uriBuilder.appendQueryParameter(queryKey, serviceQueryMap[queryKey])
-                }
-            }
-            return uriBuilder.build().toString()
-        }
-
-        return urlString
-    }
-
-    fun hasMissingQueryString(urlString: String): Boolean {
-        if (urlString.isEmpty() || serviceQueryMap == null) {
-            return false
-        }
-        val uri = Uri.parse(urlString.toLowerCase())
-        if (uri.host.equals(url.host, true)) {
-            serviceQueryMap.keys.forEach { queryKey ->
-                val queryValue = uri.getQueryParameter(queryKey)
-                if (queryValue == null || queryValue != serviceQueryMap[queryKey]) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-    fun hasOnlyRequiredQueries(urlString: String): Boolean {
-        val uri = Uri.parse(urlString.toLowerCase())
-        val queryParams = uri.queryParameterNames
-        if (serviceQueryMap?.size != queryParams.size)
-            return false
-
-        return !hasMissingQueryString(urlString)
     }
 
     fun findMatchingServicePathInfo(urlString: String, exactPathMatch: Boolean = false): Info? {

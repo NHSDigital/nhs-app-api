@@ -48,7 +48,7 @@ class MainActivityTest {
             assert(false)
         }
         val loginUrl =
-            getStringById(R.string.baseURL) + getStringById(R.string.loginPath) + getStringById(R.string.nhsOnlineRequiredQueries)
+            getStringById(R.string.baseURL) + getStringById(R.string.loginPath)
         Assert.assertEquals(mainActivity.webview.url, loginUrl)
     }
 

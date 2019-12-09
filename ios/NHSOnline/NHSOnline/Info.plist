@@ -156,8 +156,6 @@
 	<string>https://$(NHS_111_LOCATION_URL)</string>
 	<key>Nhs111Url</key>
 	<string>https://$(NHS_111_URL)</string>
-	<key>NhsOnlineRequiredQueryString</key>
-	<string>$(NHS_ONLINE_REQUIRED_QUERY_STRING)</string>
 	<key>OpenSourceLicencesURL</key>
 	<string>https://$(OPEN_SOURCE_LICENCE_URL)</string>
 	<key>OpenSourceLicencesURLOld</key>

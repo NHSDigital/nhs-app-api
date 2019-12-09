@@ -30,7 +30,8 @@
           </div>
           <div v-else>
             <span class="nhsuk-breadcrumb__back" :class="$style['native-back']" >
-              <a class="nhsuk-breadcrumb__backlink"
+              <a id="native-back-breadcrumb"
+                 class="nhsuk-breadcrumb__backlink"
                  :class="$style['native'] "
                  @click.prevent="backLinkClicked()" >
                 <span v-if="isProxyPage">Back to Home</span>

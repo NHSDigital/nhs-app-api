@@ -6,7 +6,6 @@ import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 
 class UrlLoader(
     private val webView: WebView,
-    private val knownServices: KnownServices,
     private val baseURL: String,
     private val appWebInterface: AppWebInterface
 ) {
@@ -37,8 +36,7 @@ class UrlLoader(
     }
 
     private fun hardLoadUrl(url: String) {
-        val urlWithMissingQueryStrings = knownServices.findKnownServiceAndAddMissingQueryFor(url)
-        webView.loadUrl(urlWithMissingQueryStrings)
+        webView.loadUrl(url)
     }
 
 

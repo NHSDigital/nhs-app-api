@@ -56,6 +56,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             let url = ensureSupportedScheme(initialUrl)
             
+            if(url != initialUrl) {
+                decisionHandler(.cancel)
+                webView.loadPage(url: url.absoluteString)
+                return
+            }
+            
             if(schemeHandlers.handleUrl(url: url)) {
                 decisionHandler(.cancel)
                 return
@@ -87,17 +93,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             self.failedUrl = url
             
-            let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host)
-            
-            if(matchingKnownService != nil) {
-                if(matchingKnownService!.hasMissingQueryString(urlString: url.absoluteString)) {
-                    let urlString = matchingKnownService!.addingMissingQueryParameters(urlString: url.absoluteString)
-                    decisionHandler(.cancel)
-                    webView.loadPage(url: urlString)
-                    return
-                }
-            }
-                
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)
@@ -116,14 +111,15 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         shouldHandleErrors = true
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
-        
         checkPageLoadOriginAndStartActivityIndicator()
     }
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
         self.showWebViewContainer()
-        if(webView.url?.absoluteString == config().HomeUrl + config().NhsOnlineRequiredQueryString) {
-            self.viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
+        viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
+
+        if(webView.url?.absoluteString == config().HomeUrl) {
+            viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
         }
         
         if(webView.url!.absoluteString.contains(config().CidUrlSuffix)) {
@@ -157,7 +153,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             if withError._domain == "NSURLErrorDomain" {
                 if let info = withError._userInfo as? [String: Any] {
-                    if let url = info["NSErrorFailingURLKey"] as? URL {                        self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
+                    if let url = info["NSErrorFailingURLKey"] as? URL {
+                        self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
                     }
                 }
             } else {

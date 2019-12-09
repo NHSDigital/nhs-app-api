@@ -120,41 +120,4 @@ class KnownServiceTests: XCTestCase {
         XCTAssertNotNil(pathInfoTwo)
         XCTAssertEqual(pathInfoOne?.title, pathInfoTwo?.title)
     }
-    
-    func test_HasMissingQueryString_ReturnsFalse_ForValidQueryStringDifferentCase() {
-        let testService = KnownService(serviceUrl: "http://localhost:3000", service: otherService, validateSession: false, allowNativeInteraction: false, urlQueryString: "?source=iOS")
-        let hasMissing = testService.hasMissingQueryString(urlString: "http://localhost:3000?source=IOS")
-        XCTAssertFalse(hasMissing)
-    }
-    
-    func test_HasMissingQueryString_ReturnsTrue_ForValidQueryStringWithMismatchValue() {
-        let testService = KnownService(serviceUrl: "http://localhost:3000", service: otherService, validateSession: false, allowNativeInteraction: false, urlQueryString: "?source=iOS")
-        let hasMissing = testService.hasMissingQueryString(urlString: "http://localhost:3000?source=")
-        XCTAssertTrue(hasMissing)
-    }
-    
-    func test_HasMissingQueryString_ReturnsFalse_ForEmptyUrl() {
-        let testService = KnownService(serviceUrl: "http://localhost:3000", service: otherService, validateSession: false, allowNativeInteraction: false, urlQueryString: "?source=iOS")
-        let hasMissing = testService.hasMissingQueryString(urlString: "")
-        XCTAssertFalse(hasMissing)
-    }
-    
-    func test_AddingMissingQueryParameters_ReturnsFullUrl_ForServiceWithProvideQuery() {
-        let testService = KnownService(serviceUrl: "http://localhost:3000", service: otherService, validateSession: false, allowNativeInteraction: false, urlQueryString: "?source=iOS")
-        let fullUrl = testService.addingMissingQueryParameters(urlString: "http://localhost:3000")
-        let expectedUlr = "http://localhost:3000?source=ios"
-        XCTAssertEqual(expectedUlr, fullUrl)
-    }
-    
-    func test_AddingMissingQueryParameters_ReturnsSameUrlString_ForServiceWithNoQuery() {
-        let testService = KnownService(serviceUrl: "http://localhost:3000", service: otherService)
-        let fullUrl = testService.addingMissingQueryParameters(urlString: "http://localhost:3000")
-        XCTAssertEqual("http://localhost:3000", fullUrl)
-    }
-    
-    func test_AddingMissingQueryParameters_ReturnsOriginalUrlWithMissingQuery_ForServiceWithAQuery() {
-        let testService = KnownService(serviceUrl: "http://localhost:3000", service: otherService, urlQueryString:"?source=ios")
-        let fullUrl = testService.addingMissingQueryParameters(urlString: "http://localhost:3000?param1=param1Value")
-        XCTAssertEqual("http://localhost:3000?param1=param1Value&source=ios", fullUrl)
-    }
 }

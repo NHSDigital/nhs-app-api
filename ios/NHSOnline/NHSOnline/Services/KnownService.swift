@@ -54,52 +54,6 @@ class KnownService {
         return retrieveClosestPathInfo(path: thePath)
     }
     
-    func hasMissingQueryString(urlString: String) -> Bool {
-        if self.urlQueryItems.isEmpty || urlString.isEmpty {
-            return false
-        }
-        
-        guard let urlComponents = URLComponents(string: urlString.lowercased()),
-            urlComponents.fragment == nil else {
-                return false
-        }
-        
-        guard let queryItems = urlComponents.queryItems else {
-            return true
-        }
-        
-        for urlQueryItem in urlQueryItems {
-            if !queryItems.contains(urlQueryItem) {
-                return true
-            }
-        }
-        
-        return false
-    }
-    
-    func addingMissingQueryParameters(urlString:String) -> String {
-        if self.urlQueryItems.isEmpty || urlString.isEmpty {
-            return urlString
-        }
-        
-        guard let urlComponents = URLComponents(string: urlString),
-            urlComponents.fragment == nil else {
-                return urlString
-        }
-        
-        let queryItems = urlComponents.queryItems ?? [URLQueryItem]()
-        var queryItemsToAdd = [URLQueryItem]()
-        
-        urlQueryItems.forEach { urlQueryItem in
-            let containsQueryItemAlready : Bool = urlComponents.queryItems?.contains(urlQueryItem) ?? false
-            if containsQueryItemAlready == false {
-                queryItemsToAdd.append(urlQueryItem)
-            }
-        }
-        
-        return appendMissingQueriesToRawUrl(urlString, queryItemsToAdd, queryItems)
-    }
-    
     private func retrieveClosestPathInfo(path: String)-> Info? {
         var matchingKey = ""
         pathInfoDictionary.keys.forEach {pathKey in
@@ -116,34 +70,6 @@ class KnownService {
             }
         }
         return pathInfoDictionary[matchingKey]
-    }
-    
-    /*
-     Using URLComponents strips encoding from the query string values.
-     We don't want to meddle with the encoding (e.g. nhs symptom site is
-     quite particular about some urls which are encoded already).
-     So find out what extra query strings need added and add them to
-     the raw string being requested.
-     */
-    private func appendMissingQueriesToRawUrl(_ urlString: String, _ queryItemsToAdd: [URLQueryItem], _ queryItems: [URLQueryItem]) -> String {
-        var stringToReturn = urlString
-        
-        if (queryItemsToAdd.count > 0) {
-            if (queryItems.count == 0) {
-                stringToReturn += "?"
-            } else {
-                stringToReturn += "&"
-            }
-            
-            for (index, queryItem) in queryItemsToAdd.enumerated() {
-                stringToReturn += "\(queryItem.name)=\(queryItem.value ?? "")"
-                if (index != queryItemsToAdd.count - 1) {
-                    stringToReturn += "&"
-                }
-            }
-        }
-        
-        return stringToReturn
     }
     
     private func convertToInfoPathKey(path: String) -> String {

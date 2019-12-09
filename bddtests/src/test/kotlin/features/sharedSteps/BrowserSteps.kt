@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import pages.loggedOut.LoginPage
 import utils.GlobalSerenityHelpers
 import utils.getOrNull
+import utils.set
 import webdrivers.options.ChromeOptionManager
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
@@ -137,12 +138,12 @@ open class BrowserSteps {
     }
 
     @Step
-    fun appendSourceQueryString(source: String) {
-        val driver = loginPage.driver
-        var url = driver.currentUrl
+    fun setUserAgentSource(source: String) {
+        require(source == "android" || source == "ios") { "$source is not a real native source" }
 
-        url += "?source=$source"
+        val userAgent = "Mozilla / 5.0(Linux; Android 8.0.0; SM - G930F) AppleWebKit/537.36 (KHTML, like Gecko)" +
+                "Chrome/75.0.3770.101 Mobile Safari/537.36 nhsapp-$source"
 
-        browseTo(url)
+        GlobalSerenityHelpers.USER_AGENT.set(userAgent)
     }
 }

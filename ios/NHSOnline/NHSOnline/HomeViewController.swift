@@ -133,7 +133,7 @@ class HomeViewController : UIViewController {
     }
     
     func isOnLogin(webView: WKWebView) -> Bool {
-        let loginURLString = config().HomeUrl + "login" + config().NhsOnlineRequiredQueryString
+        let loginURLString = config().HomeUrl + "login"
         
         return webView.url?.absoluteString == loginURLString
     }
@@ -291,7 +291,6 @@ class HomeViewController : UIViewController {
                 self.tabBarSpacer.isHidden = !visible
             }
         })
-        
     }
     
     func getBiometricRegistrationErrorStrings() -> BiometricErrorStrings{

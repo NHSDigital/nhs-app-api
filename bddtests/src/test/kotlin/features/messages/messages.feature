@@ -4,9 +4,10 @@ Feature: Messages
 
 @smoketest
   Scenario: A user can see their read and unread messages
-    Given I am a user wishing to view my messages
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages
     And I am logged in
-    When I navigate to the More page for mobile devices
+    When I navigate to the More page
     And I click the Messages link on the More page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -23,11 +24,12 @@ Feature: Messages
     And my messages from the sender are displayed as read
 
   Scenario: A user can see their messages and follow an internal link
-    Given I am a user wishing to view my appointments and my messages with content
+    Given I am using the native app user agent
+    And I am a user wishing to view my appointments and my messages with content
       | /account  |
       | /appointments/booking-guidance  |
     And I am logged in
-    When I navigate to the More page for mobile devices
+    When I navigate to the More page
     And I click the Messages link on the More page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -35,7 +37,7 @@ Feature: Messages
     Then the Messages page is displayed
     When I click on the '/account' link in the message
     Then the Account page for mobile devices is displayed
-    When I navigate to the More page for mobile devices
+    When I navigate to the More page
     And I click the Messages link on the More page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -47,11 +49,12 @@ Feature: Messages
     Then the Messages page is displayed
 
   Scenario: A user can see their messages and follow an external link
-    Given I am a user wishing to view my messages with content
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages with content
       | https://111.nhs.uk/  |
       | 111.nhs.uk/  |
     And I am logged in
-    When I navigate to the More page for mobile devices
+    When I navigate to the More page
     And I click the Messages link on the More page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -63,10 +66,11 @@ Feature: Messages
     Then a new tab has been opened by the link
 
   Scenario: A user can see their messages and see a mailto link
-    Given I am a user wishing to view my messages with content
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages with content
       | email@address.com  |
     And I am logged in
-    When I navigate to the More page for mobile devices
+    When I navigate to the More page
     And I click the Messages link on the More page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -75,10 +79,11 @@ Feature: Messages
     Then the email address 'email@address.com' is identified as a link in the message
 
   Scenario: A user can see their messages and follow an incorrect internal link
-    Given I am a user wishing to view my messages with content
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages with content
       | /appointments/sausages  |
     And I am logged in
-    When I navigate to the More page for mobile devices
+    When I navigate to the More page
     And I click the Messages link on the More page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
@@ -88,9 +93,10 @@ Feature: Messages
     Then the Page not found error is displayed
 
   Scenario: A user with no messages can navigate to the messages inbox, but sees no messages
-    Given I am a user wishing to view my messages, but I have no messages
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages, but I have no messages
     And I am logged in
-    When I navigate to the More page for mobile devices
+    When I navigate to the More page
     And I click the Messages link on the More page
     Then the Messages Inbox page is displayed
     And a message is displayed indicating that there are no messages in the Messages Inbox
@@ -98,18 +104,19 @@ Feature: Messages
   Scenario: A desktop user cannot see their messages
     Given I am a user wishing to view my messages
     And I am logged in
-    When I navigate to the More page for desktop
+    When I navigate to the More page
     Then the link to Messages is not available on the More page
     When I browse to the pages at the following urls I see the home page
       | /messaging  |
       | /messaging/messages  |
 
   Scenario: A user with messages disabled in service journey rules cannot see their messages
-    Given I am a EMIS user where the journey configurations are:
+    Given I am using the native app user agent
+    And I am a EMIS user where the journey configurations are:
       | Journey       | Value    |
       | messages      | disabled |
     And I am logged in
-    When I navigate to the More page for mobile devices
+    When I navigate to the More page
     Then the link to Messages is not available on the More page
     When I browse to the pages at the following urls I see the home page
       | /messaging  |
@@ -121,9 +128,10 @@ Feature: Messages
 
 
   Scenario: A user getting their summary messages when an internal server error occurs sees an error and can try again
-    Given I am a user wishing to view my messages but retrieving the messages will cause an internal server error
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages but retrieving the messages will cause an internal server error
     And I am logged in
-    When I navigate to the More page for mobile devices
+    When I navigate to the More page
     And I click the Messages link on the More page
     Then an error with a retry button is displayed indicating that there was a problem getting messages
     When the messages in the repository can be retrieved successfully
@@ -131,9 +139,10 @@ Feature: Messages
     Then the Messages Inbox page is displayed
 
   Scenario: A user getting messages from a sender when an internal server error occurs sees an error and can try again
-    Given I am a user wishing to view my messages
+    Given I am using the native app user agent
+    And I am a user wishing to view my messages
     And I am logged in
-    When I navigate to the More page for mobile devices
+    When I navigate to the More page
     And I click the Messages link on the More page
     Then the Messages Inbox page is displayed
     When retrieving the messages from the repository will cause an internal server error

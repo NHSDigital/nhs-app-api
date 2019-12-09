@@ -31,30 +31,9 @@ open class PageUrl {
             arrayOf("organ donation",
                     "more")
 
-    fun getPageWithMobileSource(pageName: String): String {
-        return "${getPageWithoutSource(pageName)}?source=ios"
-    }
-
-    fun getPageWithoutSource(pageName: String): String {
+    fun getPage(pageName: String): String {
         val path = map[pageName.toLowerCase()]!!
-        return "${Config.instance.url}$path"
-    }
-
-    fun getPage(pageName: String, isOnMobile: Boolean): String {
-        var path = map[pageName.toLowerCase()]!!
-        if (mobileOverrides.contains(pageName.toLowerCase())) {
-            path = getPageUrl(isOnMobile, path)
-        }
 
         return "${Config.instance.url}$path"
-    }
-
-    private fun getPageUrl(isOnMobile: Boolean, urlString: String): String {
-        val urlForWeb = "$urlString?source=ios"
-        val suffix = Config.instance.nativeUrlSuffix
-        return when (isOnMobile) {
-            true -> "$urlString$suffix"
-            false -> urlForWeb
-        }
     }
 }

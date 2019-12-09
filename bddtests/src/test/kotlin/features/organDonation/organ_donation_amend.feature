@@ -4,7 +4,8 @@ Feature: Organ Donation Amend Frontend
 # These tests navigate directly to the pages where the features are to be tested, to save time.
 
   Scenario: A user who opted to donate all their organs can amend it to not donate
-    Given I am a EMIS user registered as opt-in who then amends their decision to opt-out
+    Given I am using the native app user agent
+    And I am a EMIS user registered as opt-in who then amends their decision to opt-out
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -21,7 +22,8 @@ Feature: Organ Donation Amend Frontend
     And the decision to opt out of organ donation has been successfully created
 
   Scenario: A user who opted to donate all their organs can amend it to only donate some
-    Given I am a TPP user registered as opt-in who then amends their decision to some
+    Given I am using the native app user agent
+    And I am a TPP user registered as opt-in who then amends their decision to some
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -48,7 +50,8 @@ Feature: Organ Donation Amend Frontend
     And the decision to opt in to organ donation with some organs has been successfully created
 
   Scenario: A user who opted to donate all their organs can amend faith and beliefs
-    Given I am a VISION user registered as opt-in who then amends their faith and beliefs
+    Given I am using the native app user agent
+    And I am a VISION user registered as opt-in who then amends their faith and beliefs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -73,7 +76,8 @@ Feature: Organ Donation Amend Frontend
     And the decision to opt in to organ donation has been successfully created
 
   Scenario: A user opted to donate some of their organs can amend it to not donate
-    Given I am a EMIS user registered as some who then amends their decision to opt-out
+    Given I am using the native app user agent
+    And I am a EMIS user registered as some who then amends their decision to opt-out
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
@@ -90,7 +94,8 @@ Feature: Organ Donation Amend Frontend
     And the decision to opt out of organ donation has been successfully created
 
   Scenario: A user opted to donate some of their organs can amend to donate all
-    Given I am a TPP user registered as some who then amends their decision to opt-in
+    Given I am using the native app user agent
+    And I am a TPP user registered as some who then amends their decision to opt-in
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
@@ -114,7 +119,8 @@ Feature: Organ Donation Amend Frontend
     And the decision to opt in to organ donation has been successfully created
 
   Scenario: A user opted to donate some of their organs can amend the selected organs
-    Given I am a VISION user registered as some who then amends their selected organs
+    Given I am using the native app user agent
+    And I am a VISION user registered as some who then amends their selected organs
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
@@ -141,7 +147,8 @@ Feature: Organ Donation Amend Frontend
     And the decision to opt in to organ donation with some organs has been successfully created
 
   Scenario: A user who opted to donate some organs but did not make a decision for all of them can amend their selection
-    Given I am a EMIS user registered to donate some organs, with some undecided, who amends their decision
+    Given I am using the native app user agent
+    And I am a EMIS user registered to donate some organs, with some undecided, who amends their decision
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
@@ -168,7 +175,8 @@ Feature: Organ Donation Amend Frontend
     And the decision to opt in to organ donation with some organs has been successfully created
 
   Scenario: A user opted to not donate their organs can amend it to donate all
-    Given I am a EMIS user registered as opt-out who then amends their decision to opt-in
+    Given I am using the native app user agent
+    And I am a EMIS user registered as opt-out who then amends their decision to opt-in
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
@@ -193,7 +201,8 @@ Feature: Organ Donation Amend Frontend
     And the decision to opt in to organ donation has been successfully created
 
   Scenario: A user who opted to not donate their organs can amend it to donate some
-    Given I am a TPP user registered as opt-out who then amends their decision to some
+    Given I am using the native app user agent
+    And I am a TPP user registered as opt-out who then amends their decision to some
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
@@ -222,7 +231,8 @@ Feature: Organ Donation Amend Frontend
     And the decision to opt in to organ donation with some organs has been successfully created
 
   Scenario: A user can navigate back through the amend journey
-    Given I am a EMIS user registered as opt-in with organ donation, who wishes to amend
+    Given I am using the native app user agent
+    And I am a EMIS user registered as opt-in with organ donation, who wishes to amend
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -232,7 +242,8 @@ Feature: Organ Donation Amend Frontend
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
 
   Scenario: A user is informed when an amended registration is in conflicted state
-    Given I am a EMIS user registered as opt-in with organ donation, who wishes to opt-out but will cause a conflict
+    Given I am using the native app user agent
+    And I am a EMIS user registered as opt-in with organ donation, who wishes to opt-out but will cause a conflict
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -242,7 +253,8 @@ Feature: Organ Donation Amend Frontend
     Then the organ donation decision has been submitted and is to be processed
 
   Scenario: A user can find out more about organ donation when amending their decision
-    Given I am a EMIS user registered as opt-in with organ donation, who wishes to amend
+    Given I am using the native app user agent
+    And I am a EMIS user registered as opt-in with organ donation, who wishes to amend
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to amend my Organ Donation decision
@@ -251,7 +263,8 @@ Feature: Organ Donation Amend Frontend
     Then a new tab has been opened by the link
 
   Scenario Outline: A user amending a decision, where OD returns a <Error Code> recoverable error, is shown an error message and can retry
-    Given I am a EMIS user registered as opt-in amends to opt-out, but OD returns recoverable <Error Code> error
+    Given I am using the native app user agent
+    And I am a EMIS user registered as opt-in amends to opt-out, but OD returns recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -268,7 +281,8 @@ Feature: Organ Donation Amend Frontend
       | 503        |
 
   Scenario Outline: A user amending a decision, where OD returns a <Error Code> recoverable error, is shown an error message and can't retry
-    Given I am a EMIS user registered as opt-in amends to opt-out, but OD returns non-recoverable <Error Code> error
+    Given I am using the native app user agent
+    And I am a EMIS user registered as opt-in amends to opt-out, but OD returns non-recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -283,7 +297,8 @@ Feature: Organ Donation Amend Frontend
       | 401        |
 
   Scenario: A user, amending a decision where OD takes too long to respond, is shown decision pending page
-    Given I am a EMIS user registered as opt-in amends to opt-out, but OD takes too long to respond
+    Given I am using the native app user agent
+    And I am a EMIS user registered as opt-in amends to opt-out, but OD takes too long to respond
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in

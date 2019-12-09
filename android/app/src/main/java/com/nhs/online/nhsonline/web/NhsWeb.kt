@@ -40,7 +40,7 @@ class NhsWeb(
     private val openBrowserActivity =
             OpenUrlInBrowserActivity(activity.resources.getStringArray(R.array.nativeAppHosts))
     private val urlLoader =
-            UrlLoader(webView, knownServices, activity.getString(R.string.baseURL), appWebInterface)
+            UrlLoader(webView, activity.getString(R.string.baseURL), appWebInterface)
     private val chromeClient = ChromeClientLocationHandler(activity)
     private val appPersistData = PersistData(activity)
     private val errorMessageHandler = ErrorMessageHandler(activity)

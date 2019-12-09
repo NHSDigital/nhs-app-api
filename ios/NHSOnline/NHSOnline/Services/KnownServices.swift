@@ -175,7 +175,7 @@ class KnownServices {
     }
 
     private func buildNhsoService()-> KnownService {
-        let nhsoService = KnownService(serviceUrl: config.HomeUrl, service: .NHS_ONLINE, title: homeTitle, validateSession: true, allowNativeInteraction: true, urlQueryString: config.NhsOnlineRequiredQueryString)
+        let nhsoService = KnownService(serviceUrl: config.HomeUrl, service: .NHS_ONLINE, title: homeTitle, validateSession: true, allowNativeInteraction: true)
         nhsoService.addPathInfo(path: config.SymptomsUrlPath, service: .SYMPTOMS, validateSession: true, allowNativeInteraction: true, title: symptomsTitle)
         nhsoService.addPathInfo(path: config.CheckSymptomsUrlPath, service: .NHS_ONLINE, validateSession: false,  allowNativeInteraction: false, title: symptomsTitle)
         nhsoService.addPathInfo(path: config.AppointmentsUrlPath, service: .APPOINTMENTS,validateSession: true,  allowNativeInteraction: true, title: appointmentsTitle)

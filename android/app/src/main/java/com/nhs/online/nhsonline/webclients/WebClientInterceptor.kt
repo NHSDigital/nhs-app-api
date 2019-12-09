@@ -112,13 +112,6 @@ class WebClientInterceptor(
 
         updateHeaderAndNavMenu(sanitizedUrl)
 
-        if (hasMissingQueryString(sanitizedUrl)) {
-            view?.stopLoading()
-            nhsWeb.requiresFullPageLoad = true
-            sanitizedUrl?.let { uiInteractor.loadPage(it) }
-            return
-        }
-
         if (shouldHandleUnavailability(sanitizedUrl)) {
             trackWebRequestResponse(view, sanitizedUrl)
         }
@@ -253,14 +246,13 @@ class WebClientInterceptor(
         Log.d(Application.TAG,
             "${this::class.java.simpleName}: Entering onPageCommitVisible and url: $url")
         if (shouldHandleUnavailability(url)) {
-            if (knownServices.isLoginUrlWithSourceQuery(url))
+            if (knownServices.isLoginUrl(url))
                 uiInteractor.showBiometricLoginIfEnabled()
             uiInteractor.dismissProgressDialog()
         }
 
         if (!shouldShowErrorPage) {
-            if (url == context.resources.getString(R.string.baseURL) +
-                context.resources.getString(R.string.nhsOnlineRequiredQueries)) {
+            if (url == context.resources.getString(R.string.baseURL)) {
                 Log.d(Application.TAG,
                     "${this::class.java.simpleName}: Entering onPageCommitVisible > is Home page")
                 uiInteractor.showHeader()
@@ -305,12 +297,6 @@ class WebClientInterceptor(
 
     private fun isNHSApi(request: WebResourceRequest?): Boolean {
         return request?.url?.host == URL(context.getString(R.string.baseApiURL)).host
-    }
-
-    private fun hasMissingQueryString(url: String?): Boolean {
-        if (url == null)
-            return false
-        return knownServices.findMatchingKnownService(url)?.hasMissingQueryString(url) ?: false
     }
 
     fun stopLoadingWebviewAndShowNoConnectionError(view: WebView?) {

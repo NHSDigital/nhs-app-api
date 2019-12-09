@@ -44,67 +44,6 @@ class KnownServicesTest : ResourceMockingClass() {
     }
 
     @Test
-    fun findKnownServiceAndAddMissingQuery_returnsValidUrl_forValidServiceNoQueryString() {
-        val result = testKnownServices.findKnownServiceAndAddMissingQueryFor("https://111.nhs.uk")
-
-        Assert.assertEquals("https://111.nhs.uk", result)
-    }
-
-    @Test
-    fun findKnownServiceAndAddMissingQuery_returnsValidUrl_forValidServiceNoQueryStringDifferentCasing() {
-        val result = testKnownServices.findKnownServiceAndAddMissingQueryFor("https://111.NHS.UK")
-
-        Assert.assertEquals("https://111.NHS.UK", result)
-    }
-
-    @Test
-    fun findKnownServiceAndAddMissingQuery_returnsValidUrl_forValidServiceWithQueryString() {
-        val result = testKnownServices.findKnownServiceAndAddMissingQueryFor("http://10.0.2.2:3000")
-
-        Assert.assertEquals("http://10.0.2.2:3000?source=android", result)
-    }
-
-    @Test
-    fun findKnownServiceAndAddMissingQuery_returnsValidUrl_forValidServiceNoQueryStringWithInputQueryString() {
-        val result =
-            testKnownServices.findKnownServiceAndAddMissingQueryFor("https://111.nhs.uk?param1=param1Value")
-
-        Assert.assertEquals("https://111.nhs.uk?param1=param1Value", result)
-    }
-
-    @Test
-    fun findKnownServiceAndAddMissingQuery_returnsValidUrl_forValidServiceWithQueryStringWithInputQueryString() {
-        val result =
-            testKnownServices.findKnownServiceAndAddMissingQueryFor("http://10.0.2.2:3000?source=android")
-
-        Assert.assertEquals("http://10.0.2.2:3000?source=android", result)
-    }
-
-    @Test
-    fun findKnownServiceAndAddMissingQuery_returnsValidUrl_forValidServiceWithQueryStringWithAdditionalInputQueryString() {
-        val result =
-            testKnownServices.findKnownServiceAndAddMissingQueryFor("http://10.0.2.2:3000?param1=param1Value")
-
-        Assert.assertEquals("http://10.0.2.2:3000?param1=param1Value&source=android", result)
-    }
-
-    @Test
-    fun findKnownServiceAndAddMissingQuery_returnsOriginalUrl_forInvalidServiceWithInputQueryString() {
-        val result =
-            testKnownServices.findKnownServiceAndAddMissingQueryFor("https://www.google.co.uk?param1=param1Value")
-
-        Assert.assertEquals("https://www.google.co.uk?param1=param1Value", result)
-    }
-
-    @Test
-    fun findKnownServiceAndAddMissingQuery_returnsOriginalUrl_forInvalidServiceNoQueryString() {
-        val result =
-            testKnownServices.findKnownServiceAndAddMissingQueryFor("https://www.google.co.uk")
-
-        Assert.assertEquals("https://www.google.co.uk", result)
-    }
-
-    @Test
     fun findMatchingServiceInfo_resolveToNull_whenUrlIsUnknownServiceUrl() {
         val unknownServices = arrayListOf("https://www.google.co.uk",
             "https://www.yahoo.co.uk", "https://www.jobs.nhs.uk")
@@ -158,26 +97,18 @@ class KnownServicesTest : ResourceMockingClass() {
     }
 
     @Test
-    fun isLoginUrlWithSourceQuery_ReturnsFalseWhenLoginUrlHasAdditionalAQuery() {
-        val loginUrlWithExtraQuery = "http://10.0.2.2:3000/login?source=android&responseCode=102"
-        val result = testKnownServices.isLoginUrlWithSourceQuery(loginUrlWithExtraQuery)
+    fun isLoginUrl_ReturnsFalseWhenLoginUrlHasAdditionalAQuery() {
+        val loginUrlWithExtraQuery = "http://10.0.2.2:3000/login?responseCode=102"
+        val result = testKnownServices.isLoginUrl(loginUrlWithExtraQuery)
         Assert.assertFalse("Additional query responseCode=102 shouldn't in known Service", result)
     }
 
     @Test
-    fun isLoginUrlWithSourceQuery_ReturnsFalseWhenLoginUrlHasNoQuery() {
+    fun isLoginUrl_ReturnsTrueWhenLoginUrlHasNoQuery() {
         val loginUrl = "http://10.0.2.2:3000/login"
-        val result = testKnownServices.isLoginUrlWithSourceQuery(loginUrl)
+        val result = testKnownServices.isLoginUrl(loginUrl)
         Assert.assertFalse(result)
     }
-
-    @Test
-    fun isLoginUrlWithSourceQuery_ReturnsTrueWhenLoginUrlHasOnlySourceQuery() {
-        val loginUrlWithSourceQuery = "http://10.0.2.2:3000/login?source=android"
-        val result = testKnownServices.isLoginUrlWithSourceQuery(loginUrlWithSourceQuery)
-        Assert.assertTrue(result)
-    }
-
     @Test
     fun findMatchingServiceInfo_resolvesToMatchingInternalPathOrClosestInternalThePath() {
         val nhsAppServices =

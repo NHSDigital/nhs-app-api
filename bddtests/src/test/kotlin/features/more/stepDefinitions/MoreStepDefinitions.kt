@@ -48,7 +48,7 @@ class MoreStepDefinitions {
             postTokenToNdop()
                     .respondWithNdopMockPage()
         }
-        val urlForPage = pageUrl.getPage("data sharing",morePage.onMobile())
+        val urlForPage = pageUrl.getPage("data sharing")
         browser.browseTo(urlForPage)
     }
 

@@ -40,7 +40,7 @@ class GenericPageStepDefinitions {
 
     @When("^I retrieve the '(.*)' page directly$")
     fun iretrieveThePageDirectly(pageName:String) {
-        val urlForPage = pageUrl.getPage(pageName,genericPage.onMobile())
+        val urlForPage = pageUrl.getPage(pageName)
         browser.browseTo(urlForPage)
     }
 
@@ -57,7 +57,7 @@ class GenericPageStepDefinitions {
 
     @Then("^I am redirected to the '(.*)' page$")
     fun thenIAmRedirectedToThePage(pageName: String) {
-        val redirectUrl = pageUrl.getPage(pageName, genericPage.onMobile())
+        val redirectUrl = pageUrl.getPage(pageName)
         browser.shouldHaveUrl(redirectUrl)
     }
 

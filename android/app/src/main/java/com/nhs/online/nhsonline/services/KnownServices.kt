@@ -47,24 +47,17 @@ class KnownServices(private val context: Context) {
         return null
     }
 
-    fun findKnownServiceAndAddMissingQueryFor(urlString: String): String {
-        val matchingKnownService = findMatchingKnownService(urlString) ?: return urlString
-        return matchingKnownService.addMissingQueryStrings(urlString)
-    }
 
     fun findNHSAppInternalServiceInfoByPath(path: String): KnownService.Info? {
         val nhsService = findMatchingKnownService(fetchStringResource(R.string.baseURL))
         return nhsService?.findMatchingServicePathInfoByPath(path)
     }
 
-    fun isLoginUrlWithSourceQuery(urlString: String?): Boolean {
-        val nonNullUrlString = urlString ?: ""
-        val knownService = findMatchingKnownService(nonNullUrlString) ?: return false
+    fun isLoginUrl(urlString: String?): Boolean {
         val url = URL(urlString)
         val nhsUrl = URL(fetchStringResource(R.string.baseURL))
 
-        return nhsUrl.host == url.host &&
-                knownService.hasOnlyRequiredQueries(nonNullUrlString) &&
+        return (nhsUrl.host == url.host) &&
                 url.path.startsWith("/${fetchStringResource(R.string.loginPath)}")
     }
 
@@ -121,8 +114,7 @@ class KnownServices(private val context: Context) {
     private fun buildNHSInternalAppService(): KnownService {
         val internalService = KnownService(
             fetchStringResource(R.string.baseURL),
-            fetchStringResource(R.string.home_header),
-            queryStrings = fetchStringResource(R.string.nhsOnlineRequiredQueries))
+            fetchStringResource(R.string.home_header))
         internalService.addPathInfo(fetchStringResource(R.string.symptomsPath),
             true,
             fetchStringResource(R.string.symptoms_header))

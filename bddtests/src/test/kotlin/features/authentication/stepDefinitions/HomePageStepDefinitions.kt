@@ -65,6 +65,11 @@ class HomePageStepDefinitions {
         loginSteps.loginPage.clickHelpIcon()
     }
 
+    @When("I follow the Appointments link from the home page$")
+    fun iFollowTheAppointmentsLinkFromHomePage() {
+        followAppointmentsLink()
+    }
+
     @Then("^I see the home page$")
     fun iSeeTheHomePage() {
         homeSteps.assertHeaderVisible()

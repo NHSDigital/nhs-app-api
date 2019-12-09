@@ -37,7 +37,6 @@ open class ResourceMockingClass {
                     "        \\n\\nIf the problem persists and you need to book an appointment or get a prescription now,\n" +
                     "        contact your GP surgery directly. For immediate medical advice, call one. one. one.."
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
-            on { getString(R.string.nhsOnlineRequiredQueries) } doReturn "?source=android"
             on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
             on { getString(R.string.conditions) } doReturn "https://www.nhs.uk/conditions/"
             on { getString(R.string.hotjarLink) } doReturn "https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785"

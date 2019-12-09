@@ -6,6 +6,8 @@ import net.thucydides.core.webdriver.DriverSource
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import utils.GlobalSerenityHelpers
+import utils.getOrNull
 import webdrivers.options.ChromeOptionManager.Companion.DEBUG_PORT
 
 private const val CHROME_PROCESS_NAME = "chrome"
@@ -44,7 +46,14 @@ open class ChromeDriver : DriverSource {
     }
 
     open fun configureOptions(): ChromeOptions {
-        return ChromeOptions()
+        val options = ChromeOptions()
+        val userAgent = GlobalSerenityHelpers.USER_AGENT.getOrNull<String>()
+
+        if(userAgent != null){
+            options.addArguments("user-agent=$userAgent")
+        }
+
+        return options
     }
 
     override fun takesScreenshots(): Boolean {
