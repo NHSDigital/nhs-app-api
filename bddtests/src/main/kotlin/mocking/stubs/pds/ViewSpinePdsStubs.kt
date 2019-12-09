@@ -10,7 +10,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
     companion object {
         private const val IP = "10.0.225.22"
         private const val fromAsid = "200000000355"
-        private const val toAsid = "200000000355"
+        private const val toAsid = "200000000354"
         private var pharmacyTypes = arrayOf("P1")
     }
 
@@ -84,12 +84,12 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
                 </wsa:From>
                 <communicationFunctionRcv typeCode="RCV">
                   <device classCode="DEV" determinerCode="INSTANCE">
-                    <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
+                    <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
                   </device>
                 </communicationFunctionRcv>
                 <communicationFunctionSnd typeCode="SND">
                   <device classCode="DEV" determinerCode="INSTANCE">
-                    <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
+                    <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
                   </device>
                 </communicationFunctionSnd>
                 <wsa:RelatesTo>uuid:289852c1-b232-4ae2-b6c8-f3556e44e2b8</wsa:RelatesTo>
@@ -111,12 +111,12 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
                     </acknowledgement>
                     <communicationFunctionRcv typeCode="RCV">
                       <device classCode="DEV" determinerCode="INSTANCE">
-                        <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
+                        <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
                       </device>
                     </communicationFunctionRcv>
                     <communicationFunctionSnd typeCode="SND">
                       <device classCode="DEV" determinerCode="INSTANCE">
-                        <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
+                        <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
                       </device>
                     </communicationFunctionSnd>
                     <ControlActEvent classCode="CACT" moodCode="EVN">
@@ -227,12 +227,12 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
                 </wsa:From>
                 <communicationFunctionRcv typeCode="RCV">
                   <device classCode="DEV" determinerCode="INSTANCE">
-                    <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
+                    <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
                   </device>
                 </communicationFunctionRcv>
                 <communicationFunctionSnd typeCode="SND">
                   <device classCode="DEV" determinerCode="INSTANCE">
-                    <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
+                    <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
                   </device>
                 </communicationFunctionSnd>
                 <wsa:RelatesTo>uuid:86bc0f46-f8b9-4ffd-8042-cbb6b054fc2d</wsa:RelatesTo>
@@ -254,12 +254,12 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
                     </acknowledgement>
                     <communicationFunctionRcv typeCode="RCV">
                       <device classCode="DEV" determinerCode="INSTANCE">
-                        <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
+                        <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
                       </device>
                     </communicationFunctionRcv>
                     <communicationFunctionSnd typeCode="SND">
                       <device classCode="DEV" determinerCode="INSTANCE">
-                        <id root="1.2.826.0.1285.0.2.0.107" extension="${toAsid}"/>
+                        <id root="1.2.826.0.1285.0.2.0.107" extension="${fromAsid}"/>
                       </device>
                     </communicationFunctionSnd>
                     <ControlActEvent classCode="CACT" moodCode="EVN">

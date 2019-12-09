@@ -80,8 +80,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 {
                     Code = "NE",
                 },
-                CommunicationFunctionRcv = NominatedPharmacyUpdateRequest.CreateCommunicationFunctionRcv(_config.PdsTraceConfigurationSettings.FromAsid),
-                CommunicationFunctionSnd = NominatedPharmacyUpdateRequest.CreateCommunicationFunctionSnd(_config.PdsTraceConfigurationSettings.ToAsid),
+                CommunicationFunctionRcv = NominatedPharmacyUpdateRequest.CreateCommunicationFunctionRcv(_config.PdsTraceConfigurationSettings.ToAsid),
+                CommunicationFunctionSnd = NominatedPharmacyUpdateRequest.CreateCommunicationFunctionSnd(_config.PdsTraceConfigurationSettings.FromAsid),
                 ControlActEvent = new ControlActEvent
                 {
                     ClassCode = "CACT",

@@ -67,9 +67,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase) && req.ControlActEvent.Query.RetrievalItems.Count == 4 &&
@@ -196,9 +196,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase))
@@ -347,9 +347,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase))
@@ -474,9 +474,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase) && req.ControlActEvent.Query.RetrievalItems.Count == 4 &&
@@ -558,9 +558,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase) && req.ControlActEvent.Query.RetrievalItems.Count == 4 &&
@@ -736,9 +736,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
-                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                        req => req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
                                    StringComparison.OrdinalIgnoreCase) &&
-                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
                                    StringComparison.OrdinalIgnoreCase) &&
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase))

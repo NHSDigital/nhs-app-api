@@ -242,8 +242,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                 {
                     Code = "NE"
                 },
-                CommunicationFunctionRcv = CreateCommunicationFunctionRcv(_config.PdsUpdateConfigurationSettings.FromAsid),
-                CommunicationFunctionSnd = CreateCommunicationFunctionSnd(_config.PdsUpdateConfigurationSettings.ToAsid),
+                CommunicationFunctionRcv = CreateCommunicationFunctionRcv(_config.PdsUpdateConfigurationSettings.ToAsid),
+                CommunicationFunctionSnd = CreateCommunicationFunctionSnd(_config.PdsUpdateConfigurationSettings.FromAsid),
                 ControlActEvent = controlActEventBody
             };
 
@@ -268,39 +268,32 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
 
         public static NominatedPharmacyTypes.CommunicationFunctionSnd CreateCommunicationFunctionSnd(string extension)
         {
-            var communicationFuncSndObject = new NominatedPharmacyTypes.CommunicationFunctionSnd
+            return new NominatedPharmacyTypes.CommunicationFunctionSnd
             {
-                Device = new NominatedPharmacyTypes.Device
-                {
-                    ClassCode = "DEV",
-                    DeterminerCode = "INSTANCE",
-                    Id = new NominatedPharmacyTypes.Id
-                    {
-                        Extension = extension,
-                        Root = "1.2.826.0.1285.0.2.0.107"
-                    }
-                }
+                Device = CreateDevice(extension)
             };
-            return communicationFuncSndObject;
         }
         
         public static NominatedPharmacyTypes.CommunicationFunctionRcv CreateCommunicationFunctionRcv(string extension)
         {
-            var communicationFuncSndObject =
-                new NominatedPharmacyTypes.CommunicationFunctionRcv
+            return new NominatedPharmacyTypes.CommunicationFunctionRcv
+            {
+                Device = CreateDevice(extension)
+            };
+        }
+
+        private static NominatedPharmacyTypes.Device CreateDevice(string extension)
+        {
+            return new NominatedPharmacyTypes.Device
+            {
+                ClassCode = "DEV",
+                DeterminerCode = "INSTANCE",
+                Id = new NominatedPharmacyTypes.Id
                 {
-                    Device = new NominatedPharmacyTypes.Device
-                    {
-                        ClassCode = "DEV",
-                        DeterminerCode = "INSTANCE",
-                        Id = new NominatedPharmacyTypes.Id
-                        {
-                            Extension = extension,
-                            Root = "1.2.826.0.1285.0.2.0.107"
-                        }
-                    }
-                };
-            return communicationFuncSndObject;
+                    Extension = extension,
+                    Root = "1.2.826.0.1285.0.2.0.107"
+                }
+            };
         }
     }
 }

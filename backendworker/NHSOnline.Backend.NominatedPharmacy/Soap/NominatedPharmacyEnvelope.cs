@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
                     writer.WriteStartElement(hl7, "device", null);
                     writer.WriteStartElement(hl7, "id", null);
                     writer.WriteAttributeString("root", "1.2.826.0.1285.0.2.0.107");
-                    writer.WriteAttributeString("extension", config.PdsTraceConfigurationSettings.FromAsid);
+                    writer.WriteAttributeString("extension", config.PdsTraceConfigurationSettings.ToAsid);
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                     writer.WriteEndElement();
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
                     writer.WriteStartElement(hl7, "device", null);
                     writer.WriteStartElement(hl7, "id", null);
                     writer.WriteAttributeString("root", "1.2.826.0.1285.0.2.0.107");
-                    writer.WriteAttributeString("extension", config.PdsTraceConfigurationSettings.ToAsid);
+                    writer.WriteAttributeString("extension", config.PdsTraceConfigurationSettings.FromAsid);
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                     writer.WriteEndElement();
