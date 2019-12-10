@@ -20,7 +20,7 @@
                         :button-classes="['nhsuk-button']"
                         @click.stop.prevent="switchProfileButtonClicked">
           {{ $t('linkedProfiles.switchProfileButton').replace('{givenName}',
-                                                              linkedAccount.givenName)}}
+                                                              linkedAccount.givenName) }}
         </generic-button>
       </div>
     </div>

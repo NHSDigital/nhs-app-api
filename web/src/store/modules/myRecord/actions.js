@@ -9,7 +9,6 @@ import {
   LOADED_PROCEDURES,
   LOADED_DETAILED_TEST_RESULT,
   LOADED_DOCUMENT,
-  RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
   SET_SELECTED_DOCUMENT_INFO,
@@ -93,9 +92,6 @@ export default {
   },
   setSelectedDocumentInfo({ commit }, selectedDocumentInfo) {
     commit(SET_SELECTED_DOCUMENT_INFO, selectedDocumentInfo);
-  },
-  resetTerms({ commit }) {
-    commit(RESET_TERMS);
   },
   togglePatientDetail({ commit }) {
     commit(TOGGLE_PATIENT_DETAIL);

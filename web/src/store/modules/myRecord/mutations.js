@@ -10,7 +10,6 @@ import {
   LOADED_PROCEDURES,
   LOADED_DETAILED_TEST_RESULT,
   LOADED_DOCUMENT,
-  RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
   SET_SELECTED_DOCUMENT_INFO,
@@ -98,10 +97,6 @@ export default {
       state.document.codeId = documentInfo.codeId;
       state.document.size = documentInfo.size;
     }
-  },
-  [RESET_TERMS](state) {
-    state.hasAcceptedTerms = false;
-    state.nojsData = JSON.stringify({ myRecord: { hasAcceptedTerms: false } });
   },
   [TOGGLE_PATIENT_DETAIL](state) {
     state.isPatientDetailsCollapsed = !state.isPatientDetailsCollapsed;

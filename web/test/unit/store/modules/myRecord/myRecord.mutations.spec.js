@@ -4,7 +4,6 @@ import {
   ACCEPT_TERMS,
   LOADED,
   LOADED_DETAILED_TEST_RESULT,
-  RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
 } from '@/store/modules/myRecord/mutation-types';
 
@@ -82,17 +81,6 @@ describe('my record mutations', () => {
 
     it('will set the has loaded property of the test results to true', () => {
       expect(state.detailedTestResult.hasLoaded).toEqual(true);
-    });
-  });
-
-  describe('RESET_TERMS', () => {
-    beforeEach(() => {
-      state.hasAcceptedTerms = true;
-      mutations[RESET_TERMS](state, data);
-    });
-
-    it('will set the my record term acceptance flag ', () => {
-      expect(state.hasAcceptedTerms).toEqual(false);
     });
   });
 

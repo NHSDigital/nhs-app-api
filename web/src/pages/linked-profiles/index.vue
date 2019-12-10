@@ -17,7 +17,7 @@
             <div :id="'linked-account-age-' + index"
                  class="nhsuk-u-margin-top-1"
                  data-sid="age-months">
-              {{  getDisplayedAgeText(item) }}
+              {{ getDisplayedAgeText(item) }}
             </div>
           </menu-item>
         </menu-item-list>
@@ -36,11 +36,11 @@ import { find } from 'lodash/fp';
 
 export default {
   layout: 'nhsuk-layout',
-  mixins: [CalculateAgeInMonthsAndYears],
   components: {
     MenuItemList,
     MenuItem,
   },
+  mixins: [CalculateAgeInMonthsAndYears],
   data() {
     return {
       linkedAccounts: this.$store.state.linkedAccounts.items,

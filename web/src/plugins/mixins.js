@@ -7,7 +7,7 @@ import ResetPageFocusMixin from '@/plugins/mixinDefinitions/ResetPageFocus';
 import CheckProxyNoAccessMixin from '@/plugins/mixinDefinitions/CheckProxyNoAccessMixin';
 import Sources from '@/lib/sources';
 import { redirectTo } from '@/lib/utils';
-import { ACCOUNT_SIGNOUT, LOGIN, MYRECORD } from '@/lib/routes';
+import { ACCOUNT_SIGNOUT, LOGIN, MYRECORD, GP_MEDICAL_RECORD } from '@/lib/routes';
 
 Vue.mixin(ResetPageFocusMixin);
 Vue.mixin(CheckProxyNoAccessMixin);
@@ -35,8 +35,8 @@ Vue.mixin({
         return;
       }
 
-      if (url === MYRECORD.path && statusCode === 504) {
-        this.$store.dispatch('myRecord/resetTerms');
+      if ((url === MYRECORD.path || url === GP_MEDICAL_RECORD.path) && statusCode === 504) {
+        this.$store.dispatch('myRecord/load');
       }
 
       if ((url === LOGIN.path && this.$store.getters['session/isLoggedIn']())

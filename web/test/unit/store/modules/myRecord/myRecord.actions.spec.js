@@ -3,7 +3,6 @@ import {
   ACCEPT_TERMS,
   LOADED,
   LOADED_DETAILED_TEST_RESULT,
-  RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
 } from '@/store/modules/myRecord/mutation-types';
 
@@ -77,16 +76,6 @@ describe('my record actions', () => {
 
       it('will commit LOADED_DETAILED_TEST_RESULT with the received results', () => {
         expect(context.commit).toHaveBeenCalledWith(LOADED_DETAILED_TEST_RESULT, { data });
-      });
-    });
-
-    describe('resetTerms', () => {
-      beforeEach(async () => {
-        await actions.resetTerms(context);
-      });
-
-      it('will commit the reset terms mutation', () => {
-        expect(context.commit).toHaveBeenCalledWith(RESET_TERMS);
       });
     });
 

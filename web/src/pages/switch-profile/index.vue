@@ -38,10 +38,10 @@ import CalculateAgeInMonthsAndYears from '../../plugins/mixinDefinitions/Calcula
 
 export default {
   layout: 'nhsuk-layout',
-  mixins: [CalculateAgeInMonthsAndYears],
   components: {
     GenericButton,
   },
+  mixins: [CalculateAgeInMonthsAndYears],
   data() {
     return {
       currentProfile: this.$store.state.linkedAccounts.actingAsUser,

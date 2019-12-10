@@ -153,11 +153,6 @@ export default {
   updated() {
     window.scrollTo(0, 0);
   },
-  beforeDestroy() {
-    if (this.$store.state.myRecord.hasAcceptedTerms) {
-      this.$store.dispatch('myRecord/resetTerms');
-    }
-  },
   async mounted() {
     if (this.hasAgreed) {
       await this.$store.dispatch('myRecord/clear');

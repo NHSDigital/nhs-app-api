@@ -63,11 +63,6 @@ describe('gp-medical-record', () => {
       expect(page.find(Warning).exists()).toBe(false);
     });
 
-    it('will reset the terms before the component is destroyed', () => {
-      page.destroy();
-      expect($store.dispatch).toHaveBeenCalledWith('myRecord/resetTerms');
-    });
-
     it('will display the clinical feedback updates', () => {
       expect(page.find(Glossary).exists()).toBe(false);
     });
