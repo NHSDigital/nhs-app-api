@@ -257,12 +257,16 @@ export default function ({ route, store, app }) {
     case ORGAN_DONATION_REVIEW_YOUR_DECISION.name:
     case ORGAN_DONATION_SOME_ORGANS.name:
     case ORGAN_DONATION_VIEW_DECISION.name:
-    case ORGAN_DONATION_WITHDRAW_REASON.name:
-    case ORGAN_DONATION_WITHDRAWN.name:
     case ORGAN_DONATION_YOUR_CHOICE.name:
       store.dispatch('navigation/setNewMenuItem', 4);
       route.meta.headerKey = 'pageHeaders.organDonation';
       route.meta.pageTitleKey = 'pageTitles.organDonation';
+      break;
+    case ORGAN_DONATION_WITHDRAW_REASON.name:
+    case ORGAN_DONATION_WITHDRAWN.name:
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'pageHeaders.organDonation';
+      route.meta.pageTitleKey = 'pageTitles.organDonationWithdraw';
       break;
     case PRESCRIPTIONS.name:
       store.dispatch('navigation/setNewMenuItem', 2);

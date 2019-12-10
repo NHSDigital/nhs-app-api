@@ -196,8 +196,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         }
     }
 
-    @When("^I click My details heading$")
-    fun whenIClickMyDetailsHeading() {
+    @When("^I click Your details heading$")
+    fun whenIClickYourDetailsHeading() {
         myRecordInfoPage.myDetails.toggleShrub()
     }
 
@@ -211,10 +211,10 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         nav.select(NavBarNative.NavBarType.SYMPTOMS)
     }
 
-    @Then("^I see the my medical record page$")
+    @Then("^I see the your medical record page$")
     fun iSeeTheYourMedicalRecordPage() {
         thenISeeHeaderTextIsYourGPMedicalRecord()
-        iSeeTheHeadingOnMyRecord("My details")
+        iSeeTheHeadingOnMyRecord("Your details")
         iSeePatientInformationDetails()
         thenISeeMyRecordButtonOnTheNavBarIsHighlighted()
     }

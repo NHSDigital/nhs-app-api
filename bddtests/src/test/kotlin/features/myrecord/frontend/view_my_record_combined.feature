@@ -11,7 +11,7 @@ Feature: View My Medical Record Information - Combined Frontend
     When I am on the record warning page
     Then I see the my record warning page
     When I click continue
-    Then I see the my medical record page
+    Then I see the your medical record page
     When I click the Allergies and adverse reactions section on My Record
     Then I see one or more drug type allergies record displayed
     When I click the Consultations section on My Record
@@ -73,6 +73,6 @@ Feature: View My Medical Record Information - Combined Frontend
     When I am on the record warning page
     Then I see the my record warning page
     When I click continue
-    Then I see the my medical record page
+    Then I see the your medical record page
     When I click the Allergies and adverse reactions section on My Record
     Then I see a drug and non drug allergy record from VISION

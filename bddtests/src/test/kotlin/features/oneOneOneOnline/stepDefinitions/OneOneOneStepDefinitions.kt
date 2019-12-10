@@ -45,7 +45,7 @@ open class OneOneOneStepDefinitions {
 
     @Then("^the Check My Symptoms page header and navigation menu are correct$")
     fun checkMySymptomsPageHeaderAndNavigationMenuAreCorrect() {
-        navBar.headerNative.assertIsVisible("Check my symptoms")
+        navBar.headerNative.assertIsVisible("Check your symptoms")
         navBar.assertSelectedTab(NavBarNative.NavBarType.SYMPTOMS)
     }
 }

@@ -23,7 +23,7 @@ open class NativeHeaderHelper {
 
       fun followMedicalRecordHeaderLink(webHeader: WebHeader) {
          webHeader.clickMyRecordPageLink()
-         webHeaderCheck("My medical record", webHeader)
+         webHeaderCheck("Your medical record", webHeader)
       }
 
       fun followMoreHeaderLink(webHeader: WebHeader) {

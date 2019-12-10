@@ -64,7 +64,7 @@ class MyRecordInfoPage : HybridPageObject() {
                 helpfulName = "Label for '$label'")
     }
 
-    val myDetails by lazy { getSection("My details") }
+    val myDetails by lazy { getSection("Your details") }
 
     val allergies by lazy { getSection("Allergies and adverse reactions") }
 

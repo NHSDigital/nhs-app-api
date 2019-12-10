@@ -142,7 +142,7 @@ Feature: View My Medical Record Information - Test Results Frontend
     And I am on my record information page
     When I enter url address for test results detail directly into the url
     Then I am redirected to the 'My Record' page
-    And I see the my medical record page
+    And I see the your medical record page
     And I see the top of my medical record page
 
   Scenario: A MICROTEST user can view test results section when no test results are returned

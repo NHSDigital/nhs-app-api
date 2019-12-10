@@ -12,7 +12,7 @@ open class OrganDonationWithdrawDecisionPage : OrganDonationBasePage()  {
         assertBody()
     }
 
-    override val titleText = "Withdraw my decision"
+    override val titleText = "Withdraw your decision"
 
     val withdrawalReasonList = DropdownElement(
             "Reason for withdrawing",

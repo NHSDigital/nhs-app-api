@@ -44,7 +44,7 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     val serverErrorHeader = "There's been a problem sending your order"
     val serverErrorMessage = "Go back and try again. If the problem continues and you need to order" +
             " a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111."
-    val serverErrorRetryButtonText = "Back to my repeat prescriptions"
+    val serverErrorRetryButtonText = "Back to your repeat prescriptions"
 
     override fun shouldBeDisplayed() {
         title.waitForElement(HEADER_RETRIES)

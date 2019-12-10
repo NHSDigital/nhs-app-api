@@ -99,7 +99,7 @@ class AppointmentsConfirmationStepDefinitions {
 
     @Then("^there should be an action to go back to my appointments$")
     fun thenThereShouldBeAButtonToGoBackToMyAppointments() {
-        appointmentsConfirmationSteps.checkIfActionIsVisible("Back to my appointments")
+        appointmentsConfirmationSteps.checkIfActionIsVisible("Back to your appointments")
     }
 
     @Then("^an error is displayed that \"Describe your symptoms\" is mandatory$")

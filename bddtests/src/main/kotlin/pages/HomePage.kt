@@ -83,7 +83,7 @@ open class HomePage : HybridPageObject() {
                 helpfulName = "$linkText Link")
     }
 
-    val checkSymptomsLink = link("Check my symptoms")
+    val checkSymptomsLink = link("Check your symptoms")
 
     val bookAndManageAppointmentsLink = link("Book and manage appointments")
 
@@ -91,7 +91,7 @@ open class HomePage : HybridPageObject() {
 
     val viewMedicalRecordLink = link("View your GP medical record")
 
-    val organDonationLink = link("Manage organ donation decision")
+    val organDonationLink = link("Manage your organ donation decision")
 
     val linkedProfilesLink = link("Linked profiles")
 

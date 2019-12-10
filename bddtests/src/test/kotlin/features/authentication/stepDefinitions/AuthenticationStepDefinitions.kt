@@ -183,10 +183,10 @@ class AuthenticationStepDefinitions {
     @Then("I can cycle through the native header links")
     fun iLCycleTheNativeHeaderLinks(){
         val linksToFollow = arrayListOf(
-                {followAppointmentNativeHeaderLink()},
-                {followPrescriptionsNativeHeaderLink()},
-                {followMyRecordNativeHeaderLink()},
-                {followSymptomsNativeHeaderLink()}
+                {followAppointmentNativeNavBarLink()},
+                {followPrescriptionsNativeNavBarLink()},
+                {followMyRecordNativeNavBarLink()},
+                {followSymptomsNativeNavBarLink()}
         )
 
         linksToFollow.forEachIndexed { index, link ->
@@ -195,25 +195,25 @@ class AuthenticationStepDefinitions {
         }
     }
 
-    private fun followAppointmentNativeHeaderLink() {
+    private fun followAppointmentNativeNavBarLink() {
         nav.select(NavBarNative.NavBarType.APPOINTMENTS)
         webHeader.isPageTitleCorrect("Appointments")
         breadcrumbs.assertVisible()
     }
 
-    private fun followPrescriptionsNativeHeaderLink() {
+    private fun followPrescriptionsNativeNavBarLink() {
         nav.select(NavBarNative.NavBarType.PRESCRIPTIONS)
         webHeader.isPageTitleCorrect("Repeat prescriptions")
         breadcrumbs.assertVisible()
     }
 
-    private fun followMyRecordNativeHeaderLink() {
+    private fun followMyRecordNativeNavBarLink() {
         nav.select(NavBarNative.NavBarType.MY_RECORD)
-        webHeader.isPageTitleCorrect("My medical record")
+        webHeader.isPageTitleCorrect("Your medical record")
         breadcrumbs.assertVisible()
     }
 
-    private fun followSymptomsNativeHeaderLink() {
+    private fun followSymptomsNativeNavBarLink() {
         nav.select(NavBarNative.NavBarType.SYMPTOMS)
         webHeader.isPageTitleCorrect("Symptoms")
         breadcrumbs.assertVisible()

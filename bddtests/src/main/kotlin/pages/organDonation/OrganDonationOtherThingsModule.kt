@@ -21,7 +21,7 @@ open class OrganDonationOtherThingsModule(page :HybridPageObject) : LinksElement
         const val registerBloodDonorLinkDescription = "You could save lives by giving blood. " +
                 "It’s simple. You can find your local centre and book an appointment via the app."
 
-        private const val withdrawYourDecisionLinkTitle = "Withdraw my decision"
+        private const val withdrawYourDecisionLinkTitle = "Withdraw your decision"
         private const val withdrawYourDecisionLinkDescription =
                 "Remove an existing registration from the Organ Donor Register. " +
                         "There will be no recorded decision for you about organ donation."

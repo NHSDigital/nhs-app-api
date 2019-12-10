@@ -21,7 +21,7 @@ Feature: View My Medical Record Information - Demographics Frontend
     And I am on the record warning page
     Then I click continue
     And I see header text is Your GP medical record
-    Then I see the My details heading on My Record
+    Then I see the Your details heading on My Record
     And I see the patient information details
     And I see my record button on the nav bar is highlighted
 
@@ -36,5 +36,5 @@ Feature: View My Medical Record Information - Demographics Frontend
     Given the my record wiremocks are initialised for EMIS
     And the GP Practice has enabled demographics functionality
     And I am on my record information page
-    When I click My details heading
+    When I click Your details heading
     Then I do not see patient information details
