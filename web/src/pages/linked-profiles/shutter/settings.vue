@@ -16,6 +16,9 @@ export default {
   components: {
     Shutter,
   },
+  mounted() {
+    this.$store.dispatch('device/unlockNavBar');
+  },
 };
 </script>
 

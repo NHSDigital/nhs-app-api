@@ -447,7 +447,7 @@ export default function ({ route, store, app }) {
       break;
     }
     case LINKED_PROFILES_SHUTTER_SETTINGS.name: {
-      store.dispatch('navigation/setNewMenuItem', 4);
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'linkedProfiles.shutter.settings.header';
       route.meta.pageTitleKey = 'linkedProfiles.shutter.settings.header';
       break;
