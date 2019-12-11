@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "408b50ef-8b3f-4da2-86b1-a6cbf0510a55",
+		"_postman_id": "46ab98f0-de6f-4c9c-a876-9f9be7cb9e5b",
 		"name": "TPP",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -538,6 +538,222 @@
 						"{{TppApiUrl}}"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "(17) - MessageCreate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					},
+					{
+						"key": "type",
+						"value": "MessageCreate",
+						"type": "text"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<MessageCreate apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\" unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\" recipientId=\"b77c310000000000\" conversationId=\"6881000000000000\"/>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				},
+				"description": "The message create message provides the means for a user to communicate with the practice or a particular clinician. An optional binary data tag can be\nadded to include a small file of type pdf, doc, docx, rtf, jpg or png. "
+			},
+			"response": []
+		},
+		{
+			"name": "(18) - MessageRecipients",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					},
+					{
+						"key": "type",
+						"value": "MessageRecipients",
+						"type": "text"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<MessageRecipients apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\" unitId=\"{{UnitId}}\"/>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				},
+				"description": "The message recipients message is used to request the staff members and organisations that are able to receive patient-clinician communications from the\nuser. "
+			},
+			"response": []
+		},
+		{
+			"name": "(19) - MessagesView",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					},
+					{
+						"key": "type",
+						"value": "MessagesView",
+						"type": "text"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<MessagesView apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\" unitId=\"{{UnitId}}\" startDate=\"2019-10-05T00:00:00.0Z\" endDate=\"2019-12-20T00:00:00.0Z\"/>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				},
+				"description": "The messages view message is used to request patient-clinician communications to or from the selected patient. "
+			},
+			"response": []
+		},
+		{
+			"name": "(20) - UnreadMessageCount",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"type": "text",
+						"value": "UnreadMessageCount"
+					},
+					{
+						"key": "suid",
+						"type": "text",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<UnreadMessageCount apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\" unitId=\"{{UnitId}}\"/>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				},
+				"description": "The unread message count message is used to request the number of patient-clinician communications to or from the selected patient that have not been\nmarked as read. "
+			},
+			"response": []
+		},
+		{
+			"name": "(21) - MarkMessageAsRead",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"type": "text",
+						"value": "MessageMarkAsRead"
+					},
+					{
+						"key": "suid",
+						"type": "text",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<MessageMarkAsRead apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\" unitId=\"{{UnitId}}\">\n\t<Message messageId=\"ed51000000000000\"/>\n</MessageMarkAsRead>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				},
+				"description": "The message mark as read message is used to mark one or more patient-clinician communications as read. "
+			},
+			"response": []
+		},
+		{
+			"name": "(22) - MessageDelete",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"type": "text",
+						"value": "MessageMarkAsRead"
+					},
+					{
+						"key": "suid",
+						"type": "text",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<MessageMarkAsRead apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\" unitId=\"{{UnitId}}\">\n\t<Message messageId=\"ed51000000000000\"/>\n</MessageMarkAsRead>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				},
+				"description": "The message delete message will delete a message or an entire conversation of messages between the user and the practice. This can be sent if messaging\nhas been enabled for the organisation. One of either the messageId or the conversationId fields must be populated."
 			},
 			"response": []
 		}
