@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning()">
+  <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning">
     <div v-if="showTemplate && !isProxying" id="mainDiv" data-sid="user-info-details">
       <div v-if="showPatientDetails">
         <h2 data-sid="patient-name"
@@ -136,7 +136,6 @@ export default {
   data() {
     return {
       PATIENTDETAILS,
-      hasAgreed: false,
       isProxying: this.$store.getters['session/isProxying'],
     };
   },
@@ -162,17 +161,9 @@ export default {
         this.$store.state.myRecord.patientDetails.nhsNumber ||
         this.$store.state.myRecord.patientDetails.address);
     },
-  },
-  async asyncData({ store }) {
-    if (store.state.myRecord.hasAcceptedTerms) {
-      await store.dispatch('myRecord/clear');
-      await store.dispatch('myRecord/acceptTerms');
-      await store.dispatch('myRecord/load');
-    }
-
-    return {
-      medicalRecord: store.state.myRecord.record,
-    };
+    hasAgreedToMedicalWarning() {
+      return agreedToMedicalWarning();
+    },
   },
   updated() {
     window.scrollTo(0, 0);
@@ -182,21 +173,18 @@ export default {
       await this.$store.dispatch('myRecord/clear');
       await this.$store.dispatch('myRecord/acceptTerms');
       await this.$store.dispatch('myRecord/load');
-      EventBus.$emit(FOCUS_NHSAPP_ROOT);
     }
+    EventBus.$emit(FOCUS_NHSAPP_ROOT);
+    this.$store.dispatch('device/unlockNavBar');
   },
   methods: {
     hasRecordAccess() {
       return this.hasSummaryRecordAccess || this.hasDetailedRecordAccess;
     },
-    hasAgreedToMedicalWarning() {
-      this.hasAgreed = agreedToMedicalWarning();
-      return this.hasAgreed;
-    },
     shouldLoadRecord() {
       const previousPath = this.$router.previousPaths[this.$router.previousPaths.length - 1];
 
-      if (!this.hasAgreed) return false;
+      if (!this.hasAgreedToMedicalWarning) return false;
       if (!this.hasLoaded || !previousPath.includes('gp-medical-record')) return true;
 
       return false;
