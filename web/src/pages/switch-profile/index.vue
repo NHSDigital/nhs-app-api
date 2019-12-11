@@ -19,7 +19,11 @@
             {{ currentProfile.gpPracticeName }}
           </span>
         </div>
+      </div>
+    </div>
 
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
         <generic-button id="switch-profile-button" :button-classes="['nhsuk-button',
                                                                      'nhsuk-button--primary']"
                         @click.stop.prevent="switchProfileButtonClicked">
