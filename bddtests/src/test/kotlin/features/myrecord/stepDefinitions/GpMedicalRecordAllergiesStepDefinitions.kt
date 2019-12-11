@@ -122,7 +122,6 @@ open class GpMedicalRecordAllergiesStepDefinitions : AbstractDemographicsStepDef
 
     @Then("^I see the expected allergies displayed with unknown date for the first result - GP Medical Record$")
     fun thenISeeTheExpectedAllergiesDisplayedWithUnknownDateForFirstResultGpMedicalRecord() {
-
         val expectedAllergies =
                 AllergiesData.getEmisAllergyRecordsWhereTheFirstRecordHasNoEffectiveDate().medicalRecord.allergies
 

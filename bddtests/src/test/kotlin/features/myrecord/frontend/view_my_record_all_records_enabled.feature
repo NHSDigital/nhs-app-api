@@ -1,5 +1,4 @@
 @my-record
-@smoketest
 Feature: View My Medical Record Information - All records enabled
 
   Scenario: A EMIS user can see that the medical record sections are collapsed when directed to medical records page

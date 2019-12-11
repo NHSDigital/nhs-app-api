@@ -22,9 +22,6 @@ Feature: View My Medical Record Information - Combined Frontend
     Examples:
       | GP System |
       | EMIS      |
-  @smoketest
-    Examples:
-      | GP System |
       | TPP       |
 
   Scenario Outline: A <GP System> user can view acute, current and discontinued medications
@@ -42,9 +39,6 @@ Feature: View My Medical Record Information - Combined Frontend
       | GP System |
       | EMIS      |
       | TPP       |
-  @smoketest
-    Examples:
-      | GP System |
       | VISION    |
 
   Scenario Outline: A <GP System> user can view immunisations and problems
@@ -60,12 +54,8 @@ Feature: View My Medical Record Information - Combined Frontend
     Examples:
       | GP System |
       | EMIS      |
-  @smoketest
-    Examples:
-      | GP System |
       | VISION    |
 
-  @smoketest
   Scenario: A VISION user can view allergies and demographics
     Given the my record wiremocks are initialised for VISION
     And the GP Practice has enabled demographics functionality

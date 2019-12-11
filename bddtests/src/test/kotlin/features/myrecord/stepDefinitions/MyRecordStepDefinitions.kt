@@ -5,16 +5,20 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.MyRecordFactory
+import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
+import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.microtest.myRecord.MyRecordModuleCounts
 import mocking.microtest.myRecord.TestResultOptions
+import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
@@ -41,6 +45,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Steps
     lateinit var login: LoginSteps
     @Steps
+    lateinit var home: HomeSteps
+    @Steps
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var webHeader: WebHeader
@@ -57,10 +63,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^the my record wiremocks are initialised for (.*)$")
     fun givenMyRecordWiremocksAreInitialisedFor(gpSystem: String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        SerenityHelpers.setGpSupplier(supplier)
-        setPatientToDefaultFor(supplier)
-        val patient = SerenityHelpers.getPatient()
+        val patient = setSupplierAndPatientForV1MedicalRecord(gpSystem)
+        val supplier = SerenityHelpers.getGpSupplier()
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
@@ -80,8 +84,16 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^I am on my record information page$")
     fun givenIAmOnTheGpMedicalRecordInformationPage() {
+        val patient = SerenityHelpers.getPatient()
         browser.goToApp()
-        login.using(SerenityHelpers.getPatient())
+
+        DemographicsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enableForPatientProxyAccounts(patient)
+
+        login.using(patient)
+        home.waitForLoginToCompleteSuccessfully()
+
         nav.select(NavBarNative.NavBarType.MY_RECORD)
         myRecordWarningPage.clickWarningContinue()
         myRecordInfoPage.locatorMethods.waitForNativeStepToComplete()
@@ -152,18 +164,17 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^the my record wiremocks return a 403 for (.*)$")
     fun givenMyRecordWiremocksReturnA403For(gpSystem: String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        SerenityHelpers.setGpSupplier(supplier)
-        setPatientToDefaultFor(supplier)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
-        MyRecordFactory.getForSupplier(supplier).respondWithForbidden(SerenityHelpers.getPatient())
+        val patient = setSupplierAndPatientForV1MedicalRecord(gpSystem)
+        val supplier = SerenityHelpers.getGpSupplier()
+
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        MyRecordFactory.getForSupplier(supplier).respondWithForbidden(patient)
     }
 
     @Given("^the my record wiremocks are populated for (.*)$")
     fun givenMyRecordWiremocksArePopulatedFor(gpSystem: String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        setPatientToDefaultFor(supplier)
+        setSupplierAndPatientForV1MedicalRecord(gpSystem)
         givenMyRecordWiremocksArePopulatedForNoPatient(gpSystem)
     }
 
@@ -328,5 +339,15 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I click on the Back link on my records page$")
     fun iClickOnBackButtonOnMyRecordsPage(){
         myRecordInfoPage.clickOnBackLink()
+    }
+
+    fun setSupplierAndPatientForV1MedicalRecord(gpSystem: String): Patient{
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
+                listOf(ServiceJourneyRulesConfiguration("medical record version", "1")))
+        SerenityHelpers.setPatient(patient)
+        SerenityHelpers.setGpSupplier(supplier)
+
+        return patient
     }
 }

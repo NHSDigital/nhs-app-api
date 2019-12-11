@@ -3,7 +3,9 @@ package features.myrecord.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
+import features.myrecord.factories.DemographicsFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
@@ -22,6 +24,8 @@ open class MyRecordWarningStepDefinitions : AbstractDemographicsStepDefinitions(
     @Steps
     lateinit var login: LoginSteps
     @Steps
+    lateinit var home: HomeSteps
+    @Steps
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var myRecordStepDefinitions: MyRecordStepDefinitions
@@ -32,8 +36,15 @@ open class MyRecordWarningStepDefinitions : AbstractDemographicsStepDefinitions(
 
     @Given("^I am on the record warning page$")
     fun givenIAmOnTheRecordWarningPage() {
+        val patient = SerenityHelpers.getPatient()
         browser.goToApp()
-        login.using(SerenityHelpers.getPatient())
+
+        DemographicsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enableForPatientProxyAccounts(patient)
+
+        login.using(patient)
+        home.waitForLoginToCompleteSuccessfully()
         nav.select(NavBarNative.NavBarType.MY_RECORD)
     }
 

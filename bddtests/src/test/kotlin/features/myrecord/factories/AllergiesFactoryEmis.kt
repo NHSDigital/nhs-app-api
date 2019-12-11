@@ -3,6 +3,7 @@ package features.myrecord.factories
 import mocking.data.myrecord.AllergiesData
 import models.Patient
 import worker.models.myrecord.AllergyItem
+import worker.models.myrecord.Date
 
 class AllergiesFactoryEmis: AllergiesFactory() {
 
@@ -21,6 +22,8 @@ class AllergiesFactoryEmis: AllergiesFactory() {
     }
 
     override fun getExpectedAllergies(): List<AllergyItem> {
-        throw UnsupportedOperationException("Not yet implemented")
+        return AllergiesData.getEmisAllergiesData(2).medicalRecord.allergies.map {
+            element -> AllergyItem(element.term, Date(element.effectiveDate.value, element.effectiveDate.datePart))
+        }
     }
 }

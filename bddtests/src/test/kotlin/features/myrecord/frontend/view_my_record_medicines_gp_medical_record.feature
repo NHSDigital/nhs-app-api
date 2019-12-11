@@ -18,13 +18,15 @@ Feature: View My Medicines - Medical Record v2
     When I click the Back link
     And I click the Back link
     Then I am on the medical record v2 page
-
-  Examples:
-    | GP System |
-    | EMIS      |
-    | VISION    |
-    | TPP       |
-    | MICROTEST |
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | MICROTEST |
+  @smoketest
+    Examples:
+      | GP System |
+      | VISION    |
 
   Scenario Outline: A <GP System> user has no medicines on their record - GP Medical Record
     Given I am a <GP System> user setup to use medical record version 2

@@ -30,7 +30,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^an error occurs retrieving the test result detail$")
     fun givenAnErrorOccursGettingTestResultDetailForTpp() {
-        setPatientToDefaultFor(Supplier.TPP)
+        val gpSystem = Supplier.TPP
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
 
         mockingClient.forTpp {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
@@ -41,7 +42,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the test result details are retrieved successfully$")
     fun successGettingTestResultDetailForTpp() {
-        setPatientToDefaultFor(Supplier.TPP)
+        val gpSystem = Supplier.TPP
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
 
         mockingClient.forTpp {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
@@ -53,7 +55,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has test result details$")
     fun givenTestResultDetailIsRetrievedSuccessfully() {
-        setPatientToDefaultFor(Supplier.TPP)
+        val gpSystem = Supplier.TPP
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
 
         mockingClient.forTpp {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
@@ -70,7 +73,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has a single test result with multiple child values with no ranges for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithNoRangesFor() {
-        setPatientToDefaultFor(Supplier.EMIS)
+        val gpSystem = Supplier.EMIS
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData
@@ -80,7 +85,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has a single test result with single child values with no ranges for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRangesFor() {
-        setPatientToDefaultFor(Supplier.EMIS)
+        val gpSystem = Supplier.EMIS
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
@@ -89,7 +96,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the EMIS GP Practice has two test results where the second record has no date$")
     fun givenTheEmisGpPracticeHasATestResultWithNoDate() {
-        setPatientToDefaultFor(Supplier.EMIS)
+        val gpSystem = Supplier.EMIS
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getTwoTestResultsWhereTheSecondRecordHasNoDate())
@@ -98,7 +107,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has a single test result with multiple child values with ranges for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRangesFor() {
-        setPatientToDefaultFor(Supplier.EMIS)
+        val gpSystem = Supplier.EMIS
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
@@ -107,7 +118,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has a single test result with single child value with A range for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithRangesFor() {
-        setPatientToDefaultFor(Supplier.EMIS)
+        val gpSystem = Supplier.EMIS
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
@@ -117,7 +130,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Given("^the GP Practice has test results enabled " +
             "and a single test result exists with no child values or range for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRangeFor() {
-        setPatientToDefaultFor(Supplier.EMIS)
+        val gpSystem = Supplier.EMIS
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
@@ -126,7 +141,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has a single test result with no child values and range for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesAndARangeFor() {
-        setPatientToDefaultFor(Supplier.EMIS)
+        val gpSystem = Supplier.EMIS
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
@@ -136,28 +153,32 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Given("^I do not have access to test results$")
     fun givenIDoNotHaveAccessToTestResults() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         TestResultsFactory.getForSupplier(gpSystem).noAccess(SerenityHelpers.getPatient())
     }
 
     @Given("^I have no test results$")
     fun givenIHaveNoTestResults() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         TestResultsFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^an error occurred retrieving the test results$")
     fun givenAnErrorOccurredRetrievingTestResults() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         TestResultsFactory.getForSupplier(gpSystem).errorRetrieving(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has disabled test results functionality$")
     fun butTheGPPracticeHasDisabledTestResultsFunctionality() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         TestResultsFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
     }
 
@@ -179,7 +200,6 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Then("I see the appropriate error message for retrieving test result detail")
     fun thenISeeTheAppropriateErrorMessageForAMyRecordServerError() {
-
         val pageHeader = myRecordDetailedTestResultPage.serverErrorPageHeader
         val header = myRecordDetailedTestResultPage.serverErrorHeader
         val message = myRecordDetailedTestResultPage.serverErrorMessage

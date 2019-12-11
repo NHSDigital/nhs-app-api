@@ -1,6 +1,7 @@
 @my-record
 Feature: View My Allergies Information - Medical Record v2
 
+  @smoketest
   Scenario: A VISION user has a drug and non drug allergy record - GP Medical Record
     Given I am a VISION user setup to use medical record version 2
     And the GP Practice has enabled allergies functionality and has a drug and non drug allergy record for VISION - GP Medical Record

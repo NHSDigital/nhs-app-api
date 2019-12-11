@@ -11,10 +11,10 @@ private const val ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED = "A22222"
 private const val ODSCODE_GP_AT_HAND_CONFIGURATIONS = "A44444"
 private const val TPP_ONLINE_CONSULTATIONS_DISABLED = "A55555"
 private const val VISION_ONLINE_CONSULTATIONS_DISABLED = "A66666"
-private const val EMIS_GP_MEDICAL_RECORD_V2 = "A80001"
-private const val TPP_GP_MEDICAL_RECORD_V2 = "A80002"
-private const val VISION_GP_MEDICAL_RECORD_V2 = "A80003"
-private const val MICROTEST_GP_MEDICAL_RECORD_V2 = "A80004"
+private const val EMIS_GP_MEDICAL_RECORD_V1 = "A80001"
+private const val TPP_GP_MEDICAL_RECORD_V1 = "A80002"
+private const val VISION_GP_MEDICAL_RECORD_V1 = "A80003"
+private const val MICROTEST_GP_MEDICAL_RECORD_V1 = "A80004"
 
 class ServiceJourneyRulesMapper {
 
@@ -45,19 +45,19 @@ class ServiceJourneyRulesMapper {
                                 JourneyType.MESSAGES_ENABLED,
                                 JourneyType.USER_INFO_ENABLED),
 
-                // Medical Record V2
+                // Medical Record V1
                 GpInformation(Supplier.VISION, VISION_ONLINE_CONSULTATIONS_DISABLED) to
                         EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED),
 
-                // Medical Record V2
-                GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V2) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2),
-                GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V2) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2),
-                GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V2) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2),
-                GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V2) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_2)
+                // Medical Record V1
+                GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1)
         )
 
         fun findPatientForConfiguration(gpSystem: Supplier?, journeyType:JourneyType): Patient {
@@ -105,7 +105,7 @@ class ServiceJourneyRulesMapper {
             APPOINTMENTS_INFORMATICA,
             MEDICAL_RECORD_GPATHAND,
             MEDICAL_RECORD_IM1,
-            MEDICAL_RECORD_VERSION_2,
+            MEDICAL_RECORD_VERSION_1,
             MESSAGES_DISABLED,
             MESSAGES_ENABLED,
             NOTIFICATIONS_DISABLED,

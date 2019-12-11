@@ -31,6 +31,7 @@
                  class="nhsuk-u-margin-bottom-0">
                 <a :href="getTestResultPath(testResult.id)"
                    :class="$style.viewTestResult"
+                   data-purpose="record-item-detail"
                    tabindex="0"
                    @click="activateTestResult(testResult.id, $event)"
                    @keypress="onKeyDown(testResult.id, $event)">

@@ -1,6 +1,6 @@
 <template>
   <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning()">
-    <div v-if="showTemplate" id="mainDiv" data-sid="user-info-details">
+    <div v-if="showTemplate && !isProxying" id="mainDiv" data-sid="user-info-details">
       <div v-if="showPatientDetails">
         <h2 data-sid="patient-name"
             :class="['nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3 ' +
@@ -40,6 +40,9 @@
       </div>
     </div>
 
+    <proxy-patient-details v-else-if="isProxying"
+                           :proxy-patient-details="$store.state.linkedAccounts.actingAsUser"/>
+
     <div v-if="showTemplate && hasRecordAccess()" :class="$style.summaryRecordContainer"
          data-purpose="medical-record-menu">
       <menu-item-list>
@@ -73,7 +76,10 @@
     </div>
     <div v-else class="pull-content">
       <div v-if="hasLoaded">
-        <div id="errorMsg" :class="[$style['record-content'], 'nhsuk-u-margin-bottom-6']">
+        <div v-if="isProxying" :class="[$style['info'], 'nhsuk-u-margin-top-3']">
+          <shutter :feature="'medicalRecord'" />
+        </div>
+        <div v-else id="errorMsg" :class="[$style['record-content'], 'nhsuk-u-margin-bottom-6']">
           <p><strong style="margin-top: 0.5em;">
             {{ $t( supplier === 'MICROTEST' ?
               'my_record.noRecordsOrNoAccess.warningHeader' :
@@ -104,6 +110,8 @@ import MenuItemList from '@/components/MenuItemList';
 import Glossary from '@/components/Glossary';
 import Warning from '@/components/my-record/Warning';
 import agreedToMedicalWarning from '@/lib/sessionStorage';
+import Shutter from '@/components/linked-profiles/Shutter';
+import ProxyPatientDetails from '@/components/my-record/SharedComponents/ProxyPatientDetails';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 const PATIENTDETAILS = 'patientdetails';
@@ -122,11 +130,14 @@ export default {
     ScrMicrotestGpRecord,
     MenuItemList,
     Warning,
+    Shutter,
+    ProxyPatientDetails,
   },
   data() {
     return {
       PATIENTDETAILS,
       hasAgreed: false,
+      isProxying: this.$store.getters['session/isProxying'],
     };
   },
   computed: {

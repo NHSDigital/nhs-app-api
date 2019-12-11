@@ -1,8 +1,5 @@
 <template>
-  <div v-if="!isCollapsed" :class="[$style['record-content'],
-                                    'nhsuk-u-padding-bottom-3',
-                                    getCollapseState,
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]"
+  <div class="nhsuk-u-padding-bottom-3"
        data-sid="proxy-patient-details"
        :aria-hidden="isCollapsed">
     <p data-purpose="record-item-header"
@@ -36,15 +33,8 @@ export default {
       type: Object,
       default: null,
     },
-    isCollapsed: {
-      type: Boolean,
-      default: true,
-    },
   },
   computed: {
-    getCollapseState() {
-      return this.isCollapsed ? this.$style.closed : this.$style.opened;
-    },
     ...mapGetters({
       patientInfo: 'myRecord/patientDemographics',
     }),
@@ -52,7 +42,3 @@ export default {
 };
 
 </script>
-
-<style module lang="scss" scoped>
-  @import '../../../style/medrecordcontent';
-</style>

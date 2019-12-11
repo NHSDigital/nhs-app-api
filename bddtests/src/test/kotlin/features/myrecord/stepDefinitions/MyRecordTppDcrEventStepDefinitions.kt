@@ -20,7 +20,6 @@ open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has multiple dcr events for TPP$")
     fun givenTheGpPracticeHasMultipleDcrEventsForTpp() {
-        setPatientToDefaultFor(Supplier.TPP)
         mockingClient.forTpp {
             myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
@@ -29,7 +28,6 @@ open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the GP Practice has disabled dcr events functionality for TPP$")
     fun givenThePatientDoesNotHaveAccessToDcrEventsForTPP() {
-        setPatientToDefaultFor(Supplier.TPP)
         mockingClient.forTpp {
             myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
@@ -42,7 +40,8 @@ open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^an error occurred retrieving the dcr events from TPP$")
     fun givenAnErrorOccurredRetrievingDcrEventsFromTPP() {
-        setPatientToDefaultFor(Supplier.TPP)
+        val gpSystem = Supplier.TPP
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
         mockingClient.forTpp {
             myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithServiceNotAvailableException()

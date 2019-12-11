@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -136,6 +137,15 @@ open class GpMedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
         assertEquals("Expected test results", count, testResultsPage.getTestResultsElements().count())
     }
 
+    @Then("^I see the correct number of test results for current the supplier - GP Medical Record$")
+    fun thenISeeTheCorrentNumberOfTestResults() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        if(gpSystem == Supplier.EMIS)
+            thenISeeMultipleTestResultsGpMedicalRecord(Companion.emisDefaultTestResultsCount)
+        else if(gpSystem == Supplier.TPP)
+            thenISeeMultipleTestResultsGpMedicalRecord(Companion.tppDefaultTestResultsCount)
+    }
+
     @Then("^The second test result record has an unknown date - GP Medical Record$")
     fun thenTheSecondResultHasAnUnknownDateGpMedicalRecord() {
         val dateLabel = testResultsPage.getTestResultsElements()[1].label
@@ -185,5 +195,10 @@ open class GpMedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
                     .respondWithSuccess(TestResultsData
                             .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_FOUR))
         }
+    }
+
+    companion object {
+        private const val emisDefaultTestResultsCount = 2
+        private const val tppDefaultTestResultsCount = 6
     }
 }

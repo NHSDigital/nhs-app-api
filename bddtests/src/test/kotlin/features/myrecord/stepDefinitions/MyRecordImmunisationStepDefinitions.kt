@@ -27,29 +27,32 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
     @Given("^the GP Practice has enabled immunisations functionality and multiple immunisation records exist$")
     fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleRecordsExist() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
-        ImmunisationsFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient())
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
+        ImmunisationsFactory.getForSupplier(gpSystem).enabledWithRecords(patient)
     }
 
     @Given("^no immunisation records exist for the patient$")
     fun givenNoImmunisationRecordsExistForThePatient() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
+
         ImmunisationsFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
     @Given("^the user does not have access to view immunisations$")
     fun givenUserDoesNotHaveAccessToViewImmunisations() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
-        ImmunisationsFactory.getForSupplier(gpSystem).noAccess(SerenityHelpers.getPatient())
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
+        ImmunisationsFactory.getForSupplier(gpSystem).noAccess(patient)
     }
 
     @Given("^there is an error retrieving immunisations data$")
     fun givenThereIsAnErrorRetrievingImmunisationsData() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
-        ImmunisationsFactory.getForSupplier(gpSystem).errorRetrieving(SerenityHelpers.getPatient())
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
+        ImmunisationsFactory.getForSupplier(gpSystem).errorRetrieving(patient)
     }
 
     @When("^I get the users immunisations$")
@@ -127,9 +130,11 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
 
     @Given("^the EMIS GP Practice has two immunisation results where the first record has no date$")
     fun givenTheEmisGpPracticeHasAnImmunisationResultWithNoDate() {
-        setPatientToDefaultFor(Supplier.EMIS)
+        val gpSystem = Supplier.EMIS
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         mockingClient.forEmis {
-            myRecord.immunisationsRequest(SerenityHelpers.getPatient())
+            myRecord.immunisationsRequest(patient)
                     .respondWithSuccess(ImmunisationsData.getTwoImmunisationResultsWhereTheFirstRecordHasNoDate())
         }
     }

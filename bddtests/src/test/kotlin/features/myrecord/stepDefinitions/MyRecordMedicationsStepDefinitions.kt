@@ -30,32 +30,36 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
     @Given("^the GP Practice has enabled medications functionality$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionality() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
-        MedicationsFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient())
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
+        MedicationsFactory.getForSupplier(gpSystem).enabledWithRecords(patient)
     }
 
     @Given("^the GP Practice has enabled medication functionality and the patient has no medications$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityAndPatientHasNoMedications() {
         val gpSystem = SerenityHelpers.getGpSupplier()
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         val factory = MedicationsFactory.getForSupplier(gpSystem)
-        factory.enabledWithBlankRecord(SerenityHelpers.getPatient())
+        factory.enabledWithBlankRecord(patient)
         factory.getResult()
     }
 
     @Given("^the GP Practice has disabled medications functionality$")
     fun butTheGPPracticeHasDisabledMedicationsFunctionality() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         when (gpSystem) {
             Supplier.EMIS -> {
                 mockingClient.forEmis {
-                    myRecord.medicationsRequest(SerenityHelpers.getPatient())
+                    myRecord.medicationsRequest(patient)
                             .respondWithExceptionWhenNotEnabled()
                 }
             }
             Supplier.TPP -> {
                 mockingClient.forTpp {
-                    myRecord.viewPatientOverviewPost(SerenityHelpers.getPatient().tppUserSession!!)
+                    myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                                     "Requested record access is disabled by the practice",
                                     "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
@@ -67,7 +71,6 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the EMIS GP Practice has acute medication results where the first record has no date$")
     fun theEmisGpPracticeHasAcuteMedicationResultsWhereTheFirstRecordHasNoDate() {
-        setPatientToDefaultFor(Supplier.EMIS)
         val patient = SerenityHelpers.getPatient()
 
         mockingClient.forEmis {
@@ -100,7 +103,6 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the EMIS GP Practice has current repeat medication results where the first record has no date$")
     fun theEmisGpPracticeHasCurrentRepeatMedicationResultsWhereTheFirstRecordHasNoDate() {
-        setPatientToDefaultFor(Supplier.EMIS)
         val patient = SerenityHelpers.getPatient()
 
         mockingClient.forEmis {
@@ -134,7 +136,6 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Given("^the EMIS GP Practice has discontinued repeat medication results where the first record has no date$")
     fun theEmisGpPracticeHasDiscontinuedRepeatMedicationResultsWhereTheFirstRecordHasNoDate() {
-        setPatientToDefaultFor(Supplier.EMIS)
         val patient = SerenityHelpers.getPatient()
         mockingClient.forEmis {
             myRecord.medicationsRequest(patient)

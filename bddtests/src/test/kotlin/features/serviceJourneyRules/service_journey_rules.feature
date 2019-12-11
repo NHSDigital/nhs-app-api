@@ -56,12 +56,10 @@ Feature: Service Journey Rules Frontend
       | medical record     | im1       |
     And I am logged in
     When I retrieve the 'GP at Hand My Record' page directly
-    Then I am redirected to the 'My Record' page
+    Then I am redirected to the 'GP Medical Record' page
 
-  Scenario: A user with medical record configured to medical records v2 navigates from the navigation panel.
-    Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value     |
-      | medical record version    | 2       |
+  Scenario: A user with medical record configured to medical records v2 navigates from the navigation panel
+    Given I am a EMIS user setup to use medical record version 2
     And I am logged in
     When I retrieve the 'My Record' page directly
     Then I am redirected to the 'My GP medical record' page

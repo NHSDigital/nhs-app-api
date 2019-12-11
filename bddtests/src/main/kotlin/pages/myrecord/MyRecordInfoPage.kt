@@ -34,7 +34,7 @@ class MyRecordInfoPage : HybridPageObject() {
 
     private val noSummaryCareAccessMessage =
             HybridPageElement(
-                    webDesktopLocator = "//div[@id='mainDiv']//div[@id='errorMsg']",
+                    webDesktopLocator = "//div[@id='errorMsg']",
                     androidLocator = null,
                     page = this)
 

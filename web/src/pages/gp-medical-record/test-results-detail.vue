@@ -5,14 +5,13 @@
                                       'pull-content',
                                       !$store.state.device.isNativeApp && $style.desktopWeb]">
       <dcr-error-no-access-gp-record
-        v-if="!myRecord.testResults.markup"
-        :has-errored="myRecord.record.testResults.hasErrored"
-        :has-access="myRecord.record.testResults.hasAccess"
-        :has-undetermined-access="myRecord.record.testResults.hasUndeterminedAccess"/>
+        v-if="showError"
+        :has-errored="testResults.hasErrored"
+        :has-access="testResults.hasAccess"/>
       <Card v-else :class="$style['vision-test-results', 'test-result-content']">
-        <span v-html="myRecord.testResults.markup"/>
+        <span v-html="markup"/>
       </Card>
-      <glossary v-if="myRecord.testResults.markup"/>
+      <glossary v-if="markup"/>
       <desktopGenericBackLink
         v-if="!$store.state.device.isNativeApp"
         class="nhsuk-u-margin-top-3"
@@ -44,12 +43,16 @@ export default {
       backPath: MYRECORD.path,
     };
   },
+  computed: {
+    showError() {
+      return !this.markup;
+    },
+  },
   async asyncData({ store }) {
-    if (!store.state.myRecord.testResults) {
-      await store.dispatch('myRecord/loadTestResults');
-    }
+    await store.dispatch('myRecord/loadTestResults');
     return {
-      myRecord: store.state.myRecord,
+      markup: store.state.myRecord.testResults.markup,
+      testResults: store.state.myRecord.record.testResults,
     };
   },
   methods: {

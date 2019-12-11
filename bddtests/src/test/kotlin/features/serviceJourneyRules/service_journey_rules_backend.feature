@@ -71,9 +71,7 @@ Feature: Service Journey Rules Backend
     And the service journey rules response will have prescriptions set to gpAtHand
 
   Scenario: API call for SJR can return a response with medical records configured to version 2
-    Given I am a EMIS user where the journey configurations are:
-      | Journey                 | Value     |
-      | medical record version  | 2         |
+    Given I am a EMIS user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     When I request the service journey rules for my ODS Code
     Then I receive an "Ok" success code

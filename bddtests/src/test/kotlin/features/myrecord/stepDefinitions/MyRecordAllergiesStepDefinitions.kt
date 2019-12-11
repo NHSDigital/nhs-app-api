@@ -33,14 +33,15 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
     @Given("^the GP Practice has enabled allergies functionality and the patient has \"(.*)\" allergies$")
     fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndPatientHasSomeAllergies(count: Int) {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
         AllergiesFactory.getForSupplier(gpSystem).enabledWithRecords(SerenityHelpers.getPatient(), count)
     }
 
     @Given("^the GP Practice has enabled allergies functionality and has a drug and non drug allergy " +
             "record for VISION$")
     fun theGPPracticeHasEnabledAllergiesFunctionalityAndThePatientHasADrugAndNonDrugAllergyRecord() {
-        setPatientToDefaultFor(Supplier.VISION)
+        val gpSystem = Supplier.VISION
+        MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         MyRecordVisionMocker(mockingClient).generatePatientDataResponse(
                 SerenityHelpers.getPatient(),
                 allergiesView,
@@ -52,8 +53,8 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
             "allergies with different date formats")
     fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndHasFiveDifferentAllergiesWithDifferentDateFormats() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
-        val patient = SerenityHelpers.getPatient()
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         when (gpSystem) {
             Supplier.EMIS ->
                 mockingClient.forEmis {
@@ -72,8 +73,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
 
     @Given("^the EMIS GP Practice has two allergies results where the first record has no date$")
     fun givenTheEMISGPPracticeHasTwoAllergiesResultsWhereTheFirstRecordHasNoDate() {
-        setPatientToDefaultFor(Supplier.EMIS)
-        val patient = SerenityHelpers.getPatient()
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(Supplier.EMIS.supplierName)
 
         mockingClient.forEmis {
             myRecord.allergiesRequest(patient)
@@ -84,15 +84,18 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
     @Given("the GP Practice has disabled allergies functionality")
     fun butTheGPPracticeHasDisabledAllergiesFunctionalityForService() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
-        AllergiesFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
+        AllergiesFactory.getForSupplier(gpSystem).disabled(patient)
     }
 
     @Given("^there is an unknown error getting allergies for VISION$")
     fun thereIsAnUnknownErrorGettingAllergiesFor() {
-        setPatientToDefaultFor(Supplier.VISION)
+        val gpSystem = Supplier.VISION
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         MyRecordVisionMocker(mockingClient).generatePatientDataResponse(
-                SerenityHelpers.getPatient(),
+                patient,
                 allergiesView,
                 VisionConstants.htmlResponseFormat )
         { request -> request.respondWithUnknownError() }

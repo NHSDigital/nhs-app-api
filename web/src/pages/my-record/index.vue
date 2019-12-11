@@ -17,6 +17,7 @@
         <h2 class="nhsuk-heading-s nhsuk-u-padding-0 nhsuk-u-margin-0">
           {{ $t('my_record.patientInfo.sectionHeader') }}</h2>
       </analytics-tracked-tag>
+
       <div :class="[$style.patientDetailsContainer, $style['nhsuk-u-padding-bottom-3']]">
         <patient-details v-if="!isProxying" :is-collapsed="isPatientDetailsCollapsed"
                          :patient-details="$store.state.myRecord.patientDetails"/>
@@ -95,7 +96,7 @@ import Warning from '@/components/my-record/Warning';
 import agreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import Shutter from '@/components/linked-profiles/Shutter';
-import ProxyPatientDetails from '../../components/my-record/SharedComponents/ProxyPatientDetails';
+import ProxyPatientDetails from '@/components/my-record/SharedComponents/ProxyPatientDetails';
 
 const PATIENTDETAILS = 'patientdetails';
 

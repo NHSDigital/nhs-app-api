@@ -9,7 +9,8 @@ class MyRecordDataStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Given("^the GP Practice has enabled all medical records for the patient$")
     fun givenTheGPPracticeHasEnabledAllMedicalRecordsForThePatient() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
-        MyRecordFactory.getForSupplier(gpSystem).enabledWithAllRecords(SerenityHelpers.getPatient())
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
+        MyRecordFactory.getForSupplier(gpSystem).enabledWithAllRecords(patient)
     }
 }

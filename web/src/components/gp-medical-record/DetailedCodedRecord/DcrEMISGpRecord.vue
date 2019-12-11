@@ -52,7 +52,7 @@
                id="documents"
                data-purpose="documents"
                :href="documentsPath"
-               :header-tag="'h2'"
+               header-tag="h2"
                :text="$t('my_record.documents.sectionHeader')"
                :aria-label="
                  getAriaLabel($t('my_record.documents.sectionHeader'),

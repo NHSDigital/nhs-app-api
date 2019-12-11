@@ -4,7 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.DocumentsFactory
-import mocking.defaults.EmisMockDefaults
 import models.ExpectedDocument
 import org.junit.Assert
 import pages.ErrorPage
@@ -35,35 +34,35 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
     fun thePatientHasNoAccessToDocuments() {
         DocumentsFactory
             .getForSupplier(SerenityHelpers.getGpSupplier())
-            .disabled(EmisMockDefaults.patientEmis)
+            .disabled(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has no documents$")
     fun thePracticeHasNoDocuments() {
         DocumentsFactory
             .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithNoDocuments(EmisMockDefaults.patientEmis)
+            .enabledWithNoDocuments(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has multiple documents$")
     fun theGpPracticeHasMultipleDocuments() {
         DocumentsFactory
             .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithDocuments(EmisMockDefaults.patientEmis)
+            .enabledWithDocuments(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has multiple large documents$")
     fun theGpPracticeHasMultipleLargeDocuments() {
         DocumentsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabledWithDocumentsWithNoNameOrTerm(EmisMockDefaults.patientEmis, true)
+                .enabledWithDocumentsWithNoNameOrTerm(SerenityHelpers.getPatient(), true)
     }
 
     @Given("^the GP Practice has multiple documents with no name or term$")
     fun theGpPracticeHasMultipleDocumentsWithNoNameOrTerm() {
         DocumentsFactory
             .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithDocumentsWithNoNameOrTerm(EmisMockDefaults.patientEmis)
+            .enabledWithDocumentsWithNoNameOrTerm(SerenityHelpers.getPatient())
     }
 
     @Given("^the GP Practice has multiple documents where one has an invalid id$")
@@ -71,7 +70,7 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
         theGpPracticeHasMultipleDocuments()
         DocumentsFactory
             .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithDocuments(EmisMockDefaults.patientEmis, mockUnavailableDocument = true)
+            .enabledWithDocuments(SerenityHelpers.getPatient(), mockUnavailableDocument = true)
     }
 
     @When("^I select to view my documents")

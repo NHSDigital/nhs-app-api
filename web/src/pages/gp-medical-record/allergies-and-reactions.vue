@@ -10,7 +10,9 @@
         <MedicalRecordCardGroupItem
           v-for="(allergy, index) in orderedAllergies"
           :key="`allergy.name-${index}`"
-          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2">
+          class="nhsuk-grid-column-full nhsuk-u-padding-bottom-2"
+          data-purpose="record-item"
+        >
           <Card data-label="allergies-and-reactions">
             <div data-purpose="allergies-and-reactions-card">
               <p v-if="allergy.date && allergy.date.value" data-purpose="record-item-header"

@@ -7,8 +7,6 @@ import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.MyRecordFactory
-import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
-import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -44,11 +42,10 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     @Given("^I am a (\\w+) user setup to use medical record version 2$")
     fun iAmAUserWishingToRegisterTheirDeviceForPushNotifications(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
-                listOf(ServiceJourneyRulesConfiguration("medical record version", "2")))
-
+        setPatientToDefaultFor(supplier)
+        val patient = SerenityHelpers.getPatient()
         SerenityHelpers.setGpSupplier(supplier)
-        SerenityHelpers.setPatient(patient)
+
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
         MyRecordFactory.getForSupplier(supplier).enabledWithBlankRecord(patient)
@@ -121,6 +118,11 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     @When("I click the (.*) link on my record - GP Medical Record")
     fun iClickTheSectionLinkOnMyRecordPage(linkText: String) {
         myRecordInfoPage.clickMedicalRecordSectionLink(linkText)
+    }
+
+    @Then("^I see the (.*) section link on my record - GP Medical Record$")
+    fun thenISeeTheSectionLinkOnMyRecord(linkText: String) {
+        myRecordInfoPage.assertMedicalRecordSectionLinkExists(linkText)
     }
 
     @Then("^I see an error occurred message on My Record - GP Medical Record$")

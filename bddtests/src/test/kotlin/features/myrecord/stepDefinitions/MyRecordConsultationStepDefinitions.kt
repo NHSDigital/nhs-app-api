@@ -8,7 +8,6 @@ import cucumber.api.java.en.When
 import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.data.myrecord.ConsultationsData
 import mocking.data.myrecord.TppDcrData
-import mocking.defaults.EmisMockDefaults
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
@@ -27,17 +26,18 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
     @Given("^the GP Practice has multiple consultations$")
     fun givenTheGpPracticeHasMultipleConsultationsFor() {
         val gpSystem = SerenityHelpers.getGpSupplier()
-        setPatientToDefaultFor(gpSystem)
+        val patient = SerenityHelpers.getPatient()
+
         when (gpSystem) {
             Supplier.EMIS -> {
                 mockingClient.forEmis {
-                    myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
+                    myRecord.consultationsRequest(patient)
                             .respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
                 }
             }
             Supplier.TPP -> {
                 mockingClient.forTpp {
-                    myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
+                    myRecord.patientRecordRequest(patient.tppUserSession!!)
                             .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
                 }
             }
@@ -47,15 +47,18 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
 
     @Given("^the Patient has no access to consultations$")
     fun givenTheGPPracticeHasNoAccessToConsultations() {
-        when (SerenityHelpers.getGpSupplier()) {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val patient = SerenityHelpers.getPatient()
+
+        when (gpSystem) {
             Supplier.EMIS -> {
                 mockingClient.forEmis {
-                    myRecord.consultationsRequest(EmisMockDefaults.patientEmis).respondWithExceptionWhenNotEnabled()
+                    myRecord.consultationsRequest(patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             Supplier.TPP -> {
                 mockingClient.forTpp {
-                    myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
+                    myRecord.patientRecordRequest(patient.tppUserSession!!)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                                     "You don&apos;t have access to this online service. " +
                                             "You can request access to this service at Kainos GP Demo Unit by " +
@@ -70,16 +73,19 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
 
     @Given("^the GP Practice has no consultations$")
     fun givenThePracticeHasNoConsultations() {
-        when (SerenityHelpers.getGpSupplier()) {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val patient = SerenityHelpers.getPatient()
+
+        when (gpSystem) {
             Supplier.EMIS -> {
                 mockingClient.forEmis {
-                    myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
+                    myRecord.consultationsRequest(patient)
                             .respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
                 }
             }
             Supplier.TPP -> {
                 mockingClient.forTpp {
-                    myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
+                    myRecord.patientRecordRequest(patient.tppUserSession!!)
                             .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
 
                 }
@@ -91,24 +97,29 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
 
     @Given("^the EMIS GP Practice has two consultations where the second record has no date$")
     fun givenThePracticeHasAConsultationWithNoDate(){
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val patient = MyRecordStepDefinitions().setSupplierAndPatientForV1MedicalRecord(gpSystem.supplierName)
+
         mockingClient.forEmis {
-            myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
+            myRecord.consultationsRequest(patient)
                     .respondWithSuccess(ConsultationsData.getTwoConsultationsWhereTheSecondRecordHasNoDate())
         }
     }
 
     @Given("^an error occurred retrieving the consultations$")
     fun givenAnErrorOccurredRetrievingTestResults() {
-        when (SerenityHelpers.getGpSupplier()) {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val patient = SerenityHelpers.getPatient()
+
+        when (gpSystem) {
             Supplier.EMIS -> {
                 mockingClient.forEmis {
-                    myRecord.consultationsRequest(EmisMockDefaults.patientEmis).respondWithNonDataAccessException()
+                    myRecord.consultationsRequest(patient).respondWithNonDataAccessException()
                 }
             }
             Supplier.TPP -> {
-                setPatientToDefaultFor(Supplier.TPP)
                 mockingClient.forTpp {
-                    myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
+                    myRecord.patientRecordRequest(patient.tppUserSession!!)
                             .respondWithServiceNotAvailableException()
                 }
 
@@ -121,6 +132,7 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
     fun whenIGetTheUsersMyRecordData() {
         try {
             val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .myRecord.getMyRecord(patientId)
 
