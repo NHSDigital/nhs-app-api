@@ -97,17 +97,17 @@ class KnownServicesTest : ResourceMockingClass() {
     }
 
     @Test
-    fun isLoginUrl_ReturnsFalseWhenLoginUrlHasAdditionalAQuery() {
-        val loginUrlWithExtraQuery = "http://10.0.2.2:3000/login?responseCode=102"
-        val result = testKnownServices.isLoginUrl(loginUrlWithExtraQuery)
-        Assert.assertFalse("Additional query responseCode=102 shouldn't in known Service", result)
+    fun isLoginUrl_ReturnsFalseWhenNotLoginUrl() {
+        val accountUrl = "http://10.0.2.2:3000/account"
+        val result = testKnownServices.isLoginUrl(accountUrl)
+        Assert.assertFalse(result)
     }
 
     @Test
     fun isLoginUrl_ReturnsTrueWhenLoginUrlHasNoQuery() {
         val loginUrl = "http://10.0.2.2:3000/login"
         val result = testKnownServices.isLoginUrl(loginUrl)
-        Assert.assertFalse(result)
+        Assert.assertTrue(result)
     }
     @Test
     fun findMatchingServiceInfo_resolvesToMatchingInternalPathOrClosestInternalThePath() {

@@ -208,10 +208,10 @@ class WebAppInterfaceTest {
     @Test
     fun onSessionExpiringTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterface.onSessionExpiring(10)
+        webAppInterface.onSessionExpiring()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).showExtendSessionDialogue(10)
+        verify(contextMock).showExtendSessionDialogue()
     }
 
     @Test

@@ -252,11 +252,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 webAppInterface.onLogout()
                 break
             case "onSessionExpiring":
-                var sessionDuration : Int? = message.body as? Int
-                if sessionDuration == nil {
-                    sessionDuration = 20
-                }
-                viewController.displayExtendSessionDialogue(sessionDuration: sessionDuration!)
+                viewController.displayExtendSessionDialogue()
                 break
             case "openAppSettings":
                 if #available(iOS 10.0, *) {

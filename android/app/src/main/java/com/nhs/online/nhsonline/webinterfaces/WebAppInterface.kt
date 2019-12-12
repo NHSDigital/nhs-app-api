@@ -91,9 +91,16 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
+    @Deprecated(message = "since 1.23.0 (NHSO-5818), here for backwards compatibility",
+            replaceWith = ReplaceWith(expression = "onSessionExpiring()"))
     fun onSessionExpiring(sessionDuration: Int) {
+        onSessionExpiring()
+    }
+
+    @JavascriptInterface
+    fun onSessionExpiring() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showExtendSessionDialogue")
-        activity.runOnUiThread { uiInteractor.showExtendSessionDialogue(sessionDuration) }
+        activity.runOnUiThread { uiInteractor.showExtendSessionDialogue() }
     }
 
     @JavascriptInterface

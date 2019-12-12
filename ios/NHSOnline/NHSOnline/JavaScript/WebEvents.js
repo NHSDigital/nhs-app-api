@@ -44,8 +44,8 @@ window.nativeApp.onLogout = function() {
     window.webkit.messageHandlers.onLogout.postMessage(null);
 };
 
-window.nativeApp.onSessionExpiring = function(sessionDuration) {
-    window.webkit.messageHandlers.onSessionExpiring.postMessage(sessionDuration);
+window.nativeApp.onSessionExpiring = function() {
+    window.webkit.messageHandlers.onSessionExpiring.postMessage(null);
 };
 
 window.nativeApp.openAppSettings = function() {

@@ -407,12 +407,12 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         }
     }
 
-    override fun showExtendSessionDialogue(sessionDuration: Int) {
+    override fun showExtendSessionDialogue() {
         logger.info("Entering showExtendSessionDialogue")
 
         val sessionExtendCallback = { appWebInterface.extendSession() }
         val logoutCallback = { appWebInterface.logout() }
-        appDialogs.showExtendSessionDialogue(sessionDuration, sessionExtendCallback, logoutCallback)
+        appDialogs.showExtendSessionDialogue(sessionExtendCallback, logoutCallback)
     }
 
     override fun showProgressDialog() {

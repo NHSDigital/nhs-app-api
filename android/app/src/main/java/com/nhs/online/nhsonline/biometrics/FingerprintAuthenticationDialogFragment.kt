@@ -53,8 +53,8 @@ fun createFingerprintAuthenticationDialogFragment(signingHelper: SigningHelper,
 class FingerprintAuthenticationDialogFragment : DialogFragment(),
     TextView.OnEditorActionListener,
         FingerprintUiHelper.Callback {
+    private var fingerprintUiHelper: FingerprintUiHelper? = null
     var cryptoObject: FingerprintManagerCompat.CryptoObject? = null
-    var fingerprintUiHelper: FingerprintUiHelper? = null
     var fingerprintContent: FingerprintContent? = null
     var fingerprintAuthProcessor: FingerprintAuthProcessor? = null
 
@@ -63,8 +63,6 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
 
         // Do not create a new Fragment when the Activity is re-created such as orientation changes.
         retainInstance = true
-        setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog)
-
     }
 
     override fun onCreateView(

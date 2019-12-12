@@ -19,7 +19,7 @@ open class SessionExpiryNative : NativePageObject() {
 
     private val extendSessionButton = NativePageElement(
             androidLocator = "//*[contains(@resource-id, 'extendSession')]",
-            iOSAccessID = "sessionExpiryWarningGetMoreTime",
+            iOSAccessID = "sessionExpiryWarningStayLoggedIn",
             webDesktopLocator = "//button[contains(text(),'Stay logged in')]",
             page = this
     )
@@ -41,7 +41,7 @@ open class SessionExpiryNative : NativePageObject() {
 
      fun isSessionExpiryModalVisible() : Boolean {
         return when(onMobile()) {
-           true -> this.isOnPage("You'll be logged out shortly")
+           true -> this.isOnPage("For security reasons, we'll log you out of the NHS App in 1 minute.")
            false -> header.withoutRetrying().elements.count() > 0
         }
     }

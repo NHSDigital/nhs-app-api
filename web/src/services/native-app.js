@@ -19,7 +19,7 @@ export default {
 
   configureWebContext(helpUrl, reloadPath) {
     const app = window.nativeApp;
-    this.setHelpUrl(helpUrl); // For backwards compatability
+    this.setHelpUrl(helpUrl); // For backwards compatibility
 
     if (app && app.configureWebContext) {
       app.configureWebContext(helpUrl, reloadPath);
@@ -130,6 +130,13 @@ export default {
     return false;
   },
 
+  /**
+   * On session expiring event.
+   * //**
+   *  The old, on session expiring event.
+   * @deprecated since 1.23.0 (NHSO-5818), here for backwards compatibility
+   * @param {int} sessionDuration
+   */
   onSessionExpiring(sessionDuration) {
     const app = window.nativeApp;
     if (app && app.onSessionExpiring) {
@@ -176,7 +183,7 @@ export default {
   },
 
   /**
-   * @deprecated since version 1.21, here for backwards compatability
+   * @deprecated since version 1.21, here for backwards compatibility
    * */
   setHelpUrl(url) {
     const app = window.nativeApp;
@@ -187,7 +194,10 @@ export default {
     return false;
   },
 
-  /* Android only - for document zoom */
+  /**
+   * Android only - for document zoom
+   * @param {boolean} canZoom
+   */
   setZoomable(canZoom) {
     const app = window.nativeApp;
     if (app && app.setZoomable) {

@@ -151,11 +151,9 @@
     <string name="logout">Log out</string>
     <string name="cancel">Cancel</string>
 
-    <string name="UpdateRequiredHeader">Update required</string>
-    <string name="UpdateHeader">You need to update the NHS App</string>
-    <string name="UpdateDesc">You won\'t be able to use it until you do.</string>
-    <string name="UpdateNativeLink">&lt;a href=\"market://details?id=com.nhs.online.nhsonline\">Click here to update&lt;/a></string>
-    <string name="Close">Close</string>
+    <string name="updateRequiredTitle">Update required</string>
+    <string name="updateRequiredMessage">You need to update the NHS App&lt;br/>&lt;br/>&lt;a href="market://details?id=com.nhs.online.nhsonline">Click here to update&lt;/a>&lt;br/>&lt;br/>You won\'t be able to use it until you do.</string>
+    <string name="close">Close</string>
 
     <string name="locale_language">en</string>
     <string name="locale_region">GB</string>
@@ -167,9 +165,8 @@
 
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
 
-    <string name="sessionExpiryWarningHeader">You\'ll be logged out shortly</string>
-    <string name="sessionExpiryWarningDurationInformation">Every %d minutes, we log you out for security purposes.</string>
-    <string name="sessionExpiryWarningGetMoreTime">Get more time</string>
+    <string name="sessionExpiryWarningMessage"><b>For security reasons, we\'ll log you out of the NHS App in 1 minute.</b></string>
+    <string name="sessionExpiryWarningStayLoggedIn">Stay logged in</string>
     <string name="sessionExpiryWarningLogOut">Log out</string>
 
     <!-- Local fonts -->

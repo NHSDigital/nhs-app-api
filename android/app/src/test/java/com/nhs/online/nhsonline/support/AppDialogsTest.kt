@@ -1,11 +1,11 @@
 package com.nhs.online.nhsonline.support
 
 import android.app.Activity
+import android.app.Dialog
 import android.support.v7.app.AlertDialog
 import android.widget.Button
 import android.widget.TextView
 import com.nhaarman.mockito_kotlin.*
-import com.nhs.online.nhsonline.R
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -72,8 +72,8 @@ class AppDialogsTest {
 
     @Test
     fun showExitDialog_InvokesCallback_OnPositiveButtonClicked() {
-        val clickTester:ClickTester = mock()
-        appDialogs.showExitDialog{clickTester.clicked()}
+        val clickTester: ClickTester = mock()
+        appDialogs.showExitDialog { clickTester.clicked() }
         val exitDialog = getCurrentActiveAlertDialog()
         val positiveButton = exitDialog.getButton(AlertDialog.BUTTON_POSITIVE)
         positiveButton.callOnClick()
@@ -91,25 +91,21 @@ class AppDialogsTest {
 
     @Test
     fun showExtendSessionDialogue() {
-        val sessionDuration = 10
         val expectedMessageText =
-            "Every $sessionDuration minutes, we log you out for security purposes."
-        appDialogs.showExtendSessionDialogue(sessionDuration, {}, {})
+                "For security reasons, we'll log you out of the NHS App in 1 minute."
+        appDialogs.showExtendSessionDialogue({}, {})
         val extendSessionDialog = getCurrentActiveAlertDialog()
-        val messageTextView: TextView? =
-            extendSessionDialog.findViewById(R.id.sessionExpiryWarningDurationInformation)
-        Assert.assertNotNull(messageTextView)
-        val message = messageTextView?.text
+        val message = extractAlertDialogMessage(extendSessionDialog)
         Assert.assertNotNull(message)
         Assert.assertEquals(message, expectedMessageText)
     }
 
     @Test
     fun showExtendSessionDialogue_InvokesLogoutCallback_OnLogoutButtonClicked() {
-        val clickTester:ClickTester = mock()
-        appDialogs.showExtendSessionDialogue(10, {}, {clickTester.clicked()})
+        val clickTester: ClickTester = mock()
+        appDialogs.showExtendSessionDialogue({}, { clickTester.clicked() })
         val extendSessionDialog = getCurrentActiveAlertDialog()
-        val logoutButton: Button? = extendSessionDialog.findViewById(R.id.logOut)
+        val logoutButton: Button? = extendSessionDialog.getButton(Dialog.BUTTON_NEGATIVE)
         Assert.assertNotNull(logoutButton)
         logoutButton?.callOnClick()
         verify(clickTester).clicked()
@@ -117,10 +113,10 @@ class AppDialogsTest {
 
     @Test
     fun showExtendSessionDialogue_InvokeExtendCallback_OnExtendButtonClicked() {
-        val clickTester:ClickTester = mock()
-        appDialogs.showExtendSessionDialogue(10, {clickTester.clicked()}, {})
+        val clickTester: ClickTester = mock()
+        appDialogs.showExtendSessionDialogue({ clickTester.clicked() }, {})
         val extendSessionDialog = getCurrentActiveAlertDialog()
-        val extendButton: Button? = extendSessionDialog.findViewById(R.id.extendSession)
+        val extendButton: Button? = extendSessionDialog.getButton(Dialog.BUTTON_POSITIVE)
         Assert.assertNotNull(extendButton)
         extendButton?.callOnClick()
         verify(clickTester).clicked()
@@ -130,7 +126,7 @@ class AppDialogsTest {
     fun dismissExtendSessionDialog_NoAction_IfActivityIsFinishing() {
         val spyActivity = spy(activity)
         appDialogs = AppDialogs(spyActivity)
-        appDialogs.showExtendSessionDialogue(10, {}, {})
+        appDialogs.showExtendSessionDialogue({}, {})
         whenever(spyActivity.isFinishing).thenReturn(true)
         val dialog = ShadowDialog.getLatestDialog()
         appDialogs.dismissExtendSessionDialog()
@@ -139,11 +135,10 @@ class AppDialogsTest {
 
     @Test
     fun showExtendSessionDialogue_NoAlertDialog_IfActivityIsFinishing() {
-        val sessionDuration = 10
         val spyActivity = spy(activity)
         whenever(spyActivity.isFinishing).thenReturn(true)
         appDialogs = AppDialogs(spyActivity)
-        appDialogs.showExtendSessionDialogue(sessionDuration, {}, {})
+        appDialogs.showExtendSessionDialogue({}, {})
         Assert.assertNull(ShadowDialog.getLatestDialog())
     }
 
@@ -155,7 +150,7 @@ class AppDialogsTest {
 
     private fun extractAlertDialogTitle(alertDialog: AlertDialog): String? {
         val titleTextView: TextView? =
-            alertDialog.findViewById(android.support.v7.appcompat.R.id.alertTitle)
+                alertDialog.findViewById(android.support.v7.appcompat.R.id.alertTitle)
         Assert.assertNotNull(titleTextView)
         return titleTextView?.text.toString()
     }

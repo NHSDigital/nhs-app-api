@@ -40,7 +40,6 @@ class HomeViewController : UIViewController {
     var appWebInterface: AppWebInterface?
     var webAppInterface: WebAppInterface?
     var extendSessionOverdue: Bool = false
-    var currentSessionDuration: Int?
     var isPresented: Bool = false
     var goingBack: Bool = false
     var biometricService: BiometricService?
@@ -58,7 +57,7 @@ class HomeViewController : UIViewController {
         isPresented = true
         
         if (extendSessionOverdue) {
-            displayExtendSessionDialogue(sessionDuration: currentSessionDuration!)
+            displayExtendSessionDialogue()
         }
     }
     
@@ -486,19 +485,18 @@ class HomeViewController : UIViewController {
         }
     }
     
-    func displayExtendSessionDialogue(sessionDuration: Int){
+    func displayExtendSessionDialogue(){
         if (!isPresented) {
-            currentSessionDuration = sessionDuration
             extendSessionOverdue = true;
             return
         }
         
-        let alert = UIAlertController(title: NSLocalizedString("sessionExpiryWarningHeader", comment: ""), message: String.localizedStringWithFormat(NSLocalizedString("sessionExpiryWarningDurationInformation", comment: ""),sessionDuration), preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("sessionExpiryWarningGetMoreTime", comment: ""), style: .default, handler: { _ in
-            self.appWebInterface?.extendSession()
-        }))
+        let alert = UIAlertController(title: NSLocalizedString("sessionExpiryWarningMessage", comment: ""), message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("sessionExpiryWarningLogOut", comment: ""), style: .default, handler: { _ in
             self.appWebInterface?.logout()
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("sessionExpiryWarningStayLoggedIn", comment: ""), style: .default, handler: { _ in
+            self.appWebInterface?.extendSession()
         }))
         
         NotificationCenter.default.addObserver(alert, selector: #selector(alert.close), name: CustomNotifications.dismissAllAlerts, object: nil)
@@ -515,7 +513,6 @@ class HomeViewController : UIViewController {
     private func resetDisplayExtendSessionDialogueFlags(){
         if (extendSessionOverdue) {
             extendSessionOverdue = false
-            currentSessionDuration = nil
         }
     }
     

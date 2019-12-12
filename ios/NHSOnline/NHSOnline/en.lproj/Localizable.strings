@@ -52,9 +52,8 @@
 "AppUpdateRequiredGoToUpdateButtonText" = "Click here to update";
 
 /*Alert strings*/
-"sessionExpiryWarningHeader" = "You'll be logged out shortly";
-"sessionExpiryWarningDurationInformation" = "Every %d minutes, we log you out for security purposes.";
-"sessionExpiryWarningGetMoreTime" = "Get more time";
+"sessionExpiryWarningMessage" = "For security reasons, we'll log you out of the NHS App in 1 minute.";
+"sessionExpiryWarningStayLoggedIn" = "Stay logged in";
 "sessionExpiryWarningLogOut" = "Log out";
 
 /*Biometrics*/

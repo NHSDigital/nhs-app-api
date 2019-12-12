@@ -5,12 +5,24 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:dialogTheme">@style/DialogCustom</item>
+        <item name="alertDialogTheme">@style/AlertDialogCustom</item>
+    </style>
+
+    <style name="DialogCustom" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <!-- Define window properties as desired -->
+        <item name="android:windowNoTitle">false</item>
+    </style>
+
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
     <style name="menu_default_text" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">sans-serif-medium</item>
-      <item name="android:textColor">@color/defaultMenuTextColor</item>
-      <item name="android:textSize">@dimen/menuBarItemFontSize</item>
+        <item name="android:textColor">@color/defaultMenuTextColor</item>
+        <item name="android:textSize">@dimen/menuBarItemFontSize</item>
     </style>
 
     <style name="error_header_default_text" parent="TextAppearance.AppCompat">
