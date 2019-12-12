@@ -74,15 +74,5 @@ export default {
     width: calc(100% - 4em);
     vertical-align: middle;
   }
-  &.waiting{
-    .spinner{
-      display:block;
-    }
-    .toggleWrapper label{
-      &:before, &:after{
-        display: none;
-      }
-    }
-  }
 }
 </style>
