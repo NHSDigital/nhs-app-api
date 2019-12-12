@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
                 return await PerformOperationOnGpSystem(string.IsNullOrWhiteSpace(odsCode), odsCode, async gpSystem =>
                 {
-                    var getLinkageRequest = new GetLinkageRequest()
+                    var getLinkageRequest = new GetLinkageRequest
                     {
                         NhsNumber = nhsNumber,
                         Surname = surname,
@@ -77,11 +77,14 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                     var validationService = gpSystem.GetLinkageValidationService();
                     if (!validationService.IsGetValid(getLinkageRequest))
                     {
-                        _logger.LogError($"Invalid parameters or parameters missing from get linkage request");
+                        _logger.LogError("Invalid parameters or parameters missing from get linkage request");
                         return BadRequest();
                     }
 
                     var linkageService = gpSystem.GetLinkageService();
+
+                    _logger.LogInformation(
+                        $"Retrieve LinkageKey for NhsNumber={nhsNumber?.RemoveWhiteSpace() ?? "None"}");
 
                     await _auditor.AuditRegistrationEvent(nhsNumber, gpSystem.Supplier,
                         AuditingOperations.GetLinkageDetailsAuditTypeRequest,
@@ -122,7 +125,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                         var validationService = gpSystem.GetLinkageValidationService();
                         if (!validationService.IsPostValid(createLinkageRequest))
                         {
-                            _logger.LogError($"Invalid parameters or parameters missing from create linkage request");
+                            _logger.LogError("Invalid parameters or parameters missing from create linkage request");
                             return BadRequest();
                         }
 
@@ -132,6 +135,9 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
                         }
 
                         var linkageService = gpSystem.GetLinkageService();
+
+                        _logger.LogInformation(
+                            $"Create LinkageKey for NhsNumber={createLinkageRequest.NhsNumber?.RemoveWhiteSpace() ?? "None"}");
 
                         await _auditor.AuditRegistrationEvent(createLinkageRequest.NhsNumber, gpSystem.Supplier,
                             AuditingOperations.CreateLinkageKeyAuditTypeRequest,

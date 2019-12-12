@@ -28,6 +28,7 @@
     <ProjectReference Include="..\NHSOnline.Backend.CidApi\NHSOnline.Backend.CidApi.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
+    <ProjectReference Include="..\UnitTestHelper\UnitTestHelper.csproj" />
   </ItemGroup>
 
 </Project>

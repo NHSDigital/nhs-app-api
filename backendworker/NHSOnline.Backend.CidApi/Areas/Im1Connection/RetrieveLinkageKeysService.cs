@@ -6,6 +6,7 @@ using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
@@ -32,16 +33,21 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             {
                 _logger.LogEnter();
 
+                _logger.LogInformation("Getting LinkageKey from GP supplier.");
+                _logger.LogInformation($"Retrieve LinkageKey for NhsNumber={model?.NhsNumber?.RemoveWhiteSpace() ?? "None"}");
+
                 var getLinkageRequest = BuildGetLinkageRequest(model);
 
-                _logger.LogInformation("Getting LinkageKey from GP supplier.");
                 var getLinkageKey = await _getLinkageKeysService.GetLinkageKey(getLinkageRequest, gpSystem);
-                
+
                 if (IsGetLinkageSuccess(getLinkageKey) || !ShouldCreateLinkageKey(getLinkageKey))
                 {
                     return getLinkageKey;
                 }
+
                 _logger.LogInformation("Existing LinkageKey not found. Response allows a linkage key to be created.");
+                _logger.LogInformation($"Create LinkageKey for NhsNumber={model?.NhsNumber?.RemoveWhiteSpace() ?? "None"}");
+
                 var createLinkageRequest = BuildCreateLinkageRequest(model);
 
                 var createLinkageKey = await _createLinkageKeysService.CreateLinkageKey(createLinkageRequest, gpSystem);

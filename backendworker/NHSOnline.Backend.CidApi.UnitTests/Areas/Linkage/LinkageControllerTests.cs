@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -17,6 +17,7 @@ using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.CidApi.Areas.Linkage;
 using NHSOnline.Backend.GpSystems.Im1Connection;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
 {
@@ -24,7 +25,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
     public class LinkageControllerTests
     {
         private const string DefaultOdsCode = "AB1234";
-        private const string DefaultNhsNumber = "XX00000A";
+        private const string DefaultNhsNumber = "123 456 7890";
+        private const string DefaultNhsNumberWithoutWhitespace = "1234567890";
         private const string DefaultSurname = "Surname";
         private static readonly DateTime? DefaultDateOfBirth = new DateTime(1980,1,1);
         private const string DefaultIdentityToken = "IDTOKEN";
@@ -148,6 +150,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                                                  req.DateOfBirth.Equals(DefaultDateOfBirth) &&
                                                  req.OdsCode.Equals(DefaultOdsCode, StringComparison.Ordinal) &&
                                                  req.IdentityToken.Equals(DefaultIdentityToken, StringComparison.Ordinal))), Times.Once);
+
+            logger.VerifyLogger(LogLevel.Information, $"Retrieve LinkageKey for NhsNumber={DefaultNhsNumberWithoutWhitespace}", Times.Once());
             
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<LinkageResponse>()
@@ -327,6 +331,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                                                    req.OdsCode.Equals(DefaultOdsCode, StringComparison.Ordinal) &&
                                                    req.IdentityToken.Equals(DefaultIdentityToken, StringComparison.Ordinal) &&
                                                    req.EmailAddress.Equals(DefaultEmailAddress, StringComparison.Ordinal))), Times.Once);
+
+            logger.VerifyLogger(LogLevel.Information, $"Create LinkageKey for NhsNumber={DefaultNhsNumberWithoutWhitespace}", Times.Once());
             
             result.Should().BeAssignableTo<CreatedResult>()
                 .Subject.Value.Should().BeAssignableTo<LinkageResponse>()

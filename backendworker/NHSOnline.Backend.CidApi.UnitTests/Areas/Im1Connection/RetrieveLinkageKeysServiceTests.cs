@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -13,6 +13,7 @@ using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Support;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 {
@@ -20,7 +21,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
     public class RetrieveLinkageKeysServiceTests
     {
         private const string DefaultOdsCode = "AB1234";
-        private const string DefaultNhsNumber = "XX00000A";
+        private const string DefaultNhsNumber = "123 456 7890";
+        private const string DefaultNhsNumberWithoutWhitespace = "1234567890";
         private const string DefaultSurname = "Surname";
         private static readonly DateTime DefaultDateOfBirth = new DateTime(1980, 1, 1);
         private const string DefaultIdentityToken = "IDTOKEN";
@@ -48,17 +50,14 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             // Arrange
             var createIm1ConnectionRequest = CreateIm1ConnectionRequest();
             var mockResult = new LinkageResult.SuccessfullyRetrieved(_fixture.Create<LinkageResponse>());
-            var linkageService = MockLinkageService(mockResult);
+            var linkageService = MockLinkageService(expectedResult: mockResult);
             var gpSystemMock = MockGpSystem(linkageService);
 
             var getLinkageKeysService = MockGetLinkageKeysService(mockResult, gpSystemMock.Object);
-            _systemUnderTest = _fixture.Create<RetrieveLinkageKeysService>();
-
-            new RetrieveLinkageKeysService(_logger.Object, getLinkageKeysService.Object,
+            _systemUnderTest = new RetrieveLinkageKeysService(_logger.Object, getLinkageKeysService.Object,
                 _createLinkageKeysService.Object);
 
             // Act
-
             var result =
                 await _systemUnderTest.RetrieveLinkageKey(createIm1ConnectionRequest, gpSystemMock.Object);
 
@@ -72,7 +71,30 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                     req.IdentityToken.Equals(createIm1ConnectionRequest.IdentityToken, StringComparison.Ordinal))
                 , gpSystemMock.Object), Times.Once);
 
+            _logger.VerifyLogger(LogLevel.Information,
+                $"Retrieve LinkageKey for NhsNumber={DefaultNhsNumberWithoutWhitespace}",
+                Times.Once());
             result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrieved>();
+        }
+
+        [TestMethod]
+        public async Task GetLinkageKey_NhsNumberNull_LogsCorrectMessage()
+        {
+            // Arrange
+            var createIm1ConnectionRequest = CreateIm1ConnectionRequest(null);
+            var gpSystemMock = _fixture.Create<Mock<IGpSystem>>();
+
+            var getLinkageKeysService = _fixture.Create<Mock<IGetLinkageKeysService>>();
+            _systemUnderTest = new RetrieveLinkageKeysService(_logger.Object, getLinkageKeysService.Object,
+                _createLinkageKeysService.Object);
+
+            // Act
+            await _systemUnderTest.RetrieveLinkageKey(createIm1ConnectionRequest, gpSystemMock.Object);
+
+            // Assert
+            _logger.VerifyLogger(LogLevel.Information,
+                "Retrieve LinkageKey for NhsNumber=None",
+                Times.Once());
         }
         
         [TestMethod]
@@ -83,7 +105,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 .LinkageKeysNotSupportedBySupplier;
             var createIm1ConnectionRequest = CreateIm1ConnectionRequest();
             var mockResult = new LinkageResult.ErrorCase(expectedErrorCode);
-            var linkageService = MockLinkageService(mockResult);
+            var linkageService = MockLinkageService(DefaultNhsNumber, mockResult);
             var gpSystemMock = MockGpSystem(linkageService);
 
             var getLinkageKeysService = MockGetLinkageKeysService(mockResult, gpSystemMock.Object);
@@ -106,7 +128,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             // Arrange
             var createIm1ConnectionRequest = CreateIm1ConnectionRequest();
             var mockResult = new LinkageResult.SuccessfullyCreated(_fixture.Create<LinkageResponse>());
-            var linkageService = MockLinkageService(mockResult);
+            var linkageService = MockLinkageService(expectedResult: mockResult);
             var gpSystemMock = MockGpSystem(linkageService);
 
             var mockCreateLinkageKeysService = new Mock<ICreateLinkageKeysService>();
@@ -143,14 +165,18 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                     req.IdentityToken.Equals(createIm1ConnectionRequest.IdentityToken, StringComparison.Ordinal))
                 , gpSystemMock.Object), Times.Once);
 
+            _logger.VerifyLogger(LogLevel.Information,
+                $"Create LinkageKey for NhsNumber={DefaultNhsNumberWithoutWhitespace}",
+                Times.Once()); 
             result.Should().BeAssignableTo<LinkageResult.SuccessfullyCreated>();
         }
 
-        private static RetrieveLinkageKeysRequest CreateIm1ConnectionRequest()
+
+        private static RetrieveLinkageKeysRequest CreateIm1ConnectionRequest(string nhsNumber = DefaultNhsNumber)
         {
             var createIm1ConnectionRequest = new RetrieveLinkageKeysRequest()
             {
-                NhsNumber = DefaultNhsNumber,
+                NhsNumber = nhsNumber,
                 Surname = DefaultSurname,
                 DateOfBirth = DefaultDateOfBirth,
                 OdsCode = DefaultOdsCode,
@@ -169,13 +195,13 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             return mockGpSystem;
         }
 
-        private Mock<ILinkageService> MockLinkageService(LinkageResult expectedResult = null)
+        private Mock<ILinkageService> MockLinkageService(string nhsNumber = DefaultNhsNumber, LinkageResult expectedResult = null)
         {
             var mockLinkageService = _fixture.Freeze<Mock<ILinkageService>>();
 
             mockLinkageService.Setup(x => x.CreateLinkageKey(
                     It.Is<CreateLinkageRequest>(req =>
-                        req.NhsNumber.Equals(DefaultNhsNumber, StringComparison.Ordinal) &&
+                        req.NhsNumber.Equals(nhsNumber, StringComparison.Ordinal) &&
                         req.Surname.Equals(DefaultSurname, StringComparison.Ordinal) &&
                         req.DateOfBirth.Equals(DefaultDateOfBirth) &&
                         req.OdsCode.Equals(DefaultOdsCode, StringComparison.Ordinal) &&
@@ -186,12 +212,14 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             return mockLinkageService;
         }
 
-        private Mock<IGetLinkageKeysService> MockGetLinkageKeysService(LinkageResult expectedResult, IGpSystem gpSystem)
+        private Mock<IGetLinkageKeysService> MockGetLinkageKeysService(LinkageResult expectedResult,
+            IGpSystem gpSystem,
+            string nhsNumber = DefaultNhsNumber)
         {
             var mockGetLinkageKeysService = _fixture.Freeze<Mock<IGetLinkageKeysService>>();
 
             mockGetLinkageKeysService.Setup(x => x.GetLinkageKey(
-                    It.Is<GetLinkageRequest>(req => req.NhsNumber.Equals(DefaultNhsNumber, StringComparison.Ordinal) &&
+                    It.Is<GetLinkageRequest>(req => req.NhsNumber.Equals(nhsNumber, StringComparison.Ordinal) &&
                                                     req.Surname.Equals(DefaultSurname, StringComparison.Ordinal) &&
                                                     req.DateOfBirth.Equals(DefaultDateOfBirth) &&
                                                     req.OdsCode.Equals(DefaultOdsCode, StringComparison.Ordinal) &&
