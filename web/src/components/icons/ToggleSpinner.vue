@@ -23,7 +23,7 @@
                         values="0 50 50;360 50 50"
                         keyTimes="0;1"
                         dur="1.5s"
-                        begin="2s"
+                        begin="3s"
                         repeatCount="indefinite" />
     </circle>
   </svg>
