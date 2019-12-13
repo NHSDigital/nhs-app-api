@@ -9,7 +9,7 @@
     </div>
     <div :class="[$style[isNative && isBreadCrumbVisible ? 'native-padding' : '']]">
       <yellow-banner v-if="showYellowBanner" id="yellow-banner"
-                     :class="$style['bannerLine-padding']">
+                     :class="[isNative ? $style['bannerLine-padding'] : $style['']]">
         <div v-if="showExternalServiceWarning" id="external-service-warning">
           <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
               nhsuk-u-margin-bottom-0 nhsuk-body-s">
@@ -32,7 +32,7 @@
 
       <div :class="['nhsuk-width-container']">
         <div class="nhsuk-grid-row">
-          <div class="nhsuk-grid-column-full">
+          <div class="nhsuk-grid-column-two-thirds">
             <page-title v-if="showContentHeader"
                         :title-key="$store.state.header.headerText"
                         :should-show-desktop-version="showHeader">

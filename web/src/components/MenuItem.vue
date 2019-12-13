@@ -22,7 +22,10 @@
                          $style['count']]">{{ count }}</span>
           {{ text }}
         </component>
-        <p v-if="description" class="nhsuk-u-margin-bottom-3">{{ description }}</p>
+        <p v-if="description"
+           :id="descriptionId"
+           :data-sid="descriptionDataSid"
+           class="nhsuk-u-margin-bottom-3">{{ description }}</p>
         <slot/>
       </span>
     </analytics-tracked-tag>
@@ -54,6 +57,14 @@ export default {
       default: undefined,
     },
     description: {
+      type: String,
+      default: undefined,
+    },
+    descriptionId: {
+      type: String,
+      default: undefined,
+    },
+    descriptionDataSid: {
       type: String,
       default: undefined,
     },

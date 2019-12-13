@@ -2,10 +2,10 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <div class="nhsuk-do-dont-list">
-          <span :class="[$style['user-info'], 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3']">
+        <div class="nhsuk-do-dont-list nhsuk-u-margin-top-3">
+          <p :class="[$style['user-info'], 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3']">
             {{ `${$t('linkedProfiles.thingsYouCanDoOnBehalfOf.text')} ${linkedAccount.name}` }}
-          </span>
+          </p>
           <ul v-for="item in thingsYouCanDoOnBehalfOf"
               :key="item.text"
               class="nhsuk-list nhsuk-list--cross">
@@ -92,8 +92,6 @@ export default {
 
 <style module lang="scss" scoped>
   .user-info {
-    font-weight: 600;
-    font-size: 20px;
     display: inline-block;
   }
 </style>

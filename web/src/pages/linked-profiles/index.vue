@@ -13,12 +13,11 @@
             :text="item.name"
             :click-func="onLinkedProfileClicked"
             :click-param="item.id"
+            :description="getDisplayedAgeText(item)"
+            description-data-sid="age-months"
+            :description-id="'linked-account-age-' + index"
+            header-tag="h2"
             data-sid="linked-account">
-            <div :id="'linked-account-age-' + index"
-                 class="nhsuk-u-margin-top-1"
-                 data-sid="age-months">
-              {{ getDisplayedAgeText(item) }}
-            </div>
           </menu-item>
         </menu-item-list>
       </div>
@@ -67,7 +66,5 @@ export default {
 
 .dateOfBirth {
   color: black;
-  font-weight: 400;
-  font-size: 15px;
 }
 </style>

@@ -3,21 +3,21 @@
        data-sid="proxy-patient-details"
        :aria-hidden="isCollapsed">
     <p data-purpose="record-item-header"
-       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3 nhsuk-u-padding-top-3
-       nhsuk-body-s">
+       class="nhsuk-label nhsuk-u-margin-top-0
+                nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
       {{ $t('my_record.patientInfo.fieldLabelName') }}</p>
     <p v-if="proxyPatientDetails" data-purpose="record-item-detail" data-hj-suppress
-       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+       class="nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-0">
       {{ proxyPatientDetails.name }}</p>
-    <hr aria-hidden="true" class="nhsuk-u-margin-top-3">
+    <hr aria-hidden="true" class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
     <p data-purpose="record-item-header"
-       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3
-       nhsuk-body-s">
+       class="nhsuk-label nhsuk-u-margin-top-0
+                nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
       {{ $t('my_record.patientInfo.fieldLabelAge') }}</p>
     <p v-if="proxyPatientDetails" data-purpose="record-item-detail"
-       class="nhsuk-u-padding-0 nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+       class="nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-0">
       {{ getDisplayedAgeText(proxyPatientDetails) }}</p>
-    <hr aria-hidden="true" class="nhsuk-u-margin-top-3">
+    <hr aria-hidden="true" class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
   </div>
 </template>
 
@@ -42,3 +42,4 @@ export default {
 };
 
 </script>
+

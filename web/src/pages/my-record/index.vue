@@ -96,7 +96,7 @@ import Warning from '@/components/my-record/Warning';
 import agreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import Shutter from '@/components/linked-profiles/Shutter';
-import ProxyPatientDetails from '@/components/my-record/SharedComponents/ProxyPatientDetails';
+import ProxyPatientDetails from '@/components/gp-medical-record/SharedComponents/ProxyPatientDetails';
 
 const PATIENTDETAILS = 'patientdetails';
 

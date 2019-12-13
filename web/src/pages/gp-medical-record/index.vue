@@ -110,7 +110,7 @@ import Glossary from '@/components/Glossary';
 import Warning from '@/components/my-record/Warning';
 import agreedToMedicalWarning from '@/lib/sessionStorage';
 import Shutter from '@/components/linked-profiles/Shutter';
-import ProxyPatientDetails from '@/components/my-record/SharedComponents/ProxyPatientDetails';
+import ProxyPatientDetails from '@/components/gp-medical-record/SharedComponents/ProxyPatientDetails';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 const PATIENTDETAILS = 'patientdetails';
