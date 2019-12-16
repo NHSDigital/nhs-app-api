@@ -1218,8 +1218,9 @@ export default {
       documentsLink: 'View your documents',
       documentMenuItemTitle: 'added on {date}',
       documentPageSubtext: 'Document added on',
-      documentTooLargeSubtext: 'To access it, contact your GP surgery directly.',
-      documentTooLargeHeader: 'The document added on {date} is not available through the NHS App.',
+      documentUnavailableSubtext: 'To access it, contact your GP surgery directly.',
+      documentUnavailableHeader: 'The document added on {date} is not available through the NHS App',
+      documentUnavailablePageTitle: 'The document added on {date} is not available',
       actions: {
         view: 'View',
         download: 'Download',

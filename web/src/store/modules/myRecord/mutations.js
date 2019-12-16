@@ -53,13 +53,8 @@ export default {
     state.record = record;
     state.patientDetails = patientDetails;
     state.isPatientDetailsCollapsed = false;
-
-    // temporarily removing TGA & TPIC documents until issue fixed with these types
-    const filteredDocuments = (record.documents.data || [])
-      .filter(d => `${d.extension}`.toLowerCase() !== 'tga' && `${d.extension}`.toLowerCase() !== 'tpic');
-
-    state.record.documents.data = filteredDocuments;
-    state.record.documents.recordCount = filteredDocuments.length;
+    state.record.documents.data = (record.documents.data || []);
+    state.record.documents.recordCount = state.record.documents.data.length;
 
     state.documentConsultationsWithComments = (record.consultations.data || [])
       .filter(d => d.consultationHeaders.filter(p => p.header === 'Document' || p.header === 'Comment').length > 0)

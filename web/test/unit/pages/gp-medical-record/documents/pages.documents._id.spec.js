@@ -1,8 +1,10 @@
+import each from 'jest-each';
 import { mount, createRouter, createStore } from '../../../helpers';
 import DocumentInformation from '@/pages/gp-medical-record/documents/_id';
 import { DOCUMENT_DETAIL, GP_MEDICAL_RECORD } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { datePart } from '@/lib/utils';
+
 
 jest.mock('@/lib/sessionStorage');
 jest.mock('@/lib/utils');
@@ -63,7 +65,7 @@ describe('document view', () => {
 
     it('will redirect to the my record page if there is no document date', async () => {
       // Arrange
-      const document = { date: { value: undefined } };
+      const document = { type: 'jpg', date: { value: undefined } };
       $store = newStore(document);
       const page = mountPage({ $store });
 
@@ -76,7 +78,7 @@ describe('document view', () => {
 
     it('will set the header and page title to the document name', async () => {
       // Arrange
-      const document = { name: 'Document1', size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' } };
+      const document = { name: 'Document1', type: 'jpg', size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' } };
       $store = newStore({ document });
       const page = mountPage({ $store });
 
@@ -89,7 +91,7 @@ describe('document view', () => {
 
     it('will set the header to the document date if no name exists', async () => {
       // Arrange
-      const document = { name: undefined, size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' } };
+      const document = { name: undefined, type: 'jpg', size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' } };
       $store = newStore({ document });
       const page = mountPage({ $store });
 
@@ -132,6 +134,7 @@ describe('document view', () => {
         name: 'Document1',
         comments: [],
         size: 1000000,
+        type: 'jpg',
         dateString: 'translate_my_record.documents.documentPageSubtext 8 August 2019',
       });
       const page = mountPage({ $store, data });
@@ -153,6 +156,7 @@ describe('document view', () => {
         term: 'test',
         eventGuid: 'test',
         codeId: 1234,
+        type: 'jpg',
       };
       const documentComments = [{
         consultationHeaders: [{
@@ -176,6 +180,7 @@ describe('document view', () => {
         term: 'test',
         eventGuid: 'test',
         codeId: 1234,
+        type: 'jpg',
         comments: ['this is a test'],
       });
       const page = mountPage({ $store, data });
@@ -196,6 +201,7 @@ describe('document view', () => {
         term: 'test',
         eventGuid: 'test',
         codeId: 1234,
+        type: 'jpg',
       };
       const documentComments = [{
         documentKey: {
@@ -212,6 +218,7 @@ describe('document view', () => {
         term: 'test',
         eventGuid: 'test',
         codeId: 1234,
+        type: 'jpg',
         comments: ['this is a test', 'this is a second test', 'this is a third test'],
       });
       const page = mountPage({ $store, data });
@@ -248,6 +255,7 @@ describe('document view', () => {
         term: 'test',
         eventGuid: 'test',
         codeId: 1234,
+        type: 'jpg',
         comments: [],
       });
       const page = mountPage({ $store, data });
@@ -265,6 +273,7 @@ describe('document view', () => {
         name: undefined,
         comments: [],
         size: 1000000,
+        type: 'jpg',
       });
       const page = mountPage({ $store, data });
 
@@ -276,8 +285,14 @@ describe('document view', () => {
     });
 
     it('will display the actions for the document', () => {
+      const data = () => ({
+        name: undefined,
+        comments: [],
+        size: 1000000,
+        type: 'jpg',
+      });
       // Arrange
-      const page = mountPage({ $store });
+      const page = mountPage({ $store, data });
 
       // Act
       const viewItem = page.find('#btn_viewDocument');
@@ -295,6 +310,7 @@ describe('document view', () => {
         name: undefined,
         comments: [],
         size: 4000000,
+        type: 'jpg',
       });
 
       // Arrange
@@ -311,7 +327,7 @@ describe('document view', () => {
 
     it('will display a different header if the document is too large', async () => {
       // Arrange
-      const document = { name: undefined, size: 4000000, date: { value: '2019-08-08T12:03:44+00:00' } };
+      const document = { name: undefined, type: 'jpg', size: 4000000, date: { value: '2019-08-08T12:03:44+00:00' } };
       const documentComments = [{
         documentKey: {
           eventGuid: 'test',
@@ -327,26 +343,53 @@ describe('document view', () => {
       await page.vm.$options.asyncData({ store: $store, redirect });
 
       // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_my_record.documents.documentTooLargeHeader');
+      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_my_record.documents.documentUnavailableHeader');
+      expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_my_record.documents.documentUnavailablePageTitle');
     });
 
-    it('will display a different subtext if the document is too large', async () => {
+    each([{
+      type: 'tga',
+      size: 1000000,
+      comments: [],
+    }, {
+      type: 'tpic',
+      size: 1000000,
+      comments: [],
+    }, {
+      type: 'jpg',
+      size: 4000000,
+      comments: [],
+    }]).it('will display a different subtext if the document is too large or if the file type is TGA or TPIC', (testData) => {
       // Arrange
-      const data = () => ({ size: 4000000, comments: [] });
-      const page = mountPage({ $store, data });
+      const { size, comments, type } = testData;
+      const data = () => ({ type, size, comments });
+      const page = mountPage({ $store: newStore(), data });
 
       // Act
       const documentInfo = page.find('#documentInfo p');
 
       // Assert
       expect(documentInfo.exists()).toBe(true);
-      expect(documentInfo.text()).toEqual('translate_my_record.documents.documentTooLargeSubtext');
+      expect(documentInfo.text()).toEqual('translate_my_record.documents.documentUnavailableSubtext');
     });
 
-    it('will not display the glossary or the warning if the document is too large', async () => {
+    each([{
+      type: 'tga',
+      size: 1000000,
+      comments: [],
+    }, {
+      type: 'tpic',
+      size: 1000000,
+      comments: [],
+    }, {
+      type: 'jpg',
+      size: 4000000,
+      comments: [],
+    }]).it('will not display the glossary or the warning if the document is too large or if the file type is TGA or TPIC', (testData) => {
       // Arrange
-      const data = () => ({ size: 4000000, comments: [] });
-      const page = mountPage({ $store, data });
+      const { size, comments, type } = testData;
+      const data = () => ({ size, comments, type });
+      const page = mountPage({ $store: newStore(), data });
 
       // Act
       const downloadWarning = page.find('#downloadWarning');

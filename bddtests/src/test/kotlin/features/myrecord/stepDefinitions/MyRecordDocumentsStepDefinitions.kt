@@ -58,6 +58,13 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
                 .enabledWithDocumentsWithNoNameOrTerm(SerenityHelpers.getPatient(), true)
     }
 
+    @Given("^the GP Practice has documents with invalid types$")
+    fun theGpPracticeHasDocumentsWithInvalidTypes() {
+        DocumentsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithDocuments(SerenityHelpers.getPatient(), hasInvalidType = true)
+    }
+
     @Given("^the GP Practice has multiple documents with no name or term$")
     fun theGpPracticeHasMultipleDocumentsWithNoNameOrTerm() {
         DocumentsFactory
@@ -110,7 +117,7 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
         myRecordDocumentInformationPage.documentInfoContains("To access it, contact your GP surgery")
         myRecordDocumentInformationPage.headerContainsText(
-                "The document added on " + selectedDocument.date + " is not available through the NHS App.")
+                "The document added on " + selectedDocument.date + " is not available through the NHS App")
     }
 
 

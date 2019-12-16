@@ -21,10 +21,12 @@ object DocumentsData {
         )
     }
 
-    fun getDefaultDocumentsData(includeName: Boolean = true, includeTerm: Boolean = true) : DocumentsResponseModel {
+    fun getDefaultDocumentsData(includeName: Boolean = true, includeTerm: Boolean = true,
+                                hasInvalidType: Boolean = false): DocumentsResponseModel {
         val documents = mutableListOf<DocumentsResponse>()
         var nameFormat = "Name %d"
         var termFormat = "Letter %d"
+        var type = "pdf"
 
         if (!includeName) {
             nameFormat = ""
@@ -34,11 +36,15 @@ object DocumentsData {
             termFormat = ""
         }
 
+        if (hasInvalidType) {
+            type = "tga"
+        }
+
         for(documentNumber in 1..DEFAULT_NUMBER_OF_DOCUMENTS){
             documents.add(DocumentsResponse(
                 "document-$documentNumber",
                 REGULAR_DOCUMENT_SIZE,
-                "pdf",
+                type,
                 true,
                 Observation(
                     String.format(termFormat, documentNumber),

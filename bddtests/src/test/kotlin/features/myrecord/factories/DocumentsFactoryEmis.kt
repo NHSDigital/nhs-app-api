@@ -29,8 +29,9 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         }
     }
 
-    override fun enabledWithDocuments(patient: Patient, isLarge: Boolean, mockUnavailableDocument: Boolean) {
-        val documents = DocumentsData.getDefaultDocumentsData()
+    override fun enabledWithDocuments(patient: Patient, isLarge: Boolean, mockUnavailableDocument: Boolean,
+                                      hasInvalidType: Boolean) {
+        val documents = DocumentsData.getDefaultDocumentsData(hasInvalidType = hasInvalidType)
 
         val expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents)
         setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, expectedDocuments)

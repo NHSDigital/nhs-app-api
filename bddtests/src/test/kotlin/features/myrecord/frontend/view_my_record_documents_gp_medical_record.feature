@@ -40,10 +40,23 @@ Feature: View My Medical Record Information - Documents Frontend
     When I select an available document
     Then I see the document information page with the document date as the header
 
+    @james
   Scenario: An EMIS user who selects a large document cannot download or view it
     Given I am a EMIS user setup to use medical record version 2
     And the my record wiremocks are initialised when the patient is already set for EMIS
     And the GP Practice has multiple large documents
+    And I am logged in
+    And I am on my record information page and glossary is visible - GP Medical Record
+    When I click the Documents link on my record - GP Medical Record
+    Then I see a list of documents
+    When I select an available document
+    Then I see the document information page without actions
+
+    @james
+  Scenario: An EMIS user who selects a document with an invalid type cannot download or view it
+    Given I am a EMIS user setup to use medical record version 2
+    And the my record wiremocks are initialised when the patient is already set for EMIS
+    And the GP Practice has documents with invalid types
     And I am logged in
     And I am on my record information page and glossary is visible - GP Medical Record
     When I click the Documents link on my record - GP Medical Record

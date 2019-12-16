@@ -5,8 +5,8 @@
                     'pull-content',
                     !$store.state.device.isNativeApp && $style.desktopWeb]">
         <div id="documentInfo" class="nhsuk-u-margin-bottom-1" data-purpose="info">
-          <p v-if="name && !isTooLarge">{{ dateString }}</p>
-          <p v-if="isTooLarge">{{ $t('my_record.documents.documentTooLargeSubtext') }}</p>
+          <p v-if="name && isValidFile">{{ dateString }}</p>
+          <p v-if="!isValidFile">{{ $t('my_record.documents.documentUnavailableSubtext') }}</p>
         </div>
         <div v-if="hasComments">
           <b>{{ $t('my_record.documents.commentsHeader') }}</b>
@@ -17,7 +17,7 @@
             <p :data-purpose="'documentComment'+index">{{ comment }}</p>
           </div>
         </div>
-        <menu-item-list v-if="!isTooLarge" data-sid="action-list-menu">
+        <menu-item-list v-if="isValidFile" data-sid="action-list-menu">
           <menu-item id="btn_viewDocument"
                      header-tag="h2"
                      :text="$t('my_record.documents.actions.view')"
@@ -29,10 +29,10 @@
                      :text="$t('my_record.documents.actions.download')"
                      :aria-label="$t('my_record.documents.actions.download')"/>
         </menu-item-list>
-        <p v-if="!isTooLarge" id="downloadWarning">
+        <p v-if="isValidFile" id="downloadWarning">
           {{ $t('my_record.documents.downloadWarning') }}
         </p>
-        <p v-if="!isTooLarge">
+        <p v-if="isValidFile">
           <glossary id="glossary"/>
         </p>
         <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
@@ -62,8 +62,9 @@ export default {
     DesktopGenericBackLink,
   },
   computed: {
-    isTooLarge() {
-      return this.size >= 4000000;
+    isValidFile() {
+      return this.size < 4000000 &&
+        (this.type.toLowerCase() !== 'tga' && this.type.toLowerCase() !== 'tpic');
     },
     hasComments() {
       return (this.comments !== null && this.comments.length > 0);
@@ -128,6 +129,7 @@ export default {
     const documentConsultationsWithComments = get('state.myRecord.documentConsultationsWithComments', store);
     const comments = [];
     const size = get('state.myRecord.document.size', store);
+    const fileType = type.toLowerCase();
 
     if (documentConsultationsWithComments !== null
       && documentConsultationsWithComments.length > 0) {
@@ -149,7 +151,7 @@ export default {
       }
     }
 
-    if (size < 4000000) {
+    if (size < 4000000 && fileType !== 'tga' && fileType !== 'tpic') {
       if (name) {
         store.dispatch('header/updateHeaderText', name);
       } else {
@@ -157,7 +159,9 @@ export default {
       }
     } else {
       store.dispatch('header/updateHeaderText',
-        store.app.i18n.t('my_record.documents.documentTooLargeHeader', { date: datePartString }));
+        store.app.i18n.t('my_record.documents.documentUnavailableHeader', { date: datePartString }));
+      store.dispatch('pageTitle/updatePageTitle',
+        store.app.i18n.t('my_record.documents.documentUnavailablePageTitle', { date: datePartString }));
     }
 
     return {
