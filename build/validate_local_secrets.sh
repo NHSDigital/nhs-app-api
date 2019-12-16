@@ -30,6 +30,8 @@ validate_secret azure_notification_hub_key_bdd
 validate_secret browserstack_accesskey
 validate_secret microtest_client_cert.password
 validate_secret microtest_client_cert.pfx
+validate_secret organ_donation_cert.password
+validate_secret organ_donation_cert.pfx
 validate_secret session_encryption_key
 validate_secret spine_client_cert.password
 validate_secret spine_client_cert.pfx

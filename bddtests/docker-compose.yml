@@ -11,6 +11,10 @@ secrets:
     file: "./bddtests/dummysecrets/microtest_client_cert.pfx"
   microtest_cert_password:
     file: "./bddtests/dummysecrets/microtest_client_cert.password"
+  organ_donation_cert:
+    file: "./bddtests/dummysecrets/organ_donation_cert.pfx"
+  organ_donation_cert_password:
+    file: "./bddtests/dummysecrets/organ_donation_cert.password"
   spine_cert:
     file: "./bddtests/dummysecrets/spine_client_cert.pfx"
   spine_cert_password:

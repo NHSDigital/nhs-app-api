@@ -13,6 +13,10 @@ secrets:
     file: "~/.nhsonline/secrets/microtest_client_cert.pfx"
   microtest_cert_password:
     file: "~/.nhsonline/secrets/microtest_client_cert.password"
+  organ_donation_cert:
+    file: "~/.nhsonline/secrets/organ_donation_cert.pfx"
+  organ_donation_cert_password:
+    file: "~/.nhsonline/secrets/organ_donation_cert.password"
   spine_cert:
     file: "~/.nhsonline/secrets/spine_client_cert.pfx"
   spine_cert_password:
@@ -49,6 +53,7 @@ services:
       - |
           export TPP_CERTIFICATE_PASSWORD=$$(<$$TPP_CERTIFICATE_PASSWORD)
           export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
+          export ORGAN_DONATION_CERT_PASSPHRASE=$$(<$$ORGAN_DONATION_CERT_PASSPHRASE)
           export SPINE_CERT_PASSWORD=$$(<$$SPINE_CERT_PASSWORD)
           exec $$*
       - "--"
@@ -74,6 +79,8 @@ services:
       - tpp_cert_password
       - microtest_cert
       - microtest_cert_password
+      - organ_donation_cert
+      - organ_donation_cert_password
       - spine_cert
       - spine_cert_password
       - session_encryption_key
