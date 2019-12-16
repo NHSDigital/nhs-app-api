@@ -3,19 +3,26 @@
 set -e
 
 MISSING_SECRETS=0
+    
+POSSIBLE_KEYBASE_PATHS=(/k /Volumes/Keybase /keybase)
+for possible_keybase_path in ${POSSIBLE_KEYBASE_PATHS[*]}; do
+    if [ -d "$possible_keybase_path" ]; then
+        KEYBASE_PATH=$possible_keybase_path
+    break
+    fi
+done
 
 function validate_secret {
     SECRET_NAME="$1"
     SECRET_LOCAL_PATH=~/.nhsonline/secrets/$SECRET_NAME
+   
 
     if [ ! -f "$SECRET_LOCAL_PATH" ]
     then
         mkdir -p ~/.nhsonline/secrets
 
-        if [ -f "/k/team/nhsonline/development_secrets/$SECRET_NAME" ]; then
-            cp "/k/team/nhsonline/development_secrets/$SECRET_NAME" "$SECRET_LOCAL_PATH"
-        elif [ -f "/keybase/team/nhsonline/development_secrets/$SECRET_NAME" ]; then
-            cp "/keybase/team/nhsonline/development_secrets/$SECRET_NAME" "$SECRET_LOCAL_PATH"
+        if [ -f "$KEYBASE_PATH/team/nhsonline/development_secrets/$SECRET_NAME" ]; then
+            cp "$KEYBASE_PATH/team/nhsonline/development_secrets/$SECRET_NAME" "$SECRET_LOCAL_PATH"
         fi
     fi
     

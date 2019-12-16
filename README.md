@@ -22,6 +22,38 @@ make build
 make test
 ```
 
+## Running code
+
+### Run the latest develop (no need to build locally)
+
+```bash
+make run TAG=develop
+```
+
+### Run everything built locally
+
+```bash
+make run
+```
+
+### Debugging web locally
+
+```bash
+make run WEB=host
+```
+
+### Debugging API locally
+
+```bash
+make run PFSAPI=host
+```
+
+### Debugging web locally with develop versions of the rest
+
+```bash
+make run TAG=develop WEB=host
+```
+
 ## BDD (Integration) Tests
 
 ### Run Locally

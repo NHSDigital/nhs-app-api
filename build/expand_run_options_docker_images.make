@@ -38,9 +38,9 @@ $(if $(filter $(3),host), \
 	$(1): export $(2)_DOCKER_PORTS=docker-compose.ports-$(strip $(2))-container.yml)
 
 # If arg is anything else then set tag to be the arg value
-$(if $(filter-out local host,$(3)),\
+$(if $(filter-out local,$(3)),\
 	$(1): export $(2)_DOCKER_REGISTRY=nhsapp.azurecr.io)
-$(if $(filter-out local host,$(3)),\
+$(if $(filter-out local,$(3)),\
 	$(1): export $(2)_DOCKER_TAG=$(3))
 
 endef

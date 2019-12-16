@@ -10,3 +10,6 @@ indent_size = 4
 [*.make]
 indent_style = tab
 indent_size = 4
+
+[README.md]
+end_of_line=lf
