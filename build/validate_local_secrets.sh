@@ -37,5 +37,6 @@ validate_secret spine_client_cert.password
 validate_secret spine_client_cert.pfx
 validate_secret tpp_client_cert.password
 validate_secret tpp_client_cert.pfx
+validate_secret gp_lookup_api_key
 
 exit $MISSING_SECRETS

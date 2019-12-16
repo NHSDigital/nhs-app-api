@@ -21,6 +21,8 @@ secrets:
     file: "~/.nhsonline/secrets/spine_client_cert.pfx"
   spine_cert_password:
     file: "~/.nhsonline/secrets/spine_client_cert.password"
+  gp_lookup_api_key:
+    file: "~/.nhsonline/secrets/gp_lookup_api_key"
 
 
 services:
@@ -55,6 +57,7 @@ services:
           export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
           export ORGAN_DONATION_CERT_PASSPHRASE=$$(<$$ORGAN_DONATION_CERT_PASSPHRASE)
           export SPINE_CERT_PASSWORD=$$(<$$SPINE_CERT_PASSWORD)
+          export GP_LOOKUP_API_KEY=$$(<$$GP_LOOKUP_API_KEY)
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.PfsApi.dll
@@ -84,6 +87,7 @@ services:
       - spine_cert
       - spine_cert_password
       - session_encryption_key
+      - gp_lookup_api_key
 
   cid.local.bitraft.io:
     image: ${CIDAPI_DOCKER_REGISTRY:-local}/nhsonline-backendcidapi:${CIDAPI_DOCKER_TAG:-latest}

@@ -21,6 +21,8 @@ secrets:
     file: "./bddtests/dummysecrets/spine_client_cert.password"
   azure_notification_hub_key:
     file: "~/.nhsonline/secrets/azure_notification_hub_key_bdd"
+  gp_lookup_api_key:
+    file: "./bddtests/dummysecrets/gp_lookup_api_key"
 
 services:
 
