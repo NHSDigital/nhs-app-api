@@ -67,7 +67,7 @@ fi
 DOCKER_COMPOSE_FILES="../../docker-compose.yml ../docker-compose.yml"
 if [ "$RUN_LOCAL_BDD" == 1 ]
 then
-  DOCKER_COMPOSE_PORT_FILES=$(env | grep _DOCKER_PORTS | sed 's#^.*_DOCKER_PORTS=#../../#')
+  DOCKER_COMPOSE_PORT_FILES=$(env | grep _DOCKER_PORTS | sed 's#^.*_DOCKER_PORTS=#../../docker/#')
   DOCKER_COMPOSE_FILES="$DOCKER_COMPOSE_FILES ../../docker-compose.ports.yml ../docker-compose.ports.yml $DOCKER_COMPOSE_PORT_FILES"
 fi
 
