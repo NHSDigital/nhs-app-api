@@ -28,20 +28,16 @@ $(eval $(call expand_run_options_docker_images,run))
 run: run-deps	## Run in docker
 	./build/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml
 
-$(eval $(call expand_run_options_docker_images,run-biometrics))
-run-biometrics: run-deps	## Run in docker with biometrics
+run-biometrics:	## Run in docker with biometrics
 	$(MAKE) -C web run-biometrics
 
-$(eval $(call expand_run_options_docker_images,run-https))
-run-https: run-deps	## Run in docker with https
+run-https:	## Run in docker with https
 	$(MAKE) -C web run-https
 
-$(eval $(call expand_run_options_docker_images,run-android))
-run-android: run-deps	## Run in docker with https for android
+run-android:	## Run in docker with https for android
 	$(MAKE) -C web run-android
 
-$(eval $(call expand_run_options_docker_images,run-android-biometrics))
-run-android-biometrics: run-deps	## Run in docker for android with biometrics
+run-android-biometrics:	## Run in docker for android with biometrics
 	$(MAKE) -C web run-android-biometrics
 
 run-localbdd:	## Run in docker with stubs so BDD tests can be run locally

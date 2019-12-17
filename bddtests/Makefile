@@ -17,14 +17,8 @@ $(eval $(call expand_run_options_docker_images,run-native-ios))
 run-native-ios:	run-deps ## Run the nativesmoketests in BrowserStack against iOS; BROWSERSTACK_APPPATH must be set (e.g. ops20/iOSTCv1.17.0)
 	$(MAKE) -C ops run RUN_NATIVE=1 RUN_AS_DEVELOP=1 BROWSER=browserstack_ios
 
-run-deps: validate_local_secrets validate_local_images
-
-validate_local_secrets:
-	../build/validate_local_secrets.sh
-
-$(eval $(call expand_run_options_docker_images,validate_local_images))
-validate_local_images:
-	../build/validate_local_images.sh
+run-deps:
+	$(MAKE) -C .. run-deps
 
 .PHONY: run run-local run-native-android run-native-ios run-deps validate_local_secrets validate_local_images
 
