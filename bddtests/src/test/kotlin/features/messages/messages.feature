@@ -144,7 +144,7 @@ Feature: Messages
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
-    Then the Messages Inbox page is displayed
+    Then the senders and latest messages are displayed on the Messages Inbox page
     When retrieving the messages from the repository will cause an internal server error
     And I click on a sender in the Messages Inbox
     Then an error with a retry button is displayed indicating that there was a problem getting messages from the sender
