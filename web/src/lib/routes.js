@@ -233,6 +233,12 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
+  APPOINTMENT_CANCELLING_SUCCESS: {
+    name: 'appointments-cancelling-success',
+    path: '/appointments/cancelling-success',
+    crumb: {},
+    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+  },
   APPOINTMENT_CONFIRMATIONS: {
     name: 'appointments-confirmation',
     path: '/appointments/confirmation',
@@ -242,6 +248,12 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+  },
+  APPOINTMENT_BOOKING_SUCCESS: {
+    name: 'appointments-booking-success',
+    path: '/appointments/booking-success',
+    crumb: {},
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   APPOINTMENT_GP_AT_HAND: {
@@ -1035,6 +1047,12 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
   },
+  PRESCRIPTIONS_ORDER_SUCCESS: {
+    name: 'prescriptions-order-success',
+    path: '/prescriptions/order-success',
+    crumb: {},
+    helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
+  },
   RECALLS: {
     name: 'gp-medical-record-recalls',
     path: '/gp-medical-record/recalls',
@@ -1264,8 +1282,10 @@ export const {
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CANCELLING,
+  APPOINTMENT_CANCELLING_SUCCESS,
   APPOINTMENT_CANCEL_NOJS,
   APPOINTMENT_CONFIRMATIONS,
+  APPOINTMENT_BOOKING_SUCCESS,
   APPOINTMENT_ADMIN_HELP,
   APPOINTMENT_GP_ADVICE,
   APPOINTMENT_GP_AT_HAND,
@@ -1330,6 +1350,7 @@ export const {
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
+  PRESCRIPTIONS_ORDER_SUCCESS,
   PROCEDURES_V2,
   RECALLS,
   REFERRALS,

@@ -13,6 +13,8 @@ import {
   APPOINTMENT_GP_ADVICE,
   APPOINTMENT_GP_AT_HAND,
   APPOINTMENT_INFORMATICA,
+  APPOINTMENT_BOOKING_SUCCESS,
+  APPOINTMENT_CANCELLING_SUCCESS,
   CHECKYOURSYMPTOMS,
   CONSULTATIONS,
   EVENTS,
@@ -67,6 +69,7 @@ import {
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
+  PRESCRIPTIONS_ORDER_SUCCESS,
   PROCEDURES_V2,
   RECALLS,
   REFERRALS,
@@ -227,11 +230,30 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.appointmentCancelling';
       route.meta.pageTitleKey = 'pageTitles.appointmentCancelling';
       break;
+    case APPOINTMENT_CANCELLING_SUCCESS.name:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      if (store.getters['session/isProxying']) {
+        const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
+        route.meta.headerKey = 'pageHeaders.appointmentProxyCancellingSuccess';
+        route.meta.pageTitleKey = 'pageTitles.appointmentProxyCancellingSuccess';
+        route.meta.formatArguments = { name: givenName };
+      }
+      break;
     case APPOINTMENT_CONFIRMATIONS.name:
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.appointmentConfirmation';
       route.meta.pageTitleKey = 'pageTitles.appointmentConfirmation';
       break;
+    case APPOINTMENT_BOOKING_SUCCESS.name: {
+      store.dispatch('navigation/setNewMenuItem', 1);
+      if (store.getters['session/isProxying']) {
+        const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
+        route.meta.headerKey = 'pageHeaders.appointmentProxyBookingSuccess';
+        route.meta.pageTitleKey = 'pageTitles.appointmentProxyBookingSuccess';
+        route.meta.formatArguments = { name: givenName };
+      }
+      break;
+    }
     case APPOINTMENT_GP_AT_HAND.name:
     case APPOINTMENT_INFORMATICA.name:
       store.dispatch('navigation/setNewMenuItem', 1);
@@ -293,6 +315,15 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.repeatPrescriptionsPartialSuccess';
       route.meta.pageTitleKey = 'pageTitles.repeatPrescriptionsPartialSuccess';
+      break;
+    case PRESCRIPTIONS_ORDER_SUCCESS.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      if (store.getters['session/isProxying']) {
+        const givenName = get('state.linkedAccounts.actingAsUser.givenName')(store);
+        route.meta.headerKey = 'pageHeaders.prescriptionProxyOrderSuccess';
+        route.meta.pageTitleKey = 'pageTitles.prescriptionProxyOrderSuccess';
+        route.meta.formatArguments = { name: givenName };
+      }
       break;
     case MESSAGING.name:
     case MESSAGING_MESSAGES.name:

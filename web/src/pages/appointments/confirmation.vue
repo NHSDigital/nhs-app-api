@@ -185,7 +185,12 @@ import NoJsForm from '@/components/no-js/NoJsForm';
 import { createUri } from '@/lib/noJs';
 import { getMessage } from '@/lib/errors';
 import { redirectTo } from '@/lib/utils';
-import { APPOINTMENT_BOOKING, APPOINTMENT_CONFIRMATIONS, APPOINTMENTS } from '@/lib/routes';
+import {
+  APPOINTMENTS,
+  APPOINTMENT_BOOKING,
+  APPOINTMENT_CONFIRMATIONS,
+  APPOINTMENT_BOOKING_SUCCESS,
+} from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -404,8 +409,14 @@ export default {
             value: moment(this.slot.startTime).format('dddd | HH:mm:ss'),
           });
         }
-        this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
-        redirectTo(this, this.appointmentPath);
+        let successPath;
+        if (this.$store.getters['session/isProxying']) {
+          successPath = APPOINTMENT_BOOKING_SUCCESS.path;
+        } else {
+          this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
+          successPath = this.appointmentPath;
+        }
+        redirectTo(this, successPath);
       } catch (error) {
         /*
         empty catch block as the

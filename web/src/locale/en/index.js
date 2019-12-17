@@ -818,6 +818,12 @@ export default {
         },
       },
     },
+    bookingSuccess: {
+      proxyMessage: 'You have booked an appointment for {name}.',
+    },
+    cancellingSuccess: {
+      proxyMessage: 'You have cancelled {name}\'s appointment.',
+    },
     informatica: {
       header: 'Appointment booking is not currently available directly through the NHS App',
       description: 'Your GP surgery uses Appointments Online to book appointments, and you’ll need a username and password from your GP surgery.',
@@ -988,6 +994,9 @@ export default {
       medicationOrdered: 'Medication ordered successfully',
       orderStatusUpdate: 'The order status will be updated once it\'s been reviewed by your GP.',
       backButton: 'Back to your prescriptions',
+    },
+    orderSuccess: {
+      proxyMessage: 'You have ordered a prescription on behalf of {name}. The order status will be updated once it has been reviewed by {givenName}\'s GP.',
     },
   },
   nominated_pharmacy: {
@@ -1456,6 +1465,7 @@ export default {
     proceduresV2: 'Procedures',
     repeatPrescriptionCourses: 'Select medication',
     confirmPrescription: 'Confirm prescription',
+    prescriptionProxyOrderSuccess: '{name}\'s prescription has been ordered',
     consultationsAndEvents: 'Consultations and events',
     account: 'My account',
     encounters: 'Encounters',
@@ -1471,7 +1481,9 @@ export default {
     appointmentGuidance: 'Things to try before you book an appointment',
     appointmentBooking: 'Book an appointment',
     appointmentCancelling: 'Cancel appointment',
+    appointmentProxyCancellingSuccess: '{name}\'s appointment has been cancelled',
     appointmentConfirmation: 'Confirm your appointment',
+    appointmentProxyBookingSuccess: '{name}\'s appointment has been booked',
     medicalHistory: 'Medical history',
     myRecord: 'Your GP medical record',
     myRecordDocuments: 'Documents',
@@ -1510,7 +1522,9 @@ export default {
     appointmentGuidance: 'Things to try before you book an appointment',
     appointmentBooking: 'Book an appointment',
     appointmentCancelling: 'Cancel appointment',
+    appointmentProxyCancellingSuccess: '{name}\'s appointment has been cancelled',
     appointmentConfirmation: 'Confirm your appointment',
+    appointmentProxyBookingSuccess: '{name}\'s appointment has been booked',
     gpFinder: 'GP Finder',
     gpFinderParticipation: 'Features used by your GP surgery',
     gpFinderWaitingListSignup: 'Want us to email you when all features are available at your GP surgery?',
@@ -1518,6 +1532,7 @@ export default {
     prescriptions: 'Your repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication - Repeat prescriptions',
     confirmPrescription: 'Confirm prescription - Repeat prescriptions',
+    prescriptionProxyOrderSuccess: '{name}\'s prescription has been ordered',
     account: 'My account',
     myRecord: 'Sensitive information - Your GP medical record',
     allergiesAndReactions: 'Allergies and adverse reactions - Your GP medical record',

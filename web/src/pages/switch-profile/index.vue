@@ -24,26 +24,21 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <generic-button id="switch-profile-button" :button-classes="['nhsuk-button',
-                                                                     'nhsuk-button--primary']"
-                        @click.stop.prevent="switchProfileButtonClicked">
-          {{ $t('switchProfile.switchToMyProfileButton') }}
-        </generic-button>
+        <switch-profile-button />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { redirectTo } from '@/lib/utils';
-import { INDEX } from '@/lib/routes';
-import GenericButton from '@/components/widgets/GenericButton';
+import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
+
 import CalculateAgeInMonthsAndYears from '../../plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    GenericButton,
+    SwitchProfileButton,
   },
   mixins: [CalculateAgeInMonthsAndYears],
   data() {
@@ -54,16 +49,6 @@ export default {
   mounted() {
     this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.switchProfile', this.currentProfile));
     this.$store.dispatch('pageTitle/updatePageTitle', this.$t('pageTitles.switchProfile', this.currentProfile));
-  },
-  methods: {
-    async switchProfileButtonClicked() {
-      const mainPatientId = this.$store.getters['linkedAccounts/mainPatientId'];
-      const mainUserObject = {
-        id: mainPatientId,
-      };
-      await this.$store.dispatch('linkedAccounts/switchToMainUserProfile', mainUserObject);
-      redirectTo(this, INDEX.path);
-    },
   },
 };
 </script>

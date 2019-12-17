@@ -17,8 +17,7 @@
             description-data-sid="age-months"
             :description-id="'linked-account-age-' + index"
             header-tag="h2"
-            data-sid="linked-account">
-          </menu-item>
+            data-sid="linked-account"/>
         </menu-item-list>
       </div>
     </div>

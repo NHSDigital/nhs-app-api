@@ -76,6 +76,7 @@ import {
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
+  PRESCRIPTIONS_ORDER_SUCCESS,
 } from '@/lib/routes';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
@@ -185,8 +186,14 @@ export default {
         if (this.$store.state.repeatPrescriptionCourses.partialOrderResult) {
           redirectTo(this, PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS.path, null);
         } else {
-          this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
-          redirectTo(this, PRESCRIPTIONS.path);
+          let successPath;
+          if (this.$store.getters['session/isProxying']) {
+            successPath = PRESCRIPTIONS_ORDER_SUCCESS.path;
+          } else {
+            this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
+            successPath = PRESCRIPTIONS.path;
+          }
+          redirectTo(this, successPath);
         }
       } catch (error) {
         /*

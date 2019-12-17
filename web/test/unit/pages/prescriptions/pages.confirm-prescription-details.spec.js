@@ -1,11 +1,15 @@
 import ConfirmPrescription from '@/pages/prescriptions/confirm-prescription-details';
 import { mount } from '../../helpers';
-import { PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS } from '@/lib/routes';
+import { PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS, PRESCRIPTIONS_ORDER_SUCCESS } from '@/lib/routes';
+import * as dependency from '@/lib/utils';
+
+jest.mock('@/lib/utils');
 
 const createStore = ({
   hasNoNominatedPharmacy = false,
   pharmacyName = undefined,
   sjrEnabled = true,
+  isProxying = false,
 }) => ({
   dispatch: jest.fn(),
   app: {
@@ -30,9 +34,10 @@ const createStore = ({
     },
   },
   getters: {
-    'repeatPrescriptionCourses/selectedPrescriptions': [{ courseId: 1 }],
+    'repeatPrescriptionCourses/selectedPrescriptions': [{ id: 1 }],
     'nominatedPharmacy/hasNoNominatedPharmacy': hasNoNominatedPharmacy,
     'serviceJourneyRules/nominatedPharmacyEnabled': sjrEnabled,
+    'session/isProxying': isProxying,
   },
 });
 
@@ -65,7 +70,7 @@ const createStoreForNoJsTesting = ({ selectedCoursesNoJs, submitted, specialRequ
     },
   },
   getters: {
-    'repeatPrescriptionCourses/selectedPrescriptions': [{ courseId: 'course-id-1' }],
+    'repeatPrescriptionCourses/selectedPrescriptions': [{ id: 'course-id-1' }],
     'nominatedPharmacy/hasNoNominatedPharmacy': false,
     'serviceJourneyRules/nominatedPharmacyEnabled': true,
   },
@@ -85,6 +90,7 @@ describe('confirm prescriptions', () => {
 
   beforeEach(() => {
     $redirect = jest.fn();
+    dependency.redirectTo = jest.fn();
   });
 
   it('calling fetch when submitted is true (for no js) should submit the prescription order - multiple courses', async () => {
@@ -161,7 +167,29 @@ describe('confirm prescriptions', () => {
 
     // assert
     expect($store.dispatch)
-      .toHaveBeenNthCalledWith(1, 'repeatPrescriptionCourses/orderRepeatPrescription', expect.anything());
+      .toHaveBeenNthCalledWith(1, 'repeatPrescriptionCourses/orderRepeatPrescription', {
+        CourseIds: [1],
+        SpecialRequest: '',
+      });
+  });
+
+  it('should submit the prescription when clicked as proxy and redirect to confirmation page', async () => {
+    // arrange
+    $store = createStore({ isProxying: true });
+    wrapper = mountPage($store);
+
+    // act
+    await wrapper.vm.onConfirmButtonClicked();
+
+    // assert
+    expect($store.dispatch)
+      .toHaveBeenNthCalledWith(1, 'repeatPrescriptionCourses/orderRepeatPrescription', {
+        CourseIds: [1],
+        SpecialRequest: '',
+      });
+
+    expect(dependency.redirectTo)
+      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_ORDER_SUCCESS.path);
   });
 
   describe('nominated pharmacy summary', () => {

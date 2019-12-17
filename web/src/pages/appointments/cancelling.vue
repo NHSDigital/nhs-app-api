@@ -98,7 +98,7 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import { APPOINTMENTS, APPOINTMENT_CANCEL_NOJS } from '@/lib/routes';
+import { APPOINTMENTS, APPOINTMENT_CANCEL_NOJS, APPOINTMENT_CANCELLING_SUCCESS } from '@/lib/routes';
 import FormPost from '@/components/FormPost';
 import { redirectTo } from '@/lib/utils';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
@@ -171,8 +171,15 @@ export default {
         this.labelledBy = undefined;
         try {
           await this.$store.dispatch('myAppointments/cancel', data);
-          this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancelling.successText'));
-          redirectTo(this, APPOINTMENTS.path);
+
+          let successPath;
+          if (this.$store.getters['session/isProxying']) {
+            successPath = APPOINTMENT_CANCELLING_SUCCESS.path;
+          } else {
+            this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancelling.successText'));
+            successPath = APPOINTMENTS.path;
+          }
+          redirectTo(this, successPath);
         } catch (error) {
           /*
           empty catch block as the
