@@ -4,6 +4,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.assertIsVisible
+
 @DefaultUrl("http://web.local.bitraft.io:3000/account")
 class MyAccountPage : HybridPageObject() {
 
@@ -21,7 +22,7 @@ class MyAccountPage : HybridPageObject() {
             page = this
     )
 
-    val personalDetails = AccountPersonalDetailsModule(this)
+    val cookieLink = AccountCookieLinkModule(this)
 
     val aboutUs = AccountAboutUsModule(this)
 

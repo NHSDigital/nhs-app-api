@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -30,10 +31,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());            
-            
+                .Customize(new ApiControllerAutoFixtureCustomization());
+
             _termsAndConditionsService = _fixture.Freeze<Mock<ITermsAndConditionsService>>();
-            
+
             _userSession = _fixture.Create<UserSession>();
             _userSession.GpUserSession.NhsNumber = _fixture.Create<string>();
             _userSession.GpUserSession.OdsCode = _fixture.Create<string>();
@@ -49,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             _systemUnderTest.ControllerContext = new ControllerContext
             {
                 HttpContext = httpContextMock.Object
-            };          
+            };
         }
 
         [TestMethod]
@@ -60,16 +61,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             var response = new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
 
             _termsAndConditionsService.Setup(x => x.RecordConsent(
-                _userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request,
-                It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
-            
+                    _userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request,
+                    It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult((TermsAndConditionsRecordConsentResult) response))
+                .Verifiable();
+
             // Act
             var result = await _systemUnderTest.Post(request);
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
+            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber,
+                _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.InitialConsentRecorded>();
+            okObjectResult.Value.Should()
+                .BeAssignableTo<TermsAndConditionsRecordConsentResult.InitialConsentRecorded>();
         }
 
         [TestMethod]
@@ -82,14 +87,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             var response = new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
 
             _termsAndConditionsService.Setup(x => x.RecordConsent(
-                _userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request,
-                It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
+                    _userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request,
+                    It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult((TermsAndConditionsRecordConsentResult) response))
+                .Verifiable();
 
             // Act
             var result = await _systemUnderTest.Post(request);
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
+            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber,
+                _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
         }
@@ -101,14 +109,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             var request = _fixture.Create<ConsentRequest>();
             var response = new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
             _termsAndConditionsService.Setup(x => x.RecordConsent(
-                _userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request,
-                It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
-            
+                    _userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request,
+                    It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult((TermsAndConditionsRecordConsentResult) response))
+                .Verifiable();
+
             // Act
             var result = await _systemUnderTest.Post(request);
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
+            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber,
+                _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status462FailedToRecordConsent);
         }
@@ -119,8 +130,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             // Arrange
             var consentRecord = _fixture.Create<ConsentResponse>();
             var response = new TermsAndConditionsFetchConsentResult.Success(consentRecord);
-            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
-            
+            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber))
+                .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
+
             // Act
             var result = await _systemUnderTest.Get();
 
@@ -142,8 +154,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         {
             // Arrange
             var response = new TermsAndConditionsFetchConsentResult.NoConsentFound(new ConsentResponse());
-            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
-            
+            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber))
+                .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
+
             // Act
             var result = await _systemUnderTest.Get();
 
@@ -165,8 +178,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         {
             // Arrange
             var response = new TermsAndConditionsFetchConsentResult.FailureToFetchConsent();
-            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
-            
+            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber))
+                .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
+
             // Act
             var result = await _systemUnderTest.Get();
 
@@ -174,6 +188,53 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber));
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status463FailedToFetchConsent);
+        }
+
+        [TestMethod]
+        public async Task ToggleAnalyticsCookieAcceptance_Returns_Success()
+        {
+            // Arrange
+            var request = _fixture.Create<AnalyticsCookieAcceptance>();
+            var response = new ToggleAnalyticsCookieAcceptanceResult.Success();
+
+            _termsAndConditionsService.Setup(x => x.ToggleAnalyticsCookieAcceptance(
+                    _userSession.GpUserSession.NhsNumber, request,
+                    It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult((ToggleAnalyticsCookieAcceptanceResult) response))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request);
+
+            // Assert
+            _termsAndConditionsService.Verify(x =>
+                x.ToggleAnalyticsCookieAcceptance(_userSession.GpUserSession.NhsNumber, request,
+                    It.IsAny<DateTimeOffset>()));
+            var noContentResult = result.Should().BeAssignableTo<NoContentResult>().Subject;
+            noContentResult.Should().BeAssignableTo<NoContentResult>();
+        }
+
+        [TestMethod]
+        public async Task ToggleAnalyticsCookieAcceptance_Returns_Failure()
+        {
+            // Arrange
+            var request = _fixture.Create<AnalyticsCookieAcceptance>();
+            var response = new ToggleAnalyticsCookieAcceptanceResult.Failure();
+            _termsAndConditionsService.Setup(x => x.ToggleAnalyticsCookieAcceptance(
+                    _userSession.GpUserSession.NhsNumber, request,
+                    It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult((ToggleAnalyticsCookieAcceptanceResult) response))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request);
+
+            // Assert
+            _termsAndConditionsService.Verify(x =>
+                x.ToggleAnalyticsCookieAcceptance(_userSession.GpUserSession.NhsNumber, request,
+                    It.IsAny<DateTimeOffset>()));
+            result.Should().BeAssignableTo<StatusCodeResult>()
+                .Subject.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }
     }
 }

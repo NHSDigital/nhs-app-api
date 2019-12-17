@@ -1,13 +1,16 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
   <div v-if="showTemplate">
     <div v-if="!$store.state.device.isNativeApp">
-      <h2 class="nhsuk-u-margin-bottom-0">{{ $t('myAccount.detailsHeading') }}</h2>
-      <div>
-        <welcome-section :name="$store.state.session.user"
-                         :date-of-birth="$store.state.session.dateOfBirth"
-                         :nhs-number="$store.state.session.nhsNumber" />
-      </div>
+      <h2>{{ $t('myAccount.detailsHeading') }}</h2>
     </div>
+    <menu-item-list data-purpose="cookie-menu">
+      <menu-item id="'cookies'"
+                 header-tag="h2"
+                 :href="cookiesPath"
+                 :text="$t('myAccount.cookiesLink')"
+                 :click-func="goToUrl"
+                 :click-param="cookiesPath"/>
+    </menu-item-list>
 
     <template v-if="$store.state.device.isNativeApp">
       <settings v-if="(showBiometrics || showNotifications)"
@@ -46,13 +49,15 @@
 
 <script>
 /* eslint-disable import/extensions */
+import { ACCOUNT_COOKIES } from '@/lib/routes';
 import AboutUs from '@/components/account/AboutUs';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import CeMarkIcon from '@/components/icons/CeMarkIcon';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
 import NativeCallbacks from '@/services/native-app';
 import Settings from '@/components/account/Settings';
 import sjrIf from '@/lib/sjrIf';
-import WelcomeSection from '@/components/WelcomeSection';
 import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
@@ -60,14 +65,16 @@ export default {
   components: {
     AboutUs,
     CeMarkIcon,
+    MenuItem,
+    MenuItemList,
     Settings,
     GenericButton,
     AnalyticsTrackedTag,
-    WelcomeSection,
   },
   data() {
     return {
       nativeLoginOptionsMethodExists: true,
+      cookiesPath: ACCOUNT_COOKIES.path,
     };
   },
   computed: {

@@ -8,5 +8,6 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
     {       
         Task<TermsAndConditionsRecordConsentResult> RecordConsent(string nhsNumber, string odsCode, ConsentRequest request, DateTimeOffset termsAndConditionsAcceptanceDate);
         Task<TermsAndConditionsFetchConsentResult> FetchConsent(string nhsNumber);
+        Task<ToggleAnalyticsCookieAcceptanceResult> ToggleAnalyticsCookieAcceptance(string nhsNumber, AnalyticsCookieAcceptance analyticsCookieConsent, DateTimeOffset dateAnalyticsCookieAccepted);
     }
 }

@@ -50,7 +50,7 @@ open class WebHeader : HybridPageObject() {
     )
 
     val accountLink = HybridPageElement(
-            webDesktopLocator = "//a[normalize-space(text())='Account']",
+            webDesktopLocator = "//a[normalize-space(text())='Settings']",
             page = this
     )
 

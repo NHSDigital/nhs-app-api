@@ -22,7 +22,7 @@ class NavHeaderStepDefinitions {
     fun iAmOnTheRecordWarningPage() {
         nav.select(NavBarNative.NavBarType.MY_RECORD)
     }
-    @When("^I click the my account icon$")
+    @When("^I click the settings icon$")
     fun iClickTheMyAccountIcon() {
         navHeader.clickMyAccount()
     }

@@ -37,7 +37,7 @@ data class Patient(
         var sessionId: String = "",
         var endUserSessionId: String = "",
         val linkageKey: String = "",
-        val userPatientLinkToken: String = "",
+        var userPatientLinkToken: String = "",
         val nhsNumbers: List<String> = emptyList(),
         val patientId: String = "",
         val passphrase: String = "",

@@ -90,6 +90,18 @@ const routes = {
     }],
     helpUrl: `${baseNhsAppHelpUrl}account/`,
   },
+  ACCOUNT_COOKIES: {
+    name: 'account-cookies',
+    path: '/account/cookies',
+    crumb: {
+      nativeDisabled: false,
+      i8nKey: 'accountCookies',
+      get parentRoute() {
+        return this.allRoutes.ACCOUNT;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}account/`,
+  },
   ACCOUNT_NOTIFICATIONS: {
     name: 'account-notifications',
     path: '/account/notifications',
@@ -1277,6 +1289,7 @@ export const getCrumbTrailForRoute = (route) => {
 
 export const {
   ACCOUNT,
+  ACCOUNT_COOKIES,
   ACCOUNT_NOTIFICATIONS,
   ACCOUNT_SIGNOUT,
   ALLERGIESANDREACTIONS,

@@ -7,6 +7,10 @@ describe('termsAndConditions/mutation-types', () => {
       state = initialState();
     });
 
-    it('will set `areAccepted` to false', () => expect(state.areAccepted).toEqual(false));
+    it('will set `areAccepted` to false', () => {
+      expect(state.areAccepted).toEqual(false);
+      expect(state.analyticsCookieAccepted).toEqual(false);
+      expect(state.updatedConsentRequired).toEqual(false);
+    });
   });
 });

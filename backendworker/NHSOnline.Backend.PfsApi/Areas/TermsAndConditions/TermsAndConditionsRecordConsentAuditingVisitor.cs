@@ -42,7 +42,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             return null;
         }
 
-
         private void AuditConsent(string message)
         {
             _auditor.Audit(AuditingOperations.TermsAndConditionsRecordConsentAuditTypeResponse, message + " consent - ConsentGiven: {0} and DateOfConsent: {1:O}",

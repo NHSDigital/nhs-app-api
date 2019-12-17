@@ -93,7 +93,9 @@ class AuthenticationStepDefinitions {
         val patient = Patient.getDefault(supplier)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SuccessfulRegistrationJourney(mockingClient).create(patient, supplier)
-
+        DemographicsFactory
+                .getForSupplier(supplier)
+                .enableForPatientProxyAccounts(patient)
         browser.goToApp()
     }
 

@@ -97,7 +97,7 @@ Feature: Login with proxy access
     Then details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
     Then I see the home page
-    When I click the my account icon
+    When I click the settings icon
     Then the settings shutter page is displayed
     When I navigate to Symptoms
     Then the symptoms shutter page is displayed

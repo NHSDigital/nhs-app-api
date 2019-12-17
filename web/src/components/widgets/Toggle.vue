@@ -7,8 +7,7 @@
            :name="name"
            :checked="value"
            role="switch"
-           @click.stop.prevent="onClick"
-           @keypress.space.prevent="onClick">
+           @click.stop.prevent="onClick">
     <label v-visible="!isWaiting"
            :for="checkboxId"
            @click.stop.prevent="onClick"/>

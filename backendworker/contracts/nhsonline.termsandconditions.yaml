@@ -10,7 +10,6 @@ paths:
         - termsAndConditions
       summary: Gets the patient consent for the logged on user.
       description: Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
-     
       responses:
         "200":
           description: Returns patient consent data for the logged in user.
@@ -37,6 +36,25 @@ paths:
         "201":
           description: Appointment successfully created.
         "462":
+          description: Unable to record consent at this time.
+  /toggle-analytics-cookie-acceptance:
+    post:
+      tags:
+        - termsAndConditions
+      summary: Records patient Analytics cookie consent and date of consent
+      description: Records whether the logged in user has given their consent to use analytics cookie
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalyticsCookieConsent"
+        description: Object indicating whether consent has been granted, and the date the request was made.
+        required: true
+        x-name: AnalyticsCookieConsent
+      responses:
+        "204":
+          description: Analytics cookie preference set.
+        "500":
           description: Unable to record consent at this time.
 components:
   schemas:
@@ -69,3 +87,11 @@ components:
         updatingConsent:
           type: boolean
           description: Flag indicating whether the user is consenting to updated terms and conditions
+    AnalyticsCookieConsent:
+      type: object
+      required:
+        - analyticsCookieAccepted
+      properties:
+        analyticsCookieAccepted:
+          type: boolean
+          description: Flag indicating whether the user has consented to the use of analytics     

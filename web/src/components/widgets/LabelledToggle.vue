@@ -2,11 +2,14 @@
   <div :class="$style.toggleAndLabel">
     <label class="nhsuk-u-font-size-19"
            aria-hidden="true"
+           :aria-label="labelText"
            :for="checkboxId"
            @click.stop.prevent="onClick">
       {{ label }}
+      <span v-if="hintText !== ''" class="nhsuk-body"><br>{{ hintText }}</span>
     </label>
     <toggle :value="value" :checkbox-id="checkboxId" :is-waiting="isWaiting" @input="onClick"/>
+
   </div>
 </template>
 
@@ -35,6 +38,15 @@ export default {
     value: {
       default: '',
     },
+    hintText: {
+      type: String,
+      default: '',
+    },
+  },
+  computed: {
+    labelText() {
+      return `${this.label} ${this.hintText}`;
+    },
   },
   methods: {
     onClick() {
@@ -47,32 +59,40 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '~nhsuk-frontend/packages/core/settings/breakpoints';
-@import '~nhsuk-frontend/packages/core/settings/colours';
-@import '~nhsuk-frontend/packages/core/settings/globals';
-@import '~nhsuk-frontend/packages/core/settings/spacing';
-@import '~nhsuk-frontend/packages/core/tools/spacing';
-@import '~nhsuk-frontend/packages/core/tools/sass-mq';
-@import '~nhsuk-frontend/packages/core/tools/ifff';
-
+ @import '~nhsuk-frontend/packages/core/tools/mixins';
+  @import '~nhsuk-frontend/packages/core/tools/spacing';
+  @import '~nhsuk-frontend/packages/core/settings/spacing';
+  @import '~nhsuk-frontend/packages/core/tools/sass-mq';
 .toggleAndLabel {
-  @include nhsuk-responsive-padding(2, "top");
-  @include nhsuk-responsive-padding(3, "left");
-  @include nhsuk-responsive-padding(2, "bottom");
-  @include nhsuk-responsive-padding(2, "right");
-  @include nhsuk-responsive-margin(4, "bottom");
-  background: $color_nhsuk-white;
-  border-top: 1px $color_nhsuk-grey-4 solid;
-  border-bottom: 1px $color_nhsuk-grey-4 solid;
-  @include govuk-media-query($until: desktop) {
-    padding-left: $nhsuk-gutter-half;
-    margin-left: (-$nhsuk-gutter-half);
-    margin-right: (-$nhsuk-gutter-half);
-  }
+  background: #fff;
+  border-top: 1px #d8dde0 solid;
+  border-bottom: 1px #d8dde0 solid;
+  padding: 1em;
+  margin: 5px -16px 1em;
   label {
     display: inline-block;
     width: calc(100% - 4em);
     vertical-align: middle;
+  }
+  &.waiting{
+    .spinner{
+      display:block;
+    }
+    .toggleWrapper label{
+      &:before, &:after{
+        display: none;
+      }
+    }
+  }
+  p {
+    display: inline-block;
+    width: calc(100% - 4em);
+    vertical-align: middle;
+  }
+
+  @include govuk-media-query('tablet') {
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 </style>

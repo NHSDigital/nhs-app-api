@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import {
   ACCOUNT,
+  ACCOUNT_COOKIES,
   ACCOUNT_NOTIFICATIONS,
   ALLERGIESANDREACTIONS,
   ACUTE_MEDICINES,
@@ -114,8 +115,6 @@ function setPageTitle(route, store, app) {
 }
 
 export default function ({ route, store, app }) {
-  const isNative = $store =>
-    ($store.state.device.source === 'android' || $store.state.device.source === 'ios');
   switch (route.name) {
     case INDEX.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
@@ -138,13 +137,18 @@ export default function ({ route, store, app }) {
       break;
     case ACCOUNT.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
-      route.meta.headerKey = isNative(store) ? 'pageHeaders.settings' : 'pageHeaders.account';
-      route.meta.pageTitleKey = 'pageTitles.account';
+      route.meta.headerKey = 'pageHeaders.settings';
+      route.meta.pageTitleKey = 'pageTitles.settings';
       break;
     case ACCOUNT_NOTIFICATIONS.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'pageHeaders.notifications';
       route.meta.pageTitleKey = 'pageTitles.notifications';
+      break;
+    case ACCOUNT_COOKIES.name:
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
+      route.meta.headerKey = 'pageHeaders.cookies';
+      route.meta.pageTitleKey = 'pageTitles.cookies';
       break;
     case ACUTE_MEDICINES.name:
       route.meta.headerKey = 'pageHeaders.acuteMedicines';

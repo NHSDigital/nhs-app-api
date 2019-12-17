@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using Microsoft.Extensions.Configuration;
@@ -192,11 +193,8 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                     termsAndConditions.ConsentGiven = request.ConsentGiven;
                     termsAndConditions.DateOfConsent = termsAndConditionsConsentDate;
 
-                    var docLink = string.Format(CultureInfo.InvariantCulture, "dbs/{0}/colls/{1}/docs/{2}",
-                        _termsConfig.DatabaseId, _termsConfig.CollectionName, termsAndConditions.Id);
-
-                    await _client.ReplaceDocumentAsync(docLink, termsAndConditions);
-
+                    await ReplaceDocument(termsAndConditions);
+                    
                     return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
                 }
                 
@@ -211,6 +209,54 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             {
                 _logger.LogExit();
             }
+        }
+        public async Task<ToggleAnalyticsCookieAcceptanceResult> ToggleAnalyticsCookieAcceptance(string nhsNumber, AnalyticsCookieAcceptance analyticsCookieConsent, DateTimeOffset dateAnalyticsCookieAccepted)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                if (_termsConfig.Stubbed)
+                {
+                    return new ToggleAnalyticsCookieAcceptanceResult.Success();
+                }
+            
+                if (_disposed)
+                {
+                    throw new ObjectDisposedException(GetType().FullName);
+                }
+
+                var termsAndConditions = await GetTermsAndConditionsConsent(nhsNumber);
+
+                if (termsAndConditions != null)
+                {
+                    termsAndConditions.AnalyticsCookieAccepted = analyticsCookieConsent.AnalyticsCookieAccepted;
+                    termsAndConditions.DateAnalyticsCookieAccepted = dateAnalyticsCookieAccepted;
+
+                    await ReplaceDocument(termsAndConditions);
+
+                    return new ToggleAnalyticsCookieAcceptanceResult.Success();
+                }
+                
+                return new ToggleAnalyticsCookieAcceptanceResult.Failure();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unsuccessful request to toggle analytics cookie acceptance");
+                return new ToggleAnalyticsCookieAcceptanceResult.Failure();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private async Task ReplaceDocument(TermsAndConditionsRecord termsAndConditionsRecord)
+        {
+            var docLink = string.Format(CultureInfo.InvariantCulture, "dbs/{0}/colls/{1}/docs/{2}",
+                _termsConfig.DatabaseId, _termsConfig.CollectionName, termsAndConditionsRecord.Id);
+
+            await _client.ReplaceDocumentAsync(docLink, termsAndConditionsRecord);
         }
 
         private async Task<TermsAndConditionsRecord> GetTermsAndConditionsConsent(string nhsNumber)

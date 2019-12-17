@@ -3,14 +3,13 @@ package features.myAccount.stepDefintions
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import pages.account.MyAccountPage
-import utils.SerenityHelpers
 
 class MyAccountStepDefinitions {
 
     lateinit var myAccount: MyAccountPage
 
     @When("I click the Notifications link on the Account page")
-    fun iClickTheNotificationsLinkOnTheAccountPage(){
+    fun iClickTheNotificationsLinkOnTheAccountPage() {
         myAccount.settings.notifications.click()
     }
 
@@ -24,26 +23,23 @@ class MyAccountStepDefinitions {
         myAccount.assertDisplayed()
     }
 
-    @Then("^I see my personal details")
-    fun iSeeMyPersonalDetails() {
-        val patient = SerenityHelpers.getPatient()
-        myAccount.personalDetails.assertVisible(patient.formattedFullName(),
-                patient.formattedDateOfBirth(),
-                patient.formattedNHSNumber())
-    }
-
     @Then("the Account Settings are available")
-    fun theAccountSettingsAreAvailable(){
+    fun theAccountSettingsAreAvailable() {
         myAccount.settings.assertLinksPresent()
     }
 
     @Then("there are no Account Settings available")
-    fun thereAreNoAccountSettingsAvailable(){
+    fun thereAreNoAccountSettingsAvailable() {
         myAccount.settings.assertNotDisplayed()
     }
 
     @Then("the link to Notifications is not available on the Account page")
     fun theLinkToNotificationsIsNotAvailableOnTheAccountPage() {
         myAccount.settings.assertNotDisplayed()
+
+        @When("I click the cookies link")
+        fun iClickTheCookiesLinkOnTheAccountPage() {
+            myAccount.cookieLink.cookie.click()
+        }
     }
 }

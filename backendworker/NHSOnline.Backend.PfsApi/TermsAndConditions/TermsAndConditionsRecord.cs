@@ -21,8 +21,8 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         public string Id { get; private set; }
         public string NhsNumber { get; }
         public bool ConsentGiven { get; set; }
-        public bool AnalyticsCookieAccepted { get; }
+        public bool AnalyticsCookieAccepted { get; set; }
         public DateTimeOffset DateOfConsent { get; set; }
-        public DateTimeOffset? DateAnalyticsCookieAccepted { get; }   
+        public DateTimeOffset? DateAnalyticsCookieAccepted { get; set; }   
     }
 }

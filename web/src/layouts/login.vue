@@ -100,7 +100,6 @@ export default {
         lang: `${this.$t('language')}`,
       },
       title: `${this.$store.state.header.headerText} screen`,
-      script: [],
     };
   },
   mounted() {

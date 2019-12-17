@@ -46,7 +46,7 @@ open class SharedStepDefinitions {
         BrowserstackLocalService.stop()
     }
 
-    @Given("^I am a (.*) patient$")
+    @Given("^I am an? (.*) patient$")
     fun initialisePatientAndGpSystem(gpSystem: String)
     {
         val supplier = Supplier.valueOf(gpSystem)

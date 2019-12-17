@@ -6,10 +6,10 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions.Models
     {
         [Required]
         public bool ConsentGiven { get; set; }
-        
+
         [Required]
         public bool AnalyticsCookieAccepted { get; set; }
-        
+
         [Required]
         public bool UpdatingConsent { get; set; }
     }

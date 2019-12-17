@@ -13,7 +13,6 @@ describe('AboutUs', () => {
     $store = createStore({ $env: {
       TERMS_AND_CONDITIONS_URL: URL_EXTERNAL,
       PRIVACY_POLICY_URL: URL_EXTERNAL,
-      COOKIES_POLICY_URL: URL_EXTERNAL,
       OPEN_SOURCE_LICENCES_URL: URL_EXTERNAL,
       HELP_AND_SUPPORT_URL: URL_EXTERNAL,
       ACCESSIBILITY_STATEMENT: URL_EXTERNAL } });
@@ -28,12 +27,11 @@ describe('AboutUs', () => {
 
   it('links available', () => {
     const links = wrapper.findAll('li');
-    expect(links.at(0).text()).toContain('translate_myAccount.termsAndConditions');
-    expect(links.at(1).text()).toContain('translate_myAccount.privacyPolicy');
-    expect(links.at(2).text()).toContain('translate_myAccount.cookiesPolicy');
-    expect(links.at(3).text()).toContain('translate_myAccount.openSourceLicences');
-    expect(links.at(4).text()).toContain('translate_myAccount.helpAndSupport');
-    expect(links.at(5).text()).toContain('translate_myAccount.accessibilityStatement');
+    expect(links.at(0).text()).toContain('translate_myAccount.helpAndSupport');
+    expect(links.at(1).text()).toContain('translate_myAccount.accessibilityStatement');
+    expect(links.at(2).text()).toContain('translate_myAccount.openSourceLicences');
+    expect(links.at(3).text()).toContain('translate_myAccount.privacyPolicy');
+    expect(links.at(4).text()).toContain('translate_myAccount.termsAndConditions');
   });
 });
 

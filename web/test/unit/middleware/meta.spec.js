@@ -36,7 +36,7 @@ describe('tests for meta.js', () => {
     route.name = ACCOUNT.name;
     meta({ route, store, app });
 
-    expect(route.meta.headerKey).toBe('pageHeaders.account');
+    expect(route.meta.headerKey).toBe('pageHeaders.settings');
   });
 
   it('will return the native header key for "Settings" : ios', () => {

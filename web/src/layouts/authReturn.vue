@@ -297,7 +297,6 @@ export default {
         lang: `${this.$t('language')}`,
       },
       title: this.$t('auth_return.errors.pageTitle'),
-      script: [],
     };
   },
   computed: {

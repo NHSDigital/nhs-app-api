@@ -4,6 +4,6 @@
     {
         T Visit(TermsAndConditionsRecordConsentResult.InitialConsentRecorded result);
         T Visit(TermsAndConditionsRecordConsentResult.UpdateConsentRecorded result);
-        T Visit(TermsAndConditionsRecordConsentResult.FailureToRecordConsent result);       
+        T Visit(TermsAndConditionsRecordConsentResult.FailureToRecordConsent result);
     }
 }

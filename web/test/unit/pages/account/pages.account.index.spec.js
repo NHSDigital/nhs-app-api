@@ -1,13 +1,10 @@
 import AccountPage from '@/pages/account/index';
 import AboutUs from '@/components/account/AboutUs';
-import Settings from '@/components/account/Settings';
 import WebFooter from '@/components/widgets/WebFooter';
-import WelcomeSection from '@/components/WelcomeSection';
 import { create$T, createStore, initFilters, mount, toClass } from '../../helpers';
 
 describe('Account Page', () => {
   let wrapper;
-
 
   initFilters();
 
@@ -58,17 +55,11 @@ describe('Account Page', () => {
       $style: createStyle() });
   };
 
-  describe('not on a native app', () => {
-    beforeEach(() => {
-      wrapper = mountPage({ notificationsEnabled: true, isNativeApp: false });
-    });
-
-    it('will not show Settings component', () => {
-      expect(wrapper.find(Settings).exists()).toBe(false);
-    });
-  });
-
   describe('on a native app', () => {
+    beforeEach(() => {
+      wrapper = mountPage({ notificationsEnabled: true, isNativeApp: true });
+    });
+
     it('will verify that footer links are subset of links in account page', () => {
       const webHeaderWrapper = mount(WebFooter, { $env });
       const accountCssLinkPath = `ul${toClass('list-menu')} li a`;
@@ -83,32 +74,12 @@ describe('Account Page', () => {
       expect(footerLinks.every(link => accountLinks.includes(link))).toBeTruthy();
     });
 
-    it('will show About Us component', () => {
+    it('will have a cookies link', () => {
+      expect(wrapper.findAll('li').at(0).text()).toContain('translate_myAccount.cookiesLink');
+    });
+
+    it('will show About the NHS App component', () => {
       expect(wrapper.find(AboutUs).exists()).toBe(true);
-    });
-
-    it('will show Welcome Section component', () => {
-      expect(wrapper.find(WelcomeSection).exists()).toBe(true);
-    });
-
-    describe('service journey rules notifications disabled', () => {
-      beforeEach(() => {
-        wrapper = mountPage({ notificationsEnabled: false, isNativeApp: true });
-      });
-
-      it('will not show Settings component', () => {
-        expect(wrapper.find(Settings).exists()).toBe(false);
-      });
-    });
-
-    describe('service journey rules notifications enabled', () => {
-      beforeEach(() => {
-        wrapper = mountPage({ notificationsEnabled: true, isNativeApp: true });
-      });
-
-      it('will show Settings component', () => {
-        expect(wrapper.find(Settings).exists()).toBe(true);
-      });
     });
   });
 
@@ -135,7 +106,7 @@ describe('Account Page', () => {
       expect($store.dispatch).toBeCalledWith('header/updateHeaderText', 'translate_pageHeaders.settings');
     });
 
-    it('will remain as to "My Account" for desktop', () => {
+    it('will be set to "Settings" for desktop', () => {
       $state.device.isNativeApp = false;
 
       mount(AccountPage, {

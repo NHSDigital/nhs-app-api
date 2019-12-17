@@ -8,6 +8,15 @@ export default {
   init({ commit }) {
     commit(INIT_ACCEPTANCE);
   },
+  async toggleAnalyticsCookieConsent({ commit }, analyticsCookieConsent) {
+    await this.app.$http
+      .postV1PatientTermsAndConditionsToggleAnalyticsCookieAcceptance(analyticsCookieConsent)
+      .then(() => {
+        commit(SET_ACCEPTANCE, { analyticsCookieAccepted: false });
+        return true;
+      })
+      .catch(() => false);
+  },
   async acceptTerms({ commit }, consentTerms) {
     let analyticsCookie = false;
     if (consentTerms.consentRequest.UpdatingConsent) {

@@ -13,5 +13,5 @@
     Scenario: The my account page is captured
       Given I am a EMIS patient
       When I am logged in
-      And I click the my account icon
+      And I click the settings icon
       Then the myAccount page is saved to disk
