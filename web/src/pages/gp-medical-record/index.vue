@@ -65,13 +65,12 @@
 
           <dcr-microtest-gp-record v-if="supplier === 'MICROTEST'"/>
         </template>
-
-        <template v-else>
-          <p :class="$style.summaryRecordWarning">
-            {{ $t('my_record.viewRestOfHealthRecordWarning') }}
-          </p>
-        </template>
       </menu-item-list>
+      <template v-if="!hasDetailedRecordAccess">
+        <p>
+          {{ $t('my_record.viewRestOfHealthRecordWarning') }}
+        </p>
+      </template>
       <glossary/>
     </div>
     <div v-else class="pull-content">
@@ -157,9 +156,9 @@ export default {
     },
     showPatientDetails() {
       return (this.$store.state.myRecord.patientDetails.patientName ||
-        this.$store.state.myRecord.patientDetails.dateOfBirth ||
-        this.$store.state.myRecord.patientDetails.nhsNumber ||
-        this.$store.state.myRecord.patientDetails.address);
+          this.$store.state.myRecord.patientDetails.dateOfBirth ||
+          this.$store.state.myRecord.patientDetails.nhsNumber ||
+          this.$store.state.myRecord.patientDetails.address);
     },
     hasAgreedToMedicalWarning() {
       return agreedToMedicalWarning();
