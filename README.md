@@ -100,6 +100,57 @@ The following can be specified with `make run-bdd` to customise the behaviour
 | SKIP_PREPARE=1   | Bypasses the gradle prepare step. Useful if restarting the containers and this has already been run.          |
 | TAG=[dockertag]  | Pull images with the specified \[dockertag\] to run the tests against.                                        |
 
+## Secrets
+
+Secrets required for running the app locally are stored in Keybase (`team/nhsonline/development_secrets`). These are automatically copied to your home directory (`~/.nhsonline/secrets`) when the app is run using make if the keybase filesystem integration is working. If it is not an error will be reported and the files should be manually copied across.
+
+### Adding Secrets
+
+1. Add a file containing the secret to the `development_secrets` directory in keybase
+2. Add a line to `build/validate_local_secrets.sh` containing the name of the secret. e.g.
+
+    ```bash
+    validate_secret my_new_secret
+    ```
+
+3. Add the secret to the top of the root `docker-compose.yml` file and include it in the `secrets` section of any services that require it. e.g.
+
+    ```bash
+    my_new_secret:
+        file: "~/.nhsonline/secrets/my_new_secret"
+
+    services:
+        my.service:
+            secrets:
+                - my_new_secret
+    ```
+
+4. Update the appropriate `.env` file in the `docker` directory to set the envrionment variable expected to contain the secret. e.g.
+
+    ```bash
+    MY_NEW_SECRET=/run/secrets/my_new_secret
+    ```
+
+5. If the envrionment variable is expected to contain the secret and not a path to the secret update the entrypoint for the appropriate services to set the variable from the contents of the file. e.g.
+
+    ```bash
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+          export MY_NEW_SECRET=$$(<$$MY_NEW_SECRET)
+          exec $$*
+      - "--"
+    ```
+
+6. Create a suitable dummy secret file in `bddtests/dummysecrets`. This must *not* contain a real secret but a dummy value for the secret expected by the tests.
+7. Update `bddtests/docker-compose.yml` to reference the dummy secret. e.g.
+
+    ```bash
+    my_new_secret:
+        file: "./bddtests/dummysecrets/my_new_secret"
+    ```
+
 > IOS app
 
 ## Cocoapod install
