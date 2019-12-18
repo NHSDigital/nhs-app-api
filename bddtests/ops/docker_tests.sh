@@ -335,14 +335,15 @@ for TAG in ${TAGS[*]}; do
   fi
 
   # Run docker tests per tag
-  docker-compose -p $TAG $DOCKER_COMPOSE_FILES_ARG up -d --build || die "Docker compose failure"
 
   if [ "$RUN_LOCAL_BDD" == 1 ]
   then
-    echo docker-compose -p $TAG $DOCKER_COMPOSE_FILES_ARG down
+    docker-compose -p "$TAG" $DOCKER_COMPOSE_FILES_ARG up
     exit
   fi
 
+  docker-compose -p "$TAG" $DOCKER_COMPOSE_FILES_ARG up -d || die "Docker compose failure"
+    
   ##################### Runtime vars
   WEB_ID=$(docker ps -qf name=${TAG}_web.*)
   NETWORK=$(docker inspect $WEB_ID --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' | cut -c 1-12)
