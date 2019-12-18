@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -47,28 +47,15 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         {
             if (!HasSuccessResponse)
             {
-                var parseErrorSuccess = responseParser.TryParseBody<OrganDonationErrorResponse>(
-                    stringResponse, 
-                    responseMessage, 
-                    out var response);
-                if (!parseErrorSuccess)
-                {
-                    logger.LogError("An error occured while parsing the response");
-                }
+                ErrorResponse = responseParser.ParseBody<OrganDonationErrorResponse>(
+                    stringResponse);
                 logger.LogError($"Server returned with error. {ErrorForLogging}");
-                ErrorResponse = response;
                 return this;
             }
 
             Expires = responseMessage.Content?.Headers?.Expires;
 
-            var parseSuccess = responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
-            if (!parseSuccess)
-            {
-                logger.LogError("An error occured while parsing the response");
-            }
-
-            Body = body;
+            Body = responseParser.ParseBody<TBody>(stringResponse);
             return this;
         }
 

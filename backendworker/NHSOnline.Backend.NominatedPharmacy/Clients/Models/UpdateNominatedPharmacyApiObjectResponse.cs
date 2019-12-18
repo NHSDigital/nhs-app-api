@@ -30,12 +30,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients.Models
             {
                 RawResponse = stringResponse;
 
-                var parseSuccess= responseParser.TryParseBody<UpdateNominatedPharmacyResponseEnvelope>(stringResponse, responseMessage, out var response);
-                Response = response;
-                if (!parseSuccess)
-                {
-                    logger.LogError("An error occured while parsing the response");
-                }
+                Response = responseParser.ParseBody<UpdateNominatedPharmacyResponseEnvelope>(stringResponse);
             }
         }
 

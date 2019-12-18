@@ -118,16 +118,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             {
                 var stringResponse = await GetStringResponse(responseMessage, logger);
                 return string.IsNullOrEmpty(stringResponse)
-                    ? this : ParseResponse(responseParser, stringResponse, responseMessage);
+                    ? this : ParseResponse(responseParser, stringResponse);
             }
 
             private NhsSearchApiObjectResponse<TBody> ParseResponse(
                 IResponseParser responseParser, 
-                string stringResponse, 
-                HttpResponseMessage responseMessage)
+                string stringResponse)
             {
-                responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
-                Body = body;
+                Body = responseParser.ParseBody<TBody>(stringResponse);
                 return this;
             }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -26,13 +27,15 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
             {
                 return;
             }
-            
-            if (context.Exception is NhsUnparsableException)
+
+            if (context.Exception is NhsUnparsableException unparsableException)
             {
                 var serviceDeskReference =
                     ErrorReferenceGenerator.GenerateAndLogErrorReference(new ErrorTypes.UnhandledError());
 
-                Logger.LogError($"Response was unparsable - exception: {context.Exception}");
+                var redactedExceptions = string.Join(", ",
+                    unparsableException.ErrorMessages.Select(error => error.ToString()));
+                Logger.LogError($"Response was unparsable: {redactedExceptions}");
 
                 context.Result = new ObjectResult(new PfsErrorResponse
                 {

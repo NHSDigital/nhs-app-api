@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
@@ -329,20 +329,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
                 return string.IsNullOrEmpty(stringResponse)
                     ? this
                     : ParseResponse(responseParser,
-                        stringResponse,
-                        responseMessage);
+                        stringResponse);
             }
 
             private MicrotestApiObjectResponse<TBody> ParseResponse(
                 IResponseParser responseParser,
-                string stringResponse,
-                HttpResponseMessage responseMessage)
+                string stringResponse)
             {
-                responseParser.TryParseBody<TBody>(
-                    stringResponse, 
-                    responseMessage,
-                    out var body);
-                Body = body;
+                Body = responseParser.ParseBody<TBody>(stringResponse);
                 return this;
             }
         }

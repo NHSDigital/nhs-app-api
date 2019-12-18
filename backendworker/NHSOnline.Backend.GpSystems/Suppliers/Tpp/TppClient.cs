@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -392,13 +392,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             {
                 if (IsErrorResponse(stringResponse))
                 {
-                    responseParser.TryParseBody<Error>(stringResponse, responseMessage, out var error);
-                    ErrorResponse = error;
+                    ErrorResponse = responseParser.ParseBody<Error>(stringResponse);
                     logger.LogError($"Server returned with error. {ErrorForLogging}");
                     return;
                 }
-                responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
-                Body = body;
+                Body = responseParser.ParseBody<TBody>(stringResponse);
 
                 if (responseMessage.Headers.TryGetValues(ResponseSuidHeader, out var values))
                 {

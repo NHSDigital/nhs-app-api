@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
@@ -306,7 +306,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             {
                 var stringResponse = await GetStringResponse(responseMessage, logger);
                 return string.IsNullOrEmpty(stringResponse)
-                    ? this : ParseResponse(responseParser, logger, stringResponse, responseMessage);
+                    ? this : ParseResponse(responseParser, logger, stringResponse);
             }
 
             public VisionResponseEnvelope<TBody> RawResponse { get; set; }
@@ -374,21 +374,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             private VisionApiObjectResponse<TBody> ParseResponse(
                 IResponseParser responseParser,
                 ILogger logger,
-                string stringResponse,
-                HttpResponseMessage responseMessage)
+                string stringResponse)
             {
                 try
                 {
-                    var parseSuccess = responseParser.TryParseBody<VisionResponseEnvelope<TBody>>(stringResponse, 
-                        responseMessage, 
-                        out var responseObject);
-                    RawResponse = responseObject;
-
-                    if (!parseSuccess)
-                    {
-                        logger.LogError($"Vision Error Response could not be parsed: : {stringResponse}");
-                        UnparsableResultMessage = stringResponse;
-                    }
+                    RawResponse = responseParser.ParseBody<VisionResponseEnvelope<TBody>>(stringResponse);
                 }
                 catch (InvalidOperationException e)
                 {

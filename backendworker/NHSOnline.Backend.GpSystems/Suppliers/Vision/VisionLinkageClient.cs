@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -108,22 +108,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
                 if (!string.IsNullOrEmpty(stringResponse))
                 {
-                    ParseResponse(responseParser, stringResponse, responseMessage);
+                    ParseResponse(responseParser, stringResponse);
                 }
             }
 
             private void ParseResponse(
                 IResponseParser responseParser,
-                string stringResponse,
-                HttpResponseMessage responseMessage)
+                string stringResponse)
             {
-                responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
-                Body = body;
+                Body = responseParser.ParseBody<TBody>(stringResponse);
                 
                 if (!HasSuccessResponse)
                 {
-                    responseParser.TryParseBody<ErrorResponseWrapper>(stringResponse, responseMessage, out var errorResponseWrapper);
-                    ErrorResponse = errorResponseWrapper?.Error;
+                    var errorWrapper = responseParser.ParseBody<ErrorResponseWrapper>(stringResponse);
+                    ErrorResponse = errorWrapper?.Error ?? default;
                 }
             }
 

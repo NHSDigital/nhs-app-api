@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http;
 
 namespace NHSOnline.Backend.Support.ResponseParsers
@@ -13,11 +13,9 @@ namespace NHSOnline.Backend.Support.ResponseParsers
 
     public interface IResponseParser
     {
-        bool TryParseBadRequest<T>(string stringResponse, HttpResponseMessage message, out T response);
-        bool TryParseBody<T>(string stringResponse, HttpResponseMessage message, out T response);
-        bool TryParseError<T>(string stringResponse,
+        T ParseBody<T>(string stringResponse);
+        T ParseError<T>(string stringResponse,
             HttpResponseMessage message,
-            out T response,
             params HttpStatusCode[] allowedErrorStatuses);
     }
 }

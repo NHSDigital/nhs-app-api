@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
@@ -122,10 +122,8 @@ namespace NHSOnline.Backend.Auth.CitizenId
                 return response;
             }
 
-            _responseParser.TryParseBody<TResponse>(stringResponse, responseMessage, out var body);
-            response.Body = body;
-            _responseParser.TryParseError<ErrorResponse>(stringResponse, responseMessage, out var error);
-            response.ErrorResponse = error;
+            response.Body = _responseParser.ParseBody<TResponse>(stringResponse);
+            response.ErrorResponse = _responseParser.ParseError<ErrorResponse>(stringResponse, responseMessage);
 
             return response;
         }

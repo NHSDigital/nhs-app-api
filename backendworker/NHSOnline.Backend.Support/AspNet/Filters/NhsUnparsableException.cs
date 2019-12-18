@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSOnline.Backend.Support.AspNet.Filters
 {
     public class NhsUnparsableException : FormatException
     {
-        public SourceApi SourceApi { get; set; }
+        public List<NhsUnparsableExceptionError> ErrorMessages { get; }
 
         public NhsUnparsableException()
         {
@@ -16,6 +18,12 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
 
         public NhsUnparsableException(string message, Exception innerException) : base(message, innerException)
         {
+        }
+
+
+        public NhsUnparsableException(string message, IEnumerable<NhsUnparsableExceptionError> errorMessages) : base(message)
+        {
+            ErrorMessages = errorMessages.ToList();
         }
     }
 }

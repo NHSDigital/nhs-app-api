@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.ResponseParsers;
 
@@ -28,24 +27,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients.Models
             var stringResponse = await GetStringResponse(responseMessage, logger);
             if (!string.IsNullOrEmpty(stringResponse))
             {
-                ParseResponse(responseParser, logger, stringResponse, responseMessage);
-            }
-        }
-
-        private void ParseResponse(
-            IResponseParser responseParser,
-            ILogger logger,
-            string stringResponse,
-            HttpResponseMessage responseMessage)
-        {
-            var parseSuccess = responseParser.TryParseBody<NominatedPharmacyResponseEnvelope<TBody>>(
-                stringResponse,
-                responseMessage,
-                out var response);
-            RawResponse = response;
-            if (!parseSuccess)
-            {
-                logger.LogError("An error occured while parsing the response");
+                RawResponse = responseParser.ParseBody<NominatedPharmacyResponseEnvelope<TBody>>(
+                    stringResponse);
             }
         }
 

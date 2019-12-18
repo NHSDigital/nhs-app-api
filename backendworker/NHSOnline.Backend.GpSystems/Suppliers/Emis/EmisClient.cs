@@ -17,7 +17,6 @@ using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.AspNet.Filters;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
@@ -449,23 +448,30 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                     return;
                 }
 
-                responseParser.TryParseBody<TBody>(stringResponse, responseMessage, out var body);
-                Body = body;
-                responseParser.TryParseBadRequest<StandardErrorResponse>(stringResponse, responseMessage,
-                    out var standardErrorResponse);
-                StandardErrorResponse = standardErrorResponse;
-                responseParser.TryParseBadRequest<BadRequestErrorResponse>(stringResponse, responseMessage,
-                    out var errorResponseBadRequest);
-                ErrorResponseBadRequest = errorResponseBadRequest;
-                responseParser.TryParseError<ExceptionErrorResponse>(
+                Body = responseParser.ParseBody<TBody>(stringResponse);
+
+                StandardErrorResponse = ParseBadRequestError<StandardErrorResponse>(
+                        responseParser, stringResponse, responseMessage);
+                ErrorResponseBadRequest = ParseBadRequestError<BadRequestErrorResponse>(
+                    responseParser, stringResponse, responseMessage);
+                ExceptionErrorResponse = responseParser.ParseError<ExceptionErrorResponse>(
                     stringResponse,
                     responseMessage,
-                    out var exceptionErrorResponse,
                     HttpStatusCode.BadRequest);
-                ExceptionErrorResponse = exceptionErrorResponse;
+            }
+            protected override bool FormatResponseIfUnsuccessful => true;
+        }
+
+        private static T ParseBadRequestError<T>(
+            IResponseParser responseParser,
+            string stringResponse, HttpResponseMessage responseMessage)
+        {
+            if (responseMessage.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return responseParser.ParseBody<T>(stringResponse);
             }
 
-            protected override bool FormatResponseIfUnsuccessful => true;
+            return default;
         }
 
         private static string EncodeDateTimeOffsetToIso(DateTimeOffset dateTimeOffset)
