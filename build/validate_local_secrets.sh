@@ -12,22 +12,22 @@ for possible_keybase_path in ${POSSIBLE_KEYBASE_PATHS[*]}; do
     fi
 done
 
+if [ ! -d ~/.nhsonline/secrets ]; then
+    mkdir -p ~/.nhsonline/secrets
+fi
+
 function validate_secret {
     SECRET_NAME="$1"
     SECRET_LOCAL_PATH=~/.nhsonline/secrets/$SECRET_NAME
-   
+    SECRET_KEYBASE_PATH="$KEYBASE_PATH/team/nhsonline/development_secrets/$SECRET_NAME"
 
-    if [ ! -f "$SECRET_LOCAL_PATH" ]
-    then
-        mkdir -p ~/.nhsonline/secrets
-
-        if [ -f "$KEYBASE_PATH/team/nhsonline/development_secrets/$SECRET_NAME" ]; then
-            cp "$KEYBASE_PATH/team/nhsonline/development_secrets/$SECRET_NAME" "$SECRET_LOCAL_PATH"
-        fi
+    if [ "$SECRET_LOCAL_PATH" -ot "$SECRET_KEYBASE_PATH" ]; then
+        echo "$SECRET_KEYBASE_PATH => $SECRET_LOCAL_PATH"
+        cp "$SECRET_KEYBASE_PATH" "$SECRET_LOCAL_PATH"
     fi
     
     if [ ! -f "$SECRET_LOCAL_PATH" ]; then
-        echo "Missing secret $SECRET_LOCAL_PATH"
+        echo "Missing secret $SECRET_LOCAL_PATH (from Keybase $SECRET_KEYBASE_PATH)"
         MISSING_SECRETS=$((MISSING_SECRETS+1))
     fi
 }
@@ -35,6 +35,7 @@ function validate_secret {
 validate_secret azure_notification_hub_key
 validate_secret azure_notification_hub_key_bdd
 validate_secret browserstack_accesskey
+validate_secret gp_lookup_api_key
 validate_secret microtest_client_cert.password
 validate_secret microtest_client_cert.pfx
 validate_secret organ_donation_cert.password
@@ -44,6 +45,5 @@ validate_secret spine_client_cert.password
 validate_secret spine_client_cert.pfx
 validate_secret tpp_client_cert.password
 validate_secret tpp_client_cert.pfx
-validate_secret gp_lookup_api_key
 
 exit $MISSING_SECRETS
