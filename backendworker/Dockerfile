@@ -46,4 +46,4 @@ RUN rm SetupCerts.sh
 USER aspnetcore
 EXPOSE $PORT
 ENV PROJECT_NAME=${PROJECT_NAME}
-CMD ./bootstrap.sh && exec dotnet ${PROJECT_NAME}.dll
+CMD sudo update-ca-certificates && exec dotnet ${PROJECT_NAME}.dll
