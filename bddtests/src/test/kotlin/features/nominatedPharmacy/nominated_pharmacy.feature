@@ -15,7 +15,7 @@ Feature: nominated pharmacy journey
     When I click on the nominated pharmacy panel
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
-    When I click on change my nominated pharmacy link
+    When I click on change your nominated pharmacy link
     Then I see search nominated pharmacy page loaded
     Given searching for pharmacies with <search text> has 10 results
     When I search for a <search text> and click on search button
@@ -46,7 +46,7 @@ Feature: nominated pharmacy journey
     When I click on the nominated pharmacy panel
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
-    When I click on change my nominated pharmacy link
+    When I click on change your nominated pharmacy link
     Then I see search nominated pharmacy page loaded
     When I search for a <search text> and click on search button
     Then I see the no results found page
@@ -70,7 +70,7 @@ Feature: nominated pharmacy journey
     When I click on the nominated pharmacy panel
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
-    When I click on change my nominated pharmacy link
+    When I click on change your nominated pharmacy link
     Then I see search nominated pharmacy page loaded
     Given searching for pharmacies with <search text> has 0 results
     When I search for a <search text> and click on search button
@@ -102,7 +102,7 @@ Feature: nominated pharmacy journey
     When I click on item 4 pharmacy from the list of pharmacies
     Then I see confirm nominated page with selected pharmacy details
     When I click on confirm button to change my nominated pharmacy
-    Then I see my nominated pharmacy page with chosen pharmacy details
+    Then I see your nominated pharmacy page with chosen pharmacy details
     When I navigate to prescriptions
     Then I see prescriptions page loaded
     And I see my nominated pharmacy on the prescriptions page

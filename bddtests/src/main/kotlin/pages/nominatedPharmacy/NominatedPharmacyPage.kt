@@ -9,7 +9,7 @@ import pages.sharedElements.BannerObject
 open class NominatedPharmacyPage : PharmacyDetailComponent() {
 
     val changePharmacyLink = HybridPageElement(
-                webDesktopLocator = "//a[contains(text(), 'Change my nominated pharmacy')]",
+                webDesktopLocator = "//button[contains(text(), 'Change your nominated pharmacy')]",
                 page = this
     )
 
@@ -34,14 +34,14 @@ open class NominatedPharmacyPage : PharmacyDetailComponent() {
     }
 
     fun isLoadedWithPharmacy() {
-        headerNative.waitForPageHeaderText("My nominated pharmacy")
+        headerNative.waitForPageHeaderText("Your nominated pharmacy")
     }
 
     fun isLoadedWithDispensingPractiseHeader() {
-        headerNative.waitForPageHeaderText("My dispensing practice")
+        headerNative.waitForPageHeaderText("Your dispensing practice")
     }
 
     fun isLoadedWithNoPharmacy() {
-        headerNative.waitForPageHeaderText("Nominate my pharmacy")
+        headerNative.waitForPageHeaderText("Nominate your pharmacy")
     }
 }

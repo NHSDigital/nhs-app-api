@@ -15,6 +15,6 @@ open class ConfirmNominatedPharmacyPage : PharmacyDetailComponent() {
     private lateinit var headerNative: HeaderNative
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("Confirm my nominated pharmacy")
+        headerNative.waitForPageHeaderText("Confirm your nominated pharmacy")
     }
 }

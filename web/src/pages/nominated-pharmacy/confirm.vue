@@ -1,28 +1,30 @@
 <template>
-  <div v-if="showTemplate"
-       :class="[$style['pull-content'], $style.content,
-                !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <pharmacy-detail id="pharmacy-detail"
-                     :pharmacy="nominatedPharmacy"
-                     :is-my-nominated-pharmacy="false" />
-    <generic-button id="confirm-button"
-                    :button-classes="['nhsuk-button']"
-                    @click.stop.prevent="submitNominatedPharmacy">
-      {{ $t('nominated_pharmacy.confirm.confirmButton') }}
-    </generic-button>
-    <analytics-tracked-tag :text="$t('generic.backButton.text')"
-                           :tabindex="-1">
-      <generic-button v-if="$store.state.device.isNativeApp" id="back-button"
-                      :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                      tabindex="0" @click.prevent="cancelButtonClicked">
-        {{ $t('generic.backButton.text') }}
-      </generic-button>
-      <desktopGenericBackLink v-else
-                              id="back-link"
-                              :path="nominatedPharmacySearchResultsPath"
-                              :button-text="'generic.backButton.text'"
-                              @clickAndPrevent="cancelButtonClicked"/>
-    </analytics-tracked-tag>
+  <div v-if="showTemplate">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <pharmacy-detail id="pharmacy-detail"
+                         :pharmacy="nominatedPharmacy"
+                         :is-my-nominated-pharmacy="false" />
+        <generic-button id="confirm-button"
+                        :button-classes="['nhsuk-button']"
+                        @click.stop.prevent="submitNominatedPharmacy">
+          {{ $t('nominated_pharmacy.confirm.confirmButton') }}
+        </generic-button>
+        <analytics-tracked-tag :text="$t('generic.backButton.text')"
+                               :tabindex="-1">
+          <generic-button v-if="$store.state.device.isNativeApp" id="back-button"
+                          :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                          tabindex="0" @click.prevent="cancelButtonClicked">
+            {{ $t('generic.backButton.text') }}
+          </generic-button>
+          <desktopGenericBackLink v-else
+                                  id="back-link"
+                                  :path="nominatedPharmacySearchResultsPath"
+                                  :button-text="'generic.backButton.text'"
+                                  @clickAndPrevent="cancelButtonClicked"/>
+        </analytics-tracked-tag>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,6 +38,7 @@ import { redirectTo } from '@/lib/utils';
 import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY } from '@/lib/routes';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     GenericButton,
     AnalyticsTrackedTag,
@@ -66,10 +69,10 @@ export default {
         redirectTo(this, NOMINATED_PHARMACY.path);
       } catch (error) {
         /*
-        empty catch block as the
-        ApiError.vue (component) handles and
-        surfaces appropriate error content based on the http status code returned from the API
-        */
+          empty catch block as the
+          ApiError.vue (component) handles and
+          surfaces appropriate error content based on the http status code returned from the API
+          */
       }
     },
     cancelButtonClicked() {
@@ -85,23 +88,23 @@ export default {
   @import "../../style/info";
 
   div {
-  &.desktopWeb {
-    max-width: 540px;
+    &.desktopWeb {
+      max-width: 540px;
 
-    .warningText {
-      font-family: $default_web;
-      font-weight: normal;
-    }
+      .warningText {
+        font-family: $default_web;
+        font-weight: normal;
+      }
 
-    li {
-      font-family: $default_web;
-      font-weight: normal;
-    }
+      li {
+        font-family: $default_web;
+        font-weight: normal;
+      }
 
-    p {
-      font-family: $default_web;
-      font-weight: normal;
+      p {
+        font-family: $default_web;
+        font-weight: normal;
+      }
     }
   }
-}
 </style>

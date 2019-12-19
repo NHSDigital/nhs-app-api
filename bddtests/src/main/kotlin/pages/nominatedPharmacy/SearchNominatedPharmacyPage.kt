@@ -23,7 +23,7 @@ open class SearchNominatedPharmacyPage : HybridPageObject() {
     private lateinit var headerNative: HeaderNative
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("Change my nominated pharmacy")
+        headerNative.waitForPageHeaderText("Change your nominated pharmacy")
     }
 
     fun enterSearchText(searchTerm: String) {

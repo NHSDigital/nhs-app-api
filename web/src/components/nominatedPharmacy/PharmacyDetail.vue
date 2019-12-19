@@ -1,20 +1,32 @@
 <template>
   <div>
-    <p v-if="showInstruction" id="instruction">{{ instructionText }}</p>
-    <pharmacy-summary id="pharmacy-summary"
-                      :pharmacy="pharmacy" />
-    <p v-if="isInternetPharmacy" id="statement"
-       :class="[$style['spacing-top']]">{{ $t('nominated_pharmacy.internetPharmacy') }}</p>
-    <pharmacy-opening-times v-if="!isInternetPharmacy" id="pharmacy-opening-times"
-                            :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
-    <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink"
+    <div class="nhsuk-body">
+      <p v-if="showInstruction" id="instruction" class="nhsuk-u-margin-top-0">
+        {{ instructionText }}</p>
+      <pharmacy-summary id="pharmacy-summary"
+                        :pharmacy="pharmacy" />
+      <p v-if="isInternetPharmacy" id="statement"
+         :class="[$style['spacing-top']]">{{ $t('nominated_pharmacy.internetPharmacy') }}</p>
+      <pharmacy-opening-times v-if="!isInternetPharmacy" id="pharmacy-opening-times"
+                              :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
+      <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink &&
+                               displayChangeMyNominatedPharmacyButton"
+                             id="button-to-change-pharmacy"
+                             :click-func="goToChangeNominatedPharmacySearch"
+                             :text="$t('nominated_pharmacy.changePharmacyLink')">
+        <generic-button class="nhsuk-button">
+          {{ $t('nominated_pharmacy.changePharmacyLink') }}
+        </generic-button>
+      </analytics-tracked-tag>
+    </div>
+    <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink &&
+                             !displayChangeMyNominatedPharmacyButton"
                            id="link-to-change-pharmacy"
-                           :click-func="goToChangeNominatedPharmacySearch"
-                           :class="[$style.checkFeaturesLink, $style['link-spacing'],
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]"
                            :text="$t('nominated_pharmacy.changePharmacyLink')"
-                           tag="a">
-      {{ $t('nominated_pharmacy.changePharmacyLink') }}
+                           :click-func="goToChangeNominatedPharmacySearch">
+      <desktopGenericBackLink id="back-link"
+                              :button-text="'nominated_pharmacy.changePharmacyLink'"
+                              @clickAndPrevent="goToChangeNominatedPharmacySearch"/>
     </analytics-tracked-tag>
   </div>
 </template>
@@ -28,10 +40,14 @@ import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
 import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
 import { redirectTo } from '@/lib/utils';
+import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 export default {
   name: 'PharmacyDetail',
   components: {
+    DesktopGenericBackLink,
+    GenericButton,
     AnalyticsTrackedTag,
     PharmacySummary,
     PharmacyOpeningTimes,
@@ -55,6 +71,11 @@ export default {
       required: false,
     },
     showInstruction: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    displayChangeMyNominatedPharmacyButton: {
       type: Boolean,
       required: false,
       default: true,
@@ -87,22 +108,10 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '../../style/listmenu';
-@import "../../style/panels";
-@import "../../style/colours";
-@import "../../style/textstyles";
-@import "../../style/home";
 
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-  padding-bottom: 0.5em;
-}
-
-.checkFeaturesLink.link-spacing {
-  display: inline-block;
-  margin: 1.2em 0;
-}
+  .nhsuk-back-link__link {
+    display: inline-block;
+    cursor: pointer;
+  }
 
 </style>

@@ -108,8 +108,8 @@ describe('nominated pharmacy found', () => {
 
     it('will exist', () => {
       expect(pharmacyDetails.exists()).toBe(true);
-      const linkToChange = wrapper.find('#link-to-change-pharmacy');
-      expect(linkToChange.exists()).toBe(true);
+      const buttonToChange = wrapper.find('#button-to-change-pharmacy');
+      expect(buttonToChange.exists()).toBe(true);
     });
   });
 

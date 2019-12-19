@@ -384,13 +384,13 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     };
                 case MedicalApplianceCode:
                 case DispensingDoctorCode:
-                    _logger.LogInformation(
-                        $"Patient has a {patientCareSection.Key} pharmacy which is not a valid pharmacy type");
-                    return new PharmacyCheck
-                    {
+                     _logger.LogInformation(
+                         $"Patient has a {patientCareSection.Key} pharmacy which is not a valid pharmacy type");
+                     return new PharmacyCheck
+                     {
                         IsValid = false, 
                         PatientCareProvisionEvent = null,
-                    };
+                     };
                 default:
                     _logger.LogError("Unknown error when filtering nominated pharmacy");
                     return new PharmacyCheck

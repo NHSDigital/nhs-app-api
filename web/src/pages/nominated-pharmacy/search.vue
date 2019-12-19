@@ -1,67 +1,75 @@
 <template>
-  <div v-if="showTemplate" :class="[$style['pull-content'], $style.content,
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <div :class="$style.info">
-      <message-dialog id="warning-dialog-nominated-pharmacy"
-                      message-type="warning"
-                      :icon-text="$t('messageIconText.important')">
-        <div v-if="noPharmacyNominated">
-          <message-text>
-            {{ $t('nominated_pharmacy.search.line1') }}
-          </message-text>
-        </div>
-        <div v-else-if="isInternetPharmacy">
-          <message-text>
-            {{ warningText }}
-          </message-text>
-        </div>
-        <div v-else>
-          <message-text>
-            {{ $t('nominated_pharmacy.search.warning.paragraph1') }}
-          </message-text>
-          <message-text>
-            {{ $t('nominated_pharmacy.search.warning.paragraph2') }}
-          </message-text>
-        </div>
-      </message-dialog>
-      <h3> {{ $t('nominated_pharmacy.search.subHeader') }} </h3>
-      <p id="pharmacy-search-label"
-         :class="[$style['search-label-spacing'], $style['search-label']]">
-        {{ $t('nominated_pharmacy.search.line2') }}
-      </p>
-      <error-message v-if="showEmptySearchError"
-                     :id="$style['error-label']"
-                     :class="$style['search-label-spacing']"
-                     role="alert">
-        {{ $t('nominated_pharmacy.search.emptySearchError') }}
-      </error-message>
-      <form @submit.prevent="searchFormSubmitted">
-        <generic-text-input id="searchTextInput"
-                            v-model="searchQuery"
-                            :class="[$store.state.device.isNativeApp
-                              ? $style['input-spacing']: $style['input-spacing-desktop']]"
-                            type="text"
-                            a-labelled-by="pharmacy-search-label"
-                            name="searchQuery"
-                            :maxlength="searchQueryMaxLengthAsString"/>
-        <generic-button id="search-button"
-                        :button-classes="['nhsuk-button']">
-          {{ $t('nominated_pharmacy.search.searchButton') }}
-        </generic-button>
-        <analytics-tracked-tag :text="$t('generic.backButton.text')" :tabindex="-1">
-          <generic-button v-if="$store.state.device.isNativeApp"
-                          id="back-button"
-                          :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                          tabindex="0" @click.prevent="cancelButtonClicked">
-            {{ $t('generic.backButton.text') }}
+  <div v-if="showTemplate">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <message-dialog id="warning-dialog-nominated-pharmacy"
+                        message-type="warning"
+                        :icon-text="$t('messageIconText.important')">
+          <div v-if="noPharmacyNominated">
+            <message-text>
+              {{ $t('nominated_pharmacy.search.line1') }}
+            </message-text>
+          </div>
+          <div v-else-if="isInternetPharmacy">
+            <message-text>
+              {{ warningText }}
+            </message-text>
+          </div>
+          <div v-else>
+            <message-text>
+              {{ $t('nominated_pharmacy.search.warning.paragraph1') }}
+            </message-text>
+            <message-text>
+              {{ $t('nominated_pharmacy.search.warning.paragraph2') }}
+            </message-text>
+          </div>
+        </message-dialog>
+      </div>
+    </div>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <h3 class="nhsuk-u-margin-bottom-1"> {{ $t('nominated_pharmacy.search.subHeader') }} </h3>
+        <p id="pharmacy-search-label"
+           class="nhsuk-hint">
+          {{ $t('nominated_pharmacy.search.line2') }}
+        </p>
+        <error-message v-if="showEmptySearchError"
+                       :id="$style['error-label']"
+                       :class="$style['search-label-spacing']"
+                       role="alert">
+          {{ $t('nominated_pharmacy.search.emptySearchError') }}
+        </error-message>
+      </div>
+    </div>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <form @submit.prevent="searchFormSubmitted">
+          <generic-text-input id="searchTextInput"
+                              v-model="searchQuery"
+                              class="nhsuk-input--width-10 nhsuk-u-padding-bottom-3"
+                              type="text"
+                              a-labelled-by="pharmacy-search-label"
+                              name="searchQuery"
+                              :maxlength="searchQueryMaxLengthAsString"/>
+          <generic-button id="search-button"
+                          :button-classes="['nhsuk-button']">
+            {{ $t('nominated_pharmacy.search.searchButton') }}
           </generic-button>
-          <desktopGenericBackLink v-else
-                                  id="back-link"
-                                  :path="backButtonPath"
-                                  :button-text="'generic.backButton.text'"
-                                  @clickAndPrevent="cancelButtonClicked"/>
-        </analytics-tracked-tag>
-      </form>
+          <analytics-tracked-tag :text="$t('generic.backButton.text')" :tabindex="-1">
+            <generic-button v-if="$store.state.device.isNativeApp"
+                            id="back-button"
+                            :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                            tabindex="0" @click.prevent="cancelButtonClicked">
+              {{ $t('generic.backButton.text') }}
+            </generic-button>
+            <desktopGenericBackLink v-else
+                                    id="back-link"
+                                    :path="backButtonPath"
+                                    :button-text="'generic.backButton.text'"
+                                    @clickAndPrevent="cancelButtonClicked"/>
+          </analytics-tracked-tag>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -80,6 +88,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     GenericButton,
     GenericTextInput,
@@ -170,8 +179,8 @@ export default {
     },
     validateSearchQueryLength(searchQuery) {
       return searchQuery &&
-             searchQuery.length >= 1 &&
-             searchQuery.length <= this.searchQueryMaxLength;
+          searchQuery.length >= 1 &&
+          searchQuery.length <= this.searchQueryMaxLength;
     },
     async searchForPharmacies(searchQuery) {
       const pharmacySearchResult = {
@@ -203,32 +212,10 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/buttons";
-@import "../../style/spacings";
-@import '../../style/colours';
-@import '../../style/textstyles';
-
-.above-float-button {
-  margin-bottom: $marginBottomFullScreen;
-}
-
-.input-spacing {
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
-.input-spacing-desktop {
-  margin-top: 1em;
-  margin-bottom: 1em;
-  max-width: 350px;
-}
-
-.search-label-spacing {
-  margin-bottom: 1em;
-}
-
-.search-label {
-  @include small_text;
-  color: $light_grey;
-}
+  @import '~nhsuk-frontend/packages/core/settings/colours';
+  @import '../../style/_textstyles';
+  .search-label {
+    @include small_text;
+    color: $color_nhsuk-grey-2;
+  }
 </style>

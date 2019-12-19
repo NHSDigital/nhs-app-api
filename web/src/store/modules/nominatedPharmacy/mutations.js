@@ -15,7 +15,6 @@ import {
 export default {
   [NOMINATED_PHARMACY_LOADED](state, data) {
     const pharmacy = assign({}, data.pharmacyDetails);
-
     state.pharmacy = pharmacy;
     state.hasLoaded = true;
     state.nominatedPharmacyEnabled = data.nominatedPharmacyEnabled;

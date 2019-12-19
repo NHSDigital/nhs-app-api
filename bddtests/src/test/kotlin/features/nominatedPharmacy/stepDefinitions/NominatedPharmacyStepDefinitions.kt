@@ -94,7 +94,7 @@ class NominatedPharmacyStepDefinitions {
         nominatedPharmacyDataSetupSteps.setupNoNominatedPharmacy()
     }
 
-    @When("^I click on change my nominated pharmacy link$")
+    @When("^I click on change your nominated pharmacy link$")
     fun iClickOnChangeMyNominatedPharmacyLink() {
         nominatedPharmacyPage.changePharmacyLink.click()
     }
@@ -201,10 +201,11 @@ class NominatedPharmacyStepDefinitions {
                     dataItem.OrganisationName, searchResults[index].pharmacyName)
             assertEquals(
                     "Pharmacy address is not correct",
-                    dataItem.addressFormatted(), searchResults[index].address)
+                    dataItem.Address1, searchResults[index].address)
 
-            val phoneNumber = dataItem.primaryPhone()
-            if (phoneNumber != null) {
+            val phoneNumberData = dataItem.primaryPhone()
+            val phoneNumber = "Telephone: $phoneNumberData"
+            if (phoneNumberData != null) {
                 assertEquals(
                         "Phone number is not correct",
                         phoneNumber, searchResults[index].phoneNumber)
@@ -240,7 +241,7 @@ class NominatedPharmacyStepDefinitions {
         checkPharmacyDetailsAreCorrect()
     }
 
-    @Then("^I see my nominated pharmacy page with chosen pharmacy details$")
+    @Then("^I see your nominated pharmacy page with chosen pharmacy details$")
     fun iSeeNominatedPharmacyPageWithChosenPharmacyDetails() {
         nominatedPharmacyPage.isLoadedWithPharmacy()
         nominatedPharmacyPage.assertYouHaveChosenYourNominatedPharmacyBannerIsVisible()

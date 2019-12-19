@@ -1,8 +1,6 @@
 <template>
   <div v-if="showTemplate"
-       id="mainDiv"
-       :class="[$style['pull-content'], $style.content,
-                !$store.state.device.isNativeApp && $style.desktopWeb]">
+       id="mainDiv">
     <div v-if="hasNoNominatedPharmacy">
       <no-nominated-pharmacy-warning/>
     </div>
@@ -13,6 +11,7 @@
                        :is-my-nominated-pharmacy="true"
                        :previous-path="currentPage"
                        :can-change-pharmacy="showChangePharmacyLink"
+                       :displayChangeMyNominatedPharmacyButton="false"
                        :show-instruction="false" />
     </div>
 
@@ -46,6 +45,7 @@ import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_CHECK } 
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     GenericButton,
     PharmacyDetail,

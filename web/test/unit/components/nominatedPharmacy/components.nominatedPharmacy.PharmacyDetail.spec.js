@@ -8,6 +8,7 @@ const createPharmacyDetailComponentForP1CommunityPharmacy = ({ $store }) => moun
     isMyNominatedPharmacy: true,
     canChangePharmacy: true,
     showInstruction: true,
+    displayChangeMyNominatedPharmacyButton: false,
     pharmacy: {
       pharmacyName: 'Best pharmacy',
       pharmacyType: 'P1',
@@ -25,12 +26,38 @@ const createPharmacyDetailComponentForP1CommunityPharmacy = ({ $store }) => moun
   $store,
 });
 
+const createPharmacyDetailComponentWhereDisplayChangeMyNominatedPharmacyButtonIsTrue =
+  ({ $store }) => mount(PharmacyDetail, {
+    propsData: {
+      previousPath: '/myPreviousPath',
+      isMyNominatedPharmacy: true,
+      canChangePharmacy: true,
+      showInstruction: true,
+      displayChangeMyNominatedPharmacyButton: true,
+      pharmacy: {
+        pharmacyName: 'Best pharmacy',
+        pharmacyType: 'P1',
+        pharmacySubType: 'Community Pharmacy',
+        telephoneNumber: '666668',
+        addressLine1: 'address1',
+        addressLine2: 'address2',
+        addressLine3: 'address3',
+        openingTimesFormatted: [{
+          day: 'Sunday',
+          times: [],
+        }],
+      },
+    },
+    $store,
+  });
+
 const createPharmacyDetailComponentForP1InternetPharmacy = ({ $store }) => mount(PharmacyDetail, {
   propsData: {
     previousPath: '/myPreviousPath',
     isMyNominatedPharmacy: true,
     canChangePharmacy: true,
     showInstruction: false,
+    displayChangeMyNominatedPharmacyButton: false,
     pharmacy: {
       pharmacyName: 'Best pharmacy',
       pharmacyType: 'P1',
@@ -54,6 +81,7 @@ const createPharmacyDetailComponentForP3 = ({ $store }) => mount(PharmacyDetail,
     showInstruction: true,
     isMyNominatedPharmacy: true,
     canChangePharmacy: false,
+    displayChangeMyNominatedPharmacyButton: false,
     pharmacy: {
       pharmacyName: 'Best practice',
       pharmacyType: 'P3',
@@ -89,7 +117,7 @@ describe('pharmacy detail', () => {
         link = wrapper.find('#link-to-change-pharmacy');
       });
 
-      it('will display the link', () => {
+      it('will display the link when displayChangeMyNominatedPharmacyButton is false', () => {
         expect(link.exists()).toEqual(true);
       });
 
@@ -247,6 +275,35 @@ describe('pharmacy detail', () => {
 
       it('will not display the link', () => {
         expect(link.exists()).toEqual(false);
+      });
+    });
+  });
+
+  describe('pharmacy detail with displayChangeMyNominatedPharmacyButton as true', () => {
+    let wrapper;
+    let $store;
+
+    beforeEach(() => {
+      $store = createStore({
+        state: {
+          device: {
+            source: 'android',
+          },
+        },
+      });
+      wrapper =
+        createPharmacyDetailComponentWhereDisplayChangeMyNominatedPharmacyButtonIsTrue({ $store });
+    });
+
+    describe('change nominated pharmacy button', () => {
+      let button;
+
+      beforeEach(() => {
+        button = wrapper.find('#button-to-change-pharmacy');
+      });
+
+      it('will display the button to change nominated pharmacy when displayChangeMyNominatedPharmacyButton is true', () => {
+        expect(button.exists()).toEqual(true);
       });
     });
   });
