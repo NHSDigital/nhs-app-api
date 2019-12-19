@@ -15,6 +15,6 @@ class LinksWithDescriptionsContent(override val linkBlockTitle: String,
     }
 
     override fun specificLinkXPath(linkTitle: String) :String {
-        return "$sections[$linkStyling[contains(text(),'$linkTitle')]]"
+        return "$sections/div[$linkStyling[contains(text(),'$linkTitle')]]"
     }
 }

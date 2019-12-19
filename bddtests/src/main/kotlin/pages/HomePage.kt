@@ -25,7 +25,7 @@ open class HomePage : HybridPageObject() {
             androidLocator = null,
             page = this,
             helpfulName = "Dismiss Button"
-        ).withText("Dismiss", false)
+    ).withText("Dismiss", false)
 
     private val surveyPath = "//div[@data-purpose='survey']"
 
@@ -52,7 +52,7 @@ open class HomePage : HybridPageObject() {
             helpfulName = "Survey Link"
     )
 
-    private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a/span/h2"
+    private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a/span/div/h2"
 
     val banner = HybridPageElement(
             webDesktopLocator = "//*[@id='yellow-banner']",

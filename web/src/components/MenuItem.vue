@@ -11,21 +11,20 @@
                            :prevent-default="preventDefault"
                            :click-func="clickFunc">
       <span :class="[$style.listMenuItemContainer, showCount ? $style['countWidth'] : '']">
-        <component :is="headerTag"
-                   class="nhsuk-heading-s"
-                   :aria-label="ariaText">
-          <span v-if="showCount"
-                id="count"
-                :class="['nhsuk-u-margin-bottom-0' +
-                           'nhsuk-u-margin-left-8' +
-                           'nhsuk-u-font-weight-regular',
-                         $style['count']]">{{ count }}</span>
-          {{ text }}
-        </component>
-        <p v-if="description"
-           :id="descriptionId"
-           :data-sid="descriptionDataSid"
-           class="nhsuk-u-margin-bottom-3">{{ description }}</p>
+        <div :class="$style['internalWrapper']">
+          <component :is="headerTag"
+                     :class="['nhsuk-heading-s']"
+                     :aria-label="ariaText">{{ text }}</component>
+          <div v-if="showCount"
+               id="count"
+               :class="['nhsuk-u-font-weight-regular',
+                        $style['count']]"
+               :aria-label="ariaText">{{ count }}</div>
+          <p v-if="description"
+             :id="descriptionId"
+             :data-sid="descriptionDataSid"
+             class="nhsuk-u-margin-bottom-3">{{ description }}</p>
+        </div>
         <slot/>
       </span>
     </analytics-tracked-tag>
@@ -109,98 +108,120 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-@import '../style/accessibility';
-@import '../style/desktopWeb/accessibility';
-@import '../style/textstyles';
-@import '../style/fonts';
-@import '../style/colours';
-@import '../style/arrow';
-@import '~nhsuk-frontend/packages/core/tools/spacing';
-@import '~nhsuk-frontend/packages/core/settings/spacing';
-@import '~nhsuk-frontend/packages/core/settings/colours';
+  @import '../style/accessibility';
+  @import '../style/desktopWeb/accessibility';
+  @import '../style/textstyles';
+  @import '../style/fonts';
+  @import '../style/colours';
+  @import '../style/arrow';
+  @import '~nhsuk-frontend/packages/core/tools/spacing';
+  @import '~nhsuk-frontend/packages/core/settings/spacing';
+  @import '~nhsuk-frontend/packages/core/settings/colours';
 
-.listMenuItemLink {
-  @include icon-arrow-left-white-background;
-  display: block;
-  box-sizing: border-box;
-  margin-left: 0;
-
-  border-top: 1px $border_grey solid;
-  border-bottom: 1px $border_grey solid;
-
-  &:hover {
-    @include outlineStyleLightMenuItem;
-    color: #000;
-  }
-
-  &:focus {
-    @include focusStyleLightMenuItem;
-    color: #000;
-  }
-
-  &.active {
-    outline: none;
-    text-decoration: underline;
-  }
-}
-
-button.listMenuItemLink {
-  display: block;
-  width: 100%;
-  color: $nhs_blue;
-  text-align: left;
-  font-weight: bold;
-  border-left: none;
-  border-right: none;
-}
-
-.no-decoration {
-  text-decoration: none;
-}
-
-.listMenuItem {
-  display: block;
-  margin-bottom: 5px;
-
-  :focus {
-    outline: none;
-  }
-
-  .listMenuItemContainer {
-    padding: 0.2em 0.5em;
+  .listMenuItemLink {
+    @include icon-arrow-left-white-background;
     display: block;
-    cursor: pointer;
+    box-sizing: border-box;
+    margin-left: 0;
 
-    h2, p {
-      padding-left:10px;
-      width: 90%;
-    }
+    border-top: 1px $border_grey solid;
+    border-bottom: 1px $border_grey solid;
 
-    h2 {
-      margin: 0;
-    }
-
-    h3 {
-      @include h3;
-    }
-
-    h4 {
-      @include h4;
-      padding-bottom: 0.5em;
-      padding-top: 0.5em;
-    }
-
-    p {
+    &:hover {
+      @include outlineStyleLightMenuItem;
       color: #000;
     }
+
+    &:focus {
+      @include focusStyleLightMenuItem;
+      color: #000;
+    }
+
+    &.active {
+      outline: none;
+      text-decoration: underline;
+    }
   }
-}
 
-.count {
-  float: right;
-  color: $nhsuk-text-color;
-  font-weight: normal;
-}
+  button.listMenuItemLink {
+    display: block;
+    width: 100%;
+    color: $nhs_blue;
+    text-align: left;
+    font-weight: bold;
+    border-left: none;
+    border-right: none;
+  }
 
+  .no-decoration {
+    text-decoration: none;
+  }
 
+  .listMenuItem {
+    display: block;
+    margin-bottom: 5px;
+
+    :focus {
+      outline: none;
+    }
+
+    .listMenuItemContainer {
+      padding: 0.2em 0.5em;
+      display: block;
+      cursor: pointer;
+
+      h2, p {
+        padding-left:10px;
+        width: 98%;
+        display: inline-block;
+      }
+
+      h2 {
+        margin: 0;
+      }
+
+      h3 {
+        @include h3;
+      }
+
+      h4 {
+        @include h4;
+        padding-bottom: 0.5em;
+        padding-top: 0.5em;
+      }
+
+      p {
+        color: #000;
+      }
+    }
+  }
+
+  // Please be careful when changing the below 2 classes these are needed
+  // to keep the medical record count in alignment!!!
+  .internalWrapper {
+    display: block;
+    padding-right: 28px;
+    width: 100%;
+    position: relative;
+  }
+
+  .count {
+    color: $nhsuk-text-color;
+    font-weight: normal;
+    position: absolute;
+    display: inline-block;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  @media screen and (device-aspect-ratio: 2/3) {
+    .count {
+      display: none;
+    }
+  }
+
+  @media screen and (device-aspect-ratio: 40/71) {
+    .count {
+      display: none;
+    }
+  }
 </style>
