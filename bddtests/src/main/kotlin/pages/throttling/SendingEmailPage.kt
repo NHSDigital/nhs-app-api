@@ -19,9 +19,9 @@ class SendingEmailPage : HybridPageObject() {
     )
 
     val emailFeatureText = HybridPageElement(
-            webDesktopLocator = "//h3[contains(text(), 'Get an email when all " +
+            webDesktopLocator = "//h2[contains(text(), 'Get an email when all " +
                     "features are available at your GP surgery')]",
-            webMobileLocator = "//h3[contains(text(), 'Get an email when all " +
+            webMobileLocator = "//h2[contains(text(), 'Get an email when all " +
                     "features are available at your GP surgery')]",
             androidLocator = null,
             page = this

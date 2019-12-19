@@ -17,7 +17,7 @@
         <header-slim
           :show-in-native="true"
           :click-url="loginUrl"
-        >{{ headerTitle }}
+        >
         </header-slim>
       </div>
       <div class="nhsuk-width-container">
@@ -39,8 +39,7 @@
                   :id="$style.serverError"
                   :class="$store.state.device.isNativeApp?'pull-content nhsuk-u-padding-top-7':''"
                 >
-                  <h1 v-if="!$store.state.device.isNativeApp"
-                      class="nhsuk-u-margin-bottom-4 nhsuk-u-margin-top-4">
+                  <h1 class="nhsuk-u-margin-bottom-4 nhsuk-u-margin-top-4">
                     {{ $t('auth_return.errors.pageTitle') }} </h1>
                   <message-dialog
                     :override-style="overrideStyle"

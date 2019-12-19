@@ -25,7 +25,7 @@
                     $style.throttlingContent,
                     'pull-content',
                     getDesktopStyle()]">
-        <h1 v-if="$store.state.device.isNativeApp">{{ $t('th02.heading1') }}</h1>
+        <h1>{{ $t('th02.heading1') }}</h1>
         <h2>{{ $t('th02.heading2') }}</h2>
 
         <p id="search-label">{{ $t('th02.hintText') }}</p>

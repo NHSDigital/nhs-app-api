@@ -6,15 +6,17 @@
       <message-text :aria-label="messageLabel">{{ messageText }}</message-text>
     </message-dialog>
     <form method="get">
-      <button :class="[ $style.button ]" @click.prevent="onRetryButtonClicked">
+      <generic-button :class="['nhsuk-button']"
+                      @click.stop.prevent="onRetryButtonClicked">
         {{ retryButtonText }}
-      </button>
+      </generic-button>
     </form>
   </div>
 </template>
 <script>
 /* eslint-disable import/extensions */
 import isObject from 'lodash/fp/isObject';
+import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
@@ -23,6 +25,7 @@ import { INDEX } from '@/lib/routes';
 export default {
   name: 'ConnectionError',
   components: {
+    GenericButton,
     MessageDialog,
     MessageText,
   },

@@ -3,9 +3,9 @@
     <div :class="[getHeaderState(),
                   $store.state.device.isNativeApp && $style.web]">
       <div>
-        <h3 :class="[$style.h1]">
+        <h2 class="nhsuk-u-heading-m">
           {{ this.$t('th05.emailFeatureText') }}
-        </h3>
+        </h2>
 
         <form :class="$style.signup" @submit.prevent="signupFormSubmitted">
           <error-message v-if="choiceError" id="choice-error-label" role="alert"
@@ -226,10 +226,6 @@ export default {
 
   .nativeHeader {
     padding: 0 0 3.125em 2.0px;
-  }
-  .throttlingContent {
-    padding-top:0;
-    padding-left:0;
   }
 
 </style>

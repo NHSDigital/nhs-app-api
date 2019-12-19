@@ -17,10 +17,12 @@
             <div data-purpose="error-dialog-list">
               <message-list>
                 <li v-if="showTelephoneError" data-purpose="telephone-error">
-                  <p>{{ $t('appointments.confirmation.noPhoneNumberError') }}</p>
+                  <p class="nhsuk-u-margin-left-2">
+                    {{ $t('appointments.confirmation.noPhoneNumberError') }}</p>
                 </li>
                 <li v-if="showReasonError" data-purpose="reason-error">
-                  <p>{{ $t('appointments.confirmation.noReasonError') }}</p>
+                  <p class="nhsuk-u-margin-left-2">
+                    {{ $t('appointments.confirmation.noReasonError') }}</p>
                 </li>
               </message-list>
             </div>
