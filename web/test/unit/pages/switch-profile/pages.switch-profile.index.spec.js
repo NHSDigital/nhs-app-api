@@ -82,7 +82,7 @@ describe('switch profile page is there', () => {
       // assert
       expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchToMainUserProfile', { id: mainUserGuid });
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, INDEX.path);
+        .toHaveBeenCalledWith(wrapper.vm.$children[0], INDEX.path);
     });
   });
 });

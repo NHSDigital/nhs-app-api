@@ -1,10 +1,16 @@
 #!/bin/bash
 
+set -e
+
 # Change current working directory to be the root of web, regardless of how this script is invoked
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
-# Delete any old container hanging around
-docker container rm nhsonline-web-test-run 2>/dev/null || true
+if [ 1 -eq "$(docker ps -a | grep -c nhsonline-web-test-run)" ]
+then
+  docker rm nhsonline-web-test-run
+fi
+
+set +e
 
 docker run \
   --name nhsonline-web-test-run \
@@ -13,7 +19,9 @@ docker run \
 
 test_run_result=$?
 
-if [ -z "$TEAMCITY_VERSION" ]; then
+set -e
+
+if [ -n "$TEAMCITY_VERSION" ]; then
   exit
 fi;
 

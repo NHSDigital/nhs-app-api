@@ -1,11 +1,13 @@
 #!/bin/bash
 
+set -e
+
 # Change current working directory to be the root of backendworker, regardless of how this script is invoked
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
 COMMIT_ID=$(git rev-parse --short HEAD)
 
-if [ 1 -eq $(docker ps -a | grep nhsonline-backend-test-run | wc -l) ]
+if [ 1 -eq "$(docker ps -a | grep -c nhsonline-backend-test-run)" ]
 then
   docker rm nhsonline-backend-test-run
 fi
@@ -42,6 +44,8 @@ else
 fi;'
 fi;
 
+set +e
+
 docker run \
   --memory="1g" \
   --cpus=1 \
@@ -51,8 +55,17 @@ docker run \
 
 test_run_result=$?
 
-if [ -z "$TEAMCITY_VERSION" ]; then
+set -e
+
+if [ -n "$TEAMCITY_VERSION" ]; then
   exit
 fi;
 
-exit $test_run_result
+if [ -z "$TF_BUILD" ]; then
+  exit $test_run_result
+fi;
+
+if [ $test_run_result -ne 0 ]; then
+  echo "##vso[task.logissue type=error]Backend Unit Tests Failed"
+  echo "##vso[task.complete result=Failed;]Backend Unit Tests Failed"
+fi;
