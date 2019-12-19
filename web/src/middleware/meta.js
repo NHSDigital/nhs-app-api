@@ -86,6 +86,7 @@ import {
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   NOMINATED_PHARMACY_CONFIRM,
+  NOMINATED_PHARMACY_CHANGE_SUCCESS,
   NOMINATED_PHARMACY_CHECK,
   NOMINATED_PHARMACY_CANNOT_CHANGE,
   LINKED_PROFILES_SHUTTER_MORE,
@@ -459,6 +460,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.confirmNominatedPharmacy';
       route.meta.pageTitleKey = 'pageTitles.confirmNominatedPharmacy';
+      break;
+    case NOMINATED_PHARMACY_CHANGE_SUCCESS.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.nominatedPharmacyChangeSuccess';
+      route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyChangeSuccess';
       break;
     case NOMINATED_PHARMACY_CANNOT_CHANGE.name:
       store.dispatch('navigation/setNewMenuItem', 2);

@@ -14,6 +14,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import pages.isVisible
 import pages.nominatedPharmacy.ConfirmNominatedPharmacyPage
+import pages.nominatedPharmacy.NominatedPharmacyChangeSuccessPage
 import pages.nominatedPharmacy.NominatedPharmacyPage
 import pages.nominatedPharmacy.NominatedPharmacyResultsPage
 import pages.nominatedPharmacy.SearchNominatedPharmacyPage
@@ -34,6 +35,8 @@ class NominatedPharmacyStepDefinitions {
     private lateinit var nominatedPharmacyResultsPage : NominatedPharmacyResultsPage
 
     private lateinit var prescriptionsPage: PrescriptionsPage
+
+    private lateinit var nominatedPharmacyChangeSuccessPage: NominatedPharmacyChangeSuccessPage
 
     @Steps
     private lateinit var nominatedPharmacyDataSetupSteps: NominatedPharmacyDataSetupSteps
@@ -129,6 +132,35 @@ class NominatedPharmacyStepDefinitions {
                 .getOrFail<NhsAzureSearchOrganisationItem>()
         nominatedPharmacyDataSetupSteps.setupWiremockForNominatedPharmacyPostUpdate("P1", sessionData)
         confirmNominatedPharmacyPage.confirmButton.click()
+    }
+
+    @Then("^I see the change success page with my nominated pharmacy details$")
+    fun iSeeTheChangeSuccessPage() {
+
+        val myNominatedPharmacy =
+                NominatedPharmacySerenityHelpers.MY_NOMINATED_PHARMACY.getOrFail<NhsAzureSearchOrganisationItem>()
+
+        nominatedPharmacyChangeSuccessPage.isLoaded(myNominatedPharmacy.OrganisationName)
+
+        assertEquals(
+                "Organisation name is not correct",
+                myNominatedPharmacy.OrganisationName, nominatedPharmacyChangeSuccessPage.pharmacyName.text)
+        assertEquals(
+                "Address is not correct",
+                myNominatedPharmacy.addressFormatted(), nominatedPharmacyChangeSuccessPage.pharmacyAddress.text)
+
+        val phoneNumber = myNominatedPharmacy.primaryPhone()
+
+        if (phoneNumber != null) {
+            assertEquals(
+                    "Phone number is not correct",
+                    "Telephone: " + phoneNumber, confirmNominatedPharmacyPage.pharmacyPhoneNumber.text)
+        }
+    }
+
+    @When("^I click on the go to your repeat prescriptions link$")
+    fun iClickOnGoToYourRepeatPrescriptionsLink() {
+        nominatedPharmacyChangeSuccessPage.prescriptionsLink.click()
     }
 
     @Then("^I see the nominated pharmacy panel on the prescriptions page$")

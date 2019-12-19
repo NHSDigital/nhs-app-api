@@ -35,7 +35,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY, NOMINATED_PHARMACY_CHANGE_SUCCESS } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -59,14 +59,8 @@ export default {
   methods: {
     async submitNominatedPharmacy() {
       try {
-        let successMessage = this.$t('nominated_pharmacy.confirm.pharmacyChanged');
-        if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
-          successMessage = this.$t('nominated_pharmacy.confirm.pharmacyChosen');
-        }
         await this.$store.dispatch('nominatedPharmacy/update', this.nominatedPharmacy.odsCode);
-        this.$store.dispatch('flashMessage/addSuccess', successMessage);
-        this.$store.dispatch('nominatedPharmacy/clearSelectedNominatedPharmacy');
-        redirectTo(this, NOMINATED_PHARMACY.path);
+        redirectTo(this, NOMINATED_PHARMACY_CHANGE_SUCCESS.path);
       } catch (error) {
         /*
           empty catch block as the

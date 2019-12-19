@@ -83,8 +83,10 @@ const loadData = async (store) => {
   await store.dispatch('prescriptions/load');
 
   if (store.getters['serviceJourneyRules/nominatedPharmacyEnabled']) {
-    store.dispatch('nominatedPharmacy/clear');
-    await store.dispatch('nominatedPharmacy/load');
+    if (store.state.nominatedPharmacy.hasLoaded === false) {
+      store.dispatch('nominatedPharmacy/clear');
+      await store.dispatch('nominatedPharmacy/load');
+    }
   }
 };
 

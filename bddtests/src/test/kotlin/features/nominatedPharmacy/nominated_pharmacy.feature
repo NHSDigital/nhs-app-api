@@ -23,8 +23,8 @@ Feature: nominated pharmacy journey
     And I click on item 4 pharmacy from the list of pharmacies
     Then I see confirm nominated page with selected pharmacy details
     When I click on confirm button to change my nominated pharmacy
-    Then I see my nominated pharmacy page with updated pharmacy details
-    When I navigate to prescriptions
+    Then I see the change success page with my nominated pharmacy details
+    When I click on the go to your repeat prescriptions link
     Then I see prescriptions page loaded
     And I see my nominated pharmacy on the prescriptions page
 
@@ -102,8 +102,8 @@ Feature: nominated pharmacy journey
     When I click on item 4 pharmacy from the list of pharmacies
     Then I see confirm nominated page with selected pharmacy details
     When I click on confirm button to change my nominated pharmacy
-    Then I see your nominated pharmacy page with chosen pharmacy details
-    When I navigate to prescriptions
+    Then I see the change success page with my nominated pharmacy details
+    When I click on the go to your repeat prescriptions link
     Then I see prescriptions page loaded
     And I see my nominated pharmacy on the prescriptions page
 

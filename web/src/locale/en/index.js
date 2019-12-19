@@ -1021,6 +1021,11 @@ export default {
         retryButtonText: 'Back to prescriptions',
       },
     },
+    changeSuccess: {
+      header: 'Your prescriptions will now be sent to: ',
+      telephoneLabel: 'Telephone: ',
+      linkLabel: 'Go to your repeat prescriptions',
+    },
     internetPharmacy: 'This is an internet pharmacy.',
     warning: {
       changeInternetPharmacy: 'If you change your pharmacy from {pharmacyName}, you cannot change it back to {pharmacyName} using the NHS App.',
@@ -1514,6 +1519,7 @@ export default {
     referrals: 'Referrals',
     confirmNominatedPharmacy: 'Confirm your nominated pharmacy',
     searchNominatedPharmacy: 'Change your nominated pharmacy',
+    nominatedPharmacyChangeSuccess: 'Your nominated pharmacy is {name}',
     nominateMyPharmacy: 'Nominate your pharmacy',
     changeNominatedPharmacy: 'Choose your nominated pharmacy',
     nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
@@ -1583,6 +1589,7 @@ export default {
     changeNominatedPharmacy: 'Choose your nominated pharmacy',
     nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
     confirmNominatedPharmacy: 'Confirm your nominated pharmacy',
+    nominatedPharmacyChangeSuccess: 'Your nominated pharmacy is {name}',
     nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
     dispensingPracticeFound: 'Check the dispensing practice this will be sent to',
     cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',

@@ -847,6 +847,12 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
   },
+  NOMINATED_PHARMACY_CHANGE_SUCCESS: {
+    name: 'nominated-pharmacy-change-success',
+    path: '/nominated-pharmacy/change-success',
+    crumb: {},
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+  },
   NOMINATED_PHARMACY_SEARCH_RESULTS: {
     name: 'nominated-pharmacy-results',
     path: '/nominated-pharmacy/results',
@@ -1341,6 +1347,7 @@ export const {
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_CONFIRM,
+  NOMINATED_PHARMACY_CHANGE_SUCCESS,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   NOMINATED_PHARMACY_CHECK,
   NOMINATED_PHARMACY_CANNOT_CHANGE,

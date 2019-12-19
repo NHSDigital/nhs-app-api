@@ -1,5 +1,5 @@
 import * as dependency from '@/lib/utils';
-import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY_CHANGE_SUCCESS } from '@/lib/routes';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import ConfirmNominatedPharmacy from '@/pages/nominated-pharmacy/confirm';
 import { create$T, createStore, mount } from '../../helpers';
@@ -97,12 +97,8 @@ describe('confirm nominated pharmacy', () => {
       await confirmButton.trigger('click');
       expect($store.dispatch)
         .toHaveBeenNthCalledWith(1, 'nominatedPharmacy/update', $store.state.nominatedPharmacy.selectedNominatedPharmacy.odsCode);
-      expect($store.dispatch)
-        .toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', 'translate_nominated_pharmacy.confirm.pharmacyChosen');
-      expect($store.dispatch)
-        .toHaveBeenNthCalledWith(3, 'nominatedPharmacy/clearSelectedNominatedPharmacy');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHANGE_SUCCESS.path);
     });
 
     it('will submit nominated pharmacy on click and call to redirect when changing an existing nominated pharmacy', async () => {
@@ -113,12 +109,8 @@ describe('confirm nominated pharmacy', () => {
       await confirmButton.trigger('click');
       expect($store.dispatch)
         .toHaveBeenNthCalledWith(1, 'nominatedPharmacy/update', $store.state.nominatedPharmacy.selectedNominatedPharmacy.odsCode);
-      expect($store.dispatch)
-        .toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', 'translate_nominated_pharmacy.confirm.pharmacyChanged');
-      expect($store.dispatch)
-        .toHaveBeenNthCalledWith(3, 'nominatedPharmacy/clearSelectedNominatedPharmacy');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHANGE_SUCCESS.path);
     });
   });
 
