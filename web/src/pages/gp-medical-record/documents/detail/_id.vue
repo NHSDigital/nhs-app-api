@@ -2,7 +2,7 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div class="documentContainer nhsuk-u-margin-top-5" v-html="document"/>
+      <div id="document" class="documentContainer nhsuk-u-margin-top-5" v-html="document"/>
       <glossary/>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
                                  :path="documentPath"

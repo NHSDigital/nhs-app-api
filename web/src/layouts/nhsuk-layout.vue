@@ -190,7 +190,8 @@ export default {
       // the shouldShowContentHeader field is only
       // defined if we do not need to show it
       const route = findByName(this.$route.name);
-      return this.loggedIn && route.shouldShowContentHeader === undefined;
+      return this.loggedIn && route !== undefined &&
+      route.shouldShowContentHeader === undefined;
     },
     shouldShowFullDesktopHeader() {
       return (

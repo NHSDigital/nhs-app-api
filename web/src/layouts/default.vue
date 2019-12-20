@@ -27,7 +27,7 @@ PLEASE INSTEAD USE nhsuk-layout.vue
         </div>
         <content-header v-if="!isGpFinderPage()" id="content-header"
                         :show-bread-crumb="shouldShowBreadCrumb"
-                        :show-content-header="shouldShowContentHeader"/>
+                        :show-content-header="!isLoginPage()"/>
       </div>
 
       <div id="maincontent"
@@ -176,12 +176,6 @@ export default {
     breadcrumbDisabledNative() {
       return this.$store.state.device.isNativeApp &&
         get('nativeDisabled')(this.currentCrumb);
-    },
-    shouldShowContentHeader() {
-      // the shouldShowContentHeader field is only
-      // defined if we do not need to show it
-      const route = findByName(this.$route.name);
-      return this.loggedIn && route.shouldShowContentHeader === undefined;
     },
     shouldShowFullDesktopHeader() {
       return (
