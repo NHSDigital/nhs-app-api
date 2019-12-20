@@ -66,6 +66,12 @@ describe('gp-medical-record documents', () => {
       });
     });
   });
+  describe('computed', () => {
+    it('will return the document path', () => {
+      mountPage();
+      expect(page.vm.documentPath).toEqual('/gp-medical-record/documents/document-id');
+    });
+  });
   describe('created', () => {
     beforeEach(() => {
       NativeCallbacks.hideHeader.mockClear();

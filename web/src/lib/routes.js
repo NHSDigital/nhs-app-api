@@ -448,6 +448,7 @@ const routes = {
     name: 'Login',
     path: '/login',
     isAnonymous: true,
+    shouldShowContentHeader: false,
     crumb: {
       nativeDisabled: true,
       get parentRoute() {
@@ -488,6 +489,7 @@ const routes = {
   MESSAGING_MESSAGES: {
     name: 'messaging-messages',
     path: '/messaging/messages',
+    shouldShowContentHeader: false,
     crumb: {
       get parentRoute() {
         return this.allRoutes.MESSAGING;
@@ -794,6 +796,7 @@ const routes = {
   DOCUMENT_DETAIL: {
     name: 'gp-medical-record-documents-detail-id',
     path: '/gp-medical-record/documents/detail/:id',
+    shouldShowContentHeader: false,
     crumb: {
       get parentRoute() {
         return this.allRoutes.DOCUMENTS;

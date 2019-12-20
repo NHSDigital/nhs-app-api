@@ -12,8 +12,10 @@ import {
   PRESCRIPTIONS,
   PRESCRIPTION_REPEAT_COURSES,
   MYRECORD,
+  DOCUMENT_DETAIL,
   GP_MEDICAL_RECORD,
   MORE,
+  MESSAGING_MESSAGES,
 } from '@/lib/routes';
 
 const $t = create$T();
@@ -51,6 +53,8 @@ const createPage = ($store, route = INDEX) => {
     name: route.name,
     query: '',
     crumb: route.crumb,
+    shouldShowContentHeader: route.shouldShowContentHeader ?
+      route.shouldShowContentHeader : undefined,
   };
 
   const loggedIn = true;
@@ -162,6 +166,39 @@ describe('nhsuk-layout - is web', () => {
   beforeEach(() => {
     process.client = true;
     window.validateSession = () => {};
+  });
+
+  it('will show the contentHeader on the correct pages in web', () => {
+    const $store = createStore(false);
+
+    const noContentHeaderPages = [
+      LOGIN,
+      DOCUMENT_DETAIL,
+      MESSAGING_MESSAGES,
+    ];
+
+    const contentHeaderPages = [
+      APPOINTMENT_BOOKING_GUIDANCE,
+      APPOINTMENT_BOOKING,
+      APPOINTMENT_CONFIRMATIONS,
+      PRESCRIPTION_REPEAT_COURSES,
+      SYMPTOMS,
+      APPOINTMENTS,
+      PRESCRIPTIONS,
+      MYRECORD,
+      GP_MEDICAL_RECORD,
+      MORE,
+    ];
+
+    noContentHeaderPages.forEach((name) => {
+      const page = createPage($store, name);
+      expect(page.vm.shouldShowContentHeader).toBe(false);
+    });
+
+    contentHeaderPages.forEach((name) => {
+      const page = createPage($store, name);
+      expect(page.vm.shouldShowContentHeader).toBe(true);
+    });
   });
 
   it('will show breadcrumb on the correct pages when in web', () => {

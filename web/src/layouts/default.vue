@@ -1,3 +1,14 @@
+<!------
+__          __     _____  _   _ _____ _   _  _____
+\ \        / /\   |  __ \| \ | |_   _| \ | |/ ____|
+ \ \  /\  / /  \  | |__) |  \| | | | |  \| | |  __
+  \ \/  \/ / /\ \ |  _  /| . ` | | | | . ` | | |_ |
+   \  /\  / ____ \| | \ \| |\  |_| |_| |\  | |__| |
+    \/  \/_/    \_\_|  \_\_| \_|_____|_| \_|\_____|
+
+THIS LAYOUT FILE IS NO LONGER BEING USED AND WILL SOON BE DELETED.
+PLEASE INSTEAD USE nhsuk-layout.vue
+!-->
 <template>
   <div>
     <modal/>
@@ -16,7 +27,7 @@
         </div>
         <content-header v-if="!isGpFinderPage()" id="content-header"
                         :show-bread-crumb="shouldShowBreadCrumb"
-                        :show-content-header="!isLoginPage()"/>
+                        :show-content-header="shouldShowContentHeader"/>
       </div>
 
       <div id="maincontent"
@@ -165,6 +176,12 @@ export default {
     breadcrumbDisabledNative() {
       return this.$store.state.device.isNativeApp &&
         get('nativeDisabled')(this.currentCrumb);
+    },
+    shouldShowContentHeader() {
+      // the shouldShowContentHeader field is only
+      // defined if we do not need to show it
+      const route = findByName(this.$route.name);
+      return this.loggedIn && route.shouldShowContentHeader === undefined;
     },
     shouldShowFullDesktopHeader() {
       return (

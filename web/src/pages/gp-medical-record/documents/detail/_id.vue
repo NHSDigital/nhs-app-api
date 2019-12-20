@@ -2,9 +2,10 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div class="documentContainer" v-html="document"/>
+      <div class="documentContainer nhsuk-u-margin-top-5" v-html="document"/>
       <glossary/>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
+                                 :path="documentPath"
                                  @clickAndPrevent="backToDocumentsClicked"/>
     </div>
   </div>
@@ -14,7 +15,7 @@
 import NativeAppCallbacks from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
-import { GP_MEDICAL_RECORD, LOGIN, LOGOUT } from '@/lib/routes';
+import { GP_MEDICAL_RECORD, LOGIN, LOGOUT, DOCUMENT } from '@/lib/routes';
 import { isFalsy } from '@/lib/utils';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
@@ -36,6 +37,9 @@ export default {
     },
     isAndroid() {
       return this.$store.state.device.source === 'android';
+    },
+    documentPath() {
+      return DOCUMENT.path.replace(':id', this.$route.params.id);
     },
   },
   async asyncData({ store, route, redirect }) {

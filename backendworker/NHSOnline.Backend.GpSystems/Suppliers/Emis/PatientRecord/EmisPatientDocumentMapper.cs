@@ -41,10 +41,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                 if (!string.IsNullOrEmpty(documentType)
                     && !string.IsNullOrEmpty(documentName)
-                    && Constants.FileConstants.FileTypes.ImageTypes.Contains(documentType))
+                    && (Constants.FileConstants.FileTypes.ImageTypes.Contains(documentType) || 
+                    documentType.Equals(Constants.FileConstants.FileTypes.DocumentType.Pdf, StringComparison.Ordinal)))
                 {
                     documentContent = AddAltTextToImage(documentContent, documentName);
                 }
+                
                 
                 document.Content = _htmlSanitizer.GetBodyContent(documentContent);
             }
@@ -84,20 +86,37 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                 doc.LoadHtml(content);
 
-                var imgNode = doc.DocumentNode.SelectSingleNode(".//img");
+                var imgNodes = doc.DocumentNode.SelectNodes(".//img");
 
-                if (imgNode == null)
+                if (imgNodes == null)
                 {
                     _logger.LogInformation("Document contains no img tag");
                     return content;
                 }
-                
-                if (!imgNode.Attributes.Contains("alt"))
-                {
-                    _logger.LogInformation("Setting alt text on img tag");
-                    imgNode.SetAttributeValue("alt", altText);
-                }
 
+                if (imgNodes.Count > 1)
+                {
+                    // if a pdf has multiple images we want to
+                    // set the alt text to distinguish pages
+                    //eg altText="test.pdf page 1"
+                    foreach (var imgNode in imgNodes)
+                    {
+                        if (!imgNode.Attributes.Contains("alt"))
+                        {
+                            imgNode.SetAttributeValue("alt", altText + " page " 
+                                                                     + (imgNodes.IndexOf(imgNode) + 1));
+                        }
+                    }
+                }
+                else
+                {
+                    if (!imgNodes[0].Attributes.Contains("alt"))
+                    {
+                        _logger.LogInformation("Setting alt text on img tag");
+                        imgNodes[0].SetAttributeValue("alt", altText);
+                    }    
+                }
+                
                 return doc.DocumentNode.InnerHtml;
             }
             finally

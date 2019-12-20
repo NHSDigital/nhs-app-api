@@ -63,7 +63,6 @@ import {
   INDEX,
   isAnonymous,
   LOGIN,
-  MESSAGING_MESSAGES,
   DOCUMENT_DETAIL,
 } from '@/lib/routes';
 
@@ -187,9 +186,10 @@ export default {
         get('nativeDisabled')(this.currentCrumb);
     },
     shouldShowContentHeader() {
-      return this.loggedIn &&
-        this.$route.name !== LOGIN.name &&
-        this.$route.name !== MESSAGING_MESSAGES.name;
+      // the shouldShowContentHeader field is only
+      // defined if we do not need to show it
+      const route = findByName(this.$route.name);
+      return this.loggedIn && route.shouldShowContentHeader === undefined;
     },
     shouldShowFullDesktopHeader() {
       return (
