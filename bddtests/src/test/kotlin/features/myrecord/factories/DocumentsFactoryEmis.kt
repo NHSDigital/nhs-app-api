@@ -29,6 +29,19 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         }
     }
 
+    override fun enabledWithNullPageCount() {
+        val documents = DocumentsData.getDefaultDocumentsData()
+
+        mockingClient.forEmis {
+            myRecord.documentsRequest(EmisMockDefaults.patientEmis)
+                    .respondWithNullPageCount()
+        }
+
+        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(false,
+                documents = documents.medicalRecord.documents)
+        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf<ExpectedDocument>(expectedDocuments[0]))
+    }
+
     override fun enabledWithDocuments(patient: Patient, isLarge: Boolean, mockUnavailableDocument: Boolean,
                                       hasInvalidType: Boolean) {
         val documents = DocumentsData.getDefaultDocumentsData(hasInvalidType = hasInvalidType)

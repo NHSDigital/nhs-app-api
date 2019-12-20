@@ -21,6 +21,32 @@ class EmisDocumentsBuilder(configuration: EmisConfiguration,
                 .andQueryParameter("itemType", "Documents", "equalTo")
     }
 
+    fun respondWithNullPageCount(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andJsonBody(
+                    "{\n" +
+                            " \"MedicalRecord\": {\n" +
+                            " \"Documents\":[{\"DocumentGuid\":\"" +
+                            "document-1\",\"" +
+                            "Observation\":" +
+                            "{\"ObservationType\":\"Document\",\"Episodicity\":\"Unknown\",\"" +
+                            "NumericValue\":null,\"NumericOperator\":null,\"NumericUnits\":null,\"" +
+                            "DisplayValue\":null,\"TextValue\":null,\"" +
+                            "Range\":null,\"Abnormal\":false,\"AbnormalReason\":null,\"" +
+                            "AssociatedText\":null,\"" +
+                            "EventGuid\":\"00000000-0000-0000-0000-000000000000\",\"Term\":\"" +
+                            "Letter 1\",\"" +
+                            "AvailabilityDateTime\":\"2018-02-18T12:44:13.187\",\"EffectiveDate\"" +
+                            ":{\"DatePart\":\"" +
+                            "YearMonthDay\", \"Value\":\"2018-02-18T12:44:13.187\"},\"CodeId\"" +
+                            ":00000000000000, \"" +
+                            "AuthorisingUserInRoleGuid\":\"00000000-0000-0000-0000-000000000000\",\"" +
+                            "EnteredByUserInRoleGuid\":\"00000000-0000-0000-0000-000000000000\"},\"" +
+                            "Size\":1000000, \"" +
+                            "PageCount\":null,\"Extension\":\"pdf\", \"Available\":true}]}}")
+        }
+    }
+
     fun respondWithSuccess(documentsResponse: DocumentsResponseModel): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(documentsResponse)

@@ -56,7 +56,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         {
                             DocumentGuid = _fixture.Create<string>(),
                             Size = _fixture.Create<int>(),
-                            PageCount = _fixture.Create<int>(),
                             Extension = _fixture.Create<string>(),
                             Observation = new Observation
                             {
@@ -87,7 +86,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         {
                             DocumentGuid = _fixture.Create<string>(),
                             Size = _fixture.Create<int>(),
-                            PageCount = _fixture.Create<int>(),
                             Extension = _fixture.Create<string>(),
                             Observation = new Observation
                             {

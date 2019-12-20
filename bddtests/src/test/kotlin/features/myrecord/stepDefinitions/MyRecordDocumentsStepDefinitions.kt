@@ -44,6 +44,13 @@ open class MyRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinition
             .enabledWithNoDocuments(SerenityHelpers.getPatient())
     }
 
+    @Given("^the GP Practice has a document with a null page count$")
+    fun thePracticeHasDocumentNullPageCount() {
+        DocumentsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithNullPageCount()
+    }
+
     @Given("^the GP Practice has multiple documents$")
     fun theGpPracticeHasMultipleDocuments() {
         DocumentsFactory
