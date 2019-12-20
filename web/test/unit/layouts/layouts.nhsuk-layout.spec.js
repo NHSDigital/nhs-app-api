@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { create$T, mockCookies } from '../helpers';
+import { create$T, mockCookies, createRouter } from '../helpers';
 import {
   INDEX,
   LOGIN,
@@ -19,9 +19,12 @@ import {
 } from '@/lib/routes';
 
 const $t = create$T();
+const $router = createRouter();
 
 jest.mock('@/components/widgets/HotJar', () => {
 });
+jest.mock('lodash/fp/get');
+
 /* eslint-disable import/first */
 import NhsukLayout from '@/layouts/nhsuk-layout';
 
@@ -67,6 +70,7 @@ const createPage = ($store, route = INDEX) => {
       $env,
       $route,
       $t,
+      $router,
       $style,
       showTemplate: () => true,
       loggedIn,
@@ -76,7 +80,6 @@ const createPage = ($store, route = INDEX) => {
     },
   });
 };
-
 const createStore = isNativeApp => ({
   app: {
     $cookies: mockCookies(),
@@ -84,6 +87,7 @@ const createStore = isNativeApp => ({
       VERSION_TAG: 1,
     },
   },
+  getters: {},
   dispatch: jest.fn(),
   state: {
     appVersion: {
@@ -103,6 +107,9 @@ const createStore = isNativeApp => ({
     termsAndConditions: {
       analyticsCookieAccepted: true,
     },
+    http: {
+      loadingUrls: [],
+    },
   },
 });
 
@@ -110,6 +117,7 @@ describe('nhsuk-layout - is native', () => {
   beforeEach(() => {
     process.client = true;
     window.validateSession = () => {};
+    jest.clearAllMocks();
   });
 
   it('will show breadcrumb on the correct pages when native', () => {

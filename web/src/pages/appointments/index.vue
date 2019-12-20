@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate">
+  <div v-if="showTemplate && hasLoaded">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <no-js-form :action="guidancePath" :value="formData">
@@ -54,6 +54,11 @@ import GenericButton from '@/components/widgets/GenericButton';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import { APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
+
+const loadData = async (store) => {
+  store.dispatch('myAppointments/clear');
+  return store.dispatch('myAppointments/load');
+};
 
 export default {
   layout: 'nhsuk-layout',
@@ -116,13 +121,29 @@ export default {
     guidancePath() {
       return APPOINTMENT_BOOKING_GUIDANCE.path;
     },
+    hasLoaded() {
+      return this.$store.state.myAppointments.hasLoaded;
+    },
+  },
+  watch: {
+    hasLoaded() {
+      if (this.hasLoaded) {
+        this.$store.dispatch('flashMessage/show');
+      }
+    },
   },
   asyncData({ store }) {
-    store.dispatch('myAppointments/clear');
-    return store.dispatch('myAppointments/load');
+    if (process.server) {
+      return loadData(store);
+    }
+    return null;
   },
   mounted() {
-    if (this.$store.state.myAppointments.hasLoaded) {
+    if (process.client) {
+      loadData(this.$store);
+    }
+
+    if (this.hasLoaded) {
       this.$store.dispatch('flashMessage/show');
     }
   },

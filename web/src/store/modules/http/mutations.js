@@ -10,11 +10,11 @@ import {
 } from './mutation-types';
 
 export default {
-  [LOADING_COMPLETE](state) {
-    state.isLoading = false;
+  [LOADING_COMPLETE](state, url) {
+    state.loadingUrls = state.loadingUrls.filter(loading => loading !== url);
   },
-  [IS_LOADING](state) {
-    state.isLoading = true;
+  [IS_LOADING](state, url) {
+    state.loadingUrls.push(url);
   },
   [ADD_CANCEL_REQUEST_HANDLER](state, handler) {
     state.cancelRequestHandlers.push(handler);
@@ -26,11 +26,11 @@ export default {
       if (typeof handler === 'function') handler();
     }
     state.cancelRequestHandlers = [];
-    state.isLoading = false;
+    state.loadingUrls = [];
   },
   [INIT_HTTP](state) {
     state = {
-      isLoading: false,
+      loadingUrls: [],
     };
   },
 };

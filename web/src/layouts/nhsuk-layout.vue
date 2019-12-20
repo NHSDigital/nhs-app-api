@@ -56,6 +56,7 @@ import SurveyBar from '@/components/SurveyBar';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import showShutterPage from '@/lib/proxy/shutter';
 import {
   findByName,
   getCrumbTrailForRoute,
@@ -224,6 +225,9 @@ export default {
       }
       return clazzes;
     },
+    isLoading() {
+      return this.$store.getters['http/isLoading'];
+    },
   },
 
   watch: {
@@ -231,6 +235,11 @@ export default {
       if (from !== to) {
         this.pathChanged = true;
         this.configureWebContext(this.currentHelpUrl);
+      }
+    },
+    isLoading(to, from) {
+      if (from && !to) {
+        showShutterPage(this.currentRoute, this);
       }
     },
   },

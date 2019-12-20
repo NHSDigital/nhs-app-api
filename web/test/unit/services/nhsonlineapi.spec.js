@@ -297,8 +297,9 @@ describe('services/nhsonlineapi', () => {
     });
 
     it('will dispatch "http/isLoading"', () => {
-      request({ headers });
-      expect(store.dispatch).toHaveBeenCalledWith('http/isLoading');
+      const url = 'http://foo/';
+      request({ headers, url });
+      expect(store.dispatch).toHaveBeenCalledWith('http/isLoading', url);
     });
   });
 

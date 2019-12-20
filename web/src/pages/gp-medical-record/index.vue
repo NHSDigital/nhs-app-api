@@ -1,43 +1,43 @@
 <template>
   <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning">
-    <div v-if="showTemplate && !isProxying" id="mainDiv" data-sid="user-info-details">
-      <div v-if="showPatientDetails">
-        <h2 data-sid="patient-name"
-            :class="['nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3 ' +
-              'nhsuk-u-margin-bottom-0']"
-            data-hj-suppress>
-          {{ $store.state.myRecord.patientDetails.patientName }}
-        </h2>
-        <p class="nhsuk-label nhsuk-u-margin-top-0
+    <div v-if="showPatientDetails"
+         id="mainDiv"
+         data-sid="user-info-details">
+      <h2 data-sid="patient-name"
+          :class="['nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3 ' +
+            'nhsuk-u-margin-bottom-0']"
+          data-hj-suppress>
+        {{ $store.state.myRecord.patientDetails.patientName }}
+      </h2>
+      <p class="nhsuk-label nhsuk-u-margin-top-0
                   nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
-          {{ $t('my_record.patientInfo.fieldLabelDOB') }}
-        </p>
-        <p data-sid="user-date-of-birth"
-           :class="[$style['user-info'],
-                    'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3' +
-                      'nhsuk-u-margin-bottom-0']">
-          {{ $store.state.myRecord.patientDetails.dateOfBirth | longDate }}
-        </p>
-        <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
+        {{ $t('my_record.patientInfo.fieldLabelDOB') }}
+      </p>
+      <p data-sid="user-date-of-birth"
+         :class="[$style['user-info'],
+                  'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3' +
+                    'nhsuk-u-margin-bottom-0']">
+        {{ $store.state.myRecord.patientDetails.dateOfBirth | longDate }}
+      </p>
+      <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
                   nhsuk-u-font-weight-bold">
-          {{ $t('my_record.patientInfo.fieldLabelNHS') }}:
-        </p>
-        <p data-sid="user-nhs-number"
-           :class="[$style['user-info'],
-                    'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3 nhsuk-u-margin-bottom-0']">
-          {{ $store.state.myRecord.patientDetails.nhsNumber }}
-        </p>
-        <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
+        {{ $t('my_record.patientInfo.fieldLabelNHS') }}:
+      </p>
+      <p data-sid="user-nhs-number"
+         :class="[$style['user-info'],
+                  'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3 nhsuk-u-margin-bottom-0']">
+        {{ $store.state.myRecord.patientDetails.nhsNumber }}
+      </p>
+      <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
                   nhsuk-u-font-weight-bold">
-          {{ $t('my_record.patientInfo.fieldLabelAddress') }}:
-        </p>
-        <p data-sid="user-address"
-           :class="[$style['user-info'],
-                    'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-5 nhsuk-u-margin-bottom-0']"
-           data-hj-suppress>
-          {{ $store.state.myRecord.patientDetails.address }}
-        </p>
-      </div>
+        {{ $t('my_record.patientInfo.fieldLabelAddress') }}:
+      </p>
+      <p data-sid="user-address"
+         :class="[$style['user-info'],
+                  'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-5 nhsuk-u-margin-bottom-0']"
+         data-hj-suppress>
+        {{ $store.state.myRecord.patientDetails.address }}
+      </p>
     </div>
 
     <proxy-patient-details v-else-if="showTemplate && isProxying"
@@ -155,10 +155,9 @@ export default {
       return get('$store.state.myRecord.record.hasSummaryRecordAccess')(this);
     },
     showPatientDetails() {
-      return (this.$store.state.myRecord.patientDetails.patientName ||
-          this.$store.state.myRecord.patientDetails.dateOfBirth ||
-          this.$store.state.myRecord.patientDetails.nhsNumber ||
-          this.$store.state.myRecord.patientDetails.address);
+      return (this.showTemplate &&
+           !this.isProxying &&
+           this.$store.getters['myRecord/patientDetailsExist']);
     },
     hasAgreedToMedicalWarning() {
       return agreedToMedicalWarning();

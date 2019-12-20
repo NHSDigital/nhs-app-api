@@ -24,7 +24,10 @@ describe('my record actions', () => {
 
     beforeEach(() => {
       app = createApp({ record, patientDetails });
+
       actions.app = app;
+      actions.dispatch = jest.fn();
+
       context = {
         commit: jest.fn(),
       };
@@ -41,23 +44,48 @@ describe('my record actions', () => {
     });
 
     describe('load', () => {
+      let load;
       beforeEach(async () => {
-        await actions.load(context);
+        load = async () => actions.load(context);
       });
 
-      it('will request patient details', () => {
+      it('will request patient details', async () => {
+        await load();
         expect(app.$http.getV1PatientDemographics).toHaveBeenCalledWith({});
       });
 
-      it('will request my record data details', () => {
+      it('will request my record data details', async () => {
+        await load();
         expect(app.$http.getV1PatientMyRecord).toHaveBeenCalledWith({});
       });
 
-      it('will commit the loaded mutation with patient data and my record data', () => {
+      it('will commit the loaded mutation with patient data and my record data', async () => {
+        await load();
         expect(context.commit).toHaveBeenCalledWith(LOADED, {
           record,
           patientDetails,
         });
+      });
+
+      it('will catch an exeption in the demographics request', async () => {
+        const error = new Error();
+        app.$http.getV1PatientDemographics = jest.fn().mockImplementation(() => {
+          throw error;
+        });
+
+        await expect(load).not.toThrow();
+        expect(actions.dispatch).toHaveBeenCalledWith('errors/addApiError', error);
+      });
+
+      it('will catch an exeption in the patient record request', async () => {
+        const error = new Error();
+        app.$http.getV1PatientMyRecord = jest.fn().mockImplementation(() => {
+          throw error;
+        });
+
+        await load();
+        await expect(load).not.toThrow();
+        expect(actions.dispatch).toHaveBeenCalledWith('errors/addApiError', error);
       });
     });
 

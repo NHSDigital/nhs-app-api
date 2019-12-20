@@ -1094,6 +1094,13 @@ export default {
       },
     },
     errors: {
+      pageHeader: 'Medical record error',
+      header: 'There\'s been a problem getting your medical record information',
+      subheader: '',
+      message: {
+        text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+      },
       retryButtonText: '',
       502: {
         pageHeader: 'Medical record error',

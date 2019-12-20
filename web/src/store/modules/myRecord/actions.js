@@ -26,19 +26,24 @@ export default {
     commit(ACCEPT_TERMS);
   },
   async load({ commit }) {
-    const { response: patientDetails } = await this.app.$http.getV1PatientDemographics({}) || {};
-    const { response: record } = await this.app.$http.getV1PatientMyRecord({}) || {};
-    commit(LOADED, { record, patientDetails });
-    let medicalRecordType = AnalyticsValues.NoMedicalRecordAccess;
-    if (record && record.hasSummaryRecordAccess) {
-      medicalRecordType = record.hasDetailedRecordAccess ?
-        AnalyticsValues.SCRAndDCRAccess :
-        AnalyticsValues.SCRAccess;
-    }
-    commit(SET_MEDICAL_RECORD_TYPE, { medicalRecordType });
-    if (process.client) {
-      this.dispatch('analytics/trackUserProperty', { key: 'medicalRecordType', value: medicalRecordType });
-      this.dispatch('analytics/trackUserProperty', { key: 'gpOnlineProduct', value: record.supplier });
+    try {
+      const { response: patientDetails } = await this.app.$http.getV1PatientDemographics({}) || {};
+      const { response: record } = await this.app.$http.getV1PatientMyRecord({}) || {};
+      commit(LOADED, { record, patientDetails });
+
+      let medicalRecordType = AnalyticsValues.NoMedicalRecordAccess;
+      if (record && record.hasSummaryRecordAccess) {
+        medicalRecordType = record.hasDetailedRecordAccess ?
+          AnalyticsValues.SCRAndDCRAccess :
+          AnalyticsValues.SCRAccess;
+      }
+      commit(SET_MEDICAL_RECORD_TYPE, { medicalRecordType });
+      if (process.client) {
+        this.dispatch('analytics/trackUserProperty', { key: 'medicalRecordType', value: medicalRecordType });
+        this.dispatch('analytics/trackUserProperty', { key: 'gpOnlineProduct', value: record.supplier });
+      }
+    } catch (error) {
+      this.dispatch('errors/addApiError', error);
     }
   },
   async loadTestResults({ commit }) {

@@ -13,4 +13,7 @@ export default {
   justUpdated(state) {
     return state.justUpdated;
   },
+  pharmacyName(state) {
+    return state.pharmacy.pharmacyName;
+  },
 };

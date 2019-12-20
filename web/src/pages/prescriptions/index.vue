@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate">
+  <div v-if="showTemplate && hasLoaded">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
         <no-js-form :action="getContinueButtonPath()" method="get" :value="{}">
@@ -78,6 +78,16 @@ import Card from '@/components/widgets/card/Card';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import GenericButton from '@/components/widgets/GenericButton';
 
+const loadData = async (store) => {
+  store.dispatch('prescriptions/clear');
+  await store.dispatch('prescriptions/load');
+
+  if (store.getters['serviceJourneyRules/nominatedPharmacyEnabled']) {
+    store.dispatch('nominatedPharmacy/clear');
+    await store.dispatch('nominatedPharmacy/load');
+  }
+};
+
 export default {
   layout: 'nhsuk-layout',
   components: {
@@ -139,6 +149,9 @@ export default {
     showNominatedPharmacy() {
       return this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled'];
     },
+    nominatedPharmacyName() {
+      return this.$store.getters['nominatedPharmacy/pharmacyName'];
+    },
     pharmacyWidgetText() {
       if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P3) {
         return this.$t('rp04.dispensingPracticeHeader');
@@ -146,20 +159,24 @@ export default {
       return this.$t('rp04.nominatedPharmacyHeader');
     },
   },
-  async asyncData({ store }) {
-    await store.dispatch('prescriptions/clear');
-    await store.dispatch('prescriptions/load');
-
-    if (store.getters['serviceJourneyRules/nominatedPharmacyEnabled']) {
-      await store.dispatch('nominatedPharmacy/clear');
-      await store.dispatch('nominatedPharmacy/load');
+  watch: {
+    hasLoaded() {
+      if (this.hasLoaded) {
+        this.$store.dispatch('flashMessage/show');
+      }
+    },
+  },
+  async fetch({ store }) {
+    if (process.server) {
+      await loadData(store);
     }
-    return {
-      nominatedPharmacyName: store.state.nominatedPharmacy.pharmacy.pharmacyName,
-    };
   },
   mounted() {
-    if (this.$store.state.prescriptions.hasLoaded) {
+    if (process.client) {
+      loadData(this.$store);
+    }
+
+    if (this.hasLoaded) {
       this.$store.dispatch('flashMessage/show');
     }
   },

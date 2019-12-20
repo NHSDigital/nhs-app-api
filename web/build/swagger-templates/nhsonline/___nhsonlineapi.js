@@ -125,9 +125,8 @@ class NHSOnlineApi {
 
         const CancelToken = axios.CancelToken;
         let cancel;
-
         if (!ignoreLoading){
-          this.store.dispatch('http/isLoading');
+          this.store.dispatch('http/isLoading', url);
         }
 
         if (useAccessToken) {
@@ -247,7 +246,7 @@ class NHSOnlineApi {
           return response.data
         }).then((body) => {
           if (!ignoreLoading){
-            this.store.dispatch('http/loadingCompleted');
+            this.store.dispatch('http/loadingCompleted', url);
           }
           resolve({
               deferred,
@@ -267,7 +266,7 @@ class NHSOnlineApi {
             }
           }
           if (!ignoreLoading){
-            this.store.dispatch('http/loadingCompleted');
+            this.store.dispatch('http/loadingCompleted', url);
           }
           if (!axios.isCancel(error)) {
             if (error.response && error.response.status === 467) {

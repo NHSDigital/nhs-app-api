@@ -105,7 +105,7 @@ class CDSApi {
         const CancelToken = axios.CancelToken;
         let cancel;
 
-        this.store.dispatch('http/isLoading');
+        this.store.dispatch('http/isLoading', url);
 
         const csrfToken = get('csrfToken')(parameters) || get('store.state.session.csrfToken')(this);
         if (csrfToken) {
@@ -201,7 +201,7 @@ class CDSApi {
 
           return response.data
         }).then((body) => {
-          this.store.dispatch('http/loadingCompleted');
+          this.store.dispatch('http/loadingCompleted', url);
             resolve({
               deferred,
               result: body,
@@ -219,7 +219,7 @@ class CDSApi {
               consola.error(new Error(`Error setting up the request: ${method} ${urlWithParams}, error: ${error.message}, duration: ${requestDurationMilliseconds}ms`));
             }
           }
-          this.store.dispatch('http/loadingCompleted');
+          this.store.dispatch('http/loadingCompleted', url);
           if (!axios.isCancel(error)) {
             if (error.response !== undefined && 401 === error.response.status) {
               this.store.dispatch('auth/unauthorised');

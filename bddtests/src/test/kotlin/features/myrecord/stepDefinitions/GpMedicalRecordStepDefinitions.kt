@@ -40,7 +40,7 @@ open class GpMedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     var testResultOptions = TestResultOptions()
 
     @Given("^I am a (\\w+) user setup to use medical record version 2$")
-    fun iAmAUserWishingToRegisterTheirDeviceForPushNotifications(gpSystem: String) {
+    fun iAmAUserSetUpToUseMedicalRecordVersionTwo(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         setPatientToDefaultFor(supplier)
         val patient = SerenityHelpers.getPatient()

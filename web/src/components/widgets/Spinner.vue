@@ -9,7 +9,8 @@ export default {
   name: 'Spinner',
   computed: {
     isVisible() {
-      return !this.$store.state.spinner.prevent && (this.$store.state.http.isLoading
+      return !this.$store.state.spinner.prevent &&
+        (this.$store.getters['http/isLoading']
         || this.$store.state.onlineConsultations.isLoadingFile);
     },
   },

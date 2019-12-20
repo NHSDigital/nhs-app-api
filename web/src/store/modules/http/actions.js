@@ -8,11 +8,19 @@ import {
 
 
 export default {
-  loadingCompleted({ commit }) {
-    commit(LOADING_COMPLETE);
+  loadingCompleted({ commit }, url) {
+    if (!url) {
+      this.dispatch('log/onError', 'url not specified in loadingCompleted');
+    }
+
+    commit(LOADING_COMPLETE, url);
   },
-  isLoading({ commit }) {
-    commit(IS_LOADING);
+  isLoading({ commit }, url) {
+    if (!url) {
+      this.dispatch('log/onError', 'url not specified in isLoading');
+    }
+
+    commit(IS_LOADING, url);
     this.dispatch('session/updateLastCalledAt');
   },
   addCancelRequestHandler({ commit }, handler) {

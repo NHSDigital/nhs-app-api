@@ -28,6 +28,9 @@ export default {
       .getV1PatientAppointmentSlots()
       .then((data) => {
         commit(LOAD, data);
+      })
+      .catch((error) => {
+        this.dispatch('errors/addApiError', error);
       });
   },
   filter({ commit }, selectedOptions) {
