@@ -1,14 +1,44 @@
-# nhsonline-app
+# nhsapp
 
-> NHS Online App
+> NHS App
 
 ## Get code
 
-Clone from the GitLab repo: https://git.nhschoices.net/nhsonline/nhsonline-app.git
+Clone the repo: https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
 
 ```bash
-git clone https://git.nhschoices.net/nhsonline/nhsonline-app.git
+git clone https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
 ```
+
+## Migrating from GitLab
+
+1. Switch the origin URL, either:
+
+    * HTTP
+
+        ```bash
+        git remote set-url origin https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
+        ```
+
+    * SSH
+
+        ```bash
+        git remote set-url origin git@ssh.dev.azure.com:v3/nhsapp/NHS%20App/nhsapp
+        ```
+
+2. Prune old remote branches (only develop has been migrated)
+
+    ```bash
+    git fetch --prune
+    ```
+
+3. Review the [Git Branching Strategy](https://confluence.service.nhs.uk/display/NO/Git+Branching+Strategy) (this is now being enforced)
+
+4. Rename active feature branches
+
+    ```bash
+    git branch -m feature-nhso-1234-active-feature-branch feature/nhso-1234-active-feature-branch
+    ```
 
 ## Build code
 
