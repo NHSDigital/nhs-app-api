@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     Sender = addMessageRequest.Sender,
                     Version = addMessageRequest.Version,
                     Body = addMessageRequest.Body,
-                    SentTime = DateTime.Now
+                    SentTime = DateTime.UtcNow
                 };
 
                 await _messageRepository.Create(userMessage);

@@ -18,6 +18,7 @@ import worker.JsonPatchOperation
 import worker.models.messages.MessageRequest
 import worker.models.messages.MessagesSummaryFacade
 import worker.models.messages.SingleMessageFacade
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -30,9 +31,9 @@ class MessagesFactory {
     val mockingClient = MockingClient.instance
 
     private val frontendSummaryDateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-    private val twoMonthsAgo = ZonedDateTime.now().minusMonths(TWO_MONTHS)
-    private val oneMonthAgo = ZonedDateTime.now().minusMonths(ONE_MONTH)
-    private val oneWeekAgo = ZonedDateTime.now().minusDays(SEVEN_DAYS)
+    private val twoMonthsAgo = ZonedDateTime.now(ZoneId.of("Europe/London")).minusMonths(TWO_MONTHS)
+    private val oneMonthAgo = ZonedDateTime.now(ZoneId.of("Europe/London")).minusMonths(ONE_MONTH)
+    private val oneWeekAgo = ZonedDateTime.now(ZoneId.of("Europe/London")).minusDays(SEVEN_DAYS)
 
     private val senderOne = "Sender One"
     private val senderTwo = "Sender Two"

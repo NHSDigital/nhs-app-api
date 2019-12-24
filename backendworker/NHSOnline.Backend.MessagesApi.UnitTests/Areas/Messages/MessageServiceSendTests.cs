@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             actualUserMessage.Sender.Should().BeEquivalentTo(request.Sender);
             actualUserMessage.Version.Should().Be(request.Version);
             actualUserMessage.Body.Should().BeEquivalentTo(request.Body);
-            actualUserMessage.SentTime.Should().BeCloseTo(DateTime.Now, precision: 60);
+            actualUserMessage.SentTime.Should().BeCloseTo(DateTime.UtcNow, precision: 60);
         }
 
         [TestMethod]
