@@ -6,7 +6,7 @@ import pages.HybridPageObject
 
 class ReferralsPage: HybridPageObject() {
 
-    val referralElements = HybridPageElement(
+    private val referralElements = HybridPageElement(
         webDesktopLocator = "//div[@data-purpose='referrals-card']",
         page = this
     )

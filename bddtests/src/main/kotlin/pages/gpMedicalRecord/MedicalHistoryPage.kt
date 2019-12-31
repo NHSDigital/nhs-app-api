@@ -6,11 +6,10 @@ import pages.HybridPageObject
 
 class MedicalHistoryPage: HybridPageObject() {
 
-    val historyElements = HybridPageElement(
+    private val historyElements = HybridPageElement(
         webDesktopLocator = "//div[@data-purpose='medical-history-card']",
         page = this
     )
-
 
     fun getMedicalHistoryElements(): List<WebElementFacade> {
         return historyElements.elements

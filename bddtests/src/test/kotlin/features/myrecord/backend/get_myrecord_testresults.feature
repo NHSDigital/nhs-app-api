@@ -5,7 +5,7 @@ Feature: Get Test Results Data Backend
   A user can get their test results information
 
   Scenario Outline: Requesting multiple test results returns multiple test results data for <GP System>
-    Given the my record wiremocks are initialised for <GP System>
+    Given I am a <GP System> user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has six test results
     When I get the users test results
@@ -18,7 +18,7 @@ Feature: Get Test Results Data Backend
       | TPP       |
 
   Scenario: Requesting single test result with child values with no ranges for EMIS
-    Given the my record wiremocks are initialised for EMIS
+    Given I am a EMIS user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has a single test result with multiple child values with no ranges for EMIS
     When I get the users test results
@@ -28,7 +28,7 @@ Feature: Get Test Results Data Backend
     And the field indicating supplier is set
 
   Scenario: Requesting single test result with child values with ranges for EMIS
-    Given the my record wiremocks are initialised for EMIS
+    Given I am a EMIS user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has a single test result with multiple child values with ranges for EMIS
     When I get the users test results
@@ -38,7 +38,7 @@ Feature: Get Test Results Data Backend
     And the field indicating supplier is set
 
   Scenario: Requesting single test result with no child items or range for EMIS
-    Given the my record wiremocks are initialised for EMIS
+    Given I am a EMIS user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has test results enabled and a single test result exists with no child values or range for EMIS
     When I get the users test results
@@ -46,7 +46,7 @@ Feature: Get Test Results Data Backend
     And the field indicating supplier is set
 
   Scenario: Requesting single test result with no child items and a range for EMIS
-    Given the my record wiremocks are initialised for EMIS
+    Given I am a EMIS user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has a single test result with no child values and range for EMIS
     When I get the users test results
@@ -54,7 +54,7 @@ Feature: Get Test Results Data Backend
     And the field indicating supplier is set
 
   Scenario Outline: A <GP System> user cannot get test results data when GP Practice has disabled test results functionality
-    Given the my record wiremocks are initialised for <GP System>
+    Given I am a <GP System> user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has disabled test results functionality
     When I get the users test results
@@ -68,9 +68,9 @@ Feature: Get Test Results Data Backend
       | TPP       |
 
   Scenario Outline: A <GP System> user cannot get test results data when an error occurs getting test results
-    Given the my record wiremocks are initialised for <GP System>
+    Given I am a <GP System> user setup to use medical record version 2
     And I have logged in and have a valid session cookie
-    And an error occurred retrieving the test results
+    And an error occurs retrieving the test results
     When I get the users test results
     Then the flag informing that there was an error retrieving the test results data is set to "True"
 

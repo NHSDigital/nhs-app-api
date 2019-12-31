@@ -4,7 +4,7 @@ Feature: Get medications data Backend
   A user can get their medication information
 
   Scenario Outline: A <GP System> user can get medications data when GP Practice has enabled medications functionality
-    Given the my record wiremocks are initialised for <GP System>
+    Given I am a <GP System> user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has enabled medications functionality
     When I get the users my record data
@@ -19,7 +19,7 @@ Feature: Get medications data Backend
       | TPP       |
 
   Scenario Outline: A <GP System> user cannot get medications data when GP Practice has disabled medications functionality
-    Given the my record wiremocks are initialised for <GP System>
+    Given I am a <GP System> user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     But the GP Practice has disabled medications functionality
     When I get the users my record data

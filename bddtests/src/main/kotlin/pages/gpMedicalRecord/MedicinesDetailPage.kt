@@ -7,7 +7,7 @@ import pages.myrecord.RecordItem
 
 class MedicinesDetailPage: HybridPageObject() {
 
-    val medicinesElements = HybridPageElement(
+    private val medicinesElements = HybridPageElement(
         webDesktopLocator = "//div[@data-purpose='medicines-card']",
         page = this
     )

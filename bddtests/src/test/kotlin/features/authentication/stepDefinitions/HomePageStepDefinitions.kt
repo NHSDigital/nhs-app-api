@@ -8,7 +8,7 @@ import features.im1Appointments.steps.YourAppointmentsUISteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.linkedProfiles.LinkedProfilesSerenityHelpers
-import features.myrecord.stepDefinitions.MyRecordWarningStepDefinitions
+import features.myrecord.stepDefinitions.MedicalRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.sharedSteps.BrowserSteps
@@ -44,7 +44,7 @@ class HomePageStepDefinitions {
     @Steps
     private lateinit var organDonationSteps: OrganDonationStepDefinitions
     @Steps
-    private lateinit var recordWarning: MyRecordWarningStepDefinitions
+    private lateinit var recordWarning: MedicalRecordWarningStepDefinitions
 
     private lateinit var prescriptions: PrescriptionsPage
 

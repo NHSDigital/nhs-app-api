@@ -6,7 +6,7 @@ import pages.HybridPageObject
 
 class EncountersPage: HybridPageObject() {
 
-    val encountersElements = HybridPageElement(
+    private val encountersElements = HybridPageElement(
         webDesktopLocator = "//div[@data-purpose='encounters-card']",
         page = this
     )

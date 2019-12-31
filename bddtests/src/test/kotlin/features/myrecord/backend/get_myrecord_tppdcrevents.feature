@@ -4,7 +4,7 @@ Feature: Get TPP Dcr Event Data Backend
   A user can get their Tpp Dcr Event information
 
   Scenario: Requesting multiple tpp dcr events returns multiple tpp dcr events data for TPP
-    Given the my record wiremocks are initialised for TPP
+    Given I am a TPP user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has multiple dcr events for TPP
     When I get the users dcr event data
@@ -13,7 +13,7 @@ Feature: Get TPP Dcr Event Data Backend
     And the field indicating supplier is set
 
   Scenario: GP practice has disabled tpp dcr events functionality for TPP
-    Given the my record wiremocks are initialised for TPP
+    Given I am a TPP user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has disabled dcr events functionality for TPP
     When I get the users dcr event data
@@ -22,7 +22,7 @@ Feature: Get TPP Dcr Event Data Backend
     And the field indicating supplier is set
 
   Scenario: Error occurs getting tpp dcr events for TPP
-    Given the my record wiremocks are initialised for TPP
+    Given I am a TPP user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And an error occurred retrieving the dcr events from TPP
     When I get the users dcr event data

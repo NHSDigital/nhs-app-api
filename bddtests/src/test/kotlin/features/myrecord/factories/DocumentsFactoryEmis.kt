@@ -1,6 +1,6 @@
 package features.myrecord.factories
 
-import features.myrecord.stepDefinitions.MyRecordDocumentsStepDefinitions.SerenityVariable
+import features.myrecord.stepDefinitions.V2MedicalRecordDocumentsStepDefinitions.SerenityVariable
 import mocking.data.myrecord.DocumentData
 import mocking.data.myrecord.DocumentsData
 import mocking.data.myrecord.DocumentsData.DEFAULT_NUMBER_OF_DOCUMENTS

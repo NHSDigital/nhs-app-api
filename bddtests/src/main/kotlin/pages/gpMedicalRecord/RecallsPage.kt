@@ -6,7 +6,7 @@ import pages.HybridPageObject
 
 class RecallsPage: HybridPageObject() {
 
-    val recallElements = HybridPageElement(
+    private val recallElements = HybridPageElement(
         webDesktopLocator = "//div[@data-purpose='recalls-card']",
         page = this
     )

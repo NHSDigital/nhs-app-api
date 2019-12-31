@@ -5,7 +5,6 @@ Feature: Get Consultations Data Backend
 
   Scenario: Requesting multiple consultations results returns multiple consultations data
     Given I am a EMIS user setup to use medical record version 2
-    And the my record wiremocks are initialised when the patient is already set for EMIS
     And I have logged in and have a valid session cookie
     And the GP Practice has multiple consultations
     When I get the users consultations
@@ -13,7 +12,6 @@ Feature: Get Consultations Data Backend
 
   Scenario: Patient has no consultations
     Given I am a EMIS user setup to use medical record version 2
-    And the my record wiremocks are initialised when the patient is already set for EMIS
     And I have logged in and have a valid session cookie
     And an error occurred retrieving the consultations
     When I get the users consultations
@@ -21,7 +19,6 @@ Feature: Get Consultations Data Backend
 
   Scenario: Patient does not have access to consultations
     Given I am a EMIS user setup to use medical record version 2
-    And the my record wiremocks are initialised when the patient is already set for EMIS
     And I have logged in and have a valid session cookie
     And the Patient has no access to consultations
     When I get the users consultations
@@ -29,7 +26,6 @@ Feature: Get Consultations Data Backend
 
   Scenario: Error occurs getting consultations
     Given I am a EMIS user setup to use medical record version 2
-    And the my record wiremocks are initialised when the patient is already set for EMIS
     And I have logged in and have a valid session cookie
     And an error occurred retrieving the consultations
     When I get the users consultations

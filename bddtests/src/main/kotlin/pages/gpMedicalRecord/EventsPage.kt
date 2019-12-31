@@ -7,7 +7,7 @@ import pages.myrecord.RecordItem
 
 class EventsPage: HybridPageObject() {
 
-    val eventsElements = HybridPageElement(
+    private val eventsElements = HybridPageElement(
         webDesktopLocator = "//div[@data-purpose='events-card']",
         page = this
     )

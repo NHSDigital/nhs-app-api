@@ -4,7 +4,7 @@ Feature: Get patient problems data Backend
   A user can get their patient problems information
 
   Scenario Outline: A <GP System> user can get problems data when GP practice has enabled problems functionality
-    Given the my record wiremocks are initialised for <GP System>
+    Given I am a <GP System> user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has enabled problems functionality
     When I get the users my record data
@@ -19,7 +19,7 @@ Feature: Get patient problems data Backend
       | VISION    |
 
   Scenario Outline: A <GP System> user cannot get problems data when GP practice has disabled problems functionality
-    Given the my record wiremocks are initialised for <GP System>
+    Given I am a <GP System> user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has disabled problems functionality
     When I get the users my record data
