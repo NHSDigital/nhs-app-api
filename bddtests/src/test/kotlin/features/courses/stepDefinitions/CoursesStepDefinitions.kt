@@ -5,7 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
-import features.prescriptions.factories.PrescriptionsFactory
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.helpers.PrescriptionHelpers
 import features.prescriptions.stepDefinitions.PrescriptionsSerenityHelpers
 import mocking.MockingClient
@@ -296,7 +296,6 @@ open class CoursesStepDefinitions {
         val gpSystem = SerenityHelpers.getGpSupplier()
         val factory = PrescriptionsFactory.getForSupplier(gpSystem)
 
-        SerenityHelpers.setPatient(factory.patient)
         coursesLoader = factory.getCoursesLoader
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
 

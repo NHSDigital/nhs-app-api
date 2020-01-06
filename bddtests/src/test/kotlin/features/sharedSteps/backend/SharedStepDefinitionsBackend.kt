@@ -3,7 +3,6 @@ package features.sharedSteps.backend
 import constants.Supplier
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -11,6 +10,7 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import models.Patient
 import net.serenitybdd.core.Serenity
 import utils.SerenityHelpers
+import utils.LinkedProfilesSerenityHelpers
 import utils.set
 import worker.WorkerClient
 import java.util.*

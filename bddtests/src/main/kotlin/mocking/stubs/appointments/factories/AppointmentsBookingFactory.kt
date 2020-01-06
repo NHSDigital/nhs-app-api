@@ -13,6 +13,7 @@ import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
+import utils.ProxySerenityHelpers
 import worker.models.appointments.AppointmentBookRequest
 
 abstract class AppointmentsBookingFactory(gpSupplier: Supplier) : AppointmentsFactory(gpSupplier) {
@@ -54,7 +55,7 @@ abstract class AppointmentsBookingFactory(gpSupplier: Supplier) : AppointmentsFa
     }
 
     fun defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
-
+        val patient = ProxySerenityHelpers.getPatientOrProxy()
         val request = defaultAppointmentRequest(patient)
         appointmentMapper.requestMapping { bookAppointmentsBuilder(bookAppointmentSlotRequest(patient, request)) }
         setAppointmentToBeBooked(request)
@@ -65,7 +66,7 @@ abstract class AppointmentsBookingFactory(gpSupplier: Supplier) : AppointmentsFa
             emptyBookingReason: Boolean = false,
             slotId: Int? = null,
             bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
-
+        val patient = ProxySerenityHelpers.getPatientOrProxy()
         val request = telephoneAppointmentRequest(
                 patient,
                 slotId ?: getSlotToSelect().slotId,
@@ -102,7 +103,7 @@ abstract class AppointmentsBookingFactory(gpSupplier: Supplier) : AppointmentsFa
 
     private fun generateBookingResponse(bookingReason: String, booker: (IBookAppointmentsBuilder) ->
     Mapping) {
-
+        val patient = ProxySerenityHelpers.getPatientOrProxy()
         appointmentMapper.requestMapping {
             booker(bookAppointmentSlotRequest(patient,
                     BookAppointmentSlotFacade(patient.userPatientLinkToken, getSlotToSelect().slotId!!.toInt(),

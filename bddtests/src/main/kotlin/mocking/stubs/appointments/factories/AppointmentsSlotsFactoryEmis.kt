@@ -13,6 +13,7 @@ import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertTrue
+import utils.ProxySerenityHelpers
 import java.time.ZonedDateTime
 
 class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory(Supplier.EMIS) {
@@ -35,7 +36,7 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory(Supplier.EMIS) {
                 guidanceMessageOut!!.isNotEmpty() == appointmentsMessage!!.isNotEmpty())
 
         mockingClient.forEmis {
-            practiceSettingsRequest(patient)
+            practiceSettingsRequest(ProxySerenityHelpers.getPatientOrProxy())
                     .respondWithSuccess(settingsResponse)
         }
 
@@ -46,6 +47,7 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory(Supplier.EMIS) {
     override fun generateAppointmentSlotResponseWithoutGuidance(startDate: ZonedDateTime,
                                                                 endDate: ZonedDateTime,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
+        val patient = ProxySerenityHelpers.getPatientOrProxy()
         appointmentMapper.requestMapping {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }
@@ -71,6 +73,7 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory(Supplier.EMIS) {
             )
 
     override fun generateSpecificUserData() {
+        val patient = ProxySerenityHelpers.getPatientOrProxy()
         mockingClient.forEmis { authentication.demographicsRequest(patient)
                 .respondWithSuccess(EmisDemographicsResponse(patient, arrayOf())) }
     }

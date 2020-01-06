@@ -2,11 +2,11 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.data.myrecord.MyRecordSerenityHelpers
 import mocking.emis.testResults.TestResultValue
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient

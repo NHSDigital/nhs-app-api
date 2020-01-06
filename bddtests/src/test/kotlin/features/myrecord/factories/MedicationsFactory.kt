@@ -1,12 +1,12 @@
 package features.myrecord.factories
 
 import constants.Supplier
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.stepDefinitions.HTTP_EXCEPTION
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import models.Patient
 import net.serenitybdd.core.Serenity
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrNull
 import worker.NhsoHttpException
 import worker.WorkerClient

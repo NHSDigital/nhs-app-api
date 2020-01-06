@@ -2,9 +2,9 @@ package features.courses.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
+import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException

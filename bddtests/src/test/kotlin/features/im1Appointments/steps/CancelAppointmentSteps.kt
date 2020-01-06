@@ -2,7 +2,6 @@ package features.im1Appointments.steps
 
 import constants.Supplier
 import features.authentication.steps.LoginSteps
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.sharedSteps.NavigationSteps
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
@@ -20,6 +19,9 @@ import org.junit.Assert.assertTrue
 import pages.appointments.CancelAppointmentPage
 import pages.navigation.WebHeader
 import pages.text
+import utils.LinkedProfilesSerenityHelpers
+import utils.ProxySerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrFail
 import worker.WorkerClient
 import worker.models.appointments.GenericResponseObject
@@ -91,16 +93,16 @@ open class CancelAppointmentSteps {
             gpSystem: Supplier,
             response: ((ICancelAppointmentsBuilder) -> Mapping)? = null
     ) {
-
-        val patient = Patient.getDefault(gpSystem)
+        if (SerenityHelpers.getPatientOrNull() == null) {
+            Serenity.setSessionVariable(Patient::class).to(Patient.getDefault(gpSystem))
+        }
 
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpSystem)
-        Serenity.setSessionVariable(Patient::class).to(patient)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse()
 
         val factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
         val request = factory.defaultRequest(
-                patient,
+                ProxySerenityHelpers.getPatientOrProxy(),
                 retrieveSlotIdOfAppointmentToCancel(),
                 reason
                         ?: Serenity.sessionVariableCalled<MyAppointmentsFacade>(MyAppointmentsFacade::class)

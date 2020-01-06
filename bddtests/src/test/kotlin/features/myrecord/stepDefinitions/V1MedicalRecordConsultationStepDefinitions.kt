@@ -5,7 +5,6 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.data.myrecord.ConsultationsData
 import mocking.data.myrecord.TppDcrData
 import mocking.tpp.models.Error
@@ -13,6 +12,7 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import pages.myrecord.MedicalRecordV1Page
 import utils.SerenityHelpers
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient

@@ -18,6 +18,7 @@ import mockingFacade.appointments.metadata.SlotTypeFacade
 import models.Patient
 import models.Slot
 import net.serenitybdd.core.Serenity
+import utils.ProxySerenityHelpers
 import utils.SerenityHelpers
 import worker.models.appointments.MyAppointmentsResponse
 import java.time.Duration
@@ -144,7 +145,8 @@ abstract class MyAppointmentsFactory(gpSupplier: Supplier) : AppointmentsFactory
 
     fun disableForProxy(actingOnBehalfOf: Patient) {
         appointmentMapper.requestMapping {
-            viewMyAppointmentsRequestViaProxy(patient, actingOnBehalfOf).respondWithGPErrorWhenNotEnabled()
+            viewMyAppointmentsRequestViaProxy(
+                    SerenityHelpers.getPatient(), actingOnBehalfOf).respondWithGPErrorWhenNotEnabled()
         }
     }
 
@@ -158,7 +160,9 @@ abstract class MyAppointmentsFactory(gpSupplier: Supplier) : AppointmentsFactory
             mapping: (IMyAppointmentsBuilder.() -> Mapping)
 
     ) {
-        appointmentMapper.requestMapping { mapping(viewMyAppointmentsRequest(patient)) }
+        appointmentMapper.requestMapping {
+            mapping(viewMyAppointmentsRequest(ProxySerenityHelpers.getPatientOrProxy()))
+        }
     }
 
     private val defaultReasons = arrayListOf(

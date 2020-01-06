@@ -1,7 +1,6 @@
 package features.im1Appointments.steps
 
 import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import mocking.MockingClient
 import mocking.emis.models.AppointmentCancellationReason
@@ -10,6 +9,7 @@ import net.thucydides.core.annotations.Step
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient

@@ -19,10 +19,10 @@ abstract class AppointmentsFactory(gpSupplier: Supplier) {
     private val timeZone = TimeZone.getTimeZone("Europe/London")
     protected val gpDateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
     val mockingClient = MockingClient.instance
-    val patient: Patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSupplier)
     protected val supplier: Supplier = gpSupplier
     protected val appointmentMapper: MockingClientAppointmentMappingFactory
     protected val appointmentSlotsFactoryHelper = AppointmentSlotsFactoryHelper()
+    val patient: Patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSupplier)
 
     init {
         SerenityHelpers.setPatient(patient)

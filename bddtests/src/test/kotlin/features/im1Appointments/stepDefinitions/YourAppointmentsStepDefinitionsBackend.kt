@@ -6,7 +6,6 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import features.im1Appointments.steps.YourAppointmentsBackendSteps
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.data.appointments.AppointmentSlotsTelephoneExample
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
@@ -14,6 +13,7 @@ import mockingFacade.appointments.MyAppointmentsFacade
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient

@@ -1,6 +1,4 @@
-package features.linkedProfiles
-
-import utils.ISerenityHelperEnums
+package utils
 
 enum class LinkedProfilesSerenityHelpers : ISerenityHelperEnums {
     SELECTED_PROFILE,

@@ -7,7 +7,6 @@ import cucumber.api.java.en.When
 import features.im1Appointments.steps.YourAppointmentsUISteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.stepDefinitions.MedicalRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
@@ -19,6 +18,7 @@ import org.junit.Assert
 import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
 import pages.prescription.PrescriptionsPage
+import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import java.net.URL

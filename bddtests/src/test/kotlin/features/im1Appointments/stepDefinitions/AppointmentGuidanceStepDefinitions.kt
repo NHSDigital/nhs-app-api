@@ -39,4 +39,9 @@ class AppointmentGuidanceStepDefinitions {
     fun thenIAmOnTheAppointmentsGuidancePage() {
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
     }
+
+    @When("^I select the Book an Appointment button on the guidance page$")
+    fun whenISelectBookAppointmentButton() {
+        appointmentGuidanceSteps.appointmentGuidancePage.bookButton.click()
+    }
 }

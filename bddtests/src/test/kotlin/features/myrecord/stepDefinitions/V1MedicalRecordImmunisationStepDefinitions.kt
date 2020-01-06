@@ -4,13 +4,13 @@ import constants.DateTimeFormats
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.factories.ImmunisationsFactory
 import mocking.data.myrecord.ImmunisationsData
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import pages.myrecord.MedicalRecordV1Page
 import utils.SerenityHelpers
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient

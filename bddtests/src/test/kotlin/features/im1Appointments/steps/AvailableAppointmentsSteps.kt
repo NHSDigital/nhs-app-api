@@ -1,6 +1,5 @@
 package features.im1Appointments.steps
 
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mockingFacade.appointments.AppointmentSessionFacade
@@ -14,6 +13,7 @@ import org.junit.Assert.assertNotNull
 import pages.appointments.AvailableAppointmentsPage
 import pages.navigation.BreadcrumbHeader
 import pages.navigation.WebHeader
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrNull
 import worker.NhsoHttpException
 import worker.WorkerClient

@@ -6,11 +6,10 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.GpPracticeAccessSettingsFactory
 import features.myrecord.factories.MyRecordFactory
-import features.prescriptions.factories.PrescriptionsFactory
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
@@ -38,6 +37,7 @@ import pages.linkedProfiles.shutterPages.SymptomsShutterPage
 import pages.navigation.WebHeader
 import pages.text
 import utils.GlobalSerenityHelpers
+import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set

@@ -7,10 +7,9 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.courses.stepDefinitions.CoursesStepDefinitions
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
 import features.prescriptions.PrescriptionSerenityHelpers
-import features.prescriptions.factories.PrescriptionsFactory
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
@@ -39,6 +38,8 @@ import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PartiallySuccessfulRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
 import pages.text
+import utils.LinkedProfilesSerenityHelpers
+import utils.ProxySerenityHelpers
 import utils.SerenityHelpers
 import utils.assertTrueWithRetry
 import utils.getOrFail
@@ -180,6 +181,7 @@ open class PrescriptionsSubmissionStepDefinitions {
     private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: Supplier) {
         coursesStepDefinitions.thereAreXXRepeatablePrescriptionsAvailable(amount)
         coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount)
+
         currentScenarioState = PrescriptionsFactory.getForSupplier(gpSystem)
                 .setupWireMockAndDataSetup(
                         scenarioTitle,
@@ -199,13 +201,15 @@ open class PrescriptionsSubmissionStepDefinitions {
         scenarioTitle = title
     }
 
-
     @Given("^I am using (.*) GP System to submit my prescription$")
     fun givenIHaveXPastRepeatPrescriptions(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         SerenityHelpers.setGpSupplier(supplier)
-        val currentPatient = Patient.getDefault(supplier)
-        SerenityHelpers.setPatient(currentPatient)
+
+        if (SerenityHelpers.getPatientOrNull() == null) {
+           SerenityHelpers.setPatient(Patient.getDefault(supplier))
+        }
+        val currentPatient = SerenityHelpers.getPatient()
         CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(currentPatient)
         PrescriptionsSerenityHelpers.PROVIDER.set(supplier)
@@ -228,7 +232,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         prescriptionLoader.loadData(prescriptionLoaderConfig)
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
 
-        val currentPatient = SerenityHelpers.getPatient()
+        val currentPatient = ProxySerenityHelpers.getPatientOrProxy()
         when (currentProvider) {
             Supplier.EMIS -> {
                 val data = prescriptionLoader.data as PrescriptionRequestsGetResponse

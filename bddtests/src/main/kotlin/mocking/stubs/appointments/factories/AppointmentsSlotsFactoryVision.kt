@@ -9,6 +9,7 @@ import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
+import utils.ProxySerenityHelpers
 import java.time.ZonedDateTime
 
 class AppointmentsSlotsFactoryVision : AppointmentsSlotsFactory(Supplier.VISION) {
@@ -27,7 +28,7 @@ class AppointmentsSlotsFactoryVision : AppointmentsSlotsFactory(Supplier.VISION)
                                                                 endDate: ZonedDateTime,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
         appointmentMapper.requestMapping {
-            mapping(appointmentSlotsRequest(patient, startDate, endDate))
+            mapping(appointmentSlotsRequest(ProxySerenityHelpers.getPatientOrProxy(), startDate, endDate))
         }
     }
 

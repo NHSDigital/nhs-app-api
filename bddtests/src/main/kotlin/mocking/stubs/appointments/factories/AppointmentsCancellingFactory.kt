@@ -7,6 +7,7 @@ import mocking.models.Mapping
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
+import utils.ProxySerenityHelpers
 import worker.models.appointments.CancelAppointmentRequest
 
 class AppointmentsCancellingFactory(gpSystem: Supplier) : AppointmentsFactory(gpSystem) {
@@ -26,7 +27,7 @@ class AppointmentsCancellingFactory(gpSystem: Supplier) : AppointmentsFactory(gp
 
         if (response != null) {
             appointmentMapper.requestMapping {
-                response(cancelAppointmentRequest(patient, request))
+                response(cancelAppointmentRequest(ProxySerenityHelpers.getPatientOrProxy(), request))
             }
         }
         setAppointmentToBeCancelled(request)

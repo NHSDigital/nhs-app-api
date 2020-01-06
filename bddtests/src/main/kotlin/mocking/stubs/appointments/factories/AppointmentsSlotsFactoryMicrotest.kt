@@ -6,6 +6,7 @@ import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
+import utils.ProxySerenityHelpers
 import java.time.ZonedDateTime
 
 class AppointmentsSlotsFactoryMicrotest : AppointmentsSlotsFactory(Supplier.MICROTEST) {
@@ -21,6 +22,7 @@ class AppointmentsSlotsFactoryMicrotest : AppointmentsSlotsFactory(Supplier.MICR
     override fun generateAppointmentSlotResponseWithoutGuidance(startDate: ZonedDateTime,
                                                                 endDate: ZonedDateTime,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
+        val patient = ProxySerenityHelpers.getPatientOrProxy()
         appointmentMapper.requestMapping {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }

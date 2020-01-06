@@ -11,6 +11,7 @@ import mockingFacade.appointments.helpers.MyAppointmentFacadeHelper.Companion.hi
 import mockingFacade.appointments.helpers.MyAppointmentFacadeHelper.Companion.upcomingAppointmentsFromSessions
 import models.Slot
 import net.serenitybdd.core.Serenity
+import utils.ProxySerenityHelpers
 import worker.models.appointments.AppointmentResponseObject
 import worker.models.appointments.MyAppointmentsResponse
 
@@ -101,6 +102,7 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory(Supplier.TPP) {
             mapping:
             (IMyAppointmentsBuilder.() -> Mapping)
     ) {
+        val patient = ProxySerenityHelpers.getPatientOrProxy()
         if (appointmentType == IMyAppointmentsBuilder.AppointmentType.BOTH ||
                 appointmentType == IMyAppointmentsBuilder.AppointmentType.PAST_ONLY) {
             appointmentMapper.requestMapping {

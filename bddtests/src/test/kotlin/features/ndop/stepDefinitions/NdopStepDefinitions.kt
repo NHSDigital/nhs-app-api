@@ -2,11 +2,11 @@ package features.ndop.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.stepDefinitions.AbstractDemographicsStepDefinitions
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.SerenityHelpers
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient

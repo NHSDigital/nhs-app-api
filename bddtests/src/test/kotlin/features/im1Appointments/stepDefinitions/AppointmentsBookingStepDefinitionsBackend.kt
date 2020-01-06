@@ -4,7 +4,6 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.defaultTelephoneNumber
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
@@ -13,6 +12,8 @@ import net.serenitybdd.core.Serenity
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
 import org.junit.Assert.assertEquals
+import utils.LinkedProfilesSerenityHelpers
+import utils.ProxySerenityHelpers
 import utils.getOrNull
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -41,7 +42,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
                                                                                numberOfCharacters: Int) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = AppointmentsBookingFactory.getForSupplier(supplier)
-        val patient = factory.patient
+        val patient = ProxySerenityHelpers.getPatientOrProxy()
         val slotId = "1".repeat(numberOfCharacters).toInt()
         val request = factory.defaultAppointmentRequest(patient, slotId = slotId)
         factory.setupRequestAndResponse(request) { bookAppointmentSlotRequest(patient, request).respondWithSuccess() }
@@ -60,7 +61,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
                                                                                       numberOfCharacters: Int) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = AppointmentsBookingFactory.getForSupplier(supplier)
-        val patient = factory.patient
+        val patient = ProxySerenityHelpers.getPatientOrProxy()
         val bookingReason = "a".repeat(numberOfCharacters)
         val request = factory.defaultAppointmentRequest(patient, bookingReason = bookingReason)
         factory.setupRequestAndResponse(request) { bookAppointmentSlotRequest(patient, request).respondWithSuccess() }

@@ -6,6 +6,7 @@ import mocking.emis.practices.NecessityOption
 import mocking.emis.practices.SettingsResponseModel
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
+import utils.ProxySerenityHelpers
 
 class AppointmentsBookingFactoryEmis : AppointmentsBookingFactory(Supplier.EMIS) {
 
@@ -13,7 +14,7 @@ class AppointmentsBookingFactoryEmis : AppointmentsBookingFactory(Supplier.EMIS)
         val inputRequirements = InputRequirements(appointmentBookingReason = NecessityOption.MANDATORY.text)
         val settingsResponse = SettingsResponseModel(inputRequirements = inputRequirements)
         mockingClient.forEmis {
-            practiceSettingsRequest(patient)
+            practiceSettingsRequest(ProxySerenityHelpers.getPatientOrProxy())
                     .respondWithSuccess(settingsResponse)
         }
     }

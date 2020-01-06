@@ -6,7 +6,6 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.MyRecordFactory
 import features.sharedSteps.BrowserSteps
@@ -22,6 +21,7 @@ import pages.myrecord.MyRecordWarningPage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import utils.SerenityHelpers
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient

@@ -4,13 +4,13 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import features.myrecord.factories.DemographicsFactory
 import mocking.data.appointments.AppointmentsSlotsExample
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
+import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrNull
 import worker.NhsoHttpException

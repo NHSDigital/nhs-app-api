@@ -2,7 +2,7 @@ package features.prescriptions.stepDefinitions
 
 import constants.ErrorResponseCodeTpp
 import constants.Supplier
-import features.prescriptions.factories.PrescriptionsFactory
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mocking.MockingClient
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.defaults.VisionMockDefaults

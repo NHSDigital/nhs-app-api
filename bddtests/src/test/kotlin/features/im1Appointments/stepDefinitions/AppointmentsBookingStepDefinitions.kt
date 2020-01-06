@@ -131,4 +131,5 @@ class AppointmentsBookingStepDefinitions {
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.NOT_ALLOWED)
         factory.generateSuccessfulBookingResponse("")
     }
+
 }

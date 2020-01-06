@@ -4,7 +4,6 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
@@ -14,6 +13,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
 import pages.switchProfiles.SwitchProfilesPage
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail
 
 class SwitchProfileStepDefinitions {

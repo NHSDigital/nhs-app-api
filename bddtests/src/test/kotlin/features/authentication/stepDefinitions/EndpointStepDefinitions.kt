@@ -4,7 +4,6 @@ import config.Config
 import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import features.linkedProfiles.LinkedProfilesSerenityHelpers
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import mocking.MockingClient
 import utils.SerenityHelpers
@@ -14,6 +13,7 @@ import models.Patient
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
 import org.junit.Assert
+import utils.LinkedProfilesSerenityHelpers
 import utils.getOrNull
 import worker.NhsoHttpException
 import worker.WorkerClient

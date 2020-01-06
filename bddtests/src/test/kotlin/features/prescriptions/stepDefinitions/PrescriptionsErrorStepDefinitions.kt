@@ -3,7 +3,7 @@ package features.prescriptions.stepDefinitions
 import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import features.prescriptions.factories.PrescriptionsFactory
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.TppMockDefaults

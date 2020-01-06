@@ -5,7 +5,7 @@ import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.prescriptions.factories.PrescriptionsFactory
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
@@ -28,7 +28,9 @@ import models.prescriptions.PrescriptionLoaderConfiguration
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import pages.prescription.PrescriptionsPage
+import pages.prescription.RepeatPrescriptionConfirmationPage
 import pages.prescription.RepeatPrescriptionsPage
+import utils.ProxySerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.getOrNull
@@ -43,6 +45,7 @@ open class PrescriptionsStepDefinitions {
 
     private lateinit var prescriptions : PrescriptionsPage
     private lateinit var repeatPrescriptions: RepeatPrescriptionsPage
+    private lateinit var repeatPrescriptionConfirmation : RepeatPrescriptionConfirmationPage
 
     val mockingClient = MockingClient.instance
 
@@ -322,6 +325,11 @@ open class PrescriptionsStepDefinitions {
     @Then("^I see prescriptions page loaded$")
     fun iSeePrescriptionsPageLoaded() {
         prescriptions.isLoaded()
+    }
+
+    @Then("^I see repeat prescription confirmation page loaded$")
+    fun iSeeRepeatPrescriptionConfirmationPageLoaded() {
+        repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().firstName)
     }
 
     @Then("^I see no prescriptions$")
