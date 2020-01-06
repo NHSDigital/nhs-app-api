@@ -11,6 +11,7 @@ then
 fi
 
 docker run \
+  --rm \
   --name nhsonline-web-lint \
   local/nhsonline-web-build \
   npm run lint-raw

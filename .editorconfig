@@ -1,15 +1,19 @@
 
 [*.{cs,csproj}]
 end_of_line=lf
-charset = utf-8
+charset=utf-8
+
+[*.{csproj,props,targets}]
+indent_style=space
+indent_size=2
 
 [Makefile]
-indent_style = tab
-indent_size = 4
+indent_style=tab
+indent_size=4
 
 [*.make]
-indent_style = tab
-indent_size = 4
+indent_style=tab
+indent_size=4
 
 [README.md]
 end_of_line=lf

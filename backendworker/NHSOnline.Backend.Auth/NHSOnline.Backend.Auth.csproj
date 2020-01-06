@@ -2,10 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeFrameworkVersion>2.1.13</RuntimeFrameworkVersion>
-    <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>latest</LangVersion>
+    <RuntimeFrameworkVersion>2.1.14</RuntimeFrameworkVersion> 
   </PropertyGroup>
 
   <ItemGroup>

@@ -15,7 +15,7 @@ set +e
 docker run \
   --name nhsonline-web-test-run \
   local/nhsonline-web-build \
-  npm run test-jest -- --runInBand
+  npm run test-jest
 
 test_run_result=$?
 

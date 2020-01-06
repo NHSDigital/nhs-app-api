@@ -1,11 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeFrameworkVersion>2.1.13</RuntimeFrameworkVersion>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-    <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>latest</LangVersion>
+    <RuntimeFrameworkVersion>2.1.14</RuntimeFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ThreadPoolMinThreads>100</ThreadPoolMinThreads>
@@ -18,7 +14,7 @@
     <PackageReference Include="GeoCoordinate.NetCore" Version="1.0.0.1" />
     <PackageReference Include="Hl7.Fhir.STU3" Version="1.2.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.8.11" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.14" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="1.9.1" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.1" />

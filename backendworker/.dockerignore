@@ -22,3 +22,5 @@ TestResults/
 coverage/
 Makefile
 
+Rotativa/
+!Rotativa/Linux/*

@@ -15,13 +15,12 @@ fi
 RUN_UNIT_TESTS_COMMAND='
   mkdir /coverage; \
   dotnet test \
-  --no-restore \
+  -c Release \
+  --no-build \
   --results-directory TestResults \
   --logger:trx \
   /p:CollectCoverage=true \
-  /p:CoverletOutputFormat=cobertura \
-  /p:Parallel=true \
-  /p:CopyLocalLockFileAssemblies=true; \
+  /p:CoverletOutputFormat=cobertura; \
   test_run_result=$?; \
   mkdir /TestResults; \
   index=1; \
@@ -47,11 +46,9 @@ fi;
 set +e
 
 docker run \
-  --memory="1g" \
-  --cpus=1 \
   --name nhsonline-backend-test-run \
   "local/backend-build:$COMMIT_ID" \
-  /bin/bash -c "$RUN_UNIT_TESTS_COMMAND"
+  bash -c "$RUN_UNIT_TESTS_COMMAND"
 
 test_run_result=$?
 

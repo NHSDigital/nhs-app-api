@@ -129,9 +129,14 @@ stages:
               artifactName: 'web-coverage'
 
           - task: ShellScript@2
+            displayName: Run security scan
+            inputs:
+              scriptPath: web/buildscripts/06_test_security_scan.sh
+
+          - task: ShellScript@2
             displayName: Build web docker image
             inputs:
-              scriptPath: web/buildscripts/06_build_docker_image.sh
+              scriptPath: web/buildscripts/07_build_docker_image.sh
 
       - job: backend
         #condition: false

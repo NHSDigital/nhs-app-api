@@ -8,6 +8,8 @@ src/services/fhircdsapi.js
 # Build process files
 web-unit-test-results.xml
 web-unit-test-coverage.xml
+hawkeye-results.json
+reports/
 
 buildscripts/
 **/.transpiled

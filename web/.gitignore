@@ -34,3 +34,5 @@ docker-compose.override.yml
 # Build process files
 web-unit-test-results.xml
 web-unit-test-coverage.xml
+hawkeye-results.json
+reports/

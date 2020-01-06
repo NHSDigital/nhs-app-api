@@ -1,33 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-    <PropertyGroup>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
-        <RuntimeFrameworkVersion>2.1.13</RuntimeFrameworkVersion>
-        <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <LangVersion>latest</LangVersion>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RuntimeFrameworkVersion>2.1.14</RuntimeFrameworkVersion>
+  </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE;DEBUG;NETCOREAPP;NETCOREAPP2_1;CODE_ANALYSIS</DefineConstants>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP;NETCOREAPP2_1;CODE_ANALYSIS</DefineConstants>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="CsvHelper" Version="12.1.2" />
-        <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
-        <PackageReference Include="NJsonSchema" Version="9.13.36" />
-        <PackageReference Include="YamlDotNet" Version="6.1.1" />
-        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.14" />
+    <PackageReference Include="NJsonSchema" Version="9.13.36" />
+    <PackageReference Include="YamlDotNet" Version="6.1.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <None Remove="Schemas\Configurations\configuration_schema.json" />
-      <None Remove="Schemas\Rules\rules_schema.json" />
-      <EmbeddedResource Include="Schemas\Journeys\configuration_schema.json" />
-      <EmbeddedResource Include="Schemas\Rules\rules_schema.json" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Remove="Schemas\Configurations\configuration_schema.json" />
+    <None Remove="Schemas\Rules\rules_schema.json" />
+    <EmbeddedResource Include="Schemas\Journeys\configuration_schema.json" />
+    <EmbeddedResource Include="Schemas\Rules\rules_schema.json" />
+  </ItemGroup>
 </Project>

@@ -1,26 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-    <PropertyGroup>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
-        <RuntimeFrameworkVersion>2.1.13</RuntimeFrameworkVersion>
-        <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <LangVersion>latest</LangVersion>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RuntimeFrameworkVersion>2.1.14</RuntimeFrameworkVersion>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="CorrelationId" Version="2.1.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CorrelationId" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <None Update="appsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

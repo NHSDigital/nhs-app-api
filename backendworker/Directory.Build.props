@@ -1,0 +1,35 @@
+<Project>
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <IsPackable>false</IsPackable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition="$(MSBuildProjectName.EndsWith('UnitTests'))">
+      <PropertyGroup>
+        <IsPublishable>false</IsPublishable>
+        <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+      </PropertyGroup>
+    </When>
+    <When Condition="$(MSBuildProjectName.Contains('UnitTest'))">
+      <PropertyGroup>
+        <IsPublishable>false</IsPublishable>
+        <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
+      </PropertyGroup>
+    </When>
+    <When Condition="$(MSBuildProjectName.EndsWith('Api'))">
+      <PropertyGroup>
+        <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <IsPublishable>false</IsPublishable>
+        <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+</Project>
