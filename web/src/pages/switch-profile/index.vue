@@ -1,24 +1,16 @@
 <template>
   <div v-if="showTemplate">
-    <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
       <div class="nhsuk-grid-column-full">
-        <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0 ">
-          {{ $t('switchProfile.informationHeaders.age') }}:
-        </span>
-        <span id="proxy-age"
-              :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3']">
-          {{ getDisplayedAgeText(currentProfile) }}
-        </span>
+        <p class="nhsuk-u-margin-bottom-0">
+          <strong>{{ $t('switchProfile.informationHeaders.age') }}:</strong>
+          <span id="proxy-age">{{ getDisplayedAgeText(currentProfile) }}</span>
+        </p>
 
-        <div v-if="currentProfile.gpPracticeName">
-          <span class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0 ">
-            {{ $t('switchProfile.informationHeaders.gpPractice') }}:
-          </span>
-          <span id="proxy-gp-practice"
-                :class="[$style['user-info'], 'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3']">
-            {{ currentProfile.gpPracticeName }}
-          </span>
-        </div>
+        <p v-if="currentProfile.gpPracticeName" class="nhsuk-u-margin-bottom-0">
+          <strong>{{ $t('switchProfile.informationHeaders.gpPractice') }}:</strong>
+          <span id="proxy-gp-practice">{{ currentProfile.gpPracticeName }}</span>
+        </p>
       </div>
     </div>
 
@@ -32,7 +24,6 @@
 
 <script>
 import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
-
 import CalculateAgeInMonthsAndYears from '../../plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 
 export default {
@@ -53,11 +44,4 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-@import '../../style/colours';
-
-.user-info {
-  font-weight: 600;
-  font-size: 20px;
-  display: inline-block;
-}
 </style>
