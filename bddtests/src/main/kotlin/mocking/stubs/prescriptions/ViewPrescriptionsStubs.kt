@@ -15,9 +15,6 @@ import mocking.spine.ePS.models.SpineItemDetailGetResponse
 import mocking.spine.ePS.models.SpineItemDetailPrescription
 import mocking.spine.ePS.models.SpineItemSummaryGetResponse
 import mocking.spine.ePS.models.SpineItemSummaryPrescription
-import mocking.stubs.NUMBER_OF_REPEAT_PRESCRIPTIONS
-import mocking.stubs.NUMBER_OF_COURSES
-import mocking.stubs.NUMBER_OF_PRESCRIPTIONS
 import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mocking.stubs.EmisStubsPatientFactory.Companion.goodPatientEMIS
 import mocking.stubs.EmisStubsPatientFactory.Companion.serviceNotEnabledPatientEMIS
@@ -30,6 +27,9 @@ import models.Patient
 import models.prescriptions.PrescriptionLoaderConfiguration
 import java.time.Duration
 
+const val NUMBER_OF_PRESCRIPTIONS = 5
+const val NUMBER_OF_COURSES = 5
+const val NUMBER_OF_REPEAT_PRESCRIPTIONS = 5
 class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
 
     fun generateStubs(supplier: Supplier) {

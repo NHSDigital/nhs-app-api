@@ -24,12 +24,11 @@ import mocking.vision.models.Configuration
 import mocking.vision.models.PatientNumber
 import mocking.vision.models.Register
 import mocking.vision.models.VisionUserSession
-import models.patients.EmisPatients
 import models.Patient
 
 class SuccessfulRegistrationJourney(private val client: MockingClient) {
 
-    fun create(patient: Patient = SuccessfulRegistrationJourney.patient, gpSystem: Supplier) {
+    fun create(patient: Patient, gpSystem: Supplier) {
         when (gpSystem) {
             Supplier.EMIS -> generateEmisMocks(patient)
             Supplier.TPP -> generateTppMocks(patient)
@@ -161,9 +160,5 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                                             name = patient.formattedFullName()))
                             )
                 }
-    }
-
-    companion object {
-        val patient = EmisPatients.montelFrye
     }
 }

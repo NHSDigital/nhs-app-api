@@ -21,8 +21,6 @@ class EmisStubbedEnvironment(private val mockingClient: MockingClient) {
     private val gpSupplier = Supplier.EMIS
 
     fun generateStubs() {
-        mockingClient.clearWiremock()
-        mockingClient.favicon()
         PatientDataGenerator.generatePatientData(EMISPatientList, gpSupplier)
         generateAppointmentStubs()
         generateMyMedicalRecordsStubs()

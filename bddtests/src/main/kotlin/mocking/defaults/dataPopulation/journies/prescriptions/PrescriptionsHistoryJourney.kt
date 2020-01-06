@@ -1,54 +1,26 @@
 package mocking.defaults.dataPopulation.journies.prescriptions
 
+import constants.Supplier
 import mocking.MockingClient
-import mocking.data.prescriptions.MicrotestPrescriptionLoader
-import mocking.data.prescriptions.VisionPrescriptionLoader
-import mocking.defaults.VisionMockDefaults
+import mocking.SupplierSpecificFactory
 import models.Patient
-import models.prescriptions.PrescriptionLoaderConfiguration
+import java.util.*
 
-private const val SEVEN_PRESCRIPTIONS = 7
-private const val SEVEN_COURSES = 7
-private const val SEVEN_REPEATS = 7
+abstract class PrescriptionsHistoryJourney  {
 
-private const val ONE_PRESCRIPTION = 1
-private const val ONE_COURSE = 1
-private const val ONE_REPEAT = 1
+    protected val client = MockingClient.instance
 
-class PrescriptionsHistoryJourney(private val client: MockingClient) {
+    abstract fun createFor(patient: Patient)
 
-    fun createFor(patient: Patient) {
-        val prescriptionsToCreate = listOf(
-                PrescriptionsData.loadPrescriptionsData(SEVEN_PRESCRIPTIONS, SEVEN_COURSES, SEVEN_REPEATS),
-                PrescriptionsData.loadPrescriptionsData(ONE_PRESCRIPTION, ONE_COURSE, ONE_REPEAT, false),
-                PrescriptionsData.loadPrescriptionsData(ONE_PRESCRIPTION, ONE_COURSE, ONE_REPEAT, true, false),
-                PrescriptionsData.loadPrescriptionsData(ONE_PRESCRIPTION, ONE_COURSE, ONE_REPEAT, false, false)
-        )
+    companion object : SupplierSpecificFactory<PrescriptionsHistoryJourney>() {
 
-        client
-                .forEmis {
-                    prescriptions.prescriptionsRequest(patient)
-                            .respondWithSuccess(PrescriptionsData.addResponses(prescriptionsToCreate))
-                }
-
-
-        val prescriptionLoaderConfig = PrescriptionLoaderConfiguration(
-                noPrescriptions = 1,noCourses = 1, noRepeats = 1
-        )
-
-                VisionPrescriptionLoader.loadData(prescriptionLoaderConfig)
-        client
-                .forVision {
-                    prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(patient))
-                            .respondWithSuccess(VisionPrescriptionLoader.data)
-                }
-
-        MicrotestPrescriptionLoader.loadData(prescriptionLoaderConfig)
-        client
-                .forMicrotest {
-                    prescriptions.getPrescriptionHistoryRequest(patient)
-                            .respondWithSuccess(MicrotestPrescriptionLoader.data)
-                }
-
+        override val map: HashMap<Supplier, (() -> (PrescriptionsHistoryJourney))> by lazy {
+            hashMapOf(
+                    Supplier.EMIS to { PrescriptionsHistoryJourneyEmis() },
+                    Supplier.TPP to { throw NotImplementedError("Not implemented") },
+                    Supplier.VISION to { PrescriptionsHistoryJourneyVision() },
+                    Supplier.MICROTEST to { PrescriptionsHistoryJourneyMicrotest() }
+            )
+        }
     }
 }

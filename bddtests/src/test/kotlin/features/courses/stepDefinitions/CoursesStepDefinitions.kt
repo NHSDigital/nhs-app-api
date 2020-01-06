@@ -75,14 +75,8 @@ open class CoursesStepDefinitions {
             currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
         }
 
-        if (currentProvider == Supplier.EMIS) {
-            PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
-        }
-        else if (currentProvider == Supplier.VISION) {
-            PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
-        }
-        else if (currentProvider == Supplier.MICROTEST) {
-            PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
+        if (currentProvider != Supplier.TPP) {
+            PrescriptionsHistoryJourney.getForSupplier(currentProvider!!).createFor(currentPatient)
         }
     }
 
