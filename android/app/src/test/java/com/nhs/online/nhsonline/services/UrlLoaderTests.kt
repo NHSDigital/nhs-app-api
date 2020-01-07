@@ -22,7 +22,6 @@ class UrlLoaderTests {
 
     private lateinit var urlLoader: UrlLoader
     private lateinit var webViewMock: WebView
-    private lateinit var knownServicesMock: KnownServices
     private lateinit var appWebInterfaceMock: AppWebInterface
 
     @Before
@@ -33,7 +32,7 @@ class UrlLoaderTests {
 
         appWebInterfaceMock = mock()
 
-        this.urlLoader = UrlLoader(webViewMock, knownServicesMock, baseUrl, appWebInterfaceMock)
+        this.urlLoader = UrlLoader(webViewMock, baseUrl, appWebInterfaceMock)
     }
 
     @Test
