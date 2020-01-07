@@ -1,70 +1,49 @@
-import Vuex from 'vuex';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { createRouter, mount, createStore } from '../helpers';
 import CookieBanner from '@/components/CookieBanner';
 
-const $t = key => `translate_${key}`;
-const createCookieBanner = ($store) => {
-  const $http = jest.fn();
-  const localVue = createLocalVue();
-  localVue.use(Vuex);
-
-  return shallowMount(CookieBanner, {
-    localVue,
-    mocks: {
-      $http,
-      $store,
-      $t,
-      $style: {
-        info: 'info',
-      },
-      showTemplate: () => true,
-    },
-    stubs: {
-      'nuxt-link': '<a></a>',
-    },
-  });
-};
-
-const createStore = () => ({
-  dispatch: jest.fn(() => Promise.resolve()),
-  state: {
-    cookieBanner: {
-      acknowledged: false,
-    },
-    device: {
-      isNativeApp: false,
-    },
-  },
-  app: {
-    $env: {
-      COOKIES_BANNER_URL: 'infoAboutCookies',
-    },
-  },
-});
-
 describe('components/CookieBanner.vue -', () => {
-  describe('created ', () => {
-    it('will issue cookie/store synchronisation', async () => {
-      const $store = createStore();
+  let $router;
 
-      jest.spyOn($store, 'dispatch');
+  const createCookieBanner = ($route = {}) => {
+    $router = createRouter();
 
-      createCookieBanner($store);
-
-      expect($store.dispatch).toHaveBeenCalledWith('cookieBanner/sync');
+    const $store = createStore({
+      $router,
+      state: {
+        device: {
+          isNativeApp: false,
+        },
+      },
     });
-  });
+    return mount(CookieBanner, {
+      $store,
+      $router,
+      $route,
+    });
+  };
 
-  describe('onCookieBannerClicked ', () => {
-    it('will issue cookie acknowledgement event when in js mode', async () => {
-      const $store = createStore();
+  describe('created ', () => {
+    it('will add push query to router when close button clicked', async () => {
+      const cookieBanner = createCookieBanner();
+      expect(cookieBanner.vm.showCookieBanner).toBe(true);
 
-      jest.spyOn($store, 'dispatch');
+      const button = cookieBanner.find('#btn_closeCookieBanner');
+      button.trigger('click');
 
-      const cookieBanner = createCookieBanner($store);
-      cookieBanner.vm.onCookieBannerClicked();
+      expect($router.push).toHaveBeenCalledWith({ query: { acknowledged: 'true' } });
+    });
 
-      expect($store.dispatch).toHaveBeenCalledWith('cookieBanner/acknowledge');
+    it('will show banner if query param not present', async () => {
+      const cookieBanner = createCookieBanner();
+      expect(cookieBanner.vm.showCookieBanner).toBe(true);
+    });
+
+    it('will not show banner if query param present', async () => {
+      const $route = {
+        query: { acknowledged: 'true' },
+      };
+      const cookieBanner = createCookieBanner($route);
+      expect(cookieBanner.vm.showCookieBanner).toBe(false);
     });
   });
 });

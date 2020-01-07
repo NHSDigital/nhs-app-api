@@ -1,10 +1,8 @@
 package features.sharedSteps
 
-import junit.framework.TestCase.assertNull
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
-import org.openqa.selenium.Cookie
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.loggedOut.LoginPage
 import utils.GlobalSerenityHelpers
@@ -17,7 +15,6 @@ import java.net.URL
 import java.time.Duration
 import java.util.*
 
-private const val SIGN_OUT_WAIT_TIME = 1000L
 private const val LOAD_URL_WAIT_TIME = 30L
 private const val POLLING_DURATION = 100L
 private const val TAB_COUNT_VARIABLE = "TabCount"
@@ -46,8 +43,7 @@ open class BrowserSteps {
         }
     }
 
-
-    fun openLoginPage() {
+    private fun openLoginPage() {
         if (!loginPage.onMobile() && OptionManager.instance().isEnabled(NoJsOption::class)) {
             loginPage.open()
             val optionManager = OptionManager.instance()
@@ -75,37 +71,12 @@ open class BrowserSteps {
     }
 
     @Step
-    open fun waitUntilSignoutCompletes() {
-        WebDriverWait(loginPage.driver, SIGN_OUT_WAIT_TIME)
-                .pollingEvery(Duration.ofMillis(POLLING_DURATION))
-                .until {
-                    it.currentUrl == loginPage.driver.currentUrl ||
-                            fetchCookie("nhso.session") == null
-                }
-    }
-
-    @Step
     open fun shouldHaveUrl(url: String) {
         WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
                 .pollingEvery(Duration.ofMillis(POLLING_DURATION))
                 .until {
                     it.currentUrl.startsWith(url)
                 }
-    }
-
-    @Step
-    fun checkLoginDetailsAreReset() {
-        assertNull(fetchCookie("nhso.session"))
-    }
-
-    private fun fetchCookie(cookieName: String): Cookie? {
-        return loginPage.driver.manage().cookies.firstOrNull { x -> x.name == cookieName }
-    }
-
-    @Step
-    fun cookieExists(cookieName: String): Boolean {
-        val driver = loginPage.driver
-        return driver.manage().cookies.any { x -> x.name == cookieName }
     }
 
     @Step
@@ -145,5 +116,15 @@ open class BrowserSteps {
                 "Chrome/75.0.3770.101 Mobile Safari/537.36 nhsapp-$source"
 
         GlobalSerenityHelpers.USER_AGENT.set(userAgent)
+    }
+
+    @Step
+    fun refreshPage() {
+        loginPage.driver.navigate().refresh()
+    }
+
+    @Step
+    fun closeApp() {
+        loginPage.driver.close()
     }
 }

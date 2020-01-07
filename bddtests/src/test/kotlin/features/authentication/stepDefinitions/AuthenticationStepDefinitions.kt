@@ -12,6 +12,7 @@ import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.BrowserSteps
+import features.sharedSteps.CookieSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
@@ -38,6 +39,8 @@ class AuthenticationStepDefinitions {
     lateinit var accountCreation: CIDAccountCreationSteps
     @Steps
     lateinit var browser: BrowserSteps
+    @Steps
+    lateinit var cookies: CookieSteps
     @Steps
     lateinit var home: HomeSteps
     @Steps
@@ -162,9 +165,8 @@ class AuthenticationStepDefinitions {
     fun iClickTheSignOutButton() {
         navHeader.clickMyAccount()
         myAccount.signOutButton.click()
-        browser.waitUntilSignoutCompletes()
+        cookies.waitUntilSignoutCompletes()
     }
-
 
     @Then("I can cycle through the header links")
     fun iLCycleTheHeaderLinks() {
@@ -262,7 +264,7 @@ class AuthenticationStepDefinitions {
     @Then("^the user login details are cleared from cookies$")
     @Throws(Exception::class)
     fun theUserLoginDetailsAreClearedFromCookies() {
-        browser.checkLoginDetailsAreReset()
+        cookies.checkLoginDetailsAreReset()
     }
 
     @Then("^I see the CID create an account page$")

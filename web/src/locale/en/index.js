@@ -447,8 +447,9 @@ export default {
   },
   cookieBanner: {
     caption: {
-      line1: 'The NHS website uses cookies to improve your on-site experience.',
-      linkText: 'Find out more about cookies',
+      line1: 'We\'ve put some small files called cookies on your device. These are the strictly necessary cookies needed to make the NHS App work.',
+      line2: 'We will not use any other cookies unless you choose to turn them on, as described in our ',
+      linkText: 'cookies policy',
     },
   },
   biometricBanner: {

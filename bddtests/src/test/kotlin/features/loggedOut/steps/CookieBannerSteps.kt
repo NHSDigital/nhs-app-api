@@ -2,6 +2,7 @@ package features.loggedOut.steps
 
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
+import pages.isVisible
 import pages.loggedOut.CookieBanner
 
 
@@ -22,14 +23,27 @@ open class CookieBannerSteps {
                 cookieBanner.cookieBanner.elements.size
         )
         Assert.assertEquals(
-                "Cookie banner text ${isVisible.string} displayed. ",
+                "Cookie banner first paragraph ${isVisible.string} displayed. ",
                 isVisible.int,
-                cookieBanner.cookieBannerText.elements.size
+                cookieBanner.cookieBannerText1.elements.size
+        )
+        Assert.assertEquals(
+                "Cookie banner second paragraph ${isVisible.string} displayed. ",
+                isVisible.int,
+                cookieBanner.cookieBannerText2.elements.size
         )
         Assert.assertEquals(
                 "Link in cookie banner ${isVisible.string} displayed. ",
                 isVisible.int,
                 cookieBanner.cookiesInformationLink.elements.size
+        )
+    }
+
+    @Step
+    fun iDoNotSeeCookieBannerNoJs() {
+        Assert.assertTrue(
+                "Cookie banner is not visible. ",
+                !cookieBanner.cookieWrapper.isVisible
         )
     }
 }
