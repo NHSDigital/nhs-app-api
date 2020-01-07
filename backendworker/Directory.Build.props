@@ -10,7 +10,6 @@
       <PropertyGroup>
         <IsPublishable>false</IsPublishable>
         <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
-        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
       </PropertyGroup>
     </When>

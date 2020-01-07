@@ -1,30 +1,25 @@
-ARG PROJECT_PLATFORM=linux-x64
-
 FROM nhsapp.azurecr.io/nhsonline-dotnetcore-build as dependencies
-ARG PROJECT_PLATFORM
 WORKDIR /src
 COPY *.sln ./
 COPY */*.csproj ./
 RUN for file in *.csproj; do mkdir "${file%.*}" && mv "$file" "${file%.*}"; done
-RUN dotnet restore -r ${PROJECT_PLATFORM}
+RUN dotnet restore
 
 
 FROM dependencies as built
-ARG PROJECT_PLATFORM
 ARG COMMIT_ID
 RUN : "${COMMIT_ID:?COMMIT_ID argument needs to be set and non-empty.}"
 WORKDIR /src
 COPY . .
 RUN sed -i "s/.*\"CommitId\":.*/    \"CommitId\": \"$COMMIT_ID\"/" */appsettings.json
-RUN dotnet build --no-restore -c Release -r ${PROJECT_PLATFORM}
+RUN dotnet build --no-restore -c Release
 
 
 FROM built AS published
-ARG PROJECT_PLATFORM
-RUN dotnet publish --no-build -c Release -o _published_artifacts -r ${PROJECT_PLATFORM}
+RUN dotnet publish --no-build -c Release -o _published_artifacts
 
 
-FROM nhsapp.azurecr.io/nhsonline-dotnetcore-runtime AS final
+FROM nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:2.1 AS final
 ARG PROJECT_NAME
 RUN : "${PROJECT_NAME:?PROJECT_NAME argument needs to be set and non-empty.}"
 ENV PORT=8080
