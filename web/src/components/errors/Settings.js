@@ -1,6 +1,5 @@
 /* eslint-disable import/extensions */
 import { assign, has } from 'lodash/fp';
-import { createUri } from '@/lib/noJs';
 import {
   ACCOUNT,
   ACCOUNT_NOTIFICATIONS,
@@ -14,7 +13,6 @@ import {
   AUTH_RETURN,
   BEGINLOGIN,
   GP_MEDICAL_RECORD,
-  INDEX,
   LOGIN,
   MESSAGING,
   MESSAGING_MESSAGES,
@@ -29,7 +27,6 @@ import {
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
-  PROXY_LOST_REDIRECT,
   TESTRESULTID,
   TESTRESULTS,
   TESTRESULTSDETAIL,
@@ -224,21 +221,6 @@ export default {
       route: TESTRESULTSDETAIL.path,
       redirectUrl: {
         default: TESTRESULTSDETAIL.path,
-      },
-    },
-    {
-      route: PROXY_LOST_REDIRECT.path,
-      redirectUrl: {
-        default: createUri({
-          path: INDEX.path,
-          noJs: {
-            flashMessage: {
-              show: true,
-              key: 'linkedProfiles.lossProxyError',
-              type: 'error',
-            },
-          },
-        }),
       },
     },
   ],

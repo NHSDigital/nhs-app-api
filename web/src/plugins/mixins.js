@@ -6,7 +6,8 @@ import NativeCallbacks from '@/services/native-app';
 import ResetPageFocusMixin from '@/plugins/mixinDefinitions/ResetPageFocus';
 import Sources from '@/lib/sources';
 import { redirectTo } from '@/lib/utils';
-import { ACCOUNT_SIGNOUT, LOGIN, MYRECORD, GP_MEDICAL_RECORD } from '@/lib/routes';
+import { createUri } from '@/lib/noJs';
+import { ACCOUNT_SIGNOUT, LOGIN, MYRECORD, GP_MEDICAL_RECORD, INDEX } from '@/lib/routes';
 
 Vue.mixin(ResetPageFocusMixin);
 
@@ -60,7 +61,22 @@ Vue.mixin({
     },
     configureWebContext(currentHelpUrl) {
       if (this.$store.state.device.isNativeApp) {
-        const retryPath = getOr('', 'state.errors.pageSettings.redirectUrl.default', this.$store);
+        let retryPath = '';
+
+        if (this.$store.getters['session/isProxying']) {
+          retryPath = createUri({
+            path: INDEX.path,
+            noJs: {
+              flashMessage: {
+                show: true,
+                key: 'linkedProfiles.lossProxyError',
+                type: 'error',
+              },
+            },
+          });
+        } else {
+          retryPath = getOr('', 'state.errors.pageSettings.redirectUrl.default', this.$store);
+        }
         NativeCallbacks.configureWebContext(currentHelpUrl, retryPath);
       } else {
         // TODO: Add code when help function is added to the web version (Jira ticket NHSO-6388)

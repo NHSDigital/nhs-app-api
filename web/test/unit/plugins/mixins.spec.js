@@ -6,12 +6,15 @@ import NativeCallbacks from '@/services/native-app';
 import { createLocalVue, mount } from '@vue/test-utils';
 import { initialState } from '@/store/modules/errors/mutation-types';
 import { createStore } from '../helpers';
+import { createUri } from '@/lib/noJs';
+import { INDEX } from '@/lib/routes';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
 describe('mixins', () => {
   let state;
+  let getters;
   let wrapper;
 
   const mountPage = ({ $store }) => {
@@ -27,7 +30,8 @@ describe('mixins', () => {
 
   beforeEach(() => {
     state = { errors: initialState() };
-    wrapper = mountPage({ $store: createStore({ state }) });
+    getters = { 'session/isProxying': false };
+    wrapper = mountPage({ $store: createStore({ state, getters }) });
   });
 
   it('will have correct number of globally registered mounted mixins', () => {
@@ -85,6 +89,27 @@ describe('mixins', () => {
           });
 
           it('will call native callback `configureWebContext` with empty redirect URL', () => {
+            expect(configureWebContext).toBeCalledWith(currentUrl, redirectUrl);
+          });
+        });
+
+        describe('when proxying', () => {
+          beforeEach(() => {
+            getters['session/isProxying'] = true;
+            wrapper.vm.configureWebContext(currentUrl);
+          });
+
+          it('will call native callback `configureWebContext` with correct redirect URL', () => {
+            const redirectUrl = createUri({
+              path: INDEX.path,
+              noJs: {
+                flashMessage: {
+                  show: true,
+                  key: 'linkedProfiles.lossProxyError',
+                  type: 'error',
+                },
+              },
+            });
             expect(configureWebContext).toBeCalledWith(currentUrl, redirectUrl);
           });
         });
