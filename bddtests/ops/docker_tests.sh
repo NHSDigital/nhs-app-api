@@ -603,8 +603,6 @@ if [ -z "$TF_BUILD" ]; then
     info "Deleting all docker containers"
     CONTAINERS=$(docker ps -aq)
     [ -z "$CONTAINERS" ] || docker rm -f $CONTAINERS
-
-    exit
   fi;
 
   exit $test_run_result
