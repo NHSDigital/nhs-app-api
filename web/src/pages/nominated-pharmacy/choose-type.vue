@@ -61,12 +61,7 @@ import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RadioGroup from '@/components/RadioGroup';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
-import {
-  NOMINATED_PHARMACY_INTERRUPT,
-  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
-  NOMINATED_PHARMACY_SEARCH,
-  PRESCRIPTIONS,
-} from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES, PRESCRIPTIONS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -127,7 +122,6 @@ export default {
       }
 
       this.$store.dispatch('nominatedPharmacy/setChosenType', this.selectedValue);
-
       if (this.selectedValue === PharmacyTypeChoice.HIGH_STREET_PHARMACY) {
         redirectTo(this, this.highStreetSearchPath);
       } else {

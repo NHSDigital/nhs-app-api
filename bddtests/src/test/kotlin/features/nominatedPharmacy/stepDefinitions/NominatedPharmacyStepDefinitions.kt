@@ -132,6 +132,26 @@ class NominatedPharmacyStepDefinitions {
         Assert.assertTrue(searchNominatedPharmacyPage.isSearchAgainVisible())
     }
 
+    @When("^I click on item (\\d+) pharmacy from the list of online pharmacies$")
+    fun iClickOnAPharmacyFromTheListOfOnlinePharmacies(positionInTheList: Int) {
+        val index = positionInTheList - 1
+
+        val clickedOnlinePharmacy = nominatedPharmacyResultsPage.getOnlinePharmacies()[index]
+
+        val sessionData = NominatedPharmacySerenityHelpers
+                .SEARCH_RESULTS
+                .getOrFail<NhsAzureSearchOrganisationReply>().value
+
+            val result = (sessionData.find { it.OrganisationName.equals(clickedOnlinePharmacy.pharmacyName)})
+            if (result != null) {
+                NominatedPharmacySerenityHelpers.PHARMACY_TO_BE_NOMINATED.set(result)
+            } else {
+                Assert.fail("Selected pharmacy not found in the session data")
+            }
+
+        nominatedPharmacyResultsPage.selectPharmacyAtIndex(index)
+    }
+
     @When("^I click on item (\\d+) pharmacy from the list of pharmacies$")
     fun iClickOnAPharmacyFromTheListOfPharmacies(positionInTheList: Int) {
         val index = positionInTheList - 1
@@ -159,7 +179,7 @@ class NominatedPharmacyStepDefinitions {
         val myNominatedPharmacy =
                 NominatedPharmacySerenityHelpers.MY_NOMINATED_PHARMACY.getOrFail<NhsAzureSearchOrganisationItem>()
 
-        nominatedPharmacyChangeSuccessPage.isLoaded(myNominatedPharmacy.OrganisationName)
+        nominatedPharmacyChangeSuccessPage.isLoaded()
 
         assertEquals(
                 "Organisation name is not correct",

@@ -5,7 +5,7 @@ import pages.HybridPageElement
 import pages.navigation.HeaderNative
 
 @DefaultUrl("http://web.local.bitraft.io:3000/nominated-pharmacy/change-success")
-open class NominatedPharmacyChangeSuccessPage : PharmacyDetailComponent() {
+open class OnlineNominatedPharmacyChangeSuccessPage : OnlinePharmacyDetailComponent() {
 
     private lateinit var headerNative: HeaderNative
 

@@ -12,7 +12,7 @@ open class NominatedPharmacyOnlineOnlySearchPage : HybridPageObject() {
     private lateinit var headerNative: HeaderNative
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("What is the name of the online-only pharmacy?")
+        headerNative.waitForPageHeaderText("Find an online-only pharmacy")
     }
 
     private val searchField = HybridPageElement(
@@ -31,11 +31,6 @@ open class NominatedPharmacyOnlineOnlySearchPage : HybridPageObject() {
     fun isNoResultsFoundHeaderVisible(searchTerm: String) : Boolean {
         val message = "No results found for \"" + searchTerm + "\""
         return findByXpath("//H1[contains(.,'$message')]").isVisible
-    }
-
-    fun isErrorMessageHeaderVisible() : Boolean {
-        val message = "There's a problem"
-        return findByXpath("//p[contains(.,'$message')]").isVisible
     }
 
     fun isErrorMessageTextVisible() : Boolean {

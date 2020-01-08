@@ -62,10 +62,15 @@ Feature: nominated pharmacy journey
     And I click on the continue button on the online choices page
     Then I see nominated pharmacy online only search page loaded
     Given searching for online pharmacies with <search text> has 20 results
-    Then I search for an online only pharmacy with postcode <search text> and click on search button
+    Then I search for an online only pharmacy with <search text> and click on search button
     Then I see list of online only pharmacies displayed on the result page
     And I click on item 4 pharmacy from the list of pharmacies
-
+    Then I see confirm nominated page with selected online pharmacy details
+    When I click on confirm button to change my nominated pharmacy to online
+    Then I see the change success page with my online nominated pharmacy details
+    When I click on the go to your repeat prescriptions link
+    Then I see prescriptions page loaded
+    And I see my nominated pharmacy on the prescriptions page
     Examples:
       | GP System | Pharmacy type | search text | OdsCode |
       | EMIS      | P1            | pharmacy       | SW11XR  |
@@ -95,7 +100,7 @@ Feature: nominated pharmacy journey
     And I click on the continue button on the online choices page
     Then I see nominated pharmacy online only search page loaded
     Given searching for online pharmacies with <search text> has 0 results
-    Then I search for an online only pharmacy with postcode <search text> and click on search button
+    Then I search for an online only pharmacy with <search text> and click on search button
     And I see the no results found page
     Then I see the relevant information about no results for the search term <search text>
     Examples:
@@ -128,6 +133,37 @@ Feature: nominated pharmacy journey
     Examples:
       | GP System | Pharmacy type | search text | OdsCode |
       | EMIS      | P1            | boots       | SW11XR  |
+
+
+  Scenario Outline: Patient sees errors when searching for online nominated pharmacy with no input text
+    Given I am patient using the <GP System> GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
+    And I am logged in
+    And I navigate to prescriptions
+    Then I see prescriptions page loaded
+    And I see the nominated pharmacy panel on the prescriptions page
+    And I see my nominated pharmacy on the prescriptions page
+    When I click on the nominated pharmacy panel
+    Then I see nominated pharmacy page loaded
+    And I see the change my nominated pharmacy link
+    When I click on change your nominated pharmacy link
+    Then I see the update nominated pharmacy interrupt page loaded
+    When I click on the interrupt continue button
+    Then I see the choose type page is loaded
+    Then I select online pharmacy
+    And I click on the choose type continue button
+    Then I see the online choices page loaded
+    Then I click the Yes radio button on the online choices page
+    And I click on the continue button on the online choices page
+    Then I see nominated pharmacy online only search page loaded
+    Then I search for an online only pharmacy with <search text> and click on search button
+    And I see an error indicating the search text is invalid
+    Examples:
+      | GP System | Pharmacy type | OdsCode | search text |
+      | EMIS      | P1            | SW11XR  |             |
 
   Scenario Outline: No results messages are shown for postcode not in use
     Given I am patient using the <GP System> GP System
@@ -302,7 +338,6 @@ Feature: nominated pharmacy journey
       | GP System | Pharmacy type | OdsCode |
       | EMIS      | P1            | SW11XR  |
 
-
   Scenario Outline: Patient can view a list of random online pharmacies
     Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
@@ -328,7 +363,14 @@ Feature: nominated pharmacy journey
     Given searching for randomized online pharmacies has results
     Then I click on the continue button on the online choices page
     Then I see list of random online pharmacies displayed on the result page
-    # TBC.... select and set online pharmacy...
+    And I click on item 4 pharmacy from the list of online pharmacies
+    Then I see confirm nominated page with selected online pharmacy details
+    When I click on confirm button to change my nominated pharmacy to online
+    Then I see the change success page with my online nominated pharmacy details
+    When I click on the go to your repeat prescriptions link
+    Then I see prescriptions page loaded
+    And I see my nominated pharmacy on the prescriptions page
+
     Examples:
       | GP System | Pharmacy type | OdsCode |
       | EMIS      | P1            | SW11XR  |

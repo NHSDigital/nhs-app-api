@@ -51,8 +51,7 @@ describe('nominated pharmacy choose type page', () => {
       errorComponent = wrapper.find('#errorHeading');
 
       expect(errorComponent.exists()).toBe(false);
-      expect($store.dispatch)
-        .toHaveBeenCalledWith('nominatedPharmacy/setChosenType', PharmacyTypeChoice.HIGH_STREET_PHARMACY);
+      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setChosenType', PharmacyTypeChoice.HIGH_STREET_PHARMACY);
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path);
     });

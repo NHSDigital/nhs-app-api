@@ -31,6 +31,9 @@
             <error-message v-if="showErrorMessage" id="invalid-search-term-error">
               {{ $t('nominatedPharmacyOnlineOnlySearch.errorMessageText') }}
             </error-message>
+            <label id="searchTextLabel" class="nhsuk-label" for="searchTextInput">
+              {{ $t('nominatedPharmacyOnlineOnlySearch.inputLabelText') }}
+            </label>
             <generic-text-input id="searchTextInput"
                                 v-model="searchQuery"
                                 class="nhsuk-input--width-20 nhsuk-u-padding-bottom-3"

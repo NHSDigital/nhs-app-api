@@ -144,19 +144,20 @@ object NhsAzureSearchData {
     private fun createOnlinePharmacyResultFromIndex
             (i: Int, isPharmacySearch: Boolean = false): NhsAzureSearchOrganisationItem {
         val organisationName = if (isPharmacySearch) "$PHARMACY_NAME $i" else "$ORGANISATION_NAME $i"
+        val numericNACSCode = BASE_NACSCODE + i
 
         return NhsAzureSearchOrganisationItem(
                 "",
                 "$organisationName",
                 "P1",
+                "Internet Pharmacy",
                 "",
                 "",
                 "",
                 "",
                 "",
                 "",
-                "",
-                "",
+                "$numericNACSCode",
                 Geocode(),
                 "",
                 "[{\"OrganisationContactType\":\"Primary\"," +

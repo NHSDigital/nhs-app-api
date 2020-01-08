@@ -1,6 +1,7 @@
 import * as dependency from '@/lib/utils';
 import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY_CHANGE_SUCCESS } from '@/lib/routes';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
+import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import ConfirmNominatedPharmacy from '@/pages/nominated-pharmacy/confirm';
 import { create$T, createStore, mount } from '../../helpers';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
@@ -29,9 +30,25 @@ describe('confirm nominated pharmacy', () => {
     },
   }) => state;
 
+  const createStateWithP1Pharmacy = (state = {
+    device: {
+      source: 'web',
+    },
+    nominatedPharmacy: {
+      selectedNominatedPharmacy: {
+        odsCode: 'RR123',
+        pharmacyType: PharmacyType.P1,
+        url: 'www.testurl.com',
+        telephoneNumber: 91000000,
+      },
+      pharmacy: {
+      },
+    },
+  }) => state;
+
   const mountPage = () => mount(ConfirmNominatedPharmacy, { $store, $t });
 
-  describe('nominated pharmacy details', () => {
+  describe('nominated pharmacy details when isHighStreetSelected is true', () => {
     let pharmacyDetails;
 
     it('will exist', () => {
@@ -39,6 +56,7 @@ describe('confirm nominated pharmacy', () => {
         dispatch: jest.fn(() => Promise.resolve()), state: createState(),
       });
       wrapper = mountPage();
+      wrapper.vm.isHighStreetSelected = true;
       pharmacyDetails = wrapper.find(PharmacyDetail);
       expect(pharmacyDetails.exists()).toBe(true);
     });
@@ -50,6 +68,7 @@ describe('confirm nominated pharmacy', () => {
         dispatch: jest.fn(() => Promise.resolve()), state,
       });
       wrapper = mountPage();
+      wrapper.vm.isHighStreetSelected = true;
       pharmacyDetails = wrapper.find(PharmacyDetail);
       expect($t).toHaveBeenCalledWith('nominated_pharmacy.confirm.line1');
     });
@@ -61,8 +80,32 @@ describe('confirm nominated pharmacy', () => {
         dispatch: jest.fn(() => Promise.resolve()), state,
       });
       wrapper = mountPage();
+      wrapper.vm.isHighStreetSelected = true;
       pharmacyDetails = wrapper.find(PharmacyDetail);
       expect($t).toHaveBeenCalledWith('nominated_pharmacy.confirm.line1');
+    });
+  });
+
+  describe('nominated pharmacy details when isOnlineOnlySelected is true', () => {
+    let pharmacyDetails;
+    let onlinePharmacyDetails;
+
+    beforeEach(() => {
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()), state: createStateWithP1Pharmacy(),
+      });
+      wrapper = mountPage();
+      wrapper.vm.isOnlineOnlySelected = true;
+    });
+
+    it('will not have the pharmacy detail component', () => {
+      pharmacyDetails = wrapper.find(PharmacyDetail);
+      expect(pharmacyDetails.exists()).toBe(false);
+    });
+
+    it('will have the content for online only nominated pharmacy', () => {
+      onlinePharmacyDetails = wrapper.find(OnlineOnlyPharmacyDetail);
+      expect(onlinePharmacyDetails.exists()).toBe(true);
     });
   });
 

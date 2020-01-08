@@ -8,6 +8,8 @@ export const SELECT = 'SELECT';
 export const SET_CHOSEN_TYPE = 'SET_CHOSEN_TYPE';
 export const CLEAR_SEARCH_JOURNEY = 'CLEAR_SEARCH_JOURNEY';
 export const SET_ONLINE_ONLY_KNOWN_OPTION = 'SET_ONLINE_ONLY_KNOWN_OPTION';
+export const HIGH_STREET_PHARMACY = 'highStreet';
+export const ONLINE_PHARMACY = 'online';
 
 export const initialState = () => ({
   pharmacy: {},

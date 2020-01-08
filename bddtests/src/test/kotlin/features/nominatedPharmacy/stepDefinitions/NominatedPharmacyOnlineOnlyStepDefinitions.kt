@@ -4,14 +4,20 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
+import features.nominatedPharmacy.steps.NominatedPharmacyDataSetupSteps
 import features.nominatedPharmacy.steps.NominatedPharmacyOnlinePharmacyDataSetupSteps
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
+import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
-import pages.nominatedPharmacy.NominatedPharmacyResultsPage
-import pages.nominatedPharmacy.NominatedPharmacyOnlineOnlyChoicesPage
 import pages.nominatedPharmacy.NominatedPharmacyOnlineOnlySearchPage
+import pages.nominatedPharmacy.NominatedPharmacyResultsPage
+import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
+import pages.nominatedPharmacy.NominatedPharmacyOnlineOnlyChoicesPage
+import pages.nominatedPharmacy.ConfirmOnlineNominatedPharmacyPage
+import pages.nominatedPharmacy.OnlineNominatedPharmacyChangeSuccessPage
+import pages.text
+import utils.getOrFail
 import utils.set
 
 class NominatedPharmacyOnlineOnlyStepDefinitions {
@@ -24,8 +30,16 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
 
     private lateinit var nominatedPharmacyOnlineOnlyChoicesPage: NominatedPharmacyOnlineOnlyChoicesPage
 
+    private lateinit var nominatedPharmacyOnlineConfirmPage: ConfirmOnlineNominatedPharmacyPage
+
+    private lateinit var nominatedPharmacyOnlineOnlyChangeSuccessPage: OnlineNominatedPharmacyChangeSuccessPage
+
+    private lateinit var nominated: OnlineNominatedPharmacyChangeSuccessPage
     @Steps
     private lateinit var nominatedPharmacyOnlinePharmacyDataSetupSteps: NominatedPharmacyOnlinePharmacyDataSetupSteps
+
+    @Steps
+    private lateinit var nominatedPharmacyDataSetupSteps: NominatedPharmacyDataSetupSteps
 
 
     @Given("^searching for online pharmacies with (.*) has (\\d+) results")
@@ -46,10 +60,68 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
         NominatedPharmacySerenityHelpers.SEARCH_RESULTS.set(randomInternetPharmacies)
     }
 
-    @When("^I search for an online only pharmacy with postcode (.*) and click on search button$")
+    @When("^I search for an online only pharmacy with (.*) and click on search button$")
     fun iSearchForAOnlineOnlyPharmacyWithPostcodeAndClickOnSearch(searchText: String) {
         nominatedPharmacyOnlineOnlySearchPage.enterTextToSearchField(searchText)
         nominatedPharmacyOnlineOnlySearchPage.searchButton.click()
+    }
+
+    @When("^I click on confirm button to change my nominated pharmacy to online$")
+    fun iClickOnConfirmButton() {
+        val sessionData = NominatedPharmacySerenityHelpers
+                .PHARMACY_TO_BE_NOMINATED
+                .getOrFail<NhsAzureSearchOrganisationItem>()
+        nominatedPharmacyDataSetupSteps.setupWiremockForNominatedPharmacyPostUpdate("P1", sessionData)
+        nominatedPharmacyOnlineConfirmPage.confirmButton.click()
+    }
+
+    @Then("^I see confirm nominated page with selected online pharmacy details$")
+    fun iSeeConfirmNominatedPharmacyPageWithSelectedOnlinePharmacyDetails() {
+        nominatedPharmacyOnlineConfirmPage.isLoaded()
+        val selectedPharmacy = NominatedPharmacySerenityHelpers
+                .PHARMACY_TO_BE_NOMINATED
+                .getOrFail<NhsAzureSearchOrganisationItem>()
+        Assert.assertEquals(
+                "Organisation name is not correct",
+                selectedPharmacy.OrganisationName, nominatedPharmacyOnlineConfirmPage.pharmacyName.text)
+        if(selectedPharmacy.URL != null) {
+            Assert.assertEquals(
+                    "Url is not correct",
+                    selectedPharmacy.URL, nominatedPharmacyOnlineConfirmPage.pharmacyUrl.text)
+        }
+        val phoneNumber = selectedPharmacy.primaryPhone()
+        if (phoneNumber != null) {
+            Assert.assertEquals(
+                    "Phone number is not correct",
+                    "Telephone: $phoneNumber", nominatedPharmacyOnlineConfirmPage.pharmacyPhoneNumber.text)
+        }
+    }
+
+    @Then("^I see the change success page with my online nominated pharmacy details$")
+    fun iSeeTheChangeSuccessPage() {
+
+        val myNominatedPharmacy =
+                NominatedPharmacySerenityHelpers.MY_NOMINATED_PHARMACY.getOrFail<NhsAzureSearchOrganisationItem>()
+
+        nominatedPharmacyOnlineOnlyChangeSuccessPage.isLoaded()
+
+        Assert.assertEquals(
+                "Organisation name is not correct",
+                myNominatedPharmacy.OrganisationName, nominatedPharmacyOnlineOnlyChangeSuccessPage.pharmacyName.text)
+
+        if(myNominatedPharmacy.URL != null){
+            Assert.assertEquals(
+                    "Url is not correct",
+                    myNominatedPharmacy.URL, nominatedPharmacyOnlineOnlyChangeSuccessPage.pharmacyUrl.text)
+        }
+
+        val phoneNumber = myNominatedPharmacy.primaryPhone()
+
+        if (phoneNumber != null) {
+            Assert.assertEquals(
+                    "Phone number is not correct",
+                    "Telephone: $phoneNumber", nominatedPharmacyOnlineOnlyChangeSuccessPage.pharmacyPhoneNumber.text)
+        }
     }
 
     @Then("^I see nominated pharmacy online only search page loaded$")
@@ -67,13 +139,17 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
         nominatedPharmacyResultsPage.showsNoResults()
     }
 
+    @Then("^I see an error indicating the search text is invalid$")
+    fun iSeeAnErrorIndicatingTheSearchTextIsInvalid() {
+        Assert.assertTrue(nominatedPharmacyOnlineOnlySearchPage.isErrorMessageTextVisible())
+    }
+
     @Then("^I see the relevant information about no results for the search term (.*)$")
     fun iSeeTheRelevantInformationAboutNoResults(searchTerm: String) {
         nominatedPharmacyOnlineOnlySearchPage.isNoResultsFoundHeaderVisible(searchTerm)
         nominatedPharmacyOnlineOnlySearchPage.isNoResultsFoundMessageVisible(searchTerm)
         nominatedPharmacyOnlineOnlySearchPage.isSearchAgainH2Visible()
     }
-
 
     @Then("^I click the No radio button on the online choices page$")
     fun iClickTheNoRadioButtonOnTheOnlineChoicesPage() {

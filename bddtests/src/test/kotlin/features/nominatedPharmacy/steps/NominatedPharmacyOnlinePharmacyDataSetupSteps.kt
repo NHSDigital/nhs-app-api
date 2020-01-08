@@ -1,6 +1,5 @@
 package features.nominatedPharmacy.steps
 
-
 import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
@@ -41,5 +40,4 @@ open class NominatedPharmacyOnlinePharmacyDataSetupSteps {
             )).respondWithSuccess(data)
         }
     }
-
 }

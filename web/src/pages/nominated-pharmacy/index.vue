@@ -88,7 +88,7 @@ export default {
     }
   },
   created() {
-    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
+    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] || this.nominatedPharmacy === null) {
       redirectTo(this, this.prescriptionsPath);
     }
   },

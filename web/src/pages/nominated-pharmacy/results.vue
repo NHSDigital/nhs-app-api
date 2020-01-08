@@ -120,6 +120,9 @@ export default {
       }
       return NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path;
     },
+    searchNominatedPharmacyPath() {
+      return NOMINATED_PHARMACY_SEARCH.path;
+    },
   },
   mounted() {
     if (this.isHighStreetSearch && !this.searchQuery) {

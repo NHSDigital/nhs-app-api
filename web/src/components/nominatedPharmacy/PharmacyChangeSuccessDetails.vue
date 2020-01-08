@@ -1,42 +1,28 @@
 <template>
   <div>
     <div id="pharmacyName">
-      <h3 class="nhsuk-u-padding-bottom-1"> {{ pharmacy.pharmacyName }} </h3>
+      <p class="nhsuk-u-margin-bottom-0"> {{ pharmacy.pharmacyName }} </p>
     </div>
-    <p v-if="!isInternetPharmacy" id="pharmacyAddress"> {{ formatAddress(pharmacy) }} </p>
-    <analytics-tracked-tag v-if="isInternetPharmacy"
-                           id="url"
-                           :class="[$style.checkFeaturesLink, $style['link-spacing'],
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]"
-                           :href="`//${pharmacy.url}`"
-                           :text="$t(pharmacy.url)"
-                           tag="a" target="_blank">
-      {{ pharmacy.url }}
-    </analytics-tracked-tag>
+    <p id="pharmacyAddress" class="nhsuk-u-margin-bottom-0"> {{ formatAddress(pharmacy) }} </p>
     <p id="phoneNumber">
       {{ $t('nominated_pharmacy.changeSuccess.telephoneLabel') }}{{ pharmacy.telephoneNumber }}
     </p>
+    <h2>{{ $t('nominated_pharmacy.changeSuccess.whatHappensNext') }}</h2>
+    <p>{{ $t('nominated_pharmacy.changeSuccess.highStreetPrescription').
+      replace('{pharmacyName}', pharmacy.pharmacyName) }}</p>
+    <p>{{ $t('nominated_pharmacy.changeSuccess.highStreetPrescriptionCollectionMessage').
+      replace('{pharmacyName}', pharmacy.pharmacyName) }}</p>
   </div>
 </template>
 
 <script>
-import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
   name: 'PharmacyChangeSuccessDetails',
-  components: {
-    AnalyticsTrackedTag,
-  },
   props: {
     pharmacy: {
       type: Object,
       required: true,
-    },
-  },
-  computed: {
-    isInternetPharmacy() {
-      return (this.pharmacy.pharmacySubType === PharmacySubType.InternetPharmacy);
     },
   },
   methods: {

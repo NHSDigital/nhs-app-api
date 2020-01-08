@@ -1,6 +1,7 @@
 import * as dependency from '@/lib/utils';
 import { PRESCRIPTIONS } from '@/lib/routes';
 import PharmacyChangeSuccessDetails from '@/components/nominatedPharmacy/PharmacyChangeSuccessDetails';
+import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import NominatedPharmacyChangeSuccess from '@/pages/nominated-pharmacy/change-success';
 import { create$T, createStore, mount } from '../../helpers';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
@@ -21,13 +22,29 @@ describe('confirm nominated pharmacy', () => {
       },
       pharmacy: {
         pharmacyName: 'Boots',
+        url: 'www.testurl.com',
       },
     },
   }) => state;
 
+  const createStateWithNoUrl = (state = {
+    device: {
+      source: 'web',
+    },
+    nominatedPharmacy: {
+      selectedNominatedPharmacy: {
+        pharmacyType: PharmacyType.P2,
+      },
+      pharmacy: {
+        pharmacyName: 'Boots',
+      },
+    },
+  }) => state;
+
+
   const mountPage = () => mount(NominatedPharmacyChangeSuccess, { $store, $t });
 
-  describe('nominated pharmacy change success details', () => {
+  describe('nominated pharmacy change success details for high street pharmacy', () => {
     let pharmacyChangeSuccessDetails;
 
     it('will exist', async () => {
@@ -36,6 +53,7 @@ describe('confirm nominated pharmacy', () => {
       });
       wrapper = mountPage();
       await wrapper.vm.$nextTick();
+      wrapper.vm.isHighStreetSelected = true;
       pharmacyChangeSuccessDetails = wrapper.find(PharmacyChangeSuccessDetails);
       expect(pharmacyChangeSuccessDetails.exists()).toBe(true);
     });
@@ -50,6 +68,79 @@ describe('confirm nominated pharmacy', () => {
       await wrapper.vm.$nextTick();
       pharmacyChangeSuccessDetails = wrapper.find(PharmacyChangeSuccessDetails);
       expect($t).toHaveBeenCalledWith('nominated_pharmacy.changeSuccess.header');
+    });
+  });
+
+  describe('nominated pharmacy change success details for online only pharmacy with no url', () => {
+    let onlinePharmacyChangeSuccessDetails;
+    let postalWarning;
+    let whatHappensNextWarning;
+    let registrationWarningWithUrl;
+    let registrationWarningWithNoUrl;
+
+    beforeEach(async () => {
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()), state: createState(),
+      });
+      wrapper = mountPage();
+      await wrapper.vm.$nextTick();
+      wrapper.vm.isOnlineOnlySelected = true;
+      postalWarning = wrapper.find('#postal-warning');
+      whatHappensNextWarning = wrapper.find('#what-happens-next');
+      registrationWarningWithUrl = wrapper.find('#registrationWarningWithUrl');
+      registrationWarningWithNoUrl = wrapper.find('#registrationWarningWithNoUrl');
+    });
+
+    it('will exist', async () => {
+      onlinePharmacyChangeSuccessDetails = wrapper.find(OnlineOnlyPharmacyDetail);
+      expect(onlinePharmacyChangeSuccessDetails.exists()).toBe(true);
+    });
+
+    it('will have the correct content when the pharmacy has url', async () => {
+      expect(whatHappensNextWarning.exists()).toBe(true);
+      expect(registrationWarningWithUrl.exists()).toBe(true);
+      expect(registrationWarningWithNoUrl.exists()).toBe(false);
+      expect(postalWarning.exists()).toBe(true);
+    });
+
+    it('will translate the correct locale variables for text', async () => {
+      $store.state.nominatedPharmacy.pharmacy.url = 'www.testurl.com';
+      expect(whatHappensNextWarning.text()).toBe('translate_nominated_pharmacy.changeSuccess.whatHappensNext');
+      expect(registrationWarningWithUrl.text()).toBe('translate_nominated_pharmacy.changeSuccess.registrationWarning');
+      expect(postalWarning.text()).toBe('translate_nominated_pharmacy.changeSuccess.postalWarning');
+    });
+  });
+
+  describe('nominated pharmacy change success details for online only pharmacy with url', () => {
+    let postalWarning;
+    let whatHappensNextWarning;
+    let registrationWarningWithUrl;
+    let registrationWarningWithNoUrl;
+
+    beforeEach(async () => {
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()), state: createStateWithNoUrl(),
+      });
+      wrapper = mountPage();
+      await wrapper.vm.$nextTick();
+      wrapper.vm.isOnlineOnlySelected = true;
+      postalWarning = wrapper.find('#postal-warning');
+      whatHappensNextWarning = wrapper.find('#what-happens-next');
+      registrationWarningWithUrl = wrapper.find('#registrationWarningWithUrl');
+      registrationWarningWithNoUrl = wrapper.find('#registrationWarningWithNoUrl');
+    });
+
+    it('will have the correct content when the pharmacy has url', async () => {
+      expect(whatHappensNextWarning.exists()).toBe(true);
+      expect(registrationWarningWithUrl.exists()).toBe(false);
+      expect(registrationWarningWithNoUrl.exists()).toBe(true);
+      expect(postalWarning.exists()).toBe(true);
+    });
+
+    it('will translate the correct locale variables for text', async () => {
+      expect(whatHappensNextWarning.text()).toBe('translate_nominated_pharmacy.changeSuccess.whatHappensNext');
+      expect(registrationWarningWithNoUrl.text()).toBe('translate_nominated_pharmacy.changeSuccess.registrationWarningWithNoUrl');
+      expect(postalWarning.text()).toBe('translate_nominated_pharmacy.changeSuccess.postalWarning');
     });
   });
 
