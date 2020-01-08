@@ -5,7 +5,7 @@
            :aria-label="labelText"
            :for="checkboxId"
            @click.stop.prevent="onClick">
-      {{ label }}
+      <strong>{{ label }}</strong>
       <span v-if="hintText !== ''" class="nhsuk-body"><br>{{ hintText }}</span>
     </label>
     <toggle :value="value" :checkbox-id="checkboxId" :is-waiting="isWaiting" @input="onClick"/>

@@ -1,8 +1,5 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
   <div v-if="showTemplate">
-    <div v-if="!$store.state.device.isNativeApp">
-      <h2>{{ $t('myAccount.detailsHeading') }}</h2>
-    </div>
     <menu-item-list data-purpose="cookie-menu">
       <menu-item id="'cookies'"
                  header-tag="h2"
