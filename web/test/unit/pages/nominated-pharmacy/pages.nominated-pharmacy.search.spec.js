@@ -5,7 +5,7 @@ import { initialState } from '@/store/modules/nominatedPharmacy/mutation-types';
 import { createStore, mount, create$T } from '../../helpers';
 import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
 
-const $t = create$T();
+const $tMock = create$T();
 const $style = {};
 
 const createState = () => ({
@@ -22,7 +22,17 @@ const createHttp = () => ({
 const mountPage = ({ $http, $state = createState(), $store }) =>
   mount(
     SearchPharmacies,
-    { $http, $store: ($store || createStore({ $http, $state })), $style, $t },
+    {
+      $http,
+      $store: ($store || createStore({ $http, $state })),
+      $style,
+      $t: (key) => {
+        if (key === 'nominatedPharmacySearchResults.errors.noResultsFound.foundNoResults') {
+          return 'We could not find any results for "{searchQuery}". Make sure you enter a valid English postcode.';
+        }
+        return $tMock(key);
+      },
+    },
   );
 
 describe('search pharmacies', () => {
@@ -50,9 +60,55 @@ describe('search pharmacies', () => {
     expect(searchPharmaciesPage.exists()).toBe(true);
   });
 
-  it('will translate the line text', () => {
-    expect($t).toHaveBeenCalledWith('nominated_pharmacy.search.line1');
-    expect($t).toHaveBeenCalledWith('nominated_pharmacy.search.line2');
+  describe('searchClicked', () => {
+    it('displays an error when search query is empty', async () => {
+      // arrange
+      page.vm.searchQuery = '';
+
+      // act
+      await page.vm.searchClicked();
+
+      // assert
+      expect(page.vm.showInvalidSearchError).toBe(true);
+      expect($http.getV1PatientPharmacies).not.toHaveBeenCalled();
+      expect(page.find('#empty-search-error').exists()).toBe(true);
+    });
+
+    it('displays an error when search query is populated but an invalid postcode', async () => {
+      // arrange
+      page.vm.searchQuery = 'rg';
+
+      // act
+      await page.vm.searchClicked();
+
+      // assert
+      expect(page.vm.showInvalidSearchError).toBe(true);
+      expect($http.getV1PatientPharmacies).not.toHaveBeenCalled();
+      expect(page.find('#empty-search-error').exists()).toBe(true);
+    });
+
+    it('displays a not found message when no pharmacies are returned', async () => {
+      // arrange
+      page.vm.searchQuery = 'rg1';
+      $http.getV1PatientPharmacies.mockResolvedValue([]);
+
+      const expectedResult = {
+        noResultsFound: true,
+        pharmacies: [],
+        technicalError: false,
+      };
+
+      // act
+      await page.vm.searchClicked();
+
+      // assert
+      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setSearchQuery', page.vm.searchQuery);
+      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setSearchResults', expectedResult);
+      expect(page.vm.showInvalidSearchError).toBe(false);
+      expect(page.find('#empty-search-error').exists()).toBe(false);
+      expect($http.getV1PatientPharmacies).toHaveBeenCalled();
+      expect(page.vm.foundNoResultsMessage).toBe(`We could not find any results for "${page.vm.searchQuery}". Make sure you enter a valid English postcode.`);
+    });
   });
 
   describe('when pharmacies are found', () => {

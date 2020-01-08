@@ -20,6 +20,8 @@
 
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
+import { redirectTo } from '@/lib/utils';
+import { NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -33,7 +35,7 @@ export default {
   },
   methods: {
     continueButtonClicked() {
-      // Not part of this story to continue
+      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path);
     },
   },
 };

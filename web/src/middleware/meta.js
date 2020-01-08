@@ -462,13 +462,8 @@ export default function ({ route, store, app }) {
       break;
     case NOMINATED_PHARMACY_SEARCH.name:
       store.dispatch('navigation/setNewMenuItem', 2);
-      if (store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
-        route.meta.headerKey = 'pageHeaders.nominateMyPharmacy';
-        route.meta.pageTitleKey = 'pageTitles.nominateMyPharmacy';
-      } else {
-        route.meta.headerKey = 'pageHeaders.searchNominatedPharmacy';
-        route.meta.pageTitleKey = 'pageTitles.searchNominatedPharmacy';
-      }
+      route.meta.headerKey = 'pageHeaders.searchNominatedPharmacy';
+      route.meta.pageTitleKey = 'pageTitles.searchNominatedPharmacy';
       break;
     case NOMINATED_PHARMACY_INTERRUPT.name:
       store.dispatch('navigation/setNewMenuItem', 2);
@@ -482,13 +477,9 @@ export default function ({ route, store, app }) {
       break;
     case NOMINATED_PHARMACY_SEARCH_RESULTS.name:
       store.dispatch('navigation/setNewMenuItem', 2);
-      if (store.state.nominatedPharmacy.searchResults.noResultsFound === true) {
-        route.meta.headerKey = 'th03.errors.noResultsFound.header';
-        route.meta.pageTitleKey = 'th03.errors.noResultsFound.title';
-      } else {
-        route.meta.headerKey = 'pageHeaders.changeNominatedPharmacy';
-        route.meta.pageTitleKey = 'pageTitles.changeNominatedPharmacy';
-      }
+      route.meta.headerKey = 'nominatedPharmacySearchResults.header';
+      route.meta.pageTitleKey = 'nominatedPharmacySearchResults.title';
+      route.meta.formatArguments = { searchQuery: store.state.nominatedPharmacy.searchQuery };
       break;
     case NOMINATED_PHARMACY.name:
       store.dispatch('navigation/setNewMenuItem', 2);

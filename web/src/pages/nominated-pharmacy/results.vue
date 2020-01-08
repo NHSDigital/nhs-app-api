@@ -1,12 +1,7 @@
 <template>
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div v-if="noResultsFound">
-        <p> {{ foundNoResults }} </p>
-        <p>{{ $t('nominatedPharmacySearchResults.errors.noResultsFound.message') }}</p>
-      </div>
-      <div v-else-if="!noResultsFound">
-        <p>{{ foundResults }}</p>
+      <div>
         <p>{{ $t('nominatedPharmacySearchResults.resultSummary.distanceInformation') }}</p>
         <menu-item-list id="searchResults">
           <menu-item v-for="(pharmacy, index) in pharmacies"
@@ -95,32 +90,6 @@ export default {
     };
   },
   computed: {
-    showPharmacies() {
-      return !this.noResultsFound;
-    },
-    getHeaderText() {
-      let header = this.$t('nominatedPharmacySearchResults.header');
-
-      if (this.noResultsFound) {
-        header = this.$t('nominatedPharmacySearchResults.errors.noResultsFound.header');
-      }
-      return header;
-    },
-    getTitle() {
-      let title = this.$t('nominatedPharmacySearchResults.title');
-
-      if (this.noResultsFound) {
-        title = this.$t('nominatedPharmacySearchResults.errors.noResultsFound.title');
-      }
-
-      return title;
-    },
-    foundResults() {
-      return this.$t('nominatedPharmacySearchResults.resultSummary.showingPharmaciesNear').replace('{searchQuery}', this.searchQuery);
-    },
-    foundNoResults() {
-      return this.$t('nominatedPharmacySearchResults.errors.noResultsFound.foundNoResults').replace('{searchQuery}', this.searchQuery);
-    },
     searchNominatedPharmacyPath() {
       return NOMINATED_PHARMACY_SEARCH.path;
     },

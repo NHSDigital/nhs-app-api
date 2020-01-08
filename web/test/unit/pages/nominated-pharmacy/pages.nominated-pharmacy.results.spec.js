@@ -33,12 +33,6 @@ describe('nominated pharmacy search results', () => {
     $store,
     $style,
     $t: (key) => {
-      if (key === 'nominatedPharmacySearchResults.resultSummary.showingPharmaciesNear') {
-        return 'Pharmacies near "{searchQuery}"';
-      }
-      if (key === 'nominatedPharmacySearchResults.errors.noResultsFound.foundNoResults') {
-        return 'We found no pharmacies near "{searchQuery}".';
-      }
       if (key === 'nominatedPharmacySearchResults.distanceAway') {
         return '{distance} miles away';
       }
@@ -89,7 +83,6 @@ describe('nominated pharmacy search results', () => {
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
     expect(dependency.redirectTo).not.toHaveBeenCalled();
-    expect(wrapper.vm.showPharmacies).toBe(false);
   });
 
   it('will show pharmacies when there are results found', () => {
@@ -104,7 +97,6 @@ describe('nominated pharmacy search results', () => {
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
     expect(dependency.redirectTo).not.toHaveBeenCalled();
-    expect(wrapper.vm.showPharmacies).toBe(true);
   });
 
   it('will go back to the search page when the back button is clicked', () => {
@@ -150,80 +142,6 @@ describe('nominated pharmacy search results', () => {
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/select', pharmacy);
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CONFIRM.path);
-    });
-  });
-
-  describe('foundResults', () => {
-    it('will correctly replace the search query text', () => {
-      const searchQueryText = 'rg1';
-      $store.state.nominatedPharmacy = {
-        searchQuery: searchQueryText,
-        searchResults: {
-          pharmacies: [],
-          technicalError: false,
-          noResultsFound: true,
-        },
-      };
-      wrapper = mountPage();
-      pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
-
-      // assert
-      expect(wrapper.vm.foundResults).toEqual(`Pharmacies near "${searchQueryText}"`);
-    });
-  });
-
-  describe('foundNoResults', () => {
-    it('will correctly replace the search query text', () => {
-      const searchQueryText = 'rg1';
-      $store.state.nominatedPharmacy = {
-        searchQuery: searchQueryText,
-        searchResults: {
-          pharmacies: [],
-          technicalError: false,
-          noResultsFound: true,
-        },
-      };
-      wrapper = mountPage();
-      pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
-
-      // assert
-      expect(wrapper.vm.foundNoResults).toEqual(`We found no pharmacies near "${searchQueryText}".`);
-    });
-  });
-
-  describe('getHeaderText and getTitle', () => {
-    it('will return the correct text when results are found', () => {
-      $store.state.nominatedPharmacy = {
-        searchQuery: 'rg1',
-        searchResults: {
-          pharmacies: [{ pharmacyName: 'drug store' }],
-          technicalError: false,
-          noResultsFound: false,
-        },
-      };
-      wrapper = mountPage();
-      pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
-
-      // assert
-      expect(wrapper.vm.getHeaderText).toEqual('translate_nominatedPharmacySearchResults.header');
-      expect(wrapper.vm.getTitle).toEqual('translate_nominatedPharmacySearchResults.title');
-    });
-
-    it('will return the correct text when results are not found', () => {
-      $store.state.nominatedPharmacy = {
-        searchQuery: 'rg1',
-        searchResults: {
-          pharmacies: [],
-          technicalError: false,
-          noResultsFound: true,
-        },
-      };
-      wrapper = mountPage();
-      pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
-
-      // assert
-      expect(wrapper.vm.getHeaderText).toEqual('translate_nominatedPharmacySearchResults.errors.noResultsFound.header');
-      expect(wrapper.vm.getTitle).toEqual('translate_nominatedPharmacySearchResults.errors.noResultsFound.title');
     });
   });
 
