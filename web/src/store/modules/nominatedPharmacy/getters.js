@@ -11,4 +11,7 @@ export default {
   pharmacyName(state) {
     return state.pharmacy.pharmacyName;
   },
+  getOnlineOnlyKnownOption(state) {
+    return state.onlineOnlyKnownOption;
+  },
 };

@@ -2,7 +2,7 @@ import { createStore, mount } from '../../helpers';
 import NominatedPharmacyChooseType from '@/pages/nominated-pharmacy/choose-type';
 import RadioGroup from '@/components/RadioGroup';
 import { HIGH_STREET_PHARMACY, ONLINE_PHARMACY } from '@/store/modules/nominatedPharmacy/mutation-types';
-import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
+import { NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
 import * as dependency from '@/lib/utils';
 
 describe('nominated pharmacy choose type page', () => {
@@ -57,14 +57,15 @@ describe('nominated pharmacy choose type page', () => {
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path);
     });
 
-    it('will redirect to the nominated pharmacy page', () => {
+    it('will redirect to the online only choices page', () => {
       wrapper.vm.selected(ONLINE_PHARMACY);
       continueButton.trigger('click');
       errorComponent = wrapper.find('#errorHeading');
 
       expect(errorComponent.exists()).toBe(false);
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setChosenType', ONLINE_PHARMACY);
-      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path);
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm,
+        NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path);
     });
 
     it('will not redirect to next page in flow when no radio button is selected', () => {

@@ -8,6 +8,7 @@ import {
   SELECT,
   SET_CHOSEN_TYPE,
   CLEAR_CHOSEN_TYPE,
+  SET_ONLINE_ONLY_KNOWN_OPTION,
 } from './mutation-types';
 import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 
@@ -57,6 +58,9 @@ export default {
   },
   select({ commit }, nominatedPharmacy) {
     commit(SELECT, formatWithOpeningTimes(nominatedPharmacy));
+  },
+  setOnlineOnlyKnownOption({ commit }, choice) {
+    commit(SET_ONLINE_ONLY_KNOWN_OPTION, choice);
   },
   clearSelectedNominatedPharmacy({ commit }) {
     commit(CLEAR_SELECTED_NOMINATED_PHARMACY);

@@ -850,7 +850,6 @@ const routes = {
     name: 'nominated-pharmacy',
     path: '/nominated-pharmacy',
     crumb: {
-      i18nKey: 'nominatedPharmacy',
       get parentRoute() {
         return this.allRoutes.PRESCRIPTIONS;
       },
@@ -862,7 +861,7 @@ const routes = {
     path: '/nominated-pharmacy/search',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.NOMINATED_PHARMACY;
+        return this.allRoutes.PRESCRIPTIONS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
@@ -872,7 +871,7 @@ const routes = {
     path: '/nominated-pharmacy/confirm',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.NOMINATED_PHARMACY;
+        return this.allRoutes.PRESCRIPTIONS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
@@ -888,7 +887,7 @@ const routes = {
     path: '/nominated-pharmacy/interrupt',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.NOMINATED_PHARMACY;
+        return this.allRoutes.PRESCRIPTIONS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
@@ -898,7 +897,7 @@ const routes = {
     path: '/nominated-pharmacy/results',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.NOMINATED_PHARMACY;
+        return this.allRoutes.PRESCRIPTIONS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
@@ -918,7 +917,17 @@ const routes = {
     path: '/nominated-pharmacy/choose-type',
     crumb: {
       get parentRoute() {
-        return this.allRoutes.NOMINATED_PHARMACY;
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+  },
+  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES: {
+    name: 'nominated-pharmacy-online-only-choices',
+    path: '/nominated-pharmacy/online-only-choices',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
@@ -1528,6 +1537,7 @@ export const {
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_CONFIRM,
+  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
   NOMINATED_PHARMACY_CHANGE_SUCCESS,
   NOMINATED_PHARMACY_INTERRUPT,
   NOMINATED_PHARMACY_SEARCH_RESULTS,

@@ -9,6 +9,7 @@ export const SET_CHOSEN_TYPE = 'SET_CHOSEN_TYPE';
 export const CLEAR_CHOSEN_TYPE = 'CLEAR_CHOSEN_TYPE';
 export const HIGH_STREET_PHARMACY = 'highStreet';
 export const ONLINE_PHARMACY = 'online';
+export const SET_ONLINE_ONLY_KNOWN_OPTION = 'SET_ONLINE_ONLY_KNOWN_OPTION';
 
 export const initialState = () => ({
   pharmacy: {},
@@ -22,4 +23,5 @@ export const initialState = () => ({
   nominatedPharmacyEnabled: null,
   justUpdated: false,
   chosenType: undefined,
+  onlineOnlyKnownOption: null,
 });

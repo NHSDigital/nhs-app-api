@@ -61,7 +61,7 @@ import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RadioGroup from '@/components/RadioGroup';
 import { HIGH_STREET_PHARMACY, ONLINE_PHARMACY } from '@/store/modules/nominatedPharmacy/mutation-types';
-import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
+import { NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -79,6 +79,7 @@ export default {
     return {
       interruptPath: NOMINATED_PHARMACY_INTERRUPT.path,
       highStreetSearchPath: NOMINATED_PHARMACY_SEARCH.path,
+      onlineOnlyChoicesPath: NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path,
       hasTriedToContinue: false,
       radioButtons: [
         {
@@ -120,8 +121,7 @@ export default {
       if (this.selectedValue === HIGH_STREET_PHARMACY) {
         redirectTo(this, this.highStreetSearchPath);
       } else {
-        // Not part of this story - just flipping back to nominated pharmacy for now
-        redirectTo(this, NOMINATED_PHARMACY.path);
+        redirectTo(this, this.onlineOnlyChoicesPath);
       }
     },
     selected(value) {

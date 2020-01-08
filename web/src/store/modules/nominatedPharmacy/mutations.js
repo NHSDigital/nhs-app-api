@@ -9,6 +9,7 @@ import {
   CLEAR_SELECTED_NOMINATED_PHARMACY,
   SET_CHOSEN_TYPE,
   CLEAR_CHOSEN_TYPE,
+  SET_ONLINE_ONLY_KNOWN_OPTION,
 } from './mutation-types';
 
 export default {
@@ -27,6 +28,9 @@ export default {
   [NOMINATED_PHARMACY_UPDATED](state) {
     state.hasLoaded = false;
     state.justUpdated = true;
+  },
+  [SET_ONLINE_ONLY_KNOWN_OPTION](state, choice) {
+    state.onlineOnlyKnownOption = choice;
   },
   [SET_SEARCH_QUERY](state, searchQuery) {
     state.searchQuery = searchQuery;
