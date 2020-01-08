@@ -271,26 +271,49 @@ class HomeViewController : UIViewController {
     
     func setVisibilityOfHeaderAndMenuBars(visible: Bool, isSlim: Bool) {
         UIView.animate(withDuration: 0.3, animations: {
-            let constraintPriority:UILayoutPriority
-
-            if visible {
-                constraintPriority = self.showConstraintPriority
-            } else {
-                constraintPriority = self.hideConstraintPriority
-            }
             self.Notch.isHidden = false
             
+            if !visible {
+                self.setHeaderVisibility(visible: visible)
+                self.setSlimHeaderVisibility(visible: visible)
+                return
+            }
+            
             if isSlim {
-                self.webviewHeaderSlimTopConstraint.priority = constraintPriority
-                self.headerBarSlim.isHidden = !visible
+                self.setHeaderVisibility(visible: !visible)
+                self.setSlimHeaderVisibility(visible: visible)
             } else {
-                self.webviewHeaderTopConstraint.priority = constraintPriority
-                self.webviewNavMenuBottomConstraint.priority = constraintPriority
-                self.headerBar.isHidden = !visible
-                self.tabBar.isHidden = !visible
-                self.tabBarSpacer.isHidden = !visible
+                self.setHeaderVisibility(visible: visible)
+                self.setSlimHeaderVisibility(visible: !visible)
             }
         })
+    }
+    
+    private func setHeaderVisibility(visible: Bool) {
+        let contraintPriority: UILayoutPriority
+        if visible {
+            contraintPriority = showConstraintPriority
+        } else {
+            contraintPriority = hideConstraintPriority
+        }
+        
+        self.webviewHeaderTopConstraint.priority = contraintPriority
+        self.webviewNavMenuBottomConstraint.priority = contraintPriority
+        self.headerBar.isHidden = !visible
+        self.tabBar.isHidden = !visible
+        self.tabBarSpacer.isHidden = !visible
+    }
+    
+    private func setSlimHeaderVisibility(visible: Bool) {
+        let contraintPriority: UILayoutPriority
+        if visible {
+            contraintPriority = showConstraintPriority
+        } else {
+            contraintPriority = hideConstraintPriority
+        }
+        
+        self.webviewHeaderSlimTopConstraint.priority = contraintPriority
+        self.headerBarSlim.isHidden = !visible
     }
     
     func getBiometricRegistrationErrorStrings() -> BiometricErrorStrings{

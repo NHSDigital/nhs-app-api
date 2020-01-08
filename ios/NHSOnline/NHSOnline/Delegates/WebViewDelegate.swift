@@ -116,7 +116,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
         self.showWebViewContainer()
-        viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
 
         if(webView.url?.absoluteString == config().HomeUrl) {
             viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
