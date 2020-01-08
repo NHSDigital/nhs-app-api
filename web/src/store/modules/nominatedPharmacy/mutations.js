@@ -7,8 +7,8 @@ import {
   SET_SEARCH_RESULTS,
   SELECT,
   CLEAR_SELECTED_NOMINATED_PHARMACY,
-  SET_PREVIOUS_PAGE_TO_SEARCH,
-  CLEAR_PREVIOUS_PAGE_TO_SEARCH,
+  SET_CHOSEN_TYPE,
+  CLEAR_CHOSEN_TYPE,
 } from './mutation-types';
 
 export default {
@@ -40,8 +40,11 @@ export default {
   [SELECT](state, data) {
     state.selectedNominatedPharmacy = data;
   },
-  [SET_PREVIOUS_PAGE_TO_SEARCH](state, data) {
-    state.previousPageToSearch = data;
+  [SET_CHOSEN_TYPE](state, data) {
+    state.chosenType = data;
+  },
+  [CLEAR_CHOSEN_TYPE](state) {
+    state.chosenType = undefined;
   },
   [CLEAR_PREVIOUS_PAGE_TO_SEARCH](state) {
     state.previousPageToSearch = null;

@@ -98,6 +98,7 @@ import {
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_CHANGE_SUCCESS,
   NOMINATED_PHARMACY_CHECK,
+  NOMINATED_PHARMACY_CHOOSE_TYPE,
   LINKED_PROFILES_SHUTTER_MORE,
   LINKED_PROFILES_SHUTTER_SYMPTOMS,
   LINKED_PROFILES_SHUTTER_SETTINGS,
@@ -517,6 +518,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.nominatedPharmacyChangeSuccess';
       route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyChangeSuccess';
+      break;
+    case NOMINATED_PHARMACY_CHOOSE_TYPE.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.nominatedPharmacyChooseType';
+      route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyChooseType';
       break;
     case RECALLS.name:
       route.meta.headerKey = 'pageHeaders.recalls';

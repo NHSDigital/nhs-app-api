@@ -120,13 +120,6 @@ describe('pharmacy detail', () => {
       it('will display the link when displayChangeMyNominatedPharmacyButton is false', () => {
         expect(link.exists()).toEqual(true);
       });
-
-      describe('goToNominatedPharmacyInterruptPage', () => {
-        it('will dispatch "nominatedPharmacy/setPreviousPageToSearch"', () => {
-          wrapper.vm.goToNominatedPharmacyInterruptPage();
-          expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setPreviousPageToSearch', '/myPreviousPath');
-        });
-      });
     });
 
     describe('instruction about pharmacy', () => {
@@ -191,13 +184,6 @@ describe('pharmacy detail', () => {
 
       it('will display the link', () => {
         expect(link.exists()).toEqual(true);
-      });
-
-      describe('goToNominatedPharmacyInterruptPage', () => {
-        it('will dispatch "nominatedPharmacy/setPreviousPageToSearch"', () => {
-          wrapper.vm.goToNominatedPharmacyInterruptPage();
-          expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setPreviousPageToSearch', '/myPreviousPath');
-        });
       });
     });
 

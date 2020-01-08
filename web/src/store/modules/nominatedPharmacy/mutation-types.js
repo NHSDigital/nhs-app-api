@@ -5,8 +5,10 @@ export const SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS';
 export const NOMINATED_PHARMACY_UPDATED = 'NOMINATED_PHARMACY_UPDATED';
 export const CLEAR_SELECTED_NOMINATED_PHARMACY = 'CLEAR_SELECTED_NOMINATED_PHARMACY';
 export const SELECT = 'SELECT';
-export const SET_PREVIOUS_PAGE_TO_SEARCH = 'SET_PREVIOUS_PAGE_TO_SEARCH';
-export const CLEAR_PREVIOUS_PAGE_TO_SEARCH = 'CLEAR_PREVIOUS_PAGE_TO_SEARCH';
+export const SET_CHOSEN_TYPE = 'SET_CHOSEN_TYPE';
+export const CLEAR_CHOSEN_TYPE = 'CLEAR_CHOSEN_TYPE';
+export const HIGH_STREET_PHARMACY = 'highStreet';
+export const ONLINE_PHARMACY = 'online';
 
 export const initialState = () => ({
   pharmacy: {},
@@ -17,7 +19,7 @@ export const initialState = () => ({
     noResultsFound: false,
     pharmacies: [],
   },
-  previousPageToSearch: null,
   nominatedPharmacyEnabled: null,
   justUpdated: false,
+  chosenType: undefined,
 });

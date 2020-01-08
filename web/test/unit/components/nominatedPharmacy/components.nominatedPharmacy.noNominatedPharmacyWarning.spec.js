@@ -92,7 +92,6 @@ describe('nominated pharmacy not found', () => {
         path: currentPath,
       };
       await link.trigger('click');
-      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setPreviousPageToSearch', '/nominated-pharmacy');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT.path);
     });

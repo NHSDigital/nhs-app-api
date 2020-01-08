@@ -3,7 +3,7 @@ import * as dependency from '@/lib/utils';
 import SearchPharmacies from '@/pages/nominated-pharmacy/search';
 import { initialState } from '@/store/modules/nominatedPharmacy/mutation-types';
 import { createStore, mount, create$T } from '../../helpers';
-import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY_CHOOSE_TYPE } from '@/lib/routes';
 
 const $tMock = create$T();
 const $style = {};
@@ -40,7 +40,7 @@ describe('search pharmacies', () => {
   let $http;
   let page;
   let searchPharmaciesPage;
-  const state = createState({ nominatedPharmacy: { previousPageToSearch: 'ben' } });
+  const state = createState({ nominatedPharmacy: {} });
 
   beforeEach(() => {
     $http = createHttp();
@@ -234,7 +234,8 @@ describe('search pharmacies', () => {
       dependency.redirectTo = jest.fn();
       backLink.trigger('click');
 
-      expect(dependency.redirectTo).toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY.path);
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(page.vm, NOMINATED_PHARMACY_CHOOSE_TYPE.path);
     });
   });
 });

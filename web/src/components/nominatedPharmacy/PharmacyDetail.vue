@@ -98,7 +98,6 @@ export default {
   },
   methods: {
     goToNominatedPharmacyInterruptPage() {
-      this.$store.dispatch('nominatedPharmacy/setPreviousPageToSearch', this.previousPath);
       redirectTo(this, NOMINATED_PHARMACY_INTERRUPT.path);
     },
   },

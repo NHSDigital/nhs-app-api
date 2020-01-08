@@ -68,9 +68,8 @@ import ErrorGroup from '@/components/ErrorGroup';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
-import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS, PRESCRIPTIONS } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS, PRESCRIPTIONS, NOMINATED_PHARMACY_CHOOSE_TYPE } from '@/lib/routes';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
-import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { redirectTo } from '@/lib/utils';
 
@@ -98,7 +97,7 @@ export default {
       allDispensingContractorsURL: NOMINATED_PHARMACY_SEARCH.path,
       submissionError: false,
       showInvalidSearchError: false,
-      backButtonPath: this.$store.getters['nominatedPharmacy/previousPage'],
+      backButtonPath: NOMINATED_PHARMACY_CHOOSE_TYPE.path,
       foundNoResultsMessage: '',
     };
   },
@@ -196,7 +195,6 @@ export default {
       return pharmacySearchResult;
     },
     cancelButtonClicked() {
-      // todo: needs to be new page
       redirectTo(this, this.backButtonPath);
     },
   },

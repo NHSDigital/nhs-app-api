@@ -36,25 +36,4 @@ describe('getters', () => {
       });
     });
   });
-
-  describe('previousPage', () => {
-    const { previousPage } = getters;
-    let currentState;
-
-    beforeEach(() => {
-      currentState = {
-        previousPageToSearch: '',
-      };
-    });
-
-    it('will return correct previous page', () => {
-      currentState.previousPageToSearch = '/nominatedPharmacy';
-      expect(previousPage(currentState)).toEqual('/nominatedPharmacy');
-    });
-
-    it('will return prescriptions when no previous page is set', () => {
-      currentState.previousPageToSearch = '';
-      expect(previousPage(currentState)).toEqual('/prescriptions');
-    });
-  });
 });

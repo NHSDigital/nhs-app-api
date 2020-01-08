@@ -839,6 +839,16 @@ export default {
       telephoneLabel: 'Telephone: ',
       linkLabel: 'Go to your repeat prescriptions',
     },
+    chooseType: {
+      highStreet: 'High street pharmacies',
+      highStreetHint: 'You can collect your prescriptions in person at a high street pharmacy local to you. They may also deliver.',
+      online: 'Online-only pharmacies',
+      onlineHint: 'Internet-based pharmacies send your prescriptions to you in the post.',
+      buttonText: 'Continue',
+      errorMessage: 'Choose a type of pharmacy to search for',
+      errorHeading: 'There is a problem',
+      backLinkText: 'Back',
+    },
     internetPharmacy: 'This is an internet pharmacy.',
     warning: {
       changeDispensingPractice: {
@@ -1484,6 +1494,7 @@ export default {
     patientPracticeMessagingUrgency: 'Do you need urgent advice?',
     patientPracticeMessagingUrgencyContactYourGp: 'Phone or visit your GP or NHS 111',
     patientPracticeMessagingRecipients: 'Select who to message',
+    nominatedPharmacyChooseType: 'Choose a type of pharmacy to search for',
   },
   pageTitles: {
     home: 'Home',
@@ -1562,6 +1573,7 @@ export default {
     patientPracticeMessagingUrgency: 'Do you need urgent advice?',
     patientPracticeMessagingUrgencyContactYourGp: 'Phone or visit your GP or NHS 111',
     patientPracticeMessagingRecipients: 'Select who to message',
+    nominatedPharmacyChooseType: 'Choose a type of pharmacy to search for',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',

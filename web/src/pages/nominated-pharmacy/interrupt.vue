@@ -21,7 +21,7 @@
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
+import { NOMINATED_PHARMACY_CHOOSE_TYPE } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -33,9 +33,12 @@ export default {
       hasNoNominatedPharmacy: this.$store.getters['nominatedPharmacy/hasNoNominatedPharmacy'],
     };
   },
+  created() {
+    this.$store.dispatch('nominatedPharmacy/clearChosenType');
+  },
   methods: {
     continueButtonClicked() {
-      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path);
+      redirectTo(this, NOMINATED_PHARMACY_CHOOSE_TYPE.path);
     },
   },
 };
