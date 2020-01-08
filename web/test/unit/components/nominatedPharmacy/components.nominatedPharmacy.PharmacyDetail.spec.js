@@ -121,9 +121,9 @@ describe('pharmacy detail', () => {
         expect(link.exists()).toEqual(true);
       });
 
-      describe('click', () => {
+      describe('goToNominatedPharmacyInterruptPage', () => {
         it('will dispatch "nominatedPharmacy/setPreviousPageToSearch"', () => {
-          wrapper.vm.goToChangeNominatedPharmacySearch();
+          wrapper.vm.goToNominatedPharmacyInterruptPage();
           expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setPreviousPageToSearch', '/myPreviousPath');
         });
       });
@@ -193,9 +193,9 @@ describe('pharmacy detail', () => {
         expect(link.exists()).toEqual(true);
       });
 
-      describe('click', () => {
+      describe('goToNominatedPharmacyInterruptPage', () => {
         it('will dispatch "nominatedPharmacy/setPreviousPageToSearch"', () => {
-          wrapper.vm.goToChangeNominatedPharmacySearch();
+          wrapper.vm.goToNominatedPharmacyInterruptPage();
           expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setPreviousPageToSearch', '/myPreviousPath');
         });
       });

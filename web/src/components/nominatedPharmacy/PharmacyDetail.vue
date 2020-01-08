@@ -12,7 +12,7 @@
       <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink &&
                                displayChangeMyNominatedPharmacyButton"
                              id="button-to-change-pharmacy"
-                             :click-func="goToChangeNominatedPharmacySearch"
+                             :click-func="goToNominatedPharmacyInterruptPage"
                              :text="$t('nominated_pharmacy.changePharmacyLink')">
         <generic-button class="nhsuk-button">
           {{ $t('nominated_pharmacy.changePharmacyLink') }}
@@ -33,8 +33,7 @@
 <script>
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CANNOT_CHANGE, PRESCRIPTIONS } from '@/lib/routes';
-import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import { PRESCRIPTIONS, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
 import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
 import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
@@ -98,11 +97,9 @@ export default {
     },
   },
   methods: {
-    goToChangeNominatedPharmacySearch() {
+    goToNominatedPharmacyInterruptPage() {
       this.$store.dispatch('nominatedPharmacy/setPreviousPageToSearch', this.previousPath);
-      const nextPage = (this.pharmacy.pharmacyType === PharmacyType.P3) ?
-        NOMINATED_PHARMACY_CANNOT_CHANGE.path : NOMINATED_PHARMACY_SEARCH.path;
-      redirectTo(this, nextPage);
+      redirectTo(this, NOMINATED_PHARMACY_INTERRUPT.path);
     },
   },
 };

@@ -92,12 +92,12 @@ import {
   HEALTH_CONDITIONS,
   TESTRESULTID,
   NOMINATED_PHARMACY,
+  NOMINATED_PHARMACY_INTERRUPT,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_CHANGE_SUCCESS,
   NOMINATED_PHARMACY_CHECK,
-  NOMINATED_PHARMACY_CANNOT_CHANGE,
   LINKED_PROFILES_SHUTTER_MORE,
   LINKED_PROFILES_SHUTTER_SYMPTOMS,
   LINKED_PROFILES_SHUTTER_SETTINGS,
@@ -470,6 +470,16 @@ export default function ({ route, store, app }) {
         route.meta.pageTitleKey = 'pageTitles.searchNominatedPharmacy';
       }
       break;
+    case NOMINATED_PHARMACY_INTERRUPT.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      if (store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
+        route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFoundInterrupt';
+        route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFoundInterrupt';
+      } else {
+        route.meta.headerKey = 'pageHeaders.nominatedPharmacyFoundInterrupt';
+        route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyFoundInterrupt';
+      }
+      break;
     case NOMINATED_PHARMACY_SEARCH_RESULTS.name:
       store.dispatch('navigation/setNewMenuItem', 2);
       if (store.state.nominatedPharmacy.searchResults.noResultsFound === true) {
@@ -516,11 +526,6 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.nominatedPharmacyChangeSuccess';
       route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyChangeSuccess';
-      break;
-    case NOMINATED_PHARMACY_CANNOT_CHANGE.name:
-      store.dispatch('navigation/setNewMenuItem', 2);
-      route.meta.headerKey = 'pageHeaders.cannotChangePharmacy';
-      route.meta.pageTitleKey = 'pageTitles.cannotChangePharmacy';
       break;
     case RECALLS.name:
       route.meta.headerKey = 'pageHeaders.recalls';

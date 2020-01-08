@@ -870,6 +870,11 @@ export default {
         retryButtonText: 'Back to prescriptions',
       },
     },
+    interrupt: {
+      nominatedPharmacyFoundLine1: 'The new pharmacy you choose is where your prescriptions will be sent in future.',
+      nominatedPharmacyFoundLine2: 'Your new pharmacy can help to check on any outstanding prescriptions for you.',
+      continueButton: 'Continue',
+    },
   },
   gp_medical_record: {
     testResults: {
@@ -1471,6 +1476,8 @@ export default {
     nominateMyPharmacy: 'Nominate your pharmacy',
     changeNominatedPharmacy: 'Choose your nominated pharmacy',
     nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
+    nominatedPharmacyNotFoundInterrupt: 'The pharmacy you choose is where your prescriptions will be sent',
+    nominatedPharmacyFoundInterrupt: 'Any outstanding prescriptions may still arrive at your current nominated pharmacy',
     nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
     dispensingPracticeFound: 'Check the dispensing practice this will be sent to',
     cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
@@ -1549,6 +1556,8 @@ export default {
     searchNominatedPharmacy: 'Change your nominated pharmacy',
     changeNominatedPharmacy: 'Choose your nominated pharmacy',
     nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
+    nominatedPharmacyNotFoundInterrupt: 'The pharmacy you choose is where your prescriptions will be sent',
+    nominatedPharmacyFoundInterrupt: 'Any outstanding prescriptions may still arrive at your current nominated pharmacy',
     confirmNominatedPharmacy: 'Confirm your nominated pharmacy',
     nominatedPharmacyChangeSuccess: 'Your nominated pharmacy is {name}',
     nominatedPharmacyFound: 'Check the pharmacy this will be sent to',

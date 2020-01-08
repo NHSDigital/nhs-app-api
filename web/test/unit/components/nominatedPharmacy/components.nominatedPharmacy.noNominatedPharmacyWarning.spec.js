@@ -1,7 +1,7 @@
 import * as dependency from '@/lib/utils';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import { create$T, createStore, createRouter, mount } from '../../helpers';
-import { NOMINATED_PHARMACY_SEARCH } from '../../../../src/lib/routes';
+import { NOMINATED_PHARMACY_INTERRUPT } from '../../../../src/lib/routes';
 
 const $t = create$T();
 
@@ -85,7 +85,7 @@ describe('nominated pharmacy not found', () => {
         .toEqual('translate_nominatedPharmacyNotFound.nominatedPharmacyLink');
     });
 
-    it('will redirect to search nominated pharmacy page', async () => {
+    it('will redirect to interrupt nominated pharmacy page', async () => {
       dependency.redirectTo = jest.fn();
       const currentPath = '/nominated-pharmacy';
       $router.currentRoute = {
@@ -94,7 +94,7 @@ describe('nominated pharmacy not found', () => {
       await link.trigger('click');
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setPreviousPageToSearch', '/nominated-pharmacy');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path);
+        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT.path);
     });
   });
 });

@@ -2,7 +2,7 @@ import PrescriptionsPage from '@/pages/prescriptions/index';
 import { createRouter, createStore, mount } from '../../helpers';
 import { NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_CHECK,
-  NOMINATED_PHARMACY_SEARCH,
+  NOMINATED_PHARMACY_INTERRUPT,
   PRESCRIPTIONS,
   PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 
@@ -113,13 +113,13 @@ describe('prescriptions/index.vue', () => {
           nominatedPharmacyLink.trigger('click');
         });
 
-        it('will track nominated pharmacy search path when no nominated pharmacy is assigned', () => {
+        it('will track nominated pharmacy interrupt path when no nominated pharmacy is assigned', () => {
           expect($store.app.$analytics.trackButtonClick)
-            .toHaveBeenCalledWith(NOMINATED_PHARMACY_SEARCH.path, true);
+            .toHaveBeenCalledWith(NOMINATED_PHARMACY_INTERRUPT.path, true);
         });
 
-        it('will redirect to nominated pharmacy search page when no nominated pharmacy is assigned', () => {
-          expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY_SEARCH.path);
+        it('will redirect to nominated pharmacy interrupt page when no nominated pharmacy is assigned', () => {
+          expect($router.push).toHaveBeenCalledWith(NOMINATED_PHARMACY_INTERRUPT.path);
         });
       });
     });

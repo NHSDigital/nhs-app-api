@@ -74,7 +74,7 @@ import isEmpty from 'lodash/fp/isEmpty';
 import keys from 'lodash/fp/keys';
 import sortBy from 'lodash/fp/sortBy';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
+import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
 import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
@@ -193,8 +193,8 @@ export default {
   methods: {
     onNominatedPharmacyDetailClicked() {
       if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
-        this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_SEARCH.path, true);
-        redirectTo(this, NOMINATED_PHARMACY_SEARCH.path);
+        this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_INTERRUPT.path, true);
+        redirectTo(this, NOMINATED_PHARMACY_INTERRUPT.path);
       } else {
         this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY.path, true);
         redirectTo(this, NOMINATED_PHARMACY.path);

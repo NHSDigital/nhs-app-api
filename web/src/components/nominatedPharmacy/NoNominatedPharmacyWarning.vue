@@ -11,7 +11,7 @@
     </p>
     <a id="link-to-nominate-pharmacy"
        :class="[$style.checkFeaturesLink, $style['link']]"
-       :href="nominatedPharmacySearchPath"
+       :href="nominatedPharmacyInterruptPath"
        tag="a"
        @click.prevent="goToAddOrChangeNominatedPharmacy">
       {{ $t('nominatedPharmacyNotFound.nominatedPharmacyLink') }}
@@ -23,7 +23,7 @@
 /* eslint-disable global-require */
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import { NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
+import { NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -34,13 +34,13 @@ export default {
   },
   data() {
     return {
-      nominatedPharmacySearchPath: NOMINATED_PHARMACY_SEARCH.path,
+      nominatedPharmacyInterruptPath: NOMINATED_PHARMACY_INTERRUPT.path,
     };
   },
   methods: {
     goToAddOrChangeNominatedPharmacy() {
       this.$store.dispatch('nominatedPharmacy/setPreviousPageToSearch', this.$router.currentRoute.path);
-      redirectTo(this, this.nominatedPharmacySearchPath);
+      redirectTo(this, this.nominatedPharmacyInterruptPath);
     },
   },
 };

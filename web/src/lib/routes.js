@@ -883,6 +883,16 @@ const routes = {
     crumb: {},
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
   },
+  NOMINATED_PHARMACY_INTERRUPT: {
+    name: 'nominated-pharmacy-interrupt',
+    path: '/nominated-pharmacy/interrupt',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.NOMINATED_PHARMACY;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+  },
   NOMINATED_PHARMACY_SEARCH_RESULTS: {
     name: 'nominated-pharmacy-results',
     path: '/nominated-pharmacy/results',
@@ -899,16 +909,6 @@ const routes = {
     crumb: {
       get parentRoute() {
         return this.allRoutes.PRESCRIPTIONS;
-      },
-    },
-    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-  },
-  NOMINATED_PHARMACY_CANNOT_CHANGE: {
-    name: 'nominated-pharmacy-cannot-change',
-    path: '/nominated-pharmacy/cannot-change',
-    crumb: {
-      get parentRoute() {
-        return this.allRoutes.NOMINATED_PHARMACY;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
@@ -1519,9 +1519,9 @@ export const {
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_CHANGE_SUCCESS,
+  NOMINATED_PHARMACY_INTERRUPT,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   NOMINATED_PHARMACY_CHECK,
-  NOMINATED_PHARMACY_CANNOT_CHANGE,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_AMEND,
