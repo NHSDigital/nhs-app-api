@@ -47,11 +47,26 @@ class ToggleElement(val page : HybridPageObject, text:String, id:String) {
 
     private fun assertState(expectedChecked: Boolean) {
         waitForLoadingToComplete()
-        val errorMessage = "Expected toggle state:"
-        toggleElement.actOnTheElement {
-            val input = it.findElement<WebElement>(By.xpath("./$xPathFromContainerToToggleInput"))
-            val isSelected = input.isSelected
-            Assert.assertEquals(errorMessage, expectedChecked, isSelected)
+        var actualState :Boolean? = null
+        var retryCounter = NUMBER_OF_RETRIES
+        while (retryCounter >= 0) {
+            try {
+                if (retryCounter == 0) {
+                    Assert.fail("Expected toggle state: $expectedChecked. Actual $actualState")
+                }
+                if (expectedChecked!=actualState) {
+                    retryCounter--
+                    toggleElement.actOnTheElement {
+                        val input = it.findElement<WebElement>(By.xpath("./$xPathFromContainerToToggleInput"))
+                        actualState = input.isSelected
+                    }
+                    Thread.sleep(MILLISECONDS_IN_A_SECOND)
+                } else {
+                    break
+                }
+            } catch (e: StaleElementReferenceException) {
+                Thread.sleep(MILLISECONDS_IN_A_SECOND)
+            }
         }
     }
 

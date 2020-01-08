@@ -2,7 +2,6 @@
 Feature: Push Notifications
 #The following tests are gp system agnostic
 
-  @smoketest
   Scenario: A user can enable push notifications for their device for the first time
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications for the first time
@@ -29,6 +28,7 @@ Feature: Push Notifications
     Then the notifications toggle is displayed as on
     And the push registration has been added to the repository
 
+  @smoketest
   Scenario: A user can disable push notifications for their device
     Given I am using the native app user agent
     And I am a user wishing to disable push notifications
