@@ -1,0 +1,34 @@
+
+stages:
+  - stage: init
+    displayName: Initialise
+    jobs:
+      - job: init
+        displayName: Initialise
+        steps:
+          - task: Bash@3
+            displayName: Determine branch tag
+            inputs:
+              targetType: inline
+              script: |
+                BUILDNUMBER=$BUILD_BUILDNUMBER
+                BRANCH_TAG=$BUILD_SOURCEBRANCHNAME
+                if [ -n "$SYSTEM_PULLREQUEST_PULLREQUESTID" ]; then
+                  BUILDNUMBER="PR $SYSTEM_PULLREQUEST_PULLREQUESTID ($SYSTEM_PULLREQUEST_PULLREQUESTITERATION)"
+                  BRANCH_TAG="PR$SYSTEM_PULLREQUEST_PULLREQUESTID"
+                fi
+                echo "##vso[build.updatebuildnumber]$BUILDNUMBER"
+                echo "##vso[task.setvariable variable=branch.tag]$BRANCH_TAG"
+                echo "buildNumber: $BUILDNUMBER"
+                echo "docker.tag: $DOCKER_TAG"
+                echo "branch.tag: $BRANCH_TAG"
+                mkdir -p "$SYSTEM_ARTIFACTSDIRECTORY/variables"
+                echo $BRANCH_TAG > "$SYSTEM_ARTIFACTSDIRECTORY/variables/branchTag"
+
+          # Use an artifact to pass the branch tag between stages
+          # https://medium.com/microsoftazure/how-to-pass-variables-in-azure-pipelines-yaml-tasks-5c81c5d31763
+          - task: PublishBuildArtifacts@1
+            displayName: Publish variables
+            inputs:
+              pathtoPublish: $(System.ArtifactsDirectory)/variables
+              artifactName: variables

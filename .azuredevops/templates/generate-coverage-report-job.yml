@@ -1,0 +1,45 @@
+jobs:
+  - job: coverage
+    displayName: Generate Unit Test Coverage Report
+    dependsOn:
+      - web
+      - backend
+    condition: succeededOrFailed()
+    variables:
+      web.coverage.exists: $[ dependencies.web.outputs['checkdirs.unit.test.coverage.exists'] ]
+      backend.coverage.exists: $[ dependencies.backend.outputs['checkdirs.unit.test.coverage.exists'] ]
+    steps:
+      - task: DownloadPipelineArtifact@2
+        displayName: Download web coverage
+        condition: and(succeeded(), eq(variables['web.coverage.exists'], 'Yes'))
+        inputs:
+          artifact: 'web-coverage'
+          path: $(Build.SourcesDirectory)/web-coverage
+
+      - task: DownloadPipelineArtifact@2
+        displayName: Download backend coverage
+        condition: and(succeeded(), eq(variables['backend.coverage.exists'], 'Yes'))
+        inputs:
+          artifact: 'backend-coverage'
+          path: $(Build.SourcesDirectory)/backend-coverage
+
+      - task: Bash@3
+        displayName: Aggregate coverage files
+        condition: and(succeeded(), or(eq(variables['web.coverage.exists'], 'Yes'), eq(variables['backend.coverage.exists'], 'Yes')))
+        inputs:
+          targetType: 'inline'
+          script: |
+            mkdir -p $(Build.SourcesDirectory)/coverage/src
+            find $(Build.SourcesDirectory)/web-coverage -name \*.xml -exec ln -s \{\} $(Build.SourcesDirectory)/coverage/ \;
+            find $(Build.SourcesDirectory)/backend-coverage -name \*.xml -exec ln -s \{\} $(Build.SourcesDirectory)/coverage/ \;
+            find $(Build.SourcesDirectory)/backendworker -maxdepth 1 -type d -name NHSOnline.\* -exec ln -s \{\} $(Build.SourcesDirectory)/coverage/src/ \;
+            ln -s $(Build.SourcesDirectory)/web/src $(Build.SourcesDirectory)/coverage/src/
+            ls -lR $(Build.SourcesDirectory)/coverage
+
+      - task: PublishCodeCoverageResults@1
+        displayName: Publish coverage report
+        condition: and(succeeded(), or(eq(variables['web.coverage.exists'], 'Yes'), eq(variables['backend.coverage.exists'], 'Yes')))
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: coverage/*.xml
+          pathToSources: $(Build.SourcesDirectory)/coverage/src

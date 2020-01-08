@@ -65,11 +65,11 @@ then
 fi
 
 # create run time version of docker-compose and environment variables so we can append values for throttling/cosmos tests
-DOCKER_COMPOSE_FILES="../../docker-compose.yml ../docker-compose.yml"
+DOCKER_COMPOSE_FILES="../../docker-compose.yml ../../docker/bddtests/docker-compose.yml"
 if [ "$RUN_LOCAL_BDD" == 1 ]
 then
   DOCKER_COMPOSE_PORT_FILES=$(env | grep _DOCKER_PORTS | sed 's#^.*_DOCKER_PORTS=#../../docker/#')
-  DOCKER_COMPOSE_FILES="$DOCKER_COMPOSE_FILES ../../docker-compose.ports.yml ../docker-compose.ports.yml $DOCKER_COMPOSE_PORT_FILES"
+  DOCKER_COMPOSE_FILES="$DOCKER_COMPOSE_FILES ../../docker-compose.ports.yml ../../docker/bddtests/docker-compose.ports.yml $DOCKER_COMPOSE_PORT_FILES"
 fi
 
 echo 'version: "3.4"' > docker-compose.ci-run.yml
@@ -342,7 +342,7 @@ for TAG in ${TAGS[*]}; do
   fi
 
   docker-compose -p "$TAG" $DOCKER_COMPOSE_FILES_ARG up -d || die "Docker compose failure"
-    
+
   ##################### Runtime vars
   WEB_ID=$(docker ps -qf name=${TAG}_web.*)
   NETWORK=$(docker inspect $WEB_ID --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' | cut -c 1-12)
@@ -405,7 +405,7 @@ for TAG in ${TAGS[*]}; do
           -Dwebdriver.base.url=$(cat vars_test_runner.env | grep url | cut -f2 -d'=') ; \
           echo $(date) - $TAG Completed; \
         chown -R $USER_ID:$GROUP_ID /repo" &
-      
+
     PID=$!
 
     # give the test container time to startup
@@ -432,7 +432,7 @@ for TAG in ${TAGS[*]}; do
           $APPIUM_TYPE \
           -Dwebdriver.base.url=$(cat vars_test_runner.env | grep url | cut -f2 -d'='); \
         chown -R $USER_ID:$GROUP_ID /repo" &
-      
+
       PID=$!
   fi
 

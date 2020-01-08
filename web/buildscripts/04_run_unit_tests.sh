@@ -28,8 +28,3 @@ fi;
 if [ -z "$TF_BUILD" ]; then
   exit $test_run_result
 fi;
-
-if [ $test_run_result -ne 0 ]; then
-  echo "##vso[task.logissue type=error]Web Unit Tests Failed"
-  echo "##vso[task.complete result=Failed;]Web Unit Tests Failed"
-fi;

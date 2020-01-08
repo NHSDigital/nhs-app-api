@@ -1,0 +1,54 @@
+jobs:
+  - job: init
+    displayName: Initialise
+    variables:
+      report.path.detekt: bddtests/target/site/detekt
+      report.path.gherkin: bddtests/target/site/Gherkin-Report.html
+    steps:
+      - template: set-branch-tag-steps.yml
+      - template: docker-login-steps.yml
+
+      - task: ShellScript@2
+        displayName: Generate Tranche Matrix
+        name: matrix
+        inputs:
+          scriptPath: bddtests/buildscripts/01_integration_test_tranche_matrix.sh
+
+      - task: ShellScript@2
+        displayName: Analyse
+        condition: and(succeeded(), variables['matrix.tranches'])
+        inputs:
+          scriptPath: bddtests/buildscripts/02_integration_test_code_analysis.sh
+
+      - task: Bash@3
+        displayName: Check for report directories
+        condition: succeededOrFailed()
+        inputs:
+          targetType: 'inline'
+          script: |
+            if [ -d "$REPORT_PATH_DETEKT" ]; then
+              echo "Detekt report exists"
+              echo "##vso[task.setvariable variable=report.path.detekt.exists]Yes"
+            fi
+            if [ -f "$REPORT_PATH_GHERKIN" ]; then
+              echo "Gherkin report exists"
+              mkdir -p "$BUILD_ARTIFACTSTAGINGDIRECTORY/CodeAnalysis"
+              cp "$REPORT_PATH_GHERKIN" "$BUILD_ARTIFACTSTAGINGDIRECTORY/CodeAnalysis"
+              echo "##vso[task.setvariable variable=report.path.gherkin.exists]Yes"
+            fi
+
+      - task: ArchiveFiles@2
+        displayName: Zip detekt report
+        condition: and(succeededOrFailed(), eq(variables['report.path.detekt.exists'], 'Yes'))
+        inputs:
+          rootFolderOrFile: $(report.path.detekt)
+          includeRootFolder: true
+          archiveType: zip
+          archiveFile: '$(Build.ArtifactStagingDirectory)/CodeAnalysis/detekt_report.zip'
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish artifacts
+        condition: and(succeededOrFailed(), or(eq(variables['report.path.detekt.exists'], 'Yes'), eq(variables['report.path.gherkin.exists'], 'Yes')))
+        inputs:
+          pathToPublish: '$(Build.ArtifactStagingDirectory)/CodeAnalysis'
+          artifactName: Integration Tests Code Analysis

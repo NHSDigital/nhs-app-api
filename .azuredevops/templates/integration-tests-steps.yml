@@ -1,0 +1,95 @@
+
+steps:
+  - template: set-branch-tag-steps.yml
+  - template: docker-login-steps.yml
+
+  - task: ShellScript@2
+    displayName: Run
+    timeoutInMinutes: 120
+    env:
+      AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY: $(azure.notification.hub.shared.access.key)
+      TERMS_CONDITIONS_COSMOS_AUTH_KEY: $(terms.conditions.cosmos.auth.key)
+    inputs:
+      scriptPath: bddtests/buildscripts/$(tests.script)
+
+  - task: Bash@3
+    displayName: Check for report directories
+    condition: succeededOrFailed()
+    inputs:
+      targetType: 'inline'
+      script: |
+        if [ -d "$REPORT_PATH_SERENITY" ]; then
+          echo "##vso[task.setvariable variable=report.path.serenity.exists]Yes"
+        fi
+        if [ -d "$REPORT_PATH_DOCKER_LOGS" ]; then
+          echo "##vso[task.setvariable variable=report.path.docker.logs.exists]Yes"
+        fi
+        if [ -d "$REPORT_PATH_JUNIT_LOGS" ]; then
+          echo "##vso[task.setvariable variable=report.path.junit.logs.exists]Yes"
+        fi
+        if [ -d "$REPORT_PATH_PA11Y" ]; then
+          echo "##vso[task.setvariable variable=report.path.pa11y.exists]Yes"
+        fi
+
+  - task: ArchiveFiles@2
+    displayName: Zip serenity report
+    condition: and(succeededOrFailed(), eq(variables['report.path.serenity.exists'], 'Yes'))
+    inputs:
+      rootFolderOrFile: $(report.path.serenity)
+      includeRootFolder: true
+      archiveType: zip
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(tests.name)/serenity_report.zip'
+
+  - task: ArchiveFiles@2
+    displayName: Zip docker logs
+    condition: and(succeededOrFailed(), eq(variables['report.path.docker.logs.exists'], 'Yes'))
+    inputs:
+      rootFolderOrFile: $(report.path.docker.logs)
+      includeRootFolder: true
+      archiveType: zip
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(tests.name)/docker_logs.zip'
+
+  - task: ArchiveFiles@2
+    displayName: Zip junit logs
+    condition: and(succeededOrFailed(), eq(variables['report.path.junit.logs.exists'], 'Yes'))
+    inputs:
+      rootFolderOrFile: $(report.path.junit.logs)
+      includeRootFolder: true
+      archiveType: zip
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(tests.name)/junit_logs.zip'
+
+  - task: ArchiveFiles@2
+    displayName: Zip pa11y report
+    condition: and(succeededOrFailed(), eq(variables['report.path.pa11y.exists'], 'Yes'))
+    inputs:
+      rootFolderOrFile: $(report.path.pa11y)
+      includeRootFolder: true
+      archiveType: zip
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(tests.name)/pally_report.zip'
+
+  - task: Bash@3
+    displayName: Check for artifacts directory
+    condition: succeededOrFailed()
+    inputs:
+      targetType: 'inline'
+      script: |
+        if [ -d "$BUILD_ARTIFACTSTAGINGDIRECTORY/$TESTS_NAME" ]; then
+          echo "##vso[task.setvariable variable=artifacts.directory.exists]Yes"
+        fi
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish artifacts
+    condition: and(succeededOrFailed(), eq(variables['artifacts.directory.exists'], 'Yes'))
+    inputs:
+      pathToPublish: '$(Build.ArtifactStagingDirectory)/$(tests.name)'
+      artifactName: Integration Tests $(tests.name)
+
+  - task: PublishTestResults@2
+    displayName: Publish test results
+    condition: and(succeededOrFailed(), eq(variables['report.path.junit.logs.exists'], 'Yes'))
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: '**/TEST-*.xml'
+      searchFolder: '$(Build.SourcesDirectory)/$(report.path.junit.logs)'
+      testRunTitle: Integration Tests $(tests.name)
+      failTaskOnFailedTests: true

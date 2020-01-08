@@ -1,0 +1,10 @@
+parameters:
+  additionalVariables: {}
+
+variables:
+  report.path.serenity: bddtests/target/site/serenity
+  report.path.docker.logs: bddtests/logs
+  report.path.junit.logs: bddtests/build/test-results
+  report.path.pa11y: bddtests/target/site/pa11y
+  report.path.gherkin: bddtests/target/site/Gherkin-Report.html
+  ${{ insert }}: ${{ parameters.additionalVariables }}

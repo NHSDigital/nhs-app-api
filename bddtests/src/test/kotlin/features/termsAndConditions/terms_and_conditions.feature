@@ -41,20 +41,12 @@ Feature: Use Terms and conditions page
     When I agree to the updated terms and conditions
     Then I see the home page
 
-  Scenario: A patient can navigate back to the the login page when clicking the back arrow
-    Given I am a EMIS patient
-    And I have not already accepted terms and conditions
-    And I am logged in
-    When I am on the Terms and conditions page
-    And I click the back arrow
-    Then I see the login page
-
   Scenario: A patient can navigate to the Privacy policy page
     Given I am a EMIS patient
     And I have not already accepted terms and conditions
     And I am logged in
     And I am on the Terms and conditions page
-    When I click the link called 'privacy policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/'
+    When I click the link called 'privacy policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Cookies policy page
@@ -62,7 +54,7 @@ Feature: Use Terms and conditions page
     And I have not already accepted terms and conditions
     And I am logged in
     And I am on the Terms and conditions page
-    When I click the link called 'cookies policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/'
+    When I click the link called 'cookies policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/'
     Then a new tab has been opened by the link
 
   Scenario: A patient can navigate to the Terms of use page
@@ -70,5 +62,5 @@ Feature: Use Terms and conditions page
     And I have not already accepted terms and conditions
     And I am logged in
     And I am on the Terms and conditions page
-    When I click the link called 'terms of use' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/'
+    When I click the link called 'terms of use' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/'
     Then a new tab has been opened by the link

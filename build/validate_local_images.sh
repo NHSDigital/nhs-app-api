@@ -6,10 +6,10 @@ MISSING_IMAGES=0
 for IMAGE in $IMAGES; do
     REGISTRY_VAR="${IMAGE}_DOCKER_REGISTRY"
     REGISTRY=${!REGISTRY_VAR:-local};
-    
+
     if [ "$REGISTRY" == "local" ]; then
         TAG_VAR="${IMAGE}"_DOCKER_TAG
-        TAG=${!REGISTRY_VAR:-latest};
+        TAG=${!TAG_VAR:-latest};
 
         if [ "$IMAGE" == "SJRCONFIG" ]; then
             IMAGE="service-journey-dev-config"
@@ -25,8 +25,8 @@ for IMAGE in $IMAGES; do
 
         IMAGE_REF=$REGISTRY/nhsonline-${IMAGE}:$TAG
 
-        if [ -z `docker image ls -q --filter=reference=$IMAGE_REF` ]; then
-            echo Missing image $IMAGE_REF
+        if [ -z "$(docker image ls -q --filter=reference="$IMAGE_REF")" ]; then
+            echo Missing image "$IMAGE_REF"
             MISSING_IMAGES=$((MISSING_IMAGES+1))
         fi;
     fi;

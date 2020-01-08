@@ -17,8 +17,7 @@
         <header-slim
           :show-in-native="true"
           :click-url="loginUrl"
-        >
-        </header-slim>
+        />
       </div>
       <div class="nhsuk-width-container">
         <div class="nhsuk-grid-row">

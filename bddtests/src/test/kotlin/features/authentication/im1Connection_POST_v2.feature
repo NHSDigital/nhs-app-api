@@ -263,7 +263,6 @@ Feature: Im1 Connection V2 POST
       | TPP       | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
       | VISION    | 400        | 1      | 502            | 100          | Unmapped Error                                                 |
 
-  @long-running
   Scenario Outline: A <GP System> user registering with Im1, when the request times out, receives a 504 timeout error
     Given I am a <GP System> user wishing to register but the request will timeout
     And no IM1 Connection Token is currently cached

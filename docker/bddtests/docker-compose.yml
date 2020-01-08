@@ -28,50 +28,50 @@ services:
 
   web.local.bitraft.io:
     env_file:
-     - ./bddtests/docker/web.env
+     - ./docker/bddtests/env/web.env
 
   pfs.local.bitraft.io:
     env_file:
-      - ./bddtests/docker/brothermailer_connectivity.env
-      - ./bddtests/docker/emis_connectivity.env
-      - ./bddtests/docker/gplookup_connectivity.env
-      - ./bddtests/docker/microtest_connectivity.env
-      - ./bddtests/docker/nhslogin_connectivity.env
-      - ./bddtests/docker/onlineconsultationsproviders_connectivity.env
-      - ./bddtests/docker/organdonation_connectivity.env
-      - ./bddtests/docker/session_database.env
-      - ./bddtests/docker/spine_connectivity.env
-      - ./bddtests/docker/tpp_connectivity.env
-      - ./bddtests/docker/vision_connectivity.env
-      - ./bddtests/docker/pfs.env
+      - ./docker/bddtests/env/brothermailer_connectivity.env
+      - ./docker/bddtests/env/emis_connectivity.env
+      - ./docker/bddtests/env/gplookup_connectivity.env
+      - ./docker/bddtests/env/microtest_connectivity.env
+      - ./docker/bddtests/env/nhslogin_connectivity.env
+      - ./docker/bddtests/env/onlineconsultationsproviders_connectivity.env
+      - ./docker/bddtests/env/organdonation_connectivity.env
+      - ./docker/bddtests/env/session_database.env
+      - ./docker/bddtests/env/spine_connectivity.env
+      - ./docker/bddtests/env/tpp_connectivity.env
+      - ./docker/bddtests/env/vision_connectivity.env
+      - ./docker/bddtests/env/pfs.env
     volumes:
       - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
 
   cid.local.bitraft.io:
     env_file:
-      - ./bddtests/docker/emis_connectivity.env
-      - ./bddtests/docker/microtest_connectivity.env
-      - ./bddtests/docker/nhslogin_connectivity.env
-      - ./bddtests/docker/session_database.env
-      - ./bddtests/docker/tpp_connectivity.env
-      - ./bddtests/docker/vision_connectivity.env
+      - ./docker/bddtests/env/emis_connectivity.env
+      - ./docker/bddtests/env/microtest_connectivity.env
+      - ./docker/bddtests/env/nhslogin_connectivity.env
+      - ./docker/bddtests/env/session_database.env
+      - ./docker/bddtests/env/tpp_connectivity.env
+      - ./docker/bddtests/env/vision_connectivity.env
     volumes:
       - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
 
   users.local.bitraft.io:
     env_file:
-      - ./bddtests/docker/nhslogin_connectivity.env
-      - ./bddtests/docker/notificationhub_connectivity.env
+      - ./docker/bddtests/env/nhslogin_connectivity.env
+      - ./docker/bddtests/env/notificationhub_connectivity.env
 
   userinfo.local.bitraft.io:
     env_file:
-      - ./bddtests/docker/nhslogin_connectivity.env
+      - ./docker/bddtests/env/nhslogin_connectivity.env
     volumes:
       - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
 
   messages.local.bitraft.io:
     env_file:
-      - ./bddtests/docker/nhslogin_connectivity.env
+      - ./docker/bddtests/env/nhslogin_connectivity.env
 
   stubs.local.bitraft.io:
     image: ${WIREMOCK_DOCKER_REGISTRY:-nhsapp.azurecr.io}/wiremock:${WIREMOCK_DOCKER_TAG:-2.22.0-alpine}

@@ -12,43 +12,33 @@ then
   docker rm nhsonline-backend-test-run
 fi
 
-RUN_UNIT_TESTS_COMMAND='
-  mkdir /coverage; \
-  dotnet test \
-  -c Release \
-  --no-build \
-  --results-directory TestResults \
-  --logger:trx \
-  /p:CollectCoverage=true \
-  /p:CoverletOutputFormat=cobertura; \
-  test_run_result=$?; \
-  mkdir /TestResults; \
-  index=1; \
-  for trx in */TestResults/*.trx; do \
-    cp $trx /TestResults/$index.trx; \
-    ((index+=1)); \
-  done; \
-  index=1; \
-  for coverage in */coverage.cobertura.xml; do \
-    sed "#\s*<source>.*</source>#<source>backendworker/</source>#" $coverage > /coverage/$index.coverage.cobertura.xml; \
-    ((index+=1)); \
-  done; '
-
-if [ -z "$TF_BUILD" ]; then
-  RUN_UNIT_TESTS_COMMAND+='exit $test_run_result;'
-else
-  RUN_UNIT_TESTS_COMMAND+='if [ $test_run_result -ne 0 ]; then \
-  echo "##vso[task.logissue type=error]Backend Unit Tests Failed"; \
-  echo "##vso[task.complete result=Failed;]Backend Unit Tests Failed"; \
-fi;'
-fi;
-
 set +e
 
 docker run \
   --name nhsonline-backend-test-run \
   "local/backend-build:$COMMIT_ID" \
-  bash -c "$RUN_UNIT_TESTS_COMMAND"
+  bash -c "
+    mkdir /coverage; \
+    dotnet test \
+    -c Release \
+    --no-build \
+    --results-directory TestResults \
+    --logger:trx \
+    /p:CollectCoverage=true \
+    /p:CoverletOutputFormat=cobertura; \
+    test_run_result=\$?; \
+    mkdir /TestResults; \
+    index=1; \
+    for trx in */TestResults/*.trx; do \
+      cp \$trx /TestResults/\$index.trx; \
+      ((index+=1)); \
+    done; \
+    index=1; \
+    for coverage in */coverage.cobertura.xml; do \
+      sed \"#\s*<source>.*</source>#<source>backendworker/</source>#\" \$coverage > /coverage/\$index.coverage.cobertura.xml; \
+      ((index+=1)); \
+    done;
+    exit \$test_run_result;"
 
 test_run_result=$?
 
@@ -60,9 +50,4 @@ fi;
 
 if [ -z "$TF_BUILD" ]; then
   exit $test_run_result
-fi;
-
-if [ $test_run_result -ne 0 ]; then
-  echo "##vso[task.logissue type=error]Backend Unit Tests Failed"
-  echo "##vso[task.complete result=Failed;]Backend Unit Tests Failed"
 fi;

@@ -1,4 +1,5 @@
 @appointments
+@appointments-book
 @book
 @backend
 Feature: Book Appointments Backend

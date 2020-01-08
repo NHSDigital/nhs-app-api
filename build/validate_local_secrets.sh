@@ -3,7 +3,7 @@
 set -e
 
 MISSING_SECRETS=0
-    
+
 POSSIBLE_KEYBASE_PATHS=(/k /Volumes/Keybase /keybase)
 for possible_keybase_path in ${POSSIBLE_KEYBASE_PATHS[*]}; do
     if [ -d "$possible_keybase_path" ]; then
@@ -25,7 +25,7 @@ function validate_secret {
         echo "$SECRET_KEYBASE_PATH => $SECRET_LOCAL_PATH"
         cp "$SECRET_KEYBASE_PATH" "$SECRET_LOCAL_PATH"
     fi
-    
+
     if [ ! -f "$SECRET_LOCAL_PATH" ]; then
         echo "Missing secret $SECRET_LOCAL_PATH (from Keybase $SECRET_KEYBASE_PATH)"
         MISSING_SECRETS=$((MISSING_SECRETS+1))
@@ -43,6 +43,7 @@ validate_secret organ_donation_cert.pfx
 validate_secret session_encryption_key
 validate_secret spine_client_cert.password
 validate_secret spine_client_cert.pfx
+validate_secret terms_conditions_cosmos_auth_key
 validate_secret tpp_client_cert.password
 validate_secret tpp_client_cert.pfx
 

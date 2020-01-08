@@ -1,0 +1,7 @@
+version: "3.4"
+
+services:
+
+  web.local.bitraft.io:
+    environment:
+      ONLINE_CONSULTATIONS_ENABLED: 'true'

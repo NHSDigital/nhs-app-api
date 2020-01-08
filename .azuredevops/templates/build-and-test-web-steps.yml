@@ -1,0 +1,78 @@
+
+steps:
+  - template: set-branch-tag-steps.yml
+  - template: docker-login-steps.yml
+
+  - task: ShellScript@2
+    displayName: Restore web packages
+    inputs:
+      scriptPath: web/buildscripts/01_restore_dependencies.sh
+
+  - task: ShellScript@2
+    displayName: Build web
+    inputs:
+      scriptPath: web/buildscripts/02_build.sh
+
+  - task: ShellScript@2
+    displayName: Run web linting
+    inputs:
+      scriptPath: web/buildscripts/03_run_lint.sh
+
+  - task: ShellScript@2
+    displayName: Run web unit tests
+    inputs:
+      scriptPath: web/buildscripts/04_run_unit_tests.sh
+
+  - task: Bash@3
+    displayName: Check for test container
+    inputs:
+      targetType: 'inline'
+      script: |
+        if [ "$(docker ps -a -q --filter=name=nhsonline-web-test-run)" ]; then
+          echo "##vso[task.setvariable variable=unit.test.container.exists]Yes"
+        fi
+
+  - task: ShellScript@2
+    displayName: Retrieve web unit test results and coverage
+    condition: eq(variables['unit.test.container.exists'], 'Yes')
+    inputs:
+      scriptPath: web/buildscripts/05_extract_test_results.sh
+
+  - task: Bash@3
+    name: checkdirs
+    displayName: Check for results directories
+    inputs:
+      targetType: 'inline'
+      script: |
+        if [ -f "web/web-unit-test-results.xml" ]; then
+          echo "##vso[task.setvariable variable=unit.test.results.exists]Yes"
+        fi
+        if [ -f "web/web-unit-test-coverage.xml" ]; then
+          echo "##vso[task.setvariable variable=unit.test.coverage.exists]Yes"
+          echo "##vso[task.setvariable variable=unit.test.coverage.exists;isOutput=true]Yes"
+        fi
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish unit test coverage
+    condition: eq(variables['unit.test.coverage.exists'], 'Yes')
+    inputs:
+      pathToPublish: 'web/web-unit-test-coverage.xml'
+      artifactName: 'web-coverage'
+
+  - task: PublishTestResults@2
+    displayName: Publish web unit test results
+    condition: eq(variables['unit.test.results.exists'], 'Yes')
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: web/web-unit-test-results.xml
+      failTaskOnFailedTests: true
+
+  - task: ShellScript@2
+    displayName: Run security scan
+    inputs:
+      scriptPath: web/buildscripts/06_test_security_scan.sh
+
+  - task: ShellScript@2
+    displayName: Build web docker image
+    inputs:
+      scriptPath: web/buildscripts/07_build_docker_image.sh

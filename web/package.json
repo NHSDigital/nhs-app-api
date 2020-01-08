@@ -8,7 +8,7 @@
     "build": "npm run swagger-node-full && npm run transpile && nuxt build",
     "dev": "npm run swagger-node-full && npm run transpile && nuxt",
     "generate": "npm run swagger-node-full && nuxt generate",
-    "lint-raw": "eslint --ext .js,.vue src test nuxt.config.js",
+    "lint-raw": "eslint --max-warnings 0 --ext .js,.vue src test nuxt.config.js",
     "lint": "npm run transpile && npm run lint-raw",
     "lintfix": "npm run transpile && eslint --fix --ext .js,.vue .",
     "start": "nuxt start",

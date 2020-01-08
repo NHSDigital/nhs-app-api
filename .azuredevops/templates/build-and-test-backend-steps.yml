@@ -1,0 +1,112 @@
+steps:
+  - template: set-branch-tag-steps.yml
+  - template: docker-login-steps.yml
+
+  - task: ShellScript@2
+    displayName: Restore backend packages
+    inputs:
+      scriptPath: backendworker/buildscripts/01_restore_packages.sh
+
+  - task: ShellScript@2
+    displayName: Build backend
+    inputs:
+      scriptPath: backendworker/buildscripts/02_build.sh
+
+  - task: ShellScript@2
+    displayName: Run backend unit tests
+    inputs:
+      scriptPath: backendworker/buildscripts/03_run_unit_tests.sh
+
+  - task: Bash@3
+    displayName: Check for test container
+    inputs:
+      targetType: 'inline'
+      script: |
+        if [ "$(docker ps -a -q --filter=name=nhsonline-backend-test-run)" ]; then
+          echo "##vso[task.setvariable variable=unit.test.container.exists]Yes"
+        fi
+
+  - task: ShellScript@2
+    displayName: Retrieve backend unit tests results and coverage
+    condition: eq(variables['unit.test.container.exists'], 'Yes')
+    inputs:
+      scriptPath: backendworker/buildscripts/04_extract_test_results.sh
+
+  - task: Bash@3
+    name: checkdirs
+    displayName: Check for results directories
+    inputs:
+      targetType: 'inline'
+      script: |
+        if [ -d "backendworker/TestResults" ]; then
+          echo "##vso[task.setvariable variable=unit.test.results.exists]Yes"
+        fi
+        if [ -d "backendworker/coverage" ]; then
+          echo "##vso[task.setvariable variable=unit.test.coverage.exists]Yes"
+          echo "##vso[task.setvariable variable=unit.test.coverage.exists;isOutput=true]Yes"
+        fi
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish unit test coverage
+    condition: eq(variables['unit.test.coverage.exists'], 'Yes')
+    inputs:
+      pathToPublish: 'backendworker/coverage'
+      artifactName: 'backend-coverage'
+
+  - task: PublishTestResults@2
+    displayName: Publish backend unit test results
+    condition: eq(variables['unit.test.results.exists'], 'Yes')
+    inputs:
+      testResultsFormat: VSTest
+      testResultsFiles: backendworker/TestResults/*.trx
+      failTaskOnFailedTests: true
+
+  - task: ShellScript@2
+    displayName: Package PFS API
+    inputs:
+      scriptPath: backendworker/buildscripts/05_package_pfs_api.sh
+
+  - task: ShellScript@2
+    displayName: Package CID API
+    inputs:
+      scriptPath: backendworker/buildscripts/06_package_cid_api.sh
+
+  - task: ShellScript@2
+    displayName: Package SJR API
+    inputs:
+      scriptPath: backendworker/buildscripts/07_package_sjr_api.sh
+
+  - task: ShellScript@2
+    displayName: Package CDSS Wiremock
+    inputs:
+      scriptPath: backendworker/buildscripts/08_package_cdss_wiremock.sh
+
+  - task: ShellScript@2
+    displayName: Validate non-live SJR config
+    inputs:
+      scriptPath: backendworker/buildscripts/09_validate_non_live_sjr_config.sh
+
+  - task: ShellScript@2
+    displayName: Package non-live SJR config
+    inputs:
+      scriptPath: backendworker/buildscripts/10_package_non_live_sjr_config.sh
+
+  - task: ShellScript@2
+    displayName: Package Logger API
+    inputs:
+      scriptPath: backendworker/buildscripts/11_package_logger_api.sh
+
+  - task: ShellScript@2
+    displayName: Package Users API
+    inputs:
+      scriptPath: backendworker/buildscripts/12_package_users_api.sh
+
+  - task: ShellScript@2
+    displayName: Package User Info API
+    inputs:
+      scriptPath: backendworker/buildscripts/13_package_userinfo_api.sh
+
+  - task: ShellScript@2
+    displayName: Package Messages API
+    inputs:
+      scriptPath: backendworker/buildscripts/14_package_messages_api.sh

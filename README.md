@@ -127,7 +127,7 @@ The following can be specified with `make run-bdd` to customise the behaviour
 | Option           | Description                                                                                                   |
 | ---------------  | -----------                                                                                                   |
 | RUN_LOCAL_BDD=1  | Starts the containers configured as specified but with ports exposed to allow local running of the BDD tests. |
-| SKIP_PREPARE=1   | Bypasses the gradle prepare step. Useful if restarting the containers and this has already been run.          |
+| SKIP_ANALYSIS=1  | Bypasses the gradle code analysis step.                                                                       |
 | TAG=[dockertag]  | Pull images with the specified \[dockertag\] to run the tests against.                                        |
 
 ## Secrets

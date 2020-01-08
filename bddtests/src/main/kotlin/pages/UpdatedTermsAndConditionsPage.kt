@@ -6,8 +6,8 @@ import net.thucydides.core.annotations.DefaultUrl
 class UpdatedTermsAndConditionsPage : HybridPageObject() {
 
     val updatedTermsAndConditionsLabel = HybridPageElement(
-            webDesktopLocator = "//label[@id='termsAndConditionsCheckboxLabel']",
-            webMobileLocator  = "//label[@id='termsAndConditionsCheckboxLabel']",
+            webDesktopLocator = "//label[@id='termsAndConditions-agree_checkbox-label']",
+            webMobileLocator  = "//label[@id='termsAndConditions-agree_checkbox-label']",
             androidLocator = null,
             page = this
     )

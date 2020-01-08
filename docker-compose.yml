@@ -54,11 +54,24 @@ services:
       - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
       - -c        # Therefore we run a script before starting the service to read the file into an env var
       - |
-          export TPP_CERTIFICATE_PASSWORD=$$(<$$TPP_CERTIFICATE_PASSWORD)
-          export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
-          export ORGAN_DONATION_CERT_PASSPHRASE=$$(<$$ORGAN_DONATION_CERT_PASSPHRASE)
-          export SPINE_CERT_PASSWORD=$$(<$$SPINE_CERT_PASSWORD)
-          export GP_LOOKUP_API_KEY=$$(<$$GP_LOOKUP_API_KEY)
+          if [ -f "$$TPP_CERTIFICATE_PASSWORD" ]; then
+            export TPP_CERTIFICATE_PASSWORD=$$(<$$TPP_CERTIFICATE_PASSWORD)
+          fi
+          if [ -f "$$MICROTEST_CERT_PASSPHRASE" ]; then
+            export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
+          fi
+          if [ -f "$$ORGAN_DONATION_CERT_PASSPHRASE" ]; then
+            export ORGAN_DONATION_CERT_PASSPHRASE=$$(<$$ORGAN_DONATION_CERT_PASSPHRASE)
+          fi
+          if [ -f "$$SPINE_CERT_PASSWORD" ]; then
+            export SPINE_CERT_PASSWORD=$$(<$$SPINE_CERT_PASSWORD)
+          fi
+          if [ -f "$$GP_LOOKUP_API_KEY" ]; then
+            export GP_LOOKUP_API_KEY=$$(<$$GP_LOOKUP_API_KEY)
+          fi
+          if [ -f "$$TERMS_CONDITIONS_COSMOS_AUTH_KEY" ]; then
+            export TERMS_CONDITIONS_COSMOS_AUTH_KEY=$$(<$$TERMS_CONDITIONS_COSMOS_AUTH_KEY)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.PfsApi.dll
@@ -96,8 +109,12 @@ services:
       - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
       - -c        # Therefore we run a script before starting the service to read the file into an env var
       - |
-          export TPP_CERTIFICATE_PASSWORD=$$(<$$TPP_CERTIFICATE_PASSWORD)
-          export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
+          if [ -f "$$TPP_CERTIFICATE_PASSWORD" ]; then
+            export TPP_CERTIFICATE_PASSWORD=$$(<$$TPP_CERTIFICATE_PASSWORD)
+          fi
+          if [ -f "$$MICROTEST_CERT_PASSPHRASE" ]; then
+            export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.CidApi.dll
@@ -138,7 +155,9 @@ services:
       - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
       - -c        # Therefore we run a script before starting the service to read the file into an env var
       - |
-          export AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
+          if [ -f "$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" ]; then
+            export AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.UsersApi.dll

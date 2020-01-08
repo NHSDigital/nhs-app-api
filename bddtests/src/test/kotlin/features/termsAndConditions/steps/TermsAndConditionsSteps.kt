@@ -20,8 +20,8 @@ open class TermsAndConditionsSteps {
         return termsAndConditionsPage.isSecondaryErrorMessageVisible()
     }
     @Step
-    fun tcCheckBoxVisible() : Boolean {
-        return termsAndConditionsPage.isTcCheckBoxVisible()
+    fun assertTcCheckBoxVisible() {
+        termsAndConditionsPage.assertTcCheckBoxVisible()
     }
     @Step
     fun continueButtonVisible() : Boolean {

@@ -56,7 +56,6 @@ Feature: View Available Appointment Slots Backend
       | VISION    |
       | MICROTEST |
 
-  @long-running
   Scenario Outline: Requesting available appointment slots the <GP System> times out and returns "Gateway Timeout" error
     Given the system will time out when trying to retrieve <GP System> appointment slots
     And I have logged in and have a valid session cookie

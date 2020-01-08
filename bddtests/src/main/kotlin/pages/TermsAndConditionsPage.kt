@@ -1,6 +1,7 @@
 package pages
 
 import net.thucydides.core.annotations.DefaultUrl
+import pages.sharedElements.CheckBoxElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/terms-and-conditions")
 class TermsAndConditionsPage : HybridPageObject() {
@@ -23,26 +24,19 @@ class TermsAndConditionsPage : HybridPageObject() {
             page = this
     )
 
-    val tcCheckBox = HybridPageElement(
-            webDesktopLocator = "//input[@id='termsAndConditions-agree_checkbox']",
-            androidLocator = null,
-            page = this
+    private val tcCheckBox = CheckBoxElement(
+            page = this,
+            text = "I understand and accept the terms of use and privacy policy."
     )
 
     val termsAndConditionsLabel = HybridPageElement(
-            webDesktopLocator = "//label[@id='termsAndConditionsCheckboxLabel']",
+            webDesktopLocator = "//label[@id='termsAndConditions-agree_checkbox-label']",
             androidLocator = null,
             page = this
     )
 
     val continueButton = HybridPageElement(
             webDesktopLocator = "//*[@id='btn_accept']",
-            androidLocator = null,
-            page = this
-    )
-
-    val tcBackButton = HybridPageElement(
-            webDesktopLocator = "//*[@id='backIcon']",
             androidLocator = null,
             page = this
     )
@@ -59,8 +53,8 @@ class TermsAndConditionsPage : HybridPageObject() {
         return secondaryErrorMessage.isVisible
     }
 
-    fun isTcCheckBoxVisible() : Boolean {
-        return tcCheckBox.isVisible
+    fun assertTcCheckBoxVisible() {
+        tcCheckBox.assertIsVisible()
     }
 
     fun isContinueButtonVisible() : Boolean {

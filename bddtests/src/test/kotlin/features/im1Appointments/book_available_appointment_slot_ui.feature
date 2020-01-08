@@ -1,4 +1,5 @@
 @appointments
+@appointments-book
 @book
 Feature: Book Appointments Frontend
   In order to complete a booking appointment

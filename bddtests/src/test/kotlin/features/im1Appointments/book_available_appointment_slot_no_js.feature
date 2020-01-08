@@ -1,4 +1,5 @@
 @appointments
+@appointments-book
 @book
 @noJs
 Feature: Book Appointments With Javascript Disabled

@@ -4,20 +4,38 @@ end_of_line=lf
 charset=utf-8
 indent_style=space
 indent_size=4
+trim_trailing_whitespace=true
 
 [*.{csproj,props,targets}]
 end_of_line=lf
 charset=utf-8
 indent_style=space
 indent_size=2
+trim_trailing_whitespace=true
+
+[*.yml]
+end_of_line=lf
+indent_style=space
+indent_size=2
+trim_trailing_whitespace=true
+
+[*.sh]
+end_of_line=lf
+charset=utf-8
+indent_style=space
+indent_size=2
+trim_trailing_whitespace=true
 
 [Makefile]
 indent_style=tab
 indent_size=4
+trim_trailing_whitespace=true
 
 [*.make]
 indent_style=tab
 indent_size=4
+trim_trailing_whitespace=true
 
 [README.md]
 end_of_line=lf
+trim_trailing_whitespace=true

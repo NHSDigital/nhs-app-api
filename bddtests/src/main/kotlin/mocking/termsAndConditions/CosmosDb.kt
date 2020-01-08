@@ -3,6 +3,9 @@ package mocking
 import com.microsoft.azure.cosmosdb.ConnectionPolicy
 import com.microsoft.azure.cosmosdb.ConsistencyLevel
 import com.microsoft.azure.cosmosdb.Document
+import com.microsoft.azure.cosmosdb.FeedOptions
+import com.microsoft.azure.cosmosdb.PartitionKey
+import com.microsoft.azure.cosmosdb.RequestOptions
 import com.microsoft.azure.cosmosdb.rx.AsyncDocumentClient
 import java.time.OffsetDateTime
 
@@ -24,10 +27,14 @@ object CosmosDb
         val cosmosClient = connectToCosmos(System.getenv("TERMS_CONDITIONS_COSMOS_AUTH_KEY"),
                 System.getenv("TERMS_CONDITIONS_COSMOS_ENDPOINT_URI"))
         val filterQuery = "SELECT * FROM consent r where r.NhsNumber = '096 876 4215'"
+        val feedOptions = FeedOptions()
+        feedOptions.partitionKey = PartitionKey("096 876 4215")
         val feedResponses = cosmosClient.queryDocuments(
-                System.getenv("TERMS_CONDITIONS_COLLECTION_LINK"), filterQuery, null).toBlocking()
+                System.getenv("TERMS_CONDITIONS_COLLECTION_LINK"), filterQuery, feedOptions).toBlocking()
+        val requestOptions = RequestOptions()
+        requestOptions.partitionKey = PartitionKey("096 876 4215")
         feedResponses.toIterable().forEach { feedResponse -> feedResponse.results.forEach { item ->
-            cosmosClient.deleteDocument(item.selfLink, null).subscribe()
+            cosmosClient.deleteDocument(item.selfLink, requestOptions).subscribe()
         }
         }
     }

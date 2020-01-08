@@ -1,4 +1,5 @@
 @appointments
+@appointments-book
 @book
 Feature: Book Telephone Appointments Frontend
 

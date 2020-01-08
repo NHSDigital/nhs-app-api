@@ -6,7 +6,7 @@ set -e
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
 # Cleanup old containers
-OLD_CONTAINERS=$(docker images | grep nhsonline-backend | awk '{print $3}')
+OLD_CONTAINERS=$(docker images --filter=reference=local/nhsonline*api --filter=reference=local/backend-build -q)
 [ -z "$OLD_CONTAINERS" ] || docker rmi -f $OLD_CONTAINERS || true
 
 COMMIT_ID=$(git rev-parse --short HEAD)

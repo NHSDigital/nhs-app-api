@@ -1,4 +1,4 @@
-@prescriptions
+@prescription
 @noJs
 Feature: Prescriptions Service With Javascript Disabled
 

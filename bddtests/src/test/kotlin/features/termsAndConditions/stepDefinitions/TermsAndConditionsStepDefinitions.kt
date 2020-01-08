@@ -6,6 +6,7 @@ import cucumber.api.java.en.When
 import features.termsAndConditions.steps.TermsAndConditionsSteps
 import mocking.CosmosDb
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
 import java.time.OffsetDateTime
 
 class TermsAndConditionsStepDefinitions {
@@ -16,9 +17,9 @@ class TermsAndConditionsStepDefinitions {
 
     @Given("^I am on the Terms and conditions page$")
     fun iAmOnTheTermsAndConditionsPage() {
-        assert(termsAndConditions.mainBodyTextVisible())
-        assert(termsAndConditions.tcCheckBoxVisible())
-        assert(termsAndConditions.continueButtonVisible())
+        Assert.assertTrue("Main body visible", termsAndConditions.mainBodyTextVisible())
+        termsAndConditions.assertTcCheckBoxVisible()
+        Assert.assertTrue("Continue button Visible",termsAndConditions.continueButtonVisible())
     }
 
     @Given("^I have not already accepted terms and conditions$")
@@ -30,11 +31,6 @@ class TermsAndConditionsStepDefinitions {
     fun iHaveAlreadyAcceptedTermsAndConditions() {
         CosmosDb.clearTermsAndConditionsAcceptance()
         CosmosDb.addTermsAndConditionsAcceptance(OffsetDateTime.now())
-    }
-
-    @When("^I click the back arrow$")
-    fun iClickTheBackArrow() {
-        termsAndConditions.termsAndConditionsPage.tcBackButton.click()
     }
 
     @When("^I click the continue button on Terms and Conditions$")
