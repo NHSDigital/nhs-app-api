@@ -11,6 +11,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         int PharmacySearchApiLimit { get; }
 
         int OnlinePharmacyRandomisedSearchResultLimit { get; }
+        
+        int OnlinePharmacySearchResultLimit { get; }
 
         string GpLookupApiKey { get; }
 

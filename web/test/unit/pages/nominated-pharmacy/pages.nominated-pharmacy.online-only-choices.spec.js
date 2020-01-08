@@ -2,9 +2,9 @@ import { create$T, createStore, mount } from '../../helpers';
 import NominatedPharmacyOnlineOnlyChoices from '@/pages/nominated-pharmacy/online-only-choices';
 import RadioGroup from '@/components/RadioGroup';
 import {
-  NOMINATED_PHARMACY_INTERRUPT,
   NOMINATED_PHARMACY_CHOOSE_TYPE,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
+  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
 } from '@/lib/routes';
 import * as dependency from '@/lib/utils';
 
@@ -74,15 +74,15 @@ describe('nominated pharmacy online only choices page', () => {
         expect(continueButton.text())
           .toEqual('translate_nominatedPharmacyOnlineOnlyChoices.continueButton');
       });
-      // todo: update with path to correct page
-      it('will use redirect to PAGE X when yes is selected and the continue button is clicked', () => {
+
+      it('will use redirect to online only search page when yes is selected and the continue button is clicked', () => {
         wrapper.vm.hasTriedToContinue = true;
         wrapper.vm.onlineOnlyChoice = true;
         errorMessage = wrapper.find('#error-message');
         continueButton.trigger('click');
         expect(errorMessage.exists()).toBe(false);
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_INTERRUPT.path);
+          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH.path);
       });
 
       it('will use redirect to search results when no is selected and the continue button is clicked', async () => {

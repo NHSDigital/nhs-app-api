@@ -12,6 +12,7 @@ using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
+using System.Collections.Generic;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 {
@@ -46,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
         {
             _logger.LogEnter();
 
-            var query = CreateOnlinePharmacyOnlySearchQuery();
+            var query = CreateOnlinePharmacyOnlySearchQuery(null);
             try
             {
                 var searchResults = await _gpLookupClient.OrganisationSearch(query);
@@ -86,6 +87,63 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             {
                 _logger.LogExit();
             }
+        }
+
+        public async Task<PharmacySearchResult> SearchOnlineOnlyPharmacies(string searchTerm)
+        {
+            _logger.LogEnter();
+
+            searchTerm = OrganisationSearchUtility.SanitizeOnlinePharmacyNameSearch(searchTerm);
+            
+            var isValid = new ValidateAndLog(_logger)
+                .IsNotNullOrWhitespace(searchTerm, nameof(searchTerm))
+                .IsValid();
+
+            if (!isValid)
+            {
+                return new PharmacySearchResult.BadRequest();
+            }
+           
+            searchTerm = OrganisationSearchUtility.PrepareSearch(searchTerm, false);
+            
+            var query = CreateOnlinePharmacyOnlySearchQuery(searchTerm);
+            try
+            {
+                var searchResults = await _gpLookupClient.OrganisationSearch(query);
+
+                var pharmacySearchResponse = _nhsSearchResultChecker.CheckPharmacies(searchResults);
+
+                if (pharmacySearchResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    var contactablePharmacies = PickContactableOnlinePharmacies(pharmacySearchResponse.Pharmacies);
+
+                    var pharmacies = Enumerable.Empty<PharmacyDetails>();
+
+                    try
+                    {
+                        pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(contactablePharmacies);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, $"Error during mapping list of {nameof(Organisation)} to list of {nameof(PharmacyDetailsResponse)}");
+                        return new PharmacySearchResult.InternalServerError();
+                    }
+
+                    return new PharmacySearchResult.Success(pharmacies);
+                }
+
+                return new PharmacySearchResult.InternalServerError();
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error processing online pharmacy search");
+                return new PharmacySearchResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }        
         }
 
         public async Task<PharmacySearchResult> Search(string searchTerm)
@@ -185,7 +243,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                                          || x.GetContactsArray().Any(c =>
                                              c.OrganisationContactMethodType ==
                                              ResponseEnums.OrganisationContactMethodType.Telephone &&
-                                             !string.IsNullOrEmpty(c.OrganisationContactValue)));
+                                             !string.IsNullOrEmpty(c.OrganisationContactValue))).ToList();
         }
 
         private async Task<PharmacySearchResponse> ExecuteOrganisationPostcodeSearch(OrganisationPostcodeSearchData organisationSearchData, string postcode)
@@ -225,17 +283,29 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             };
         }
 
-        public static OrganisationSearchData CreateOnlinePharmacyOnlySearchQuery()
+        private OrganisationSearchData CreateOnlinePharmacyOnlySearchQuery(string searchTerm)
         {
-            return new OrganisationSearchData
+            var searchData = new OrganisationSearchData
             {
                 Select = "OrganisationName,URL,Contacts,NACSCode",
                 Filter = $"(OrganisationTypeID eq '{Constants.OrganisationTypePharmacy}') and (OrganisationSubType eq '{Constants.OrganisationSubTypeForInternetPharmacy}')",
                 Count = true,
+            };
+
+            if (string.IsNullOrEmpty(searchTerm))
+            {
                 // a big number to make sure all online pharmacies are
                 // included, otherwise NHS search defaults to 50
-                Top = 1000,
-            };
+                searchData.Top = 1000;
+            }
+            else
+            {
+                searchData.Search = searchTerm;
+                searchData.SearchFields = "OrganisationName";
+                searchData.Top = _gpLookupConfig.OnlinePharmacySearchResultLimit;
+            }
+            
+            return searchData;
         }
     }
 }

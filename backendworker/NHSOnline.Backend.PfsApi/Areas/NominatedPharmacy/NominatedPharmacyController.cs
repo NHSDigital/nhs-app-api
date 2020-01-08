@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             await result.Accept(new UpdateNominatedPharmacyResponseAuditingVisitor(_auditor, _logger));
             return result.Accept(new UpdateNominatedPharmacyResponseVisitor());
         }
-
+        
         [HttpGet]
         [ApiVersionRoute("patient/pharmacies")]
         public async Task<IActionResult> Search([FromQuery] string searchTerm)
@@ -105,16 +105,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             await pharmacySearchResult.Accept(new PharmacySearchResponseAuditingVisitor(_auditor, _logger));
             return pharmacySearchResult.Accept(new PharmacySearchResponseVisitor());
         }
-
+     
         [HttpGet]
-        [Route("online-pharmacies")]
-        public async Task<IActionResult> OnlineOnlyPharmacySearch()
+        [ApiVersionRoute("patient/online-pharmacies")]
+        public async Task<IActionResult> OnlineOnlyPharmacySearch([FromQuery] string searchTerm)
         {
             _logger.LogEnter();
-            await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
-                $"Attempting to search for online only pharmacy");
-
-            var pharmacySearchResult = await SearchForOnlineOnlyPharmacies();
+            
+            var pharmacySearchResult = await SearchForOnlineOnlyPharmacies(ModelState, searchTerm);
 
             _logger.LogExit();
 
@@ -133,11 +131,30 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             return await _pharmacySearchService.Search(searchTerm);
         }
 
-        private async Task<PharmacySearchResult> SearchForOnlineOnlyPharmacies()
+        private async Task<PharmacySearchResult> SearchForOnlineOnlyPharmacies(ModelStateDictionary modelState,
+            string searchTerm)
         {
-            _logger.LogInformation("Fetching online only Pharmacies");
-            return await _pharmacySearchService.SearchOnlineOnlyPharmacies();
+            
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
+                    "Attempting to fetch a random list of Online Pharmacies");
+                
+                _logger.LogInformation("Fetching random list of online pharmacies");
+                return await _pharmacySearchService.SearchOnlineOnlyPharmacies();
+            }
+            
+            await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
+                $"Attempting to search for Online Pharmacies by name using search term: {searchTerm}");
+            if (!modelState.IsValid)
+            {
+                return new PharmacySearchResult.ModelValidationError();
+            }
+
+            _logger.LogInformation($"Fetching Online Pharmacies by name using search term: {searchTerm}");
+            return await _pharmacySearchService.SearchOnlineOnlyPharmacies(searchTerm);
         }
+
 
         private async Task<UpdateNominatedPharmacyResponse> UpdateNominatedPharmacy(UpdateNominatedPharmacyRequest model, UserSession userSession)
         {

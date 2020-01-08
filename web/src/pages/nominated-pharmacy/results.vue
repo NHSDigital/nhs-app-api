@@ -5,8 +5,9 @@
         <p v-if="isHighStreetSearch">
           {{ $t('nominatedPharmacySearchResults.resultSummary.distanceInformation') }}
         </p>
-        <p v-else>{{ $t('nominatedPharmacySearchResults.online.information') }}</p>
-
+        <p v-else-if="!isOnlineWithSearch">
+          {{ $t('nominatedPharmacySearchResults.online.random.information') }}
+        </p>
         <menu-item-list id="searchResults">
           <menu-item v-for="(pharmacy, index) in pharmacies"
                      :id="'pharmacy-menu-item-' + index"
@@ -41,7 +42,7 @@
                 <p v-if="pharmacy.postcode" id="pharmacy-postcode" class="nhsuk-u-margin-bottom-0"
                    :class="$style['results-styling']">
                   {{ pharmacy.postcode }}</p>
-                <p v-if="isOnlineSearch && pharmacy.url" id="pharmacy-url"
+                <p v-if="isOnline && pharmacy.url" id="pharmacy-url"
                    class="nhsuk-u-margin-bottom-3" :class="$style['results-styling']">
                   {{ pharmacy.url }}</p>
                 <p v-if="pharmacy.telephoneNumber" id="pharmacy-telephone-number"
@@ -62,7 +63,7 @@
                              :tabindex="-1">
         <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                 :path="previousPagePath"
-                                :button-text="'nominatedPharmacyNotFound.backButton'"
+                                :button-text="'nominatedPharmacySearchResults.backButton'"
                                 @clickAndPrevent="backButtonClicked"/>
       </analytics-tracked-tag>
     </div>
@@ -75,6 +76,7 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import {
   NOMINATED_PHARMACY_SEARCH,
+  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
   NOMINATED_PHARMACY_CONFIRM,
   PRESCRIPTIONS,
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
@@ -102,14 +104,19 @@ export default {
       searchQuery,
       isHighStreetSearch:
         this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.HIGH_STREET_PHARMACY,
-      isOnlineSearch:
+      isOnline:
         this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.ONLINE_PHARMACY,
+      isOnlineWithSearch:
+        this.$store.state.nominatedPharmacy.onlineOnlyKnownOption,
     };
   },
   computed: {
     previousPagePath() {
       if (this.isHighStreetSearch) {
         return NOMINATED_PHARMACY_SEARCH.path;
+      }
+      if (this.isOnlineWithSearch) {
+        return NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH.path;
       }
       return NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path;
     },

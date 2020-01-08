@@ -38,6 +38,13 @@ paths:
         - pharmacy
       summary: Search for online-only pharmacies.
       description: Returns Response object containing list of online pharmacies.
+      parameters:
+        - in: query
+          name: searchTerm
+          required: false
+          description: Search term to search for online pharmacy name.
+          schema:
+            type: string
       responses:
         "200":
           description: Search processed successfully

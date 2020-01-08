@@ -8,5 +8,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
         Task<PharmacySearchResult> Search(string searchTerm);
 
         Task<PharmacySearchResult> SearchOnlineOnlyPharmacies();
+        
+        Task<PharmacySearchResult> SearchOnlineOnlyPharmacies(string searchTerm);
     }
 }

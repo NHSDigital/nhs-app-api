@@ -16,6 +16,7 @@ object NhsAzureSearchData {
     const val ORGANISATION_NAME = "Clay Cross Medical Centre"
     const val PHARMACY_NAME = "My Pharmacy"
     const val RANDOMIZED_INTERNET_PHARMACY_LIMIT = 1000
+    const val SEARCHED_INTERNET_PHARMACY_LIMIT = 20
 
     private const val BASE_NACSCODE = 81089
     private const val BASE_ORGANISATION_ID = 4648
@@ -48,6 +49,15 @@ object NhsAzureSearchData {
             searchItems.add(createOnlinePharmacyResultFromIndex(i, isPharmacySearch = false))
         }
         return NhsAzureSearchOrganisationReply(searchItems, NhsAzureSearchData.RANDOMIZED_INTERNET_PHARMACY_LIMIT)
+    }
+
+    fun generateOnlinePharmacySearchData(numberOfItems: Int): NhsAzureSearchOrganisationReply {
+        val searchItems = mutableListOf<NhsAzureSearchOrganisationItem>()
+
+        for(i in 1..Math.min(numberOfItems, NhsAzureSearchData.SEARCHED_INTERNET_PHARMACY_LIMIT)) {
+            searchItems.add(createOnlinePharmacyResultFromIndex(i, isPharmacySearch = true))
+        }
+        return NhsAzureSearchOrganisationReply(searchItems, NhsAzureSearchData.SEARCHED_INTERNET_PHARMACY_LIMIT)
     }
 
     fun getSuccessfulPostcodeMatch(): NHSAzureSearchPostcodesAndPlacesReply {

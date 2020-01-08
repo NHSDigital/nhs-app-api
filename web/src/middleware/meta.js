@@ -94,6 +94,7 @@ import {
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_INTERRUPT,
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
+  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   NOMINATED_PHARMACY_CONFIRM,
@@ -487,8 +488,14 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       const pharmacyTypeChoice = store.state.nominatedPharmacy.chosenType;
       if (pharmacyTypeChoice === PharmacyTypeChoice.ONLINE_PHARMACY) {
-        route.meta.headerKey = 'nominatedPharmacySearchResults.online.header';
-        route.meta.pageTitleKey = 'nominatedPharmacySearchResults.online.title';
+        if (store.state.nominatedPharmacy.onlineOnlyKnownOption === true) {
+          route.meta.headerKey = 'nominatedPharmacySearchResults.online.search.header';
+          route.meta.pageTitleKey = 'nominatedPharmacySearchResults.online.search.title';
+          route.meta.formatArguments = { searchQuery: store.state.nominatedPharmacy.searchQuery };
+        } else {
+          route.meta.headerKey = 'nominatedPharmacySearchResults.online.random.header';
+          route.meta.pageTitleKey = 'nominatedPharmacySearchResults.online.random.title';
+        }
       } else {
         route.meta.headerKey = 'nominatedPharmacySearchResults.highStreet.header';
         route.meta.pageTitleKey = 'nominatedPharmacySearchResults.highStreet.title';
@@ -537,6 +544,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.nominatedPharmacyChooseType';
       route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyChooseType';
+      break;
+    case NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.nominatedPharmacyOnlineOnlySearch';
+      route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyOnlineOnlySearch';
       break;
     case RECALLS.name:
       route.meta.headerKey = 'pageHeaders.recalls';

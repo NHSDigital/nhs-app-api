@@ -4,11 +4,12 @@ using NHSOnline.Backend.PfsApi.GpSearch;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using GeoCoordinatePortable;
+using Hl7.Fhir.Model;
+using Microsoft.AspNetCore.Rewrite.Internal;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
@@ -17,6 +18,7 @@ using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
+using Task = System.Threading.Tasks.Task;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
 {
@@ -45,6 +47,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             _gpLookupConfig = new Mock<IGpLookupConfig>();
             _gpLookupConfig.SetupGet(x => x.OnlinePharmacyRandomisedSearchResultLimit).Returns(10);
             _gpLookupConfig.SetupGet(x => x.PharmacySearchApiLimit).Returns(10);
+            _gpLookupConfig.SetupGet(x => x.OnlinePharmacySearchResultLimit).Returns(20);
+
             _nhsSearchResultChecker = new Mock<INhsSearchResultChecker>();
             _postcodeParser = new PostcodeParser();
             _mockMapper = _fixture.Freeze<Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper>>();
@@ -300,6 +304,135 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             mappedOrganisations.Count().Should().Be(isValidContactMechanism ? 1 : 0);
         }
 
+        
+     
+        [TestMethod]
+        public async Task SearchOnlineOnlyPharmacies_WhenCalledWithOnlineName_ReturnsListOfPharmacies()
+        {
+            // Arrange
+            const int numberOfPharmaciesToGenerate = 20; 
+            
+            var pharmacies = Enumerable.Repeat(new Organisation { URL = "www.test.com"}, numberOfPharmaciesToGenerate).ToList();
+
+            var pharmacyResponse = new
+               GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
+               {
+                   Body = new NhsOrganisationSearchResponse
+                   {
+                       OrganisationCount = numberOfPharmaciesToGenerate,
+                       Organisations = pharmacies,
+                   }
+               };
+
+            var pharmacySearchResponse = new PharmacySearchResponse(HttpStatusCode.OK, pharmacies);
+
+            SetupGpClientForOnlinePharmacySearchByName(pharmacyResponse, "test");
+
+            _nhsSearchResultChecker
+               .Setup(x => x.CheckPharmacies(pharmacyResponse))
+               .Returns(pharmacySearchResponse);
+
+           var pharmacyDetailsList = new List<PharmacyDetails>
+           {
+               new PharmacyDetails()
+           };
+
+           var mappedOrganisations = Enumerable.Empty<Organisation>();
+
+           _mockMapper.Setup(x => x.Map(It.IsAny<IEnumerable<Organisation>>()))
+               .Callback((IEnumerable<Organisation> beingMapped) => mappedOrganisations = beingMapped)
+               .Returns(pharmacyDetailsList);
+
+            // Act
+            var result = await _pharmacySearchService.SearchOnlineOnlyPharmacies("test");
+
+            // Assert
+            var response = result.Should().BeAssignableTo<PharmacySearchResult.Success>().Subject;
+            response.Pharmacies.Should().Equal(pharmacyDetailsList);
+            mappedOrganisations.Count().Should().Be(_gpLookupConfig.Object.OnlinePharmacySearchResultLimit);
+        }
+        
+        
+        [TestMethod]
+        public async Task SearchOnlineOnlyPharmacies_WhenCalledWithOnlineName_FiltersResultsWithNoContactDetailsBeforeReturnsingListOfPharmacies()
+        {
+            // Arrange
+            const int numberOfPharmaciesToGenerate = 20;
+
+            var pharmacies = new List<Organisation>();
+
+            for (int i = 0; i < numberOfPharmaciesToGenerate; i++)
+            {
+                pharmacies.Add(new Organisation
+                {
+                    URL = $"www.test{i}.com",
+                    Contacts = JsonConvert.SerializeObject(new[]
+                        {
+                            new ContactInformation
+                            {
+                                OrganisationContactMethodType = ResponseEnums.OrganisationContactMethodType.Telephone,
+                                OrganisationContactValue = "0100234987"       
+                            }
+                        }
+                    )
+                });    
+            }
+
+            //some pharmacies only have one piece of information (and will not be filtered)
+            pharmacies[4].URL = "";
+            pharmacies[5].URL = null;
+            pharmacies[6].Contacts = "";
+            pharmacies[7].Contacts = null;
+            
+            //these 4 pharmacies will have no information (and will be filtered)
+            pharmacies[8].URL = "";
+            pharmacies[8].Contacts = "";
+            pharmacies[9].URL = null;
+            pharmacies[9].Contacts = null;
+            pharmacies[10].URL = "";
+            pharmacies[10].Contacts = null;
+            pharmacies[11].URL = null;
+            pharmacies[11].Contacts = "";
+           
+            var pharmacyResponse = new
+                GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
+                {
+                    Body = new NhsOrganisationSearchResponse
+                    {
+                        OrganisationCount = numberOfPharmaciesToGenerate,
+                        Organisations = pharmacies,
+                    }
+                };
+
+            var pharmacySearchResponse = new PharmacySearchResponse(HttpStatusCode.OK, pharmacies);
+
+            SetupGpClientForOnlinePharmacySearchByName(pharmacyResponse, "test");
+
+            _nhsSearchResultChecker
+                .Setup(x => x.CheckPharmacies(pharmacyResponse))
+                .Returns(pharmacySearchResponse);
+
+            var pharmacyDetailsList = new List<PharmacyDetails>
+            {
+                new PharmacyDetails()
+            };
+
+            var mappedOrganisations = Enumerable.Empty<Organisation>();
+
+            _mockMapper.Setup(x => x.Map(It.IsAny<IEnumerable<Organisation>>()))
+                .Callback((IEnumerable<Organisation> beingMapped) => mappedOrganisations = beingMapped)
+                .Returns(pharmacyDetailsList);
+
+
+            // Act
+            var result = await _pharmacySearchService.SearchOnlineOnlyPharmacies("test");
+
+            // Assert
+            var response = result.Should().BeAssignableTo<PharmacySearchResult.Success>().Subject;
+            response.Pharmacies.Should().Equal(pharmacyDetailsList);
+            mappedOrganisations.Count().Should().Be(_gpLookupConfig.Object.OnlinePharmacySearchResultLimit - 4);
+        }
+
         private void SetupGpClientForRandomisedInternetPharmacySearch(GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> response)
         {
             _gpLookupClient
@@ -311,6 +444,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                         $"(OrganisationTypeID eq '{Constants.OrganisationTypePharmacy}') " +
                         $"and (OrganisationSubType eq '{Constants.OrganisationSubTypeForInternetPharmacy}')", StringComparison.Ordinal) &&
                     p.Top == 1000 &&
+                    p.Select.Equals("OrganisationName,URL,Contacts,NACSCode", StringComparison.Ordinal))))
+                .Returns(Task.FromResult(response));
+        }
+        
+        private void SetupGpClientForOnlinePharmacySearchByName(GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> response, string searchTerm)
+        {
+            _gpLookupClient
+                .Setup(x => x.OrganisationSearch(It.Is<OrganisationSearchData>(p =>
+                    p.Search.Equals($"{searchTerm}*", StringComparison.Ordinal) &&
+                    p.SearchFields.Equals("OrganisationName", StringComparison.Ordinal) &&
+                    p.QueryType == null &&
+                    p.SearchMode == null &&
+                    p.Filter.Equals(
+                        $"(OrganisationTypeID eq '{Constants.OrganisationTypePharmacy}') " +
+                        $"and (OrganisationSubType eq '{Constants.OrganisationSubTypeForInternetPharmacy}')", StringComparison.Ordinal) &&
+                    p.Top == _gpLookupConfig.Object.OnlinePharmacySearchResultLimit &&
                     p.Select.Equals("OrganisationName,URL,Contacts,NACSCode", StringComparison.Ordinal))))
                 .Returns(Task.FromResult(response));
         }

@@ -46,5 +46,18 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 
             return sanitisedSearchCriteria;
         }
+        
+        
+        public static string SanitizeOnlinePharmacyNameSearch(string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return searchTerm;
+            }
+
+            var multipleSpacesRemoved = Regex.Replace(searchTerm, "\\s\\s+/g", " ");
+
+            return multipleSpacesRemoved;
+        }
     }
 }

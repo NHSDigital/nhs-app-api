@@ -432,7 +432,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Subject.StatusCode.Should().Be((int)HttpStatusCode.OK);
 
             _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
 
@@ -462,7 +462,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Subject.StatusCode.Should().Be((int)HttpStatusCode.BadGateway);
 
             _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -491,7 +491,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Subject.StatusCode.Should().Be((int)HttpStatusCode.BadGateway);
 
             _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -520,7 +520,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Subject.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
 
             _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
 
@@ -552,7 +552,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Subject.StatusCode.Should().Be((int)statusCode);
 
             _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
-            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest, It.IsAny<string>()));
+            _auditor.Verify(x => x.Audit(AuditingOperations.UpdatedNominatedPharmacyResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -667,14 +667,49 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.OnlineOnlyPharmacySearch();
+            var result = await _systemUnderTest.OnlineOnlyPharmacySearch(null);
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeEquivalentTo(pharmacyResultList);
 
             _mockPharmacySearchService.Verify();
-            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, It.IsAny<string>()));
+            
+            _auditor.Verify(x => x.Audit(
+                AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, 
+                "Attempting to fetch a random list of Online Pharmacies"));
+            
+            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
+        }
+        
+        
+        [TestMethod]
+        public async Task OnlineOnlyPharmacySearchByName_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
+        {
+            // Arrange
+            var searchTerm = "test";
+            var pharmacy = _fixture.Create<PharmacyDetails>();
+            var pharmacyResultList = new List<PharmacyDetails> { pharmacy };
+            var pharmacySearchResult = new PharmacySearchResult.Success(pharmacyResultList);
+
+            _mockPharmacySearchService
+                .Setup(x => x.SearchOnlineOnlyPharmacies(searchTerm))
+                .Returns(Task.FromResult((PharmacySearchResult)pharmacySearchResult))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.OnlineOnlyPharmacySearch(searchTerm);
+
+            // Assert
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeEquivalentTo(pharmacyResultList);
+
+            _mockPharmacySearchService.Verify();
+            
+            _auditor.Verify(x => x.Audit(
+                AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, 
+                $"Attempting to search for Online Pharmacies by name using search term: {searchTerm}"));
+            
             _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
     }

@@ -26,4 +26,20 @@ open class NominatedPharmacyOnlinePharmacyDataSetupSteps {
         }
     }
 
+    fun setupWiremockForSearchedOnlinePharmaciesWithSearch(data: NhsAzureSearchOrganisationReply, searchTerm : String) {
+        mockingClient.forAzure.forSearchOrganisation {
+
+            nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
+                    top = NhsAzureSearchData.SEARCHED_INTERNET_PHARMACY_LIMIT,
+                    select = "OrganisationName,URL,Contacts,NACSCode",
+                    filter  = "(OrganisationTypeID eq 'PHA') and (OrganisationSubType eq 'Internet Pharmacy')",
+                    count  = true,
+                    search = "$searchTerm*",
+                    searchFields = "OrganisationName",
+                    queryType = null,
+                    searchMode = null
+            )).respondWithSuccess(data)
+        }
+    }
+
 }

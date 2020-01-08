@@ -7,6 +7,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.isVisible
+import pages.assertIsNotVisible
 import pages.text
 
 @DefaultUrl("http://web.local.bitraft.io:3000/nominated-pharmacy/results")
@@ -59,6 +60,10 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
 
     fun showsNoResultsFoundHeader() {
         noResultsFoundHeader.isVisible
+    }
+
+    fun showsNoResults() {
+        listOfPharmacies.assertIsNotVisible()
     }
 
     fun isLoaded(): Boolean {

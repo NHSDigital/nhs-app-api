@@ -932,6 +932,16 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
   },
+  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH: {
+    name: 'nominated-pharmacy-online-only-search',
+    path: '/nominated-pharmacy/online-only-search',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+  },
   ORGAN_DONATION: {
     name: 'organ-donation',
     path: '/organ-donation',
@@ -1543,6 +1553,7 @@ export const {
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   NOMINATED_PHARMACY_CHECK,
   NOMINATED_PHARMACY_CHOOSE_TYPE,
+  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_AMEND,

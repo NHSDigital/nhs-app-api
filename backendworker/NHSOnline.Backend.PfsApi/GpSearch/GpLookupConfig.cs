@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         public int GpLookupApiResultsLimit { get; }
         public int PharmacySearchApiLimit { get; }
         public int OnlinePharmacyRandomisedSearchResultLimit { get; }
+        public int OnlinePharmacySearchResultLimit { get; }
         public Uri NhsSearchBaseUrl { get; }
         public string GpLookupApiKey { get; }
         public string PostcodeLookupSearchRadiusKm { get; }
@@ -22,6 +23,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             PharmacySearchApiLimit = configuration.GetIntOrThrow("PHARMACY_API_RESULT_LIMIT", logger);
 
             OnlinePharmacyRandomisedSearchResultLimit = configuration.GetIntOrThrow("ONLINE_PHARMACY_RANDOMISED_SEARCH_RESULT_LIMIT", logger);
+            
+            OnlinePharmacySearchResultLimit = configuration.GetIntOrThrow("ONLINE_PHARMACY_SEARCH_RESULT_LIMIT", logger);
 
             var gpLookupApiUriString = configuration.GetOrWarn("NHS_SEARCH_BASE_URL", logger);
 

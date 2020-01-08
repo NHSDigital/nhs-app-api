@@ -32,7 +32,7 @@
                                :tabindex="-1">
           <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                   id="back-link"
-                                  :path="nominatedPharmacyInterruptPath"
+                                  :path="nominatedPharmacyChooseType"
                                   :button-text="'generic.backButton.text'"
                                   @clickAndPrevent="backButtonClicked"/>
         </analytics-tracked-tag>
@@ -53,7 +53,7 @@ import RadioGroup from '@/components/RadioGroup';
 import { redirectTo } from '@/lib/utils';
 import {
   NOMINATED_PHARMACY_CHOOSE_TYPE,
-  NOMINATED_PHARMACY_INTERRUPT,
+  NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   PRESCRIPTIONS,
 } from '@/lib/routes';
@@ -73,7 +73,6 @@ export default {
   data() {
     return {
       nominatedPharmacyChooseType: NOMINATED_PHARMACY_CHOOSE_TYPE.path,
-      nominatedPharmacyInterruptPath: NOMINATED_PHARMACY_INTERRUPT.path,
       hasTriedToContinue: false,
       onlineOnlyChoice: this.$store.getters['nominatedPharmacy/getOnlineOnlyKnownOption'],
       radioButtons: [
@@ -116,7 +115,7 @@ export default {
       this.$store.dispatch('nominatedPharmacy/setOnlineOnlyKnownOption', this.onlineOnlyChoice);
 
       if (this.onlineOnlyChoice === true) {
-        redirectTo(this, NOMINATED_PHARMACY_INTERRUPT.path);
+        redirectTo(this, NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH.path);
       } else {
         const pharmacySearchResponse = await this.getRandomOnlinePharmacies();
 
