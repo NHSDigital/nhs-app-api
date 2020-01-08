@@ -5,8 +5,7 @@
       <h2 class="nhsuk-u-margin-bottom-2">{{ $t('login.desc') }}</h2>
       <form ref="loginForm"
             :action="authoriseUrl"
-            method="get"
-            @submit.prevent="redirectToCitizenId">
+            method="get">
         <input :value="source" type="hidden" name="source">
         <generic-button
           id="login-button"
@@ -14,7 +13,8 @@
                             $store.state.device.isNativeApp
                               ?'button':'']"
           type="submit"
-          data-id="login-button">
+          data-id="login-button"
+          @click="trackLogin">
           {{ $t('loginButton.login') }}
         </generic-button>
       </form>
@@ -74,41 +74,42 @@
   </div>
 </template>
 <script>
+import moment from 'moment';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import AuthorisationService from '@/services/authorisation-service';
 import GenericButton from '@/components/widgets/GenericButton';
+import NativeCallbacks from '@/services/native-app';
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
+import { getDynamicStyle } from '@/lib/desktop-experience';
 import { setCookie } from '@/lib/cookie-manager';
 import { BEGINLOGIN } from '@/lib/routes';
-import AuthorisationService from '@/services/authorisation-service';
-import NativeCallbacks from '@/services/native-app';
-import moment from 'moment';
-import { getDynamicStyle } from '@/lib/desktop-experience';
 
 export default {
   layout: 'login',
   components: {
     AnalyticsTrackedTag,
-    NhsArrowBanner,
     GenericButton,
+    NhsArrowBanner,
   },
   data() {
     return {
       authoriseUrl: BEGINLOGIN.path,
+      hasCookie: false,
       isButtonDisabled: false,
       organDonationUrl: this.$store.app.$env.ORGAN_DONATION_THROTTLING_URL,
-      practiceParticipating: true,
-      practiceName: undefined,
       practiceAddress: undefined,
+      practiceName: undefined,
+      practiceParticipating: true,
       source: this.getSource(),
-      hasCookie: false,
     };
   },
   computed: {
     isPracticeParticipating() {
       return this.practiceParticipating;
     },
-    shouldShowBiometrics() {
-      return this.$store.app.$env.BIOMETRICS_ENABLED && this.$store.state.device.isNativeApp;
+    isThrottlingEnabled() {
+      return (this.$store.app.$env.THROTTLING_ENABLED === 'true' ||
+            this.$store.app.$env.THROTTLING_ENABLED === true);
     },
     notParticipatingSurgeryName() {
       return this.practiceName;
@@ -116,9 +117,8 @@ export default {
     notParticipatingSurgeryAddress() {
       return this.practiceAddress;
     },
-    isThrottlingEnabled() {
-      return (this.$store.app.$env.THROTTLING_ENABLED === 'true' ||
-            this.$store.app.$env.THROTTLING_ENABLED === true);
+    shouldShowBiometrics() {
+      return this.$store.app.$env.BIOMETRICS_ENABLED && this.$store.state.device.isNativeApp;
     },
   },
   asyncData(context) {
@@ -193,13 +193,10 @@ export default {
       });
       return { authoriseUrl: request.authoriseUrl, loginUrl };
     },
-    redirectToCitizenId() {
+    trackLogin() {
       if (!this.isButtonDisabled) {
-        const { authoriseUrl, loginUrl } = this.generateRedirectData();
-        this.authoriseUrl = authoriseUrl;
-        this.$store.app.context.redirect(loginUrl);
-        this.isButtonDisabled = true;
         this.$store.dispatch('analytics/satelliteTrack', 'login');
+        this.isButtonDisabled = true;
       }
     },
     getSource() {

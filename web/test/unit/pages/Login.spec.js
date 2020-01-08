@@ -1,5 +1,6 @@
 import AuthorisationService from '@/services/authorisation-service';
 import Login from '@/pages/Login';
+import { BEGINLOGIN } from '@/lib/routes';
 import { createStore, mount } from '../helpers';
 
 jest.mock('@/services/authorisation-service');
@@ -16,22 +17,28 @@ const defaultQuery = {
   source: 'android',
 };
 
-const mountWithQueryData = ({ isNativeApp = true, query, source = 'android', data }) => {
-  const $env = {
-    BIOMETRICS_ENABLED: true,
-    THROTTLING_ENABLED: true,
-    ORGAN_DONATION_THROTTLING_URL: 'www.foo.com',
-  };
+const createFidoQueries = () =>
+  Object.assign({}, defaultQuery, {
+    fidoAuthResponse: 'Boom',
+  });
 
+describe('login page', () => {
+  let $store;
+  let wrapper;
 
-  const $cookies = {
-    get: jest.fn().mockImplementation('BetaCookie').mockReturnValue({}),
-    set: jest.fn(),
-  };
+  const mountWithQueryData = ({ isNativeApp = true, query, source = 'android', data }) => {
+    const $env = {
+      BIOMETRICS_ENABLED: true,
+      THROTTLING_ENABLED: true,
+      ORGAN_DONATION_THROTTLING_URL: 'www.foo.com',
+    };
 
-  return mount(Login, {
-    $env,
-    $store: createStore({
+    const $cookies = {
+      get: jest.fn().mockImplementation('BetaCookie').mockReturnValue({}),
+      set: jest.fn(),
+    };
+
+    $store = createStore({
       $env,
       state: {
         appVersion: {
@@ -47,41 +54,31 @@ const mountWithQueryData = ({ isNativeApp = true, query, source = 'android', dat
       context: {
         redirect: jest.fn(),
       },
-    }),
-    $route: {
-      query,
-    },
-    $cookies,
-    data,
-    stubs: {
-      'no-ssr': '<div><slot/></div>',
-    },
-  });
-};
-
-const createFidoQueries = () =>
-  Object.assign({}, defaultQuery, {
-    fidoAuthResponse: 'Boom',
-  });
-
-describe('login page', () => {
-  let wrapper;
+    });
+    return mount(Login, {
+      $env,
+      $store,
+      $route: {
+        query,
+      },
+      $cookies,
+      data,
+      stubs: {
+        'no-ssr': '<div><slot/></div>',
+      },
+    });
+  };
 
   beforeEach(() => {
     wrapper = mountWithQueryData({ query: defaultQuery });
     AuthorisationService.mockClear();
   });
 
-  it('has a login button', () => {
-    expect(wrapper.find('#login-button').exists()).toBe(true);
-  });
+  it('will have a form that performs a get request to the begin login path', () => {
+    const form = wrapper.find(`form[action="${BEGINLOGIN.path}"]`);
 
-  it('will call generateLoginValues only once when login button clicked', () => {
-    expect(AuthorisationService).not.toHaveBeenCalled();
-    wrapper.find('#login-button').trigger('submit');
-    wrapper.find('#login-button').trigger('submit');
-    wrapper.find('#login-button').trigger('submit');
-    expect(AuthorisationService.mock.instances[0].generateLoginUrl).toHaveBeenCalledTimes(1);
+    expect(form.exists()).toBe(true);
+    expect(form.attributes().method).toEqual('get');
   });
 
   it('will redirect automatically if FidoAuthResponse exists and is native', () => {
@@ -104,6 +101,36 @@ describe('login page', () => {
 
   it('will not display record organ donation link', () => {
     expect(wrapper.find('#btn_organDonation').exists()).toBe(false);
+  });
+
+  describe('login button', () => {
+    let loginButton;
+
+    beforeEach(() => {
+      loginButton = wrapper.find('#login-button');
+    });
+
+    it('exists', () => {
+      expect(loginButton.exists()).toBe(true);
+    });
+
+    it('will not be disabled', () => {
+      expect(wrapper.vm.isButtonDisabled).toBe(false);
+    });
+
+    describe('click', () => {
+      beforeEach(() => {
+        loginButton.trigger('click');
+      });
+
+      it('will call analytics/satelliteTrack', () => {
+        expect($store.dispatch).toHaveBeenCalledWith('analytics/satelliteTrack', 'login');
+      });
+
+      it('will be disabled', () => {
+        expect(wrapper.vm.isButtonDisabled).toBe(true);
+      });
+    });
   });
 
   describe('throttling', () => {
