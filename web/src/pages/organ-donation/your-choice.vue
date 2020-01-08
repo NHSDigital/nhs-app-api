@@ -1,30 +1,31 @@
 <template>
-  <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <message-dialog v-if="showErrors" message-type="error">
-      <message-text data-purpose="error-heading">
-        {{ $t('organDonation.yourChoice.errorMessageHeader') }}
-      </message-text>
-      <message-list data-purpose="reason-error">
-        <li>{{ $t('organDonation.yourChoice.errorMessageText') }}</li>
-      </message-list>
-    </message-dialog>
-    <div :class="$style.info">
-      <h2>{{ $t('organDonation.yourChoice.subheader') }}</h2>
-      <p>{{ $t('organDonation.yourChoice.description') }}</p>
+  <div id="mainDiv" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <message-dialog v-if="showErrors" message-type="error">
+        <message-text data-purpose="error-heading">
+          {{ $t('organDonation.yourChoice.errorMessageHeader') }}
+        </message-text>
+        <message-list data-purpose="reason-error">
+          <li>{{ $t('organDonation.yourChoice.errorMessageText') }}</li>
+        </message-list>
+      </message-dialog>
+      <div>
+        <h2>{{ $t('organDonation.yourChoice.subheader') }}</h2>
+        <p>{{ $t('organDonation.yourChoice.description') }}</p>
+      </div>
+      <radio-group v-model="selectedValue"
+                   :current-value="currentChoice"
+                   :radios="radioButtons"
+                   :show-error="showErrors"
+                   :error-message="$t('organDonation.yourChoice.errorMessageText')"
+                   @select="selected"/>
+      <generic-button id="continue-button"
+                      :class="['nhsuk-button']"
+                      @click.prevent="continueClicked">
+        {{ $t('organDonation.yourChoice.continueButtonText') }}
+      </generic-button>
+      <back-button v-if="!$store.state.device.isNativeApp" :before="beforeBack" />
     </div>
-    <radio-group v-model="selectedValue"
-                 :class="$style.radioGroup"
-                 :current-value="currentChoice"
-                 :radios="radioButtons"
-                 :show-error="showErrors"
-                 :error-message="$t('organDonation.yourChoice.errorMessageText')"
-                 @select="selected"/>
-    <generic-button id="continue-button"
-                    :class="['nhsuk-button']"
-                    @click.prevent="continueClicked">
-      {{ $t('organDonation.yourChoice.continueButtonText') }}
-    </generic-button>
-    <back-button v-if="!$store.state.device.isNativeApp" :before="beforeBack" />
   </div>
 </template>
 <script>
@@ -44,6 +45,7 @@ import {
 } from '@/lib/routes';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     BackButton,
     GenericButton,
@@ -121,9 +123,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-@import "../../style/info";
-@import "../../style/buttons";
-@import "../../style/spacings";
-</style>

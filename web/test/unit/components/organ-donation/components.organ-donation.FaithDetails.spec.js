@@ -23,7 +23,7 @@ describe('faith details', () => {
     let declarationText;
 
     beforeEach(() => {
-      declarationText = wrapper.find('span');
+      declarationText = wrapper.find('div');
     });
 
     it('will exist', () => {

@@ -1,49 +1,52 @@
 <template>
-  <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <message-dialog v-if="showErrors" id="errors">
-      <message-text data-purpose="error-heading">
-        {{ $t('organDonation.withdrawReason.errorMessageHeader') }}
-      </message-text>
-      <message-list data-purpose="reason-error">
-        <li>{{ $t('organDonation.withdrawReason.errorMessageText') }}</li>
-      </message-list>
-    </message-dialog>
-    <div :class="$style.info">
-      <h2>{{ $t('organDonation.withdrawReason.subheader') }}</h2>
-      <p v-for="(item, index) in $t('organDonation.withdrawReason.bodyItems')" :key="index">
-        {{ item }}
-      </p>
-      <error-group :show-error="showErrors">
-        <label :class="[$style.label, $style['mb-2']]" for="reason">
-          {{ $t('organDonation.withdrawReason.reason.label') }}
-        </label>
-        <error-message v-if="showErrors">
-          {{ $t('organDonation.withdrawReason.errorMessageText') }}
-        </error-message>
-        <select-dropdown v-model="reasonId"
-                         :class="[$style.select, $style['mb-4']]"
-                         :required="true"
-                         select-id="reason">
-          <option v-for="option in reasons"
-                  :key="option.id"
-                  :value="option.id"
-                  :disabled="option.value===''"
-                  :selected="option.value===''">
-            {{ option.displayName }}
-          </option>
-        </select-dropdown>
-      </error-group>
-      <generic-button id="continue-button"
-                      :class="['nhsuk-button']"
-                      @click.stop.prevent="continueClicked">
-        {{ $t('organDonation.withdrawReason.continueButton') }}
-      </generic-button>
-      <generic-button v-if="!$store.state.device.isNativeApp"
-                      id="back-button"
-                      :class="['nhsuk-button', 'nhsuk-button--secondary']"
-                      @click.stop.prevent="goBack" >
-        {{ $t('generic.backButton.text') }}
-      </generic-button>
+  <div v-if="showTemplate" id="mainDiv" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <div :class="[$style.form]">
+        <message-dialog v-if="showErrors" id="errors">
+          <message-text data-purpose="error-heading">
+            {{ $t('organDonation.withdrawReason.errorMessageHeader') }}
+          </message-text>
+          <message-list data-purpose="reason-error">
+            <li>{{ $t('organDonation.withdrawReason.errorMessageText') }}</li>
+          </message-list>
+        </message-dialog>
+        <div>
+          <h2>{{ $t('organDonation.withdrawReason.subheader') }}</h2>
+          <p v-for="(item, index) in $t('organDonation.withdrawReason.bodyItems')" :key="index">
+            {{ item }}
+          </p>
+          <error-group :show-error="showErrors">
+            <label for="reason">
+              {{ $t('organDonation.withdrawReason.reason.label') }}
+            </label>
+            <error-message v-if="showErrors">
+              {{ $t('organDonation.withdrawReason.errorMessageText') }}
+            </error-message>
+            <select-dropdown v-model="reasonId"
+                             :required="true"
+                             select-id="reason">
+              <option v-for="option in reasons"
+                      :key="option.id"
+                      :value="option.id"
+                      :disabled="option.value===''"
+                      :selected="option.value===''">
+                {{ option.displayName }}
+              </option>
+            </select-dropdown>
+          </error-group>
+          <generic-button id="continue-button"
+                          :class="['nhsuk-button']"
+                          @click.stop.prevent="continueClicked">
+            {{ $t('organDonation.withdrawReason.continueButton') }}
+          </generic-button>
+          <generic-button v-if="!$store.state.device.isNativeApp"
+                          id="back-button"
+                          :class="['nhsuk-button', 'nhsuk-button--secondary']"
+                          @click.stop.prevent="goBack" >
+            {{ $t('generic.backButton.text') }}
+          </generic-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -61,6 +64,7 @@ import { INDEX, ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/li
 import { isNativeApp } from '@/components/NativeOnlyMixin';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     GenericButton,
     ErrorGroup,
@@ -115,15 +119,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/spacings";
-  @import "../../style/buttons";
-  @import "../../style/info";
-
-  .label {
-    margin-top: $one;
-  }
-
-  .select {
-    margin-bottom: $three;
-  }
+ @import "../../style/forms";
 </style>

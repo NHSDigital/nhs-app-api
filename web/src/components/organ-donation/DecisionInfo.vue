@@ -10,7 +10,6 @@
     <decision-details v-else-if="isOptInDecision"
                       :choices="currentChoices"
                       :is-some-organs="isSomeOrgans"/>
-    <hr :class="$style.rule" aria-hidden="true">
   </div>
 </template>
 
@@ -54,14 +53,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/organdonation";
-  @import "../../style/textstyles";
-
-  .rule {
-    border-top: solid 1px $mid_grey;
-    margin-top: 1em;
-    margin-bottom: 0.5em;
-  }
-</style>

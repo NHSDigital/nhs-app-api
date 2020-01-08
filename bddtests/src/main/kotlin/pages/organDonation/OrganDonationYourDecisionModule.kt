@@ -43,10 +43,9 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
 
     private fun assertText(expectedText: String) {
         HybridPageElement(
-                "$containerXPath//span",
+                "$containerXPath//p[normalize-space(text())='$expectedText']",
                 page = page,
                 helpfulName = "Explanatory text")
-                .withText(expectedText)
                 .assertSingleElementPresent()
                 .assertIsVisible()
     }
@@ -83,7 +82,7 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
 
     private fun organSection(expectedKey: String): HybridPageElement {
         return HybridPageElement(
-                "//h4[text()='$expectedKey']",
+                "//h4[normalize-space(text())='$expectedKey']",
                 page = page,
                 helpfulName = "label '$expectedKey'")
     }

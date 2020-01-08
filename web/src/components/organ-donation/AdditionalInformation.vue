@@ -1,17 +1,21 @@
 <template>
-  <div :class="$style.info">
+  <div>
     <h3>{{ $t('organDonation.reviewYourDecision.additionalInformation.subheader') }}</h3>
-    <h4>{{ $t('organDonation.reviewYourDecision.additionalInformation.ethnicityheader') }}</h4>
+    <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
+      {{ $t('organDonation.reviewYourDecision.additionalInformation.ethnicityheader') }}
+    </h4>
     <p v-if="!ethnicityId">
       {{ $t('organDonation.reviewYourDecision.additionalInformation.noDecision') }}
     </p>
     <p v-else>{{ ethnicity }}</p>
-    <h4>{{ $t('organDonation.reviewYourDecision.additionalInformation.religionheader') }}</h4>
+    <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
+      {{ $t('organDonation.reviewYourDecision.additionalInformation.religionheader') }}
+    </h4>
     <p v-if="!religionId">
       {{ $t('organDonation.reviewYourDecision.additionalInformation.noDecision') }}
     </p>
     <p v-else>{{ religion }}</p>
-    <p :class="$style['pt-3']">
+    <p>
       {{ $t('organDonation.reviewYourDecision.additionalInformation.text') }}
     </p>
   </div>
@@ -55,21 +59,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/info";
-  @import '../../style/fonts';
-  @import "../../style/spacings";
-
-  .info {
-    h3 {
-      margin: 0;
-      padding: 0;
-    }
-
-    h4 {
-      margin: 0;
-      padding: $three 0 0 0;
-    }
-  }
-</style>

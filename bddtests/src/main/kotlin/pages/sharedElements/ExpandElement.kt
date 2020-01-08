@@ -6,67 +6,75 @@ import pages.HybridPageObject
 import pages.assertElementNotPresent
 import pages.text
 
-class ExpandElement(pageObject: HybridPageObject){
+class ExpandElement(pageObject: HybridPageObject) {
 
-    private val parentXpath = "//*[@data-purpose='info-msg']"
-    private val guidanceIconXpathFormat = "$parentXpath//*[@data-purpose='icon']${pageObject
-            .containsTextXpathSubstring}"
+    private val parentXpath = "//details[contains(@class, 'nhsuk-details nhsuk-expander')]"
 
-    private val expand = HybridPageElement(
-            webDesktopLocator = String.format(guidanceIconXpathFormat, "+"),
+    private val summaryXpath = "$parentXpath/summary"
+
+    private val expander = HybridPageElement(
+            webDesktopLocator = parentXpath,
             androidLocator = null,
             page = pageObject,
-            helpfulName = "Expand icon"
+            helpfulName = "Details Expand Element"
     )
 
-    private val collapse = HybridPageElement(
-            // Note that the character is a true minus sign and not a hyphen
-            webDesktopLocator = String.format(guidanceIconXpathFormat, "−"),
+    private val summary = HybridPageElement(
+            webDesktopLocator = summaryXpath,
             androidLocator = null,
             page = pageObject,
-            helpfulName = "Collapse icon"
-    )
-
-    private val label = HybridPageElement(
-            webDesktopLocator = "$parentXpath//p",
-            androidLocator = null,
-            page = pageObject,
-            helpfulName = "Section label. "
+            helpfulName = "Details Expand Summary"
     )
 
     private val content = HybridPageElement(
-            webDesktopLocator = "$parentXpath//*[@data-purpose='info-content']",
+            webDesktopLocator = "$parentXpath/div",
             androidLocator = null,
             page = pageObject,
-            helpfulName = "Content. "
+            helpfulName = "Details Expand Content"
     )
 
-    fun collapse(){
-        collapse.click()
+    fun collapse() {
+        summary.click()
+        assertCollapsed()
     }
 
-    fun expand(){
-        expand.click()
+    fun expand() {
+        summary.click()
+        assertExpanded()
     }
 
-    fun assertLabel(expectedLabel : String) {
+    fun assertLabel(expectedLabel: String) {
         Assert.assertEquals("Label of expand section",
                 expectedLabel,
-                label.text.trim())
+                summary.text.trim())
     }
 
-    fun assertContent(expectedContent : String) {
+    fun assertContent(expectedContent: String) {
         Assert.assertEquals("Content of expand section",
                 expectedContent,
                 content.text.trim())
     }
 
-    fun assertCollapsed() {
-        content.assertElementNotPresent()
+    fun assertExpanded() {
+        Assert.assertTrue("Expected Expanded", isOpen())
     }
 
-    fun assertNotPresent(){
-        content.assertElementNotPresent()
-        label.assertElementNotPresent()
+    fun assertCollapsed() {
+        Assert.assertFalse("Expected Collapsed", isOpen())
+    }
+
+    private fun isOpen(): Boolean {
+        var isOpen = false
+        expander.actOnTheElement { element ->
+            val attribute = element.getAttribute("open")
+            if (attribute != null) {
+                isOpen = attribute == "true"
+            }
+        }
+        return isOpen
+    }
+
+    fun assertNotPresent() {
+        expander.assertElementNotPresent()
     }
 }

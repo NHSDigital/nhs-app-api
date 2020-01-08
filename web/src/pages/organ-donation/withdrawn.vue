@@ -1,19 +1,21 @@
 <template>
-  <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <message-dialog :icon-text="$t('organDonation.withdrawn.dialogText')"
-                    message-id="success-dialog" message-type="success">
-      <message-text v-for="(item, index) in $t('organDonation.withdrawn.messageTextItems')"
-                    :key="index">
-        {{ item }}
-      </message-text>
-    </message-dialog>
-    <div :class="$style.info">
-      <h2>{{ $t('organDonation.withdrawn.whatNext.header') }}</h2>
-      <p v-for="(item, index) in $t('organDonation.withdrawn.whatNext.bodyItems')" :key="index">
-        {{ item }}
-      </p>
+  <div id="mainDiv" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <message-dialog :icon-text="$t('organDonation.withdrawn.dialogText')"
+                      message-id="success-dialog" message-type="success">
+        <message-text v-for="(item, index) in $t('organDonation.withdrawn.messageTextItems')"
+                      :key="index">
+          {{ item }}
+        </message-text>
+      </message-dialog>
+      <div>
+        <h2>{{ $t('organDonation.withdrawn.whatNext.header') }}</h2>
+        <p v-for="(item, index) in $t('organDonation.withdrawn.whatNext.bodyItems')" :key="index">
+          {{ item }}
+        </p>
+      </div>
+      <other-things-to-do :can-withdraw="false"/>
     </div>
-    <other-things-to-do :can-withdraw="false"/>
   </div>
 </template>
 
@@ -24,6 +26,7 @@ import NativeOnlyMixin from '@/components/NativeOnlyMixin';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     MessageText,
     MessageDialog,
@@ -35,8 +38,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-@import "../../style/info";
-@import "../../style/spacings";
-</style>

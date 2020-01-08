@@ -1,7 +1,7 @@
 <template>
-  <div id="faithAndBeliefs" :class="$style.info" >
-    <p>{{ $t(`organDonation.registered.faithAndBeliefs.${declaration}`) }}</p>
-  </div>
+  <p id="faithAndBeliefs" >
+    {{ $t(`organDonation.registered.faithAndBeliefs.${declaration}`) }}
+  </p>
 </template>
 <script>
 export default {
@@ -14,6 +14,3 @@ export default {
   },
 };
 </script>
-<style module lang="scss">
-@import "../../style/info";
-</style>

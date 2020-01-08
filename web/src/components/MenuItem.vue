@@ -108,15 +108,13 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-  @import '../style/accessibility';
-  @import '../style/desktopWeb/accessibility';
-  @import '../style/textstyles';
-  @import '../style/fonts';
-  @import '../style/colours';
-  @import '../style/arrow';
-  @import '~nhsuk-frontend/packages/core/tools/spacing';
-  @import '~nhsuk-frontend/packages/core/settings/spacing';
+  @import '../style/arrow';  ;
   @import '~nhsuk-frontend/packages/core/settings/colours';
+
+  @mixin outlineStyle {
+    outline: 4px solid transparent;
+    outline-offset: -6px;
+  }
 
   .listMenuItemLink {
     @include icon-arrow-left-white-background;
@@ -124,29 +122,24 @@ export default {
     box-sizing: border-box;
     margin-left: 0;
 
-    border-top: 1px $border_grey solid;
-    border-bottom: 1px $border_grey solid;
+    border-top: 1px $color_nhsuk-grey-4 solid;
+    border-bottom: 1px $color_nhsuk-grey-4 solid;
 
     &:hover {
-      @include outlineStyleLightMenuItem;
-      color: #000;
+      @include outlineStyle;
+      box-shadow: 0 0 0 4px $nhsuk-link-hover-background-color inset;
     }
 
     &:focus {
-      @include focusStyleLightMenuItem;
-      color: #000;
-    }
-
-    &.active {
-      outline: none;
-      text-decoration: underline;
+      @include outlineStyle;
+      box-shadow: 0 0 0 4px $nhsuk-link-focus-background-color inset;
     }
   }
 
   button.listMenuItemLink {
     display: block;
     width: 100%;
-    color: $nhs_blue;
+    color: $nhsuk-link-color;
     text-align: left;
     font-weight: bold;
     border-left: none;
@@ -160,10 +153,6 @@ export default {
   .listMenuItem {
     display: block;
     margin-bottom: 5px;
-
-    :focus {
-      outline: none;
-    }
 
     .listMenuItemContainer {
       padding: 0.2em 0.5em;
@@ -180,18 +169,17 @@ export default {
         margin: 0;
       }
 
-      h3 {
-        @include h3;
+      h2, h3, p {
+        padding-left:10px;
+        width: 90%;
       }
 
-      h4 {
-        @include h4;
-        padding-bottom: 0.5em;
-        padding-top: 0.5em;
-      }
+      h2, h3 {
+         margin: 0;
+       }
 
       p {
-        color: #000;
+        color: $nhsuk-text-color;
       }
     }
   }

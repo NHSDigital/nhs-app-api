@@ -13,7 +13,7 @@ class OrganDonationFaithModule(page: HybridPageObject) {
 
     private val title = "Faith / beliefs details"
 
-    private val containerXPath = "//div[h2[text()=\"$title\"]]"
+    private val containerXPath = "//div[h3[text()=\"$title\"]]"
 
     private val container = HybridPageElement(
             containerXPath,
@@ -30,14 +30,14 @@ class OrganDonationFaithModule(page: HybridPageObject) {
 
     fun assertChoice(choice: String) {
         container.actOnTheElement {
-            val actualText = it.findElement<WebElement>(By.xpath("./p/b")).text
+            val actualText = it.findElement<WebElement>(By.xpath("./h4")).text
 
             Assert.assertEquals("Faith and Beliefs",
                     "I would like NHS staff to speak to my family and anyone else appropriate about how organ " +
                             "donation can go ahead in line with my faith / beliefs",
                     actualText)
 
-            val actualChoice = it.findElement<WebElement>(By.xpath("./span")).text
+            val actualChoice = it.findElement<WebElement>(By.xpath("./p")).text
 
             Assert.assertEquals("Faith and Beliefs Choice",
                     choice,

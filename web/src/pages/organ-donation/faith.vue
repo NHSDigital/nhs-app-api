@@ -1,47 +1,42 @@
 <template>
-  <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <message-dialog v-if="showError" message-type="error">
-      <message-text data-purpose="error-heading">
-        {{ $t('organDonation.faith.errorMsgHeader') }}
-      </message-text>
-      <message-list data-purpose="reason-error">
-        <li>{{ $t('organDonation.faith.errorMsgText') }}</li>
-      </message-list>
-    </message-dialog>
-    <h2>{{ $t('organDonation.faith.subheader') }}</h2>
-    <div :class="$style.info">
+  <div id="mainDiv" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <message-dialog v-if="showError" message-type="error">
+        <message-text data-purpose="error-heading">
+          {{ $t('organDonation.faith.errorMsgHeader') }}
+        </message-text>
+        <message-list data-purpose="reason-error">
+          <li>{{ $t('organDonation.faith.errorMsgText') }}</li>
+        </message-list>
+      </message-dialog>
+      <h2>{{ $t('organDonation.faith.subheader') }}</h2>
       <p>{{ $t('organDonation.faith.body.paragraph1') }}</p>
-    </div>
-    <collapsible-dialog>
-      <template slot="header">
-        {{ $t('organDonation.faith.endOfLifeWishes.header') }}
-      </template>
-      <ul>
-        <li v-for="(listItem, index) of $t('organDonation.faith.endOfLifeWishes.listItems')"
-            :key="index">
-          {{ listItem }}
-        </li>
-      </ul>
-    </collapsible-dialog>
-    <div :class="$style.info">
+      <collapsible-dialog>
+        <template slot="header">
+          {{ $t('organDonation.faith.endOfLifeWishes.header') }}
+        </template>
+        <ul class="nhsuk-list">
+          <li v-for="(listItem, index) of $t('organDonation.faith.endOfLifeWishes.listItems')"
+              :key="index">
+            {{ listItem }}
+          </li>
+        </ul>
+      </collapsible-dialog>
       <p>{{ $t('organDonation.faith.body.paragraph2') }}</p>
-    </div>
-    <div :class="$style.info">
       <p><b>{{ $t('organDonation.faith.choices.header') }}</b></p>
+      <radio-group v-model="selectedValue"
+                   :radios="choices"
+                   :current-value="currentChoice"
+                   :show-error="showError"
+                   :error-message="$t('organDonation.faith.inlineErrorMessage')"
+                   @select="radioButtonSelected"/>
+      <generic-button id="continue-to-additional-details"
+                      :class="['nhsuk-button']"
+                      @click.stop.prevent="continueClicked">
+        {{ $t('organDonation.faith.continueButtonText') }}
+      </generic-button>
+      <back-button v-if="!$store.state.device.isNativeApp"/>
     </div>
-    <radio-group v-model="selectedValue"
-                 :radios="choices"
-                 :current-value="currentChoice"
-                 :show-error="showError"
-                 :error-message="$t('organDonation.faith.inlineErrorMessage')"
-                 @select="radioButtonSelected"/>
-    <generic-button id="continue-to-additional-details"
-                    :class="['nhsuk-button']"
-                    @click.stop.prevent="continueClicked">
-      {{ $t('organDonation.faith.continueButtonText') }}
-    </generic-button>
-
-    <back-button v-if="!$store.state.device.isNativeApp"/>
   </div>
 </template>
 
@@ -60,6 +55,7 @@ import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionM
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     BackButton,
     CollapsibleDialog,
@@ -118,20 +114,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-@import "../../style/info";
-@import "../../style/buttons";
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  margin-bottom: 1em;
-  li {
-    margin: 0;
-    padding: 0;
-    line-height:1em;
-  }
-}
-
-</style>

@@ -1,17 +1,17 @@
 <template>
-  <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <make-decision/>
-    <ul :class="[$style['list-menu'], $style['mb-3']]">
-      <li>
+  <div id="mainDiv" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <make-decision/>
+      <menu-item-list>
         <find-out-more-link/>
-      </li>
-    </ul>
-    <generic-button v-if="!$store.state.device.isNativeApp"
-                    id="back-button"
-                    :class="['nhsuk-button', 'nhsuk-button--secondary']"
-                    @click="goBack" >
-      {{ $t('generic.backButton.text') }}
-    </generic-button>
+      </menu-item-list>
+      <generic-button v-if="!$store.state.device.isNativeApp"
+                      id="back-button"
+                      :class="['nhsuk-button', 'nhsuk-button--secondary']"
+                      @click="goBack" >
+        {{ $t('generic.backButton.text') }}
+      </generic-button>
+    </div>
   </div>
 </template>
 
@@ -19,15 +19,18 @@
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import GenericButton from '@/components/widgets/GenericButton';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
+import MenuItemList from '@/components/MenuItemList';
 import { INDEX, ORGAN_DONATION } from '@/lib/routes';
 import { isNativeApp } from '@/components/NativeOnlyMixin';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     FindOutMoreLink,
     GenericButton,
     MakeDecision,
+    MenuItemList,
   },
   fetch({ redirect, route, store }) {
     if (!isNativeApp({ route, store })) {
@@ -44,9 +47,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-@import "../../style/buttons";
-@import "../../style/listmenu";
-@import "../../style/spacings";
-</style>

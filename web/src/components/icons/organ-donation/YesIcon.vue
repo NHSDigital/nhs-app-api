@@ -59,9 +59,8 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../../style/colours";
 .yes {
-  margin: 0 auto;
+  margin: 0;
   display: inline-block;
   width: 35px;
   height: 35px;

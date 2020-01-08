@@ -1,48 +1,43 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <div v-if="isConflicted || hasExistingDecision">
-      <div v-if="isConflicted" :class="$style['mb-3']">
-        <message-dialog :icon-text="$t('organDonation.viewDecision.conflictedState.dialogText')"
-                        message-id="success-dialog" message-type="success">
-          <message-text>
-            {{ $t('organDonation.viewDecision.conflictedState.messageText') }}</message-text>
-        </message-dialog>
-        <h2>{{ $t('organDonation.viewDecision.conflictedState.registrationHeader') }}</h2>
-        <p>
-          {{ $t('organDonation.viewDecision.conflictedState.registrationText') }}</p>
-      </div>
-      <div v-else :class="$style['mb-3']">
-        <decision-info :decision="decision"
-                       :decision-details="decisionDetails"
-                       header-key="organDonation.registered.yourDecision.subheader"/>
-
-        <faith-details-registered v-if="hasExistingOptIn" :declaration="faithDeclaration"/>
-
-        <still-your-decision :is-some-organs="isSomeOrgans"
-                             :show-amend="true"
-                             :show-reaffirm="!hasAppointedRep"/>
-
-        <div v-if="hasAppointedRep" :class="[$style.info, $style.appointedRep, $style['mt-3']]">
-          <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
-          <span role="text" aria-label="zero three zero zero one two three two three two three">
-            0300 123 2323
-          </span>
+  <div v-if="showTemplate" id="mainDiv" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <div v-if="isConflicted || hasExistingDecision">
+        <div v-if="isConflicted">
+          <message-dialog :icon-text="$t('organDonation.viewDecision.conflictedState.dialogText')"
+                          message-id="success-dialog" message-type="success">
+            <message-text>
+              {{ $t('organDonation.viewDecision.conflictedState.messageText') }}</message-text>
+          </message-dialog>
+          <h2>{{ $t('organDonation.viewDecision.conflictedState.registrationHeader') }}</h2>
+          <p>
+            {{ $t('organDonation.viewDecision.conflictedState.registrationText') }}</p>
         </div>
+        <div v-else>
+          <decision-info :decision="decision"
+                         :decision-details="decisionDetails"
+                         header-key="organDonation.registered.yourDecision.subheader"/>
+          <faith-details-registered v-if="hasExistingOptIn" :declaration="faithDeclaration"/>
+          <still-your-decision :is-some-organs="isSomeOrgans"
+                               :show-amend="true"
+                               :show-reaffirm="!hasAppointedRep"/>
+          <div v-if="hasAppointedRep">
+            <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
+            <span role="text" aria-label="zero three zero zero one two three two three two three">
+              0300 123 2323
+            </span>
+          </div>
+        </div>
+        <next-steps v-if="!hasAppointedRep && (hasExistingOptIn || hasExistingOptOut)"
+                    :is-opt-in-decision="hasExistingOptIn"/>
+        <other-things-to-do :can-withdraw="!isConflicted"/>
       </div>
-      <next-steps v-if="!hasAppointedRep && (hasExistingOptIn || hasExistingOptOut)"
-                  :class="$style['mb-3']" :is-opt-in-decision="hasExistingOptIn"/>
-      <other-things-to-do :class="$style['mb-3']" :can-withdraw="!isConflicted"/>
-    </div>
-    <div v-else :class="$style['mb-6']">
-      <make-decision/>
-      <ul :class="$style['list-menu']">
-        <li>
+      <div v-else>
+        <make-decision/>
+        <menu-item-list>
           <already-registered-link/>
-        </li>
-        <li>
           <find-out-more-link/>
-        </li>
-      </ul>
+        </menu-item-list>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +48,7 @@ import DecisionInfo from '@/components/organ-donation/DecisionInfo';
 import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
+import MenuItemList from '@/components/MenuItemList';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import NextSteps from '@/components/organ-donation/NextSteps';
@@ -74,12 +70,14 @@ const load = async (store) => {
 };
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     AlreadyRegisteredLink,
     DecisionInfo,
     FaithDetailsRegistered,
     FindOutMoreLink,
     MakeDecision,
+    MenuItemList,
     MessageText,
     MessageDialog,
     NextSteps,
@@ -142,18 +140,3 @@ export default {
   },
 };
 </script>
-
-
-<style module lang="scss" scoped>
-@import "../../style/info";
-@import "../../style/listmenu";
-@import "../../style/spacings";
-
-.info {
-  &.appointedRep {
-    p {
-      padding-bottom: 0;
-    }
-  }
-}
-</style>

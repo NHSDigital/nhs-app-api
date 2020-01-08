@@ -1,10 +1,12 @@
 <template>
-  <div :class="$style.info">
+  <div>
     <h3>{{ $t('organDonation.reviewYourDecision.contactDetails.subheader') }}</h3>
-    <p :class="$style['pt-3']">{{ $t('organDonation.reviewYourDecision.contactDetails.text') }}</p>
-    <h4>{{ $t('organDonation.reviewYourDecision.contactDetails.addressheader') }}</h4>
+    <p>{{ $t('organDonation.reviewYourDecision.contactDetails.text') }}</p>
+    <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
+      {{ $t('organDonation.reviewYourDecision.contactDetails.addressheader') }}
+    </h4>
     <p>{{ address }}</p>
-    <p :class="$style['pt-3']">
+    <p>
       {{ $t('organDonation.reviewYourDecision.contactDetails.changeDetailsText') }}
     </p>
   </div>
@@ -21,21 +23,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/info";
-  @import '../../style/fonts';
-  @import "../../style/spacings";
-
-  .info {
-    h3 {
-      margin: 0;
-      padding: 0;
-    }
-
-    h4 {
-      margin: 0;
-      padding: $three 0 0 0;
-    }
-  }
-</style>

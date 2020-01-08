@@ -1,10 +1,10 @@
 <template>
-  <div :class="$style['flex-container']">
+  <div>
     <button :class="[style, $style['decision-button']]" @click.prevent="chooseDecision()">
       <div>
-        <component :is="icon" :class="$style['button-content']" :title-id="headerId" />
-        <h2 :id="headerId" aria-hidden="true">{{ $t(headerKey) }}</h2>
-        <p>{{ $t(subHeaderKey) }}</p>
+        <component :is="icon" :class="$style['button-content', 'icon']" :title-id="headerId" />
+        <h2 :id="headerId" class="nhsuk-heading-l" aria-hidden="true">{{ $t(headerKey) }}</h2>
+        <p class="nhsuk-heading-m">{{ $t(subHeaderKey) }}</p>
       </div>
     </button>
   </div>
@@ -53,65 +53,58 @@ export default {
 </script>
 
 <style module lang="scss">
-  @import "../../style/accessibility";
-  @import "../../style/colours";
-  @import "../../style/spacings";
+@import '~nhsuk-frontend/packages/core/settings/colours';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/tools/ifff';
+@import '~nhsuk-frontend/packages/core/tools/sass-mq';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
 
   .decision-button {
-    @include space(padding, top, $three);
-    @include space(padding, left, $four);
-    @include space(padding, right, $four);
-    @include space(padding, bottom, $three);
-    background: $white;
+    @include nhsuk-responsive-padding(2, "top");
+    @include nhsuk-responsive-padding(3, "right");
+    @include nhsuk-responsive-padding(0, "bottom");
+    @include nhsuk-responsive-padding(3, "left");
+    background: $color_nhsuk-white;
     border: none;
     cursor: pointer;
     outline: none;
     width: 100%;
-    height: 100%;
 
     div {
       height: 100%;
+      vertical-align: top;
+    }
+
+    .icon {
+      @include nhsuk-responsive-margin(4);
     }
 
     h2 {
-      font-size: 2em;
-      margin: 0;
-      padding: 0;
-    }
-
-    p {
-      font-size: 1.727em;
-      font-weight: bold;
+      @include nhsuk-responsive-padding(1, "bottom");
+      @include nhsuk-responsive-padding(0, "top");
     }
   }
 
   .no-button {
-
     h2 {
-      color: $red;
+      color: $color_nhsuk-red;
     }
-
     p {
-      color: $red;
+      color: $color_nhsuk-red;
     }
   }
 
   .yes-button {
-
     h2 {
-      color: $light_green;
+      color: $color_nhsuk-green;
     }
-
     p {
-      color: $light_green;
+      color: $color_nhsuk-green;
     }
   }
 
   .button-content {
     vertical-align: top;
-  }
-
-  .flex-container {
-    flex: 0 50%;
   }
 </style>

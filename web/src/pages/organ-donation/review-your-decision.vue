@@ -1,49 +1,49 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <message-dialog v-if="showErrors" id="errors">
-      <message-text data-purpose="error-heading">
-        {{ $t('organDonation.reviewYourDecision.errorMsgHeader') }}
-      </message-text>
-      <message-list data-purpose="reason-error">
-        <li v-for="error in validationErrors" :key="error">{{ $t(error) }}</li>
-      </message-list>
-    </message-dialog>
-
-    <h2>{{ $t('organDonation.reviewYourDecision.header') }}</h2>
-    <personal-details
-      :name="$store.state.organDonation.registration.nameFull"
-      :date-of-birth="$store.state.organDonation.registration.dateOfBirth"
-      :gender="$store.state.organDonation.registration.gender"
-      :nhs-number="$store.state.organDonation.registration.nhsNumber"
-      :address="$store.state.organDonation.registration.addressFull"/>
-    <hr :class="$style.rule" aria-hidden="true">
-    <contact-details :address="$store.state.organDonation.registration.addressFull"/>
-    <hr :class="$style.rule" aria-hidden="true">
-    <div v-if="showAdditionalDetails">
-      <additional-information
-        :ethnicity-id="$store.state.organDonation.additionalDetails.ethnicityId"
-        :religion-id="$store.state.organDonation.additionalDetails.religionId"
-        :reference-data="$store.state.organDonation.referenceData"/>
-      <hr :class="$style.rule" aria-hidden="true">
+  <div v-if="showTemplate" id="mainDiv" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <message-dialog v-if="showErrors" id="errors">
+        <message-text data-purpose="error-heading">
+          {{ $t('organDonation.reviewYourDecision.errorMsgHeader') }}
+        </message-text>
+        <message-list data-purpose="reason-error">
+          <li v-for="error in validationErrors" :key="error">{{ $t(error) }}</li>
+        </message-list>
+      </message-dialog>
+      <h2>{{ $t('organDonation.reviewYourDecision.header') }}</h2>
+      <personal-details
+        :name="$store.state.organDonation.registration.nameFull"
+        :date-of-birth="$store.state.organDonation.registration.dateOfBirth"
+        :gender="$store.state.organDonation.registration.gender"
+        :nhs-number="$store.state.organDonation.registration.nhsNumber"
+        :address="$store.state.organDonation.registration.addressFull"/>
+      <hr class="nhsuk-section-break nhsuk-section-break--m" aria-hidden="true">
+      <contact-details :address="$store.state.organDonation.registration.addressFull"/>
+      <hr class="nhsuk-section-break nhsuk-section-break--m" aria-hidden="true">
+      <div v-if="showAdditionalDetails">
+        <additional-information
+          :ethnicity-id="$store.state.organDonation.additionalDetails.ethnicityId"
+          :religion-id="$store.state.organDonation.additionalDetails.religionId"
+          :reference-data="$store.state.organDonation.referenceData"/>
+        <hr class="nhsuk-section-break nhsuk-section-break--m" aria-hidden="true">
+      </div>
+      <decision-info :decision-details="$store.state.organDonation.registration.decisionDetails"
+                     :decision="$store.state.organDonation.registration.decision"
+                     :is-withdrawing="isWithdrawing"/>
+      <hr class="nhsuk-section-break nhsuk-section-break--m" aria-hidden="true">
+      <div v-if="!isWithdrawing && isOptInDecision" id="faithDetails">
+        <faith-details :declaration="$store.state.organDonation.registration.faithDeclaration"/>
+        <hr class="nhsuk-section-break nhsuk-section-break--m" aria-hidden="true">
+      </div>
+      <confirmation :submit-attempted="submitAttempted"/>
+      <generic-button id="submit-button"
+                      class="nhsuk-button"
+                      :disabled="isDisabled"
+                      click-delay="medium"
+                      @click="clickSubmit">
+        {{ $t('organDonation.reviewYourDecision.submitButton') }}
+      </generic-button>
+      <back-button v-if="!$store.state.device.isNativeApp"/>
     </div>
-
-    <decision-info :decision-details="$store.state.organDonation.registration.decisionDetails"
-                   :decision="$store.state.organDonation.registration.decision"
-                   :is-withdrawing="isWithdrawing"/>
-
-    <div v-if="!isWithdrawing && isOptInDecision" id="faithDetails">
-      <faith-details :declaration="$store.state.organDonation.registration.faithDeclaration"/>
-      <hr :class="$style.rule" aria-hidden="true">
-    </div>
-    <confirmation :submit-attempted="submitAttempted"/>
-    <generic-button id="submit-button"
-                    class="nhsuk-button"
-                    :disabled="isDisabled"
-                    click-delay="medium"
-                    @click="clickSubmit">
-      {{ $t('organDonation.reviewYourDecision.submitButton') }}
-    </generic-button>
-    <back-button v-if="!$store.state.device.isNativeApp"/>
   </div>
 </template>
 
@@ -65,6 +65,7 @@ import { DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
 import { EnsureCanSubmit } from '@/components/organ-donation/EnsureDecisionMixin';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     AdditionalInformation,
     BackButton,
@@ -136,10 +137,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/buttons";
-  @import "../../style/info";
-  @import "../../style/organdonation";
-  @import "../../style/textstyles";
-</style>

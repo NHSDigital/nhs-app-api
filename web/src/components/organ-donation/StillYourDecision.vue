@@ -1,11 +1,12 @@
 <template>
-  <div :class="$style['mb-3']">
+  <div>
     <h3>{{ $t('organDonation.stillYourDecision.subheader') }}</h3>
-    <p :class="$style['mb-1']">{{ $t('organDonation.stillYourDecision.text') }}</p>
-    <reaffirm-decision-link v-if="showReaffirm"
-                            :class="$style['mb-1']"
-                            :is-some-organs="isSomeOrgans"/>
-    <amend-decision-link v-if="showAmend"/>
+    <p>{{ $t('organDonation.stillYourDecision.text') }}</p>
+    <ul class="nhsuk-list">
+      <reaffirm-decision-link v-if="showReaffirm"
+                              :is-some-organs="isSomeOrgans"/>
+      <amend-decision-link v-if="showAmend"/>
+    </ul>
   </div>
 </template>
 
@@ -35,7 +36,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/spacings";
-</style>

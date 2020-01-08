@@ -1,19 +1,20 @@
 <template>
-  <analytics-tracked-tag :href="alreadyRegisteredUrl"
-                         :text="$t('organDonation.links.alreadyRegisteredText')"
-                         :class="$style.focusBorder"
-                         tag="a" target="_blank">
-    {{ $t('organDonation.links.alreadyRegisteredText') }}
-  </analytics-tracked-tag>
+  <menu-item id="btn_alreadyRegistered"
+             header-tag="h3"
+             role="link"
+             :href="alreadyRegisteredUrl"
+             target="_blank"
+             :text="$t('organDonation.links.alreadyRegisteredText')"
+             :aria-label="$t('organDonation.links.alreadyRegisteredText')"/>
 </template>
 
 <script>
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import MenuItem from '@/components/MenuItem';
 
 export default {
   name: 'AlreadyRegisteredLink',
   components: {
-    AnalyticsTrackedTag,
+    MenuItem,
   },
   data() {
     return {
@@ -22,7 +23,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss">
-  @import "../../style/accessibility";
-</style>

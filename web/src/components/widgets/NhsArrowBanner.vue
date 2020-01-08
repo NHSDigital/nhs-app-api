@@ -1,21 +1,25 @@
 <template>
-  <div class="nhsuk-action-link nhsuk-action-link__text">
-    <analytics-tracked-tag
-      v-if="isAnalyticsTracked"
-      :id="id"
-      class="nhsuk-action-link__link"
-      :click-func="clickFunc"
-      :href="linkUrl"
-      :target="openNewWindow? '_blank' : ''"
-      :text="bannerText"
-      tag="a">
-      <Nhs-Arrow-Circle tabindex="-1" />{{ bannerText }}
+  <div class="nhsuk-action-link">
+    <analytics-tracked-tag v-if="isAnalyticsTracked"
+                           :id="id"
+                           class="nhsuk-action-link__link"
+                           :click-func="clickFunc"
+                           :href="linkUrl"
+                           :target="openNewWindow ? '_blank' : undefined"
+                           :text="bannerText"
+                           tag="a">
+      <nhs-arrow-circle />
+      <span class="nhsuk-action-link__text">{{ bannerText }}</span>
     </analytics-tracked-tag>
-    <a v-else :id="id" class="nhsuk-action-link__link nhsuk-action-link__text" :href="linkUrl"
-       :target="openNewWindow? '_blank' : ''"
+    <a v-else
+       :id="id"
+       class="nhsuk-action-link__link"
+       :href="linkUrl"
+       :target="openNewWindow ? '_blank' : undefined"
        @click="doClick"
        @keypress.enter="doClick" >
-      <Nhs-Arrow-Circle tabindex="-1" />{{ bannerText }}
+      <nhs-arrow-circle />
+      <span class="nhsuk-action-link__text">{{ bannerText }}</span>
     </a>
   </div>
 </template>

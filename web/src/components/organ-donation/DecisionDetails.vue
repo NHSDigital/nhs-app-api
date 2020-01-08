@@ -3,30 +3,35 @@
     <h3 id="decision-details-header">
       {{ $t('organDonation.reviewYourDecision.decisionDetails.subheader') }}
     </h3>
-    <p id="decision-details-text" :class="$style['mb-3']">
+    <p id="decision-details-text">
       {{ $t(decisionDetailsTextKey) }}
     </p>
-
     <div v-if="isSomeOrgans">
-      <div :class="$style.chosen">
-        <h4>{{ $t('organDonation.reviewYourDecision.decisionDetails.chosenHeader') }}</h4>
-        <ul>
+      <div id="chosen">
+        <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
+          {{ $t('organDonation.reviewYourDecision.decisionDetails.chosenHeader') }}
+        </h4>
+        <ul class="nhsuk-list nhsuk-u-margin-left-3">
           <li v-for="choice in chosen" :key="choice">
             {{ $t(`organDonation.reviewYourDecision.decisionDetails.choices.${choice}`) }}
           </li>
         </ul>
       </div>
-      <div v-if="hasNotChosen" :class="$style.notChosen">
-        <h4>{{ $t('organDonation.reviewYourDecision.decisionDetails.notChosenHeader') }}</h4>
-        <ul>
+      <div v-if="hasNotChosen" id="notChosen">
+        <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
+          {{ $t('organDonation.reviewYourDecision.decisionDetails.notChosenHeader') }}
+        </h4>
+        <ul class="nhsuk-list nhsuk-u-margin-left-3">
           <li v-for="choice in notChosen" :key="choice">
             {{ $t(`organDonation.reviewYourDecision.decisionDetails.choices.${choice}`) }}
           </li>
         </ul>
       </div>
-      <div v-if="hasNotStated" :class="$style.notStated">
-        <h4>{{ $t('organDonation.reviewYourDecision.decisionDetails.notStatedHeader') }}</h4>
-        <ul>
+      <div v-if="hasNotStated" id="notStated">
+        <h4 class="nhsuk-heading-xs nhsuk-u-margin-0">
+          {{ $t('organDonation.reviewYourDecision.decisionDetails.notStatedHeader') }}
+        </h4>
+        <ul class="nhsuk-list nhsuk-u-margin-left-3">
           <li v-for="choice in notStated" :key="choice">
             {{ $t(`organDonation.reviewYourDecision.decisionDetails.choices.${choice}`) }}
           </li>
@@ -81,17 +86,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss">
-  @import "../../style/spacings";
-
-  .chosen, .notChosen, .notStated {
-    ul {
-      margin-bottom: $three;
-    }
-
-    li {
-      list-style-type: none;
-    }
-  }
-</style>

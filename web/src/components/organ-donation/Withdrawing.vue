@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style['mb-3']">
+  <div>
     <h3>{{ $t('organDonation.reviewYourDecision.withdraw.subheader') }}</h3>
     <p>
       {{ $t('organDonation.reviewYourDecision.withdraw.body') }}
@@ -12,7 +12,3 @@ export default {
   name: 'Withdrawing',
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import '../../style/organdonation';
-</style>

@@ -8,6 +8,8 @@ import pages.sharedElements.TextBlockElement
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationViewWithdrawRegistrationPage: OrganDonationBasePage()  {
     override fun assertDisplayed() {
+        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
+        Thread.sleep(RELOAD_WAIT)
         title.assertIsVisible()
     }
     override val titleText = "What to do next"

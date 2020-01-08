@@ -1,12 +1,19 @@
 <template>
-  <div :class="$style['mb-3']">
-    <div :class="$style.info">
-      <h2>{{ headerText }}</h2>
-    </div>
-    <div :class="$style['flexbox-container']">
-      <organ-donation-button id="no-button" :decision="noDecision"/>
-      <div :class="$style['m-1']"/>
-      <organ-donation-button id="yes-button" :decision="yesDecision"/>
+  <div class="nhsuk-u-padding-bottom-4">
+    <h2>{{ headerText }}</h2>
+    <div class="nhsuk-grid-row" :class="$style['flex-container']">
+      <organ-donation-button id="no-button"
+                             class="nhsuk-grid-column-one-half
+                             nhsuk-u-padding-0
+                             nhsuk-u-margin-4
+                             nhsuk-u-one-half choiceButton"
+                             :decision="noDecision"/>
+      <organ-donation-button id="yes-button"
+                             class="nhsuk-grid-column-one-half
+                             nhsuk-u-padding-0
+                             nhsuk-u-margin-4
+                             nhsuk-u-one-half choiceButton"
+                             :decision="yesDecision"/>
     </div>
   </div>
 </template>
@@ -33,10 +40,13 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/info";
-@import "../../style/spacings";
-
-.flexbox-container {
+.flex-container{
   display: flex;
 }
+</style>
+
+<style>
+  .nhsuk-u-one-half.choiceButton{
+    background: #fff;
+  }
 </style>

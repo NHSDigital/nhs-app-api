@@ -1,8 +1,10 @@
 <template>
-  <a id="reaffirmDecisionLink" :class="$style.reaffirmDecision" href="#"
-     @click.stop.prevent="setReaffirmDecision">
-    {{ $t('organDonation.links.reaffirmDecisionText') }}
-  </a>
+  <li>
+    <a id="reaffirmDecisionLink" href="#"
+       @click.stop.prevent="setReaffirmDecision">
+      {{ $t('organDonation.links.reaffirmDecisionText') }}
+    </a>
+  </li>
 </template>
 
 <script>
@@ -29,11 +31,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-
-.reaffirmDecision {
-  padding: 0.5em;
-  margin-left: -0.5em;
-}
-</style>

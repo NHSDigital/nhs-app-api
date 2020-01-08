@@ -19,7 +19,7 @@ class CheckBoxElement(val page : HybridPageObject, text:String) {
     }
 
     fun click() {
-        checkBoxElement.actOnTheElement { it.findElement<WebElement>(By.xpath("./label")).click() }
+        checkBoxElement.actOnTheElement { it.findElement<WebElement>(By.xpath("./input")).click() }
     }
 
     fun assertChecked() {

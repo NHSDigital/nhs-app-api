@@ -10,9 +10,8 @@
                  :text="$t('sc04.messaging.subheader')"
                  :description="$t('sc04.messaging.body')"
                  :click-func="navigate"
-                 :aria-label="ariaLabelCaption(
-                   'sc04.messaging.subheader',
-                   'sc04.messaging.body')"/>
+                 :aria-label="$t('sc04.messaging.subheader') |
+                   join($t('sc04.messaging.body') ,'. ')"/>
 
       <menu-item v-if="adminHelpEnabled"
                  id="btn_gp_help"
@@ -22,13 +21,12 @@
                  :text="$t('sc04.requestGpHelp.subheader')"
                  :description="$t('sc04.requestGpHelp.body')"
                  :click-func="navigate"
-                 :aria-label="ariaLabelCaption(
-                   'sc04.requestGpHelp.subheader',
-                   'sc04.requestGpHelp.body')"/>
+                 :aria-label="$t('sc04.requestGpHelp.subheader') |
+                   join($t('sc04.requestGpHelp.body') ,'. ')"/>
 
       <organ-donation-link id="btn_organ_donation"
                            header-tag="h2"
-                           :description="$t('sc04.organDonation.body')"
+                           :display-description="true"
                            :back-link-override="morePath"/>
 
       <menu-item id="btn_data_sharing"
@@ -38,10 +36,8 @@
                  :text="$t('sc04.dataSharing.subheader')"
                  :description="$t('sc04.dataSharing.body')"
                  :click-func="navigateToDataSharing"
-                 target="_blank"
-                 :aria-label="ariaLabelCaption(
-                   'sc04.dataSharing.subheader',
-                   'sc04.dataSharing.body')"/>
+                 :aria-label="$t('sc04.dataSharing.subheader') |
+                   join($t('sc04.dataSharing.body') ,'. ')"/>
 
     </menu-item-list>
   </div>
@@ -85,8 +81,9 @@ export default {
   },
   computed: {
     dataSharingPath() {
-      return (this.$store.state.device.isNativeApp) ?
-        DATA_SHARING_PREFERENCES.path : this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL;
+      return this.$store.state.device.isNativeApp
+        ? DATA_SHARING_PREFERENCES.path
+        : this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL;
     },
     patientPracticeMessagingEnabled() {
       return isTruthy(this.$store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)
@@ -122,15 +119,12 @@ export default {
       if (this.$store.state.device.isNativeApp) {
         this.navigate(event);
       } else {
-        window.open(this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL, '_blank');
+        window.open(this.dataSharingPath, '_blank');
       }
     },
     navigate(event) {
       redirectTo(this, event.currentTarget.pathname);
       event.preventDefault();
-    },
-    ariaLabelCaption(header, body) {
-      return `${this.$t(header)}. ${this.$t(body)}`;
     },
   },
 };

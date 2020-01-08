@@ -5,14 +5,16 @@
       <menu-item v-if="canWithdraw"
                  id="btn_withdraw"
                  header-tag="h3"
+                 role="link"
                  href="#"
                  :description="$t('organDonation.otherThings.withdraw.body')"
                  :text="$t('organDonation.otherThings.withdraw.subheader')"
                  :click-func="withdrawDecision"
-                 :aria-label="$t('organDonation.otherThings.withdraw.subheader')"/>
-
+                 :aria-label="`${$t('organDonation.otherThings.withdraw.subheader')}.
+                               ${$t('organDonation.otherThings.withdraw.body')}`"/>
       <menu-item id="btn_blood"
                  header-tag="h3"
+                 role="link"
                  :href="bloodDonationUrl"
                  target="_blank"
                  :description="$t('organDonation.otherThings.bloodDonation.body')"
@@ -53,24 +55,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/accessibility";
-  @import "../../style/listmenu";
-
-  .noDecoration {
-    text-decoration: none;
-  }
-
-  .list-menu {
-    li {
-      a {
-        h3 {
-          @include h2;
-          color: $nhs_blue;
-        }
-      }
-    }
-  }
-
-</style>

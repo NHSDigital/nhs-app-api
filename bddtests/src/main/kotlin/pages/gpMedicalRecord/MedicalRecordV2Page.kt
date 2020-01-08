@@ -16,7 +16,7 @@ class MedicalRecordV2Page : HybridPageObject() {
 
     val clinicalAbbreviationsLink =
             HybridPageElement(
-                    webDesktopLocator = "//a[contains(text(),'Help with abbreviations')]",
+                    webDesktopLocator = "//a/span[contains(text(),'Help with abbreviations')]",
                     androidLocator = null,
                     page = this)
 

@@ -34,8 +34,8 @@ import MenuItemList from '@/components/MenuItemList';
 export default {
   name: 'NextSteps',
   components: {
-    MenuItemList,
     MenuItem,
+    MenuItemList,
   },
   props: {
     isOptInDecision: {
@@ -51,26 +51,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  @import "../../style/accessibility";
-  @import '../../style/colours';
-  @import "../../style/listmenu";
-  @import '../../style/textstyles';
-
-  .no-decoration {
-    text-decoration: none;
-  }
-
-  .list-menu {
-    li {
-      a {
-        h3 {
-          @include h2;
-          color: $nhs_blue;
-        }
-      }
-    }
-  }
-
-</style>

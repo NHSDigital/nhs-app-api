@@ -1,13 +1,12 @@
 <template>
-  <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <div :class="$style.info">
+  <div id="mainDiv" :class="[$style.form]" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
       <h2>{{ $t('organDonation.additionalDetails.subheader') }}</h2>
       <p>{{ $t('organDonation.additionalDetails.description') }}</p>
-      <label :class="$style.label" for="ethnicity">
+      <label for="ethnicity" class="nhsuk-label">
         {{ $t('organDonation.additionalDetails.ethnicity.label') }}
       </label>
       <select-dropdown v-model="ethnicityId"
-                       :class="$style.select"
                        :required="false"
                        select-id="ethnicity"
                        select-name="nojs.organDonation.additionalDetails.ethnicityId">
@@ -19,11 +18,10 @@
           {{ option.displayName }}
         </option>
       </select-dropdown>
-      <label :class="$style.label" for="religion">
+      <label for="religion" class="nhsuk-label">
         {{ $t('organDonation.additionalDetails.religion.label') }}
       </label>
       <select-dropdown v-model="religionId"
-                       :class="$style.select"
                        :required="false"
                        select-id="religion"
                        select-name="nojs.organDonation.additionalDetails.religionId">
@@ -40,7 +38,6 @@
                       @click.prevent="continueClicked">
         {{ $t('organDonation.additionalDetails.continueButton') }}
       </generic-button>
-
       <back-button v-if="!$store.state.device.isNativeApp" />
     </div>
   </div>
@@ -61,6 +58,7 @@ const mapAdditionalDetails = self => ({
 });
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     BackButton,
     GenericButton,
@@ -97,16 +95,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/spacings";
-  @import "../../style/buttons";
-  @import "../../style/info";
-  @import "../../style/accessibility";
-
-  .label {
-    margin-top: $one;
-  }
-
-  .select {
-    margin-bottom: $three;
-  }
+ @import "../../style/forms";
 </style>

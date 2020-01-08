@@ -1,20 +1,20 @@
 <template>
-  <analytics-tracked-tag :href="findOutMoreUrl"
-                         :class="$style.focusBorder"
-                         :text="$t('organDonation.links.findOutMoreText')"
-                         tag="a"
-                         target="_blank">
-    {{ $t('organDonation.links.findOutMoreText') }}
-  </analytics-tracked-tag>
+  <menu-item id="btn_findOutMore"
+             header-tag="h3"
+             role="link"
+             :href="findOutMoreUrl"
+             target="_blank"
+             :text="$t('organDonation.links.findOutMoreText')"
+             :aria-label="$t('organDonation.links.findOutMoreText')"/>
 </template>
 
 <script>
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import MenuItem from '@/components/MenuItem';
 
 export default {
   name: 'FindOutMoreLink',
   components: {
-    AnalyticsTrackedTag,
+    MenuItem,
   },
   data() {
     return {
@@ -23,7 +23,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss">
-  @import "../../style/accessibility";
-</style>

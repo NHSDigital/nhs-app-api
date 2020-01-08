@@ -11,7 +11,7 @@ import utils.isTrueOrFalse
 class OrganDonationChoicePage : OrganDonationBasePage() {
 
     override val titleText: String by lazy {getCorrectTitleText()}
-    
+
     private val alreadyRegisteredLinkText = "Think you have registered already?"
     private val findOutMoreLinkText = "Find out more about organ donation"
     private val expectedLinksInAmendJourney = arrayOf(findOutMoreLinkText)
@@ -39,6 +39,8 @@ class OrganDonationChoicePage : OrganDonationBasePage() {
     }
 
     override fun assertDisplayed() {
+        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
+        Thread.sleep(RELOAD_WAIT)
         title.assertIsVisible()
         noButton.assertIsVisible()
         yesButton.assertIsVisible()

@@ -17,3 +17,10 @@ Vue.filter('longDate', longDate);
 Vue.filter('readableBytes', readableBytes);
 
 Vue.filter('uppercase', value => `${value}`.toLocaleUpperCase());
+
+Vue.filter('join', (value, append, delimiter = ' ') => {
+  if (append) {
+    return `${value}${delimiter}${append}`;
+  }
+  return value;
+});

@@ -1,14 +1,18 @@
 <template>
-  <div :class="$style.info">
+  <div>
     <h2>{{ $t(headerKey) }}</h2>
-    <p :class="$style['flex-container']">
-      <component :is="icon"
-                 v-if="icon"
-                 :class="$style.icon"
-                 title-id="decision-text-id"
-                 aria-hidden="true" />
-      <span id="decision-text-id" :class="[style, $style.label]">{{ $t(decisionTextKey) }}</span>
-    </p>
+    <div :class="$style['flex-container']">
+      <div>
+        <component :is="icon"
+                   v-if="icon"
+                   :class="$style.icon"
+                   title-id="decision-text-id"
+                   aria-hidden="true" />
+      </div>
+      <p id="decision-text-id" :class="[style, $style.label, 'nhsuk-heading-m']">
+        {{ $t(decisionTextKey) }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -81,37 +85,41 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/info";
-@import "../../style/colours";
-@import "../../style/spacings";
+@import '~nhsuk-frontend/packages/core/settings/colours';
+@import '~nhsuk-frontend/packages/core/settings/globals';
+@import '~nhsuk-frontend/packages/core/settings/spacing';
+@import '~nhsuk-frontend/packages/core/tools/ifff';
+@import '~nhsuk-frontend/packages/core/tools/sass-mq';
+@import '~nhsuk-frontend/packages/core/tools/spacing';
 
-.flex-container {
+
+.flex-container{
   display: flex;
-  align-content: flex-start;
+  justify-content: flex-start;
+  @include nhsuk-responsive-margin(4, "bottom");
 
   .icon {
-    flex: 0 0 3em;
-    margin-right: $two;
-    padding-left: 0.5em;
+    @include nhsuk-responsive-margin(3, "right ");
   }
+
   .label {
-    flex: 1 1 auto;
-    font-weight: bold;
-    font-size: 1.1875em;
-    padding-top: $one;
-  }
+    @include nhsuk-responsive-padding(0, "top");
+    @include nhsuk-responsive-margin(0, "bottom");
+    align-content: center;
+    align-items: center;
+   }
 }
 
 .optout-label {
-  color: $red;
+  color: $color_nhsuk-red;
 }
 .optin-label {
-  color: $light_green;
+  color: $color_nhsuk-green;
 }
 .appointedrep-label {
-  color: $nhs_blue;
+  color: $color_nhsuk-blue;
 }
 .withdraw-label {
-  color: $purple;
+  color: $color_nhsuk-purple;
 }
 </style>

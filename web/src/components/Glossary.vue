@@ -8,7 +8,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 
 export default {

@@ -1,10 +1,11 @@
 <template>
-  <a id="amendDecisionLink"
-     :class="$style.amendDecision"
-     href="#"
-     @click.stop.prevent="amendDecision">
-    {{ $t('organDonation.links.amendDecisionText') }}
-  </a>
+  <li>
+    <a id="amendDecisionLink"
+       href="#"
+       @click.stop.prevent="amendDecision">
+      {{ $t('organDonation.links.amendDecisionText') }}
+    </a>
+  </li>
 </template>
 
 <script>
@@ -21,11 +22,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-
-  .amendDecision {
-    padding: 0.5em;
-    margin-left: -0.5em;
-  }
-</style>

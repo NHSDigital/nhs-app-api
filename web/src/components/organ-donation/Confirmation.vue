@@ -11,12 +11,9 @@
                         :required="true"
                         checkbox-id="accuracy-checkbox"
                         @input="selectedValueChanged('accuracy-checkbox')">
-        <span :class="$style['checkbox-label']">
-          {{ $t('organDonation.reviewYourDecision.confirmation.accuracyText') }}
-        </span>
+        {{ $t('organDonation.reviewYourDecision.confirmation.accuracyText') }}
       </generic-checkbox>
     </error-group>
-
     <error-group :show-error="showPrivacyError">
       <error-message v-if="showPrivacyError" id="privacy-checkbox-error">
         {{ $t('organDonation.reviewYourDecision.confirmation.errors.privacy') }}
@@ -27,18 +24,12 @@
                         :required="true"
                         checkbox-id="privacy-checkbox"
                         @input="selectedValueChanged('privacy-checkbox')">
-        <span :class="$style['checkbox-label']">
-          {{ $t('organDonation.reviewYourDecision.confirmation.privacyText1') }}
-          <a :href="privacyUrl" target="_blank">
-            {{ $t('organDonation.reviewYourDecision.confirmation.privacyLinkText') }}
-          </a>
-          {{ $t('organDonation.reviewYourDecision.confirmation.privacyText2') }}
-        </span>
-
+        {{ $t('organDonation.reviewYourDecision.confirmation.privacyText1') }}
+        <a :href="privacyUrl" target="_blank">
+          {{ $t('organDonation.reviewYourDecision.confirmation.privacyLinkText') }}</a>
+        {{ $t('organDonation.reviewYourDecision.confirmation.privacyText2') }}
       </generic-checkbox>
     </error-group>
-
-
   </div>
 </template>
 
@@ -70,7 +61,6 @@ export default {
         { code: 'privacy-checkbox', id: 'privacy-checkbox', selected: false },
       ],
       checkboxChoices: undefined,
-
     };
   },
   computed: {
@@ -116,17 +106,9 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/info";
-  @import "../../style/forms";
-
-  .checkbox-label {
+  a{
+    display: inline;
     font-weight: normal;
-
-    a {
-      display: inline-block;
-      padding-top: 0;
-      padding-bottom: 0;
-      vertical-align: baseline;
-    }
+    vertical-align: unset;
   }
 </style>

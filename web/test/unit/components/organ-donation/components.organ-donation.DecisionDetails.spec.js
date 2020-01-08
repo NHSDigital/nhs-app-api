@@ -63,15 +63,15 @@ describe('DecisionDetails', () => {
     });
 
     it('will not display chosen items', () => {
-      expect(wrapper.find('.chosen h4').exists()).toBe(false);
+      expect(wrapper.find('#chosen h4').exists()).toBe(false);
     });
 
     it('will not display not chosen items', () => {
-      expect(wrapper.find('.notChosen h4').exists()).toBe(false);
+      expect(wrapper.find('#notChosen h4').exists()).toBe(false);
     });
 
     it('will not display not stated items', () => {
-      expect(wrapper.find('.notStated h4').exists()).toBe(false);
+      expect(wrapper.find('#notStated h4').exists()).toBe(false);
     });
   });
 
@@ -80,9 +80,9 @@ describe('DecisionDetails', () => {
       beforeEach(() => {
         choices = mapValues(() => 'Yes')(createChoices());
         wrapper = mountDecisionInfo({ choices, isSomeOrgans: true });
-        chosenHeader = wrapper.find('.chosen h4');
-        notChosenHeader = wrapper.find('.notChosen h4');
-        notStatedHeader = wrapper.find('.notStated h4');
+        chosenHeader = wrapper.find('#chosen h4');
+        notChosenHeader = wrapper.find('#notChosen h4');
+        notStatedHeader = wrapper.find('#notStated h4');
       });
 
       it('will display the decision details text for all organs', () => {
@@ -109,9 +109,9 @@ describe('DecisionDetails', () => {
         choices.heart = 'Yes';
         choices.kidney = 'Yes';
         wrapper = mountDecisionInfo({ choices, isSomeOrgans: true });
-        chosenHeader = wrapper.find('.chosen > h4');
-        notChosenHeader = wrapper.find('.notChosen > h4');
-        notStatedHeader = wrapper.find('.notStated > h4');
+        chosenHeader = wrapper.find('#chosen > h4');
+        notChosenHeader = wrapper.find('#notChosen > h4');
+        notStatedHeader = wrapper.find('#notStated > h4');
       });
 
       it('will display the decision details text for all organs', () => {
@@ -142,7 +142,7 @@ describe('DecisionDetails', () => {
       });
 
       it('will have a list containing the chosen organs', () => {
-        const list = wrapper.find('.chosen > ul');
+        const list = wrapper.find('#chosen > ul');
         expect(list.exists()).toEqual(true);
 
         const text = list.text();
@@ -156,7 +156,7 @@ describe('DecisionDetails', () => {
       });
 
       it('will have a list containing the non-chosen organs', () => {
-        const list = wrapper.find('.notChosen > ul');
+        const list = wrapper.find('#notChosen > ul');
         expect(list.exists()).toEqual(true);
 
         const text = list.text();
@@ -177,9 +177,9 @@ describe('DecisionDetails', () => {
         choices.kidney = 'Yes';
         choices.tissue = 'NotStated';
         wrapper = mountDecisionInfo({ choices, isSomeOrgans: true });
-        chosenHeader = wrapper.find('.chosen > h4');
-        notChosenHeader = wrapper.find('.notChosen > h4');
-        notStatedHeader = wrapper.find('.notStated > h4');
+        chosenHeader = wrapper.find('#chosen > h4');
+        notChosenHeader = wrapper.find('#notChosen > h4');
+        notStatedHeader = wrapper.find('#notStated > h4');
       });
 
       it('will display the decision details text for all organs', () => {
@@ -200,7 +200,7 @@ describe('DecisionDetails', () => {
       });
 
       it('will have a list containing the chosen organs', () => {
-        const list = wrapper.find('.chosen > ul');
+        const list = wrapper.find('#chosen > ul');
         expect(list.exists()).toEqual(true);
 
         const text = list.text();
@@ -214,7 +214,7 @@ describe('DecisionDetails', () => {
       });
 
       it('will have a list containing the non-chosen organs', () => {
-        const list = wrapper.find('.notChosen > ul');
+        const list = wrapper.find('#notChosen > ul');
         expect(list.exists()).toEqual(true);
 
         const text = list.text();
@@ -228,7 +228,7 @@ describe('DecisionDetails', () => {
       });
 
       it('will have a list containing the non-stated organs', () => {
-        const list = wrapper.find('.notStated > ul');
+        const list = wrapper.find('#notStated > ul');
         expect(list.exists()).toEqual(true);
 
         const text = list.text();
