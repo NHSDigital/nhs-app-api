@@ -28,7 +28,6 @@
     <string name="dataSharingPath">data-sharing</string>
     <string name="adminHelpPath">appointments/admin-help</string>
     <string name="fidoAuthQueryKey">fidoAuthResponse</string>
-    <string name="fidoLoginPathWithAuthQueryKey">login?fidoAuthResponse</string>
     <string name="nhs111">https://111.nhs.uk/</string>
     <string name="nhsUK">https://www.nhs.uk</string>
     <string name="conditions">https://www.nhs.uk/conditions/</string>

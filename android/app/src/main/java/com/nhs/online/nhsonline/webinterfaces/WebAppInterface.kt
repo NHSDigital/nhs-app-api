@@ -24,6 +24,12 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
+    fun attemptBiometricLogin() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering attemptBiometricLogin")
+        activity.runOnUiThread { uiInteractor.showBiometricLoginIfEnabled() }
+    }
+
+    @JavascriptInterface
     fun clearMenuBarItem() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering clearMenuBarItem")
         activity.runOnUiThread { uiInteractor.clearMenuBarItem() }

@@ -188,7 +188,6 @@ class NhsWeb(
         webView.settings.builtInZoomControls = false
 
         uiInteractor.dismissSessionExtensionDialog()
-        uiInteractor.showBiometricLoginIfEnabled()
     }
 
     fun onBetaCookieStoreRequest() {

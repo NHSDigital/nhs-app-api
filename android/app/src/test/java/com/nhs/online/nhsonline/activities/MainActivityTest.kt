@@ -53,36 +53,6 @@ class MainActivityTest {
     }
 
     @Test
-    fun onResume_LoginPath_StartBiometrics() {
-        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
-            R.string.loginPath))
-        spyActivity.isSuccessfulConfigCheck = true
-
-        try{
-            spyActivity.onResume()
-        } catch(e: Exception) {
-            assert(false)
-        }
-
-        verify(spyActivity, times(1)).showBiometricLoginIfEnabled(true)
-    }
-
-    @Test
-    fun onResume_NotLoginPath_DoNotStartBiometrics() {
-        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
-            R.string.gpFinderPath))
-        spyActivity.isSuccessfulConfigCheck = true
-
-        try{
-            spyActivity.onResume()
-        } catch(e: Exception) {
-            assert(false)
-        }
-
-        verify(spyActivity, times(0)).showBiometricLoginIfEnabled(true)
-    }
-
-    @Test
     fun onBackButtonPressed_OnLoginScreen_ClosesApp() {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
             R.string.loginPath))
@@ -281,7 +251,9 @@ class MainActivityTest {
     }
 
     @Test
-    fun showBiometricLoginIfEnabled_SuccessfulConfig_ReturnsTrue() {
+    fun showBiometricLoginIfEnabled_SuccessfulConfig_StandardLoginUrl_ReturnsTrue() {
+        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
+                R.string.loginPath))
         spyActivity.isSuccessfulConfigCheck = true
 
         val biometricsInterfaceMock: BiometricsInterface = mock {
@@ -303,6 +275,22 @@ class MainActivityTest {
 
         val biometricsInterfaceMock: BiometricsInterface = mock {
             on { showBiometricLoginIfEnabled() }.thenReturn(false)
+        } //TODO - we keep this in? only utilised for the verification below
+
+        val result = spyActivity.showBiometricLoginIfEnabled()
+
+        Assert.assertFalse(result)
+        verify(biometricsInterfaceMock, times(0)).showBiometricLoginIfEnabled()
+    }
+
+    @Test
+    fun showBiometricLoginIfEnabled_SuccessfulConfig_FidoAuthLoginUrl_ReturnsFalse() {
+        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
+                R.string.loginPath) + "?source=android&" + getStringById(R.string.fidoAuthQueryKey))
+        spyActivity.isSuccessfulConfigCheck = true
+
+        val biometricsInterfaceMock: BiometricsInterface = mock {
+            on { showBiometricLoginIfEnabled() }.thenReturn(true)
         }
         FieldSetter.setField(spyActivity,
                 spyActivity::class.java.getDeclaredField("biometricsInterface"),
@@ -312,6 +300,43 @@ class MainActivityTest {
 
         Assert.assertFalse(result)
         verify(biometricsInterfaceMock, times(0)).showBiometricLoginIfEnabled()
+    }
+
+    @Test
+    fun showBiometricLoginIfEnabled_SuccessfulConfig_NullUrl_ReturnsFalse() {
+        spyActivity.webview.loadUrl(null)
+        spyActivity.isSuccessfulConfigCheck = true
+
+        val biometricsInterfaceMock: BiometricsInterface = mock {
+            on { showBiometricLoginIfEnabled() }.thenReturn(true)
+        }
+        FieldSetter.setField(spyActivity,
+                spyActivity::class.java.getDeclaredField("biometricsInterface"),
+                biometricsInterfaceMock)
+
+        val result = spyActivity.showBiometricLoginIfEnabled()
+
+        Assert.assertFalse(result)
+        verify(biometricsInterfaceMock, times(0)).showBiometricLoginIfEnabled()
+    }
+
+    @Test
+    fun showBiometricLoginIfEnabled_SuccessfulConfig_NullQueryUrl_ReturnsTrue() {
+        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
+                R.string.loginPath))
+        spyActivity.isSuccessfulConfigCheck = true
+
+        val biometricsInterfaceMock: BiometricsInterface = mock {
+            on { showBiometricLoginIfEnabled() }.thenReturn(true)
+        }
+        FieldSetter.setField(spyActivity,
+                spyActivity::class.java.getDeclaredField("biometricsInterface"),
+                biometricsInterfaceMock)
+
+        val result = spyActivity.showBiometricLoginIfEnabled()
+
+        Assert.assertTrue(result)
+        verify(biometricsInterfaceMock, times(1)).showBiometricLoginIfEnabled()
     }
 
     @Test

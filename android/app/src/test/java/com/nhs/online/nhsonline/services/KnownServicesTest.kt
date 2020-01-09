@@ -97,10 +97,10 @@ class KnownServicesTest : ResourceMockingClass() {
     }
 
     @Test
-    fun isLoginUrl_ReturnsFalseWhenNotLoginUrl() {
-        val accountUrl = "http://10.0.2.2:3000/account"
-        val result = testKnownServices.isLoginUrl(accountUrl)
-        Assert.assertFalse(result)
+    fun isLoginUrl_ReturnsTrueWhenLoginUrlHasAdditionalQueryParameters() {
+        val loginUrlWithExtraQuery = "http://10.0.2.2:3000/login?responseCode=102"
+        val result = testKnownServices.isLoginUrl(loginUrlWithExtraQuery)
+        Assert.assertTrue("Failed to recognise login url with additional parameters", result)
     }
 
     @Test

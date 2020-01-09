@@ -123,6 +123,7 @@ class WebClientInterceptor(
 
     override fun onLoadResource(view: WebView?, url: String?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLoadResource > url $url")
+
         if (!isConnectedToNetwork) {
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onLoadResource > isConnectedToInternet")
@@ -246,8 +247,6 @@ class WebClientInterceptor(
         Log.d(Application.TAG,
             "${this::class.java.simpleName}: Entering onPageCommitVisible and url: $url")
         if (shouldHandleUnavailability(url)) {
-            if (knownServices.isLoginUrl(url))
-                uiInteractor.showBiometricLoginIfEnabled()
             uiInteractor.dismissProgressDialog()
         }
 
@@ -408,5 +407,4 @@ class WebClientInterceptor(
             false
         }
     }
-
 }

@@ -19,6 +19,7 @@ import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
+import android.webkit.URLUtil
 import android.webkit.WebSettings
 import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.nhsonline.Application
@@ -290,7 +291,14 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         nhsWeb.loadUrl(path)
     }
 
-    override fun loadBiometricLoginPage(url: String) {
+    override fun loadBiometricLoginPage(biometricsParams: String) {
+        var url = webview.url
+
+        url += when(url.contains("?")) {
+            true -> "&$biometricsParams"
+            false -> "?$biometricsParams"
+        }
+
         nhsWeb.requiresFullPageLoad = true
         nhsWeb.loadUrl(url)
     }
@@ -394,9 +402,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         }
 
         if (isSuccessfulConfigCheck) {
-            if (nhsWeb.isLoginPath()) {
-                showBiometricLoginIfEnabled(true)
-            }
             nhsWeb.reloadLoginUrl()
         }
     }
@@ -637,7 +642,15 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             return false
         }
 
-        return biometricsInterface.showBiometricLoginIfEnabled(forceStart)
+        webview?.url?.let { currentUrl ->
+            val url = URL(currentUrl)
+
+            if(url.query == null || !url.query.contains(resources.getString(R.string.fidoAuthQueryKey))) {
+                return biometricsInterface.showBiometricLoginIfEnabled(forceStart)
+            }
+        }
+
+        return false
     }
 
     override fun displayBiometricLoginErrorOccurrence() {

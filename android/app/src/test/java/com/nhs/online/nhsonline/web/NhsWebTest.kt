@@ -241,12 +241,11 @@ class NhsWebTest {
     }
 
     @Test
-    fun onWebLoggedOut_Sets_IsLoginToFalse_And_DismissSessionExtensionDialog_And_CallsShowBiometricLoginIfEnabled() {
+    fun onWebLoggedOut_Sets_IsLoginToFalse_And_DismissSessionExtensionDialog() {
         nhsWeb.onWebLoggedOut()
         assertFalse(nhsWeb.isUserLoggedIn)
         assertFalse(webViewMock.settings.builtInZoomControls)
         verify(interactorMock).dismissSessionExtensionDialog()
-        verify(interactorMock).showBiometricLoginIfEnabled(false)
     }
 
     @Test

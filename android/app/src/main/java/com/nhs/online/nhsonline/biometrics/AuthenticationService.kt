@@ -76,6 +76,10 @@ class AuthenticationService(
                 override fun cancel() {
                     isFingerprintLoginStarted = false
                 }
+
+                override fun error() {
+                    showBiometricLoginIfEnabled(true)
+                }
             }
             biometricsInteractor.dismissProgressDialog()
             val fingerprintContent = fingerprintDialog.generateFingerprintContent(false)
@@ -119,7 +123,7 @@ class AuthenticationService(
         val authResponseB64 = authResponse.toByteArray().toBase64()
         Log.d(TAG, "Base64 encoded AuthResponse message is: $authResponseB64")
 
-        return "${activity.getString(R.string.fidoLoginPathWithAuthQueryKey)}=$authResponseB64"
+        return "${activity.getString(R.string.fidoAuthQueryKey)}=$authResponseB64"
     }
 
     fun processUafLoginMsg(

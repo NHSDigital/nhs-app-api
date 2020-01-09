@@ -18,6 +18,7 @@
 
 package com.nhs.online.nhsonline.biometrics
 
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
@@ -103,6 +104,13 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
         fingerprintUiHelper?.stopListening()
     }
 
+    // This is for when the user cancels the dialog using the back button on their phone.
+    override fun onCancel(dialog: DialogInterface?) {
+        super.onCancel(dialog)
+        fingerprintAuthProcessor?.cancel()
+        dismissAllowingStateLoss()
+    }
+
     private fun initiateFingerprintUiHelper() {
         context?.let {
             val fingerprintManager = FingerprintManagerCompat.from(it)
@@ -126,6 +134,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
 
     override fun onError() {
         if (this.isAdded) {
+            fingerprintAuthProcessor?.error()
             dismissAllowingStateLoss()
         }
         fingerprintUiHelper?.stopListening()

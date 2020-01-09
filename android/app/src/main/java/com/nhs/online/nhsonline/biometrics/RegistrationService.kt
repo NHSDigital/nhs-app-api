@@ -89,6 +89,10 @@ class RegistrationService(
                 override fun cancel() {
                     biometricState.registrationStateChangeInProgress = false
                 }
+
+                override fun error() {
+                    return
+                }
             }
 
             biometricState.registrationStateChangeInProgress = true

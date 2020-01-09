@@ -8,4 +8,5 @@ interface FingerprintAuthProcessor {
 
     fun cancel()
 
+    fun error()
 }
