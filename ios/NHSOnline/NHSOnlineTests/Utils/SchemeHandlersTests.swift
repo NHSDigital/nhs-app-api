@@ -3,7 +3,7 @@ import XCTest
 @testable import NHSOnline
 
 class SchemeHandlersTests: XCTestCase {
-    func handle_ReturnsTrue_WhenUrlIsHandled() {
+    func test_handle_ReturnsTrue_WhenUrlIsHandled() {
         let url: URL = URL(string: "mailto:someonesomewhere")!
         
         let systemUnderTest = SchemeHandlers()
@@ -13,7 +13,7 @@ class SchemeHandlersTests: XCTestCase {
         XCTAssertTrue(result)
     }
     
-    func handle_ReturnsFalse_WhenNoHandlersAreRegistered() {
+    func test_handle_ReturnsFalse_WhenNoHandlersAreRegistered() {
         let url: URL = URL(string: "mailto:someonesomewhere")!
         
         let systemUnderTest = SchemeHandlers()
@@ -22,7 +22,7 @@ class SchemeHandlersTests: XCTestCase {
         XCTAssertFalse(result)
     }
     
-    func handle_ReturnsFalse_WhenNoMatchingHandlerIsRegistered() {
+    func test_handle_ReturnsFalse_WhenNoMatchingHandlerIsRegistered() {
         let url: URL = URL(string: "tel:someonesomewhere")!
         
         let systemUnderTest = SchemeHandlers()
@@ -32,7 +32,7 @@ class SchemeHandlersTests: XCTestCase {
         XCTAssertFalse(result)
     }
     
-    func handle_ReturnsFalse_WhenUrlIsMalformed() {
+    func test_handle_ReturnsFalse_WhenUrlIsMalformed() {
         let url: URL = URL(string: "asdfawerqefwefwadfwe")!
         
         let systemUnderTest = SchemeHandlers()

@@ -34,6 +34,7 @@
 		2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */; };
 		2EC6C6CA224312BC00EE49B9 /* MailToSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC6C6C9224312BC00EE49B9 /* MailToSchemeHandlerTests.swift */; };
 		2EC6C6CC224312CE00EE49B9 /* SchemeHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC6C6CB224312CE00EE49B9 /* SchemeHandlersTests.swift */; };
+		2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF7D81B23C76377005C03ED /* HeaderEnum.swift */; };
 		30178302224E1FE400CCB5EA /* HomeViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */; };
 		3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */; };
 		3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */; };
@@ -169,6 +170,7 @@
 		2EC6C6C9224312BC00EE49B9 /* MailToSchemeHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailToSchemeHandlerTests.swift; sourceTree = "<group>"; };
 		2EC6C6CB224312CE00EE49B9 /* SchemeHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlersTests.swift; sourceTree = "<group>"; };
 		2EE2C6262371CCAA00C02299 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		2EF7D81B23C76377005C03ED /* HeaderEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderEnum.swift; sourceTree = "<group>"; };
 		30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerTests.swift; sourceTree = "<group>"; };
 		3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlersTests.swift; sourceTree = "<group>"; };
 		30DC9CD1EB30D0B0FE83C615 /* Pods-NHSOnlineTests.scratch5.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch5.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch5.xcconfig"; sourceTree = "<group>"; };
@@ -566,6 +568,7 @@
 				F0B4B8BA204D68DC004E4120 /* Localizable.strings */,
 				F065B3D7205FCFFE004EF388 /* HomeViewController.swift */,
 				105BB9752178DC1700571671 /* Configurations */,
+				2EF7D81B23C76377005C03ED /* HeaderEnum.swift */,
 			);
 			path = NHSOnline;
 			sourceTree = "<group>";
@@ -953,6 +956,7 @@
 				F9EBD64D237C25FE006FFA8C /* DataDownloadErrorStrings.swift in Sources */,
 				1381D48621BFFFD300B54300 /* AAID.swift in Sources */,
 				139AD8CD21E7B21600E580CA /* BiometricsResultViewController.swift in Sources */,
+				2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */,
 				13730A22220454FF00437FC1 /* BiometricType.swift in Sources */,
 				F9EBD654237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift in Sources */,
 				14ED9E4D234B58480015C767 /* UINavigationControllerExtensions.swift in Sources */,

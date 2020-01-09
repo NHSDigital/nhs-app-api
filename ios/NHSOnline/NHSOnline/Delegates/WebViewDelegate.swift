@@ -117,13 +117,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
         self.showWebViewContainer()
 
-        if(webView.url?.absoluteString == config().HomeUrl) {
-            viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
+        if (knownServices.isValidHomeUrl(url: webView.url)) {
+            viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Full)
         }
         
         if(webView.url!.absoluteString.contains(config().CidUrlSuffix)) {
             viewController.updateHeaderText(headerText: "Log in to the NHS App", accessibilityLabel: "Login using Patient ID")
-            viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: true)
+            viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Slim)
         }
         
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
@@ -233,16 +233,16 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 goToLoginOptions()
                 break
             case "hideHeader":
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: false)
+                viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
                 break
             case "hideWhiteScreen":
                 UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
                 break
             case "hideHeaderSlim":
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
+                viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
                 break
             case "hideMenuBar":
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: false)
+                viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
                 break
             case "onLogin":
                 WebViewController.Properties.usingAbsoluteUri = false
@@ -279,10 +279,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 setMenuBarItem(index: message.body as? Int ?? 0)
                 break
             case "showHeader":
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
+                viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Full)
                 break
             case "showHeaderSlim":
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: true)
+                viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Slim)
                 break
             case "updateHeaderText":
                 if(!Reachability.isConnectedToNetwork()) {
@@ -327,7 +327,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
     func ensureSupportedScheme(_ url: URL) -> URL {
         if(url.scheme==config().AppScheme) {
-            self.viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
+            self.viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
             return URL(string: url.absoluteString.replacingOccurrences(of: config().AppScheme + ":", with: config().BaseScheme + ":"))!
         }
         return url

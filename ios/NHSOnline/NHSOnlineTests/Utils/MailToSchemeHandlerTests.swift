@@ -4,7 +4,7 @@ import XCTest
 
 class MailToSchemeHandlerTests: XCTestCase { 
     
-    func handle_returnsTrue_WhenMailToUrl() {
+    func test_handle_returnsTrue_WhenMailToUrl() {
         let url: URL = URL(string: "mailto:someonesomewhere")!
         
         let systemUnderTest = MailToSchemeHandler()
@@ -13,7 +13,7 @@ class MailToSchemeHandlerTests: XCTestCase {
         XCTAssertTrue(result)        
     }
     
-    func handle_returnsFalse_WhenNotAMailToUrl() {
+    func test_handle_returnsFalse_WhenNotAMailToUrl() {
         let url: URL = URL(string: "tel:someonesomewhere")!
         
         let systemUnderTest = MailToSchemeHandler()

@@ -53,6 +53,13 @@ class KnownServices {
         return nil
     }
     
+    func isValidHomeUrl(url: URL?) -> Bool {
+        if let homeUrl = URL(string: config.HomeUrl) {
+            return homeUrl.host == url?.host && homeUrl.path == url?.path
+        }
+        return false
+    }
+    
     func isSameHostAsHomeUrl(url: URL?) -> Bool {
         if let homeUrl = URL(string: config.HomeUrl) {
             return homeUrl.host == url?.host

@@ -268,22 +268,20 @@ class HomeViewController : UIViewController {
         self.webViewController?.webView.evaluateJavaScript(scriptToExecute, completionHandler: completionHandler)
     }
     
-    func setVisibilityOfHeaderAndMenuBars(visible: Bool, isSlim: Bool) {
+    func setVisibilityOfHeaderAndMenuBars(headerType: HeaderType) {
         UIView.animate(withDuration: 0.3, animations: {
             self.Notch.isHidden = false
             
-            if !visible {
-                self.setHeaderVisibility(visible: visible)
-                self.setSlimHeaderVisibility(visible: visible)
-                return
-            }
-            
-            if isSlim {
-                self.setHeaderVisibility(visible: !visible)
-                self.setSlimHeaderVisibility(visible: visible)
-            } else {
-                self.setHeaderVisibility(visible: visible)
-                self.setSlimHeaderVisibility(visible: !visible)
+            switch headerType {
+            case HeaderType.Full:
+                self.setHeaderVisibility(visible: true)
+                self.setSlimHeaderVisibility(visible: false)
+            case HeaderType.Slim:
+                self.setHeaderVisibility(visible: false)
+                self.setSlimHeaderVisibility(visible: true)
+            default:
+                self.setHeaderVisibility(visible: false)
+                self.setSlimHeaderVisibility(visible: false)
             }
         })
     }
@@ -471,7 +469,7 @@ class HomeViewController : UIViewController {
         if let webview = self.webViewController?.webView {
             if(isCheckYourSymptomsPath(webview: webview)
                 || hasCidUrlSuffix(webview: webview)){
-                self.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
+                self.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
                 self.showWhiteScreen()
                 self.webViewController?.loadPage(url: config().HomeUrl)
                 self.tabBar.selectedItem = nil

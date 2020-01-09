@@ -102,6 +102,30 @@ class KnownServicesTests: XCTestCase {
         XCTAssertFalse(nhs111UrlSameAsHomeHost)
     }
     
+    func test_isValidHomeUrl_ReturnsTrueWhenIsHomeUrlNoQueryString() {
+        let homeUrl = URL(string: config().HomeUrl)
+        let isValidHomeUrl = knownServices.isValidHomeUrl(url: homeUrl)
+        XCTAssertTrue(isValidHomeUrl)
+    }
+    
+    func test_isValidHomeUrl_ReturnsTrueWhenIsHomeUrlWithQueryString() {
+        let homeUrl = URL(string: config().HomeUrl + "?param1=abc")
+        let isValidHomeUrl = knownServices.isValidHomeUrl(url: homeUrl)
+        XCTAssertTrue(isValidHomeUrl)
+    }
+    
+    func test_isValidHomeUrl_ReturnsFalseWhenIsNotHomeUrl() {
+        let homeUrl = URL(string: config().HomeUrl + "/appointments")
+        let isValidHomeUrl = knownServices.isValidHomeUrl(url: homeUrl)
+        XCTAssertFalse(isValidHomeUrl)
+    }
+    
+    func test_isValidHomeUrl_ReturnsFalseWhenExternallUrl() {
+        let homeUrl = URL(string: config().Nhs111Url)
+        let isValidHomeUrl = knownServices.isValidHomeUrl(url: homeUrl)
+        XCTAssertFalse(isValidHomeUrl)
+    }
+    
     func test_theURLIsABiometricRedirectURL_ReturnsTrue() {
         let url = config().HomeUrl + config().BiometricRedirectURL
         print(url)
