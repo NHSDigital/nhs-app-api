@@ -22,7 +22,7 @@ import java.util.*
 class NotificationsFactory {
 
     val mockingClient = MockingClient.instance
-    private val devicePns = "0123456789ABCDEF"
+    private val devicePns = UUID.randomUUID().toString()
 
     fun setUpUser(supplier: Supplier? = null, patient: Patient? = null): Patient {
         val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
