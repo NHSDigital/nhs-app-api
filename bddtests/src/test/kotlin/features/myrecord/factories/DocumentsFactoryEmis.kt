@@ -42,6 +42,19 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf<ExpectedDocument>(expectedDocuments[0]))
     }
 
+    override fun enabledWithNullSize() {
+        val documents = DocumentsData.getDefaultDocumentsData(hasSize = false)
+
+        mockingClient.forEmis {
+            myRecord.documentsRequest(EmisMockDefaults.patientEmis)
+                    .respondWithSuccess(documents)
+        }
+
+        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(false,
+                documents = documents.medicalRecord.documents, includeSize = false)
+        setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf<ExpectedDocument>(expectedDocuments[0]))
+    }
+
     override fun enabledWithDocuments(patient: Patient, isLarge: Boolean, mockUnavailableDocument: Boolean,
                                       hasInvalidType: Boolean) {
         val documents = DocumentsData.getDefaultDocumentsData(hasInvalidType = hasInvalidType)
@@ -94,13 +107,24 @@ class DocumentsFactoryEmis: DocumentsFactory() {
 
     private fun getExpectedDocumentsFromEmisDocuments(isLarge: Boolean,
         documents: List<DocumentsResponse>,
-        includeName: Boolean = true, includeTerm: Boolean = true): List<ExpectedDocument> {
-        val size = if (isLarge) LARGE_DOCUMENT_SIZE else REGULAR_DOCUMENT_SIZE
+        includeName: Boolean = true, includeTerm: Boolean = true, includeSize: Boolean = true)
+            : List<ExpectedDocument> {
+
 
         return documents.mapIndexed(fun(index, document): ExpectedDocument {
+            var typeAndSize = "(${document.extension.toUpperCase()})"
+
+            if (includeSize) {
+                if (isLarge) {
+                    typeAndSize = "(${document.extension.toUpperCase()}, ${LARGE_DOCUMENT_SIZE}MB)"
+                } else {
+                    typeAndSize = "(${document.extension.toUpperCase()}, ${REGULAR_DOCUMENT_SIZE}MB)"
+                }
+            }
+
             val expectedDocument = ExpectedDocument(
                 document.documentGuid,
-                "(${document.extension.toUpperCase()}, ${size}MB)",
+                typeAndSize,
                 "18 February 2018",
                 mutableListOf("View"))
             if (includeName) {

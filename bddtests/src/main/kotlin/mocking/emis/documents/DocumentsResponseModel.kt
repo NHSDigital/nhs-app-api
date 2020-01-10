@@ -10,7 +10,7 @@ data class DocumentsMedicalRecord(
 
 data class DocumentsResponse(
         var documentGuid: String,
-        var size: Int,
+        var size: Long?,
         var extension: String,
         var available: Boolean,
         var observation: Observation

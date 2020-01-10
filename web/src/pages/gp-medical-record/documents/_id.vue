@@ -63,7 +63,7 @@ export default {
   },
   computed: {
     isValidFile() {
-      return this.size < 4000000 &&
+      return this.size !== undefined && this.size < 4000000 &&
         (this.type.toLowerCase() !== 'tga' && this.type.toLowerCase() !== 'tpic');
     },
     hasComments() {

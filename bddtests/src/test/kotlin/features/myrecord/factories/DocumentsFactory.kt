@@ -13,6 +13,7 @@ abstract class DocumentsFactory {
                                       mockUnavailableDocument: Boolean = false, hasInvalidType: Boolean = false)
     abstract fun enabledWithDocumentsWithNoNameOrTerm(patient: Patient, isLarge: Boolean = false)
     abstract fun enabledWithNullPageCount()
+    abstract fun enabledWithNullSize()
 
     val mockingClient = MockingClient.instance
 

@@ -77,7 +77,10 @@ export default {
       redirectTo(this, this.backPath);
     },
     documentDescription(extension, size) {
-      return `(${extension.toUpperCase()}, ${readableBytes(size)})`;
+      if (size) {
+        return `(${extension.toUpperCase()}, ${readableBytes(size)})`;
+      }
+      return `(${extension.toUpperCase()})`;
     },
     documentTitle(title, date) {
       const dateString = datePart(date, 'YearMonthDay');

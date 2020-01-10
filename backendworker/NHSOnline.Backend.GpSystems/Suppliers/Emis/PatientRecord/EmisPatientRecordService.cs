@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -106,7 +107,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                 _logger.LogInformation("Mapping EMIS responses to universal MyRecordResponse class instance");
                 var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems, consultations, documents);
-
+                
+                _logger.LogInformation("Number of documents to be returned " + myRecordResponse.Documents.RecordCount);
                 myRecordResponse.Supplier = emisUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
 
                 return new GetMyRecordResult.Success(myRecordResponse);

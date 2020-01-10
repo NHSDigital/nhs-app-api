@@ -9,6 +9,7 @@ import mocking.stubs.myMedicalRecord.emis.ImmunisationsStubs
 import mocking.stubs.myMedicalRecord.emis.MedicationsStubs
 import mocking.stubs.myMedicalRecord.emis.ProblemsStubs
 import mocking.stubs.myMedicalRecord.emis.TestResultsStubs
+import mocking.stubs.myMedicalRecord.emis.DocumentsStubs
 import mocking.stubs.myMedicalRecord.tpp.PatientOverviewTpp
 import mocking.stubs.myMedicalRecord.tpp.PatientSelectedTPP
 import mocking.stubs.myMedicalRecord.tpp.RequestPatientRecordTpp
@@ -33,6 +34,7 @@ class MedicalRecordStubs(private val mockingClient: MockingClient) {
         ConsultationsStubs(mockingClient).generateEMISStubs()
         ProblemsStubs(mockingClient).generateEMISStubs()
         DemographicsStubs(mockingClient).generateEMISStubs()
+        DocumentsStubs(mockingClient).generateEMISStubs()
     }
 
     private fun generateTPPStubs(){

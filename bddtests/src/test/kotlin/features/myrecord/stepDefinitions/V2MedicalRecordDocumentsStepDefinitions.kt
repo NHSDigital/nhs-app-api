@@ -49,6 +49,13 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
                 .enabledWithNullPageCount()
     }
 
+    @Given("^the GP Practice has a document with a null size property$")
+    fun thePracticeHasDocumentNullSizeProperty() {
+        DocumentsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithNullSize()
+    }
+
     @Given("^the GP Practice has multiple documents$")
     fun theGpPracticeHasMultipleDocuments() {
         DocumentsFactory

@@ -10,8 +10,8 @@ import mocking.emis.documents.Observation
 object DocumentsData {
 
     const val DEFAULT_NUMBER_OF_DOCUMENTS = 3
-    private const val LARGE_DOCUMENT_SIZE = 4000000
-    private const val REGULAR_DOCUMENT_SIZE = 1000000
+    private const val LARGE_DOCUMENT_SIZE = 4000000L
+    private const val REGULAR_DOCUMENT_SIZE = 1000000L
 
     fun getNoDocumentData() : DocumentsResponseModel {
         return DocumentsResponseModel(
@@ -22,14 +22,19 @@ object DocumentsData {
     }
 
     fun getDefaultDocumentsData(includeName: Boolean = true, includeTerm: Boolean = true,
-                                hasInvalidType: Boolean = false): DocumentsResponseModel {
+                                hasInvalidType: Boolean = false, hasSize: Boolean = true): DocumentsResponseModel {
         val documents = mutableListOf<DocumentsResponse>()
         var nameFormat = "Name %d"
         var termFormat = "Letter %d"
         var type = "pdf"
+        var size: Long? = REGULAR_DOCUMENT_SIZE.toLong()
 
         if (!includeName) {
             nameFormat = ""
+        }
+
+        if(!hasSize) {
+            size = null
         }
 
         if (!includeTerm) {
@@ -43,7 +48,7 @@ object DocumentsData {
         for(documentNumber in 1..DEFAULT_NUMBER_OF_DOCUMENTS){
             documents.add(DocumentsResponse(
                 "document-$documentNumber",
-                REGULAR_DOCUMENT_SIZE,
+                size,
                 type,
                 true,
                 Observation(

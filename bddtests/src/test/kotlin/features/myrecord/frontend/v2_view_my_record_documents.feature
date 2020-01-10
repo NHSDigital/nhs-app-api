@@ -30,6 +30,13 @@ Feature: Documents Frontend - Medical Record v2
     When I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
 
+  Scenario: An EMIS user can view a list of Documents on their record if the size is null
+    Given I am a EMIS user setup to use medical record version 2
+    And the GP Practice has a document with a null size property
+    And I am on the medical record page
+    When I click the Documents link on my record - Medical Record v2
+    Then I see a list of documents
+
   Scenario: An EMIS user who views a document with no name sees the document date as the header - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
     And the GP Practice has multiple documents with no name or term
