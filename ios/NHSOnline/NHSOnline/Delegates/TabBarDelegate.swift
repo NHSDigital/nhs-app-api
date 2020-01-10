@@ -28,10 +28,11 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
             return
         }
         
-        let selectedItem = Menu(rawValue: didSelect.tag)!
+        let previouslySelectedItem = Menu(rawValue: viewController.selectedTab ?? 0)
+        let currentlySelectedItem = Menu(rawValue: didSelect.tag)!
         
         if(viewController.selectedTab == didSelect.tag) {
-            if(selectedItem != .More && selectedItem != .Symptoms) {
+            if(currentlySelectedItem != .More && currentlySelectedItem != .Symptoms) {
                 return
             }
         }
@@ -39,12 +40,11 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         viewController.selectedTab = didSelect.tag
 
         var _: String
-        if(selectedItem != .Symptoms) {
+        if(currentlySelectedItem != .Symptoms && previouslySelectedItem != .More) {
             viewController.applicationState.block()
         }
         processTabBarSelection(selectedTag: didSelect.tag)
     }
-    
     
     func processTabBarSelection(selectedTag: Int) {
         let selectedItem = Menu(rawValue: selectedTag)!

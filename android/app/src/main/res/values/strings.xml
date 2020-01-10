@@ -193,6 +193,7 @@
     </string-array>
 
     <string-array name="nonBlockingMenuItems">
+        <item>@string/more</item>
         <item>@string/symptoms</item>
     </string-array>
 

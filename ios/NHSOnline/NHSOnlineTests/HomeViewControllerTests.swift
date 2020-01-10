@@ -7,6 +7,7 @@ class HomeViewControllerTests: XCTestCase {
     var testWebview: WKWebView!
 
     var mockConfigurationService: MockConfigurationService!
+    var mockApplicationState: MockApplicationState!
 
     let app = XCUIApplication.self
 
@@ -21,6 +22,9 @@ class HomeViewControllerTests: XCTestCase {
 
         mockConfigurationService = MockConfigurationService();
         vcHome?.configurationService = mockConfigurationService
+        
+        mockApplicationState = MockApplicationState();
+        vcHome?.applicationState = mockApplicationState
     }
     
     func test_hasCidUrlSuffix_nilUrl_Returns_False() {
@@ -138,6 +142,23 @@ class HomeViewControllerTests: XCTestCase {
         "Expected the presentOptionsMenu to be called")
     }
     
+    func test_showWebViewContainer_isBlockedisFalse() {
+        vcHome.showWebViewContainer()
+        assert(self.mockApplicationState.isBlocked == false)
+    }
+    
+    class MockApplicationState: ApplicationState {
+        var isBlocked = false
+        
+        override func block() {
+            isBlocked = true
+        }
+    
+        override func unBlock() {
+            isBlocked = false
+        }
+    }
+    
     class MockDocumentInteractionController: UIDocumentInteractionController {
         var menuOpened = false
         
@@ -149,7 +170,6 @@ class HomeViewControllerTests: XCTestCase {
         return true;        }
     }
     
-    
     class MockConfigurationService: ConfigurationServiceProtocol {
         var isValidConfiguration = false
         
@@ -160,4 +180,3 @@ class HomeViewControllerTests: XCTestCase {
         }
     }
 }
-

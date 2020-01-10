@@ -126,44 +126,6 @@ class MenuBarTests  {
     }
 
     @Test
-    fun switchingTheMenuItemShouldSetApplicationStateBusyIfCurrentTabIsReslectableAndReselected() {
-
-        val appStateMock: ApplicationState = mock {
-            on { isReady() } doReturn true
-        }
-
-        nhsWeb = mock {
-            on { applicationState } doReturn appStateMock
-        }
-
-        menuBar.nhsWeb = nhsWeb
-
-        for(childIndex: Int in 0.until(menuBar.childCount)) {
-            val menuBarItem = menuBar.getChildAt(childIndex) as MenuBarItem
-            if(menuBarItem.isBlockingMenuItem() && menuBarItem.isReselectableMenuItem()) {
-                menuBar.switchActiveMenuItemTo(menuBarItem.id)
-                break
-            }
-        }
-
-        verify(appStateMock, times(1)).isReady()
-        verify(appStateMock, times(1)).block()
-
-        for(childIndex: Int in 0.until(menuBar.childCount)) {
-            val menuBarItem = menuBar.getChildAt(childIndex) as MenuBarItem
-            if(menuBarItem.isBlockingMenuItem() && menuBarItem.isReselectableMenuItem()) {
-                menuBar.switchActiveMenuItemTo(menuBarItem.id)
-                break
-            }
-        }
-
-        verify(appStateMock, times(2)).isReady()
-        verify(appStateMock, times(2)).block()
-        verifyNoMoreInteractions(appStateMock)
-    }
-
-
-    @Test
     fun switchingTheMenuItemWhenTheApplicationStateIsBusyShouldNotCallTheListener() {
 
         val appStateMock: ApplicationState = mock {

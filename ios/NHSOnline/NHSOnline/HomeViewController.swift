@@ -8,7 +8,7 @@ class HomeViewController : UIViewController {
     private let showConstraintPriority = UILayoutPriority.init(rawValue: 900)
     private let hideConstraintPriority = UILayoutPriority.init(rawValue: 850)
     
-    let applicationState = ApplicationState()
+    var applicationState = ApplicationState()
     var documentInteractionController = UIDocumentInteractionController()
     
     @IBOutlet weak var headerBar: HeaderBar!
@@ -323,7 +323,6 @@ class HomeViewController : UIViewController {
     
     func showWebViewContainer() {
         if (!appVersionCheckError) {
-            applicationState.unBlock()
             self.cycleFromViewController(oldViewController: self.currentNativeViewController!, toViewController: self.webViewController!)
         }
     }

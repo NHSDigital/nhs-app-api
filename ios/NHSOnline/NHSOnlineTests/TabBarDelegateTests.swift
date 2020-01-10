@@ -12,7 +12,7 @@ class TabBarDelegateTests : XCTestCase {
         super.setUp()
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        viewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
+        viewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
        
         tabBarDelegate = MockTabBarDelegate(controller: viewController!)
         
@@ -39,10 +39,10 @@ class TabBarDelegateTests : XCTestCase {
     func test_WhenASelectedItemIsClickedOnTheMenuBarTheSelectionIsNotProcessed() {
         viewController!.selectedTab = 2
         tabBarDelegate!.tabBar(tabBar!, didSelect: tabBarItem!)
-        
+
         XCTAssert(tabBarDelegate!.processTabBarSelectionWasCalled == false)
     }
-    
+
     func test_WhenTheApplicationStateIsBusyTheMenuBarSelectionIsNotProcessedAndTheSelectedTabIsNotUpdated() {
         viewController!.applicationState.block()
         viewController!.selectedTab = 1
@@ -51,15 +51,31 @@ class TabBarDelegateTests : XCTestCase {
         XCTAssert(tabBarDelegate!.processTabBarSelectionWasCalled == false)
         XCTAssert(viewController!.selectedTab==1)
     }
+    
+    func test_WhenSymptomsIsClickedOnThenTheApplicationStateIsNotBlocked() {
+        let symptomsTabBarItem = UITabBarItem(title: "symptomsItem", image: nil, tag: 0)
+        viewController!.selectedTab = 1
+        tabBarDelegate!.tabBar(tabBar!, didSelect: symptomsTabBarItem)
+           
+        XCTAssert(viewController!.applicationState.isReady())
+    }
+    
+    func test_WhenMoreIsThePreviouslySelectedTabThenTheNextTabSelectionWillNotBlockTheApplicationState() {
+        let moreTabBarItem = UITabBarItem(title: "moreItem", image: nil, tag: 4)
+        viewController!.selectedTab = moreTabBarItem.tag
+        tabBarDelegate!.tabBar(tabBar!, didSelect: tabBarItem!)
+             
+        XCTAssert(viewController!.applicationState.isReady())
+    }
 }
 
 class MockTabBarDelegate : TabBarDelegate {
     
     var processTabBarSelectionWasCalled = false
+    
     override init(controller: HomeViewController) {
         super.init(controller: controller)
     }
-    
     
     override func processTabBarSelection(selectedTag: Int) {
         processTabBarSelectionWasCalled = true
