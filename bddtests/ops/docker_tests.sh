@@ -155,7 +155,7 @@ else
         fi
         if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ]
         then
-          TAGS=()
+          TRANCHE_TAGS=()
           val=1
           for filename in $(find .. | grep -F .feature | grep -v throttling.feature | sort); do
             let tranche="$(( val++ % MAX_TESTTHREADS + 1))"
@@ -163,13 +163,11 @@ else
             info "Tagging $filename as tranche$tranche"
             echo -e "@tranche$tranche\n$(cat $filename)" > $filename
 
-            TAGS+=(tranche$tranche)
+            TRANCHE_TAGS+=(tranche$tranche)
           done
+          TRANCHE_TAGS=($(tr ' ' '\n' <<< "${TRANCHE_TAGS[@]}" | sort -u | tr '\n' ' '))
 
-          TAGS=($(tr ' ' '\n' <<< "${TAGS[@]}" | sort -u | tr '\n' ' '))
-          TAGS+=(throttling)
-          TAGS+=(onlineconsultations)
-
+          TAGS=(throttling onlineconsultations "${TRANCHE_TAGS[@]}")
         elif [ "$RUN_NATIVE" == 1 ]
         then
           TAGS=(nativesmoketest)
@@ -484,25 +482,29 @@ info "Collecting failed test reports"
 touch $workingDir/../build/failures.txt
 for TAG in ${TAGS[*]}; do
   info "Collecting failed test reports for $TAG"
-  cp junit.xslt $TEST_RUN_FOLDER/$TAG/build/test-results/test/.
-  docker run --rm -v "$TEST_RUN_FOLDER/$TAG/build/test-results/test:/wrk" $XSLTPROC_DOCKER_IMAGE \
-    bash -c "ls *.xml | xargs -n 1 -I {} xsltproc -o {} junit.xslt {}"
 
   if [ -f $TEST_RUN_FOLDER/$TAG/build/failures.txt ]; then
     cat $TEST_RUN_FOLDER/$TAG/build/failures.txt >> $workingDir/../build/failures.txt
   fi
 done
 
-info "All failed tests for rerun"
-cat $workingDir/../build/failures.txt
-
 test_run_result=0
-if [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -ge 1 ]
+if [ "$(wc -l $workingDir/../build/failures.txt | awk '{print $1}')" -ge 1 ]
 then
   test_run_result=1
 
-  if [ $(wc -l $workingDir/../build/failures.txt | awk '{print $1}') -le 30 ]
+  if [ "$(wc -l $workingDir/../build/failures.txt | awk '{print $1}')" -le 30 ]
   then
+    info "Failed tests for rerun"
+    cat $workingDir/../build/failures.txt
+
+    for TAG in ${TAGS[*]}; do
+      info "Removing failed test reports for $TAG"
+      cp junit.xslt $TEST_RUN_FOLDER/$TAG/build/test-results/test/.
+      docker run --rm -v "$TEST_RUN_FOLDER/$TAG/build/test-results/test:/wrk" $XSLTPROC_DOCKER_IMAGE \
+        bash -c "ls *.xml | xargs -n 1 -I {} xsltproc -o {} junit.xslt {}"
+    done
+
     TAGS+=(RERUN)
 
     cp -r $workingDir/../ $TEST_RUN_FOLDER/RERUN

@@ -31,6 +31,7 @@ services:
     image: mongo:latest
 
   api.local.bitraft.io:
+    restart: always
     image: nginx:alpine
     volumes:
       - ./backendworker/nginx:/etc/nginx/conf.d
@@ -164,7 +165,7 @@ services:
     image: ${LOGAPI_DOCKER_REGISTRY:-local}/nhsonline-clientloggerapi:${LOGAPI_DOCKER_TAG:-latest}
     env_file:
       - ./docker/logger.env
-      
+
   mongo_seed:
     image: mongo:latest
     links:
