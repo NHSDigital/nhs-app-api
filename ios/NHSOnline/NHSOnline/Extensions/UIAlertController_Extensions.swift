@@ -36,7 +36,9 @@ extension UIAlertController {
     override open func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        self.alertWindow.isHidden = true
-        self.alertWindow = nil
+        if self.alertWindow != nil {
+            self.alertWindow.isHidden = true
+            self.alertWindow = nil
+        }
     }
 }
