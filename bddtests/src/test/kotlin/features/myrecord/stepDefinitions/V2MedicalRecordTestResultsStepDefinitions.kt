@@ -108,10 +108,14 @@ open class V2MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     }
 
     @Then("^I see the test result content - Medical Record v2$")
-    fun thenISeeTheTestResulsContentV2() {
+    fun thenISeeTheTestResultsContentV2() {
         myRecordDetailedTestResultPage.assertContentMedicalRecordV2()
     }
 
+    @Then("^there are no wrongly displayed HTML entities - Medical Record v2$")
+    fun thereAreNoWronglyDisplayedHTMLEntitiesV2() {
+        myRecordDetailedTestResultPage.assertContentWithNoWronglyDisplayedHTMLEntities()
+    }
 
     companion object {
         private const val emisDefaultTestResultsCount = 2

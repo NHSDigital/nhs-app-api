@@ -18,7 +18,9 @@ import pages.myrecord.MyRecordTestResultDetailPage
 import utils.SerenityHelpers
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
+private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ZERO = 0
+private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ONE = 1
+private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_TWO = 2
 private const val NUMBER_OF_TEST_RESULTS_EQUALS_FOUR = 4
 open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -56,6 +58,15 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
         }
     }
 
+    @Given("^the GP Practice has test result details with HTML entities$")
+    fun givenTestResultDetailWithHTMLEntitiesIsRetrievedSuccessfully() {
+        mockingClient.forTpp {
+            myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
+                    TestResultsData.mockTestResultId)
+                    .respondWithSuccess(TestResultsData.getTestResultDetailWithHTMLEntities())
+        }
+    }
+
     @Given("^the GP Practice has six test results$")
     fun givenTheGpPracticeHasSixTestResults() {
         val gpSystem = SerenityHelpers.getGpSupplier()
@@ -67,7 +78,8 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData
-                            .getSingleTestResultWithMultipleChildValuesWithNoRanges())
+                            .getTestResultWithChildValueCountAndRangePresent(
+                                    NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_TWO, false))
         }
     }
 
@@ -75,7 +87,9 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRangesForEmis() {
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
-                    .respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
+                    .respondWithSuccess(TestResultsData
+                            .getTestResultWithChildValueCountAndRangePresent(
+                                    NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ONE, false))
         }
     }
 
@@ -98,7 +112,8 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRangesFor() {
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
-                    .respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
+                    .respondWithSuccess(TestResultsData
+                            .getTestResultWithChildValueCountAndRangePresent(NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_TWO))
         }
     }
 
@@ -106,7 +121,8 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithRangesFor() {
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
-                    .respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
+                    .respondWithSuccess(TestResultsData
+                            .getTestResultWithChildValueCountAndRangePresent(NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ONE))
         }
     }
 
@@ -115,7 +131,9 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRangeFor() {
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
-                    .respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
+                    .respondWithSuccess(TestResultsData
+                            .getTestResultWithChildValueCountAndRangePresent(
+                                    NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ZERO, false))
         }
     }
 
@@ -123,7 +141,8 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesAndARangeFor() {
         mockingClient.forEmis {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
-                    .respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
+                    .respondWithSuccess(TestResultsData
+                            .getTestResultWithChildValueCountAndRangePresent(NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ZERO))
         }
     }
 
@@ -184,6 +203,11 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     @Then("^I see the test result content - Medical Record v1$")
     fun thenISeeTheTestResulsContentV1() {
         myRecordDetailedTestResultPage.assertContent()
+    }
+
+    @Then("^there are no wrongly displayed HTML entities - Medical Record v1$")
+    fun thenThereAreNoWronglyDisplayedHTMLEntitiesV1() {
+        myRecordDetailedTestResultPage.assertContentWithNoWronglyDisplayedHTMLEntities()
     }
 
     @Then("^I see test results with multiple child values some of which have ranges - Medical Record v1$")

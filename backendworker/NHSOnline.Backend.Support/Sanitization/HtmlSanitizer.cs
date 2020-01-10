@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -37,24 +37,8 @@ namespace NHSOnline.Backend.Support.Sanitization
             doc.LoadHtml(html);
             SanitizeHtmlNode(doc.DocumentNode);
 
-            using (var sw = new StringWriter())
-            using (var writer = new XmlTextWriter(sw))
-            {
-                doc.DocumentNode.WriteTo(writer);
-                var output = sw.ToString();
-
-                if (string.IsNullOrEmpty(output))
-                {
-                    return output;
-                }
-                
-                var at = output.IndexOf("?>", StringComparison.Ordinal);
-                output = output.Substring(at + 2);
-
-                return output;
-            }
+            return doc.DocumentNode.WriteTo();
         }
-
 
         public string GetBodyContent(string html)
         {

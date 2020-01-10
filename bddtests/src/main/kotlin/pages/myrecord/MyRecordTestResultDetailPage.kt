@@ -1,8 +1,10 @@
 package pages.myrecord
 
+import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.sharedElements.TextBlockElement
+import pages.text
 
 class MyRecordTestResultDetailPage: HybridPageObject() {
 
@@ -20,6 +22,18 @@ class MyRecordTestResultDetailPage: HybridPageObject() {
 
     fun assertContent(){
         TextBlockElement.withH2Header("Test result", this).assert("Test Result Detail")
+    }
+
+    fun assertContentWithNoWronglyDisplayedHTMLEntities(){
+        val content = HybridPageElement(
+                webDesktopLocator = "//div",
+                page = this
+        ).text
+
+        val regex = """&(#?[0-9]+|x?[0-9A-Za-z]+);""".toRegex()
+        Assert.assertFalse("HTML entity displayed incorrectly. " +
+                "Regex found: '${regex.find(content)?.value}' ",
+                regex.containsMatchIn(content))
     }
 
     fun assertContentMedicalRecordV2(){

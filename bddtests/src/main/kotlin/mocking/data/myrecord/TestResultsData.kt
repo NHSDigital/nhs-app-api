@@ -28,56 +28,19 @@ class TestResultsData {
             )
         }
 
-        fun getSingleTestResultWithMultipleChildValuesWithRanges(): TestResultResponseModel {
+        fun getTestResultWithChildValueCountAndRangePresent(
+                childValueCount: Int,
+                rangePresent: Boolean = true
+        ): TestResultResponseModel {
             val testResults = mutableListOf<TestResultResponse>()
             testResults.add(TestResultResponseDataBuilder().testResultResponseData(
-                    childValueCount = 2
+                    childValueCount = childValueCount,
+                    rangePresent = rangePresent
             ))
             return TestResultResponseModel(
                     medicalRecord = TestResultMedicalRecord(
                             testResults = testResults
                     ))
-        }
-
-        fun getSingleTestResultWithSingleChildValuesWithARange(): TestResultResponseModel {
-            val testResults = mutableListOf<TestResultResponse>()
-            testResults.add(TestResultResponseDataBuilder().testResultResponseData(
-                    childValueCount = 1
-            ))
-            return TestResultResponseModel(
-                    medicalRecord = TestResultMedicalRecord(
-                            testResults = testResults
-                    ))
-        }
-
-        fun getSingleTestResultWithMultipleChildValuesWithNoRanges(): TestResultResponseModel {
-            val testResults = mutableListOf<TestResultResponse>()
-
-            testResults.add(TestResultResponseDataBuilder().testResultResponseData(
-                    childValueCount = 2,
-                    rangePresent = false
-            ))
-
-            return TestResultResponseModel(
-                    medicalRecord = TestResultMedicalRecord(
-                            testResults = testResults
-                    )
-            )
-        }
-
-        fun getSingleTestResultWithSingleChildValuesWithNoRanges(): TestResultResponseModel {
-            val testResults = mutableListOf<TestResultResponse>()
-
-            testResults.add(TestResultResponseDataBuilder().testResultResponseData(
-                    childValueCount = 1,
-                    rangePresent = false
-            ))
-
-            return TestResultResponseModel(
-                    medicalRecord = TestResultMedicalRecord(
-                            testResults = testResults
-                    )
-            )
         }
 
         fun getTwoTestResultsWhereTheSecondRecordHasNoDate(): TestResultResponseModel {
@@ -85,31 +48,6 @@ class TestResultsData {
             testResults.medicalRecord.testResults[1].value.effectiveDate.value = ""
 
             return testResults
-        }
-
-        fun getSingleTestResultWithNoChildValuesOrRange(): TestResultResponseModel {
-            val testResults = mutableListOf<TestResultResponse>()
-            testResults.add(TestResultResponseDataBuilder().testResultResponseData(
-                    childValueCount = 0,
-                    rangePresent = false
-            ))
-            return TestResultResponseModel(
-                    medicalRecord = TestResultMedicalRecord(
-                            testResults = testResults
-                    )
-            )
-        }
-
-        fun getSingleTestResultWithNoChildValuesAndARange(): TestResultResponseModel {
-            val testResults = mutableListOf<TestResultResponse>()
-            testResults.add(TestResultResponseDataBuilder().testResultResponseData(
-                    childValueCount = 0
-            ))
-            return TestResultResponseModel(
-                    medicalRecord = TestResultMedicalRecord(
-                            testResults = testResults
-                    )
-            )
         }
 
         fun getDefaultTestResultsModel(): TestResultResponseModel {
@@ -140,6 +78,18 @@ class TestResultsData {
             val testResultDetail = TestResultsViewReply(items = mutableListOf())
 
             testResultDetail.items.add(TestResultsViewReplyItem(value = "<p>Test Result Detail</p>"))
+
+            return testResultDetail
+        }
+
+        fun getTestResultDetailWithHTMLEntities(): TestResultsViewReply {
+            val testResultDetail = TestResultsViewReply(items = mutableListOf())
+
+            val path = Paths.get("").toAbsolutePath().toString()
+            val fileLocation = "$path/src/main/kotlin/mocking/data/myrecord/TPPTestResultWithHTMLEntities.html"
+
+            testResultDetail.items.add(TestResultsViewReplyItem(
+                    value = File(fileLocation).readText()))
 
             return testResultDetail
         }

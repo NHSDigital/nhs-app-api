@@ -88,6 +88,20 @@ namespace NHSOnline.Backend.Support.UnitTests.Sanitization
             sanitizedHtml.Should().ContainAll("Safe Anchor", "Safe Paragraph", "Safe Table Cell");
         }
 
+        [TestMethod]
+        public void SanitizeHtml_WhenPassedSymbols_DoesNotAffectThem()
+        {
+            // Arrange
+            const string testHtml = "<span>Here is a gt symbol &gt; &amp; here is a forward slash &#47;</span>";
+
+            // Act
+            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(testHtml, _whitelist);
+
+            // Assert
+            sanitizedHtml.Should().Be(testHtml);
+        }
+
+
         private static async Task<string> ReadTestDataFile(string resourceFile)
         {
             var assembly = Assembly.GetExecutingAssembly();

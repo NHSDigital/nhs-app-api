@@ -90,3 +90,12 @@ Feature: Test Results Frontend - Medical Record v2
     When I click the Test results link on my record - Medical Record v2
     And I click a test result - Medical Record v2
     And I see the test result content - Medical Record v2
+
+  Scenario: A TPP user can navigate to a test result containing HTML entities - Medical Record v2
+    Given I am a TPP user setup to use medical record version 2
+    And the GP Practice has six test results
+    And the GP Practice has test result details with HTML entities
+    And I am on the medical record page
+    When I click the Test results link on my record - Medical Record v2
+    And I click a test result - Medical Record v2
+    And there are no wrongly displayed HTML entities - Medical Record v2

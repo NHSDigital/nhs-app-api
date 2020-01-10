@@ -54,6 +54,15 @@ Feature: Test Results Frontend - Medical Record v1
     Then I see header text is Your GP medical record
     And I see the test result content - Medical Record v1
 
+  Scenario: A TPP user can navigate to a test result containing HTML entities - Medical Record v1
+    Given I am a TPP user setup to use medical record version 1
+    And the GP Practice has six test results
+    And the GP Practice has test result details with HTML entities
+    And I am on the medical record page
+    When I select a test result - Medical Record v1
+    Then I see header text is Your GP medical record
+    And there are no wrongly displayed HTML entities - Medical Record v1
+
   Scenario: A MICROTEST user has test results ordered first by result type and in reverse chronological order - Medical Record v1
     Given I am a MICROTEST user setup to use medical record version 1
     And I have 4 INR TestResults and 5 Path TestResults
