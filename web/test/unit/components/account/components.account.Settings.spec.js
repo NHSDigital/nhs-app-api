@@ -6,15 +6,16 @@ describe('Settings', () => {
   let $router;
   let wrapper;
 
-  const mountSettings = ({ showBiometrics = true, showNotifications = true } = {}) => {
+  const mountSettings = ({ showBiometrics = true, showNotifications = true,
+    showLinkedProfiles = true } = {}) => {
     $router = createRouter();
     return mount(Settings, {
       $router,
-      propsData: { showBiometrics, showNotifications },
+      propsData: { showBiometrics, showNotifications, showLinkedProfiles },
     });
   };
 
-  describe('biometrics and notifications enabled', () => {
+  describe('biometrics, notifications and linked profiles enabled', () => {
     let notificationsLink;
     let biometricsLink;
 
@@ -43,7 +44,7 @@ describe('Settings', () => {
     });
   });
 
-  describe('biometrics enabled and notifications disabled', () => {
+  describe('biometrics enabled, linked profiles enabled and notifications disabled', () => {
     let notificationsLink;
     let biometricsLink;
 
@@ -62,7 +63,7 @@ describe('Settings', () => {
     });
   });
 
-  describe('biometrics disabled and notifications enabled', () => {
+  describe('biometrics disabled, linked profiles disabled and notifications enabled', () => {
     let notificationsLink;
     let biometricsLink;
 

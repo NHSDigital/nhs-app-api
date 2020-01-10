@@ -45,9 +45,11 @@ describe('Account Page', () => {
     return urls;
   };
 
-  const mountPage = ({ notificationsEnabled = false, isNativeApp = false }) => {
+  const mountPage = ({ notificationsEnabled = false, isNativeApp = false,
+    showLinkedProfiles = false }) => {
     const $store = createStore({ state: $state });
     $store.getters['serviceJourneyRules/notificationsEnabled'] = notificationsEnabled;
+    $store.getters['linkedAccounts/hasLinkedAccounts'] = showLinkedProfiles;
     $state.device.isNativeApp = isNativeApp;
     return mount(AccountPage, { $env,
       $store,
@@ -57,7 +59,9 @@ describe('Account Page', () => {
 
   describe('on a native app', () => {
     beforeEach(() => {
-      wrapper = mountPage({ notificationsEnabled: true, isNativeApp: true });
+      wrapper = mountPage({ notificationsEnabled: true,
+        isNativeApp: true,
+        showLinkedProfiles: true });
     });
 
     it('will verify that footer links are subset of links in account page', () => {
@@ -74,12 +78,40 @@ describe('Account Page', () => {
       expect(footerLinks.every(link => accountLinks.includes(link))).toBeTruthy();
     });
 
+    it('will have a linked profiles link', () => {
+      expect(wrapper.findAll('li').at(0).text()).toContain('translate_myAccount.linkedProfilesLink');
+    });
+
     it('will have a cookies link', () => {
-      expect(wrapper.findAll('li').at(0).text()).toContain('translate_myAccount.cookiesLink');
+      expect(wrapper.findAll('li').at(1).text()).toContain('translate_myAccount.cookiesLink');
     });
 
     it('will show About the NHS App component', () => {
       expect(wrapper.find(AboutUs).exists()).toBe(true);
+    });
+  });
+
+  describe('on desktop with showLinkedProfiles false', () => {
+    beforeEach(() => {
+      wrapper = mountPage({ notificationsEnabled: true,
+        isNativeApp: false,
+        showLinkedProfiles: false });
+    });
+
+    it('will not have a linked profiles link', () => {
+      expect(wrapper.find('#linked-profiles-link').exists()).toBe(false);
+    });
+  });
+
+  describe('on desktop with showLinkedProfiles true', () => {
+    beforeEach(() => {
+      wrapper = mountPage({ notificationsEnabled: true,
+        isNativeApp: false,
+        showLinkedProfiles: true });
+    });
+
+    it('will have a linked profiles link', () => {
+      expect(wrapper.find('#linked-profiles-link').exists()).toBe(false);
     });
   });
 

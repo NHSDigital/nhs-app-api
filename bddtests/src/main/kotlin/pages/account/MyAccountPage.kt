@@ -1,12 +1,15 @@
 package pages.account
 
 import net.thucydides.core.annotations.DefaultUrl
-import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.HybridPageObject
 import pages.assertIsVisible
+import pages.assertElementNotPresent
 
 @DefaultUrl("http://web.local.bitraft.io:3000/account")
 class MyAccountPage : HybridPageObject() {
+
+    private val listMenuPath = "//ul[@data-purpose='settings-menu']//a/span/h2"
 
     val signOutButton = HybridPageElement(
             webDesktopLocator = "//a[@id='account-logout']",
@@ -22,11 +25,20 @@ class MyAccountPage : HybridPageObject() {
             page = this
     )
 
-    val cookieLink = AccountCookieLinkModule(this)
-
     val aboutUs = AccountAboutUsModule(this)
 
     val settings = AccountSettingsModule(this)
+
+    private fun link(linkText: String): HybridPageElement {
+        return HybridPageElement(
+                webDesktopLocator = "$listMenuPath${String.format(containsTextXpathSubstring, linkText)}",
+                androidLocator = null,
+                page = this,
+                helpfulName = "$linkText Link")
+    }
+
+    val linkedProfilesLink = link("Linked profiles")
+    val cookieLink = link("Cookies")
 
     fun assertDisplayed() {
         aboutUs.assertLinksPresent(true)
@@ -36,6 +48,18 @@ class MyAccountPage : HybridPageObject() {
     fun assertDisplayedForMobile() {
         signOutButtonMobile.assertIsVisible()
         aboutUs.assertLinksPresent(true)
+    }
+
+    fun assertLinkedProfilesLinkIsPresent() {
+        linkedProfilesLink.assertIsVisible()
+    }
+
+    fun assertLinkedProfilesLinkIsNotPresent() {
+        linkedProfilesLink.assertElementNotPresent()
+    }
+
+    fun assertCookiesLinkIsPresent() {
+        cookieLink.assertIsVisible()
     }
 }
 

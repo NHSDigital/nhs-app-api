@@ -1,12 +1,20 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
   <div v-if="showTemplate">
-    <menu-item-list data-purpose="cookie-menu">
+    <menu-item-list data-purpose="settings-menu">
+      <menu-item v-if="hasLinkedProfiles"
+                 id="'linked-profiles-link'"
+                 header-tag="h2"
+                 :href="linkedProfilesPath"
+                 :text="$t('myAccount.linkedProfilesLink')"
+                 :click-func="goToUrl"
+                 :click-param="linkedProfilesPath"/>
       <menu-item id="'cookies'"
                  header-tag="h2"
                  :href="cookiesPath"
                  :text="$t('myAccount.cookiesLink')"
                  :click-func="goToUrl"
                  :click-param="cookiesPath"/>
+
     </menu-item-list>
 
     <template v-if="$store.state.device.isNativeApp">
@@ -46,7 +54,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import { ACCOUNT_COOKIES } from '@/lib/routes';
+import { ACCOUNT_COOKIES, LINKED_PROFILES } from '@/lib/routes';
 import AboutUs from '@/components/account/AboutUs';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import CeMarkIcon from '@/components/icons/CeMarkIcon';
@@ -72,6 +80,7 @@ export default {
     return {
       nativeLoginOptionsMethodExists: true,
       cookiesPath: ACCOUNT_COOKIES.path,
+      linkedProfilesPath: LINKED_PROFILES.path,
     };
   },
   computed: {
@@ -82,6 +91,9 @@ export default {
     showNotifications() {
       return sjrIf({ $store: this.$store, journey: 'notifications' }) &&
         this.$store.state.device.isNativeApp;
+    },
+    hasLinkedProfiles() {
+      return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
     },
   },
   mounted() {

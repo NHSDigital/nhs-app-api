@@ -21,6 +21,7 @@ describe('Account.index', () => {
       },
       getters: {
         'serviceJourneyRules/notificationsEnabled': false,
+        'linkedAccounts/hasLinkedAccounts': false,
       },
     };
 

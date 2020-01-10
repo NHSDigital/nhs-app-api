@@ -147,6 +147,13 @@ data class Patient(
             }
         }
 
+        fun getPatientWithNoLinkedProfiles(gpSystem: Supplier): Patient {
+            return when (gpSystem) {
+                Supplier.EMIS -> EmisPatients.getPatientWithNoLinkedProfiles()
+                else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
+            }
+        }
+
         fun getMicrotestPostLinkage(accountID: String, linkageKey: String): Patient {
             return MicrotestPatients.microtestPostLinkageUserDetails(accountID, linkageKey)
         }

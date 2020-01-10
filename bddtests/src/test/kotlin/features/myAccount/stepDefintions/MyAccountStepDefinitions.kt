@@ -23,6 +23,21 @@ class MyAccountStepDefinitions {
         myAccount.assertDisplayed()
     }
 
+    @Then("^the Linked Profiles link is displayed$")
+    fun theLinkedProfilesLinkIsDisplayed() {
+        myAccount.assertLinkedProfilesLinkIsPresent()
+    }
+
+    @Then("^the Cookies link is displayed$")
+    fun theCookiesLinkIsDisplayed() {
+        myAccount.assertCookiesLinkIsPresent()
+    }
+
+    @Then("^the Linked Profiles link is not displayed$")
+    fun theLinkedProfilesLinkIsNotDisplayed() {
+        myAccount.assertLinkedProfilesLinkIsNotPresent()
+    }
+
     @Then("the Account Settings are available")
     fun theAccountSettingsAreAvailable() {
         myAccount.settings.assertLinksPresent()
@@ -36,10 +51,5 @@ class MyAccountStepDefinitions {
     @Then("the link to Notifications is not available on the Account page")
     fun theLinkToNotificationsIsNotAvailableOnTheAccountPage() {
         myAccount.settings.assertNotDisplayed()
-
-        @When("I click the cookies link")
-        fun iClickTheCookiesLinkOnTheAccountPage() {
-            myAccount.cookieLink.cookie.click()
-        }
     }
 }

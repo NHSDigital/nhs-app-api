@@ -1666,6 +1666,7 @@ export default {
     detailsHeading: 'Details',
     accountSettings: {
       header: 'Account settings',
+      linkedProfilesOptions: 'Linked profiles',
       passwordOptions: 'Login and password options',
       notificationOptions: 'Notifications',
     },
@@ -1674,6 +1675,7 @@ export default {
     privacyPolicy: 'Privacy policy',
     cookiesLink: 'Cookies',
     cookiesPolicy: 'Cookies policy',
+    linkedProfilesLink: 'Linked profiles',
     openSourceLicences: 'Open source licences',
     helpAndSupport: 'Help and support',
     accessibilityStatement: 'Accessibility statement',

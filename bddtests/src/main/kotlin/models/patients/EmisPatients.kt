@@ -23,6 +23,10 @@ class EmisPatients {
             return tonyStark
         }
 
+        fun getPatientWithNoLinkedProfiles() : Patient {
+            return picaJones
+        }
+
         val paulSmith = Patient(
                 title = "Mr",
                 firstName = "Paul",

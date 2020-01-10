@@ -1152,7 +1152,7 @@ const routes = {
     crumb: {
       i18nKey: 'linkedProfiles',
       get parentRoute() {
-        return this.allRoutes.INDEX;
+        return this.allRoutes.ACCOUNT;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}proxy/`,

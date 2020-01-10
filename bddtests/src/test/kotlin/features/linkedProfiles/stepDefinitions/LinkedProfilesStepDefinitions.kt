@@ -71,15 +71,24 @@ class LinkedProfilesStepDefinitions {
         val patient = Patient.getPatientWithLinkedProfiles(supplier)
         Patient.setOdsCodeBasedOnAppointmentsProvider(patient, provider)
         SerenityHelpers.setGpSupplier(supplier)
-        setupWithLinkedAccountsAndLogIn(patient, supplier)
+        setupAndLogIn(patient, supplier)
     }
+
+    @Given("^I am logged in as a (.*) user with no linked profiles")
+    fun iAmLoggedInWithNoLinkedProfiles(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getPatientWithNoLinkedProfiles(supplier)
+        SerenityHelpers.setGpSupplier(supplier)
+        setupAndLogIn(patient, supplier)
+    }
+
 
     @Given("^I click on the Appointments link on the header$")
     fun iClickOnAppointmentsLinkInHeader() {
         webHeader.clickAppointmentsPageLink()
     }
 
-    private fun setupWithLinkedAccountsAndLogIn(patient: Patient, gpSystem: Supplier) {
+    private fun setupAndLogIn(patient: Patient, gpSystem: Supplier) {
         SerenityHelpers.setPatient(patient)
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
