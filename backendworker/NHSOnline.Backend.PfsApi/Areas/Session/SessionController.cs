@@ -24,7 +24,7 @@ using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session
 {
-    [Route("session")]
+    [ApiVersionRoute("session")]
     public class SessionController : Controller
     {
         private readonly ICitizenIdSessionService _citizenIdSessionService;
@@ -257,7 +257,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             CitizenIdSessionResult citizenIdSessionResult,
             GpSessionCreateResultVisitorOutput gpSessionCreatedResultVisited)
         {
-            // Build and save session token in our session cache
+            // retrieveConfiguration and save session token in our session cache
             var sessionFetchTask = FetchSessionIdAndSaveInCookie(userSession);
 
             // Post to the UserInfo service
@@ -374,7 +374,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
         private async Task FetchSessionIdAndSaveInCookie(UserSession userSession)
         {
-            // Build and save session token in our session cache
+            // retrieveConfiguration and save session token in our session cache
             var sessionId = await _sessionCacheService.CreateUserSession(userSession);
 
             _logger.LogDebug($"Fetched Session Id: '{sessionId}'");

@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Brothermailer.Models;
 using NHSOnline.Backend.PfsApi.Brothermailer;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Brothermailer
 {
-    [Route("brothermailer")]
+    [ApiVersionRoute("brothermailer")]
     public class BrothermailerController : Controller
     {
         private readonly IBrothermailerService _brothermailerService;

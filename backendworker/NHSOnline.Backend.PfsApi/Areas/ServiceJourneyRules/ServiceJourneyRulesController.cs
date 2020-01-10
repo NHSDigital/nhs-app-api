@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,7 +6,6 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
-using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
@@ -44,7 +42,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
         }
 
         [HttpGet]
-        [Route("patient/journey-configuration")]
+        [ApiVersionRoute("patient/journey-configuration")]
         public async Task<IActionResult> Get()
         {
             try
@@ -69,7 +67,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
         }
 
         [HttpGet]
-        [Route("patient/configuration")]
+        [ApiVersionRoute("patient/configuration")]
         public async Task<IActionResult> GetLinkedAccountPatientConfig()
         {
             await _auditor.Audit(AuditingOperations.GetPatientConfigRequest,"Attempting to get config for patient");
@@ -107,7 +105,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
         }
 
         [HttpGet]
-        [Route("patient/linked-account-journey-configuration")]
+        [ApiVersionRoute("patient/linked-account-journey-configuration")]
         public async Task<IActionResult> GetLinkedAccountConfiguration([FromHeader(Name = PatientId)] Guid patientId)
         {
             try

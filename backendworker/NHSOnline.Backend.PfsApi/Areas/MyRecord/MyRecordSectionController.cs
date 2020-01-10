@@ -10,7 +10,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
-    [Route("patient/my-record/section")]
+    [ApiVersionRoute("patient/my-record/section")]
     public class MyRecordSectionController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

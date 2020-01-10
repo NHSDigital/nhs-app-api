@@ -16,7 +16,7 @@ using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
-    [Route("patient/appointments")]
+    [ApiVersionRoute("patient/appointments")]
     public class AppointmentsController : Controller
     {
         private readonly ILogger<AppointmentsController> _logger;

@@ -20,7 +20,6 @@ using NHSOnline.Backend.Support.Http;
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
     [JourneyFeatureFilterAttribute(JourneyFeature.NominatedPharmacy)]
-    [Route("patient")]
     public class NominatedPharmacyController : Controller
     {
         private readonly ILogger<NominatedPharmacyController> _logger;
@@ -56,7 +55,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             _gpSearchService = gpSearchService;
         }
 
-        [HttpGet("nominated-pharmacy")]
+        [HttpGet]
+        [ApiVersionRoute("patient/nominated-pharmacy")]
         public async Task<IActionResult> Get()
         {
             _logger.LogEnter();
@@ -71,7 +71,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             return getNominatedPharmacyResult.Accept(new GetNominatedPharmacyResultVisitor());
         }
 
-        [HttpPost("nominated-pharmacy")]
+        [HttpPost]
+        [ApiVersionRoute("patient/nominated-pharmacy")]
         public async Task<IActionResult> Update([FromBody] UpdateNominatedPharmacyRequest model)
         {
             _logger.LogEnter();
@@ -90,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         }
 
         [HttpGet]
-        [Route("pharmacies")]
+        [ApiVersionRoute("patient/pharmacies")]
         public async Task<IActionResult> Search([FromQuery] string searchTerm)
         {
             _logger.LogEnter();

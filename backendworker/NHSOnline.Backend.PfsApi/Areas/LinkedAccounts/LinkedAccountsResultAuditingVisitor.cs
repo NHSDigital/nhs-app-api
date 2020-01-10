@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
-using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 
 namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts

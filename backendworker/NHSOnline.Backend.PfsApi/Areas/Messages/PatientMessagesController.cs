@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         }
 
         [HttpGet]
-        [Route("patient/messages")]
+        [ApiVersionRoute("patient/messages")]
         public async Task<IActionResult> GetMessages()
         {
             _logger.LogEnter();
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         }
 
         [HttpGet]
-        [Route("patient/messages/{messageId}")]
+        [ApiVersionRoute("patient/messages/{messageId}")]
         public async Task<IActionResult> GetMessageDetails(
             [FromRoute(Name = "messageId")] string messageId)
         {

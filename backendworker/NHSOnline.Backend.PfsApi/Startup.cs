@@ -38,9 +38,10 @@ using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.PfsApi.SpineSearch;
 using NHSOnline.Backend.Support.Certificate;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Settings;
 using Microsoft.Extensions.Options;
+using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using Wkhtmltopdf.NetCore;
+using ConfigurationSettings = NHSOnline.Backend.Support.Settings.ConfigurationSettings;
 
 namespace NHSOnline.Backend.PfsApi
 {
@@ -110,6 +111,13 @@ namespace NHSOnline.Backend.PfsApi
                         new CamelCasePropertyNamesContractResolver()
                 ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = ApiVersion.Parse("1.0");
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ErrorResponses = new NotFoundErrorResponseProvider();
+            });
+
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
@@ -137,7 +145,9 @@ namespace NHSOnline.Backend.PfsApi
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
-
+            
+            services.Configure<KnownServices>(Configuration);
+            
             _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);
             NominatedPharmacyStartup.RegisterServices(services);
@@ -295,8 +305,6 @@ namespace NHSOnline.Backend.PfsApi
             app.UseSecurityResponseHeadersMiddleware();
             app.UseResponseHeadersMiddleware();
             app.UseMiddleware<ProxyAuditingMiddleware>();
-            
-            app.UsePathBase(new PathString("/v1"));
 
             var corsAuthority = Configuration["CORS_AUTHORITY"];
             if (corsAuthority != null)
@@ -399,6 +407,7 @@ namespace NHSOnline.Backend.PfsApi
             var baseUrlstring = Configuration.GetOrWarn("MICROTEST_BASE_URL", _logger);
             var certificatePath = Configuration.GetOrWarn("MICROTEST_CERT_PATH", _logger);
             var certificatePassphrase = Configuration.GetOrWarn("MICROTEST_CERT_PASSPHRASE", _logger);
+            
             var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
             var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
 
@@ -410,18 +419,21 @@ namespace NHSOnline.Backend.PfsApi
 
         public DeviceConfigurationSettings CreateAndValidateDeviceEnvironmentVariables()
         {
+            var webAppBaseUrl = new Uri(Configuration.GetOrWarn("NHS_WEB_APP_BASE_URL", _logger), UriKind.Absolute);
+            
             var minimumSupportedAndroidVersion = Configuration["ConfigurationSettings:MinimumSupportedAndroidVersion"];
             var minimumSupportediOSVersion = Configuration["ConfigurationSettings:MinimumSupportediOSVersion"];
             var fidoServerUrl = new Uri(Configuration["ConfigurationSettings:FidoServerUrl"], UriKind.Absolute);
             var throttlingEnabled = Configuration["ConfigurationSettings:ThrottlingEnabled"];
 
-            var config = new DeviceConfigurationSettings(minimumSupportedAndroidVersion, minimumSupportediOSVersion, fidoServerUrl, throttlingEnabled);
+            var config = new DeviceConfigurationSettings(minimumSupportedAndroidVersion, minimumSupportediOSVersion, fidoServerUrl, throttlingEnabled, webAppBaseUrl);
             config.Validate();
 
             return config;
         }
 
-        public TppConfigurationSettings CreateAndValidateTppEnvironmentVariables(string environment){
+        public TppConfigurationSettings CreateAndValidateTppEnvironmentVariables(string environment)
+        {
             var tppBaseUrl = Configuration.GetOrWarn("TPP_BASE_URL", _logger);
             var apiVersion = Configuration.GetOrWarn("TPP_API_VERSION", _logger);
             var applicationName = Configuration.GetOrWarn("TPP_APPLICATION_NAME", _logger);
@@ -447,10 +459,10 @@ namespace NHSOnline.Backend.PfsApi
                 prescriptionsMaxCoursesSoftLimit,
                 coursesMaxCoursesLimit,
                 environment
-                );
+            );
 
-                config.Validate();
-                return config;
+            config.Validate();
+            return config;
         }
 
         public VisionConfigurationSettings CreateAndValidateVisionEnvironmentVariables(string environment)
@@ -485,8 +497,8 @@ namespace NHSOnline.Backend.PfsApi
                 prescriptionsMaxCoursesSoftLimit,
                 environment);
 
-                config.Validate();
-                return config;
+            config.Validate();
+            return config;
         }
 
         public NominatedPharmacyConfigurationSettings CreateAndValidateSpineEnvironmentVariables(NhsAppSpinePdsTraceProperties nhsAppSpinePdsTraceProperties, NhsAppSpinePdsUpdateProperties nhsAppSpinePdsUpdateProperties)

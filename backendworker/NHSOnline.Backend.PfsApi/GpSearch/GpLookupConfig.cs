@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;

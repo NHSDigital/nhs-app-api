@@ -8,7 +8,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
-    [Route("patient/test-result")]
+    [ApiVersionRoute("patient/test-result")]
     public class DetailedTestResultController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

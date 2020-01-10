@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
@@ -29,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         }
         
         [HttpPost]
-        [Route("documents/{documentGuid}")]
+        [ApiVersionRoute("documents/{documentGuid}")]
         public async Task<IActionResult> GetPatientDocument(
             [FromRoute(Name = "documentGuid")] string documentGuid,
             [FromBody] DocumentInfo documentInfo)
@@ -70,7 +69,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         }
         
         [HttpPost]
-        [Route("documents/{documentGuid}/download")]
+        [ApiVersionRoute("documents/{documentGuid}/download")]
         public async Task<IActionResult> GetPatientDocumentForDownload(            
             [FromRoute(Name = "documentGuid")] string documentGuid,
             [FromBody] DocumentInfo documentInfo)

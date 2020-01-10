@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         }
 
         [HttpGet]
-        [Route("patient/terms-and-conditions/consent")]
+        [ApiVersionRoute("patient/terms-and-conditions/consent")]
         public async Task<IActionResult> Get()
         {
             _logger.LogEnter();
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         }
 
         [HttpPost]
-        [Route("patient/terms-and-conditions/consent")]
+        [ApiVersionRoute("patient/terms-and-conditions/consent")]
         public async Task<IActionResult> Post([FromBody] ConsentRequest model)
         {
             _logger.LogEnter();
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         }
 
         [HttpPost]
-        [Route("patient/terms-and-conditions/toggle-analytics-cookie-acceptance")]
+        [ApiVersionRoute("patient/terms-and-conditions/toggle-analytics-cookie-acceptance")]
         public async Task<IActionResult> ToggleAnalyticsCookieAcceptance(
             [FromBody] AnalyticsCookieAcceptance analyticsCookieAcceptance)
         {

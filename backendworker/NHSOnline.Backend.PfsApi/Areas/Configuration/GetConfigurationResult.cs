@@ -5,10 +5,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
 {
     public abstract class GetConfigurationResult
     {
-        private GetConfigurationResult()
-        {
-        }
-
         public abstract T Accept<T>(IGetConfigurationResultVisitor<T> visitor);
 
         public class Success : GetConfigurationResult

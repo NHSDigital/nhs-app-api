@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,7 +12,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
-    [Route("patient/organdonation")]
+    [ApiVersionRoute("patient/organdonation")]
     [ProxyingNotAllowed]
     public class OrganDonationController : Controller
     {

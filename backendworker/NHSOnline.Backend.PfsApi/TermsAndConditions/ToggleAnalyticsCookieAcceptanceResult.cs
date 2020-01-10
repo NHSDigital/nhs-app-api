@@ -1,5 +1,3 @@
-using NHSOnline.Backend.PfsApi.Areas.TermsAndConditions;
-
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
     public abstract class ToggleAnalyticsCookieAcceptanceResult

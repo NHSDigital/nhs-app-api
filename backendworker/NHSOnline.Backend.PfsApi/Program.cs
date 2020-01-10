@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore;
+﻿using System;
+using System.IO;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -12,10 +14,18 @@ namespace NHSOnline.Backend.PfsApi
             BuildWebHost(args).Run();
         }
 
-        public static IConfigurationRoot BuildConfiguration(string[] args) => new ConfigurationBuilder()
-            .AddEnvironmentVariables()
-            .AddCommandLine(args)
-            .Build();
+        public static IConfigurationRoot BuildConfiguration(string[] args)
+        {
+            var environment = Environment.GetEnvironmentVariable("KNOWNSERVICES_PATH");
+
+            var builder =  new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddCommandLine(args)
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile($"{environment}", optional: false, reloadOnChange: false)
+                .Build();
+           return builder;
+        }
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)

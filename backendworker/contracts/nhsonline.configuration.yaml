@@ -52,4 +52,4 @@ components:
             false.
         fidoServerUrl:
           type: string
-          description: Returns the URL of the FIDO server for the given environemnt.
+          description: Returns the URL of the FIDO server for the given environment.

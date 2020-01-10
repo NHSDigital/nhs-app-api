@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Areas.OdsCode.Models;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OdsCode
 {
-    [Route("odscodelookup")]
+    [ApiVersionRoute("odscodelookup")]
     public class OdsCodeLookupController : Controller
     {
         private readonly ILogger<OdsCodeLookupController> _logger;

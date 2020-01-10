@@ -1,11 +1,13 @@
 openapi: 3.0.2
 info:
-  version: 0.0.8
+  version: 0.0.9
   title: NHS App API
   description: This is the API for the NHS App.
 paths:
   /v1/configuration:
     $ref: ./nhsonline.configuration.yaml#/paths/~1configuration
+  /v2/configuration:
+    $ref: ./nhsonline.configuration_v2.yaml#/paths/~1configuration
   /v1/odscodelookup:
     $ref: ./nhsonline.odscode.yaml#/paths/~1odscodelookup
   /v1/patient/appointments:

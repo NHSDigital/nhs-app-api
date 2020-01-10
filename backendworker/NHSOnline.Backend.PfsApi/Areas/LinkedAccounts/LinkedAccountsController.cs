@@ -15,7 +15,6 @@ using NHSOnline.Backend.Support.AspNet;
 
 namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
 {
-    [Route("patient/linked-accounts")]
     public class LinkedAccountsController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;
@@ -38,6 +37,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             _auditor = auditor;
         }
 
+        [ApiVersionRoute("patient/linked-accounts")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             return await result.Accept(new LinkedAccountsResultVisitor());
         }
 
-        [Route("access-summary")]
+        [ApiVersionRoute("patient/linked-accounts/access-summary")]
         [HttpGet]
         public async Task<IActionResult> GetAccessSummaryOfLinkedAccount([FromQuery] Guid id)
         {
@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
 
-        [Route("switch/{id:guid}")]
+        [ApiVersionRoute("patient/linked-accounts/switch/{id:guid}")]
         [HttpPost]
         public async Task<IActionResult> Switch(Guid id)
         {

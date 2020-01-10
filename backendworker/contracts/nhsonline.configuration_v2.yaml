@@ -1,0 +1,98 @@
+openapi: 3.0.2
+info:
+  version: 2.0.1
+  title: NHS App Sub-API - Configuration V2
+  description: NHS App Sub-API - endpoints pertaining to configuration.
+paths:
+  /configuration:
+    get:
+      tags:
+        - configuration
+      summary: Gets a collection of configuration values.
+      description: Gets a collection of configuration values.
+      responses:
+        "200":
+          description: Returns configuration for the app.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetConfigurationResponseV2"
+        "400":
+          description: Either the device name was not provided or the device version number
+            was not in the correct format.
+        "500":
+          description: An unexpected error occurred processing the request.
+components:
+  schemas:
+    Service:
+      type: string
+      enum:
+        - "Account"
+        - "AdminHelp"
+        - "Appointments"
+        - "DataPreferences"
+        - "More"
+        - "HotJar"
+        - "MyRecord"
+        - "Nhs111"
+        - "NhsOnline"
+        - "OrganDonation"
+        - "Others"
+        - "Prescriptions"
+        - "Symptoms"
+        - ""
+    GetConfigurationResponseV2:
+      type: object
+      properties:
+        minimumSupportedAndroidVersion:
+          type: string
+          description: Returns the minimum version of NHS App that is supported by Android.
+        minimumSupportediOSVersion:
+          type: string
+          description: Returns the minimum version of NHS App that is supported by iOS.
+        fidoServerUrl:
+          type: string
+          description: Returns the URL of the FIDO server for the given environment.
+        knownServices:
+          type: array
+          description: Returns a list of know services for the NHS App.
+          items:
+            $ref: "#/components/schemas/KnownService"
+    KnownService:
+      type: object
+      properties:
+        service:
+          $ref: "#/components/schemas/Service"
+        url:
+          type: string
+        titleKey:
+          type: string
+        accessibleTitleKey:
+          type: string
+        isExternal:
+          type: boolean
+        allowNativeInteraction:
+          type: boolean
+        useCustomTabs:
+          type: boolean
+        pathInfoDictionary:
+          type: array
+          items:
+            $ref: "#/components/schemas/PathInfo"
+    PathInfo:
+      type: object
+      properties:
+        path:
+          type: string
+        validateSession:
+          type: boolean
+        allowNativeInteraction:
+          type: boolean
+        service:
+          $ref: "#/components/schemas/Service"
+        titleKey:
+          type: string
+        accessibleTitleKey:
+          type: string
+        menuTab:
+          type: integer

@@ -9,7 +9,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Ndop
 {
-    [Route("patient/ndop")]
+    [ApiVersionRoute("patient/ndop")]
     [ProxyingNotAllowed]
     public class NdopController : Controller
     {

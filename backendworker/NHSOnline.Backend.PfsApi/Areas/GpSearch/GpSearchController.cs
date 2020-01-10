@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Areas.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.GpSearch
 {
-    [Route("gpsearch")]
+    [ApiVersionRoute("gpsearch")]
     public class GpSearchController : Controller
     {
         private readonly IGpSearchService _gpSearchService;

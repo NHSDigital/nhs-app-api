@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.OrganDonation;
+using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
-    [Route("patient/organdonation/referencedata")]
+    [ApiVersionRoute("patient/organdonation/referencedata")]
     public class OrganDonationReferenceDataController : Controller
     {
         

@@ -9,7 +9,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session
 {
-    [Route("session/extend")]
+    [ApiVersionRoute("session/extend")]
     public class SessionExtendController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

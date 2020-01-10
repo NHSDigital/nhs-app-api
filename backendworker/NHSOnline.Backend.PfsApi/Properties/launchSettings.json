@@ -144,7 +144,9 @@
         "SPINE_CERT_PATH": "../certs/spine.pfx",
         "SPINE_CERT_PASSWORD": "",
         "NHS_APP_PARTY_ID_FOR_SPINE": "",
-        "USERINFO_API_BASE_URL": "http://api.local.bitraft.io:8091/v1/api/me/info"
+        "USERINFO_API_BASE_URL": "http://api.local.bitraft.io:8091/v1/api/me/info",
+        "KNOWNSERVICES_PATH": "KnownServices.json",
+        "NHS_WEB_APP_BASE_URL": "http://web.local.bitraft.io:3000"
       }
     },
     "NHSOnline.Backend.PfsApi.Bdd": {

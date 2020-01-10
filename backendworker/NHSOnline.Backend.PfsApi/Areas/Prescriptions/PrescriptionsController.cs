@@ -18,7 +18,7 @@ using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
-    [Route("patient/prescriptions")]
+    [ApiVersionRoute("patient/prescriptions")]
     public class PrescriptionsController : Controller
     {
         private readonly ConfigurationSettings _settings;

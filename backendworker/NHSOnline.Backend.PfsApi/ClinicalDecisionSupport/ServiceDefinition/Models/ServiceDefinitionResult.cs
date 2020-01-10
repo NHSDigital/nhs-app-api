@@ -1,7 +1,3 @@
-
-using Microsoft.AspNetCore.Mvc.Versioning;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Models;
-
 namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models
 {
     public abstract class ServiceDefinitionResult

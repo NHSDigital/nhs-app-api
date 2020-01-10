@@ -15,7 +15,7 @@ using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
-    [Route("patient/courses")]
+    [ApiVersionRoute("patient/courses")]
     public class CoursesController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

@@ -12,7 +12,7 @@ using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
-    [Route("patient/my-record")]
+    [ApiVersionRoute("patient/my-record")]
     public class MyRecordController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Hl7.Fhir.Model;
-using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
 using NHSOnline.Backend.Support;
 

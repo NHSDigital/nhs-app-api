@@ -12,7 +12,7 @@ using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Demographics
 {
-    [Route("patient")]
+    [ApiVersionRoute("patient")]
     public class DemographicsController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

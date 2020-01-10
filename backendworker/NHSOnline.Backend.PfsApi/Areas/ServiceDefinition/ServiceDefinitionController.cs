@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         }
 
         [HttpGet]
-        [Route("fhir/ServiceDefinition/{provider}/{id}")]
+        [ApiVersionRoute("fhir/ServiceDefinition/{provider}/{id}")]
         public async Task<IActionResult> GetServiceDefinitionsById([FromRoute(Name = "id")] string serviceDefinitionId, 
           [FromRoute(Name = "provider")] string provider)
         {
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         }
 
         [HttpPost]
-        [Route("fhir/ServiceDefinition/{provider}/{id}/$evaluate")]
+        [ApiVersionRoute("fhir/ServiceDefinition/{provider}/{id}/$evaluate")]
         public async Task<IActionResult> EvaluateServiceDefinition(
             [FromRoute(Name = "provider")] string provider,
             [FromRoute(Name = "id")] string serviceDefinitionId,
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         }
 
         [HttpGet]
-        [Route("/fhir/ServiceDefinition/providerName/{provider}")]
+        [ApiVersionRoute("fhir/ServiceDefinition/providerName/{provider}")]
         public IActionResult GetProviderName([FromRoute(Name = "provider")] string provider)
         {
             _logger.LogEnter();
