@@ -23,7 +23,7 @@ const final = ({ self, commit }) => {
   self.dispatch('navigation/init');
   self.dispatch('repeatPrescriptionCourses/init');
   self.dispatch('errors/clearAllApiErrors');
-  self.dispatch('session/init');
+  self.dispatch('session/setInfo');
   self.dispatch('flashMessage/init');
   self.dispatch('termsAndConditions/init');
   self.dispatch('appVersion/init');

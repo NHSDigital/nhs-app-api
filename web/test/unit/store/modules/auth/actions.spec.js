@@ -41,7 +41,7 @@ describe('actions', () => {
       'organDonation/init',
       'repeatPrescriptionCourses/init',
       'serviceJourneyRules/init',
-      'session/init',
+      'session/setInfo',
       'termsAndConditions/init',
       'patientPracticeMessaging/init',
       'practiceSettings/init',
