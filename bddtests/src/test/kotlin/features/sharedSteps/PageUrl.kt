@@ -18,13 +18,17 @@ open class PageUrl {
                     "organ donation" to "/organ-donation",
                     "more" to "/more",
                     "account" to "/account",
+                    "notifications settings" to "/account/notifications",
                     "terms and conditions" to "/terms-and-conditions",
                     "my record" to "/my-record",
+                    "gp at hand my record" to "/my-record/gp-at-hand",
+                    "gp at hand my record" to "/my-record/gp-at-hand",
                     "gp medical record" to "/gp-medical-record",
-                    "gp at hand my record" to "/my-record/gp-at-hand",
                     "my gp medical record" to "/gp-medical-record",
-                    "gp at hand my record" to "/my-record/gp-at-hand",
-                    "notifications settings" to "/account/notifications"
+                    "gp medical record diagnosis" to "/gp-medical-record/diagnosis",
+                    "gp medical record examinations" to "/gp-medical-record/examinations",
+                    "gp medical record test results detail" to "/gp-medical-record/test-results-detail",
+                    "gp medical record procedures" to "/gp-medical-record/procedures"
             )
 
     private val mobileOverrides =

@@ -15,6 +15,16 @@ import {
 } from '@/store/modules/myRecord/mutation-types';
 import AnalyticsValues from '@/lib/analytics-values';
 
+const getMedicalRecordSection = async (commit, $http, mutation, section) => {
+  try {
+    const { response: record } = await $http.getV1PatientMyRecordSection({ section });
+    commit(mutation, { record });
+  } catch {
+    // Ignoring error as only expected error is unsuccessful response from api
+    commit(mutation, {});
+  }
+};
+
 export default {
   init({ commit }) {
     commit(INIT);
@@ -47,28 +57,16 @@ export default {
     }
   },
   async loadTestResults({ commit }) {
-    const section = 'TestResults';
-    const { response: record } =
-      await this.app.$http.getV1PatientMyRecordSection({ section }) || {};
-    commit(LOADED_TEST_RESULTS, { record });
+    await getMedicalRecordSection(commit, this.app.$http, LOADED_TEST_RESULTS, 'TestResults');
   },
   async loadDiagnosis({ commit }) {
-    const section = 'Diagnosis';
-    const { response: record } =
-      await this.app.$http.getV1PatientMyRecordSection({ section }) || {};
-    commit(LOADED_DIAGNOSIS, { record });
+    await getMedicalRecordSection(commit, this.app.$http, LOADED_DIAGNOSIS, 'Diagnosis');
   },
   async loadExaminations({ commit }) {
-    const section = 'Examinations';
-    const { response: record } =
-      await this.app.$http.getV1PatientMyRecordSection({ section }) || {};
-    commit(LOADED_EXAMINATIONS, { record });
+    await getMedicalRecordSection(commit, this.app.$http, LOADED_EXAMINATIONS, 'Examinations');
   },
   async loadProcedures({ commit }) {
-    const section = 'Procedures';
-    const { response: record } =
-      await this.app.$http.getV1PatientMyRecordSection({ section }) || {};
-    commit(LOADED_PROCEDURES, { record });
+    await getMedicalRecordSection(commit, this.app.$http, LOADED_PROCEDURES, 'Procedures');
   },
   async loadDetailedTestResult({ commit }, testResultId) {
     const { response: data }

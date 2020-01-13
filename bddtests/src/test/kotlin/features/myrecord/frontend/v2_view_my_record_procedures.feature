@@ -22,3 +22,10 @@ Feature: Procedures Frontend - Medical Record v2
     And I am on the medical record page
     When I click the Procedures link on my record - Medical Record v2
     Then I see the expected procedures - Medical Record v2
+
+  Scenario: A VISION user encounters an error navigating directly to Procedures - Medical Record V2
+    Given I am a VISION user setup to use medical record version 2
+    And an error occurred retrieving the procedures
+    And I am on the medical record page
+    When I retrieve the 'Gp Medical Record Procedures' page directly
+    Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2

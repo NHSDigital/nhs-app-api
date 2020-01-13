@@ -1,9 +1,10 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div>
-    <dcr-error-no-access-gp-record v-if="showError"
-                                   :has-errored="diagnosis.hasErrored"
-                                   :has-access="diagnosis.hasAccess"/>
+  <div v-if="showTemplate">
+    <dcr-error-no-access-gp-record
+      v-if="showError"
+      :has-errored="diagnosis.hasErrored"
+      :has-access="diagnosis.hasAccess"/>
     <div v-if="showTemplate"
          :class="['pull-content']"
          class="nhsuk-grid-row nhsuk-u-margin-bottom-4">
@@ -25,6 +26,7 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import { MYRECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import Card from '@/components/widgets/card/Card';
@@ -53,8 +55,8 @@ export default {
   async asyncData({ store }) {
     await store.dispatch('myRecord/loadDiagnosis');
     return {
-      markup: store.state.myRecord.diagnosis.markup,
-      diagnosis: store.state.myRecord.record.diagnosis,
+      markup: get('markup', store.state.myRecord.diagnosis),
+      diagnosis: get('diagnosis', store.state.myRecord.record) || {},
     };
   },
   methods: {

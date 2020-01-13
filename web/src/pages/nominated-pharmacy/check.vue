@@ -11,7 +11,7 @@
                        :is-my-nominated-pharmacy="true"
                        :previous-path="currentPage"
                        :can-change-pharmacy="showChangePharmacyLink"
-                       :displayChangeMyNominatedPharmacyButton="false"
+                       :display-change-my-nominated-pharmacy-button="false"
                        :show-instruction="false" />
     </div>
 

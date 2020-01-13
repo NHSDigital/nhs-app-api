@@ -22,3 +22,10 @@ Feature: Examinations Frontend - Medical Record v2
     And I am on the medical record page
     When I click the Examinations link on my record - Medical Record v2
     Then I see the expected examinations - Medical Record v2
+
+  Scenario: A VISION user encounters an error navigating directly to Examinations - Medical Record V2
+    Given I am a VISION user setup to use medical record version 2
+    And an error occurred retrieving the examinations
+    And I am on the medical record page
+    When I retrieve the 'Gp Medical Record Examinations' page directly
+    Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2

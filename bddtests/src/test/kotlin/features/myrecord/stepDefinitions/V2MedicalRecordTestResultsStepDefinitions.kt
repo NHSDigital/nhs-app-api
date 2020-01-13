@@ -1,8 +1,10 @@
 package features.myrecord.stepDefinitions
 
 import constants.Supplier
+import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.myrecord.factories.TestResultsFactoryVision
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.gpMedicalRecord.TestResultsPage
@@ -13,6 +15,17 @@ open class V2MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
 
     private lateinit var testResultsPage: TestResultsPage
     private lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
+
+    @Given("^an error occurred retrieving the test results")
+    fun andAnErrorOccurredRetrievingTheProcedures() {
+        val testResultsFactory = TestResultsFactoryVision()
+        testResultsFactory.errorRetrieving(SerenityHelpers.getPatient())
+    }
+
+    @When("I click a test result - Medical Record v2$")
+    fun whenIClickATestResultV2() {
+        testResultsPage.clickTestResult()
+    }
 
     @Then("^I see one test result with one value - Medical Record v2$")
     fun thenISeeOneTestResultWithOneValueV2() {
@@ -90,11 +103,6 @@ open class V2MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     @Then("^I see the test result content - Medical Record v2$")
     fun thenISeeTheTestResulsContentV2() {
         myRecordDetailedTestResultPage.assertContentMedicalRecordV2()
-    }
-
-    @When("I click a test result - Medical Record v2$")
-    fun whenIClickATestResultV2() {
-        testResultsPage.clickTestResult()
     }
 
     companion object {

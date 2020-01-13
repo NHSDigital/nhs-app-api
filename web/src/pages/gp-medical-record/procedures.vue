@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div>
+  <div v-if="showTemplate">
     <dcr-error-no-access-gp-record
       v-if="showError"
       :has-errored="procedures.hasErrored"
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import { MYRECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import Card from '@/components/widgets/card/Card';
@@ -54,8 +55,8 @@ export default {
   async asyncData({ store }) {
     await store.dispatch('myRecord/loadProcedures');
     return {
-      markup: store.state.myRecord.procedures.markup,
-      procedures: store.state.myRecord.record.procedures,
+      markup: get('markup', store.state.myRecord.procedures),
+      procedures: get('procedures', store.state.myRecord.record) || {},
     };
   },
   methods: {

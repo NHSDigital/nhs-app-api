@@ -1,28 +1,28 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div>
-    <div v-if="showTemplate" :class="[$style.content,
-                                      'pull-content',
-                                      !$store.state.device.isNativeApp && $style.desktopWeb]">
-      <dcr-error-no-access-gp-record
-        v-if="showError"
-        :has-errored="testResults.hasErrored"
-        :has-access="testResults.hasAccess"/>
-      <Card v-else :class="$style['vision-test-results', 'test-result-content']">
-        <span v-html="markup"/>
-      </Card>
-      <glossary v-if="markup"/>
-      <desktopGenericBackLink
-        v-if="!$store.state.device.isNativeApp"
-        class="nhsuk-u-margin-top-3"
-        :path="backPath"
-        :button-text="'rp03.backButton'"
-        @clickAndPrevent="backButtonClicked"/>
-    </div>
+  <div v-if="showTemplate"
+       :class="[$style.content,
+                'pull-content',
+                !$store.state.device.isNativeApp && $style.desktopWeb]">
+    <dcr-error-no-access-gp-record
+      v-if="showError"
+      :has-errored="testResults.hasErrored"
+      :has-access="testResults.hasAccess"/>
+    <Card v-else :class="$style['vision-test-results', 'test-result-content']">
+      <span v-html="markup"/>
+    </Card>
+    <glossary v-if="markup"/>
+    <desktopGenericBackLink
+      v-if="!$store.state.device.isNativeApp"
+      class="nhsuk-u-margin-top-3"
+      :path="backPath"
+      :button-text="'rp03.backButton'"
+      @clickAndPrevent="backButtonClicked"/>
   </div>
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import Card from '@/components/widgets/card/Card';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
@@ -51,8 +51,8 @@ export default {
   async asyncData({ store }) {
     await store.dispatch('myRecord/loadTestResults');
     return {
-      markup: store.state.myRecord.testResults.markup,
-      testResults: store.state.myRecord.record.testResults,
+      markup: get('markup', store.state.myRecord.testResults),
+      testResults: get('testResults', store.state.myRecord.record) || {},
     };
   },
   methods: {

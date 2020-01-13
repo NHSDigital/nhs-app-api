@@ -93,7 +93,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                     Supplier.Emis),
                 BuildRecordDetailMetadata(response.TppDcrEvents, userSession, "Tpp Dcr Events", 
                     Supplier.Tpp),
-                BuildRecordDetailMetadata(response.TestResults, userSession, "Test Results")
+                BuildRecordDetailMetadata(response.TestResults, userSession, "Test Results"),
+                BuildRecordDetailMetadata(response.Documents, userSession, "Documents")
             };
             
             var medicalRecordMetadata = new MedicalRecordMetadata(

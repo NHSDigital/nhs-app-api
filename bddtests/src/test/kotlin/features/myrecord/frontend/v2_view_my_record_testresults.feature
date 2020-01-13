@@ -16,6 +16,13 @@ Feature: Test Results Frontend - Medical Record v2
     When I click the Test results link on my record - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
 
+  Scenario: A VISION user encounters an error navigating directly to Test Results - Medical Record V2
+    Given I am a VISION user setup to use medical record version 2
+    And an error occurred retrieving the test results
+    And I am on the medical record page
+    When I retrieve the 'Gp Medical Record Test Results Detail' page directly
+    Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2
+
   Scenario: An EMIS user has one test result with one value - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
     And the GP Practice has a single test result with single child values with no ranges for EMIS
