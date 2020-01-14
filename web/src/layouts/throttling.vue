@@ -39,7 +39,7 @@ export default {
     },
   },
   mounted() {
-    NativeVersionSetup(this.$store, this.$route);
+    NativeVersionSetup(this.$store);
     this.configureWebContext(this.currentHelpUrl);
   },
 };

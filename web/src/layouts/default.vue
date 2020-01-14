@@ -240,7 +240,7 @@ export default {
   mounted() {
     EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
 
-    NativeVersionSetup(this.$store, this.$route);
+    NativeVersionSetup(this.$store);
     this.configureWebContext(this.currentHelpUrl);
     if (this.loggedIn) {
       this.$store.dispatch('session/startValidationChecking');

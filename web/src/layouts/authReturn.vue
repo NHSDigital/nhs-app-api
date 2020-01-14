@@ -346,7 +346,7 @@ export default {
     this.$store.dispatch('pageTitle/updatePageTitle', this.$t('auth_return.errors.pageTitle'));
   },
   mounted() {
-    NativeVersionSetup(this.$store, this.$route);
+    NativeVersionSetup(this.$store);
   },
   methods: {
     pageTitle() {

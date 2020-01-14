@@ -1,8 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies import/imports-first */
-import Vuex from 'vuex';
 import ContentHeader from '@/components/widgets/ContentHeader';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { create$T } from '../helpers';
+import { create$T, createStore, shallowMount } from '../helpers';
 
 const $t = create$T();
 
@@ -12,17 +10,8 @@ import TsAndCsPage from '@/layouts/termsAndConditions';
 const $http = jest.fn();
 const $env = {};
 const $style = {};
-const localVue = createLocalVue();
 
 const createDefaultPage = ($store) => {
-  localVue.use(Vuex);
-  localVue.mixin({
-    methods: {
-      configureWebContext(url) {
-        return url;
-      },
-    },
-  });
   const $route = {
     query: '',
     name: 'terms-and-conditions',
@@ -30,16 +19,18 @@ const createDefaultPage = ($store) => {
   };
   const loggedIn = true;
   return shallowMount(TsAndCsPage, {
-    localVue,
-    mocks: {
-      $http,
-      $store,
-      $env,
-      $route,
-      $t,
-      $style,
-      showTemplate: () => true,
-      loggedIn,
+    $http,
+    $store,
+    $env,
+    $route,
+    $t,
+    $style,
+    showTemplate: () => true,
+    loggedIn,
+    methods: {
+      configureWebContext(url) {
+        return url;
+      },
     },
     stubs: {
       nuxt: '<div></div>',
@@ -47,15 +38,15 @@ const createDefaultPage = ($store) => {
   });
 };
 
-const createStore = isNativeApp => ({
-  app: {
-    $env: {
-      VERSION_TAG: 1,
-    },
+const createLayoutStore = isNativeApp => createStore({
+  $env: {
+    VERSION_TAG: 1,
   },
-  dispatch: jest.fn(),
-  subscribe: jest.fn(),
   state: {
+    appVersion: {
+      webVersion: '1.2.3',
+      nativeVersion: '3.2.1',
+    },
     header: {
       headerText: 'someheader',
     },
@@ -73,7 +64,7 @@ describe('termsAndConditions.vue ', () => {
   });
 
   it('will show content header', () => {
-    const $store = createStore(true);
+    const $store = createLayoutStore(true);
     const defaultPage = createDefaultPage($store);
 
     expect(defaultPage.find(ContentHeader).exists()).toBe(true);
@@ -81,7 +72,7 @@ describe('termsAndConditions.vue ', () => {
 
   describe('mounted()', () => {
     it('will send correct help URL to setHelpUrl mixin function', () => {
-      const $store = createStore(true);
+      const $store = createLayoutStore(true);
       const defaultPage = createDefaultPage($store);
       const expectedHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
 
@@ -92,7 +83,7 @@ describe('termsAndConditions.vue ', () => {
 
   describe('created()', () => {
     it('will dispatch appVersion/updateWebVersion on created', () => {
-      const $store = createStore(true);
+      const $store = createLayoutStore(true);
       jest.spyOn($store, 'dispatch');
 
       createDefaultPage($store);
@@ -102,7 +93,7 @@ describe('termsAndConditions.vue ', () => {
 
     it('will dispatch session/updateLastCalledAt if process is browser', () => {
       process.browser = true;
-      const $store = createStore(true);
+      const $store = createLayoutStore(true);
       jest.spyOn($store, 'dispatch');
 
       createDefaultPage($store);
@@ -112,7 +103,7 @@ describe('termsAndConditions.vue ', () => {
 
     it('will not dispatch session/updateLastCalledAt if process is not browser', () => {
       process.browser = false;
-      const $store = createStore(true);
+      const $store = createLayoutStore(true);
       jest.spyOn($store, 'dispatch');
 
       createDefaultPage($store);

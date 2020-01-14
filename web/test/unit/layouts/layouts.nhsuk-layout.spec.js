@@ -1,6 +1,4 @@
-import Vuex from 'vuex';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { create$T, mockCookies, createRouter } from '../helpers';
+import { create$T, createRouter, createStore, mockCookies, shallowMount } from '../helpers';
 import {
   INDEX,
   LOGIN,
@@ -35,17 +33,8 @@ const $env = {
 const $style = {
   homeMain: true,
 };
-const localVue = createLocalVue();
 
 const createPage = ($store, route = INDEX) => {
-  localVue.use(Vuex);
-  localVue.mixin({
-    methods: {
-      configureWebContext(helpUrl) {
-        return helpUrl;
-      },
-    },
-  });
   NhsukLayout.components.HotJar = {
     computed: {},
     staticRenderFns: [],
@@ -63,32 +52,29 @@ const createPage = ($store, route = INDEX) => {
   const loggedIn = true;
 
   return shallowMount(NhsukLayout, {
-    localVue,
-    mocks: {
-      $http,
-      $store,
-      $env,
-      $route,
-      $t,
-      $router,
-      $style,
-      showTemplate: () => true,
-      loggedIn,
+    $http,
+    $store,
+    $env,
+    $route,
+    $t,
+    $router,
+    $style,
+    loggedIn,
+    methods: {
+      configureWebContext(helpUrl) {
+        return helpUrl;
+      },
     },
     stubs: {
       nuxt: '<div></div>',
     },
   });
 };
-const createStore = isNativeApp => ({
-  app: {
-    $cookies: mockCookies(),
-    $env: {
-      VERSION_TAG: 1,
-    },
+const createLayoutStore = isNativeApp => createStore({
+  $cookies: mockCookies(),
+  $env: {
+    VERSION_TAG: 1,
   },
-  getters: {},
-  dispatch: jest.fn(),
   state: {
     appVersion: {
       webVersion: '1.2.3',
@@ -121,7 +107,7 @@ describe('nhsuk-layout - is native', () => {
   });
 
   it('will show breadcrumb on the correct pages when native', () => {
-    const $store = createStore(true);
+    const $store = createLayoutStore(true);
 
     const noBreadcrumbPages = [
       LOGIN,
@@ -152,7 +138,7 @@ describe('nhsuk-layout - is native', () => {
   });
 
   it('will load analytics when on a logged in page', () => {
-    const $store = createStore(true);
+    const $store = createLayoutStore(true);
     $store.app.$cookies.get = jest.fn(() => undefined);
     const defaultPage = createPage($store);
     const head = defaultPage.vm.$options.head.call(defaultPage.vm);
@@ -161,7 +147,7 @@ describe('nhsuk-layout - is native', () => {
   });
 
   it('will not load analytics when on a logged off page', () => {
-    const $store = createStore(true);
+    const $store = createLayoutStore(true);
     $store.app.$cookies.get = jest.fn(() => undefined);
     const defaultPage = createPage($store, LOGIN);
     const head = defaultPage.vm.$options.head.call(defaultPage.vm);
@@ -177,7 +163,7 @@ describe('nhsuk-layout - is web', () => {
   });
 
   it('will show the contentHeader on the correct pages in web', () => {
-    const $store = createStore(false);
+    const $store = createLayoutStore(false);
 
     const noContentHeaderPages = [
       LOGIN,
@@ -210,7 +196,7 @@ describe('nhsuk-layout - is web', () => {
   });
 
   it('will show breadcrumb on the correct pages when in web', () => {
-    const $store = createStore(false);
+    const $store = createLayoutStore(false);
 
     const noBreadcrumbPages = [
       LOGIN,

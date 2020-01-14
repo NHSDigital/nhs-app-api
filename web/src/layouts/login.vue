@@ -108,7 +108,7 @@ export default {
         NativeCallbacks.attemptBiometricLogin();
       });
     }
-    NativeVersionSetup(this.$store, this.$route);
+    NativeVersionSetup(this.$store);
     window.validateSession =
       window.validateSession || (() => this.$store.dispatch('session/validate'));
     this.configureWebContext(this.currentHelpUrl);

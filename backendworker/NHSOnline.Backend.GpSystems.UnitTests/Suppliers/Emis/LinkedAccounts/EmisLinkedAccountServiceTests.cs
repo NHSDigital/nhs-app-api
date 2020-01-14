@@ -579,7 +579,73 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             _demographicsService.VerifyAll();
         }
 
+        [TestMethod]
+        public async Task GetLinkedAccounts_HandlesCaseWhereNotAllDemographicCallsAreSuccessful()
+        {
+            var proxyPatients = _fixture.Create<List<EmisProxyUserSession>>();
+            proxyPatients.ForEach(x => x.OdsCode = _emisUserSession.OdsCode); // set all to have same Ods code
+            proxyPatients.ForEach(x => x.NhsNumber = null); // set all to have null NhsNumber (simulate first time)
+            _emisUserSession.HasLinkedAccounts = true;
+            _emisUserSession.ProxyPatients = proxyPatients;
+            var demographicsResponses = new Dictionary<Guid, DemographicsResponse>();
 
+            var patientToFailDemographicsFor = proxyPatients.First();
+
+            foreach (var user in _emisUserSession.ProxyPatients)
+            {
+                var demographicsResponse = _fixture.Create<DemographicsResponse>();
+                demographicsResponses.Add(user.Id, demographicsResponse);
+                DemographicsResult demographicsResult = new DemographicsResult.Success(demographicsResponse);
+
+                if (patientToFailDemographicsFor == user)
+                {
+                    demographicsResult = new DemographicsResult.Forbidden();
+                }
+
+                _demographicsService
+                    .Setup(x => x.GetDemographics(
+                        It.Is<GpLinkedAccountModel>(e =>
+                            string.Equals(((EmisUserSession) e.GpUserSession).SessionId, _emisUserSession.SessionId,
+                                StringComparison.Ordinal)
+                            && string.Equals(((EmisUserSession) e.GpUserSession).EndUserSessionId,
+                                _emisUserSession.EndUserSessionId, StringComparison.Ordinal)
+                            && string.Equals(((EmisUserSession) e.GpUserSession).UserPatientLinkToken,
+                                user.UserPatientLinkToken, StringComparison.Ordinal))))
+                    .Returns(Task.FromResult(demographicsResult))
+                    .Verifiable();
+            }
+
+            // Act
+            var result = await _systemUnderTest.GetLinkedAccounts(_emisUserSession);
+
+            // Assert
+            var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
+
+            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
+            // valid accounts count should be one less as we returned a non-success for one demographics call
+            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(_emisUserSession.ProxyPatients.Count - 1);
+            successResult.HasAnyProxyInfoBeenUpdatedInSession.Should().BeTrue();
+
+            var validProxyPatients = _emisUserSession.ProxyPatients.Except(new[] { patientToFailDemographicsFor });
+            for (var i = 0; i < validProxyPatients.Count(); i++)
+            {
+                var emisProxyPatient = validProxyPatients.ElementAt(i);
+                var demographicsResponseForUser = demographicsResponses[emisProxyPatient.Id];
+                var linkedAccountDetail = successResult.LinkedAccountsBreakdown.ValidAccounts.ElementAt(i);
+
+                emisProxyPatient.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
+
+                linkedAccountDetail.Id.Should().Be(emisProxyPatient.Id);
+                linkedAccountDetail.Name.Should().Be(demographicsResponseForUser.PatientName);
+                linkedAccountDetail.AgeMonths.Should().Be(_systemUnderTest
+                    .CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
+                linkedAccountDetail.AgeYears.Should().Be(_systemUnderTest
+                    .CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
+            }
+
+            _demographicsService.VerifyAll();
+            _logger.VerifyLogger(LogLevel.Warning, "Not all demographics calls for proxy patients were successful.", Times.Once());
+        }
 
         [TestMethod]
         public void GetProxyAuditData_WhenPatientIdFoundInProxyUser()

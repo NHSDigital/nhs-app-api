@@ -157,7 +157,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
                 var successResults = tasks
                     .Where(x => x.Value.Result is DemographicsResult.Success)
-                    .ToList();
+                    .ToDictionary(x => x.Key, x => x.Value);
+
+                if (emisUserSession.ProxyPatients.Count != successResults.Count)
+                {
+                    _logger.LogWarning("Not all demographics calls for proxy patients were successful.");
+                }
 
                 var linkedAccounts = successResults.Select(x => {
                     var demographics = (DemographicsResult.Success)x.Value.Result;
@@ -175,7 +180,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
                 foreach (var proxy in emisUserSession.ProxyPatients)
                 {
-                    var nhsNumberFromDemographics = ((DemographicsResult.Success) successResults.First(p => p.Key == proxy.Id).Value.Result).Response.NhsNumber;
+                    if (!successResults.ContainsKey(proxy.Id))
+                    {
+                        continue;
+                    }
+
+                    var nhsNumberFromDemographics = ((DemographicsResult.Success)successResults[proxy.Id].Result).Response.NhsNumber;
 
                     if (!string.Equals(nhsNumberFromDemographics, proxy.NhsNumber, StringComparison.OrdinalIgnoreCase))
                     {
