@@ -9,15 +9,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
     public class EmisHttpClientHandler : HttpClientHandler
     {
         public EmisHttpClientHandler(
-            IConfiguration configuration,
             EmisConfigurationSettings emisConfigurationSettings,
             ILogger<EmisHttpClientHandler> logger,
             ICertificateService certificateService)
         {
-            if (!"Production".Equals(configuration["ASPNETCORE_ENVIRONMENT"], StringComparison.OrdinalIgnoreCase))
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
-            }
+            ServerCertificateCustomValidationCallback = certificateService.ServerCertificateValidationHandler;
 
             var path = emisConfigurationSettings.CertificatePath;
             var password = emisConfigurationSettings.CertificatePassphrase;
@@ -28,6 +24,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             if (certificate != null)
             {
                 ClientCertificates.Add(certificate);
+                certificateService.LogCertInfo("Emis cert info:", certificate);
             }
         }
     }

@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
             _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
             _systemUnderTest = CreateOrganDonationHttpClientHandler();
-            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().BeNull();
+            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
             _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
             _systemUnderTest = CreateOrganDonationHttpClientHandler();
-            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().BeNull();
+            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
             _systemUnderTest.ClientCertificates.Should().NotBeEmpty();
             _systemUnderTest.ClientCertificates.Should().HaveCount(1);
         }

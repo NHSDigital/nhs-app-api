@@ -88,10 +88,11 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
         [DataRow(SslPolicyErrors.RemoteCertificateNameMismatch, "Production", false)]
         [DataRow(SslPolicyErrors.RemoteCertificateNotAvailable, "Production", false)]
         [DataRow(SslPolicyErrors.RemoteCertificateChainErrors, "Production", false)]
-        [DataRow(SslPolicyErrors.None, "Develop", true)]
-        [DataRow(SslPolicyErrors.RemoteCertificateNameMismatch, "Develop", true)]
-        [DataRow(SslPolicyErrors.RemoteCertificateNotAvailable, "Develop", false)]
-        [DataRow(SslPolicyErrors.RemoteCertificateChainErrors, "Develop", false)]
+        [DataRow(SslPolicyErrors.None, "Development", true)]
+        [DataRow(SslPolicyErrors.RemoteCertificateNameMismatch, "Productionn", false)]
+        [DataRow(SslPolicyErrors.RemoteCertificateNameMismatch, "Development", true)]
+        [DataRow(SslPolicyErrors.RemoteCertificateNotAvailable, "Development", false)]
+        [DataRow(SslPolicyErrors.RemoteCertificateChainErrors, "Development", false)]
         [DataRow(SslPolicyErrors.RemoteCertificateNameMismatch | SslPolicyErrors.RemoteCertificateChainErrors, "Develop", false)]
         public void ServerCertificateValidationHandlerWithError(SslPolicyErrors error, string environment, bool output)
         {

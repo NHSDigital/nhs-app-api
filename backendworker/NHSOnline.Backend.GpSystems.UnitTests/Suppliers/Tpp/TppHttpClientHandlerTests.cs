@@ -17,7 +17,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
     {
         private IFixture _fixture;
         private TppHttpClientHandler _systemUnderTest;
-        private Mock<IConfiguration> _mockConfiguration;
         private Mock<ILogger<TppHttpClientHandler>> _mockLogger;
         private Mock<ICertificateService> _certificateService;
 
@@ -28,8 +27,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
-            _mockConfiguration = new Mock<IConfiguration>();
+            
             _mockLogger = new Mock<ILogger<TppHttpClientHandler>>();
             _certificateService = _fixture.Freeze<Mock<ICertificateService>>();
         }
@@ -41,14 +39,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             _certificateService
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new X509Certificate2(Path, Passphrase));
-
-            _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
             
             // Act
             _systemUnderTest = CreateTppHttpClientHandler();
             
             // Assert
-            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().BeNull();
+            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
             _systemUnderTest.ClientCertificates.Should().NotBeEmpty();
         }
 
@@ -60,8 +56,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new X509Certificate2(Path, Passphrase));
 
-            _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Development");
-            
             // Act
             _systemUnderTest = CreateTppHttpClientHandler();
             
@@ -76,14 +70,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             _certificateService
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new X509Certificate2(Path, Passphrase));
-
-            _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
             
             // Act
             _systemUnderTest = CreateTppHttpClientHandler();
             
             // Assert
-            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().BeNull();
+            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
             _systemUnderTest.ClientCertificates.Should().HaveCount(1);
         }
 
@@ -93,8 +85,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             // Arrange
             _certificateService.Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((X509Certificate2)null);
-            _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
-            
+
             // Act
             _systemUnderTest = CreateTppHttpClientHandler();
             
@@ -104,7 +95,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
         private TppHttpClientHandler CreateTppHttpClientHandler()
         {
-            return new TppHttpClientHandler(_mockConfiguration.Object,
+            return new TppHttpClientHandler(
                 new TppConfigurationSettings 
                 {
                     CertificatePath = Path,

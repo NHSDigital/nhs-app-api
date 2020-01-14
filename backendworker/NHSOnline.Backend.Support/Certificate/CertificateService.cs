@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.Support.Certificate
                 throw;
             }
         }
-        
+
         public bool ServerCertificateValidationHandler(object sender, X509Certificate certificate,
             X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
@@ -48,23 +48,20 @@ namespace NHSOnline.Backend.Support.Certificate
 
                 var success = false;
 
-                _logger.LogInformation($"ServerCertificateValidationHandler - SslPolicyErrors: {sslPolicyErrors}");
-                LogCertInfo("ServerCertificateValidationHandler", certificate);
-
                 if (sslPolicyErrors != System.Net.Security.SslPolicyErrors.None)
                 {
-                    var inProduction = "Production".Equals(_configuration["ASPNETCORE_ENVIRONMENT"],
+                    LogCertInfo("ServerCertificateValidationHandler", certificate, true);
+                    var inDevelopment = "Development".Equals(_configuration["ASPNETCORE_ENVIRONMENT"],
                         StringComparison.OrdinalIgnoreCase);
-                    _logger.LogInformation($"Running in Production Mode: {inProduction}");
-                    
-                    if (!inProduction && sslPolicyErrors == System.Net.Security.SslPolicyErrors.RemoteCertificateNameMismatch)
+
+                    if (inDevelopment && sslPolicyErrors == System.Net.Security.SslPolicyErrors.RemoteCertificateNameMismatch)
                     {
                         _logger.LogError($"SSL policy errors={sslPolicyErrors.ToString()}, ignoring");
                         success = true;
                     }
                     else
                     {
-                        
+
                         foreach (var item in chain.ChainStatus)
                         {
                             _logger.LogError($"Certificate validation was not successful. " +
@@ -81,20 +78,29 @@ namespace NHSOnline.Backend.Support.Certificate
             }
         }
 
-        public void LogCertInfo(string intro, X509Certificate certificate)
+        public void LogCertInfo(string intro, X509Certificate certificate, bool logAsDebug = false )
         {
             try
             {
                 var xh5092 = new X509Certificate2(certificate);
                 var sb = new StringBuilder();
-                sb.AppendLine($"{intro} cert info: ");
-                sb.AppendLine($"Subject: {xh5092.Subject}");
-                sb.AppendLine($"Issuer: {xh5092.Issuer}");
-                sb.AppendLine($"Version: {xh5092.Version}");
-                sb.AppendLine($"Valid Date: {xh5092.NotBefore}");
-                sb.AppendLine($"Expiry Date: {xh5092.NotAfter}");
+                sb.Append($"{intro} cert info: ");
+                sb.Append($"Subject: {xh5092.Subject}, ");
+                sb.Append($"Issuer: {xh5092.Issuer}, ");
+                sb.Append($"Version: {xh5092.Version}, ");
+                sb.Append($"Valid Date: {xh5092.NotBefore}, ");
+                sb.Append($"Expiry Date: {xh5092.NotAfter}");
 
-                _logger.LogInformation(sb.ToString());
+                if (logAsDebug)
+                {
+                    _logger.LogDebug(sb.ToString());
+                }
+                else
+                {
+                    _logger.LogInformation(sb.ToString());
+                }
+
+
             }
             catch (Exception ex)
             {

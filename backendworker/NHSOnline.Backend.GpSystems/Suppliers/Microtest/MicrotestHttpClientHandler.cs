@@ -9,15 +9,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
     public class MicrotestHttpClientHandler : HttpClientHandler
     {
         public MicrotestHttpClientHandler(
-            IConfiguration configuration,
             MicrotestConfigurationSettings configurationSettings,
             ILogger<MicrotestHttpClientHandler> logger,
             ICertificateService certificateService)
         {
-            if (!"Production".Equals(configuration["ASPNETCORE_ENVIRONMENT"], StringComparison.OrdinalIgnoreCase))
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
-            }
+            ServerCertificateCustomValidationCallback =
+                certificateService.ServerCertificateValidationHandler;
 
             var path = configurationSettings.CertificatePath;
             var password = configurationSettings.CertificatePassphrase;
@@ -28,6 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             if (certificate != null)
             {
                 ClientCertificates.Add(certificate);
+                certificateService.LogCertInfo("Microtest cert info:", certificate);
             }
         }
     }

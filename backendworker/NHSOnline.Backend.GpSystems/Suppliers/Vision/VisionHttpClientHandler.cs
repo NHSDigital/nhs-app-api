@@ -10,15 +10,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
     {
 
         public VisionHttpClientHandler(
-            IConfiguration configuration,
             VisionConfigurationSettings visionConfigurationSettings,
             ILogger<VisionHttpClientHandler> logger,
             ICertificateService certificateService)
         {
-            if (!"Production".Equals(configuration["ASPNETCORE_ENVIRONMENT"], StringComparison.OrdinalIgnoreCase))
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
-            }
+            ServerCertificateCustomValidationCallback =
+                certificateService.ServerCertificateValidationHandler;
 
             var path = visionConfigurationSettings.CertificatePath;
             var password = visionConfigurationSettings.CertificatePassphrase;
@@ -29,6 +26,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             if (certificate != null)
             {
                 ClientCertificates.Add(certificate);
+                certificateService.LogCertInfo("Vision cert info:", certificate);
             }
         }
     }

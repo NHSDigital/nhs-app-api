@@ -28,9 +28,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
             if (certificate != null)
             {
-                logger.LogInformation("about to add Spine cert.");
                 ClientCertificates.Add(certificate);
-                logger.LogInformation("Spine cert added successfully");
             }
 
         }

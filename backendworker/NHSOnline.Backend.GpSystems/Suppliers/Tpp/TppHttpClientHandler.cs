@@ -9,15 +9,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
     public class TppHttpClientHandler : HttpClientHandler
     {
         public TppHttpClientHandler(
-            IConfiguration configuration,
             TppConfigurationSettings configurationSettings,
             ILogger<TppHttpClientHandler> logger,
             ICertificateService certificateService)
         {
-            if (!"Production".Equals(configuration["ASPNETCORE_ENVIRONMENT"], StringComparison.OrdinalIgnoreCase))
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
-            }
+            ServerCertificateCustomValidationCallback =
+                certificateService.ServerCertificateValidationHandler;
 
             var path = configurationSettings.CertificatePath;
             var password = configurationSettings.CertificatePassphrase;
@@ -28,6 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             if (certificate != null)
             {
                 ClientCertificates.Add(certificate);
+                certificateService.LogCertInfo("Tpp cert info:", certificate);
             }
         }
     }

@@ -6,10 +6,10 @@ namespace NHSOnline.Backend.Support.Certificate
     public interface ICertificateService
     {
         X509Certificate2 GetCertificate(string certificatePath, string certificatePassphrase);
-        
+
         bool ServerCertificateValidationHandler(object sender, X509Certificate certificate, X509Chain chain,
             System.Net.Security.SslPolicyErrors sslPolicyErrors);
 
-        void LogCertInfo(string intro, X509Certificate certificate);
+        void LogCertInfo(string intro, X509Certificate certificate, bool logAsDebug = false);
     }
 }

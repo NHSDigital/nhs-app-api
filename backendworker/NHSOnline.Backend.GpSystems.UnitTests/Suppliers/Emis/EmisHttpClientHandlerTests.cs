@@ -17,7 +17,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
     {
         private IFixture _fixture;
         private EmisHttpClientHandler _systemUnderTest;
-        private Mock<IConfiguration> _mockConfiguration;
         private EmisConfigurationSettings _config;
         private ILogger<EmisHttpClientHandler> _mockLogger;
         private Mock<ICertificateService> _certificateService;
@@ -46,8 +45,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
             _config = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath, 
                 CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, Environment);
-
-            _mockConfiguration = new Mock<IConfiguration>();
+            
             _certificateService = _fixture.Freeze<Mock<ICertificateService>>();
         }
 
@@ -57,10 +55,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _certificateService
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new X509Certificate2(Path, Passphrase));
-
-            _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
+            
             _systemUnderTest = CreateEmisHttpClientHandler();
-            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().BeNull();
+            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -70,7 +67,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new X509Certificate2(Path, Passphrase));
 
-            _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Development");
             _systemUnderTest = CreateEmisHttpClientHandler();
             _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
         }
@@ -82,9 +78,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 .Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new X509Certificate2(Path, Passphrase));
 
-            _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
             _systemUnderTest = CreateEmisHttpClientHandler();
-            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().BeNull();
+            _systemUnderTest.ServerCertificateCustomValidationCallback.Should().NotBeNull();
             _systemUnderTest.ClientCertificates.Should().NotBeEmpty();
             _systemUnderTest.ClientCertificates.Should().HaveCount(1);
         }
@@ -95,14 +90,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             _certificateService.Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((X509Certificate2)null);
 
-            _mockConfiguration.SetupGet(x => x["ASPNETCORE_ENVIRONMENT"]).Returns("Production");
             _systemUnderTest = CreateEmisHttpClientHandler();
             _systemUnderTest.ClientCertificates.Should().BeEmpty();
         }
 
         private EmisHttpClientHandler CreateEmisHttpClientHandler()
         {
-            return new EmisHttpClientHandler(_mockConfiguration.Object, _config, _mockLogger, _certificateService.Object);
+            return new EmisHttpClientHandler( _config, _mockLogger, _certificateService.Object);
         }
 
         public void Dispose()

@@ -14,10 +14,8 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             ILogger<OrganDonationHttpClientHandler> logger,
             ICertificateService certificateService)
         {
-            if (!"Production".Equals(configuration["ASPNETCORE_ENVIRONMENT"], StringComparison.OrdinalIgnoreCase))
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
-            }
+            ServerCertificateCustomValidationCallback =
+                certificateService.ServerCertificateValidationHandler;
 
             var path = configuration.GetOrWarn("ORGAN_DONATION_CERT_PATH", logger);
             var password = configuration.GetOrWarn("ORGAN_DONATION_CERT_PASSPHRASE", logger);
