@@ -18,16 +18,18 @@
             </b>
           </p>
         </div>
-        <div v-if="isProxying" id="acting-as-other-user-warning"
-             :class="$style['banner']" tabindex="0"
-             @keypress.enter="proxyBannerClicked"
-             @click="proxyBannerClicked">
+        <a v-if="isProxying" id="acting-as-other-user-warning"
+           :class="$style['banner']"
+           role="link"
+           tabindex="0"
+           @click="proxyBannerClicked"
+           @keypress.enter="proxyBannerClicked">
           <p class="nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2
               nhsuk-u-margin-bottom-0 nhsuk-body-s">
             {{ $t('linkedProfiles.actingAsOtherUserBannerWarningText') }}
             <b>{{ actingAsPersonName }}</b>
           </p>
-        </div>
+        </a>
       </yellow-banner>
 
       <div :class="['nhsuk-width-container']">
@@ -164,6 +166,8 @@ export default {
 
   .banner {
     @include icon-arrow-left;
+    color: $black;
+    text-decoration: none;
 
     padding: 0 10px;
     margin: 0 -10px;
@@ -178,8 +182,6 @@ export default {
       outline-color: $black;
       box-shadow: inset 0 0 0 4px $black;
       outline-offset: -5px;
-      color: $black;
-      text-decoration: none;
     }
   }
 
