@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 {
                     new Request
                     {
-                        Date = _fixture.Create<DateTime>(),
+                        Date = new DateTime(2020, 1, 1, 12, 12, 12, DateTimeKind.Utc),
                         Status = new Backend.GpSystems.Suppliers.Vision.Models.Prescriptions.Status
                         {
                             Code = PrescriptionRepeatStatusCode.Processed,
@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                     },
                     new Request
                     {
-                        Date = _fixture.Create<DateTime>(),
+                        Date = new DateTime(2020, 1, 2, 12, 12, 12, DateTimeKind.Utc),
                         Status = new Backend.GpSystems.Suppliers.Vision.Models.Prescriptions.Status
                         {
                             Code = PrescriptionRepeatStatusCode.Rejected,
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                     },
                     new Request
                     {
-                        Date = _fixture.Create<DateTime>(),
+                        Date = new DateTime(2020, 1, 3, 12, 12, 12, DateTimeKind.Utc),
                         Status = new Backend.GpSystems.Suppliers.Vision.Models.Prescriptions.Status
                         {
                             Code = PrescriptionRepeatStatusCode.InProgress,
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                     },
                     new Request
                     {
-                        Date = _fixture.Create<DateTime>(),
+                        Date = new DateTime(2020, 1, 4, 12, 12, 12, DateTimeKind.Utc),
                         Status = new Backend.GpSystems.Suppliers.Vision.Models.Prescriptions.Status
                         {
                             Code = PrescriptionRepeatStatusCode.NotProcessed,
@@ -144,8 +144,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             result.Should().NotBeNull();
-            result.Prescriptions.Should().HaveCount(item.Requests.Count());
-            result.Courses.Should().HaveCount(item.Requests.SelectMany(x => x.Repeats).Count());
+            result.Prescriptions.Should().HaveCount(4);
+            result.Courses.Should().HaveCount(6);
 
             var expectedResult = new PrescriptionListResponse
             {
@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 {
                     new PrescriptionItem
                     {
-                        OrderDate = item.Requests.ElementAt(0).Date.Date,
+                        OrderDate = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                         Status = Backend.GpSystems.Prescriptions.Models.Status.Approved,
                         Courses = new List<CourseEntry>
                         {
@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                     },
                     new PrescriptionItem
                     {
-                        OrderDate = item.Requests.ElementAt(1).Date.Date,
+                        OrderDate = new DateTime(2020, 1, 2, 0, 0, 0, DateTimeKind.Utc),
                         Status = Backend.GpSystems.Prescriptions.Models.Status.Rejected,
                         Courses = new List<CourseEntry>
                         {
@@ -185,7 +185,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                     },
                     new PrescriptionItem
                     {
-                        OrderDate = item.Requests.ElementAt(2).Date.Date,
+                        OrderDate = new DateTime(2020, 1, 3, 0, 0, 0, DateTimeKind.Utc),
                         Status = Backend.GpSystems.Prescriptions.Models.Status.Requested,
                         Courses = new List<CourseEntry>
                         {
@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                     },
                     new PrescriptionItem
                     {
-                        OrderDate = item.Requests.ElementAt(3).Date.Date,
+                        OrderDate = new DateTime(2020, 1, 4, 0, 0, 0, DateTimeKind.Utc),
                         Status = Backend.GpSystems.Prescriptions.Models.Status.Requested,
                         Courses = new List<CourseEntry>
                         {
@@ -245,7 +245,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
                 }
             };
 
-            // Exclude missing members as CourseId is generated so can't setup expectation for it.
             expectedResult.Should().BeEquivalentTo(result);
         }
 

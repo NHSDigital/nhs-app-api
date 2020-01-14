@@ -11,12 +11,14 @@
         <IsPublishable>false</IsPublishable>
         <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <Optimize>false</Optimize>
       </PropertyGroup>
     </When>
     <When Condition="$(MSBuildProjectName.Contains('UnitTest'))">
       <PropertyGroup>
         <IsPublishable>false</IsPublishable>
         <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
+        <Optimize>false</Optimize>
       </PropertyGroup>
     </When>
     <When Condition="$(MSBuildProjectName.EndsWith('Api'))">
