@@ -1407,6 +1407,8 @@ export default {
       },
     },
     view_details: {
+      unreadMessages: 'Unread messages',
+      unreadMessage: 'Unread message',
       backButtonText: {
         text: 'Back',
       },

@@ -4,6 +4,7 @@ import mocking.emis.patientPracticeMessaging.MessageResponseModel
 import mocking.emis.patientPracticeMessaging.MessagesResponseModel
 import mocking.emis.patientPracticeMessaging.PatientMessageSummary
 import mocking.emis.patientPracticeMessaging.MessageDetails
+import mocking.emis.patientPracticeMessaging.MessageReadStatusUpdateResponse
 import mocking.emis.patientPracticeMessaging.MessageReply
 import mocking.emis.patientPracticeMessaging.Recipient
 
@@ -48,6 +49,14 @@ object MessagingData {
                 "2019-12-05T13:39:02.303"
         ))
 
+        messageReplies.add(MessageReply(
+                isLegacy,
+                isUnread,
+                "I can see the appointment is booked, thank you..",
+                RECIPIENT,
+                "2019-12-05T13:39:02.303"
+        ))
+
         val message = MessageDetails("1", "GP Practice Information",
                 mutableListOf(Recipient(RECIPIENT)),
                 messageReplies, "When will my blood test results be ready?",
@@ -55,4 +64,9 @@ object MessagingData {
 
         return MessageResponseModel(message)
     }
+
+    fun getUpdatedResponse(): MessageReadStatusUpdateResponse {
+        return MessageReadStatusUpdateResponse("Updated")
+    }
+
 }

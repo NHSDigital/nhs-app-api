@@ -8,21 +8,26 @@ describe('patient messaging messages', () => {
   let $t;
 
   const messageDetails = {
-    recipient: 'test',
-    content: 'Test content',
-    subject: 'Test subject',
-    sentDateTime: '2019-12-09T13:56:50.377',
+    messageDetails: {
+      recipient: 'test',
+      content: 'Test content',
+      subject: 'Test subject',
+      sentDateTime: '2019-12-09T13:56:50.377',
+    },
   };
 
   const mountPage = ({
     messageDetaiils = messageDetails,
     toggle = true,
-    selectedId = undefined } = {}) => {
+    selectedId = undefined,
+    loaded = false } = {}) => {
     store = createStore({
       state: {
         patientPracticeMessaging: {
           selectedMessageDetails: messageDetaiils,
           selectedMessageId: selectedId,
+          loadedDetails: loaded,
+          selectedMessageRecipient: 'test',
         },
         device: { isNativeApp: false } },
       $env: { PATIENT_PRACTICE_MESSAGING_ENABLED: toggle },
@@ -69,6 +74,26 @@ describe('patient messaging messages', () => {
       it('will redirect to home', () => {
         expect(redirect).toHaveBeenCalledWith('/');
       });
+    });
+  });
+  describe('mounted', () => {
+    let toggle;
+    beforeEach(async () => {
+      toggle = true;
+      mountPage({ toggle, selectedId: '1', loaded: true });
+      await wrapper.vm.$options.fetch({ store, redirect });
+    });
+
+    it('will dispatch update read status', () => {
+      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/updateReadStatusAsRead');
+    });
+
+    it('will dispatch updateHeaderText', () => {
+      expect(store.dispatch).toHaveBeenNthCalledWith(1, 'header/updateHeaderText', jasmine.anything());
+    });
+
+    it('will dispatch updatePageTitle', () => {
+      expect(store.dispatch).toHaveBeenNthCalledWith(2, 'pageTitle/updatePageTitle', jasmine.anything());
     });
   });
 });

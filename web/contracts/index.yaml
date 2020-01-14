@@ -2972,6 +2972,106 @@
                 schema: 
                   type: "object"
                   properties: 
+                    MessageReadStateUpdateStatus: 
+                      type: "string"
+                      description: "read status of the message"
+          400: 
+            description: "Upstream system returned BadRequest status."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          403: 
+            description: "Upstream system returned Forbidden status."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          500: 
+            description: "An unknown error occured when processing the request."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          502: 
+            description: "Upstream system returned BadGateway status or an invalid response."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+    /v1/patient/messages/updateReadStatus: 
+      post: 
+        tags: 
+          - "patientMessages"
+        summary: "Update the read status of a message thread"
+        description: "Update the read status of a message thread"
+        requestBody: 
+          x-name: "UpdateMessageReadStatusRequestBody"
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                properties: 
+                  messageId: 
+                    type: "integer"
+                    description: "id of the message to update the status"
+                  messageReadState: 
+                    type: "string"
+                    description: "read state of the message"
+          description: "Details of the message and the new read status."
+          required: true
+        responses: 
+          200: 
+            description: "Successfully updated the read status of the message"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
                     messageDetails: 
                       type: "array"
                       description: "Details for a conversation between the patient and their practice"
@@ -2980,6 +3080,7 @@
                         properties: 
                           MessageId: 
                             type: "integer"
+                            nullable: true
                             description: "A unique indentifier for this conversation"
                           subject: 
                             type: "string"
@@ -3005,6 +3106,7 @@
                                   description: "The datetime the reply was sent"
                                 isUnread: 
                                   type: "boolean"
+                                  nullable: true
                                   description: "Indicator to show if the message has already been read"
                                 replyContent: 
                                   type: "string"
@@ -3028,6 +3130,23 @@
                       description: "Six character service desk reference code."
           403: 
             description: "Upstream system returned Forbidden status."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          404: 
+            description: "Upstream system returned Not found status."
             content: 
               application/json: 
                 schema: 

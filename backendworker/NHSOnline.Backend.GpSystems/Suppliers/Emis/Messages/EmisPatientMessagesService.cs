@@ -15,17 +15,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         private readonly IEmisClient _emisClient;
         private readonly IEmisPatientMessagesMapper _messageListMapper;
         private readonly IEmisPatientMessageMapper _messageMapper;
+        private readonly IEmisPatientMessageUpdateMapper _messageUpdateMapper;
 
         public EmisPatientMessagesService(
             ILogger<EmisPatientMessagesService> logger,
             IEmisClient emisClient,
             IEmisPatientMessagesMapper messageListMapper,
-            IEmisPatientMessageMapper messageMapper)
+            IEmisPatientMessageMapper messageMapper,
+            IEmisPatientMessageUpdateMapper messageUpdateMapper)
         {
             _logger = logger;
             _emisClient = emisClient;
             _messageListMapper = messageListMapper;
             _messageMapper = messageMapper;
+            _messageUpdateMapper = messageUpdateMapper;
         }
 
         public async Task<GetPatientMessagesResult> GetMessages(GpUserSession gpUserSession)
@@ -73,6 +76,42 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             {
                 _logger.LogError(e, $"Unknown error occured when getting patient message with id {messageId}");
                 return new GetPatientMessageResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<PutPatientMessageReadStatusResult> UpdateMessageMessageReadStatus(GpUserSession gpUserSession, UpdateMessageReadStatusRequestBody updateRequest)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+
+                var emisRequestParameters = new EmisRequestParameters((EmisUserSession) gpUserSession);
+
+                var putRequestBody = new UpdateMessageReadStatusRequest
+                {
+                    MessageId = updateRequest.MessageId,
+                    MessageReadState = updateRequest.MessageReadState,
+                    UserPatientLinkToken = emisRequestParameters.UserPatientLinkToken
+                };
+
+                var response = await _emisClient.PatientMessageUpdatePut(emisRequestParameters, putRequestBody);
+
+                return InterpretPatientMessagePutResponse(response);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, $"Request to update patient message status with id {updateRequest.MessageId} has failed");
+                return new PutPatientMessageReadStatusResult.BadRequest();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Unknown error occured when updating patient message status with id {updateRequest.MessageId} has failed");
+                return new PutPatientMessageReadStatusResult.InternalServerError();
             }
             finally
             {
@@ -154,6 +193,41 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
             return new GetPatientMessageResult.BadGateway();
+        }
+
+        private PutPatientMessageReadStatusResult InterpretPatientMessagePutResponse(
+            EmisClient.EmisApiObjectResponse<MessageUpdateResponse> response)
+        {
+            if (response.HasSuccessResponse)
+            {
+                _logger.LogInformation("Mapping EMIS patient message update status");
+                var mapped = _messageUpdateMapper.Map(response.Body);
+
+                if (mapped == null)
+                {
+                    _logger.LogInformation("Mapping EMIS patient message update status returned null");
+                    return new PutPatientMessageReadStatusResult.BadGateway();
+                }
+
+                return new PutPatientMessageReadStatusResult.Success(mapped);
+            }
+
+            if (response.HasForbiddenResponse())
+            {
+                _logger.LogEmisResponseIsForbidden();
+                _logger.LogEmisErrorResponse(response);
+                return new PutPatientMessageReadStatusResult.Forbidden();
+            }
+
+            if (response.HasBadRequestResponse)
+            {
+                _logger.LogEmisErrorResponse(response);
+                return new PutPatientMessageReadStatusResult.BadRequest();
+            }
+
+            _logger.LogEmisUnknownError(response);
+            _logger.LogEmisErrorResponse(response);
+            return new PutPatientMessageReadStatusResult.BadGateway();
         }
     }
 }

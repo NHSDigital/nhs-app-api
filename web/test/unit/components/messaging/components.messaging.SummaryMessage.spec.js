@@ -8,29 +8,34 @@ describe('summary message', () => {
   const title = 'Test sender';
   const subTitle = 'Test subject';
   const dateTime = '2019-09-14T02:15:12.356Z';
+  const listIndex = 1;
   const href = '/messaging/messages';
   const unreadCountClass = 'nhs-app-message__count';
   let $router;
   let $store;
   let wrapper;
 
-  const mountSummaryMessage = ({ unreadCount = 0 } = {}) => mount(SummaryMessage, {
-    $router,
-    $store,
-    $style: {
-      [dateTimeClass]: dateTimeClass,
-      [metaClass]: metaClass,
-      [subjectLineClass]: subjectLineClass,
-      [unreadCountClass]: unreadCountClass,
+  const mountSummaryMessage = ({ unreadCount = 0, hasUnreadMessages = false } = {}) => mount(
+    SummaryMessage, {
+      $router,
+      $store,
+      $style: {
+        [dateTimeClass]: dateTimeClass,
+        [metaClass]: metaClass,
+        [subjectLineClass]: subjectLineClass,
+        [unreadCountClass]: unreadCountClass,
+      },
+      propsData: {
+        title,
+        subTitle,
+        dateTime,
+        unreadCount,
+        hasUnreadMessages,
+        listIndex,
+        href,
+      },
     },
-    propsData: {
-      title,
-      subTitle,
-      dateTime,
-      unreadCount,
-      href,
-    },
-  });
+  );
 
   beforeEach(() => {
     $router = createRouter();
@@ -47,7 +52,7 @@ describe('summary message', () => {
       let unreadCount;
 
       beforeEach(() => {
-        wrapper = mountSummaryMessage({ unreadCount: 3 });
+        wrapper = mountSummaryMessage({ unreadCount: 3, hasUnreadMessages: true });
         unreadCount = wrapper.find(`.${unreadCountClass}`);
       });
 
@@ -57,6 +62,19 @@ describe('summary message', () => {
 
       it('will be the same as passed value', () => {
         expect(unreadCount.text()).toBe('3');
+      });
+    });
+
+    describe('has no value', () => {
+      let unreadCount;
+
+      beforeEach(() => {
+        wrapper = mountSummaryMessage({ hasUnreadMessages: true });
+        unreadCount = wrapper.find(`.${unreadCountClass}`);
+      });
+
+      it('will show unread count', () => {
+        expect(unreadCount.exists()).toBe(true);
       });
     });
 

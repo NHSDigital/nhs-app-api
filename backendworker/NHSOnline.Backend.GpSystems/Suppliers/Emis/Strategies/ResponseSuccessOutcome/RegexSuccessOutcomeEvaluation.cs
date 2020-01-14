@@ -8,12 +8,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessO
     {
         private static readonly Regex ErrorRegex = new Regex("\"ErrorCode\":|\"Exceptions\":\\[");
         
-        public bool isSuccess(List<HttpStatusCode> successStatusCodes, HttpStatusCode statusCode, bool isSuccessStatusCode, string stringResponse)
+        public bool IsSuccess(List<HttpStatusCode> successStatusCodes, HttpStatusCode statusCode, bool isSuccessStatusCode, string stringResponse)
         {
             return isSuccessStatusCode && !ErrorRegex.IsMatch(stringResponse);
         }
 
-        public bool populateErrors(List<HttpStatusCode> successStatusCodes, bool isSuccess, HttpStatusCode statusCode)
+        public bool PopulateErrors(List<HttpStatusCode> successStatusCodes, bool isSuccess, HttpStatusCode statusCode)
         {
             return !isSuccess;
         }

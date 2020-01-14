@@ -7,7 +7,7 @@ Feature: Patient to practice messaging
     And I am a user who can access patient practice messaging
 
   Scenario: A user can see their read and unread patient practice messages
-    Given I have patient practice messages in my inbox
+    Given I have patient practice messages in my inbox, all of which are read
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
@@ -30,18 +30,29 @@ Feature: Patient to practice messaging
     Then I see the appropriate error for patient practice messaging
 
   @smoketest
-  Scenario: A user can see a patient practice message conversation
+  Scenario: A user can see a patient practice message conversation with unread messages
     Given I am logged in
-    And I have patient practice messages in my inbox
+    And I have patient practice messages in my inbox, some of which are unread
     When I navigate to the More page
     And I click the Messages link on the More page
     Then the patient to practice inbox page is displayed
+    And I see a list of patient practice messages
+    When I select a patient practice message in my inbox
+    Then I see my patient practice message along with the replies from the GP
+
+  Scenario: A user can see a patient practice message conversation with no unread messages
+    Given I am logged in
+    And I have patient practice messages in my inbox, all of which are read
+    When I navigate to the More page
+    And I click the Messages link on the More page
+    Then the patient to practice inbox page is displayed
+    And I see a list of patient practice messages
     When I select a patient practice message in my inbox
     Then I see my patient practice message along with the replies from the GP
 
   Scenario: A user can see an error message when the patient practice message cant be retrieved
     Given I am logged in
-    And I have patient practice messages in my inbox
+    And I have patient practice messages in my inbox, all of which are read
     When I navigate to the More page
     And I click the Messages link on the More page
     Then the patient to practice inbox page is displayed

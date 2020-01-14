@@ -8,6 +8,7 @@ import {
   SET_DETAILS,
   SET_SUMMARIES,
   SET_SELECTED_MESSAGE_RECIPIENT,
+  SET_STATUS_STATE,
 } from './mutation-types';
 
 export default {
@@ -56,5 +57,20 @@ export default {
   },
   clearErrorsAndLoadDetails({ state }) {
     return this.dispatch('patientPracticeMessaging/loadMessage', { id: state.selectedMessageId, clearApiError: true });
+  },
+  updateReadStatusAsRead({ commit, state }) {
+    const request = {
+      updateMessageReadStatusRequestBody: {
+        messageId: state.selectedMessageId,
+        messageReadState: 'Read',
+      },
+    };
+    this.app.$http
+      .postV1PatientMessagesUpdateReadStatus(request)
+      .then((data) => {
+        commit(SET_STATUS_STATE, data.messageReadStateUpdateStatus);
+      })
+      .catch(() => {
+      });
   },
 };

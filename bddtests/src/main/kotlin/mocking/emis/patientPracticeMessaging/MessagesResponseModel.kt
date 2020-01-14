@@ -38,3 +38,7 @@ data class MessageReply(
         var sender: String,
         var sentDateTime: String
 )
+
+data class MessageReadStatusUpdateResponse (
+        var MessageReadStateUpdateStatus: String
+)

@@ -675,6 +675,45 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             response.StatusCode.Should().Be(200);
             response.ExceptionErrorResponse.Should().Be(null);
         }
+        
+        [TestMethod]
+        public async Task PatientMessageUpdatePut_ReturnsAMessageUpdateResponse_ForValidRequest()
+        {
+            // Arrange
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+
+            var expectedResponse = _fixture.Create<MessageUpdateResponse>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Put, "messages")
+                .WithEmisHeaders(additionalHeaders)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // Act
+            var response = await _systemUnderTest.PatientMessageUpdatePut(new EmisRequestParameters
+            {
+                SessionId = sessionId,
+                EndUserSessionId = endUserSessionId,
+                UserPatientLinkToken = userPatientLinkToken
+            }, new UpdateMessageReadStatusRequest
+            {
+                MessageId = 1,
+                MessageReadState = "Read"
+            });
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ExceptionErrorResponse.Should().Be(null);
+        }
 
         [TestMethod]
         public async Task SessionsEndUserSessionPost_VerifyCustomTimeoutHeaderPresent()

@@ -5,6 +5,7 @@ import mocking.emis.patientPracticeMessaging.MessageDetails
 import mocking.emis.patientPracticeMessaging.MessageReply
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.isVisible
 import pages.text
 
 class PatientPracticeMessagingDetailsPage: HybridPageObject() {
@@ -23,10 +24,21 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
         header.waitForElement()
     }
 
-    fun assertRepliesCorrect(expectedReplies: List<MessageReply>){
+    fun assertReadRepliesCorrect(expectedReplies: List<MessageReply>){
         for (expectedReply in expectedReplies) {
-            setMessageReplyId(expectedReplies.indexOf(expectedReply))
-            assertEquals(assertReplyTextCorrect().text, expectedReply.replyContent)
+            if (!expectedReply.isUnread) {
+                setReadMessageReplyId(expectedReplies.indexOf(expectedReply))
+                assertEquals(assertReplyTextCorrect().text, expectedReply.replyContent)
+            }
+        }
+    }
+
+    fun assertUnreadRepliesCorrect(expectedReplies: List<MessageReply>){
+        for (expectedReply in expectedReplies) {
+            if (expectedReply.isUnread) {
+                setUnreadMessageReplyId(expectedReplies.indexOf(expectedReply))
+                assertEquals(assertReplyTextCorrect().text, expectedReply.replyContent)
+            }
         }
     }
 
@@ -48,6 +60,15 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
         return assertEquals(sentMessage.text, message.subject)
     }
 
+    fun assertUnreadDividerIsOnSceen(){
+        val pageDivider =  HybridPageElement(
+                webDesktopLocator = "//*[@id='receivedMessagesDivider']",
+                androidLocator = null,
+                page = this)
+
+        return assert(pageDivider.isVisible)
+    }
+
     fun assertSentDateTimeCorrect(){
         val sentDateTimeMessage =  HybridPageElement(
                 webDesktopLocator = "//*[@id='messageSentDateTime']",
@@ -57,17 +78,30 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
         return assertEquals(sentDateTimeMessage.text, "Sent 05 December 2019 at 1:39pm")
     }
 
-    fun assertReceivedDateTimeCorrect(){
+    fun assertReadReceivedDateTimeCorrect(){
         val sentDateTimeMessage =  HybridPageElement(
-                webDesktopLocator = "//*[@id='messageReplyDateTime0']",
+                webDesktopLocator = "//*[@id='readMessageReplyDateTime0']",
                 androidLocator = null,
                 page = this)
 
         return assertEquals(sentDateTimeMessage.text, "Sent 05 December 2019 at 1:39pm")
     }
 
-    private fun setMessageReplyId(replyId: Int) {
-        baseReplyPath = "//*[@id='messageReplyPanel$replyId']"
+    fun assertUnreadReceivedDateTimeCorrect(){
+        val sentDateTimeMessage =  HybridPageElement(
+                webDesktopLocator = "//*[@id='unreadMessageReplyDateTime0']",
+                androidLocator = null,
+                page = this)
+
+        return assertEquals(sentDateTimeMessage.text, "Sent 05 December 2019 at 1:39pm")
+    }
+
+    private fun setReadMessageReplyId(replyId: Int) {
+        baseReplyPath = "//*[@id='readMessageReplyPanel$replyId']"
+    }
+
+    private fun setUnreadMessageReplyId(replyId: Int) {
+        baseReplyPath = "//*[@id='unreadMessageReplyPanel$replyId']"
     }
 
     private fun assertReplyTextCorrect(): HybridPageElement{

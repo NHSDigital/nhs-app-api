@@ -41,6 +41,57 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+  /messages/updateReadStatus:
+    post:
+      tags:
+        - patientMessages
+      summary: Update the read status of a message thread
+      description: Update the read status of a message thread
+      requestBody:
+        x-name: UpdateMessageReadStatusRequestBody
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMessageReadStatusRequestBody"
+        description: Details of the message and the new read status.
+        required: true
+      responses:
+        "200":
+          description: Successfully updated the read status of the message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientMessageReadStatusUpdatedResponse"
+        "400":
+          description: Upstream system returned BadRequest status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "403":
+          description: Upstream system returned Forbidden status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "404":
+          description: Upstream system returned Not found status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "500":
+          description: An unknown error occured when processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "502":
+          description: Upstream system returned BadGateway status or an invalid response.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
   /messages/{id}:
     get:
       tags:
@@ -96,6 +147,12 @@ components:
           items:
             $ref: "#/components/schemas/PatientMessageSummary"
     PatientMessageResponse:
+      type: object
+      properties:
+        MessageReadStateUpdateStatus:
+          type: string
+          description: read status of the message
+    PatientMessageReadStatusUpdatedResponse:
       type: object
       properties:
         messageDetails:
@@ -165,3 +222,13 @@ components:
         replyContent:
           type: string
           description: Content of the reply to the user
+    UpdateMessageReadStatusRequestBody:
+      type: object
+      properties:
+        messageId:
+          type: integer
+          description: id of the message to update the status
+        messageReadState:
+          type: string
+          description: read state of the message
+        

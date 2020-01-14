@@ -11,6 +11,7 @@ import pages.patientPracticeMessaging.PatientPracticeMessagingPage
 import utils.SerenityHelpers
 import mocking.MockingClient
 import mocking.emis.models.PatientPracticeMessagingMessageTypes
+import mocking.emis.patientPracticeMessaging.MessageReply
 import mocking.emis.patientPracticeMessaging.MessageResponseModel
 import org.junit.Assert.assertNotNull
 import pages.ErrorPage
@@ -42,11 +43,18 @@ open class PatientPracticeMessageStepDefinitions {
                 .disabled(SerenityHelpers.getPatient())
     }
 
-    @Given("^I have patient practice messages in my inbox$")
-    fun thePatientHasPatientPracticeMessagesInTheirInbox() {
+    @Given("^I have patient practice messages in my inbox, some of which are unread$")
+    fun thePatientHasPatientPracticeMessagesInTheirInboxWithUnreadMessages() {
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient())
+                .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(), true)
+    }
+
+    @Given("^I have patient practice messages in my inbox, all of which are read$")
+    fun thePatientHasPatientPracticeMessagesInTheirInboxWithoutUnreadMessages() {
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(), false)
     }
 
     @Given("^I have no patient practice messages in my inbox$")
@@ -117,11 +125,21 @@ open class PatientPracticeMessageStepDefinitions {
         val message = SerenityHelpers.getValueOrNull<MessageResponseModel>(
                 PatientPracticeMessagingMessageTypes.SELECTED_MESSAGE)!!.Message
         val replies = message.messageReplies
-        patientPracticeMessagingDetailsPage.assertRepliesCorrect(replies)
+        val unreadReplies = mutableListOf<MessageReply>()
+        val readReplies = mutableListOf<MessageReply>()
+        replies.filterTo(unreadReplies, {reply: MessageReply -> reply.isUnread})
+        replies.filterTo(readReplies, {reply: MessageReply -> !reply.isUnread})
+        patientPracticeMessagingDetailsPage.assertReadRepliesCorrect(readReplies)
+        patientPracticeMessagingDetailsPage.assertUnreadRepliesCorrect(unreadReplies)
         patientPracticeMessagingDetailsPage.assertSentMessageCorrect(message)
         patientPracticeMessagingDetailsPage.assertSentDateTimeCorrect()
-        patientPracticeMessagingDetailsPage.assertReceivedDateTimeCorrect()
         patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(message)
+        if (unreadReplies.count() > 1) {
+            patientPracticeMessagingDetailsPage.assertUnreadReceivedDateTimeCorrect()
+            patientPracticeMessagingDetailsPage.assertUnreadDividerIsOnSceen()
+        } else {
+            patientPracticeMessagingDetailsPage.assertReadReceivedDateTimeCorrect()
+        }
     }
 
     private fun clickMessageBySerenityVariable(messageToClick: PatientPracticeMessagingMessageTypes) {

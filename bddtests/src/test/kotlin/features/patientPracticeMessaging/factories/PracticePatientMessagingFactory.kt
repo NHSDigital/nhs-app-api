@@ -10,7 +10,7 @@ import models.Patient
 abstract class PracticePatientMessagingFactory {
 
     abstract fun disabled(patient: Patient)
-    abstract fun enabledWithPatientPracticeMessaging(patient: Patient)
+    abstract fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean)
     abstract fun errorWithPatientPracticeMessaging(patient: Patient)
     abstract fun errorWithPatientPracticeMessagingMessageDetails(patient: Patient)
     abstract fun getExpectedMessages(expectedMessages: List<PatientMessageSummary>): List<ExpectedMessage>

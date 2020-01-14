@@ -3,7 +3,7 @@
     <div v-if="showTemplate && detailsLoaded">
       <sentMessage
         class="nhsuk-u-padding-bottom-4"/>
-      <recievedMessages/>
+      <receivedMessages/>
     </div>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
@@ -19,7 +19,7 @@
 
 <script>
 import SentMessage from '@/components/patient-practice-messaging/SentMessage';
-import RecievedMessages from '@/components/patient-practice-messaging/RecievedMessages';
+import ReceivedMessages from '@/components/patient-practice-messaging/ReceivedMessages';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { INDEX, PATIENT_PRACTICE_MESSAGING } from '@/lib/routes';
 import { redirectTo, isFalsy } from '@/lib/utils';
@@ -29,7 +29,7 @@ export default {
   name: 'Index',
   components: {
     SentMessage,
-    RecievedMessages,
+    ReceivedMessages,
     DesktopGenericBackLink,
   },
   data() {
@@ -59,6 +59,7 @@ export default {
         `Message to ${this.$store.state.patientPracticeMessaging.selectedMessageRecipient}`);
       this.$store.dispatch('pageTitle/updatePageTitle',
         `Message to ${this.$store.state.patientPracticeMessaging.selectedMessageRecipient}`);
+      this.$store.dispatch('patientPracticeMessaging/updateReadStatusAsRead');
     }
   },
   beforeDestroy() {

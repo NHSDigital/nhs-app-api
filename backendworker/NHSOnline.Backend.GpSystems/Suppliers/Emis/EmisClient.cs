@@ -57,6 +57,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         private const string UsersNhsPath = "users/nhs";
         private const string GetMessagesPath = "messages?userPatientLinkToken={0}";
         private const string GetMessageDetailsPath = "messages/{0}/?userPatientLinkToken={1}";
+        private const string PutMessageReadStatusUpdate = "messages";
 
         private readonly EmisHttpClient _httpClient;
         private readonly EmisConfigurationSettings _settings;
@@ -81,9 +82,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         public async Task<EmisApiObjectResponse<SessionsEndUserSessionPostResponse>> SessionsEndUserSessionPost()
         {
-            
+
             return await Post<SessionsEndUserSessionPostResponse>(
-                SessionsEndUserSessionPath, 
+                SessionsEndUserSessionPath,
                 requestType: RequestsForSuccessOutcome.SessionsEndUserSessionPost, GetDefaultSuccessStatusCodeList(), customTimeout: _settings.EmisExtendedHttpTimeoutSeconds);
         }
 
@@ -91,8 +92,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             SessionsPostRequest model)
         {
             return await Post<SessionsPostRequest, SessionsPostResponse>(
-                model, 
-                SessionsPath, 
+                model,
+                SessionsPath,
                 RequestsForSuccessOutcome.SessionsPost, GetDefaultSuccessStatusCodeList(),
                 endUserSessionId: endUserSessionId);
         }
@@ -104,9 +105,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             var path = string.Format(CultureInfo.InvariantCulture, DemographicsPath, emisRequestParameters.UserPatientLinkToken);
 
             return await Get<DemographicsGetResponse>
-                (path, 
+                (path,
                 RequestsForSuccessOutcome.DemographicsGet, GetDefaultSuccessStatusCodeList(),
-                endUserSessionId: emisRequestParameters.EndUserSessionId, 
+                endUserSessionId: emisRequestParameters.EndUserSessionId,
                 sessionId: emisRequestParameters.SessionId);
         }
 
@@ -118,9 +119,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
             var successStatusCodeLists = GetDefaultSuccessStatusCodeList();
             successStatusCodeLists.Add(HttpStatusCode.Forbidden);
-            return await Get<MedicationRootObject>(path, 
-                RequestsForSuccessOutcome.MedicalRecordGet, successStatusCodeLists, 
-                endUserSessionId: emisRequestParameters.EndUserSessionId, 
+            return await Get<MedicationRootObject>(path,
+                RequestsForSuccessOutcome.MedicalRecordGet, successStatusCodeLists,
+                endUserSessionId: emisRequestParameters.EndUserSessionId,
                 sessionId: emisRequestParameters.SessionId);
         }
 
@@ -135,9 +136,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 userPatientLinkToken);
 
             return await Get<IndividualDocument>(
-                path, 
+                path,
                 RequestsForSuccessOutcome.MedicalDocumentGet, GetDefaultSuccessStatusCodeList(),
-                endUserSessionId: endUserSessionId, 
+                endUserSessionId: endUserSessionId,
                 sessionId: responseSessionId);
         }
 
@@ -145,7 +146,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             MeApplicationsPostRequest model)
         {
             return await Post<MeApplicationsPostRequest, MeApplicationsPostResponse>(
-                model, 
+                model,
                 MeApplicationsPath,
                 RequestsForSuccessOutcome.MeApplicationsPost, GetDefaultSuccessStatusCodeList(),
                 endUserSessionId: endUserSessionId, customTimeout: _settings.EmisExtendedHttpTimeoutSeconds);
@@ -166,7 +167,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 path += $"&filterToDate={EncodeDateTimeOffsetToIso(toDateTime.Value)}";
             }
 
-            return await Get<PrescriptionRequestsGetResponse>(path, 
+            return await Get<PrescriptionRequestsGetResponse>(path,
                 RequestsForSuccessOutcome.PrescriptionsGet, GetDefaultSuccessStatusCodeList(),
                 endUserSessionId: emisRequestParameters.EndUserSessionId, sessionId: emisRequestParameters.SessionId);
         }
@@ -206,7 +207,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                                      PracticeSettingsPath,
                                      practiceCode);
 
-            var response = await Get<PracticeSettingsGetResponse>(path, 
+            var response = await Get<PracticeSettingsGetResponse>(path,
                 RequestsForSuccessOutcome.PracticeSettingsGet, GetDefaultSuccessStatusCodeList(),
                 endUserSessionId: requestParameters.EndUserSessionId, sessionId: requestParameters.SessionId);
             return response;
@@ -246,7 +247,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             var postRequest = new BookAppointmentSlotPostRequest(requestParameters.UserPatientLinkToken, bookRequest);
 
             return await Post<BookAppointmentSlotPostRequest, BookAppointmentSlotPostResponse>(postRequest,
-                AppointmentsPath, 
+                AppointmentsPath,
                 RequestsForSuccessOutcome.AppointmentsPost, GetDefaultSuccessStatusCodeList(),
                 endUserSessionId: requestParameters.EndUserSessionId, sessionId: requestParameters.SessionId);
         }
@@ -262,7 +263,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             var path = $"{AppointmentsPath}{queryParams}";
 
             var response =
-                await Get<AppointmentsGetResponse>(path, 
+                await Get<AppointmentsGetResponse>(path,
                     RequestsForSuccessOutcome.AppointmentsGet, GetDefaultSuccessStatusCodeList(),
                     endUserSessionId: requestParameters.EndUserSessionId, sessionId: requestParameters.SessionId);
             return response;
@@ -300,7 +301,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             _logger.LogInformation("EMIS: Fetching patient settings");
             var path = string.Format(CultureInfo.InvariantCulture, MeSettingsPath, requestParameters.UserPatientLinkToken);
 
-            return await Get<MeSettingsGetResponse>(path, 
+            return await Get<MeSettingsGetResponse>(path,
                 RequestsForSuccessOutcome.MeSettingsGet, GetDefaultSuccessStatusCodeList(),
                 endUserSessionId: requestParameters.EndUserSessionId, sessionId: requestParameters.SessionId);
         }
@@ -332,6 +333,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 RequestsForSuccessOutcome.PatientMessageDetailsGet, GetDefaultSuccessStatusCodeList(),
                 endUserSessionId: requestParameters.EndUserSessionId,
                 sessionId: requestParameters.SessionId);
+        }
+
+        public async Task<EmisApiObjectResponse<MessageUpdateResponse>> PatientMessageUpdatePut(
+            EmisRequestParameters requestParameters, UpdateMessageReadStatusRequest updateMessageReadStatusRequest)
+        {
+            return await Put<UpdateMessageReadStatusRequest, MessageUpdateResponse>(
+                updateMessageReadStatusRequest, PutMessageReadStatusUpdate,
+                RequestsForSuccessOutcome.PatientMessageUpdatePut, GetDefaultSuccessStatusCodeList(),
+                endUserSessionId: requestParameters.EndUserSessionId,
+                sessionId: requestParameters.SessionId,
+                customTimeout: _settings.EmisExtendedHttpTimeoutSeconds);
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Delete<TRequest, TResponse>(TRequest model, string path,
@@ -382,6 +394,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             var request = BuildEmisRequest(HttpMethod.Post, path, endUserSessionId, sessionId);
 
             request.CheckAndSetCustomTimeout(customTimeout);
+
+            return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+        }
+
+        private async Task<EmisApiObjectResponse<TResponse>> Put<TRequest, TResponse>(TRequest model, string path,
+            RequestsForSuccessOutcome requestType,
+            List<HttpStatusCode> successStatusCodes,
+            string endUserSessionId = null, string sessionId = null, int? customTimeout = null)
+        {
+            var request = BuildEmisRequest(HttpMethod.Put, path, endUserSessionId, sessionId);
+
+            request.CheckAndSetCustomTimeout(customTimeout);
+
+            var body = JsonConvert.SerializeObject(model);
+            request.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
             return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
         }
@@ -502,7 +529,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                                              $"Error Message:'{StandardErrorResponse?.Message}'. ";
 
         }
-        
+
         public class EmisApiObjectResponse<TBody> : EmisApiResponse
         {
             public TBody Body { get; set; }
@@ -543,10 +570,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 }
 
                 var successStrategy = GetOutcomeEvaluator(RequestType);
-                Body = successStrategy.isSuccess(StatusCodes, StatusCode,
+                Body = successStrategy.IsSuccess(StatusCodes, StatusCode,
                     responseMessage.IsSuccessStatusCode , stringResponse) ?  responseParser.ParseBody<TBody>(stringResponse): default;
 
-                if (successStrategy.populateErrors(StatusCodes, responseMessage.IsSuccessStatusCode, StatusCode))
+                if (successStrategy.PopulateErrors(StatusCodes, responseMessage.IsSuccessStatusCode, StatusCode))
                 {
                     StandardErrorResponse = ParseBadRequestError<StandardErrorResponse>(
                         responseParser, stringResponse, responseMessage);
@@ -588,10 +615,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         {
             switch (requestType)
             {
-                case RequestsForSuccessOutcome.PatientMessageDetailsGet: 
+                case RequestsForSuccessOutcome.PatientMessageDetailsGet:
                     return new RegexSuccessOutcomeEvaluation();
                 case RequestsForSuccessOutcome.VerificationPost:
-                case RequestsForSuccessOutcome.MedicalRecordGet:    
+                case RequestsForSuccessOutcome.MedicalRecordGet:
                     return new StatusCodeSuccessOutcomeEvaluation();
                 default:
                     return new DefaultSuccessOutcomeEvaluation();

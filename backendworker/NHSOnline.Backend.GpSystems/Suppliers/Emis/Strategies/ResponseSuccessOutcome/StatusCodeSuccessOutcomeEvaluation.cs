@@ -5,13 +5,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessO
 {
     public class StatusCodeSuccessOutcomeEvaluation : IResponseSuccessOutcomeStrategy
     {
-        public bool isSuccess(List<HttpStatusCode> successStatusCodes, HttpStatusCode statusCode,
+        public bool IsSuccess(List<HttpStatusCode> successStatusCodes, HttpStatusCode statusCode,
             bool isSuccessStatusCode, string stringResponse )
         {
             return isSuccessStatusCode || successStatusCodes.Contains(statusCode);
         }
 
-        public bool populateErrors(List<HttpStatusCode> successStatusCodes, bool isSuccess, HttpStatusCode statusCode)
+        public bool PopulateErrors(List<HttpStatusCode> successStatusCodes, bool isSuccess, HttpStatusCode statusCode)
         {
             return !isSuccess || successStatusCodes.Contains(statusCode);
         }

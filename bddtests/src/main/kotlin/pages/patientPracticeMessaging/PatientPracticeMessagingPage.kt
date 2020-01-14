@@ -6,6 +6,7 @@ import org.junit.Assert.assertTrue
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.isDisplayed
+import pages.isVisible
 import pages.text
 
 class PatientPracticeMessagingPage: HybridPageObject() {
@@ -31,6 +32,9 @@ class PatientPracticeMessagingPage: HybridPageObject() {
             assertEquals(getMessageTitle().text, expectedMessage.recipient)
             assertEquals(getMessageDate().text, expectedMessage.lastMessageDateTime)
             assertEquals(getMessageSubject().text, expectedMessage.subject)
+            if (expectedMessage.hasUnreadReplies) {
+                assert(getUnreadIndicator(--expectedMessage.id).isVisible)
+            }
         }
     }
 
@@ -72,6 +76,13 @@ class PatientPracticeMessagingPage: HybridPageObject() {
     private fun getUnreadCount(): HybridPageElement{
         return HybridPageElement(
                 webDesktopLocator = "$baseMessagePath//p",
+                androidLocator = null,
+                page = this)
+    }
+
+    private fun getUnreadIndicator(id: Int): HybridPageElement{
+        return HybridPageElement(
+                webDesktopLocator = "//*[@id='unreadIndicator$id']",
                 androidLocator = null,
                 page = this)
     }

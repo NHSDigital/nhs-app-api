@@ -36,24 +36,9 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         }
     }
 
-    override fun enabledWithPatientPracticeMessaging(patient: Patient){
-        val messages = MessagingData.getDefaultMessagesData()
-
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingMessageTypes.EXPECTED_MESSAGES, getExpectedMessages(messages.messages))
-
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingMessageTypes.AVAILABLE_MESSAGE, MessagingData.getMessagesWithReplies())
-
-
-        mockingClient.forEmis{
-            messaging.viewMyMessagesRequest(patient)
-                    .respondWithSuccess(messages)
-        }
-        mockingClient.forEmis{
-            messaging.viewConversationRequest(patient)
-                    .respondWithSuccess(MessagingData.getMessagesWithReplies())
-        }
+    override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean){
+        val messages = MessagingData.getDefaultMessagesData(REPLY_COUNT, hasUnread)
+        setUpMessageDataAndStubs(patient, messages)
     }
 
     override fun getExpectedMessages(expectedMessages: List<PatientMessageSummary>): List<ExpectedMessage>{
@@ -62,7 +47,35 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
                     message.messageId,
                     message.subject,
                     "18 February 2018",
-                    message.recipients.first().name)
+                    message.recipients.first().name,
+                    message.hasUnreadReplies)
         })
+    }
+
+    private fun setUpMessageDataAndStubs(patient: Patient, messages: MessagesResponseModel) {
+        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
+                PatientPracticeMessagingMessageTypes.EXPECTED_MESSAGES, getExpectedMessages(messages.messages))
+
+        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
+                PatientPracticeMessagingMessageTypes.AVAILABLE_MESSAGE, MessagingData.getMessagesWithReplies())
+
+
+        mockingClient.forEmis {
+            messaging.viewMyMessagesRequest(patient)
+                    .respondWithSuccess(messages)
+        }
+        mockingClient.forEmis {
+            messaging.viewConversationRequest(patient)
+                    .respondWithSuccess(MessagingData.getMessagesWithReplies())
+        }
+
+        mockingClient.forEmis {
+            messaging.updateReadStatusRequest(patient)
+                    .respondWithSuccess(MessagingData.getUpdatedResponse())
+        }
+    }
+
+    companion object {
+        const val REPLY_COUNT = 3;
     }
 }

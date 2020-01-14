@@ -17,8 +17,9 @@
       <p :class="['nhsuk-body-s', $style['nhs-app-message__subject-line']]">
         {{ subTitle }}
       </p>
-      <span v-if="unreadCount" :class="$style['nhs-app-message__meta']">
-        <span :class="$style['nhs-app-message__count']">{{ unreadCount }}</span>
+      <span v-if="hasUnreadMessages" :class="$style['nhs-app-message__meta']">
+        <span :id="'unreadIndicator' + listIndex"
+              :class="$style['nhs-app-message__count']">{{ unreadCount }}</span>
       </span>
     </div>
   </a>
@@ -69,6 +70,10 @@ export default {
       type: String,
       required: false,
       default: '#',
+    },
+    listIndex: {
+      type: Number,
+      required: true,
     },
   },
 };
@@ -153,6 +158,7 @@ export default {
         border: 1px solid #B58F1C;
         display: inline-block;
         min-width: nhsuk-spacing(4);
+        min-height: nhsuk-spacing(4);
         text-align: center;
         @include govuk-media-query($until: tablet) {
           padding-top: 1px;

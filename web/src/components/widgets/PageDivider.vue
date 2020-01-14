@@ -1,8 +1,7 @@
 <template>
   <div :class="$style['page-divider']">
-    <hr class="nhsuk-section-break nhsuk-section-break--m" >
     <div :class="$style['page-divider__content']">
-      <span :class="$style['page-divider__inner']">{{ text }}</span>
+      <span :class="[$style['page-divider__inner'], 'nhsuk-u-font-size-19']">{{ text }}</span>
     </div>
   </div>
 </template>
@@ -33,7 +32,6 @@ export default {
     bottom: nhsuk-spacing(6);
     margin: 0 auto;
     margin-bottom: -(nhsuk-spacing(6));
-    max-width: 80%;
     @include govuk-media-query($until: tablet) {
       bottom: nhsuk-spacing(5);
       margin-bottom: -(nhsuk-spacing(5));
@@ -44,5 +42,24 @@ export default {
       padding: nhsuk-spacing(1) nhsuk-spacing(2);
     }
   }
+
+  .page-divider__content:before {
+    content: "";
+    position: absolute;
+    height: 5px;
+    border-top: 1px solid #d8dde0;
+    width: 28%;
+    top: 1em;
+    left: 0;
+  }
+
+  .page-divider__content:after {
+    content: "";
+    position: absolute;
+    height: 5px;
+    border-top: 1px solid #d8dde0;
+    width: 28%;
+    top: 1em;
+    right: 0; }
 }
 </style>

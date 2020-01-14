@@ -8,6 +8,7 @@ import {
   SET_DETAILS,
   SET_SUMMARIES,
   SET_SELECTED_MESSAGE_RECIPIENT,
+  SET_STATUS_STATE,
   initialState,
 } from './mutation-types';
 
@@ -15,6 +16,7 @@ const clearMessage = (state) => {
   state.selectedMessageDetails = undefined;
   state.selectedMessageId = undefined;
   state.selectedMessageRecipient = undefined;
+  state.statusState = undefined;
 };
 
 export default {
@@ -44,5 +46,8 @@ export default {
   },
   [SET_SELECTED_MESSAGE_RECIPIENT](state, recipient) {
     state.selectedMessageRecipient = recipient;
+  },
+  [SET_STATUS_STATE](state, status) {
+    state.statusState = status;
   },
 };

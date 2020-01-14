@@ -15,6 +15,8 @@
                          :unread-count="senderMessage.unreadCount"
                          :aria-label="messageLabel(senderMessage, message)"
                          :href="generateMessageUrl(senderMessage.sender)"
+                         :list-index="messageIndex"
+                         :has-unread-messages="isUnread(senderMessage)"
                          @click="goToMessages(senderMessage.sender)"/>
       </li>
     </ul>
@@ -72,6 +74,9 @@ export default {
     },
     sanitizedContent(text) {
       return stripHtml(text);
+    },
+    isUnread(message) {
+      return message.unreadCount > 0;
     },
   },
 };

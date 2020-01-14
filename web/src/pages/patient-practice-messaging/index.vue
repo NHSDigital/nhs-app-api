@@ -12,7 +12,8 @@
                            :sub-title="summary.subject"
                            :date-time="summary.lastMessageDateTime"
                            :aria-label="getMessageLabel(summary)"
-                           :has-unread-messages="true"
+                           :has-unread-messages="summary.hasUnreadReplies"
+                           :list-index="index"
                            date-format="D MMMM YYYY"
                            @click="goToMessageDetails(summary.id, summary.recipient)"/>
         </li>

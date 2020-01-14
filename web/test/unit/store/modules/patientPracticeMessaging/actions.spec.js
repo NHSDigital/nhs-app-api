@@ -8,6 +8,7 @@ describe('patient practice messaging store actions', () => {
     sentDateTime: '2019-12-09T13:56:50.377',
   };
   const mockMessages = { messageSummaries: [{ id: '1', subject: 'subject' }] };
+  const mockUpdateStatus = { messageReadStateUpdateStatus: 'Updated' };
   let commit;
   let dispatch;
   const id = 1;
@@ -20,7 +21,9 @@ describe('patient practice messaging store actions', () => {
   const store = () => ({
     app: { $http: { getV1PatientMessages: jest.fn().mockResolvedValue(mockMessages),
       getV1PatientMessagesById: jest.fn()
-        .mockImplementation(() => Promise.resolve(getMessageResponse)) } },
+        .mockImplementation(() => Promise.resolve(getMessageResponse)),
+      postV1PatientMessagesUpdateReadStatus: jest.fn()
+        .mockImplementation(() => Promise.resolve(mockUpdateStatus)) } },
     dispatch,
     state,
   });
@@ -120,6 +123,16 @@ describe('patient practice messaging store actions', () => {
 
     it('will dispath to load message', () => {
       expect(dispatch).toHaveBeenCalledWith('patientPracticeMessaging/loadMessage', { id, clearApiError: true });
+    });
+  });
+
+  describe('updateReadStatusAsRead', () => {
+    beforeEach(async () => {
+      await actions.updateReadStatusAsRead.call(store(), { commit, state });
+    });
+
+    it('will dispatch to load message', () => {
+      expect(commit).toHaveBeenCalledWith('SET_STATUS_STATE', 'Updated');
     });
   });
 });

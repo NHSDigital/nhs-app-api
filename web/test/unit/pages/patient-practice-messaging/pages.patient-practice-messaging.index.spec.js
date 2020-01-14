@@ -17,6 +17,7 @@ describe('practice patient messaging inbox', () => {
     recipient: 'Dr NHS Online',
     subject: 'This is the message subject',
     lastMessageDateTime: '2020-01-01T13:37:00.137Z',
+    hasUnreadReplies: true,
   }];
 
   const mountPage = ({ messageSummaries = summaries, loaded = true, toggle = true } = {}) => {
