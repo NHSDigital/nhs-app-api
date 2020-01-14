@@ -63,9 +63,11 @@ steps:
     displayName: Publish web unit test results
     condition: eq(variables['unit.test.results.exists'], 'Yes')
     inputs:
+      testRunTitle: Unit Tests Web
       testResultsFormat: JUnit
       testResultsFiles: web/web-unit-test-results.xml
       failTaskOnFailedTests: true
+      mergeTestResults: true
 
   - task: ShellScript@2
     displayName: Run security scan

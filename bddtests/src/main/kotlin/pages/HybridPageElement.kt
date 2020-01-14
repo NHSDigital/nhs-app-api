@@ -119,21 +119,23 @@ open class HybridPageElement(
         }
     }
 
-    fun withText(text: String, exact: Boolean = true): HybridPageElement {
+    fun withText(text: String, exact: Boolean = true, normalised: Boolean = false): HybridPageElement {
+        val textFunc = if (normalised) "normalize-space(text())" else "text()"
+        val textAttribute = if (normalised) "normalize-space(@text)" else "@text"
         return when (exact) {
             true -> {
                 HybridPageElement(
-                        webDesktopLocator = this.webDesktopLocator.plus("[text()=\"$text\"]"),
-                        androidLocator = this.androidLocator?.plus("[@text=\"$text\"]"),
-                        iOSLocator = this.iOSLocator?.plus("[@text=\"$text\"]"),
+                        webDesktopLocator = this.webDesktopLocator.plus("[$textFunc=\"$text\"]"),
+                        androidLocator = this.androidLocator?.plus("[$textAttribute=\"$text\"]"),
+                        iOSLocator = this.iOSLocator?.plus("[$textAttribute=\"$text\"]"),
                         helpfulName = this.helpfulNameToUse,
                         page = this.page)
             }
             false -> {
                 HybridPageElement(
-                        webDesktopLocator = this.webDesktopLocator.plus("[contains(text(),\"$text\")]"),
-                        androidLocator = this.androidLocator?.plus("[contains(@text,\"$text\")]"),
-                        iOSLocator = this.iOSLocator?.plus("[contains(@text,\"$text\")]"),
+                        webDesktopLocator = this.webDesktopLocator.plus("[contains($textFunc,\"$text\")]"),
+                        androidLocator = this.androidLocator?.plus("[contains($textAttribute,\"$text\")]"),
+                        iOSLocator = this.iOSLocator?.plus("[contains($textAttribute,\"$text\")]"),
                         helpfulName = this.helpfulNameToUse,
                         page = this.page)
             }

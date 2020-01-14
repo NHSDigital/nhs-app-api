@@ -57,9 +57,11 @@ steps:
     displayName: Publish backend unit test results
     condition: eq(variables['unit.test.results.exists'], 'Yes')
     inputs:
+      testRunTitle: Unit Tests Backend
       testResultsFormat: VSTest
       testResultsFiles: backendworker/TestResults/*.trx
       failTaskOnFailedTests: true
+      mergeTestResults: true
 
   - task: ShellScript@2
     displayName: Package PFS API

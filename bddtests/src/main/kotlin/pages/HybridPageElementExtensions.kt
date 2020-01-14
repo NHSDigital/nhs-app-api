@@ -8,6 +8,9 @@ import org.openqa.selenium.WebElement
 const val WAIT_FOR_NON_STALE_ELEMENT = 500L
 const val UNICODE_HYPHEN = 8208.toChar().toString()
 
+fun HybridPageElement.withNormalisedText(text: String): HybridPageElement =
+        this.withText(text, exact = true, normalised = true)
+
 val HybridPageElement.isDisplayed: Boolean
   get() {
       var isDisplayed = false

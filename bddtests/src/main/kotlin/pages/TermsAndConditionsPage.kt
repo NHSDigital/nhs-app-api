@@ -1,63 +1,44 @@
 package pages
 
 import net.thucydides.core.annotations.DefaultUrl
+import pages.navigation.HeaderNative
 import pages.sharedElements.CheckBoxElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/terms-and-conditions")
 class TermsAndConditionsPage : HybridPageObject() {
-
-    val mainErrorMessage = HybridPageElement(
-            webDesktopLocator = "//*[@id='error_msg']",
-            androidLocator = null,
-            page = this
-    )
+    private lateinit var headerNative: HeaderNative
+    private val pageHeaderText = "Accept conditions of use"
 
     val mainBodyText = HybridPageElement(
-            webDesktopLocator = "//*[@id='text_body']",
+            webDesktopLocator = "//p",
             androidLocator = null,
             page = this
-    )
+    ).withText("To use the NHS App you must agree to our", exact = false)
 
-    val secondaryErrorMessage = HybridPageElement(
-            webDesktopLocator = "//*[@id='error_txt']",
+    val mainErrorMessage = HybridPageElement(
+            webDesktopLocator = "//li",
             androidLocator = null,
             page = this
-    )
+    ).withNormalisedText("You cannot continue without agreeing")
 
-    private val tcCheckBox = CheckBoxElement(
+    val checkboxErrorMessage = HybridPageElement(
+            webDesktopLocator = "//span",
+            androidLocator = null,
+            page = this
+    ).withNormalisedText("You cannot use the NHS App without agreeing")
+
+    val acceptTermsAndConditionsCheckBox = CheckBoxElement(
             page = this,
             text = "I understand and accept the terms of use and privacy policy."
     )
 
-    val termsAndConditionsLabel = HybridPageElement(
-            webDesktopLocator = "//label[@id='termsAndConditions-agree_checkbox-label']",
-            androidLocator = null,
-            page = this
-    )
-
     val continueButton = HybridPageElement(
-            webDesktopLocator = "//*[@id='btn_accept']",
+            webDesktopLocator = "//button",
             androidLocator = null,
             page = this
-    )
+    ).withNormalisedText("Continue")
 
-    fun isMainErrorMessageVisible() : Boolean {
-        return mainErrorMessage.isVisible
-    }
-
-    fun isMainBodyTextVisible() : Boolean {
-        return mainBodyText.isVisible
-    }
-
-    fun isSecondaryErrorMessageVisible() : Boolean {
-        return secondaryErrorMessage.isVisible
-    }
-
-    fun assertTcCheckBoxVisible() {
-        tcCheckBox.assertIsVisible()
-    }
-
-    fun isContinueButtonVisible() : Boolean {
-        return continueButton.isVisible
+    fun assertPageHeaderIsVisible() {
+        headerNative.waitForPageHeaderText(pageHeaderText)
     }
 }
