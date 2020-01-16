@@ -17,7 +17,11 @@
                      :text="pharmacy.pharmacyName"
                      :click-func="pharmacyPracticeClicked"
                      :click-param="pharmacy"
-                     :aria-label="`${pharmacy.pharmacyName}`">
+                     :aria-label="ariaLabelCaption(
+                       `${pharmacy.pharmacyName}`,
+                       `${formatAddress(pharmacy)}`,
+                       `${formatTelephone(pharmacy.telephoneNumber)}`,
+                       `${formatDistance(pharmacy.distance)}`)">
             <slot >
               <div class="nhsuk-u-padding-left-2">
                 <p v-if="pharmacy.addressLine1" id="pharmacy-address-line-1"
@@ -139,12 +143,18 @@ export default {
     formatDistance(distance) {
       return this.$t('nominatedPharmacySearchResults.distanceAway').replace('{distance}', distance);
     },
+    formatTelephone(number) {
+      return this.$t('nominatedPharmacySearchResults.telephoneLabel') + number;
+    },
     async pharmacyPracticeClicked(pharmacy) {
       this.$store.dispatch('nominatedPharmacy/select', pharmacy);
       redirectTo(this, NOMINATED_PHARMACY_CONFIRM.path);
     },
     backButtonClicked() {
       redirectTo(this, this.searchNominatedPharmacyPath);
+    },
+    ariaLabelCaption(header, address, telephone, distance) {
+      return `${this.$t(header)}. ${this.$t(address)}. ${this.$t(telephone)}. ${this.$t(distance)}.`;
     },
   },
 };
