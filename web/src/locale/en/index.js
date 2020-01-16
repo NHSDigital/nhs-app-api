@@ -279,8 +279,15 @@ export default {
     },
   },
   nominatedPharmacySearchResults: {
-    header: 'High street pharmacies near "{searchQuery}"',
-    title: 'High street pharmacies near "{searchQuery}"',
+    highStreet: {
+      header: 'High street pharmacies near "{searchQuery}"',
+      title: 'High street pharmacies near "{searchQuery}"',
+    },
+    online: {
+      header: 'Choose an online-only pharmacy',
+      title: 'Choose an online-only pharmacy',
+      information: 'This is a selection of online-only pharmacies.',
+    },
     resultSummary: {
       distanceInformation: 'Distances given are in a straight line but travel routes may be longer.',
     },

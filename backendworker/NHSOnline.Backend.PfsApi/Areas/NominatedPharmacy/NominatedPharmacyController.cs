@@ -63,8 +63,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 
             await _auditor.Audit(AuditingOperations.GetNominatedPharmacyRequest, "Attempting to get Nominated Pharmacy");
 
-            var getNominatedPharmacyResult = await GetNominatedPharmacy(); 
-            
+            var getNominatedPharmacyResult = await GetNominatedPharmacy();
+
             _logger.LogExit();
 
             await getNominatedPharmacyResult.Accept(new GetNominatedPharmacyResultAuditingVisitor(_auditor, _logger));
@@ -83,9 +83,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             UserSession userSession = HttpContext.GetUserSession();
 
             var result = await UpdateNominatedPharmacy(model, userSession);
-            
+
             _logger.LogExit();
-            
+
             await result.Accept(new UpdateNominatedPharmacyResponseAuditingVisitor(_auditor, _logger));
             return result.Accept(new UpdateNominatedPharmacyResponseVisitor());
         }
@@ -95,29 +95,50 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         public async Task<IActionResult> Search([FromQuery] string searchTerm)
         {
             _logger.LogEnter();
-            await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, 
+            await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                 $"Attempting to search for nominated pharmacy with search term { searchTerm } ");
 
-            var pharmacySearchResult = await SearchForNominatedPharmacy(ModelState, searchTerm);
+            var pharmacySearchResult = await SearchForCommunityPharmacies(ModelState, searchTerm);
 
             _logger.LogExit();
 
             await pharmacySearchResult.Accept(new PharmacySearchResponseAuditingVisitor(_auditor, _logger));
             return pharmacySearchResult.Accept(new PharmacySearchResponseVisitor());
         }
-        
-        private async Task<PharmacySearchResult> SearchForNominatedPharmacy( ModelStateDictionary modelState, string searchTerm)
+
+        [HttpGet]
+        [Route("online-pharmacies")]
+        public async Task<IActionResult> OnlineOnlyPharmacySearch()
+        {
+            _logger.LogEnter();
+            await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
+                $"Attempting to search for online only pharmacy");
+
+            var pharmacySearchResult = await SearchForOnlineOnlyPharmacies();
+
+            _logger.LogExit();
+
+            await pharmacySearchResult.Accept(new PharmacySearchResponseAuditingVisitor(_auditor, _logger));
+            return pharmacySearchResult.Accept(new PharmacySearchResponseVisitor());
+        }
+
+        private async Task<PharmacySearchResult> SearchForCommunityPharmacies(ModelStateDictionary modelState, string searchTerm)
         {
             if (!modelState.IsValid)
             {
                 return new PharmacySearchResult.ModelValidationError();
             }
-                
+
             _logger.LogInformation($"Fetching Pharmacies for {searchTerm}");
             return await _pharmacySearchService.Search(searchTerm);
         }
-        
-        
+
+        private async Task<PharmacySearchResult> SearchForOnlineOnlyPharmacies()
+        {
+            _logger.LogInformation("Fetching online only Pharmacies");
+            return await _pharmacySearchService.SearchOnlineOnlyPharmacies();
+        }
+
         private async Task<UpdateNominatedPharmacyResponse> UpdateNominatedPharmacy(UpdateNominatedPharmacyRequest model, UserSession userSession)
         {
             if (!_config.IsNominatedPharmacyEnabled)
@@ -125,7 +146,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 _logger.LogInformation("Nominated pharmacy feature is disabled");
                 return new UpdateNominatedPharmacyResponse.NominatedPharmacyIsDisabled();
             }
-            
+
             if (!ModelState.IsValid)
             {
                 _logger.LogError("Update nominated pharmacy : bad request");
@@ -138,10 +159,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                     userSession.GpUserSession.NhsNumber, model.OdsCode, userSession.CitizenIdUserSession);
             }
             catch (Exception ex)
-            {               
+            {
                 _logger.LogError(ex, $"An error occurred while trying to update the patient's nominated pharmacy");
                 return new UpdateNominatedPharmacyResponse.InternalServerError(HttpStatusCode.InternalServerError);
-            }  
+            }
         }
 
         private async Task<GetNominatedPharmacyResult> GetNominatedPharmacy()

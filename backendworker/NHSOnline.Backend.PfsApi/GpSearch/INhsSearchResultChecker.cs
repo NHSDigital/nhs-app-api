@@ -17,5 +17,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> pharmacySearchResponse,
             string postcode);
 
+        PharmacySearchResponse CheckPharmacies(
+            GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> pharmacySearchResponse);
+
     }
 }

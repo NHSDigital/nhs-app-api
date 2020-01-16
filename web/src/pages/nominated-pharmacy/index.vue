@@ -11,13 +11,13 @@
           :pharmacy="nominatedPharmacy"
           :is-my-nominated-pharmacy="true"
           :previous-path="currentPage"
-          :can-change-pharmacy="isCommunityPharmacy"
+          :can-change-pharmacy="isP1Pharmacy"
           :show-instruction="true"/>
       </div>
     </div>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <message-dialog v-if="!isCommunityPharmacy"
+        <message-dialog v-if="!isP1Pharmacy"
                         id="warning-dialog-dispensing-practice"
                         message-type="warning"
                         :icon-text="$t('messageIconText.important')">
@@ -76,7 +76,7 @@ export default {
     };
   },
   computed: {
-    isCommunityPharmacy() {
+    isP1Pharmacy() {
       return (
         this.$store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P1);
     },

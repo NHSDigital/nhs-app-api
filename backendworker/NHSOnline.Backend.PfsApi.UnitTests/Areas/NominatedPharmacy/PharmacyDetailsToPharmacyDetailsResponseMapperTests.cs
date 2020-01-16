@@ -28,8 +28,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         [TestMethod]
         public void MapPharmacyDetailsToPharmacyDetailsResponse_WhenPassingNull_ThrowsNullReferenceException()
         {
-            Action act = () => _mapper.Map(null);
-            
+            Action act = () => _mapper.Map((Organisation)null);
+
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("pharmacy");
         }
 
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 "{\"WeekDay\":\"\",\"Times\":\"\",\"OpeningTimeType\":\"General\",\"AdditionalOpeningDate\":\"May  6 2019\",\"IsOpen\":false}," +
                 "{\"WeekDay\":\"\",\"Times\":\"\",\"OpeningTimeType\":\"General\",\"AdditionalOpeningDate\":\"May 27 2019\",\"IsOpen\":false}]",
             };
-            
+
             // Act
             var result = _mapper.Map(pharmacy);
 
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             const string phone = "024345322434";
             const double preCalculatedDistanceInMiles = 960.7;
-            
+
             var pharmacy = new Organisation
             {
                 OrganisationName = "Pharmacy 1",
@@ -138,13 +138,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 Contacts = "[{\"OrganisationContactType\":\"Primary\",\"OrganisationContactAvailabilityType\":\"Office hours\",\"OrganisationContactMethodType\":\"Fax\",\"OrganisationContactValue\":\"1234567890\"}," +
                            "{\"OrganisationContactType\":\"Primary\",\"OrganisationContactAvailabilityType\":\"Office hours\",\"OrganisationContactMethodType\":\"Telephone\",\"OrganisationContactValue\":\"" + phone + "\"}]",
             };
-            
+
             var postcodeCoordinate = new GeoCoordinate
             {
                 Latitude = 10,
-                Longitude = -10               
+                Longitude = -10
             };
-                        
+
             // Act
             var result = _mapper.Map(new List<Organisation> { pharmacy }, postcodeCoordinate);
 
@@ -194,9 +194,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var postcodeCoordinate = new GeoCoordinate
             {
                 Latitude = 10,
-                Longitude = -10               
+                Longitude = -10
             };
-                        
+
             // Act
             var result = _mapper.Map(new List<Organisation> { pharmacy }, postcodeCoordinate);
 
@@ -216,7 +216,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                     Distance =  null,
                 },
             };
-            
+
             result.Should().BeEquivalentTo(expectedResult);
         }
     }

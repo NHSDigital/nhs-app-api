@@ -2,7 +2,11 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div>
-        <p>{{ $t('nominatedPharmacySearchResults.resultSummary.distanceInformation') }}</p>
+        <p v-if="isHighStreetSearch">
+          {{ $t('nominatedPharmacySearchResults.resultSummary.distanceInformation') }}
+        </p>
+        <p v-else>{{ $t('nominatedPharmacySearchResults.online.information') }}</p>
+
         <menu-item-list id="searchResults">
           <menu-item v-for="(pharmacy, index) in pharmacies"
                      :id="'pharmacy-menu-item-' + index"
@@ -17,7 +21,7 @@
                        `${formatAddress(pharmacy)}`,
                        `${formatTelephone(pharmacy.telephoneNumber)}`,
                        `${formatDistance(pharmacy.distance)}`)">
-            <slot >
+            <slot>
               <div class="nhsuk-u-padding-left-2">
                 <p v-if="pharmacy.addressLine1" id="pharmacy-address-line-1"
                    class="nhsuk-u-margin-bottom-0" :class="$style['results-styling']">
@@ -37,6 +41,9 @@
                 <p v-if="pharmacy.postcode" id="pharmacy-postcode" class="nhsuk-u-margin-bottom-0"
                    :class="$style['results-styling']">
                   {{ pharmacy.postcode }}</p>
+                <p v-if="isOnlineSearch && pharmacy.url" id="pharmacy-url"
+                   class="nhsuk-u-margin-bottom-3" :class="$style['results-styling']">
+                  {{ pharmacy.url }}</p>
                 <p v-if="pharmacy.telephoneNumber" id="pharmacy-telephone-number"
                    class="nhsuk-u-margin-bottom-3" :class="$style['results-styling']">
                   {{ $t('nominatedPharmacySearchResults.telephoneLabel') +
@@ -54,7 +61,7 @@
       <analytics-tracked-tag :text="$t('nominatedPharmacySearchResults.backButton')"
                              :tabindex="-1">
         <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                                :path="searchNominatedPharmacyPath"
+                                :path="previousPagePath"
                                 :button-text="'nominatedPharmacyNotFound.backButton'"
                                 @clickAndPrevent="backButtonClicked"/>
       </analytics-tracked-tag>
@@ -66,8 +73,14 @@
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CONFIRM, PRESCRIPTIONS } from '@/lib/routes';
+import {
+  NOMINATED_PHARMACY_SEARCH,
+  NOMINATED_PHARMACY_CONFIRM,
+  PRESCRIPTIONS,
+  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
+} from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
+import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 
@@ -87,20 +100,28 @@ export default {
       noResultsFound,
       pharmacies,
       searchQuery,
+      isHighStreetSearch:
+        this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.HIGH_STREET_PHARMACY,
+      isOnlineSearch:
+        this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.ONLINE_PHARMACY,
     };
   },
   computed: {
-    searchNominatedPharmacyPath() {
-      return NOMINATED_PHARMACY_SEARCH.path;
+    previousPagePath() {
+      if (this.isHighStreetSearch) {
+        return NOMINATED_PHARMACY_SEARCH.path;
+      }
+      return NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path;
     },
   },
   mounted() {
-    if (!this.searchQuery || (!this.pharmacies && !this.technicalError && !this.noResultsFound)) {
-      redirectTo(this, this.searchNominatedPharmacyPath);
+    if (this.isHighStreetSearch && !this.searchQuery) {
+      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path);
     }
   },
   created() {
-    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
+    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']
+        || !this.$store.state.nominatedPharmacy.chosenType) {
       redirectTo(this, PRESCRIPTIONS.path);
     }
   },
@@ -120,7 +141,7 @@ export default {
       redirectTo(this, NOMINATED_PHARMACY_CONFIRM.path);
     },
     backButtonClicked() {
-      redirectTo(this, this.searchNominatedPharmacyPath);
+      redirectTo(this, this.previousPagePath);
     },
     ariaLabelCaption(header, address, telephone, distance) {
       return `${this.$t(header)}. ${this.$t(address)}. ${this.$t(telephone)}. ${this.$t(distance)}.`;

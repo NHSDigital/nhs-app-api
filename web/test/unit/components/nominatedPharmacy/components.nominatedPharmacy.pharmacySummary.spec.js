@@ -112,7 +112,7 @@ describe('pharmacy summary', () => {
     });
 
     it('will go to share decision external url', () => {
-      expect(pharmacyWebsiteUrl.attributes().href).toEqual('http://www.myBestPharmacy.net');
+      expect(pharmacyWebsiteUrl.attributes().href).toEqual('//http://www.myBestPharmacy.net');
     });
   });
 

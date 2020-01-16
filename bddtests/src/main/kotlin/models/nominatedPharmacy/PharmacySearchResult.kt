@@ -6,3 +6,9 @@ data class PharmacySearchResult(
         var phoneNumber: String = "",
         var distance: String? = null
 )
+
+data class OnlinePharmacySearchResult(
+        var pharmacyName: String = "",
+        var phoneNumber: String? = "",
+        var website: String? = ""
+)

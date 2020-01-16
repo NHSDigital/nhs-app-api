@@ -42,6 +42,52 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             _pharmacyDetailsToPharmacyDetailsResponseMapper = pharmacyDetailsToPharmacyDetailsResponseMapper;
         }
 
+        public async Task<PharmacySearchResult> SearchOnlineOnlyPharmacies()
+        {
+            _logger.LogEnter();
+
+            var query = CreateOnlinePharmacyOnlySearchQuery();
+            try
+            {
+                var searchResults = await _gpLookupClient.OrganisationSearch(query);
+
+                var pharmacySearchResponse = _nhsSearchResultChecker.CheckPharmacies(searchResults);
+
+                if (pharmacySearchResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    var pharmaciesInRandomOrder = PickContactableOnlinePharmacies(pharmacySearchResponse.Pharmacies)
+                        .InRandomOrder()
+                        .Take(_gpLookupConfig.OnlinePharmacyRandomisedSearchResultLimit);
+
+                    var pharmacies = Enumerable.Empty<PharmacyDetails>();
+
+                    try
+                    {
+                        pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmaciesInRandomOrder);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, $"Error during mapping list of {nameof(Organisation)} to list of {nameof(PharmacyDetailsResponse)}");
+                        return new PharmacySearchResult.InternalServerError();
+                    }
+
+                    return new PharmacySearchResult.Success(pharmacies);
+                }
+
+                return new PharmacySearchResult.InternalServerError();
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error processing online pharmacy search");
+                return new PharmacySearchResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         public async Task<PharmacySearchResult> Search(string searchTerm)
         {
             _logger.LogEnter();
@@ -79,7 +125,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                         _logger.LogError($"Unsuccessful request searching for Postcode Latitude and Longitude " +
                                          $"on Nhs Search Service, Status code: " +
                                          $"{(int) postcodeSearchResult.StatusCode}");
-                        
+
                         return new PharmacySearchResult.PostcodeResultFailure(postcodeSearchResult.StatusCode);
                     }
 
@@ -92,8 +138,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                     }
 
                     var organisationSearchQuery = CreateOrganisationPostcodeSearchQuery(postcodeCoordinates);
-                    
-                    var pharmacySearchResponse = 
+
+                    var pharmacySearchResponse =
                         await ExecuteOrganisationPostcodeSearch(organisationSearchQuery, postcodeDetail.Postcode);
 
 
@@ -112,7 +158,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                     {
                         _logger.LogError(e, $"Error during mapping list of {nameof(Organisation)} to list of {nameof(PharmacyDetailsResponse)}");
                         return new PharmacySearchResult.InternalServerError();
-                    } 
+                    }
 
                     return new PharmacySearchResult.Success(pharmacies);
                 }
@@ -133,6 +179,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             }
         }
 
+        private static IEnumerable<Organisation> PickContactableOnlinePharmacies(IEnumerable<Organisation> pharmacies)
+        {
+            return pharmacies.Where(x => !string.IsNullOrEmpty(x.URL)
+                                         || x.GetContactsArray().Any(c =>
+                                             c.OrganisationContactMethodType ==
+                                             ResponseEnums.OrganisationContactMethodType.Telephone &&
+                                             !string.IsNullOrEmpty(c.OrganisationContactValue)));
+        }
 
         private async Task<PharmacySearchResponse> ExecuteOrganisationPostcodeSearch(OrganisationPostcodeSearchData organisationSearchData, string postcode)
         {
@@ -168,6 +222,19 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                 Count = true,
                 QueryType = "full",
                 SearchMode = "all"
+            };
+        }
+
+        public static OrganisationSearchData CreateOnlinePharmacyOnlySearchQuery()
+        {
+            return new OrganisationSearchData
+            {
+                Select = "OrganisationName,URL,Contacts,NACSCode",
+                Filter = $"(OrganisationTypeID eq '{Constants.OrganisationTypePharmacy}') and (OrganisationSubType eq '{Constants.OrganisationSubTypeForInternetPharmacy}')",
+                Count = true,
+                // a big number to make sure all online pharmacies are
+                // included, otherwise NHS search defaults to 50
+                Top = 1000,
             };
         }
     }

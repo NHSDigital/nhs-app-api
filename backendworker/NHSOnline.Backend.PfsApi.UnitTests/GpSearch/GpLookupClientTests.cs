@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _systemUnderTest.PharmaciesSearch(request);
+            var response = await _systemUnderTest.OrganisationSearch(request);
 
             // Assert
             using (new AssertionScope())

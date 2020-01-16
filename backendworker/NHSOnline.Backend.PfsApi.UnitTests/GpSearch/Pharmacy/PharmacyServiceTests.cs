@@ -54,9 +54,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                 };
 
             _gpLookupClient
-                .Setup(x => x.PharmacySearch(It.IsAny<OrganisationSearchData>()))
+                .Setup(x => x.OrganisationSearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult));
-            
+
             // Act
             var result = await _pharmacyService.GetPharmacyDetail(validOdsCode);
 
@@ -99,9 +99,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                 new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.BadRequest);
 
             _gpLookupClient
-                .Setup(x => x.PharmacySearch(It.IsAny<OrganisationSearchData>()))
+                .Setup(x => x.OrganisationSearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult));
-            
+
             // Act
             var result = await _pharmacyService.GetPharmacyDetail(validOdsCode);
 
@@ -128,9 +128,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                 };
 
             _gpLookupClient
-                .Setup(x => x.PharmacySearch(It.IsAny<OrganisationSearchData>()))
+                .Setup(x => x.OrganisationSearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult));
-            
+
             // Act
             var result = await _pharmacyService.GetPharmacyDetail(validOdsCode);
 
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             var validOdsCode = _fixture.Create<string>();
 
             _gpLookupClient
-                .Setup(x => x.PharmacySearch(It.IsAny<OrganisationSearchData>()))
+                .Setup(x => x.OrganisationSearch(It.IsAny<OrganisationSearchData>()))
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
 
@@ -167,9 +167,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                 result.Pharmacy.Should().BeNull();
             }
         }
-        
+
         [TestMethod]
-        [DataRow(Constants.OrganisationSubTypeForInternetPharmacy, false)]
+        [DataRow(Constants.OrganisationSubTypeForInternetPharmacy, true)]
         [DataRow(Constants.OrganisationSubTypeForCommunityPharmacy, true)]
         [DataRow(null, false)]
         public void IsValidPharmacySubType_ReturnsCorrectResult_ForDifferentOrganisationSubTypes(string organisationSubType, bool expectedResult)

@@ -32,18 +32,18 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         {
             return outcodeOnly ? "Type eq 'PostcodeOutCode'" : "LocalType eq 'Postcode'";
         }
-        
+
         public static string SanitizeSearch(string searchTerm)
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
                 return searchTerm;
             }
-            
+
             var dashesRemoved = searchTerm.Trim().Replace('-', ' ');
             var multipleSpacesRemoved = Regex.Replace(dashesRemoved, "\\s\\s+/g", " ");
             var sanitisedSearchCriteria = Regex.Replace(multipleSpacesRemoved, "[/\\\\^$*+&?,.()|[\\]{}\"~:!<>£;@%^'`]/g", string.Empty);
-            
+
             return sanitisedSearchCriteria;
         }
     }

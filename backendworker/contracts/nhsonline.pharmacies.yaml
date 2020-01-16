@@ -32,6 +32,25 @@ paths:
           description: An unexpected error occurred processing the request.
         "502":
           description: Bad response received from upstream system.
+  /online-pharmacies:
+    get:
+      tags:
+        - pharmacy
+      summary: Search for online-only pharmacies.
+      description: Returns Response object containing list of online pharmacies.
+      responses:
+        "200":
+          description: Search processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PharmacySearchResponse"
+        "400":
+          description: Bad request. Supplied request is invalid.
+        "500":
+          description: An unexpected error occurred processing the request.
+        "502":
+          description: Bad response received from upstream system.
 components:
   schemas:
     Pharmacy:

@@ -18,14 +18,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         private readonly GpLookupHttpClient _gpLookupHttpClient;
         private readonly IJsonResponseParser _responseParser;
         private readonly IGpLookupConfig _config;
-        
+
         private const string SubscriptionKey = "subscription-key";
         private const string OrganisationSearchPath = "service-search/search?api-version=1";
         private const string PostcodeSearchPath = "service-search/postcodesandplaces/search?api-version=1";
-        
+
         public GpLookupClient(
-            ILogger<GpLookupClient> logger, 
-            GpLookupHttpClient gpLookupHttpClient, 
+            ILogger<GpLookupClient> logger,
+            GpLookupHttpClient gpLookupHttpClient,
             IJsonResponseParser responseParser,
             IGpLookupConfig config)
         {
@@ -35,16 +35,16 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             _config = config;
         }
 
-        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> GpSearch(OrganisationSearchData searchData)
+        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> OrganisationSearch(OrganisationSearchData searchData)
         {
             return await Post<OrganisationSearchData, NhsOrganisationSearchResponse>(searchData,
-                OrganisationSearchPath);            
+                OrganisationSearchPath);
         }
-        
+
         public async Task<NhsSearchApiObjectResponse<NhsPostcodeSearchResponse>> PostcodeSearch(PostcodeSearchData searchData)
         {
             return await Post<PostcodeSearchData, NhsPostcodeSearchResponse>(searchData,
-                PostcodeSearchPath);            
+                PostcodeSearchPath);
         }
 
         public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>>
@@ -54,20 +54,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 OrganisationSearchPath);
         }
 
-        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> PharmacySearch(OrganisationSearchData searchData)
-        {
-            _logger.LogEnter();
-            return await Post<OrganisationSearchData, NhsOrganisationSearchResponse>(searchData,
-                OrganisationSearchPath);
-        }
-
-        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> PharmaciesSearch(OrganisationSearchData searchData)
-        {
-            _logger.LogEnter();
-            return await Post<OrganisationSearchData, NhsOrganisationSearchResponse>(searchData,
-                OrganisationSearchPath);
-        }
-        
         private async Task<NhsSearchApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string path)
         {
             var request = BuildNhsSearchRequest(HttpMethod.Post, path, _config.GpLookupApiKey);
@@ -76,14 +62,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 
             return await SendRequestAndParseResponse<TResponse>(request);
         }
-        
+
         private static HttpRequestMessage BuildNhsSearchRequest(HttpMethod httpMethod, string path, string apiKey)
         {
-            var request = new HttpRequestMessage(httpMethod, path);               
+            var request = new HttpRequestMessage(httpMethod, path);
             request.Headers.Add(SubscriptionKey, apiKey);
             return request;
         }
-        
+
         private async Task<NhsSearchApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
@@ -91,7 +77,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             var response = new NhsSearchApiObjectResponse<TResponse>(responseMessage.StatusCode);
             return await response.Parse(responseMessage, _responseParser, _logger);
         }
-        
+
         public abstract class NhsSearchApiResponse: ApiResponse
         {
             protected NhsSearchApiResponse(HttpStatusCode statusCode) :base(statusCode)
@@ -99,7 +85,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
         }
-        
+
         public class NhsSearchApiObjectResponse<TBody> : NhsSearchApiResponse
         {
             public TBody Body { get; set; }
@@ -117,7 +103,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             }
 
             private NhsSearchApiObjectResponse<TBody> ParseResponse(
-                IResponseParser responseParser, 
+                IResponseParser responseParser,
                 string stringResponse)
             {
                 Body = responseParser.ParseBody<TBody>(stringResponse);

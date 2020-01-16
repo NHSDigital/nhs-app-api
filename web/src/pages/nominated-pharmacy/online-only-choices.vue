@@ -51,7 +51,12 @@ import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RadioGroup from '@/components/RadioGroup';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY_INTERRUPT, NOMINATED_PHARMACY_CHOOSE_TYPE } from '@/lib/routes';
+import {
+  NOMINATED_PHARMACY_CHOOSE_TYPE,
+  NOMINATED_PHARMACY_INTERRUPT,
+  NOMINATED_PHARMACY_SEARCH_RESULTS,
+  PRESCRIPTIONS,
+} from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -70,7 +75,7 @@ export default {
       nominatedPharmacyChooseType: NOMINATED_PHARMACY_CHOOSE_TYPE.path,
       nominatedPharmacyInterruptPath: NOMINATED_PHARMACY_INTERRUPT.path,
       hasTriedToContinue: false,
-      onlineOnlyChoice: undefined,
+      onlineOnlyChoice: this.$store.getters['nominatedPharmacy/getOnlineOnlyKnownOption'],
       radioButtons: [
         {
           label: this.$t('nominatedPharmacyOnlineOnlyChoices.yesLabel'),
@@ -85,7 +90,7 @@ export default {
   },
   computed: {
     hasMadeDecision() {
-      return !(this.onlineOnlyChoice === '' || this.onlineOnlyChoice === undefined);
+      return this.onlineOnlyChoice !== null;
     },
     showErrors() {
       return this.hasTriedToContinue && !this.hasMadeDecision;
@@ -94,23 +99,54 @@ export default {
       return this.$store.getters['nominatedPharmacy/getOnlineOnlyKnownOption'];
     },
   },
+  created() {
+    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
+      redirectTo(this, PRESCRIPTIONS.path);
+    }
+  },
   methods: {
-    continueClicked() {
+    async continueClicked() {
       this.hasTriedToContinue = true;
 
       if (this.showErrors) {
         window.scrollTo(0, 0);
         return;
       }
+
       this.$store.dispatch('nominatedPharmacy/setOnlineOnlyKnownOption', this.onlineOnlyChoice);
 
       if (this.onlineOnlyChoice === true) {
-        // todo: update with path to correct page
         redirectTo(this, NOMINATED_PHARMACY_INTERRUPT.path);
       } else {
-        // todo: update with path to correct page
-        redirectTo(this, NOMINATED_PHARMACY_INTERRUPT.path);
+        const pharmacySearchResponse = await this.getRandomOnlinePharmacies();
+
+        if (pharmacySearchResponse.technicalError) {
+          this.submissionError = true;
+          return;
+        }
+
+        this.$store.dispatch('nominatedPharmacy/setSearchQuery', '');
+        this.$store.dispatch('nominatedPharmacy/setSearchResults', pharmacySearchResponse);
+
+        redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path);
       }
+    },
+    async getRandomOnlinePharmacies() {
+      const pharmacySearchResult = {
+        noResultsFound: false,
+        technicalError: false,
+        pharmacies: [],
+      };
+
+      try {
+        const response = await this.$store.app.$http.getV1PatientOnlinePharmacies();
+        pharmacySearchResult.pharmacies = response;
+        pharmacySearchResult.noResultsFound = pharmacySearchResult.pharmacies.length === 0;
+      } catch {
+        pharmacySearchResult.technicalError = true;
+      }
+
+      return pharmacySearchResult;
     },
     selected(value) {
       this.onlineOnlyChoice = value;
@@ -123,5 +159,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

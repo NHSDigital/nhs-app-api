@@ -8,7 +8,7 @@ import {
   SELECT,
   CLEAR_SELECTED_NOMINATED_PHARMACY,
   SET_CHOSEN_TYPE,
-  CLEAR_CHOSEN_TYPE,
+  CLEAR_SEARCH_JOURNEY,
   SET_ONLINE_ONLY_KNOWN_OPTION,
 } from './mutation-types';
 
@@ -47,8 +47,9 @@ export default {
   [SET_CHOSEN_TYPE](state, data) {
     state.chosenType = data;
   },
-  [CLEAR_CHOSEN_TYPE](state) {
-    state.chosenType = undefined;
+  [CLEAR_SEARCH_JOURNEY](state) {
+    state.chosenType = null;
+    state.onlineOnlyKnownOption = null;
   },
   [CLEAR_PREVIOUS_PAGE_TO_SEARCH](state) {
     state.previousPageToSearch = null;

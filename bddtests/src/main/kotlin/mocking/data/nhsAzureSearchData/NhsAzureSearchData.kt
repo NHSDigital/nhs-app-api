@@ -15,6 +15,8 @@ object NhsAzureSearchData {
     // 1 less than F81090 in redis cache
     const val ORGANISATION_NAME = "Clay Cross Medical Centre"
     const val PHARMACY_NAME = "My Pharmacy"
+    const val RANDOMIZED_INTERNET_PHARMACY_LIMIT = 1000
+
     private const val BASE_NACSCODE = 81089
     private const val BASE_ORGANISATION_ID = 4648
     private const val POSTCODE_SEARCH_INDEX = 9
@@ -37,6 +39,15 @@ object NhsAzureSearchData {
         }
 
         return NhsAzureSearchOrganisationReply(searchItems, numberOfItems)
+    }
+
+    fun generateOnlinePharmacyData(): NhsAzureSearchOrganisationReply {
+        val searchItems = mutableListOf<NhsAzureSearchOrganisationItem>()
+
+        for(i in 1..NhsAzureSearchData.RANDOMIZED_INTERNET_PHARMACY_LIMIT) {
+            searchItems.add(createOnlinePharmacyResultFromIndex(i, isPharmacySearch = false))
+        }
+        return NhsAzureSearchOrganisationReply(searchItems, NhsAzureSearchData.RANDOMIZED_INTERNET_PHARMACY_LIMIT)
     }
 
     fun getSuccessfulPostcodeMatch(): NHSAzureSearchPostcodesAndPlacesReply {
@@ -106,7 +117,7 @@ object NhsAzureSearchData {
                 "County",
                 "SW$i ${i % POSTCODE_SEARCH_INDEX + POSTCODES_AND_PLACES_LIMIT}NG",
                 "F$numericNACSCode",
-                 geocode,
+                geocode,
                 "[{\"MetricID\":10051,\"MetricName\":\"EPS enabled pharmacy\"," +
                         "\"DisplayName\":\"EPS Enabled\",\"Description\":\"EPS Service is enabled\"," +
                         "\"Value\":\"yes\",\"Text\":\"Has EPS enabled\"," +
@@ -115,7 +126,34 @@ object NhsAzureSearchData {
                 "[{\"OrganisationContactType\":\"Primary\"," +
                         "\"OrganisationContactAvailabilityType\":\"Office hours\"," +
                         "\"OrganisationContactMethodType\":\"Telephone\"," +
-                        "\"OrganisationContactValue\":\"01132433551 (ext. $i)\"}]")
+                        "\"OrganisationContactValue\":\"01132433551 (ext. $i)\"}]",
+                "www.$organisationName.com")
+    }
+
+
+    private fun createOnlinePharmacyResultFromIndex
+            (i: Int, isPharmacySearch: Boolean = false): NhsAzureSearchOrganisationItem {
+        val organisationName = if (isPharmacySearch) "$PHARMACY_NAME $i" else "$ORGANISATION_NAME $i"
+
+        return NhsAzureSearchOrganisationItem(
+                "",
+                "$organisationName",
+                "P1",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                Geocode(),
+                "",
+                "[{\"OrganisationContactType\":\"Primary\"," +
+                        "\"OrganisationContactAvailabilityType\":\"Office hours\"," +
+                        "\"OrganisationContactMethodType\":\"Telephone\"," +
+                        "\"OrganisationContactValue\":\"01132433551 (ext. $i)\"}]",
+                "www.$organisationName.com")
     }
 
 }

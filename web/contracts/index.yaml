@@ -4106,6 +4106,71 @@
             description: "An unexpected error occurred processing the request."
           502: 
             description: "Bad response received from upstream system."
+    /v1/patient/online-pharmacies: 
+      get: 
+        tags: 
+          - "pharmacy"
+        summary: "Search for online-only pharmacies."
+        description: "Returns Response object containing list of online pharmacies."
+        responses: 
+          200: 
+            description: "Search processed successfully"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    pharmacies: 
+                      type: "array"
+                      description: "Array of pharmacies matched in search"
+                      items: 
+                        type: "object"
+                        properties: 
+                          pharmacyName: 
+                            type: "string"
+                            description: "Name of the pharmacy."
+                          addressLine1: 
+                            type: "string"
+                            description: "First line of address."
+                          addressLine2: 
+                            type: "string"
+                            description: "Second line of address."
+                          addressLine3: 
+                            type: "string"
+                            description: "Third line of address."
+                          city: 
+                            type: "string"
+                            description: "Name of the city."
+                          county: 
+                            type: "string"
+                            description: "Name of the county."
+                          postcode: 
+                            type: "string"
+                            description: "Postcode."
+                          telephoneNumber: 
+                            type: "string"
+                            description: "Telephone number of the pharmacy."
+                          odsCode: 
+                            type: "string"
+                            description: "Code to identify the pharmacy"
+                          openingTimes: 
+                            type: "array"
+                            description: "An array of opening times."
+                            items: 
+                              type: "object"
+                              properties: 
+                                day: 
+                                  type: "string"
+                                  description: "Day of the week."
+                                time: 
+                                  type: "string"
+                                  description: "Opening and closing time."
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from upstream system."
     /v1/patient/nominated-pharmacy: 
       get: 
         tags: 

@@ -33,7 +33,7 @@
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY_CHOOSE_TYPE, NOMINATED_PHARMACY } from '@/lib/routes';
+import { NOMINATED_PHARMACY_CHOOSE_TYPE, NOMINATED_PHARMACY, PRESCRIPTIONS } from '@/lib/routes';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
@@ -51,7 +51,11 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch('nominatedPharmacy/clearChosenType');
+    this.$store.dispatch('nominatedPharmacy/clearSearchJourney');
+
+    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
+      redirectTo(this, PRESCRIPTIONS.path);
+    }
   },
   methods: {
     continueButtonClicked() {

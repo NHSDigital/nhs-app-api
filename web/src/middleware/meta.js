@@ -107,8 +107,9 @@ import {
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS,
 } from '@/lib/routes';
 
-import get from 'lodash/fp/get';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
+import get from 'lodash/fp/get';
 
 function setPageTitle(route, store, app) {
   let header = '';
@@ -482,12 +483,19 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.nominatedPharmacyOnlineOnlyChoices';
       route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyOnlineOnlyChoices';
       break;
-    case NOMINATED_PHARMACY_SEARCH_RESULTS.name:
+    case NOMINATED_PHARMACY_SEARCH_RESULTS.name: {
       store.dispatch('navigation/setNewMenuItem', 2);
-      route.meta.headerKey = 'nominatedPharmacySearchResults.header';
-      route.meta.pageTitleKey = 'nominatedPharmacySearchResults.title';
-      route.meta.formatArguments = { searchQuery: store.state.nominatedPharmacy.searchQuery };
+      const pharmacyTypeChoice = store.state.nominatedPharmacy.chosenType;
+      if (pharmacyTypeChoice === PharmacyTypeChoice.ONLINE_PHARMACY) {
+        route.meta.headerKey = 'nominatedPharmacySearchResults.online.header';
+        route.meta.pageTitleKey = 'nominatedPharmacySearchResults.online.title';
+      } else {
+        route.meta.headerKey = 'nominatedPharmacySearchResults.highStreet.header';
+        route.meta.pageTitleKey = 'nominatedPharmacySearchResults.highStreet.title';
+        route.meta.formatArguments = { searchQuery: store.state.nominatedPharmacy.searchQuery };
+      }
       break;
+    }
     case NOMINATED_PHARMACY.name:
       store.dispatch('navigation/setNewMenuItem', 2);
       if (store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] &&

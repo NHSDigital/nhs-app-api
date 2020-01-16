@@ -26,7 +26,8 @@ data class NhsAzureSearchOrganisationItem(
         var NACSCode: String,
         var Geocode: Geocode,
         var Metrics: String? = null,
-        var Contacts: String? = null
+        var Contacts: String? = null,
+        var URL: String? = null
 ) {
         fun addressFormatted(): String {
             val addressElements = listOfNotNull(Address1, Address2, Address3, City, County, Postcode)

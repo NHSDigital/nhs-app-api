@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 
                 try
                 {
-                    var pharmacyGetResult = await _gpLookupClient.PharmacySearch(GetPharmacySearchData(odsCode));
+                    var pharmacyGetResult = await _gpLookupClient.OrganisationSearch(GetPharmacySearchData(odsCode));
 
                     if (!pharmacyGetResult.HasSuccessResponse)
                     {
@@ -77,13 +77,13 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                 _logger.LogExit();
             }
         }
-        
+
         public bool IsValidPharmacySubType(PharmacyDetailResponse pharmacyDetailResponse)
         {
-            return (pharmacyDetailResponse.Pharmacy?.OrganisationSubType != null && 
-                    !pharmacyDetailResponse.Pharmacy.OrganisationSubType.Equals(
-                Constants.OrganisationSubTypeForInternetPharmacy, StringComparison.Ordinal));
-        } 
+            return pharmacyDetailResponse.Pharmacy?.OrganisationSubType != null &&
+                   (pharmacyDetailResponse.Pharmacy.OrganisationSubType.Equals(Constants.OrganisationSubTypeForCommunityPharmacy, StringComparison.Ordinal)
+                    || pharmacyDetailResponse.Pharmacy.OrganisationSubType.Equals(Constants.OrganisationSubTypeForInternetPharmacy, StringComparison.Ordinal));
+        }
 
         private static OrganisationSearchData GetPharmacySearchData(string odsCode)
         {

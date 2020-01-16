@@ -1,5 +1,6 @@
 package pages.nominatedPharmacy
 
+import models.nominatedPharmacy.OnlinePharmacySearchResult
 import models.nominatedPharmacy.PharmacySearchResult
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
@@ -49,6 +50,13 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
                 page = this)
     }
 
+    private fun getPharmacyResultWebsite(): HybridPageElement {
+        return HybridPageElement(
+                webDesktopLocator = "$basePharmacyResultItemPath//span//p[@id='pharmacy-url']",
+                androidLocator = null,
+                page = this)
+    }
+
     fun showsNoResultsFoundHeader() {
         noResultsFoundHeader.isVisible
     }
@@ -67,6 +75,23 @@ open class NominatedPharmacyResultsPage : HybridPageObject() {
                     PharmacySearchResult(
                             pharmacyName = getPharmacyResultName().text,
                             address = getPharmacyResultAddress().text,
+                            phoneNumber = getPharmacyResultTelephoneNumber().text
+                    )
+            )
+        }
+        return listOfPharmacies
+    }
+
+    fun getOnlinePharmacies(): List<OnlinePharmacySearchResult> {
+        val results = findAll(By.cssSelector("#searchResults li"))
+        val listOfPharmacies = mutableListOf<OnlinePharmacySearchResult>()
+
+        for (result in results.withIndex()) {
+            setBasePharmacyResultItemPath(result.index)
+            listOfPharmacies.add(
+                    OnlinePharmacySearchResult(
+                            pharmacyName = getPharmacyResultName().text,
+                            website = getPharmacyResultWebsite().text,
                             phoneNumber = getPharmacyResultTelephoneNumber().text
                     )
             )

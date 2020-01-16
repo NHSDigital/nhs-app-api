@@ -8,7 +8,7 @@
                            id="url"
                            :class="[$style.checkFeaturesLink, $style['link-spacing'],
                                     !$store.state.device.isNativeApp && $style.desktopWeb]"
-                           :href="pharmacy.url"
+                           :href="`//${pharmacy.url}`"
                            :text="$t(pharmacy.url)"
                            tag="a" target="_blank">
       {{ pharmacy.url }}

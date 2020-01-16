@@ -60,8 +60,13 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RadioGroup from '@/components/RadioGroup';
-import { HIGH_STREET_PHARMACY, ONLINE_PHARMACY } from '@/store/modules/nominatedPharmacy/mutation-types';
-import { NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
+import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
+import {
+  NOMINATED_PHARMACY_INTERRUPT,
+  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
+  NOMINATED_PHARMACY_SEARCH,
+  PRESCRIPTIONS,
+} from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -85,12 +90,12 @@ export default {
         {
           hint: this.$t('nominated_pharmacy.chooseType.highStreetHint'),
           label: this.$t('nominated_pharmacy.chooseType.highStreet'),
-          value: HIGH_STREET_PHARMACY,
+          value: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
         },
         {
           hint: this.$t('nominated_pharmacy.chooseType.onlineHint'),
           label: this.$t('nominated_pharmacy.chooseType.online'),
-          value: ONLINE_PHARMACY,
+          value: PharmacyTypeChoice.ONLINE_PHARMACY,
         },
       ],
       selectedValue: this.$store.state.nominatedPharmacy.chosenType,
@@ -101,11 +106,16 @@ export default {
       return get('$store.state.nominatedPharmacy.chosenType')(this);
     },
     hasMadeDecision() {
-      return !(this.selectedValue === '' || this.selectedValue === undefined);
+      return this.selectedValue !== null;
     },
     showErrors() {
       return this.hasTriedToContinue && !this.hasMadeDecision;
     },
+  },
+  created() {
+    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
+      redirectTo(this, PRESCRIPTIONS.path);
+    }
   },
   methods: {
     continueClicked() {
@@ -118,7 +128,7 @@ export default {
 
       this.$store.dispatch('nominatedPharmacy/setChosenType', this.selectedValue);
 
-      if (this.selectedValue === HIGH_STREET_PHARMACY) {
+      if (this.selectedValue === PharmacyTypeChoice.HIGH_STREET_PHARMACY) {
         redirectTo(this, this.highStreetSearchPath);
       } else {
         redirectTo(this, this.onlineOnlyChoicesPath);

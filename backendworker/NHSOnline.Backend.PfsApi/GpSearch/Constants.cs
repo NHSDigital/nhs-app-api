@@ -8,5 +8,6 @@
         internal const string OrganisationSubTypeForInternetPharmacy = "Internet Pharmacy";
 
         internal const string OrganisationTypeGpPractice = "GPB";
+        internal const string OrganisationTypePharmacy = "PHA";
     }
 }

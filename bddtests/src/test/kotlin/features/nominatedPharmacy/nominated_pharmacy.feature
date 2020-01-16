@@ -206,7 +206,7 @@ Feature: nominated pharmacy journey
       | GP System | Pharmacy Type | OdsCode |
       | EMIS      | P3            | SW11XR  |
 
-  Scenario Outline: If patient has an Internet Pharmacy they can't see any nominated pharmacy functionality
+  Scenario Outline: If patient has an Internet Pharmacy they can see their nominated pharmacy
     Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -215,7 +215,8 @@ Feature: nominated pharmacy journey
     And I am logged in
     When I navigate to prescriptions
     Then I see prescriptions page loaded
-    And I do not see the nominated pharmacy panel
+    And I see the nominated pharmacy panel on the prescriptions page
+    And I see my nominated pharmacy on the prescriptions page
 
     Examples:
       | GP System | OdsCode |
@@ -232,6 +233,37 @@ Feature: nominated pharmacy journey
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     Then I see nominated pharmacy information is shown and correct
+    Examples:
+      | GP System | Pharmacy type | OdsCode |
+      | EMIS      | P1            | SW11XR  |
+
+
+  Scenario Outline: Patient can view a list of random online pharmacies
+    Given I am patient using the <GP System> GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
+    And I am logged in
+    And I navigate to prescriptions
+    Then I see prescriptions page loaded
+    And I see the nominated pharmacy panel on the prescriptions page
+    And I see my nominated pharmacy on the prescriptions page
+    When I click on the nominated pharmacy panel
+    Then I see nominated pharmacy page loaded
+    And I see the change my nominated pharmacy link
+    When I click on change your nominated pharmacy link
+    Then I see the update nominated pharmacy interrupt page loaded
+    When I click on the interrupt continue button
+    Then I see the choose type page is loaded
+    Then I select online pharmacy
+    And I click on the choose type continue button
+    Then I see the online choices page loaded
+    And I click the No radio button on the online choices page
+    Given searching for randomized online pharmacies has results
+    Then I click on the continue button on the online choices page
+    Then I see list of random online pharmacies displayed on the result page
+    # TBC.... select and set online pharmacy...
     Examples:
       | GP System | Pharmacy type | OdsCode |
       | EMIS      | P1            | SW11XR  |

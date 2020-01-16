@@ -23,8 +23,8 @@
                              !displayChangeMyNominatedPharmacyButton"
                            id="link-to-change-pharmacy"
                            :text="$t('nominated_pharmacy.changePharmacyLink')"
-                           :click-func="goToChangeNominatedPharmacySearch"
-                           tag="a" :href="nominatedPharmacySearch">
+                           :click-func="goToNominatedPharmacyInterruptPage"
+                           tag="a" :href="nominatedPharmacyInterrupt">
       <p> {{ $t('nominated_pharmacy.changePharmacyLink') }} </p>
     </analytics-tracked-tag>
   </div>
@@ -79,7 +79,7 @@ export default {
   },
   data() {
     return {
-      nominatedPharmacySearch: NOMINATED_PHARMACY_SEARCH.path,
+      nominatedPharmacyInterrupt: NOMINATED_PHARMACY_INTERRUPT.path,
     };
   },
   computed: {

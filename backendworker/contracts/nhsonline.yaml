@@ -55,6 +55,8 @@ paths:
     $ref: ./nhsonline.usersession.yaml#/paths/~1session~1extend
   /v1/patient/pharmacies:
     $ref: ./nhsonline.pharmacies.yaml#/paths/~1pharmacies
+  /v1/patient/online-pharmacies:
+    $ref: ./nhsonline.pharmacies.yaml#/paths/~1online-pharmacies
   /v1/patient/nominated-pharmacy:
     $ref: ./nhsonline.nominatedpharmacy.yaml#/paths/~1nominated-pharmacy
   /v1/patient/journey-configuration:

@@ -8,6 +8,12 @@ namespace NHSOnline.Backend.Support
 {
     public static class IEnumerableExtensions
     {
+        public static IEnumerable<T> InRandomOrder<T>(this IEnumerable<T> list)
+        {
+            var shuffledList = new List<T>(list);
+            return shuffledList.OrderBy(x => Guid.NewGuid());
+        }
+
         public static Dictionary<TKey, TElement> ToDictionaryLogOnFailure<TSource, TKey, TElement>(
             this IEnumerable<TSource> source,
             Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, ILogger logger)
@@ -29,7 +35,7 @@ namespace NHSOnline.Backend.Support
             try
             {
                 if (source == null) return;
-                
+
                 var duplicates = source
                     .Select(x => new { Key = keySelector(x), Element = elementSelector(x) })
                     .GroupBy(x => x.Key)

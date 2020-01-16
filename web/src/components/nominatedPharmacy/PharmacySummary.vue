@@ -8,9 +8,13 @@
     <div>
       <p v-if="!isInternetPharmacy" id="pharmacyAddress" class="nhsuk-u-margin-bottom-1">
         {{ formatAddress(pharmacy) }}</p>
+      <!--
+        We get pharmacy urls without http/https.
+        So // in the href tells it this is a new root address.
+      -->
       <analytics-tracked-tag v-if="isInternetPharmacy"
                              id="url"
-                             :href="pharmacy.url"
+                             :href="`//${pharmacy.url}`"
                              :text="$t(pharmacy.url)"
                              tag="a" target="_blank">
         {{ pharmacy.url }}

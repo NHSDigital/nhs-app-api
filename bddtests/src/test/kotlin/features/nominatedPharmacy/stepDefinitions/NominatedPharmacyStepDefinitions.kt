@@ -5,6 +5,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
 import features.nominatedPharmacy.steps.NominatedPharmacyDataSetupSteps
+import features.nominatedPharmacy.steps.NominatedPharmacyOnlinePharmacyDataSetupSteps
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
@@ -21,6 +22,7 @@ import pages.nominatedPharmacy.ConfirmNominatedPharmacyPage
 import pages.nominatedPharmacy.NominatedPharmacyResultsPage
 import pages.nominatedPharmacy.NominatedPharmacyChangeSuccessPage
 import pages.nominatedPharmacy.NominatedPharmacyInterruptPage
+import pages.nominatedPharmacy.NominatedPharmacyOnlineOnlyChoicesPage
 import pages.prescription.PrescriptionsPage
 import pages.text
 import utils.SerenityHelpers
@@ -45,8 +47,14 @@ class NominatedPharmacyStepDefinitions {
 
     private lateinit var nominatedPharmacyChooseTypePage: NominatedPharmacyChooseTypePage
 
+    private lateinit var nominatedPharmacyOnlineOnlyChoicesPage: NominatedPharmacyOnlineOnlyChoicesPage
+
     @Steps
     private lateinit var nominatedPharmacyDataSetupSteps: NominatedPharmacyDataSetupSteps
+
+    @Steps
+    private lateinit var nominatedPharmacyOnlinePharmacyDataSetupSteps: NominatedPharmacyOnlinePharmacyDataSetupSteps
+
 
     @Given("^searching for pharmacies with (.*) has (\\d+) results")
     fun searchTextHasResults(searchTerm: String, numberOfResults: Int) {
@@ -62,6 +70,15 @@ class NominatedPharmacyStepDefinitions {
         val data = NhsAzureSearchData.generatePharmacyData(numberOfResults)
         NominatedPharmacySerenityHelpers.SEARCH_RESULTS.set(data)
         nominatedPharmacyDataSetupSteps.setupWiremockForPharmacyPostcodeSearch(postcodeCoordinates, data)
+    }
+
+    @Given("^searching for randomized online pharmacies has results")
+    fun randomisedOnlinePharmacyResults() {
+        val randomInternetPharmacies = NhsAzureSearchData.generateOnlinePharmacyData()
+        nominatedPharmacyOnlinePharmacyDataSetupSteps
+                .setupWiremockForRandomisedOnlinePharmacies(randomInternetPharmacies)
+
+        NominatedPharmacySerenityHelpers.SEARCH_RESULTS.set(randomInternetPharmacies)
     }
 
     @Given("^my GP Practice is EPS enabled$")
@@ -231,6 +248,21 @@ class NominatedPharmacyStepDefinitions {
         searchNominatedPharmacyPage.isLoaded()
     }
 
+    @Then("^I see the online choices page loaded$")
+    fun iSeeTheOnlineChoicesLoaded() {
+        nominatedPharmacyOnlineOnlyChoicesPage.isLoaded()
+    }
+
+    @Then("^I click the No radio button on the online choices page$")
+    fun iClickTheNoRadioButtonOnTheOnlineChoicesPage() {
+        nominatedPharmacyOnlineOnlyChoicesPage.noRadioButton.click()
+    }
+
+    @Then("^I click on the continue button on the online choices page$")
+    fun iClickTheContinueButtonOnTheOnlineChoicesPage() {
+        nominatedPharmacyOnlineOnlyChoicesPage.continueButton.click()
+    }
+
     @Then("^I see the update nominated pharmacy interrupt page loaded$")
     fun iSeeUpdateNominatedPharmacyInterruptPageIsLoaded() {
         nominatedPharmacyInterruptPage.isLoaded(
@@ -255,6 +287,11 @@ class NominatedPharmacyStepDefinitions {
     @When("^I select high street pharmacy$")
     fun iSelectHighStreePharmacy() {
         nominatedPharmacyChooseTypePage.highStreetPharmacyRadioButton.click()
+    }
+
+    @When("^I select online pharmacy$")
+    fun iSelectOnlinePharmacy() {
+        nominatedPharmacyChooseTypePage.onlinePharmacyRadioButton.click()
     }
 
     @Then("^I click on the choose type continue button$")
@@ -293,6 +330,13 @@ class NominatedPharmacyStepDefinitions {
                         phoneNumber, searchResults[index].phoneNumber)
             }
         }
+    }
+
+    @Then("^I see list of random online pharmacies displayed on the result page$")
+    fun iSeeOnlinePharmaciesOnResultsPage(){
+        nominatedPharmacyResultsPage.isLoaded()
+        val searchResults = nominatedPharmacyResultsPage.getOnlinePharmacies()
+        Assert.assertEquals(DEFAULT_SEARCH_RESULT_COUNT, searchResults.size)
     }
 
     @Then("^I see confirm nominated page with selected pharmacy details$")
@@ -351,5 +395,9 @@ class NominatedPharmacyStepDefinitions {
         assertEquals(
                 "Pharmacy address is not correct",
                 selectedPharmacy.addressFormatted(), nominatedPharmacyPage.pharmacyAddress.text)
+    }
+
+    companion object {
+        const val DEFAULT_SEARCH_RESULT_COUNT = 10
     }
 }

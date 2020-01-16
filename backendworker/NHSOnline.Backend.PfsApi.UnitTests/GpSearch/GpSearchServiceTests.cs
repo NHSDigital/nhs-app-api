@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
         private INhsSearchResultChecker _nhsSearchResultChecker;
         private IPostcodeParser _postcodeParser;
         private ILogger<NhsSearchResultChecker> _nhsResultCheckerLogger;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -35,9 +35,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             _nhsResultCheckerLogger = _fixture.Freeze<ILogger<NhsSearchResultChecker>>();
             _nhsSearchResultChecker = new NhsSearchResultChecker(_nhsResultCheckerLogger);
             _postcodeParser = new PostcodeParser();
-            
+
             _gpSearchService = new GpSearchService(_logger, _gpLookupClient.Object, _gpLookupConfig, _nhsSearchResultChecker,
-                _postcodeParser);     
+                _postcodeParser);
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             var result = await _gpSearchService.IsGpPracticeEPSEnabled(string.Empty);
 
             // Assert
-            _gpLookupClient.Verify(x => x.GpSearch(It.IsAny<OrganisationSearchData>()), Times.Never);
+            _gpLookupClient.Verify(x => x.OrganisationSearch(It.IsAny<OrganisationSearchData>()), Times.Never);
             result.HttpStatusCode.Should().Be(HttpStatusCode.BadRequest);
             result.IsGpEpsEnabled.Should().BeFalse();
         }
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
         {
             // Arrange
             const string odsCode = "AB234";
-            
+
             var organisationReturnResult =
                 new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
                 {
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                     }
                 };
 
-            _gpLookupClient.Setup(x => x.GpSearch(It.IsAny<OrganisationSearchData>()))
+            _gpLookupClient.Setup(x => x.OrganisationSearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult))
                 .Verifiable();
 
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                     }
                 };
 
-            _gpLookupClient.Setup(x => x.GpSearch(It.IsAny<OrganisationSearchData>()))
+            _gpLookupClient.Setup(x => x.OrganisationSearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult))
                 .Verifiable();
 
@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                     }
                 };
 
-            _gpLookupClient.Setup(x => x.GpSearch(It.IsAny<OrganisationSearchData>()))
+            _gpLookupClient.Setup(x => x.OrganisationSearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult))
                 .Verifiable();
 
@@ -180,7 +180,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                     }
                 };
 
-            _gpLookupClient.Setup(x => x.GpSearch(It.Is<OrganisationSearchData>(
+            _gpLookupClient.Setup(x => x.OrganisationSearch(It.Is<OrganisationSearchData>(
                 o => o.Top == 1 &&
                 string.Equals(o.Select, "OrganisationID,OrganisationName,NACSCode,Metrics", System.StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(o.Filter, $"OrganisationTypeID eq 'GPB' and NACSCode eq '{odsCode}'", System.StringComparison.OrdinalIgnoreCase))
@@ -210,13 +210,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             // Arrange
             const string testLatitude = "1223.4345";
             const string testLongitude = "2323.232";
-            
+
             var organisationReturnResults = new List<Organisation>
             {
                 new Organisation { OrganisationName = "Test GP Practice" },
                 new Organisation { OrganisationName = "Test GP Practice 2" }
             };
-            
+
             var organisationReturnResult =
                 new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
                 {
@@ -226,7 +226,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                         OrganisationCount = 2,
                     }
                 };
-            
+
             _gpLookupClient.Setup(x => x.GpPostcodeSearch(It.IsAny<OrganisationPostcodeSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult));
 
@@ -241,10 +241,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                         }
                     }
                 };
-                
+
             _gpLookupClient.Setup(x => x.PostcodeSearch(It.IsAny<PostcodeSearchData>()))
                 .Returns(Task.FromResult(postcodeReturnResult));
-            
+
             // Act
             var result = await _gpSearchService.Search(searchTerm);
 
@@ -258,7 +258,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                 response.Organisations.Should().BeEquivalentTo(organisationReturnResults);
             }
         }
-        
+
         [TestMethod]
         public async Task Search_WhenCalledWithACity_ReturnsTheListOfMatchingOrganisationsInASuccessfulResponse()
         {
@@ -270,7 +270,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                 new Organisation { OrganisationName = "Test GP Practice" },
                 new Organisation { OrganisationName = "Test GP Practice 2" }
             };
-            
+
             var organisationReturnResult =
                 new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
                 {
@@ -280,15 +280,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                         OrganisationCount = 2,
                     }
                 };
-            
-            _gpLookupClient.Setup(x => x.GpSearch(It.IsAny<OrganisationSearchData>()))
+
+            _gpLookupClient.Setup(x => x.OrganisationSearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult));
-            
+
             // Act
             var result = await _gpSearchService.Search(validPostcodeSearchTerm);
-            
+
             // Assert
-            _gpLookupClient.Verify(x=>x.GpSearch(It.IsAny<OrganisationSearchData>()));
+            _gpLookupClient.Verify(x=>x.OrganisationSearch(It.IsAny<OrganisationSearchData>()));
             var response = result.Should().BeAssignableTo<GpSearchResult.Success>().Subject.Response;
             using (new AssertionScope())
             {
@@ -296,30 +296,30 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                 response.Organisations.Should().BeEquivalentTo(organisationReturnResults);
             }
         }
-        
+
         [TestMethod]
         public async Task Search_WhenCalledWithACityAndResponseBodyIsNull_CallsOrganisationSearchAndReturnsInternalServerErrorResponse()
         {
             // Arrange
             const string validPostcodeSearchTerm = "Manchester";
-            
+
             var organisationReturnResult =
                 new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
                 {
                     Body = null,
                 };
-            
-            _gpLookupClient.Setup(x => x.GpSearch(It.IsAny<OrganisationSearchData>()))
+
+            _gpLookupClient.Setup(x => x.OrganisationSearch(It.IsAny<OrganisationSearchData>()))
                 .Returns(Task.FromResult(organisationReturnResult));
-            
+
             // Act
             var result = await _gpSearchService.Search(validPostcodeSearchTerm);
 
             // Assert
-            _gpLookupClient.Verify(x=>x.GpSearch(It.IsAny<OrganisationSearchData>()));
+            _gpLookupClient.Verify(x=>x.OrganisationSearch(It.IsAny<OrganisationSearchData>()));
             result.Should().BeAssignableTo<GpSearchResult.InternalServerError>();
         }
-        
+
         [TestMethod]
         [DataRow("")]
         [DataRow(null)]
@@ -327,11 +327,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
         {
             // Act
             var result = await _gpSearchService.Search(searchTerm);
-            
+
             // Assert
             result.Should().BeAssignableTo<GpSearchResult.BadRequest>();
         }
-        
+
         [TestMethod]
         public async Task Search_WhenCalledAndNhsPostcodeSearchReturnsUnsuccessfulStatusCode_ReturnsInternalServerError()
         {
@@ -340,17 +340,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 
             var postcodeReturnResult =
                 new GpLookupClient.NhsSearchApiObjectResponse<NhsPostcodeSearchResponse>(HttpStatusCode.Unauthorized);
-                
+
             _gpLookupClient.Setup(x => x.PostcodeSearch(It.IsAny<PostcodeSearchData>()))
                 .Returns(Task.FromResult(postcodeReturnResult));
-            
+
             // Act
             var result = await _gpSearchService.Search(searchTerm);
 
             // Assert
             result.Should().BeAssignableTo<GpSearchResult.InternalServerError>();
         }
-        
+
         [TestMethod]
         public async Task Search_WhenCalledAndNhsPostcodeSearchReturnsSuccessfulButNoPostcodeData_ReturnsSuccessful()
         {
@@ -360,15 +360,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             var postcodeReturnResult =
                 new GpLookupClient.NhsSearchApiObjectResponse<NhsPostcodeSearchResponse>(HttpStatusCode.OK)
                 {
-                    Body = new NhsPostcodeSearchResponse 
-                    { 
+                    Body = new NhsPostcodeSearchResponse
+                    {
                         PostcodeData = new List<PostcodeData>()
                     },
                 };
-                
+
             _gpLookupClient.Setup(x => x.PostcodeSearch(It.IsAny<PostcodeSearchData>()))
                 .Returns(Task.FromResult(postcodeReturnResult));
-            
+
             // Act
             var result = await _gpSearchService.Search(searchTerm);
 
@@ -399,7 +399,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                     }
                 };
 
-            _gpLookupClient.Setup(x => x.GpSearch(It.Is<OrganisationSearchData>(
+            _gpLookupClient.Setup(x => x.OrganisationSearch(It.Is<OrganisationSearchData>(
                     o => o.Top == 1 &&
                          string.Equals(o.Select, "OrganisationID,OrganisationName,NACSCode,Metrics", System.StringComparison.OrdinalIgnoreCase) &&
                          string.Equals(o.Filter, $"OrganisationTypeID eq 'GPB' and NACSCode eq '{odsCode}'", System.StringComparison.OrdinalIgnoreCase))

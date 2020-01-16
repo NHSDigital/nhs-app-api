@@ -3,7 +3,13 @@ import NominatedPharmacySearchResults from '@/pages/nominated-pharmacy/results';
 import * as dependency from '@/lib/utils';
 import { createLocalVue } from '@vue/test-utils';
 import { create$T, createStore, mount } from '../../helpers';
-import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CONFIRM } from '@/lib/routes';
+import {
+  PRESCRIPTIONS,
+  NOMINATED_PHARMACY_SEARCH,
+  NOMINATED_PHARMACY_CONFIRM,
+  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
+} from '@/lib/routes';
+import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 
 const $tMock = create$T();
 
@@ -25,6 +31,7 @@ describe('nominated pharmacy search results', () => {
         technicalError: false,
         noResultsFound: true,
       },
+      chosenType: null,
     },
   }) => state;
 
@@ -64,6 +71,7 @@ describe('nominated pharmacy search results', () => {
         noResultsFound: true,
       },
       nominatedPharmacyEnabled: true,
+      chosenType: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
     };
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
@@ -79,6 +87,7 @@ describe('nominated pharmacy search results', () => {
         technicalError: false,
         noResultsFound: true,
       },
+      chosenType: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
     };
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
@@ -93,13 +102,14 @@ describe('nominated pharmacy search results', () => {
         technicalError: false,
         noResultsFound: false,
       },
+      chosenType: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
     };
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
     expect(dependency.redirectTo).not.toHaveBeenCalled();
   });
 
-  it('will go back to the search page when the back button is clicked', () => {
+  it('will go back to the prescriptions page when no chosen type is found', () => {
     $store.state.nominatedPharmacy = {
       searchQuery: 'rg1',
       searchResults: {
@@ -108,8 +118,26 @@ describe('nominated pharmacy search results', () => {
         noResultsFound: false,
       },
     };
+
+    // act
     wrapper = mountPage();
-    pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
+
+    // assert
+    expect(dependency.redirectTo)
+      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
+  });
+
+  it('will go back to the search page when the back button is clicked and the user came from high street pharmacy search', () => {
+    $store.state.nominatedPharmacy = {
+      searchQuery: 'rg1',
+      searchResults: {
+        pharmacies: [{ pharmacyName: 'boots' }],
+        technicalError: false,
+        noResultsFound: false,
+      },
+      chosenType: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
+    };
+    wrapper = mountPage();
     expect(dependency.redirectTo).not.toHaveBeenCalled();
 
     // act
@@ -118,6 +146,27 @@ describe('nominated pharmacy search results', () => {
     // assert
     expect(dependency.redirectTo)
       .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path);
+  });
+
+  it('will go back to the online choices page when the back button is clicked and the user chose to see a selection of randomised online pharmacies', () => {
+    $store.state.nominatedPharmacy = {
+      searchQuery: 'rg1',
+      searchResults: {
+        pharmacies: [{ pharmacyName: 'boots' }],
+        technicalError: false,
+        noResultsFound: false,
+      },
+      chosenType: PharmacyTypeChoice.ONLINE_PHARMACY,
+    };
+    wrapper = mountPage();
+    expect(dependency.redirectTo).not.toHaveBeenCalled();
+
+    // act
+    wrapper.vm.backButtonClicked();
+
+    // assert
+    expect(dependency.redirectTo)
+      .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path);
   });
 
   describe('pharmacyPracticeClicked', () => {

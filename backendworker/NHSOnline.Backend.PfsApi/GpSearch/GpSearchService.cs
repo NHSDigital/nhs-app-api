@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             }
 
             var data = GetSearchByOdsCodeOrganisationSearchData(odsCode);
-            var searchResponse = await _gpLookupClient.GpSearch(data);
+            var searchResponse = await _gpLookupClient.OrganisationSearch(data);
 
             if (!searchResponse.HasSuccessResponse)
             {
@@ -184,7 +184,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             {
                 _logger.LogEnter();
 
-                var searchResults = await _gpLookupClient.GpSearch(organisationSearchData);
+                var searchResults = await _gpLookupClient.OrganisationSearch(organisationSearchData);
 
                 return _nhsSearchResultChecker.CheckOdsCodeSearchResult(searchResults, organisationSearchData.Search);
             }

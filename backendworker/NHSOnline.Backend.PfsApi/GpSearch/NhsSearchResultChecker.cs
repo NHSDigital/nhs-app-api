@@ -91,19 +91,48 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 return new PharmacySearchResponse(pharmacySearchResponse.StatusCode);
             }
 
-            var logDetail = new Dictionary<string, string>
-            {
-                { "total count available", pharmacySearchResponse.Body.OrganisationCount.ToString(CultureInfo.CurrentCulture) },
-                { "number of items returned", pharmacySearchResponse.Body.Organisations.Count.ToString(CultureInfo.CurrentCulture) },
-            };
+            LogResultCounts("Pharmacy postcode search summary", pharmacySearchResponse);
 
-            _logger.LogInformationKeyValuePairs("Pharmacy postcode search summary", logDetail);
-            
             var searchResponse = new PharmacySearchResponse(
                 pharmacySearchResponse.StatusCode,
                 pharmacySearchResponse.Body.Organisations);
 
             return searchResponse;
+        }
+
+        public PharmacySearchResponse CheckPharmacies(GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> pharmacySearchResponse)
+        {
+            if (!pharmacySearchResponse.HasSuccessResponse)
+            {
+                _logger.LogError(
+                    $"Unsuccessful request searching for Pharmacies, Status code: {(int) pharmacySearchResponse.StatusCode}");
+                return new PharmacySearchResponse(pharmacySearchResponse.StatusCode);
+            }
+
+            if (pharmacySearchResponse.Body == null)
+            {
+                _logger.LogError("Search for Nhs Pharmacy Failed, no response body found");
+                return new PharmacySearchResponse(pharmacySearchResponse.StatusCode);
+            }
+
+            LogResultCounts("Pharmacy search summary", pharmacySearchResponse);
+
+            var searchResponse = new PharmacySearchResponse(
+                pharmacySearchResponse.StatusCode,
+                pharmacySearchResponse.Body.Organisations);
+
+            return searchResponse;
+        }
+
+        private void LogResultCounts(string description, GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> response)
+        {
+            var logDetail = new Dictionary<string, string>
+            {
+                { "total count available", response.Body.OrganisationCount.ToString(CultureInfo.CurrentCulture) },
+                { "number of items returned", response.Body.Organisations.Count.ToString(CultureInfo.CurrentCulture) },
+            };
+
+            _logger.LogInformationKeyValuePairs(description, logDetail);
         }
     }
 }

@@ -7,7 +7,7 @@ import {
   CLEAR_SELECTED_NOMINATED_PHARMACY,
   SELECT,
   SET_CHOSEN_TYPE,
-  CLEAR_CHOSEN_TYPE,
+  CLEAR_SEARCH_JOURNEY,
   SET_ONLINE_ONLY_KNOWN_OPTION,
 } from './mutation-types';
 import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
@@ -68,8 +68,8 @@ export default {
   setChosenType({ commit }, chosenType) {
     commit(SET_CHOSEN_TYPE, chosenType);
   },
-  clearChosenType({ commit }) {
-    commit(CLEAR_CHOSEN_TYPE);
+  clearSearchJourney({ commit }) {
+    commit(CLEAR_SEARCH_JOURNEY);
   },
   clearPreviousPageToSearch({ commit }) {
     commit(CLEAR_PREVIOUS_PAGE_TO_SEARCH);
