@@ -16,6 +16,11 @@ Feature: nominated pharmacy journey
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
     When I click on change your nominated pharmacy link
+    Then I see the update nominated pharmacy interrupt page loaded
+    When I click on the interrupt continue button
+    Then I see the choose type page is loaded
+    Then I select high street pharmacy
+    And I click on the choose type continue button
     Then I see search nominated pharmacy page loaded
     Given searching for pharmacies with <search text> has 10 results
     When I search for a <search text> and click on search button
@@ -47,16 +52,19 @@ Feature: nominated pharmacy journey
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
     When I click on change your nominated pharmacy link
+    Then I see the update nominated pharmacy interrupt page loaded
+    When I click on the interrupt continue button
+    Then I see the choose type page is loaded
+    Then I select high street pharmacy
+    And I click on the choose type continue button
     Then I see search nominated pharmacy page loaded
     When I search for a <search text> and click on search button
-    Then I see the no results found page
-    When I click the Back link
-    Then I see prescriptions page loaded
+    Then I see an error indicating the postcode is invalid
     Examples:
       | GP System | Pharmacy type | search text | OdsCode |
       | EMIS      | P1            | boots       | SW11XR  |
 
-  Scenario Outline: No results are returned for postcode not in use
+  Scenario Outline: No results messages are shown for postcode not in use
     Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -71,13 +79,15 @@ Feature: nominated pharmacy journey
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
     When I click on change your nominated pharmacy link
+    Then I see the update nominated pharmacy interrupt page loaded
+    When I click on the interrupt continue button
+    Then I see the choose type page is loaded
+    Then I select high street pharmacy
+    And I click on the choose type continue button
     Then I see search nominated pharmacy page loaded
     Given searching for pharmacies with <search text> has 0 results
     When I search for a <search text> and click on search button
-    Then I see the no results found page
-    When I click the Back link
-    Then I see prescriptions page loaded
-
+    Then I see the no results found messages for <search text>
     Examples:
       | GP System | Pharmacy type | search text | OdsCode |
       | EMIS      | P1            | BT1       | SW11XR  |
@@ -95,7 +105,11 @@ Feature: nominated pharmacy journey
     Then I see the nominated pharmacy panel on the prescriptions page
     And I see that I haven't nominated a pharmacy on the prescriptions page
     When I click on the nominated pharmacy panel
-    Then I see nominated pharmacy page loaded without a pharmacy
+    Then I see the set nominated pharmacy interrupt page loaded
+    When I click on the interrupt continue button
+    Then I see the choose type page is loaded
+    Then I select high street pharmacy
+    And I click on the choose type continue button
     Given searching for pharmacies with <search text> has 10 results
     When I search for a <search text> and click on search button
     Then I see list of pharmacies displayed on the result page

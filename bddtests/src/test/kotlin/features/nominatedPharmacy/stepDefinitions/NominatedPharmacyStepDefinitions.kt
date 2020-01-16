@@ -10,14 +10,17 @@ import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import models.nominatedPharmacy.Postcode
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import pages.isVisible
-import pages.nominatedPharmacy.ConfirmNominatedPharmacyPage
-import pages.nominatedPharmacy.NominatedPharmacyChangeSuccessPage
-import pages.nominatedPharmacy.NominatedPharmacyPage
-import pages.nominatedPharmacy.NominatedPharmacyResultsPage
+import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
 import pages.nominatedPharmacy.SearchNominatedPharmacyPage
+import pages.nominatedPharmacy.NominatedPharmacyPage
+import pages.nominatedPharmacy.ConfirmNominatedPharmacyPage
+import pages.nominatedPharmacy.NominatedPharmacyResultsPage
+import pages.nominatedPharmacy.NominatedPharmacyChangeSuccessPage
+import pages.nominatedPharmacy.NominatedPharmacyInterruptPage
 import pages.prescription.PrescriptionsPage
 import pages.text
 import utils.SerenityHelpers
@@ -37,6 +40,10 @@ class NominatedPharmacyStepDefinitions {
     private lateinit var prescriptionsPage: PrescriptionsPage
 
     private lateinit var nominatedPharmacyChangeSuccessPage: NominatedPharmacyChangeSuccessPage
+
+    private lateinit var nominatedPharmacyInterruptPage: NominatedPharmacyInterruptPage
+
+    private lateinit var nominatedPharmacyChooseTypePage: NominatedPharmacyChooseTypePage
 
     @Steps
     private lateinit var nominatedPharmacyDataSetupSteps: NominatedPharmacyDataSetupSteps
@@ -111,6 +118,18 @@ class NominatedPharmacyStepDefinitions {
     fun iSearchForATextAndClickOnSearch(searchText: String) {
         searchNominatedPharmacyPage.enterSearchText(searchText)
         searchNominatedPharmacyPage.searchButton.click()
+    }
+
+    @Then("^I see an error indicating the postcode is invalid$")
+    fun iSeeThePostCodeIsInvalidErrorMessage() {
+        Assert.assertTrue(searchNominatedPharmacyPage.isInvalidPostcodeErrorVisible())
+    }
+
+    @Then("^I see the no results found messages for (.*)$")
+    fun iSeeNoResultsFoundMessage(searchText: String) {
+        Assert.assertTrue(searchNominatedPharmacyPage.isNoResultsFoundHeaderVisible(searchText))
+        Assert.assertTrue(searchNominatedPharmacyPage.isNoResultsFoundMessageVisible(searchText))
+        Assert.assertTrue(searchNominatedPharmacyPage.isSearchAgainVisible())
     }
 
     @When("^I click on item (\\d+) pharmacy from the list of pharmacies$")
@@ -210,6 +229,37 @@ class NominatedPharmacyStepDefinitions {
     @Then("^I see search nominated pharmacy page loaded$")
     fun iSeeSearchNominatedPharmacyLoaded() {
         searchNominatedPharmacyPage.isLoaded()
+    }
+
+    @Then("^I see the update nominated pharmacy interrupt page loaded$")
+    fun iSeeUpdateNominatedPharmacyInterruptPageIsLoaded() {
+        nominatedPharmacyInterruptPage.isLoaded(
+                "Any outstanding prescriptions may still arrive at your current nominated pharmacy")
+    }
+
+    @Then("^I see the set nominated pharmacy interrupt page loaded$")
+    fun iSeeSetNominatedPharmacyInterruptPageIsLoaded() {
+        nominatedPharmacyInterruptPage.isLoaded("The pharmacy you choose is where your prescriptions will be sent")
+    }
+
+    @Then("^I click on the interrupt continue button$")
+    fun iClickOnTheInterruptContinueButton() {
+        nominatedPharmacyInterruptPage.continueButton.click()
+    }
+
+    @Then("^I see the choose type page is loaded$")
+    fun iSeeChooseTypePageIsLoaded() {
+        nominatedPharmacyChooseTypePage.isLoaded()
+    }
+
+    @When("^I select high street pharmacy$")
+    fun iSelectHighStreePharmacy() {
+        nominatedPharmacyChooseTypePage.highStreetPharmacyRadioButton.click()
+    }
+
+    @Then("^I click on the choose type continue button$")
+    fun iClickOnTheChooseTypeContinueButton() {
+        nominatedPharmacyChooseTypePage.continueButton.click()
     }
 
     @Then("^I see the no results found page$")

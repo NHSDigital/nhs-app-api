@@ -1,0 +1,36 @@
+package pages.nominatedPharmacy
+
+import net.thucydides.core.annotations.DefaultUrl
+import pages.HybridPageElement
+import pages.HybridPageObject
+import pages.navigation.HeaderNative
+
+@DefaultUrl("http://web.local.bitraft.io:3000/nominated-pharmacy/choose-type")
+open class NominatedPharmacyChooseTypePage : HybridPageObject() {
+
+    private lateinit var headerNative: HeaderNative
+
+    val highStreetPharmacyRadioButton = HybridPageElement(
+            webDesktopLocator = "//input[@id='radioButton-highStreet']",
+            webMobileLocator = "//input[@id='radioButton-highStreet']",
+            androidLocator = null,
+            page = this
+    )
+
+    val onlinePharmacyRadioButton = HybridPageElement(
+            webDesktopLocator = "//input[@id='radioButton-online']",
+            webMobileLocator = "//input[@id='radioButton-online']",
+            androidLocator = null,
+            page = this
+    )
+
+    val continueButton = HybridPageElement(
+            webDesktopLocator = "//button[contains(text(), 'Continue')]",
+            page = this
+    )
+
+    fun isLoaded() {
+        headerNative.waitForPageHeaderText("Choose a type of pharmacy to search for")
+    }
+
+}
