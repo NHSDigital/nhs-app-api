@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
     {
         private readonly ILogger<PharmacyService> _logger;
         private readonly IGpLookupClient _gpLookupClient;
-        
+
         public PharmacyService(
             ILogger<PharmacyService> logger,
             IGpLookupClient gpLookupClient
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                     }
 
                     var pharmacy = pharmacyGetResult?.Body?.Organisations?.FirstOrDefault();
-                    
+
                     if (pharmacy == null)
                     {
                         _logger.LogInformation($"NHS Search service returned no pharmacy detail for: {odsCode}");
@@ -80,9 +80,11 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 
         public bool IsValidPharmacySubType(PharmacyDetailResponse pharmacyDetailResponse)
         {
-            return pharmacyDetailResponse.Pharmacy?.OrganisationSubType != null &&
-                   (pharmacyDetailResponse.Pharmacy.OrganisationSubType.Equals(Constants.OrganisationSubTypeForCommunityPharmacy, StringComparison.Ordinal)
-                    || pharmacyDetailResponse.Pharmacy.OrganisationSubType.Equals(Constants.OrganisationSubTypeForInternetPharmacy, StringComparison.Ordinal));
+            var organisationSubType = pharmacyDetailResponse.Pharmacy?.OrganisationSubType;
+            _logger.LogInformation($"Organisation Sub Type = {organisationSubType}");
+            return organisationSubType != null &&
+                   (organisationSubType.Equals(Constants.OrganisationSubTypeForCommunityPharmacy, StringComparison.Ordinal)
+                    || organisationSubType.Equals(Constants.OrganisationSubTypeForInternetPharmacy, StringComparison.Ordinal));
         }
 
         private static OrganisationSearchData GetPharmacySearchData(string odsCode)

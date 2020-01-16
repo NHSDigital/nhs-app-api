@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             await result.Accept(new UpdateNominatedPharmacyResponseAuditingVisitor(_auditor, _logger));
             return result.Accept(new UpdateNominatedPharmacyResponseVisitor());
         }
-        
+
         [HttpGet]
         [ApiVersionRoute("patient/pharmacies")]
         public async Task<IActionResult> Search([FromQuery] string searchTerm)
@@ -105,13 +105,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             await pharmacySearchResult.Accept(new PharmacySearchResponseAuditingVisitor(_auditor, _logger));
             return pharmacySearchResult.Accept(new PharmacySearchResponseVisitor());
         }
-     
+
         [HttpGet]
         [ApiVersionRoute("patient/online-pharmacies")]
         public async Task<IActionResult> OnlineOnlyPharmacySearch([FromQuery] string searchTerm)
         {
             _logger.LogEnter();
-            
+
             var pharmacySearchResult = await SearchForOnlineOnlyPharmacies(ModelState, searchTerm);
 
             _logger.LogExit();
@@ -138,11 +138,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             {
                 await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                     "Attempting to fetch a random list of Online Pharmacies");
-                
+
                 _logger.LogInformation("Fetching random list of online pharmacies");
                 return await _pharmacySearchService.SearchOnlineOnlyPharmacies();
             }
-            
+
             await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                 $"Attempting to search for Online Pharmacies by name using search term: {searchTerm}");
             if (!modelState.IsValid)
@@ -185,6 +185,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             if (!_config.IsNominatedPharmacyEnabled)
             {
+                _logger.LogInformation("Nominated Pharmacy is not enabled");
                 return new GetNominatedPharmacyResult.ConfigNotEnabled();
             }
 
