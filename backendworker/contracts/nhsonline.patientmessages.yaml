@@ -41,6 +41,44 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+  /messages/recipients:
+    get:
+      tags:
+        -patientMessages
+      summary: Get a list of available recipients to which the user can send a message
+      description: Get a list of available recipients to which the user can send a message
+      responses:
+        "200":
+          description: Successfully retrieved a list of messaging recipients for the user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientMessageRecipientsResponse"
+        "400":
+          description: Upstream system returned BadRequest status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "403":
+          description: Upstream system returned Forbidden status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "500":
+          description: An unknown error occured when processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "502":
+          description: Upstream system returned BadGateway status or an invalid response.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        
   /messages/updateReadStatus:
     post:
       tags:
@@ -146,13 +184,15 @@ components:
           description: A list of meta data about each available conversation between the patient and their practice
           items:
             $ref: "#/components/schemas/PatientMessageSummary"
-    PatientMessageResponse:
+    PatientMessageRecipientsResponse:
       type: object
       properties:
-        MessageReadStateUpdateStatus:
-          type: string
-          description: read status of the message
-    PatientMessageReadStatusUpdatedResponse:
+        messageRecipients:
+          type: array
+          description: A list of recipients to which the user can send a message
+          items:
+            $ref: "#/components/schemas/PatientMessageRecipient"
+    PatientMessageResponse:
       type: object
       properties:
         messageDetails:
@@ -160,6 +200,21 @@ components:
           description: Details for a conversation between the patient and their practice
           items:
             $ref: "#/components/schemas/PatientMessageDetails"
+    PatientMessageReadStatusUpdatedResponse:
+      type: object
+      properties:
+        MessageReadStateUpdateStatus:
+          type: string
+          description: read status of the message
+    PatientMessageRecipient:
+      type: object
+      properties:
+        recipientGuid:
+          type: string
+          description: A unique identifier for this recipient
+        name:
+          type: string
+          description: The name of the recipient
     PatientMessageSummary:
       type: object
       properties:

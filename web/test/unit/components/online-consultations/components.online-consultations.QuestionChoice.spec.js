@@ -7,7 +7,7 @@ import each from 'jest-each';
 describe('questionChoice compoonent', () => {
   let wrapper;
 
-  const mountQuestion = ({ propsData = {} } = {}) =>
+  const mountQuestion = ({ renderAsHtml = false, legend = undefined } = {}) =>
     mount(QuestionChoice, {
       propsData: {
         name: 'name',
@@ -16,7 +16,8 @@ describe('questionChoice compoonent', () => {
           { code: 'second', description: 'second label' },
           { code: 'third', description: 'third label' },
         ],
-        ...propsData,
+        renderAsHtml,
+        legend,
       },
     });
 
@@ -25,7 +26,7 @@ describe('questionChoice compoonent', () => {
       true,
       false,
     ]).it('will set renderAsHtml on radio group', (renderAsHtml) => {
-      wrapper = mountQuestion({ propsData: { renderAsHtml } });
+      wrapper = mountQuestion({ renderAsHtml });
 
       const radioGroup = wrapper.find(RadioGroup);
 
@@ -33,27 +34,35 @@ describe('questionChoice compoonent', () => {
     });
   });
 
+  describe('legend', () => {
+    it('will include legend element if legend provided', () => {
+      wrapper = mountQuestion({ legend: 'Question choice legend' });
+      const legend = wrapper.find('legend');
+      expect(legend.text()).toEqual('Question choice legend');
+    });
+  });
+
   describe('radio buttons', () => {
-    it('will have radio button for the question with value of first', () => {
+    beforeEach(() => {
       wrapper = mountQuestion();
+    });
+
+    it('will have radio button for the question with value of first', () => {
       const firstRadioButton = wrapper.findAll(GenericRadioButton).at(0);
       expect(firstRadioButton.vm.value).toEqual('first');
     });
 
     it('will have radio button for the question with value of second', () => {
-      wrapper = mountQuestion();
       const secondRadioButton = wrapper.findAll(GenericRadioButton).at(1);
       expect(secondRadioButton.vm.value).toEqual('second');
     });
 
     it('will have radio button for the question with value of third', () => {
-      wrapper = mountQuestion();
       const thirdRadioButton = wrapper.findAll(GenericRadioButton).at(2);
       expect(thirdRadioButton.vm.value).toEqual('third');
     });
 
     it('will have first radio button with correct label', () => {
-      wrapper = mountQuestion();
       expect(wrapper.find("[for='name-first']")
         .exists())
         .toEqual(true);
@@ -63,7 +72,6 @@ describe('questionChoice compoonent', () => {
     });
 
     it('will have second radio button with correct label', () => {
-      wrapper = mountQuestion();
       expect(wrapper.find("[for='name-second']")
         .exists())
         .toEqual(true);
@@ -73,7 +81,6 @@ describe('questionChoice compoonent', () => {
     });
 
     it('will have third radio button with correct label', () => {
-      wrapper = mountQuestion();
       expect(wrapper.find("[for='name-third']")
         .exists())
         .toEqual(true);
@@ -83,7 +90,6 @@ describe('questionChoice compoonent', () => {
     });
 
     it('will emit first value when first clicked', () => {
-      wrapper = mountQuestion();
       expect(wrapper.vm).toBeDefined();
       expect(wrapper.vm.selected).toBeDefined();
 
@@ -99,7 +105,6 @@ describe('questionChoice compoonent', () => {
     });
 
     it('will emit second value when second clicked', () => {
-      wrapper = mountQuestion();
       expect(wrapper.vm).toBeDefined();
       expect(wrapper.vm.selected).toBeDefined();
 
@@ -115,7 +120,6 @@ describe('questionChoice compoonent', () => {
     });
 
     it('will emit third value when second clicked', () => {
-      wrapper = mountQuestion();
       expect(wrapper.vm).toBeDefined();
       expect(wrapper.vm.selected).toBeDefined();
 

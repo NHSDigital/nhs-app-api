@@ -165,6 +165,10 @@ class KnownServices(private val context: Context) {
         return homeUrl.host == url.host
     }
 
+    fun isUrlTelephone(urlString: String?) : Boolean {
+        return urlString!!.startsWith("tel")
+    }
+
     private fun fetchStringResource(resourceId: Int): String {
         return context.resources.getString(resourceId)
     }

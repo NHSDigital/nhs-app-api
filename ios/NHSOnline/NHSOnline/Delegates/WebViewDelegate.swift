@@ -197,9 +197,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func openInSafari(url: URL) {
-        self.safariViewController = SFSafariViewController(url: url)
-        self.safariViewController?.delegate = self
-        self.viewController.present(safariViewController!, animated: true, completion: nil)
+        if (url.scheme == "tel") {
+            UIApplication.shared.openURL(url)
+        } else {
+            self.safariViewController = SFSafariViewController(url: url)
+            self.safariViewController?.delegate = self
+            self.viewController.present(safariViewController!, animated: true, completion: nil)
+        }
     }
     
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {

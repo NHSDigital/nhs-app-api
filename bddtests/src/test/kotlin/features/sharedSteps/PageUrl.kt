@@ -29,7 +29,8 @@ open class PageUrl {
                     "gp medical record diagnosis" to "/gp-medical-record/diagnosis",
                     "gp medical record examinations" to "/gp-medical-record/examinations",
                     "gp medical record test results detail" to "/gp-medical-record/test-results-detail",
-                    "gp medical record procedures" to "/gp-medical-record/procedures"
+                    "gp medical record procedures" to "/gp-medical-record/procedures",
+                    "patient practice messaging" to "/patient-practice-messaging"
             )
 
     private val mobileOverrides =

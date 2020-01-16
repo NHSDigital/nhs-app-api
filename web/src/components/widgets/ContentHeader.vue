@@ -34,7 +34,7 @@
 
       <div :class="['nhsuk-width-container']">
         <div class="nhsuk-grid-row">
-          <div class="nhsuk-grid-column-two-thirds">
+          <div id="page-title-container" class="nhsuk-grid-column-two-thirds">
             <page-title v-if="showContentHeader"
                         :title-key="$store.state.header.headerText"
                         :should-show-desktop-version="showHeader">
@@ -136,6 +136,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  #page-title-container {
+    margin-top: -1px;
+    padding-top: 1px;
+  }
+</style>
 
 <style module lang="scss" scoped>
   @import '../../style/colours';

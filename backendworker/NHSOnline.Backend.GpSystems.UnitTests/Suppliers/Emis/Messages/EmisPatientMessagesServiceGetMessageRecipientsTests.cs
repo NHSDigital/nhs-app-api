@@ -1,0 +1,212 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using NHSOnline.Backend.GpSystems.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
+
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
+{
+    [TestClass]
+    public class EmisPatientMessagesServiceGetMessageRecipientsTests
+    {
+        private IFixture _fixture;
+
+        private Mock<IEmisClient> _mockClient;
+
+        private EmisUserSession _userSession;
+        private List<HttpStatusCode> _sampleSuccessStatusCodes;
+
+        private EmisPatientMessagesService _systemUnderTest;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            _mockClient = _fixture.Freeze<Mock<IEmisClient>>();
+
+            _userSession = _fixture.Create<EmisUserSession>();
+
+            _systemUnderTest = _fixture.Create<EmisPatientMessagesService>();
+
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>
+            {
+                HttpStatusCode.OK
+            };
+        }
+
+        [TestMethod]
+        public async Task GetMessageRecipients_WhenSuccessfulResponseFromEmis_ReturnsSuccess()
+        {
+            // Arrange
+            var messageRecipientsGetResponse = _fixture.Create<MessageRecipientsGetResponse>();
+
+            _mockClient
+                .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
+                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessageRecipientsGetResponse>(
+                    HttpStatusCode.OK,
+                    RequestsForSuccessOutcome.PatientMessageDetailsGet, _sampleSuccessStatusCodes)
+                {
+                    Body = messageRecipientsGetResponse
+                }))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.GetMessageRecipients(_userSession);
+
+            // Assert
+            _mockClient.Verify();
+
+            result.Should().BeAssignableTo<GetPatientMessageRecipientsResult.Success>()
+                .Subject.Response.Should().BeEquivalentTo(messageRecipientsGetResponse);
+        }
+
+        [TestMethod]
+        public async Task GetMessageRecipients_WhenBadRequestFromEmis_ReturnsBadRequest()
+        {
+            // Arrange
+            var badRequestErrorResponse = _fixture.Create<BadRequestErrorResponse>();
+            
+            _mockClient
+                .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MessageRecipientsGetResponse>(HttpStatusCode.BadRequest,
+                        RequestsForSuccessOutcome.PatientMessageRecipientsGet, _sampleSuccessStatusCodes)
+                    {
+                        ErrorResponseBadRequest = badRequestErrorResponse
+                    }))
+                .Verifiable();
+            
+            // Act
+            var getMessageRecipientsResult = await _systemUnderTest.GetMessageRecipients(_userSession);
+            
+            // Assert
+            _mockClient.Verify();
+            
+            getMessageRecipientsResult.Should().BeAssignableTo<GetPatientMessageRecipientsResult.BadRequest>();
+        }
+
+        [TestMethod]
+        public async Task GetMessageRecipients_WhenForbiddenResponseFromEmis_ReturnsForbidden()
+        {
+            // Arrange
+            var exceptionErrorResponse = _fixture.Create<ExceptionErrorResponse>();
+            exceptionErrorResponse.Exceptions.First().Message = EmisApiErrorMessages.EmisService_NotEnabledForUser;
+
+            _mockClient.Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MessageRecipientsGetResponse>(HttpStatusCode.Forbidden,
+                        RequestsForSuccessOutcome.PatientMessageRecipientsGet, _sampleSuccessStatusCodes)
+                    {
+                        ExceptionErrorResponse = exceptionErrorResponse
+                    })).Verifiable();
+
+            // Act
+            var getMessageRecipientsResult = await _systemUnderTest.GetMessageRecipients(_userSession);
+
+            // Assert
+            _mockClient.Verify();
+            
+            getMessageRecipientsResult.Should().BeAssignableTo<GetPatientMessageRecipientsResult.Forbidden>();
+        }
+        
+        [TestMethod]
+        public async Task GetMessageRecipients_WhenHttpExceptionIsThrown_ReturnsBadGateway()
+        {
+            // Arrange
+            _mockClient
+                .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
+                .Throws<HttpRequestException>()
+                .Verifiable();
+
+            // Act
+            var getMessageRecipientsResult = await _systemUnderTest.GetMessageRecipients(_userSession);
+
+            // Assert
+            _mockClient.Verify();
+            
+            getMessageRecipientsResult.Should().BeAssignableTo<GetPatientMessageRecipientsResult.BadGateway>();
+        }
+        
+        [TestMethod]
+        public async Task GetMessageRecipients_WhenExceptionIsThrown_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockClient
+                .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
+                .Throws<Exception>()
+                .Verifiable();
+
+            // Act
+            var getMessageRecipientsResult = await _systemUnderTest.GetMessageRecipients(_userSession);
+
+            // Assert
+            _mockClient.Verify();
+            
+            getMessageRecipientsResult.Should().BeAssignableTo<GetPatientMessageRecipientsResult.InternalServerError>();
+        }
+
+        [TestMethod]
+        public async Task GetMessageRecipients_WhenUnknownExceptionIsThrown_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockClient
+                .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
+                .Throws<Exception>()
+                .Verifiable();
+
+            // Act
+            var getMessageRecipientsResult = await _systemUnderTest.GetMessageRecipients(_userSession);
+
+            // Assert
+            _mockClient.Verify();
+            
+            getMessageRecipientsResult.Should().BeAssignableTo<GetPatientMessageRecipientsResult.InternalServerError>();
+        }
+        
+        [TestMethod]
+        public async Task GetMessageRecipients_WhenUnknownErrorOccurs_ReturnsBadGateway()
+        {
+            // Arrange
+            var exceptionErrorResponse = _fixture.Create<ExceptionErrorResponse>();
+
+            _mockClient
+                .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MessageRecipientsGetResponse>(
+                        HttpStatusCode.InternalServerError,
+                        RequestsForSuccessOutcome.PatientMessageRecipientsGet, _sampleSuccessStatusCodes)
+                    {
+                        ExceptionErrorResponse = exceptionErrorResponse
+                    }))
+                .Verifiable();
+
+            // Act
+            var getMessageRecipientsResult = await _systemUnderTest.GetMessageRecipients(_userSession);
+
+            // Assert
+            _mockClient.Verify();
+
+            getMessageRecipientsResult.Should().BeAssignableTo<GetPatientMessageRecipientsResult.BadGateway>();
+        }
+
+        private EmisRequestParameters GetMatchingEmisRequestParameters()
+        {
+            return It.Is<EmisRequestParameters>(e =>
+                _userSession.SessionId.Equals(e.SessionId, StringComparison.Ordinal) &&
+                _userSession.EndUserSessionId.Equals(e.EndUserSessionId, StringComparison.Ordinal) &&
+                _userSession.UserPatientLinkToken.Equals(e.UserPatientLinkToken, StringComparison.Ordinal));
+        }
+    }
+}

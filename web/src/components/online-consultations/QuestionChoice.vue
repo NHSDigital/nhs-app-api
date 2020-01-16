@@ -7,6 +7,7 @@
         {{ singleError }}
       </span>
     </div>
+    <legend v-if="legend" class="nhsuk-u-visually-hidden">{{ legend }}</legend>
     <radio-group :key="name"
                  v-model="selectedValue"
                  :name="name"
@@ -31,6 +32,10 @@ export default {
     name: {
       type: String,
       required: true,
+    },
+    legend: {
+      type: String,
+      default: undefined,
     },
     error: {
       type: Boolean,

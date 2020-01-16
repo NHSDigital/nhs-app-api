@@ -1037,6 +1037,39 @@ const routes = {
     },
     helpUrl: baseNhsAppHelpUrl,
   },
+  PATIENT_PRACTICE_MESSAGING_URGENCY: {
+    name: 'patient-practice-messaging-urgency',
+    path: '/patient-practice-messaging/urgency',
+    crumb: {
+      i18nKey: 'patientPracticeMessagingUrgency',
+      get parentRoute() {
+        return this.allRoutes.PATIENT_PRACTICE_MESSAGING;
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+  },
+  PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP: {
+    name: 'patient-practice-messaging-urgency-contact-your-gp',
+    path: '/patient-practice-messaging/urgency/contact-your-gp',
+    crumb: {
+      i18nKey: 'patientPracticeMessagingUrgencyContactYourGp',
+      get parentRoute() {
+        return this.allRoutes.PATIENT_PRACTICE_MESSAGING;
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+  },
+  PATIENT_PRACTICE_MESSAGING_RECIPIENTS: {
+    name: 'patient-practice-messaging-recipients',
+    path: '/patient-practice-messaging/recipients',
+    crumb: {
+      i18nKey: 'patientPracticeMessagingRecipients',
+      get parentRoute() {
+        return this.allRoutes.PATIENT_PRACTICE_MESSAGING;
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+  },
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE: {
     name: 'patient-practice-messaging-view-details',
     path: '/patient-practice-messaging/view-details',
@@ -1407,6 +1440,9 @@ export const {
   ORGAN_DONATION_WITHDRAWN,
   ORGAN_DONATION_YOUR_CHOICE,
   PATIENT_PRACTICE_MESSAGING,
+  PATIENT_PRACTICE_MESSAGING_URGENCY,
+  PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
+  PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,

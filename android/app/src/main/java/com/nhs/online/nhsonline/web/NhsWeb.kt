@@ -1,6 +1,8 @@
 package com.nhs.online.nhsonline.web
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.WebView
@@ -101,6 +103,12 @@ class NhsWeb(
             isUserLoggedIn = false
         }
         urlLoader.loadUrl(url, requiresFullPageLoad)
+    }
+
+    fun loadTelephoneUrl(url: String) {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.setData(Uri.parse(url))
+        activity.startActivity(intent)
     }
 
     fun setReloadPath(path: String) {

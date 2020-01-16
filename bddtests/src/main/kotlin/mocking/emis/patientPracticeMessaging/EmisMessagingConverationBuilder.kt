@@ -7,7 +7,6 @@ import mocking.emis.models.ExceptionResponse
 import wiremock.org.apache.http.HttpStatus
 import mocking.models.Mapping
 
-
 class EmisMessagingConverationBuilder(configuration: EmisConfiguration?,
                            linkToken: String,
                            apiEndUserSessionId: String,

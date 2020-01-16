@@ -68,7 +68,7 @@ describe('patient messaging messages', () => {
 
       it('will not dispatch load', () => {
         // Assert
-        expect(store.dispatch).not.toHaveBeenCalledWith('patientPracticeMessaging/load');
+        expect(store.dispatch).not.toHaveBeenCalledWith('patientPracticeMessaging/loadMessage');
       });
 
       it('will redirect to home', () => {

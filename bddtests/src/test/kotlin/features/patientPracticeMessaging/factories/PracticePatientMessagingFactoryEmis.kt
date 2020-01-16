@@ -1,7 +1,7 @@
 package features.patientPracticeMessaging.factories
 
 import mocking.data.messaging.MessagingData
-import mocking.emis.models.PatientPracticeMessagingMessageTypes
+import mocking.emis.models.PatientPracticeMessagingTypes
 import mocking.emis.patientPracticeMessaging.MessagesResponseModel
 import mocking.emis.patientPracticeMessaging.PatientMessageSummary
 import models.ExpectedMessage
@@ -11,7 +11,7 @@ import utils.SerenityHelpers
 class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
 
     override fun disabled(patient: Patient) {
-            mockingClient.forEmis {
+        mockingClient.forEmis {
             messaging.viewMyMessagesRequest(patient)
                     .respondWithExceptionWhenNotEnabled()
         }
@@ -47,17 +47,20 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
                     message.messageId,
                     message.subject,
                     "18 February 2018",
-                    message.recipients.first().name,
+                    message.recipients.first().name!!,
                     message.hasUnreadReplies)
         })
     }
 
     private fun setUpMessageDataAndStubs(patient: Patient, messages: MessagesResponseModel) {
         SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingMessageTypes.EXPECTED_MESSAGES, getExpectedMessages(messages.messages))
+                PatientPracticeMessagingTypes.EXPECTED_MESSAGES, getExpectedMessages(messages.messages))
 
         SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingMessageTypes.AVAILABLE_MESSAGE, MessagingData.getMessagesWithReplies())
+                PatientPracticeMessagingTypes.AVAILABLE_MESSAGE, MessagingData.getMessagesWithReplies())
+
+        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
+                PatientPracticeMessagingTypes.AVAILABLE_RECIPIENTS, MessagingData.getDefaultMessageRecipients())
 
 
         mockingClient.forEmis {
@@ -72,6 +75,10 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         mockingClient.forEmis {
             messaging.updateReadStatusRequest(patient)
                     .respondWithSuccess(MessagingData.getUpdatedResponse())
+        }
+        mockingClient.forEmis{
+            messaging.getRecipientsRequest(patient)
+                    .respondWithSuccess(MessagingData.getDefaultMessageRecipients())
         }
     }
 

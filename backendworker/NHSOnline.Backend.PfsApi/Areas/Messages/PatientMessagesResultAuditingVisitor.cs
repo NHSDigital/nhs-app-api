@@ -10,14 +10,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<PatientMessagesController> _logger;
-        private const string AuditType = AuditingOperations.ViewPracticePatientMessagesResponse;
+        private const string AuditType = AuditingOperations.ViewPatientPracticeMessagesResponse;
 
         public PatientMessagesResultAuditingVisitor(IAuditor auditor, ILogger<PatientMessagesController> logger)
         {
             _auditor = auditor;
             _logger = logger;
         }
-
 
         public async Task Visit(GetPatientMessagesResult.Success result)
         {

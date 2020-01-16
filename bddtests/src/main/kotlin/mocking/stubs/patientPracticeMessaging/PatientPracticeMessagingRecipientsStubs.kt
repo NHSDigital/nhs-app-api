@@ -1,0 +1,23 @@
+package mocking.stubs.patientPracticeMessaging
+
+import mocking.MockingClient
+import mocking.data.messaging.MessagingData
+import mocking.emis.patientPracticeMessaging.EmisMessagingRecipientsBuilder
+import mocking.stubs.EmisStubsPatientFactory
+import mocking.stubs.InputResponse
+import models.Patient
+
+class PatientPracticeMessagingRecipientsStubs(private val mockingClient: MockingClient) {
+    fun generateEMISStubs() {
+        val recipientsData = MessagingData.getDefaultMessageRecipients()
+        val stubs = InputResponse<Patient, EmisMessagingRecipientsBuilder>()
+        stubs.addResponse(EmisStubsPatientFactory.goodPatientEMIS) {
+            builder -> builder.respondWithSuccess(recipientsData)
+        }
+        stubs.listResponse().forEach { scenario ->
+            mockingClient.forEmis {
+                scenario.getResponse(messaging.getRecipientsRequest(scenario.forMatcher))
+            }
+        }
+    }
+}

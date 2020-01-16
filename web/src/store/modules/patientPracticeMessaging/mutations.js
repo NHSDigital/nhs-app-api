@@ -1,13 +1,16 @@
 import mapKeys from 'lodash/fp/mapKeys';
 import {
   INIT,
-  LOADED,
   CLEAR,
-  SET_SELECTED_MESSAGE_ID,
+  LOADED_MESSAGES,
+  LOADED_RECIPIENTS,
   LOADED_MESSAGE,
-  SET_DETAILS,
   SET_SUMMARIES,
+  SET_RECIPIENTS,
+  SET_DETAILS,
+  SET_SELECTED_MESSAGE_ID,
   SET_SELECTED_MESSAGE_RECIPIENT,
+  SET_URGENCY_CHOICE,
   SET_STATUS_STATE,
   initialState,
 } from './mutation-types';
@@ -26,26 +29,35 @@ export default {
       state[key] = blank[key];
     })(state);
   },
-  [SET_SUMMARIES](state, data) {
-    state.messageSummaries = data || [];
+  [CLEAR](state) {
+    clearMessage(state);
   },
-  [LOADED](state, loaded) {
-    state.loaded = !!loaded;
+  [LOADED_MESSAGES](state, loaded) {
+    state.loadedMessages = !!loaded;
+  },
+  [LOADED_RECIPIENTS](state, loaded) {
+    state.loadedRecipients = !!loaded;
   },
   [LOADED_MESSAGE](state, loaded) {
     state.loadedDetails = !!loaded;
   },
+  [SET_SUMMARIES](state, data) {
+    state.messageSummaries = data || [];
+  },
+  [SET_RECIPIENTS](state, data) {
+    state.messageRecipients = data || [];
+  },
   [SET_DETAILS](state, data) {
     state.selectedMessageDetails = data || undefined;
-  },
-  [CLEAR](state) {
-    clearMessage(state);
   },
   [SET_SELECTED_MESSAGE_ID](state, id) {
     state.selectedMessageId = id;
   },
   [SET_SELECTED_MESSAGE_RECIPIENT](state, recipient) {
     state.selectedMessageRecipient = recipient;
+  },
+  [SET_URGENCY_CHOICE](state, choice) {
+    state.urgencyChoice = choice;
   },
   [SET_STATUS_STATE](state, status) {
     state.statusState = status;

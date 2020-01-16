@@ -13,6 +13,15 @@ class PatientPracticeMessagingPage: HybridPageObject() {
 
     private var baseMessagePath: String = ""
 
+    fun clickSendAMessageButton() {
+         HybridPageElement(
+                 "//button[@id='sendMessageButton']",
+                 page = this,
+                 helpfulName = "Send a message button")
+             .waitForElement()
+             .click()
+    }
+
     fun assertDisplayed() {
         val path = "//h1[normalize-space(text())='Messages']"
         val header = HybridPageElement(

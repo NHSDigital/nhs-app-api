@@ -86,7 +86,13 @@ namespace NHSOnline.Backend.Auditing
         public const string LinkedAccountsAccessSummaryResponse = "LinkedAccounts_Access_Summary_Response";
         public const string LinkedAccountsSwitchRequest = "LinkedAccounts_Switch_Request";
         public const string LinkedAccountsSwitchResponse = "LinkedAccounts_Switch_Response";
-        public const string ViewPracticePatientMessagesRequest = "PracticePatientMessages_View_Request";
-        public const string ViewPracticePatientMessagesResponse = "PracticePatientMessages_View_Response";
+        public const string ViewPatientPracticeMessagesRequest = "PatientPracticeMessages_View_Request";
+        public const string ViewPatientPracticeMessagesResponse = "PatientPracticeMessages_View_Response";
+        public const string GetPatientPracticeMessageDetailsRequest = "PatientPracticeMessageDetails_Get_Request";
+        public const string GetPatientPracticeMessageDetailsResponse = "PatientPracticeMessageDetails_Get_Response";
+        public const string GetPatientPracticeMessageRecipientsRequest = "PatientPracticeMessageRecipients_Get_Request";
+        public const string GetPatientPracticeMessageRecipientsResponse = "PatientPracticeMessageRecipients_Get_Response";
+        public const string UpdatePatientPracticeMessageUnreadStatusRequest = "PatientPracticeMessageUnreadStatus_Update_Request";
+        public const string UpdatePatientPracticeMessageUnreadStatusResponse = "PatientPracticeMessageUnreadStatus_Update_Response";
     }
 }

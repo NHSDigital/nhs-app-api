@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -37,9 +38,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 
         private UserSession _userSession;
 
-        private const string RequestAuditType = "PracticePatientMessages_View_Request";
-        private const string ResponseAuditType = "PracticePatientMessages_View_Response";
-        private const string RequestAuditMessage = "Viewing Practice to Patient Messages";
+        private const string GetMessagesRequestAuditType = "PatientPracticeMessages_View_Request";
+        private const string GetMessagesResponseAuditType = "PatientPracticeMessages_View_Response";
+        private const string GetMessagesRequestAuditMessage = "Viewing Patient to Practice Messages";
+        
+        private const string GetMessageRequestAuditType = "PatientPracticeMessageDetails_Get_Request";
+        private const string GetMessageResponseAuditType = "PatientPracticeMessageDetails_Get_Response";
+        private const string GetMessageRequestAuditMessage = "Getting Patient to Practice Message Details";
+        
+        private const string GetMessageRecipientsRequestAuditType = "PatientPracticeMessageRecipients_Get_Request";
+        private const string GetMessageRecipientsResponseAuditType = "PatientPracticeMessageRecipients_Get_Response";
+        private const string GetMessageRecipientsRequestAuditMessage = "Getting Patient to Practice Message Recipients";
+        
+        private const string UpdateMessageUnreadStatusRequestAuditType = "PatientPracticeMessageUnreadStatus_Update_Request";
+        private const string UpdateMessageUnreadStatusResponseAuditType = "PatientPracticeMessageUnreadStatus_Update_Response";
+        private const string UpdateMessageUnreadStatusRequestAuditMessageFormat = "Updating unread status for message with id {0} to {1}";
 
         [TestInitialize]
         public void TestInitialize()
@@ -99,7 +112,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             result
                 .Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().Be(successResponse);
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Patient messages successfully retrieved"));
+            _mockAuditor.Verify(x => x.Audit(GetMessagesResponseAuditType, "Patient messages successfully retrieved"));
         }
 
         [TestMethod]
@@ -123,100 +136,27 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Subject.Value.Should().Be(successResponse);
         }
 
-        [DataTestMethod]
-        [DataRow(typeof(GetPatientMessageResult.Forbidden), StatusCodes.Status403Forbidden)]
-        [DataRow(typeof(GetPatientMessageResult.InternalServerError), StatusCodes.Status500InternalServerError)]
-        [DataRow(typeof(GetPatientMessageResult.BadGateway), StatusCodes.Status502BadGateway)]
-        [DataRow(typeof(GetPatientMessageResult.BadRequest), StatusCodes.Status400BadRequest)]
-        public async Task Get_ServiceReturnsErrorResultForGetMessageDetails_ReturnsAppropriateResultObject(
-            Type serviceResultType,
-            int expectedStatusCode)
+
+        [TestMethod]
+        public async Task GetMessageRecipients_ReturnsSuccessResult_WhenServiceReturnsSuccessfulResponse()
         {
             // Arrange
-            var serviceResult = (GetPatientMessageResult) Activator.CreateInstance(serviceResultType);
-            _mockPatientMessagesService
-                .Setup(s => s.GetMessageDetails("1",
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
-                .Returns(Task.FromResult(serviceResult))
-                .Verifiable();
-            _mockErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(
-                    ErrorCategory.PatientPracticeMessages,
-                    expectedStatusCode,
-                    _userSession.GpUserSession.Supplier))
-                .Returns(_serviceDeskReference)
-                .Verifiable();
+            var successResponse = _fixture.Create<MessageRecipientsGetResponse>();
+            var successResult = new GetPatientMessageRecipientsResult.Success(successResponse);
 
-            var expectedValue = new PfsErrorResponse
-            {
-                ServiceDeskReference = _serviceDeskReference
-            };
+            _mockPatientMessagesService
+                .Setup(s => s.GetMessageRecipients(
+                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                .Returns(Task.FromResult((GetPatientMessageRecipientsResult) successResult));
 
             // Act
-            var result = await _systemUnderTest.GetMessageDetails("1");
+            var result = await _systemUnderTest.GetMessageRecipients();
 
             // Assert
-            _mockPatientMessagesService.Verify();
-            _mockErrorReferenceGenerator.Verify();
-
-            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            objectResult.StatusCode.Should().Be(expectedStatusCode);
-            objectResult.Value.Should().BeEquivalentTo(expectedValue);
-        }
-
-        [DataTestMethod]
-        [DataRow(typeof(GetPatientMessagesResult.Forbidden), StatusCodes.Status403Forbidden,
-            "Error retrieving patient messages: Forbidden")]
-        [DataRow(typeof(GetPatientMessagesResult.InternalServerError), StatusCodes.Status500InternalServerError,
-            "Error retrieving patient messages: Internal Server Error")]
-        [DataRow(typeof(GetPatientMessagesResult.BadGateway), StatusCodes.Status502BadGateway,
-            "Error retrieving patient messages: Bad Gateway")]
-        [DataRow(typeof(GetPatientMessagesResult.BadRequest), StatusCodes.Status400BadRequest,
-            "Error retrieving patient messages: Bad Request")]
-        public async Task Get_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
-            Type serviceResultType,
-            int expectedStatusCode,
-            string expectedAuditResponseMessage)
-        {
-            // Arrange
-            var serviceResult = (GetPatientMessagesResult) Activator.CreateInstance(serviceResultType);
-            _mockPatientMessagesService
-                .Setup(s => s.GetMessages(
-                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
-                .Returns(Task.FromResult(serviceResult))
-                .Verifiable();
-            _mockErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(
-                    ErrorCategory.PatientPracticeMessages,
-                    expectedStatusCode,
-                    _userSession.GpUserSession.Supplier))
-                .Returns(_serviceDeskReference)
-                .Verifiable();
-            _mockAuditor
-                .Setup(x => x.Audit(RequestAuditType, RequestAuditMessage))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
-            _mockAuditor
-                .Setup(x => x.Audit(ResponseAuditType, expectedAuditResponseMessage))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
-
-            var expectedValue = new PfsErrorResponse
-            {
-                ServiceDeskReference = _serviceDeskReference
-            };
-
-            // Act
-            var result = await _systemUnderTest.GetMessages();
-
-            // Assert
-            _mockPatientMessagesService.Verify();
-            _mockErrorReferenceGenerator.Verify();
-            _mockAuditor.Verify();
-
-            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
-            objectResult.StatusCode.Should().Be(expectedStatusCode);
-            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+            result
+                .Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().Be(successResponse);
+            _mockAuditor.Verify(x => x.Audit(GetMessageRecipientsResponseAuditType, "Patient message recipients successfully retrieved"));
         }
 
         [TestMethod]
@@ -249,13 +189,153 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         }
 
         [DataTestMethod]
-        [DataRow(typeof(PutPatientMessageReadStatusResult.Forbidden), StatusCodes.Status403Forbidden)]
-        [DataRow(typeof(PutPatientMessageReadStatusResult.InternalServerError), StatusCodes.Status500InternalServerError)]
-        [DataRow(typeof(PutPatientMessageReadStatusResult.BadGateway), StatusCodes.Status502BadGateway)]
-        [DataRow(typeof(PutPatientMessageReadStatusResult.BadRequest), StatusCodes.Status400BadRequest)]
-        public async Task Put_ServiceReturnsErrorResultForPostUpdateMessageReadStatus_ReturnsAppropriateResultObject(
+        [DataRow(typeof(GetPatientMessagesResult.Forbidden), StatusCodes.Status403Forbidden,
+            "Error retrieving patient messages: Forbidden")]
+        [DataRow(typeof(GetPatientMessagesResult.InternalServerError), StatusCodes.Status500InternalServerError,
+            "Error retrieving patient messages: Internal Server Error")]
+        [DataRow(typeof(GetPatientMessagesResult.BadGateway), StatusCodes.Status502BadGateway,
+            "Error retrieving patient messages: Bad Gateway")]
+        [DataRow(typeof(GetPatientMessagesResult.BadRequest), StatusCodes.Status400BadRequest,
+            "Error retrieving patient messages: Bad Request")]
+        public async Task GetMessages_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
             Type serviceResultType,
-            int expectedStatusCode)
+            int expectedStatusCode,
+            string expectedAuditResponseMessage)
+        {
+            // Arrange
+            var serviceResult = (GetPatientMessagesResult) Activator.CreateInstance(serviceResultType);
+            
+            _mockPatientMessagesService
+                .Setup(s => s.GetMessages(
+                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                .Returns(Task.FromResult(serviceResult))
+                .Verifiable();
+            
+            MockErrorReferenceGenerator(expectedStatusCode);
+            MockAuditor(GetMessagesRequestAuditType, GetMessagesRequestAuditMessage);
+            MockAuditor(GetMessagesResponseAuditType, expectedAuditResponseMessage);
+
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
+
+            // Act
+            var result = await _systemUnderTest.GetMessages();
+
+            // Assert
+            _mockPatientMessagesService.Verify();
+            _mockErrorReferenceGenerator.Verify();
+            _mockAuditor.Verify();
+
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            objectResult.StatusCode.Should().Be(expectedStatusCode);
+            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+        }
+        
+        [DataTestMethod]
+        [DataRow(typeof(GetPatientMessageResult.Forbidden), StatusCodes.Status403Forbidden,
+            "Error retrieving patient message details: Forbidden")]
+        [DataRow(typeof(GetPatientMessageResult.InternalServerError), StatusCodes.Status500InternalServerError,
+            "Error retrieving patient message details: Internal Server Error")]
+        [DataRow(typeof(GetPatientMessageResult.BadGateway), StatusCodes.Status502BadGateway,
+            "Error retrieving patient message details: Bad Gateway")]
+        [DataRow(typeof(GetPatientMessageResult.BadRequest), StatusCodes.Status400BadRequest,
+            "Error retrieving patient message details: Bad Request")]
+        public async Task GetMessageDetails_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
+            Type serviceResultType,
+            int expectedStatusCode,
+            string expectedAuditResponseMessage)
+        {
+            // Arrange
+            var serviceResult = (GetPatientMessageResult) Activator.CreateInstance(serviceResultType);
+            
+            _mockPatientMessagesService
+                .Setup(s => s.GetMessageDetails("1",
+                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                .Returns(Task.FromResult(serviceResult))
+                .Verifiable();
+            
+            MockErrorReferenceGenerator(expectedStatusCode);
+            MockAuditor(GetMessageRequestAuditType, GetMessageRequestAuditMessage);
+            MockAuditor(GetMessageResponseAuditType, expectedAuditResponseMessage);
+
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
+
+            // Act
+            var result = await _systemUnderTest.GetMessageDetails("1");
+
+            // Assert
+            _mockPatientMessagesService.Verify();
+            _mockErrorReferenceGenerator.Verify();
+            _mockAuditor.Verify();
+
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            objectResult.StatusCode.Should().Be(expectedStatusCode);
+            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+        }
+        
+        [DataTestMethod]
+        [DataRow(typeof(GetPatientMessageRecipientsResult.Forbidden), StatusCodes.Status403Forbidden,
+            "Error retrieving patient message recipients: Forbidden")]
+        [DataRow(typeof(GetPatientMessageRecipientsResult.InternalServerError), StatusCodes.Status500InternalServerError,
+            "Error retrieving patient message recipients: Internal Server Error")]
+        [DataRow(typeof(GetPatientMessageRecipientsResult.BadGateway), StatusCodes.Status502BadGateway,
+            "Error retrieving patient message recipients: Bad Gateway")]
+        [DataRow(typeof(GetPatientMessageRecipientsResult.BadRequest), StatusCodes.Status400BadRequest,
+            "Error retrieving patient message recipients: Bad Request")]
+        public async Task GetMessageRecipients_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
+            Type serviceResultType,
+            int expectedStatusCode,
+            string expectedAuditResponseMessage)
+        {
+            // Arrange
+            var serviceResult = (GetPatientMessageRecipientsResult) Activator.CreateInstance(serviceResultType);
+            
+            _mockPatientMessagesService
+                .Setup(s => s.GetMessageRecipients(
+                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
+                .Returns(Task.FromResult(serviceResult))
+                .Verifiable();
+            
+            MockErrorReferenceGenerator(expectedStatusCode);
+            MockAuditor(GetMessageRecipientsRequestAuditType, GetMessageRecipientsRequestAuditMessage);
+            MockAuditor(GetMessageRecipientsResponseAuditType, expectedAuditResponseMessage);
+
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
+
+            // Act
+            var result = await _systemUnderTest.GetMessageRecipients();
+
+            // Assert
+            _mockPatientMessagesService.Verify();
+            _mockErrorReferenceGenerator.Verify();
+            _mockAuditor.Verify();
+
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            objectResult.StatusCode.Should().Be(expectedStatusCode);
+            objectResult.Value.Should().BeEquivalentTo(expectedValue);
+        }
+
+        [DataTestMethod]
+        [DataRow(typeof(PutPatientMessageReadStatusResult.Forbidden), StatusCodes.Status403Forbidden,
+            "Error updating unread status for message with id {0}: Forbidden")]
+        [DataRow(typeof(PutPatientMessageReadStatusResult.InternalServerError), StatusCodes.Status500InternalServerError,
+            "Error updating unread status for message with id {0}: Internal Server Error")]
+        [DataRow(typeof(PutPatientMessageReadStatusResult.BadGateway), StatusCodes.Status502BadGateway,
+            "Error updating unread status for message with id {0}: Bad Gateway")]
+        [DataRow(typeof(PutPatientMessageReadStatusResult.BadRequest), StatusCodes.Status400BadRequest,
+            "Error updating unread status for message with id {0}: Bad Request")]
+        public async Task UpdateMessageMessageReadStatus_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
+            Type serviceResultType,
+            int expectedStatusCode,
+            string expectedAuditResponseMessageFormat)
         {
             // Arrange
             var requestBody = new UpdateMessageReadStatusRequestBody
@@ -264,20 +344,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 MessageReadState = "Read"
             };
             var serviceResult = (PutPatientMessageReadStatusResult) Activator.CreateInstance(serviceResultType);
+            
             _mockPatientMessagesService
                 .Setup(s => s.UpdateMessageMessageReadStatus(
                     It.Is<GpUserSession>(g => g == _userSession.GpUserSession),
-                    It.Is<UpdateMessageReadStatusRequestBody>(p => p.MessageId == requestBody.MessageId &&
-                                                                   p.MessageReadState.Equals(requestBody.MessageReadState, StringComparison.Ordinal))))
+                    It.Is<UpdateMessageReadStatusRequestBody>(
+                        p => p.MessageId == requestBody.MessageId && 
+                             p.MessageReadState.Equals(requestBody.MessageReadState, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(serviceResult))
                 .Verifiable();
-            _mockErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(
-                    ErrorCategory.PatientPracticeMessages,
-                    expectedStatusCode,
-                    _userSession.GpUserSession.Supplier))
-                .Returns(_serviceDeskReference)
-                .Verifiable();
+            
+            MockErrorReferenceGenerator(expectedStatusCode);
+            MockAuditor(UpdateMessageUnreadStatusRequestAuditType, 
+                string.Format(CultureInfo.InvariantCulture, 
+                    UpdateMessageUnreadStatusRequestAuditMessageFormat,
+                    1,
+                    "Read"));
+            MockAuditor(UpdateMessageUnreadStatusResponseAuditType,
+                string.Format(CultureInfo.InvariantCulture,
+                    expectedAuditResponseMessageFormat,
+                    1));
 
             var expectedValue = new PfsErrorResponse
             {
@@ -290,10 +376,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             // Assert
             _mockPatientMessagesService.Verify();
             _mockErrorReferenceGenerator.Verify();
+            _mockAuditor.Verify();
 
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             objectResult.StatusCode.Should().Be(expectedStatusCode);
             objectResult.Value.Should().BeEquivalentTo(expectedValue);
+        }
+
+        private void MockAuditor(string operation, string details)
+        {
+            _mockAuditor
+                .Setup(x => x.Audit(operation, details))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+        }
+
+        private void MockErrorReferenceGenerator(int statusCode)
+        {
+            _mockErrorReferenceGenerator
+                .Setup(x => x.GenerateAndLogErrorReference(
+                    ErrorCategory.PatientPracticeMessages, statusCode, _userSession.GpUserSession.Supplier))
+                .Returns(_serviceDeskReference)
+                .Verifiable();
         }
     }
 }

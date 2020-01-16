@@ -3,6 +3,7 @@ package mocking.emis
 import mocking.emis.patientPracticeMessaging.EmisMessageReadStatusUpdateBuilder
 import mocking.emis.patientPracticeMessaging.EmisMessagingBuilder
 import mocking.emis.patientPracticeMessaging.EmisMessagingConverationBuilder
+import mocking.emis.patientPracticeMessaging.EmisMessagingRecipientsBuilder
 import models.Patient
 
 class EmisMappingBuilderMessages(private var configuration: EmisConfiguration?) {
@@ -25,4 +26,10 @@ class EmisMappingBuilderMessages(private var configuration: EmisConfiguration?) 
             patient.sessionId
     )
 
+    fun getRecipientsRequest(patient: Patient) = EmisMessagingRecipientsBuilder(
+            configuration!!,
+            patient.userPatientLinkToken,
+            patient.endUserSessionId,
+            patient.sessionId
+    )
 }

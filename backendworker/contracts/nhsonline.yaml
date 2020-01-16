@@ -39,6 +39,8 @@ paths:
     $ref: ./nhsonline.patientmessages.yaml#/paths/~1messages
   /v1/patient/messages/{id}:
     $ref: ./nhsonline.patientmessages.yaml#/paths/~1messages~1{id}
+  /v1/patient/messages/recipients:
+    $ref: ./nhsonline.patientmessages.yaml#/paths/~1messages~1recipients
   /v1/patient/messages/updateReadStatus:
     $ref: ./nhsonline.patientmessages.yaml#/paths/~1messages~1updateReadStatus
   /v1/gpsearch:

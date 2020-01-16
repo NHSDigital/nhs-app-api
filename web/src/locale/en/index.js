@@ -1393,11 +1393,56 @@ export default {
     noStartDate: 'Unknown Date',
   },
   im01: {
+    sendMessageButtonText: 'Send a message',
     subheader: 'Your messages',
     noMessages: 'You have no messages.',
     summary: {
       hidden: 'Conversation with {recipient}. {subject}. The last message in this conversation was sent on {date}.',
     },
+  },
+  im02: {
+    isUrgentChoiceLabel: 'Yes, I need advice now',
+    isNotUrgentChoiceLabel: 'No, my message is not urgent',
+    noOptionSelectedErrorHeader: 'There\'s a problem',
+    noOptionSelectedErrorText: 'You need to select yes or no',
+    continueButtonText: 'Continue',
+  },
+  im03: {
+    info: {
+      paragraph1: 'Messaging is for non-urgent advice.',
+      paragraph2: {
+        part1: 'For advice now, phone or visit your GP surgery, go to ',
+        part2: '111.nhs.uk',
+        part3: ' or ',
+        part4: 'call 111',
+        ariaLabel: 'For advice now, phone or visit your GP surgery, go to 111.nhs.uk or call one one one.',
+      },
+    },
+    careCard: {
+      heading: 'Call 999 now if you have:',
+      symptoms: [{
+        title: 'signs of a heart attack',
+        description: 'pain like a very tight band, heavy weight or squeezing in the centre of your chest',
+      }, {
+        title: 'signs of a stroke',
+        description: 'face drooping on one side, cannot hold both arms up, difficulty speaking',
+      }, {
+        title: 'severe difficulty breathing',
+        description: 'gasping, not being able to get words out, choking or lips turning blue',
+      }, {
+        title: 'heavy bleeding',
+        description: 'that will not stop',
+      }, {
+        title: 'severe injuries',
+        description: 'or deep cuts after a serious accident',
+      }, {
+        title: 'seizure (fit)',
+        description: 'someone is shaking or jerking because of a fit, or is unconscious (cannot be woken up)',
+      }],
+    },
+  },
+  im04: {
+    info: 'This is who your GP surgery lets you message. Your message may be read by any member of staff.',
   },
   patient_practice_messaging: {
     errors: {
@@ -1512,7 +1557,6 @@ export default {
     gpFinderParticipation: 'GP surgery features',
     gpFinderWaitingListSignup: 'Waiting list',
     gpFinderWaitingListJoined: 'Next steps',
-    patientPracticeMessaging: 'Messages',
     prescriptions: 'Your repeat prescriptions',
     proceduresV2: 'Procedures',
     repeatPrescriptionCourses: 'Select medication',
@@ -1570,6 +1614,10 @@ export default {
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
     messaging: 'Messages',
     messageDetails: 'Messages',
+    patientPracticeMessaging: 'Messages',
+    patientPracticeMessagingUrgency: 'Do you need urgent advice?',
+    patientPracticeMessagingUrgencyContactYourGp: 'Phone or visit your GP or NHS 111',
+    patientPracticeMessagingRecipients: 'Select who to message',
   },
   pageTitles: {
     home: 'Home',
@@ -1587,7 +1635,6 @@ export default {
     gpFinderParticipation: 'Features used by your GP surgery',
     gpFinderWaitingListSignup: 'Want us to email you when all features are available at your GP surgery?',
     gpFinderWaitingListJoined: 'What happens next',
-    patientPracticeMessaging: 'Messages',
     prescriptions: 'Your repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication - Repeat prescriptions',
     confirmPrescription: 'Confirm prescription - Repeat prescriptions',
@@ -1640,6 +1687,10 @@ export default {
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
     messaging: 'Messages',
     messageDetails: 'Messages',
+    patientPracticeMessaging: 'Messages',
+    patientPracticeMessagingUrgency: 'Do you need urgent advice?',
+    patientPracticeMessagingUrgencyContactYourGp: 'Phone or visit your GP or NHS 111',
+    patientPracticeMessagingRecipients: 'Select who to message',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',
@@ -2542,6 +2593,13 @@ export default {
                         '| For security reasons, you\'ll be logged out in {time} minutes.',
       warningGetMoreTime: 'Stay logged in',
       warningLogOut: 'Log out',
+    },
+  },
+  careCard: {
+    headingPrefix: {
+      nonUrgent: 'Non-urgent advice:',
+      urgent: 'Urgent advice:',
+      immediate: 'Immediate advice:',
     },
   },
 };

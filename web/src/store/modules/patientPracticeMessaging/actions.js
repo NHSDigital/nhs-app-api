@@ -1,50 +1,81 @@
 import get from 'lodash/fp/get';
 import {
   INIT,
-  LOADED,
-  LOADED_MESSAGE,
-  SET_SELECTED_MESSAGE_ID,
   CLEAR,
-  SET_DETAILS,
+  LOADED_MESSAGES,
+  LOADED_RECIPIENTS,
+  LOADED_MESSAGE,
   SET_SUMMARIES,
+  SET_RECIPIENTS,
+  SET_DETAILS,
+  SET_SELECTED_MESSAGE_ID,
   SET_SELECTED_MESSAGE_RECIPIENT,
   SET_STATUS_STATE,
+  SET_URGENCY_CHOICE,
 } from './mutation-types';
 
 export default {
   init({ commit }) {
     commit(INIT);
   },
-  load({ commit }, clearApiError) {
+  async loadMessages({ commit }, clearApiError) {
     if (clearApiError) {
       this.dispatch('errors/clearAllApiErrors');
-      commit(LOADED, false);
+      commit(LOADED_MESSAGES, false);
     }
-    return this.app.$http.getV1PatientMessages()
-      .then((response) => {
-        commit(SET_SUMMARIES, get('messageSummaries', response));
-        commit(LOADED, true);
-      }).catch(() => {});
+    try {
+      const response = await this.app.$http.getV1PatientMessages();
+      commit(SET_SUMMARIES, get('messageSummaries', response));
+      commit(LOADED_MESSAGES, true);
+    } catch {
+      // Nothing to do. A server error / messages error is displayed
+    }
   },
-  clearErrorsAndLoad() {
-    return this.dispatch('patientPracticeMessaging/load', true);
+  clearErrorsAndLoadMessages() {
+    return this.dispatch('patientPracticeMessaging/loadMessages', true);
   },
-  loadMessage({ commit }, { id, clearApiError }) {
+  async loadRecipients({ commit }, clearApiError) {
+    if (clearApiError) {
+      this.dispatch('errors/clearAllApiErrors');
+      commit(LOADED_RECIPIENTS, false);
+    }
+    try {
+      const response = await this.app.$http.getV1PatientMessagesRecipients();
+      commit(SET_RECIPIENTS, get('messageRecipients', response));
+      commit(LOADED_RECIPIENTS, true);
+    } catch {
+      // Nothing to do. A server error / messages error is displayed
+    }
+  },
+  async loadMessage({ commit }, { id, clearApiError }) {
     if (clearApiError) {
       this.dispatch('errors/clearAllApiErrors');
       commit(LOADED_MESSAGE, false);
     }
+    try {
+      const response = await this.app.$http.getV1PatientMessagesById({ id });
+      commit(SET_DETAILS, response);
+      commit(LOADED_MESSAGE, true);
+    } catch {
+      // Nothing to do. A server error / messages error is displayed
+    }
+  },
+  clearErrorsAndLoadDetails({ state }) {
+    return this.dispatch('patientPracticeMessaging/loadMessage', { id: state.selectedMessageId, clearApiError: true });
+  },
+  async updateReadStatusAsRead({ commit, state }) {
     const request = {
-      id,
+      updateMessageReadStatusRequestBody: {
+        messageId: state.selectedMessageId,
+        messageReadState: 'Read',
+      },
     };
-    return this.app.$http
-      .getV1PatientMessagesById(request)
-      .then((data) => {
-        commit(SET_DETAILS, data);
-        commit(LOADED_MESSAGE, true);
-      })
-      .catch(() => {
-      });
+    try {
+      const response = await this.app.$http.postV1PatientMessagesUpdateReadStatus(request);
+      commit(SET_STATUS_STATE, response.messageReadStateUpdateStatus);
+    } catch {
+      // Nothing to do. A server error / messages error is displayed
+    }
   },
   setSelectedMessageID({ commit }, id) {
     commit(SET_SELECTED_MESSAGE_ID, id);
@@ -52,25 +83,10 @@ export default {
   setSelectedRecipient({ commit }, recipient) {
     commit(SET_SELECTED_MESSAGE_RECIPIENT, recipient);
   },
+  setUrgencyChoice({ commit }, choice) {
+    commit(SET_URGENCY_CHOICE, choice);
+  },
   clear({ commit }) {
     commit(CLEAR);
-  },
-  clearErrorsAndLoadDetails({ state }) {
-    return this.dispatch('patientPracticeMessaging/loadMessage', { id: state.selectedMessageId, clearApiError: true });
-  },
-  updateReadStatusAsRead({ commit, state }) {
-    const request = {
-      updateMessageReadStatusRequestBody: {
-        messageId: state.selectedMessageId,
-        messageReadState: 'Read',
-      },
-    };
-    this.app.$http
-      .postV1PatientMessagesUpdateReadStatus(request)
-      .then((data) => {
-        commit(SET_STATUS_STATE, data.messageReadStateUpdateStatus);
-      })
-      .catch(() => {
-      });
   },
 };

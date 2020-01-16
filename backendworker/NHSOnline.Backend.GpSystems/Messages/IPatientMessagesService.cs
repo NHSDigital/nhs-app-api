@@ -8,8 +8,8 @@ namespace NHSOnline.Backend.GpSystems.Messages
     {
         Task<GetPatientMessagesResult> GetMessages(GpUserSession gpUserSession);
         Task<GetPatientMessageResult> GetMessageDetails(string messageId, GpUserSession gpUserSession);
-
         Task<PutPatientMessageReadStatusResult> UpdateMessageMessageReadStatus(GpUserSession gpUserSession,
             UpdateMessageReadStatusRequestBody updateRequest);
+        Task<GetPatientMessageRecipientsResult> GetMessageRecipients(GpUserSession gpUserSession);
     }
 }

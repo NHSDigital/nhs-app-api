@@ -12,13 +12,14 @@ class PatientPracticeMessagingStubs(private val mockingClient: MockingClient) {
     fun generateEMISStubs() {
         val messagesDataLoader = MessagingData.getDefaultMessagesData(REPLY_COUNT,true)
         val mapEMISPatientPracticeMessageRequestStubs =
-                InputResponse<Patient, EmisMessagingBuilder>()
-                        .addResponse(EmisStubsPatientFactory.goodPatientEMIS) { builder
-                            ->
-                            builder.respondWithSuccess(messagesDataLoader)
-                        }
+            InputResponse<Patient, EmisMessagingBuilder>()
+                .addResponse(EmisStubsPatientFactory.goodPatientEMIS) {
+                    builder -> builder.respondWithSuccess(messagesDataLoader)
+                }
         mapEMISPatientPracticeMessageRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(messaging.viewMyMessagesRequest(scenario.forMatcher)) }
+            mockingClient.forEmis {
+                scenario.getResponse(messaging.viewMyMessagesRequest(scenario.forMatcher))
+            }
         }
     }
 

@@ -20,9 +20,19 @@ describe('practice patient messaging inbox', () => {
     hasUnreadReplies: true,
   }];
 
-  const mountPage = ({ messageSummaries = summaries, loaded = true, toggle = true } = {}) => {
+  const mountPage = ({
+    messageSummaries = summaries,
+    loadedMessages = true,
+    toggle = true,
+  } = {}) => {
     store = createStore({
-      state: { patientPracticeMessaging: { messageSummaries, loaded } },
+      state: {
+        patientPracticeMessaging: {
+          messageSummaries,
+          loadedMessages,
+          urgencyChoice: 'yes',
+        },
+      },
       $env: { PATIENT_PRACTICE_MESSAGING_ENABLED: toggle },
     });
     $t = create$T();
@@ -57,7 +67,7 @@ describe('practice patient messaging inbox', () => {
 
       it('will dispatch load', () => {
         // Assert
-        expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/load');
+        expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/loadMessages');
       });
 
       it('will not redirect', () => {
@@ -75,12 +85,19 @@ describe('practice patient messaging inbox', () => {
 
       it('will not dispatch load', () => {
         // Assert
-        expect(store.dispatch).not.toHaveBeenCalledWith('patientPracticeMessaging/load');
+        expect(store.dispatch).not.toHaveBeenCalledWith('patientPracticeMessaging/loadMessages');
       });
 
       it('will redirect to home', () => {
         expect(redirect).toHaveBeenCalledWith('/');
       });
+    });
+  });
+
+  describe('mounted', () => {
+    it('will dispatch action to clear urgency choice', () => {
+      mountPage();
+      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/setUrgencyChoice', undefined);
     });
   });
 

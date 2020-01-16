@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                         practiceResponse?.Body?.Services?.PracticePatientCommunicationSupported ?? false;
 
                     session.Name = patientName;
-                    
+
                     _logger.LogInformation($"Enabled services for practice {session.OdsCode}: {practiceResponse?.Body?.Services}");
                 }
                 catch (HttpRequestException e)

@@ -182,7 +182,7 @@ export default {
     {
       route: PATIENT_PRACTICE_MESSAGING.path,
       action: {
-        400: 'patientPracticeMessaging/clearErrorsAndLoad',
+        400: 'patientPracticeMessaging/clearErrorsAndLoadMessages',
       },
     },
     {

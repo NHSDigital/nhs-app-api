@@ -7,7 +7,6 @@ import mocking.emis.models.ExceptionResponse
 import wiremock.org.apache.http.HttpStatus
 import mocking.models.Mapping
 
-
 class EmisMessagingBuilder(configuration: EmisConfiguration?,
                            linkToken: String,
                            apiEndUserSessionId: String,
@@ -44,7 +43,4 @@ class EmisMessagingBuilder(configuration: EmisConfiguration?,
             andJsonBody(exceptionResponse, GsonFactory.asPascal)
         }
     }
-
-
-
 }

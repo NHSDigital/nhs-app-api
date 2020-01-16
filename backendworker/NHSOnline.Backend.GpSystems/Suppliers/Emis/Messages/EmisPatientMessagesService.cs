@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, $"Request to get patient message was unsuccessful with id id {messageId}");
-                return new GetPatientMessageResult.BadRequest();
+                return new GetPatientMessageResult.BadGateway();
             }
             catch (Exception e)
             {
@@ -112,6 +112,32 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             {
                 _logger.LogError(e, $"Unknown error occured when updating patient message status with id {updateRequest.MessageId} has failed");
                 return new PutPatientMessageReadStatusResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<GetPatientMessageRecipientsResult> GetMessageRecipients(GpUserSession gpUserSession)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var response = await _emisClient.PatientMessageRecipientsGet(new EmisRequestParameters((EmisUserSession) gpUserSession));
+
+                return InterpretPatientMessageRecipientsGetResponse(response);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Request to get patient message recipients was unsuccessful");
+                return new GetPatientMessageRecipientsResult.BadGateway();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unknown error occured when getting patient message recipients");
+                return new GetPatientMessageRecipientsResult.InternalServerError();
             }
             finally
             {
@@ -228,6 +254,33 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
             return new PutPatientMessageReadStatusResult.BadGateway();
+        }
+
+        private GetPatientMessageRecipientsResult InterpretPatientMessageRecipientsGetResponse(
+            EmisClient.EmisApiObjectResponse<MessageRecipientsGetResponse> response)
+        {
+            if (response.HasSuccessResponse)
+            {
+                _logger.LogInformation($"Number of recipients: {response.Body?.MessageRecipients?.Count}");
+                return new GetPatientMessageRecipientsResult.Success(response.Body);
+            }
+
+            if (response.HasForbiddenResponse())
+            {
+                _logger.LogEmisResponseIsForbidden();
+                _logger.LogEmisErrorResponse(response);
+                return new GetPatientMessageRecipientsResult.Forbidden();
+            }
+
+            if (response.HasBadRequestResponse)
+            {
+                _logger.LogEmisErrorResponse(response);
+                return new GetPatientMessageRecipientsResult.BadRequest();
+            }
+
+            _logger.LogEmisUnknownError(response);
+            _logger.LogEmisErrorResponse(response);
+            return new GetPatientMessageRecipientsResult.BadGateway();
         }
     }
 }

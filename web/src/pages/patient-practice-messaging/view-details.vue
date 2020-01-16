@@ -26,7 +26,6 @@ import { redirectTo, isFalsy } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
-  name: 'Index',
   components: {
     SentMessage,
     ReceivedMessages,
@@ -80,8 +79,3 @@ export default {
     vertical-align: unset;
   }
 </style>
-
-<style module lang="scss" scoped>
-
-</style>
-

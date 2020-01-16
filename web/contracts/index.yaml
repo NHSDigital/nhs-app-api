@@ -3196,6 +3196,99 @@
                     serviceDeskReference: 
                       type: "string"
                       description: "Six character service desk reference code."
+    /v1/patient/messages/recipients: 
+      get: 
+        tags: "-patientMessages"
+        summary: "Get a list of available recipients to which the user can send a message"
+        description: "Get a list of available recipients to which the user can send a message"
+        responses: 
+          200: 
+            description: "Successfully retrieved a list of messaging recipients for the user"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    messageRecipients: 
+                      type: "array"
+                      description: "A list of recipients to which the user can send a message"
+                      items: 
+                        type: "object"
+                        properties: 
+                          recipientGuid: 
+                            type: "string"
+                            description: "A unique identifier for this recipient"
+                          name: 
+                            type: "string"
+                            description: "The name of the recipient"
+          400: 
+            description: "Upstream system returned BadRequest status."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          403: 
+            description: "Upstream system returned Forbidden status."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          500: 
+            description: "An unknown error occured when processing the request."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          502: 
+            description: "Upstream system returned BadGateway status or an invalid response."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/gpsearch: 
       post: 
         tags: 

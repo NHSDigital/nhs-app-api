@@ -4,10 +4,6 @@ data class MessagesResponseModel(
         var messages: List<PatientMessageSummary> = arrayListOf()
 )
 
-data class MessageResponseModel(
-        var Message : MessageDetails
-)
-
 data class PatientMessageSummary (
         var messageId: Int,
         var subject: String,
@@ -17,12 +13,12 @@ data class PatientMessageSummary (
         var hasUnreadReplies: Boolean
 )
 
-data class Recipient (
-        var name: String
+data class MessageResponseModel(
+        var Message : MessageDetails
 )
 
 data class MessageDetails (
-        var messageid: String,
+        var messageId: String,
         var subject: String,
         var recipients: List<Recipient>,
         var messageReplies: List<MessageReply> = arrayListOf(),
@@ -37,6 +33,15 @@ data class MessageReply(
         var replyContent: String,
         var sender: String,
         var sentDateTime: String
+)
+
+data class MessageRecipientsResponseModel(
+        var MessageRecipients: List<Recipient> = arrayListOf()
+)
+
+data class Recipient (
+        var name: String?,
+        var recipientGuid: String? = null
 )
 
 data class MessageReadStatusUpdateResponse (

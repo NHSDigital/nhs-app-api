@@ -66,6 +66,9 @@ import {
   ORGAN_DONATION_WITHDRAWN,
   ORGAN_DONATION_YOUR_CHOICE,
   PATIENT_PRACTICE_MESSAGING,
+  PATIENT_PRACTICE_MESSAGING_URGENCY,
+  PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
+  PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
@@ -492,7 +495,23 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.referrals';
       route.meta.pageTitleKey = 'pageTitles.referrals';
       break;
+    case PATIENT_PRACTICE_MESSAGING_RECIPIENTS.name:
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'pageHeaders.patientPracticeMessagingRecipients';
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingRecipients';
+      break;
+    case PATIENT_PRACTICE_MESSAGING_URGENCY.name:
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'pageHeaders.patientPracticeMessagingUrgency';
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingUrgency';
+      break;
+    case PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP.name:
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'pageHeaders.patientPracticeMessagingUrgencyContactYourGp';
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingUrgencyContactYourGp';
+      break;
     case PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.name:
+      store.dispatch('navigation/setNewMenuItem', 4);
       route.meta.headerKey = 'pageHeaders.messageDetails';
       route.meta.pageTitleKey = 'pageTitles.messageDetails';
       break;

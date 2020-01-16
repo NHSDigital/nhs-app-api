@@ -54,6 +54,12 @@ class WebClientInterceptor(
         Log.d(Application.TAG,
             "${this::class.java.simpleName}: Entering shouldOverrideUrlLoading > url $url")
 
+        if (knownServices.isUrlTelephone(url)){
+            view.stopLoading()
+            nhsWeb.loadTelephoneUrl(url)
+            return false
+        }
+
         if (urlHasAppScheme(url)) {
             val sanitizedUrl = ensureSupportedScheme(url)
             Log.d(Application.TAG,

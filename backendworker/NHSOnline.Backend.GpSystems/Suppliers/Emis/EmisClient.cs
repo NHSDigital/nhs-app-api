@@ -57,6 +57,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         private const string UsersNhsPath = "users/nhs";
         private const string GetMessagesPath = "messages?userPatientLinkToken={0}";
         private const string GetMessageDetailsPath = "messages/{0}/?userPatientLinkToken={1}";
+        private const string GetMessageRecipientsPath = "messagerecipients?userPatientLinkToken={0}";
         private const string PutMessageReadStatusUpdate = "messages";
 
         private readonly EmisHttpClient _httpClient;
@@ -331,6 +332,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return await Get<MessageGetResponse>(
                 string.Format(CultureInfo.InvariantCulture, GetMessageDetailsPath, messageId, requestParameters.UserPatientLinkToken),
                 RequestsForSuccessOutcome.PatientMessageDetailsGet, GetDefaultSuccessStatusCodeList(),
+                endUserSessionId: requestParameters.EndUserSessionId,
+                sessionId: requestParameters.SessionId);
+        }
+
+        public async Task<EmisApiObjectResponse<MessageRecipientsGetResponse>> PatientMessageRecipientsGet(
+            EmisRequestParameters requestParameters)
+        {
+            return await Get<MessageRecipientsGetResponse>(
+                string.Format(CultureInfo.InvariantCulture, GetMessageRecipientsPath, requestParameters.UserPatientLinkToken),
+                RequestsForSuccessOutcome.PatientMessageRecipientsGet, GetDefaultSuccessStatusCodeList(),
                 endUserSessionId: requestParameters.EndUserSessionId,
                 sessionId: requestParameters.SessionId);
         }
