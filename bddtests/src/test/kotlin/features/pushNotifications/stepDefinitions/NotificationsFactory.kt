@@ -22,7 +22,6 @@ import java.util.*
 class NotificationsFactory {
 
     val mockingClient = MockingClient.instance
-    private val devicePns = UUID.randomUUID().toString()
 
     fun setUpUser(supplier: Supplier? = null, patient: Patient? = null): Patient {
         val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
@@ -52,9 +51,19 @@ class NotificationsFactory {
     }
 
     fun setUpDeviceValues() {
+        val devicePns = PnsTokenGenerator.generate()
         val deviceType = "Android"
         PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.set(deviceType)
         PushNotificationsSerenityHelpers.EXPECTED_PNS.set(devicePns)
+        setUpDeletionAfterTest(devicePns)
+    }
+
+    fun setUpDeletionAfterTest(pnsToken:String, accessToken :String? = null) {
+        val deletion = {
+            NotificationsApi.deleteRegistration(
+                    accessToken ?: SerenityHelpers.getPatient().accessToken,
+                    pnsToken) }
+        GlobalSerenityHelpers.TEAR_DOWN_ACTIONS.addToList(deletion)
     }
 
     fun mockNativeNotificationFunctions(status: SettingStatus, authorised: Boolean = true) {
@@ -104,6 +113,7 @@ class NotificationsFactory {
     }
 
     private fun createInvalidDevice(patient: Patient): InvalidUserDevice {
+        val devicePns =  PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
         return InvalidUserDevice(
                 patient.subject + "-" + devicePns,
                 patient.subject,

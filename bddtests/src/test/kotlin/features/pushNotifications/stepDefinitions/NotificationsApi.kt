@@ -10,46 +10,46 @@ import worker.models.userDevices.RegisterUserDevicesRequest
 
 class NotificationsApi {
 
-      companion object {
-          fun postRegistration(authToken: String?) {
-              val pnsToken = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
-              val deviceType = PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.getOrFail<String>()
-              val request = RegisterUserDevicesRequest(pnsToken, deviceType)
-              try {
-                  val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                          .userDevices
-                          .post(request, authToken)
+    companion object {
+        fun postRegistration(authToken: String?) {
+            val pnsToken = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
+            val deviceType = PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.getOrFail<String>()
+            val request = RegisterUserDevicesRequest(pnsToken, deviceType)
+            try {
+                val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                        .userDevices
+                        .post(request, authToken)
 
-                  PushNotificationsSerenityHelpers.REGISTER_RESPONSE.set(response)
-              } catch (httpException: NhsoHttpException) {
-                  SerenityHelpers.setHttpException(httpException)
-              }
-          }
+                PushNotificationsSerenityHelpers.REGISTER_RESPONSE.set(response)
+            } catch (httpException: NhsoHttpException) {
+                SerenityHelpers.setHttpException(httpException)
+            }
+        }
 
-          fun getRegistration(authToken: String?) {
-              val pnsToken = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
-              try {
-                  val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                          .userDevices
-                          .get(pnsToken, authToken)
+        fun getRegistration(authToken: String?) {
+            val pnsToken = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
+            try {
+                val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                        .userDevices
+                        .get(pnsToken, authToken)
 
-                  PushNotificationsSerenityHelpers.GET_RESPONSE.set(response)
-              } catch (httpException: NhsoHttpException) {
-                  SerenityHelpers.setHttpException(httpException)
-              }
-          }
+                PushNotificationsSerenityHelpers.GET_RESPONSE.set(response)
+            } catch (httpException: NhsoHttpException) {
+                SerenityHelpers.setHttpException(httpException)
+            }
+        }
 
-          fun deleteRegistration(authToken: String?) {
-              val pnsToken = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
-              try {
-                  val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                          .userDevices
-                          .delete(pnsToken, authToken)
+        fun deleteRegistration(authToken: String?, pnsToken: String? = null) {
+            val pnsTokenToDelete = pnsToken ?: PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail()
+            try {
+                val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                        .userDevices
+                        .delete(pnsTokenToDelete, authToken)
 
-                  PushNotificationsSerenityHelpers.DELETE_RESPONSE.set(response)
-              } catch (httpException: NhsoHttpException) {
-                  SerenityHelpers.setHttpException(httpException)
-              }
-          }
-      }
+                PushNotificationsSerenityHelpers.DELETE_RESPONSE.set(response)
+            } catch (httpException: NhsoHttpException) {
+                SerenityHelpers.setHttpException(httpException)
+            }
+        }
+    }
 }

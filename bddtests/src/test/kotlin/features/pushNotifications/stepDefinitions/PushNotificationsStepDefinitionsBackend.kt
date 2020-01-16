@@ -25,14 +25,15 @@ class PushNotificationsStepDefinitionsBackend {
             " and I have another device to register$")
     fun iAmAnApiUserWhoHasRegisteredTheirDeviceForNotificationsAndIHaveAnotherDeviceToRegister() {
         val factory = NotificationsFactory()
-        factory.setUpUser()
+        val patient = factory.setUpUser()
         factory.setUpDeviceValues()
         factory.setUpExistingRegistration()
 
         val originalPnsToken = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
-        val newPnsToRegister = "0987654321abcdef"
+        val newPnsToRegister =  PnsTokenGenerator.generate()
         PushNotificationsSerenityHelpers.EXPECTED_PNS.set(newPnsToRegister)
         PushNotificationsSerenityHelpers.EXPECTED_MULTIPLE_PNS.set(arrayListOf(originalPnsToken, newPnsToRegister))
+        factory.setUpDeletionAfterTest(newPnsToRegister, patient.accessToken)
     }
 
     @Given("^I am an api user who has not registered their device for push notifications$")
@@ -56,6 +57,7 @@ class PushNotificationsStepDefinitionsBackend {
         factory.setUpDeviceValues()
         val user1 = factory.setUpUser()
         val user2 = factory.setUpAlternativeUser()
+        factory.setUpDeletionAfterTest(PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail(), user2.accessToken)
         factory.setUpExistingRegistration(user1)
         factory.setUpExistingRegistration(user2)
     }
@@ -82,7 +84,7 @@ class PushNotificationsStepDefinitionsBackend {
 
     @When("^I get the registration for push notifications with an unregistered device pns token$")
     fun iGetTheRegistrationForPushNotificationsWithAnUnregisteredDeviceId() {
-        val unregisteredDevicePns = "0123456789ABCDEF"
+        val unregisteredDevicePns =  PnsTokenGenerator.generate()
         PushNotificationsSerenityHelpers.EXPECTED_PNS.set(unregisteredDevicePns)
         val authToken = SerenityHelpers.getPatient().accessToken
         NotificationsApi.getRegistration(authToken = authToken)
@@ -96,7 +98,7 @@ class PushNotificationsStepDefinitionsBackend {
 
     @When("^I delete the registration for push notifications with an unregistered device pns token$")
     fun iDeleteTheRegistrationForPushNotificationsWithAnUnregisteredDeviceId() {
-        val unregisteredDevicePns = "0123456789ABCDEF"
+        val unregisteredDevicePns =  PnsTokenGenerator.generate()
         PushNotificationsSerenityHelpers.EXPECTED_PNS.set(unregisteredDevicePns)
         val authToken = SerenityHelpers.getPatient().accessToken
         NotificationsApi.deleteRegistration(authToken = authToken)

@@ -9,7 +9,9 @@ import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
 import org.openqa.selenium.WebDriver
 import pages.WEB_CONTEXT
+import utils.GlobalSerenityHelpers
 import utils.contains
+import utils.getOrNull
 import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
@@ -41,6 +43,10 @@ class SetupAndTeardown {
 
     @After
     fun afterEachScenario() {
+
+        val tearDownActions = GlobalSerenityHelpers.TEAR_DOWN_ACTIONS.getOrNull<List<() -> Unit>>()
+        tearDownActions?.forEach { tearDownAction -> tearDownAction.invoke() }
+
         var driver = getWebdriverManager().currentDriver
 
         if (driver != null && (driver.isAndroid() || driver.isIOS())) {
