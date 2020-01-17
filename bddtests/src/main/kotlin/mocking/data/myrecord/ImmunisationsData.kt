@@ -73,6 +73,13 @@ object ImmunisationsData {
         return response + responseStringEnd
     }
 
+    fun getBadVisionImmunisationsDataWithNoImmunisations(): String {
+        val response = "<![BADDATA[<root><patient>"
+        val responseStringEnd = "</patient></root>]]>"
+
+        return response + responseStringEnd
+    }
+
     fun getTwoImmunisationResultsWhereTheFirstRecordHasNoDate(): ImmunisationResponseModel {
         val immunisationData = getValidImmunisationsData()
         // Overwrite effective date

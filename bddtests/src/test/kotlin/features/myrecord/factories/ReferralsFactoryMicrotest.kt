@@ -2,6 +2,7 @@ package features.myrecord.factories
 
 import mocking.data.myrecord.MyRecordSerenityHelpers
 import mocking.microtest.myRecord.MyRecordResponseModel
+import utils.SerenityHelpers
 import utils.getOrFail
 import worker.models.myrecord.ReferralItem
 
@@ -25,5 +26,12 @@ class ReferralsFactoryMicrotest: ReferralsFactory() {
         val sortedReferrals = referralItems.sortedByDescending { it.recordDate }
 
         return sortedReferrals
+    }
+
+    override fun respondWithCorruptedReponse() {
+        mockingClient.forMicrotest {
+            myRecord.myRecordRequest(SerenityHelpers.getPatient())
+                    .respondWithCorruptedContent("Bad Data")
+        }
     }
 }

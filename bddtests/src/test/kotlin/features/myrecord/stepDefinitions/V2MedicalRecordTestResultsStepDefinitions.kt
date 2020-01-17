@@ -5,6 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.TestResultsFactoryVision
+import features.myrecord.factories.TestResultsFactory
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.gpMedicalRecord.TestResultsPage
@@ -25,6 +26,12 @@ open class V2MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     @When("I click a test result - Medical Record v2$")
     fun whenIClickATestResultV2() {
         testResultsPage.clickTestResult()
+    }
+    @When("^there is a corrupted test results response returned$")
+    fun thereIsACorruptedTestResultsResponse() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        TestResultsFactory.getForSupplier(gpSystem).respondWithACorruptedResponse(SerenityHelpers.getPatient())
+
     }
 
     @Then("^I see one test result with one value - Medical Record v2$")
@@ -104,6 +111,7 @@ open class V2MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
     fun thenISeeTheTestResulsContentV2() {
         myRecordDetailedTestResultPage.assertContentMedicalRecordV2()
     }
+
 
     companion object {
         private const val emisDefaultTestResultsCount = 2

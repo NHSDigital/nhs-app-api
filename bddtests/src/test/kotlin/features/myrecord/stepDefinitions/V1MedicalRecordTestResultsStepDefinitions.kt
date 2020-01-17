@@ -79,6 +79,13 @@ open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepD
         }
     }
 
+    @Given("^the GP Practice sends a bad test results response$")
+    fun givenTheGpPracticeHasSendCorruptedContent() {
+        TestResultsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .respondWithACorruptedResponse(SerenityHelpers.getPatient())
+    }
+
     @Given("^the EMIS GP Practice has two test results where the second record has no date$")
     fun givenTheEmisGpPracticeHasATestResultWithNoDate() {
         mockingClient.forEmis {

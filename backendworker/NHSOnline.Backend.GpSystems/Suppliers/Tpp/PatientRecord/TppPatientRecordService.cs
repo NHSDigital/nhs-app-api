@@ -9,7 +9,6 @@ using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
-using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
@@ -38,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _tppMyRecordMapper = tppMyRecordMapper;
             _logger = logger;
         }
-        
+
         public async Task<GetMyRecordResult> GetMyRecord(GpLinkedAccountModel gpLinkedAccountModel)
         {
             _logger.LogEnter();
@@ -47,21 +46,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
             try
             {
-                var patientOverview = await _tppClient.PatientOverviewPost(tppUserSession);
-                var patientRecord = await _tppClient.RequestPatientRecordPost(tppUserSession);
-                var testResults = await GetLast180DaysTestResults(tppUserSession);
-                
-                _logger.LogDebug($"Mapping TPP Patient Overview responses to lists of {nameof(Allergies)} and {nameof(Medications)} classes");
-                var patientOverviewItems = _patientOverviewTaskChecker.Check(patientOverview);  
-                
-                var allergies = patientOverviewItems.Item1;
-                var medications = patientOverviewItems.Item2;
-                
-                _logger.LogDebug($"Mapping TPP DCR responses to instance of {nameof(TppDcrEvents)} class" );
-                var dcrEvents = _patientDcrEventsChecker.Check(patientRecord);
+                var patientOverviewItemsTask = RetrievePatientOverviewItems(tppUserSession);
+                var dcrEventsTask = RetrieveDcrEvents(tppUserSession);
+                var testResultsTask = RetrieveTestResults(tppUserSession);
 
+                await Task.WhenAll(patientOverviewItemsTask, dcrEventsTask, testResultsTask);
+                
+                var allergies = patientOverviewItemsTask.Result.Item1;
+                var medications = patientOverviewItemsTask.Result.Item2;
+                
                 _logger.LogInformation($"Mapping TPP responses to universal {nameof(MyRecordResponse)} class instance");
-                var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications, dcrEvents, testResults);
+                var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications,
+                    dcrEventsTask.Result,
+                    testResultsTask.Result);
                 myRecordResponse.Supplier = tppUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
 
                 return new GetMyRecordResult.Success(myRecordResponse);
@@ -191,6 +188,64 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 }
             };
         }
-        
+
+        private async Task<TppDcrEvents> RetrieveDcrEvents(TppUserSession tppUserSession)
+        {
+          try 
+          {
+
+            _logger.LogInformation("Retrieving DCR Events.");
+            var patientRecord = await _tppClient.RequestPatientRecordPost(tppUserSession);
+
+            _logger.LogDebug($"Mapping TPP DCR responses to instance of {nameof(TppDcrEvents)} class");
+            return _patientDcrEventsChecker.Check(patientRecord);
+
+          }
+          catch(Exception e) {
+
+            _logger.LogError(e, "Retrieving dcrEvents failed. Returning hasErrored as true");
+            return new TppDcrEvents 
+            {
+              HasErrored = true
+            };
+          }
+        }
+        private async Task<TestResults> RetrieveTestResults(TppUserSession tppUserSession)
+        {
+          try 
+          {
+
+            _logger.LogInformation("Retrieving Test Results.");
+            return await GetLast180DaysTestResults(tppUserSession);
+
+          }
+          catch(Exception e) {
+
+            _logger.LogError(e, "Retrieving testResults failed. Returning hasErrored as true");
+            return new TestResults 
+            {
+              HasErrored = true
+            };
+          }
+        }
+
+        private async Task<Tuple<Allergies, Medications>> RetrievePatientOverviewItems(TppUserSession tppUserSession)
+        {
+          try 
+          {
+            var patientOverview = await _tppClient.PatientOverviewPost(tppUserSession);
+            _logger.LogDebug($"Mapping TPP Patient Overview responses to lists of {nameof(Allergies)} and {nameof(Medications)} classes");
+            return _patientOverviewTaskChecker.Check(patientOverview);
+          }
+          catch(Exception e) 
+          {
+             _logger.LogError(e, "Retrieving patientOverViewItems failed. Returning hasErrored as true");
+            var result = new Tuple<Allergies, Medications>(new Allergies(), new Medications());
+            result.Item1.HasErrored = true;
+            result.Item2.HasErrored = true;
+
+            return result;
+          }
+        }
     }
 }

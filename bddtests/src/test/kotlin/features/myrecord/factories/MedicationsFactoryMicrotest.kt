@@ -12,6 +12,9 @@ import worker.models.myrecord.MedicationItem
 import worker.models.myrecord.MedicationLineItem
 
 class MedicationsFactoryMicrotest: MedicationsFactory(){
+    override fun respondWithBadData(patient: Patient) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun enabledWithBlankRecord(patient: Patient) {
         throw UnsupportedOperationException()

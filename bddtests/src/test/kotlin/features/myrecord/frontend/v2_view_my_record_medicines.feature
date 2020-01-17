@@ -27,6 +27,26 @@ Feature: Medicines Frontend - Medical Record v2
       | GP System |
       | VISION    |
 
+  Scenario Outline: A <GP System> user receives bad medicines data sees an error - Medical Record v2
+    Given I am a <GP System> user setup to use medical record version 2
+    And The GP practice responds with bad medications data
+    And I am on the medical record page
+    When I click the Medicines link on my record - Medical Record v2
+    And I click the Acute medicines link - Medical Record v2
+    Then I see an error occurred message on My Record - Medical Record v2
+    When I click the Back link
+    And I click the Current medicines link - Medical Record v2
+    Then I see an error occurred message on My Record - Medical Record v2
+    When I click the Back link
+    And I click the Discontinued medicines link - Medical Record v2
+    Then I see an error occurred message on My Record - Medical Record v2
+    Examples:
+    | GP System |
+    | EMIS      |
+    | VISION    |
+    | TPP       |
+
+
   Scenario Outline: A <GP System> user has no medicines on their record - Medical Record v2
     Given I am a <GP System> user setup to use medical record version 2
     And I am on the medical record page
@@ -39,12 +59,11 @@ Feature: Medicines Frontend - Medical Record v2
     When I click the Back link
     And I click the Discontinued medicines link - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
-
     Examples:
-    | GP System |
-    | EMIS      |
-    | VISION    |
-    | TPP       |
+      | GP System |
+      | EMIS      |
+      | VISION    |
+      | TPP       |
 
     Scenario: A MICROTEST user has no medicines on their record - Medical Record v2
       Given I am a MICROTEST user setup to use medical record version 2

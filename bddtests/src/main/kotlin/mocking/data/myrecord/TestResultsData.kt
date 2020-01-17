@@ -144,12 +144,18 @@ class TestResultsData {
             return testResultDetail
         }
 
-        fun getVisionTestResultsDataWithNoTestResults(): String {
-            val response = "<![CDATA[<root><patient>"
+        fun getVisionTestResultsDataWithNoTestResults(isBadData: Boolean = false): String {
+
+            var response = "<![CDATA[<root><patient>"
             val responseStringEnd = "</patient></root>]]>"
+
+            if (isBadData) {
+                response = "<![BADDATA[<root><patient>"
+            }
 
             return response + responseStringEnd
         }
+
 
         fun getVisionTestResultsDataWithMultipleResults(): String {
 

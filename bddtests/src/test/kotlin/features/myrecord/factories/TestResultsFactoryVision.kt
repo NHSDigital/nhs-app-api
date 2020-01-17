@@ -10,7 +10,6 @@ class TestResultsFactoryVision : TestResultsFactory() {
 
     private var mocker: MyRecordVisionMocker = MyRecordVisionMocker(mockingClient)
 
-    private val testResultsData by lazy { TestResultsData() }
     override fun disabled(patient: Patient) {
         mocker.generatePatientDataResponse(
                 patient,
@@ -44,6 +43,12 @@ class TestResultsFactoryVision : TestResultsFactory() {
                 testResultsView,
                 htmlResponseFormat) {
             request -> request.respondWithServiceUnavailable()
+        }
+    }
+
+    override fun respondWithACorruptedResponse(patient: Patient) {
+        mocker.generatePatientDataResponse(patient, testResultsView, htmlResponseFormat) {
+            request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults(true))
         }
     }
 

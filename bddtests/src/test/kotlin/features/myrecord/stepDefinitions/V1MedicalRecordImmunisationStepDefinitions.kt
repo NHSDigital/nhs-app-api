@@ -46,6 +46,12 @@ open class V1MedicalRecordImmunisationStepDefinitions : AbstractDemographicsStep
         ImmunisationsFactory.getForSupplier(gpSystem).errorRetrieving(SerenityHelpers.getPatient())
     }
 
+    @Given("^the GP practice returns a bad immunisations response$")
+    fun givenThereIsACorruptedImmunisationsResponse() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        ImmunisationsFactory.getForSupplier(gpSystem).respondWithACorruptedResponse(SerenityHelpers.getPatient())
+    }
+
     @Given("^the EMIS GP Practice has two immunisation results where the first record has no date$")
     fun givenTheEmisGpPracticeHasAnImmunisationResultWithNoDate() {
         mockingClient.forEmis {

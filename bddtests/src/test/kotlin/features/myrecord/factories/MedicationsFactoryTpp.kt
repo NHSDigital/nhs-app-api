@@ -7,6 +7,13 @@ import worker.models.myrecord.MedicationsData
 import java.time.LocalDateTime
 
 class MedicationsFactoryTpp: MedicationsFactory() {
+    override fun respondWithBadData(patient: Patient) {
+        mockingClient.forTpp {
+            myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
+                    .respondWithCorruptedContent()
+        }
+    }
+
     override fun getExpectedMedications(): MedicationsData {
         throw UnsupportedOperationException()
     }

@@ -30,6 +30,15 @@ class DiagnosisFactoryVision {
         }
     }
 
+    fun badData(patient: Patient) {
+        mocker.generatePatientDataResponse(
+                patient,
+                diagnosisView,
+                htmlResponseFormat){
+            request -> request.respondWithCorruptedContent("Bad Data")
+        }
+    }
+
     fun errorRetrieving(patient: Patient) {
         mocker.generatePatientDataResponse(
                 patient,

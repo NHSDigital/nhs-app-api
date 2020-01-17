@@ -79,6 +79,12 @@ open class V1MedicalRecordAllergiesStepDefinitions : AbstractDemographicsStepDef
         AllergiesFactory.getForSupplier(SerenityHelpers.getGpSupplier()).disabled(SerenityHelpers.getPatient())
     }
 
+    @Given("the GP practice returns a bad allergies response")
+    fun theGPPracticeReturnsACorruptedResponse(){
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        AllergiesFactory.getForSupplier(gpSystem).respondWithCorruptedContent(SerenityHelpers.getPatient())
+    }
+
     @Given("^there is an unknown error getting allergies for VISION$")
     fun thereIsAnUnknownErrorGettingAllergiesForVision() {
         MyRecordVisionMocker(mockingClient).generatePatientDataResponse(

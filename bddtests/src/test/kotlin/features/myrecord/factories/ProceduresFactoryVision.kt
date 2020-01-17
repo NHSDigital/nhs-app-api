@@ -29,6 +29,15 @@ class ProceduresFactoryVision {
         }
     }
 
+    fun badData(patient: Patient) {
+        mocker.generatePatientDataResponse(
+                patient,
+                VisionConstants.proceduresView,
+                VisionConstants.htmlResponseFormat){
+         request -> request.respondWithSuccess(ProceduresData.getBadProceduresData())
+        }
+    }
+
     fun errorRetrieving(patient: Patient) {
         mocker.generatePatientDataResponse(
                 patient,

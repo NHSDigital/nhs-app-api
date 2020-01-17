@@ -14,4 +14,8 @@ object ProceduresData {
 
         return response + html + responseStringEnd
     }
+
+    fun getBadProceduresData(): String {
+        return "<![BADDATA[<root><patient>responseStringEnd</patient></root>]]>"
+    }
 }

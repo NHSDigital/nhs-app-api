@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,6 @@ using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
-using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 {
@@ -37,24 +37,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 
             try
             {
-                var medicalRecordResponse =
-                    await _microtestClient.MedicalRecordGet(microtestUserSession.OdsCode,
-                        microtestUserSession.NhsNumber);
 
-                if (medicalRecordResponse.HasSuccessResponse)
-                {
-                    return HandleSuccess(microtestUserSession, medicalRecordResponse);
-                }
-                else if (medicalRecordResponse.HasForbiddenResponse)
-                {
-                    _logger.LogError("The Microtest patient record service is not enabled");
-                    return new GetMyRecordResult.Success(new MyRecordResponse());
-                }
-                else
-                {
-                    _logger.LogError("Microtest system is currently unavailable");
-                    return new GetMyRecordResult.BadGateway();
-                }
+               return await RetrieveMicrotestPatientRecord(microtestUserSession);
             }
             catch (HttpRequestException e)
             {
@@ -106,6 +90,47 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
         public byte[] ConvertDocumentToCorrectFormat(string type, string content)
         {
             throw new NotImplementedException();
+        }
+
+        private async Task<GetMyRecordResult> RetrieveMicrotestPatientRecord(MicrotestUserSession microtestUserSession)
+        {
+            var medicalRecordResponse =  _microtestClient.MedicalRecordGet(microtestUserSession.OdsCode,
+                    microtestUserSession.NhsNumber);
+
+            await medicalRecordResponse;
+
+            if (medicalRecordResponse.Result.HasSuccessResponse)
+            {
+                return HandleSuccess(microtestUserSession, medicalRecordResponse.Result);
+            }
+            
+            if (medicalRecordResponse.Result.HasForbiddenResponse)
+            {
+                _logger.LogError("The Microtest patient record service is not enabled");
+                return new GetMyRecordResult.Success(new MyRecordResponse());
+            }
+            
+            _logger.LogError("Microtest system is currently unavailable");
+            return HandleSuccess(microtestUserSession, getEmptyMicrotestMedicalRecordResponse());
+        }
+
+        private MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse> getEmptyMicrotestMedicalRecordResponse()
+        {
+            return new MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>(HttpStatusCode.OK)
+            {
+                Body = new PatientRecordGetResponse
+                {
+                    AllergyData = { HasErrored = true },
+                    MedicationData = { HasErrored = true },
+                    ImmunisationData = { HasErrored = true },
+                    ProblemData = { HasErrored = true },
+                    TestResultData = { HasErrored = true },
+                    RecallData = { HasErrored = true },
+                    EncounterData = { HasErrored = true },
+                    ReferralData = { HasErrored = true },
+                    MedicalHistoryData = { HasErrored = true }
+                }
+            };
         }
 
     }

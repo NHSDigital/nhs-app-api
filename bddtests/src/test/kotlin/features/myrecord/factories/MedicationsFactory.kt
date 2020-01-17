@@ -25,6 +25,7 @@ abstract class MedicationsFactory {
     abstract fun enabledWithBlankRecord(patient:Patient)
     abstract fun enabledWithRecords(patient:Patient)
     abstract fun getExpectedMedications(): MedicationsData
+    abstract fun respondWithBadData(patient: Patient)
 
     fun getResult() {
 

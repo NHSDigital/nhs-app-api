@@ -15,6 +15,13 @@ class MedicationsFactoryEmis: MedicationsFactory(){
         }
     }
 
+    override fun respondWithBadData(patient: Patient) {
+        mockingClient.forEmis {
+            myRecord.medicationsRequest(patient)
+                    .respondWithCorruptedContent("Bad Data")
+        }
+    }
+
     override fun enabledWithRecords(patient: Patient) {
         mockingClient.forEmis {
             myRecord.medicationsRequest(patient).respondWithSuccess(

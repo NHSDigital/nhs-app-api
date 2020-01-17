@@ -34,6 +34,17 @@ Feature: Test Results Frontend - Medical Record v1
     And I click a test result - Medical Record v1
     Then I see the appropriate error message for retrieving test result detail
 
+  Scenario Outline: An exception occurs retrieving test results - Medical Record v1
+    Given I am a <GP System> user setup to use medical record version 1
+    And the GP Practice sends a bad test results response
+    And I am on the medical record page
+    When I click the Test results section on My Record - Medical Record v1
+    Then I see an error occurred message with Test results on My Record - Medical Record v1
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
   Scenario: A TPP user can navigate to an individual test result - Medical Record v1
     Given I am a TPP user setup to use medical record version 1
     And the GP Practice has six test results

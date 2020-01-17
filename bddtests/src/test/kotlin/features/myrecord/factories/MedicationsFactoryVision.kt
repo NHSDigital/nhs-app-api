@@ -6,6 +6,11 @@ import worker.models.myrecord.MedicationsData
 import java.time.LocalDateTime
 
 class MedicationsFactoryVision: MedicationsFactory() {
+    override fun respondWithBadData(patient: Patient) {
+        mocker.generatePatientDataResponse(patient, VisionConstants.medicationsView)
+        { request -> request.respondWithSuccess(getBadResponseData())}
+    }
+
     override fun getExpectedMedications(): MedicationsData {
         throw UnsupportedOperationException()
     }
@@ -89,6 +94,10 @@ class MedicationsFactoryVision: MedicationsFactory() {
         response += pastRepeatMedication
 
         return response + responseStringEnd
+    }
+
+    private fun getBadResponseData(): String {
+        return "<![BADDATA[<root><patient></patient></root>]]>"
     }
 
     private fun getEmptySetOfVisionMedicationData(): String {

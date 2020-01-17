@@ -56,6 +56,12 @@ export default {
     state.record.documents.data = (record.documents.data || []);
     state.record.documents.recordCount = state.record.documents.data.length;
 
+    if (state.record.medications && state.record.medications.hasErrored) {
+      state.record.medications.data.acuteMedications.hasErrored = true;
+      state.record.medications.data.currentRepeatMedications.hasErrored = true;
+      state.record.medications.data.discontinuedRepeatMedications.hasErrored = true;
+    }
+
     state.documentConsultationsWithComments = (record.consultations.data || [])
       .filter(d => d.consultationHeaders.filter(p => p.header === 'Document' || p.header === 'Comment').length > 0)
       .filter(x => x.consultationHeaders.length > 1);

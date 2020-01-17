@@ -10,7 +10,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
-using Microsoft.AspNetCore.Http;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
 {
@@ -64,44 +63,32 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
 
             try
             {
-                var allergiesTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.VPS_ALLERGIES));
-                var medicationsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML, Views.VPS_MEDICATIONS));
-                var immunisationsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML ,Views.PROCEDURES));
-                var problemsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML ,Views.PROBLEMS));
-                var testResultsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.TEST_RESULTS));
-                var diagnosisTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.DIAGNOSIS));
-                var examinationsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.EXAM_FINDINGS));
-                var proceduresTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.PROCEDURES));
-                
-                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, problemsTask, testResultsTask, diagnosisTask, examinationsTask, proceduresTask);
-                _logger.LogInformation("Patient record tasks completed");
 
-                try
-                {
-                    var checkedAllergies = new VisionTaskChecker<Allergies>(_logger, _allergyMapper, VisionMapperType.Allergies).Check(allergiesTask.Result);
-                    var checkedMedications = new VisionTaskChecker<Medications>(_logger, _medicationMapper, VisionMapperType.Medications).Check(medicationsTask.Result);
-                    var checkedImmunisations = new VisionTaskChecker<Immunisations>(_logger, _immunisationsMapper, VisionMapperType.Immunisations).Check(immunisationsTask.Result);
-                    var checkedProblems = new VisionTaskChecker<Problems>(_logger, _problemsMapper, VisionMapperType.Problems).Check(problemsTask.Result);
-                    var checkedTestResults = new VisionTaskChecker<TestResults>(_logger, _testResultsMapper, VisionMapperType.TestResults).Check(testResultsTask.Result);
-                    var checkedDiagnosis = new VisionTaskChecker<Diagnosis>(_logger, _diagnosisMapper, VisionMapperType.Diagnosis).Check(diagnosisTask.Result);
-                    var checkedExaminations = new VisionTaskChecker<Examinations>(_logger, _examinationsMapper, VisionMapperType.Examinations).Check(examinationsTask.Result);
-                    var checkedProcedures = new VisionTaskChecker<Procedures>(_logger, _proceduresMapper, VisionMapperType.Procedures).Check(proceduresTask.Result);
-                    
-                    var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations, checkedProblems, checkedTestResults, checkedDiagnosis, checkedExaminations, checkedProcedures);
-                    response.Supplier = visionUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
-                    
-                    return new GetMyRecordResult.Success(response);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Something went wrong building the Vision My Record response");
-                    return new GetMyRecordResult.InternalServerError();
-                }
+                var allergiesTask = RetrieveAllergies(visionUserSession);
+                var medicationsTask = RetrieveMedications(visionUserSession);
+                var immunisationsTask = RetrieveImmunisations(visionUserSession);
+                var problemsTask = RetrieveProblems(visionUserSession);
+                var testResultsTask = RetrieveTestResults(visionUserSession);
+                var diagnosisTask = RetrieveDiagnosis(visionUserSession);
+                var examinationsTask = RetrieveExaminations(visionUserSession);
+                var proceduresTask = RetrieveProcedures(visionUserSession);
+
+                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, problemsTask,
+                    diagnosisTask, testResultsTask, examinationsTask, proceduresTask);
+
+                var response = _visionMyRecordMapper.Map(allergiesTask.Result, medicationsTask.Result,
+                    immunisationsTask.Result, problemsTask.Result, testResultsTask.Result, diagnosisTask.Result,
+                    examinationsTask.Result, proceduresTask.Result);
+                response.Supplier = visionUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+                
+                _logger.LogInformation("Patient record tasks completed");
+                
+                return new GetMyRecordResult.Success(response);
             }
-            catch (HttpRequestException e)
+            catch (Exception e)
             {
-                _logger.LogError(e, "Unsuccessful request retrieving patient selected information for Vision");
-                return new GetMyRecordResult.BadGateway();
+                _logger.LogError(e, "Something went wrong building the Vision My Record response");
+                return new GetMyRecordResult.InternalServerError();
             }
             finally
             {
@@ -231,7 +218,126 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                 View = visionView,
             };
         }
+        private async Task<Allergies> RetrieveAllergies(VisionUserSession visionUserSession)
+        {
+          try
+          {
+            var allergiesTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.VPS_ALLERGIES));
+            return new VisionTaskChecker<Allergies>(_logger, _allergyMapper, VisionMapperType.Allergies).Check(allergiesTask);
 
+          }
+          catch(Exception e)
+          {
+            _logger.LogError(e, "Retrieving allergies failed. Returning hasErrored as true");
+            return new Allergies { HasErrored = true };
+          }
+        }
+        private async Task<Medications> RetrieveMedications(VisionUserSession visionUserSession)
+        {
+          try
+          {
+            var medicationsTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML, Views.VPS_MEDICATIONS));
+            return new VisionTaskChecker<Medications>(_logger, _medicationMapper, VisionMapperType.Medications).Check(medicationsTask);
+
+          }
+          catch(Exception e)
+          {
+            _logger.LogError(e, "Retrieving medications failed. Returning hasErrored as true");
+            return new Medications {
+                HasErrored = true,
+            };
+          }
+        }
+
+        private async Task<Immunisations> RetrieveImmunisations(VisionUserSession visionUserSession)
+        {
+          try
+          {
+            var immunisationTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML, Views.PROCEDURES));
+            return new VisionTaskChecker<Immunisations>(_logger, _immunisationsMapper, VisionMapperType.Immunisations).Check(immunisationTask);
+
+          }
+          catch(Exception e)
+          {
+            _logger.LogError(e, "Retrieving immunisations failed. Returning hasErrored as true");
+            return new Immunisations { HasErrored = true };
+          }
+        }
+        private async Task<Problems> RetrieveProblems(VisionUserSession visionUserSession)
+        {
+          try
+          {
+            var problemTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML, Views.PROBLEMS));
+            return new VisionTaskChecker<Problems>(_logger, _problemsMapper, VisionMapperType.Problems).Check(problemTask);
+
+          }
+          catch(Exception e)
+          {
+            _logger.LogError(e, "Retrieving problems failed. Returning hasErrored as true");
+            return new Problems { HasErrored = true };
+          }
+        }
+
+        private async Task<TestResults> RetrieveTestResults(VisionUserSession visionUserSession)
+        {
+          try
+          {
+            var testResultsTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.TEST_RESULTS));
+            return new VisionTaskChecker<TestResults>(_logger, _testResultsMapper, VisionMapperType.TestResults).Check(testResultsTask);
+
+          }
+          catch(Exception e)
+          {
+            _logger.LogError(e, "Retrieving test results failed. Returning hasErrored as true");
+            return new TestResults { HasErrored = true };
+          }
+        }
+        
+        private async Task<Diagnosis> RetrieveDiagnosis(VisionUserSession visionUserSession)
+        {
+          try
+          {
+            var diagnosisTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.DIAGNOSIS));
+            return new VisionTaskChecker<Diagnosis>(_logger, _diagnosisMapper, VisionMapperType.Diagnosis).Check(diagnosisTask);
+
+          }
+          catch(Exception e)
+          {
+            _logger.LogError(e, "Retrieving diagnosis failed. Returning hasErrored as true");
+            return new Diagnosis { HasErrored = true };
+          }
+        }
+
+        private async Task<Examinations> RetrieveExaminations(VisionUserSession visionUserSession)
+        {
+          try
+          {
+            var examinationsTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.EXAM_FINDINGS));
+            return new VisionTaskChecker<Examinations>(_logger, _examinationsMapper, VisionMapperType.Examinations).Check(examinationsTask);
+
+          }
+          catch(Exception e)
+          {
+            _logger.LogError(e, "Retrieving examinations failed. Returning hasErrored as true");
+            return new Examinations { HasErrored = true };
+          }
+        }
+
+        private async Task<Procedures> RetrieveProcedures(VisionUserSession visionUserSession)
+        {
+          try
+          {
+            var proceduresTask = await _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.PROCEDURES));
+            return new VisionTaskChecker<Procedures>(_logger, _proceduresMapper, VisionMapperType.Examinations).Check(proceduresTask);
+
+          }
+          catch(Exception e)
+          {
+            _logger.LogError(e, "Retrieving procedures failed. Returning hasErrored as true");
+            return new Procedures { HasErrored = true };
+          }
+        }
+        
         public Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
         {
             throw new NotImplementedException();

@@ -1,7 +1,9 @@
 package features.myrecord.stepDefinitions
 
 import constants.Supplier
+import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
+import features.myrecord.factories.ProblemsFactory
 import org.junit.Assert
 import pages.gpMedicalRecord.HealthConditionsPage
 import utils.SerenityHelpers
@@ -38,5 +40,11 @@ open class V2MedicalRecordHealthConditionsStepDefinitions : AbstractDemographics
 
         healthConditionsMessages.forEachIndexed { i, message ->
             Assert.assertEquals(expectedData[supplier]?.get(i), message.text) }
+    }
+
+    @Given("the GP practice responds with bad problems data")
+    fun thereIsBadDataRecievedForProblems() {
+        ProblemsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
+                .badDataResponse(SerenityHelpers.getPatient())
     }
 }

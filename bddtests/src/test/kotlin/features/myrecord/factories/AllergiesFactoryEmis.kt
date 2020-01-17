@@ -26,4 +26,11 @@ class AllergiesFactoryEmis: AllergiesFactory() {
             element -> AllergyItem(element.term, Date(element.effectiveDate.value, element.effectiveDate.datePart))
         }
     }
+
+    override fun respondWithCorruptedContent(patient: Patient) {
+        mockingClient.forEmis {
+            myRecord.allergiesRequest(patient)
+                    .respondWithCorruptedContent()
+        }
+    }
 }

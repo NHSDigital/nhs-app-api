@@ -14,6 +14,7 @@ abstract class TestResultsFactory {
     abstract fun errorRetrieving(patient: Patient)
     abstract fun noAccess(patient: Patient)
     abstract fun getExpectedTestResults() : List<TestResultItem>
+    abstract fun respondWithACorruptedResponse(patient: Patient)
 
     val mockingClient = MockingClient.instance
 

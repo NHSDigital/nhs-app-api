@@ -12,6 +12,10 @@ class ImmunisationsFactoryMicrotest: ImmunisationsFactory(){
         throw UnsupportedOperationException()
     }
 
+    override fun respondWithACorruptedResponse(patient: Patient) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun enabledWithRecords(patient: Patient) {
         throw UnsupportedOperationException()
     }

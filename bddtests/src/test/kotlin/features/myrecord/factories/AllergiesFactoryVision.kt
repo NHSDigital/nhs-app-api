@@ -6,6 +6,9 @@ import models.Patient
 import worker.models.myrecord.AllergyItem
 
 class AllergiesFactoryVision: AllergiesFactory() {
+    override fun respondWithCorruptedContent(patient: Patient) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private var mocker: MyRecordVisionMocker = MyRecordVisionMocker(mockingClient)
 

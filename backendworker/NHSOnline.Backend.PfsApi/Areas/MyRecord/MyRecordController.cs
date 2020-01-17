@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             _logger.LogInformation("Fetching patient record");
             var result = await patientRecordService.GetMyRecord(gpLinkedAccountUserSession);
             
-            // Audit result of attempt to view patient record    
+            // Audit result of attempt to view patient record
             await result.Accept(new MyRecordAuditingVisitor(_auditor, _logger));
 
             LogMetadata(userSession, result);

@@ -29,6 +29,15 @@ class ExaminationsFactoryVision {
         }
     }
 
+    fun badData(patient: Patient) {
+        mocker.generatePatientDataResponse(
+                patient,
+                VisionConstants.examinationsView,
+                VisionConstants.htmlResponseFormat) {
+            request -> request.respondWithCorruptedContent("Bad data")
+        }
+    }
+
     fun errorRetrieving(patient: Patient) {
         mocker.generatePatientDataResponse(
                 patient,

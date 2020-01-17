@@ -45,3 +45,10 @@ Feature: Allergies Frontend - Medical Record v2
     When I click the Allergies and adverse reactions link on my record - Medical Record v2
     Then I see the expected allergies displayed with unknown date for the first result - Medical Record v2
 
+  Scenario: An EMIS user receiving a bad allergies response sees an error - Medical Record v2
+    Given I am a EMIS user setup to use medical record version 2
+    And the GP practice returns a bad allergies response
+    And I am on the medical record page
+    When I click the Allergies and adverse reactions link on my record - Medical Record v2
+    Then I see an error occurred message on My Record - Medical Record v2
+

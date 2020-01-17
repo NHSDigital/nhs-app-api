@@ -127,6 +127,29 @@ open class V1MedicalRecordConsultationStepDefinitions : AbstractDemographicsStep
         }
     }
 
+    @Given("^the GP practice returns bad consultations data$")
+    fun theGPPracticeReturnsACorruptedResponse() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val patient = SerenityHelpers.getPatient()
+
+        when (gpSystem) {
+            Supplier.EMIS -> {
+                mockingClient.forEmis {
+                    myRecord.consultationsRequest(patient)
+                            .respondWithCorruptedContent("Bad Data")
+                }
+            }
+            Supplier.TPP -> {
+                mockingClient.forTpp {
+                    myRecord.patientRecordRequest(patient.tppUserSession!!)
+                            .respondWithCorruptedContent()
+                }
+
+            }
+            else -> throw UnsupportedOperationException("Not implemented for this $gpSystem")
+        }
+    }
+
     @When("I get the users consultations")
     fun whenIGetTheUsersConsultations() {
         try {

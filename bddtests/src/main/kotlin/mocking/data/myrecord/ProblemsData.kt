@@ -64,4 +64,17 @@ object ProblemsData {
 
         return response + responseStringEnd
     }
+
+    fun getBadVisionProblemsDataWithNoProblemsData(): String {
+       val badData =  "<problems eventdate=\"2018-10-10T00:00:00\" " +
+                "badData=\"Peanut allergy\"  subgroup_code=\"PastProblem\"/> " +
+                "<problems eventdate=\"2018-10-10T00:00:00\" " +
+                "badData=\"Broken leg\"  subgroup_code=\"CurrentProblem\"/> " +
+                "<problems eventdate=\"2018-10-10T00:00:00\" " +
+                "badData=\"Acne\"  subgroup_code=\"Random\"/>"
+        val response = "<![BADDATA[<root><patient>"
+        val responseStringEnd = "</patient></root>]]>"
+
+        return response + badData + responseStringEnd
+    }
 }

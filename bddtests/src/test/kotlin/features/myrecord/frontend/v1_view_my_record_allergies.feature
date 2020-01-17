@@ -30,6 +30,20 @@ Feature: Allergies Frontend - Medical Record v1
     Then I see the Allergies and adverse reactions heading on My Record - Medical Record v1
     When I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see a message telling me to contact my GP for Allergies and adverse reactions information on My Record - Medical Record v1
+    
+  Scenario: An EMIS user receiving a bad allergies response sees an error
+    Given I am a EMIS user setup to use medical record version 1
+    And the GP practice returns a bad allergies response
+    And I am on the medical record page
+    When I click the Allergies and adverse reactions section on My Record - Medical Record v1
+    Then I see an error occurred message with Allergies and adverse reactions on My Record - Medical Record v1
+
+  Scenario: An TPP user receiving a bad allergies response sees an error
+    Given I am a TPP user setup to use medical record version 1
+    And the GP practice returns a bad allergies response
+    And I am on the medical record page
+    When I click the Allergies and adverse reactions section on My Record - Medical Record v1
+    Then I see an error occurred message with Allergies and adverse reactions on My Record - Medical Record v1
 
   Scenario: An EMIS user has multiple allergies with different date display formats - Medical Record v1
     Given I am a EMIS user setup to use medical record version 1

@@ -16,9 +16,6 @@ object  DiagnosisData {
     }
 
     fun getVisionDiagnosisDataWithNoDiagnosisData(): String {
-        val response = "<![CDATA[<root><patient>"
-        val responseStringEnd = "</patient></root>]]>"
-
-        return response + responseStringEnd
+        return "<![CDATA[<root><patient></patient></root>]]>"
     }
 }

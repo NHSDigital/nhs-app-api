@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,14 +10,13 @@ using HtmlToOpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HtmlAgilityPack;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using Wkhtmltopdf.NetCore;
+using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
@@ -76,40 +74,26 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
             try
             {
-                EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
+                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
                 
                 _logger.LogInformation("Creating patient record api tasks");
-                var medicationsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Medication);
-
-                var allergiesTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Allergies);
-
-                var immunisationsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Immunisations);
-
-                var testResultsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.TestResults);
-
-                var problemsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Problems);
-
-                var consultationsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Consultations);
-
-                var documentsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Documents);
+                var allergiesTask = RetrieveAllergies(emisRequestParameters);
+                var medicationsTask = RetrieveMedications(emisRequestParameters);
+                var immunisationsTask = RetrieveImmunisations(emisRequestParameters);
+                var testResultsTask = RetrieveTestResults(emisRequestParameters);
+                var problemsTask = RetrieveProblems(emisRequestParameters);
+                var consultationsTask = RetrieveConsultations(emisRequestParameters);
+                var documentsTask = RetrieveDocuments(emisRequestParameters);
 
                 await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask, problemsTask, consultationsTask, documentsTask);
+
                 _logger.LogInformation("Patient record tasks completed");
 
-                _logger.LogInformation("Checking status of all patient record tasks");
-                var allergies = _allergiesTaskChecker.Check(allergiesTask);
-                var medications = _medicationsTaskChecker.Check(medicationsTask);
-                var immunisations = _immunistationsTaskChecker.Check(immunisationsTask);
-                var testResults = _testResultsTaskChecker.Check(testResultsTask);
-                var problems = _problemsTaskChecker.Check(problemsTask);
-                var consultations = _consultationsTaskChecker.Check(consultationsTask);
-                var documents = _documentsTaskChecker.Check(documentsTask);
-
                 _logger.LogInformation("Mapping EMIS responses to universal MyRecordResponse class instance");
-                var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems, consultations, documents);
-                
-                myRecordResponse.Supplier = emisUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+                var myRecordResponse = _emisMyRecordMapper.Map(allergiesTask.Result, medicationsTask.Result, immunisationsTask.Result,
+                    testResultsTask.Result, problemsTask.Result, consultationsTask.Result, documentsTask.Result);
 
+                myRecordResponse.Supplier = emisUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                 return new GetMyRecordResult.Success(myRecordResponse);
             }
             catch (HttpRequestException e)
@@ -318,5 +302,133 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 return generatedDocument.ToArray();
             }
         }
+
+        private async Task<Allergies> RetrieveAllergies(EmisRequestParameters emisRequestParameters)
+        {
+            _logger.LogInformation("Retrieving allergies.");
+            try
+            {
+                var allergiesTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Allergies);
+                await allergiesTask;
+                return _allergiesTaskChecker.Check(allergiesTask);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Retrieving allergies failed. Returning hasErrored as true");
+                return new Allergies
+                {
+                    HasErrored = true
+                };
+            }
+        }
+        private async Task<Medications> RetrieveMedications(EmisRequestParameters emisRequestParameters)
+        {
+            _logger.LogInformation("Retrieving medications.");
+            try
+            {
+                var medicationsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Medication);
+                await medicationsTask;
+                return _medicationsTaskChecker.Check(medicationsTask);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Retrieving medications failed. Returning hasErrored as true");
+                return new Medications
+                {
+                    HasErrored = true
+                };
+            }
+        }
+        private async Task<Immunisations> RetrieveImmunisations(EmisRequestParameters emisRequestParameters)
+        {
+            _logger.LogInformation("Retrieving immunisations.");
+            try
+            {
+                var immunisationsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Immunisations);
+                await immunisationsTask;
+                return _immunistationsTaskChecker.Check(immunisationsTask);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Retrieving immunisations failed. Returning hasErrored as true");
+                return new Immunisations
+                {
+                    HasErrored = true
+                };
+            }
+        }
+        private async Task<TestResults> RetrieveTestResults(EmisRequestParameters emisRequestParameters)
+        {
+            _logger.LogInformation("Retrieving test results.");
+            try
+            {
+                var testResultsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.TestResults);
+                await testResultsTask;
+                return _testResultsTaskChecker.Check(testResultsTask);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Retrieving test results failed. Returning hasErrored as true");
+                return new TestResults
+                {
+                    HasErrored = true
+                };
+            }
+        }
+        private async Task<Problems> RetrieveProblems(EmisRequestParameters emisRequestParameters)
+        {
+            _logger.LogInformation("Retrieving problems.");
+            try
+            {
+                var problemsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Problems);
+                await problemsTask;
+                return _problemsTaskChecker.Check(problemsTask);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Retrieving consultations failed. Returning hasErrored as true");
+                return new Problems
+                {
+                    HasErrored = true
+                };
+            }
+        }
+        private async Task<Consultations> RetrieveConsultations(EmisRequestParameters emisRequestParameters)
+        {
+            _logger.LogInformation("Retrieving consultations.");
+            try
+            {
+                var consultationsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Consultations);
+                await consultationsTask;
+                return _consultationsTaskChecker.Check(consultationsTask);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Retrieving consultations failed. Returning hasErrored as true");
+                return new Consultations
+                {
+                    HasErrored = true
+                };
+            }
+        }
+        private async Task<PatientDocuments> RetrieveDocuments(EmisRequestParameters emisRequestParameters)
+        {
+            _logger.LogInformation("Retrieving documents.");
+            try
+            {
+                var documentsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Documents);
+                await documentsTask;
+                return _documentsTaskChecker.Check(documentsTask);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Retrieving documents failed. Returning hasErrored as true");
+                return new PatientDocuments
+                {
+                    HasErrored = true
+                };
+            }
+        }
+        
     }
 }

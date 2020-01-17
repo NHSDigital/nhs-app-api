@@ -14,6 +14,7 @@ abstract class ProblemsFactory {
     abstract fun errorRetrieving(patient: Patient)
     abstract fun noAccess(patient: Patient)
     abstract fun getExpectedProblems(): List<ProblemItem>
+    abstract fun badDataResponse(patient: Patient)
 
     val mockingClient = MockingClient.instance
 

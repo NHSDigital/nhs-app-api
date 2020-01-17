@@ -35,6 +35,13 @@ class ProblemsFactoryEmis : ProblemsFactory(){
         }
     }
 
+    override fun badDataResponse(patient: Patient) {
+        mockingClient.forEmis {
+            myRecord.problemsRequest(patient)
+                    .respondWithCorruptedContent("Bad Data")
+        }
+    }
+
     override fun noAccess(patient: Patient) {
         mockingClient.forEmis {
             myRecord.problemsRequest(patient)

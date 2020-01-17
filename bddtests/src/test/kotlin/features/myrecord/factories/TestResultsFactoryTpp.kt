@@ -16,7 +16,18 @@ private const val END_DATE_FOR_RANGE_ONE = 120L
 private const val START_DATE_FOR_RANGE_TWO = 119L
 private const val END_DATE_FOR_RANGE_TWO = 60L
 private const val START_DATE_FOR_RANGE_THREE = 59L
+
 class TestResultsFactoryTpp : TestResultsFactory(){
+    override fun respondWithACorruptedResponse(patient: Patient) {
+        val today = OffsetDateTime.now()
+        val startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
+        val endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
+
+        mockingClient.forTpp {
+            myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
+                    .respondWithCorruptedContent("Bad Data")
+        }
+    }
 
     override fun disabled(patient: Patient) {
         val today = OffsetDateTime.now()

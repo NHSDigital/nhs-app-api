@@ -32,6 +32,12 @@ open class V1MedicalRecordProblemsStepDefinitions: AbstractDemographicsStepDefin
         ProblemsFactory.getForSupplier(gpSystem).enabledWithBlankRecord(SerenityHelpers.getPatient())
     }
 
+    @When("there is bad problems data returned")
+    fun badProblemsDataReturned() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        ProblemsFactory.getForSupplier(gpSystem).badDataResponse(SerenityHelpers.getPatient())
+    }
+
     @Given("^there is an error retrieving Problems data$")
     fun givenThereIsAnErrorRetrievingProblemsData() {
         val gpSystem = SerenityHelpers.getGpSupplier()

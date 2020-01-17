@@ -8,6 +8,12 @@ import worker.models.myrecord.ProblemItem
 import worker.models.myrecord.ProblemLineItem
 
 class ProblemsFactoryMicrotest: ProblemsFactory(){
+    override fun badDataResponse(patient: Patient) {
+            mockingClient.forMicrotest {
+                myRecord.myRecordRequest(patient)
+                        .respondWithCorruptedContent("Bad Data")
+            }
+        }
 
     override fun getExpectedProblems(): List<ProblemItem> {
         val myRecord = MyRecordSerenityHelpers.MY_RECORD_DATA.getOrFail<MyRecordResponseModel>()

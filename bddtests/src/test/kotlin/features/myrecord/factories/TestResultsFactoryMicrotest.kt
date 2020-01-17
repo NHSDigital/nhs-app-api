@@ -10,7 +10,11 @@ import utils.getOrFail
 import worker.models.myrecord.TestResultItem
 
 
-class TestResultsFactoryMicrotest : TestResultsFactory(){
+class TestResultsFactoryMicrotest : TestResultsFactory() {
+
+    override fun respondWithACorruptedResponse(patient: Patient) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun getExpectedTestResults(): List<TestResultItem> {
 

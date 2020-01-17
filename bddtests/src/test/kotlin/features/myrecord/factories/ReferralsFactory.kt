@@ -8,6 +8,7 @@ import worker.models.myrecord.ReferralItem
 abstract class ReferralsFactory {
 
     abstract fun getExpectedReferrals(): List<ReferralItem>
+    abstract fun respondWithCorruptedReponse()
 
     val mockingClient = MockingClient.instance
 

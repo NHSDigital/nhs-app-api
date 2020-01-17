@@ -30,6 +30,13 @@ Feature: Test Results Frontend - Medical Record v2
     When I click the Test results link on my record - Medical Record v2
     Then I see one test result with one value - Medical Record v2
 
+  Scenario: An EMIS user receiving a corrupt response for test results sees an error - Medical Record v2
+    Given I am a EMIS user setup to use medical record version 2
+    And there is a corrupted test results response returned
+    And I am on the medical record page
+    When I click the Test results link on my record - Medical Record v2
+    Then I see an error occurred message on My Record - Medical Record v2
+
   Scenario: An EMIS user has one test result with one value and a range - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
     And the GP Practice has a single test result with single child value with A range for EMIS

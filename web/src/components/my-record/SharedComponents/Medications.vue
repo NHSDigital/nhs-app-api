@@ -1,6 +1,7 @@
 <template>
   <scr-error-no-access v-if="showError"
                        :data="medications"
+                       :has-errored="medications.hasErrored"
                        :class="[$style['record-content'],
                                 getCollapseState]"
                        :aria-hidden="isCollapsed"

@@ -49,6 +49,18 @@ Feature: Health Conditions Frontend - Medical Record V2
       | EMIS      |
       | VISION    |
 
+  Scenario Outline: A <GP System> user receiving bad problems data accessing their health conditions sees an error - Medical Record v2
+    Given I am a <GP System> user setup to use medical record version 2
+    And the GP practice responds with bad problems data
+    And I am on the medical record page
+    When I click the Health conditions link on my record - Medical Record v2
+    Then I see an error occurred message on My Record - Medical Record v2
+
+    Examples:
+      | GP System |
+      | EMIS      |
+      | VISION    |
+
   Scenario: A MICROTEST user can view health conditions - Medical Record v2
     Given I am a MICROTEST user setup to use medical record version 2
     And the my record wiremocks are populated

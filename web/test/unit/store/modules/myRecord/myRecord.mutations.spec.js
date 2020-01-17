@@ -14,6 +14,9 @@ describe('my record mutations', () => {
   beforeEach(() => {
     data = {
       record: {
+        medications: {
+          hasErrored: false,
+        },
         documents: {
           data: [
             { name: 'Document1', extension: 'tga' },

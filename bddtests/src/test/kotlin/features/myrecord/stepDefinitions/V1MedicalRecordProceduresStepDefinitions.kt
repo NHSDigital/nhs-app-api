@@ -1,6 +1,6 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.And
+import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.ProceduresFactoryVision
@@ -18,16 +18,21 @@ class V1MedicalRecordProceduresStepDefinitions : AbstractDemographicsStepDefinit
     private lateinit var medicalRecordV1Page: MedicalRecordV1Page
     private lateinit var proceduresFactoryVision: ProceduresFactoryVision
 
-    @And( "^I do not have access to procedures$" )
+    @Given( "^I do not have access to procedures$" )
     fun givenIDoNotHaveAccessToProcedures(){
         proceduresFactoryVision = ProceduresFactoryVision()
         proceduresFactoryVision.noAccess(SerenityHelpers.getPatient())
     }
 
-    @And("^the GP Practice has multiple procedures$")
+    @When("^the GP Practice has multiple procedures$")
     fun andTheGpPracticeHasMultipleProcedures(){
         proceduresFactoryVision = ProceduresFactoryVision()
         proceduresFactoryVision.enabledWithRecords(SerenityHelpers.getPatient())
+    }
+
+    @When("^the GP Practice responds with bad procedures data")
+    fun theGpPracticeRespondsWithBadData(){
+        ProceduresFactoryVision().badData(SerenityHelpers.getPatient())
     }
 
     @When("^I click the procedures section$" )
@@ -35,7 +40,7 @@ class V1MedicalRecordProceduresStepDefinitions : AbstractDemographicsStepDefinit
         medicalRecordV1Page.procedures.toggleShrub()
     }
 
-    @And("^an error occurred retrieving the procedures")
+    @Then("^an error occurred retrieving the procedures")
     fun andAnErrorOccurredRetrievingTheProcedures() {
         proceduresFactoryVision = ProceduresFactoryVision()
         proceduresFactoryVision.errorRetrieving(SerenityHelpers.getPatient())

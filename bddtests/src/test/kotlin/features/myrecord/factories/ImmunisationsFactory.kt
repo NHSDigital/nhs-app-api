@@ -13,6 +13,7 @@ abstract class ImmunisationsFactory {
     abstract fun errorRetrieving(patient: Patient)
     abstract fun noAccess(patient: Patient)
     abstract fun getExpectedImmunisations(): List<ImmunisationItem>
+    abstract fun respondWithACorruptedResponse(patient: Patient)
 
     val mockingClient = MockingClient.instance
 

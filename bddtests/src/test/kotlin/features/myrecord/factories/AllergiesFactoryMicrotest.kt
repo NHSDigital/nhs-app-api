@@ -7,6 +7,9 @@ import utils.getOrFail
 import worker.models.myrecord.AllergyItem
 
 class AllergiesFactoryMicrotest: AllergiesFactory() {
+    override fun respondWithCorruptedContent(patient: Patient) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun disabled(patient: Patient) {
         throw UnsupportedOperationException()

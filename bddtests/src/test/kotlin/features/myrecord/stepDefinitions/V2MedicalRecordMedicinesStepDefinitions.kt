@@ -3,6 +3,7 @@ package features.myrecord.stepDefinitions
 import constants.Supplier
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.myrecord.factories.MedicationsFactory
 import mocking.data.myrecord.MedicationsData
 import org.junit.Assert
 import pages.gpMedicalRecord.MedicinesDetailPage
@@ -101,6 +102,12 @@ open class V2MedicalRecordMedicinesStepDefinitions : AbstractDemographicsStepDef
     @Then("^I see the expected discontinued medicines - Medical Record v2$")
     fun thenISeeExpectedDiscontinuedMedicinesV2() {
         assertExpectedMedicinesPresent(expectedDiscontinuedMedicinesData)
+    }
+
+    @When("^The GP practice responds with bad medications data")
+    fun theGPPracticeRespondsWithBadData() {
+        MedicationsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
+                .respondWithBadData(SerenityHelpers.getPatient())
     }
 
     private fun assertExpectedMedicinesPresent(expectedData: Map<Supplier, Array<String>>){

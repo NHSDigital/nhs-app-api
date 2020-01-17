@@ -65,6 +65,12 @@ open class V1MedicalRecordMedicationsStepDefinitions : AbstractDemographicsStepD
         }
     }
 
+    @When("^the GP practice returns bad medications data")
+    fun theGpPracticeReturnsBadMedicationsData() {
+        MedicationsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
+                .respondWithBadData(SerenityHelpers.getPatient())
+    }
+
     @Then("^I see the expected acute medications displayed without the record with an unknown date" +
             " - Medical Record v1$")
     fun thenISeeTheExpectedAcuteMedicationsDisplayedWithoutTheRecordWithAnUnknownDateV1() {

@@ -34,6 +34,11 @@ class ProblemsFactoryVision : ProblemsFactory() {
         { request -> request.respondWithAccessDeniedError() }
     }
 
+    override fun badDataResponse(patient: Patient){
+        mocker.generatePatientDataResponse(patient, VisionConstants.problemsView)
+        { request -> request.respondWithSuccess(ProblemsData.getBadVisionProblemsDataWithNoProblemsData()) }
+    }
+
     override fun getExpectedProblems(): List<ProblemItem> {
         throw UnsupportedOperationException()
     }

@@ -11,6 +11,7 @@ abstract class AllergiesFactory {
     abstract fun disabled(patient: Patient)
     abstract fun enabledWithRecords(patient: Patient, count: Int)
     abstract fun getExpectedAllergies(): List<AllergyItem>
+    abstract fun respondWithCorruptedContent(patient: Patient)
 
     val mockingClient = MockingClient.instance
 

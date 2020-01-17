@@ -18,6 +18,12 @@ class ImmunisationsFactoryEmis: ImmunisationsFactory(){
         }
     }
 
+    override fun respondWithACorruptedResponse(patient: Patient){
+        mockingClient.forEmis {
+            myRecord.immunisationsRequest(patient).respondWithCorruptedContent("Bad Data")
+        }
+    }
+
     override fun errorRetrieving(patient: Patient) {
         mockingClient.forEmis {
             myRecord.immunisationsRequest(patient).respondWithNonDataAccessException()

@@ -34,6 +34,13 @@ class TestResultsFactoryEmis : TestResultsFactory(){
         }
     }
 
+    override fun respondWithACorruptedResponse(patient: Patient){
+        mockingClient.forEmis {
+            myRecord.testResultsRequest(patient)
+                    .respondWithCorruptedContent("Bad Data")
+        }
+    }
+
     override fun noAccess(patient: Patient) {
 
         mockingClient.forEmis {

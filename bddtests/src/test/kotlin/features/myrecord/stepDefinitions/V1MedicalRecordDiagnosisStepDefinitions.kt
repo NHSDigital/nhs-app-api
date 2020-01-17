@@ -37,6 +37,11 @@ open class V1MedicalRecordDiagnosisStepDefinitions : AbstractDemographicsStepDef
         diagnosisFactoryVision.errorRetrieving(SerenityHelpers.getPatient())
     }
 
+    @Given("^the GP practice responds with bad diagnosis data")
+    fun theGpPracticeRespondsWithBadDiagnosisData(){
+        DiagnosisFactoryVision().badData(SerenityHelpers.getPatient())
+    }
+
     @When("^I click the diagnosis section$" )
     fun whenIClickTheDiagnosisSection() {
         medicalRecordV1Page.diagnosis.toggleShrub()

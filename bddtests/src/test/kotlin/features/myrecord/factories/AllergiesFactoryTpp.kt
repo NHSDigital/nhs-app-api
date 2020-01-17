@@ -26,6 +26,13 @@ class AllergiesFactoryTpp: AllergiesFactory() {
         }
     }
 
+    override fun respondWithCorruptedContent(patient: Patient) {
+        mockingClient.forTpp {
+            myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
+                    .respondWithCorruptedContent()
+        }
+    }
+
     override fun getExpectedAllergies(): List<AllergyItem> {
         throw UnsupportedOperationException("Not yet implemented")
     }

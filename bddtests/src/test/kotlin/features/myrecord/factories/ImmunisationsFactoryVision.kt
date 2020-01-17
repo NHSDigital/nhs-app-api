@@ -30,6 +30,11 @@ class ImmunisationsFactoryVision: ImmunisationsFactory() {
         { request -> request.respondWithAccessDeniedError() }
     }
 
+    override fun respondWithACorruptedResponse(patient: Patient) {
+        mocker.generatePatientDataResponse(patient, VisionConstants.immunisationsView, responseFormat)
+        { request -> request.respondWithCorruptedContent("Bad data") }
+    }
+
     override fun getExpectedImmunisations(): List<ImmunisationItem> {
         throw UnsupportedOperationException()
     }

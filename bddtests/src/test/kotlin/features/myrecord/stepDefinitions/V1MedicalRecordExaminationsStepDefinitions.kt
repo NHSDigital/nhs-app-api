@@ -37,6 +37,11 @@ open class V1MedicalRecordExaminationsStepDefinitions : AbstractDemographicsStep
         examinationsFactoryVision.errorRetrieving(SerenityHelpers.getPatient())
     }
 
+    @Given("the GP practice responds with bad examinations data")
+    fun gpPracticeRespondsWithBadExaminationsData() {
+        ExaminationsFactoryVision().badData(SerenityHelpers.getPatient())
+    }
+
     @When("^I enter url address for examinations detail directly into the url$")
     fun whenIEnterUrlAddressForExaminationsDetailDirectlyIntoTheUrl() {
         val fullUrl = Config.instance.url + "/my-record/examinations-detail"

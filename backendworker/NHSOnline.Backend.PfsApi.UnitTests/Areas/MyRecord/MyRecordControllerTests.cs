@@ -107,6 +107,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
             // Act
             var result = await _systemUnderTest.GetMyRecord(_patientGuid);
+            
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
