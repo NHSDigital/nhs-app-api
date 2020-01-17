@@ -14,8 +14,14 @@ fi
 
 set +e
 
+ARGS=()
+if [ -n "$TEAMCITY_VERSION" ]; then
+  ARGS+=('--cpus=1' '--memory=1g')
+fi;
+
 docker run \
   --name nhsonline-backend-test-run \
+  "${ARGS[@]}" \
   "local/backend-build:$COMMIT_ID" \
   bash -c "
     mkdir /coverage; \
