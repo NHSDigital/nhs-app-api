@@ -14,15 +14,13 @@
                  :text="$t('myAccount.cookiesLink')"
                  :click-func="goToUrl"
                  :click-param="cookiesPath"/>
-
-    </menu-item-list>
-
-    <template v-if="$store.state.device.isNativeApp">
       <settings v-if="(showBiometrics || showNotifications)"
                 data-purpose="setting-section"
                 :show-notifications="showNotifications"
                 :show-biometrics="showBiometrics"/>
+    </menu-item-list>
 
+    <template v-if="$store.state.device.isNativeApp">
       <analytics-tracked-tag :text="$t('signOutButton.signOut')"
                              data-purpose="button"
                              :tabindex="-1">

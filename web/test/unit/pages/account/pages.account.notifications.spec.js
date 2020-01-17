@@ -31,7 +31,7 @@ describe('notifications', () => {
   });
 
   it('will dispatch `notifications/toggle` when UI label is clicked', () => {
-    wrapper.findAll('label').at(1).trigger('click');
+    wrapper.findAll('span').trigger('click');
     expect($store.dispatch).toBeCalledWith('notifications/toggle');
   });
 

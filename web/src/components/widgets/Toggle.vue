@@ -8,9 +8,8 @@
            :checked="value"
            role="switch"
            @click.stop.prevent="onClick">
-    <label v-visible="!isWaiting"
-           :for="checkboxId"
-           @click.stop.prevent="onClick"/>
+    <span :id="`span${checkboxId}`" v-visible="!isWaiting"
+          @click.stop.prevent="onClick"/>
   </div>
 </template>
 
@@ -86,7 +85,7 @@ export default {
     opacity: 0; // hides checkbox
     position: absolute;
     z-index: -1;
-    & + label {
+    & + span {
       position: relative;
       display: inline-block;
       user-select: none;
@@ -118,11 +117,11 @@ export default {
     }
     // When Active
     &:checked {
-      & + label::before {
+      & + span::before {
         background: $light_green;
         transition: width 0.2s cubic-bezier(0, 0, 0, 0.1);
       }
-      & + label::after {
+      & + span::after {
         left: 1.6em;
       }
     }
@@ -132,7 +131,7 @@ export default {
     .spinner {
       opacity: 1;
     }
-    input.toggle + label {
+    input.toggle + span {
       opacity: 0;
       &::before,
       &::after {

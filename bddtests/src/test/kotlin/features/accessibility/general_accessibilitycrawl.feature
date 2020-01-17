@@ -9,9 +9,3 @@
       Given I am a EMIS patient
       When I am logged in
       Then the welcome page is saved to disk
-
-    Scenario: The my account page is captured
-      Given I am a EMIS patient
-      When I am logged in
-      And I click the settings icon
-      Then the myAccount page is saved to disk

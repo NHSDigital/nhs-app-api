@@ -18,6 +18,7 @@ open class PageUrl {
                     "organ donation" to "/organ-donation",
                     "more" to "/more",
                     "account" to "/account",
+                    "manage cookies" to "/account/cookies",
                     "notifications settings" to "/account/notifications",
                     "terms and conditions" to "/terms-and-conditions",
                     "my record" to "/my-record",

@@ -39,8 +39,8 @@ describe('Toggle', () => {
         expect(checkbox.attributes('id')).toBe(checkboxId);
       });
 
-      it('will set the label `for` attribute', () => {
-        expect(wrapper.find('label').attributes('for')).toBe(checkboxId);
+      it('will set the span `id` attribute', () => {
+        expect(wrapper.find('span').attributes('id')).toBe(`span${checkboxId}`);
       });
     });
 
@@ -59,18 +59,18 @@ describe('Toggle', () => {
       });
 
       it('will hide toggle', () => {
-        expect(wrapper.find('label').isVisible()).toBe(false);
+        expect(wrapper.find('span').isVisible()).toBe(false);
       });
 
-      describe('label', () => {
-        let label;
+      describe('span', () => {
+        let span;
 
         beforeEach(() => {
-          label = wrapper.find('label');
+          span = wrapper.find('span');
         });
 
         it('will not emit `input` when clicked', () => {
-          label.trigger('click');
+          span.trigger('click');
           expect(emit).not.toBeCalled();
         });
       });
@@ -91,18 +91,18 @@ describe('Toggle', () => {
       });
 
       it('will show toggle', () => {
-        expect(wrapper.find('label').isVisible()).toBe(true);
+        expect(wrapper.find('span').isVisible()).toBe(true);
       });
 
-      describe('label', () => {
-        let label;
+      describe('span', () => {
+        let span;
 
         beforeEach(() => {
-          label = wrapper.find('label');
+          span = wrapper.find('span');
         });
 
         it('will emit `input` when clicked', () => {
-          label.trigger('click');
+          span.trigger('click');
           expect(emit).toBeCalledWith('input', true);
         });
       });
