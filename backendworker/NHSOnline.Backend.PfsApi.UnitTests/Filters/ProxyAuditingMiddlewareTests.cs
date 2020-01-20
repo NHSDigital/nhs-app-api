@@ -12,6 +12,7 @@ using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 {
@@ -118,6 +119,45 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 
             // Assert
             _context.GetLinkedAccountAuditInfo().Should().BeNull();
+        }
+        
+        [DataTestMethod]
+        [DataRow(null, "/v1/patient/configuration")]
+        [DataRow(null, "/v1/patient/journey-configuration")]
+        public async Task DoesNotLogPatientHeaderNotFoundWarning_WhenRequestPathIsInvalid(string patientId, string requestPath)
+        {
+            // Arrange
+            _context.Request.Headers.Add(Constants.HttpHeaders.PatientId, patientId);
+            _context.Request.Path = requestPath;
+            var expectedLogMessage = "NHSO-Patient-Id Header not found";
+                 
+            var subject = new ProxyAuditingMiddleware(_next, _mockGpSystemFactory.Object, _mockLogger.Object);
+
+            // Act
+            await subject.Invoke(_context);
+
+            // Assert
+            _context.GetLinkedAccountAuditInfo().Should().BeNull();
+            _mockLogger.VerifyLogger(LogLevel.Warning, expectedLogMessage, Times.Never());
+        }
+        
+                
+        [DataTestMethod]
+        [DataRow(null, "/v1/patient/configuration1234")]
+        public async Task LogsPatientHeaderNotFoundWarning_WhenRequestPathIsValid(string patientId, string requestPath)
+        {
+            // Arrange
+            _context.Request.Headers.Add(Constants.HttpHeaders.PatientId, patientId);
+            _context.Request.Path = requestPath;
+            var expectedLogMessage = "NHSO-Patient-Id Header not found";
+                 
+            var subject = new ProxyAuditingMiddleware(_next, _mockGpSystemFactory.Object, _mockLogger.Object);
+
+            // Act
+            await subject.Invoke(_context);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Warning, expectedLogMessage, Times.Once());
         }
         
         [DataTestMethod]

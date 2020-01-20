@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,11 @@ namespace NHSOnline.Backend.PfsApi.Filters
         private readonly RequestDelegate _next;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<ProxyAuditingMiddleware> _logger;
-
+        
+        private readonly List<string> _patientIdHeaderNotExpectedForPaths = new List<string> {
+            @"/v1/patient/configuration", @"/v1/patient/journey-configuration"
+        };
+        
         public ProxyAuditingMiddleware(RequestDelegate next, IGpSystemFactory gpSystemFactory, ILogger<ProxyAuditingMiddleware> logger)
         {
             _next = next;
@@ -46,7 +51,11 @@ namespace NHSOnline.Backend.PfsApi.Filters
             string patientIdHeader = context.Request.Headers[PatientId];
             if (patientIdHeader == null)
             {
-                _logger.LogWarning("{PatientIdHeaderName} Header not found", PatientId);
+                // These two requests path are being called in the Startup before the patient id has been set
+                if (!_patientIdHeaderNotExpectedForPaths.Contains(context.Request.Path))
+                {
+                    _logger.LogWarning("{PatientIdHeaderName} Header not found", PatientId);
+                }
                 patientId = default;
                 return false;
             }

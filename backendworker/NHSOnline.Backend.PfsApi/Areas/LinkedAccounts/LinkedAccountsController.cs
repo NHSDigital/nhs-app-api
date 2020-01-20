@@ -110,6 +110,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
             {
                 string gpPracticeName = GetPracticeNameToDisplay(gpPracticeSearchTask, odsCodeForLinkedAccount);
 
+                _logger.LogInformation(
+                    $"Has access to GP appointments: {linkedAccountSuccess.Response.CanBookAppointment}, Has access to repeat prescriptions: " +
+                    $"{ linkedAccountSuccess.Response.CanOrderRepeatPrescription}, Has access to medical record: {linkedAccountSuccess.Response.CanViewMedicalRecord}");
+                
                 var response = new LinkedAccountAccessSummaryResponse
                 {
                     CanBookAppointment = linkedAccountSuccess.Response.CanBookAppointment,
