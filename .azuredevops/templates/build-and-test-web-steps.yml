@@ -25,6 +25,7 @@ steps:
 
   - task: Bash@3
     displayName: Check for test container
+    condition: succeededOrFailed()
     inputs:
       targetType: 'inline'
       script: |
@@ -34,13 +35,14 @@ steps:
 
   - task: ShellScript@2
     displayName: Retrieve web unit test results and coverage
-    condition: eq(variables['unit.test.container.exists'], 'Yes')
+    condition: and(succeededOrFailed(), eq(variables['unit.test.container.exists'], 'Yes'))
     inputs:
       scriptPath: web/buildscripts/05_extract_test_results.sh
 
   - task: Bash@3
     name: checkdirs
     displayName: Check for results directories
+    condition: succeededOrFailed()
     inputs:
       targetType: 'inline'
       script: |
@@ -54,19 +56,19 @@ steps:
 
   - task: PublishBuildArtifacts@1
     displayName: Publish unit test coverage
-    condition: eq(variables['unit.test.coverage.exists'], 'Yes')
+    condition: and(succeededOrFailed(), eq(variables['unit.test.coverage.exists'], 'Yes'))
     inputs:
       pathToPublish: 'web/web-unit-test-coverage.xml'
       artifactName: 'web-coverage'
 
   - task: PublishTestResults@2
     displayName: Publish web unit test results
-    condition: eq(variables['unit.test.results.exists'], 'Yes')
+    condition: and(succeededOrFailed(), eq(variables['unit.test.results.exists'], 'Yes'))
     inputs:
       testRunTitle: Unit Tests Web
       testResultsFormat: JUnit
       testResultsFiles: web/web-unit-test-results.xml
-      failTaskOnFailedTests: true
+      failTaskOnFailedTests: false
       mergeTestResults: true
 
   - task: ShellScript@2

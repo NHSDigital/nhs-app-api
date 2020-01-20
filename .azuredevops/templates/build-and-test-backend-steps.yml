@@ -19,6 +19,7 @@ steps:
 
   - task: Bash@3
     displayName: Check for test container
+    condition: succeededOrFailed()
     inputs:
       targetType: 'inline'
       script: |
@@ -28,13 +29,14 @@ steps:
 
   - task: ShellScript@2
     displayName: Retrieve backend unit tests results and coverage
-    condition: eq(variables['unit.test.container.exists'], 'Yes')
+    condition: and(succeededOrFailed(), eq(variables['unit.test.container.exists'], 'Yes'))
     inputs:
       scriptPath: backendworker/buildscripts/04_extract_test_results.sh
 
   - task: Bash@3
     name: checkdirs
     displayName: Check for results directories
+    condition: succeededOrFailed()
     inputs:
       targetType: 'inline'
       script: |
@@ -48,19 +50,19 @@ steps:
 
   - task: PublishBuildArtifacts@1
     displayName: Publish unit test coverage
-    condition: eq(variables['unit.test.coverage.exists'], 'Yes')
+    condition: and(succeededOrFailed(), eq(variables['unit.test.coverage.exists'], 'Yes'))
     inputs:
       pathToPublish: 'backendworker/coverage'
       artifactName: 'backend-coverage'
 
   - task: PublishTestResults@2
     displayName: Publish backend unit test results
-    condition: eq(variables['unit.test.results.exists'], 'Yes')
+    condition: and(succeededOrFailed(), eq(variables['unit.test.results.exists'], 'Yes'))
     inputs:
       testRunTitle: Unit Tests Backend
       testResultsFormat: VSTest
       testResultsFiles: backendworker/TestResults/*.trx
-      failTaskOnFailedTests: true
+      failTaskOnFailedTests: false
       mergeTestResults: true
 
   - task: ShellScript@2

@@ -36,7 +36,5 @@ destroy_services_under_test
 if [ -f "build/failures.txt" ]; then
   info "Tests failed"
   cat build/failures.txt
-  if [ -z "$TF_BUILD" ]; then
-    exit 1
-  fi
+  exit 1
 fi

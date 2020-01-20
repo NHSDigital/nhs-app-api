@@ -12,7 +12,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  - template: .azuredevops/templates/docker-variables.yml
+  docker.registry: nhsappdev.azurecr.io
+  docker.tag: $[variables['Build.SourceVersion']]
+  source.develop: $[eq(variables['Build.SourceBranchName'], 'develop')]
+  source.tag: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
 
 stages:
   - template: .azuredevops/templates/initialise-stage.yml
@@ -33,8 +36,16 @@ stages:
 
       - template: .azuredevops/templates/generate-coverage-report-job.yml
 
+  - stage: security
+    displayName: Security Scans
+    dependsOn: build_and_unit_test
+    condition: and(succeeded(), or(variables['security.run.scans'], eq(variables['source.develop'], 'True'), eq(variables['source.tag'], 'True')))
+    jobs:
+      - template: .azuredevops/templates/run-security-scan-job.yml
+
   - stage: integration_tests
     displayName: Integration Tests
+    dependsOn: build_and_unit_test
     jobs:
       - template: .azuredevops/templates/integration-tests-initialise-job.yml
 

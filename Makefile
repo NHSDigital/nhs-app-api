@@ -22,6 +22,9 @@ clean:	## Delete all docker containers and volumes
 
 localbdd: build	run-localbdd	## Build everything and start containers ready to BDD tests locally
 
+twistlock:	# Run twistlock security scan
+	./build/run_twistlock_security_scan.sh
+
 -include build/expand_run_options_docker_images.make
 
 $(eval $(call expand_run_options_docker_images,run))

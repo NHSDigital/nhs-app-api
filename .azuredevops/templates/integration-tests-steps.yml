@@ -92,5 +92,5 @@ steps:
       testResultsFormat: JUnit
       testResultsFiles: '**/TEST-*.xml'
       searchFolder: '$(Build.SourcesDirectory)/$(report.path.junit.logs)'
-      failTaskOnFailedTests: true
+      failTaskOnFailedTests: false
       mergeTestResults: true

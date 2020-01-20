@@ -54,6 +54,4 @@ if [ -n "$TEAMCITY_VERSION" ]; then
   exit
 fi;
 
-if [ -z "$TF_BUILD" ]; then
-  exit $test_run_result
-fi;
+exit $test_run_result

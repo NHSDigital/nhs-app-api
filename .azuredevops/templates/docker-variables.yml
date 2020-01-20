@@ -1,3 +1,0 @@
-variables:
-  docker.registry: nhsappdev.azurecr.io
-  docker.tag: $[variables['Build.SourceVersion']]
