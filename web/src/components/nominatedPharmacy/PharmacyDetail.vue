@@ -23,10 +23,9 @@
                              !displayChangeMyNominatedPharmacyButton"
                            id="link-to-change-pharmacy"
                            :text="$t('nominated_pharmacy.changePharmacyLink')"
-                           :click-func="goToChangeNominatedPharmacySearch">
-      <desktopGenericBackLink id="back-link"
-                              :button-text="'nominated_pharmacy.changePharmacyLink'"
-                              @clickAndPrevent="goToChangeNominatedPharmacySearch"/>
+                           :click-func="goToChangeNominatedPharmacySearch"
+                           tag="a" :href="nominatedPharmacySearch">
+      <p> {{ $t('nominated_pharmacy.changePharmacyLink') }} </p>
     </analytics-tracked-tag>
   </div>
 </template>
@@ -41,12 +40,10 @@ import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
 import { redirectTo } from '@/lib/utils';
 import GenericButton from '@/components/widgets/GenericButton';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 export default {
   name: 'PharmacyDetail',
   components: {
-    DesktopGenericBackLink,
     GenericButton,
     AnalyticsTrackedTag,
     PharmacySummary,
@@ -80,6 +77,11 @@ export default {
       required: false,
       default: true,
     },
+  },
+  data() {
+    return {
+      nominatedPharmacySearch: NOMINATED_PHARMACY_SEARCH.path,
+    };
   },
   computed: {
     showChangeNominatedPharmacyLink() {
