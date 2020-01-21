@@ -38,6 +38,14 @@ class EmisMessagingBuilder(configuration: EmisConfiguration?,
         }
     }
 
+    fun respondWithForbidden(): Mapping {
+        val exceptionResponse = ExceptionResponse(HttpStatus.SC_FORBIDDEN.toLong(),
+                "Forbidden error")
+        return respondWith(HttpStatus.SC_FORBIDDEN) {
+            andJsonBody(exceptionResponse, GsonFactory.asPascal)
+        }
+    }
+
     private fun respondWithException(exceptionResponse: ExceptionResponse): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody(exceptionResponse, GsonFactory.asPascal)

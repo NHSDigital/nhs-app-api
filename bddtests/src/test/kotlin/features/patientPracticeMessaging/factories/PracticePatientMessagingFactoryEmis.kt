@@ -24,9 +24,15 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         }
     }
 
-    override fun errorWithPatientPracticeMessaging(patient: Patient) {
+    override fun unknownErrorWithPatientPracticeMessaging(patient: Patient) {
         mockingClient.forEmis {
             messaging.viewMyMessagesRequest(patient).respondWithBadRequest()
+        }
+    }
+
+    override fun forbiddenErrorWithPatientPracticeMessaging(patient: Patient) {
+        mockingClient.forEmis {
+            messaging.viewMyMessagesRequest(patient).respondWithForbidden()
         }
     }
 

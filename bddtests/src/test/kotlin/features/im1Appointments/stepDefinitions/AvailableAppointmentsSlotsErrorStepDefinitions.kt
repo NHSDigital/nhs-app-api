@@ -50,7 +50,7 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
 
     @Then("^I see appropriate information message when appointments are disabled$")
     fun thenISeeAppropriateInformationMessageWhenAppointmentsAreDisabled() {
-        val expectedHeader = "You are not currently able to book appointments online"
+        val expectedHeader = "You are not currently able to book appointments online."
         val expectedBody = "Contact your GP surgery for more information. For urgent medical help, call 111."
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.text}",
                 expectedHeader, errorPage.heading.text)

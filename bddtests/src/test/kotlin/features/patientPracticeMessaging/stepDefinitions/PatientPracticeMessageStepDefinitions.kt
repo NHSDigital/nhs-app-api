@@ -84,10 +84,17 @@ open class PatientPracticeMessageStepDefinitions {
     }
 
     @Given("^there is an unknown error getting patient practice messages$")
-    fun givenThereIsAnErrorGettingPatientPracticeMessages() {
+    fun givenThereIsAnUnknownErrorGettingPatientPracticeMessages() {
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
-                .errorWithPatientPracticeMessaging(SerenityHelpers.getPatient())
+                .unknownErrorWithPatientPracticeMessaging(SerenityHelpers.getPatient())
+    }
+
+    @Given("^there is a forbidden error getting patient practice messages$")
+    fun givenThereIsAForbiddenErrorGettingPatientPracticeMessages() {
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .forbiddenErrorWithPatientPracticeMessaging(SerenityHelpers.getPatient())
     }
 
     @Given("^there is an unknown error getting patient practice message details$")
@@ -149,6 +156,15 @@ open class PatientPracticeMessageStepDefinitions {
     @Then("^I see a message indicating that I have no patient practice messages$")
     fun theMessageIndicatingNoPatientPracticeMessagesIsDisplayed() {
         patientPracticeMessagingPage.assertNoMessagesTextDisplayed()
+    }
+
+    @Then("^I see the appropriate forbidden error for patient practice messaging$")
+    fun iSeeTheAppropriateForbiddenErrorForPatientPracticeMessaging(){
+        errorPage.assertPageHeader("Service unavailable")
+        errorPage.assertNoSubHeader()
+        errorPage.assertHeaderText("You are not currently able to use messaging.")
+        errorPage.assertMessageText("Contact your GP surgery for more information. For urgent medical advice, " +
+                "go to 111.nhs.uk or call 111.")
     }
 
     @Then("^I see the appropriate error for patient practice messaging$")

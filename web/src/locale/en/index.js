@@ -659,7 +659,7 @@ export default {
       },
       403: {
         pageHeader: 'Appointment booking unavailable',
-        header: 'You are not currently able to book appointments online',
+        header: 'You are not currently able to book appointments online.',
         subheader: '',
         message: {
           text: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
@@ -765,7 +765,7 @@ export default {
         403: {
           pageTitle: 'Appointment booking unavailable',
           pageHeader: 'Appointment booking unavailable',
-          header: 'You are not currently able to book appointments online',
+          header: 'You are not currently able to book appointments online.',
           subheader: '',
           message: {
             text: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
@@ -1452,6 +1452,16 @@ export default {
         header: 'There is a problem getting your messages',
         message: 'Try again now.',
         retryButtonText: 'Try again',
+      },
+      403: {
+        pageTitle: 'Messaging unavailable',
+        pageHeader: 'Messaging unavailable',
+        header: 'You are not currently able to use messaging.',
+        subheader: '',
+        message: {
+          text: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call 111.',
+          label: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call one one one.',
+        },
       },
     },
     view_details: {

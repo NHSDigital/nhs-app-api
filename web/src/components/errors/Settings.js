@@ -181,6 +181,7 @@ export default {
     },
     {
       route: PATIENT_PRACTICE_MESSAGING.path,
+      errorOverrideStyles: { 403: 'plain' },
       action: {
         400: 'patientPracticeMessaging/clearErrorsAndLoadMessages',
       },

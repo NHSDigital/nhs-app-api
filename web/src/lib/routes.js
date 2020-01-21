@@ -1032,7 +1032,7 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessaging',
       get parentRoute() {
-        return this.allRoutes.MORE;
+        return this.allRoutes.INDEX;
       },
     },
     helpUrl: baseNhsAppHelpUrl,
