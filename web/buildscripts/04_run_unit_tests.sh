@@ -12,7 +12,7 @@ fi
 
 ARGS=()
 if [ -n "$TEAMCITY_VERSION" ]; then
-  ARGS+=('--cpus=1' '--memory=1g')
+  ARGS+=('--cpus=1')
 fi;
 
 set +e
