@@ -11,12 +11,12 @@ TWISTLOCK_CLI_USER=${TWISTLOCK_CLI_USER:-twistcli}
 TWISTLOCK_CLI_CONSOLE=${TWISTLOCK_CLI_CONSOLE:-https://twistlock.production.nhsapp.service.nhs.uk:8083}
 TWISTLOCK_CLI_IMAGE=${TWISTLOCK_CLI_IMAGE:-nhsapp.azurecr.io/twistcli:19.11.480}
 
-if [ -z "$TWISTLOCK_CLI_PASS" ] && [ -f "$HOME/.nhsonline/secrets/twistlock.password" ]; then
-  TWISTLOCK_CLI_PASS=$(<~/.nhsonline/secrets/twistlock.password)
+if [ -z "$TWISTLOCK_CLI_PASSWORD" ] && [ -f "$HOME/.nhsonline/secrets/twistlock.password" ]; then
+  TWISTLOCK_CLI_PASSWORD=$(<~/.nhsonline/secrets/twistlock.password)
 fi
 
-if [ -z "$TWISTLOCK_CLI_PASS" ]; then
-  echo "Twistlock password is required (TWISTLOCK_CLI_PASS or $HOME/.nhsonline/secrets/twistlock.password)"
+if [ -z "$TWISTLOCK_CLI_PASSWORD" ]; then
+  echo "Twistlock password is required (TWISTLOCK_CLI_PASSWORD or $HOME/.nhsonline/secrets/twistlock.password)"
   exit 1
 fi
 
@@ -44,7 +44,7 @@ do
     -v "$MOUNT_DOCKER_SOCKET" \
     "$TWISTLOCK_CLI_IMAGE" \
     images scan \
-    -u "$TWISTLOCK_CLI_USER" -p "$TWISTLOCK_CLI_PASS" --address "$TWISTLOCK_CLI_CONSOLE" \
+    -u "$TWISTLOCK_CLI_USER" -p "$TWISTLOCK_CLI_PASSWORD" --address "$TWISTLOCK_CLI_CONSOLE" \
     --vulnerability-threshold critical \
     --details \
     "$DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG"

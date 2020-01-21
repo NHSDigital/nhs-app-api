@@ -8,6 +8,6 @@ jobs:
       - task: ShellScript@2
         displayName: Run
         env:
-          TWISTLOCK_CLI_PASS: $(tw.pass)
+          TWISTLOCK_CLI_PASSWORD: $(twistlock.cli.password)
         inputs:
           scriptPath: build/run_twistlock_security_scan.sh
