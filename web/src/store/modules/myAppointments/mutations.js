@@ -7,6 +7,8 @@ import {
   CLEAR_SELECTED_APPOINTMENT,
   CLEAR_APPOINTMENTS,
   initialState,
+  CANCELLING_JOURNEY_START,
+  CANCELLING_JOURNEY_COMPLETE,
 } from './mutation-types';
 
 const sortSlots = sortBy(slot => [
@@ -51,5 +53,11 @@ export default {
   },
   [CLEAR_APPOINTMENTS](state) {
     clearAppointments(state);
+  },
+  [CANCELLING_JOURNEY_START](state) {
+    state.cancellingInProgress = true;
+  },
+  [CANCELLING_JOURNEY_COMPLETE](state) {
+    state.cancellingInProgress = false;
   },
 };

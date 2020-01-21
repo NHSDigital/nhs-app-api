@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import AppointmentsCancellingPage from '@/pages/appointments/cancelling';
 import { mount } from '../../helpers';
-import { APPOINTMENTS, APPOINTMENT_CANCELLING_SUCCESS } from '@/lib/routes';
+import { APPOINTMENT_CANCELLING_SUCCESS } from '@/lib/routes';
 import * as dependency from '@/lib/utils';
 
 jest.mock('@/lib/utils');
@@ -79,10 +79,8 @@ describe('cancelling.vue', () => {
           appointmentId: selectedAppointmentId,
           cancellationReasonId: '',
         });
-      expect($store.dispatch)
-        .toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', jasmine.anything());
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS.path);
+        .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_CANCELLING_SUCCESS.path);
     });
   });
 });

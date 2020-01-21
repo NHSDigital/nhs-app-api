@@ -9,7 +9,10 @@
           <switch-profile-button />
         </div>
         <div v-else>
-          <!-- main user booked content -->
+          <desktopGenericBackLink
+            :path="backPath"
+            :button-text="'appointments.bookingSuccess.back'"
+            @clickAndPrevent="backButtonClicked"/>
         </div>
       </div>
     </div>
@@ -19,20 +22,32 @@
 <script>
 import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
 import get from 'lodash/fp/get';
+import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import { APPOINTMENTS } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'BookingSuccess',
   layout: 'nhsuk-layout',
   components: {
     SwitchProfileButton,
+    DesktopGenericBackLink,
   },
   data() {
     return {
       isProxying: this.$store.getters['session/isProxying'],
       name: get('$store.state.linkedAccounts.actingAsUser.name', this),
+      backPath: APPOINTMENTS.path,
     };
   },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
+    this.$store.dispatch('availableAppointments/completeBookingJourney');
+  },
+  methods: {
+    backButtonClicked() {
+      redirectTo(this, this.backPath, null);
+    },
   },
 };
 </script>

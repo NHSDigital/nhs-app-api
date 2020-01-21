@@ -76,8 +76,8 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
-    Then the Your Appointments page is displayed
-    And a "Cancellation confirmed" message is displayed
+    Then the Appointment Cancel success page is displayed
+    And I select the back to home link on the appointments page
   @smoketest
     Examples:
       | Reason             | GP System |
@@ -91,15 +91,15 @@ Feature: Cancel Appointments Frontend
       | No longer required | MICROTEST |
       | Unable to attend   | MICROTEST |
 
-  Scenario:  Vision user can cancel appointment when there is just one reason
+  Scenario: A Vision user can cancel appointment when there is just one reason
     Given VISION is available to cancel a previously booked appointment before cutoff time, with only one available reason
     And I am logged in
     When I retrieve the 'Your Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select the cancellation reason
     When I select "Cancel appointment" button
-    Then the Your Appointments page is displayed
-    And a "Cancellation confirmed" message is displayed
+    Then the Appointment Cancel success page is displayed
+    And I select the back to home link on the appointments page
 
   Scenario: A TPP user can cancel an appointment
     Given TPP is available to cancel a previously booked appointment before cutoff time
@@ -108,8 +108,8 @@ Feature: Cancel Appointments Frontend
     And I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     When I select "Cancel appointment" button
-    Then the Your Appointments page is displayed
-    And a "Cancellation confirmed" message is displayed
+    Then the Appointment Cancel success page is displayed
+    And I select the back to home link on the appointments page
 
   Scenario Outline: <GP System> user navigates back to the "Your appointments" screen
     Given I have upcoming appointments before cutoff time for <GP System>

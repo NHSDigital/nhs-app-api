@@ -28,8 +28,7 @@ open class YourAppointmentsUISteps {
 
     private val pageHeader = "Your appointments"
 
-    private val bookingSuccessMessage = "Your appointment has been booked. You can view details or cancel it here."
-    private val cancellationSuccessMessage = "Your appointment has been cancelled."
+    private val backLink = "Go to your appointments"
 
     private val expectedNoUpcomingText = "Upcoming appointments\n" +
             "If you have an upcoming appointment that is not shown here, contact your GP surgery for more information."
@@ -37,14 +36,9 @@ open class YourAppointmentsUISteps {
             "You have no recent past appointments. To find out about older appointments, contact your GP surgery."
 
     @Step
-    fun checkBookingSuccessMessage(includesReferenceToCancel: Boolean = true) {
-        val actualMessage = yourAppointmentsPage.getSuccessMessage()
-        val expectedMessage =
-                if (includesReferenceToCancel)
-                    bookingSuccessMessage
-                else
-                    bookingSuccessMessage.replace("or cancel it ", "")
-        assertEquals(expectedMessage, actualMessage)
+    fun checkBackToAppointmentsLink() {
+        val actualMessage = yourAppointmentsPage.getBackLink()
+        assertEquals(backLink, actualMessage)
     }
 
     @Step
@@ -125,12 +119,6 @@ open class YourAppointmentsUISteps {
                 "Historical slots are in the wrong order. ",
                 Ordering.natural<Long>().reverse<Long>().isOrdered(slotDate)
         )
-    }
-
-    @Step
-    fun verifyCancellationConfirmationMessage() {
-        val message = yourAppointmentsPage.getSuccessMessage()
-        assertEquals(cancellationSuccessMessage, message)
     }
 
     @Step

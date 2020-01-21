@@ -73,7 +73,8 @@ describe('cancel', () => {
     };
     data = { foo: 'bar' };
     process.client = true;
-    await cancel.call(that, {}, data);
+    const commit = jest.fn();
+    await cancel.call(that, { commit }, data);
   });
 
   it('will delete the patients appointment from the backend', () => {

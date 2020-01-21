@@ -171,14 +171,7 @@ export default {
         this.labelledBy = undefined;
         try {
           await this.$store.dispatch('myAppointments/cancel', data);
-
-          let successPath;
-          if (this.$store.getters['session/isProxying']) {
-            successPath = APPOINTMENT_CANCELLING_SUCCESS.path;
-          } else {
-            this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancelling.successText'));
-            successPath = APPOINTMENTS.path;
-          }
+          const successPath = APPOINTMENT_CANCELLING_SUCCESS.path;
           redirectTo(this, successPath);
         } catch (error) {
           /*

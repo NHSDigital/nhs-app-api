@@ -8,6 +8,8 @@ import features.im1Appointments.steps.YourAppointmentsTelephoneSteps
 import features.im1Appointments.steps.YourAppointmentsUISteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.appointments.BookingSuccessPage
+import pages.appointments.CancellingSuccessPage
 import pages.assertSingleElementPresent
 import pages.assertIsVisible
 import pages.waitUntilPresent
@@ -23,13 +25,16 @@ class YourAppointmentsStepDefinitions {
     @Steps
     lateinit var yourAppointmentsUISteps: YourAppointmentsUISteps
     @Steps
+    lateinit var bookingSuccessPage: BookingSuccessPage
+    @Steps
+    lateinit var cancelSuccessPage: CancellingSuccessPage
+    @Steps
     lateinit var yourAppointmentsTelephoneSteps: YourAppointmentsTelephoneSteps
     @Steps
     lateinit var cancelAppointmentSteps: CancelAppointmentSteps
 
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
-
 
     @When("^I select \"([^\"]*)\" button$")
     fun whenISelectButton(buttonText: String) {
@@ -42,6 +47,11 @@ class YourAppointmentsStepDefinitions {
         yourAppointmentsUISteps.yourAppointmentsPage.clickFirstCancelAppointmentLink()
     }
 
+    @Then("^I select the back to home link on the appointments page$")
+    fun thenISelectTheBackToHomeLink() {
+        yourAppointmentsUISteps.yourAppointmentsPage.clickOnBackLink()
+    }
+
     @Then("^the Appointment Slot page is displayed$")
     fun theAppointmentSlotPageIsDisplayed() {
         webHeader.getPageTitle().withText("Confirm your appointment")
@@ -52,7 +62,23 @@ class YourAppointmentsStepDefinitions {
     fun appointmentBookingSuccessMessage() {
         yourAppointmentsUISteps.yourAppointmentsPage.
                 locatorMethods.assertNativeElementsLoaded(yourAppointmentsUISteps.yourAppointmentsPage.bookButton)
-        yourAppointmentsUISteps.checkBookingSuccessMessage()
+        bookingSuccessPage.checkBookingSuccessMessage()
+    }
+
+    @Then("^the Appointment Booking success page is displayed$")
+    fun appointmentBookingSuccessPage() {
+        yourAppointmentsUISteps.yourAppointmentsPage.
+                locatorMethods.assertNativeElementsLoaded(yourAppointmentsUISteps.yourAppointmentsPage.bookButton)
+        bookingSuccessPage.checkBookingSuccessMessage()
+        yourAppointmentsUISteps.checkBackToAppointmentsLink()
+    }
+
+    @Then("^the Appointment Cancel success page is displayed$")
+    fun appointmentCancelSuccessPage() {
+        yourAppointmentsUISteps.yourAppointmentsPage.
+                locatorMethods.assertNativeElementsLoaded(yourAppointmentsUISteps.yourAppointmentsPage.bookButton)
+        cancelSuccessPage.checkCancelSuccessMessage()
+        yourAppointmentsUISteps.checkBackToAppointmentsLink()
     }
 
     @Then("^the booked appointment before cutoff time is correctly displayed with ability to cancel$")
@@ -68,10 +94,9 @@ class YourAppointmentsStepDefinitions {
         yourAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment(1)
     }
 
-    @Then("^the Appointment Booking success message is displayed without reference to being able to cancel$")
-    fun appointmentBookingConfirmationScreenIsDisplayedWithoutReferenceToCancel() {
-        yourAppointmentsUISteps.checkBookingSuccessMessage(false)
-
+    @Then("^the Appointment Booking success page is displayed without reference to being able to cancel$")
+    fun appointmentBookingConfirmationPageIsDisplayedWithoutReferenceToCancel() {
+        bookingSuccessPage.checkBookingSuccessMessage()
     }
 
     @Then("^the booked appointment is correctly displayed without ability to cancel$")
@@ -144,11 +169,6 @@ class YourAppointmentsStepDefinitions {
     @Then("^no appointment can be cancelled$")
     fun noAppointmentCanBeCancelled() {
         yourAppointmentsUISteps.verifyThatThereAreNoCancelLinks()
-    }
-
-    @Then("^a \"Cancellation confirmed\" message is displayed$")
-    fun cancellationConfirmationMessage() {
-        yourAppointmentsUISteps.verifyCancellationConfirmationMessage()
     }
 
     @Then("^I see page header indicating there is an appointment data error$")

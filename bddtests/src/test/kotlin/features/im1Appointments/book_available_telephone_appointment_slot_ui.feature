@@ -18,7 +18,8 @@ Feature: Book Telephone Appointments Frontend
     When I enter a phone number for the appointment
     And I enter symptoms
     And I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success message is displayed
+    Then the Appointment Booking success page is displayed
+    And I select the back to home link on the appointments page
     And I can see the booked telephone appointment and it has a cancel link
     Examples:
       | GP System |
@@ -213,7 +214,8 @@ Feature: Book Telephone Appointments Frontend
     And I have selected a telephone appointment slot to book
     And I enter a phone number for the appointment
     When I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success message is displayed
+    Then the Appointment Booking success page is displayed
+    And I select the back to home link on the appointments page
     And I can see the booked telephone appointment and it has a cancel link
     Examples:
       | GP System |
@@ -245,7 +247,8 @@ Feature: Book Telephone Appointments Frontend
     And I have selected a telephone appointment slot to book
     When I select a telephone number to book an appointment
     And I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success message is displayed
+    Then the Appointment Booking success page is displayed
+    And I select the back to home link on the appointments page
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
   Scenario Outline: A <GP System> user receives an error if a telephone number is manually entered, but no reason entered, but a reason is required
@@ -276,5 +279,6 @@ Feature: Book Telephone Appointments Frontend
     When I select the radio button for an alternative phone number to those stored
     And I enter a phone number for the appointment
     And I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success message is displayed
+    Then the Appointment Booking success page is displayed
+    And I select the back to home link on the appointments page
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
