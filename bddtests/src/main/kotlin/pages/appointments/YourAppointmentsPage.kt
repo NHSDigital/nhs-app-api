@@ -53,15 +53,12 @@ class YourAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    private val backLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(),\"Go to your appointments\")]",
-            page = this
-    )
-
     override val titleText: String = "Your appointments"
 
     private val upcomingAppointmentParentXpath = "//div[@data-purpose='upcoming-appointments']"
     private val historicalAppointmentParentXpath = "//div[@data-purpose='past-appointments']"
+
+    fun getSuccessMessage(): String = successMessage.text
 
     fun getNoUpcomingText(): String = actualNoUpcomingText.text
 
@@ -106,6 +103,4 @@ class YourAppointmentsPage : AppointmentSharedElementsPage() {
     fun getTelephoneField(): ArrayList<String> {
         return getTelephoneSlot(upcomingAppointmentParentXpath)
     }
-
-    fun getBackLink(): String = backLink.text
 }

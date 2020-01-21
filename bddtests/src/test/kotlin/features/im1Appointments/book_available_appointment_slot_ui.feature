@@ -29,8 +29,7 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success page is displayed
-    And I select the back to home link on the appointments page
+    Then the Appointment Booking success message is displayed
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
@@ -63,8 +62,7 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success page is displayed
-    And I select the back to home link on the appointments page
+    Then the Appointment Booking success message is displayed
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
@@ -85,8 +83,7 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success page is displayed without reference to being able to cancel
-    And I select the back to home link on the appointments page
+    Then the Appointment Booking success message is displayed without reference to being able to cancel
     And the booked appointment is correctly displayed without ability to cancel
 
   #400
@@ -239,8 +236,7 @@ Feature: Book Appointments Frontend
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success page is displayed
-    And I select the back to home link on the appointments page
+    Then the Appointment Booking success message is displayed
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
   Scenario: An EMIS user can book an appointment with describing symptoms
@@ -252,8 +248,7 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
-    Then the Appointment Booking success page is displayed
-    And I select the back to home link on the appointments page
+    Then the Appointment Booking success message is displayed
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
   #460
@@ -266,6 +261,7 @@ Feature: Book Appointments Frontend
     And I enter symptoms
     And  I click the 'Confirm and book appointment' button
     Then a message is displayed indicating that user has reached maximum appointment limit
+
 
     # Positive submission cases
   Scenario: An EMIS user cannot enter or select a phone number for non phone appointments

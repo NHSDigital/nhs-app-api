@@ -248,18 +248,7 @@ const routes = {
   APPOINTMENT_CANCELLING_SUCCESS: {
     name: 'appointments-cancelling-success',
     path: '/appointments/cancelling-success',
-    crumb: {
-      nativeDisabled: true,
-      i18nKey: 'appointmentsConfirmation',
-      get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
-      },
-    },
-    redirectRules: [{
-      condition: 'myAppointments/isCancellingAppointmentInProgress',
-      value: false,
-      url: '/appointments',
-    }],
+    crumb: {},
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   APPOINTMENT_CONFIRMATIONS: {
@@ -276,18 +265,7 @@ const routes = {
   APPOINTMENT_BOOKING_SUCCESS: {
     name: 'appointments-booking-success',
     path: '/appointments/booking-success',
-    crumb: {
-      nativeDisabled: true,
-      i18nKey: 'appointmentsConfirmation',
-      get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
-      },
-    },
-    redirectRules: [{
-      condition: 'availableAppointments/isBookingAppointmentInProgress',
-      value: false,
-      url: '/appointments',
-    }],
+    crumb: {},
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   APPOINTMENT_GP_AT_HAND: {

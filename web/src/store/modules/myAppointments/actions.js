@@ -6,7 +6,6 @@ import {
   SELECT,
   CLEAR_SELECTED_APPOINTMENT,
   CLEAR_APPOINTMENTS,
-  CANCELLING_JOURNEY_COMPLETE,
 } from './mutation-types';
 
 export default {
@@ -38,7 +37,7 @@ export default {
   clearAppointments({ commit }) {
     commit(CLEAR_APPOINTMENTS);
   },
-  cancel({ commit }, data) {
+  cancel(_, data) {
     /* eslint-disable no-unused-vars */
     const param = {
       appointmentCancelRequest: data,
@@ -46,13 +45,9 @@ export default {
 
     return this.app.$http
       .deleteV1PatientAppointments(param).then(() => {
-        commit('CANCELLING_JOURNEY_START');
         if (process.client) {
           this.dispatch('analytics/satelliteTrack', 'appointment_cancelled');
         }
       });
-  },
-  completeCancellingJourney({ commit }) {
-    commit(CANCELLING_JOURNEY_COMPLETE);
   },
 };

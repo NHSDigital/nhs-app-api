@@ -34,7 +34,6 @@ Feature: Book Appointments With Javascript Disabled
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
 
-  @tech-debt
   Scenario Outline: A <GP System> user with noJs can only enter a phone number for phone appointments, when they have phone numbers saved
     Given I wish to book a <GP System> telephone appointment
       | number of stored telephone numbers  | 2         |
@@ -164,7 +163,6 @@ Feature: Book Appointments With Javascript Disabled
       | EMIS      |
       | MICROTEST |
 
-  @tech-debt
   Scenario: An EMIS user with noJS can book a telephone appointment if a phone number is provided without describing symptoms when booking reason is optional
     Given I wish to book a EMIS telephone appointment
       | number of stored telephone numbers  | 0         |
@@ -182,7 +180,7 @@ Feature: Book Appointments With Javascript Disabled
 
 
     # Miscellaneous no-JS scenarios
-  @tech-debt
+
   Scenario Outline: A <GP System> user with noJS can book appointments
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled
@@ -220,7 +218,6 @@ Feature: Book Appointments With Javascript Disabled
       | TPP       |
       | MICROTEST |
 
-  @tech-debt
   Scenario: An EMIS user with noJS can book an appointment without describing symptoms when booking reason is optional
     Given there are EMIS appointments available to book where booking reason is set optional
     And a booked appointment can be cancelled

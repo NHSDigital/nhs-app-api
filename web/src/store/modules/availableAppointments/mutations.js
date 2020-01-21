@@ -13,8 +13,6 @@ import {
   FILTER,
   SET_BOOKING_REASON_NECESSITY,
   SET_SELECTED_OPTIONS,
-  BOOKING_JOURNEY_COMPLETE,
-  BOOKING_JOURNEY_START,
 } from './mutation-types';
 
 const clearState = (state) => {
@@ -74,11 +72,5 @@ export default {
   [FILTER](state) {
     const mutation = new FilterMutation(DateProvider, new DateFilterMapper(DateProvider));
     state.filteredSlots = mutation.execute(state.slots, state.selectedOptions);
-  },
-  [BOOKING_JOURNEY_COMPLETE](state) {
-    state.bookingInProgress = false;
-  },
-  [BOOKING_JOURNEY_START](state) {
-    state.bookingInProgress = true;
   },
 };

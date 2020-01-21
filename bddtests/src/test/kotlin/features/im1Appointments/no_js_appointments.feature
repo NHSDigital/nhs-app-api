@@ -6,7 +6,7 @@ Feature: Appointments Service With Javascript Disabled
     Given I have disabled javascript
 
   #This test covers navigation via buttons/links
-  @tech-debt
+   
   Scenario Outline: A <GP System> user can find and book available appointments with javascript disabled
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And I am logged in
@@ -62,7 +62,6 @@ Feature: Appointments Service With Javascript Disabled
     When I retrieve the 'Appointment Booking' page directly
     Then the appointment slot guidance content is displayed
 
-  @tech-debt
   Scenario Outline: A <GP System> user can cancel appointments with javascript disabled
     Given <GP System> is available to cancel a previously booked appointment before cutoff time because <Reason>
     And I am logged in
@@ -77,7 +76,6 @@ Feature: Appointments Service With Javascript Disabled
       | No longer required | EMIS      |
       | Reason 1           | VISION    |
 
-  @tech-debt
   Scenario: A TPP user can cancel appointments with javascript disabled
     Given TPP is available to cancel a previously booked appointment before cutoff time
     And I am logged in

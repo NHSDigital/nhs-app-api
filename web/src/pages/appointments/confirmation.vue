@@ -411,7 +411,13 @@ export default {
             value: moment(this.slot.startTime).format('dddd | HH:mm:ss'),
           });
         }
-        const successPath = APPOINTMENT_BOOKING_SUCCESS.path;
+        let successPath;
+        if (this.$store.getters['session/isProxying']) {
+          successPath = APPOINTMENT_BOOKING_SUCCESS.path;
+        } else {
+          this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
+          successPath = this.appointmentPath;
+        }
         redirectTo(this, successPath);
       } catch (error) {
         /*

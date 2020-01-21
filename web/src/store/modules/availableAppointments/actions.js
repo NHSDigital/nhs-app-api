@@ -8,8 +8,6 @@ import {
   FILTER,
   SET_BOOKING_REASON_NECESSITY,
   SET_SELECTED_OPTIONS,
-  BOOKING_JOURNEY_COMPLETE,
-  BOOKING_JOURNEY_START,
 } from './mutation-types';
 
 export default {
@@ -47,23 +45,16 @@ export default {
   deselect({ commit }) {
     commit(DESELECT);
   },
-  book({ commit }, slot) {
+  book(_, slot) {
     const param = {
       appointmentBookRequest: slot,
     };
 
     return this.app.$http
       .postV1PatientAppointments(param).then(() => {
-        commit(BOOKING_JOURNEY_START);
         if (process.client) {
           this.dispatch('analytics/satelliteTrack', 'appointment_booked');
         }
       });
-  },
-  completeBookingJourney({ commit }) {
-    commit(BOOKING_JOURNEY_COMPLETE);
-  },
-  startBookingJourney({ commit }) {
-    commit(BOOKING_JOURNEY_START);
   },
 };

@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import ConfirmationPage from '@/pages/appointments/confirmation';
 import { mount } from '../../helpers';
-import { APPOINTMENT_BOOKING_SUCCESS } from '@/lib/routes';
+import { APPOINTMENTS, APPOINTMENT_BOOKING_SUCCESS } from '@/lib/routes';
 import * as dependency from '@/lib/utils';
 
 jest.mock('@/lib/utils');
@@ -95,8 +95,10 @@ describe('confirmation.vue', () => {
       // assert
       expect($store.dispatch)
         .toHaveBeenNthCalledWith(1, 'availableAppointments/book', jasmine.anything());
+      expect($store.dispatch)
+        .toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', jasmine.anything());
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_BOOKING_SUCCESS.path);
+        .toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS.path);
     });
   });
 });
