@@ -11,8 +11,7 @@ pull_docker_images
 start_services_under_test
 
 docker run \
-  --name "$TRANCHE_TAG" \
-  --rm \
+  --name "${TRANCHE_TAG}_test_runner" \
   --network "$DOCKER_NETWORK" \
   --env-file ../docker/bddtests/env/vars_test_runner.env \
   -v "$WORKING_DIR:/repo" \

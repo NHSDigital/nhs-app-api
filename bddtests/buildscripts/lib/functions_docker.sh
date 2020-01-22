@@ -11,6 +11,8 @@ function cleanup_docker_containers () {
     for CONTAINER in $(docker ps | grep -v clair | grep -v CONTAINER | awk '{print $1}'); do
       docker kill "$CONTAINER"
     done
+    [ -z "$(docker ps -q --filter="name=${TRANCHE_TAG}_test_runner")" ] || docker stop "${TRANCHE_TAG}_test_runner"
+    [ -z "$(docker ps -aq --filter="name=${TRANCHE_TAG}_test_runner")" ] || docker rm "${TRANCHE_TAG}_test_runner"
   fi
 }
 
@@ -70,12 +72,14 @@ function start_services_under_test () {
 
 function stop_services_under_test () {
   if [ -z "$TF_BUILD" ]; then
+    docker stop "${TRANCHE_TAG}_test_runner"
     docker-compose -p "$TRANCHE_TAG" "${DOCKER_COMPOSE_FILES_ARGS[@]}" stop
   fi
 }
 
 function destroy_services_under_test () {
   if [ -z "$TF_BUILD" ]; then
+    docker rm "${TRANCHE_TAG}_test_runner"
     docker-compose -p "$TRANCHE_TAG" "${DOCKER_COMPOSE_FILES_ARGS[@]}" down
   fi
 }
@@ -85,7 +89,7 @@ function fetch_container_logs () {
 
   mkdir -p logs
 
-  for CONTAINER_ID in $(docker-compose -p "$TRANCHE_TAG" "${DOCKER_COMPOSE_FILES_ARGS[@]}" ps -q); do
+  for CONTAINER_ID in $(docker ps -aq --filter=network="$DOCKER_NETWORK"); do
     CONTAINER_NAME=$(docker ps -a --filter "id=$CONTAINER_ID" --format '{{.Names}}')
     info "Fetching logs for $CONTAINER_NAME ($CONTAINER_ID)"
     docker logs "$CONTAINER_NAME" >& "./logs/$CONTAINER_NAME.log"
