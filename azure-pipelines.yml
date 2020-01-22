@@ -54,6 +54,7 @@ stages:
         dependsOn:
           - init
         condition: and(succeeded(), dependencies.init.outputs['matrix.tranches'])
+        timeoutInMinutes: 180
         strategy:
           matrix: $[ dependencies.init.outputs['matrix.tranches'] ]
         variables:
