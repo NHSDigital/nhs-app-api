@@ -15,8 +15,8 @@ android {
         applicationId "com.nhs.online.nhsonline"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 44
-        versionName "1.24.0"
+        versionCode 45
+        versionName "1.25.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
