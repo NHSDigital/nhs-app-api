@@ -78,4 +78,27 @@ describe('linked profile is there', () => {
       expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_pageTitles.linkedProfilesSummary');
     });
   });
+
+  describe('icons are not focusable', () => {
+    it('focus is disabled on icons of services you can access', () => {
+      const appointmentIconAttributes = wrapper
+        .find('[id="book-an-appointment"]')
+        .find('svg[class*="nhsuk-icon__tick"]').attributes();
+
+      const prescriptionIconAttributes = wrapper
+        .find('[id="order-repeat-prescription"]')
+        .find('svg[class*="nhsuk-icon__tick"]').attributes();
+
+      expect(appointmentIconAttributes.focusable).toEqual('false');
+      expect(prescriptionIconAttributes.focusable).toEqual('false');
+    });
+
+    it('focus is disabled on icons of services you cannot access', () => {
+      const medicalRecordIconAttributes = wrapper
+        .find('[id="view-medical-record"]')
+        .find('svg[class*="nhsuk-icon__cross"]').attributes();
+
+      expect(medicalRecordIconAttributes.focusable).toEqual('false');
+    });
+  });
 });
