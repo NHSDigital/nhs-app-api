@@ -23,7 +23,7 @@
       Then the CancelAppointments page is saved to disk
       And I select a cancellation reason of No longer required
       When I select "Cancel appointment" button
-      Then the Your Appointments page is displayed
+      Then the Appointment Cancel success page is displayed
       Then the CancelConfirmation page is saved to disk
 
     Scenario: The appointment booking pages are captured
@@ -41,5 +41,5 @@
       When I select a telephone number to book an appointment
       And I enter symptoms
       And I click the 'Confirm and book appointment' button
-      Then the Appointment Booking success message is displayed
+      Then the Appointment Booking success page is displayed
       Then the BookingConfirmation page is saved to disk

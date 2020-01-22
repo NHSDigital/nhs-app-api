@@ -243,6 +243,9 @@ export default function ({ route, store, app }) {
         route.meta.headerKey = 'pageHeaders.appointmentProxyCancellingSuccess';
         route.meta.pageTitleKey = 'pageTitles.appointmentProxyCancellingSuccess';
         route.meta.formatArguments = { name: givenName };
+      } else {
+        route.meta.headerKey = 'pageHeaders.appointmentCancellingSuccess';
+        route.meta.pageTitleKey = 'pageTitles.appointmentCancellingSuccess';
       }
       break;
     case APPOINTMENT_CONFIRMATIONS.name:
@@ -257,6 +260,9 @@ export default function ({ route, store, app }) {
         route.meta.headerKey = 'pageHeaders.appointmentProxyBookingSuccess';
         route.meta.pageTitleKey = 'pageTitles.appointmentProxyBookingSuccess';
         route.meta.formatArguments = { name: givenName };
+      } else {
+        route.meta.headerKey = 'pageHeaders.appointmentBookingSuccess';
+        route.meta.pageTitleKey = 'pageHeaders.appointmentBookingSuccess';
       }
       break;
     }
