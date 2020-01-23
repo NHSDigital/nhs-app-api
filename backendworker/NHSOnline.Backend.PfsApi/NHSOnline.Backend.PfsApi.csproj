@@ -55,13 +55,8 @@
   <ItemGroup>
     <Content Remove="ClinicalDecisionSupport\cdss-wiremock\**" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <ItemGroup>
     <Content Include="..\Rotativa\**\*" LinkBase="Rotativa\">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
-    <Content Include="..\Rotativa\Linux\*" LinkBase="Rotativa\">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
