@@ -131,6 +131,28 @@ describe('BreadCrumbTrail.vue', () => {
       expect(router.go).toHaveBeenCalledWith(-1);
     });
 
+    it('back link will exist and have the correct attributes', () => {
+      const wrapper = createBreadCrumbTrail({
+        $store: createStore({
+          state: {
+            device: {
+              isNativeApp: true,
+            },
+            session: {
+              csrfToken: 'some token',
+            },
+          },
+        }),
+        propsData: {
+          routes: [INDEX],
+        },
+      });
+
+      const backLink = wrapper.find('#native-back-breadcrumb').find('a');
+      expect(backLink.exists()).toEqual(true);
+      expect(backLink.attributes('tabindex')).toBe('0');
+    });
+
     it('will navigate to the correct place from organ donation', () => {
       routeName = 'organ-donation';
       const wrapper = createBreadCrumbTrail({
@@ -147,9 +169,12 @@ describe('BreadCrumbTrail.vue', () => {
             },
           },
         },
+        propsData: {
+          routes: [INDEX],
+        },
       });
-
-      wrapper.vm.backLinkClicked();
+      const backLink = wrapper.find('#native-back-breadcrumb').find('a');
+      backLink.trigger('click');
       expect(wrapper.vm.$route.name).toBe('organ-donation');
       expect(goToUrl).toHaveBeenCalledWith(BACKLINK_OVERRIDE);
     });
@@ -167,9 +192,13 @@ describe('BreadCrumbTrail.vue', () => {
             },
           },
         },
+        propsData: {
+          routes: [INDEX],
+        },
       });
 
-      wrapper.vm.backLinkClicked();
+      const backLink = wrapper.find('#native-back-breadcrumb').find('a');
+      backLink.trigger('click');
       expect(wrapper.vm.$route.name).toBe('switch-profile');
       expect(goToUrl).toHaveBeenCalledWith(INDEX.path);
     });

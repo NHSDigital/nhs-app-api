@@ -32,7 +32,9 @@
             <span class="nhsuk-breadcrumb__back" :class="$style['native-back']" >
               <a id="native-back-breadcrumb"
                  class="nhsuk-breadcrumb__backlink"
+                 tabindex="0"
                  :class="$style['native'] "
+                 @keypress.enter.prevent="backLinkClicked()"
                  @click.prevent="backLinkClicked()" >
                 <span v-if="isProxyPage">Back to Home</span>
                 <span v-else>Back</span>
