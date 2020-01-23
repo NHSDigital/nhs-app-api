@@ -1,5 +1,5 @@
 export default (req, res, next) => {
-  if (req.url === '/apple-app-site-association') {
+  if (req.url === '/apple-app-site-association' || req.url === '/.well-known/apple-app-site-association') {
     res.setHeader('content-type', 'application/json');
     res.writeHead(200);
     const links = {
