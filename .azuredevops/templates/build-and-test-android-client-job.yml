@@ -1,0 +1,104 @@
+jobs:
+  - job: build_and_unit_test_android
+    displayName: Build and Unit Test
+    variables:
+      unit.tests.results.path: android/app/build/test-results
+      code.coverage.report.path: android/app/build/reports/jacoco/jacocoTestReport/html
+    steps:
+      - template: set-branch-tag-steps.yml
+      - template: docker-login-steps.yml
+
+      - task: MavenAuthenticate@0
+        displayName: 'Maven Authenticate'
+        inputs:
+          artifactsFeeds: nhsapp
+
+      - task: Bash@3
+        displayName: Run Unit Tests
+        inputs:
+          filePath: android/buildscripts/01_run_unit_tests.sh
+
+      - template: check-for-output-steps.yml
+        parameters:
+          description: unit tests results
+          test.path: ${{ variables['unit.tests.results.path'] }}
+          test.path.exists.variable.name: unit.tests.results.exists
+
+      - task: PublishTestResults@2
+        displayName: Publish unit tests results
+        condition: and(succeededOrFailed(), eq(variables['unit.tests.results.exists'], 'True'))
+        inputs:
+          testRunTitle: Unit Tests Android Client
+          testResultsFormat: JUnit
+          testResultsFiles: '**/TEST-*.xml'
+          searchFolder: '$(Build.SourcesDirectory)/$(unit.tests.results.path)'
+          failTaskOnFailedTests: false
+          mergeTestResults: true
+
+      - template: check-for-output-steps.yml
+        parameters:
+          description: code coverage report
+          test.path: ${{ variables['code.coverage.report.path'] }}
+          test.path.exists.variable.name: code.coverage.report.exists
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish code coverage report
+        condition: and(succeededOrFailed(), eq(variables['code.coverage.report.exists'], 'True'))
+        inputs:
+          pathToPublish: '$(Build.SourcesDirectory)/$(code.coverage.report.path)'
+          artifactName: Android Client Code Coverage Report
+
+      - task: Bash@3
+        displayName: Build ${{ variables['android.target'] }}
+        env:
+          TARGET: ${{ variables['android.target'] }}
+        inputs:
+          filePath: android/buildscripts/02_build.sh
+
+      - task: Bash@3
+        displayName: Build Preview Release
+        condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), ne(variables['android.target'], 'previewRelease'))
+        env:
+          TARGET: previewRelease
+        inputs:
+          filePath: android/buildscripts/02_build.sh
+
+      - task: DownloadSecureFile@1
+        name: android_key_store
+        condition: and(succeeded(), eq(variables['source.tag'], 'True'))
+        inputs:
+          secureFile: 'AndroidSigningKeyStore'
+
+      - task: Bash@3
+        displayName: Build Demo (Staging)
+        condition: and(succeeded(), eq(variables['source.tag'], 'True'))
+        env:
+          TARGET: demo
+          ANDROID_KEY_STORE_LOCATION: $(android_key_store.secureFilePath)
+          ANDROID_KEY_STORE_PASSWORD: $(android.key.store.password)
+        inputs:
+          filePath: android/buildscripts/02_build.sh
+
+      - task: Bash@3
+        displayName: Build Release
+        condition: and(succeeded(), eq(variables['source.tag'], 'True'))
+        env:
+          TARGET: release
+          ANDROID_KEY_STORE_LOCATION: $(android_key_store.secureFilePath)
+          ANDROID_KEY_STORE_PASSWORD: $(android.key.store.password)
+        inputs:
+          filePath: android/buildscripts/02_build.sh
+
+      - task: Bash@3
+        displayName: Collect android package files
+        inputs:
+          targetType: 'inline'
+          script: |
+            mkdir -p "$BUILD_SOURCESDIRECTORY/apk"
+            find android/app/build/outputs/apk -name '*.apk' -exec cp \{\} "$BUILD_SOURCESDIRECTORY/apk/" \;
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish android package files
+        inputs:
+          pathToPublish: '$(Build.SourcesDirectory)/apk'
+          artifactName: Android Package Files

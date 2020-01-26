@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+# Change current working directory to be the root of android, regardless of how this script is invoked
+cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
+
+TARGET=${TARGET:-browserstack}
+
+# shellcheck source=lib/set_env.sh
+source "buildscripts/lib/set_env.sh"
+
+if [ -n "$ANDROID_KEY_STORE_PASSWORD" ] && [ -n "$ANDROID_KEY_STORE_LOCATION" ]; then
+  DOCKER_ARGS+=(-v "$ANDROID_KEY_STORE_LOCATION:/secret/AndroidKeyStore")
+  GRADLE_ARGS+=("-Prelease_store_password='$ANDROID_KEY_STORE_PASSWORD'" "-Prelease_store_location='/secret/AndroidKeyStore'")
+fi
+GRADLE_ARGS+=("assemble$TARGET")
+
+# shellcheck source=lib/run_gradle.sh
+source "buildscripts/lib/run_gradle.sh"

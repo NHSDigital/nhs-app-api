@@ -36,6 +36,12 @@ stages:
 
       - template: .azuredevops/templates/generate-coverage-report-job.yml
 
+  - stage: android
+    displayName: Android Client
+    dependsOn: init
+    jobs:
+      - template: .azuredevops/templates/build-and-test-android-client-job.yml
+
   - stage: security
     displayName: Security Scans
     dependsOn: build_and_unit_test

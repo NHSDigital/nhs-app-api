@@ -4,21 +4,12 @@ buildscript {
     ext.kotlin_version = '1.3.41'
     ext.kotlin_version = '1.3.11'
     repositories {
-         maven {
-	     url "file:./../maven"
-         }
          google()
          jcenter()
          maven {
-             url "http://repo.maven.apache.org/maven2"
-         }
-//        maven {
-//            url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
-//            credentials {
-//                username "developer"
-//                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
-//            }
-//        }
+            url 'https://pkgs.dev.azure.com/nhsapp/_packaging/nhsapp/maven/v1'
+            name 'nhsapp'
+        }
         google()
     }
     dependencies {
@@ -33,18 +24,8 @@ buildscript {
 
 allprojects {
     repositories {
-         google()
-         jcenter()
-         maven {
-	     url "file:./../maven"
-	 }
-//        maven {
-//            url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
-//            credentials {
-//                username "developer"
-//                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
-//            }
-//        }
+        google()
+        jcenter()
     }
 }
 

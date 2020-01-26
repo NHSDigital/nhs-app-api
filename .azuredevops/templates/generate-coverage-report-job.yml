@@ -6,26 +6,26 @@ jobs:
       - backend
     condition: succeededOrFailed()
     variables:
-      web.coverage.exists: $[ dependencies.web.outputs['checkdirs.unit.test.coverage.exists'] ]
-      backend.coverage.exists: $[ dependencies.backend.outputs['checkdirs.unit.test.coverage.exists'] ]
+      web.coverage.exists: $[ dependencies.web.outputs['output_vars.unit.test.coverage.exists'] ]
+      backend.coverage.exists: $[ dependencies.backend.outputs['output_vars.unit.test.coverage.exists'] ]
     steps:
       - task: DownloadPipelineArtifact@2
         displayName: Download web coverage
-        condition: and(succeeded(), eq(variables['web.coverage.exists'], 'Yes'))
+        condition: and(succeeded(), eq(variables['web.coverage.exists'], 'True'))
         inputs:
           artifact: 'web-coverage'
           path: $(Build.SourcesDirectory)/web-coverage
 
       - task: DownloadPipelineArtifact@2
         displayName: Download backend coverage
-        condition: and(succeeded(), eq(variables['backend.coverage.exists'], 'Yes'))
+        condition: and(succeeded(), eq(variables['backend.coverage.exists'], 'True'))
         inputs:
           artifact: 'backend-coverage'
           path: $(Build.SourcesDirectory)/backend-coverage
 
       - task: Bash@3
         displayName: Aggregate coverage files
-        condition: and(succeeded(), or(eq(variables['web.coverage.exists'], 'Yes'), eq(variables['backend.coverage.exists'], 'Yes')))
+        condition: and(succeeded(), or(eq(variables['web.coverage.exists'], 'True'), eq(variables['backend.coverage.exists'], 'True')))
         inputs:
           targetType: 'inline'
           script: |
@@ -38,7 +38,7 @@ jobs:
 
       - task: PublishCodeCoverageResults@1
         displayName: Publish coverage report
-        condition: and(succeeded(), or(eq(variables['web.coverage.exists'], 'Yes'), eq(variables['backend.coverage.exists'], 'Yes')))
+        condition: and(succeeded(), or(eq(variables['web.coverage.exists'], 'True'), eq(variables['backend.coverage.exists'], 'True')))
         inputs:
           codeCoverageTool: Cobertura
           summaryFileLocation: coverage/*.xml
