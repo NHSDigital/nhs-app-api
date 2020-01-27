@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         }
 
         [HttpPost]
-        [Route("patient/messages/updateReadStatus")]
+        [ApiVersionRoute("patient/messages/updateReadStatus")]
         public async Task<IActionResult> PostUpdateMessageReadStatus([FromBody] UpdateMessageReadStatusRequestBody updateMessageReadStatusRequest)
         {
             _logger.LogEnter();
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         }
 
         [HttpGet]
-        [Route("patient/messages/recipients")]
+        [ApiVersionRoute("patient/messages/recipients")]
         public async Task<IActionResult> GetMessageRecipients()
         {
             _logger.LogEnter();
