@@ -100,7 +100,7 @@ class NHSOnlineApi {
      * @param {object} deferred - promise object
      * @param {object} ignoreError - boolean to control dispatching ApiError message
      * @param {object} ignoreLoading - boolean to control dispatching http/isLoading
-     * 
+     *
      */
     request({
         method,
@@ -354,21 +354,43 @@ class NHSOnlineApi {
     headers['Content-Type'] = ['application/json'];
   {{/ifEquals}}
   {{#ifEquals @key 'get'}}
-    {{#each ../responses}}
-      {{#ifEquals @key 200}}
-        {{#ifEquals x-header "Content-Type"}}
-    headers['Content-Type'] = ['application/json'];
-      {{else}}
-    headers['Accept'] = ['application/json'];
+    {{#ifEquals ../x-area "olc"}}
+      if (parameters['addJavascriptDisabledHeader']) {
+        headers['NHSO-Javascript-Disabled'] = 'true';
+      }
+      {{#each ../responses}}
+        {{#ifEquals @key 200}}
+          {{#ifEquals x-header "Content-Type"}}
+            headers['Content-Type'] = ['application/json+fhir'];
+          {{else}}
+            headers['Accept'] = ['application/json+fhir'];
+          {{/ifEquals}}
         {{/ifEquals}}
-      {{/ifEquals}}
-    {{/each}}
+      {{/each}}
+    {{ else }}
+      {{#each ../responses}}
+        {{#ifEquals @key 200}}
+          {{#ifEquals x-header "Content-Type"}}
+            headers['Content-Type'] = ['application/json'];
+          {{else}}
+            headers['Accept'] = ['application/json'];
+          {{/ifEquals}}
+        {{/ifEquals}}
+      {{/each}}
+    {{/ifEquals}}
   {{/ifEquals}}
   {{#ifEquals @key 'patch'}}
     headers['Content-Type'] = ['application/json-patch+json'];
   {{/ifEquals}}
   {{#ifEquals @key 'post'}}
-    headers['Content-Type'] = ['application/json'];
+    if (parameters['addJavascriptDisabledHeader']) {
+      headers['NHSO-Javascript-Disabled'] = 'true';
+    }
+    {{#ifEquals ../x-area "olc"}}
+      headers['Content-Type'] = ['application/json+fhir'];
+    {{ else }}
+      headers['Content-Type'] = ['application/json'];
+    {{/ifEquals}}
   {{/ifEquals}}
   {{#ifEquals @key 'put'}}
     headers['Content-Type'] = ['application/json'];

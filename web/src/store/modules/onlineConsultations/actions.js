@@ -52,14 +52,14 @@ export default {
   },
   async setProviderNames({ commit }, { adminProviderName, adviceProviderName }) {
     if (adminProviderName !== 'none') {
-      await this.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider({
+      await this.app.$http.getV1ServiceDefinitionProviderNameByProvider({
         provider: adminProviderName,
       }).then((providerName) => {
         commit(SET_ADMIN_PROVIDER_NAME, providerName);
       }).catch(() => {});
     }
     if (adviceProviderName !== 'none') {
-      await this.app.$cdsApi.getFhirServiceDefinitionProviderNameByProvider({
+      await this.app.$http.getV1ServiceDefinitionProviderNameByProvider({
         provider: adviceProviderName,
       }).then((providerName) => {
         commit(SET_ADVICE_PROVIDER_NAME, providerName);
@@ -70,7 +70,7 @@ export default {
     const store = this;
     const { serviceDefinitionId, provider } = params;
 
-    return store.app.$cdsApi.getFhirServiceDefinitionByProviderByServicedefinitionid({
+    return store.app.$http.getV1ServiceDefinitionByProviderByServicedefinitionid({
       serviceDefinitionId,
       provider,
     }).then((response) => {
@@ -141,7 +141,7 @@ export default {
     ) {
       requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
     }
-    return store.app.$cdsApi.postFhirServiceDefinitionByProviderByServicedefinitionidEvaluate(
+    return store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate(
       requestParams,
     ).then((response) => {
       commit(CLEAR);

@@ -11,7 +11,6 @@ using Constants = NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 {
-    [ApiController]
     public class ServiceDefinitionController : Controller
     {
         private readonly IServiceDefinitionService _service;
@@ -26,7 +25,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         }
 
         [HttpGet]
-        [ApiVersionRoute("fhir/ServiceDefinition/{provider}/{id}")]
+        [Route("fhir/ServiceDefinition/{provider}/{id}")]
+        [ApiVersionRoute("service-definition/{provider}/{id}")]
         public async Task<IActionResult> GetServiceDefinitionsById([FromRoute(Name = "id")] string serviceDefinitionId, 
           [FromRoute(Name = "provider")] string provider)
         {
@@ -51,7 +51,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         }
 
         [HttpPost]
-        [ApiVersionRoute("fhir/ServiceDefinition/{provider}/{id}/$evaluate")]
+        [Route("fhir/ServiceDefinition/{provider}/{id}/$evaluate")]
+        [ApiVersionRoute("service-definition/{provider}/{id}/$evaluate")]
         public async Task<IActionResult> EvaluateServiceDefinition(
             [FromRoute(Name = "provider")] string provider,
             [FromRoute(Name = "id")] string serviceDefinitionId,
@@ -93,7 +94,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         }
 
         [HttpGet]
-        [ApiVersionRoute("fhir/ServiceDefinition/providerName/{provider}")]
+        [Route("fhir/ServiceDefinition/providerName/{provider}")]
+        [ApiVersionRoute("service-definition/provider-name/{provider}")]
         public IActionResult GetProviderName([FromRoute(Name = "provider")] string provider)
         {
             _logger.LogEnter();
