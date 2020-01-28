@@ -24,6 +24,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import java.lang.Exception
 import java.security.Signature
+import java.security.KeyStoreException
 
 private val TAG = RegistrationService::class.java.simpleName
 private const val KEY_ID_PREFIX = "nhs-app-key"
@@ -114,25 +115,31 @@ class RegistrationService(
             removeAndShowRegistrationError()
             return Activity.RESULT_CANCELED
         }
-        val processedRegMessage = processUafRegistrationMsg(uafMessage, signature)
-        Log.d(TAG, "UAF processed message $processedRegMessage")
+        try {
+            val processedRegMessage = processUafRegistrationMsg(uafMessage, signature)
+            Log.d(TAG, "UAF processed message $processedRegMessage")
 
-        biometricsInteractor.showProgressDialog()
-        biometricAsyncHandler.sendClientRegistrationMsg(processedRegMessage) { response: BiometricCallResult ->
-            biometricsInteractor.dismissProgressDialog()
-            if (response.statusCode != BiometricAsyncHandler.OK) {
-                removeAndShowRegistrationError()
-                return@sendClientRegistrationMsg
-            }
+            biometricsInteractor.showProgressDialog()
+            biometricAsyncHandler.sendClientRegistrationMsg(processedRegMessage) { response: BiometricCallResult ->
+                biometricsInteractor.dismissProgressDialog()
+                if (response.statusCode != BiometricAsyncHandler.OK) {
+                    removeAndShowRegistrationError()
+                    return@sendClientRegistrationMsg
+                }
 
-            if (verifyIfRegistrationSuccess(response.result)) {
-                preferencesService.storeFingerprintState(true)
-                biometricState.registered = true
-                biometricsInteractor.toggleBiometricSwitch(biometricState.registered)
-                biometricsInteractor.showBiometricsOnRegistrationSuccessMessage()
-            } else {
-                biometricCleanupHelper.removeFidoData()
+                if (verifyIfRegistrationSuccess(response.result)) {
+                    preferencesService.storeFingerprintState(true)
+                    biometricState.registered = true
+                    biometricsInteractor.toggleBiometricSwitch(biometricState.registered)
+                    biometricsInteractor.showBiometricsOnRegistrationSuccessMessage()
+                } else {
+                    biometricCleanupHelper.removeFidoData()
+                }
             }
+        }
+        catch (e: KeyStoreException){
+            removeAndShowDeviceError()
+            return Activity.RESULT_CANCELED
         }
         return Activity.RESULT_OK
     }
@@ -160,6 +167,7 @@ class RegistrationService(
 
         val publicKey = fidoKeystore.getPublicKey(preferencesService.getFidoUsername())
         val assertionBuilder = RegAssertionBuilder(publicKey, signature, keyId)
+        
         return registerResponseHandler.processRegisterMessage(inMsg, assertionBuilder)
     }
 
