@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -8,9 +9,14 @@ namespace NHSOnline.Backend.Support
 {
     public class OdsCodeMassager : IOdsCodeMassager
     {
-		private static readonly List<string> VisionCidOdsCodes = new List<string> { "G85075", "G85672" };
+        private static readonly IDictionary<string, string> _defaultOdsCodeMap =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "G85075", "X00100" },
+            { "G85672", "X00100" }
+        };
 
-        private const string VisionTestOdsCode = "X00100";
+        private readonly IDictionary<string, string> _odsCodeMap;
 
         public bool IsEnabled { get; }
 
@@ -21,17 +27,67 @@ namespace NHSOnline.Backend.Support
             _logger = logger;
 
             IsEnabled = bool.TrueString.Equals(
-                configuration.GetOrWarn("VISION_ODS_REMAP_ENABLED", _logger),
+                configuration.GetOrWarn("ODS_REMAP_ENABLED", _logger),
                 StringComparison.OrdinalIgnoreCase);
+
+            if (IsEnabled)
+            {
+                _odsCodeMap = BuildOdsCodeMap(configuration);
+            }
+        }
+
+        private IDictionary<string, string> BuildOdsCodeMap(IConfiguration configuration)
+        {
+            var odsRemapMap = configuration.GetOrNull("ODS_REMAP_MAP");
+
+            if (odsRemapMap == null)
+            {
+                _logger.LogWarning("Environment variable ODS_REMAP_MAP not set - using default ODS Code map");
+                return _defaultOdsCodeMap;
+            }
+
+            if (!TryParseOdsRemapMap(odsRemapMap, out var odsCodeMap))
+            {
+                _logger.LogWarning("Unable to parse environment variable ODS_REMAP_MAP - using default ODS Code map");
+                return _defaultOdsCodeMap;
+            }
+
+            return odsCodeMap;
+        }
+
+        private bool TryParseOdsRemapMap(string odsRemapMap, out Dictionary<string, string> odsCodeMap)
+        {
+            const string odsCodeMapRegex = "^([A-Z][0-9]{5}:[A-Z][0-9]{5})(;[A-Z][0-9]{5}:[A-Z][0-9]{5})*$";
+
+            if (!Regex.IsMatch(odsRemapMap, odsCodeMapRegex))
+            {
+                _logger.LogWarning("Unable to parse environment variable ODS_REMAP_MAP");
+                odsCodeMap = new Dictionary<string, string>();
+                return false;
+            }
+
+            odsCodeMap = odsRemapMap.Split(';')
+                .Select(x => x.Split(':'))
+                .ToDictionary(x => x[0], x => x[1], StringComparer.OrdinalIgnoreCase);
+
+            return true;
         }
 
         public string CheckOdsCode(string odsCode)
         {
-            if (IsEnabled && VisionCidOdsCodes.Contains(odsCode.ToUpper(CultureInfo.InvariantCulture)))
+            if (!IsEnabled)
             {
-                _logger.LogInformation($"Before we do the OdsCodeMassage, code is {odsCode}");
-                return VisionTestOdsCode;
+                return odsCode;
             }
+
+            if (_odsCodeMap.ContainsKey(odsCode))
+            {
+                var mappedCode = _odsCodeMap[odsCode];
+                _logger.LogInformation($"Massaging ODS Code {odsCode} to {mappedCode}");
+
+                return mappedCode;
+            }
+
             return odsCode;
         }
     }

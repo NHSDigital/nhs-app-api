@@ -38,7 +38,8 @@
         "TPP_BASE_URL": "https://systmonline2.tpp-uk.com:60015/Patient/",
         "TPP_CERTIFICATE_PASSWORD": "",
         "TPP_CERTIFICATE_PATH": "../certs/TppNhsTest.pfx",
-        "VISION_ODS_REMAP_ENABLED": "false"
+        "ODS_REMAP_ENABLED": "false",
+        "ODS_REMAP_MAP": ""
       }
     },
     "NHSOnline.Backend.CidApi": {
@@ -93,7 +94,8 @@
         "CORS_AUTHORITY": "http://web.local.bitraft.io:3000",
         "CookieDomain": ".bitraft.io",
         "ConfigurationSettings__CookieDomain": ".bitraft.io",
-        "VISION_ODS_REMAP_ENABLED": "false",
+        "ODS_REMAP_ENABLED": "false",
+        "ODS_REMAP_MAP": "",
         "SERVICE_JOURNEY_RULES_BASE_URL": "http://servicejourneyrulesapi.local.bitraft.io:8086"
       }
     },
@@ -146,7 +148,8 @@
         "VISION_SENDER_USERIDENTITY": "65489761321654",
         "VISION_SENDER_USERNAME": "Username123123asdas",
         "VISION_SENDER_USERROLE": "ROSU",
-        "VISION_ODS_REMAP_ENABLED": "false"
+        "ODS_REMAP_ENABLED": "false",
+        "ODS_REMAP_MAP": ""
       }
     }
   }
