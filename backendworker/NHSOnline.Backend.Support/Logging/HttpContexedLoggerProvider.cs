@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.Support.Logging
 
                     var scope = GetScope(state);
 
-                    _textWriter.WriteLine($"| {DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} |" +
+                    _textWriter.WriteLine($"| {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss:fff} |" +
                                           (string.IsNullOrWhiteSpace(scope) ? string.Empty : $" {scope} |") +
                                           $" {_categoryName} |" +
                                           $" { logLevel } |" +
