@@ -2,17 +2,17 @@
 {
     public class SpineLdapConfigurationSettings
     {
-        public string LdapHost { get; set; }
+        public string LdapHost { get; }
 
-        public int LdapPort { get; set; }
+        public int LdapPort { get; }
 
-        public string LoginDN { get; set; }
+        public string LoginDN { get; }
 
-        public string CertPath { get; set; }
+        public string CertPath { get; }
 
-        public string CertPassword { get; set; }
+        public string CertPassword { get; }
 
-        public string NhsAppPartyId { get; set; }
+        public string NhsAppPartyId { get; }
 
         public SpineLdapConfigurationSettings() {}
 

@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
             _mockMongoClient.Setup(x => x.GetDatabase(It.IsAny<string>(), null))
                 .Returns(mongoDatabaseMock.Object);
             mongoCollectionMock.Setup(
-                    x => x.ReplaceOneAsync(It.IsAny<Expression<Func<UserAndInfo, bool>>>(),
+                    x => x.ReplaceOneAsync(It.IsAny<FilterDefinition<UserAndInfo>>(),
                         It.IsAny<UserAndInfo>(),
                         new UpdateOptions { IsUpsert = true },
                         default))

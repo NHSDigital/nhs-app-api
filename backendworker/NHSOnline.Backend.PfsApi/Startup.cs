@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.PfsApi
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
-            
+
             services.AddWkhtmltopdf();
 
             services.AddSingleton(Configuration);
@@ -140,17 +140,21 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
             services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
             services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
+            services.AddTransient<ILdapConnectionService, LdapConnectionService>();
+            services.AddTransient<ISpineSearchService, SpineSearchService>();
             services.AddTransient(typeof(HttpTimeoutHandler<>));
             services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
-            
+
             services.Configure<KnownServices>(Configuration);
-            
+
             _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);
             NominatedPharmacyStartup.RegisterServices(services);
+
+            services.AddHostedService<SpinePdsConfigurationBackgroundService>();
         }
 
         private static void ConfigureMvcOptions(MvcOptions options)
@@ -230,48 +234,8 @@ namespace NHSOnline.Backend.PfsApi
             var spineLdapConfigurationSettings = CreateAndValidateSpineLdapConfig(isSpineLdapLookupEnabled);
             services.AddSingleton(spineLdapConfigurationSettings);
 
-            NhsAppSpinePdsTraceProperties nhsAppSpinePdsTraceProperties = null;
-            NhsAppSpinePdsUpdateProperties nhsAppSpinePdsUpdateProperties = null;
-
-            if (isSpineLdapLookupEnabled)
-            {
-                var spineSearchService = GetSpineSearchService(spineLdapConfigurationSettings);
-                nhsAppSpinePdsTraceProperties = spineSearchService.RetrieveSpinePropertiesForPdsTrace();
-                nhsAppSpinePdsUpdateProperties = spineSearchService.RetrieveSpinePropertiesForPdsUpdate();
-            }
-            else
-            {
-                nhsAppSpinePdsTraceProperties = new NhsAppSpinePdsTraceProperties
-                {
-                    FromAsid = Configuration.GetOrWarn("TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE", _logger),
-                    ToAsid = Configuration.GetOrWarn("TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE", _logger),
-                };
-
-                nhsAppSpinePdsUpdateProperties = new NhsAppSpinePdsUpdateProperties
-                {
-                    FromAsid = Configuration.GetOrWarn("TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE", _logger),
-                    ToAsid = Configuration.GetOrWarn("TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE", _logger),
-                    CpaId = Configuration.GetOrWarn("TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE", _logger),
-                    ToPartyId = Configuration.GetOrWarn("TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE", _logger),
-                };
-            }
-
-            var nominatedPharmacyConfig = CreateAndValidateSpineEnvironmentVariables(nhsAppSpinePdsTraceProperties, nhsAppSpinePdsUpdateProperties);
+            var nominatedPharmacyConfig = new NominatedPharmacyConfigurationSettings(false, null, null, 0, null, null);
             services.AddSingleton<INominatedPharmacyConfigurationSettings>(nominatedPharmacyConfig);
-         }
-
-        private SpineSearchService GetSpineSearchService(SpineLdapConfigurationSettings spineLdapConfigurationSettings)
-        {
-            return new SpineSearchService(
-                _loggerFactory.CreateLogger<SpineSearchService>(),
-                spineLdapConfigurationSettings,
-                new LdapConnectionService(
-                    _loggerFactory.CreateLogger<LdapConnectionService>(),
-                    spineLdapConfigurationSettings,
-                    configurationSettings,
-                    new CertificateService(
-                        _loggerFactory.CreateLogger<CertificateService>(),
-                        Configuration)));
         }
 
         private SessionConfigurationSettings CreateAndValidateProxyEnvironmentVariables()
@@ -407,7 +371,7 @@ namespace NHSOnline.Backend.PfsApi
             var baseUrlstring = Configuration.GetOrWarn("MICROTEST_BASE_URL", _logger);
             var certificatePath = Configuration.GetOrWarn("MICROTEST_CERT_PATH", _logger);
             var certificatePassphrase = Configuration.GetOrWarn("MICROTEST_CERT_PASSPHRASE", _logger);
-            
+
             var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
             var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
 
@@ -420,7 +384,7 @@ namespace NHSOnline.Backend.PfsApi
         public DeviceConfigurationSettings CreateAndValidateDeviceEnvironmentVariables()
         {
             var webAppBaseUrl = new Uri(Configuration.GetOrWarn("NHS_WEB_APP_BASE_URL", _logger), UriKind.Absolute);
-            
+
             var minimumSupportedAndroidVersion = Configuration["ConfigurationSettings:MinimumSupportedAndroidVersion"];
             var minimumSupportediOSVersion = Configuration["ConfigurationSettings:MinimumSupportediOSVersion"];
             var fidoServerUrl = new Uri(Configuration["ConfigurationSettings:FidoServerUrl"], UriKind.Absolute);
@@ -500,55 +464,6 @@ namespace NHSOnline.Backend.PfsApi
             config.Validate();
             return config;
         }
-
-        public NominatedPharmacyConfigurationSettings CreateAndValidateSpineEnvironmentVariables(NhsAppSpinePdsTraceProperties nhsAppSpinePdsTraceProperties, NhsAppSpinePdsUpdateProperties nhsAppSpinePdsUpdateProperties)
-        {
-            var isNominatedPharmacyEnabled = bool.TrueString.Equals(Configuration.GetOrWarn("NOMINATED_PHARMACY_ENABLED", _logger), StringComparison.OrdinalIgnoreCase);
-            if (isNominatedPharmacyEnabled)
-            {
-                var nominatedPharmacyUriString = Configuration.GetOrWarn("SPINE_PDS_URL", _logger);
-                var nominatedPharmacyUriPathString = Configuration.GetOrWarn("SPINE_PDS_URL_PATH", _logger);
-                var pdsQueryFromAddress = Configuration.GetOrWarn("PDS_QUERY_FROM_ADDRESS", _logger);
-                var pdsQueryTo = Configuration.GetOrWarn("PDS_QUERY_TO", _logger);
-                var artificialDelayAfterNominatedPharmacyUpdateInMilliseconds = Configuration.GetIntOrDefault("DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS", _logger);
-
-                var pdsTraceConfigurationSettings = new PdsTraceConfigurationSettings
-                {
-                    FromAddress = pdsQueryFromAddress,
-                    ToAddress = pdsQueryTo,
-                    FromAsid = nhsAppSpinePdsTraceProperties.FromAsid,
-                    ToAsid = nhsAppSpinePdsTraceProperties.ToAsid,
-                };
-
-                var pdsUpdateConfigurationSettings = new PdsUpdateConfigurationSettings
-                {
-                    FromAsid = nhsAppSpinePdsUpdateProperties.FromAsid,
-                    ToAsid = nhsAppSpinePdsUpdateProperties.ToAsid,
-                    CpaId = nhsAppSpinePdsUpdateProperties.CpaId,
-                    FromPartyId = Configuration.GetOrWarn("NHS_APP_PARTY_ID_FOR_SPINE", _logger),
-                    ToPartyId = nhsAppSpinePdsUpdateProperties.ToPartyId,
-                };
-
-                var config = new NominatedPharmacyConfigurationSettings(
-                    isNominatedPharmacyEnabled,
-                    new Uri(nominatedPharmacyUriString, UriKind.Absolute),
-                    nominatedPharmacyUriPathString,
-                    artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
-                    pdsTraceConfigurationSettings,
-                    pdsUpdateConfigurationSettings
-                    );
-
-                var nominatedPharmacyConfigIsValid = config.Validate();
-                if (!nominatedPharmacyConfigIsValid)
-                {
-                    _logger.LogWarning($"Not all nominated pharmacy config is populated, disabling nominated pharmacy feature (initial value was {isNominatedPharmacyEnabled})");
-                    config.IsNominatedPharmacyEnabled = false;
-                }
-
-                return config;
-            }
-            return new NominatedPharmacyConfigurationSettings(false, null, null, 0, null, null);
-        }
     }
 
     public static class ServiceCollectionExtensions
@@ -562,9 +477,9 @@ namespace NHSOnline.Backend.PfsApi
         }
 
         /// <summary>
-        /// Registers a configuration instance which <typeparamref name="TOptions"/> will bind against, and registers as a validatble setting. 
-        /// Additionally registers the configuration object directly with the DI container, so can be retrieved without referencing IOptions. 
-        /// 
+        /// Registers a configuration instance which <typeparamref name="TOptions"/> will bind against, and registers as a validatble setting.
+        /// Additionally registers the configuration object directly with the DI container, so can be retrieved without referencing IOptions.
+        ///
         /// </summary>
         /// <typeparam name="T">The type of options being configured</typeparam>
         /// <param name="services">The <see cref="IServiceCollection "/> to add the services</param>

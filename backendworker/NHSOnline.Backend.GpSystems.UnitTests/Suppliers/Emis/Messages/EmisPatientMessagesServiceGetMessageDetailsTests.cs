@@ -194,6 +194,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockMessageDetailsMapper.
                 Setup(e => e.Map(
                     It.Is<MessageGetResponse>(m => m.Equals(messageDetailsGetResponse))))
+                .Returns((GetPatientMessageResponse)null)
                 .Verifiable();
 
             // Act

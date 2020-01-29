@@ -9,5 +9,13 @@
         public string CpaId { get; set; }
 
         public string ToPartyId { get; set; }
+
+        public bool Validate()
+        {
+            return !string.IsNullOrEmpty(FromAsid) &&
+                   !string.IsNullOrEmpty(ToAsid) &&
+                   !string.IsNullOrEmpty(CpaId) &&
+                   !string.IsNullOrEmpty(ToPartyId);
+        }
     }
 }

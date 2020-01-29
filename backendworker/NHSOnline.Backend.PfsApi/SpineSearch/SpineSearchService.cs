@@ -8,7 +8,7 @@ using Novell.Directory.Ldap;
 
 namespace NHSOnline.Backend.PfsApi.SpineSearch
 {
-    public class SpineSearchService
+    public class SpineSearchService : ISpineSearchService
     {
         readonly ILogger<SpineSearchService> _logger;
         readonly SpineLdapConfigurationSettings _ldapConfigurationSettings;

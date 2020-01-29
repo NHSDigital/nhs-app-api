@@ -16,12 +16,12 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
         public const string MediaType = "text/xml";
 
         private const string HeaderSoapAction = "SoapAction";
-        
+
         private readonly NominatedPharmacyHttpClient _httpClient;
         private readonly ILogger<NominatedPharmacyPDSClient> _logger;
         private readonly IXmlResponseParser _responseParser;
         private readonly INominatedPharmacyEnvelopeService _envelopeService;
-        private readonly string _pdsPath;
+        private readonly INominatedPharmacyConfigurationSettings _settings;
 
         public NominatedPharmacyPDSClient(NominatedPharmacyHttpClient httpClient,
             ILogger<NominatedPharmacyPDSClient> logger, IXmlResponseParser responseParser,
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             _httpClient = httpClient;
             _responseParser = responseParser;
             _envelopeService = envelopeService;
-            _pdsPath = settings.PdsPath;
+            _settings = settings;
         }
 
         public async Task<NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>> NominatedPharmacyGet(
@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
         {
             var serviceDefinition = new GetNominatedPharmacyServiceDefinition();
 
-            var path = string.Format(CultureInfo.InvariantCulture, _pdsPath);
+            var path = string.Format(CultureInfo.InvariantCulture, _settings.PdsPath);
 
             var result = await Post<QUPAIN000009UK03Response, QUPAIN000008UK02>(
                 serviceDefinition,
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
 
             return response;
         }
-        
+
         private HttpRequestMessage BuildHttpRequest<T>(IServiceDefinition serviceDefinition, string path, T request)
         {
             var envelope = _envelopeService.BuildEnvelope(request, serviceDefinition);

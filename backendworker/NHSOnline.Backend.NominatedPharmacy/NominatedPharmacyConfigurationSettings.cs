@@ -22,17 +22,44 @@ namespace NHSOnline.Backend.NominatedPharmacy
             PdsUpdateConfigurationSettings = pdsUpdateConfigurationSettings;
         }
 
+        public event EventHandler<NominatedPharmacyConfigurationUpdatedEventArgs> SettingsUpdated;
+
+        private void OnSettingsUpdated()
+        {
+            var handler = SettingsUpdated;
+            handler?.Invoke(this, new NominatedPharmacyConfigurationUpdatedEventArgs { Config = this});
+        }
+
+        public void Update(
+            bool isNominatedPharmacyEnabled,
+            Uri baseUrl,
+            string pdsPath,
+            int artificialDelayAfterNominatedPharmacyUpdateInMilliseconds,
+            PdsTraceConfigurationSettings pdsTraceConfigurationSettings,
+            PdsUpdateConfigurationSettings pdsUpdateConfigurationSettings
+        )
+        {
+            IsNominatedPharmacyEnabled = isNominatedPharmacyEnabled;
+            BaseUrl = baseUrl;
+            PdsPath = pdsPath;
+            ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds = artificialDelayAfterNominatedPharmacyUpdateInMilliseconds;
+            PdsTraceConfigurationSettings = pdsTraceConfigurationSettings;
+            PdsUpdateConfigurationSettings = pdsUpdateConfigurationSettings;
+
+            OnSettingsUpdated();
+        }
+
         public bool IsNominatedPharmacyEnabled { get; set; }
 
-        public Uri BaseUrl { get; }
-        
-        public string PdsPath { get; }
+        public Uri BaseUrl { get; private set; }
 
-        public int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
+        public string PdsPath { get; private set; }
 
-        public PdsTraceConfigurationSettings PdsTraceConfigurationSettings { get; }
+        public int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; private set; }
 
-        public PdsUpdateConfigurationSettings PdsUpdateConfigurationSettings { get; }
+        public PdsTraceConfigurationSettings PdsTraceConfigurationSettings { get; private set; }
+
+        public PdsUpdateConfigurationSettings PdsUpdateConfigurationSettings { get; private set; }
 
         public bool Validate()
         {
