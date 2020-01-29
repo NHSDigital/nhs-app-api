@@ -14,7 +14,6 @@
 /* eslint-disable import/extensions */
 import BackIcon from '@/components/icons/BackIcon';
 import { ACCOUNT_SIGNOUT } from '@/lib/routes';
-import NativeCallbacks from '@/services/native-app';
 
 export default {
   name: 'HeaderSlim',
@@ -43,9 +42,6 @@ export default {
       return (this.showInNative && this.$store.state.device.isNativeApp)
           || (this.showInDesktop && !this.$store.state.device.isNativeApp);
     },
-  },
-  mounted() {
-    NativeCallbacks.hideHeaders();
   },
   methods: {
     goBack() {

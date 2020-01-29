@@ -73,6 +73,7 @@
     </string-array>
 
     <string-array name="nativeAppHosts">
+        <item>@string/nhs111</item>
         <item>@string/nhs111Location</item>
         <item>@string/baseURL</item>
         <item>@string/nhsLoginSuffix</item>

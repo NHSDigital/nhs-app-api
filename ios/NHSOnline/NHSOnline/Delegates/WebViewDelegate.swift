@@ -84,9 +84,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
                 return
             }
-        
-            
-           if knownServices.shouldURLOpenExternally( url) {
+
+            if knownServices.shouldURLOpenExternally( url) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)
                 return
@@ -185,13 +184,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         let nativeWebViewUrlParts = ["login",
                           config().CidUrlSuffix]
-        
-        // The nhs 111 url should open in app tab format for logged out users but within the
-        // application for logged in users
-        if (url.absoluteString.contains(config().Nhs111Url)){
-            return !self.viewController.isLoggedIn
-        }
-    
 
         if(url.absoluteString.containsAnyOf(nativeWebViewUrlParts)) {
             return false
@@ -257,12 +249,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
                 break
             case "onLogin":
-                viewController.headerBarSlim.closeIcon.isHidden = true
-                viewController.isLoggedIn = true
                 WebViewController.Properties.usingAbsoluteUri = false
                 break
             case "onLogout":
-                viewController.isLoggedIn = false
                 WebViewController.Properties.usingAbsoluteUri = true
                 webAppInterface.onLogout()
                 break

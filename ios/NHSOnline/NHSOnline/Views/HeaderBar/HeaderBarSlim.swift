@@ -4,7 +4,6 @@ import UIKit
 class HeaderBarSlim: UIView {
     @IBOutlet var headerBarView: UIView!
     @IBOutlet weak var backButtonArrow: UIButton!
-    @IBOutlet weak var closeIcon: UIButton!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,12 +18,10 @@ class HeaderBarSlim: UIView {
         Bundle.main.loadNibNamed("HeaderBarSlim", owner: self, options: nil)
         headerBarView.bounds = self.bounds
         headerBarView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        closeIcon.accessibilityLabel = NSLocalizedString("CloseIconTitle", comment: "")
-        closeIcon.accessibilityHint = NSLocalizedString("CloseIconHint", comment: "")
         backButtonArrow.accessibilityLabel = NSLocalizedString("BackArrowTitle", comment: "")
         backButtonArrow.accessibilityHint = NSLocalizedString("BackArrowHint", comment: "")
         // specifies the elements in the header which should be read out when using talkback (and the order which they're read out)
-        headerBarView.accessibilityElements = [backButtonArrow, closeIcon]
+        headerBarView.accessibilityElements = [backButtonArrow]
         addSubview(headerBarView)
     }
     

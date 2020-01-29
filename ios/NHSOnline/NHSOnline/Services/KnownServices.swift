@@ -170,10 +170,12 @@ class KnownServices {
     
     private func buildKnownServices() {
         let nhsoService = buildNhsoService()
+        let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111,title: nhs111Title, accessibleTitle: accessibleNhs111Title, validateSession: false, allowNativeInteraction: false)
         let nhs111LocationService = KnownService(serviceUrl: config.Nhs111LocationUrl, service: .NHS_111,  title: nhs111Title, validateSession: false, allowNativeInteraction: false)
         let dataPrefService = KnownService(serviceUrl: config.DataPreferencesURL, service: .DATA_PREFERENCES, title: dataPreferencesTitle, validateSession: false, allowNativeInteraction: true)
         
         self.serviceList.append(nhsoService)
+        self.serviceList.append(nhs111Service)
         self.serviceList.append(nhs111LocationService)
         self.serviceList.append(dataPrefService)
     }
