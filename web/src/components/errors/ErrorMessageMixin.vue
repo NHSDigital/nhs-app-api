@@ -37,6 +37,9 @@ export default {
       return this.getText(`${this.component}.${domain}.${type}`);
     },
     getMessage(type) {
+      if (this.hasConnectionError) {
+        return this.getText(`${this.domain}.${type}`);
+      }
       if (this.showError()) {
         return this.getComponentErrorCodeKey(type)
           || this.getText(`${this.component}.${this.domain}.${type}`)

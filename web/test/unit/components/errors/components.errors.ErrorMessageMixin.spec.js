@@ -23,10 +23,15 @@ describe('error message mixin', () => {
   const mountErrorMessageMixin = ({
     apiError,
     hasApiError = false,
+    hasConnectionError = false,
     routePath,
     showError = true,
   } = {}) => {
     state = createState();
+    if (hasConnectionError) {
+      state.errors.hasConnectionProblem = hasConnectionError;
+    }
+
     if (routePath) {
       state.errors.routePath = routePath;
     }
@@ -107,14 +112,26 @@ describe('error message mixin', () => {
     });
 
     describe('get message', () => {
+      describe('has connection error', () => {
+        it('will return the component error code key when one is returned', () => {
+          const expected = 'an error';
+
+          wrapper = mountErrorMessageMixin({ hasConnectionError: true });
+          wrapper.vm.getText = jest.fn().mockReturnValue(expected);
+
+          expect(wrapper.vm.getMessage('appointments')).toEqual(expected);
+          expect(wrapper.vm.getText).toHaveBeenCalledWith('noConnection.appointments');
+        });
+      });
       describe('showing errors', () => {
         it('will return the component error code key when one is returned', () => {
-          const type = 'appointments';
           const expected = 'an error';
-          wrapper = mountErrorMessageMixin();
-          wrapper.vm.getComponentErrorCodeKey = jest.fn().mockReturnValue(expected);
-          expect(wrapper.vm.getMessage(type)).toEqual(expected);
-          expect(wrapper.vm.getComponentErrorCodeKey).toHaveBeenCalledWith(type);
+
+          wrapper = mountErrorMessageMixin({ hasConnectionError: true });
+          wrapper.vm.getText = jest.fn().mockReturnValue(expected);
+
+          expect(wrapper.vm.getMessage('appointments')).toEqual(expected);
+          expect(wrapper.vm.getText).toHaveBeenCalledWith('noConnection.appointments');
         });
       });
 

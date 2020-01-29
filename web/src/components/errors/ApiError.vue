@@ -204,7 +204,7 @@ export default {
       this.goToUrl(this.retryUrl, this.statusCode);
     },
     showError() {
-      return this.hasApiError;
+      return this.hasApiError && !this.hasConnectionError;
     },
     trackSystemError(message) {
       const errorMessage = {

@@ -5,12 +5,10 @@
       <message-text>{{ subheader }}</message-text>
       <message-text :aria-label="messageLabel">{{ messageText }}</message-text>
     </message-dialog>
-    <form method="get">
-      <generic-button :class="['nhsuk-button']"
-                      @click.stop.prevent="onRetryButtonClicked">
-        {{ retryButtonText }}
-      </generic-button>
-    </form>
+    <generic-button :class="['nhsuk-button']"
+                    @click.stop.prevent="onRetryButtonClicked">
+      {{ retryButtonText }}
+    </generic-button>
   </div>
 </template>
 <script>
@@ -39,7 +37,7 @@ export default {
   },
   computed: {
     isVisible() {
-      return this.showError();
+      return this.showError() && !this.$store.state.device.isNativeApp;
     },
     header() {
       return this.getMessage('header');
@@ -67,10 +65,12 @@ export default {
   },
   methods: {
     onRetryButtonClicked() {
-      if (this.$store.getters['session/isProxying']) {
-        this.$router.push(INDEX.path);
-      } else {
-        this.$router.go();
+      if (process.client && navigator.onLine) {
+        if (this.$store.getters['session/isProxying']) {
+          this.$router.push(INDEX.path);
+        } else {
+          this.$router.go();
+        }
       }
     },
     showError() {

@@ -126,6 +126,9 @@ export default {
     },
   },
   watch: {
+    '$route.query.ts': function watchTimestamp() {
+      loadData(this.$store);
+    },
     hasLoaded() {
       if (this.hasLoaded) {
         this.$store.dispatch('flashMessage/show');

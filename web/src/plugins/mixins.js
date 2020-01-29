@@ -14,7 +14,11 @@ Vue.mixin(ResetPageFocusMixin);
 Vue.mixin({
   computed: {
     showTemplate() {
-      const hasConnectionError = this.$store.state.errors.hasConnectionProblem;
+      let hasConnectionError = false;
+      if (process.client && !navigator.onLine) {
+        this.$store.dispatch('errors/setConnectionProblem', true);
+        hasConnectionError = true;
+      }
       return !this.$store.getters['errors/showApiError'] && !hasConnectionError;
     },
   },
