@@ -20,9 +20,9 @@
 </template>
 
 <script>
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
 import get from 'lodash/fp/get';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import { APPOINTMENTS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
@@ -30,8 +30,8 @@ export default {
   name: 'BookingSuccess',
   layout: 'nhsuk-layout',
   components: {
-    SwitchProfileButton,
     DesktopGenericBackLink,
+    SwitchProfileButton,
   },
   data() {
     return {

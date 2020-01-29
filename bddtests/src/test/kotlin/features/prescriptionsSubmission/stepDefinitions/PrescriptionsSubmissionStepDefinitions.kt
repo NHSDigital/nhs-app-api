@@ -317,6 +317,14 @@ open class PrescriptionsSubmissionStepDefinitions {
     fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
         assertTrueWithRetry(prescriptionPage.isOrderSuccessfullTextVisible(),
                 "Expected order success text to be visible")
+        assertAmountOfPrescriptionsIsCorrect(amount)
+    }
+
+    @Then("I see the Repeat prescription page with (\\d+) prescriptions")
+    fun iSeeNumberOfPrescriptions(amount: Int) {
+        assertAmountOfPrescriptionsIsCorrect(amount)
+    }
+    private fun assertAmountOfPrescriptionsIsCorrect(amount: Int) {
         val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
 
         when (currentProvider) {

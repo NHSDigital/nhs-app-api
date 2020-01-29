@@ -1138,17 +1138,34 @@ const routes = {
     name: 'prescriptions-repeat-partial-success',
     path: '/prescriptions/repeat-partial-success',
     crumb: {
+      nativeDisabled: true,
       i18nKey: 'prescriptionRepeatPartialSuccess',
       get parentRoute() {
         return this.allRoutes.PRESCRIPTIONS;
       },
     },
+    redirectRules: [{
+      condition: 'repeatPrescriptionCourses/isOrderPrescriptionInProgress',
+      value: false,
+      url: '/prescriptions',
+    }],
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
   },
   PRESCRIPTIONS_ORDER_SUCCESS: {
     name: 'prescriptions-order-success',
     path: '/prescriptions/order-success',
-    crumb: {},
+    crumb: {
+      nativeDisabled: true,
+      i18nKey: 'prescriptionsOrderSuccess',
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+    redirectRules: [{
+      condition: 'repeatPrescriptionCourses/isOrderPrescriptionInProgress',
+      value: false,
+      url: '/prescriptions',
+    }],
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
   },
   RECALLS: {

@@ -187,14 +187,7 @@ export default {
         if (this.$store.state.repeatPrescriptionCourses.partialOrderResult) {
           redirectTo(this, PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS.path, null);
         } else {
-          let successPath;
-          if (this.$store.getters['session/isProxying']) {
-            successPath = PRESCRIPTIONS_ORDER_SUCCESS.path;
-          } else {
-            this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
-            successPath = PRESCRIPTIONS.path;
-          }
-          redirectTo(this, successPath);
+          redirectTo(this, PRESCRIPTIONS_ORDER_SUCCESS.path, null);
         }
       } catch (error) {
         /*

@@ -26,4 +26,7 @@ export default {
   selectedIds(state, getters) {
     return getters.selectedPrescriptions.map(item => item.id);
   },
+  isOrderPrescriptionInProgress(state) {
+    return !!state.orderInProgress;
+  },
 };

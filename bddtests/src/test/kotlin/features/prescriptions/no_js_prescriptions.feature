@@ -5,7 +5,7 @@ Feature: Prescriptions Service With Javascript Disabled
   Background:
     Given I have disabled javascript
     And the scenario is submit prescription
-
+  @tech-debt
   Scenario: The EMIS user orders a repeat prescription with 5 entries without javascript
     And I am using EMIS GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
@@ -15,6 +15,10 @@ Feature: Prescriptions Service With Javascript Disabled
     And I enter text "As soon as possible please" for special request
     And I click Continue on the Order a repeat prescription page
     When I click Confirm and order repeat prescription
+    #Then I see the Prescription Ordered success page
+    #And I click the Go to your prescriptions link
+    ##update below with:##
+    #Then I see the Repeat prescription page with 6 prescriptions
     Then I see a order successful message on the Repeat prescription page with 6 prescriptions
 
   # just a single test to make sure errors are handled for prescription submission when javascript is not enabled
@@ -28,3 +32,4 @@ Feature: Prescriptions Service With Javascript Disabled
     But EMIS responds with an error indicating an included course has already been ordered in the last 30 days when submitting the repeat prescription
     When I click Confirm and order repeat prescription
     Then I see a message indicating I've previously ordered one of the selected medications within the last 30 days
+

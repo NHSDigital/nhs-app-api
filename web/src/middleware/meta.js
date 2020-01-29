@@ -343,6 +343,9 @@ export default function ({ route, store, app }) {
         route.meta.headerKey = 'pageHeaders.prescriptionProxyOrderSuccess';
         route.meta.pageTitleKey = 'pageTitles.prescriptionProxyOrderSuccess';
         route.meta.formatArguments = { name: givenName };
+      } else {
+        route.meta.headerKey = 'pageHeaders.prescriptionOrderSuccess';
+        route.meta.pageTitleKey = 'pageTitles.prescriptionOrderSuccess';
       }
       break;
     case MESSAGING.name:

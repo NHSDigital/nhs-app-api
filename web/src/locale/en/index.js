@@ -394,7 +394,7 @@ export default {
     backButton: 'Change this prescription',
   },
   rp05: {
-    confirmationMessage: 'Your prescription has been ordered. The order status will be updated once it’s been reviewed by your GP.​',
+    confirmationMessage: 'The order status will be updated once it’s been reviewed by your GP.​',
   },
   rp12: {
     reasonMissing: {
@@ -1002,6 +1002,8 @@ export default {
     },
     orderSuccess: {
       proxyMessage: 'You have ordered a prescription on behalf of {name}. The order status will be updated once it has been reviewed by {givenName}\'s GP.',
+      message: 'Your prescription has been ordered. The order status will be updated once it\'s been reviewed by your GP.',
+      back: 'Go to your prescriptions',
     },
   },
   nominated_pharmacy: {
@@ -1572,6 +1574,7 @@ export default {
     repeatPrescriptionCourses: 'Select medication',
     confirmPrescription: 'Confirm prescription',
     prescriptionProxyOrderSuccess: '{name}\'s prescription has been ordered',
+    prescriptionOrderSuccess: 'Your prescription has been ordered',
     consultationsAndEvents: 'Consultations and events',
     account: 'My account',
     encounters: 'Encounters',
@@ -1641,6 +1644,7 @@ export default {
     appointmentProxyCancellingSuccess: '{name}\'s appointment has been cancelled',
     appointmentConfirmation: 'Confirm your appointment',
     appointmentProxyBookingSuccess: '{name}\'s appointment has been booked',
+    appointmentBookingSuccess: 'Your appointment has been booked',
     gpFinder: 'GP Finder',
     gpFinderParticipation: 'Features used by your GP surgery',
     gpFinderWaitingListSignup: 'Want us to email you when all features are available at your GP surgery?',
@@ -1649,6 +1653,7 @@ export default {
     repeatPrescriptionCourses: 'Select medication - Repeat prescriptions',
     confirmPrescription: 'Confirm prescription - Repeat prescriptions',
     prescriptionProxyOrderSuccess: '{name}\'s prescription has been ordered',
+    prescriptionOrderSuccess: 'Your prescription has been ordered',
     account: 'My account',
     myRecord: 'Sensitive information - Your GP medical record',
     allergiesAndReactions: 'Allergies and adverse reactions - Your GP medical record',

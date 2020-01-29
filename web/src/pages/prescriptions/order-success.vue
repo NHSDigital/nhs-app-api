@@ -9,7 +9,13 @@
           <switch-profile-button />
         </div>
         <div v-else>
-          <!-- main user cancelled content -->
+          <p>
+            {{ $tc('rp05.confirmationMessage') }}
+          </p>
+          <desktopGenericBackLink
+            :path="backPath"
+            :button-text="'prescriptions.orderSuccess.back'"
+            @clickAndPrevent="backButtonClicked"/>
         </div>
       </div>
     </div>
@@ -17,12 +23,17 @@
 </template>
 
 <script>
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
 import get from 'lodash/fp/get';
+import { PRESCRIPTIONS } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'PrescriptionOrderSuccess',
   layout: 'nhsuk-layout',
   components: {
+    DesktopGenericBackLink,
     SwitchProfileButton,
   },
   data() {
@@ -30,10 +41,17 @@ export default {
       isProxying: this.$store.getters['session/isProxying'],
       name: get('$store.state.linkedAccounts.actingAsUser.name', this),
       givenName: get('$store.state.linkedAccounts.actingAsUser.givenName', this),
+      backPath: PRESCRIPTIONS.path,
     };
   },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
+    this.$store.dispatch('repeatPrescriptionCourses/completeOrderJourney');
+  },
+  methods: {
+    backButtonClicked() {
+      redirectTo(this, this.backPath, null);
+    },
   },
 };
 </script>

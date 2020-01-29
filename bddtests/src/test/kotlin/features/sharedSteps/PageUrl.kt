@@ -15,6 +15,8 @@ open class PageUrl {
                     "your prescriptions" to "/prescriptions",
                     "prescription repeat courses" to "/prescriptions/repeat-courses",
                     "gp at hand prescriptions" to "/prescriptions/gp-at-hand",
+                    "partial success" to "/prescriptions/repeat-partial-success",
+                    "prescriptions success" to "/prescriptions/order-success",
                     "organ donation" to "/organ-donation",
                     "more" to "/more",
                     "account" to "/account",

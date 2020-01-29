@@ -6,6 +6,8 @@ import {
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
   PARTIAL_ORDER_RESULT,
+  PRESCRIPTIONS_JOURNEY_COMPLETE,
+  PRESCRIPTIONS_JOURNEY_START,
   initialState,
 } from './mutation-types';
 
@@ -50,6 +52,12 @@ export default {
   },
   [PARTIAL_ORDER_RESULT](state, data) {
     state.partialOrderResult = data;
+  },
+  [PRESCRIPTIONS_JOURNEY_COMPLETE](state) {
+    state.orderInProgress = false;
+  },
+  [PRESCRIPTIONS_JOURNEY_START](state) {
+    state.orderInProgress = true;
   },
 };
 

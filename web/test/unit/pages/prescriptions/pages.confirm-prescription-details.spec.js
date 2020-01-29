@@ -150,6 +150,7 @@ describe('confirm prescriptions', () => {
       'repeatPrescriptionCourses/orderRepeatPrescription',
       { CourseIds: ['course-id-1', 'course-id-2'], SpecialRequest: 'asap please' },
     );
+
     expect($redirect).not.toHaveBeenCalled();
     expect($store.app.router.push).toHaveBeenCalledWith(PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS.path);
     expect($store.state.repeatPrescriptionCourses.submitted).toBe(false);
@@ -189,7 +190,26 @@ describe('confirm prescriptions', () => {
       });
 
     expect(dependency.redirectTo)
-      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_ORDER_SUCCESS.path);
+      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_ORDER_SUCCESS.path, null);
+  });
+
+  it('should submit the prescription when clicked the user and redirect to confirmation page', async () => {
+    // arrange
+    $store = createStore({ isProxying: false });
+    wrapper = mountPage($store);
+
+    // act
+    await wrapper.vm.onConfirmButtonClicked();
+
+    // assert
+    expect($store.dispatch)
+      .toHaveBeenNthCalledWith(1, 'repeatPrescriptionCourses/orderRepeatPrescription', {
+        CourseIds: [1],
+        SpecialRequest: '',
+      });
+
+    expect(dependency.redirectTo)
+      .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_ORDER_SUCCESS.path, null);
   });
 
   describe('nominated pharmacy summary', () => {

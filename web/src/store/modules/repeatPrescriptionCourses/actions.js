@@ -6,6 +6,8 @@ import {
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
   PARTIAL_ORDER_RESULT,
+  PRESCRIPTIONS_JOURNEY_COMPLETE,
+  PRESCRIPTIONS_JOURNEY_START,
 } from './mutation-types';
 
 export default {
@@ -29,6 +31,7 @@ export default {
     };
     return this.app.$http
       .postV1PatientPrescriptions(param).then((data) => {
+        commit(PRESCRIPTIONS_JOURNEY_START);
         commit(PARTIAL_ORDER_RESULT, data);
         if (process.client) {
           this.dispatch('analytics/satelliteTrack', 'prescription_ordered');
@@ -37,5 +40,11 @@ export default {
   },
   updateAdditionalInfo({ commit }, repeatPrescriptionAdditionalInfo) {
     commit(REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO, repeatPrescriptionAdditionalInfo);
+  },
+  completeOrderJourney({ commit }) {
+    commit(PRESCRIPTIONS_JOURNEY_COMPLETE);
+  },
+  startOrderJourney({ commit }) {
+    commit(PRESCRIPTIONS_JOURNEY_START);
   },
 };
