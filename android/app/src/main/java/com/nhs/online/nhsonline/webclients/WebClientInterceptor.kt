@@ -72,6 +72,10 @@ class WebClientInterceptor(
             return true
         }
 
+        if(knownServices.shouldOpen111InApp(URL(url), nhsWeb.isUserLoggedIn)){
+            return false
+        }
+
         if (schemeHandlers.handleUrl(url))
             return true
 

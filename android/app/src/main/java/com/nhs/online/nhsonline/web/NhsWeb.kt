@@ -208,6 +208,12 @@ class NhsWeb(
         }
     }
 
+    fun isCIDUrl(urlString: String): Boolean {
+        val url = URL(urlString)
+        val cidURL = URL(readResourceString(R.string.nhsLoginSuffix))
+        return url.host.contains(cidURL.host)
+    }
+
     fun onBiometricOptionChanged() {
         val cookies: String? = CookieManager.getInstance()
                 .getCookie(activity.resources.getString(R.string.cookieDomain))

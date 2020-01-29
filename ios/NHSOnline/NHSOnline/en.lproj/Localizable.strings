@@ -16,6 +16,7 @@
 "ServiceUnavailableTitle" = "Service unavailable";
 "CheckSymptomsTitle" = "Check my symptoms";
 "BackArrowTitle" = "Back button";
+"CloseIconTitle" = "Close button";
 "LoginAndPasswordOptions" = "Login & password options";
 /*Data sharing header should be updated in Android, iOS, and Web if changed*/
 "DataSharingTitle" = "Find out why your data matters";
@@ -32,6 +33,7 @@
 /*Accessibility*/
 "MyAccountHint" = "Navigates to my account page";
 "BackArrowHint" = "Navigates back a page";
+"CloseIconHint" = "Closes the page";
 "HelpHint" = "Navigates to help page";
 "NHSAppHomeTitle" = "NHS App Home";
 "NHSAppHomeHint" = "Takes you to NHS App home page";

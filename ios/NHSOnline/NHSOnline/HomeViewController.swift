@@ -10,6 +10,7 @@ class HomeViewController : UIViewController {
     
     var applicationState = ApplicationState()
     var documentInteractionController = UIDocumentInteractionController()
+    var isLoggedIn = false
     
     @IBOutlet weak var headerBar: HeaderBar!
     @IBOutlet weak var headerBarSlim: HeaderBarSlim!
@@ -76,6 +77,7 @@ class HomeViewController : UIViewController {
         
         setupNhsLogo()
         setupBackArrow()
+        setupCloseIcon()
         setupMyAccountIcon()
         setupHelpIcon()
         
@@ -231,6 +233,12 @@ class HomeViewController : UIViewController {
         self.headerBarSlim.backButtonArrow.addGestureRecognizer(tapGesture)
     }
     
+    func setupCloseIcon(){
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.checkSymptomsAndCIDBack))
+        self.headerBarSlim.closeIcon.isUserInteractionEnabled = true
+        self.headerBarSlim.closeIcon.addGestureRecognizer(tapGesture)
+    }
+    
     func setupMyAccountIcon() {
         let tapGesture = UITapGestureRecognizer(target: self, action:  #selector(self.selectMyAccount))
         self.headerBar.myAccountIcon.isUserInteractionEnabled = true
@@ -277,6 +285,8 @@ class HomeViewController : UIViewController {
                 self.setHeaderVisibility(visible: true)
                 self.setSlimHeaderVisibility(visible: false)
             case HeaderType.Slim:
+                self.headerBarSlim.backButtonArrow.isHidden = false
+                self.headerBarSlim.closeIcon.isHidden = true
                 self.setHeaderVisibility(visible: false)
                 self.setSlimHeaderVisibility(visible: true)
             default:
@@ -303,10 +313,16 @@ class HomeViewController : UIViewController {
     
     private func setSlimHeaderVisibility(visible: Bool) {
         let contraintPriority: UILayoutPriority
+        
         if visible {
             contraintPriority = showConstraintPriority
         } else {
             contraintPriority = hideConstraintPriority
+        }
+        
+        if (self.hasCidUrlSuffix(webview: self.webViewController?.webView)){
+            self.headerBarSlim.closeIcon.isHidden = false
+            self.headerBarSlim.backButtonArrow.isHidden = true
         }
         
         self.webviewHeaderSlimTopConstraint.priority = contraintPriority

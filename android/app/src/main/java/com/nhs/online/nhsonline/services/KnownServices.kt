@@ -5,8 +5,6 @@ import android.net.Uri
 import android.util.Log
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.data.ErrorMessage
-import com.nhs.online.nhsonline.support.Optional
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -15,9 +13,14 @@ class KnownServices(private val context: Context) {
     private val serviceList = buildKnownServices()
     private val externalSites = buildExternalSites()
 
-
+    
     fun shouldURLOpenExternally(url: URL): Boolean {
         return externalSites.contains(url)
+    }
+
+    fun shouldOpen111InApp(url: URL, isLoggedIn: Boolean): Boolean {
+        val adviceUrl = URL(context.resources.getString(R.string.nhs111))
+        return (adviceUrl.host == url.host && isLoggedIn)
     }
 
     fun isHotJar(url: URL): Boolean {
@@ -73,18 +76,12 @@ class KnownServices(private val context: Context) {
         val services = arrayListOf<KnownService>()
         val nhsAppService = buildNHSInternalAppService()
 
-        val nhs111 = KnownService(fetchStringResource(
-            R.string.nhs111),
-            fetchStringResource(R.string.nhs_111_header),
-            fetchStringResource(R.string.nhs_111_header_description),
-            false)
         val dataPref = KnownService(fetchStringResource(R.string.dataPreferencesBaseUrl),
             fetchStringResource(R.string.data_preferences_header),
             fetchStringResource(R.string.data_preferences_header),
             false)
 
         services.add(nhsAppService)
-        services.add(nhs111)
         services.add(dataPref)
 
         val nhsLoginPrefixList = fetchStringArrayResource(R.array.nhsLoginPrefixList)

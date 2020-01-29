@@ -33,6 +33,7 @@ import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.support.*
 import com.nhs.online.nhsonline.utils.NotificationManagerCompat
 import com.nhs.online.nhsonline.web.NhsWeb
@@ -690,6 +691,12 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             title = null
             setHomeButtonEnabled(isHomeEnabled)
             setDisplayHomeAsUpEnabled(isHomeEnabled)
+
+            if(nhsWeb.isCIDUrl(webview.url) && id == R.id.symptoms_toolbar){
+                setHomeAsUpIndicator(R.drawable.ic_close)
+            }else{
+                setHomeAsUpIndicator(R.drawable.back_arrow)
+            }
         }
     }
 

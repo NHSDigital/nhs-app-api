@@ -2,7 +2,7 @@ import Foundation
 import WebKit
 import SwiftyJSON
 
-class CookieHandler {    
+class CookieHandler {
     func getAccessTokenFromCookie(completion : @escaping (_: String?) -> ())  {
         if #available(iOS 11.0, *) {
             self.getAccessToken(completion: { accessToken in
