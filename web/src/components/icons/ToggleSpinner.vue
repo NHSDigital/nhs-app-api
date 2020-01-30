@@ -1,32 +1,7 @@
 <template>
-  <svg width="30px"
-       height="30px"
-       xmlns="http://www.w3.org/2000/svg"
-       xmlns:svg="http://www.w3.org/2000/svg"
-       viewBox="0 0 100 100"
-       preserveAspectRatio="xMidYMid"
-       focusable="false"
-       tabindex="-1">
-    <title>Icon - Waiting</title>
-    <circle id="svg_1"
-            cx="50"
-            cy="50"
-            fill="none"
-            stroke="#005eb8"
-            stroke-width="8"
-            r="35"
-            stroke-dasharray="164.93361431346415 56.97787143782138"
-            transform="rotate(335.886 50 50)">
-      <animateTransform attributeName="transform"
-                        type="rotate"
-                        calcMode="linear"
-                        values="0 50 50;360 50 50"
-                        keyTimes="0;1"
-                        dur="1.5s"
-                        begin="3s"
-                        repeatCount="indefinite" />
-    </circle>
-  </svg>
+  <div class="loading-spinner-background" tabindex="-1" focusable="false">
+    <div class="loading-spinner" tabindex="-1" focusable="false" />
+  </div>
 </template>
 
 <script>
@@ -34,3 +9,34 @@ export default {
   name: 'ToggleSpinner',
 };
 </script>
+
+<style lang="scss" scoped>
+  .loading-spinner-background {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+  }
+
+  .loading-spinner {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    border-top: 0.2em solid rgba(0, 94, 184, 1);
+    border-right: 0.2em solid rgba(0, 94, 184, 1);
+    border-bottom: 0.2em solid rgba(0, 94, 184, 1);
+    border-left: 0.2em solid rgba(0, 94, 184, 0);
+    animation: spinner-animation 1.5s infinite linear;
+    background-color: rgba(255, 255, 255, 0);
+    display: inline-block;
+    margin: 5px;
+  }
+  @keyframes spinner-animation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>

@@ -1,6 +1,6 @@
 <template>
-  <div v-if="isVisible">
-    <img id="loading-spinner" src="~assets/spinnerImg.gif" alt="loading">
+  <div v-if="isVisible" class="loading-spinner-background" tabindex="-1" focusable="false">
+    <div class="loading-spinner" tabindex="-1" focusable="false" />
   </div>
 </template>
 
@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  #loading-spinner {
+  .loading-spinner-background {
     position: fixed;
     z-index: 10;
     top: 0em;
@@ -26,5 +26,35 @@ export default {
     left: 0em;
     bottom: 0em;
     margin: auto;
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 40px;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+  }
+
+  .loading-spinner {
+    border-radius: 40px;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    width: 50px;
+    height: 50px;
+    border-top: 0.3em solid rgba(0, 94, 184, 1);
+    border-right: 0.3em solid rgba(0, 94, 184, 1);
+    border-bottom: 0.3em solid rgba(0, 94, 184, 1);
+    border-left: 0.3em solid rgba(0, 94, 184, 0);
+    animation: spinner-animation 1.5s infinite linear;
+    background-color: rgba(255, 255, 255, 0);
+    display: inline-block;
+    margin: 5px;
+  }
+  @keyframes spinner-animation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 </style>

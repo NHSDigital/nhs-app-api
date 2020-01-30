@@ -55,7 +55,7 @@ describe('Toggle', () => {
       });
 
       it('will show spinner', () => {
-        expect(wrapper.find('svg').isVisible()).toBe(true);
+        expect(wrapper.find('.loading-spinner-background').isVisible()).toBe(true);
       });
 
       it('will hide toggle', () => {
@@ -87,7 +87,7 @@ describe('Toggle', () => {
       });
 
       it('will hide spinner', () => {
-        expect(wrapper.find('svg').isVisible()).toBe(false);
+        expect(wrapper.find('.loading-spinner-background').isVisible()).toBe(false);
       });
 
       it('will show toggle', () => {
