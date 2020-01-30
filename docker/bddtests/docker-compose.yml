@@ -73,6 +73,10 @@ services:
     env_file:
       - ./docker/bddtests/env/nhslogin_connectivity.env
 
+  mongo_seed:
+    env_file:
+      - ./docker/bddtests/env/mongo_seed.env
+
   stubs.local.bitraft.io:
     image: ${WIREMOCK_DOCKER_REGISTRY:-nhsapp.azurecr.io}/wiremock:${WIREMOCK_DOCKER_TAG:-2.22.0-alpine}
     command: --local-response-templating
