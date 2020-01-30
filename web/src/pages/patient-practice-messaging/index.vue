@@ -81,7 +81,7 @@ export default {
     },
     goToMessageDetails(id, recipient) {
       this.$store.dispatch('patientPracticeMessaging/setSelectedMessageID', id);
-      this.$store.dispatch('patientPracticeMessaging/setSelectedRecipient', recipient);
+      this.$store.dispatch('patientPracticeMessaging/setSelectedRecipient', { name: recipient });
       redirectTo(this, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path);
     },
   },

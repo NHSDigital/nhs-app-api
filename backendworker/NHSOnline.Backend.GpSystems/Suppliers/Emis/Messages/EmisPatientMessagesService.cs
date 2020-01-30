@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
@@ -16,19 +17,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         private readonly IEmisPatientMessagesMapper _messageListMapper;
         private readonly IEmisPatientMessageMapper _messageMapper;
         private readonly IEmisPatientMessageUpdateMapper _messageUpdateMapper;
+        private readonly IEmisPatientMessageSendMapper _messageSendWrapper;
 
         public EmisPatientMessagesService(
             ILogger<EmisPatientMessagesService> logger,
             IEmisClient emisClient,
             IEmisPatientMessagesMapper messageListMapper,
             IEmisPatientMessageMapper messageMapper,
-            IEmisPatientMessageUpdateMapper messageUpdateMapper)
+            IEmisPatientMessageUpdateMapper messageUpdateMapper,
+            IEmisPatientMessageSendMapper messageSendMapper)
         {
             _logger = logger;
             _emisClient = emisClient;
             _messageListMapper = messageListMapper;
             _messageMapper = messageMapper;
             _messageUpdateMapper = messageUpdateMapper;
+            _messageSendWrapper = messageSendMapper;
         }
 
         public async Task<GetPatientMessagesResult> GetMessages(GpUserSession gpUserSession)
@@ -145,7 +149,29 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             }
         }
 
-        private GetPatientMessagesResult InterpretPatientMessagesGetResponse(
+            public async Task<PostSendMessageResult> SendMessage(GpUserSession gpUserSession,
+                CreatePatientMessage message)
+            {
+                try
+                {
+                    var response = await _emisClient.SendPatientMessagePost(
+                        new EmisRequestParameters((EmisUserSession) gpUserSession), message);
+
+                    return InterpretSendMessageResponse(response);
+                }
+                catch (HttpRequestException e)
+                {
+                    _logger.LogError(e, "Request to send patient message was unsuccessful");
+                    return new PostSendMessageResult.BadGateway();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Unknown error occured when sending the patient message");
+                    return new PostSendMessageResult.InternalServerError();
+                }
+            }
+
+            private GetPatientMessagesResult InterpretPatientMessagesGetResponse(
             EmisClient.EmisApiObjectResponse<MessagesGetResponse> response)
         {
             if (response.HasSuccessResponse)
@@ -281,6 +307,38 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
             return new GetPatientMessageRecipientsResult.BadGateway();
+        }
+
+        private PostSendMessageResult InterpretSendMessageResponse(
+            EmisClient.EmisApiObjectResponse<MessagePostResponse> response)
+        {
+            if (response.HasSuccessResponse)
+            {
+                var mapped = _messageSendWrapper.Map(response.Body);
+                if (mapped.HasValue)
+                {
+                    return new PostSendMessageResult.Success(mapped.ValueOrFailure());
+                }
+
+                return new PostSendMessageResult.BadRequest();
+            }
+
+            if (response.HasForbiddenResponse())
+            {
+                _logger.LogEmisResponseIsForbidden();
+                _logger.LogEmisErrorResponse(response);
+                return new PostSendMessageResult.Forbidden();
+            }
+
+            if (response.HasBadRequestResponse)
+            {
+                _logger.LogEmisErrorResponse(response);
+                return new PostSendMessageResult.BadRequest();
+            }
+
+            _logger.LogEmisUnknownError(response);
+            _logger.LogEmisErrorResponse(response);
+            return new PostSendMessageResult.BadGateway();
         }
     }
 }

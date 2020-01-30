@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Messages
@@ -11,5 +12,6 @@ namespace NHSOnline.Backend.GpSystems.Messages
         Task<PutPatientMessageReadStatusResult> UpdateMessageMessageReadStatus(GpUserSession gpUserSession,
             UpdateMessageReadStatusRequestBody updateRequest);
         Task<GetPatientMessageRecipientsResult> GetMessageRecipients(GpUserSession gpUserSession);
+        Task<PostSendMessageResult> SendMessage(GpUserSession gpUserSession, CreatePatientMessage message);
     }
 }

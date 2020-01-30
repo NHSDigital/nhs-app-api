@@ -5,14 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
-using NHSOnline.Backend.GpSystems.Messages;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
@@ -59,6 +57,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         private const string GetMessageDetailsPath = "messages/{0}/?userPatientLinkToken={1}";
         private const string GetMessageRecipientsPath = "messagerecipients?userPatientLinkToken={0}";
         private const string PutMessageReadStatusUpdate = "messages";
+        private const string PostMessagePath = "messages";
 
         private readonly EmisHttpClient _httpClient;
         private readonly EmisConfigurationSettings _settings;
@@ -336,16 +335,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 sessionId: requestParameters.SessionId);
         }
 
-        public async Task<EmisApiObjectResponse<MessageRecipientsGetResponse>> PatientMessageRecipientsGet(
-            EmisRequestParameters requestParameters)
-        {
-            return await Get<MessageRecipientsGetResponse>(
-                string.Format(CultureInfo.InvariantCulture, GetMessageRecipientsPath, requestParameters.UserPatientLinkToken),
-                RequestsForSuccessOutcome.PatientMessageRecipientsGet, GetDefaultSuccessStatusCodeList(),
-                endUserSessionId: requestParameters.EndUserSessionId,
-                sessionId: requestParameters.SessionId);
-        }
-
         public async Task<EmisApiObjectResponse<MessageUpdateResponse>> PatientMessageUpdatePut(
             EmisRequestParameters requestParameters, UpdateMessageReadStatusRequest updateMessageReadStatusRequest)
         {
@@ -355,6 +344,26 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 endUserSessionId: requestParameters.EndUserSessionId,
                 sessionId: requestParameters.SessionId,
                 customTimeout: _settings.EmisExtendedHttpTimeoutSeconds);
+        }
+
+        public async Task<EmisApiObjectResponse<MessageRecipientsGetResponse>> PatientMessageRecipientsGet(
+            EmisRequestParameters requestParameters)
+        {
+            return await Get<MessageRecipientsGetResponse>(
+                string.Format(CultureInfo.InvariantCulture, GetMessageRecipientsPath,
+                    requestParameters.UserPatientLinkToken),
+                RequestsForSuccessOutcome.PatientMessageRecipientsGet, GetDefaultSuccessStatusCodeList(),
+                endUserSessionId: requestParameters.EndUserSessionId,
+                sessionId: requestParameters.SessionId);
+        }
+
+        public async Task<EmisApiObjectResponse<MessagePostResponse>> SendPatientMessagePost(EmisRequestParameters requestParameters,
+            CreatePatientMessage message)
+        {
+            var sendMessageRequest = new PostMessageRequest(requestParameters.UserPatientLinkToken, message);
+            return await Post<PostMessageRequest, MessagePostResponse>(sendMessageRequest, PostMessagePath,
+                RequestsForSuccessOutcome.SendPatientMessagePost, GetDefaultSuccessStatusCodeList(),
+                requestParameters.EndUserSessionId, requestParameters.SessionId);
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Delete<TRequest, TResponse>(TRequest model, string path,

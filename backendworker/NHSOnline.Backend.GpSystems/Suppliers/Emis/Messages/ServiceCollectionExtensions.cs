@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             services.AddTransient<IEmisPatientMessagesMapper, EmisPatientMessagesMapper>();
             services.AddTransient<IEmisPatientMessageMapper, EmisPatientMessageMapper>();
             services.AddTransient<IEmisPatientMessageUpdateMapper, EmisPatientMessageUpdateMapper>();
+            services.AddTransient<IEmisPatientMessageSendMapper, EmisPatientSendMessageMapper>();
 
             return services;
         }

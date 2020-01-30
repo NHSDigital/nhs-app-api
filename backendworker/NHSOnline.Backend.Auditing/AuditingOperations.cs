@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.Auditing
         public const string GetDocumentAuditTypeRequest = "Documents_Get_Request";
         public const string GetDocumentAuditTypeResponse = "Documents_Get_Response";
         public const string GetNominatedPharmacyRequest = "NominatedPharmacy_Get_Request";
-        public const string GetNominatedPharmacyResponse = "NominatedPharmacy_Get_Response"; 
+        public const string GetNominatedPharmacyResponse = "NominatedPharmacy_Get_Response";
         public const string UpdatedNominatedPharmacyRequest = "NominatedPharmacy_Update_Request";
         public const string UpdatedNominatedPharmacyResponse = "NominatedPharmacy_Update_Response";
         public const string SearchNominatedPharmacyAuditTypeRequest = "SearchNominatedPharmacy_Get_Request";
@@ -94,5 +94,8 @@ namespace NHSOnline.Backend.Auditing
         public const string GetPatientPracticeMessageRecipientsResponse = "PatientPracticeMessageRecipients_Get_Response";
         public const string UpdatePatientPracticeMessageUnreadStatusRequest = "PatientPracticeMessageUnreadStatus_Update_Request";
         public const string UpdatePatientPracticeMessageUnreadStatusResponse = "PatientPracticeMessageUnreadStatus_Update_Response";
+        public const string ViewPracticePatientMessagesRequest = "PracticePatientMessages_View_Request";
+        public const string CreatePracticePatientMessageRequest = "PracticePatientMessage_Create_Request";
+        public const string CreatePracticePatientMessageResponse = "PracticePatientMessage_Create_Response";
     }
 }

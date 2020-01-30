@@ -41,6 +41,50 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+    post:
+      tags:
+        - patientMessages
+      summary: Sends a message from the user to their practice
+      description: Sends a message from the user to their practice
+      requestBody:
+        x-name: CreateMessageRequest
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMessageRequest"
+        description: The message to be sent
+        required: true
+      responses:
+        "200":
+          description: Successfully sent a message to the users practice
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostMessageResponse"
+        "400":
+          description: Upstream system returned BadRequest status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "403":
+          description: Upstream system returned Forbidden status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "500":
+          description: An unknown error occured when processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "502":
+          description: Upstream system returned BadGateway status or an invalid response.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
   /messages/recipients:
     get:
       tags:
@@ -78,7 +122,6 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
-        
   /messages/updateReadStatus:
     post:
       tags:
@@ -286,4 +329,22 @@ components:
         messageReadState:
           type: string
           description: read state of the message
-        
+    CreateMessageRequest:
+      type: object
+      properties:
+        messageBody:
+          type: string
+          description: The main text of the message
+        subject:
+          type: string
+          description: The subject of the message
+        recipient:
+          type: string
+          description: The guid of recipient of the message
+    PostMessageResponse:
+      type: object
+      properties:
+        messageSent:
+          type: boolean
+          nullable: true
+          description: Indicates if the message has been successfully sent

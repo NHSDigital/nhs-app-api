@@ -7,6 +7,8 @@
                    :id="`recipient-${recipient.recipientGuid}`"
                    :key="`recipient-${recipient.recipientGuid}`"
                    :text="recipient.name"
+                   :click-func="recipientClicked"
+                   :click-param="recipient"
                    header-tag="h2"
                    href="#"/>
       </menu-item-list>
@@ -24,6 +26,7 @@ import MenuItemList from '@/components/MenuItemList';
 import {
   INDEX,
   PATIENT_PRACTICE_MESSAGING_URGENCY,
+  PATIENT_PRACTICE_MESSAGING_CREATE,
 } from '@/lib/routes';
 import { isFalsy, redirectTo } from '@/lib/utils';
 
@@ -49,6 +52,11 @@ export default {
   methods: {
     backLinkClicked() {
       redirectTo(this, this.urgencyPath);
+    },
+    recipientClicked(recipient) {
+      this.$store.dispatch('patientPracticeMessaging/setSelectedRecipient',
+        { id: recipient.recipientGuid, name: recipient.name });
+      redirectTo(this, PATIENT_PRACTICE_MESSAGING_CREATE.path);
     },
   },
 };

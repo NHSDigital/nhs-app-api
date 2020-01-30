@@ -12,6 +12,7 @@ import {
   SET_SELECTED_MESSAGE_RECIPIENT,
   SET_STATUS_STATE,
   SET_URGENCY_CHOICE,
+  MESSAGE_SENT,
 } from './mutation-types';
 
 export default {
@@ -76,6 +77,25 @@ export default {
     } catch {
       // Nothing to do. A server error / messages error is displayed
     }
+  },
+  async sendMessage({ commit, state }, message) {
+    const createMessageRequest = {
+      messageBody: message.messageText,
+      subject: message.subjectText,
+      recipient: state.selectedMessageRecipient.id,
+    };
+    try {
+      const response = await this.app.$http.postV1PatientMessages({ createMessageRequest });
+      if (response.messageSent) {
+        commit(MESSAGE_SENT);
+      }
+    } catch {
+      // Nothing to do. A server error / messages error is displayed
+    }
+  },
+  setMessageDetails({ commit }, messageDetails) {
+    commit(SET_DETAILS, messageDetails);
+    commit(LOADED_MESSAGE, true);
   },
   setSelectedMessageID({ commit }, id) {
     commit(SET_SELECTED_MESSAGE_ID, id);

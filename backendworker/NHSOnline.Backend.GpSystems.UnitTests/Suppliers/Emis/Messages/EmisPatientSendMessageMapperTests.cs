@@ -1,0 +1,55 @@
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.Backend.GpSystems.Messages.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
+
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
+{
+    public class EmisPatientSendMessageMapperTests
+    {
+        private IFixture _fixture;
+
+        private EmisPatientSendMessageMapper _systemUnderTest;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            _systemUnderTest = _fixture.Create<EmisPatientSendMessageMapper>();
+        }
+
+        [TestMethod]
+        public void Map_WhenCalledHappyPath_ReturnsMappedGetPatientMessageResponse()
+        {
+            // Arrange
+            var messagePostResponse = _fixture.Create<MessagePostResponse>();
+
+            // Act
+            var result = _systemUnderTest.Map(messagePostResponse);
+
+            // Assert
+            result.Should().BeEquivalentTo(new PostMessageResponse
+            {
+                MessageSent = messagePostResponse.MessageSent
+            });
+        }
+
+        [TestMethod]
+        public void Map_MessageNotSent_ReturnsMappedGetPatientMessageResponse()
+        {
+            // Arrange
+            var messagePostResponse = _fixture.Create<MessagePostResponse>();
+            messagePostResponse.MessageSent = null;
+
+            // Act
+            var result = _systemUnderTest.Map(messagePostResponse);
+
+            // Assert
+            result.Should().BeNull();
+        }
+    }
+}

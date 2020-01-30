@@ -3046,6 +3046,108 @@
                     serviceDeskReference: 
                       type: "string"
                       description: "Six character service desk reference code."
+      post: 
+        tags: 
+          - "patientMessages"
+        summary: "Sends a message from the user to their practice"
+        description: "Sends a message from the user to their practice"
+        requestBody: 
+          x-name: "CreateMessageRequest"
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                properties: 
+                  messageBody: 
+                    type: "string"
+                    description: "The main text of the message"
+                  subject: 
+                    type: "string"
+                    description: "The subject of the message"
+                  recipients: 
+                    type: "string"
+                    description: "The recipient of the message"
+          description: "The message to be sent"
+          required: true
+        responses: 
+          200: 
+            description: "Successfully sent a message to the users practice"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    messageSent: 
+                      type: "boolean"
+                      description: "Indicates if the message has been successfully sent"
+          400: 
+            description: "Upstream system returned BadRequest status."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          403: 
+            description: "Upstream system returned Forbidden status."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          500: 
+            description: "An unknown error occured when processing the request."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
+          502: 
+            description: "Upstream system returned BadGateway status or an invalid response."
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  description: "Error response from backend api."
+                  properties: 
+                    errorCode: 
+                      type: "integer"
+                      description: "Error code"
+                    errorMessage: 
+                      type: "string"
+                      description: "Error message"
+                    serviceDeskReference: 
+                      type: "string"
+                      description: "Six character service desk reference code."
     /v1/patient/messages/{id}: 
       get: 
         tags: 

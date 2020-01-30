@@ -40,6 +40,10 @@ class PatientPracticeMessagingRecipientsPage: HybridPageObject() {
         )
     }
 
+    fun clickRecipient(expectedRecipients: List<Recipient>) {
+        recipientLink(expectedRecipients[0].name!!).click()
+    }
+
     fun assertRecipients(expectedRecipients: List<Recipient>) {
         expectedRecipients.forEach {
             recipientLink(it.name!!).waitForElement().assertIsVisible()

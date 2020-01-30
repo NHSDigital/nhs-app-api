@@ -9,6 +9,7 @@
               v-model="textValue"
               v-tabbing="textAreaClasses"
               tabindex="0"
+              :rows="rows"
               :class="inputClasses"
               :required="required"
               :aria-labelledby="aLabelledBy"
@@ -57,6 +58,10 @@ export default {
     },
     name: {
       type: String,
+      default: undefined,
+    },
+    rows: {
+      type: Number,
       default: undefined,
     },
     value: {

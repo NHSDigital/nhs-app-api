@@ -1,13 +1,14 @@
 package features.patientPracticeMessaging.stepDefinitions
 
+import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.patientPracticeMessaging.factories.PracticePatientMessagingFactory
+import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
 import mocking.emis.models.PatientPracticeMessagingTypes
 import mocking.emis.patientPracticeMessaging.MessageRecipientsResponseModel
-import mocking.emis.patientPracticeMessaging.MessageResponseModel
 import mocking.emis.practices.SettingsResponseModel
 import models.ExpectedMessage
 import org.junit.Assert.assertNotNull
@@ -19,6 +20,10 @@ import pages.patientPracticeMessaging.PatientPracticeMessagingRecipientsPage
 import pages.patientPracticeMessaging.PatientPracticeMessagingUrgencyPage
 import utils.SerenityHelpers
 import mocking.emis.patientPracticeMessaging.MessageReply
+import mocking.emis.patientPracticeMessaging.MessageResponseModel
+import net.thucydides.core.annotations.Steps
+import pages.patientPracticeMessaging.PracticePatientMessagingCreateMessagePage
+import worker.models.patientPracticeMessaging.CreateMessageRequest
 
 open class PatientPracticeMessageStepDefinitions {
 
@@ -40,6 +45,10 @@ open class PatientPracticeMessageStepDefinitions {
             Pair("severe injuries", "severe injuries - or deep cuts after a serious accident"),
             Pair("seizure (fit)", "seizure (fit) - someone is shaking or jerking because of a fit, or is unconscious " +
                     "(cannot be woken up)"))
+    private lateinit var patientPracticePatientMessagingCreateMessagePage: PracticePatientMessagingCreateMessagePage
+
+    @Steps
+    lateinit var browser: BrowserSteps
 
     var mockingClient = MockingClient.instance
 
@@ -69,11 +78,35 @@ open class PatientPracticeMessageStepDefinitions {
                 .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(), true)
     }
 
+    @When("^I enter url address for the send message page$")
+    fun whenIEnterTheUrlAddressForSendMessagePage() {
+        val fullUrl = Config.instance.url + "/patient-practice-messaging/send-message"
+        browser.browseTo(fullUrl)
+    }
+
+
+    @Given("^I have patient practice messages in my inbox$")
+    fun thePatientHasPatientPracticeMessagesInTheirInbox() {
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(), true)
+    }
+
     @Given("^I have patient practice messages in my inbox, all of which are read$")
     fun thePatientHasPatientPracticeMessagesInTheirInboxWithoutUnreadMessages() {
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(), false)
+    }
+
+    @Given("^The patient can successfully send a message to their practice")
+    fun thePatientSuccessfullySendsAMessage() {
+        val createMessageRequest = CreateMessageRequest("Test Results",
+                "When will my test results be ready", "Recipient 1")
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .patientSuccessfullySendsAMessage(SerenityHelpers.getPatient(), createMessageRequest)
+
     }
 
     @Given("^I have no patient practice messages in my inbox$")
@@ -95,6 +128,53 @@ open class PatientPracticeMessageStepDefinitions {
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .forbiddenErrorWithPatientPracticeMessaging(SerenityHelpers.getPatient())
+    }
+
+    @Given("^The patient receives an error trying to send a message to their practice")
+    fun thePatientReceivesAnErrorWhenTryingToSendAMessage() {
+       val createMessageRequest = CreateMessageRequest("Test Results",
+           "When will my test results be ready", "Recipient 1")
+        PracticePatientMessagingFactory.getForSupplier(SerenityHelpers.getGpSupplier())
+        .errorSendingAMessage(SerenityHelpers.getPatient(), createMessageRequest)
+    }
+
+    @Then("^I am on the send message page")
+    fun iAmOnTheSendMessagePage() {
+        val expectedRecipients = SerenityHelpers.getValueOrNull<MessageRecipientsResponseModel>(
+                PatientPracticeMessagingTypes.AVAILABLE_RECIPIENTS)!!.MessageRecipients
+        patientPracticePatientMessagingCreateMessagePage.assertHeaderContainsRecipient(expectedRecipients[0].name!!)
+        patientPracticePatientMessagingCreateMessagePage.assertDisplayed()
+    }
+
+    @When("^I insert a subject and message")
+    fun iInsertSubjectAndMessageText() {
+        val messageDetails = SerenityHelpers
+                .getValueOrNull<CreateMessageRequest>(PatientPracticeMessagingTypes.SENT_MESSAGE)!!
+        patientPracticePatientMessagingCreateMessagePage.insertSubjectAndMessageText(
+                messageDetails.subject,
+                messageDetails.messageBody)
+    }
+
+    @When("^I click on a recipient$")
+    fun iClickOnARecipient(){
+        val expectedRecipients = SerenityHelpers.getValueOrNull<MessageRecipientsResponseModel>(
+                PatientPracticeMessagingTypes.AVAILABLE_RECIPIENTS)!!.MessageRecipients
+        patientPracticeMessagingRecipientsPage.clickRecipient(expectedRecipients)
+    }
+
+    @When("^I leave the message and subject fields blank")
+    fun iDoNotInsertSubjectAndMessageText() {
+        patientPracticePatientMessagingCreateMessagePage.insertSubjectAndMessageText("", "")
+    }
+
+    @When("^I click send message")
+    fun iClickSendMessage() {
+        patientPracticePatientMessagingCreateMessagePage.sendMessage()
+    }
+
+    @Then("I see validation errors for subject and message")
+    fun iSeeValidationErrorsForSubjectAndMessage(){
+        patientPracticePatientMessagingCreateMessagePage.assertValidationErrorsDisplayed()
     }
 
     @Given("^there is an unknown error getting patient practice message details$")
@@ -186,20 +266,29 @@ open class PatientPracticeMessageStepDefinitions {
         errorPage.assertHasButton("Try again")
     }
 
-    @Then("^I see my patient practice message along with the replies from the GP$")
+    @Then("^I see my new message after it has been sent")
+    fun iSeeMyNewMessageAfterItHasBeenSent(){
+        val messageDetails = SerenityHelpers
+                .getValueOrNull<CreateMessageRequest>(PatientPracticeMessagingTypes.SENT_MESSAGE)!!
+        patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(messageDetails.subject)
+        patientPracticeMessagingDetailsPage.assertSentMessageCorrect(messageDetails.messageBody)
+    }
+
+    @Then("^I see my patient practice message along with the replies from the GP")
     fun iSeeMyPatientPracticeMessageAlongWithTheReplies() {
         val message = SerenityHelpers.getValueOrNull<MessageResponseModel>(
                 PatientPracticeMessagingTypes.SELECTED_MESSAGE)!!.Message
         val replies = message.messageReplies
+
         val unreadReplies = mutableListOf<MessageReply>()
         val readReplies = mutableListOf<MessageReply>()
         replies.filterTo(unreadReplies, {reply: MessageReply -> reply.isUnread})
         replies.filterTo(readReplies, {reply: MessageReply -> !reply.isUnread})
         patientPracticeMessagingDetailsPage.assertReadRepliesCorrect(readReplies)
         patientPracticeMessagingDetailsPage.assertUnreadRepliesCorrect(unreadReplies)
-        patientPracticeMessagingDetailsPage.assertSentMessageCorrect(message)
+        patientPracticeMessagingDetailsPage.assertSentMessageCorrect(message.content)
         patientPracticeMessagingDetailsPage.assertSentDateTimeCorrect()
-        patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(message)
+        patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(message.subject)
         if (unreadReplies.count() > 1) {
             patientPracticeMessagingDetailsPage.assertUnreadReceivedDateTimeCorrect()
             patientPracticeMessagingDetailsPage.assertUnreadDividerIsOnSceen()

@@ -9,13 +9,13 @@
 export default {
   name: 'PageTitle',
   props: {
-    cssClass: {
-      type: String,
-      default: 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-0 nhsuk-u-padding-top-3',
-    },
     shouldShowDesktopVersion: {
       type: Boolean,
       default: true,
+    },
+    cssClass: {
+      type: String,
+      default: 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-0 nhsuk-u-padding-top-3',
     },
     titleKey: {
       type: String,

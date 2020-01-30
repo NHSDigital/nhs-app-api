@@ -1,7 +1,6 @@
 package pages.patientPracticeMessaging
 
 import org.junit.Assert.assertEquals
-import mocking.emis.patientPracticeMessaging.MessageDetails
 import mocking.emis.patientPracticeMessaging.MessageReply
 import pages.HybridPageElement
 import pages.HybridPageObject
@@ -42,22 +41,22 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
         }
     }
 
-    fun assertSentMessageCorrect(message: MessageDetails){
+    fun assertSentMessageCorrect(content: String){
         val sentMessage =  HybridPageElement(
                 webDesktopLocator = "//*[@id='messageSentPanel']//p",
                 androidLocator = null,
                 page = this)
 
-        return assertEquals(sentMessage.text, message.content)
+        return assertEquals(sentMessage.text, content)
     }
 
-    fun assertSentSubjectCorrect(message: MessageDetails){
+    fun assertSentSubjectCorrect(subject: String){
         val sentMessage =  HybridPageElement(
                 webDesktopLocator = "//*[@id='messageSubject']",
                 androidLocator = null,
                 page = this)
 
-        return assertEquals(sentMessage.text, message.subject)
+        return assertEquals(sentMessage.text, subject)
     }
 
     fun assertUnreadDividerIsOnSceen(){

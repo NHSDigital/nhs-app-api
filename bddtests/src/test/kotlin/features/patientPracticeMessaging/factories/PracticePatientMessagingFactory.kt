@@ -6,6 +6,7 @@ import mocking.MockingClient
 import mocking.emis.patientPracticeMessaging.PatientMessageSummary
 import models.ExpectedMessage
 import models.Patient
+import worker.models.patientPracticeMessaging.CreateMessageRequest
 
 abstract class PracticePatientMessagingFactory {
 
@@ -16,6 +17,8 @@ abstract class PracticePatientMessagingFactory {
     abstract fun errorWithPatientPracticeMessagingMessageDetails(patient: Patient)
     abstract fun getExpectedMessages(expectedMessages: List<PatientMessageSummary>): List<ExpectedMessage>
     abstract fun patientHasNoMessages(patient: Patient)
+    abstract fun patientSuccessfullySendsAMessage(patient: Patient, createMessageRequest: CreateMessageRequest)
+    abstract fun errorSendingAMessage(patient: Patient, createMessageRequest: CreateMessageRequest)
 
     val mockingClient = MockingClient.instance
 

@@ -70,6 +70,7 @@ import {
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+  PATIENT_PRACTICE_MESSAGING_CREATE,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_CONFIRM_COURSES,
@@ -311,6 +312,13 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.patientPracticeMessaging';
       route.meta.pageTitleKey = 'pageTitles.patientPracticeMessaging';
       break;
+    case PATIENT_PRACTICE_MESSAGING_CREATE.name: {
+      const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
+      route.meta.headerKey = 'pageTitles.patientPracticeMessagingCreateMessage';
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingCreateMessage';
+      route.meta.formatArguments = { name };
+      break;
+    }
     case PRESCRIPTIONS.name:
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.prescriptions';

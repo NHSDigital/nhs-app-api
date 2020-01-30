@@ -7,4 +7,5 @@ enum class PatientPracticeMessagingTypes: ISerenityHelperEnums {
     SELECTED_MESSAGE,
     AVAILABLE_MESSAGE,
     AVAILABLE_RECIPIENTS,
+    SENT_MESSAGE
 }

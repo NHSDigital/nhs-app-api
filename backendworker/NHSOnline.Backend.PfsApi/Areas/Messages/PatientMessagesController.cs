@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -39,8 +40,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             {
                 return new BadRequestObjectResult(ModelState);
             }
-            
+
             await _auditor.Audit(AuditingOperations.ViewPatientPracticeMessagesRequest, "Viewing Patient to Practice Messages");
+
+            await _auditor.Audit(AuditingOperations.ViewPracticePatientMessagesRequest,
+                "Viewing Practice to Patient Messages");
 
             var userSession = HttpContext.GetUserSession();
             var gpUserSession = userSession.GpUserSession;
@@ -70,7 +74,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             }
 
             await _auditor.Audit(AuditingOperations.GetPatientPracticeMessageDetailsRequest, "Getting Patient to Practice Message Details");
-            
+
             var userSession = HttpContext.GetUserSession();
             var gpUserSession = userSession.GpUserSession;
 
@@ -81,7 +85,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
                 .GetPatientMessagesService();
 
             var result = await patientMessagesService.GetMessageDetails(messageId, gpUserSession);
-            
+
             await result.Accept(new PatientMessageResultAuditingVisitor(_auditor, _logger));
             return result.Accept(new PatientMessageResultVisitor(_errorReferenceGenerator, userSession));
         }
@@ -90,13 +94,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         [ApiVersionRoute("patient/messages/updateReadStatus")]
         public async Task<IActionResult> PostUpdateMessageReadStatus([FromBody] UpdateMessageReadStatusRequestBody updateMessageReadStatusRequest)
         {
+
             _logger.LogEnter();
 
             if (!ModelState.IsValid)
             {
                 return new BadRequestObjectResult(ModelState);
             }
-            
+
             await _auditor.Audit(
                 AuditingOperations.UpdatePatientPracticeMessageUnreadStatusRequest,
                 $"Updating unread status for message with id {updateMessageReadStatusRequest.MessageId} to " +
@@ -132,17 +137,46 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
 
             var userSession = HttpContext.GetUserSession();
             var gpUserSession = userSession.GpUserSession;
-            
+
             _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
-            
+
             var patientMessagesService = _gpSystemFactory
                 .CreateGpSystem(gpUserSession.Supplier)
                 .GetPatientMessagesService();
 
             var result = await patientMessagesService.GetMessageRecipients(gpUserSession);
-            
+
             await result.Accept(new PatientMessageRecipientsResultAuditingVisitor(_auditor, _logger));
             return result.Accept(new PatientMessageRecipientsResultVisitor(_errorReferenceGenerator, userSession));
+        }
+
+        [HttpPost]
+        [ApiVersionRoute("patient/messages")]
+        public async Task<IActionResult> SendMessage([FromBody] CreatePatientMessage message)
+        {
+            _logger.LogEnter();
+
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+
+            await _auditor.Audit(AuditingOperations.CreatePracticePatientMessageRequest,
+                "Creating a practice to patient message");
+
+            var userSession = HttpContext.GetUserSession();
+            var gpUserSession = userSession.GpUserSession;
+
+            _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
+
+            var patientMessagesService = _gpSystemFactory
+                .CreateGpSystem(gpUserSession.Supplier)
+                .GetPatientMessagesService();
+
+            var result = await patientMessagesService.SendMessage(gpUserSession, message);
+
+            await result.Accept(new PatientSendMessageResultAuditingVisitor(_auditor, _logger));
+            return result.Accept(new PatientSendMessageResultVisitor(_errorReferenceGenerator, userSession));
         }
     }
 }

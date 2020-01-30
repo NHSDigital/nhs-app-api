@@ -1081,6 +1081,17 @@ const routes = {
     },
     helpUrl: baseNhsAppHelpUrl,
   },
+  PATIENT_PRACTICE_MESSAGING_CREATE: {
+    name: 'patient-practice-messaging-send-message',
+    path: '/patient-practice-messaging/send-message',
+    crumb: {
+      i18nKey: 'patientPracticeMessagingCreate',
+      get parentRoute() {
+        return this.allRoutes.PATIENT_PRACTICE_MESSAGING;
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+  },
   PRESCRIPTIONS: {
     name: 'prescriptions',
     path: '/prescriptions',
@@ -1461,6 +1472,7 @@ export const {
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+  PATIENT_PRACTICE_MESSAGING_CREATE,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_REPEAT_COURSES,

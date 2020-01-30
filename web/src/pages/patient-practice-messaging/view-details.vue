@@ -48,17 +48,24 @@ export default {
     if (store.state.patientPracticeMessaging.selectedMessageId === undefined) {
       return redirect(PATIENT_PRACTICE_MESSAGING.path);
     }
-    const selectedId = store.state.patientPracticeMessaging.selectedMessageId;
-    return store.dispatch('patientPracticeMessaging/loadMessage', { id: selectedId, clearApiError: true });
+
+    if (store.state.patientPracticeMessaging.selectedMessageId !== 0) {
+      const selectedId = store.state.patientPracticeMessaging.selectedMessageId;
+      return store.dispatch('patientPracticeMessaging/loadMessage', { id: selectedId, clearApiError: true });
+    }
+    return undefined;
   },
   mounted() {
     if (this.$store.state.patientPracticeMessaging.loadedDetails &&
       this.$store.state.patientPracticeMessaging.selectedMessageRecipient !== undefined) {
       this.$store.dispatch('header/updateHeaderText',
-        `Message to ${this.$store.state.patientPracticeMessaging.selectedMessageRecipient}`);
+        `Message to ${this.$store.state.patientPracticeMessaging.selectedMessageRecipient.name}`);
       this.$store.dispatch('pageTitle/updatePageTitle',
-        `Message to ${this.$store.state.patientPracticeMessaging.selectedMessageRecipient}`);
-      this.$store.dispatch('patientPracticeMessaging/updateReadStatusAsRead');
+        `Message to ${this.$store.state.patientPracticeMessaging.selectedMessageRecipient.name}`);
+
+      if (this.$store.state.patientPracticeMessaging.selectedMessageId !== 0) {
+        this.$store.dispatch('patientPracticeMessaging/updateReadStatusAsRead');
+      }
     }
   },
   beforeDestroy() {

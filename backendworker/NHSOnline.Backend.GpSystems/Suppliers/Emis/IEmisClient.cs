@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
@@ -85,5 +87,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         Task<EmisApiObjectResponse<MessageRecipientsGetResponse>> PatientMessageRecipientsGet(
             EmisRequestParameters requestParameters);
+        Task<EmisApiObjectResponse<MessagePostResponse>> SendPatientMessagePost(
+            EmisRequestParameters requestParameters, CreatePatientMessage message);
     }
 }
