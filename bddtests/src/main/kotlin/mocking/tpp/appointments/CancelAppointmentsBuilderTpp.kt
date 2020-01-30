@@ -1,5 +1,6 @@
 package mocking.tpp.appointments
 
+import constants.ErrorResponseCodeTpp
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
@@ -41,5 +42,21 @@ class CancelAppointmentsBuilderTpp  (patient: Patient, request: CancelAppointmen
         return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
             andXmlBody("Service unavailable").build()
         }
+    }
+
+    override fun responseErrorForbiddenService(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun respondWithExceptionWhenNotAvailable(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun respondWithWithinAnHour(): Mapping {
+        return respondWithError(HttpStatus.SC_OK, ErrorResponseCodeTpp.APPOINTMENT_WITHIN_ONE_HOUR)
+    }
+
+    override fun respondWithUnknownException(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

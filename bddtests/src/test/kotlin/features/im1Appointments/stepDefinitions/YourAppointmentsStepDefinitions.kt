@@ -1,13 +1,22 @@
 package features.im1Appointments.stepDefinitions
 
+import com.github.tomakehurst.wiremock.stubbing.Scenario
+import constants.Supplier
+import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.steps.AppointmentsConfirmationSteps
-import features.im1Appointments.steps.CancelAppointmentSteps
 import features.im1Appointments.steps.YourAppointmentsTelephoneSteps
 import features.im1Appointments.steps.YourAppointmentsUISteps
+import mocking.data.appointments.AppointmentsSlotsExample
+import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
+import mocking.vision.VisionConstants
+import mockingFacade.appointments.MyAppointmentsFacade
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.ErrorDialogPage
 import pages.appointments.BookingSuccessPage
 import pages.appointments.CancellingSuccessPage
 import pages.assertSingleElementPresent
@@ -17,6 +26,10 @@ import pages.isDisplayed
 import pages.isCurrentlyEnabled
 import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
+
+private const val ERROR_SCENARIO = "error scenario"
+private const val ERROR_SCENARIO_SECOND = "error scenario second"
+private const val ERROR_SCENARIO_WILL_SUCCEED = "to succeed"
 
 class YourAppointmentsStepDefinitions {
 
@@ -30,11 +43,47 @@ class YourAppointmentsStepDefinitions {
     lateinit var cancelSuccessPage: CancellingSuccessPage
     @Steps
     lateinit var yourAppointmentsTelephoneSteps: YourAppointmentsTelephoneSteps
-    @Steps
-    lateinit var cancelAppointmentSteps: CancelAppointmentSteps
 
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
+    private lateinit var errorDialogPage: ErrorDialogPage
+
+    private val appointmentSlotsExample = AppointmentsSlotsExample()
+
+    @Given("^VISION user is not allowed to view appointments")
+    fun visionUserIsNotAllowedToViewAppointments() {
+        Serenity.setSessionVariable(VisionConstants.gpAppointmentsDisabled).to("true")
+        MyAppointmentsFactory.getForSupplier(Supplier.VISION).generateDefaultUserData()
+    }
+
+    @Given("^(.*) returns corrupted response once when trying to retrieve my appointments$")
+    fun gpSystemReturnsCorruptedResponseOnceWhenTryingToRetrieveMyAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
+        val example = MyAppointmentsFacade(
+                appointmentSlotsExample.getGenericExample()
+        )
+        viewAppointmentFactory.generateDefaultUserData()
+        viewAppointmentFactory.mockMyAppointments(IMyAppointmentsBuilder.AppointmentType.BOTH) {
+            respondWithCorrupted()
+                    .inScenario(ERROR_SCENARIO)
+                    .whenScenarioStateIs(Scenario.STARTED)
+                    .willSetStateTo(ERROR_SCENARIO_SECOND)
+        }
+        // this is setup twice because appointments index retrieves
+        // my appointments twice when loading
+        viewAppointmentFactory.mockMyAppointments(IMyAppointmentsBuilder.AppointmentType.BOTH) {
+            respondWithCorrupted()
+                    .inScenario(ERROR_SCENARIO)
+                    .whenScenarioStateIs(ERROR_SCENARIO_SECOND)
+                    .willSetStateTo(ERROR_SCENARIO_WILL_SUCCEED)
+        }
+        viewAppointmentFactory.mockMyAppointments(IMyAppointmentsBuilder.AppointmentType.BOTH) {
+            respondWithSuccess(example)
+                    .inScenario(ERROR_SCENARIO)
+                    .whenScenarioStateIs(ERROR_SCENARIO_WILL_SUCCEED)
+        }
+    }
 
     @When("^I select \"([^\"]*)\" button$")
     fun whenISelectButton(buttonText: String) {
@@ -167,27 +216,54 @@ class YourAppointmentsStepDefinitions {
         yourAppointmentsUISteps.verifyThatThereAreNoCancelLinks()
     }
 
-    @Then("^I see page header indicating there is an appointment data error$")
-    fun iSeePageHeaderIndicatingAppointmentDataError() {
-        webHeader.getPageTitle().withText("Appointment data error")
-    }
-
-    @Then("^I see the appropriate error messages for the appointment data error$")
-    fun iSeeTheAppropriateErrorMessagesForTheAppointmentDataError() {
-        yourAppointmentsUISteps.checkAppointmentDataErrorMessagesAreCorrect()
-    }
-
     @Then("^I can see the list of upcoming telephone appointments")
     fun thenICanSeeTheListOfUpcomingTelephoneAppointments() {
         yourAppointmentsTelephoneSteps.checkUpcomingTelephoneAppointmentsAreCorectlyPopulated()
     }
+
     @Then("^I can see the list of past telephone appointments$")
     fun thenICanSeeTheListOfPastTelephoneAppointments() {
         yourAppointmentsTelephoneSteps.checkPastTelephoneAppointmentsAreCorectlyPopulated()
     }
+
     @Then("^I can see the booked telephone appointment and it has a cancel link")
     fun thenICanSeeTheBookedTelephoneAppointmentAndItHasACancelLink() {
         yourAppointmentsTelephoneSteps.checkUpcomingTelephoneAppointmentsAreCorectlyPopulated()
         yourAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
+    }
+
+    @Then("^I see appropriate error message when appointments are disabled$")
+    fun iSeeAppropriateErrorMessageWhenAppointmentsAreDisabled() {
+        errorDialogPage.assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.notAbleToBook)
+                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.contactForMoreInformation)
+                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.unavailableTitle)
+                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.unavailableTitle)
+    }
+
+    @Then("^I see appropriate try again error message when there is an error with '(.*)'$")
+    fun iSeeAppropriateTryAgainErrorMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
+        val tryAgainParagraph = yourAppointmentsUISteps.yourAppointmentsPage.getTryAgainNowParagraph(prefix)
+        errorDialogPage.assertParagraphText(tryAgainParagraph)
+                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinues)
+                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
+                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
+    }
+
+    @Then("^I see appropriate try again book/cancel error message when there is an error with '(.*)'$")
+    fun iSeeAppropriateTryAgainBookCancelErrorMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
+        val tryAgainParagraph = yourAppointmentsUISteps.yourAppointmentsPage.getTryAgainNowParagraph(prefix)
+        errorDialogPage.assertParagraphText(tryAgainParagraph)
+                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinuesBookOrCancel)
+                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
+                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemLoadingTitle)
+    }
+
+    @Then("^I see appropriate error message when there is an error with '(.*)'$")
+    fun iSeeAppropriateErrorMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
+        val goBackParagraph = yourAppointmentsUISteps.yourAppointmentsPage.getGoBackAndTryAgainParagraph(prefix)
+        errorDialogPage.assertParagraphText(goBackParagraph)
+                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.ifItContinues)
+                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.problemHeader)
+                .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.problemTitle)
     }
 }

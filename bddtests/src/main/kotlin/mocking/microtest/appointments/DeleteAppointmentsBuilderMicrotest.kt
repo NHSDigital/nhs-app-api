@@ -31,4 +31,20 @@ class DeleteAppointmentsBuilderMicrotest(request: CancelAppointmentSlotFacade) :
     override fun respondWithSuccess(): Mapping {
         return respondWith(HttpStatus.SC_NO_CONTENT){}
     }
+
+    override fun responseErrorForbiddenService(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun respondWithExceptionWhenNotAvailable(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun respondWithWithinAnHour(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+    
+    override fun respondWithUnknownException(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

@@ -1,8 +1,8 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import AppointmentsCancellingPage from '@/pages/appointments/cancelling';
-import { mount } from '../../helpers';
-import { APPOINTMENT_CANCELLING_SUCCESS } from '@/lib/routes';
+import each from 'jest-each';
 import * as dependency from '@/lib/utils';
+import AppointmentsCancellingPage from '@/pages/appointments/cancelling';
+import { APPOINTMENT_CANCELLING_SUCCESS } from '@/lib/routes';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 
@@ -19,11 +19,7 @@ describe('cancelling.vue', () => {
   });
 
   beforeEach(() => {
-    $store = {
-      dispatch: jest.fn(),
-      app: {
-        $env: {},
-      },
+    $store = createStore({
       state: {
         device: {
           isNativeApp: true,
@@ -33,6 +29,7 @@ describe('cancelling.vue', () => {
           selectedAppointment: {
             id: selectedAppointmentId,
           },
+          error: null,
         },
         session: {
           csrfToken: 'bookingReason',
@@ -41,46 +38,55 @@ describe('cancelling.vue', () => {
       getters: {
         'session/isProxying': false,
       },
-    };
+    });
 
     dependency.redirectTo = jest.fn();
     wrapper = createAppointmentCancellingPage();
   });
 
-  describe('cancelling the appointment', () => {
-    it('when cancelling as proxy should redirect to confirmation page', async () => {
-      // arrange
-      $store.getters['session/isProxying'] = true;
+  describe('cancel', () => {
+    let cancelButton;
 
-      // act
-      await wrapper.vm.onCancelButtonClicked();
-
-      // assert
-      expect($store.dispatch)
-        .toHaveBeenNthCalledWith(1, 'myAppointments/cancel', {
-          appointmentId: selectedAppointmentId,
-          cancellationReasonId: '',
-        });
-
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_CANCELLING_SUCCESS.path);
+    beforeEach(() => {
+      cancelButton = wrapper.find('#btn_cancel_appointment');
     });
 
-    it('when cancelled as main user should redirect to appointments home', async () => {
-      // arrange
-      $store.getters['session/isProxying'] = false;
+    it('will exist', () => {
+      expect(cancelButton.exists()).toBe(true);
+    });
 
-      // act
-      await wrapper.vm.onCancelButtonClicked();
+    describe('on click', () => {
+      beforeEach(async () => {
+        cancelButton.trigger('click');
+      });
 
-      // assert
-      expect($store.dispatch)
-        .toHaveBeenNthCalledWith(1, 'myAppointments/cancel', {
-          appointmentId: selectedAppointmentId,
-          cancellationReasonId: '',
-        });
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_CANCELLING_SUCCESS.path);
+      it('will dispatch `myAppointments/cancel` action', () => {
+        expect($store.dispatch)
+          .toHaveBeenNthCalledWith(1, 'myAppointments/cancel', {
+            appointmentId: selectedAppointmentId,
+            cancellationReasonId: '',
+          });
+      });
+
+      it('will redirect to appointments cancelling success page', async () => {
+        expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm,
+          APPOINTMENT_CANCELLING_SUCCESS.path);
+      });
+    });
+  });
+
+  describe('errors', () => {
+    each([
+      400,
+      403,
+      409,
+      461,
+      500,
+      502,
+      504,
+    ]).it('will display an error dialog for status code: %s', (status) => {
+      $store.state.myAppointments.error = { status };
+      expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
     });
   });
 });

@@ -19,7 +19,7 @@ open class AvailableAppointmentFilterSteps {
     private val locationDefaultOption = "Select location"
     private val clinicianDefaultOption = "No preference"
 
-    lateinit var availableAppointmentsPage: AvailableAppointmentsPage
+    private lateinit var availableAppointmentsPage: AvailableAppointmentsPage
 
     @Step
     fun verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated() {

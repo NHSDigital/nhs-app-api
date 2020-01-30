@@ -11,10 +11,29 @@ import pages.HybridPageObject
 import pages.isPresent
 import pages.navigation.HeaderNative
 import pages.withoutRetrying
+import worker.models.ErrorCodeParagraph
 import java.text.SimpleDateFormat
 import java.util.*
 
 abstract class AppointmentSharedElementsPage : HybridPageObject() {
+    val problemTitle = "Sorry, there is a problem - Appointments"
+    val problemHeader = "Sorry, there is a problem"
+    val problemLoadingTitle = "Sorry, there is a problem with loading appointments"
+    val unavailableTitle = "Appointment booking unavailable"
+    val goBackAndTryAgainProblem = "Go back and try again. If the problem continues and you need to book or cancel " +
+            "an appointment now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk " +
+            "or call 111."
+    val goBackAndTryAgainWithoutErrorCode = "Go back and try again. If the problem continues and you need to book or " +
+            "cancel an appointment now, contact your GP surgery directly. " +
+            "For urgent medical advice, visit 111.nhs.uk or call 111."
+    val ifItContinues = "If the problem continues and you need to book an appointment now, contact your GP surgery " +
+            "directly. For urgent medical advice, go to 111.nhs.uk or call 111."
+    val ifItContinuesBookOrCancel = "If the problem continues and you need to book or cancel an appointment now, " +
+            "contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111."
+    val notAbleToBook = "You are not currently able to book appointments online."
+    val contactForMoreInformation = "Contact your GP surgery for more information. For urgent medical advice, " +
+            "visit 111.nhs.uk or call 111."
+
     private val xPathRoot = "//*"
     private val relativeToParentXPath = ".//*"
     private val dataLabelXpath = "[@data-label='%s']"
@@ -43,6 +62,20 @@ abstract class AppointmentSharedElementsPage : HybridPageObject() {
     )
 
     abstract val titleText: String?
+
+    fun getTryAgainNowParagraph(errorCodePrefix: String) : ErrorCodeParagraph {
+        return ErrorCodeParagraph(
+                "Try again now. If you keep seeing this message, contact us. Quote the error code",
+                errorCodePrefix,
+                "to help us resolve the problem more quickly.")
+    }
+
+    fun getGoBackAndTryAgainParagraph(errorCodePrefix: String) : ErrorCodeParagraph {
+        return ErrorCodeParagraph(
+                "Go back and try again. If you keep seeing this message, contact us. Quote the error code",
+                errorCodePrefix,
+                "to help us resolve the problem more quickly.")
+    }
 
     fun assertPageFullyLoaded() {
         headerNative.getPageTitle(titleText!!)

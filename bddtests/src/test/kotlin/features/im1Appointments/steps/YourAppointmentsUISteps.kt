@@ -9,12 +9,10 @@ import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import pages.ErrorPage
 import pages.appointments.YourAppointmentsPage
 import pages.isDisplayed
 import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
-import pages.text
 import java.util.*
 
 open class YourAppointmentsUISteps {
@@ -22,7 +20,6 @@ open class YourAppointmentsUISteps {
     val mockingClient = MockingClient.instance
 
     lateinit var yourAppointmentsPage: YourAppointmentsPage
-    lateinit var errorPage: ErrorPage
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
 
@@ -56,14 +53,14 @@ open class YourAppointmentsUISteps {
     @Step
     fun checkNoUpcomingAppointmentsTextIsDisplaying() {
         val actualNoUpcomingText = yourAppointmentsPage.getNoUpcomingText()
-        Assert.assertEquals("Incorrect text when no upcoming appointments. ",
+        assertEquals("Incorrect text when no upcoming appointments. ",
                 expectedNoUpcomingText, actualNoUpcomingText)
     }
 
     @Step
     fun checkNoHistoricalAppointmentsTextIsDisplaying() {
         val actualNoPastText = yourAppointmentsPage.getNoPastText()
-        Assert.assertEquals("Incorrect text when no past appointments. ",
+        assertEquals("Incorrect text when no past appointments. ",
                 expectedNoPastText, actualNoPastText)
     }
 
@@ -153,16 +150,5 @@ open class YourAppointmentsUISteps {
                 0,
                 yourAppointmentsPage.getNumberOfCancelLinks()
         )
-    }
-
-    @Step
-    fun checkAppointmentDataErrorMessagesAreCorrect() {
-        val expectedHeader = "There's been a problem getting your appointment history"
-        val expectedBody = "Try again later. If the problem continues and you need this information now, " +
-                "contact your GP surgery directly. For urgent medical advice, call 111."
-        assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.text}",
-                expectedHeader, errorPage.heading.text)
-        assertEquals("expected error text $expectedBody but found ${errorPage.errorText1.text}",
-                expectedBody, errorPage.errorText1.text)
     }
 }

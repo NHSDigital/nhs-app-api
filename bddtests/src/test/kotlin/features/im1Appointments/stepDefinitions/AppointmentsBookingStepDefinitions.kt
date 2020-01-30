@@ -72,6 +72,14 @@ class AppointmentsBookingStepDefinitions {
         }
     }
 
+    @Given("^(.*) returns corrupt data when booking appointment$")
+    fun gpSystemReturnsCorruptDataWhenBookingAppointment(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val factory = AppointmentsBookingFactory.getForSupplier(supplier)
+        factory.generateDefaultAvailableAppointmentSlotExample()
+        factory.generateBookingResponse { bookRequest -> bookRequest.respondWithCorrupted() }
+    }
+
     @Given("^there are (.*) appointments available to book, but the GP system is unavailable$")
     fun thereAreAvailableAppointmentsToBookButSystemIsUnavailable(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)

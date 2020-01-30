@@ -68,6 +68,12 @@ export default {
     backButton: {
       text: 'Back',
     },
+    contactUsButton: {
+      text: 'Contact us',
+    },
+    tryAgainButton: {
+      text: 'Try again',
+    },
     input: {
       errors: {
         messagePrefix: 'Error: ',
@@ -83,104 +89,39 @@ export default {
     },
   },
   auth_return: {
-    errors: {
-      pageTitle: 'Login failed',
-      pageHeader: 'Login failed',
-      header: 'Login failed',
-      subheader: 'There\'s been a problem loading this page.',
-      message: 'Go back to the home screen and log in again.',
-      additionalInfo: {
-        text: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
-        label: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+    error: {
+      title: {
+        loginFailed: 'Login failed',
       },
-      retryButtonText: 'Back to home',
+      backButtonText: 'Back to home',
       default: {
-        header: 'Login failed',
-        title: 'Login failed - NHS App',
-        line1: {
-          text: 'We cannot log you in to the NHS App.',
-          label: 'We cannot log you in to the NHS App.',
-        },
-        line3: {
-          text: 'Go back to the home screen and try logging in again.',
-          label: 'Go back to the home screen and try logging in again.',
-        },
+        line1: 'We cannot log you in to the NHS App.',
+        line2: 'Go back to the home screen and try logging in again.',
+        line3: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
         line4: {
-          text: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-          label: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        },
-        line5: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
           label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
         },
-        contactUsButtonText: {
-          text: 'Contact us',
-          label: 'Contact us',
-        },
-        backButtonText: {
-          text: 'Back to home',
-          label: 'back to home',
-        },
       },
       400: {
-        header: 'Login failed',
-        title: 'Login failed - NHS App',
-        line1: {
-          text: 'Go back to the home screen and try logging in again.',
-          label: 'Go back to the home screen and try logging in again.',
-        },
-        line2: {
-          text: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-          label: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        },
+        line1: 'Go back to the home screen and try logging in again.',
+        line2: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
         contactUs: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
           label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
         },
-        backButtonText: {
-          text: 'Back to home',
-          label: 'back to home',
-        },
-        contactUsButtonText: {
-          text: 'Contact us',
-          label: 'Contact us',
-        },
       },
       403: {
-        header: 'Login failed',
-        title: 'Login failed - NHS App',
-        line1: {
-          text: 'We cannot get your details from your GP surgery.',
-          label: 'We cannot get your details from your GP surgery.',
-        },
-        line2: {
-          text: 'Go back to the home screen and try logging in again.',
-          label: 'Go back to the home screen and try logging in again.',
-        },
-        line3: {
-          text: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-          label: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        },
+        line1: 'We cannot get your details from your GP surgery.',
+        line2: 'Go back to the home screen and try logging in again.',
+        line3: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
         line4: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
           label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
         },
-        contactUsButtonText: {
-          text: 'Contact us',
-          label: 'Contact us',
-        },
-        backButtonText: {
-          text: 'Back to home',
-          label: 'back to home',
-        },
       },
       464: {
-        header: 'Login failed',
-        title: 'Login failed - NHS App',
-        line2: {
-          text: 'This can be one of two problems:',
-          label: 'This can be one of two problems:',
-        },
+        line1: 'This can be one of two problems:',
         uList: {
           item1: {
             id: '1',
@@ -193,62 +134,30 @@ export default {
             label: 'we cannot find your NHS number',
           },
         },
-        contactUs: {
-          text: 'Contact us and quote the error code {errorCode} to help us resolve the problem more quickly.',
-          label: 'Contact us and quote the error code {errorCode} to help us resolve the problem more quickly.',
-        },
+        contactUs: 'Contact us and quote the error code {errorCode} to help us resolve the problem more quickly.',
         message: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
           label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one',
         },
-        contactUsButtonText: {
-          text: 'contact us',
-          label: 'contact us',
-        },
       },
       465: {
-        pageHeader: 'You are too young to use the NHS App',
-        header: 'You are too young to use the NHS App',
+        title: 'You are too young to use the NHS App',
         message: {
           text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, visit 111.nhs.uk or call 111.',
           label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, visit 111.nhs.uk or call one one one.',
         },
       },
       500: {
-        header: 'Login failed',
-        title: 'Login failed - NHS App',
-        line1: {
-          text: 'We cannot log you in to the NHS App.',
-          label: 'We cannot log you in to the NHS App.',
-        },
-        line3: {
-          text: 'Go back to the home screen and try logging in again.',
-          label: 'Go back to the home screen and try logging in again.',
-        },
-        line4: {
-          text: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-          label: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        },
+        line1: 'We cannot log you in to the NHS App.',
+        line3: 'Go back to the home screen and try logging in again.',
+        line4: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
         line5: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
           label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
         },
-        contactUsButtonText: {
-          text: 'Contact us',
-          label: 'Contact us',
-        },
-        backButtonText: {
-          text: 'Back to home',
-          label: 'back to home',
-        },
       },
       502: {
-        title: 'Login failed - NHS App',
-        header: 'Login failed',
-        listTitle: {
-          text: 'This can be one of two problems:',
-          label: 'This can be one of two problems:',
-        },
+        listTitle: 'This can be one of two problems:',
         uList: {
           item1: {
             id: '1',
@@ -261,34 +170,15 @@ export default {
             label: 'we cannot connect to your GP surgery',
           },
         },
-        line3: {
-          text: 'Go back to the home screen and try logging in again.',
-          label: 'Go back to the home screen and try logging in again.',
-        },
-        line4: {
-          text: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-          label: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
-        },
+        line3: 'Go back to the home screen and try logging in again.',
+        line4: 'If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
         message: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-        },
-        backButtonText: {
-          text: 'Back to home',
-          label: 'back to home',
-        },
-        contactUsButtonText: {
-          text: 'Contact us',
-          label: 'Contact us',
+          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
         },
       },
       504: {
-        title: 'Login failed - NHS App',
-        header: 'Login failed',
-        listTitle: {
-          text: 'This can be one of two problems:',
-          label: 'This can be one of two problems:',
-        },
+        listTitle: 'This can be one of two problems:',
         uList: {
           item1: {
             id: '1',
@@ -301,26 +191,11 @@ export default {
             label: 'we cannot connect to your GP surgery',
           },
         },
-
-        line3: {
-          text: 'Go back to the home screen and try logging in again.',
-          label: 'Go back to the home screen and try logging in again.',
-        },
-        line4: {
-          text: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
-          label: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
-        },
+        line3: 'Go back to the home screen and try logging in again.',
+        line4: 'If you keep seeing this message, contact us and quote the error code {errorCode}.',
         message: {
           text: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
-        },
-        backButtonText: {
-          text: 'Back to home',
-          label: 'back to home',
-        },
-        contactUsButtonText: {
-          text: 'Contact us',
-          label: 'Contact us',
+          label: 'If you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
         },
       },
     },
@@ -578,34 +453,6 @@ export default {
         header: 'Past appointments',
         telephoneMessage: 'The phone number you gave us was ',
       },
-      errors: {
-        pageTitle: 'Appointment data error',
-        pageHeader: 'Appointment data error',
-        header: 'There\'s been a problem getting your appointment history',
-        subheader: '',
-        message: {
-          text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-        },
-        504: {
-          subheader: '',
-          retryButtonText: 'Try again',
-          message: {
-            text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-            label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-          },
-        },
-        403: {
-          pageTitle: 'Appointment booking unavailable',
-          pageHeader: 'Appointment booking unavailable',
-          header: 'You are not currently able to book appointments online.',
-          subheader: '',
-          message: {
-            text: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
-            label: 'Contact your GP surgery for more information. For urgent medical help, call one one one.',
-          },
-        },
-      },
     },
     guidance: {
       li1: {
@@ -641,29 +488,38 @@ export default {
       summary: 'There are no appointments available at the moment',
       info: 'If you need an appointment, please contact your GP.',
     },
-    errors: {
-      pageHeader: 'Appointment data error',
-      header: 'There\'s been a problem getting your appointment history',
-      subheader: '',
-      message: {
-        text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-        label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+    error: {
+      title: {
+        problem: 'Sorry, there is a problem - Appointments',
+        problemLoading: 'Sorry, there is a problem with loading appointments',
+        unavailable: 'Appointment booking unavailable',
       },
-      504: {
-        subheader: '',
-        message: {
-          text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+      header: {
+        problem: 'Sorry, there is a problem',
+      },
+      message: {
+        goBackAndTryContact: 'Go back and try again. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
+        ifItContinues: {
+          text: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+          label: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
         },
-        retryButtonText: 'Try again',
+        tryAgainNow: 'Try again now. If you keep seeing this message, contact us. Quote the error code {errorCode} to help us resolve the problem more quickly.',
+        ifItContinuesBookOrCancel: {
+          text: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call 111.',
+          label: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, go to 111.nhs.uk or call one one one.',
+        },
+      },
+      400: {
+        message: {
+          text: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call 111.',
+          label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk or call one one one.',
+        },
       },
       403: {
-        pageHeader: 'Appointment booking unavailable',
-        header: 'You are not currently able to book appointments online.',
-        subheader: '',
-        message: {
-          text: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
-          label: 'Contact your GP surgery for more information. For urgent medical help, call one one one.',
+        line1: 'You are not currently able to book appointments online.',
+        line2: {
+          text: 'Contact your GP surgery for more information. For urgent medical advice, visit 111.nhs.uk or call 111.',
+          label: 'Contact your GP surgery for more information. For urgent medical advice, visit 111.nhs.uk or call one one one.',
         },
       },
     },
@@ -676,27 +532,19 @@ export default {
       noReasonError: 'Select a reason for cancelling',
       dropdownDefaultOption: 'Select reason',
       successText: 'Your appointment has been cancelled.',
-      errors: {
-        pageTitle: 'Appointment request error',
-        pageHeader: 'Error sending request',
-        header: 'There\'s been a problem sending your request',
-        subheader: '',
-        message: {
-          text: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-        },
-        retryButtonText: 'Back to your appointments',
+      error: {
         403: {
-          pageHeader: 'Cancel appointment',
+          title: 'Sorry, there is a problem with the service - Appointments',
           header: 'Contact your GP surgery to cancel',
-          message: 'You can\'t cancel appointments online right now. Call your GP surgery as soon as possible to let them know you need to cancel.',
-          retryButtonText: 'Back to your appointments',
+          message: 'You cannot cancel appointments online right now. Call your GP surgery as soon as possible to let them know you need to cancel.',
+        },
+        409: {
+          title: 'Sorry, you cannot cancel this appointment',
+          message: 'This may be because the appointment is already cancelled or it occurs in the past.',
         },
         461: {
-          pageHeader: 'Cancel appointment',
-          header: 'Contact your GP surgery to cancel',
+          title: 'Contact your GP surgery to cancel',
           message: 'It\'s too late to cancel this appointment online. Call your GP surgery as soon as possible to let them know you need to cancel.',
-          retryButtonText: 'Back to your appointments',
         },
       },
     },
@@ -745,34 +593,6 @@ export default {
           },
         },
       },
-      errors: {
-        pageTitle: 'Appointment data error',
-        pageHeader: 'Appointment data error',
-        header: 'There\'s been a problem loading this page',
-        subheader: '',
-        message: {
-          text: 'Try again later. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'Try again later. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-        },
-        504: {
-          message: {
-            text: 'Try again now. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
-            label: 'Try again now. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-          },
-          subheader: '',
-          retryButtonText: 'Try again',
-        },
-        403: {
-          pageTitle: 'Appointment booking unavailable',
-          pageHeader: 'Appointment booking unavailable',
-          header: 'You are not currently able to book appointments online.',
-          subheader: '',
-          message: {
-            text: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
-            label: 'Contact your GP surgery for more information. For urgent medical help, call one one one.',
-          },
-        },
-      },
     },
     confirmation: {
       telephoneNumberLabel: 'Choose a phone number for this appointment',
@@ -793,30 +613,20 @@ export default {
       noPhoneNumberError: 'Enter a telephone number',
       conflictErrorMessage: 'This slot is no longer available. Please select a different time.',
       info: 'Check your appointment details before booking.',
-      errors: {
-        pageTitle: 'Appointment request error',
-        pageHeader: 'Error sending request',
-        header: 'There\'s been a problem sending your request',
-        subheader: '',
-        message: {
-          text: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-        },
-        retryButtonText: 'Back to your appointments',
-        460: {
-          pageHeader: 'Appointment limit reached',
-          header: 'You can\'t book any more appointments right now',
-          subheader: 'Contact your GP surgery if you still need to book one.',
-          message: 'You can go back to see what you\'ve already booked and cancel any appointments that you may no longer need.',
-          additionalInfo: 'If it\'s urgent and you do not know what to do, call 111 to get help near you.',
-          retryButtonText: 'Back to your appointments',
-        },
+      error: {
         409: {
-          pageHeader: 'Confirm your appointment',
-          header: 'This slot is no longer available',
-          subheader: '',
-          message: 'Please select a different time.',
-          retryButtonText: 'Back',
+          title: 'Sorry, the appointment is no longer available',
+          message: 'Please choose a different appointment.',
+        },
+        460: {
+          title: 'Sorry, you have reached your appointment limit',
+          line1: 'You cannot book any more appointments right now.',
+          line2: 'Contact your GP surgery if you still need to book an appointment.',
+          line3: 'You can go back to see what you have already booked and cancel any appointments that you may no longer need.',
+          line4: {
+            text: 'For urgent medical advice, go to 111.nhs.uk or call 111.',
+            label: 'For urgent medical advice, go to 111.nhs.uk or call one one one.',
+          },
         },
       },
     },

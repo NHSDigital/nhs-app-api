@@ -575,5 +575,9 @@ export default function ({ route, store, app }) {
   store.dispatch('flashMessage/clear');
   store.dispatch('errors/setRoutePath', route);
 
+  // clear errors
+  store.dispatch('myAppointments/clearError');
+  store.dispatch('availableAppointments/clearError');
+
   setPageTitle(route, store, app);
 }

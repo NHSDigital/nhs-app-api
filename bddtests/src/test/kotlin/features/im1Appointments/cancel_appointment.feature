@@ -78,7 +78,7 @@ Feature: Cancel Appointments Frontend
     When I select "Cancel appointment" button
     Then the Appointment Cancel success page is displayed
     And I select the back to home link on the appointments page
-  @smoketest
+    @smoketest
     Examples:
       | Reason             | GP System |
       | No longer required | EMIS      |
@@ -124,26 +124,96 @@ Feature: Cancel Appointments Frontend
       | TPP       |
       | VISION    |
       | MICROTEST |
-  @nativesmoketest
+    @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
 
-    #502
-  Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
-    Given <GP System> is unavailable to cancel a previously booked appointment because <Reason>
+  #403
+  Scenario Outline: A <GP System> user sees appropriate error message when it is not allowed to cancel
+    Given <GP System> user is not allowed to cancel appointments with '<Reason>'
     And I am logged in
     When I retrieve the 'Your Appointments' page directly
     When I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
-    Then I see appropriate information message when there is an error sending data on appointment confirmation page
-    And there should be an action to go back to my appointments
+    Then I see an appropriate error message when not allowed to cancel
+    When I click the error 'Back' link
+    Then the Your Appointments page is displayed
     Examples:
       | Reason           | GP System |
       | Unable to attend | EMIS      |
-      | Reason 1         | VISION    |
-      | Unable to attend | MICROTEST |
+
+  #409
+  Scenario Outline: A <GP System> user sees appropriate error message when booking has been cancelled already
+    Given <GP System> prevents cancellation of previously booked appointment with '<Reason>' because it is already cancelled
+    And I am logged in
+    When I retrieve the 'Your Appointments' page directly
+    When I select a "Cancel this appointment" link
+    And I select a cancellation reason of <Reason>
+    When I select "Cancel appointment" button
+    Then I see an appropriate error message when it is already cancelled
+    When I click the error 'Back' link
+    Then the Your Appointments page is displayed
+    Examples:
+      | Reason           | GP System |
+      | Unable to attend | EMIS      |
+
+  #461
+  Scenario: A TPP user sees appropriate error message when it is too late to cancel
+    Given TPP prevents cancellation of previously booked appointment because it is too late
+    And I am logged in
+    When I retrieve the 'Your Appointments' page directly
+    When I select a "Cancel this appointment" link
+    When I select "Cancel appointment" button
+    Then I see an appropriate error message when it is too late to cancel
+    When I click the error 'Back' link
+    Then the Your Appointments page is displayed
+
+  #500
+  Scenario Outline: VISION user sees appropriate error message when it returns corrupt data when cancelling appointment
+    Given VISION returns corrupt data when cancelling appointment with '<Reason>'
+    And I am logged in
+    When I retrieve the 'Your Appointments' page directly
+    When I select a "Cancel this appointment" link
+    And I select a cancellation reason of <Reason>
+    When I select "Cancel appointment" button
+    Then I see appropriate submit error message when there is an error with '<Prefix>'
+    When I click the error 'Back' link
+    Then the Your Appointments page is displayed
+    Examples:
+      | Reason   | Prefix |
+      | Reason 1 | xx     |
+
+  #502
+  Scenario Outline: EMIS user sees appropriate error message when it returns unknown exception when cancelling appointment
+    Given EMIS returns unknown exception when cancelling appointment with '<Reason>'
+    And I am logged in
+    When I retrieve the 'Your Appointments' page directly
+    When I select a "Cancel this appointment" link
+    And I select a cancellation reason of <Reason>
+    When I select "Cancel appointment" button
+    Then I see appropriate submit error message when there is an error with '<Prefix>'
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    Then a new tab has been opened by the link
+    Examples:
+      | Reason           | Prefix |
+      | Unable to attend | 4e     |
+
+  #504
+  Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
+    Given  <GP System> will time out when trying to cancel with '<Reason>'
+    And I am logged in
+    When I retrieve the 'Your Appointments' page directly
+    When I select a "Cancel this appointment" link
+    And I select a cancellation reason of <Reason>
+    When I select "Cancel appointment" button
+    Then I see appropriate submit error message when there is an error with '<Prefix>'
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    Then a new tab has been opened by the link
+    Examples:
+      | Reason             | Prefix | GP System |
+      | No longer required | zm     | MICROTEST |
 
     # covered in Manual Regression Test pack
   @tech-debt   @NHSO-4061

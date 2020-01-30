@@ -1,237 +1,123 @@
 <template>
   <div>
-    <div
-      id="app"
-      :class="!$store.state.device.isNativeApp && $style.desktopWeb"
-    >
-      <div
-        v-if="!$store.state.device.isNativeApp"
-        :class="$style['header-container-desktop']"
-      >
-        <web-header
-          :show-menu="false"
-          :show-links="false"
-        />
+    <div id="app" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+      <div v-if="!$store.state.device.isNativeApp" :class="$style['header-container-desktop']">
+        <web-header :show-menu="false" :show-links="false"/>
       </div>
       <div v-else>
-        <header-slim
-          :show-in-native="true"
-          :click-url="loginUrl"
-        />
+        <header-slim :show-in-native="true" :click-url="loginUrl"/>
       </div>
       <div class="nhsuk-width-container">
         <div class="nhsuk-grid-row">
-          <div
-            ref="mainContent"
-            class="nhsuk-grid-column-two-thirds"
-          >
-            <div
-              id="mainContent"
-              tabindex="-1"
-              :class="[mainClass, $style['main-container-desktop']]"
-            >
-              <div
-                v-if="showError"
-                :class="!$store.state.device.isNativeApp && $style.desktopWeb"
-              >
-                <session-error-api-error
-                  :id="$style.serverError"
-                  :class="$store.state.device.isNativeApp?'pull-content nhsuk-u-padding-top-7':''"
-                >
-                  <h1 class="nhsuk-u-margin-bottom-4 nhsuk-u-margin-top-4">
-                    {{ $t('auth_return.errors.pageTitle') }} </h1>
-                  <message-dialog
-                    :override-style="overrideStyle"
-                    message-type="error"
-                    aria-live="polite"
-                  >
-                    <api-error-container v-if="errorStatusCode==464">
-                      <api-error-title
-                        title="auth_return.errors.464.title"
-                        header="auth_return.errors.464.header"
-                      />
-                      <api-error-paragraph from="auth_return.errors.464.line2" />
-                      <api-error-unordered-list from="auth_return.errors.464.uList" />
-                      <api-error-paragraph
-                        from="auth_return.errors.464.contactUs"
-                        :variable="serviceDeskReference"
-                      />
-                      <api-error-paragraph from="auth_return.errors.464.message" />
-                      <div :class="$style['api-error-button-container']">
-                        <api-error-button
-                          from="auth_return.errors.464.contactUsButtonText"
-                          :action="contactUsUrl"
-                          :target="target"
-                          :query-param="contactUsParam"
-                        />
-                      </div>
-                    </api-error-container>
-                    <api-error-container v-else-if="errorStatusCode==465">
-                      <api-error-title
-                        title="auth_return.errors.465.title"
-                        header="auth_return.errors.465.header"
-                      />
-                      <api-error-paragraph from="auth_return.errors.465.message" />
-
-                    </api-error-container>
-                    <api-error-container v-else-if="errorStatusCode==400">
-                      <api-error-title
-                        title="auth_return.errors.400.title"
-                        header="auth_return.errors.400.header"
-                      />
-                      <api-error-paragraph from="auth_return.errors.400.line1" />
-                      <api-error-paragraph
-                        from="auth_return.errors.400.line2"
-                        :variable="serviceDeskReference"
-                      />
-                      <api-error-paragraph from="auth_return.errors.400.contactUs" />
-                      <div :class="$style['api-error-button-container']">
-                        <api-error-button
-                          from="auth_return.errors.400.contactUsButtonText"
-                          :action="contactUsUrl"
-                          :target="target"
-                          :query-param="contactUsParam"
-                        />
-                        <api-error-button
-                          from="auth_return.errors.400.backButtonText"
-                          :action="loginUrl"
-                        />
-                      </div>
-                    </api-error-container>
-                    <api-error-container v-else-if="errorStatusCode==403">
-                      <api-error-title
-                        title="auth_return.errors.403.title"
-                        header="auth_return.errors.403.header"
-                      />
-                      <api-error-paragraph from="auth_return.errors.403.line1" />
-                      <api-error-paragraph from="auth_return.errors.403.line2" />
-                      <api-error-paragraph
-                        from="auth_return.errors.403.line3"
-                        :variable="serviceDeskReference"
-                      />
-                      <api-error-paragraph from="auth_return.errors.403.line4" />
-                      <div :class="$style['api-error-button-container']">
-                        <api-error-button
-                          from="auth_return.errors.403.contactUsButtonText"
-                          :action="contactUsUrl"
-                          :target="target"
-                          :query-param="contactUsParam"
-                        />
-                        <api-error-button
-                          from="auth_return.errors.403.backButtonText"
-                          :action="loginUrl"
-                        />
-                      </div>
-                    </api-error-container>
-                    <api-error-container v-else-if="errorStatusCode==500">
-                      <api-error-title
-                        title="auth_return.errors.500.title"
-                        header="auth_return.errors.500.header"
-                      />
-                      <api-error-paragraph from="auth_return.errors.500.line1" />
-                      <api-error-paragraph from="auth_return.errors.500.line3" />
-                      <api-error-paragraph
-                        from="auth_return.errors.500.line4"
-                        :variable="serviceDeskReference"
-                      />
-                      <api-error-paragraph from="auth_return.errors.500.line5" />
-                      <div :class="$style['api-error-button-container']">
-                        <api-error-button
-                          from="auth_return.errors.500.contactUsButtonText"
-                          :action="contactUsUrl"
-                          :target="target"
-                        />
-                        <api-error-button
-                          from="auth_return.errors.500.backButtonText"
-                          :action="loginUrl"
-                        />
-                      </div>
-                    </api-error-container>
-                    <api-error-container v-else-if="errorStatusCode==502">
-                      <api-error-title
-                        title="auth_return.errors.502.title"
-                        header="auth_return.errors.502.header"
-                      />
-
-                      <api-error-paragraph from="auth_return.errors.502.listTitle" />
-                      <api-error-unordered-list from="auth_return.errors.502.uList" />
-                      <api-error-paragraph from="auth_return.errors.502.line3" />
-                      <api-error-paragraph
-                        from="auth_return.errors.502.line4"
-                        :variable="serviceDeskReference"
-                      />
-                      <api-error-paragraph from="auth_return.errors.502.message" />
-                      <div :class="$style['api-error-button-container']">
-                        <api-error-button
-                          from="auth_return.errors.502.contactUsButtonText"
-                          :action="contactUsUrl"
-                          :target="target"
-                          :query-param="contactUsParam"
-                        />
-                        <api-error-button
-                          from="auth_return.errors.502.backButtonText"
-                          :action="loginUrl"
-
-                        />
-                      </div>
-                    </api-error-container>
-                    <api-error-container v-else-if="errorStatusCode==504">
-                      <api-error-title
-                        title="auth_return.errors.504.title"
-                        header="auth_return.errors.504.header"
-                      />
-                      <api-error-paragraph from="auth_return.errors.504.listTitle" />
-                      <api-error-unordered-list from="auth_return.errors.504.uList" />
-                      <api-error-paragraph from="auth_return.errors.504.line3" />
-                      <api-error-paragraph
-                        from="auth_return.errors.504.line4"
-                        :variable="serviceDeskReference"
-                      />
-
-                      <api-error-paragraph from="auth_return.errors.504.message" />
-                      <div :class="$style['api-error-button-container']">
-                        <api-error-button
-                          from="auth_return.errors.504.contactUsButtonText"
-                          :action="contactUsUrl"
-                          :target="target"
-                          :query-param="contactUsParam"
-                        />
-                        <api-error-button
-                          from="auth_return.errors.504.backButtonText"
-                          :action="loginUrl"
-
-                        />
-                      </div>
-                    </api-error-container>
-
-                    <api-error-container v-else>
-                      <api-error-title
-                        title="auth_return.errors.default.title"
-                        header="auth_return.errors.default.header"
-                      />
-                      <api-error-paragraph from="auth_return.errors.default.line1" />
-                      <api-error-paragraph from="auth_return.errors.default.line3" />
-                      <api-error-paragraph
-                        from="auth_return.errors.default.line4"
-                        :variable="serviceDeskReference"
-                      />
-                      <api-error-paragraph from="auth_return.errors.default.line5" />
-                      <div :class="$style['api-error-button-container']">
-                        <api-error-button
-                          from="auth_return.errors.default.contactUsButtonText"
-                          :action="contactUsUrl"
-                          :target="target"
-                          :class="$style['api-error-button']"
-                        />
-                        <api-error-button
-                          from="auth_return.errors.default.backButtonText"
-                          :action="loginUrl"
-                        />
-                      </div>
-                    </api-error-container>
-
-                  </message-dialog>
-                </session-error-api-error>
+          <div ref="mainContent" class="nhsuk-grid-column-two-thirds">
+            <div id="mainContent"
+                 tabindex="-1"
+                 :class="[mainClass, $style['main-container-desktop']]">
+              <div v-if="showError"
+                   :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+                <div :id="$style.serverError"
+                     :class="$store.state.device.isNativeApp
+                       ? 'pull-content nhsuk-u-padding-top-7'
+                       : ''">
+                  <h1 class="nhsuk-u-padding-bottom-3 nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-0">
+                    {{ $t('auth_return.error.title.loginFailed') }} </h1>
+                  <error-container v-if="errorStatusCode===464">
+                    <error-title title="auth_return.error.title.loginFailed"/>
+                    <error-paragraph from="auth_return.error.464.line1" />
+                    <error-unordered-list from="auth_return.error.464.uList" />
+                    <error-paragraph from="auth_return.error.464.contactUs"
+                                     :variable="serviceDeskReference"/>
+                    <error-paragraph from="auth_return.error.464.message" />
+                    <error-link from="generic.contactUsButton.text"
+                                :action="contactUsUrl"
+                                :target="target"
+                                :query-param="contactUsParam"/>
+                  </error-container>
+                  <error-container v-else-if="errorStatusCode===465">
+                    <error-title title="auth_return.error.465.title"/>
+                    <error-paragraph from="auth_return.error.465.message" />
+                  </error-container>
+                  <error-container v-else-if="errorStatusCode===400">
+                    <error-title title="auth_return.error.title.loginFailed"/>
+                    <error-paragraph from="auth_return.error.400.line1" />
+                    <error-paragraph from="auth_return.error.400.line2"
+                                     :variable="serviceDeskReference"/>
+                    <error-paragraph from="auth_return.error.400.contactUs" />
+                    <error-link from="generic.contactUsButton.text"
+                                :action="contactUsUrl"
+                                :target="target"
+                                :query-param="contactUsParam"/>
+                    <error-link from="auth_return.error.backButtonText"
+                                :action="loginUrl"/>
+                  </error-container>
+                  <error-container v-else-if="errorStatusCode===403">
+                    <error-title title="auth_return.error.title.loginFailed"/>
+                    <error-paragraph from="auth_return.error.403.line1" />
+                    <error-paragraph from="auth_return.error.403.line2" />
+                    <error-paragraph from="auth_return.error.403.line3"
+                                     :variable="serviceDeskReference"/>
+                    <error-paragraph from="auth_return.error.403.line4" />
+                    <error-link from="generic.contactUsButton.text"
+                                :action="contactUsUrl"
+                                :target="target"
+                                :query-param="contactUsParam"/>
+                    <error-link from="auth_return.error.backButtonText"
+                                :action="loginUrl"/>
+                  </error-container>
+                  <error-container v-else-if="errorStatusCode===500">
+                    <error-title title="auth_return.error.title.loginFailed"/>
+                    <error-paragraph from="auth_return.error.500.line1" />
+                    <error-paragraph from="auth_return.error.500.line3" />
+                    <error-paragraph from="auth_return.error.500.line4"
+                                     :variable="serviceDeskReference"/>
+                    <error-paragraph from="auth_return.error.500.line5" />
+                    <error-link from="generic.contactUsButton.text"
+                                :action="contactUsUrl"
+                                :target="target"/>
+                    <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
+                  </error-container>
+                  <error-container v-else-if="errorStatusCode===502">
+                    <error-title title="auth_return.error.title.loginFailed"/>
+                    <error-paragraph from="auth_return.error.502.listTitle" />
+                    <error-unordered-list from="auth_return.error.502.uList" />
+                    <error-paragraph from="auth_return.error.502.line3" />
+                    <error-paragraph from="auth_return.error.502.line4"
+                                     :variable="serviceDeskReference"/>
+                    <error-paragraph from="auth_return.error.502.message" />
+                    <error-link from="generic.contactUsButton.text"
+                                :action="contactUsUrl"
+                                :target="target"
+                                :query-param="contactUsParam"/>
+                    <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
+                  </error-container>
+                  <error-container v-else-if="errorStatusCode===504">
+                    <error-title title="auth_return.error.title.loginFailed"/>
+                    <error-paragraph from="auth_return.error.504.listTitle" />
+                    <error-unordered-list from="auth_return.error.504.uList" />
+                    <error-paragraph from="auth_return.error.504.line3" />
+                    <error-paragraph from="auth_return.error.504.line4"
+                                     :variable="serviceDeskReference" />
+                    <error-paragraph from="auth_return.error.504.message" />
+                    <error-link from="generic.contactUsButton.text"
+                                :action="contactUsUrl"
+                                :target="target"
+                                :query-param="contactUsParam"/>
+                    <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
+                  </error-container>
+                  <error-container v-else>
+                    <error-title title="auth_return.error.title.loginFailed"/>
+                    <error-paragraph from="auth_return.error.default.line1" />
+                    <error-paragraph from="auth_return.error.default.line2" />
+                    <error-paragraph from="auth_return.error.default.line3"
+                                     :variable="serviceDeskReference"/>
+                    <error-paragraph from="auth_return.error.default.line4" />
+                    <error-link from="generic.contactUsButton.text"
+                                :action="contactUsUrl"
+                                :target="target"
+                                :class="$style['api-error-button']"/>
+                    <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
+                  </error-container>
+                </div>
               </div>
               <div v-else>
                 <main :class="mainClass">
@@ -247,50 +133,45 @@
         </div>
       </div>
     </div>
-    <div
-      v-if="!$store.state.device.isNativeApp"
-      :class="$style['footer-container-desktop']"
-    >
+    <div v-if="!$store.state.device.isNativeApp"
+         :class="$style['footer-container-desktop']">
       <web-footer />
     </div>
   </div>
 </template>
 
 <script>
+import get from 'lodash/fp/get';
+import ApiError from '@/components/errors/ApiError';
+import ConnectionError from '@/components/errors/ConnectionError';
+import ErrorContainer from '@/components/errors/ErrorContainer';
+import ErrorLink from '@/components/errors/ErrorLink';
+import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
+import ErrorParagraph from '@/components/errors/ErrorParagraph';
+import ErrorTitle from '@/components/errors/ErrorTitle';
+import ErrorUnorderedList from '@/components/errors/ErrorUnorderedList';
+import FlashMessage from '@/components/widgets/FlashMessage';
 import HeaderSlim from '@/components/HeaderSlim';
+import NativeVersionSetup from '@/services/nativeVersionSetup';
+import Spinner from '@/components/widgets/Spinner';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
-import Spinner from '@/components/widgets/Spinner';
-import ApiError from '@/components/errors/ApiError';
-import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
-import ConnectionError from '@/components/errors/ConnectionError';
-import FlashMessage from '@/components/widgets/FlashMessage';
 import { LOGIN } from '@/lib/routes';
-import NativeVersionSetup from '../services/nativeVersionSetup';
-import SessionErrorApiError from '@/components/errors/session-errors/SessionErrorApiError';
-import ApiErrorContainer from '@/components/errors/session-errors/ApiErrorContainer';
-import ApiErrorTitle from '@/components/errors/session-errors/ApiErrorTitle';
-import ApiErrorParagraph from '@/components/errors/session-errors/ApiErrorParagraph';
-import ApiErrorButton from '@/components/errors/session-errors/ApiErrorButton';
-import ApiErrorUnorderedList from '@/components/errors/session-errors/ApiErrorUnorderedList';
-import MessageDialog from '@/components/widgets/MessageDialog';
 
 export default {
   components: {
-    HeaderSlim,
-    WebHeader,
-    WebFooter,
-    Spinner,
     ApiError,
     ConnectionError,
+    ErrorContainer,
+    ErrorLink,
+    ErrorParagraph,
+    ErrorTitle,
+    ErrorUnorderedList,
     FlashMessage,
-    SessionErrorApiError,
-    ApiErrorContainer,
-    ApiErrorTitle,
-    ApiErrorParagraph,
-    ApiErrorButton,
-    ApiErrorUnorderedList,
-    MessageDialog,
+    HeaderSlim,
+    Spinner,
+    WebHeader,
+    WebFooter,
   },
   mixins: [ErrorMessageMixin],
   head() {
@@ -298,39 +179,31 @@ export default {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
-      title: this.$t('auth_return.errors.pageTitle'),
+      title: this.$t('auth_return.error.title.loginFailed'),
+    };
+  },
+  data() {
+    return {
+      contactUsUrl: this.$env.CONTACT_US_URL,
     };
   },
   computed: {
-    serviceDeskReference() {
-      return {
-        swap: true,
-        text: (this.$store.state.errors.apiErrors[0] || {}).serviceDeskReference || '',
-        label: (this.$store.state.errors.apiErrors[0] || {}).serviceDeskReference || '',
-      };
-    },
     contactUsParam() {
       return {
         param: 'errorcode',
         value: this.serviceDeskReference.text,
       };
     },
-    target() {
-      return '_blank';
-    },
-    contactUsUrl() {
-      return this.$env.CONTACT_US_URL;
-    },
     errorStatusCode() {
       return this.statusCode;
-    },
-    loginUrl() {
-      return LOGIN.path;
     },
     headerTitle() {
       return this.showError()
         ? this.getMessage('header')
         : this.$store.state.header.headerText;
+    },
+    loginUrl() {
+      return LOGIN.path;
     },
     mainClass() {
       const classes = ['content', 'pull-body'];
@@ -344,9 +217,15 @@ export default {
     overrideStyle() {
       return this.$store.state.errors.pageSettings.errorOverrideStyles[this.errorStatusCode];
     },
+    serviceDeskReference() {
+      return get('state.errors.apiErrors[0].serviceDeskReference')(this.$store) || '';
+    },
+    target() {
+      return '_blank';
+    },
   },
   created() {
-    this.$store.dispatch('pageTitle/updatePageTitle', this.$t('auth_return.errors.pageTitle'));
+    this.$store.dispatch('pageTitle/updatePageTitle', this.$t('auth_return.error.title.loginFailed'));
   },
   mounted() {
     NativeVersionSetup(this.$store);
@@ -389,10 +268,5 @@ div {
       width: 100%;
     }
   }
-
-    .api-error-button-container {
-      display: inline-block;
-      padding: 1em;
-    }
 }
 </style>

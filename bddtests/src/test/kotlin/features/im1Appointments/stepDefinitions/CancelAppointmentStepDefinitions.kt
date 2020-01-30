@@ -4,14 +4,18 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.im1Appointments.steps.CancelAppointmentSteps
+import mocking.stubs.StubbedEnvironment
 import mockingFacade.appointments.MyAppointmentsFacade
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import pages.ErrorDialogPage
+import java.time.Duration
 
 class CancelAppointmentStepDefinitions {
 
     @Steps
-    lateinit var cancelAppointmentSteps: CancelAppointmentSteps
+    private lateinit var cancelAppointmentSteps: CancelAppointmentSteps
+    private lateinit var errorDialogPage: ErrorDialogPage
 
     @Given("^(.*) is available to cancel a previously booked appointment before cutoff time because (.*)$")
     fun gpSystemIsAvailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
@@ -45,12 +49,103 @@ class CancelAppointmentStepDefinitions {
         )
     }
 
-    @Given("^(.*) is unavailable to cancel a previously booked appointment because (.*)$")
-    fun gpSystemIsUnavailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
+    @Given("^(.*) user is not allowed to cancel appointments with '(.*)'$")
+    fun gpSystemUserIsNotAllowedToCancelAppointmentsWithReason(gpSystem: String, reason: String) {
         val supplier = Supplier.valueOf(gpSystem)
         cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, supplier) { cancelRequest ->
-            cancelRequest.responseWithExceptionWhenServiceUnavailable()
+            cancelRequest.responseErrorForbiddenService()
         }
+    }
+
+    @Given("^(.*) prevents cancellation of previously booked appointment with '(.*)' because it is already cancelled$")
+    fun gpSystemPreventsCancellationWithReasonBecauseItIsAlreadyCancelled(gpSystem: String, reason: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, supplier) { cancelRequest ->
+            cancelRequest.respondWithExceptionWhenNotAvailable()
+        }
+    }
+
+    @Given("^TPP prevents cancellation of previously booked appointment because it is too late$")
+    fun tppPreventsCancellationWithReasonBecauseItIsTooLate() {
+        cancelAppointmentSteps.mockCancellationRequestStubForReason("", Supplier.TPP) { cancelRequest ->
+            cancelRequest.respondWithWithinAnHour()
+        }
+    }
+
+    @Given("^VISION returns corrupt data when cancelling appointment with '(.*)'$")
+    fun visionReturnsCorruptDataWhenCancellingAppointmentWithReason(reason: String) {
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, Supplier.VISION) { cancelRequest ->
+            cancelRequest.respondWithCorrupted()
+        }
+    }
+
+    @Given("^EMIS returns unknown exception when cancelling appointment with '(.*)'$")
+    fun emisReturnsUnknownExceptionaWhenCancellingAppointmentWithReason(reason: String) {
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, Supplier.EMIS) { cancelRequest ->
+            cancelRequest.respondWithUnknownException()
+        }
+    }
+
+    @Given("^(.*) will time out when trying to cancel with '(.*)'$")
+    fun gpSystemWillTimeOutWhenTryingToCancelWithReason(gpSystem: String, reason: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, supplier) {
+            cancelRequest -> cancelRequest.respondWithSuccess()
+                .delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
+        }
+    }
+
+    @Then("^I see an appropriate error message when there is an error sending data on cancellation page$")
+    fun iSeeAnAppropriateErrorMessageWhenThereIsAnErrorSendingDataOnCancellationPage() {
+        val pageTitle = cancelAppointmentSteps.cancelAppointmentPage.problemTitle
+        val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.problemHeader
+        val message = cancelAppointmentSteps.cancelAppointmentPage.goBackAndTryAgainWithoutErrorCode
+
+        errorDialogPage.assertParagraphText(message)
+                .assertPageHeader(pageHeader)
+                .assertPageTitle(pageTitle)
+    }
+
+    @Then("^I see an appropriate error message when not allowed to cancel$")
+    fun iSeeAnAppropriateErrorMessageWhenNotAllowedToCancel() {
+        val pageTitle = cancelAppointmentSteps.cancelAppointmentPage.serviceProblemTitle
+        val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.contactGpToCancelHeader
+        val message = cancelAppointmentSteps.cancelAppointmentPage.cannotCancelRightNow
+
+        errorDialogPage.assertParagraphText(message)
+                .assertPageHeader(pageHeader)
+                .assertPageTitle(pageTitle)
+    }
+
+    @Then("^I see an appropriate error message when it is already cancelled$")
+    fun iSeeAnAppropriateErrorMessageWhenItIsAlreadyCancelled() {
+        val pageTitle = cancelAppointmentSteps.cancelAppointmentPage.cannotCancelTitle
+        val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.cannotCancelTitle
+        val message = cancelAppointmentSteps.cancelAppointmentPage.alreadyCancelled
+
+        errorDialogPage.assertParagraphText(message)
+                .assertPageHeader(pageHeader)
+                .assertPageTitle(pageTitle)
+    }
+
+    @Then("^I see an appropriate error message when it is too late to cancel$")
+    fun iSeeAnAppropriateErrorMessageWhenItIsTooLateToCancel() {
+        val pageTitle = cancelAppointmentSteps.cancelAppointmentPage.contactToCancelTitle
+        val pageHeader = cancelAppointmentSteps.cancelAppointmentPage.contactToCancelTitle
+        val message = cancelAppointmentSteps.cancelAppointmentPage.tooLateToCancel
+
+        errorDialogPage.assertParagraphText(message)
+                .assertPageHeader(pageHeader)
+                .assertPageTitle(pageTitle)
+    }
+
+    @Then("^I see appropriate submit error message when there is an error with '(.*)'$")
+    fun iSeeAppropriateSubmitErrorMessageWhenThereIsAnErrorWithPrefix(prefix: String) {
+        val goBackParagraph = cancelAppointmentSteps.cancelAppointmentPage.getGoBackAndTryAgainParagraph(prefix)
+        errorDialogPage.assertParagraphText(goBackParagraph)
+                .assertParagraphText(cancelAppointmentSteps.cancelAppointmentPage.ifItContinuesBookOrCancel)
+                .assertPageHeader(cancelAppointmentSteps.cancelAppointmentPage.problemHeader)
+                .assertPageTitle(cancelAppointmentSteps.cancelAppointmentPage.problemTitle)
     }
 
     @Then("^I will be on the \"Cancellation reason\" screen$")

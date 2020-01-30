@@ -1,5 +1,6 @@
 package mocking.emis.appointments
 
+import constants.ErrorResponseCodeEmis
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -42,5 +43,17 @@ class DeleteAppointmentsBuilderEmis (configuration: EmisConfiguration,
         return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
             andXmlBody("").build()
         }
+    }
+
+    override fun respondWithExceptionWhenNotAvailable(): Mapping {
+        return respondWithStandardError(ErrorResponseCodeEmis.NOT_AVAILABLE.toInt(), HttpStatus.SC_NOT_FOUND)
+    }
+
+    override fun respondWithWithinAnHour(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun respondWithUnknownException(): Mapping {
+        return respondWithEmisUnknownError()
     }
 }

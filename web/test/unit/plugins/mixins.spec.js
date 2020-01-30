@@ -4,10 +4,13 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import NativeCallbacks from '@/services/native-app';
 import { createLocalVue, mount } from '@vue/test-utils';
-import { initialState } from '@/store/modules/errors/mutation-types';
-import { createStore } from '../helpers';
-import { createUri } from '@/lib/noJs';
 import { INDEX } from '@/lib/routes';
+import { createUri } from '@/lib/noJs';
+import { initialState } from '@/store/modules/errors/mutation-types';
+import { redirectTo } from '@/lib/utils';
+import { createStore } from '../helpers';
+
+jest.mock('@/lib/utils');
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -23,6 +26,7 @@ describe('mixins', () => {
     return mount(testPage, {
       localVue,
       mocks: {
+        $route: { path: '/foo' },
         $store,
       },
     });
@@ -124,6 +128,16 @@ describe('mixins', () => {
         it('will not call native callback `configureWebContext`', () => {
           expect(configureWebContext).not.toBeCalled();
         });
+      });
+    });
+
+    describe('reload', () => {
+      beforeEach(() => {
+        wrapper.vm.reload();
+      });
+
+      it('will redirect to current route', () => {
+        expect(redirectTo).toBeCalledWith(wrapper.vm, '/foo');
       });
     });
   });

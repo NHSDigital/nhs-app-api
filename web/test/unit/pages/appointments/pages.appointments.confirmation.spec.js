@@ -1,8 +1,8 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import ConfirmationPage from '@/pages/appointments/confirmation';
-import { mount } from '../../helpers';
-import { APPOINTMENT_BOOKING_SUCCESS } from '@/lib/routes';
+import each from 'jest-each';
 import * as dependency from '@/lib/utils';
+import ConfirmationPage from '@/pages/appointments/confirmation';
+import { APPOINTMENT_BOOKING_SUCCESS } from '@/lib/routes';
+import { createStore, mount } from '../../helpers';
 
 jest.mock('@/lib/utils');
 
@@ -18,11 +18,7 @@ describe('confirmation.vue', () => {
   });
 
   beforeEach(() => {
-    $store = {
-      dispatch: jest.fn(),
-      app: {
-        $env: {},
-      },
+    $store = createStore({
       state: {
         device: {
           isNativeApp: true,
@@ -37,6 +33,7 @@ describe('confirmation.vue', () => {
             channel: '',
           },
           bookingReasonNecessity: '',
+          error: null,
         },
         session: {
           csrfToken: 'bookingReason',
@@ -46,7 +43,7 @@ describe('confirmation.vue', () => {
       getters: {
         'session/isProxying': false,
       },
-    };
+    });
 
     dependency.redirectTo = jest.fn();
     wrapper = createConfirmationPage();
@@ -67,36 +64,46 @@ describe('confirmation.vue', () => {
     });
   });
 
-  describe('confirming the appointment', () => {
-    it('when confirmed as proxy should redirect to confirmation page', async () => {
-      // arrange
-      $store.getters['session/isProxying'] = true;
-      const e = { preventDefault: jest.fn() };
+  describe('book', () => {
+    let bookButton;
 
-      // act
-      await wrapper.vm.onConfirmButtonClicked(e);
-
-      // assert
-      expect($store.dispatch)
-        .toHaveBeenNthCalledWith(1, 'availableAppointments/book', jasmine.anything());
-
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_BOOKING_SUCCESS.path);
+    beforeEach(() => {
+      bookButton = wrapper.find('#btn_book_appointment');
     });
 
-    it('when confirmed as main user should redirect to appointments home', async () => {
-      // arrange
-      $store.getters['session/isProxying'] = false;
-      const e = { preventDefault: jest.fn() };
+    it('will exist', () => {
+      expect(bookButton.exists()).toBe(true);
+    });
 
-      // act
-      await wrapper.vm.onConfirmButtonClicked(e);
+    describe('on click', () => {
+      beforeEach(async () => {
+        bookButton.trigger('click');
+      });
 
-      // assert
-      expect($store.dispatch)
-        .toHaveBeenNthCalledWith(1, 'availableAppointments/book', jasmine.anything());
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_BOOKING_SUCCESS.path);
+      it('will dispatch `availableAppointments/book` action', () => {
+        expect($store.dispatch)
+          .toHaveBeenNthCalledWith(1, 'availableAppointments/book', jasmine.anything());
+      });
+
+      it('will redirect to booking success page', async () => {
+        expect(dependency.redirectTo)
+          .toHaveBeenCalledWith(wrapper.vm, APPOINTMENT_BOOKING_SUCCESS.path);
+      });
+    });
+  });
+
+  describe('errors', () => {
+    each([
+      400,
+      403,
+      409,
+      460,
+      500,
+      502,
+      504,
+    ]).it('will display an error dialog for status code: %s', (status) => {
+      $store.state.availableAppointments.error = { status };
+      expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
     });
   });
 });

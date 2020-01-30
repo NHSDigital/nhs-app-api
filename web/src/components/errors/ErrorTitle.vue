@@ -5,16 +5,12 @@
 </template>
 
 <script>
-import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
-
 export default {
-  name: 'ApiErrorTitle',
-
-  mixins: [ErrorMessageMixin],
+  name: 'ErrorTitle',
   props: {
     title: {
       type: String,
-      default: '',
+      required: true,
     },
     header: {
       type: String,
@@ -22,14 +18,11 @@ export default {
     },
   },
   computed: {
-    overrideStyle() {
-      return this.$store.state.errors.pageSettings.errorOverrideStyles[this.statusCode];
-    },
     headerText() {
-      return this.header !== '' ? this.getText(this.header) : '';
+      return this.header ? this.$t(this.header) : this.titleText;
     },
     titleText() {
-      return this.title !== '' ? this.getText(this.title) : '';
+      return this.$t(this.title);
     },
   },
   beforeMount() {
@@ -46,7 +39,3 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>

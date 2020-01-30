@@ -90,20 +90,32 @@ class CancelAppointmentBuilderVision(patient: Patient, request: CancelAppointmen
         }
     }
 
-    fun respondWithConflictException(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
-                    serviceDefinition,
-                    ErrorResponseCodeVision.APPOINTMENT_SLOT_NOT_BOOKED_TO_CURRENT_USER)).build()
-        }
+    override fun responseErrorForbiddenService(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun respondWithExceptionWhenNotAvailable(): Mapping {
+    override fun respondWithExceptionWhenNotAvailable(): Mapping {
 
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
                     serviceDefinition,
                     ErrorResponseCodeVision.APPOINTMENT_SLOT_NOT_FOUND)).build()
+        }
+    }
+
+    override fun respondWithWithinAnHour(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun respondWithUnknownException(): Mapping {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun respondWithConflictException(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
+                    serviceDefinition,
+                    ErrorResponseCodeVision.APPOINTMENT_SLOT_NOT_BOOKED_TO_CURRENT_USER)).build()
         }
     }
 

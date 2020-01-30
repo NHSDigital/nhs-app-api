@@ -4,6 +4,7 @@ import {
   INDEX,
   LINKED_PROFILES_SHUTTER_APPOINTMENTS,
 } from '@/lib/routes';
+import { createStore } from '../helpers';
 
 describe('tests for meta.js', () => {
   let route;
@@ -11,8 +12,7 @@ describe('tests for meta.js', () => {
   let app;
 
   beforeEach(() => {
-    store = {
-      dispatch: jest.fn(),
+    store = createStore({
       state: {
         device: {
           source: 'web',
@@ -21,7 +21,7 @@ describe('tests for meta.js', () => {
       getters: {
         'session/isProxying': false,
       },
-    };
+    });
 
     route = { meta: {} };
     app = {
@@ -29,18 +29,18 @@ describe('tests for meta.js', () => {
         tc: jest.fn(),
       },
     };
+
+    route.name = ACCOUNT.name;
+    meta({ route, store, app });
   });
 
   it('will return the desktop header key for "My Account"', () => {
-    route.name = ACCOUNT.name;
     meta({ route, store, app });
 
     expect(route.meta.headerKey).toBe('pageHeaders.settings');
   });
 
   it('will return the native header key for "Settings" : ios', () => {
-    route.name = ACCOUNT.name;
-
     store.state.device.source = 'ios';
 
     meta({ route, store, app });
@@ -49,8 +49,6 @@ describe('tests for meta.js', () => {
   });
 
   it('will return the native header key for "Settings" : android', () => {
-    route.name = ACCOUNT.name;
-
     store.state.device.source = 'android';
 
     meta({ route, store, app });
@@ -96,5 +94,13 @@ describe('tests for meta.js', () => {
 
     // assert
     expect(store.dispatch).toHaveBeenCalledWith('errors/setRoutePath', expectedRouteData);
+  });
+
+  it('will dispatch `myAppointments/clearError`', () => {
+    expect(store.dispatch).toBeCalledWith('myAppointments/clearError');
+  });
+
+  it('will dispatch `availableAppointments/clearError`', () => {
+    expect(store.dispatch).toBeCalledWith('availableAppointments/clearError');
   });
 });

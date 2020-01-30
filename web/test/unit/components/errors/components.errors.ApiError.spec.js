@@ -1,23 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import has from 'lodash/fp/has';
 import Vue from 'vue';
 import ApiError from '@/components/errors/ApiError';
-import { initialState as initialErrorsState } from '@/store/modules/errors/mutation-types';
-import { initialState as initialDeviceState } from '@/store/modules/device/mutation-types';
-import { createStore, locale, mount } from '../../helpers';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import { initialState as initialDeviceState } from '@/store/modules/device/mutation-types';
+import { initialState as initialErrorsState } from '@/store/modules/errors/mutation-types';
+import { createStore, locale, mount } from '../../helpers';
 
 Vue.mixin({
-  computed: {
-    showTemplate: {
-      get() {
-        return true;
-      },
-      set() {
-      },
-    },
-  },
   methods: {
     correctUrl(url) {
       return url;
@@ -41,6 +31,7 @@ const testMessages = {
 const createState = ({
   action,
   additionalInfoComponentName,
+  error = '',
   isNativeApp = false,
   path,
   status,
@@ -49,7 +40,7 @@ const createState = ({
     ...initialErrorsState(),
     ...{
       apiErrors: [{
-        error: status,
+        error,
         status,
         message: testMessages[status],
       }],
@@ -76,13 +67,10 @@ describe('api errors', () => {
   let wrapper;
 
   const $style = { additionalInformation: 'additionalInformation' };
-  const $te = key => has(key)(locale);
 
   const mountApiError = () => mount(ApiError, {
     $store,
     $style,
-    // $t,
-    $te,
   });
 
   describe('standard error', () => {
@@ -100,7 +88,7 @@ describe('api errors', () => {
         let additionalInfo;
 
         beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments/confirmation', status: 460 });
+          state = createState({ isNativeApp: true, path: '/account/notifications', status: 500, error: 10002 });
           $store = createStore({ getters, state });
           wrapper = mountApiError();
           additionalInfo = getAdditionalInfo();
@@ -111,7 +99,7 @@ describe('api errors', () => {
         });
 
         it('will have text', () => {
-          expect(additionalInfo.text()).toBe('translate_appointments.confirmation.errors.460.additionalInfo');
+          expect(additionalInfo.text()).toBe('translate_account.notifications.errors.500.10002.additionalInfo');
         });
 
         it('will not have label', () => {
@@ -119,34 +107,9 @@ describe('api errors', () => {
         });
       });
 
-      describe('path has additional info and label', () => {
-        let additionalInfo;
-        const additionalInfoText = locale.auth_return.errors.additionalInfo.text;
-        const additionalInfoLabel = locale.auth_return.errors.additionalInfo.label;
-
-        beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/auth-return', status: 400 });
-          $store = createStore({ getters, state });
-          wrapper = mountApiError();
-          additionalInfo = getAdditionalInfo();
-        });
-
-        it('will exist', () => {
-          expect(additionalInfo.exists()).toBe(true);
-        });
-
-        it('will have text', () => {
-          expect(additionalInfo.text()).toBe(additionalInfoText);
-        });
-
-        it('will have label', () => {
-          expect(additionalInfo.attributes('aria-label')).toBe(additionalInfoLabel);
-        });
-      });
-
       describe('path does not have additional info', () => {
         beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments', status: 400 });
+          state = createState({ isNativeApp: true, path: '/account/notifications', status: 500, error: 10001 });
           $store = createStore({ getters, state });
           wrapper = mountApiError();
         });
@@ -163,14 +126,14 @@ describe('api errors', () => {
 
       describe('path has message text', () => {
         beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments/cancelling', status: 403 });
+          state = createState({ isNativeApp: true, path: '/organ_donation', status: 500 });
           $store = createStore({ getters, state });
           wrapper = mountApiError();
           message = getMessage();
         });
 
         it('will have text', () => {
-          expect(message.text()).toBe('translate_appointments.cancelling.errors.403.message');
+          expect(message.text()).toBe('translate_organ_donation.errors.500.message');
         });
 
         it('will not have label', () => {
@@ -179,11 +142,11 @@ describe('api errors', () => {
       });
 
       describe('path has message text and label', () => {
-        const messageText = locale.appointments.errors.message.text;
-        const messageLabel = locale.appointments.errors.message.label;
+        const messageText = locale.prescriptions.errors.message.text;
+        const messageLabel = locale.prescriptions.errors.message.label;
 
         beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments', status: 400 });
+          state = createState({ isNativeApp: true, path: '/prescriptions', status: 500 });
           $store = createStore({ getters, state });
           wrapper = mountApiError();
           message = getMessage();
@@ -202,7 +165,7 @@ describe('api errors', () => {
     describe('standard message text', () => {
       describe('is native app', () => {
         beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments/cancelling', status: 403 });
+          state = createState({ isNativeApp: true, path: '/prescriptions/confirm_prescription_details', status: 466 });
           $store = createStore({ getters, state });
           wrapper = mountApiError();
         });
@@ -216,21 +179,21 @@ describe('api errors', () => {
         });
 
         it('will contain the header', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.403.header');
+          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.header');
         });
 
         it('will contain the subheader', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.subheader');
+          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.subheader');
         });
 
         it('will contain the message', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.403.message');
+          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.message');
         });
       });
 
       describe('is not native app', () => {
         beforeEach(() => {
-          state = createState({ isNativeApp: false, path: '/appointments/cancelling', status: 403 });
+          state = createState({ isNativeApp: false, path: '/prescriptions/confirm_prescription_details', status: 466 });
           $store = createStore({ getters, state });
           wrapper = mountApiError();
         });
@@ -244,15 +207,15 @@ describe('api errors', () => {
         });
 
         it('will contain the header', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.403.header');
+          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.header');
         });
 
         it('will contain the subheader', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.subheader');
+          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.subheader');
         });
 
         it('will contain the message', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.403.message');
+          expect(wrapper.find(MessageDialog).text()).toContain('.errors.466.message');
         });
       });
     });
@@ -260,7 +223,7 @@ describe('api errors', () => {
     describe('retry button', () => {
       describe('no retry text', () => {
         beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments', status: 400 });
+          state = createState({ isNativeApp: true, path: '/', status: 404 });
           $store = createStore({ getters, state });
           wrapper = mountApiError();
         });
@@ -273,7 +236,7 @@ describe('api errors', () => {
       describe('retry text', () => {
         describe('is native app', () => {
           beforeEach(() => {
-            state = createState({ isNativeApp: true, path: '/appointments/cancelling', status: 400 });
+            state = createState({ isNativeApp: true, path: '/prescriptions', status: 504 });
             $store = createStore({ getters, state });
             wrapper = mountApiError();
           });
@@ -286,26 +249,7 @@ describe('api errors', () => {
         describe('is not native app', () => {
           describe('no retry action or text', () => {
             beforeEach(() => {
-              state = createState({ isNativeApp: false, path: '/appointments/cancelling', status: 400 });
-              $store = createStore({ getters, state });
-              wrapper = mountApiError();
-            });
-
-            it('will not exist', () => {
-              expect(wrapper.find('[data-purpose="retry-or-back-button"').exists()).toBe(false);
-            });
-          });
-
-          describe('retry action but no retry text', () => {
-            beforeEach(() => {
-              // This state does not have retry text because there is no `retryButtonText`
-              // associated with appointments in the locale file
-              state = createState({
-                action: { 400: '/test' },
-                isNativeApp: false,
-                path: '/appointments',
-                status: 400,
-              });
+              state = createState({ isNativeApp: false, path: '/', status: 404 });
               $store = createStore({ getters, state });
               wrapper = mountApiError();
             });
@@ -317,13 +261,13 @@ describe('api errors', () => {
 
           describe('retry action and retry text', () => {
             beforeEach(() => {
-              // This has retry text because auth-return has an associated `retryButtonText`
+              // This has retry text because prescriptions has an associated `retryButtonText`
               // in the locale file.
               state = createState({
-                action: { 400: '/test' },
+                action: { 504: '/test' },
                 isNativeApp: false,
-                path: '/auth-return',
-                status: 400,
+                path: '/prescriptions',
+                status: 504,
               });
               $store = createStore({ getters, state });
               wrapper = mountApiError();
@@ -335,7 +279,7 @@ describe('api errors', () => {
 
             it('will have the retry text', () => {
               expect(wrapper.find('[data-purpose="retry-or-back-button"').text())
-                .toEqual('translate_auth_return.errors.retryButtonText');
+                .toEqual('translate_prescriptions.errors.504.retryButtonText');
             });
 
             it('will call setFocus method on update', () => {
@@ -374,7 +318,7 @@ describe('api errors', () => {
 
     describe('is native app', () => {
       beforeEach(() => {
-        state = createState({ isNativeApp: true, path: '/appointments', status: 400 });
+        state = createState({ isNativeApp: true, path: '/', status: 404 });
         $store = createStore({ getters, state });
         wrapper = mountApiError();
       });
@@ -386,7 +330,7 @@ describe('api errors', () => {
 
     describe('is not native app', () => {
       beforeEach(() => {
-        state = createState({ isNativeApp: false, path: '/appointments', status: 400 });
+        state = createState({ isNativeApp: false, path: '/', status: 404 });
         $store = createStore({ getters, state });
         wrapper = mountApiError();
       });
@@ -396,7 +340,7 @@ describe('api errors', () => {
       });
 
       it('will have an h2 set to the subheader', () => {
-        expect(wrapper.find('h2').text()).toEqual('translate_appointments.errors.subheader');
+        expect(wrapper.find('h2').text()).toEqual('translate_errors.404.subheader');
       });
     });
   });

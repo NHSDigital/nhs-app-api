@@ -23,12 +23,14 @@ Feature: Your Appointments With Javascript Disabled
   #    Only testing each Scenario for 1 GP System, for no JS
 
   @bug  @NHSO-4129
-  Scenario: An EMIS user sees Service currently unavailable message when GP system is unavailable
+  Scenario Outline: An EMIS user sees Service currently unavailable message when GP system is unavailable
     Given the EMIS GP appointment system is unavailable
     And I am logged in
     When I retrieve the 'Your Appointments' page directly
-    Then I see page header indicating there is an appointment data error
-    And I see the appropriate error messages for the appointment data error
+    Then I see appropriate try again error message when there is an error with '<Prefix>'
+    Examples:
+      | Prefix |
+      | 4e     |
 
 #  This Scenario can be removed once implemented for ALL GP Systems
   Scenario: A VISION user sees appropriate messages when they have no upcoming or historical appointments
@@ -96,12 +98,13 @@ Feature: Your Appointments With Javascript Disabled
 
 # VISION Specific tests
 
+  #403
+  @tech-debt
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
-    Given Appointments are disabled for VISION at a GP Practice level
+    Given VISION user is not allowed to view appointments
     And I am logged in
     When I retrieve the 'Your Appointments' page directly
-    Then I see appropriate information message when appointments are disabled
-    And there should not be an option to try again
+    Then I see appropriate error message when appointments are disabled
 
   Scenario: Cancellation link won't be displayed for VISION appointment before cancellation cut off period without cancellation reason(s) available
     Given I have upcoming appointments before cutoff time for VISION without cancellation reasons

@@ -11,6 +11,7 @@ const exclusions = [
   '../src/components/widgets/HotJar.vue',
   '../src/components/NativeOnlyMixin.vue',
   '../src/components/TermsConditionsMixin.vue',
+  '../src/components/errors/ErrorPageMixin.vue',
 ];
 
 const importComponent = (path) => {

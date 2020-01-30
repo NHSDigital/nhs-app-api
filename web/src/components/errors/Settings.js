@@ -5,10 +5,6 @@ import {
   ACCOUNT,
   ACCOUNT_NOTIFICATIONS,
   ALLERGIESANDREACTIONS,
-  APPOINTMENTS,
-  APPOINTMENT_BOOKING,
-  APPOINTMENT_CANCELLING,
-  APPOINTMENT_CONFIRMATIONS,
   APPOINTMENT_ADMIN_HELP,
   APPOINTMENT_GP_ADVICE,
   AUTH_RETURN,
@@ -65,35 +61,6 @@ export default {
       route: ALLERGIESANDREACTIONS.path,
       redirectUrl: {
         default: ALLERGIESANDREACTIONS.path,
-      },
-    },
-    {
-      route: APPOINTMENTS.path,
-      errorOverrideStyles: { 403: 'plain' },
-      redirectUrl: {
-        default: APPOINTMENTS.path,
-      },
-    },
-    {
-      route: APPOINTMENT_BOOKING.path,
-      errorOverrideStyles: { 403: 'plain' },
-      redirectUrl: {
-        504: APPOINTMENT_BOOKING.path,
-        default: APPOINTMENTS.path,
-      },
-    },
-    {
-      route: APPOINTMENT_CANCELLING.path,
-      redirectUrl: {
-        default: APPOINTMENTS.path,
-      },
-    },
-    {
-      route: APPOINTMENT_CONFIRMATIONS.path,
-      errorOverrideStyles: { 460: 'plain' },
-      redirectUrl: {
-        409: APPOINTMENT_BOOKING.path,
-        default: APPOINTMENTS.path,
       },
     },
     {

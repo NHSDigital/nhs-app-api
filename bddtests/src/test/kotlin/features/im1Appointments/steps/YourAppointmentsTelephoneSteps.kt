@@ -5,7 +5,6 @@ import mocking.MockingClient
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.ErrorPage
 import pages.appointments.YourAppointmentsPage
 import pages.isDisplayed
 import pages.navigation.HeaderNative
@@ -16,7 +15,6 @@ open class YourAppointmentsTelephoneSteps {
     lateinit var yourAppointmentsPage: YourAppointmentsPage
     @Steps
     lateinit var yourAppointmentsUiSteps: YourAppointmentsUISteps
-    lateinit var errorPage: ErrorPage
     lateinit var headerNative: HeaderNative
 
     private val upcomingPhoneMessage = "We will call you on"

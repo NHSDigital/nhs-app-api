@@ -27,7 +27,7 @@ Feature: View Available Appointment Slots Frontend
       | VISION    |
       | MICROTEST |
 
-  @nativesmoketest
+    @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
@@ -144,7 +144,7 @@ Feature: View Available Appointment Slots Frontend
       | VISION    |
       | MICROTEST |
 
-  @nativesmoketest
+    @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
@@ -161,7 +161,7 @@ Feature: View Available Appointment Slots Frontend
       | VISION    |
       | MICROTEST |
 
-  @nativesmoketest
+    @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
@@ -193,70 +193,64 @@ Feature: View Available Appointment Slots Frontend
       | VISION    |
       | MICROTEST |
 
-    #504
-  Scenario Outline: <GP System> user tries again after a timeout and it times-out again
-    Given the <GP System> doesn't respond in a timely fashion for available appointment slots
+  #403
+  Scenario:  TPP user sees appropriate error message when not allowed to retrieve appointment slots
+    Given TPP user is not allowed to retrieve appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate information message for time-outs
-    When I click the 'Try again' action
-    Then I see appropriate information message for time-outs
-    And there should be a button to try again
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
+    Then I see appropriate error message when appointments are disabled
 
-
-    #504
-  Scenario Outline: <GP System> user can try again after a timeout fetching appointment slots and be successful
-    Given the first request to the <GP System> for available appointment slots times out but later requests succeed
+  #500
+  Scenario: TPP user sees appropriate error message when GP system returns corrupt data
+    Given TPP returns corrupt data for appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see a timeout on the appointment booking page
-    When I click the 'Try again' action
+    Then I see appropriate error message when there is a loading error with 'xx'
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    Then a new tab has been opened by the link
+
+  #502
+  @nativesmoketest
+  Scenario: EMIS user sees appropriate error message when GP system is unavailable
+    Given EMIS is unavailable for available appointment slots
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    Then I see appropriate error message when there is a loading error with '4e'
+    When I click the error 'Back' link
+    Then the Your Appointments page is displayed
+
+  #504
+  Scenario: VISION user opens up contact us after a timeout
+    Given the VISION doesn't respond in a timely fashion for available appointment slots
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    Then I see appropriate error message for loading time-outs with 'zs'
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    Then a new tab has been opened by the link
+
+  Scenario: TPP user can try again after a timeout fetching appointment slots and be successful
+    Given the first request to the TPP for available appointment slots times out but later requests succeed
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    Then I see appropriate error message for loading time-outs with 'zt'
+    When I click the 'Try again' button
     Then I am able to filter on available slots
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
 
   Scenario: EMIS user can try again after a timeout fetching appointment slots and be successful
     Given the first request to EMIS for available appointment slots times out but later requests succeed
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see a timeout on the appointment booking page
-    When I click the 'Try again' action
+    Then I see appropriate error message for loading time-outs with 'ze'
+    When I click the 'Try again' button
     Then I am able to filter on available slots
 
   Scenario: EMIS user can try again after a timeout fetching appointment slots metadata and be successful
     Given the first request to EMIS for available appointment slots metadata times out but later requests succeed
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    Then I see a timeout on the appointment booking page
-    When I click the 'Try again' action
+    Then I see appropriate error message for loading time-outs with 'ze'
+    When I click the 'Try again' button
     Then I am able to filter on available slots
-
-    #500
-  Scenario Outline: <GP System> user sees appropriate information message when returns corrupt data
-    Given <GP System> returns corrupt data for appointment slots
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate information message when there is a error retrieving data
-    And there should not be an option to try again
-    Examples:
-      | GP System |
-      | MICROTEST |
-      | TPP       |
-      | VISION    |
-
-  @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
 
   # GP System agnostic scenario, so only need to test with TPP
   Scenario: A TPP user only sees days with available slots, if filtering by "Next week" but no appointments are available for some days
@@ -284,24 +278,6 @@ Feature: View Available Appointment Slots Frontend
     And I select a type and location that have available slots
     And I select time period for 'Next eight weeks'
     Then I only see results for days that have available slots
-
-    #502
-  Scenario Outline: <GP System>  user sees appropriate information message when GP system is unavailable
-    Given <GP System> is unavailable for available appointment slots
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    Then I see appropriate information message when there is a error retrieving data
-    And there should not be an option to try again
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
-
-    @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
 
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user decides to go back even though there's available slots

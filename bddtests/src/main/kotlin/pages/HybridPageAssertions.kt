@@ -10,9 +10,9 @@ fun HybridPageElement.assertSingleElementPresent(): HybridPageElement {
     return this
 }
 
-fun HybridPageElement.assertIsVisible(): HybridPageElement {
+fun HybridPageElement.assertIsVisible(message: String? = null): HybridPageElement {
     actOnTheElement {
-        Assert.assertTrue("Expected $helpfulNameToUse to be visible", it.isVisible)
+        Assert.assertTrue(message ?: "Expected $helpfulNameToUse to be visible", it.isVisible)
     }
     return this
 }

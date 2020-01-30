@@ -22,6 +22,34 @@ Vue.mixin({
     },
   },
   methods: {
+    configureWebContext(currentHelpUrl) {
+      if (this.$store.state.device.isNativeApp) {
+        let retryPath = '';
+
+        if (this.$store.getters['session/isProxying']) {
+          retryPath = createUri({
+            path: INDEX.path,
+            noJs: {
+              flashMessage: {
+                show: true,
+                key: 'linkedProfiles.lossProxyError',
+                type: 'error',
+              },
+            },
+          });
+        } else {
+          retryPath = getOr('', 'state.errors.pageSettings.redirectUrl.default', this.$store);
+        }
+        NativeCallbacks.configureWebContext(currentHelpUrl, retryPath);
+      } else {
+        // TODO: Add code when help function is added to the web version (Jira ticket NHSO-6388)
+      }
+    },
+    correctUrl(url) {
+      return url === LOGIN.path && this.$store.getters['session/isLoggedIn']()
+        ? ACCOUNT_SIGNOUT.path
+        : url;
+    },
     getMedicationCourseStatus(medicationStatusId) {
       // eslint-disable-next-line no-restricted-syntax
       for (const [key, value] of Object.entries(MedicationCourseStatus)) {
@@ -49,33 +77,8 @@ Vue.mixin({
 
       redirectTo(this, url);
     },
-    correctUrl(url) {
-      return url === LOGIN.path && this.$store.getters['session/isLoggedIn']()
-        ? ACCOUNT_SIGNOUT.path
-        : url;
-    },
-    configureWebContext(currentHelpUrl) {
-      if (this.$store.state.device.isNativeApp) {
-        let retryPath = '';
-
-        if (this.$store.getters['session/isProxying']) {
-          retryPath = createUri({
-            path: INDEX.path,
-            noJs: {
-              flashMessage: {
-                show: true,
-                key: 'linkedProfiles.lossProxyError',
-                type: 'error',
-              },
-            },
-          });
-        } else {
-          retryPath = getOr('', 'state.errors.pageSettings.redirectUrl.default', this.$store);
-        }
-        NativeCallbacks.configureWebContext(currentHelpUrl, retryPath);
-      } else {
-        // TODO: Add code when help function is added to the web version (Jira ticket NHSO-6388)
-      }
+    reload() {
+      redirectTo(this, this.$route.path);
     },
   },
 });

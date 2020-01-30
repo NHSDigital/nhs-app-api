@@ -102,9 +102,84 @@ Feature: Book Appointments Frontend
     Examples:
       | GP System |
       | EMIS      |
+
+  #409
+  @nativesmoketest
+  Scenario Outline: A <GP System> user sees appropriate information error message when appointment has already been booked
+    Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    When I enter symptoms
+    And  I click the 'Confirm and book appointment' button
+    Then a message is displayed indicating that the slot has already been taken
+    When I click the error 'Back' link
+    Then the Your Appointments page is displayed
+    Examples:
+      | GP System |
+      | EMIS      |
+
+  #460
+  @nativesmoketest
+  Scenario Outline: A <GP System> user reached maximum appointment booking limit
+    Given there are <GP System> appointments available to book, but user reached maximum appointment booking limit
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    And I enter symptoms
+    And  I click the 'Confirm and book appointment' button
+    Then a message is displayed indicating that user has reached maximum appointment limit
+    When I click the error 'Back' link
+    Then the Your Appointments page is displayed
+    Examples:
+      | GP System |
       | TPP       |
-      | VISION    |
-      | MICROTEST |
+
+  #460
+  Scenario: An EMIS user on Old EMIS System reached maximum appointment booking limit
+    Given  there are appointments available to book in old EMIS system, but user reached maximum appointment booking limit
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    And I enter symptoms
+    And  I click the 'Confirm and book appointment' button
+    Then a message is displayed indicating that user has reached maximum appointment limit
+
+  #500
+  Scenario Outline: <GP System> user sees appropriate error message when it returns corrupt data
+    Given <GP System> returns corrupt data when booking appointment
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    When I enter symptoms
+    And  I click the 'Confirm and book appointment' button
+    Then I see appropriate submit error message when there is an error with '<Prefix>'
+    When I click the error 'Back' link
+    Then the Your Appointments page is displayed
+    Examples:
+      | Prefix | GP System |
+      | xx     | TPP       |
+
+  #502
+  @nativesmoketest
+  Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
+    Given there are <GP System> appointments available to book, but the GP system is unavailable
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    When I enter symptoms
+    And  I click the 'Confirm and book appointment' button
+    Then I see appropriate submit error message when there is an error with '<Prefix>'
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    Then a new tab has been opened by the link
+    Examples:
+      | Prefix | GP System |
+      | 4s     | VISION    |
 
   #504
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
@@ -115,98 +190,12 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then I see appropriate information message after 10 seconds when it times-out on appointment confirmation page
-    And there should be an action to go back to my appointments
+    Then I see appropriate submit error message when there is an error with '<Prefix>'
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    Then a new tab has been opened by the link
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
-
-  #502
-  Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
-    Given there are <GP System> appointments available to book, but the GP system is unavailable
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    And I have selected an appointment slot to book
-    Then the Appointment Slot page is displayed
-    When I enter symptoms
-    And  I click the 'Confirm and book appointment' button
-    Then I see appropriate information message when there is an error sending data on appointment confirmation page
-    And there should be an action to go back to my appointments
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
-
-  @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
-
-  #409
-  Scenario Outline: A <GP System> user sees appropriate information error message when appointment has already been booked
-    Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    And I have selected an appointment slot to book
-    Then the Appointment Slot page is displayed
-    When I enter symptoms
-    And  I click the 'Confirm and book appointment' button
-    Then a message is displayed indicating that the slot has already been taken
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
-
-  @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
-
-  Scenario Outline: A <GP System> user can return directly back to their appointments after trying to book one already booked
-    Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    And I have selected an appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I enter symptoms
-    And  I click the 'Confirm and book appointment' button
-    When I click the error page back button
-    Then the Available Appointments page is displayed
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
-
-  @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
-
-  #460
-  Scenario Outline: A <GP System> user reached maximum appointment booking limit
-    Given there are <GP System> appointments available to book, but user reached maximum appointment booking limit
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    And I have selected an appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I enter symptoms
-    And  I click the 'Confirm and book appointment' button
-    Then a message is displayed indicating that user has reached maximum appointment limit
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
-
-  @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
+      | Prefix | GP System |
+      | ze     | EMIS      |
 
   Scenario Outline: A <GP System> user is navigated back to the 'Book this appointment' screen when Back button selected.
     Given there are <GP System> appointments available to book
@@ -256,17 +245,6 @@ Feature: Book Appointments Frontend
     And I select the back to home link on the appointments page
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
-  #460
-  Scenario: An EMIS user on Old EMIS System reached maximum appointment booking limit
-    Given  there are appointments available to book in old EMIS system, but user reached maximum appointment booking limit
-    And I am logged in
-    When I retrieve the 'Appointment Booking' page directly
-    And I have selected an appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I enter symptoms
-    And  I click the 'Confirm and book appointment' button
-    Then a message is displayed indicating that user has reached maximum appointment limit
-
     # Positive submission cases
   Scenario: An EMIS user cannot enter or select a phone number for non phone appointments
     Given there are EMIS appointments available to book
@@ -287,7 +265,7 @@ Feature: Book Appointments Frontend
     Examples:
       | GP System |
       | VISION    |
-  @nativesmoketest
+    @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |

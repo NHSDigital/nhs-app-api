@@ -3,26 +3,6 @@
 Feature: Your Appointments Frontend
   Users can view their upcoming and past appointments in the Your Appointments screen.
 
-  #This test covers navigation via buttons/links
-
-  #502
-  Scenario Outline: A <GP System> user sees Service currently unavailable message when GP system is unavailable
-    Given the <GP System> GP appointment system is unavailable
-    And I am logged in
-    When I am on the Your Appointments error page
-    Then I see page header indicating there is an appointment data error
-    And I see the appropriate error messages for the appointment data error
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
-      | MICROTEST |
-
-  @nativesmoketest
-    Examples:
-      | GP System |
-      | EMIS      |
-
   # These tests navigate directly to the pages where the features are to be tested, to save time.
 
   Scenario Outline: A <GP System> user sees appropriate messages when they have no upcoming or historical appointments
@@ -134,14 +114,49 @@ Feature: Your Appointments Frontend
       | EMIS      |
       | MICROTEST |
 
-    #403
-  Scenario: A user sees appropriate information message when appointments are disabled on VISION
-      # VISION Specific test
-    Given Appointments are disabled for VISION at a GP Practice level
+  #403
+  Scenario: VISION user sees appropriate error message when appointments are disabled
+    Given VISION user is not allowed to view appointments
     And I am logged in
     When I retrieve the 'Your Appointments' page directly
-    Then I see appropriate information message when appointments are disabled
-    And there should not be an option to try again
+    Then I see appropriate error message when appointments are disabled
+
+  #500
+  Scenario: TPP user sees appropriate error message when it returns corrupt data
+    Given TPP returns corrupted response for my appointments
+    And I am logged in
+    When I retrieve the 'Your Appointments' page directly
+    Then I see appropriate try again error message when there is an error with 'xx'
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    Then a new tab has been opened by the link
+
+  Scenario: EMIS user retries to view my appointments after it returns corrupt data
+    Given EMIS returns corrupted response once when trying to retrieve my appointments
+    And I am logged in
+    When I retrieve the 'Your Appointments' page directly
+    Then I see appropriate try again error message when there is an error with 'xx'
+    When I click the 'Try again' button
+    Then the page title is "Your appointments"
+    And I am informed I have no historical appointments
+
+  #502
+  @nativesmoketest
+  Scenario: MICROTEST user sees appropriate error message when it returns unknown exception viewing appointments
+    Given an unknown exception occurs when I want to view my MICROTEST appointments
+    And I am logged in
+    When I retrieve the 'Your Appointments' page directly
+    Then I see appropriate try again error message when there is an error with '4m'
+    When I click the error 'Back' link
+    Then I see the home page
+
+  #504
+  Scenario: VISION user opens up contact us after a timeout
+    Given VISION will time out when trying to retrieve my appointments
+    And I am logged in
+    When I retrieve the 'Your Appointments' page directly
+    Then I see appropriate try again book/cancel error message when there is an error with 'zs'
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
+    Then a new tab has been opened by the link
 
   Scenario: Cancellation link won't be displayed for VISION appointment before cancellation cut off period without cancellation reason(s) available
     Given I have upcoming appointments before cutoff time for VISION without cancellation reasons

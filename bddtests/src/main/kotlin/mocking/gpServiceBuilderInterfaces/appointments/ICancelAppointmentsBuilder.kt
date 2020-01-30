@@ -10,4 +10,11 @@ interface ICancelAppointmentsBuilder {
 
     fun responseWithExceptionWhenServiceUnavailable(): Mapping
 
+    fun responseErrorForbiddenService(): Mapping
+
+    fun respondWithExceptionWhenNotAvailable(): Mapping
+
+    fun respondWithWithinAnHour(): Mapping
+
+    fun respondWithUnknownException(): Mapping
 }

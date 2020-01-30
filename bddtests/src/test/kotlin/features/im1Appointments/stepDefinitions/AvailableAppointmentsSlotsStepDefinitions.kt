@@ -12,7 +12,6 @@ import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.data.appointments.AppointmentsSlotsExampleForFiltering
 import mocking.data.appointments.FilterSlotDetails
 import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
-import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
@@ -143,12 +142,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
             respondWithSuccess(genericExample)
                     .delayedBy(Duration.ofSeconds(1))
         }
-    }
-
-    @Given("^Appointments are disabled for VISION at a GP Practice level")
-    fun appointmentsAreDisabledForVisionAtAGPLevel() {
-        Serenity.setSessionVariable(gpAppointmentsDisabled).to("true")
-        AppointmentsSlotsFactory.getForSupplier(Supplier.VISION).generateDefaultUserData()
     }
 
     @Given("^(.*) is unavailable for available appointment slots$")

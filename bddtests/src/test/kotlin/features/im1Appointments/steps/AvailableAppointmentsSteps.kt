@@ -20,7 +20,6 @@ import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.appointments.SlotResponseObject
 import javax.servlet.http.Cookie
-import kotlin.collections.set
 
 open class AvailableAppointmentsSteps {
 
@@ -28,7 +27,7 @@ open class AvailableAppointmentsSteps {
 
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
     lateinit var webHeader: WebHeader
-    lateinit var breadcrumbs: BreadcrumbHeader
+    private lateinit var breadcrumbs: BreadcrumbHeader
 
     @Step
     fun checkIfPageHeaderIsCorrect() {

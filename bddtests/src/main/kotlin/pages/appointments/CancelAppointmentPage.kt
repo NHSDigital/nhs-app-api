@@ -8,6 +8,15 @@ import pages.text
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments")
 class CancelAppointmentPage : AppointmentSharedElementsPage() {
+    val contactToCancelTitle = "Contact your GP surgery to cancel"
+    val cannotCancelTitle = "Sorry, you cannot cancel this appointment"
+    val alreadyCancelled = "This may be because the appointment is already cancelled or it occurs in the past."
+    val serviceProblemTitle = "Sorry, there is a problem with the service - Appointments - NHS App"
+    val contactGpToCancelHeader = "Contact your GP surgery to cancel"
+    val cannotCancelRightNow = "You cannot cancel appointments online right now. " +
+            "Call your GP surgery as soon as possible to let them know you need to cancel."
+    val tooLateToCancel = "It's too late to cancel this appointment online. Call your GP surgery as soon " +
+            "as possible to let them know you need to cancel."
 
     private val checkDetailsText = HybridPageElement(
             webDesktopLocator = "//div[@data-purpose='info']/p",

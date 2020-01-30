@@ -1,133 +1,162 @@
-import get from 'lodash/fp/get';
 import showShutterPage from '@/lib/proxy/shutter';
-import { createStore } from '../../helpers';
+import { APPOINTMENTS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
-import { findByName } from '@/lib/routes';
+import { createStore } from '../../helpers';
 
 jest.mock('@/lib/utils');
-jest.mock('@/lib/routes');
-jest.mock('lodash/fp/get');
 
-describe('CheckProxyNoAccessMixin mounted mixin', () => {
+describe('shutter', () => {
   let $store;
-  let vm;
+  let self;
 
   beforeEach(() => {
     jest.clearAllMocks();
     $store = createStore({
       state: {
-        device: {
-          isNativeApp: true,
+        errors: {
+          apiErrors: [],
+        },
+        myAppointments: {
+          error: null,
         },
       },
     });
-    vm = { $store };
+    self = { $store };
   });
 
-  it('will redirect to shutter page if error 403 proxying and route has shutter page defined', () => {
-    // arrange
-    $store.getters['session/isProxying'] = true;
-    $store.getters['errors/showApiError'] = true;
-    $store.state = {
-      errors: {
-        apiErrors: [{ status: 403 }],
-      },
-    };
+  describe('proxying', () => {
+    beforeEach(() => {
+      $store.getters['session/isProxying'] = true;
+    });
 
-    const getFunction = jest.fn().mockImplementation(() => 403);
-    get.mockImplementation(() => getFunction);
+    describe('shutter page defined', () => {
+      let route;
 
-    const route = {
-      name: 'example',
-      proxyShutterPath: '/shutter/example',
-    };
-    findByName.mockImplementation(() => route);
+      beforeEach(() => {
+        route = {
+          proxyShutterPath: '/shutter/example',
+        };
+      });
 
-    // act
-    showShutterPage(route, vm);
+      describe('appointments route', () => {
+        beforeEach(() => {
+          route.name = APPOINTMENTS.name;
+        });
 
-    // assert
-    expect(get).toHaveBeenCalledWith('$store.state.errors.apiErrors[0].status');
-    expect(redirectTo).toHaveBeenCalledWith(vm, '/shutter/example');
+        describe('has 403 error', () => {
+          beforeEach(() => {
+            $store.state.myAppointments.error = { status: 403 };
+            showShutterPage(route, self);
+          });
+
+          it('will redirect', () => {
+            expect(redirectTo).toBeCalledWith(self, '/shutter/example');
+          });
+        });
+
+        describe('has any other error', () => {
+          beforeEach(() => {
+            $store.state.myAppointments.error = { status: 500 };
+            showShutterPage(route, self);
+          });
+
+          it('will not redirect', () => {
+            expect(redirectTo).not.toBeCalled();
+          });
+        });
+
+        describe('has no error', () => {
+          beforeEach(() => {
+            $store.state.myAppointments.error = null;
+          });
+
+          it('will not redirect', () => {
+            expect(redirectTo).not.toBeCalled();
+          });
+        });
+      });
+
+      describe('any other route', () => {
+        beforeEach(() => {
+          route.name = 'foo';
+        });
+
+        describe('has 403 api error', () => {
+          beforeEach(() => {
+            $store.getters['errors/showApiError'] = true;
+            $store.state.errors.apiErrors.push({ status: 403 });
+            showShutterPage(route, self);
+          });
+
+          it('will redirect', () => {
+            expect(redirectTo).toBeCalledWith(self, '/shutter/example');
+          });
+        });
+
+        describe('has any other api error', () => {
+          beforeEach(() => {
+            $store.getters['errors/showApiError'] = true;
+            $store.state.errors.apiErrors.push({ status: 500 });
+            showShutterPage(route, self);
+          });
+
+          it('will not redirect', () => {
+            expect(redirectTo).not.toBeCalled();
+          });
+        });
+
+        describe('has no api error', () => {
+          beforeEach(() => {
+            $store.getters['errors/showApiError'] = false;
+            $store.state.errors.apiErrors = [];
+            showShutterPage(route, self);
+          });
+
+          it('will not redirect', () => {
+            expect(redirectTo).not.toBeCalled();
+          });
+        });
+      });
+    });
+
+    describe('shutter page not defined', () => {
+      let route;
+
+      beforeEach(() => {
+        route = {
+          proxyShutterPath: undefined,
+        };
+        $store.getters['errors/showApiError'] = true;
+        $store.state.errors.apiErrors.push({ status: 403 });
+        route.name = APPOINTMENTS.name;
+        $store.state.myAppointments.error = { status: 403 };
+        showShutterPage(route, self);
+      });
+
+      it('will not redirect', () => {
+        expect(redirectTo).not.toBeCalled();
+      });
+    });
   });
 
-  it('will not redirect to shutter page if error 403, proxying but route does not have shutter page defined', () => {
-    // arrange
-    $store.getters['session/isProxying'] = true;
-    $store.getters['errors/showApiError'] = true;
-    $store.state = {
-      errors: {
-        apiErrors: [{ status: 403 }],
-      },
-    };
+  describe('not proxying', () => {
+    let route;
 
-    const getFunction = jest.fn().mockImplementation(() => 403);
-    get.mockImplementation(() => getFunction);
+    beforeEach(() => {
+      $store.getters['session/isProxying'] = false;
 
-    const route = {
-      name: 'example',
-    };
-    findByName.mockImplementation(() => route);
+      route = {
+        name: APPOINTMENTS.name,
+        proxyShutterPath: '/shutter/example',
+      };
+      $store.getters['errors/showApiError'] = true;
+      $store.state.errors.apiErrors.push({ status: 403 });
+      $store.state.myAppointments.error = { status: 403 };
+      showShutterPage(route, self);
+    });
 
-    // act
-    showShutterPage(route, vm);
-
-    // assert
-    expect(get).toHaveBeenCalledWith('$store.state.errors.apiErrors[0].status');
-    expect(redirectTo).not.toHaveBeenCalled();
-  });
-
-  it('will not redirect to shutter page if error 403 and not proxying', () => {
-    // arrange
-    $store.getters['session/isProxying'] = false;
-    $store.getters['errors/showApiError'] = true;
-    $store.state = {
-      errors: {
-        apiErrors: [{ status: 403 }],
-      },
-    };
-
-    const getFunction = jest.fn().mockImplementation(() => 403);
-    get.mockImplementation(() => getFunction);
-
-    const route = {
-      name: '/example',
-      proxyShutterPath: '/shutter/example',
-    };
-    findByName.mockImplementation(() => route);
-
-    // act
-    showShutterPage(route, vm);
-
-    // assert
-    expect(get).not.toHaveBeenCalled();
-    expect(redirectTo).not.toHaveBeenCalled();
-  });
-
-  it('will not redirect to shutter page if error is not 403, even when proxying', () => {
-    // arrange
-    $store.getters['session/isProxying'] = true;
-    $store.getters['errors/showApiError'] = true;
-    $store.state = {
-      errors: {
-        apiErrors: [{ status: 500 }],
-      },
-    };
-
-    const getFunction = jest.fn().mockImplementation(() => 500);
-    get.mockImplementation(() => getFunction);
-
-    const route = {
-      name: 'example',
-      proxyShutterPath: '/shutter/example',
-    };
-    findByName.mockImplementation(() => route);
-
-    // act
-    showShutterPage(route, vm);
-
-    // assert
-    expect(get).toHaveBeenCalledWith('$store.state.errors.apiErrors[0].status');
-    expect(redirectTo).not.toHaveBeenCalled();
+    it('will not redirect', () => {
+      expect(redirectTo).not.toBeCalled();
+    });
   });
 });

@@ -7,7 +7,6 @@ import features.im1Appointments.steps.AvailableAppointmentsSteps
 import features.im1Appointments.steps.YourAppointmentsUISteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
-import pages.ErrorPage
 import pages.navigation.NavBarNative
 
 class AppointmentNavigationStepDefinitions {
@@ -16,8 +15,6 @@ class AppointmentNavigationStepDefinitions {
     lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
-    @Steps
-    lateinit var errorPage: ErrorPage
     @Steps
     lateinit var myAppointmentsUI: YourAppointmentsUISteps
     @Steps
@@ -28,12 +25,6 @@ class AppointmentNavigationStepDefinitions {
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
         myAppointmentsUI.yourAppointmentsPage.
                 locatorMethods.assertNativeElementsLoaded(myAppointmentsUI.yourAppointmentsPage.bookButton)
-    }
-
-    @Given("^I am on the Your Appointments error page$")
-    fun iAmOnMyAppointmentsErrorPage() {
-        navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
-        errorPage.locatorMethods.assertNativeElementsLoaded(errorPage.heading)
     }
 
     @Given("^I am on the Appointment Guidance page$")

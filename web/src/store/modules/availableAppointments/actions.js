@@ -1,42 +1,67 @@
-/* eslint-disable no-unused-vars */
 import {
-  INIT,
-  SELECT,
-  DESELECT,
-  LOAD,
-  CLEAR,
-  FILTER,
-  SET_BOOKING_REASON_NECESSITY,
-  SET_SELECTED_OPTIONS,
+  ADD_ERROR,
   BOOKING_JOURNEY_COMPLETE,
   BOOKING_JOURNEY_START,
+  CLEAR,
+  CLEAR_ERROR,
+  DESELECT,
+  FILTER,
+  INIT,
+  LOAD,
+  SELECT,
+  SET_BOOKING_REASON_NECESSITY,
+  SET_SELECTED_OPTIONS,
 } from './mutation-types';
 
+const createError = ({ response }) => ({
+  status: response.status || '',
+  serviceDeskReference: response.data.serviceDeskReference || '',
+});
+
 export default {
-  init({ commit }) {
-    commit(INIT);
+  async book({ commit }, slot) {
+    const param = {
+      appointmentBookRequest: slot,
+      ignoreError: true,
+    };
+
+    try {
+      await this.app.$http.postV1PatientAppointments(param);
+      commit(BOOKING_JOURNEY_START);
+      if (process.client) {
+        this.dispatch('analytics/satelliteTrack', 'appointment_booked');
+      }
+    } catch (error) {
+      commit(ADD_ERROR, createError(error));
+    }
   },
   clear({ commit }) {
     commit(CLEAR);
   },
-  setSelectedFilters({ commit }, selectedOptions) {
-    if (process.client) {
-      this.dispatch('analytics/trackUserProperty', { key: 'appointmentDateFilterDropdownValue', value: selectedOptions.date });
-    }
-    commit(SET_SELECTED_OPTIONS, selectedOptions);
+  clearError({ commit }) {
+    commit(CLEAR_ERROR);
   },
-  load({ commit }) {
-    return this.app.$http
-      .getV1PatientAppointmentSlots()
-      .then((data) => {
-        commit(LOAD, data);
-      })
-      .catch((error) => {
-        this.dispatch('errors/addApiError', error);
-      });
+  completeBookingJourney({ commit }) {
+    commit(BOOKING_JOURNEY_COMPLETE);
+  },
+  deselect({ commit }) {
+    commit(DESELECT);
   },
   filter({ commit }, selectedOptions) {
     commit(FILTER, selectedOptions);
+  },
+  init({ commit }) {
+    commit(INIT);
+  },
+  async load({ commit }) {
+    try {
+      const data = await this.app.$http.getV1PatientAppointmentSlots({
+        ignoreError: true,
+      });
+      commit(LOAD, data);
+    } catch (error) {
+      commit(ADD_ERROR, createError(error));
+    }
   },
   select({ commit }, slot) {
     commit(SELECT, slot);
@@ -44,24 +69,11 @@ export default {
   setBookingReasonNecessity({ commit }, value) {
     commit(SET_BOOKING_REASON_NECESSITY, value);
   },
-  deselect({ commit }) {
-    commit(DESELECT);
-  },
-  book({ commit }, slot) {
-    const param = {
-      appointmentBookRequest: slot,
-    };
-
-    return this.app.$http
-      .postV1PatientAppointments(param).then(() => {
-        commit(BOOKING_JOURNEY_START);
-        if (process.client) {
-          this.dispatch('analytics/satelliteTrack', 'appointment_booked');
-        }
-      });
-  },
-  completeBookingJourney({ commit }) {
-    commit(BOOKING_JOURNEY_COMPLETE);
+  setSelectedFilters({ commit }, selectedOptions) {
+    if (process.client) {
+      this.dispatch('analytics/trackUserProperty', { key: 'appointmentDateFilterDropdownValue', value: selectedOptions.date });
+    }
+    commit(SET_SELECTED_OPTIONS, selectedOptions);
   },
   startBookingJourney({ commit }) {
     commit(BOOKING_JOURNEY_START);

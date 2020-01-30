@@ -14,6 +14,7 @@ import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.ErrorDialogPage
 import pages.assertDoesElementHaveFocus
 import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
@@ -27,6 +28,8 @@ class AppointmentsConfirmationStepDefinitions {
     lateinit var availableAppointmentsFilterSteps: AvailableAppointmentFilterSteps
     @Steps
     lateinit var availableAppointmentsSteps: AvailableAppointmentsSteps
+
+    private lateinit var errorDialogPage: ErrorDialogPage
 
     @Given("^I have selected an appointment slot to book$")
     fun givenIHaveSelectedAnAppointmentSlotToBook() {
@@ -44,11 +47,6 @@ class AppointmentsConfirmationStepDefinitions {
     @Given("^I have selected a telephone appointment slot to book$")
     fun givenIHaveSelectedATelephoneAppointmentSlotToBook() {
         givenIHaveSelectedAnAppointmentSlotToBook()
-    }
-
-    @When("^I click the error page back button$")
-    fun whenIClickTheErrorPageBackButton() {
-        appointmentsConfirmationSteps.errorPage.button.click()
     }
 
     @When("^I enter symptoms$")
@@ -85,21 +83,12 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
     }
 
-    @Then("^I see appropriate information message after 10 seconds when it times-out on appointment confirmation page$")
-    fun thenISeeAppropriateInformationMessageAfterSecondsWhenItTimesOutOnAppointmentConfirmationPage() {
-        appointmentsConfirmationSteps.checkTimeoutErrorMessage()
-    }
-
     @Then("^I see appropriate information message " +
             "when there is an error sending data on appointment confirmation page$")
     fun thenISeeAppropriateInformationMessageWhenThereIsAnErrorSendingDataOnAppointmentConfirmationPage() {
-        appointmentsConfirmationSteps.appointmentsConfirmation.locatorMethods.waitForNativeStepToComplete()
-        appointmentsConfirmationSteps.checkErrorSendingMessage()
-    }
-
-    @Then("^there should be an action to go back to my appointments$")
-    fun thenThereShouldBeAButtonToGoBackToMyAppointments() {
-        appointmentsConfirmationSteps.checkIfActionIsVisible("Back to your appointments")
+        errorDialogPage.assertPageHeader(appointmentsConfirmationSteps.appointmentsConfirmation.problemHeader)
+                .assertPageTitle(appointmentsConfirmationSteps.appointmentsConfirmation.problemTitle)
+                .assertParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.goBackAndTryAgainProblem)
     }
 
     @Then("^an error is displayed that \"Describe your symptoms\" is mandatory$")
@@ -114,7 +103,20 @@ class AppointmentsConfirmationStepDefinitions {
 
     @Then("^a message is displayed indicating that user has reached maximum appointment limit$")
     fun aMessageIsDisplayedInformingTheAppointmentLimitReached() {
-        appointmentsConfirmationSteps.verifyThatAppointmentLimitReachedErrorDisplayed()
+        errorDialogPage.assertParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.cannotBook)
+                .assertParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.contactGp)
+                .assertParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.cancelNoLongerNeeded)
+                .assertParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.urgentAdvice)
+                .assertPageTitle(appointmentsConfirmationSteps.appointmentsConfirmation.reachedLimitTitle)
+                .assertPageHeader(appointmentsConfirmationSteps.appointmentsConfirmation.reachedLimitTitle)
+
+    }
+
+    @Then("^a message is displayed indicating that the slot has already been taken$")
+    fun aMessageIsDisplayedInformingTheSlotHasAlreadyBeenTaken() {
+        errorDialogPage.assertParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.chooseDifferent)
+                .assertPageHeader(appointmentsConfirmationSteps.appointmentsConfirmation.notAvailableTitle)
+                .assertPageTitle(appointmentsConfirmationSteps.appointmentsConfirmation.notAvailableTitle)
     }
 
     @Then("^I do not see a text input to enter phone number$")

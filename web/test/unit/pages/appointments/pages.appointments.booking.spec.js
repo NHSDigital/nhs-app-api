@@ -1,3 +1,4 @@
+import each from 'jest-each';
 import BookingPage from '@/pages/appointments/booking';
 import { createStore, mount } from '../../helpers';
 
@@ -10,6 +11,9 @@ const createBookingPage = ({ $route, $store, data }) => mount(BookingPage, {
   },
   $store,
   data,
+  methods: {
+    reload: jest.fn(),
+  },
   stubs: {
     'page-title': '<div></div>',
     'nuxt-link': '<a>Back</a>',
@@ -27,6 +31,7 @@ describe('booking.vue', () => {
         slots: [],
         filteredSlots: [],
         hasLoaded: true,
+        error: null,
       },
       myAppointments: {
         disableCancellation: false,
@@ -36,11 +41,10 @@ describe('booking.vue', () => {
       },
     };
     $store = createStore({ state });
+    wrapper = createBookingPage({ $store });
   });
 
   it('will show "no slot message"', () => {
-    wrapper = createBookingPage({ $store });
-
     expect(wrapper.find('.warning').exists()).toBeTruthy();
     expect(wrapper.find('.warning p').text()).toContain('translate_appointments.booking.noAppointmentsAvailable');
   });
@@ -68,10 +72,6 @@ describe('booking.vue', () => {
   });
 
   describe('asyncData', () => {
-    beforeEach(() => {
-      wrapper = createBookingPage({ $store });
-    });
-
     describe('query has filter', () => {
       beforeEach(async () => {
         await wrapper.vm.$options.asyncData({
@@ -167,6 +167,22 @@ describe('booking.vue', () => {
       it('will dispatch `availableAppointments/load`', () => {
         expect($store.dispatch).toBeCalledWith('availableAppointments/load');
       });
+    });
+  });
+
+  describe('errors', () => {
+    beforeEach(() => {
+      wrapper = createBookingPage({ $store });
+    });
+
+    each([
+      403,
+      500,
+      502,
+      504,
+    ]).it('will display an error dialog for status code: %s', (status) => {
+      state.availableAppointments.error = { status };
+      expect(wrapper.find(`#error-dialog-${status}`).exists()).toBe(true);
     });
   });
 });

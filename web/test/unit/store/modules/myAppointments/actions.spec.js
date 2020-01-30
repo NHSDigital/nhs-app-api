@@ -1,88 +1,198 @@
-/* eslint-disable import/extensions */
 import actions from '@/store/modules/myAppointments/actions';
-import { LOADED } from '@/store/modules/myAppointments/mutation-types';
+import { ADD_ERROR, CANCELLING_JOURNEY_START, CLEAR_ERROR, LOADED } from '@/store/modules/myAppointments/mutation-types';
 
-const { load, cancel } = actions;
+describe('actions', () => {
+  let commit;
 
-describe('load', () => {
-  it('will dispatch device/unlockNavBar', async () => {
-    const dispatch = jest.fn();
-    const that = {
-      app: {
-        $http: {
-          getV1PatientAppointments: jest.fn().mockImplementation(() => Promise.resolve()),
+  beforeEach(() => {
+    commit = jest.fn();
+  });
+
+  describe('clearError', () => {
+    beforeEach(() => {
+      actions.clearError({ commit });
+    });
+
+    it('will commit CLEAR_ERROR', () => {
+      expect(commit).toBeCalledWith(CLEAR_ERROR);
+    });
+  });
+
+  describe('load', () => {
+    let that;
+
+    beforeEach(() => {
+      that = {
+        app: {
+          $http: {
+            getV1PatientAppointments: null,
+          },
         },
-      },
-      dispatch,
-    };
+        dispatch: jest.fn(),
+      };
+      process.client = true;
+    });
 
-    await load.call(that, { commit: jest.fn() });
+    describe('on success', () => {
+      const response = 'response data';
 
-    expect(dispatch).toHaveBeenCalledWith('device/unlockNavBar');
-  });
+      beforeEach(async () => {
+        that.app.$http.getV1PatientAppointments = jest.fn().mockResolvedValue(response);
+        await actions.load.call(that, { commit });
+      });
 
-  it('will request the patient appointments from the backend', () => {
-    const that = {
-      app: {
-        $http: {
-          getV1PatientAppointments: jest.fn().mockImplementation(() => Promise.resolve()),
+      it('will request the patient appointments from the backend', () => {
+        expect(that.app.$http.getV1PatientAppointments).toBeCalledWith({
+          ignoreError: true,
+        });
+      });
+
+      it('will commit LOADED', () => {
+        expect(commit).toBeCalledWith(LOADED, response);
+      });
+
+      it('will dispatch device/unlockNavBar', async () => {
+        expect(that.dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+      });
+
+      it('will not commit ADD_ERROR', () => {
+        expect(commit).not.toBeCalledWith(ADD_ERROR, jasmine.anything());
+      });
+    });
+
+    describe('on failure', () => {
+      const error = {
+        response: {
+          status: 500,
+          data: {
+            serviceDeskReference: 'xxx',
+          },
         },
-      },
-      dispatch: jest.fn(),
-    };
+      };
 
-    return load
-      .call(that, { commit: jest.fn() })
-      .then(() => expect(that.app.$http.getV1PatientAppointments).toBeCalled());
+      beforeEach(async () => {
+        that.app.$http.getV1PatientAppointments = jest.fn().mockRejectedValue(error);
+        await actions.load.call(that, { commit });
+      });
+
+      it('will request the patient appointments from the backend', () => {
+        expect(that.app.$http.getV1PatientAppointments).toBeCalledWith({
+          ignoreError: true,
+        });
+      });
+
+      it('will commit ADD_ERROR', () => {
+        expect(commit).toBeCalledWith(ADD_ERROR, {
+          status: 500,
+          serviceDeskReference: 'xxx',
+        });
+      });
+
+      it('will dispatch device/unlockNavBar', async () => {
+        expect(that.dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+      });
+
+      it('will not commit LOADED', () => {
+        expect(commit).not.toBeCalledWith(LOADED, jasmine.anything());
+      });
+    });
   });
 
-  it('will call commit with the data returned from the HTTP call', () => {
-    const expected = {
-      data: { foo: 'bar' },
-    };
+  describe('cancel', () => {
+    let data;
+    let that;
 
-    const that = {
-      app: {
-        $http: {
-          getV1PatientAppointments: () => Promise.resolve(expected),
+    beforeEach(() => {
+      data = { foo: 'bar' };
+      that = {
+        app: {
+          $http: {
+            deleteV1PatientAppointments: null,
+          },
         },
-      },
-      dispatch: jest.fn(),
-    };
+        dispatch: jest.fn(),
+      };
+      process.client = true;
+    });
 
-    const commit = jest.fn();
+    describe('on success', () => {
+      beforeEach(async () => {
+        that.app.$http.deleteV1PatientAppointments = jest.fn().mockResolvedValue();
+        await actions.cancel.call(that, { commit }, data);
+      });
 
-    return load
-      .call(that, { commit })
-      .then(() => expect(commit).toBeCalledWith(LOADED, expected));
-  });
-});
+      it('will call to delete the patients appointment from the backend', () => {
+        expect(that.app.$http.deleteV1PatientAppointments)
+          .toBeCalledWith({ appointmentCancelRequest: data, ignoreError: true });
+      });
 
-describe('cancel', () => {
-  let that;
-  let data;
+      it('will commit CANCELLING_JOURNEY_START', () => {
+        expect(commit).toBeCalledWith(CANCELLING_JOURNEY_START);
+      });
 
-  beforeEach(async () => {
-    that = {
-      app: {
-        $http: {
-          deleteV1PatientAppointments: jest.fn().mockResolvedValue(),
+      it('will not commit ADD_ERROR', () => {
+        expect(commit).not.toBeCalledWith(ADD_ERROR, jasmine.anything());
+      });
+
+      describe('on client', () => {
+        beforeEach(async () => {
+          that.dispatch = jest.fn();
+          process.client = true;
+          await actions.cancel.call(that, { commit }, data);
+        });
+
+        it('will dispatch `analytics/satelliteTrack``', () => {
+          expect(that.dispatch).toBeCalledWith('analytics/satelliteTrack', 'appointment_cancelled');
+        });
+      });
+
+      describe('on server', () => {
+        beforeEach(async () => {
+          that.dispatch = jest.fn();
+          process.client = false;
+          await actions.cancel.call(that, { commit }, data);
+        });
+
+        it('will not dispatch `analytics/satelliteTrack`', () => {
+          expect(that.dispatch).not.toBeCalled();
+        });
+      });
+    });
+
+    describe('on exception', () => {
+      const errorResponse = {
+        response: {
+          status: 500,
+          data: {
+            serviceDeskReference: 'foo',
+          },
         },
-      },
-      dispatch: jest.fn(),
-    };
-    data = { foo: 'bar' };
-    process.client = true;
-    const commit = jest.fn();
-    await cancel.call(that, { commit }, data);
-  });
+      };
 
-  it('will delete the patients appointment from the backend', () => {
-    expect(that.app.$http.deleteV1PatientAppointments)
-      .toBeCalledWith({ appointmentCancelRequest: data });
-  });
+      beforeEach(async () => {
+        that.app.$http.deleteV1PatientAppointments = jest.fn().mockRejectedValue(errorResponse);
+        await actions.cancel.call(that, { commit }, data);
+      });
 
-  it('will dispatch appointment_cancelled', () => {
-    expect(that.dispatch).toBeCalledWith('analytics/satelliteTrack', 'appointment_cancelled');
+      it('will call to delete the patients appointment from the backend', () => {
+        expect(that.app.$http.deleteV1PatientAppointments)
+          .toBeCalledWith({ appointmentCancelRequest: data, ignoreError: true });
+      });
+
+      it('will add error', () => {
+        expect(commit).toBeCalledWith(ADD_ERROR, {
+          status: 500,
+          serviceDeskReference: 'foo',
+        });
+      });
+
+      it('will not commit CANCELLING_JOURNEY_START', () => {
+        expect(commit).not.toBeCalledWith(CANCELLING_JOURNEY_START);
+      });
+
+      it('will not dispatch `analytics/satelliteTrack`', () => {
+        expect(that.dispatch).not.toBeCalled();
+      });
+    });
   });
 });

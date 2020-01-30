@@ -1,101 +1,139 @@
 <template>
   <div v-if="showTemplate">
-    <form :action="bookingPath">
-      <input :name="noJsInputName" :value="JSON.stringify(noJsData)" type="hidden">
-      <ul :class="$style['sr-only']" role="list"
-          aria-live="polite" aria-relevant="additions" aria-atomic="false">
-        <li v-for="(text, index) in availableAppointmentsScreenReaderMessage" :key="index">
-          <span :aria-hidden="availableAppointmentsScreenReaderMessage.length !== (index + 1)">
-            {{ text }}
-          </span>
-        </li>
-      </ul>
+    <div v-if="error">
+      <error-container v-if="error.status===403"
+                       :id="generateErrorId()"
+                       override-style="plain"
+                       aria-live="polite">
+        <error-title title="appointments.error.title.unavailable"/>
+        <error-paragraph from="appointments.error.403.line1"/>
+        <error-paragraph from="appointments.error.403.line2"/>
+      </error-container>
+      <error-container v-else-if="error.status===502 || error.status===500"
+                       :id="generateErrorId()">
+        <error-title title="appointments.error.title.problemLoading"/>
+        <error-paragraph from="appointments.error.message.goBackAndTryContact"
+                         :variable="error.serviceDeskReference"/>
+        <error-paragraph from="appointments.error.message.ifItContinues"/>
+        <error-link from="generic.contactUsButton.text"
+                    :action="contactUsUrl"
+                    target="_blank"/>
+        <error-link from="generic.backButton.text"
+                    :action="appointmentsPath"
+                    :desktop-only="true"/>
+      </error-container>
+      <error-container v-else-if="error.status===504" :id="generateErrorId()">
+        <error-title title="appointments.error.title.problemLoading"/>
+        <error-paragraph from="appointments.error.message.tryAgainNow"
+                         :variable="error.serviceDeskReference"/>
+        <error-paragraph from="appointments.error.message.ifItContinues"/>
+        <error-button from="generic.tryAgainButton.text" @click="reload" />
+        <error-link from="generic.contactUsButton.text"
+                    :action="contactUsUrl"
+                    target="_blank" />
+        <error-link from="generic.backButton.text"
+                    :action="appointmentsPath"
+                    :desktop-only="true" />
+      </error-container>
+    </div>
+    <div v-else>
+      <form :action="bookingPath">
+        <input :name="noJsInputName" :value="JSON.stringify(noJsData)" type="hidden">
+        <ul :class="$style['sr-only']" role="list"
+            aria-live="polite" aria-relevant="additions" aria-atomic="false">
+          <li v-for="(text, index) in availableAppointmentsScreenReaderMessage" :key="index">
+            <span :aria-hidden="availableAppointmentsScreenReaderMessage.length !== (index + 1)">
+              {{ text }}
+            </span>
+          </li>
+        </ul>
 
-      <div v-if="noAvailableAppointments" class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full">
-          <message-dialog message-type="warning">
-            <message-text :is-header="true">
-              {{ $t('appointments.booking.noAppointmentsAvailable.title') }}
-            </message-text>
-            <message-text>
-              {{ $t('appointments.booking.noAppointmentsAvailable.line1') }}
-            </message-text>
-            <message-text>
-              {{ $t('appointments.booking.noAppointmentsAvailable.line2') }}
-            </message-text>
-          </message-dialog>
-        </div>
-      </div>
-
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full">
-          <filters
-            v-if="availableAppointments"
-            v-model="selectedOptions"
-            :options="filtersOptions"
-            :guidance-msg="bookingGuidanceMsg"/>
-        </div>
-      </div>
-
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
-          <noscript inline-template>
-            <button class="nhsuk-button">
-            {{ $t('appointments.booking.nojs.findButton') }}
-            </button>
-          </noscript>
-        </div>
-      </div>
-
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full">
-          <slot-list ref="slot_list" :available-slots="availableSlots" />
-        </div>
-      </div>
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full">
-          <div ref="noMatching" tabindex="-1">
-            <message-dialog v-if="showNoMatchingWarning"
-                            :icon-text="$t('appointments.booking.adjustSearch.title')"
-                            message-type="warning">
-              <message-text>
-                {{ $t('appointments.booking.adjustSearch.line1') }}
+        <div v-if="noAvailableAppointments" class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <message-dialog message-type="warning">
+              <message-text :is-header="true">
+                {{ $t('appointments.booking.noAppointmentsAvailable.title') }}
               </message-text>
               <message-text>
-                {{ $t('appointments.booking.adjustSearch.line2') }}
+                {{ $t('appointments.booking.noAppointmentsAvailable.line1') }}
+              </message-text>
+              <message-text>
+                {{ $t('appointments.booking.noAppointmentsAvailable.line2') }}
               </message-text>
             </message-dialog>
           </div>
         </div>
-      </div>
-    </form>
 
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <filters
+              v-if="availableAppointments"
+              v-model="selectedOptions"
+              :options="filtersOptions"
+              :guidance-msg="bookingGuidanceMsg"/>
+          </div>
+        </div>
 
-        <desktopGenericBackLink
-          v-if="loadComplete && !$store.state.device.isNativeApp"
-          :path="appointmentsPath"
-          :button-text="'appointments.booking.desktopBackButtonText'"
-          @clickAndPrevent="goBack"/>
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
+            <noscript inline-template>
+              <button class="nhsuk-button">
+              {{ $t('appointments.booking.nojs.findButton') }}
+              </button>
+            </noscript>
+          </div>
+        </div>
+
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <slot-list ref="slot_list" :available-slots="availableSlots" />
+          </div>
+        </div>
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <div ref="noMatching" tabindex="-1">
+              <message-dialog v-if="showNoMatchingWarning"
+                              :icon-text="$t('appointments.booking.adjustSearch.title')"
+                              message-type="warning">
+                <message-text>
+                  {{ $t('appointments.booking.adjustSearch.line1') }}
+                </message-text>
+                <message-text>
+                  {{ $t('appointments.booking.adjustSearch.line2') }}
+                </message-text>
+              </message-dialog>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div v-if="hasLoaded && !$store.state.device.isNativeApp" class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <desktop-generic-back-link :path="appointmentsPath" @clickAndPrevent="goBack"/>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { APPOINTMENT_BOOKING, APPOINTMENTS } from '@/lib/routes';
-import { noJsParameterName } from '@/lib/noJs';
-import { redirectTo } from '@/lib/utils';
-import get from 'lodash/fp/get';
-import isEmpty from 'lodash/fp/isEmpty';
 import qs from 'qs';
+import VueScrollTo from 'vue-scrollto';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import ErrorButton from '@/components/errors/ErrorButton';
+import ErrorContainer from '@/components/errors/ErrorContainer';
+import ErrorLink from '@/components/errors/ErrorLink';
+import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
+import ErrorParagraph from '@/components/errors/ErrorParagraph';
+import ErrorTitle from '@/components/errors/ErrorTitle';
+import Filters from '@/components/appointments/booking/Filters';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
-import VueScrollTo from 'vue-scrollto';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import { APPOINTMENT_BOOKING, APPOINTMENTS } from '@/lib/routes';
+import { get, isEmpty } from 'lodash/fp';
+import { noJsParameterName } from '@/lib/noJs';
+import { redirectTo } from '@/lib/utils';
 
 const FILTER_PARAMETERS = [
   'clinician',
@@ -106,16 +144,8 @@ const FILTER_PARAMETERS = [
 
 const containsFilter = parameters => (!parameters
   ? false
-  : Object
-    .keys(parameters)
+  : Object.keys(parameters)
     .some(x => FILTER_PARAMETERS.includes(x)));
-
-const getBookingGuidance = get('state.availableAppointments.bookingGuidance');
-const getFilteredSlots = get('state.availableAppointments.filteredSlots');
-const getFiltersOptions = get('state.availableAppointments.filtersOptions');
-const getSelectedOptions = get('state.availableAppointments.selectedOptions');
-const getSlots = get('state.availableAppointments.slots');
-const hasLoaded = get('state.availableAppointments.hasLoaded');
 
 const load = async ({ $store }, query) => {
   $store.dispatch('availableAppointments/init');
@@ -131,62 +161,47 @@ export default {
   layout: 'nhsuk-layout',
   components: {
     DesktopGenericBackLink,
+    ErrorButton,
+    ErrorContainer,
+    ErrorLink,
+    ErrorParagraph,
+    ErrorTitle,
+    Filters,
     MessageDialog,
     MessageText,
-    Filters,
     SlotList,
   },
+  mixins: [ErrorPageMixin],
   data() {
     return {
       appointmentsPath: APPOINTMENTS.path,
       availableAppointmentsScreenReaderMessage: [],
+      bookingPath: APPOINTMENT_BOOKING.path,
+      contactUsUrl: this.$env.CONTACT_US_URL,
       filtered: false,
     };
   },
   computed: {
-    selectedOptions: {
-      get() {
-        return getSelectedOptions(this.$store);
-      },
-      set(val) {
-        this.filterSlots(val);
-      },
-    },
-    showNoMatchingWarning() {
-      return !!(this.filtered &&
-             get('selectedOptions.location')(this) &&
-             get('selectedOptions.type')(this) &&
-             isEmpty(getFilteredSlots(this.$store)));
-    },
-    filtersOptions() {
-      return getFiltersOptions(this.$store);
-    },
-    bookingGuidanceMsg() {
-      return getBookingGuidance(this.$store);
+    availableAppointments() {
+      return this.hasLoaded && !isEmpty(this.slots);
     },
     availableSlots() {
-      return getFilteredSlots(this.$store);
+      return get('state.availableAppointments.filteredSlots')(this.$store);
+    },
+    bookingGuidanceMsg() {
+      return get('state.availableAppointments.bookingGuidance')(this.$store);
+    },
+    error() {
+      return this.$store.state.availableAppointments.error;
+    },
+    filtersOptions() {
+      return get('state.availableAppointments.filtersOptions')(this.$store);
+    },
+    hasLoaded() {
+      return get('state.availableAppointments.hasLoaded')(this.$store);
     },
     noAvailableAppointments() {
-      const hasNoSlots = isEmpty(getSlots(this.$store));
-      return hasLoaded(this.$store) && hasNoSlots;
-    },
-    availableAppointments() {
-      const hasSlots = !isEmpty(getSlots(this.$store));
-      return hasLoaded(this.$store) && hasSlots;
-    },
-    loadComplete() {
-      return hasLoaded(this.$store);
-    },
-    numberOfAvailableAppointments() {
-      let count = 0;
-      this.availableSlots.forEach((value) => {
-        count += value[1].length;
-      });
-      return count;
-    },
-    bookingPath() {
-      return APPOINTMENT_BOOKING.path;
+      return this.hasLoaded && isEmpty(this.slots);
     },
     noJsData() {
       return {
@@ -197,6 +212,30 @@ export default {
     },
     noJsInputName() {
       return noJsParameterName;
+    },
+    numberOfAvailableAppointments() {
+      let count = 0;
+      this.availableSlots.forEach((value) => {
+        count += value[1].length;
+      });
+      return count;
+    },
+    selectedOptions: {
+      get() {
+        return get('state.availableAppointments.selectedOptions')(this.$store);
+      },
+      set(val) {
+        this.filterSlots(val);
+      },
+    },
+    showNoMatchingWarning() {
+      return !!(this.filtered &&
+             get('selectedOptions.location')(this) &&
+             get('selectedOptions.type')(this) &&
+             isEmpty(this.availableSlots));
+    },
+    slots() {
+      return get('state.availableAppointments.slots')(this.$store);
     },
   },
   watch: {
@@ -212,6 +251,12 @@ export default {
     return { filtered: containsFilter(query) };
   },
   methods: {
+    generateErrorId() {
+      return `error-dialog-${this.error.status}`;
+    },
+    goBack() {
+      redirectTo(this, APPOINTMENTS.path);
+    },
     filterSlots(val) {
       this.$store.dispatch('availableAppointments/setSelectedFilters', val);
       this.$store.dispatch('availableAppointments/filter');
@@ -248,9 +293,6 @@ export default {
       };
 
       this.$store.dispatch('analytics/satelliteTrack', trackEvent, objectToTrack);
-    },
-    goBack() {
-      redirectTo(this, APPOINTMENTS.path);
     },
   },
 };

@@ -23,8 +23,7 @@ export default {
   selectSender({ commit }, sender) {
     commit(SET_SENDER, sender);
   },
-  // eslint-disable-next-line no-unused-vars
-  markAsRead({ commit }, messageId) {
+  markAsRead(_, messageId) {
     const request = {
       messageId,
       patchMessageRequest: [{

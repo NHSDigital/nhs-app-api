@@ -14,7 +14,6 @@ import pages.sharedElements.ExpandElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking")
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
-
     private val dateHeadingXpath = "//*[@data-purpose='appointment-day-heading']"
     private val dateHeadingByTextXpathFormat = "$dateHeadingXpath$containsTextXpathSubstring"
     private val timeSlotXpathFormat = "$dateHeadingXpath%s/following-sibling::ul/li/a" +

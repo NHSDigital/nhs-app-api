@@ -12,7 +12,14 @@ import pages.isSelected
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/confirmation")
 open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
-
+    val notAvailableTitle = "Sorry, the appointment is no longer available"
+    val chooseDifferent = "Please choose a different appointment."
+    val reachedLimitTitle = "Sorry, you have reached your appointment limit"
+    val cannotBook = "You cannot book any more appointments right now."
+    val contactGp = "Contact your GP surgery if you still need to book an appointment."
+    val cancelNoLongerNeeded = "You can go back to see what you have already booked and cancel any appointments " +
+            "that you may no longer need."
+    val urgentAdvice = "For urgent medical advice, go to 111.nhs.uk or call 111."
     private val inputXpathPrefix = "//input"
     private val typeRadioXpathPart = "@type='radio'"
     private val inputTypeRadioXpathPrefix = "$inputXpathPrefix[$typeRadioXpathPart"

@@ -34,8 +34,7 @@ open class CancelAppointmentSteps {
     @Steps
     lateinit var navigation: NavigationSteps
     lateinit var webHeader: WebHeader
-
-    private lateinit var cancelAppointmentPage: CancelAppointmentPage
+    lateinit var cancelAppointmentPage: CancelAppointmentPage
 
     @Step
     fun verifyWeAreOnTheCancelAppointmentScreen() {

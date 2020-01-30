@@ -1,58 +1,71 @@
-/* eslint-disable no-unused-vars */
+import get from 'lodash/fp/get';
 import {
-  CLEAR,
-  LOADED,
-  INIT,
-  SELECT,
-  CLEAR_SELECTED_APPOINTMENT,
-  CLEAR_APPOINTMENTS,
+  ADD_ERROR,
   CANCELLING_JOURNEY_COMPLETE,
+  CANCELLING_JOURNEY_START,
+  CLEAR,
+  CLEAR_APPOINTMENTS,
+  CLEAR_ERROR,
+  CLEAR_SELECTED_APPOINTMENT,
+  INIT,
+  LOADED,
+  SELECT,
 } from './mutation-types';
 
+const createError = ({ response }) => ({
+  status: response.status || '',
+  serviceDeskReference: get('serviceDeskReference')(response.data) || '',
+});
+
 export default {
-  load({ commit }) {
-    this.dispatch('myAppointments/init');
-    return this.app.$http
-      .getV1PatientAppointments()
-      .then((data) => {
-        commit(LOADED, data);
-        return true;
-      })
-      .catch(() => false)
-      .finally(() => {
-        this.dispatch('device/unlockNavBar');
-      });
-  },
-  init({ commit }) {
-    commit(INIT);
+  async cancel({ commit }, data) {
+    const param = {
+      appointmentCancelRequest: data,
+      ignoreError: true,
+    };
+
+    try {
+      await this.app.$http.deleteV1PatientAppointments(param);
+      commit(CANCELLING_JOURNEY_START);
+      if (process.client) {
+        this.dispatch('analytics/satelliteTrack', 'appointment_cancelled');
+      }
+    } catch (error) {
+      commit(ADD_ERROR, createError(error));
+    }
   },
   clear({ commit }) {
     commit(CLEAR);
   },
-  select({ commit }, appointment) {
-    commit(SELECT, appointment);
+  clearAppointments({ commit }) {
+    commit(CLEAR_APPOINTMENTS);
+  },
+  clearError({ commit }) {
+    commit(CLEAR_ERROR);
   },
   clearSelectedAppointment({ commit }) {
     commit(CLEAR_SELECTED_APPOINTMENT);
   },
-  clearAppointments({ commit }) {
-    commit(CLEAR_APPOINTMENTS);
-  },
-  cancel({ commit }, data) {
-    /* eslint-disable no-unused-vars */
-    const param = {
-      appointmentCancelRequest: data,
-    };
-
-    return this.app.$http
-      .deleteV1PatientAppointments(param).then(() => {
-        commit('CANCELLING_JOURNEY_START');
-        if (process.client) {
-          this.dispatch('analytics/satelliteTrack', 'appointment_cancelled');
-        }
-      });
-  },
   completeCancellingJourney({ commit }) {
     commit(CANCELLING_JOURNEY_COMPLETE);
+  },
+  init({ commit }) {
+    commit(INIT);
+  },
+  async load({ commit }) {
+    this.dispatch('myAppointments/init');
+    try {
+      const data = await this.app.$http.getV1PatientAppointments({
+        ignoreError: true,
+      });
+      commit(LOADED, data);
+    } catch (error) {
+      commit(ADD_ERROR, createError(error));
+    } finally {
+      this.dispatch('device/unlockNavBar');
+    }
+  },
+  select({ commit }, appointment) {
+    commit(SELECT, appointment);
   },
 };
