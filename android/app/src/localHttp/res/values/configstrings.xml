@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NHS App Local HTTP</string>
+    <string name="baseHost">android.local.bitraft.io</string>
+    <string name="baseURL">http://android.local.bitraft.io:3000/</string>
+    <string name="baseApiURL">http://android.local.bitraft.io:8089/v1/</string>
+    <string name="dataPreferencesBaseUrl">http://ndopapp-int1.thunderbird.service.nhs.uk/</string>
+</resources>

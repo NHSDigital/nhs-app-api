@@ -74,10 +74,15 @@ android {
             manifestPlaceholders = [appName: "NHS App Debug"]
             testCoverageEnabled = true
         }
-        local {
+        localHttp {
             initWith debug
             applicationIdSuffix ".local"
-            manifestPlaceholders = [appName: "NHS App Local"]
+            manifestPlaceholders = [appName: "NHS App Local HTTP"]
+        }
+        localHttps {
+            initWith debug
+            applicationIdSuffix ".local"
+            manifestPlaceholders = [appName: "NHS App Local HTTPS"]
         }
         scratch1 {
             initWith debug

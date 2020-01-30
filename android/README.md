@@ -1,64 +1,46 @@
 # NHS Online Android
 
-## Pre-Requisites
+[Setup instructions on Confluence](https://confluence.service.nhs.uk/display/NO/Android)
 
-The web app is currently running and accessible via localhost. If you are planning to use an emulator on windows, this must be done using [docker-toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/) and the port forwarding script found in the [nhsonline-dev-utils repo](https://git.nhschoices.net/nhsonline/nhsonline-dev-utils).
+## FIDO Client Library
 
-### FIDO Client
+The Fido client library is pulled in from a maven repository hosted within Azure Artifacts. If you get access denied errors ensure you have followed the [instructions to setup maven artifacts development access](https://confluence.service.nhs.uk/display/NO/Tech+and+Tooling+-+Azure+DevOps+-+Maven+Artifacts).
 
-The Fido Client is pulled in from a maven repository hosted within Azure Artifacts. If you get access denied errors ensure you have followed the [instructions to setup maven artifacts development access](https://confluence.service.nhs.uk/display/NO/Tech+and+Tooling+-+Azure+DevOps+-+Maven+Artifacts).
+## Running in Emulator
 
-### Backend-Worker
+The emulator uses the IP address 10.0.2.2 to access the host machine. To support this a DNS entry `android.local.bitraft.io` has been created pointing at 10.0.0.2.
 
-**WARNING**: This is out of date
+1. Start the web and backend configured for android app
 
-In the docker-compose.yml file, set the NHS_WEB_APP_BASE_URL variable to the following:
-    http://10.0.2.2:3000/
-Run the backend-worker locally using Docker, navigate to the backend workers directory and run the following commands:
-    'docker-compose build'
-    'docker-compose up'
-The backend-worker should now be running on docker
-This can be confirmed by performing the
-    'docker ps'
-To bring down all running processes on docker use
-    'docker-compose down'
+   ```bash
+   make run-android
+   ```
 
-### Mobile-Web
+   or
 
-Set the variables as shown in the env.js file:
-    API_HOST = 'http://10.0.2.2:8082'
-    CID_REDIRECT_URI = 'http://10.0.2.2:3000/auth-return'
-To run the mobile web project locally, ensure you have done an
-    'npm install'
-After that, the project can be run using
-    'npm run dev'
+   ```bash
+   make run-android-https
+   ```
 
-## Building
+2. Set the Active Build Variant in Android Studio to be `localHttp` or `localHttps` (to match the `make run-` comand above)
 
-Set the variables in the configstrings.xml to the following:
-    <string name="baseScheme">http</string>
-    <string name="baseHost">10.0.2.2</string>
-    <string name="basePort">3000</string>
-    <string name="authRedirectPath">/auth-return</string>
-    <string name="baseURL">http://10.0.2.2:3000/</string>
-and in configstrings.xml(debug)
-    <string name="baseURL">http://10.0.2.2:3000/</string>
-In the AndroidManifest.xml file ensure that the <data> section looks like the following:
-    <data
-        android:scheme="@string/baseScheme"
-        android:host="@string/baseHost"
-        android:pathPrefix="@string/authRedirectPath"
-        android:port="@string/basePort"/>
+3. Select (or create) an virtual device.
 
-Build the app using Android Studio.  The app acts as a shell for the web app.
+   If running with HTTPS ensure you have installed your local dev certificate onto the device:
 
-See the page on Confluence for more detail.
+   1. Drag and drop \$HOME/.nhsonline/local-development-certificate/local-development-https.crt into the emulator
+   2. Navigate to Settings \> Security and Location \> Encryption and Credentials \> Install from SD Card
+   3. Select the certificate that was just copied to the phone \(in downloads\)
+   4. Give the certificate a name, say "LocalDevCert"
+   5. Follow the instructions to set a pin \(a fingerprint is not needed\)
+
+4. Click the green play button
 
 ## Debugging on device with mocks
 
 Connect to a network which doesn't prevent other devices on the same network from accessing its public IP e.g. a mobile hotspot (many work networks are restricted and won't allow you to do this).
 
-Obtain the IP address of the machine you are running the application from (using ifconfig).
+Obtain the IP address of the machine you are running the application from (using `ifconfig`/`ipconfig`).
 
 Update all IP address in the following files (replace 10.0.2.2 with your IP address).
 

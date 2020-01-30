@@ -34,7 +34,7 @@ services:
     restart: always
     image: nginx:alpine
     volumes:
-      - ./backendworker/nginx:/etc/nginx/conf.d
+      - ./docker/nginx:/etc/nginx/conf.d
     depends_on:
       - log.local.bitraft.io
       - messages.local.bitraft.io

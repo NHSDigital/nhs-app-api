@@ -3,5 +3,5 @@ version: "3.4"
 services:
 
   web.local.bitraft.io:
-    environment:
-      BIOMETRICS_ENABLED: 'true'
+    env_file:
+      - ./docker/android/env/web.env

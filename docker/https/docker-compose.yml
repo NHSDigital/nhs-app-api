@@ -1,0 +1,17 @@
+version: "3.4"
+
+services:
+
+  api.local.bitraft.io:
+    volumes:
+      - ./docker/https/nginx:/etc/nginx/conf.d
+      - ~/.nhsonline/local-development-certificate:/etc/ssl
+    ports:
+      - "443:443"
+      - "444:444"
+    depends_on:
+      - web.local.bitraft.io
+
+  web.local.bitraft.io:
+    env_file:
+      - ./docker/https/env/web.env

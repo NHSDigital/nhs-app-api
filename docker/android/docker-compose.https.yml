@@ -1,0 +1,7 @@
+version: "3.4"
+
+services:
+
+  web.local.bitraft.io:
+    env_file:
+      - ./docker/android/env/web_https.env

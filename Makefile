@@ -7,7 +7,7 @@ define AdditionalHelp
 @echo '    Set to "host" to route all traffic for that container to the host machine so the process can be run and debugged on the host'
 endef
 
-.PHONY: build test clean localbdd run run-biometrics run-https run-android run-android-biometrics run-localbdd run-smoketests run-deps validate_local_secrets validate_local_images
+SSH_CERT := ~/.nhsonline/local-development-certificate/local-development-https.crt
 
 build:	## Build everything (run make from a subdirectory for more granularity)
 	$(MAKE) -C backendworker build
@@ -25,23 +25,25 @@ localbdd: build	run-localbdd	## Build everything and start containers ready to B
 twistlock:	# Run twistlock security scan
 	./build/run_twistlock_security_scan.sh
 
+.PHONY: build test clean localbdd twistlock
+
 -include build/expand_run_options_docker_images.make
 
 $(eval $(call expand_run_options_docker_images,run))
 run: run-deps	## Run in docker
 	./build/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml
 
-run-biometrics:	## Run in docker with biometrics
-	$(MAKE) -C web run-biometrics
+$(eval $(call expand_run_options_docker_images,run-https))
+run-https: $(SSH_CERT)	## Run in docker with https
+	./build/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/https/docker-compose.yml
 
-run-https:	## Run in docker with https
-	$(MAKE) -C web run-https
+$(eval $(call expand_run_options_docker_images,run-android))
+run-android:	## Run in docker for android
+	./build/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/android/docker-compose.yml
 
-run-android:	## Run in docker with https for android
-	$(MAKE) -C web run-android
-
-run-android-biometrics:	## Run in docker for android with biometrics
-	$(MAKE) -C web run-android-biometrics
+$(eval $(call expand_run_options_docker_images,run-android-https))
+run-android-https: $(SSH_CERT)	## Run in docker with https for android
+	./build/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/https/docker-compose.yml docker/android/docker-compose.yml docker/android/docker-compose.https.yml
 
 run-localbdd:	## Run in docker with stubs so BDD tests can be run locally
 	$(MAKE) -C bddtests run-local
@@ -57,5 +59,10 @@ validate_local_secrets:
 $(eval $(call expand_run_options_docker_images,validate_local_images))
 validate_local_images:
 	./build/validate_local_images.sh
+
+$(SSH_CERT):
+	./build/create-certificate.sh
+
+.PHONY: run run-https run-android run-android-https run-localbdd run-bdd run-deps validate_local_secrets validate_local_images
 
 -include build/util.make
