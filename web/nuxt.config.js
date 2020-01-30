@@ -114,7 +114,8 @@ const config = {
     COOKIES_POLICY_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/',
     COOKIES_BANNER_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy#manage',
     COOKIES_BANNER_EXPIRY_DAYS: 365,
-
+    // Contact us
+    CONTACT_US_URL: 'https://www.nhs.uk/contact-us/nhs-app-contact-us',
     OPEN_SOURCE_LICENCES_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/',
     HELP_AND_SUPPORT_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/',
     ACCESSIBILITY_STATEMENT: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/',

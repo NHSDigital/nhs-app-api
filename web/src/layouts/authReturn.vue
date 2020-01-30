@@ -62,6 +62,7 @@
                           from="auth_return.errors.464.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
+                          :query-param="contactUsParam"
                         />
                       </div>
                     </api-error-container>
@@ -89,6 +90,7 @@
                           from="auth_return.errors.400.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
+                          :query-param="contactUsParam"
                         />
                         <api-error-button
                           from="auth_return.errors.400.backButtonText"
@@ -113,6 +115,7 @@
                           from="auth_return.errors.403.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
+                          :query-param="contactUsParam"
                         />
                         <api-error-button
                           from="auth_return.errors.403.backButtonText"
@@ -163,6 +166,7 @@
                           from="auth_return.errors.502.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
+                          :query-param="contactUsParam"
                         />
                         <api-error-button
                           from="auth_return.errors.502.backButtonText"
@@ -190,6 +194,7 @@
                           from="auth_return.errors.504.contactUsButtonText"
                           :action="contactUsUrl"
                           :target="target"
+                          :query-param="contactUsParam"
                         />
                         <api-error-button
                           from="auth_return.errors.504.backButtonText"
@@ -263,12 +268,12 @@ import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import { LOGIN } from '@/lib/routes';
 import NativeVersionSetup from '../services/nativeVersionSetup';
-import SessionErrorApiError from '@/components/errors/sesssion-errors/SessionErrorApiError';
-import ApiErrorContainer from '@/components/errors/sesssion-errors/ApiErrorContainer';
-import ApiErrorTitle from '@/components/errors/sesssion-errors/ApiErrorTitle';
-import ApiErrorParagraph from '@/components/errors/sesssion-errors/ApiErrorParagraph';
-import ApiErrorButton from '@/components/errors/sesssion-errors/ApiErrorButton';
-import ApiErrorUnorderedList from '@/components/errors/sesssion-errors/ApiErrorUnorderedList';
+import SessionErrorApiError from '@/components/errors/session-errors/SessionErrorApiError';
+import ApiErrorContainer from '@/components/errors/session-errors/ApiErrorContainer';
+import ApiErrorTitle from '@/components/errors/session-errors/ApiErrorTitle';
+import ApiErrorParagraph from '@/components/errors/session-errors/ApiErrorParagraph';
+import ApiErrorButton from '@/components/errors/session-errors/ApiErrorButton';
+import ApiErrorUnorderedList from '@/components/errors/session-errors/ApiErrorUnorderedList';
 import MessageDialog from '@/components/widgets/MessageDialog';
 
 export default {
@@ -305,11 +310,17 @@ export default {
         label: (this.$store.state.errors.apiErrors[0] || {}).serviceDeskReference || '',
       };
     },
+    contactUsParam() {
+      return {
+        param: 'errorcode',
+        value: this.serviceDeskReference.text,
+      };
+    },
     target() {
       return '_blank';
     },
     contactUsUrl() {
-      return 'https://www.nhs.uk/contact-us/nhs-app-contact-us';
+      return this.$env.CONTACT_US_URL;
     },
     errorStatusCode() {
       return this.statusCode;

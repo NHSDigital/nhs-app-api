@@ -34,13 +34,24 @@ export default {
       type: String,
       default: '',
     },
+    queryParam: {
+      type: Object,
+      default: () => ({
+        param: undefined,
+        value: undefined,
+      }),
+    },
   },
   computed: {
     buttonText() {
       return this.getText(this.from);
     },
     retryUrl() {
-      return this.action;
+      let actionLink = this.action;
+      if (this.queryParam.param && this.queryParam.value) {
+        actionLink += `?${this.queryParam.param}=${this.queryParam.value}`;
+      }
+      return actionLink;
     },
   },
   methods: {
