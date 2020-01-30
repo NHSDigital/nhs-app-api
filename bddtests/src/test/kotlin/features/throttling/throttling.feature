@@ -1,5 +1,6 @@
 @throttling
-@techdebt @NHSO-5824
+@tech-debt @NHSO-5824
+@pending
 Feature: Throttling
 #To be deleted as part of @techdebt @NHSO-5824
   Background:
@@ -12,6 +13,7 @@ Feature: Throttling
     Then I see the GP Search Results Page with 2 search results
     When I select a practice which is not participating in beta
     Then I see the Practice Not Participating page
+
 
   Scenario: A user is redirected to an external login page after continuing through the participating practice journey
     Given there are 2 GP Practices for my search criteria
@@ -51,6 +53,7 @@ Feature: Throttling
     When I enter criteria and submit my search in the GP Practice finder
     Then the No Results Found page for GP Search is visible
 
+    
   Scenario: A user is redirected to the GP finder page after selecting 'This is not my surgery' link
     Given there are 2 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder

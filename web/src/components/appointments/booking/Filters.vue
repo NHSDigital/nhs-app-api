@@ -21,7 +21,7 @@
         {{ displayName(option) }}
       </option>
       <!-- empty optgroup tag forces ios to not cut off text in options -->
-      <optgroup v-if="this.$store.state.device.source === 'ios'" label=""/>
+      <optgroup v-if="$store.state.device.source === 'ios'" label=""/>
     </select-dropdown>
 
     <label class="nhsuk-label" for="location">

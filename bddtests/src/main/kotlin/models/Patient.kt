@@ -1,6 +1,5 @@
 package models
 
-import config.Config
 import constants.DateTimeFormats
 import constants.Supplier
 import mocking.AccessTokenBuilder
@@ -44,13 +43,11 @@ data class Patient(
         val onlineUserId: String = "",
         val rosuAccountId: String = "",
         val apiKey: String = "",
-        val cidUserSession: UserSessionRequest = UserSessionRequest(
-                authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPS" +
-                        "ETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-76" +
-                        "57b5e9e403.8d4c0a21-6483-4a52-9d47" +
-                        "-6bcd737c634e",
-                codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
-                redirectUrl = Config.instance.cidRedirectUri),
+        val authCode: String = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPS" +
+                "ETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-76" +
+                "57b5e9e403.8d4c0a21-6483-4a52-9d47" +
+                "-6bcd737c634e",
+        val codeVerifier: String = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
         var subject: String = "3ad631b4-7a7a-434d-8a7b-1c8ac3c56132",
         val im1ConnectionToken: Im1ConnectionToken? = null,
         val organDonationRegistrationId: String = "AD02745157",
@@ -69,6 +66,13 @@ data class Patient(
                 "84df400000000000",
                 if (odsCode == "") TppMockDefaults.DEFAULT_ODS_CODE_TPP else odsCode,
                 "84df400000000000")
+    }
+
+    fun generateUserSessionRequest(redirectUrl: String): UserSessionRequest {
+        return UserSessionRequest(
+                authCode = this.authCode,
+                codeVerifier = this.codeVerifier,
+                redirectUrl = redirectUrl)
     }
 
     fun formattedDateOfBirth(): String {

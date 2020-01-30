@@ -1,9 +1,7 @@
 package mocking.stubs
 
-import config.Config
 import models.Patient
 import models.patients.EmisPatients
-import worker.models.session.UserSessionRequest
 
 class EmisStubsPatientFactory {
     companion object {
@@ -44,11 +42,8 @@ class EmisStubsPatientFactory {
             val patient = EmisPatients.picaJones.copy(
                     firstName = "You are logged in as",
                     surname = loginID,
-                    cidUserSession = UserSessionRequest(
-                            authCode = "authCode$pad",
-                            codeVerifier = "codeVerifier$pad",
-                            redirectUrl = Config.instance.cidRedirectUri
-                    ),
+                    authCode = "authCode$pad",
+                    codeVerifier = "codeVerifier$pad",
                     connectionToken = "00000000-0000-0000-0000-$pad",
                     userPatientLinkToken = "userPatientLinkToken$pad"
             )

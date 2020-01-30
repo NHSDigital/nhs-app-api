@@ -1,16 +1,10 @@
 /* eslint-disable global-require */
 import NativeCallbacks from '@/services/native-app';
-import Sources from '@/lib/sources';
 import { LOGIN } from '@/lib/routes';
 import { removeCookies } from '@/lib/cookie-manager';
 import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
 
-
-const MAX_TRIES = 10;
-
 const final = ({ self, commit }) => {
-  const sourceValue = self.app.store.state.device.source;
-
   commit(LOGOUT, true);
   self.dispatch('analytics/init');
   self.dispatch('availableAppointments/init');
@@ -33,11 +27,7 @@ const final = ({ self, commit }) => {
   self.dispatch('patientPracticeMessaging/init');
   self.dispatch('practiceSettings/init');
 
-  if (sourceValue === Sources.Web) {
-    self.app.context.redirect(LOGIN.path);
-  } else {
-    self.app.context.redirect(`${LOGIN.path}?source=${sourceValue}`);
-  }
+  self.app.context.redirect(LOGIN.path);
 };
 
 const removeSessionCookies = ({ app }) => removeCookies({
@@ -123,14 +113,9 @@ export default {
     commit(INIT_AUTH);
   },
   nativeLogin() {
-    if (!process.server && !NativeCallbacks.onLogin()) {
-      let attempts = 0;
-      const interval = setInterval(() => {
-        attempts += 1;
-        if (NativeCallbacks.onLogin() || attempts >= MAX_TRIES) {
-          clearInterval(interval);
-        }
-      }, 500);
+    if (process.client) {
+      NativeCallbacks.onLogin();
+      NativeCallbacks.showHeader();
     }
   },
   updateConfig({ commit }, config) {

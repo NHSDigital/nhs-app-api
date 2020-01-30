@@ -1,8 +1,8 @@
-import { TERMSANDCONDITIONS, LOGOUT } from '@/lib/routes';
-import { initialState as sessionState } from '@/store/modules/session/mutation-types';
-import { initialState as termsAndConditionsState } from '@/store/modules/termsAndConditions/mutation-types';
 import getters from '@/store/modules/session/getters';
 import termsAndConditions from '@/middleware/termsAndConditions';
+import { APPOINTMENTS, INTERSTITIAL_REDIRECTOR, LOGOUT, REDIRECT_PARAMETER, TERMSANDCONDITIONS } from '@/lib/routes';
+import { initialState as sessionState } from '@/store/modules/session/mutation-types';
+import { initialState as termsAndConditionsState } from '@/store/modules/termsAndConditions/mutation-types';
 
 const { isLoggedIn } = getters;
 
@@ -29,9 +29,11 @@ describe('middleware/termsAndConditions', () => {
           'session/isLoggedIn': isLoggedIn(state),
         },
       },
-      route: TERMSANDCONDITIONS,
+      route: {
+        ...TERMSANDCONDITIONS,
+        query: {},
+      },
     };
-
     app.store.app = app;
   });
 
@@ -51,32 +53,93 @@ describe('middleware/termsAndConditions', () => {
         expect(app.store.dispatch).toBeCalledWith('termsAndConditions/checkAcceptance');
       });
 
-      it('will redirect to "/" if the dispatch says they have been accepted', async () => {
-        app.store.dispatch = jest.fn(() => new Promise((resolve) => {
-          app.store.state.termsAndConditions.areAccepted = true;
-          resolve();
-        }));
-        await termsAndConditions(app);
-        expect(app.redirect).toBeCalledWith('/');
-      });
-
       it('will allow logout regardless of acceptance of the terms', async () => {
-        app.store.state.termsAndConditions.areAccepted = false;
-
         app.route = LOGOUT;
         await termsAndConditions(app);
         expect(app.redirect).not.toBeCalled();
       });
+
+      describe('will redirect to', () => {
+        beforeEach(() => {
+          app.route = { APPOINTMENTS,
+            query: {},
+          };
+        });
+
+        it('terms and conditions when not accepted', async () => {
+          await termsAndConditions(app);
+          expect(app.redirect).toBeCalledWith(TERMSANDCONDITIONS.path, {});
+        });
+
+        it('terms and conditions with redirect query param when not accepted', async () => {
+          app.route.query = { [REDIRECT_PARAMETER]: LOGOUT.name };
+          await termsAndConditions(app);
+          expect(app.redirect).toBeCalledWith(TERMSANDCONDITIONS.path,
+            { [REDIRECT_PARAMETER]: LOGOUT.name });
+        });
+      });
+
+      describe('dispatch says terms have been accepted', () => {
+        beforeEach(async () => {
+          app.store.dispatch = jest.fn(() => new Promise((resolve) => {
+            app.store.state.termsAndConditions.areAccepted = true;
+            resolve();
+          }));
+        });
+
+        it('will redirect to "/"', async () => {
+          await termsAndConditions(app);
+          expect(app.redirect).toHaveBeenCalledWith('/', {});
+        });
+
+        it('will redirect to query param target', async () => {
+          app.route.query = { [REDIRECT_PARAMETER]: APPOINTMENTS.name };
+          await termsAndConditions(app);
+          expect(app.redirect).toBeCalledWith(APPOINTMENTS.path);
+        });
+
+        it('will redirect to query parameter target and pass source parameter', async () => {
+          app.route.query = { [REDIRECT_PARAMETER]: APPOINTMENTS.name, source: 'web' };
+          await termsAndConditions(app);
+          expect(app.redirect).toBeCalledWith(APPOINTMENTS.path);
+        });
+      });
     });
 
     describe('terms accepted in state', () => {
-      beforeEach(async () => {
-        app.store.state.termsAndConditions.areAccepted = true;
-        await termsAndConditions(app);
+      describe('no redirect in query string', () => {
+        beforeEach(async () => {
+          app.store.state.termsAndConditions.areAccepted = true;
+          await termsAndConditions(app);
+        });
+
+        it('will redirect to "/"', async () => {
+          expect(app.redirect).toBeCalledWith('/', {});
+        });
       });
 
-      it('will redirect to "/" if the terms have been accepted', async () => {
-        expect(app.redirect).toBeCalledWith('/');
+      describe('internal route redirect in query string', () => {
+        beforeEach(async () => {
+          app.store.state.termsAndConditions.areAccepted = true;
+          app.route.query = { [REDIRECT_PARAMETER]: APPOINTMENTS.name };
+          await termsAndConditions(app);
+        });
+
+        it('will redirect to target of redirect_to parameter', async () => {
+          expect(app.redirect).toBeCalledWith(APPOINTMENTS.path);
+        });
+      });
+
+      describe('external route redirect in query string', () => {
+        beforeEach(async () => {
+          app.store.state.termsAndConditions.areAccepted = true;
+          app.route.query = { [REDIRECT_PARAMETER]: 'somethingelse', source: 'web' };
+          await termsAndConditions(app);
+        });
+
+        it('will redirect to redirector page with redirect_to parameter', async () => {
+          expect(app.redirect).toBeCalledWith(INTERSTITIAL_REDIRECTOR.path, app.route.query);
+        });
       });
     });
   });

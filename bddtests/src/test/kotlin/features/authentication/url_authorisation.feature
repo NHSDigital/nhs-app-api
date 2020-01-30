@@ -84,7 +84,7 @@ Feature: Authorisation occurs during each URL visit
       | /appointments/booking-guidance              | /appointments/booking-guidance |
       | /appointments/cancelling                    | /appointments                  |
       | /appointments/booking                       | /appointments/booking          |
-      | /appointments/confirmation                  | /appointments/booking          |
+      | /appointments/confirmation                  | /appointments                  |
       | /data-sharing                               | /data-sharing                  |
       | /                                           | /                              |
       | /my-record                                  | /gp-medical-record             |
@@ -94,3 +94,25 @@ Feature: Authorisation occurs during each URL visit
       | /symptoms                                   | /symptoms                      |
       | /terms-and-conditions                       | /                              |
       | /logout                                     | /login                         |
+
+  Scenario Outline: User has never logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after login
+    Given I am a EMIS patient
+    And I am not logged in
+    When I browse to the <Url> and see the login page
+    When I login
+    Then I am on the relevant <Page> page
+    Examples:
+      | Url                                         | Page                           |
+      | /appointments                               | /appointments                  |
+      | /data-sharing                               | /data-sharing                  |
+      | /                                           | /                              |
+      | /my-record                                  | /gp-medical-record             |
+      | /prescriptions                              | /prescriptions                 |
+      | /prescriptions/confirm-prescription-details | /prescriptions                 |
+      | /symptoms                                   | /symptoms                      |
+      | /terms-and-conditions                       | /                              |
+      | /logout                                     | /login                         |
+      | /redirector                                 | /                              |
+      | /redirector?redirect_to=appointments        | /appointments                  |
+      | /nonexistent                                | /                              |
+

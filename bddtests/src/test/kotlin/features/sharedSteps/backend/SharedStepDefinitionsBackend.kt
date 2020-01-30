@@ -9,8 +9,10 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
 import net.serenitybdd.core.Serenity
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
+import utils.getOrFail
 import utils.set
 import worker.WorkerClient
 import java.util.*
@@ -33,10 +35,11 @@ open class SharedStepDefinitionsBackend{
         val gpSystem = SerenityHelpers.getGpSupplier()
         val patient = SerenityHelpers.getPatientOrNull()
                 ?: Patient.getDefault(gpSystem)
+        val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
-                .postSessionConnection(patient.cidUserSession)
+                .postSessionConnection(patient.generateUserSessionRequest(redirectUri))
 
         DemographicsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())

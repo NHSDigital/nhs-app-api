@@ -11,6 +11,7 @@ describe('notifications', () => {
   let state;
 
   beforeEach(() => {
+    process.client = true;
     state = {
       notifications: initialState(),
       device: {
@@ -35,11 +36,7 @@ describe('notifications', () => {
     expect($store.dispatch).toBeCalledWith('notifications/toggle');
   });
 
-  describe('asyncData', () => {
-    beforeEach(async () => {
-      await wrapper.vm.$options.asyncData({ store: $store });
-    });
-
+  describe('created', () => {
     it('will dispatch `notifications/load`', () => {
       expect($store.dispatch).toBeCalledWith('notifications/load');
     });

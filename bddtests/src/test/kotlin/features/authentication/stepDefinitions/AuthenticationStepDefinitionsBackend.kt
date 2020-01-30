@@ -14,7 +14,9 @@ import mocking.emis.models.AssociationType
 import models.Patient
 import org.apache.commons.lang3.StringUtils
 import org.junit.Assert
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
+import utils.getOrFail
 import utils.getOrNull
 import utils.set
 import worker.NhsoHttpException
@@ -29,8 +31,8 @@ class AuthenticationStepDefinitionsBackend {
 
     val mockingClient = MockingClient.instance
 
-    private var authCode: String? = EmisMockDefaults.patientEmis.cidUserSession.authCode
-    private var codeVerifier: String? = EmisMockDefaults.patientEmis.cidUserSession.codeVerifier
+    private var authCode: String? = EmisMockDefaults.patientEmis.authCode
+    private var codeVerifier: String? = EmisMockDefaults.patientEmis.codeVerifier
     private val associationType = AssociationType.Self
 
     @Given("^I have a valid authCode and codeVerifier$")
@@ -50,7 +52,7 @@ class AuthenticationStepDefinitionsBackend {
     @Given("^I have invalid OAuth details$")
     fun iHaveInvalidOAuthDetails() {
         mockingClient.forCitizenId {
-            tokenRequest(codeVerifier!!, authCode)
+            tokenRequest(codeVerifier!!, authCode, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
                     .respondWithBadRequest()
         }
     }
@@ -61,7 +63,10 @@ class AuthenticationStepDefinitionsBackend {
         val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         mockingClient.forCitizenId {
-            tokenRequest(codeVerifier!!, authCode).respondWithServerError()
+            tokenRequest(codeVerifier!!,
+                    authCode,
+                    GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
+                    .respondWithServerError()
         }
         mockingClient.forCitizenId {
             userInfoRequest(patient.accessToken).respondWithServerError()
@@ -119,6 +124,7 @@ class AuthenticationStepDefinitionsBackend {
     fun iHaveValidOAuthDetailsAndEmisFailsToRespondInXSeconds(gpSystem: String, delayBySeconds: Int) {
         val supplier = Supplier.valueOf(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(supplier))
+
         AuthenticationFactory.getForSupplier(supplier)
                 .validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds.toLong())
     }

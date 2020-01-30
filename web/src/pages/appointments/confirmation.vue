@@ -339,7 +339,7 @@ export default {
   },
   mounted() {
     if (!this.slot) {
-      redirectTo(this, APPOINTMENT_BOOKING.path);
+      redirectTo(this, APPOINTMENTS.path);
     }
   },
   created() {

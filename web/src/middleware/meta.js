@@ -31,6 +31,7 @@ import {
   GP_FINDER_WAITING_LIST_JOINED,
   DATA_SHARING_PREFERENCES,
   INDEX,
+  INTERSTITIAL_REDIRECTOR,
   LINKED_PROFILES,
   LINKED_PROFILES_SUMMARY,
   LOGIN,
@@ -102,8 +103,8 @@ import {
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS,
 } from '@/lib/routes';
 
-import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import get from 'lodash/fp/get';
+import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 
 function setPageTitle(route, store, app) {
   let header = '';
@@ -558,6 +559,11 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'linkedProfiles.shutter.prescriptions.header';
       route.meta.pageTitleKey = 'linkedProfiles.shutter.prescriptions.header';
       route.meta.formatArguments = { name: givenName };
+      break;
+    }
+    case INTERSTITIAL_REDIRECTOR.name: {
+      route.meta.headerKey = '';
+      route.meta.pageTitleKey = '';
       break;
     }
     default:

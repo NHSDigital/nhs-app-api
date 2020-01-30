@@ -48,12 +48,12 @@ const config = {
   ],
   router: {
     middleware: [
+      'setSource',
       'noJsState',
       'urlResolution',
       'auth',
       'serviceJourneyRules',
       'session',
-      'setSource',
       'conditionalRedirect',
       'sjrRedirect',
       'meta',

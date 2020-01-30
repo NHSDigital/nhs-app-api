@@ -10,6 +10,7 @@ const exclusions = [
   '../src/components/organ-donation/EnsureDecisionMixin.vue',
   '../src/components/widgets/HotJar.vue',
   '../src/components/NativeOnlyMixin.vue',
+  '../src/components/TermsConditionsMixin.vue',
 ];
 
 const importComponent = (path) => {

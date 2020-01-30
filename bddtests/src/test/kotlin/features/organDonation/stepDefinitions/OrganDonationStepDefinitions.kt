@@ -146,11 +146,6 @@ open class OrganDonationStepDefinitions {
         }
     }
 
-    @Given("^the organ donation toggle is set to target the internal page$")
-    fun toggleOrganDonationSiteLink() {
-        browser.setUserAgentSource("ios")
-    }
-
     @When("^I click the '(.*)' button on an Organ Donation page$")
     fun iClickTheButtonOnThePage(buttonText: String) {
         page.clickButton(buttonText)

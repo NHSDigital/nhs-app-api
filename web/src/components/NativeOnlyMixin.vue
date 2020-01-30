@@ -1,14 +1,13 @@
 <script>
 import get from 'lodash/fp/get';
-import Sources from '@/lib/sources';
 import { INDEX } from '@/lib/routes';
 
-export const isNativeApp = ({ route = {}, store = {} }) =>
-  get('state.device.isNativeApp')(store) || Sources.isNative(get('query.source')(route));
+export const isNativeApp = ({ store = {} }) =>
+  get('state.device.isNativeApp')(store);
 
 export default {
-  fetch({ redirect, route, store }) {
-    if (!isNativeApp({ route, store })) {
+  fetch({ redirect, store }) {
+    if (!isNativeApp({ store })) {
       redirect(INDEX.path);
     }
   },

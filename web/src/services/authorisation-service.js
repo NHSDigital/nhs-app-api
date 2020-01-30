@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import Sources from '@/lib/sources';
 import querystring from 'querystring';
 
 const base64URLEncode = value =>
@@ -38,7 +37,6 @@ const generateCIDUrl = (redirectData) => {
     [camelToUnderscore('redirectUri')]: redirectData.redirectUri,
     [camelToUnderscore('state')]: redirectData.state,
     [camelToUnderscore('responseType')]: redirectData.responseType,
-    [camelToUnderscore('source')]: redirectData.source,
   };
 
   return `${redirectData.authoriseUrl}?${querystring.stringify(newData)}`;
@@ -52,11 +50,11 @@ class AuthorisationService {
     this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT;
   }
 
-  generateLoginUrl({ source, cookies, fidoAuthResponse }) {
+  generateLoginUrl({ isNativeApp, redirectTo, cookies, fidoAuthResponse }) {
     const verifier = createVerifier();
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
-    const redirectUri = this.getRedirectUri(source || Sources.Web);
+    const redirectUri = this.getRedirectUri(isNativeApp);
     const fidoResponse = fidoAuthResponse;
 
     const request = {
@@ -64,13 +62,12 @@ class AuthorisationService {
       clientId: this.cidClientId,
       redirectUri,
       responseType: 'code',
-      state: myState,
+      state: redirectTo || myState,
       codeVerifier: verifier,
       codeChallenge: challenge,
       codeChallengeMethod: 'S256',
       authoriseUrl: this.cidAuthEndpoint,
       fidoAuthResponse: fidoResponse,
-      source,
     };
 
     cookies.set('nhso.auth', {
@@ -88,8 +85,8 @@ class AuthorisationService {
     return { loginUrl: responseUrl, request };
   }
 
-  getRedirectUri(device) {
-    return Sources.isNative(device) ? this.nativeCidRedirectUri : this.webCidRedirectUri;
+  getRedirectUri(isNativeApp) {
+    return isNativeApp ? this.nativeCidRedirectUri : this.webCidRedirectUri;
   }
 
   /* eslint-disable class-methods-use-this */

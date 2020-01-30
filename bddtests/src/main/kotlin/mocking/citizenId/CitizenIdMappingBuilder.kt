@@ -29,9 +29,9 @@ open class CitizenIdMappingBuilder(method: String, relativePath: String = "")
                              customIdForPatient: String? = null) = CompleteLoginRequestBuilder(
             patient, customIdForPatient)
 
-    fun tokenRequest(codeVerifier: String, authCode: String? = null,
+    fun tokenRequest(codeVerifier: String, authCode: String? = null, redirectUri : String,
                      customTokenRequest: TokenRequest? = null) = TokenRequestBuilder(
-            codeVerifier, authCode, customTokenRequest)
+            codeVerifier, authCode, redirectUri, customTokenRequest)
 
     fun userInfoRequest(accessToken: String) = UserInfoRequestBuilder(accessToken)
 

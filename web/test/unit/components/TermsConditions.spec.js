@@ -1,58 +1,33 @@
-import { get } from 'lodash/fp';
-import { mount, createLocalVue } from '@vue/test-utils';
 import TermsConditions from '@/components/TermsConditions';
-import Vuex from 'vuex';
-import { mount as mountHelper } from '../helpers';
+import { APPOINTMENTS, INDEX, REDIRECT_PARAMETER, TERMSANDCONDITIONS } from '@/lib/routes';
+import { createRouter, createStore, mount } from '../helpers';
 
-const locale = {
-  'termsAndConditions.listItems': ['item 1', 'item 2'],
-};
-const $t = key => get(key, locale);
+let $router;
+let wrapper;
+let $store;
 
-const app = {
-  $env: {
-    TERMS_CONDITIONS_URL: 'http://example.com',
-    PRIVACY_POLICY_URL: 'http://example.com',
-    COOKIES_POLICY_URL: 'http://example.com',
-  },
-};
-
-const createTermsConditionsComponent = ($store) => {
-  const $http = jest.fn();
-  const localVue = createLocalVue();
-  localVue.use(Vuex);
-
+const createTermsConditionsComponent = ({ state, route = TERMSANDCONDITIONS }) => {
+  $router = createRouter();
+  $store = createStore({ state });
   return mount(TermsConditions, {
-    localVue,
-    mocks: {
-      $http,
-      $store,
-      $t,
-      $style: {
-        validationText: 'mock validation test',
-        info: 'info',
-        customErrorBox: false,
-        customErrorText: 'mock custom error text',
-        button: 'btn',
-        green: '#00ff00',
-        validationBorderLeft: 'mock validation border',
-      },
+    $store,
+    $style: {
+      validationText: 'mock validation test',
+      info: 'info',
+      customErrorBox: false,
+      customErrorText: 'mock custom error text',
+      button: 'btn',
+      green: '#00ff00',
+      validationBorderLeft: 'mock validation border',
     },
-    showTemplate: () => true,
+    $route: route,
+    $router,
   });
 };
 
 describe('TermsConditions checkbox rendering', () => {
-  let wrapper;
-
   beforeEach(() => {
-    const mountTermsConditions = ({ state } = {}) =>
-      mountHelper(TermsConditions, {
-        state,
-        t: $t,
-      });
-
-    wrapper = mountTermsConditions({
+    wrapper = createTermsConditionsComponent({
       state: {
         device: {
           isNativeApp: false,
@@ -79,18 +54,17 @@ describe('TermsConditions checkbox rendering', () => {
 });
 
 describe('TermsConditions acceptance', () => {
-  const $store = {
-    state: {
+  beforeEach(() => {
+    const state = {
       termsAndConditions: {
         areAccepted: false,
         acceptTerms: jest.fn(input => input),
       },
-    },
-    dispatch: jest.fn(),
-    app,
-  };
+      device: { isNativeApp: false },
+    };
 
-  const wrapper = createTermsConditionsComponent($store);
+    wrapper = createTermsConditionsComponent({ state });
+  });
 
   it('has T&Cs unchecked when loaded for the first time', () => {
     expect(wrapper.vm.areTermsAccepted).toBe(false);
@@ -107,7 +81,7 @@ describe('TermsConditions acceptance', () => {
     });
 
     it('progresses when submit button clicked', async () => {
-      await wrapper.vm.onConfirmButtonClicked();
+      wrapper.find('#btn_accept').trigger('click');
       expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
         consentRequest: {
           ConsentGiven: true,
@@ -118,20 +92,85 @@ describe('TermsConditions acceptance', () => {
   });
 });
 
+describe('terms and conditions are accepted', () => {
+  let state;
+
+  beforeEach(() => {
+    state = {
+      termsAndConditions: {
+        areAccepted: true,
+        acceptTerms: jest.fn(input => input),
+      },
+      device: { isNativeApp: false },
+    };
+  });
+
+  describe('current route has no redirect query param', () => {
+    beforeEach(() => {
+      wrapper = createTermsConditionsComponent({ state });
+      wrapper.vm.areTermsAccepted = true;
+      wrapper.vm.isAnalyticsCookieAccepted = true;
+    });
+
+    describe('when the accept button is clicked', () => {
+      beforeEach(() => {
+        wrapper.find('#btn_accept').trigger('click');
+      });
+
+      it('will dispatch "termsAndConditions/acceptTerms"', () => {
+        expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
+          consentRequest: {
+            ConsentGiven: true,
+            AnalyticsCookieAccepted: true,
+          },
+        });
+      });
+
+      it('will redirect to INDEX route', () => {
+        expect($router.push).toBeCalledWith(INDEX.path);
+      });
+    });
+  });
+
+  describe('current route has a redirect query parameter', () => {
+    beforeEach(() => {
+      const redirectRoute = {
+        ...TERMSANDCONDITIONS,
+        query: { [REDIRECT_PARAMETER]: APPOINTMENTS.name },
+      };
+      wrapper = createTermsConditionsComponent({ state, route: redirectRoute });
+      wrapper.vm.areTermsAccepted = true;
+      wrapper.vm.isAnalyticsCookieAccepted = true;
+    });
+
+    describe('when the accept button is clicked', () => {
+      beforeEach(() => {
+        wrapper.find('#btn_accept').trigger('click');
+      });
+
+      it('will redirect to redirect parameter route', () => {
+        expect($router.push).toBeCalledWith(APPOINTMENTS.path);
+      });
+    });
+  });
+});
+
 describe('TermsConditions error state', () => {
-  const $store = {
-    state: {
+  beforeEach(() => {
+    const state = {
       termsAndConditions: {
         areAccepted: false,
       },
-    },
-    app,
-  };
+      device: {
+        isNativeApp: false,
+      },
+    };
 
-  const wrapper = createTermsConditionsComponent($store);
+    wrapper = createTermsConditionsComponent({ state });
+    wrapper.find('#btn_accept').trigger('click');
+  });
 
   it('returns an error when terms are left unchecked', () => {
-    wrapper.vm.onConfirmButtonClicked();
     expect(wrapper.vm.getErrorState()).toBe('mock validation border');
   });
 

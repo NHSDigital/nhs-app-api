@@ -1,6 +1,8 @@
+import * as dependency from '@/lib/utils';
 import Channel from '@/lib/channel';
-import Necessity from '@/lib/necessity';
 import Confirmation from '@/pages/appointments/confirmation';
+import Necessity from '@/lib/necessity';
+import { APPOINTMENTS } from '@/lib/routes';
 import { createStore, mount } from '../../helpers';
 
 describe('appointments confirmation page', () => {
@@ -8,12 +10,10 @@ describe('appointments confirmation page', () => {
   let state;
   let wrapper;
 
-  const createState = ({ channel } = {}) => ({
+  const createState = slot => ({
     availableAppointments: {
       bookingReasonNecessity: Necessity.Mandatory,
-      selectedSlot: {
-        channel,
-      },
+      selectedSlot: slot,
     },
     device: {
       isNativeApp: false,
@@ -34,6 +34,33 @@ describe('appointments confirmation page', () => {
     },
   });
 
+  describe('mounted', () => {
+    beforeEach(() => {
+      dependency.redirectTo = jest.fn();
+    });
+    describe('when no slot is selected', () => {
+      beforeEach(() => {
+        state = createState(undefined);
+        wrapper = mountConfirmation();
+      });
+
+      it('will redirect to appointments hub page', () => {
+        expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS.path);
+      });
+    });
+
+    describe('when slot is selected', () => {
+      beforeEach(() => {
+        state = createState({ channel: Channel.Telephone });
+        wrapper = mountConfirmation();
+      });
+
+      it('will not call redirect', () => {
+        expect(dependency.redirectTo).not.toHaveBeenCalled();
+      });
+    });
+  });
+
   describe('errors', () => {
     beforeEach(() => {
       window.scrollTo = jest.fn();
@@ -45,7 +72,7 @@ describe('appointments confirmation page', () => {
           error: 'error',
         };
 
-        state = createState();
+        state = createState({});
         wrapper = mountConfirmation();
       });
 

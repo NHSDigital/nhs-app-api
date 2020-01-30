@@ -86,12 +86,11 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
-import { INDEX } from '@/lib/routes';
+import TermsConditionsMixin from '@/components/TermsConditionsMixin';
 
 export default {
   name: 'TermsConditions',
@@ -101,6 +100,7 @@ export default {
     MessageDialog,
     GenericCheckbox,
   },
+  mixins: [TermsConditionsMixin],
   data() {
     return {
       termsAndConditionsURL: this.$store.app.$env.TERMS_AND_CONDITIONS_URL,
@@ -128,8 +128,7 @@ export default {
         await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
 
         if (this.$store.state.termsAndConditions.areAccepted) {
-          const sourceValue = this.$store.state.device.source;
-          window.location = `${window.location.origin}${INDEX.path}?source=${sourceValue}`;
+          this.conditionalRedirect();
         }
       } else {
         window.scrollTo(0, 0);

@@ -9,7 +9,8 @@ import org.apache.http.HttpStatus
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
-class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRequest: TokenRequest? =null)
+class TokenRequestBuilder(codeVerifier: String, authCode: String?, redirectUri: String, customTokenRequest:
+TokenRequest? =null)
     : CitizenIdMappingBuilder("POST", "/token") {
 
     init {
@@ -18,7 +19,7 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRe
 
         // add token query parameters
 
-        val tokenRequest = customTokenRequest ?: TokenRequest(codeVerifier, code = authCode)
+        val tokenRequest = customTokenRequest ?: TokenRequest(codeVerifier, code = authCode, redirectUri = redirectUri)
         val body = tokenRequestToQueryParams(tokenRequest)
         requestBuilder.andBody(body, "matches")
     }

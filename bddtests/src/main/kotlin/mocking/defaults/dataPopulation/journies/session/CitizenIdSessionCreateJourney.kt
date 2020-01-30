@@ -6,6 +6,7 @@ import mocking.citizenId.models.notifications.SuccessResponse
 import mocking.citizenId.models.signingKeys.SucceededResponse
 import models.Patient
 import utils.GlobalSerenityHelpers
+import utils.getOrFail
 import utils.isTrueOrFalse
 import utils.set
 import worker.models.patient.Im1ConnectionToken
@@ -15,7 +16,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
 
     fun createFor(patient: Patient, alternativeUser:Boolean = false) {
         if (!GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.isTrueOrFalse() || alternativeUser) {
-            val accessToken = createMockingSteps(patient)
+            val accessToken = createMockingSteps(patient, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
             mockingClient.forCitizenId {
                 userInfoRequest(accessToken).respondWithSuccess(patient)
             }
@@ -24,27 +25,28 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
     }
 
     fun createInvalidFor(patient: Patient) {
-        val idToken = mockingStepsInitialise(patient)
-
+        val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
+        val idToken = mockingStepsInitialise(patient, redirectUri)
         mockingClient.forCitizenId {
-            tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
+            tokenRequest(patient.codeVerifier, patient.authCode, redirectUri)
                     .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
         }
     }
 
     fun createTimeoutfor(patient: Patient) {
-        val idToken = mockingStepsInitialise(patient)
+        val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
+        val idToken = mockingStepsInitialise(patient, redirectUri)
 
         mockingClient.forCitizenId {
-            tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
+            tokenRequest(patient.codeVerifier, patient.authCode, redirectUri)
                     .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
                     .delayedBy(java.time.Duration.ofSeconds(DELAY_BY))
         }
     }
 
-    private fun mockingStepsInitialise(patient: Patient): String {
+    private fun mockingStepsInitialise(patient: Patient, redirectUri: String): String {
         mockingClient.forCitizenId {
-            initialLoginRequest(patient, Config.instance.cidRedirectUri, Config.instance.cidClientId)
+            initialLoginRequest(patient, redirectUri, Config.instance.cidClientId)
                     .respondWithLoginPage()
         }
 
@@ -68,7 +70,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
     }
 
     fun createInvalidAuthenticationTokenfor(patient: Patient) {
-        val accessToken = createMockingSteps(patient)
+        val accessToken = createMockingSteps(patient, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
 
         mockingClient.forCitizenId {
             userInfoRequest(accessToken).respondWithSuccess(patient
@@ -77,9 +79,9 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
         }
     }
 
-    private fun createMockingSteps(patient: Patient): String {
+    private fun createMockingSteps(patient: Patient, redirectUri :String): String {
         mockingClient.forCitizenId {
-            initialLoginRequest(patient, Config.instance.cidRedirectUri, Config.instance.cidClientId)
+            initialLoginRequest(patient, redirectUri, Config.instance.cidClientId)
                     .respondWithLoginPage()
         }
 
@@ -107,7 +109,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
         }
 
         mockingClient.forCitizenId {
-            tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
+            tokenRequest(patient.codeVerifier, patient.authCode, redirectUri)
                     .respondWithSuccess(accessToken = accessToken, idToken = idToken)
         }
         return accessToken

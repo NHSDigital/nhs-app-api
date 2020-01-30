@@ -42,8 +42,15 @@ export default {
       },
     },
   },
-  async asyncData({ store }) {
-    await store.dispatch('notifications/load');
+  watch: {
+    '$route.query.ts': async function watchTimestamp() {
+      await this.$store.dispatch('notifications/load');
+    },
+  },
+  created() {
+    if (process.client) {
+      this.$store.dispatch('notifications/load');
+    }
   },
   methods: {
     openAppSettings() {

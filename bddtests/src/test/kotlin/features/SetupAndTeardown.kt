@@ -1,5 +1,6 @@
 package features
 
+import config.Config
 import cucumber.api.java.After
 import cucumber.api.java.Before
 import mocking.MockingClient
@@ -12,6 +13,7 @@ import pages.WEB_CONTEXT
 import utils.GlobalSerenityHelpers
 import utils.contains
 import utils.getOrNull
+import utils.set
 import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
@@ -39,6 +41,8 @@ class SetupAndTeardown {
 
         setSessionVariable(MockingClient::class).to(mockingClient)
         setSessionVariable(WorkerClient::class).to(workerClient)
+        GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(false)
+        GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidRedirectUri)
     }
 
     @After

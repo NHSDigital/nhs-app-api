@@ -8,8 +8,11 @@ import {
   DECISION_UNKNOWN,
 } from '@/store/modules/organDonation/mutation-types';
 
-const createStore = ({ decision, isWithdrawing = false } = {}) => ({
+const createStore = ({ decision, isWithdrawing = false, isNativeApp } = {}) => ({
   state: {
+    device: {
+      isNativeApp,
+    },
     organDonation: {
       ...initialState(),
       ...{
@@ -26,23 +29,18 @@ describe('ensure decision mixin', () => {
   describe('fetch', () => {
     let redirect;
 
-    const fetch = ({ decision, source }) => {
+    const fetch = ({ decision, isNativeApp }) => {
       redirect = jest.fn();
 
       EnsureDecisionMixin.fetch({
         redirect,
-        route: {
-          query: {
-            source,
-          },
-        },
-        store: createStore({ decision }),
+        store: createStore({ decision, isNativeApp }),
       });
     };
 
     describe('not native', () => {
       beforeEach(() => {
-        fetch({ decision: DECISION_OPT_IN, source: 'web' });
+        fetch({ decision: DECISION_OPT_IN, isNativeApp: false });
       });
 
       it('will call redirect with the INDEX path', () => {
@@ -51,11 +49,9 @@ describe('ensure decision mixin', () => {
     });
 
     describe('native', () => {
-      const source = 'ios';
-
       describe('decision not made', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_UNKNOWN, source });
+          fetch({ decision: DECISION_UNKNOWN, isNativeApp: true });
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
@@ -65,7 +61,7 @@ describe('ensure decision mixin', () => {
 
       describe('the user has appointed a representative', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_APPOINTED_REP, source });
+          fetch({ decision: DECISION_APPOINTED_REP, isNativeApp: true });
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
@@ -75,7 +71,7 @@ describe('ensure decision mixin', () => {
 
       describe('decision is opt-out', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_OPT_OUT, source });
+          fetch({ decision: DECISION_OPT_OUT, isNativeApp: true });
         });
 
         it('will not call redirect', () => {
@@ -85,7 +81,7 @@ describe('ensure decision mixin', () => {
 
       describe('decision is opt-in', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_OPT_IN, source });
+          fetch({ decision: DECISION_OPT_IN, isNativeApp: true });
         });
 
         it('will not call redirect', () => {
@@ -100,23 +96,18 @@ describe('ensure opt in decision mixin', () => {
   describe('fetch', () => {
     let redirect;
 
-    const fetch = ({ decision, source }) => {
+    const fetch = ({ decision, isNativeApp }) => {
       redirect = jest.fn();
 
       EnsureOptInDecision.fetch({
         redirect,
-        route: {
-          query: {
-            source,
-          },
-        },
-        store: createStore({ decision }),
+        store: createStore({ decision, isNativeApp }),
       });
     };
 
     describe('not native', () => {
       beforeEach(() => {
-        fetch({ decision: DECISION_OPT_IN, source: 'web' });
+        fetch({ decision: DECISION_OPT_IN, isNativeApp: false });
       });
 
       it('will call redirect with the INDEX path', () => {
@@ -125,11 +116,9 @@ describe('ensure opt in decision mixin', () => {
     });
 
     describe('native', () => {
-      const source = 'ios';
-
       describe('decision not made', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_UNKNOWN, source });
+          fetch({ decision: DECISION_UNKNOWN, isNativeApp: true });
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
@@ -139,7 +128,7 @@ describe('ensure opt in decision mixin', () => {
 
       describe('the user has appointed a representative', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_UNKNOWN, source });
+          fetch({ decision: DECISION_UNKNOWN, isNativeApp: true });
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
@@ -149,7 +138,7 @@ describe('ensure opt in decision mixin', () => {
 
       describe('decision is opt-out', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_OPT_OUT, source });
+          fetch({ decision: DECISION_OPT_OUT, isNativeApp: true });
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
@@ -159,7 +148,7 @@ describe('ensure opt in decision mixin', () => {
 
       describe('decision is opt-in', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_OPT_IN, source });
+          fetch({ decision: DECISION_OPT_IN, isNativeApp: true });
         });
 
         it('will not call redirect', () => {
@@ -174,23 +163,18 @@ describe('ensure can submit mixin', () => {
   describe('fetch', () => {
     let redirect;
 
-    const fetch = ({ decision, isWithdrawing = false, source }) => {
+    const fetch = ({ decision, isWithdrawing = false, isNativeApp }) => {
       redirect = jest.fn();
 
       EnsureCanSubmit.fetch({
         redirect,
-        route: {
-          query: {
-            source,
-          },
-        },
-        store: createStore({ decision, isWithdrawing }),
+        store: createStore({ decision, isWithdrawing, isNativeApp }),
       });
     };
 
     describe('not native', () => {
       beforeEach(() => {
-        fetch({ decision: DECISION_OPT_IN, source: 'web' });
+        fetch({ decision: DECISION_OPT_IN, isNativeApp: false });
       });
 
       it('will call redirect with the INDEX path', () => {
@@ -199,11 +183,9 @@ describe('ensure can submit mixin', () => {
     });
 
     describe('native', () => {
-      const source = 'ios';
-
       describe('decision not made', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_UNKNOWN, source });
+          fetch({ decision: DECISION_UNKNOWN, isNativeApp: true });
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
@@ -215,7 +197,7 @@ describe('ensure can submit mixin', () => {
         const decision = DECISION_APPOINTED_REP;
 
         beforeEach(() => {
-          fetch({ decision, source });
+          fetch({ decision, isNativeApp: true });
         });
 
         it('will call redirect with the ORGAN_DONATION path', () => {
@@ -224,7 +206,7 @@ describe('ensure can submit mixin', () => {
 
         describe('is withdrawing', () => {
           beforeEach(() => {
-            fetch({ decision, source, isWithdrawing: true });
+            fetch({ decision, isWithdrawing: true, isNativeApp: true });
           });
 
           it('will not call redirect', () => {
@@ -235,7 +217,7 @@ describe('ensure can submit mixin', () => {
 
       describe('decision is opt-out', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_OPT_OUT, source });
+          fetch({ decision: DECISION_OPT_OUT, isNativeApp: true });
         });
 
         it('will not call redirect', () => {
@@ -245,7 +227,7 @@ describe('ensure can submit mixin', () => {
 
       describe('decision is opt-in', () => {
         beforeEach(() => {
-          fetch({ decision: DECISION_OPT_IN, source });
+          fetch({ decision: DECISION_OPT_IN, isNativeApp: true });
         });
 
         it('will not call redirect', () => {

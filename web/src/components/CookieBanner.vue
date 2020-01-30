@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     onCookieBannerClicked() {
-      this.$router.push({ query: { acknowledged: 'true' } });
+      this.$router.push({ query: { ...(this.$route.query || {}), acknowledged: 'true' } });
     },
   },
 };

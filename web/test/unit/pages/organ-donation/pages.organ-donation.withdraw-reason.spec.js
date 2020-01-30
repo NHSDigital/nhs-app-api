@@ -6,9 +6,9 @@ import { createRouter, createStore, mount } from '../../helpers';
 import { INDEX, ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
 import locale from '@/locale/en/index';
 
-const createState = ({ isWithdrawing = false, referenceData = {}, withdrawReasonId = '' } = {}) => ({
+const createState = ({ isWithdrawing = false, referenceData = {}, withdrawReasonId = '', isNativeApp } = {}) => ({
   device: {
-    isNativeApp: false,
+    isNativeApp,
   },
   organDonation: {
     ...initialState(),
@@ -50,18 +50,13 @@ describe('organ donation withdraw reason page', () => {
   describe('fetch', () => {
     let redirect;
 
-    const fetch = ({ isWithdrawing = false, source }) => {
+    const fetch = ({ isWithdrawing = false, isNativeApp }) => {
       redirect = jest.fn();
 
       wrapper.vm.$options.fetch({
         redirect,
-        route: {
-          query: {
-            source,
-          },
-        },
         store: createStore({
-          state: createState({ isWithdrawing }),
+          state: createState({ isWithdrawing, isNativeApp }),
         }),
       });
     };
@@ -72,7 +67,7 @@ describe('organ donation withdraw reason page', () => {
 
     describe('not native', () => {
       beforeEach(() => {
-        fetch({ isWithdrawing: false, source: 'web' });
+        fetch({ isWithdrawing: false, isNativeApp: false });
       });
 
       it('will redirect back to the home page', () => {
@@ -81,11 +76,9 @@ describe('organ donation withdraw reason page', () => {
     });
 
     describe('native', () => {
-      const source = 'ios';
-
       describe('not withdrawing', () => {
         beforeEach(() => {
-          fetch({ isWithdrawing: false, source });
+          fetch({ isWithdrawing: false, isNativeApp: true });
         });
 
         it('will redirect back to the organ donation page', () => {
@@ -95,7 +88,7 @@ describe('organ donation withdraw reason page', () => {
 
       describe('withdrawing', () => {
         beforeEach(() => {
-          fetch({ isWithdrawing: true, source });
+          fetch({ isWithdrawing: true, isNativeApp: true });
         });
 
         it('will not redirect', () => {

@@ -36,13 +36,7 @@
       </p>
 
       <form v-if="practiceParticipating" :action="authoriseUrl" method="get">
-        <input :value="scope" type="hidden" name="scope">
-        <input :value="clientId" type="hidden" name="client_id">
-        <input :value="codeChallenge" type="hidden" name="code_challenge">
-        <input :value="codeChallengeMethod" type="hidden" name="code_challenge_method">
-        <input :value="redirectUri" type="hidden" name="redirect_uri">
-        <input :value="state" type="hidden" name="state">
-        <input :value="responseType" type="hidden" name="response_type">
+        <input :value="redirectTo" type="hidden" :name="redirectName">
         <analytics-tracked-tag :text="this.$t('th04.ctaContinue')" :tabindex="-1">
           <generic-button :class="$style.continue" :button-classes="['nhsuk-button']">
             {{ this.$t('th04.ctaContinue') }}
@@ -67,7 +61,7 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import NativeCallbacks from '@/services/native-app';
 import GenericButton from '@/components/widgets/GenericButton';
-import { GP_FINDER, BEGINLOGIN, GP_FINDER_SENDING_EMAIL } from '@/lib/routes';
+import { GP_FINDER, BEGINLOGIN, GP_FINDER_SENDING_EMAIL, REDIRECT_PARAMETER } from '@/lib/routes';
 import AuthorisationService from '@/services/authorisation-service';
 import get from 'lodash/fp/get';
 
@@ -82,13 +76,8 @@ export default {
       conditionalFeatures: this.$t('th04.conditionalFeatures'),
       organDonationNotParticipating: this.$t('th04.organDonationNotParticipating'),
       authoriseUrl: BEGINLOGIN.path,
-      scope: '',
-      codeChallenge: '',
-      codeChallengeMethod: '',
-      redirectUri: '',
-      state: '',
-      responseType: '',
-      clientId: '',
+      redirectTo: get(REDIRECT_PARAMETER)(this.$route.query),
+      redirectName: REDIRECT_PARAMETER,
     };
   },
   computed: {
@@ -110,12 +99,13 @@ export default {
       return get('PracticeName')(this.$store.state.throttling.selectedGpPractice);
     },
   },
-  asyncData({ store }) {
+  asyncData({ store, route }) {
     if (get('PracticeParticipating')(store.state.throttling.selectedGpPractice)) {
       const authorisationService = new AuthorisationService(store.app.$env);
       return authorisationService.generateLoginUrl({
-        source: store.state.device.source,
+        isNativeApp: store.state.device.isNativeApp,
         cookies: store.$cookies,
+        redirectTo: get(REDIRECT_PARAMETER)(route.query),
       }).request;
     }
     return {};

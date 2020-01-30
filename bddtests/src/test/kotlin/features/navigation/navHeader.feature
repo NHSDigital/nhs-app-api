@@ -1,26 +1,26 @@
 @navigation-bar
 Feature: Use the navigation header bar
 
-  Background:
-    Given I am a EMIS patient
-
   @pending
   Scenario: A patient can access the help and support page by clicking the help icon
-    Given I am logged in
+    Given I am a EMIS patient
+    And I am logged in
     And I see the header
     When I click the help icon
     Then a new tab has been opened by the link
 
   @nativesmoketest
   Scenario: A patient can access the my account page by clicking the my account icon
-    Given I am logged in
-    Given I see the header
+    Given I am a EMIS patient
+    And I am logged in
+    And I see the header
     When I click the settings icon
     Then the Account page is displayed
 
   @nativesmoketest
   Scenario: A patient can access the home page by clicking the home icon
-    Given I am logged in
+    Given I am a EMIS patient
+    And I am logged in
     And I see the header
     And I navigate away from the home page
     When I click the home icon
@@ -29,6 +29,7 @@ Feature: Use the navigation header bar
   @nativesmoketest
   Scenario: Dynamic back link leads to the correct pages
     Given I am using the native app user agent
+    And I am a EMIS patient
     And I am logged in
     And there are EMIS appointments available to book with a reason
     And a booked appointment can be cancelled
@@ -47,6 +48,7 @@ Feature: Use the navigation header bar
 
   Scenario: A user can navigate through organ donation with the dynamic back button
     Given I am using the native app user agent
+    And I am a EMIS patient
     And I am logged in
     And I am a EMIS user not registered with organ donation, who wishes to register and opt in
     And I navigate to the internal Organ Donation Choice Page

@@ -38,25 +38,20 @@ describe('organ donation amend page', () => {
   describe('fetch', () => {
     let redirect;
 
-    const fetch = ({ isAmending, source } = {}) => {
+    const fetch = ({ isAmending, isNativeApp } = {}) => {
       redirect = jest.fn();
 
       wrapper.vm.$options.fetch({
         redirect,
-        route: {
-          query: {
-            source,
-          },
-        },
         store: createStore({
-          state: createState({ isAmending }),
+          state: createState({ isAmending, isNativeApp }),
         }),
       });
     };
 
     describe('not native', () => {
       beforeEach(() => {
-        fetch({ isAmending: false, source: 'web' });
+        fetch({ isAmending: false, isNativeApp: false });
       });
 
       it('will redirect back to the home page', () => {
@@ -65,11 +60,9 @@ describe('organ donation amend page', () => {
     });
 
     describe('native', () => {
-      const source = 'ios';
-
       describe('is not amending', () => {
         beforeEach(() => {
-          fetch({ isAmending: false, source });
+          fetch({ isAmending: false, isNativeApp: true });
         });
 
         it('will redirect back to the organ donation page', () => {
@@ -79,7 +72,7 @@ describe('organ donation amend page', () => {
 
       describe('is amending', () => {
         beforeEach(() => {
-          fetch({ isAmending: true, source });
+          fetch({ isAmending: true, isNativeApp: true });
         });
 
         it('will not redirect', () => {

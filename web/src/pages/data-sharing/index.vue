@@ -71,9 +71,6 @@ export default {
     pageId() {
       return this.pageIds[this.pageIndex];
     },
-    device() {
-      return this.$store.state.device.source;
-    },
   },
   mounted() {
     if (!this.$store.state.navigation.menuItemStatusAt[4]) {

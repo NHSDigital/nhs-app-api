@@ -18,6 +18,7 @@ import models.patients.EmisPatients
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.getOrNull
@@ -275,8 +276,9 @@ class Im1ConnectionV1StepDefinitionsBackend {
     @When("^I have logged in with the user associated with the IM1 Connection Token$")
     fun loggedInWithTheUserAssociatedWithTheIm1ConnectionToken() {
         val patient = SerenityHelpers.getPatient()
+        val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         Assert.assertNotNull(Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
-                .postSessionConnection(patient.cidUserSession))
+                .postSessionConnection(patient.generateUserSessionRequest(redirectUri)))
     }
 
     @Then("^the response has the expected connection token$")

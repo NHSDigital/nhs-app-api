@@ -74,6 +74,16 @@ open class SharedStepDefinitions {
         home.waitForLoginToCompleteSuccessfully()
     }
 
+    @And("^I login$")
+    fun iLogin() {
+        val patient = SerenityHelpers.getPatient()
+        DemographicsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enableForPatientProxyAccounts(patient)
+
+        login.using(patient)
+    }
+
     @And("Azure organisation search is working")
     fun azureOrganisationSearchIsWorking() {
         mockingClient.forAzure.forSearchOrganisation {

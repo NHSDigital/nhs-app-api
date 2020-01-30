@@ -243,39 +243,6 @@ describe('notifications actions', () => {
 
       it('will resolve loading promise with `notDetermined`', () => expect(loading).resolves.toBe('notDetermined'));
     });
-
-    describe('denied', () => {
-      let rejectFunc;
-
-      beforeEach(() => {
-        rejectFunc = jest.fn();
-        loading.catch(rejectFunc);
-        actions.settingsStatus({ commit }, 'denied');
-      });
-
-      it('will not call native app `requestPnsToken`', () => {
-        expect(global.nativeApp.requestPnsToken).not.toBeCalled();
-      });
-
-      it('will commit a value of `false` to `SET_REGISTRATION`', () => {
-        expect(commit).toBeCalledWith(SET_REGISTRATION, false);
-      });
-
-      it('will dispatch `errors/addApiError` with error code `10001`', () => {
-        expect(actions.dispatch).toBeCalledWith('errors/addApiError', {
-          response: {
-            status: 500,
-            data: {
-              errorCode: 10001,
-            },
-          },
-        });
-      });
-
-      it('will reject loading promise with `denied`', () => {
-        expect(rejectFunc).toBeCalledWith('denied');
-      });
-    });
   });
 
   describe('load', () => {

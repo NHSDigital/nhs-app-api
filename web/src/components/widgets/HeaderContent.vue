@@ -58,7 +58,7 @@ export default {
       return INDEX.path;
     },
     shouldShowDesktopVersion() {
-      return (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios');
+      return !this.$store.state.device.isNativeApp;
     },
   },
   mounted() {

@@ -1,4 +1,4 @@
-import find from 'lodash/fp/find';
+import { find, get } from 'lodash/fp';
 
 const adminHelpDisabledRedirect = {
   journey_disabled: 'cdssAdmin',
@@ -477,6 +477,17 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+  },
+  INTERSTITIAL_REDIRECTOR: {
+    name: 'redirector',
+    path: '/redirector',
+    crumb: {
+      nativeDisabled: true,
+      get parentRoute() {
+        return undefined;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}app-login/`,
   },
   LOGIN: {
     name: 'Login',
@@ -1361,6 +1372,12 @@ export const findByPath = path => find(({ path: pathValue }) => pathValue === pa
 
 export const getRouteNames = () => Object.keys(routes).map(key => routes[key].name);
 
+export const REDIRECT_PARAMETER = 'redirect_to';
+export const getRedirectRoute = (route) => {
+  const redirectPath = get(REDIRECT_PARAMETER)(route.query);
+  return redirectPath ? findByName(redirectPath) || {} : {};
+};
+
 export const isAnonymous = (input) => {
   if (!input) return false;
   const route = input.name ? input : findByName(input);
@@ -1428,6 +1445,7 @@ export const {
   GP_FINDER_SENDING_EMAIL,
   GP_FINDER_WAITING_LIST_JOINED,
   INDEX,
+  INTERSTITIAL_REDIRECTOR,
   LEGACY_MYRECORDWARNING,
   LOGIN,
   LOGOUT,

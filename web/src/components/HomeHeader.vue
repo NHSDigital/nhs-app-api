@@ -47,9 +47,6 @@ export default {
   methods: {
     checkSymptomsButtonClicked() {
       this.$store.dispatch('device/goToCheckSymptoms');
-      // this method will be refactored to the following:
-      // const sourceValue = this.$store.state.device.source;
-      // redirectTo('this, /check-your-symptoms', { source: sourceValue })
     },
   },
 };

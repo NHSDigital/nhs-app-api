@@ -6,7 +6,7 @@
       <form ref="loginForm"
             :action="authoriseUrl"
             method="get">
-        <input :value="source" type="hidden" name="source">
+        <input :value="redirectTo" type="hidden" :name="redirectName">
         <generic-button
           id="login-button"
           :button-classes="['nhsuk-login', 'nhsuk-body', 'nhsuk-button',
@@ -82,7 +82,7 @@ import NativeCallbacks from '@/services/native-app';
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import { setCookie } from '@/lib/cookie-manager';
-import { BEGINLOGIN } from '@/lib/routes';
+import { BEGINLOGIN, REDIRECT_PARAMETER } from '@/lib/routes';
 
 export default {
   layout: 'login',
@@ -100,7 +100,8 @@ export default {
       practiceAddress: undefined,
       practiceName: undefined,
       practiceParticipating: true,
-      source: this.getSource(),
+      redirectTo: this.$route.query[REDIRECT_PARAMETER],
+      redirectName: REDIRECT_PARAMETER,
     };
   },
   computed: {
@@ -185,10 +186,10 @@ export default {
   methods: {
     generateRedirectData() {
       const authorisationService = new AuthorisationService(this.$store.app.$env);
-      const { source } = this.$route.query;
       const { request, loginUrl } = authorisationService.generateLoginUrl({
-        source,
+        isNativeApp: this.$store.state.device.isNativeApp,
         cookies: this.$cookies,
+        redirectTo: this.redirectTo,
         fidoAuthResponse: this.$route.query.fidoAuthResponse,
       });
       return { authoriseUrl: request.authoriseUrl, loginUrl };
@@ -198,9 +199,6 @@ export default {
         this.$store.dispatch('analytics/satelliteTrack', 'login');
         this.isButtonDisabled = true;
       }
-    },
-    getSource() {
-      return this.$route.query.source;
     },
     resetAndGoToGPFinder() {
       setCookie({

@@ -12,6 +12,8 @@ function info () {
     echo >&2 "===]> Info: $@ ";
 }
 
+echo "VERSION_TAG=dev_bdd_docker_ops_ci" > vars_ci_run.env
+
 # Check if APP_DOCKER_TAG exists in envvar
 [ -z "$APP_DOCKER_TAG" ] && die "APP_DOCKER_TAG is not specified, it should be so we can pin builds to a specific version rather than latest"
 
@@ -31,6 +33,7 @@ if [ "$RUN_NATIVE" == 1 ]; then
   [ "$BROWSER" != "browserstack_ios" ] && [ "$BROWSER" != "browserstack_android" ] && die "BROWSER must be browserstack_ios or browserstack_android to run native BDD tests"
 
   BROWSERSTACK_USERNAME=${BROWSERSTACK_USERNAME:-ops20}
+  echo "IS_NATIVE_APP_RUN=true" >> vars_ci_run.env
 fi
 
 # Support TeamCity running with APP_DOCKER_TAG
@@ -83,8 +86,6 @@ done
 
 DOCKER_COMPOSE_FILES="$DOCKER_COMPOSE_FILES docker-compose.ci-run.yml"
 DOCKER_COMPOSE_FILES_ARG="-f $(echo $DOCKER_COMPOSE_FILES | sed "s/ / -f /g")"
-
-echo "VERSION_TAG=dev_bdd_docker_ops_ci" > vars_ci_run.env
 
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 BROWSER=${BROWSER:-chromeheadless}
@@ -365,7 +366,7 @@ for TAG in ${TAGS[*]}; do
     else
       if [ $TAG == "throttling" ] || [ $TAG == "onlineconsultations" ]
       then
-        BDD_CUCUMBER_OPTIONS="--strict --tags '@$TAG and not @native'"
+        BDD_CUCUMBER_OPTIONS="--strict --tags '@$TAG and not @native and not @pending and not @tech-debt'"
       else
         BDD_CUCUMBER_OPTIONS="$BDD_CUCUMBER_OPTIONS_PREFIX and @$TAG'"
       fi

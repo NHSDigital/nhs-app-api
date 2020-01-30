@@ -33,6 +33,8 @@ module.exports = {
     'vue/singleline-html-element-content-newline': 'off',
     'vue/multiline-html-element-content-newline': 'off',
     'vue/no-unused-components': 'error',
+    'vue/no-multi-spaces': 'error',
+    'vue/order-in-components': 'error',
     //don't require new line after closing bracket
     'vue/html-closing-bracket-newline': 'off',
     //don't require space before closing bracket

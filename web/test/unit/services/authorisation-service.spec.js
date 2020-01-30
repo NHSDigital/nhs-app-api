@@ -1,5 +1,4 @@
 import AuthorisationService from '@/services/authorisation-service';
-import Sources from '@/lib/sources';
 
 const environment = {
   NATIVE_CID_REDIRECT_URI: 'mock native cid redirect uri',
@@ -8,11 +7,9 @@ const environment = {
   CID_AUTH_ENDPOINT: 'mock cid auth endpoint',
 };
 
-
 describe('login values generation', () => {
   const authorisationService = new AuthorisationService(environment);
-
-  const source = Sources.Android;
+  let request;
   const cookies = {
     a: undefined,
     b: undefined,
@@ -23,11 +20,14 @@ describe('login values generation', () => {
   };
   const fidoAuthResponse = 'mock auth response';
 
-  const { request } = authorisationService.generateLoginUrl({ source, cookies, fidoAuthResponse });
-
-  it('uses the correct source in the request', () => {
-    const redirectUri = authorisationService.getRedirectUri(source);
-    expect(request.redirectUri).toEqual(redirectUri);
+  beforeEach(() => {
+    ({ request } = authorisationService.generateLoginUrl(
+      {
+        isNativeApp: true,
+        cookies,
+        fidoAuthResponse,
+      },
+    ));
   });
 
   it('puts the correct redirect URI in the cookie', () => {
@@ -49,23 +49,39 @@ describe('login values generation', () => {
   it('has a challenge in the request', () => {
     expect(request.codeChallenge).toBeDefined();
   });
+
+  it('has default state in the request', () => {
+    expect(request.state).toBe('A');
+  });
+
+  describe('Url has a redirect url', () => {
+    beforeEach(() => {
+      ({ request } = authorisationService.generateLoginUrl(
+        {
+          isNativeApp: false,
+          cookies,
+          redirectTo: 'url',
+          fidoAuthResponse,
+        },
+      ));
+    });
+
+    it('has redirect param value in state in the request', () => {
+      expect(request.state).toBe('url');
+    });
+  });
 });
 
 describe('redirect URI', () => {
   const authorisationService = new AuthorisationService(environment);
 
   it('uses the correct URI for Web', () => {
-    const uri = authorisationService.getRedirectUri(Sources.Web);
+    const uri = authorisationService.getRedirectUri(false);
     expect(uri).toEqual(environment.CID_REDIRECT_URI);
   });
 
-  it('uses the correct URI for IOS', () => {
-    const uri = authorisationService.getRedirectUri(Sources.iOS);
-    expect(uri).toEqual(environment.NATIVE_CID_REDIRECT_URI);
-  });
-
-  it('uses the correct URI for android', () => {
-    const uri = authorisationService.getRedirectUri(Sources.Android);
+  it('uses the correct URI for native', () => {
+    const uri = authorisationService.getRedirectUri(true);
     expect(uri).toEqual(environment.NATIVE_CID_REDIRECT_URI);
   });
 });

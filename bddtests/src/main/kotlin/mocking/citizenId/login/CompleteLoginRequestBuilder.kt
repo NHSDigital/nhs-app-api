@@ -1,8 +1,11 @@
 package mocking.citizenId.login
 
+import config.Config
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.models.Mapping
 import models.Patient
+import utils.GlobalSerenityHelpers
+import utils.getOrFail
 
 class CompleteLoginRequestBuilder(val patient: Patient, customId: String? = null)
     : CitizenIdMappingBuilder("GET",
@@ -14,8 +17,14 @@ class CompleteLoginRequestBuilder(val patient: Patient, customId: String? = null
     }
 
     fun respondWithRedirectResponse(): Mapping {
+        val redirectUri = if(GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.getOrFail()
+                && !Config.instance.isNativeAppTestRun) {
+            Config.instance.cidRedirectUri
+        } else {
+            "{{request.query.redirect_uri}}"
+        }
         return redirectTo(
-                "{{request.query.redirect_uri}}?state={{request.query.state}}&code=" +
-                "${patient.cidUserSession.authCode!!}")
+                "${redirectUri}?state={{request.query.state}}&code=" +
+                "${patient.authCode}")
     }
 }

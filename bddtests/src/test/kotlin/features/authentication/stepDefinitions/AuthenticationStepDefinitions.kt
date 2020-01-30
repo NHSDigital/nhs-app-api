@@ -127,24 +127,42 @@ class AuthenticationStepDefinitions {
 
     @When("^I browse to the pages at the following urls I see the (.*) page$")
     fun iBrowseToPageAtXAndSeeTheXPage(page: String, table: DataTable) {
-        val lowerPage = page.toLowerCase()
         for (row in table.raw()) {
-            val fullUrl = Config.instance.url + row.get(0)
-            browser.browseTo(fullUrl)
-            this.currentUrl = fullUrl
-
-            when (lowerPage) {
-                "login" -> {
-                    login.loginPage.shouldBeDisplayed()
-                }
-                "home" -> {
-                    home.assertHeaderVisible()
-                }
-                "relevant" -> {
-                    browser.shouldHaveUrl(Config.instance.url + row.get(1))
-                }
+            if(row.size > 1) {
+                iBrowseToPageXAndSeePageX(page, row.get(0), row.get(1))
+            } else {
+                iBrowseToPageXAndSeePageX(page, row.get(0))
             }
         }
+    }
+
+    @When("^I browse to the (.*) and see the (.*) page$")
+    fun iBrowseToTheXPageAtXAndSeeTheXPage(path: String, page: String) {
+        iBrowseToPageXAndSeePageX(page, path)
+    }
+
+    private fun iBrowseToPageXAndSeePageX(page: String, path: String, destination: String = "") {
+        val lowerPage = page.toLowerCase()
+        val fullUrl = Config.instance.url + path
+        browser.browseTo(fullUrl)
+        this.currentUrl = fullUrl
+
+        when (lowerPage) {
+            "login" -> {
+                login.loginPage.shouldBeDisplayed()
+            }
+            "home" -> {
+                home.assertHeaderVisible()
+            }
+            "relevant" -> {
+                browser.shouldHaveUrl(Config.instance.url + destination)
+            }
+        }
+    }
+
+    @Then("^I am on the relevant (.*) page$")
+    fun iAmOnTheXPage(page: String) {
+        browser.shouldHaveUrl(Config.instance.url + page)
     }
 
     @When("^I select to create an account$")

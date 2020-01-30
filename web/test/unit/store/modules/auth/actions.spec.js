@@ -5,6 +5,8 @@ import NativeCallbacks from '@/services/native-app';
 import { mockCookies } from '../../../helpers';
 import Sources from '../../../../../src/lib/sources';
 
+jest.mock('@/services/native-app');
+
 describe('actions', () => {
   const name = 'Montel';
   const odsCode = 'A12345';
@@ -188,45 +190,20 @@ describe('actions', () => {
   });
 
   describe('nativeLogin', () => {
-    let spy;
-
-    beforeEach(() => {
-      jest.useFakeTimers();
-      window.nativeApp = undefined;
-    });
-
-    afterEach(() => {
-      (spy || {}).mockRestore();
-    });
-
-    it('will attempt to fire the native onLogin callback and fail as the app has timed out', () => {
-      process.server = false;
-      spy = jest.spyOn(NativeCallbacks, 'onLogin').mockImplementation(() => false);
+    it('will fire the native onLogin callback', () => {
+      process.client = true;
 
       actions.nativeLogin();
 
-      // Fast-forward until all timers have been executed
-      jest.runTimersToTime(10000);
-
-      expect(NativeCallbacks.onLogin).toHaveBeenCalledTimes(11);
+      expect(NativeCallbacks.onLogin).toHaveBeenCalled();
     });
 
-
-    it('will attempt to fire the native onLogin callback and succeed ', () => {
-      process.server = false;
-
-      let attempts = 0;
-      spy = jest.spyOn(NativeCallbacks, 'onLogin').mockImplementation(() => {
-        attempts += 1;
-        return attempts > 1;
-      });
+    it('will fire the show headers callback', () => {
+      process.client = true;
 
       actions.nativeLogin();
 
-      // Fast-forward until all timers have been executed
-      jest.runTimersToTime(10000);
-
-      expect(NativeCallbacks.onLogin).toHaveBeenCalledTimes(2);
+      expect(NativeCallbacks.showHeader).toHaveBeenCalled();
     });
   });
 

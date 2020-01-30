@@ -1,24 +1,12 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import Vue from 'vue';
-import { INDEX, APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
-import { createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
-import { mount, createRouter, createStore } from '../../helpers';
-import BreadCrumbTrail from '../../../../src/components/widgets/BreadCrumbTrail';
+import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
+import { APPOINTMENT_BOOKING_GUIDANCE, INDEX } from '@/lib/routes';
+import { createRouter, createStore, mount } from '../../helpers';
 
 describe('BreadCrumbTrail.vue', () => {
   const BACKLINK_OVERRIDE = '/some-link';
-  const router = createRouter();
-  const localVue = createLocalVue();
-  const goToUrl = jest.fn();
 
-  localVue.use(Vuex);
-  localVue.mixin(Vue.mixin({
-    methods: {
-      goToUrl,
-    },
-  }));
-
+  let $router;
+  let goToUrl;
   let routeName = 'some-route';
 
   const createBreadCrumbTrail = (
@@ -36,24 +24,27 @@ describe('BreadCrumbTrail.vue', () => {
       $route = {
         name: routeName,
       },
-      $router = router,
       propsData,
     } = {},
   ) =>
     mount(BreadCrumbTrail, {
       $store,
-      localVue,
       $style: {
         native: 'native',
       },
       $route,
       $router,
+      methods: {
+        goToUrl,
+      },
       propsData,
       stubs: { 'nuxt-link': '<a></a>' },
     });
 
   beforeEach(() => {
     routeName = 'some-route';
+    goToUrl = jest.fn();
+    $router = createRouter();
   });
 
 
@@ -128,7 +119,7 @@ describe('BreadCrumbTrail.vue', () => {
       const wrapper = createBreadCrumbTrail();
 
       wrapper.vm.backLinkClicked();
-      expect(router.go).toHaveBeenCalledWith(-1);
+      expect($router.goBack).toHaveBeenCalled();
     });
 
     it('back link will exist and have the correct attributes', () => {

@@ -27,7 +27,7 @@ class InitialLoginRequestBuilder(
         if (Config.instance.autoLogin == "true" || OptionManager.instance().isEnabled(NoJsOption::class)) {
             return redirectTo(
                     "{{request.query.redirect_uri}}?state={{request.query.state}}&code=" +
-                            patient.cidUserSession.authCode!!)
+                            patient.authCode)
         } else {
             return respondWith(HttpStatus.SC_OK) {
                 andTemplatedHtmlBody("""

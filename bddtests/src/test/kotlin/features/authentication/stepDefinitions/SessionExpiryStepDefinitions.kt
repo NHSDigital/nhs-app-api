@@ -14,7 +14,9 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.SessionExpiryNative
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
+import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import java.util.concurrent.TimeUnit
@@ -39,11 +41,13 @@ class SessionExpiryStepDefinitions  {
     fun iClickToExtendSessionExpectingResponse(gpSystem: String, expectedResponse: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = Patient.getDefault(supplier)
+        val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
+
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
 
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
-                .postSessionConnection(patient.cidUserSession)
+                .postSessionConnection(patient.generateUserSessionRequest(redirectUri))
 
         PatientVerificationFactory.getForSupplier(supplier)
                 .setSessionExtendMockResponse(patient, expectedResponse)

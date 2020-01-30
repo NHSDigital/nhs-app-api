@@ -14,8 +14,7 @@ private fun HybridPageObject.getActionPageElement(actionText: String): HybridPag
             webDesktopLocator = webLocator,
             iOSLocator = nativeLocator,
             androidLocator = nativeLocator,
-            page = this,
-            timeToWaitForElement = 30
+            page = this
     )
 }
 

@@ -2,8 +2,8 @@
 Feature: Patient to practice messaging
 
   Background:
-    Given I am a EMIS patient
-    And I am using the native app user agent
+    Given I am using the native app user agent
+    And I am a EMIS patient
 
   Scenario: A user can see their read and unread patient practice messages
     Given I am a user who can access patient practice messaging

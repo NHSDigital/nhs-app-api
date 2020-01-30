@@ -20,7 +20,6 @@ const addApiError = ({ dispatch }, errorCode, message) => dispatch('errors/addAp
   },
 });
 
-let rejectLoading;
 let resolveLoading;
 
 export default {
@@ -50,8 +49,7 @@ export default {
       .finally(() => resolveLoading(authorisationStatus.authorised));
   },
   load() {
-    const loading = new Promise((resolve, reject) => {
-      rejectLoading = reject;
+    const loading = new Promise((resolve) => {
       resolveLoading = resolve;
     });
 
@@ -66,7 +64,7 @@ export default {
       case authorisationStatus.denied:
         commit(SET_REGISTRATION, false);
         addApiError(this, 10001);
-        rejectLoading(status);
+        resolveLoading(status);
         break;
       default:
         commit(SET_REGISTRATION, false);

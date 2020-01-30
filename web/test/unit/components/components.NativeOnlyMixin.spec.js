@@ -4,13 +4,8 @@ import { INDEX } from '@/lib/routes';
 describe('NativeOnlyMixin', () => {
   let redirect;
 
-  const fetch = ({ source, isNativeApp }) => NativeOnlyMixin.fetch({
+  const fetch = isNativeApp => NativeOnlyMixin.fetch({
     redirect,
-    route: {
-      query: {
-        source,
-      },
-    },
     store: {
       state: {
         device: {
@@ -26,7 +21,7 @@ describe('NativeOnlyMixin', () => {
 
   describe('not native', () => {
     beforeEach(() => {
-      fetch({ source: 'web', isNativeApp: false });
+      fetch(false);
     });
 
     it('will redirect to the index page', () => {
@@ -36,27 +31,7 @@ describe('NativeOnlyMixin', () => {
 
   describe('native', () => {
     beforeEach(() => {
-      fetch({ source: 'ios', isNativeApp: true });
-    });
-
-    it('will not redirect', () => {
-      expect(redirect).not.toBeCalled();
-    });
-  });
-
-  describe('native source', () => {
-    beforeEach(() => {
-      fetch({ source: 'ios', isNativeApp: false });
-    });
-
-    it('will not redirect', () => {
-      expect(redirect).not.toBeCalled();
-    });
-  });
-
-  describe('native state', () => {
-    beforeEach(() => {
-      fetch({ source: 'web', isNativeApp: true });
+      fetch(true);
     });
 
     it('will not redirect', () => {

@@ -4,7 +4,6 @@ import Vue from 'vue';
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import NativeCallbacks from '@/services/native-app';
 import ResetPageFocusMixin from '@/plugins/mixinDefinitions/ResetPageFocus';
-import Sources from '@/lib/sources';
 import { redirectTo } from '@/lib/utils';
 import { createUri } from '@/lib/noJs';
 import { ACCOUNT_SIGNOUT, LOGIN, MYRECORD, GP_MEDICAL_RECORD, INDEX } from '@/lib/routes';
@@ -46,14 +45,6 @@ Vue.mixin({
         || url === ACCOUNT_SIGNOUT.path) {
         this.$store.dispatch('auth/logout');
         return;
-      }
-
-      if (url === LOGIN.path) {
-        const sourceDevice = this.$store.state.device.source;
-        if (Sources.isNative(sourceDevice)) {
-          redirectTo(this, url, { source: sourceDevice });
-          return;
-        }
       }
 
       redirectTo(this, url);

@@ -29,7 +29,7 @@ export const key = {
 };
 
 export const navigateBack = (self) => {
-  self.$router.go(-1);
+  self.$router.goBack();
 };
 
 export const readableBytes = (bytes) => {

@@ -257,7 +257,6 @@
 </template>
 
 <script>
-import Sources from '@/lib/sources';
 import HeaderSlim from '@/components/HeaderSlim';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
@@ -347,11 +346,6 @@ export default {
     },
   },
   created() {
-    const { source } = this.$route.query;
-    if (source) {
-      this.$store.dispatch('device/updateIsNativeApp', Sources.isNative(source));
-      this.$store.dispatch('device/setSourceDevice', source);
-    }
     this.$store.dispatch('pageTitle/updatePageTitle', this.$t('auth_return.errors.pageTitle'));
   },
   mounted() {
@@ -394,7 +388,6 @@ div {
       align-self: stretch;
       width: 100%;
     }
-
   }
 
     .api-error-button-container {

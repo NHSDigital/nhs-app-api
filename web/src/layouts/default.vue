@@ -96,7 +96,7 @@ export default {
     WebHeader,
   },
   head() {
-    let { platform } = this.$store.state.device.source;
+    let platform = this.$store.state.device.source;
     const { nativeVersion } = this.$store.state.appVersion;
 
     if (nativeVersion !== undefined) {
