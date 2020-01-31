@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
@@ -54,7 +55,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                     var medicationsToBeFiltered = response.Body.Medications.ToList();
                     var medicationListFiltered = GetMaxPrescriptions(medicationsToBeFiltered);
                     var numberOfPrescriptionsDiscarded = medicationsToBeFiltered.Count() - medicationListFiltered.Count();
-                    
+
                     var prescriptionsCount = new FilteringCounts
                     {
                         ReceivedCount = medicationsToBeFiltered.Count(),
@@ -67,6 +68,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                         $"Mapping successful response from {nameof(ListRepeatMedicationReply)} to {nameof(PrescriptionListResponse)}");
                     var mappedPrescriptionList = _tppPrescriptionMapper.Map(medicationListFiltered);
 
+                    await LogPrescriptionMessaging(tppUserSession);
                     return new GetPrescriptionsResult.Success(mappedPrescriptionList, prescriptionsCount);
                 }
                 catch (Exception e)
@@ -111,7 +113,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 var response = await _tppClient.OrderPrescriptionsPost(tppUserSession, postRequest);
 
                 if (!response.HasSuccessResponse) return InterpretOrderPrescriptionError(response);
-                
+
                 _logger.LogDebug($"Prescription order placed successfully");
                 return new OrderPrescriptionResult.Success();
 
@@ -127,16 +129,35 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             }
         }
 
+        private async Task LogPrescriptionMessaging(TppUserSession tppUserSession)
+        {
+            var messagesRequest = new RequestSystmOnlineMessages(tppUserSession);
+
+            try
+            {
+                var messages = await _tppClient.RequestSystmOnlineMessages(messagesRequest, tppUserSession.Suid);
+
+                const string intro = "Prescription Messaging from practice:";
+                var confirmation = messages?.Body?.RequestMedicationConfirmation?.Trim() ?? string.Empty;
+                var medication = messages?.Body?.Medication?.Trim() ?? string.Empty;
+                _logger.LogInformation($"{intro} RequestMedicationConfirmation={confirmation}, Medication={medication}");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Exception has been thrown calling TPP.");
+            }
+        }
+
         private List<Medication> GetMaxPrescriptions(List<Medication> medications)
         {
-            if(_settings.PrescriptionsMaxCoursesSoftLimit.HasValue) 
+            if(_settings.PrescriptionsMaxCoursesSoftLimit.HasValue)
             {
                 medications = medications.Take(_settings.PrescriptionsMaxCoursesSoftLimit.Value).ToList();
             }
 
             return medications;
         }
-        
+
         private GetPrescriptionsResult InterpretGetPrescriptionsError(
             TppClient.TppApiResponse response)
         {
@@ -144,7 +165,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             if (response.HasForbiddenResponse)
             {
                 _logger.LogError("The tpp prescriptions service is not enabled");
-                
+
                 return new GetPrescriptionsResult.Forbidden();
             }
 
@@ -153,13 +174,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 _logger.LogError($"The tpp prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponse.TechnicalMessage)}");
 
                 return new GetPrescriptionsResult.BadRequest();
-            }     
-            
+            }
+
             _logger.LogError("Tpp system is currently unavailable");
 
             return new GetPrescriptionsResult.BadGateway();
         }
-        
+
         private OrderPrescriptionResult InterpretOrderPrescriptionError(
             TppClient.TppApiResponse response)
         {
@@ -167,47 +188,47 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             if (response.HasForbiddenResponse)
             {
                 _logger.LogError("The tpp prescriptions service is not enabled");
-                
+
                 return new OrderPrescriptionResult.Forbidden();
             }
 
             if (PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(response))
             {
                 _logger.LogError("The tpp prescription has already been ordered or is not available");
-                
+
                 return new OrderPrescriptionResult.CannotReorderPrescription();
             }
-            
+
             if (InvalidCourseId(response) || RequestNoteTooLarge(response) || MustViewMedications(response) )
             {
                 _logger.LogError($"The tpp prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponse.TechnicalMessage)}");
 
                 return new OrderPrescriptionResult.BadRequest();
-            }     
-            
+            }
+
             _logger.LogError("Tpp system is currently unavailable");
 
             return new OrderPrescriptionResult.BadGateway();
         }
-        
+
         private static bool PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(TppClient.TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_CourseAlreadyOrdered_IsUnavailable);
         }
-        
+
         private static bool InvalidCourseId(TppClient.TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_InvalidCourseIds);
         }
-        
+
         private static bool RequestNoteTooLarge(TppClient.TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_RequestNoteTooLarge);
         }
-        
+
         private static bool MustViewMedications(TppClient.TppApiResponse response)
         {
             return response.HasErrorMessageContaining(

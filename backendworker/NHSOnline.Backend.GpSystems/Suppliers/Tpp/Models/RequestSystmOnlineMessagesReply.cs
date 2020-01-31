@@ -14,8 +14,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
 
         [XmlAttribute("uuid")]
         public string UuId { get; set; }
-        
+
         [XmlAttribute("BookAppointments")]
         public string BookAppointments { get; set; }
+
+        [XmlAttribute("RequestMedicationConfirmation")]
+        public string RequestMedicationConfirmation { get; set; }
+
+        [XmlAttribute("Medication")]
+        public string Medication { get; set; }
     }
 }

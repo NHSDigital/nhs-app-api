@@ -187,7 +187,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
                     var nhsNumberFromDemographics = ((DemographicsResult.Success)successResults[proxy.Id].Result).Response.NhsNumber;
 
-                    if (!string.Equals(nhsNumberFromDemographics, proxy.NhsNumber, StringComparison.OrdinalIgnoreCase))
+                    if (string.IsNullOrEmpty(nhsNumberFromDemographics))
+                    {
+                        _logger.LogWarning("Linked Account demographic response contains no nhs number");
+                    }
+                    else if (!string.Equals(nhsNumberFromDemographics, proxy.NhsNumber, StringComparison.OrdinalIgnoreCase))
                     {
                         hasAnyNhsNumberBeenUpdatedInSession = true;
                         proxy.NhsNumber = nhsNumberFromDemographics;

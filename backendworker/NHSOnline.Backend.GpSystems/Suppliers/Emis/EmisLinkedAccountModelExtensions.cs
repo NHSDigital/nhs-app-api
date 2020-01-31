@@ -14,21 +14,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             if (gpLinkedAccountModel.PatientId == emisUserSession.Id)
             {
                 userPatientLinkToken = emisUserSession.UserPatientLinkToken;
-                logger.LogInformation("Patient Id match found against main (logged in) user");
             }
             else if (emisUserSession.HasLinkedAccounts)
             {
                 userPatientLinkToken = emisUserSession.ProxyPatients
                     .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId)?.UserPatientLinkToken;
-
-                if (userPatientLinkToken != null)
-                {
-                    logger.LogInformation("Patient Id match found on proxy patient");
-                }
             }
 
             if (string.IsNullOrEmpty(userPatientLinkToken))
             {
+                logger.LogInformation($"Patient Id {gpLinkedAccountModel.PatientId} not matched. Main user id {emisUserSession.Id} and user had linkedAccounts: {emisUserSession.HasLinkedAccounts}");
                 throw new InvalidPatientIdException(gpLinkedAccountModel.PatientId);
             }
 
