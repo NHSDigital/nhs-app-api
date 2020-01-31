@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,7 +6,6 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support.AspNet;
@@ -20,32 +16,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
     [ApiVersionRoute("patient/appointment-slots")]
     public class AppointmentSlotsController : Controller
     {
-        internal class AppointmentSlotsInformation
-        {
-            public string Supplier { get; }
-            public string OdsCode { get; }
-            public string[] SlotTypes { get; }
-            public string[] SlotTypesFromGpSystem { get; }
-            public string[] Locations { get; }
-            public int SlotCount { get; }
-
-            public AppointmentSlotsInformation(
-                string supplier,
-                string odsCode,
-                string[] slotTypes, 
-                string[] slotTypesFromGpSystem,
-                string[] locations, 
-                int slotCount)
-            {
-                Supplier = supplier;
-                OdsCode = odsCode;
-                SlotTypes = slotTypes;
-                SlotTypesFromGpSystem = slotTypesFromGpSystem;
-                Locations = locations;
-                SlotCount = slotCount;
-            }
-        }
-        
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<AppointmentSlotsController> _logger;
@@ -59,7 +29,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             IDateTimeOffsetProvider dateTimeOffsetProvider,
             ILogger<AppointmentSlotsController> logger,
             IAuditor auditor,
-            IAppointmentSlotMetadataLogger appointmentSlotMetadataLogger, 
+            IAppointmentSlotMetadataLogger appointmentSlotMetadataLogger,
             IErrorReferenceGenerator errorReferenceGenerator,
             IAppointmentTypeTransformingVisitor appointmentTypeTransformingVisitor)
         {
@@ -79,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 _logger.LogEnter();
                 _logger.LogDebug($"{nameof(Get)} with patientId {patientId}");
-               
+
                 await _auditor.Audit(AuditingOperations.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
                 var userSession = HttpContext.GetUserSession();
@@ -92,57 +62,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 var gpLinkedAccountsModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
 
                 var result = await appointmentService.GetSlots(gpLinkedAccountsModel, dateRange);
-                
-                await result.Accept(_appointmentTypeTransformingVisitor);
-                
-                LogAppointmentSlotInformation(userSession.GpUserSession, result);
 
+                await result.Accept(_appointmentTypeTransformingVisitor);
+                await result.Accept(
+                    new AppointmentSlotsLoggingVisitor(_logger, _appointmentSlotMetadataLogger, userSession));
                 await result.Accept(new AppointmentSlotsAuditingVisitor(_auditor, _logger));
                 return result.Accept(new AppointmentSlotsResultVisitor(_errorReferenceGenerator, userSession));
             }
             finally
             {
                 _logger.LogExit();
-            }
-        }
-
-        private void LogAppointmentSlotInformation(GpUserSession gpUserSession, AppointmentSlotsResult result)
-        {
-            if (!(result is AppointmentSlotsResult.Success successResult))
-            {
-                return;
-            }
-            
-            try
-            {
-                _appointmentSlotMetadataLogger.CaptureAppointmentSlotTypes(gpUserSession, successResult);
-                
-                var slots = successResult.Response?.Slots ?? Array.Empty<Slot>();
-                var slotCount = slots.Count();
-            
-                var kvp = new Dictionary<string, string>
-                {
-                    { "Supplier", gpUserSession.Supplier.ToString() },
-                    { "OdsCode", gpUserSession.OdsCode },
-                    { "Count", slotCount.ToString(CultureInfo.InvariantCulture) }
-                };
-
-                _logger.LogInformationKeyValuePairs("Appointment Slot Count", kvp);
-
-                var slotInfo = new AppointmentSlotsInformation(
-                    gpUserSession.Supplier.ToString(),
-                    gpUserSession.OdsCode,
-                    slots.Select(x => x.Type).Distinct().ToArray(),
-                    slots.Select(x => x.TypeFromGpSystem).Distinct().ToArray(),
-                    slots.Select(x => x.Location).Distinct().ToArray(),
-                    slotCount);
-
-                _logger.LogInformation("appointment_slot_data=" + slotInfo.SerializeJson());
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Unable to log appointment slot type details. " +
-                                    "Catching exception to prevent inability to create appointment");
             }
         }
     }

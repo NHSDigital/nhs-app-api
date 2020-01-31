@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -54,7 +51,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 await _auditor.Audit(AuditingOperations.CancelAppointmentAuditTypeRequest, $"Attempting to cancel appointment with id: {request.AppointmentId}");
 
                 var userSession = HttpContext.GetUserSession();
-                
+
                 var result = await Cancel(request, userSession, patientId);
 
                 await result.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, request.AppointmentId));
@@ -73,21 +70,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 _logger.LogEnter();
                 _logger.LogDebug($"{nameof(Get)} with patientId {patientId}");
-  
+
                 await _auditor.Audit(AuditingOperations.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
-                              
+
                 var userSession = HttpContext.GetUserSession();
-                
+
                 var gpLinkedAccountModel = new GpLinkedAccountModel(
                     userSession.GpUserSession, patientId
                 );
-                
+
                 var result = await GetAppointmentsService(userSession).GetAppointments(gpLinkedAccountModel);
 
                 await result.Accept(_appointmentTypeTransformingVisitor);
-                
-                LogAppointmentsInformation(userSession.GpUserSession, result);
-                
+                await result.Accept(new AppointmentsLoggingVisitor(_logger, userSession));
                 await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger));
                 return await result.Accept(new AppointmentsResultVisitor(_sessionCacheService, _errorReferenceGenerator, userSession));
             }
@@ -96,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogExit();
             }
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AppointmentBookRequest request, [FromHeader(Name=PatientId)] Guid patientId)
         {
@@ -110,7 +105,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
                 var userSession = HttpContext.GetUserSession();
                 var result = await Book(request, userSession, patientId);
-                
+
                 await result.Accept(new AppointmentBookAuditingVisitor(_auditor, _logger, request.SlotId, request.StartTime));
                 return result.Accept(new AppointmentBookResultVisitor(_errorReferenceGenerator, userSession));
             }
@@ -119,7 +114,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogExit();
             }
         }
-        
+
         private async Task<AppointmentCancelResult> Cancel(AppointmentCancelRequest request, UserSession userSession, Guid patientId)
         {
             var appointmentValidator = GetAppointmentsValidationService(userSession);
@@ -166,36 +161,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             return _gpSystemFactory
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetAppointmentsValidationService();
-        }
-
-        private void LogAppointmentsInformation(GpUserSession gpUserSession, AppointmentsResult result)
-        {
-            if (!(result is AppointmentsResult.Success successResult))
-            {
-                return;
-            }
-
-            try
-            {
-                var upcomingAppointmentsCount = successResult.Response?.UpcomingAppointments?.Count() ?? 0;
-                var pastAppointmentsCount = successResult.Response?.PastAppointments?.Count() ?? 0;
-            
-                var kvp = new Dictionary<string, string>
-                {
-                    { "Supplier", gpUserSession.Supplier.ToString() },
-                    { "OdsCode", gpUserSession.OdsCode },
-                    { "Count", (upcomingAppointmentsCount+pastAppointmentsCount).ToString(CultureInfo.InvariantCulture) },
-                    { "UpcomingCount", upcomingAppointmentsCount.ToString(CultureInfo.InvariantCulture) },
-                    { "HistoricalCount", pastAppointmentsCount.ToString(CultureInfo.InvariantCulture)}
-                };
-
-                _logger.LogInformationKeyValuePairs("Appointment Count", kvp);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Unable to log appointment details. " +
-                                    "Catching exception to prevent inability to view appointments");
-            }
         }
     }
 }
