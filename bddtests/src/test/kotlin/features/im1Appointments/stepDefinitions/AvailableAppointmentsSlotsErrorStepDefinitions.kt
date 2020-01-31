@@ -4,33 +4,13 @@ import cucumber.api.java.en.Then
 import mocking.MockingClient
 import org.junit.Assert.assertEquals
 import pages.ErrorPage
-import pages.appointments.AvailableAppointmentsPage
 import pages.text
-
-private const val WAIT_FOR_TIMEOUT = 15000L
 
 class AvailableAppointmentsSlotsErrorStepDefinitions {
 
-    lateinit var availableAppointmentsPage: AvailableAppointmentsPage
     lateinit var errorPage: ErrorPage
 
     val mockingClient = MockingClient.instance
-
-    @Then("^I see appropriate information message for time-outs$")
-    fun iSeeAppropriateInformationMessageAfterSecondsWhenItTimesOut() {
-        Thread.sleep(WAIT_FOR_TIMEOUT)
-
-        val expectedHeader = "There's been a problem loading this page"
-
-        val expectedMessageText = "Try again now. If the problem continues and you need to book an appointment now, " +
-                "contact your GP surgery directly. For urgent medical advice, call 111."
-
-        assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.text}",
-                expectedHeader, errorPage.heading.text)
-
-        assertEquals("expected error text $expectedMessageText but found ${errorPage.errorText1.text}",
-                expectedMessageText, errorPage.errorText1.text)
-    }
 
     @Then("^there should be a button to try again$")
     fun thenThereShouldBeAButtonToTryAgain() {
@@ -72,11 +52,5 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
                 expectedHeader, errorPage.heading.text)
         assertEquals("expected error text $expectedMsg but found ${errorPage.errorText1.text}",
                 expectedMsg, errorPage.errorText1.text)
-    }
-
-    @Then("^I see a timeout on the appointment booking page$")
-    fun iSeeATimeOutOnTheAppointmentBookingPage() {
-        errorPage.assertHeaderText("There's been a problem loading this page")
-        errorPage.assertHasButton("Try again")
     }
 }

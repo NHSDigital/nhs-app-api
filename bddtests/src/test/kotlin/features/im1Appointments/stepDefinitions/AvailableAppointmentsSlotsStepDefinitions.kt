@@ -1,6 +1,5 @@
 package features.im1Appointments.stepDefinitions
 
-import com.github.tomakehurst.wiremock.stubbing.Scenario
 import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -30,8 +29,6 @@ import worker.NhsoHttpException
 import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
 import javax.servlet.http.Cookie
-
-private const val TIMEOUT_IN_SECONDS = 90L
 
 class AvailableAppointmentsSlotsStepDefinitions {
 
@@ -135,45 +132,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(supplier)
         val exampleForFiltering = appointmentSlotsExampleForFiltering.getExampleForFilteringClinincian()
         appointmentsSlotsFactory.generateExample(exampleForFiltering)
-    }
-
-    @Given("^the (.*) doesn't respond in a timely fashion for available appointment slots$")
-    fun theGpSystemDoesntRespondInATimelyFashionForAvailableAppointmentSlots(gpSystem: String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
-        val genericExample = appointmentSlotsExample.getGenericExample()
-        factory.generateExample {
-            withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
-                    .respondWithSuccess(genericExample)
-        }
-    }
-
-    @Given("^the (.*) doesn't respond in a timely fashion for available appointment slots, on the first attempt$")
-    fun theGpSystemDoesntRespondInATimelyFashionForAvailableAppointmentSlotsOnTheFirstAttempt(gpSystem: String) {
-        val supplier = Supplier.valueOf(gpSystem)
-        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
-        val genericExample = appointmentSlotsExample.getGenericExample()
-        // stub to generate timeout for 1st attempt
-        factory.generateExample {
-            withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
-                    .respondWithSuccess(genericExample)
-                    .inScenario(timeoutScenario)
-                    .whenScenarioStateIs(Scenario.STARTED)
-                    .willSetStateTo(willSucceed)
-        }
-    }
-
-    @Given("^will respond in a timely fashion on the second attempt$")
-    fun theGpSystemWillSucceedForAvailableAppointmentSlotsOnTheSecondAttempt() {
-        val gpSystem= SerenityHelpers.getGpSupplier()
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        val genericExample = appointmentSlotsExample.getGenericExample()
-        // stub to generate success on 2nd attempt
-        factory.generateExample {
-            respondWithSuccess(genericExample)
-                    .inScenario(timeoutScenario)
-                    .whenScenarioStateIs(willSucceed)
-        }
     }
 
     @Given("^there are available EMIS appointment slots with different criteria " +
@@ -348,10 +306,5 @@ class AvailableAppointmentsSlotsStepDefinitions {
             }
         }
         availableAppointments.assertNumberOfSlotsPresent(expectedNumberOfSlots)
-    }
-
-    companion object {
-        const val timeoutScenario = "timeout scenario"
-        const val willSucceed = "to succeed"
     }
 }

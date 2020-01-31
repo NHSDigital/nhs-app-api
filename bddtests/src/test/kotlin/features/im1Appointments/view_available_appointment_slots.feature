@@ -209,10 +209,10 @@ Feature: View Available Appointment Slots Frontend
       | VISION    |
       | MICROTEST |
 
+
     #504
-  Scenario Outline: <GP System> user tries again after a timeout and it is now successful
-    Given the <GP System> doesn't respond in a timely fashion for available appointment slots, on the first attempt
-    But will respond in a timely fashion on the second attempt
+  Scenario Outline: <GP System> user can try again after a timeout fetching appointment slots and be successful
+    Given the first request to the <GP System> for available appointment slots times out but later requests succeed
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     Then I see a timeout on the appointment booking page
@@ -220,10 +220,25 @@ Feature: View Available Appointment Slots Frontend
     Then I am able to filter on available slots
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
       | MICROTEST |
+
+  Scenario: EMIS user can try again after a timeout fetching appointment slots and be successful
+    Given the first request to EMIS for available appointment slots times out but later requests succeed
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    Then I see a timeout on the appointment booking page
+    When I click the 'Try again' action
+    Then I am able to filter on available slots
+
+  Scenario: EMIS user can try again after a timeout fetching appointment slots metadata and be successful
+    Given the first request to EMIS for available appointment slots metadata times out but later requests succeed
+    And I am logged in
+    When I retrieve the 'Appointment Booking' page directly
+    Then I see a timeout on the appointment booking page
+    When I click the 'Try again' action
+    Then I am able to filter on available slots
 
     #500
   Scenario Outline: <GP System> user sees appropriate information message when returns corrupt data

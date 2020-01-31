@@ -9,7 +9,6 @@ Feature: Prescriptions submission Frontend
   #This test covers navigation via buttons/links
   @nominatedPharmacy
   @smoketest
-  @runnow
   Scenario: The TPP user orders a repeat prescription with 5 entries
     And I am using TPP GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
