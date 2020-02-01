@@ -3,7 +3,7 @@ using System.Net.Http;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
+namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
     public class TppHttpRequestIdentifier : HttpRequestIdentifier
     {

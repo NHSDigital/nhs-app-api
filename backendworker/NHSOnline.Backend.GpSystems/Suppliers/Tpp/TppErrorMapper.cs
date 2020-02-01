@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 {
     public static class TppErrorMapper
     {
-        public static TEnum? Map<TResponse, TEnum>(ILogger logger, TppClient.TppApiObjectResponse<TResponse> response,
+        public static TEnum? Map<TResponse, TEnum>(ILogger logger, TppApiObjectResponse<TResponse> response,
             Dictionary<string, TEnum> keyToEnumMapper) where TEnum : struct
         {
             logger.LogTppErrorResponse(response);

@@ -68,7 +68,7 @@ namespace NHOnline.Backend.LoggerApi
 
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
 
-            services.AddSingleton<IGuidCreator, GuidCreator>();
+            services.AddTransient<IGuidCreator, GuidCreator>();
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();

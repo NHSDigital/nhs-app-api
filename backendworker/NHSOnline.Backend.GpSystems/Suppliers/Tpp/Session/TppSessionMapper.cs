@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support;
-using static NHSOnline.Backend.GpSystems.Suppliers.Tpp.TppClient;
+using static NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client.TppClient;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 {

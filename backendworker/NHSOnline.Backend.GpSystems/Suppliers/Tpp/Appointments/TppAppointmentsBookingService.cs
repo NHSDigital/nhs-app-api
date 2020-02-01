@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             }
         }
 
-        private AppointmentBookResult InterpretAppointmentsPostResponse(TppClient.TppApiObjectResponse<BookAppointmentReply> response)
+        private AppointmentBookResult InterpretAppointmentsPostResponse(TppApiObjectResponse<BookAppointmentReply> response)
         {
             if (response.HasSuccessResponse)
             {

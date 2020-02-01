@@ -486,7 +486,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             public BadRequestErrorResponse ErrorResponseBadRequest { get; set; }
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
 
-            public override bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
+            public bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
 
             internal bool IsUnauthorisedResponse =>
                 StatusCode == HttpStatusCode.Unauthorized ||
@@ -545,7 +545,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                        + $"{ExceptionErrorResponse?.Exceptions.First().Message}";
             }
 
-            public override string  ErrorForLogging => $"Error Code: '{StatusCode}'. " +
+            public string ErrorForLogging => $"Error Code: '{StatusCode}'. " +
                                              $"Error Message:'{StandardErrorResponse?.Message}'. ";
 
         }

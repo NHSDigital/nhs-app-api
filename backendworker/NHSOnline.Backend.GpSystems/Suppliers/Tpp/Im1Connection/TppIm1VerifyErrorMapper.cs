@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                 { "2009", InternalCode.ProblemLoggingIn },
             };
 
-        public static Im1ConnectionVerifyResult Map(TppClient.TppApiObjectResponse<AuthenticateReply> response, ILogger<TppIm1ConnectionService> logger)
+        public static Im1ConnectionVerifyResult Map(TppApiObjectResponse<AuthenticateReply> response, ILogger<TppIm1ConnectionService> logger)
         {
             var keyMapping = TppErrorMapper.Map(logger, response, KeyToEnumMapper);
             return keyMapping !=null

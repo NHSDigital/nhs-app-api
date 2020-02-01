@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
@@ -70,12 +70,12 @@ namespace NHSOnline.Backend.GpSystems
         {
             services.AddTransient<IHtmlSanitizer, HtmlSanitizer>();
             services.AddTransient<ICancellationReasonService, CancellationReasonService>();
-            services.AddSingleton<IGpSystemFactory, GpSystemFactory>();
-            services.AddSingleton<IIm1CacheService, Im1CacheService>();
-            services.AddSingleton<IIm1CacheKeyGenerator, Im1CacheKeyGenerator>();
-            services.AddSingleton<IAppointmentCancellationReasonLogger, AppointmentCancellationReasonLogger>();
+            services.AddTransient<IGpSystemFactory, GpSystemFactory>();
+            services.AddTransient<IIm1CacheService, Im1CacheService>();
+            services.AddTransient<IIm1CacheKeyGenerator, Im1CacheKeyGenerator>();
+            services.AddTransient<IAppointmentCancellationReasonLogger, AppointmentCancellationReasonLogger>();
 
-            services.AddSingleton<IIm1ConnectionErrorCodes, Im1ConnectionErrorCodes>();
+            services.AddTransient<IIm1ConnectionErrorCodes, Im1ConnectionErrorCodes>();
 
             return services;
         }

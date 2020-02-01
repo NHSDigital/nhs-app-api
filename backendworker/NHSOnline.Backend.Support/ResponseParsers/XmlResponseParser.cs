@@ -35,13 +35,11 @@ namespace NHSOnline.Backend.Support.ResponseParsers
             }
         }
 
-        public NhsUnparsableExceptionError RedactExceptionMessage(InvalidOperationException exception)
+        private NhsUnparsableExceptionError RedactExceptionMessage(InvalidOperationException exception)
         {
             var exceptionMessage = exception.InnerException?.Message ?? exception.Message;
 
-            var redactedMessage =
-                _redactor.RedactOrNull(exceptionMessage)
-                ?? "Could not redact exception message";
+            var redactedMessage = _redactor.RedactOrNull(exceptionMessage) ?? "Could not redact exception message";
 
             return new NhsUnparsableExceptionError(redactedMessage, "Unknown");
         }

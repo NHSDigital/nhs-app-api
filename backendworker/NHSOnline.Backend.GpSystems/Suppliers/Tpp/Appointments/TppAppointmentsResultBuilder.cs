@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             _logger = logger;
         }
 
-        public Option<AppointmentsResult> Build(Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewPastAppointmentsTask, Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewUpcomingAppointmentsTask)
+        public Option<AppointmentsResult> Build(Task<TppApiObjectResponse<ViewAppointmentsReply>> viewPastAppointmentsTask, Task<TppApiObjectResponse<ViewAppointmentsReply>> viewUpcomingAppointmentsTask)
         {
             return GetTaskCompletedUnsuccessfullyCase(viewPastAppointmentsTask)
                 .IfNone(() => GetTaskCompletedUnsuccessfullyCase(viewUpcomingAppointmentsTask))
@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                 .IfNone(() => BuildSuccessfulAppointmentsResult(viewPastAppointmentsTask, viewUpcomingAppointmentsTask));
         }
 
-        private Option<AppointmentsResult> BuildSuccessfulAppointmentsResult(Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewPastAppointmentsTask, Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewUpcomingAppointmentsTask)
+        private Option<AppointmentsResult> BuildSuccessfulAppointmentsResult(Task<TppApiObjectResponse<ViewAppointmentsReply>> viewPastAppointmentsTask, Task<TppApiObjectResponse<ViewAppointmentsReply>> viewUpcomingAppointmentsTask)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
         }
 
         private Option<AppointmentsResult> GetResponseHasNoSuccessStatusCodeCase<T>(T response)
-            where T : TppClient.TppApiObjectResponse<ViewAppointmentsReply>
+            where T : TppApiObjectResponse<ViewAppointmentsReply>
         {
             if (response.HasSuccessResponse)
             {
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             return Option.Some<AppointmentsResult>(new AppointmentsResult.BadGateway());
         }
 
-        private Option<AppointmentsResult> GetTaskCompletedUnsuccessfullyCase(Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> appointmentTask)
+        private Option<AppointmentsResult> GetTaskCompletedUnsuccessfullyCase(Task<TppApiObjectResponse<ViewAppointmentsReply>> appointmentTask)
         {
             return GetTaskIsCompletedUnsuccessfullyCase(appointmentTask.IsCompletedSuccessfully,
                 "Retrieving view appointments task completed unsuccessfully");

@@ -4,6 +4,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 {
@@ -50,10 +51,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var dependencies = new List<ServiceDescriptor>
             {
-                new ServiceDescriptor(typeof(TppHttpClientHandler), typeof(TppHttpClientHandler), ServiceLifetime.Singleton),
+                new ServiceDescriptor(typeof(TppHttpClientHandler), typeof(TppHttpClientHandler), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(TppHttpRequestIdentifier), typeof(TppHttpRequestIdentifier), ServiceLifetime.Transient),
-                new ServiceDescriptor(typeof(IGpSystem), typeof(TppGpSystem), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(ITppClient), typeof(TppClient), ServiceLifetime.Singleton),
+                new ServiceDescriptor(typeof(IGpSystem), typeof(TppGpSystem), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(TppTokenValidationService), typeof(TppTokenValidationService),ServiceLifetime.Transient)
             };
 

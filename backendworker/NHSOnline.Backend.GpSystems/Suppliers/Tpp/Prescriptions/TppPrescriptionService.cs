@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
         }
 
         private GetPrescriptionsResult InterpretGetPrescriptionsError(
-            TppClient.TppApiResponse response)
+            TppApiResponse response)
         {
 
             if (response.HasForbiddenResponse)
@@ -182,7 +182,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
         }
 
         private OrderPrescriptionResult InterpretOrderPrescriptionError(
-            TppClient.TppApiResponse response)
+            TppApiResponse response)
         {
 
             if (response.HasForbiddenResponse)
@@ -211,25 +211,25 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             return new OrderPrescriptionResult.BadGateway();
         }
 
-        private static bool PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(TppClient.TppApiResponse response)
+        private static bool PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_CourseAlreadyOrdered_IsUnavailable);
         }
 
-        private static bool InvalidCourseId(TppClient.TppApiResponse response)
+        private static bool InvalidCourseId(TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_InvalidCourseIds);
         }
 
-        private static bool RequestNoteTooLarge(TppClient.TppApiResponse response)
+        private static bool RequestNoteTooLarge(TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_RequestNoteTooLarge);
         }
 
-        private static bool MustViewMedications(TppClient.TppApiResponse response)
+        private static bool MustViewMedications(TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_MustViewMedicationsListFirst);

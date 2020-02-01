@@ -5,7 +5,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 {
     public static class TppLoggingExtensions
     {
-        public static void LogTppErrorResponse<T>(this ILogger logger, TppClient.TppApiObjectResponse<T> response)
+        public static void LogTppErrorResponse<T>(this ILogger logger, TppApiObjectResponse<T> response)
         {
             if (IsResponseNull(logger, response)) return;
             try
@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             }
         }
 
-        public static void LogTppUnknownError<T>(this ILogger logger, TppClient.TppApiObjectResponse<T> response)
+        public static void LogTppUnknownError<T>(this ILogger logger, TppApiObjectResponse<T> response)
         {
             if (IsResponseNull(logger, response)) return;
 
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             logger.LogError("Call to TPP returned a forbidden response");
         }
 
-        private static bool IsResponseNull<T>(ILogger logger, TppClient.TppApiObjectResponse<T> response)
+        private static bool IsResponseNull<T>(ILogger logger, TppApiObjectResponse<T> response)
         {
             if (null != response) return false;
             logger.LogError("Call to TPP returned a null response");

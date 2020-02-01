@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -16,13 +16,9 @@ namespace NHSOnline.Backend.Support
 
         public abstract bool HasSuccessResponse { get; }
 
-        public abstract bool HasBadRequestResponse { get; }
-
-        public abstract string ErrorForLogging { get; }
-
         protected abstract bool FormatResponseIfUnsuccessful { get; }
 
-        public async Task<string> GetStringResponse(HttpResponseMessage responseMessage, ILogger logger)
+        protected async Task<string> GetStringResponse(HttpResponseMessage responseMessage, ILogger logger)
         {
             if (!HasSuccessResponse)
             {

@@ -68,11 +68,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                 .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
         }
         
-        private TppClient.TppApiObjectResponse<AddNhsUserResponse> CreateResponse(
+        private TppApiObjectResponse<AddNhsUserResponse> CreateResponse(
             HttpStatusCode statusCode,
             string errorCode)
         {
-            var response = _fixture.Create<TppClient.TppApiObjectResponse<AddNhsUserResponse>>();
+            var response = _fixture.Create<TppApiObjectResponse<AddNhsUserResponse>>();
 
             response.StatusCode = statusCode;
             response.ErrorResponse.ErrorCode = errorCode;

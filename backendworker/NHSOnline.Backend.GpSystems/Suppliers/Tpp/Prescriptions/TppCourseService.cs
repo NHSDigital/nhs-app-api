@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
         }
 
         private GetCoursesResult GetCorrectErrorResult(
-            TppClient.TppApiResponse response)
+            TppApiResponse response)
         {
             if (response.HasForbiddenResponse)
             {

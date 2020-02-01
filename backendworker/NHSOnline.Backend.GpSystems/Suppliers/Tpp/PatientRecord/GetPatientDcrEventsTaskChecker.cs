@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
     public interface IGetPatientDcrEventsTaskChecker
     {
-        TppDcrEvents Check(TppClient.TppApiObjectResponse<RequestPatientRecordReply> taskResponse);
+        TppDcrEvents Check(TppApiObjectResponse<RequestPatientRecordReply> taskResponse);
     }
     
     public class GetPatientDcrEventsTaskChecker : IGetPatientDcrEventsTaskChecker
@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _logger = logger;
         }
 
-        public TppDcrEvents Check(TppClient.TppApiObjectResponse<RequestPatientRecordReply> taskResponse)
+        public TppDcrEvents Check(TppApiObjectResponse<RequestPatientRecordReply> taskResponse)
         {
             _logger.LogEnter();
 

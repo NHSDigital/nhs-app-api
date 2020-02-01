@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
     public interface IGetPatientOverviewTaskChecker
     {
-        Tuple<Allergies, Medications> Check(TppClient.TppApiObjectResponse<ViewPatientOverviewReply> taskResponse);
+        Tuple<Allergies, Medications> Check(TppApiObjectResponse<ViewPatientOverviewReply> taskResponse);
     }
     
     public class GetPatientOverviewTaskChecker : IGetPatientOverviewTaskChecker
@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _tppPatientOverviewMapper = tppPatientOverviewMapper;
         }
 
-        public Tuple<Allergies, Medications> Check(TppClient.TppApiObjectResponse<ViewPatientOverviewReply> taskResponse)
+        public Tuple<Allergies, Medications> Check(TppApiObjectResponse<ViewPatientOverviewReply> taskResponse)
         {
             _logger.LogEnter();
             

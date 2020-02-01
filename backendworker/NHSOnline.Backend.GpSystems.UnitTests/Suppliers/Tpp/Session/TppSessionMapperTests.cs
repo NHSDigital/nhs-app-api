@@ -7,7 +7,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
 using NHSOnline.Backend.Support;
-using static NHSOnline.Backend.GpSystems.Suppliers.Tpp.TppClient;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 {

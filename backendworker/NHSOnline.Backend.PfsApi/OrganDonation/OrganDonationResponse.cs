@@ -21,7 +21,6 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
 
-        public override bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
         public OrganDonationErrorResponse ErrorResponse { get; private set; }
 
         public TBody Body { get; set; }
@@ -37,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
                 : ParseResponse(responseParser, logger, stringResponse, responseMessage);
         }
 
-        public override string ErrorForLogging => $"Status Code: '{StatusCode}'. {ErrorResponse?.Issue?.FirstOrDefault()}";
+        public string ErrorForLogging => $"Status Code: '{StatusCode}'. {ErrorResponse?.Issue?.FirstOrDefault()}";
 
         private OrganDonationResponse<TBody> ParseResponse(
             IResponseParser responseParser,

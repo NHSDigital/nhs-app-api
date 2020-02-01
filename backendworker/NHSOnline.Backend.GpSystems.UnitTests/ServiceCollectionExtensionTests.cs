@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -79,10 +79,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var dependencies = new List<ServiceDescriptor>
             {
                 new ServiceDescriptor(typeof(IHtmlSanitizer), typeof(HtmlSanitizer), ServiceLifetime.Transient),
-                new ServiceDescriptor(typeof(IGpSystemFactory), typeof(GpSystemFactory), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IIm1CacheService), typeof(Im1CacheService), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IIm1CacheKeyGenerator), typeof(Im1CacheKeyGenerator), ServiceLifetime.Singleton),
-                new ServiceDescriptor(typeof(IAppointmentCancellationReasonLogger), typeof(AppointmentCancellationReasonLogger), ServiceLifetime.Singleton)
+                new ServiceDescriptor(typeof(IGpSystemFactory), typeof(GpSystemFactory), ServiceLifetime.Transient),
+                new ServiceDescriptor(typeof(IIm1CacheService), typeof(Im1CacheService), ServiceLifetime.Transient),
+                new ServiceDescriptor(typeof(IIm1CacheKeyGenerator), typeof(Im1CacheKeyGenerator), ServiceLifetime.Transient),
+                new ServiceDescriptor(typeof(IAppointmentCancellationReasonLogger), typeof(AppointmentCancellationReasonLogger), ServiceLifetime.Transient)
             };
 
             foreach (var dependency in dependencies) {

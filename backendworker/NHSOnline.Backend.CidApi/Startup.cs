@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Globalization;
 using CorrelationId;
@@ -95,19 +95,19 @@ namespace NHSOnline.Backend.CidApi
 
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
 
-            services.AddSingleton<IGuidCreator, GuidCreator>();
+            services.AddTransient<IGuidCreator, GuidCreator>();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
-            services.AddSingleton<IIm1CacheService, Im1CacheService>();
+            services.AddTransient<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
-            services.AddSingleton<IRetrieveLinkageKeysService, RetrieveLinkageKeysService>();
-            services.AddSingleton<IGetLinkageKeysService, GetLinkageKeysService>();
-            services.AddSingleton<ICreateLinkageKeysService, CreateLinkageKeysService>();
-            services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
-            services.AddSingleton<IGpSystemResolver, GpSystemResolver>();
+            services.AddTransient<IRetrieveLinkageKeysService, RetrieveLinkageKeysService>();
+            services.AddTransient<IGetLinkageKeysService, GetLinkageKeysService>();
+            services.AddTransient<ICreateLinkageKeysService, CreateLinkageKeysService>();
+            services.AddTransient<IOdsCodeLookup, OdsCodeLookup>();
+            services.AddTransient<IGpSystemResolver, GpSystemResolver>();
 
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
-            services.AddSingleton(typeof(HttpTimeoutHandler<>));
-            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
+            services.AddTransient(typeof(HttpTimeoutHandler<>));
+            services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();

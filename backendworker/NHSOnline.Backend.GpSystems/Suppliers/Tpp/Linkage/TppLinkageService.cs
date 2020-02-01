@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
         }
 
         private LinkageResult HandleCreateError(
-            TppClient.TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse, AddNhsUserRequest request)
+            TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse, AddNhsUserRequest request)
         {
             if (createNhsUserResponse.HasErrorWithCode("8") &&
                 !_minimumAgeValidator.IsValid(request.DateofBirth, _settings.MinimumLinkageAge))
@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
         }
 
         private async Task<LinkageResult> HandleCreateSuccess(AddNhsUserRequest request,
-            TppClient.TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
+            TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             return request;
         }
 
-        private static TppConnectionToken CreateConnectionToken(TppClient.TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
+        private static TppConnectionToken CreateConnectionToken(TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
         {
             return new TppConnectionToken
             {

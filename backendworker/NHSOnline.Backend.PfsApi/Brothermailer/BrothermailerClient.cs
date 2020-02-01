@@ -75,10 +75,6 @@ namespace NHSOnline.Backend.PfsApi.Brothermailer
 
             public override bool HasSuccessResponse =>
                 StatusCode.IsSuccessStatusCode() || StatusCode == HttpStatusCode.Redirect;
-            
-            public override bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
-            
-            public override string  ErrorForLogging => $"Error Code: '{StatusCode}'. ";
         }
         
         public class BrothermailerApiObjectResponse : BrothermailerApiReponse

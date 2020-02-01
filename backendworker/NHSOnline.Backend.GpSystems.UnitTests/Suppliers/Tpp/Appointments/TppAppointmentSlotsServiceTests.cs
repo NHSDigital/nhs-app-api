@@ -88,14 +88,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         {
             // Arrange
             var unsuccessfulResponse = _fixture
-                .Build<TppClient.TppApiObjectResponse<ListSlotsReply>>()
+                .Build<TppApiObjectResponse<ListSlotsReply>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, () => null)
                 .Create();
             
             MockTppClientListSlotsPost(unsuccessfulResponse);
             
-            MockTppClientRequestSystmOnlineMessagesPost(new TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK));
+            MockTppClientRequestSystmOnlineMessagesPost(new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK));
             
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
             
-            MockTppClientListSlotsPost(new TppClient.TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK));
+            MockTppClientListSlotsPost(new TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK));
             
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -129,14 +129,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         {
             // Arrange
             var unsuccessfulResponse = _fixture
-                .Build<TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>>()
+                .Build<TppApiObjectResponse<RequestSystmOnlineMessagesReply>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, () => null)
                 .Create();
             
             MockTppClientRequestSystmOnlineMessagesPost(unsuccessfulResponse);
             
-            MockTppClientListSlotsPost(new TppClient.TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK));
+            MockTppClientListSlotsPost(new TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK));
             
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         {
             // Arrange
             var forbiddenResponse = _fixture
-                .Build<TppClient.TppApiObjectResponse<ListSlotsReply>>()
+                .Build<TppApiObjectResponse<ListSlotsReply>>()
                 .With(x => x.StatusCode, HttpStatusCode.OK)
                 .With(x => x.Body, () => null)
                 .With(x => x.ErrorResponse, new Error { ErrorCode = TppApiErrorCodes.NoAccess })
@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             
             MockTppClientListSlotsPost(forbiddenResponse);
             
-            MockTppClientRequestSystmOnlineMessagesPost(new TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK));
+            MockTppClientRequestSystmOnlineMessagesPost(new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK));
             
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
@@ -173,8 +173,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task GetSlots_ErrorsDuringMappingResponse_ReturnsInternalServerError()
         {
             // Arrange
-            var listSlotsReply = new TppClient.TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK);
-            var messagesReply = new TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK);
+            var listSlotsReply = new TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK);
+            var messagesReply = new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK);
             
             MockTppClientListSlotsPost(listSlotsReply);
             MockTppClientRequestSystmOnlineMessagesPost(messagesReply);
@@ -194,8 +194,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task GetSlots_HappyPath_ReturnsAppointmentSlots()
         {
             // Arrange
-            var listSlotsReply = new TppClient.TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK);
-            var messagesReply = new TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK);
+            var listSlotsReply = new TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK);
+            var messagesReply = new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK);
             
             MockTppClientListSlotsPost(listSlotsReply);
             MockTppClientRequestSystmOnlineMessagesPost(messagesReply);
@@ -213,7 +213,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
 
-        private void MockTppClientListSlotsPost(TppClient.TppApiObjectResponse<ListSlotsReply> response)
+        private void MockTppClientListSlotsPost(TppApiObjectResponse<ListSlotsReply> response)
         {
             var expectedRequest = new ListSlots(_tppUserSession, _dateRange);
 
@@ -230,7 +230,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .Verifiable();
         }
 
-        private void MockTppClientRequestSystmOnlineMessagesPost(TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply> response)
+        private void MockTppClientRequestSystmOnlineMessagesPost(TppApiObjectResponse<RequestSystmOnlineMessagesReply> response)
         {
             var expectedRequest = new RequestSystmOnlineMessages(_tppUserSession);
             

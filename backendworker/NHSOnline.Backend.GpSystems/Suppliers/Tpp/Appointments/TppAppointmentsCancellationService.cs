@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             }
         }
 
-        private AppointmentCancelResult InterpretCancelAppointmentReply(TppClient.TppApiObjectResponse<CancelAppointmentReply> response)
+        private AppointmentCancelResult InterpretCancelAppointmentReply(TppApiObjectResponse<CancelAppointmentReply> response)
         {
             if (response.HasSuccessResponse)
             {

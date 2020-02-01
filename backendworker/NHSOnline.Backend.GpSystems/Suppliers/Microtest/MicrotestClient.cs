@@ -294,7 +294,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             public string ErrorResponseMessage { get; set; }
 
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
-            public override bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
 
             internal bool HasUnauthorisedResponse => StatusCode == HttpStatusCode.Unauthorized;
 
@@ -304,8 +303,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             public bool HasInternalServerError => StatusCode == HttpStatusCode.InternalServerError;
 
 
-            public override string ErrorForLogging => $"Error Code: '{StatusCode}'. " +
-                                                      $"Error Message:'{ErrorResponseMessage}'. ";
+            public string ErrorForLogging => $"Error Code: '{StatusCode}'. " +
+                                             $"Error Message:'{ErrorResponseMessage}'. ";
 
             protected override bool FormatResponseIfUnsuccessful => false;
 

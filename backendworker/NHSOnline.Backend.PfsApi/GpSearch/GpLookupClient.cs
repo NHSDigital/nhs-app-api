@@ -98,11 +98,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             {}
 
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
-
-            public override bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
-            
-            public override string  ErrorForLogging => $"Error Code: '{StatusCode}'. ";
-
         }
         
         public class NhsSearchApiObjectResponse<TBody> : NhsSearchApiResponse

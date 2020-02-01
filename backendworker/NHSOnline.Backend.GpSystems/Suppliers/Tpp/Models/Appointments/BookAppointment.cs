@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Xml.Serialization;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
@@ -9,6 +9,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments
     [Serializable]
     public class BookAppointment : AbstractTppRequestModel
     {
+        private const string TppDateTimeFormat = "yyy-MM-ddTHH:mm:ss+00:00";
+
         private BookAppointment()
         {
         }
@@ -17,8 +19,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments
         {
             PatientId = userSession.PatientId;
             SessionId = request.SlotId;
-            StartDate = dateTimeOffsetProvider.ConvertToLocalTime(request.StartTime.Value).ToString(TppClient.TppDateTimeFormat, CultureInfo.InvariantCulture);
-            EndDate = dateTimeOffsetProvider.ConvertToLocalTime(request.EndTime.Value).ToString(TppClient.TppDateTimeFormat, CultureInfo.InvariantCulture);
+            StartDate = dateTimeOffsetProvider.ConvertToLocalTime(request.StartTime.Value).ToString(TppDateTimeFormat, CultureInfo.InvariantCulture);
+            EndDate = dateTimeOffsetProvider.ConvertToLocalTime(request.EndTime.Value).ToString(TppDateTimeFormat, CultureInfo.InvariantCulture);
             Notes = request.BookingReason;
             UnitId = userSession.UnitId;
             OnlineUserId = userSession.OnlineUserId;

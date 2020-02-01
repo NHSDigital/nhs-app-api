@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
     public interface IGetPatientTestResultsTaskChecker
     {
-        TestResults Check(TppClient.TppApiObjectResponse<TestResultsViewReply> taskResponse);
+        TestResults Check(TppApiObjectResponse<TestResultsViewReply> taskResponse);
     }
     
     public class GetPatientTestResultsTaskChecker : IGetPatientTestResultsTaskChecker
@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _logger = logger;
         }
 
-        public TestResults Check(TppClient.TppApiObjectResponse<TestResultsViewReply> taskResponse)
+        public TestResults Check(TppApiObjectResponse<TestResultsViewReply> taskResponse)
         {
             _logger.LogEnter();
             

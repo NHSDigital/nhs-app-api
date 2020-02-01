@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
                 }
             };
 
-        public static LinkageResult Map(TppClient.TppApiObjectResponse<AddNhsUserResponse> response, ILogger<TppLinkageService> logger)
+        public static LinkageResult Map(TppApiObjectResponse<AddNhsUserResponse> response, ILogger<TppLinkageService> logger)
         {
             var keyMapping = TppErrorMapper.Map(logger, response, KeyToEnumMapper);
             return keyMapping != null

@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var tppAppointmentMapper = new ServiceDescriptor(typeof(IAppointmentMapper),
                 typeof(AppointmentMapper), ServiceLifetime.Transient);
             var tppAppointmentsResultBuilder = new ServiceDescriptor(typeof(IAppointmentsResultBuilder),
-                typeof(TppAppointmentsResultBuilder), ServiceLifetime.Singleton);
+                typeof(TppAppointmentsResultBuilder), ServiceLifetime.Transient);
 
             registeredService.Should().ContainEquivalentOf(tppAppointmentService);
             registeredService.Should().ContainEquivalentOf(tppAppointmentSlotService);

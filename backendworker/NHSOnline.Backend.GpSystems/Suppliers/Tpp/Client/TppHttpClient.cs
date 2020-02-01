@@ -1,11 +1,11 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
+namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
-    public class TppHttpClient
+    internal sealed class TppHttpClient
     {
-        public const string MediaType = "text/xml";
+        internal const string MediaType = "text/xml";
 
         public TppHttpClient(HttpClient client, TppConfigurationSettings config)
         {

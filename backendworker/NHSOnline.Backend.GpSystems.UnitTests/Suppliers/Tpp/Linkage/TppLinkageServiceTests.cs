@@ -16,7 +16,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Temporal;
-using static NHSOnline.Backend.GpSystems.Suppliers.Tpp.TppClient;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 {

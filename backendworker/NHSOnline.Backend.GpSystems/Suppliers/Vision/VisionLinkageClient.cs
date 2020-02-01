@@ -127,10 +127,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
             public override bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
 
-            public override bool HasBadRequestResponse => StatusCode.IsBadRequestCode();
-
-            public override string ErrorForLogging => ErrorResponse == null ? null : JsonConvert.SerializeObject(ErrorResponse);
-
             protected override bool FormatResponseIfUnsuccessful => true;
         }
 

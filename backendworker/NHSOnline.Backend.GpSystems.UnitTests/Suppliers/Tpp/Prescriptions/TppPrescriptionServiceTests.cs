@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -76,14 +76,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
                         Body = prescriptionsResponse,
                     }));
 
             _tppClient.Setup(x => x.RequestSystmOnlineMessages(It.IsAny<RequestSystmOnlineMessages>(), _tppUserSession.Suid)).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK)
                     {
                         Body = new RequestSystmOnlineMessagesReply()
                         {
@@ -132,14 +132,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession)).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
                         Body = listRepeatMedicationReply,
                     }));
 
             _tppClient.Setup(x => x.RequestSystmOnlineMessages(It.IsAny<RequestSystmOnlineMessages>(), _tppUserSession.Suid)).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK)
                     {
                         Body = new RequestSystmOnlineMessagesReply()
                         {
@@ -174,7 +174,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
                         Body = prescriptionsResponse,
                     }));
@@ -202,7 +202,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(
                     Task.FromResult(
-                        new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>
+                        new TppApiObjectResponse<ListRepeatMedicationReply>
                             (HttpStatusCode.InternalServerError)
                             {
                                 ErrorResponse = _fixture.Create<Error>()
@@ -241,7 +241,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(
                     Task.FromResult(
-                        new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>
+                        new TppApiObjectResponse<ListRepeatMedicationReply>
                             (HttpStatusCode.InternalServerError)
                             {
                                 ErrorResponse = expectedError
@@ -269,7 +269,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = error,
                     }));
@@ -294,7 +294,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = error,
                     }));
@@ -323,7 +323,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = error,
                     }));
@@ -348,7 +348,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = error,
                     }));
@@ -378,7 +378,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
                     {
                         Body = prescriptionsResponse,
                     }))
@@ -410,7 +410,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = error,
                     }));

@@ -23,8 +23,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
         }
 
         public Option<AppointmentSlotsResult> Build(
-            Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask,
-            Task<TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>> messagesTask)
+            Task<TppApiObjectResponse<ListSlotsReply>> slotTask,
+            Task<TppApiObjectResponse<RequestSystmOnlineMessagesReply>> messagesTask)
         {
             try
             {
@@ -41,8 +41,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
         }
         
         private Option<AppointmentSlotsResult> BuildSuccessfulAppointmentSlotsResult(
-            Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask,
-            Task<TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>> messagesTask)
+            Task<TppApiObjectResponse<ListSlotsReply>> slotTask,
+            Task<TppApiObjectResponse<RequestSystmOnlineMessagesReply>> messagesTask)
         {
             try
             {
@@ -62,13 +62,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                 return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.InternalServerError());
             }
         }
-        private Option<AppointmentSlotsResult> GetSlotsResponseHasNoSuccessStatusCodeCase(Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask)
+        private Option<AppointmentSlotsResult> GetSlotsResponseHasNoSuccessStatusCodeCase(Task<TppApiObjectResponse<ListSlotsReply>> slotTask)
         {
             return GetResponseHasNoSuccessStatusCodeCase(slotTask.Result);
         }
 
         private Option<AppointmentSlotsResult> GetResponseHasNoSuccessStatusCodeCase<T>(T response)
-            where T : TppClient.TppApiObjectResponse<ListSlotsReply>
+            where T : TppApiObjectResponse<ListSlotsReply>
         {
             if (response.HasSuccessResponse)
             {
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.BadGateway());
         }
 
-        private Option<AppointmentSlotsResult> GetSlotsTaskCompletedUnsuccessfullyCase(Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask)
+        private Option<AppointmentSlotsResult> GetSlotsTaskCompletedUnsuccessfullyCase(Task<TppApiObjectResponse<ListSlotsReply>> slotTask)
         {
             return GetTaskIsCompletedUnsuccessfullyCase(slotTask.IsCompletedSuccessfully,
                 "Retrieving appointment slots task completed unsuccessfully");

@@ -49,7 +49,6 @@ namespace NHSOnline.Backend.PfsApi
     {
         private readonly IHostingEnvironment _env;
 
-        private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<Startup> _logger;
 
         private IConfiguration Configuration { get; }
@@ -59,13 +58,12 @@ namespace NHSOnline.Backend.PfsApi
 
         private readonly string _apiAppVersion;
 
-        private ConfigurationSettings configurationSettings;
+        private ConfigurationSettings _configurationSettings;
 
         public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
             _env = env;
-            _loggerFactory = loggerFactory;
 
             var logSettings = LoggingSettings.GetSettings(Configuration);
             loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel, logSettings.ErrorLevel, logSettings.CensorFilters));
@@ -128,18 +126,18 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton(Configuration);
 
             services.AddSingleton<IMongoSessionCacheServiceConfig, MongoSessionCacheServiceConfig>();
-            services.AddSingleton<IGuidCreator, GuidCreator>();
-            services.AddSingleton<ISessionCacheService, MongoSessionCacheService>();
+            services.AddTransient<IGuidCreator, GuidCreator>();
+            services.AddTransient<ISessionCacheService, MongoSessionCacheService>();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
-            services.AddSingleton<IIm1CacheService, Im1CacheService>();
-            services.AddSingleton<IUserSessionManager, UserSessionManager>();
-            services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
-            services.AddSingleton<IGpSystemResolver, GpSystemResolver>();
+            services.AddTransient<IIm1CacheService, Im1CacheService>();
+            services.AddTransient<IUserSessionManager, UserSessionManager>();
+            services.AddTransient<IOdsCodeLookup, OdsCodeLookup>();
+            services.AddTransient<IGpSystemResolver, GpSystemResolver>();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
-            services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
-            services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
-            services.AddSingleton<IErrorReferenceGenerator, ErrorReferenceGenerator>();
+            services.AddTransient<RandomNumberGenerator, RNGCryptoServiceProvider>();
+            services.AddTransient<IRandomStringGenerator, RandomStringGenerator>();
+            services.AddTransient<IErrorReferenceGenerator, ErrorReferenceGenerator>();
             services.AddTransient<ILdapConnectionService, LdapConnectionService>();
             services.AddTransient<ISpineSearchService, SpineSearchService>();
             services.AddTransient(typeof(HttpTimeoutHandler<>));
@@ -185,9 +183,9 @@ namespace NHSOnline.Backend.PfsApi
             options.EventsType = typeof(CustomCookieAuthenticationEvents);
             options.TicketDataFormat = new UnencryptedCookieDataFormat();
 
-            if (!string.IsNullOrEmpty(configurationSettings.CookieDomain))
+            if (!string.IsNullOrEmpty(_configurationSettings.CookieDomain))
             {
-                options.Cookie.Domain = configurationSettings.CookieDomain;
+                options.Cookie.Domain = _configurationSettings.CookieDomain;
             }
 
             if (_env.IsDevelopment())
@@ -204,12 +202,12 @@ namespace NHSOnline.Backend.PfsApi
 
         private void SetupConfigurationSettings(IServiceCollection services, string environment)
         {
-            configurationSettings = CreateAndValidateEnvironmentVariables();
+            _configurationSettings = CreateAndValidateEnvironmentVariables();
 
             services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
 
-            services.AddSingleton(configurationSettings);
-            services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
+            services.AddSingleton(_configurationSettings);
+            services.AddSingleton<IHttpTimeoutConfigurationSettings>(_configurationSettings);
 
             var deviceConfigurationSettings = CreateAndValidateDeviceEnvironmentVariables();
             services.AddSingleton(deviceConfigurationSettings);

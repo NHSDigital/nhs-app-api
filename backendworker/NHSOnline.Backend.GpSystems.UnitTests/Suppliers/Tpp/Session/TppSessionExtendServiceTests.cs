@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         public async Task Extend_WhenClientReturnsSuccess_ReturnsSuccess()
         {    
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<PatientSelectedReply>(HttpStatusCode.OK);
+            var response = new TppApiObjectResponse<PatientSelectedReply>(HttpStatusCode.OK);
 
             _mockTppClient.Setup(x => x.PatientSelectedPost(_tppUserSession))
                 .ReturnsAsync(response)
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         public async Task Extend_WhenClientReturnsError_ReturnsBadGateway()
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<PatientSelectedReply>(HttpStatusCode.BadRequest);
+            var response = new TppApiObjectResponse<PatientSelectedReply>(HttpStatusCode.BadRequest);
 
             _mockTppClient.Setup(x => x.PatientSelectedPost(_tppUserSession))
                 .ReturnsAsync(response)

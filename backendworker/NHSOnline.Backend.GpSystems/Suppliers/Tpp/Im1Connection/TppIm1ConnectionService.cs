@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
         }
 
         private PatientIm1ConnectionResponse CreatePatientIm1ConnectionResponse(
-            TppClient.TppApiObjectResponse<AuthenticateReply> authenticateReply, string connectionToken, string odsCode)
+            TppApiObjectResponse<AuthenticateReply> authenticateReply, string connectionToken, string odsCode)
         {
             var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
 
@@ -162,7 +162,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
         }
 
         private static TppConnectionToken CreateTppConnectionToken(LinkAccount linkAccountRequest,
-            TppClient.TppApiObjectResponse<LinkAccountReply> linkAccountReply, string key)
+            TppApiObjectResponse<LinkAccountReply> linkAccountReply, string key)
         {
             return new TppConnectionToken
             {

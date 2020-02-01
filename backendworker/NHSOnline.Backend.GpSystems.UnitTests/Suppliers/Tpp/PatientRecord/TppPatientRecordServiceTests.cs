@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             
             _tppClient.Setup(x => x.PatientOverviewPost(It.IsAny<TppUserSession>()))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<ViewPatientOverviewReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<ViewPatientOverviewReply>(HttpStatusCode.OK)
                     {
                         Body = patientOverviewResponse,
                         ErrorResponse = null,
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             
             _tppClient.Setup(x => x.RequestPatientRecordPost(It.IsAny<TppUserSession>()))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<RequestPatientRecordReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<RequestPatientRecordReply>(HttpStatusCode.OK)
                     {
                         Body = patientRecordResponse,
                         ErrorResponse = null,
@@ -96,24 +96,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             
             _tppClient.Setup(x => x.TestResultsView(It.IsAny<TppUserSession>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new TppClient.TppApiObjectResponse<TestResultsViewReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<TestResultsViewReply>(HttpStatusCode.OK)
                     {
                         Body = testResultsResponse,
                         ErrorResponse = null,
                     }));
 
             _patientDcrEventsChecker.Setup(x =>
-                    x.Check(It.IsAny<TppClient.TppApiObjectResponse<RequestPatientRecordReply>>()))
+                    x.Check(It.IsAny<TppApiObjectResponse<RequestPatientRecordReply>>()))
                 .Returns(Mock.Of<TppDcrEvents>())
                 .Verifiable();
             
             _patientOverviewTaskChecker.Setup(x =>
-                    x.Check(It.IsAny<TppClient.TppApiObjectResponse<ViewPatientOverviewReply>>()))
+                    x.Check(It.IsAny<TppApiObjectResponse<ViewPatientOverviewReply>>()))
                 .Returns(new Tuple<Allergies, Medications>(Mock.Of<Allergies>(), Mock.Of<Medications>()))
                 .Verifiable();
             
             _patientTestResultsChecker.Setup(x =>
-                    x.Check(It.IsAny<TppClient.TppApiObjectResponse<TestResultsViewReply>>()))
+                    x.Check(It.IsAny<TppApiObjectResponse<TestResultsViewReply>>()))
                 .Returns(Mock.Of<TestResults>())
                 .Verifiable();
             

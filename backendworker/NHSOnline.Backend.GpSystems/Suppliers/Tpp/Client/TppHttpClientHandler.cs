@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Certificate;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
+namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
     public class TppHttpClientHandler : HttpClientHandler
     {

@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
     public interface IAppointmentsResultBuilder
     {
         Option<AppointmentsResult> Build(
-            Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewPastAppointmentsTask,
-            Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewUpcomingAppointmentsTask);
+            Task<TppApiObjectResponse<ViewAppointmentsReply>> viewPastAppointmentsTask,
+            Task<TppApiObjectResponse<ViewAppointmentsReply>> viewUpcomingAppointmentsTask);
     }
 }

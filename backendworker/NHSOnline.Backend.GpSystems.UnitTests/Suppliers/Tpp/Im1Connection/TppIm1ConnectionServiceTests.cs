@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
                         Body = authenticateReply,
                     }));
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             // Arrange
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
                         Body = null
                     }));
@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             // Arrange
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = _fixture.Create<Error>()
                     }));
@@ -129,7 +129,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             // Arrange
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.BadGateway)
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.BadGateway)
                     {
                         ErrorResponse = null
                     }));
@@ -150,7 +150,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var authenticateReply = _fixture.Create<AuthenticateReply>();
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
                         Body = authenticateReply,
                     }));
@@ -174,7 +174,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var authenticateReply = _fixture.Create<AuthenticateReply>();
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
                         Body = authenticateReply,
                     }));
@@ -198,7 +198,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
                         Body = linkAccountReply,
                     }));
@@ -206,7 +206,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var authenticateReply = _fixture.Create<AuthenticateReply>();
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
                         Body = authenticateReply,
                     }));
@@ -242,7 +242,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
                         Body = linkAccountReply,
                     }));
@@ -250,7 +250,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var authenticateReply = _fixture.Create<AuthenticateReply>();
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
                         Body = authenticateReply,
                     }));
@@ -323,7 +323,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = invalidProviderErrorResponse
                     }));
@@ -348,7 +348,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = invalidLinkageCredentialsErrorResponse
                     }));
@@ -370,7 +370,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var errorResponse = _fixture.Create<Error>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = errorResponse
                     }));
@@ -392,7 +392,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
                         Body = linkAccountReply,
                     }));
@@ -400,7 +400,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var errorResponse = _fixture.Create<Error>();
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = errorResponse
                     }));
@@ -439,7 +439,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
                         Body = linkAccountReply,
                     }));
@@ -468,7 +468,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
                     {
                         Body = linkAccountReply,
                     }));
@@ -479,7 +479,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
                         Body = authenticateReply
                     }));

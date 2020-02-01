@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         private int _sessionTimeoutMinutes;
         private string _nhsNumber;
         private const string ResponseSuidHeader = "suid";
-        private TppClient.TppApiObjectResponse<AuthenticateReply> _authenticatePostResult;
+        private TppApiObjectResponse<AuthenticateReply> _authenticatePostResult;
         private Mock<ILogger<TppSessionService>> _logger;
 
         [TestInitialize]
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             const string gpPracticeName = "gp practice 1";
             const string gpAddress = "1 street name, town name";
             var tppConnectionToken = CreateConnectionTokenJson(accountId, passphrase);
-            _authenticatePostResult = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.Accepted)
+            _authenticatePostResult = new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.Accepted)
             {
                 Body = new AuthenticateReply
                 {
@@ -170,7 +170,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             const string accountId = "boo";
             const string passphrase = "hoo";
             var tppConnectionToken = CreateConnectionTokenJson(accountId, passphrase);
-            _authenticatePostResult = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.Accepted)
+            _authenticatePostResult = new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.Accepted)
             {
                 Body = new AuthenticateReply()
             };
@@ -191,7 +191,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             // Arrange
             const string expected = "bar";
             _systemUnderTest = _fixture.Create<TppSessionService>();
-            _authenticatePostResult = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.Accepted)
+            _authenticatePostResult = new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.Accepted)
             {
                 Body = new AuthenticateReply()
             };
@@ -535,10 +535,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         private static string CreateConnectionTokenJson(string accountId = "", string passphrase = "") =>
             $"{{ \"accountId\": \"{accountId}\", \"passphrase\": \"{passphrase}\" }}";
 
-        private TppClient.TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie",
+        private TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie",
             string suid = "dimsum", string onlineUserId = "123", string patientId = "123")
         {
-            var response = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
             {
                 Body = new AuthenticateReply
                 {
@@ -586,9 +586,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             };
         }
 
-        private static TppClient.TppApiObjectResponse<LogoffReply> LogoffReply()
+        private static TppApiObjectResponse<LogoffReply> LogoffReply()
         {
-            var response = new TppClient.TppApiObjectResponse<LogoffReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<LogoffReply>(HttpStatusCode.OK)
             {
                 Body = new LogoffReply
                 {
@@ -603,9 +603,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             return response;
         }
         
-        private static TppClient.TppApiObjectResponse<ListServiceAccessesReply> ListServiceAccessesReply(ListServiceAccessesReply reply)
+        private static TppApiObjectResponse<ListServiceAccessesReply> ListServiceAccessesReply(ListServiceAccessesReply reply)
         {
-            var response = new TppClient.TppApiObjectResponse<ListServiceAccessesReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<ListServiceAccessesReply>(HttpStatusCode.OK)
             {
                 Body = reply,
                 Headers = new Dictionary<string, string>

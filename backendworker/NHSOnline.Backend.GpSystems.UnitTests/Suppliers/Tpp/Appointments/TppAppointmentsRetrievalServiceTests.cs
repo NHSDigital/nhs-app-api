@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private AppointmentsResponse _mappedResponse;
         private ViewAppointmentsReply _tppViewPastAppointmentsReply;
         private ViewAppointmentsReply _tppViewUpcomingAppointmentsReply;
-        private TppClient.TppApiObjectResponse<ViewAppointmentsReply> _tppErrorResponse;
+        private TppApiObjectResponse<ViewAppointmentsReply> _tppErrorResponse;
         private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
         private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                     }
                 }
             };
-            var response1 = new TppClient.TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.OK)
+            var response1 = new TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.OK)
             {
                 Body = _tppViewPastAppointmentsReply
             };
@@ -95,14 +95,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                      }
                  }
             };
-            var response2 = new TppClient.TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.OK)
+            var response2 = new TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.OK)
             {
                 Body = _tppViewUpcomingAppointmentsReply
             };
             MockTppClientAppointmentsGetMethod(response2, true);
             
             _tppErrorResponse =
-                new TppClient.TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.Ambiguous)
+                new TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.Ambiguous)
                 {
                     ErrorResponse = _fixture.Create<Error>()
                 };
@@ -208,7 +208,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task GetAppointments_TppClientReturnsForbiddenCode_ReturnsForbidden()
         {
             // Arrange
-            var tppResponse = new TppClient.TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.OK) { ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.NoAccess } };
+            var tppResponse = new TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.OK) { ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.NoAccess } };
             MockTppClientAppointmentsGetMethod(tppResponse, false);
             MockTppClientAppointmentsGetMethod(tppResponse, true);
 
@@ -227,7 +227,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             errorResponse.ErrorCode = TppApiErrorCodes.NoAccess;
 
-            var tppResponse = new TppClient.TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.InternalServerError)
+            var tppResponse = new TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.InternalServerError)
                 {
                     ErrorResponse = errorResponse
                 };
@@ -283,7 +283,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         }
 
         private void MockTppClientAppointmentsGetMethod(
-            TppClient.TppApiObjectResponse<ViewAppointmentsReply> response, bool futureAppointments)
+            TppApiObjectResponse<ViewAppointmentsReply> response, bool futureAppointments)
         {
             _mockTppClient.Setup(x => x.ViewAppointmentsPost(
                      It.Is<ViewAppointments>(p =>

@@ -11,24 +11,22 @@ namespace NHSOnline.Backend.Support.Http
     public class HttpTimeoutHandler<TRequestIdentifier> : DelegatingHandler where TRequestIdentifier : IHttpRequestIdentifier
     {
         private readonly ILogger<HttpTimeoutHandler<TRequestIdentifier>> _logger;
-        private readonly IHttpTimeoutConfigurationSettings _settings;
         private readonly IHttpRequestIdentifier _requestIdentifier;
         private readonly TimeSpan _defaultTimeout;
 
-        public HttpTimeoutHandler(ILogger<HttpTimeoutHandler<TRequestIdentifier>> logger, IHttpTimeoutConfigurationSettings settings
+        public HttpTimeoutHandler(
+            ILogger<HttpTimeoutHandler<TRequestIdentifier>> logger, IHttpTimeoutConfigurationSettings settings
             , TRequestIdentifier requestIdentifier)
         {
             _logger = logger;
-            _settings = settings;
             _requestIdentifier = requestIdentifier;
-            _defaultTimeout = TimeSpan.FromSeconds(_settings.DefaultHttpTimeoutSeconds);
+            _defaultTimeout = TimeSpan.FromSeconds(settings.DefaultHttpTimeoutSeconds);
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            object value = "";
-             var timeOut = request.Properties.TryGetValue(HttpRequestConstants.CustomTimeout, out value)
+            var timeOut = request.Properties.TryGetValue(HttpRequestConstants.CustomTimeout, out var value)
                 ? TimeSpan.FromSeconds((int) value)
                 : _defaultTimeout;
 

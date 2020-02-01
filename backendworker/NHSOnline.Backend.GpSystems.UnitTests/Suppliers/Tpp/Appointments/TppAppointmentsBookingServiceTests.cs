@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Book_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = new BookAppointmentReply(),
                 ErrorResponse = null
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Book_WhenNotFoundAppointment_ReturnsSlotNotAvailable()
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
                 ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.SlotNotFound }
@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Book_WhenAppointmentsIsInThePast_ReturnsSlotNotAvailable()
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
                 ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.StartDateInPast }
@@ -139,7 +139,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Book_WhenAppointmentsLimitIsReached_ReturnsAppointmentLimitReached()
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
                 ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.AppointmentLimitReached }
@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Book_WhenAppointmentsHasBeenAlreadyBooked_ReturnsSlotNotAvailable()
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
                 ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.SlotAlreadyBooked }
@@ -179,7 +179,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Book_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsSlotNotAvailable()
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
                 ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.NoAccess }
@@ -199,7 +199,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Book_TppReturnsUnknownError_ReturnsBadGateway()
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode
+            var response = new TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode
                     .InternalServerError);
 
             MockTppClientAppointmentPostMethod(response);
@@ -239,7 +239,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         }
 
 
-        private void MockTppClientAppointmentPostMethod(TppClient.TppApiObjectResponse<BookAppointmentReply> response)
+        private void MockTppClientAppointmentPostMethod(TppApiObjectResponse<BookAppointmentReply> response)
         {
             _mockTppClient.Setup(x => x.BookAppointmentSlotPost(
                 It.Is<BookAppointment>(p=>

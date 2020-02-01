@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                 { "2006", InternalCode.InvalidLinkageDetailsTpp },
             };
 
-        public static Im1ConnectionRegisterResult Map(TppClient.TppApiObjectResponse<LinkAccountReply> response, ILogger<TppIm1ConnectionService> logger)
+        public static Im1ConnectionRegisterResult Map(TppApiObjectResponse<LinkAccountReply> response, ILogger<TppIm1ConnectionService> logger)
         {
             var keyMapping = TppErrorMapper.Map(logger, response, KeyToEnumMapper);
             return keyMapping !=null

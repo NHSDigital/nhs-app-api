@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Cancel_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = _fixture.Create<CancelAppointmentReply>(),
                 ErrorResponse = null
@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Cancel_TppClientReturnsNotCancellableErrorCode_ReturnsAppointmentNotCancellable(string tppErrorCode)
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
                 ErrorResponse = new Error{ErrorCode = tppErrorCode}
@@ -110,7 +110,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Cancel_TppClientReturnsTooLateToCancelErrorCode_ReturnsTooLateToCancel(string tppErrorCode)
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
                 ErrorResponse = new Error{ErrorCode = tppErrorCode}
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Cancel_TppClientReturnsInsufficientPermissionsErrorCode_ReturnsForbidden(string tppErrorCode)
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
                 ErrorResponse = new Error{ErrorCode = tppErrorCode}
@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Cancel_TppClientReturnsUnanticipatedErrorCode_ReturnsBadGateway(string tppErrorCode)
         {
             // Arrange
-            var response = new TppClient.TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
+            var response = new TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
                 ErrorResponse = new Error{ErrorCode = tppErrorCode}
@@ -170,7 +170,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         }
 
         private void MockTppClientAppointmentCancelMethod(
-            TppClient.TppApiObjectResponse<CancelAppointmentReply> response)
+            TppApiObjectResponse<CancelAppointmentReply> response)
         {
             _mockTppClient
                 .Setup(
