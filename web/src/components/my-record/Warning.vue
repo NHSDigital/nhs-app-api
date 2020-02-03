@@ -45,6 +45,7 @@ import { INDEX, MYRECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
+import NativeApp from '@/services/native-app';
 
 export default {
   name: 'Warning',
@@ -73,6 +74,9 @@ export default {
       this.$store.dispatch('myRecord/acceptTerms');
       this.$store.dispatch('myRecord/load');
       EventBus.$emit(FOCUS_NHSAPP_ROOT);
+      if (this.$store.state.device.isNativeApp) {
+        NativeApp.resetPageFocus();
+      }
     },
     onBackButtonClicked(event) {
       event.preventDefault();
