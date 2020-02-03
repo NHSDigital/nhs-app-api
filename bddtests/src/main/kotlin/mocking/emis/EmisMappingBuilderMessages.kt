@@ -5,6 +5,7 @@ import mocking.emis.patientPracticeMessaging.EmisCreateMessageBuilder
 import mocking.emis.patientPracticeMessaging.EmisMessagingBuilder
 import mocking.emis.patientPracticeMessaging.EmisMessagingConverationBuilder
 import mocking.emis.patientPracticeMessaging.EmisMessagingRecipientsBuilder
+import mocking.emis.patientPracticeMessaging.EmisDeleteConversationBuilder
 import models.Patient
 import worker.models.patientPracticeMessaging.CreateMessageRequest
 
@@ -42,5 +43,12 @@ class EmisMappingBuilderMessages(private var configuration: EmisConfiguration?) 
             patient.endUserSessionId,
             patient.sessionId,
             createMessageRequest)
+
+    fun deleteConversationRequest(patient: Patient) = EmisDeleteConversationBuilder(
+            configuration!!,
+            patient.userPatientLinkToken,
+            patient.endUserSessionId,
+            patient.sessionId
+    )
 
 }

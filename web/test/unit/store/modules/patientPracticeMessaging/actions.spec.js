@@ -9,6 +9,7 @@ describe('patient practice messaging store actions', () => {
   };
   const mockMessages = { messageSummaries: [{ id: '1', subject: 'subject' }] };
   const mockUpdateStatus = { messageReadStateUpdateStatus: 'Updated' };
+  const mockDelete = { isDeleted: true };
   let commit;
   let dispatch;
   const id = 1;
@@ -23,7 +24,9 @@ describe('patient practice messaging store actions', () => {
       getV1PatientMessagesById: jest.fn()
         .mockImplementation(() => Promise.resolve(getMessageResponse)),
       postV1PatientMessagesUpdateReadStatus: jest.fn()
-        .mockImplementation(() => Promise.resolve(mockUpdateStatus)) } },
+        .mockImplementation(() => Promise.resolve(mockUpdateStatus)),
+      deleteV1PatientMessagesById: jest.fn()
+        .mockImplementation(() => Promise.resolve(mockDelete)) } },
     dispatch,
     state,
   });
@@ -133,6 +136,36 @@ describe('patient practice messaging store actions', () => {
 
     it('will dispatch to load message', () => {
       expect(commit).toHaveBeenCalledWith('SET_STATUS_STATE', 'Updated');
+    });
+  });
+
+  describe('deleteMessage', () => {
+    beforeEach(async () => {
+      await actions.deleteMessage.call(store(), { commit }, 1);
+    });
+
+    it('will dispatch to set deleted', () => {
+      expect(commit).toHaveBeenCalledWith('SET_DELETED', true);
+    });
+  });
+
+  describe('clearSelectedRetainingId', () => {
+    beforeEach(async () => {
+      await actions.clearSelectedRetainingId.call(store(), { commit }, 1);
+    });
+
+    it('will dispatch to clear but retain id', () => {
+      expect(commit).toHaveBeenCalledWith('CLEAR_SELECTED_MESSAGE_DETAILS');
+    });
+  });
+
+  describe('retryMessageDelete', () => {
+    beforeEach(async () => {
+      await actions.retryMessageDelete.call(store(), { commit, state }, 1);
+    });
+
+    it('will dispatch to retry to delete message', () => {
+      expect(dispatch).toHaveBeenCalledWith('patientPracticeMessaging/deleteMessage', 1);
     });
   });
 });

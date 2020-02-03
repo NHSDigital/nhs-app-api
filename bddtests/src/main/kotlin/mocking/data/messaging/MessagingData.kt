@@ -1,5 +1,6 @@
 package mocking.data.messaging
 
+import mocking.emis.patientPracticeMessaging.ConversationDeletedResponse
 import mocking.emis.patientPracticeMessaging.MessageDetails
 import mocking.emis.patientPracticeMessaging.MessageRecipientsResponseModel
 import mocking.emis.patientPracticeMessaging.MessageReply
@@ -79,5 +80,9 @@ object MessagingData {
 
     fun getUpdatedResponse(): MessageReadStatusUpdateResponse {
         return MessageReadStatusUpdateResponse("Updated")
+    }
+
+    fun getDeleteResponse(): ConversationDeletedResponse {
+        return ConversationDeletedResponse(true)
     }
 }

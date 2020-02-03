@@ -58,6 +58,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         private const string GetMessageRecipientsPath = "messagerecipients?userPatientLinkToken={0}";
         private const string PutMessageReadStatusUpdate = "messages";
         private const string PostMessagePath = "messages";
+        private const string DeleteMessagePath = "messages/{0}";
 
         private readonly EmisHttpClient _httpClient;
         private readonly EmisConfigurationSettings _settings;
@@ -364,6 +365,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return await Post<PostMessageRequest, MessagePostResponse>(sendMessageRequest, PostMessagePath,
                 RequestsForSuccessOutcome.SendPatientMessagePost, GetDefaultSuccessStatusCodeList(),
                 requestParameters.EndUserSessionId, requestParameters.SessionId);
+        }
+
+        public async Task<EmisApiObjectResponse<MessageDeleteResponse>> PatientPracticeMessageDelete(EmisRequestParameters requestParameters, string messageId)
+        {
+            var deleteMessageRequest = new MessageDeleteRequest()
+            {
+                UserPatientLinkToken = requestParameters.UserPatientLinkToken
+            };
+
+            return await Delete<MessageDeleteRequest, MessageDeleteResponse>(
+                deleteMessageRequest,
+                string.Format(CultureInfo.InvariantCulture, DeleteMessagePath, messageId),
+                RequestsForSuccessOutcome.PatientPracticeMessageDelete, GetDefaultSuccessStatusCodeList(),
+                endUserSessionId: requestParameters.EndUserSessionId, sessionId: requestParameters.SessionId);
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Delete<TRequest, TResponse>(TRequest model, string path,

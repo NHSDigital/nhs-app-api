@@ -25,5 +25,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessO
         PatientMessageUpdatePut,
         PatientMessageRecipientsGet,
         SendPatientMessagePost,
+        PatientPracticeMessageDelete,
     }
 }

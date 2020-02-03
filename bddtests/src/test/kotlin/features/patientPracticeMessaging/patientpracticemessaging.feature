@@ -5,15 +5,6 @@ Feature: Patient to practice messaging
     Given I am using the native app user agent
     And I am a EMIS patient
 
-  Scenario: A user can see their read and unread patient practice messages
-    Given I am a user who can access patient practice messaging
-    And I am logged in
-    And I have patient practice messages in my inbox, all of which are read
-    When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the patient to practice inbox page is displayed
-    And I see a list of patient practice messages
-
   Scenario: A user that has no patient practice messages sees no patient practice messages information displayed
     Given I am a user who can access patient practice messaging
     And I am logged in
@@ -37,7 +28,7 @@ Feature: Patient to practice messaging
     And there is an unknown error getting patient practice messages
     When I navigate to the More page
     And I click the Messages link on the More page
-    Then I see the appropriate error for patient practice messaging
+    Then I see the appropriate error for listing patient practice message(s)
 
   Scenario: A user receives a validation error if they enter invalid data when sending a patient practice message
     Given I am a user who can access patient practice messaging
@@ -64,18 +55,6 @@ Feature: Patient to practice messaging
 
 
   @smoketest
-  Scenario: A user can see a patient practice message conversation with unread messages
-    Given I am a user who can access patient practice messaging
-    And I am logged in
-    And I have patient practice messages in my inbox, some of which are unread
-    When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the patient to practice inbox page is displayed
-    And I see a list of patient practice messages
-    When I select a patient practice message in my inbox
-    Then I see my patient practice message along with the replies from the GP
-
-  @smoketest
   Scenario: A patient can send a patient practice message to their GP
     Given I am a user who can access patient practice messaging
     And I am logged in
@@ -91,6 +70,40 @@ Feature: Patient to practice messaging
     And I insert a subject and message
     And I click send message
     Then I see my new message after it has been sent
+
+  @smoketest
+  Scenario: A user can see their unread messages, view one and then delete the patient practice conversation
+    Given I am a user who can access patient practice messaging
+    And I am logged in
+    And I have patient practice messages in my inbox, some of which are unread
+    When I navigate to the More page
+    And I click the Messages link on the More page
+    Then the patient to practice inbox page is displayed
+    And I see a list of patient practice messages
+    When I select a patient practice message in my inbox
+    Then I see my patient practice message along with the replies from the GP
+    When I select delete conversation on the view conversation page
+    Then I am prompted to confirm my intention to delete the conversation
+    When I click delete conversation on the delete page to confirm my decision
+    Then I see a page indicating my patient practice message has been deleted
+    When I click go back to patient practice messages
+    Then the patient to practice inbox page is displayed
+
+  Scenario: A user cant delete a patient practice conversation and is shown an error
+    Given I am a user who can access patient practice messaging
+    And I am logged in
+    And I have patient practice messages in my inbox, some of which are unread
+    When I navigate to the More page
+    And I click the Messages link on the More page
+    Then the patient to practice inbox page is displayed
+    And I see a list of patient practice messages
+    When I select a patient practice message in my inbox
+    Then I see my patient practice message along with the replies from the GP
+    When I select delete conversation on the view conversation page
+    Then I am prompted to confirm my intention to delete the conversation
+    And there is a bad request deleting the patient practice conversation
+    When I click delete conversation on the delete page to confirm my decision
+    Then I see the appropriate error for deleting patient practice message(s)
 
   Scenario: A user can see a patient practice message conversation with no unread messages
     Given I am a user who can access patient practice messaging
@@ -112,7 +125,7 @@ Feature: Patient to practice messaging
     Then the patient to practice inbox page is displayed
     And there is an unknown error getting patient practice message details
     When I select a patient practice message in my inbox
-    Then I see the appropriate error for getting patient practice message details
+    Then I see the appropriate error for getting patient practice message(s)
 
   Scenario: A user is looking for urgent advice via patient practice messaging
     Given I am a user who can access patient practice messaging

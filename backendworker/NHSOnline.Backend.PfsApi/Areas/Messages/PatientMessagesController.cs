@@ -178,5 +178,34 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             await result.Accept(new PatientSendMessageResultAuditingVisitor(_auditor, _logger));
             return result.Accept(new PatientSendMessageResultVisitor(_errorReferenceGenerator, userSession));
         }
+
+        [HttpDelete]
+        [ApiVersionRoute("patient/messages/{messageId}")]
+        public async Task<IActionResult> DeleteMessage([FromRoute(Name = "messageId")] string messageId)
+        {
+            _logger.LogEnter();
+
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+
+            await _auditor.Audit(AuditingOperations.DeletePracticePatientMessageRequest,
+                $"Deleting a practice to patient message with id {messageId}");
+
+            var userSession = HttpContext.GetUserSession();
+            var gpUserSession = userSession.GpUserSession;
+
+            _logger.LogInformation($"Fetching PatientMessagesService for supplier: {gpUserSession.Supplier}");
+
+            var patientMessagesService = _gpSystemFactory
+                .CreateGpSystem(gpUserSession.Supplier)
+                .GetPatientMessagesService();
+
+            var result = await patientMessagesService.DeleteMessage(gpUserSession, messageId);
+
+            await result.Accept(new PatientMessageDeleteResultAuditingVisitor(_auditor, _logger));
+            return result.Accept(new PatientMessageDeleteResultVisitor(_errorReferenceGenerator, userSession));
+        }
     }
 }

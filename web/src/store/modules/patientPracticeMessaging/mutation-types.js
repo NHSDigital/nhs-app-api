@@ -11,6 +11,8 @@ export const SET_SELECTED_MESSAGE_RECIPIENT = 'SET_SELECTED_MESSAGE_RECIPIENT';
 export const SET_URGENCY_CHOICE = 'SET_URGENCY_CHOICE';
 export const SET_STATUS_STATE = 'SET_STATUS_STATE';
 export const MESSAGE_SENT = 'MESSAGE_SENT';
+export const SET_DELETED = 'SET_DELETED';
+export const CLEAR_SELECTED_MESSAGE_DETAILS = 'CLEAR_SELECTED_MESSAGE_DETAILS';
 
 export const initialState = () => ({
   loadedMessages: false,
@@ -24,4 +26,5 @@ export const initialState = () => ({
   urgencyChoice: undefined,
   statusState: undefined,
   messageSent: false,
+  messageDeleted: false,
 });

@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         // Practice to Patient Messages
         Task<EmisApiObjectResponse<MessagesGetResponse>> PatientMessagesGet(
             EmisRequestParameters requestParameters);
-        
+
         Task<EmisApiObjectResponse<MessageGetResponse>> PatientMessageDetailsGet(
             string messageId, EmisRequestParameters requestParameters);
 
@@ -89,5 +89,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             EmisRequestParameters requestParameters);
         Task<EmisApiObjectResponse<MessagePostResponse>> PatientMessagePost(
             EmisRequestParameters requestParameters, CreatePatientMessage message);
+
+        Task<EmisApiObjectResponse<MessageDeleteResponse>> PatientPracticeMessageDelete(
+            EmisRequestParameters requestParameters, string messageId);
     }
 }

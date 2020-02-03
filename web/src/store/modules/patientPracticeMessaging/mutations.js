@@ -12,8 +12,10 @@ import {
   SET_SELECTED_MESSAGE_RECIPIENT,
   SET_URGENCY_CHOICE,
   SET_STATUS_STATE,
-  initialState,
   MESSAGE_SENT,
+  SET_DELETED,
+  CLEAR_SELECTED_MESSAGE_DETAILS,
+  initialState,
 } from './mutation-types';
 
 const clearMessage = (state) => {
@@ -22,6 +24,10 @@ const clearMessage = (state) => {
   state.selectedMessageRecipient = undefined;
   state.statusState = undefined;
   state.messageSent = false;
+};
+
+const clearSelectedMessageDetails = (state) => {
+  state.selectedMessageDetails = undefined;
 };
 
 export default {
@@ -33,6 +39,9 @@ export default {
   },
   [CLEAR](state) {
     clearMessage(state);
+  },
+  [CLEAR_SELECTED_MESSAGE_DETAILS](state) {
+    clearSelectedMessageDetails(state);
   },
   [LOADED_MESSAGES](state, loaded) {
     state.loadedMessages = !!loaded;
@@ -66,5 +75,8 @@ export default {
   },
   [SET_STATUS_STATE](state, status) {
     state.statusState = status;
+  },
+  [SET_DELETED](state, status) {
+    state.messageDeleted = status;
   },
 };

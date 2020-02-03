@@ -1285,6 +1285,7 @@ export default {
     view_details: {
       unreadMessages: 'Unread messages',
       unreadMessage: 'Unread message',
+      deleteMenuItemText: 'Delete conversation',
       backButtonText: {
         text: 'Back',
       },
@@ -1310,6 +1311,26 @@ export default {
       or: 'or',
       call111Link: 'call 111',
       sendButtonText: 'Send message',
+    },
+    delete: {
+      firstParagraph: 'Deleting your conversation will remove it from your list of messages.',
+      secondParagraph: 'Your conversation will still be saved in your GP health record.',
+      deleteButtonText: 'Delete conversation',
+      backButtonText: {
+        text: 'Cancel',
+      },
+      errors: {
+        400: {
+          pageTitle: 'Error deleting conversation',
+          pageHeader: 'Error deleting conversation',
+          header: 'Sorry, we could not delete your conversation',
+          message: 'Try again now.',
+          retryButtonText: 'Try again',
+        },
+      },
+    },
+    deleteSuccess: {
+      back: 'Go to your messages',
     },
   },
   messaging: {
@@ -1479,7 +1500,10 @@ export default {
     gpFinderWaitingListSignup: 'Want us to email you when all features are available at your GP surgery?',
     gpFinderWaitingListJoined: 'What happens next',
     patientPracticeMessaging: 'Messages',
+    patientPracticeMessagingViewMessage: 'Conversation with {name}',
     patientPracticeMessagingCreateMessage: 'Send your message to {name}',
+    patientPracticeMessagingDeleteMessage: 'Delete your conversation with {name}',
+    patientPracticeMessagingDeleteMessageSuccess: 'Your conversation with {name} is deleted',
     prescriptions: 'Your repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication - Repeat prescriptions',
     confirmPrescription: 'Confirm prescription - Repeat prescriptions',
@@ -1532,7 +1556,6 @@ export default {
     serviceUnavailable: 'Service unavailable',
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
     messaging: 'Messages',
-    messageDetails: 'Messages',
     patientPracticeMessagingUrgency: 'Do you need urgent advice?',
     patientPracticeMessagingUrgencyContactYourGp: 'Phone or visit your GP or NHS 111',
     patientPracticeMessagingRecipients: 'Select who to message',

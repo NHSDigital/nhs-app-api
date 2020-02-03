@@ -58,6 +58,7 @@ export const createStore = ({
     tc: create$T(),
     te: create$Te(),
   },
+  router = {},
 } = {}) => ({
   app: {
     $analytics: {
@@ -68,6 +69,7 @@ export const createStore = ({
     $http,
     context,
     i18n,
+    router,
   },
   dispatch: jest.fn(),
   getters,

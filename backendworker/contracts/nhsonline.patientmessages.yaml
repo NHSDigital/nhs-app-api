@@ -217,6 +217,45 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+    delete:
+      tags:
+        - patientMessages
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the message
+          schema:
+            type: string
+      summary: Delete a conversation between the user and their practice
+      description: Delete a conversation between the user and their practice
+      responses:
+        "204":
+          description: Successfully deleted 
+        "400":
+          description: Upstream system returned BadRequest status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "403":
+          description: Upstream system returned Forbidden status.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "500":
+          description: An unknown error occured when processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
+        "502":
+          description: Upstream system returned BadGateway status or an invalid response.
+          content:
+            application/json:
+              schema:
+                $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
 components:
   schemas:
     PatientMessagesResponse:
@@ -243,6 +282,12 @@ components:
           description: Details for a conversation between the patient and their practice
           items:
             $ref: "#/components/schemas/PatientMessageDetails"
+    PatientMessageDeleteResponse:
+      type: object
+      properties:
+        IsDeleted:
+          type: boolean
+          description: Flag to indicate if the message has been deleted
     PatientMessageReadStatusUpdatedResponse:
       type: object
       properties:

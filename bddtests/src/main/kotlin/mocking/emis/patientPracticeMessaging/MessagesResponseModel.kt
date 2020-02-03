@@ -47,3 +47,7 @@ data class Recipient (
 data class MessageReadStatusUpdateResponse (
         var MessageReadStateUpdateStatus: String
 )
+
+data class ConversationDeletedResponse (
+        var IsDeleted: Boolean
+)

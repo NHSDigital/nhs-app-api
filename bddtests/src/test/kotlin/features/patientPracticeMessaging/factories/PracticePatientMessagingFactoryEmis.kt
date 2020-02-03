@@ -50,6 +50,12 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         }
     }
 
+    override fun errorWithPatientPracticeMessagingConversationDelete(patient: Patient) {
+        mockingClient.forEmis {
+            messaging.deleteConversationRequest(patient).respondWithBadRequest()
+        }
+    }
+
     override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean){
         val messages = MessagingData.getDefaultMessagesData(REPLY_COUNT, hasUnread)
         setUpMessageDataAndStubs(patient, messages)
@@ -116,6 +122,11 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         mockingClient.forEmis {
             messaging.sendMessageRequest(patient, createMessageRequest)
                     .respondWithSuccess()
+        }
+
+        mockingClient.forEmis {
+            messaging.deleteConversationRequest(patient)
+                    .respondWithSuccess(MessagingData.getDeleteResponse())
         }
     }
 

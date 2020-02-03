@@ -87,13 +87,5 @@ describe('patient messaging messages', () => {
     it('will dispatch update read status', () => {
       expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/updateReadStatusAsRead');
     });
-
-    it('will dispatch updateHeaderText', () => {
-      expect(store.dispatch).toHaveBeenNthCalledWith(1, 'header/updateHeaderText', jasmine.anything());
-    });
-
-    it('will dispatch updatePageTitle', () => {
-      expect(store.dispatch).toHaveBeenNthCalledWith(2, 'pageTitle/updatePageTitle', jasmine.anything());
-    });
   });
 });

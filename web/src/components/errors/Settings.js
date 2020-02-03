@@ -27,6 +27,7 @@ import {
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
   PATIENT_PRACTICE_MESSAGING_CREATE,
+  PATIENT_PRACTICE_MESSAGING_DELETE,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -193,6 +194,12 @@ export default {
       route: PATIENT_PRACTICE_MESSAGING_CREATE.path,
       redirectUrl: {
         default: MORE.path,
+      },
+    },
+    {
+      route: PATIENT_PRACTICE_MESSAGING_DELETE.path,
+      action: {
+        400: 'patientPracticeMessaging/retryMessageDelete',
       },
     },
     {

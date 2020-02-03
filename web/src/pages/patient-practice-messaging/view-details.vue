@@ -4,6 +4,13 @@
       <sentMessage
         class="nhsuk-u-padding-bottom-4"/>
       <receivedMessages/>
+      <menu-item-list id="messageDetailsOptionsList" class="nhsuk-u-margin-bottom-3">
+        <menu-item id="deleteMessage"
+                   :text="$t('patient_practice_messaging.view_details.deleteMenuItemText')"
+                   :click-func="deleteClicked"
+                   header-tag="h2"
+                   href="#"/>
+      </menu-item-list>
     </div>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
@@ -21,7 +28,9 @@
 import SentMessage from '@/components/patient-practice-messaging/SentMessage';
 import ReceivedMessages from '@/components/patient-practice-messaging/ReceivedMessages';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { INDEX, PATIENT_PRACTICE_MESSAGING } from '@/lib/routes';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
+import { INDEX, PATIENT_PRACTICE_MESSAGING, PATIENT_PRACTICE_MESSAGING_DELETE } from '@/lib/routes';
 import { redirectTo, isFalsy } from '@/lib/utils';
 
 export default {
@@ -30,6 +39,8 @@ export default {
     SentMessage,
     ReceivedMessages,
     DesktopGenericBackLink,
+    MenuItem,
+    MenuItemList,
   },
   data() {
     return {
@@ -39,6 +50,9 @@ export default {
   computed: {
     detailsLoaded() {
       return this.$store.state.patientPracticeMessaging.loadedDetails;
+    },
+    messageID() {
+      return this.$store.state.patientPracticeMessaging.selectedMessageId;
     },
   },
   async fetch({ store, redirect }) {
@@ -56,24 +70,21 @@ export default {
     return undefined;
   },
   mounted() {
-    if (this.$store.state.patientPracticeMessaging.loadedDetails &&
-      this.$store.state.patientPracticeMessaging.selectedMessageRecipient !== undefined) {
-      this.$store.dispatch('header/updateHeaderText',
-        `Message to ${this.$store.state.patientPracticeMessaging.selectedMessageRecipient.name}`);
-      this.$store.dispatch('pageTitle/updatePageTitle',
-        `Message to ${this.$store.state.patientPracticeMessaging.selectedMessageRecipient.name}`);
-
+    if (this.$store.state.patientPracticeMessaging.loadedDetails) {
       if (this.$store.state.patientPracticeMessaging.selectedMessageId !== 0) {
         this.$store.dispatch('patientPracticeMessaging/updateReadStatusAsRead');
       }
     }
   },
   beforeDestroy() {
-    this.$store.dispatch('patientPracticeMessaging/clear');
+    this.$store.dispatch('patientPracticeMessaging/clearSelectedRetainingId');
   },
   methods: {
     backButtonClicked() {
       redirectTo(this, this.messagesPath);
+    },
+    deleteClicked() {
+      redirectTo(this, PATIENT_PRACTICE_MESSAGING_DELETE.path);
     },
   },
 };

@@ -13,6 +13,8 @@ import {
   SET_STATUS_STATE,
   SET_URGENCY_CHOICE,
   MESSAGE_SENT,
+  SET_DELETED,
+  CLEAR_SELECTED_MESSAGE_DETAILS,
 } from './mutation-types';
 
 export default {
@@ -40,6 +42,7 @@ export default {
       this.dispatch('errors/clearAllApiErrors');
       commit(LOADED_RECIPIENTS, false);
     }
+    commit(CLEAR);
     try {
       const response = await this.app.$http.getV1PatientMessagesRecipients();
       commit(SET_RECIPIENTS, get('messageRecipients', response));
@@ -63,6 +66,9 @@ export default {
   },
   clearErrorsAndLoadDetails({ state }) {
     return this.dispatch('patientPracticeMessaging/loadMessage', { id: state.selectedMessageId, clearApiError: true });
+  },
+  retryMessageDelete({ state }) {
+    this.dispatch('patientPracticeMessaging/deleteMessage', state.selectedMessageId);
   },
   async updateReadStatusAsRead({ commit, state }) {
     const request = {
@@ -93,6 +99,15 @@ export default {
       // Nothing to do. A server error / messages error is displayed
     }
   },
+  async deleteMessage({ commit }, id) {
+    try {
+      await this.app.$http.deleteV1PatientMessagesById({ id });
+      commit(SET_DELETED, true);
+    } catch {
+      commit(SET_DELETED, false);
+      // Nothing to do. A server error / messages error is displayed
+    }
+  },
   setMessageDetails({ commit }, messageDetails) {
     commit(SET_DETAILS, messageDetails);
     commit(LOADED_MESSAGE, true);
@@ -108,5 +123,8 @@ export default {
   },
   clear({ commit }) {
     commit(CLEAR);
+  },
+  clearSelectedRetainingId({ commit }) {
+    commit(CLEAR_SELECTED_MESSAGE_DETAILS);
   },
 };

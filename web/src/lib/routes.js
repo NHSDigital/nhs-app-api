@@ -1045,6 +1045,17 @@ const routes = {
     },
     helpUrl: baseNhsAppHelpUrl,
   },
+  PATIENT_PRACTICE_MESSAGING_DELETE: {
+    name: 'patient-practice-messaging-delete',
+    path: '/patient-practice-messaging/delete',
+    crumb: {
+      i18nKey: 'patientPracticeMessagingDelete',
+      get parentRoute() {
+        return this.allRoutes.PATIENT_PRACTICE_MESSAGING;
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+  },
   PATIENT_PRACTICE_MESSAGING_URGENCY: {
     name: 'patient-practice-messaging-urgency',
     path: '/patient-practice-messaging/urgency',
@@ -1094,6 +1105,18 @@ const routes = {
     path: '/patient-practice-messaging/send-message',
     crumb: {
       i18nKey: 'patientPracticeMessagingCreate',
+      get parentRoute() {
+        return this.allRoutes.PATIENT_PRACTICE_MESSAGING;
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+  },
+  PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS: {
+    name: 'patient-practice-messaging-delete-success',
+    path: '/patient-practice-messaging/delete-success',
+    crumb: {
+      nativeDisabled: true,
+      i18nKey: 'patientPracticeMessagingDeleteSuccess',
       get parentRoute() {
         return this.allRoutes.PATIENT_PRACTICE_MESSAGING;
       },
@@ -1516,6 +1539,8 @@ export const {
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   PATIENT_PRACTICE_MESSAGING_CREATE,
+  PATIENT_PRACTICE_MESSAGING_DELETE,
+  PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_REPEAT_COURSES,

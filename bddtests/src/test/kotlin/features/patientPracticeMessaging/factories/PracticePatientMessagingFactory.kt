@@ -15,6 +15,7 @@ abstract class PracticePatientMessagingFactory {
     abstract fun forbiddenErrorWithPatientPracticeMessaging(patient: Patient)
     abstract fun unknownErrorWithPatientPracticeMessaging(patient: Patient)
     abstract fun errorWithPatientPracticeMessagingMessageDetails(patient: Patient)
+    abstract fun errorWithPatientPracticeMessagingConversationDelete(patient: Patient)
     abstract fun getExpectedMessages(expectedMessages: List<PatientMessageSummary>): List<ExpectedMessage>
     abstract fun patientHasNoMessages(patient: Patient)
     abstract fun patientSuccessfullySendsAMessage(patient: Patient, createMessageRequest: CreateMessageRequest)

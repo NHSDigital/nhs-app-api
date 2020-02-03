@@ -58,6 +58,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         private const string CreateMessageResponseAuditType = "PatientPracticeMessage_Create_Response";
         private const string CreateMessageRequestAuditMessage = "Creating a practice to patient message";
 
+        private const string DeletePracticePatientMessageRequest = "PracticePatientMessage_Delete_Request";
+        private const string DeletePracticePatientMessageResponse = "PracticePatientMessage_Delete_Response";
+        private const string DeleteMessageRequestAuditMessage = "Deleting a practice to patient message with id 1";
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -190,6 +194,71 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             result
                 .Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().Be(successResponse);
+        }
+
+        [TestMethod]
+        public async Task DeleteMessage_ReturnsSuccessResult_WhenServiceReturnsSuccessfulResponse()
+        {
+            // Arrange
+            var successResult = new DeletePatientMessageResult.Success();
+
+            _mockPatientMessagesService
+                .Setup(s => s.DeleteMessage(
+                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession),
+                    "1"))
+                .Returns(Task.FromResult((DeletePatientMessageResult) successResult));
+
+            // Act
+            var result = await _systemUnderTest.DeleteMessage("1");
+
+            // Assert
+            result
+                .Should().BeAssignableTo<NoContentResult>();
+        }
+
+        [DataTestMethod]
+        [DataRow(typeof(DeletePatientMessageResult.Forbidden), StatusCodes.Status403Forbidden,
+            "Error deleting patient message: Forbidden")]
+        [DataRow(typeof(DeletePatientMessageResult.InternalServerError), StatusCodes.Status500InternalServerError,
+            "Error deleting patient message: Internal Server Error")]
+        [DataRow(typeof(DeletePatientMessageResult.BadGateway), StatusCodes.Status502BadGateway,
+            "Error deleting patient message: Bad Gateway")]
+        [DataRow(typeof(DeletePatientMessageResult.BadRequest), StatusCodes.Status400BadRequest,
+            "Error deleting patient message: Bad Request")]
+        public async Task DeleteMessage_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
+            Type serviceResultType,
+            int expectedStatusCode,
+            string expectedAuditResponseMessage)
+        {
+            // Arrange
+            var serviceResult = (DeletePatientMessageResult) Activator.CreateInstance(serviceResultType);
+
+            _mockPatientMessagesService
+                .Setup(s => s.DeleteMessage(
+                    It.Is<GpUserSession>(g => g == _userSession.GpUserSession), "1"))
+                .Returns(Task.FromResult(serviceResult))
+                .Verifiable();
+
+            MockErrorReferenceGenerator(expectedStatusCode);
+            MockAuditor(DeletePracticePatientMessageRequest, DeleteMessageRequestAuditMessage);
+            MockAuditor(DeletePracticePatientMessageResponse, expectedAuditResponseMessage);
+
+            var expectedValue = new PfsErrorResponse
+            {
+                ServiceDeskReference = _serviceDeskReference
+            };
+
+            // Act
+            var result = await _systemUnderTest.DeleteMessage("1");
+
+            // Assert
+            _mockPatientMessagesService.Verify();
+            _mockErrorReferenceGenerator.Verify();
+            _mockAuditor.Verify();
+
+            var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            objectResult.StatusCode.Should().Be(expectedStatusCode);
+            objectResult.Value.Should().BeEquivalentTo(expectedValue);
         }
 
         [DataTestMethod]

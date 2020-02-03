@@ -110,4 +110,12 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
                 page = this)
     }
 
+    fun clickDeleteConversation() {
+        HybridPageElement(
+                webDesktopLocator = "//a[@id='deleteMessage']",
+                androidLocator = null,
+                page= this
+        ).click()
+    }
+
 }

@@ -72,6 +72,8 @@ import {
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   PATIENT_PRACTICE_MESSAGING_CREATE,
+  PATIENT_PRACTICE_MESSAGING_DELETE,
+  PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_CONFIRM_COURSES,
@@ -320,6 +322,27 @@ export default function ({ route, store, app }) {
       route.meta.formatArguments = { name };
       break;
     }
+    case PATIENT_PRACTICE_MESSAGING_DELETE.name: {
+      const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
+      route.meta.headerKey = 'pageTitles.patientPracticeMessagingDeleteMessage';
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingDeleteMessage';
+      route.meta.formatArguments = { name };
+      break;
+    }
+    case PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS.name: {
+      const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
+      route.meta.headerKey = 'pageTitles.patientPracticeMessagingDeleteMessageSuccess';
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingDeleteMessageSuccess';
+      route.meta.formatArguments = { name };
+      break;
+    }
+    case PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.name: {
+      const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
+      route.meta.headerKey = 'pageTitles.patientPracticeMessagingViewMessage';
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingViewMessage';
+      route.meta.formatArguments = { name };
+      break;
+    }
     case PRESCRIPTIONS.name:
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.prescriptions';
@@ -521,11 +544,6 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 4);
       route.meta.headerKey = 'pageHeaders.patientPracticeMessagingUrgencyContactYourGp';
       route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingUrgencyContactYourGp';
-      break;
-    case PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.name:
-      store.dispatch('navigation/setNewMenuItem', 4);
-      route.meta.headerKey = 'pageHeaders.messageDetails';
-      route.meta.pageTitleKey = 'pageTitles.messageDetails';
       break;
     case LINKED_PROFILES_SHUTTER_MORE.name: {
       store.dispatch('navigation/setNewMenuItem', 4);

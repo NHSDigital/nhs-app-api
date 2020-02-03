@@ -1,6 +1,7 @@
 package features.patientPracticeMessaging.stepDefinitions
 
 import config.Config
+import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -22,6 +23,8 @@ import utils.SerenityHelpers
 import mocking.emis.patientPracticeMessaging.MessageReply
 import mocking.emis.patientPracticeMessaging.MessageResponseModel
 import net.thucydides.core.annotations.Steps
+import pages.patientPracticeMessaging.PatientPracticeMessagingDeletePage
+import pages.patientPracticeMessaging.PatientPracticeMessagingDeleteSuccessPage
 import pages.patientPracticeMessaging.PracticePatientMessagingCreateMessagePage
 import worker.models.patientPracticeMessaging.CreateMessageRequest
 
@@ -32,6 +35,8 @@ open class PatientPracticeMessageStepDefinitions {
     private lateinit var patientPracticeMessagingUrgencyPage: PatientPracticeMessagingUrgencyPage
     private lateinit var patientPracticeMessagingContactYourGpPage: PatientPracticeMessagingContactYourGpPage
     private lateinit var patientPracticeMessagingRecipientsPage: PatientPracticeMessagingRecipientsPage
+    private lateinit var patientPracticeMessagingDeletePage: PatientPracticeMessagingDeletePage
+    private lateinit var patientPracticeMessagingDeleteSuccessPage: PatientPracticeMessagingDeleteSuccessPage
     private lateinit var errorPage: ErrorPage
 
     private val expectedCareCardContent = arrayListOf(
@@ -186,9 +191,16 @@ open class PatientPracticeMessageStepDefinitions {
 
     @When("I have no recipients for patient practice messaging$")
     fun iHaveNoRecipients() {
-       PracticePatientMessagingFactory
-               .getForSupplier(SerenityHelpers.getGpSupplier())
-               .noRecipients(SerenityHelpers.getPatient())
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .noRecipients(SerenityHelpers.getPatient())
+    }
+
+    @And("^there is a bad request deleting the patient practice conversation$")
+    fun givenThereIsABadRequestDeletingThePatientPracticeConversation() {
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .errorWithPatientPracticeMessagingConversationDelete(SerenityHelpers.getPatient())
     }
 
     @When("^I select a patient practice message in my inbox$")
@@ -265,23 +277,35 @@ open class PatientPracticeMessageStepDefinitions {
                 "go to 111.nhs.uk or call 111.")
     }
 
-    @Then("^I see the appropriate error for patient practice messaging$")
-    fun iSeeTheAppropriateErrorForPatientPracticeMessaging(){
-        errorPage.assertPageHeader("Messages Error")
-        errorPage.assertNoSubHeader()
-        errorPage.assertHeaderText("There is a problem getting your messages")
-        errorPage.assertMessageText("Try again now.")
-        errorPage.assertHasButton("Try again")
-    }
+    @Then("^I see the appropriate error for (.*) patient practice message\\(s\\)$")
+    fun iSeeTheAppropriateErrorForPatientPracticeMessage(action: String){
+        when (action) {
+            "deleting" -> {
+                errorPage.assertPageHeader("Error deleting conversation")
+                errorPage.assertNoSubHeader()
+                errorPage.assertHeaderText("Sorry, we could not delete your conversation")
+                errorPage.assertMessageText("Try again now.")
+                errorPage.assertHasButton("Try again")
+            }
+            "getting" -> {
+                errorPage.assertPageHeader("Message Error")
+                errorPage.assertNoSubHeader()
+                errorPage.assertHeaderText("There is a problem getting your message")
+                errorPage.assertMessageText("Try again now. If the problem " +
+                        "continues and you need this information now, " +
+                        "contact the person directly.")
+                errorPage.assertHasButton("Try again")
+            }
+            "listing" -> {
+                errorPage.assertPageHeader("Messages Error")
+                errorPage.assertNoSubHeader()
+                errorPage.assertHeaderText("There is a problem getting your messages")
+                errorPage.assertMessageText("Try again now.")
+                errorPage.assertHasButton("Try again")
+            }
+        }
 
-    @Then("^I see the appropriate error for getting patient practice message details$")
-    fun iSeeTheAppropriateErrorForGettingPatientPracticeMessageDetails(){
-        errorPage.assertPageHeader("Message Error")
-        errorPage.assertNoSubHeader()
-        errorPage.assertHeaderText("There is a problem getting your message")
-        errorPage.assertMessageText("Try again now. If the problem continues and you need this information now, " +
-                "contact the person directly.")
-        errorPage.assertHasButton("Try again")
+
     }
 
     @Then("^I see my new message after it has been sent")
@@ -321,6 +345,31 @@ open class PatientPracticeMessageStepDefinitions {
                 PatientPracticeMessagingTypes.AVAILABLE_RECIPIENTS)!!.MessageRecipients
         patientPracticeMessagingRecipientsPage.assertInfoText()
         patientPracticeMessagingRecipientsPage.assertRecipients(expectedRecipients)
+    }
+
+    @When("^I select delete conversation on the view conversation page$")
+    fun iClickOnDeleteConversationFromViewDetailsScreen(){
+        patientPracticeMessagingDetailsPage.clickDeleteConversation()
+    }
+
+    @Then("^I am prompted to confirm my intention to delete the conversation$")
+    fun iSeeTheDeleteInfoPage(){
+        patientPracticeMessagingDeletePage.assertDisplayed()
+    }
+
+    @When("^I click delete conversation on the delete page to confirm my decision$")
+    fun iClickDeleteConversationOnDeletePage() {
+        patientPracticeMessagingDeletePage.clickDeleteConversation()
+    }
+
+    @Then("^I see a page indicating my patient practice message has been deleted$")
+    fun iSeeTheDeleteSuccessPage(){
+        patientPracticeMessagingDeleteSuccessPage.assertDisplayed()
+    }
+
+    @When("^I click go back to patient practice messages$")
+    fun iClickToGoBackToPatientPracticeMessages() {
+        patientPracticeMessagingDeleteSuccessPage.clickBackToMessages()
     }
 
     private fun clickMessageBySerenityVariable(messageToClick: PatientPracticeMessagingTypes) {

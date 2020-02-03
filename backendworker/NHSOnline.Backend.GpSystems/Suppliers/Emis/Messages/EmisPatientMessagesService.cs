@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Azure.Documents.SystemFunctions;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages;
 using NHSOnline.Backend.GpSystems.Messages.Models;
@@ -149,30 +150,52 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             }
         }
 
-            public async Task<PostPatientMessageResult> SendMessage(GpUserSession gpUserSession,
-                CreatePatientMessage message)
+        public async Task<PostPatientMessageResult> SendMessage(GpUserSession gpUserSession,
+            CreatePatientMessage message)
+        {
+            try
             {
-                try
-                {
-                    var response = await _emisClient.PatientMessagePost(
-                        new EmisRequestParameters((EmisUserSession) gpUserSession), message);
+                var response = await _emisClient.PatientMessagePost(
+                    new EmisRequestParameters((EmisUserSession) gpUserSession), message);
 
-                    return InterpretSendMessageResponse(response);
-                }
-                catch (HttpRequestException e)
-                {
-                    _logger.LogError(e, "Request to send patient message was unsuccessful");
-                    return new PostPatientMessageResult.BadGateway();
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"Unknown error occured when sending the patient message");
-                    return new PostPatientMessageResult.InternalServerError();
-                }
+                return InterpretSendMessageResponse(response);
             }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Request to send patient message was unsuccessful");
+                return new PostPatientMessageResult.BadGateway();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Unknown error occured when sending the patient message");
+                return new PostPatientMessageResult.InternalServerError();
+            }
+        }
 
-            private GetPatientMessagesResult InterpretPatientMessagesGetResponse(
-            EmisClient.EmisApiObjectResponse<MessagesGetResponse> response)
+        public async Task<DeletePatientMessageResult> DeleteMessage(GpUserSession gpUserSession, string messageId)
+        {
+            try
+            {
+                var response = await _emisClient.PatientPracticeMessageDelete(
+                    new EmisRequestParameters((EmisUserSession) gpUserSession), messageId);
+
+                _logger.LogInformation($"Patient practice message with id {messageId} has been deleted");
+                return InterpretDeleteMessageResponse(response);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, $"Request to delete a patient message with id {messageId} was unsuccessful");
+                return new DeletePatientMessageResult.BadGateway();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Unknown error occured when deleting the patient message with id {messageId}");
+                return new DeletePatientMessageResult.InternalServerError();
+            }
+        }
+
+        private GetPatientMessagesResult InterpretPatientMessagesGetResponse(
+        EmisClient.EmisApiObjectResponse<MessagesGetResponse> response)
         {
             if (response.HasSuccessResponse)
             {
@@ -339,6 +362,38 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
             return new PostPatientMessageResult.BadGateway();
+        }
+
+        private DeletePatientMessageResult InterpretDeleteMessageResponse(
+            EmisClient.EmisApiObjectResponse<MessageDeleteResponse> response)
+        {
+            if (response.HasSuccessResponse)
+            {
+
+                if (response.Body != null && response.Body.IsDeleted != null && !response.Body.IsDeleted.Value)
+                {
+                    return new DeletePatientMessageResult.BadGateway();
+                }
+
+                return new DeletePatientMessageResult.Success();
+            }
+
+            if (response.HasForbiddenResponse())
+            {
+                _logger.LogEmisResponseIsForbidden();
+                _logger.LogEmisErrorResponse(response);
+                return new DeletePatientMessageResult.Forbidden();
+            }
+
+            if (response.HasBadRequestResponse)
+            {
+                _logger.LogEmisErrorResponse(response);
+                return new DeletePatientMessageResult.BadRequest();
+            }
+
+            _logger.LogEmisUnknownError(response);
+            _logger.LogEmisErrorResponse(response);
+            return new DeletePatientMessageResult.BadGateway();
         }
     }
 }
