@@ -2635,7 +2635,9 @@ export default {
     title: 'Coronavirus',
     paragraph1Highlight: 'Do not book a GP appointment ',
     paragraph1: 'if you have symptoms of coughing, fever, or shortness of breath, and:',
-    listItem1: 'you’ve been to mainland China and have become unwell within 2 weeks of returning, or',
+    listItem1: 'you’ve been to mainland China, Hong Kong, Japan, Macau, Malaysia, Republic ' +
+      'of Korea, Singapore, Taiwan, or Thailand and have become unwell ' +
+      'within 2 weeks of returning, or',
     listItem2: 'you’ve been in contact with someone with a confirmed case of coronavirus',
     paragraph2: 'Call NHS 111 instead.',
     paragraph3: 'You can read more about coronavirus on NHS.UK',

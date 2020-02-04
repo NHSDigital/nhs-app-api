@@ -45,6 +45,6 @@ export default {
     display: block;
   }
   ul {
-    padding: 0em 0 0 2.5em;
+    padding: 0 1em 0 2.5em;
   }
 </style>
