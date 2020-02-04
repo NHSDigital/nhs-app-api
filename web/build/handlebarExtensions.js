@@ -3,11 +3,13 @@ const _ = require('lodash');
 function handlebarsExt(Handlebars) {
   Handlebars.registerHelper('toUpperCase', str => str.toUpperCase());
 
+  Handlebars.registerHelper('versioning', str => '/v' + str.match(/\d+/g).map(Number)[0]);
+
   Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
   });
 
-  Handlebars.registerHelper('ifTrue', function (arg1, options) {
+  Handlebars.registerHelper('ifTrue', function (arg1, options)  {
     return (arg1 == true) ? options.fn(this) : options.inverse(this);
   });
 
@@ -18,3 +20,4 @@ function handlebarsExt(Handlebars) {
 }
 
 module.exports = handlebarsExt;
+ 

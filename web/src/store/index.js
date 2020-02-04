@@ -9,6 +9,7 @@ import errors from './modules/errors';
 import flashMessage from './modules/flashMessage';
 import header from './modules/header';
 import http from './modules/http';
+import knownServices from './modules/knownServices';
 import linkedAccounts from './modules/linkedAccounts';
 import modal from './modules/modal';
 import messaging from './modules/messaging';
@@ -43,6 +44,7 @@ export const modules = {
   flashMessage,
   header,
   http,
+  knownServices,
   linkedAccounts,
   messaging,
   modal,

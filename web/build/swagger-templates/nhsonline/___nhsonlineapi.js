@@ -334,7 +334,7 @@ class NHSOnlineApi {
     let ignoreLoading = parameters.ignoreLoading || false;
     let deferred = {{#isNode}}Q{{/isNode}}{{^isNode}}$q{{/isNode}}.defer();
     let domain = this.domain;
-    let path = '/v1{{../../subresource}}';
+    let path = '{{versioning ../operationId}}{{../../subresource}}';
     let body = {};
     let headers = {};
     let form = {};
