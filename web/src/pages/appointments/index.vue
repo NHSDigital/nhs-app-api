@@ -2,6 +2,7 @@
   <div v-if="showTemplate && hasLoaded">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
+        <corona-virus-message />
         <no-js-form :action="guidancePath" :value="formData">
           <generic-button
             id="book-appointments-button"
@@ -48,10 +49,11 @@
 </template>
 
 <script>
+import CoronaVirusMessage from '@/components/widgets/CoronaVirusMessage';
+import NoJsForm from '@/components/no-js/NoJsForm';
+import GenericButton from '@/components/widgets/GenericButton';
 import PastAppointments from '@/components/appointments/PastAppointments';
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
-import GenericButton from '@/components/widgets/GenericButton';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import { APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
@@ -64,10 +66,16 @@ export default {
   layout: 'nhsuk-layout',
 
   components: {
+    CoronaVirusMessage,
+    GenericButton,
+    NoJsForm,
     PastAppointments,
     UpcomingAppointments,
-    NoJsForm,
-    GenericButton,
+  },
+  data() {
+    return {
+      coronaVirusUrl: this.$store.app.$env.CORONAVIRUS_INFORMATION_URL,
+    };
   },
   computed: {
     hasConnectionProblem() {
