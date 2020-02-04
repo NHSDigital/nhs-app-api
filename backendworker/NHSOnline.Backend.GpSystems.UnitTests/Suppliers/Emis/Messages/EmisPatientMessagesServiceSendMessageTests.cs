@@ -56,14 +56,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         {
             // Arrange
             var messagePostResponse = _fixture.Create<MessagePostResponse>();
-            var postMessageResponse = _fixture.Create<PostMessageResponse>();
+            var postMessageResponse = _fixture.Create<PostPatientMessageResponse>();
             var message = _fixture.Create<CreatePatientMessage>();
             message.Recipient = "Recipient 1";
             message.Subject = "Subject";
             message.MessageBody = "Message";
 
             _mockClient
-                .Setup(c => c.SendPatientMessagePost(GetMatchingEmisRequestParameters(), message))
+                .Setup(c => c.PatientMessagePost(GetMatchingEmisRequestParameters(), message))
                 .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessagePostResponse>(HttpStatusCode.OK,
                     RequestsForSuccessOutcome.SendPatientMessagePost, _sampleSuccessStatusCodes)
                 {
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient.Verify();
             _mockMessagesMapper.Verify();
 
-            result.Should().BeAssignableTo<PostSendMessageResult.Success>()
+            result.Should().BeAssignableTo<PostPatientMessageResult.Success>()
                 .Subject.Response.Should().NotBeNull();
         }
 
@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             var badRequestErrorResponse = _fixture.Create<BadRequestErrorResponse>();
 
             _mockClient
-                .Setup(c => c.SendPatientMessagePost(GetMatchingEmisRequestParameters(), message))
+                .Setup(c => c.PatientMessagePost(GetMatchingEmisRequestParameters(), message))
                 .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessagePostResponse>(HttpStatusCode.BadRequest,
                     RequestsForSuccessOutcome.SendPatientMessagePost, _sampleSuccessStatusCodes)
                 {
@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             // Assert
             _mockClient.Verify();
 
-            result.Should().BeAssignableTo<PostSendMessageResult.BadRequest>();
+            result.Should().BeAssignableTo<PostPatientMessageResult.BadRequest>();
         }
 
         [TestMethod]
@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             exceptionErrorResponse.Exceptions.First().Message = EmisApiErrorMessages.EmisService_NotEnabledForUser;
 
             _mockClient
-                .Setup(c => c.SendPatientMessagePost(GetMatchingEmisRequestParameters(), message))
+                .Setup(c => c.PatientMessagePost(GetMatchingEmisRequestParameters(), message))
                 .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessagePostResponse>(HttpStatusCode.Forbidden,
                     RequestsForSuccessOutcome.SendPatientMessagePost, _sampleSuccessStatusCodes)
                 {
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             // Assert
             _mockClient.Verify();
 
-            result.Should().BeAssignableTo<PostSendMessageResult.Forbidden>();
+            result.Should().BeAssignableTo<PostPatientMessageResult.Forbidden>();
         }
 
         [TestMethod]
@@ -161,7 +161,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             };
 
             _mockClient
-                .Setup(c => c.SendPatientMessagePost(GetMatchingEmisRequestParameters(), message))
+                .Setup(c => c.PatientMessagePost(GetMatchingEmisRequestParameters(), message))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -171,7 +171,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             // Assert
             _mockClient.Verify();
 
-            result.Should().BeAssignableTo<PostSendMessageResult.BadGateway>();
+            result.Should().BeAssignableTo<PostPatientMessageResult.BadGateway>();
         }
 
         [TestMethod]
@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             };
 
             _mockClient
-                .Setup(c => c.SendPatientMessagePost(GetMatchingEmisRequestParameters(), message))
+                .Setup(c => c.PatientMessagePost(GetMatchingEmisRequestParameters(), message))
                 .Throws<Exception>()
                 .Verifiable();
 
@@ -196,7 +196,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             // Assert
             _mockClient.Verify();
 
-            result.Should().BeAssignableTo<PostSendMessageResult.InternalServerError>();
+            result.Should().BeAssignableTo<PostPatientMessageResult.InternalServerError>();
         }
 
         private EmisRequestParameters GetMatchingEmisRequestParameters()

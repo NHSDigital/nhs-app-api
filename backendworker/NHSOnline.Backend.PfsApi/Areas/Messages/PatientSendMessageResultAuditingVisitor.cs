@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         }
 
 
-        public async Task Visit(PostSendMessageResult.Success result)
+        public async Task Visit(PostPatientMessageResult.Success result)
         {
             try
             {
@@ -27,55 +27,55 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PostSendMessageResult.Success)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PostPatientMessageResult.Success)}");
             }
         }
 
-        public async Task Visit(PostSendMessageResult.BadRequest result)
+        public async Task Visit(PostPatientMessageResult.BadRequest result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient messages: Bad Request");
+                await _auditor.Audit(AuditType, "Error sending patient practice message: Bad Request");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PostSendMessageResult.BadRequest)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PostPatientMessageResult.BadRequest)}");
             }
         }
 
-        public async Task Visit(PostSendMessageResult.Forbidden result)
+        public async Task Visit(PostPatientMessageResult.Forbidden result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient messages: Forbidden");
+                await _auditor.Audit(AuditType, "Error sending patient practice message: Forbidden");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PostSendMessageResult.Forbidden)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PostPatientMessageResult.Forbidden)}");
             }
         }
 
-        public async Task Visit(PostSendMessageResult.BadGateway result)
+        public async Task Visit(PostPatientMessageResult.BadGateway result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient messages: Bad Gateway");
+                await _auditor.Audit(AuditType, "Error sending patient practice message: Bad Gateway");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PostSendMessageResult.BadGateway)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PostPatientMessageResult.BadGateway)}");
             }
         }
 
-        public async Task Visit(PostSendMessageResult.InternalServerError result)
+        public async Task Visit(PostPatientMessageResult.InternalServerError result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient messages: Internal Server Error");
+                await _auditor.Audit(AuditType, "Error sending patient practice message: Internal Server Error");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PostSendMessageResult.InternalServerError)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PostPatientMessageResult.InternalServerError)}");
             }
         }
     }

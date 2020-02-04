@@ -8,22 +8,22 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 {
-    public class EmisPatientSendMessageMapperTests
+    public class EmisPatientMessageSendMapperTests
     {
         private IFixture _fixture;
 
-        private EmisPatientSendMessageMapper _systemUnderTest;
+        private EmisPatientMessageSendMapper _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            _systemUnderTest = _fixture.Create<EmisPatientSendMessageMapper>();
+            _systemUnderTest = _fixture.Create<EmisPatientMessageSendMapper>();
         }
 
         [TestMethod]
-        public void Map_WhenCalledHappyPath_ReturnsMappedGetPatientMessageResponse()
+        public void Map_WhenCalledHappyPath_ReturnsMappedPostPatientMessageResponse()
         {
             // Arrange
             var messagePostResponse = _fixture.Create<MessagePostResponse>();
@@ -32,14 +32,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             var result = _systemUnderTest.Map(messagePostResponse);
 
             // Assert
-            result.Should().BeEquivalentTo(new PostMessageResponse
+            result.Should().BeEquivalentTo(new PostPatientMessageResponse
             {
                 MessageSent = messagePostResponse.MessageSent
             });
         }
 
         [TestMethod]
-        public void Map_MessageNotSent_ReturnsMappedGetPatientMessageResponse()
+        public void Map_MessageNotSent_ReturnsMappedPostPatientMessageResponse()
         {
             // Arrange
             var messagePostResponse = _fixture.Create<MessagePostResponse>();

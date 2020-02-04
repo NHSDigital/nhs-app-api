@@ -6,6 +6,7 @@ import {
   LOGIN,
   BEGINLOGIN,
 
+  backLinkOverrides,
   isAnonymous,
   executeHomeNavigationRule,
   getCrumbTrailForRoute,
@@ -38,6 +39,44 @@ describe('routes', () => {
 
     it('will be false for a non-anonymous route name', () => {
       expect(isAnonymous(APPOINTMENTS.name)).toBe(false);
+    });
+  });
+
+  describe('backLinkOverrides', () => {
+    it('will go to more from organ donation by default and not ignore store override', () => {
+      const override = backLinkOverrides['organ-donation'];
+      expect(override.defaultPath).toBe('/more');
+      expect(override.ignoreStore).toBe(undefined);
+    });
+
+    it('will go to more from organ donation view decision by default and not ignore store override', () => {
+      const override = backLinkOverrides['organ-donation-view-decision'];
+      expect(override.defaultPath).toBe('/more');
+      expect(override.ignoreStore).toBe(undefined);
+    });
+
+    it('will go to more from patient messaging inbox by default and ignore store override', () => {
+      const override = backLinkOverrides['patient-practice-messaging'];
+      expect(override.defaultPath).toBe('/more');
+      expect(override.ignoreStore).toBe(true);
+    });
+
+    it('will go to patient messaging inbox from patient messaging details by default and ignore store override', () => {
+      const override = backLinkOverrides['patient-practice-messaging-view-details'];
+      expect(override.defaultPath).toBe('/patient-practice-messaging');
+      expect(override.ignoreStore).toBe(true);
+    });
+
+    it('will go to home from switch profile by default and ignore store override', () => {
+      const override = backLinkOverrides['switch-profile'];
+      expect(override.defaultPath).toBe('/');
+      expect(override.ignoreStore).toBe(true);
+    });
+
+    it('will have a default path in each overriding configuration', () => {
+      Object.keys(backLinkOverrides).forEach((key) => {
+        expect(backLinkOverrides[key].defaultPath).toBeDefined();
+      });
     });
   });
 

@@ -1,5 +1,3 @@
-using System;
-
 namespace NHSOnline.Backend.GpSystems.Messages.Models
 {
     public class CreatePatientMessage

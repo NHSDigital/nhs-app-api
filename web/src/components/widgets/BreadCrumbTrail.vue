@@ -51,7 +51,10 @@
 import last from 'lodash/fp/last';
 import isEmpty from 'lodash/fp/isEmpty';
 import { navigateBack } from '@/lib/utils';
-import { ORGAN_DONATION, MORE, ORGAN_DONATION_VIEW_DECISION, SWITCH_PROFILE, INDEX } from '@/lib/routes';
+import {
+  SWITCH_PROFILE,
+  backLinkOverrides,
+} from '@/lib/routes';
 
 export default {
   name: 'BreadCrumbTrail',
@@ -77,18 +80,12 @@ export default {
   },
   methods: {
     backLinkClicked() {
-      if (this.$route.name === ORGAN_DONATION.name ||
-          this.$route.name === ORGAN_DONATION_VIEW_DECISION.name) {
-        // eslint-disable-next-line prefer-destructuring
-        let backLinkOverride = this.$store.state.navigation.backLinkOverride;
+      const override = backLinkOverrides[this.$route.name];
+      if (override) {
+        const defaultOverride = override.defaultPath;
+        const storeOverride = this.$store.state.navigation.backLinkOverride || defaultOverride;
 
-        if (!backLinkOverride) {
-          backLinkOverride = MORE.path;
-        }
-
-        this.goToUrl(backLinkOverride);
-      } else if (this.$route.name === SWITCH_PROFILE.name) {
-        this.goToUrl(INDEX.path);
+        this.goToUrl(override.ignoreStore ? defaultOverride : storeOverride);
       } else {
         navigateBack(this);
       }

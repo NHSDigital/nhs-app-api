@@ -12,27 +12,27 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         
         protected override ErrorCategory ErrorCategory => ErrorCategory.PatientPracticeMessages;
         
-        public IActionResult Visit(PostSendMessageResult.Success result)
+        public IActionResult Visit(PostPatientMessageResult.Success result)
         {
             return new OkObjectResult(result.Response);
         }
 
-        public IActionResult Visit(PostSendMessageResult.BadRequest result)
+        public IActionResult Visit(PostPatientMessageResult.BadRequest result)
         {
             return BuildErrorResult(StatusCodes.Status400BadRequest);
         }
 
-        public IActionResult Visit(PostSendMessageResult.Forbidden result)
+        public IActionResult Visit(PostPatientMessageResult.Forbidden result)
         {
             return BuildErrorResult(StatusCodes.Status403Forbidden);
         }
 
-        public IActionResult Visit(PostSendMessageResult.BadGateway result)
+        public IActionResult Visit(PostPatientMessageResult.BadGateway result)
         {
             return BuildErrorResult(StatusCodes.Status502BadGateway);
         }
 
-        public IActionResult Visit(PostSendMessageResult.InternalServerError result)
+        public IActionResult Visit(PostPatientMessageResult.InternalServerError result)
         {
             return BuildErrorResult(StatusCodes.Status500InternalServerError);
         }

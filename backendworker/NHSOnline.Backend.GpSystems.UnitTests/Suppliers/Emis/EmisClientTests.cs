@@ -14,6 +14,7 @@ using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
@@ -675,6 +676,41 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             response.StatusCode.Should().Be(200);
             response.ExceptionErrorResponse.Should().Be(null);
         }
+
+        [TestMethod]
+        public async Task PatientMessageDetailsGet_ReturnsAMessageGetResponse_ForValidRequest()
+        {
+            // Arrange
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+
+            var expectedResponse = _fixture.Create<MessageGetResponse>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Get, "messages/1/?userPatientLinkToken=" + userPatientLinkToken)
+                .WithEmisHeaders(additionalHeaders)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // Act
+            var response = await _systemUnderTest.PatientMessageDetailsGet("1", new EmisRequestParameters
+            {
+                SessionId = sessionId,
+                EndUserSessionId = endUserSessionId,
+                UserPatientLinkToken = userPatientLinkToken
+            });
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ExceptionErrorResponse.Should().Be(null);
+        }
         
         [TestMethod]
         public async Task PatientMessageUpdatePut_ReturnsAMessageUpdateResponse_ForValidRequest()
@@ -743,6 +779,44 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 EndUserSessionId = endUserSessionId,
                 UserPatientLinkToken = userPatientLinkToken
             });
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ExceptionErrorResponse.Should().Be(null);
+        }
+
+        [TestMethod]
+        public async Task PatientMessagePost_ReturnsAMessagePostResponse_ForValidRequest()
+        {
+            // Arrange
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+            var createPatientMessage = _fixture.Create<CreatePatientMessage>();
+
+            var expectedRequestContent = new PostMessageRequest(userPatientLinkToken, createPatientMessage);
+            var expectedResponse = _fixture.Create<MessagePostResponse>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Post, "messages")
+                .WithContent(JsonConvert.SerializeObject(expectedRequestContent))
+                .WithEmisHeaders(additionalHeaders)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // Act
+            var response = await _systemUnderTest.PatientMessagePost(new EmisRequestParameters
+            {
+                SessionId = sessionId,
+                EndUserSessionId = endUserSessionId,
+                UserPatientLinkToken = userPatientLinkToken
+            }, createPatientMessage);
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);

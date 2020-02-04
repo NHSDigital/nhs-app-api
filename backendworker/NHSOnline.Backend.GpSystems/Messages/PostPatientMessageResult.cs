@@ -2,15 +2,15 @@ using NHSOnline.Backend.GpSystems.Messages.Models;
 
 namespace NHSOnline.Backend.GpSystems.Messages
 {
-    public abstract class PostSendMessageResult
+    public abstract class PostPatientMessageResult
     {
         public abstract T Accept<T>(IPatientSendMessageResultVisitor<T> visitor);
         
-        public class Success : PostSendMessageResult
+        public class Success : PostPatientMessageResult
         {
-            public PostMessageResponse Response { get; }
+            public PostPatientMessageResponse Response { get; }
 
-            public Success(PostMessageResponse response)
+            public Success(PostPatientMessageResponse response)
             {
                 Response = response;
             }
@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.GpSystems.Messages
             }
         }
 
-        public class BadGateway : PostSendMessageResult
+        public class BadGateway : PostPatientMessageResult
         {
             public override T Accept<T>(IPatientSendMessageResultVisitor<T> visitor)
             {
@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.Messages
             }
         }
         
-        public class Forbidden : PostSendMessageResult
+        public class Forbidden : PostPatientMessageResult
         {
             public override T Accept<T>(IPatientSendMessageResultVisitor<T> visitor)
             {
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.Messages
             }
         }
         
-        public class BadRequest : PostSendMessageResult
+        public class BadRequest : PostPatientMessageResult
         {
             public override T Accept<T>(IPatientSendMessageResultVisitor<T> visitor)
             {
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.Messages
             }
         }
         
-        public class InternalServerError : PostSendMessageResult
+        public class InternalServerError : PostPatientMessageResult
         {
             public override T Accept<T>(IPatientSendMessageResultVisitor<T> visitor)
             {

@@ -162,7 +162,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             }
 
             await _auditor.Audit(AuditingOperations.CreatePracticePatientMessageRequest,
-                "Creating a practice to patient message");
+                "Creating a patient to practice message");
 
             var userSession = HttpContext.GetUserSession();
             var gpUserSession = userSession.GpUserSession;

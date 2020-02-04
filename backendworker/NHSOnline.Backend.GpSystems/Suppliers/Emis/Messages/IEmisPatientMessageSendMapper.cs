@@ -6,6 +6,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
 {
     public interface IEmisPatientMessageSendMapper
     {
-        Option<PostMessageResponse> Map(MessagePostResponse response);
+        Option<PostPatientMessageResponse> Map(MessagePostResponse response);
     }
 }

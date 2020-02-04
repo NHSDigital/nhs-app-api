@@ -149,12 +149,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             }
         }
 
-            public async Task<PostSendMessageResult> SendMessage(GpUserSession gpUserSession,
+            public async Task<PostPatientMessageResult> SendMessage(GpUserSession gpUserSession,
                 CreatePatientMessage message)
             {
                 try
                 {
-                    var response = await _emisClient.SendPatientMessagePost(
+                    var response = await _emisClient.PatientMessagePost(
                         new EmisRequestParameters((EmisUserSession) gpUserSession), message);
 
                     return InterpretSendMessageResponse(response);
@@ -162,12 +162,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                 catch (HttpRequestException e)
                 {
                     _logger.LogError(e, "Request to send patient message was unsuccessful");
-                    return new PostSendMessageResult.BadGateway();
+                    return new PostPatientMessageResult.BadGateway();
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, $"Unknown error occured when sending the patient message");
-                    return new PostSendMessageResult.InternalServerError();
+                    return new PostPatientMessageResult.InternalServerError();
                 }
             }
 
@@ -309,7 +309,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             return new GetPatientMessageRecipientsResult.BadGateway();
         }
 
-        private PostSendMessageResult InterpretSendMessageResponse(
+        private PostPatientMessageResult InterpretSendMessageResponse(
             EmisClient.EmisApiObjectResponse<MessagePostResponse> response)
         {
             if (response.HasSuccessResponse)
@@ -317,28 +317,28 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                 var mapped = _messageSendWrapper.Map(response.Body);
                 if (mapped.HasValue)
                 {
-                    return new PostSendMessageResult.Success(mapped.ValueOrFailure());
+                    return new PostPatientMessageResult.Success(mapped.ValueOrFailure());
                 }
 
-                return new PostSendMessageResult.BadRequest();
+                return new PostPatientMessageResult.BadRequest();
             }
 
             if (response.HasForbiddenResponse())
             {
                 _logger.LogEmisResponseIsForbidden();
                 _logger.LogEmisErrorResponse(response);
-                return new PostSendMessageResult.Forbidden();
+                return new PostPatientMessageResult.Forbidden();
             }
 
             if (response.HasBadRequestResponse)
             {
                 _logger.LogEmisErrorResponse(response);
-                return new PostSendMessageResult.BadRequest();
+                return new PostPatientMessageResult.BadRequest();
             }
 
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
-            return new PostSendMessageResult.BadGateway();
+            return new PostPatientMessageResult.BadGateway();
         }
     }
 }

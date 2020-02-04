@@ -6,33 +6,33 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
 {
-    public class EmisPatientSendMessageMapper : IEmisPatientMessageSendMapper
+    public class EmisPatientMessageSendMapper : IEmisPatientMessageSendMapper
     {
-        private readonly ILogger<EmisPatientSendMessageMapper> _logger;
+        private readonly ILogger<EmisPatientMessageSendMapper> _logger;
 
-        public EmisPatientSendMessageMapper(ILogger<EmisPatientSendMessageMapper> logger)
+        public EmisPatientMessageSendMapper(ILogger<EmisPatientMessageSendMapper> logger)
         {
             _logger = logger;
         }
 
-        public Option<PostMessageResponse> Map(MessagePostResponse response)
+        public Option<PostPatientMessageResponse> Map(MessagePostResponse response)
         {
             try
             {
                 if (response.MessageSent != null && response.MessageSent == true)
                 {
-                    return Option.Some(new PostMessageResponse
+                    return Option.Some(new PostPatientMessageResponse
                     {
                         MessageSent = response.MessageSent
                     });
                 }
 
-                return Option.None<PostMessageResponse>();
+                return Option.None<PostPatientMessageResponse>();
             }
             catch (ArgumentNullException e)
             {
                 _logger.LogError(e, "Failed to map patient create message response from EMIS");
-                return Option.None<PostMessageResponse>();
+                return Option.None<PostPatientMessageResponse>();
             }
         }
     }

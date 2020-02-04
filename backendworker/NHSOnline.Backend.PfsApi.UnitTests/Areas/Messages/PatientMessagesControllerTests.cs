@@ -54,9 +54,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         private const string UpdateMessageUnreadStatusResponseAuditType = "PatientPracticeMessageUnreadStatus_Update_Response";
         private const string UpdateMessageUnreadStatusRequestAuditMessageFormat = "Updating unread status for message with id {0} to {1}";
 
-        private const string PostMessageRequestAuditType = "PracticePatientMessage_Create_Request";
-        private const string PostMessageResponseAuditType = "PatientPracticeMessage_Create_Response";
-        private const string CreatePracticePatientMessageRequest = "Creating a practice to patient message";
+        private const string CreateMessageRequestAuditType = "PracticePatientMessage_Create_Request";
+        private const string CreateMessageResponseAuditType = "PatientPracticeMessage_Create_Response";
+        private const string CreateMessageRequestAuditMessage = "Creating a practice to patient message";
 
         [TestInitialize]
         public void TestInitialize()
@@ -398,14 +398,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 Recipient = "recipient 1"
 
             };
-            var successResponse = _fixture.Create<PostMessageResponse>();
-            var successResult = new PostSendMessageResult.Success(successResponse);
+            var successResponse = _fixture.Create<PostPatientMessageResponse>();
+            var successResult = new PostPatientMessageResult.Success(successResponse);
 
             _mockPatientMessagesService
                 .Setup(s => s.SendMessage(
                     It.Is<GpUserSession>(g => g == _userSession.GpUserSession),
                     message))
-                .Returns(Task.FromResult((PostSendMessageResult) successResult));
+                .Returns(Task.FromResult((PostPatientMessageResult) successResult));
 
             // Act
             var result = await _systemUnderTest.SendMessage(message);
@@ -417,14 +417,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         }
 
         [DataTestMethod]
-        [DataRow(typeof(PostSendMessageResult.Forbidden), StatusCodes.Status403Forbidden,
-            "Error retrieving patient message recipients: Forbidden")]
-        [DataRow(typeof(PostSendMessageResult.InternalServerError), StatusCodes.Status500InternalServerError,
-            "Error retrieving patient message recipients: Internal Server Error")]
-        [DataRow(typeof(PostSendMessageResult.BadGateway), StatusCodes.Status502BadGateway,
-            "Error retrieving patient message recipients: Bad Gateway")]
-        [DataRow(typeof(PostSendMessageResult.BadRequest), StatusCodes.Status400BadRequest,
-            "Error retrieving patient message recipients: Bad Request")]
+        [DataRow(typeof(PostPatientMessageResult.Forbidden), StatusCodes.Status403Forbidden,
+            "Error sending patient practice message: Forbidden")]
+        [DataRow(typeof(PostPatientMessageResult.InternalServerError), StatusCodes.Status500InternalServerError,
+            "Error sending patient practice message: Internal Server Error")]
+        [DataRow(typeof(PostPatientMessageResult.BadGateway), StatusCodes.Status502BadGateway,
+            "Error sending patient practice message: Bad Gateway")]
+        [DataRow(typeof(PostPatientMessageResult.BadRequest), StatusCodes.Status400BadRequest,
+            "Error sending patient practice message: Bad Request")]
         public async Task SendMessage_ServiceReturnsErrorResult_ReturnsAppropriateResultObject(
             Type serviceResultType,
             int expectedStatusCode,
@@ -436,13 +436,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 Subject = "subject",
                 MessageBody = "message",
                 Recipient = "recipient 1"
-
             };
-            var serviceResult = (PostSendMessageResult) Activator.CreateInstance(serviceResultType);
+            var serviceResult = (PostPatientMessageResult) Activator.CreateInstance(serviceResultType);
 
             MockErrorReferenceGenerator(expectedStatusCode);
-            MockAuditor(PostMessageRequestAuditType, CreatePracticePatientMessageRequest);
-            MockAuditor(PostMessageResponseAuditType, expectedAuditResponseMessage);
+            MockAuditor(CreateMessageRequestAuditType, CreateMessageRequestAuditMessage);
+            MockAuditor(CreateMessageResponseAuditType, expectedAuditResponseMessage);
 
             _mockPatientMessagesService
                 .Setup(s => s.SendMessage(

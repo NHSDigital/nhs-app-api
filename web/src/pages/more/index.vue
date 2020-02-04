@@ -101,14 +101,17 @@ export default {
     this.$store.dispatch('device/unlockNavBar');
   },
   methods: {
+    navigateToAdminHelp(event) {
+      this.navigate(event);
+      this.$store.dispatch('navigation/setNewMenuItem', 4);
+      this.$store.dispatch('onlineConsultations/setPreviousRoute', this.morePath);
+    },
+    navigateToMessaging(event) {
+      this.navigate(event);
+    },
     navigate(event) {
       redirectTo(this, event.currentTarget.pathname);
       event.preventDefault();
-
-      if (event.currentTarget.pathname === this.requestAdminHelpPath) {
-        this.$store.dispatch('navigation/setNewMenuItem', 4);
-        this.$store.dispatch('onlineConsultations/setPreviousRoute', this.morePath);
-      }
     },
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;

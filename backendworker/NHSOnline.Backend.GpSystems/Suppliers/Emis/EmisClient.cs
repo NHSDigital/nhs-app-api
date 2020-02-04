@@ -357,7 +357,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 sessionId: requestParameters.SessionId);
         }
 
-        public async Task<EmisApiObjectResponse<MessagePostResponse>> SendPatientMessagePost(EmisRequestParameters requestParameters,
+        public async Task<EmisApiObjectResponse<MessagePostResponse>> PatientMessagePost(EmisRequestParameters requestParameters,
             CreatePatientMessage message)
         {
             var sendMessageRequest = new PostMessageRequest(requestParameters.UserPatientLinkToken, message);

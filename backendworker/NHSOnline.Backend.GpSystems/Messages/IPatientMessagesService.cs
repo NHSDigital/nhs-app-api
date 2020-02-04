@@ -12,6 +12,6 @@ namespace NHSOnline.Backend.GpSystems.Messages
         Task<PutPatientMessageReadStatusResult> UpdateMessageMessageReadStatus(GpUserSession gpUserSession,
             UpdateMessageReadStatusRequestBody updateRequest);
         Task<GetPatientMessageRecipientsResult> GetMessageRecipients(GpUserSession gpUserSession);
-        Task<PostSendMessageResult> SendMessage(GpUserSession gpUserSession, CreatePatientMessage message);
+        Task<PostPatientMessageResult> SendMessage(GpUserSession gpUserSession, CreatePatientMessage message);
     }
 }

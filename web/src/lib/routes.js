@@ -1357,6 +1357,34 @@ const routes = {
 };
 
 /**
+ * Overrides for the back link on native
+ *
+ * For these routes, when clicking the back nav on native, the defaultPath will be used if
+ * there is no state.navigation.backLinkOverride path set in the store. If this value is
+ * to be ignored and the default path is to always be used, be sure to set ignoreStore: true
+ */
+export const backLinkOverrides = {
+  [routes.ORGAN_DONATION.name]: {
+    defaultPath: routes.MORE.path,
+  },
+  [routes.ORGAN_DONATION_VIEW_DECISION.name]: {
+    defaultPath: routes.MORE.path,
+  },
+  [routes.PATIENT_PRACTICE_MESSAGING.name]: {
+    ignoreStore: true,
+    defaultPath: routes.MORE.path,
+  },
+  [routes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.name]: {
+    ignoreStore: true,
+    defaultPath: routes.PATIENT_PRACTICE_MESSAGING.path,
+  },
+  [routes.SWITCH_PROFILE.name]: {
+    ignoreStore: true,
+    defaultPath: routes.INDEX.path,
+  },
+};
+
+/**
  * Wire up back reference to all routes for each route.
  */
 Object.keys(routes).forEach((key) => { routes[key].crumb.allRoutes = routes; });
