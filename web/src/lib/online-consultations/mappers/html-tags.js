@@ -1,4 +1,4 @@
-import { isString } from 'lodash/fp';
+import isString from 'lodash/fp/isString';
 
 function mapHtmlTags(html) {
   if (!isString(html)) {

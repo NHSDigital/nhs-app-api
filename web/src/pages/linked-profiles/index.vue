@@ -30,7 +30,7 @@ import MenuItemList from '@/components/MenuItemList';
 import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 import { LINKED_PROFILES_SUMMARY } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
-import { find } from 'lodash/fp';
+import find from 'lodash/fp/find';
 
 export default {
   layout: 'nhsuk-layout',

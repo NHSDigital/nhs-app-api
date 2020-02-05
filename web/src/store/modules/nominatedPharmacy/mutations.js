@@ -1,6 +1,4 @@
-import {
-  assign,
-} from 'lodash/fp';
+import assign from 'lodash/fp/assign';
 import {
   NOMINATED_PHARMACY_CLEAR,
   NOMINATED_PHARMACY_LOADED,

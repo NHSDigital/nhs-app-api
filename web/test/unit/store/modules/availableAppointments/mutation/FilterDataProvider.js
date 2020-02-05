@@ -1,6 +1,6 @@
 /* eslint-disable */
 /*jshint esversion: 6 */
-import { assign } from 'lodash/fp';
+import assign from 'lodash/fp/assign';
 
 export default class FilterDataProvider {
   constructor(DateProvider) {

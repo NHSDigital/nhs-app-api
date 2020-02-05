@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import orderBy from 'lodash/orderBy';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import Card from '@/components/widgets/card/Card';
@@ -72,7 +72,7 @@ export default {
   },
   computed: {
     orderedEvents() {
-      return _.orderBy(this.events.data, [obj => obj.date], ['desc']);
+      return orderBy(this.events.data, [obj => obj.date], ['desc']);
     },
     showError() {
       return this.events.hasErrored

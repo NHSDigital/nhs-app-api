@@ -1,4 +1,5 @@
-import { get, isEmpty } from 'lodash/fp';
+import get from 'lodash/fp/get';
+import isEmpty from 'lodash/fp/isEmpty';
 import {
   CARE_PLAN,
   ORGANIZATION,

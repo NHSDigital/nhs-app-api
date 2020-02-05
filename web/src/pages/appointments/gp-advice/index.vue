@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { get } from 'lodash/fp';
+import get from 'lodash/fp/get';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import Orchestrator from '@/components/online-consultations/Orchestrator';

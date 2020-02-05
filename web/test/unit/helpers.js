@@ -3,7 +3,10 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import '@/plugins/directives';
 import _locale from '@/locale/en';
-import { get, has, isString, merge } from 'lodash/fp';
+import get from 'lodash/fp/get';
+import has from 'lodash/fp/has';
+import isString from 'lodash/fp/isString';
+import merge from 'lodash/fp/merge';
 import { formatDate } from '@/plugins/filters';
 import {
   createLocalVue,

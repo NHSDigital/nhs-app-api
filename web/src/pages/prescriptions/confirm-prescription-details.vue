@@ -84,7 +84,7 @@ import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import { createUri, ensureNoJsPostedValueIsArray } from '@/lib/noJs';
-import { isEmpty } from 'lodash/fp';
+import isEmpty from 'lodash/fp/isEmpty';
 
 const onSubmit = async (store, selectedCourseIds, specialRequest) => {
   const repeatPrescriptionOrder = {

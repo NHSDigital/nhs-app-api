@@ -21,7 +21,6 @@ const $router = createRouter();
 
 jest.mock('@/components/widgets/HotJar', () => {
 });
-jest.mock('lodash/fp/get');
 
 /* eslint-disable import/first */
 import NhsukLayout from '@/layouts/nhsuk-layout';

@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import each from 'jest-each';
-import { get, has } from 'lodash/fp';
+import get from 'lodash/fp/get';
+import has from 'lodash/fp/has';
 import ConnectionError from '@/components/errors/ConnectionError';
 import getters from '@/store/modules/errors/getters';
 import locale from '@/locale';

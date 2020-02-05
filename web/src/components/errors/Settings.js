@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
-import { assign, has } from 'lodash/fp';
+import assign from 'lodash/fp/assign';
+import has from 'lodash/fp/has';
 import {
   ACCOUNT,
   ACCOUNT_NOTIFICATIONS,

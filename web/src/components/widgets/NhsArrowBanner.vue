@@ -20,7 +20,8 @@
   </div>
 </template>
 <script>
-import { isFunction, isString } from 'lodash/fp';
+import isFunction from 'lodash/fp/isFunction';
+import isString from 'lodash/fp/isString';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import NhsArrowCircle from '@/components/icons/NHSArrowCircle';
 import { getDynamicStyle, exchangeStyle } from '@/lib/desktop-experience';

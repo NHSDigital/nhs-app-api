@@ -1,4 +1,6 @@
-import { get, mapKeys, sortBy } from 'lodash/fp';
+import sortBy from 'lodash/fp/sortBy';
+import mapKeys from 'lodash/fp/mapKeys';
+import get from 'lodash/fp/get';
 import {
   CLEAR,
   LOADED,

@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import orderBy from 'lodash/fp/orderBy';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 
 export default {
@@ -86,7 +86,7 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedConsultations() {
-      return _.orderBy(this.consultations.data, [consultation => this.getEffectiveDate(consultation.effectiveDate, '')], ['desc']);
+      return orderBy([consultation => this.getEffectiveDate(consultation.effectiveDate, '')], ['desc'])(this.consultations.data);
     },
     showError() {
       return this.consultations.hasErrored

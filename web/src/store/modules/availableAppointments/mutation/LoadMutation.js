@@ -1,5 +1,5 @@
 /* eslint-disable */
-import _ from 'lodash';
+import forEach from 'lodash/forEach';
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
 import namedObjectComparator  from '@/lib/comparators'
 
@@ -9,13 +9,17 @@ export default class LoadMutation {
   }
 
   execute(data) {
+    console.log(data.slots)
     const filters = new Map();
     const types = [];
     const locations = [];
     const clinicians = [];
     let defaultLocationSelectedOption = '';
-
-    _.each(data.slots, (slot, index) => {
+    console.log(filters)
+    const slots = data.slots;
+    console.log(slots);
+    forEach(slots, (slot, index) => {
+      console.log("slot")
       slot.ref = `slot_${index}`;
 
       if (!filters.has(slot.type)) {
@@ -28,14 +32,13 @@ export default class LoadMutation {
         locations.push({ value: slot.location, name: slot.location, translate: false });
       }
 
-      _.each(slot.clinicians, (clinician) => {
+      forEach(slot.clinicians, (clinician) => {
         if (!filters.has(clinician)) {
           filters.set(clinician, true);
           clinicians.push({ value: clinician, name: clinician, translate: false });
         }
       });
     });
-
     if (locations.length === 1) {
       defaultLocationSelectedOption = locations[0].value;
     }

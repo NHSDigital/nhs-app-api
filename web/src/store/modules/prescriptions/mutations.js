@@ -1,7 +1,5 @@
-import {
-  assign,
-  find,
-} from 'lodash/fp';
+import assign from 'lodash/fp/assign';
+import find from 'lodash/fp/find';
 import {
   PRESCRIPTIONS_CLEAR,
   PRESCRIPTIONS_LOADED,

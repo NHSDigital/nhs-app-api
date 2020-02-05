@@ -27,7 +27,8 @@
   </div>
 </template>
 <script>
-import { dropWhile, takeWhile } from 'lodash/fp';
+import dropWhile from 'lodash/fp/dropWhile';
+import takeWhile from 'lodash/fp/takeWhile';
 import MessagePanel from '@/components/patient-practice-messaging/ReceivedMessagePanel';
 import PageDivider from '@/components/widgets/PageDivider';
 

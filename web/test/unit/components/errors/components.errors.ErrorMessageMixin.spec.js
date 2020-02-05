@@ -3,7 +3,8 @@ import ApiError from '@/components/errors/ApiError';
 import { initialState as initialDevice } from '@/store/modules/device/mutation-types';
 import { initialState as initialErrors } from '@/store/modules/errors/mutation-types';
 import { createStore, mount } from '../../helpers';
-import { get, has } from 'lodash/fp';
+import has from 'lodash/fp/has';
+import get from 'lodash/fp/get';
 import locale from '@/locale';
 
 const engLocale = locale.en;

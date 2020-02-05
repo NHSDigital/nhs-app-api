@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import orderBy from 'lodash/fp/orderBy';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import Card from '@/components/widgets/card/Card';
@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     orderedAllergies() {
-      return _.orderBy((this.allergies || {}).data, [obj => this.getEffectiveDate(obj.date, '')], ['desc']);
+      return orderBy([obj => this.getEffectiveDate(obj.date, '')], ['desc'])((this.allergies || {}).data);
     },
     showError() {
       return ((this.allergies || {}).hasErrored) || (this.allergies || {}).data.length === 0;

@@ -59,7 +59,6 @@ PLEASE INSTEAD USE nhsuk-layout.vue
 
 <script>
 /* eslint-disable no-underscore-dangle */
-import { get } from 'lodash/fp';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import ContentHeader from '@/components/widgets/ContentHeader';
@@ -175,7 +174,7 @@ export default {
     },
     breadcrumbDisabledNative() {
       return this.$store.state.device.isNativeApp &&
-        get('nativeDisabled')(this.currentCrumb);
+        this.currentCrumb.nativeDisabled;
     },
     shouldShowFullDesktopHeader() {
       return (

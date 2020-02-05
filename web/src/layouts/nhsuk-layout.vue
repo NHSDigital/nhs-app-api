@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import { get } from 'lodash/fp';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import ContentHeader from '@/components/widgets/ContentHeader';
@@ -184,7 +183,7 @@ export default {
     },
     breadcrumbDisabledNative() {
       return this.$store.state.device.isNativeApp &&
-        get('nativeDisabled')(this.currentCrumb);
+        this.currentCrumb.nativeDisabled;
     },
     shouldShowContentHeader() {
       // the shouldShowContentHeader field is only

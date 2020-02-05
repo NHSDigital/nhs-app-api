@@ -1,7 +1,7 @@
 /* eslint-disable */
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
-import _ from 'lodash';
-import { sortBy } from 'lodash/fp';
+import sortBy from 'lodash/fp/sortBy';
+import each from 'lodash/each';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -66,7 +66,7 @@ export default class FilterMutation {
     const sortedSlots = this._sort(slots);
     const filteredSlots = new Map();
 
-    _.each(sortedSlots, (slot) => {
+    each(sortedSlots, (slot) => {
       const slotTime = this.dateProvider.create(slot.startTime);
       const day = slotTime.format(DATE_FORMAT);
       if (dateRange != null

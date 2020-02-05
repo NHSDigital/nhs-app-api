@@ -27,7 +27,10 @@
 import Message from '@/components/messaging/Message';
 import PageDivider from '@/components/widgets/PageDivider';
 import PageTitle from '@/components/widgets/PageTitle';
-import { dropWhile, first, get, takeWhile } from 'lodash/fp';
+import get from 'lodash/fp/get';
+import first from 'lodash/fp/first';
+import takeWhile from 'lodash/fp/takeWhile';
+import dropWhile from 'lodash/fp/dropWhile';
 import { redirectTo } from '@/lib/utils';
 import { MESSAGING } from '@/lib/routes';
 

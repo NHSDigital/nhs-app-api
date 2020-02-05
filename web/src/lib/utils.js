@@ -1,4 +1,5 @@
-import { get, isEqual } from 'lodash/fp';
+import get from 'lodash/fp/get';
+import isEqual from 'lodash/fp/isEqual';
 import moment from 'moment-timezone';
 
 export const datePart = (value, dateFormat) => {

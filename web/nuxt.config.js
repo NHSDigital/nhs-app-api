@@ -9,6 +9,10 @@ const config = {
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 4,
       }),
+      new webpack.NormalModuleReplacementPlugin(
+        /moment-timezone\/data\/packed\/latest\.json/,
+        require.resolve('./src/lib/timezones.json'),
+      ),
     ],
     publicPath: `/_nuxt/${APP_VERSION_TAG}`.replace(/\./g, '-'),
     babel: {

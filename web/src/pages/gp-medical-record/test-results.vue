@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import orderBy from 'lodash/orderBy';
 import Card from '@/components/widgets/card/Card';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
@@ -104,7 +104,7 @@ export default {
   },
   computed: {
     orderedTestResults() {
-      return _.orderBy(
+      return orderBy(
         (this.results || {}).data,
         [result => this.getEffectiveDate(result.date, '')],
         ['desc'],

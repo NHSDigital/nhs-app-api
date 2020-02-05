@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { isEmpty } from 'lodash/fp';
+import isEmpty from 'lodash/fp/isEmpty';
 import moment from 'moment';
 
 import { APPOINTMENTS, TERMSANDCONDITIONS } from '@/lib/routes';

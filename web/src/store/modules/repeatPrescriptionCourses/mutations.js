@@ -1,4 +1,6 @@
-import { assign, map, mapKeys } from 'lodash/fp';
+import assign from 'lodash/fp/assign';
+import mapKeys from 'lodash/fp/mapKeys';
+import map from 'lodash/fp/map';
 import {
   REPEAT_PRESCRIPTION_COURSES_LOADED,
   INIT_REPEAT_PRESCRIPTIONS,

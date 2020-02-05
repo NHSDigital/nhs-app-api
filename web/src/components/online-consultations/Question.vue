@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { get } from 'lodash/fp';
+import get from 'lodash/fp/get';
 import { SUCCESS } from '@/lib/online-consultations/constants/status-types';
 
 export default {

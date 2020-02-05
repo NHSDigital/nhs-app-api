@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import orderBy from 'lodash/fp/orderBy';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import Card from '@/components/widgets/card/Card';
@@ -97,7 +97,7 @@ export default {
   },
   computed: {
     orderedConsultations() {
-      return _.orderBy(this.consultations.data, [consultation => this.getEffectiveDate(consultation.effectiveDate, '')], ['desc']);
+      return orderBy([consultation => this.getEffectiveDate(consultation.effectiveDate, '')], ['desc'])(this.consultations.data);
     },
     showError() {
       return this.consultations.hasErrored

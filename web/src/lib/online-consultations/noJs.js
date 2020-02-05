@@ -1,4 +1,5 @@
-import { get, isString } from 'lodash/fp';
+import isString from 'lodash/fp/isString';
+import get from 'lodash/fp/get';
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
 
 function getAnswer(body, question) {

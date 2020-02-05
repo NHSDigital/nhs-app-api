@@ -28,7 +28,7 @@
 
 <script>
 
-import _ from 'lodash';
+import orderBy from 'lodash/fp/orderBy';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 
 export default {
@@ -51,7 +51,7 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedEvents() {
-      return _.orderBy(this.events.data, [obj => obj.date], ['desc']);
+      return orderBy([obj => obj.date], ['desc'])(this.events.data);
     },
     showError() {
       return this.events.hasErrored ||

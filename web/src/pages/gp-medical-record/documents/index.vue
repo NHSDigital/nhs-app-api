@@ -35,7 +35,7 @@ import { isFalsy, redirectTo, readableBytes, datePart } from '@/lib/utils';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import _ from 'lodash';
+import orderBy from 'lodash/fp/orderBy';
 
 export default {
   layout: 'nhsuk-layout',
@@ -58,7 +58,7 @@ export default {
         !(this.documents || {}).hasAccess;
     },
     orderedDocuments() {
-      return _.orderBy(this.documents.data, [document => this.getEffectiveDate(document.effectiveDate, '')], ['desc']);
+      return orderBy([document => this.getEffectiveDate(document.effectiveDate, '')], ['desc'])(this.documents.data);
     },
   },
   async asyncData({ store, redirect }) {

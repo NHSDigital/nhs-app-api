@@ -109,7 +109,7 @@ import {
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
 } from '@/lib/routes';
-import { isEmpty } from 'lodash/fp';
+import isEmpty from 'lodash/fp/isEmpty';
 import { redirectTo } from '@/lib/utils';
 import { ensureNoJsPostedValueIsArray } from '@/lib/noJs';
 import CardGroup from '@/components/widgets/card/CardGroup';

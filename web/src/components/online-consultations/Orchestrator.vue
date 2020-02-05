@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { get } from 'lodash/fp';
+import get from 'lodash/fp/get';
 import BackButton from '@/components/BackButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';

@@ -34,7 +34,7 @@
 
 <script>
 
-import _ from 'lodash';
+import orderBy from 'lodash/fp/orderBy';
 import ScrErrorNoAccess from '@/components/my-record/SharedComponents/SCRErrorNoAccess';
 
 export default {
@@ -57,7 +57,7 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedAllergies() {
-      return _.orderBy(this.allergies.data, [obj => this.getEffectiveDate(obj.date, '')], ['desc']);
+      return orderBy([obj => this.getEffectiveDate(obj.date, '')], ['desc'])(this.allergies.data);
     },
     showError() {
       return this.allergies.hasErrored || this.allergies.data.length === 0;

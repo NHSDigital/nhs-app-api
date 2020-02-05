@@ -1,4 +1,5 @@
-import { find, get } from 'lodash/fp';
+import get from 'lodash/fp/get';
+import find from 'lodash/fp/find';
 
 const adminHelpDisabledRedirect = {
   journey_disabled: 'cdssAdmin',

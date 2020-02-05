@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import keys from 'lodash/fp/keys';
+import indexOf from 'lodash/indexOf';
 
 import GenericButton from '@/components/widgets/GenericButton';
 
@@ -32,17 +33,17 @@ export default {
   },
   data() {
     return {
-      pageIds: _.keys(this.$t('ds01.titles')),
+      pageIds: keys(this.$t('ds01.titles')),
     };
   },
   computed: {
     showNext() {
       return (
-        _.indexOf(this.pageIds, this.currentPage) < this.pageIds.length - 1
+        indexOf(this.pageIds, this.currentPage) < this.pageIds.length - 1
       );
     },
     showPrevious() {
-      return _.indexOf(this.pageIds, this.currentPage) > 0;
+      return indexOf(this.pageIds, this.currentPage) > 0;
     },
   },
   methods: {
