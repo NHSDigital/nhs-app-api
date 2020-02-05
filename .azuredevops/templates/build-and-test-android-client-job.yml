@@ -89,16 +89,22 @@ jobs:
         inputs:
           filePath: android/buildscripts/02_build.sh
 
-      - task: Bash@3
-        displayName: Collect android package files
-        inputs:
-          targetType: 'inline'
-          script: |
-            mkdir -p "$BUILD_SOURCESDIRECTORY/apk"
-            find android/app/build/outputs/apk -name '*.apk' -exec cp \{\} "$BUILD_SOURCESDIRECTORY/apk/" \;
-
       - task: PublishBuildArtifacts@1
         displayName: Publish android package files
         inputs:
-          pathToPublish: '$(Build.SourcesDirectory)/apk'
+          pathToPublish: '$(Build.SourcesDirectory)/android/app/build/outputs/apk'
+          artifactName: Android Package Files
+
+      - template: check-for-output-steps.yml
+        parameters:
+          description: mapping file check
+          test.path: '$(Build.SourcesDirectory)/android/app/build/outputs/mapping'
+          test.path.exists.variable.name: android.mapping.folder.exists
+          mandatory: false
+
+      - task: PublishBuildArtifacts@1
+        condition: and(succeeded(), eq(variables['android.mapping.folder.exists'], 'True'))
+        displayName: Publish android mapping files
+        inputs:
+          pathToPublish: '$(Build.SourcesDirectory)/android/app/build/outputs/mapping'
           artifactName: Android Package Files
