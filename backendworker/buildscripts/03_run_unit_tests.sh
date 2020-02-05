@@ -41,7 +41,7 @@ docker run \
     done; \
     index=1; \
     for coverage in */coverage.cobertura.xml; do \
-      sed \"#\s*<source>.*</source>#<source>backendworker/</source>#\" \$coverage > /coverage/\$index.coverage.cobertura.xml; \
+      cp \"\$coverage\" /coverage/backend-\$index-cobertura.xml; \
       ((index+=1)); \
     done;
     exit \$test_run_result;"

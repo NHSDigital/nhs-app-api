@@ -20,21 +20,17 @@ variables:
 stages:
   - template: .azuredevops/templates/initialise-stage.yml
 
-  - stage: build_and_unit_test
-    displayName: Build and Unit Test
+  - stage: backend
+    displayName: Backend
     dependsOn: init
     jobs:
-      - job: web
-        displayName: Web
-        steps:
-          - template: .azuredevops/templates/build-and-test-web-steps.yml
+      - template: .azuredevops/templates/build-and-test-backend-job.yml
 
-      - job: backend
-        displayName: Backend
-        steps:
-          - template: .azuredevops/templates/build-and-test-backend-steps.yml
-
-      - template: .azuredevops/templates/generate-coverage-report-job.yml
+  - stage: web
+    displayName: Web
+    dependsOn: init
+    jobs:
+      - template: .azuredevops/templates/build-and-test-web-job.yml
 
   - stage: android
     displayName: Android Client
@@ -48,16 +44,30 @@ stages:
     jobs:
       - template: .azuredevops/templates/build-and-test-ios-client-job.yml
 
+  - stage: generate_code_coverage
+    displayName: Generate Code Coverage
+    condition: succeededOrFailed()
+    dependsOn:
+      - web
+      - backend
+      - ios
+    jobs:
+      - template: .azuredevops/templates/generate-coverage-report-job.yml
+
   - stage: security
     displayName: Security Scans
-    dependsOn: build_and_unit_test
+    dependsOn:
+      - web
+      - backend
     condition: and(succeeded(), or(variables['security.run.scans'], eq(variables['source.develop'], 'True'), eq(variables['source.tag'], 'True')))
     jobs:
       - template: .azuredevops/templates/run-security-scan-job.yml
 
   - stage: integration_tests
     displayName: Integration Tests
-    dependsOn: build_and_unit_test
+    dependsOn:
+      - web
+      - backend
     jobs:
       - template: .azuredevops/templates/integration-tests-initialise-job.yml
 

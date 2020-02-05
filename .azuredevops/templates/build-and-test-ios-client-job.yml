@@ -61,3 +61,27 @@ jobs:
           testResultsFiles: './build/reports/junit.xml'
           failTaskOnFailedTests: false
           mergeTestResults: true
+
+      - task: Bash@3
+        displayName: Generate coverage report
+        inputs:
+          targetType: 'inline'
+          script: |
+            set -e
+            gem install slather
+            cd ios/NHSOnline/
+            slather coverage --workspace NHSOnline.xcworkspace --scheme NHSOnline --cobertura-xml --output-directory reports/coverage NHSOnline.xcodeproj
+            mv reports/coverage/cobertura.xml reports/coverage/ios-cobertura.xml
+
+      - template: check-for-output-steps.yml
+        parameters:
+          description: coverage report
+          test.path: "ios/NHSOnline/reports/coverage/ios-cobertura.xml"
+          test.path.exists.variable.name: unit.tests.coverage.exists
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish unit test coverage
+        condition: and(succeededOrFailed(), eq(variables['unit.tests.coverage.exists'], 'True'))
+        inputs:
+          pathToPublish: 'ios/NHSOnline/reports/coverage'
+          artifactName: 'coverage'
