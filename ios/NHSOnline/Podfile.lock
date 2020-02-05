@@ -1,0 +1,26 @@
+PODS:
+  - BCryptSwift (1.1)
+  - FidoClientIOS (1.0.1):
+    - BCryptSwift
+    - SwiftyJSON (~> 4.0)
+  - SwiftyJSON (4.3.0)
+
+DEPENDENCIES:
+  - FidoClientIOS
+  - SwiftyJSON (~> 4.0)
+
+SPEC REPOS:
+  "https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp-fido-client-ios-cocoapod":
+    - FidoClientIOS
+  trunk:
+    - BCryptSwift
+    - SwiftyJSON
+
+SPEC CHECKSUMS:
+  BCryptSwift: f69992ea5685f6714260842c2770688043b89ab2
+  FidoClientIOS: 96494fe3c9c093113b397eca4f7e194334afefc9
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
+
+PODFILE CHECKSUM: 18291c7c322abbc004a5659d0d089dea262f013e
+
+COCOAPODS: 1.8.4

@@ -15,17 +15,28 @@ This will allow Xcode to correctly resolve the project permissions
 In a terminal run the following commands
 
 1. Make sure you have cocoapods on your machine:
-        sudo gem install cocoapods
+
+    ```bash
+    sudo gem install cocoapods
+    ```
 
 2. Navigate to the ios/NHSOnline folder
 
 3. Check for any cocoapod updates:
-        pod update
+
+    ```bash
+    pod update
+    ```
+
     The cocapod should now install as long as the pods are pulled down in the repo if not run:
+
+    ```bash
         pod install
+    ```
+
 4. To see the pod in your project you will need to open the NHSOnline.xcworkspace fiole in xcode instead of the NHSOnline.xcodeproj
 
-see more here: https://guides.cocoapods.org/using/using-cocoapods.html
+See more [here](https://guides.cocoapods.org/using/using-cocoapods.html).
 
 ## Troubleshooting
 

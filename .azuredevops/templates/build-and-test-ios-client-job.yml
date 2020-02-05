@@ -1,0 +1,63 @@
+jobs:
+  - job: build_and_unit_test_ios
+    displayName: Build and Unit Test
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+      - template: set-branch-tag-steps.yml
+
+      - task: InstallAppleCertificate@2
+        displayName: 'Install Dev Apple certificate'
+        inputs:
+          certSecureFile: 'iOSDevelopmentCertificate.p12'
+          certPwd: '$(ios.development.certificate.password)'
+
+      - task: InstallAppleProvisioningProfile@1
+        displayName: 'Install Development provisioning profile'
+        inputs:
+          provProfileSecureFile: 'iOSDevelopment.mobileprovision'
+
+      - task: Bash@3
+        displayName: Configure git authentication
+        env:
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        inputs:
+          targetType: 'inline'
+          script: |
+            git config --global 'http.https://nhsapp@dev.azure.com/.extraheader' "AUTHORIZATION: bearer $SYSTEM_ACCESSTOKEN"
+
+      - task: CocoaPods@0
+        displayName: Install CocoaPods
+        inputs:
+          forceRepoUpdate: false
+          projectDirectory: $(Build.SourcesDirectory)/ios/NHSOnline
+
+      - task: Xcode@5
+        displayName: 'Build and Run Unit Tests'
+        inputs:
+          actions: test
+          configuration: Development
+          sdk: iphonesimulator
+          xcWorkspacePath: ios/NHSOnline/NHSOnline.xcworkspace
+          scheme: NHSOnline
+          xcodeDeveloperDir: /Applications/Xcode_10.1.app
+          signingOption: auto
+          destinationPlatformOption: iOS
+          destinationSimulators: 'iPhone 8'
+          publishJUnitResults: false
+
+      - template: check-for-output-steps.yml
+        parameters:
+          description: unit tests results
+          test.path: "./build/reports/junit.xml"
+          test.path.exists.variable.name: unit.tests.results.exists
+
+      - task: PublishTestResults@2
+        displayName: Publish unit tests results
+        condition: and(succeededOrFailed(), eq(variables['unit.tests.results.exists'], 'True'))
+        inputs:
+          testRunTitle: Unit Tests iOS
+          testResultsFormat: JUnit
+          testResultsFiles: './build/reports/junit.xml'
+          failTaskOnFailedTests: false
+          mergeTestResults: true

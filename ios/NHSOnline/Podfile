@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 use_frameworks!
 
-source 'https://github.com/CocoaPods/Specs.git'
-source 'https://git.nhschoices.net/nhsonline/nhsonline-fido-client-ios-cocoapod.git'
+source 'https://cdn.cocoapods.org/'
+source 'https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp-fido-client-ios-cocoapod'
 
 target 'NHSOnline' do
   pod 'FidoClientIOS'
