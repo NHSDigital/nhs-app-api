@@ -144,7 +144,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
 
             // Assert
             var response = result.Should().BeAssignableTo<PharmacySearchResult.Success>().Subject;
-            response.Pharmacies.Count().Should().Be(1);
+            response.Response.Pharmacies.Count().Should().Be(1);
         }
 
         [TestMethod]
@@ -251,7 +251,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
 
             // Assert
             var response = result.Should().BeAssignableTo<PharmacySearchResult.Success>().Subject;
-            response.Pharmacies.Should().Equal(pharmacyDetailsList);
+            response.Response.Pharmacies.Should().Equal(pharmacyDetailsList);
             mappedOrganisations.Count().Should().Be(_gpLookupConfig.Object.OnlinePharmacyRandomisedSearchResultLimit);
         }
 
@@ -348,16 +348,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
 
             // Assert
             var response = result.Should().BeAssignableTo<PharmacySearchResult.Success>().Subject;
-            response.Pharmacies.Should().Equal(pharmacyDetailsList);
+            response.Response.Pharmacies.Should().Equal(pharmacyDetailsList);
             mappedOrganisations.Count().Should().Be(_gpLookupConfig.Object.OnlinePharmacySearchResultLimit);
         }
         
         
         [TestMethod]
-        public async Task SearchOnlineOnlyPharmacies_WhenCalledWithOnlineName_FiltersResultsWithNoContactDetailsBeforeReturnsingListOfPharmacies()
+        public async Task SearchOnlineOnlyPharmacies_WhenCalledWithOnlineName_FiltersResultsWithNoContactDetailsAndUpdatesPharmacyCount()
         {
             // Arrange
             const int numberOfPharmaciesToGenerate = 20;
+            const int numberOfPharmaciesWithNoContactInfo = 4;
 
             var pharmacies = new List<Organisation>();
 
@@ -378,13 +379,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                 });    
             }
 
-            //some pharmacies only have one piece of information (and will not be filtered)
+            // some pharmacies only have one piece of information (and will not be filtered)
             pharmacies[4].URL = "";
             pharmacies[5].URL = null;
             pharmacies[6].Contacts = "";
             pharmacies[7].Contacts = null;
             
-            //these 4 pharmacies will have no information (and will be filtered)
+            // these 4 pharmacies will have no information (and will be filtered)
             pharmacies[8].URL = "";
             pharmacies[8].Contacts = "";
             pharmacies[9].URL = null;
@@ -404,7 +405,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                     }
                 };
 
-            var pharmacySearchResponse = new PharmacySearchResponse(HttpStatusCode.OK, pharmacies);
+            var pharmacySearchResponse = new PharmacySearchResponse(HttpStatusCode.OK, pharmacies, numberOfPharmaciesToGenerate);
 
             SetupGpClientForOnlinePharmacySearchByName(pharmacyResponse, "test");
 
@@ -423,13 +424,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                 .Callback((IEnumerable<Organisation> beingMapped) => mappedOrganisations = beingMapped)
                 .Returns(pharmacyDetailsList);
 
-
             // Act
             var result = await _pharmacySearchService.SearchOnlineOnlyPharmacies("test");
 
             // Assert
             var response = result.Should().BeAssignableTo<PharmacySearchResult.Success>().Subject;
-            response.Pharmacies.Should().Equal(pharmacyDetailsList);
+            response.Response.Pharmacies.Should().Equal(pharmacyDetailsList);
+            response.Response.PharmacyCount.Should()
+                .Be(numberOfPharmaciesToGenerate - numberOfPharmaciesWithNoContactInfo);
             mappedOrganisations.Count().Should().Be(_gpLookupConfig.Object.OnlinePharmacySearchResultLimit - 4);
         }
 

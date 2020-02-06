@@ -139,7 +139,7 @@ export default {
 
       try {
         const response = await this.$store.app.$http.getV1PatientOnlinePharmacies();
-        pharmacySearchResult.pharmacies = response;
+        pharmacySearchResult.pharmacies = response.pharmacies;
         pharmacySearchResult.noResultsFound = pharmacySearchResult.pharmacies.length === 0;
       } catch {
         pharmacySearchResult.technicalError = true;

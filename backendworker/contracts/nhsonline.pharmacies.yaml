@@ -112,3 +112,7 @@ components:
           description: Array of pharmacies matched in search
           items:
             $ref: "#/components/schemas/Pharmacy"
+        pharmacyCount:
+          type: integer
+          nullable: true
+          description: The total number of pharmacies matching the search

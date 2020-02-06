@@ -138,6 +138,7 @@ export default {
           noResultsFound: false,
           technicalError: false,
           pharmacies: [],
+          pharmacyCount: 0,
         };
 
         const pharmacySearchParams = {
@@ -149,7 +150,8 @@ export default {
           const response =
             await this.$store.app.$http.getV1PatientOnlinePharmacies(pharmacySearchParams);
 
-          pharmacySearchResult.pharmacies = response;
+          pharmacySearchResult.pharmacies = response.pharmacies;
+          pharmacySearchResult.pharmacyCount = response.pharmacyCount;
           pharmacySearchResult.noResultsFound = pharmacySearchResult.pharmacies.length === 0;
         } catch {
           pharmacySearchResult.technicalError = true;

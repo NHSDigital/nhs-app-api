@@ -296,6 +296,7 @@ export default {
     },
     resultSummary: {
       distanceInformation: 'Distances given are in a straight line but travel routes may be longer.',
+      beMoreSpecific: 'We can only show {max} results for what you search. The more specific your search, the better the results',
     },
     backButton: 'Search again',
     distanceAway: '{distance} miles away',

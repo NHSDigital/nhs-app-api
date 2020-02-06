@@ -110,13 +110,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             try
             {
                 var searchResults = await _gpLookupClient.OrganisationSearch(query);
-
+                
                 var pharmacySearchResponse = _nhsSearchResultChecker.CheckPharmacies(searchResults);
 
                 if (pharmacySearchResponse.StatusCode == HttpStatusCode.OK)
                 {
                     var contactablePharmacies = PickContactableOnlinePharmacies(pharmacySearchResponse.Pharmacies);
-
+                    
+                    var nonContactablePharmaciesCount = pharmacySearchResponse.Pharmacies.Count - contactablePharmacies.Count();
                     var pharmacies = Enumerable.Empty<PharmacyDetails>();
 
                     try
@@ -128,8 +129,10 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                         _logger.LogError(e, $"Error during mapping list of {nameof(Organisation)} to list of {nameof(PharmacyDetailsResponse)}");
                         return new PharmacySearchResult.InternalServerError();
                     }
-
-                    return new PharmacySearchResult.Success(pharmacies);
+                    
+                    return new PharmacySearchResult.Success(
+                        pharmacies, 
+                        pharmacySearchResponse.PharmacyCount - nonContactablePharmaciesCount);
                 }
 
                 return new PharmacySearchResult.InternalServerError();

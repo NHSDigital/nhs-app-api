@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             try
             {
-                await _auditor.Audit(AuditType, $"Returning { result.Pharmacies.Count() } pharmacies");
+                await _auditor.Audit(AuditType, $"Returning { result.Response.Pharmacies.Count() } pharmacies");
             }
             catch (Exception e)
             {
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PharmacySearchResult.InvalidPostcode)}");
-            }        
+            }
         }
 
 

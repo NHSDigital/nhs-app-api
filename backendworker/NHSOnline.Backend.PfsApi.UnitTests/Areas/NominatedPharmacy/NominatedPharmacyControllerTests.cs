@@ -609,7 +609,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var pharmacy = _fixture.Create<PharmacyDetails>();
             var pharmacyResultList = new List<PharmacyDetails> { pharmacy };
             var pharmacySearchResult = new PharmacySearchResult.Success(pharmacyResultList);
-
+            var expectedResult = new PharmacySearchResultResponse
+            {
+                Pharmacies = pharmacyResultList,
+            };
+            
             _mockPharmacySearchService
                 .Setup(x => x.Search(postcode))
                 .Returns(Task.FromResult((PharmacySearchResult)pharmacySearchResult))
@@ -620,7 +624,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeEquivalentTo(pharmacyResultList);
+                .Subject.Value.Should().BeEquivalentTo(expectedResult);
 
             _mockPharmacySearchService.Verify();
             _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, It.IsAny<string>()));
@@ -646,7 +650,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeEquivalentTo(new List<PharmacyDetails>());
+                .Subject.Value.Should().BeEquivalentTo(new PharmacySearchResultResponse());
 
             _mockPharmacySearchService.Verify();
             _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest, It.IsAny<string>()));
@@ -660,6 +664,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var pharmacy = _fixture.Create<PharmacyDetails>();
             var pharmacyResultList = new List<PharmacyDetails> { pharmacy };
             var pharmacySearchResult = new PharmacySearchResult.Success(pharmacyResultList);
+            var expectedResult = new PharmacySearchResultResponse
+            {
+                Pharmacies = pharmacyResultList,
+            };
 
             _mockPharmacySearchService
                 .Setup(x => x.SearchOnlineOnlyPharmacies())
@@ -671,7 +679,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeEquivalentTo(pharmacyResultList);
+                .Subject.Value.Should().BeEquivalentTo(expectedResult);
 
             _mockPharmacySearchService.Verify();
             
@@ -690,7 +698,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var searchTerm = "test";
             var pharmacy = _fixture.Create<PharmacyDetails>();
             var pharmacyResultList = new List<PharmacyDetails> { pharmacy };
-            var pharmacySearchResult = new PharmacySearchResult.Success(pharmacyResultList);
+            const int pharmacyResultCount = 1;
+            var pharmacySearchResult = new PharmacySearchResult.Success(pharmacyResultList, pharmacyResultCount);
+            
+            var expectedResult = new PharmacySearchResultResponse
+            {
+                Pharmacies = pharmacyResultList,
+                PharmacyCount = pharmacyResultCount,
+            };
 
             _mockPharmacySearchService
                 .Setup(x => x.SearchOnlineOnlyPharmacies(searchTerm))
@@ -702,7 +717,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeEquivalentTo(pharmacyResultList);
+                .Subject.Value.Should().BeEquivalentTo(expectedResult);
 
             _mockPharmacySearchService.Verify();
             

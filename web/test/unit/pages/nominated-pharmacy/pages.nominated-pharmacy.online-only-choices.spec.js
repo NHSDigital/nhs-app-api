@@ -20,7 +20,10 @@ describe('nominated pharmacy online only choices page', () => {
   let errorMessage;
 
   const createHttp = () => ({
-    getV1PatientOnlinePharmacies: jest.fn(() => Promise.resolve([{ pharmacyName: 'ABC' }])),
+    getV1PatientOnlinePharmacies: jest.fn(() => Promise.resolve({
+      pharmacies: [{ pharmacyName: 'ABC' }],
+      pharmacyCount: null,
+    })),
   });
 
   const createState = (state = {

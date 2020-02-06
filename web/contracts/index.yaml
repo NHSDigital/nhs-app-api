@@ -4100,6 +4100,10 @@
                                 time: 
                                   type: "string"
                                   description: "Opening and closing time."
+                    pharmacyCount: 
+                      type: "integer"
+                      nullable: true
+                      description: "The total number of pharmacies matching the search"
           400: 
             description: "Bad request. Supplied request is invalid."
           500: 
@@ -4173,6 +4177,10 @@
                                 time: 
                                   type: "string"
                                   description: "Opening and closing time."
+                    pharmacyCount: 
+                      type: "integer"
+                      nullable: true
+                      description: "The total number of pharmacies matching the search"
           400: 
             description: "Bad request. Supplied request is invalid."
           500: 

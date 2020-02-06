@@ -185,8 +185,10 @@ export default {
 
       await this.$store.app.$http.getV1PatientPharmacies(pharmacySearchParams)
         .then((response) => {
-          pharmacySearchResult.pharmacies = response;
-          pharmacySearchResult.noResultsFound = pharmacySearchResult.pharmacies.length === 0;
+          pharmacySearchResult.pharmacies = response.pharmacies;
+          pharmacySearchResult.noResultsFound =
+            (pharmacySearchResult.pharmacies === undefined ||
+            pharmacySearchResult.pharmacies.length === 0);
         })
         .catch(() => {
           pharmacySearchResult.technicalError = true;

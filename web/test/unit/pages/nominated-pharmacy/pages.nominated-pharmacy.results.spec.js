@@ -19,6 +19,7 @@ describe('nominated pharmacy search results', () => {
   let wrapper;
   let localVue;
   let pharmacySearchResults;
+  let $tcMock;
   let distanceInformationMessage;
 
   const createState = (state = {
@@ -46,6 +47,7 @@ describe('nominated pharmacy search results', () => {
       }
       return $tMock(key);
     },
+    $tc: $tcMock,
   });
 
   beforeEach(() => {
@@ -56,6 +58,7 @@ describe('nominated pharmacy search results', () => {
       state: createState(),
     });
     $store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] = true;
+    $tcMock = jest.fn();
   });
 
   it('will exist', () => {
@@ -138,6 +141,30 @@ describe('nominated pharmacy search results', () => {
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
     expect(dependency.redirectTo).not.toHaveBeenCalled();
+  });
+
+  it('will show a message asking the user to be more specific when number available exceeds number returned', () => {
+    $store.state.nominatedPharmacy = {
+      searchQuery: 'rg1',
+      searchResults: {
+        pharmacies: [
+          { pharmacyName: 'boots', odsCode: 'a1' },
+          { pharmacyName: 'best pharmacy', odsCode: 'a2' },
+        ],
+        pharmacyCount: 3,
+        technicalError: false,
+        noResultsFound: false,
+      },
+      chosenType: PharmacyTypeChoice.ONLINE_PHARMACY,
+      onlineOnlyKnownOption: true,
+    };
+    wrapper = mountPage();
+    pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
+    const beMoreSpecificMessage = wrapper.find('#too-many-results');
+    expect(dependency.redirectTo).not.toHaveBeenCalled();
+    expect(pharmacySearchResults.exists()).toBe(true);
+    expect(beMoreSpecificMessage.exists()).toBe(true);
+    expect($tcMock).toHaveBeenCalledWith('nominatedPharmacySearchResults.resultSummary.beMoreSpecific', null, { max: 2 });
   });
 
   it('will go back to the prescriptions page when no chosen type is found', () => {

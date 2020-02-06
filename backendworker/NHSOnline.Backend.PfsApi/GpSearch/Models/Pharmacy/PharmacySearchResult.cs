@@ -11,11 +11,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
 
         public class Success : PharmacySearchResult
         {
-            public IEnumerable<PharmacyDetails> Pharmacies { get; }
-            
-            public Success(IEnumerable<PharmacyDetails> pharmacies)
+            public PharmacySearchResultResponse Response { get; }
+            public Success(IEnumerable<PharmacyDetails> pharmacies, int? pharmacyCount = null)
             {
-                Pharmacies = pharmacies;
+                Response = new PharmacySearchResultResponse
+                {
+                    Pharmacies = pharmacies,
+                    PharmacyCount = pharmacyCount,
+                };
             }
             
             public override T Accept<T>(IPharmacySearchResponseVisitor<T> visitor)

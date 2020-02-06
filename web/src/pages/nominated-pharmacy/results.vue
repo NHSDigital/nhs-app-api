@@ -8,6 +8,10 @@
         <p v-else-if="!isOnlineWithSearch" id="random-results-information">
           {{ $t('nominatedPharmacySearchResults.online.random.information') }}
         </p>
+        <p v-if="showTooManyResults" id="too-many-results">
+          {{ $tc('nominatedPharmacySearchResults.resultSummary.beMoreSpecific',
+                 null, { max: pharmacies.length }) }}
+        </p>
         <menu-item-list id="searchResults">
           <menu-item v-for="(pharmacy, index) in pharmacies"
                      :id="'pharmacy-menu-item-' + index"
@@ -17,11 +21,7 @@
                      :text="pharmacy.pharmacyName"
                      :click-func="pharmacyPracticeClicked"
                      :click-param="pharmacy"
-                     :aria-label="ariaLabelCaption(
-                       `${pharmacy.pharmacyName}`,
-                       `${formatAddress(pharmacy)}`,
-                       `${formatTelephone(pharmacy.telephoneNumber)}`,
-                       `${formatDistance(pharmacy.distance)}`)">
+                     :aria-label="ariaLabelCaption(pharmacy)">
             <slot>
               <div class="nhsuk-u-padding-left-2" :class="$style['results-styling']">
                 <pharmacy-address-component id="resultAddressComponent" :pharmacy="pharmacy"/>
@@ -69,18 +69,26 @@ export default {
   },
   data() {
     const { searchResults, searchQuery } = this.$store.state.nominatedPharmacy;
-    const { pharmacies, technicalError, noResultsFound } = searchResults;
+    const { pharmacies, pharmacyCount, technicalError, noResultsFound } = searchResults;
+    const isHighStreetSearch =
+      this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.HIGH_STREET_PHARMACY;
+    const isOnline =
+      this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.ONLINE_PHARMACY;
+    const isOnlineWithSearch =
+      this.$store.state.nominatedPharmacy.onlineOnlyKnownOption;
+    const showTooManyResults =
+      isOnlineWithSearch && pharmacyCount !== null && pharmacyCount > pharmacies.length;
+
     return {
       technicalError,
       noResultsFound,
       pharmacies,
+      pharmacyCount,
       searchQuery,
-      isHighStreetSearch:
-        this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.HIGH_STREET_PHARMACY,
-      isOnline:
-        this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.ONLINE_PHARMACY,
-      isOnlineWithSearch:
-        this.$store.state.nominatedPharmacy.onlineOnlyKnownOption,
+      isHighStreetSearch,
+      isOnline,
+      isOnlineWithSearch,
+      showTooManyResults,
     };
   },
   computed: {
@@ -126,8 +134,23 @@ export default {
     backButtonClicked() {
       redirectTo(this, this.previousPagePath);
     },
-    ariaLabelCaption(header, address, telephone, distance) {
-      return `${this.$t(header)}. ${this.$t(address)}. ${this.$t(telephone)}. ${this.$t(distance)}.`;
+    ariaLabelCaption(pharmacy) {
+      // Not all pharmacies will have all details.
+      let label = `${pharmacy.pharmacyName}.`;
+
+      if (pharmacy.address) {
+        label += ` ${this.formatAddress(pharmacy.address)}.`;
+      }
+
+      if (pharmacy.telephoneNumber) {
+        label += ` ${this.formatTelephone(pharmacy.telephoneNumber)}.`;
+      }
+
+      if (pharmacy.distance) {
+        label += ` ${this.formatDistance(pharmacy.distance)}.`;
+      }
+
+      return label;
     },
   },
 };

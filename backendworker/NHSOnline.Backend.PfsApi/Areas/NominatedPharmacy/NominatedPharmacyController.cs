@@ -134,7 +134,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         private async Task<PharmacySearchResult> SearchForOnlineOnlyPharmacies(ModelStateDictionary modelState,
             string searchTerm)
         {
-            
             if (string.IsNullOrEmpty(searchTerm))
             {
                 await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,

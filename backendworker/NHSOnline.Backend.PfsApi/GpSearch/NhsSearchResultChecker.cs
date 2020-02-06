@@ -119,7 +119,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 
             var searchResponse = new PharmacySearchResponse(
                 pharmacySearchResponse.StatusCode,
-                pharmacySearchResponse.Body.Organisations);
+                pharmacySearchResponse.Body.Organisations,
+                pharmacySearchResponse.Body.OrganisationCount);
 
             return searchResponse;
         }

@@ -10,12 +10,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
     {
         public IActionResult Visit(PharmacySearchResult.Success result)
         {
-            return new OkObjectResult(result.Pharmacies);
+            return new OkObjectResult(result.Response);
         }
 
         public IActionResult Visit(PharmacySearchResult.InvalidPostcode result)
         {
-            return new OkObjectResult(new List<PharmacyDetails>());
+            return new OkObjectResult(new PharmacySearchResultResponse());
         }
 
         public IActionResult Visit(PharmacySearchResult.PostcodeResultFailure result)

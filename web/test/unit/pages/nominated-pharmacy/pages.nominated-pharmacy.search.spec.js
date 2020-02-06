@@ -90,7 +90,10 @@ describe('search pharmacies', () => {
     it('displays a not found message when no pharmacies are returned', async () => {
       // arrange
       page.vm.searchQuery = 'rg1';
-      $http.getV1PatientPharmacies.mockResolvedValue([]);
+      $http.getV1PatientPharmacies.mockResolvedValue({
+        pharmacies: [],
+        pharmacyCount: null,
+      });
 
       const expectedResult = {
         noResultsFound: true,
@@ -117,7 +120,10 @@ describe('search pharmacies', () => {
       const testPostcode = 'rg1';
       const testPharmacies = [{ pharmacyName: 'boots' }];
 
-      $http.getV1PatientPharmacies.mockResolvedValue(testPharmacies);
+      $http.getV1PatientPharmacies.mockResolvedValue({
+        pharmacies: testPharmacies,
+        pharmacyCount: null,
+      });
 
       const expectedRequest = { searchTerm: testPostcode };
       const expectedResult = {
@@ -139,7 +145,7 @@ describe('search pharmacies', () => {
   describe('when pharmacies are not found', () => {
     it('sets noResultsFound to true and handles response', async () => {
       // arrange
-      $http.getV1PatientPharmacies.mockResolvedValue([]);
+      $http.getV1PatientPharmacies.mockResolvedValue({ pharmacies: [], pharacyCount: null });
       const testPostcode = 'rg1';
       const expectedRequest = { searchTerm: testPostcode };
       const expectedResult = { noResultsFound: true, pharmacies: [], technicalError: false };
@@ -181,7 +187,10 @@ describe('search pharmacies', () => {
         technicalError: false,
       };
 
-      $http.getV1PatientPharmacies.mockResolvedValue(testPharmacies);
+      $http.getV1PatientPharmacies.mockResolvedValue({
+        pharmacies: testPharmacies,
+        pharmacyCount: null,
+      });
 
       processQuery.mockReturnValue('123');
       validateSearchQuery.mockReturnValue(true);

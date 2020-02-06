@@ -27,7 +27,10 @@ describe('nominated pharmacy online only search page', () => {
 
   describe('online only search page with no results', () => {
     const createHttp = () => ({
-      getV1PatientOnlinePharmacies: jest.fn(() => Promise.resolve([])),
+      getV1PatientOnlinePharmacies: jest.fn(() => Promise.resolve({
+        pharmacies: [],
+        pharmacyCount: 0,
+      })),
     });
 
     const $http = createHttp();
@@ -124,6 +127,7 @@ describe('nominated pharmacy online only search page', () => {
         const expectedResult = {
           noResultsFound: true,
           pharmacies: [],
+          pharmacyCount: 0,
           technicalError: false,
         };
         await wrapper.vm.searchButtonClicked();
@@ -138,8 +142,13 @@ describe('nominated pharmacy online only search page', () => {
   });
 
   describe('online only search page with results', () => {
+    const response = {
+      pharmacies: [
+        { pharmacyName: 'abc' },
+      ],
+    };
     const createHttpWithResults = () => ({
-      getV1PatientOnlinePharmacies: jest.fn(() => Promise.resolve([{ pharmacyName: 'abc' }])),
+      getV1PatientOnlinePharmacies: jest.fn(() => Promise.resolve(response)),
     });
     const $http = createHttpWithResults();
     const mountPageWithResults = () => mount(NominatedPharmacyOnlineOnlySearch,
