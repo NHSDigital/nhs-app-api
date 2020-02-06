@@ -108,6 +108,7 @@ export default {
         term: document.term,
         eventGuid: document.eventGuid,
         size: document.size,
+        isValidFile: document.isValidFile,
       });
       this.$router.push({ name: DOCUMENT.name, params: { id: document.documentGuid } });
     },

@@ -160,6 +160,27 @@ namespace NHSOnline.Backend.Support
                     { TextType.Rtf, "application/rtf"},
                     { TextType.Txt, "text/plain"}
                 };
+
+                public static readonly List<string> WhiteListTypes = new List<string>
+                {
+                    ImageType.Bmp,
+                    ImageType.Dib,
+                    ImageType.Gif,
+                    ImageType.Jpg,
+                    ImageType.Jpeg,
+                    ImageType.Jpe,
+                    ImageType.Jfif,
+                    ImageType.Tif,
+                    ImageType.Tiff,
+                    ImageType.Png,
+                    DocumentType.Doc,
+                    DocumentType.Docx,
+                    DocumentType.Docm,
+                    DocumentType.Dot,
+                    DocumentType.Pdf,
+                    TextType.Txt,
+                    TextType.Rtf
+                };
             }
         }
 

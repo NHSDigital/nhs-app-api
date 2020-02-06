@@ -5,8 +5,8 @@
                     'pull-content',
                     !$store.state.device.isNativeApp && $style.desktopWeb]">
         <div id="documentInfo" class="nhsuk-u-margin-bottom-1" data-purpose="info">
-          <p v-if="name && isValidFile">{{ dateString }}</p>
-          <p v-if="!isValidFile">{{ $t('my_record.documents.documentUnavailableSubtext') }}</p>
+          <p v-if="name && isValid">{{ dateString }}</p>
+          <p v-if="!isValid">{{ $t('my_record.documents.documentUnavailableSubtext') }}</p>
         </div>
         <div v-if="hasComments">
           <b>{{ $t('my_record.documents.commentsHeader') }}</b>
@@ -17,7 +17,7 @@
             <p :data-purpose="'documentComment'+index">{{ comment }}</p>
           </div>
         </div>
-        <menu-item-list v-if="isValidFile" data-sid="action-list-menu">
+        <menu-item-list v-if="isValid" data-sid="action-list-menu">
           <menu-item id="btn_viewDocument"
                      header-tag="h2"
                      :text="$t('my_record.documents.actions.view')"
@@ -29,10 +29,10 @@
                      :text="$t('my_record.documents.actions.download')"
                      :aria-label="$t('my_record.documents.actions.download')"/>
         </menu-item-list>
-        <p v-if="isValidFile" id="downloadWarning">
+        <p v-if="isValid" id="downloadWarning">
           {{ $t('my_record.documents.downloadWarning') }}
         </p>
-        <p v-if="isValidFile">
+        <p v-if="isValid">
           <glossary id="glossary"/>
         </p>
         <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
@@ -62,15 +62,14 @@ export default {
     DesktopGenericBackLink,
   },
   computed: {
-    isValidFile() {
-      return this.size !== undefined && this.size < 4000000 &&
-        (this.type.toLowerCase() !== 'tga' && this.type.toLowerCase() !== 'tpic');
-    },
     hasComments() {
       return (this.comments !== null && this.comments.length > 0);
     },
     retrieveComments() {
       return this.comments;
+    },
+    isValid() {
+      return this.isValidFile;
     },
     documentsPath() {
       return DOCUMENTS.path;
@@ -126,10 +125,10 @@ export default {
     const codeId = get('state.myRecord.document.codeId', store);
     const term = get('state.myRecord.document.term', store);
     const eventGuid = get('state.myRecord.document.eventGuid', store);
+    const isValidFile = get('state.myRecord.document.isValidFile', store);
     const documentConsultationsWithComments = get('state.myRecord.documentConsultationsWithComments', store);
     const comments = [];
     const size = get('state.myRecord.document.size', store);
-    const fileType = type.toLowerCase();
 
     if (documentConsultationsWithComments !== null
       && documentConsultationsWithComments.length > 0) {
@@ -151,7 +150,7 @@ export default {
       }
     }
 
-    if (size < 4000000 && fileType !== 'tga' && fileType !== 'tpic') {
+    if (isValidFile) {
       if (name) {
         store.dispatch('header/updateHeaderText', name);
       } else {
@@ -171,6 +170,7 @@ export default {
       type,
       comments,
       size,
+      isValidFile,
     };
   },
   methods: {

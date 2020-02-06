@@ -67,6 +67,7 @@ describe('document view', () => {
         size: 1000000,
         type: 'jpg',
         dateString: 'translate_my_record.documents.documentPageSubtext Unknown Date',
+        isValidFile: true,
       });
       const page = mountPage({ $store, data });
 
@@ -81,7 +82,11 @@ describe('document view', () => {
 
     it('will set the header and page title to the document name', async () => {
       // Arrange
-      const document = { name: 'Document1', type: 'jpg', size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' } };
+      const document = { name: 'Document1',
+        type: 'jpg',
+        size: 1000000,
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        isValidFile: true };
       $store = newStore({ document });
       const page = mountPage({ $store });
 
@@ -94,7 +99,7 @@ describe('document view', () => {
 
     it('will set the header to the document date if no name exists', async () => {
       // Arrange
-      const document = { name: undefined, type: 'jpg', size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' } };
+      const document = { name: undefined, type: 'jpg', size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' }, isValidFile: true };
       $store = newStore({ document });
       const page = mountPage({ $store });
 
@@ -139,6 +144,7 @@ describe('document view', () => {
         size: 1000000,
         type: 'jpg',
         dateString: 'translate_my_record.documents.documentPageSubtext 8 August 2019',
+        isValidFile: true,
       });
       const page = mountPage({ $store, data });
 
@@ -185,6 +191,7 @@ describe('document view', () => {
         codeId: 1234,
         type: 'jpg',
         comments: ['this is a test'],
+        isValidFile: true,
       });
       const page = mountPage({ $store, data });
 
@@ -223,6 +230,7 @@ describe('document view', () => {
         codeId: 1234,
         type: 'jpg',
         comments: ['this is a test', 'this is a second test', 'this is a third test'],
+        isValidFile: true,
       });
       const page = mountPage({ $store, data });
 
@@ -260,6 +268,7 @@ describe('document view', () => {
         codeId: 1234,
         type: 'jpg',
         comments: [],
+        isValidFile: true,
       });
       const page = mountPage({ $store, data });
 
@@ -277,6 +286,7 @@ describe('document view', () => {
         comments: [],
         size: 1000000,
         type: 'jpg',
+        isValidFile: true,
       });
       const page = mountPage({ $store, data });
 
@@ -293,6 +303,7 @@ describe('document view', () => {
         comments: [],
         size: 1000000,
         type: 'jpg',
+        isValidFile: true,
       });
       // Arrange
       const page = mountPage({ $store, data });
@@ -314,6 +325,7 @@ describe('document view', () => {
         comments: [],
         size: 4000000,
         type: 'jpg',
+        isValidFile: false,
       });
 
       // Arrange
@@ -354,14 +366,17 @@ describe('document view', () => {
       type: 'tga',
       size: 1000000,
       comments: [],
+      isValidFile: true,
     }, {
       type: 'tpic',
       size: 1000000,
       comments: [],
+      isValidFile: true,
     }, {
       type: 'jpg',
       size: 4000000,
       comments: [],
+      isValidFile: true,
     }]).it('will display a different subtext if the document is too large or if the file type is TGA or TPIC', (testData) => {
       // Arrange
       const { size, comments, type } = testData;
@@ -380,14 +395,17 @@ describe('document view', () => {
       type: 'tga',
       size: 1000000,
       comments: [],
+      isValidFile: true,
     }, {
       type: 'tpic',
       size: 1000000,
       comments: [],
+      isValidFile: true,
     }, {
       type: 'jpg',
       size: 4000000,
       comments: [],
+      isValidFile: true,
     }]).it('will not display the glossary or the warning if the document is too large or if the file type is TGA or TPIC', (testData) => {
       // Arrange
       const { size, comments, type } = testData;

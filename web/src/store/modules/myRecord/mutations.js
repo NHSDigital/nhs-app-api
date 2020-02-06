@@ -97,6 +97,7 @@ export default {
       state.document.eventGuid = documentInfo.eventGuid;
       state.document.codeId = documentInfo.codeId;
       state.document.size = documentInfo.size;
+      state.document.isValidFile = documentInfo.isValidFile;
     }
   },
   [TOGGLE_PATIENT_DETAIL](state) {
