@@ -1,11 +1,25 @@
 <template>
   <div v-if="showTemplate">
-    <div v-if="foundNoResultsMessage" class="nhsuk-grid-row">
+    <div v-if="showMainPageHeader" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <p id="noResultsFoundText" class="nhsuk-u-padding-bottom-1">
-          {{ foundNoResultsMessage }}
+        <h1 class="nhsuk-label-wrapper">
+          <label class="nhsuk-label nhsuk-label--xl nhsuk-u-margin-top-3
+          nhsuk-u-margin-bottom-3" for="searchTextInput">
+            {{ $t('pageHeaders.nominatedPharmacyOnlineOnlySearch') }}
+          </label>
+        </h1>
+      </div>
+    </div>
+    <div v-else-if="!showMainPageHeader" class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <h1 class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
+          {{ $t('pageHeaders.nominatedPharmacyOnlineOnlySearchNoResults')
+            .replace('{searchQuery}', processedSearchQuery ) }}
+        </h1>
+        <p id="noResultsFoundText" class="nhsuk-u-margin-bottom-3">
+          {{ noResultsFoundMessage }}
         </p>
-        <h2 id="noResultsFoundHeader">
+        <h2 id="noResultsFoundHeader" class="nhsuk-u-margin-bottom-3">
           {{ $t('nominatedPharmacyOnlineOnlySearch.searchAgainMessage') }}
         </h2>
       </div>
@@ -31,9 +45,6 @@
             <error-message v-if="showErrorMessage" id="invalid-search-term-error">
               {{ $t('nominatedPharmacyOnlineOnlySearch.errorMessageText') }}
             </error-message>
-            <label id="searchTextLabel" class="nhsuk-label" for="searchTextInput">
-              {{ $t('nominatedPharmacyOnlineOnlySearch.inputLabelText') }}
-            </label>
             <generic-text-input id="searchTextInput"
                                 v-model="searchQuery"
                                 class="nhsuk-input--width-20 nhsuk-u-padding-bottom-3"
@@ -95,7 +106,9 @@ export default {
       nominatedPharmacyChooseType: NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path,
       showErrorMessage: false,
       searchQuery: '',
-      foundNoResultsMessage: '',
+      showMainPageHeader: true,
+      processedSearchQuery: '',
+      noResultsFoundMessage: '',
     };
   },
   computed: {
@@ -113,6 +126,7 @@ export default {
     },
     async searchButtonClicked() {
       this.showErrorMessage = false;
+      this.showMainPageHeader = true;
 
       const processedQuery = this.processQuery(this.searchQuery);
 
@@ -129,6 +143,7 @@ export default {
         const pharmacySearchParams = {
           searchTerm: processedQuery,
         };
+        this.processedSearchQuery = processedQuery;
 
         try {
           const response =
@@ -149,9 +164,8 @@ export default {
         this.$store.dispatch('nominatedPharmacy/setSearchResults', pharmacySearchResult);
 
         if (pharmacySearchResult.noResultsFound) {
-          this.foundNoResultsMessage = this.generateNoResultsMessage();
-          this.$store.dispatch('header/updateHeaderText', this.$t('nominatedPharmacySearchResults.errors.noResultsFound.header', { searchQuery: processedQuery }));
-          this.$store.dispatch('pageTitle/updatePageTitle', this.$t('nominatedPharmacySearchResults.errors.noResultsFound.title', { searchQuery: processedQuery }));
+          this.noResultsFoundMessage = this.generateNoResultsMessage();
+          this.showMainPageHeader = false;
           window.scrollTo(0, 0);
         } else {
           redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path);

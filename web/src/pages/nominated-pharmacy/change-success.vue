@@ -16,8 +16,15 @@
               {{ $t('nominated_pharmacy.changeSuccess.whatHappensNext') }}</h2>
             <p v-if="pharmacy.url" id="registrationWarningWithUrl">
               {{ $t('nominated_pharmacy.changeSuccess.registrationWarning',
-                    {'pharmacyName': pharmacy.pharmacyName,
-                     'pharmacyUrl': pharmacy.url}) }}</p>
+                    {'pharmacyName': pharmacy.pharmacyName}) }}
+              <analytics-tracked-tag v-if="pharmacy.url"
+                                     id="pharmacy-url"
+                                     :href="`//${pharmacy.url}`"
+                                     :text="$t(pharmacy.url)"
+                                     tag="a" target="_blank"
+                                     style="vertical-align: baseline; display: inline;">
+                {{ pharmacy.url }}</analytics-tracked-tag>.
+            </p>
             <p v-else id="registrationWarningWithNoUrl">
               {{ $t('nominated_pharmacy.changeSuccess.registrationWarningWithNoUrl',
                     {'pharmacyName': pharmacy.pharmacyName}) }}</p>
@@ -31,10 +38,11 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <desktopGenericBackLink id="to-prescriptions-link"
-                                :path="prescriptionsPath"
-                                :button-text="'nominated_pharmacy.changeSuccess.linkLabel'"
-                                @clickAndPrevent="prescriptionsLinkClicked"/>
+        <desktopGenericBackLink
+          id="to-prescriptions-link"
+          :path="prescriptionsPath"
+          :button-text="'nominated_pharmacy.changeSuccess.linkLabel'"
+          @clickAndPrevent="prescriptionsLinkClicked"/>
       </div>
     </div>
   </div>
@@ -45,10 +53,10 @@
 import PharmacyChangeSuccessDetails from '@/components/nominatedPharmacy/PharmacyChangeSuccessDetails';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { PRESCRIPTIONS, NOMINATED_PHARMACY_CHANGE_SUCCESS } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
-
+import AnalyticsTrackedTag from '../../components/widgets/AnalyticsTrackedTag';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -56,6 +64,7 @@ export default {
     OnlineOnlyPharmacyDetail,
     PharmacyChangeSuccessDetails,
     DesktopGenericBackLink,
+    AnalyticsTrackedTag,
   },
   data() {
     return {

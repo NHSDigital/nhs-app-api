@@ -21,13 +21,7 @@
       {{ getContinueButtonText }}
     </generic-button>
 
-    <generic-button v-if="$store.state.device.isNativeApp"
-                    id="back-button"
-                    :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                    tabindex="0" @click.prevent="onBackButtonClicked">
-      {{ $t('nominatedPharmacyNotFound.backButton') }}
-    </generic-button>
-    <desktopGenericBackLink v-else
+    <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             id="back-link"
                             :path="prescriptionsPath"
                             :button-text="'nominatedPharmacyNotFound.backButton'"

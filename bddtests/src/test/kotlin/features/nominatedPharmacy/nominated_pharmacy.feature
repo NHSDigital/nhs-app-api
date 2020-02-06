@@ -57,7 +57,7 @@ Feature: nominated pharmacy journey
     Then I see the choose type page is loaded
     Then I select online pharmacy
     And I click on the choose type continue button
-    Then I see the dsp interrupt  page is loaded
+    Then I see the dsp interrupt page is loaded
     And I click on the DSP Interrupt continue button
     Then I see the online choices page loaded
     Then I click the Yes radio button on the online choices page
@@ -97,7 +97,7 @@ Feature: nominated pharmacy journey
     Then I see the choose type page is loaded
     Then I select online pharmacy
     And I click on the choose type continue button
-    Then I see the dsp interrupt  page is loaded
+    Then I see the dsp interrupt page is loaded
     And I click on the DSP Interrupt continue button
     Then I see the online choices page loaded
     Then I click the Yes radio button on the online choices page
@@ -159,7 +159,7 @@ Feature: nominated pharmacy journey
     Then I see the choose type page is loaded
     Then I select online pharmacy
     And I click on the choose type continue button
-    Then I see the dsp interrupt  page is loaded
+    Then I see the dsp interrupt page is loaded
     And I click on the DSP Interrupt continue button
     Then I see the online choices page loaded
     Then I click the Yes radio button on the online choices page
@@ -328,7 +328,7 @@ Feature: nominated pharmacy journey
     Examples:
       | GP System | OdsCode |
       | EMIS      | SW11XR  |
-
+  
   Scenario Outline: The <GP System> user can see nominated pharmacy on the prescriptions summary page
     Given the scenario is submit prescription
     And I am using <GP System> GP System to submit my prescription
@@ -364,7 +364,7 @@ Feature: nominated pharmacy journey
     Then I see the choose type page is loaded
     Then I select online pharmacy
     And I click on the choose type continue button
-    Then I see the dsp interrupt  page is loaded
+    Then I see the dsp interrupt page is loaded
     And I click on the DSP Interrupt continue button
     Then I see the online choices page loaded
     And I click the No radio button on the online choices page

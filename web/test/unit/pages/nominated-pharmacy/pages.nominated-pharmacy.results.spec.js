@@ -19,6 +19,7 @@ describe('nominated pharmacy search results', () => {
   let wrapper;
   let localVue;
   let pharmacySearchResults;
+  let distanceInformationMessage;
 
   const createState = (state = {
     device: {
@@ -61,6 +62,36 @@ describe('nominated pharmacy search results', () => {
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
     expect(pharmacySearchResults.exists()).toBe(true);
+  });
+
+  it('will display the distance information message when isHighStreetSearch is true', () => {
+    $store.state.nominatedPharmacy = {
+      searchResults: {
+        pharmacies: [],
+        technicalError: false,
+        noResultsFound: true,
+      },
+      nominatedPharmacyEnabled: true,
+      chosenType: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
+    };
+    wrapper = mountPage();
+    distanceInformationMessage = wrapper.find('#distance-information');
+    expect(distanceInformationMessage.exists()).toBe(true);
+  });
+
+  it('will display the random results message when isOnlineWithSearch is true', () => {
+    $store.state.nominatedPharmacy = {
+      searchResults: {
+        pharmacies: [],
+        technicalError: false,
+        noResultsFound: true,
+      },
+      nominatedPharmacyEnabled: true,
+      onlineOnlyKnownOption: false,
+    };
+    wrapper = mountPage();
+    distanceInformationMessage = wrapper.find('#random-results-information');
+    expect(distanceInformationMessage.exists()).toBe(true);
   });
 
   it('will redirect to search if no search query present', () => {
@@ -194,7 +225,7 @@ describe('nominated pharmacy search results', () => {
     });
   });
 
-  it('will display pharmacy details from the store', () => {
+  it('will display pharmacy details from the store for high street pharmacy', () => {
     const pharmacyDetail = {
       pharmacyName: 'drug store',
       odsCode: 'ABC1',
@@ -215,20 +246,63 @@ describe('nominated pharmacy search results', () => {
         technicalError: false,
         noResultsFound: false,
       },
+      chosenType: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
     };
+
     wrapper = mountPage();
     pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
 
     const pharmacyMenuItem = wrapper.find('#pharmacy-menu-item-0');
+    const addressComponent = wrapper.find('#resultAddressComponent');
     // assert
     expect(pharmacyMenuItem.exists()).toBe(true);
+    expect(addressComponent.exists()).toBe(true);
     expect(pharmacyMenuItem.text()).toContain('drug store');
     expect(wrapper.find('#pharmacy-address-line-1').text()).toEqual(pharmacyDetail.addressLine1);
     expect(wrapper.find('#pharmacy-address-line-2').text()).toEqual(pharmacyDetail.addressLine2);
     expect(wrapper.find('#pharmacy-address-line-3').text()).toEqual(pharmacyDetail.addressLine3);
     expect(wrapper.find('#pharmacy-city').text()).toEqual(pharmacyDetail.city);
     expect(wrapper.find('#pharmacy-county').text()).toEqual(pharmacyDetail.county);
-    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual(`translate_nominatedPharmacySearchResults.telephoneLabel${pharmacyDetail.telephoneNumber}`);
+    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual(`translate_nominated_pharmacy.telephoneLabel${pharmacyDetail.telephoneNumber}`);
     expect(wrapper.find('#pharmacy-distance-away').text()).toEqual(`${pharmacyDetail.distance} miles away`);
+    expect(wrapper.find('#pharmacy-url').exists()).toBe(false);
+  });
+
+  it('will display pharmacy details from the store for online pharmacy', () => {
+    const pharmacyDetail = {
+      pharmacyName: 'drug store',
+      odsCode: 'ABC1',
+      addressLine1: '',
+      addressLine2: '',
+      addressLine3: '',
+      city: '',
+      county: '',
+      postcode: '',
+      telephoneNumber: '0819283',
+      distance: '',
+      url: 'testurl.com',
+    };
+
+    $store.state.nominatedPharmacy = {
+      searchQuery: 'rg1',
+      searchResults: {
+        pharmacies: [pharmacyDetail],
+        technicalError: false,
+        noResultsFound: false,
+      },
+      chosenType: PharmacyTypeChoice.ONLINE_PHARMACY,
+    };
+
+    wrapper = mountPage();
+    pharmacySearchResults = wrapper.find(NominatedPharmacySearchResults);
+
+    const pharmacyMenuItem = wrapper.find('#pharmacy-menu-item-0');
+    const addressComponent = wrapper.find('#resultAddressComponent');
+    // assert
+    expect(pharmacyMenuItem.exists()).toBe(true);
+    expect(addressComponent.exists()).toBe(true);
+    expect(pharmacyMenuItem.text()).toContain('drug store');
+    expect(wrapper.find('#pharmacy-url').text()).toEqual(pharmacyDetail.url);
+    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual(`translate_nominated_pharmacy.telephoneLabel${pharmacyDetail.telephoneNumber}`);
   });
 });

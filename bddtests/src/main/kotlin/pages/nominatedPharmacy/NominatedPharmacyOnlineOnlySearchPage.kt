@@ -12,7 +12,7 @@ open class NominatedPharmacyOnlineOnlySearchPage : HybridPageObject() {
     private lateinit var headerNative: HeaderNative
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("Find an online-only pharmacy")
+        headerNative.waitForPageHeaderText("What is the name of the online-only pharmacy?")
     }
 
     private val searchField = HybridPageElement(

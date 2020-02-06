@@ -104,9 +104,12 @@ describe('confirm nominated pharmacy', () => {
     });
 
     it('will translate the correct locale variables for text', async () => {
-      $store.state.nominatedPharmacy.pharmacy.url = 'www.testurl.com';
+      const pharmacyUrl = 'www.testurl.com';
+      $store.state.nominatedPharmacy.pharmacy.url = pharmacyUrl;
       expect(whatHappensNextWarning.text()).toBe('translate_nominated_pharmacy.changeSuccess.whatHappensNext');
-      expect(registrationWarningWithUrl.text()).toBe('translate_nominated_pharmacy.changeSuccess.registrationWarning');
+      expect(wrapper.find('#pharmacy-url').text()).toEqual(pharmacyUrl);
+      expect(registrationWarningWithUrl.text()).toContain('translate_nominated_pharmacy.changeSuccess.registrationWarning');
+      expect(registrationWarningWithUrl.text()).toContain(pharmacyUrl);
       expect(postalWarning.text()).toBe('translate_nominated_pharmacy.changeSuccess.postalWarning');
     });
   });

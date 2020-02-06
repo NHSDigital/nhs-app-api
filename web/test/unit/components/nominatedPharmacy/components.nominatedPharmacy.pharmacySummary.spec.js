@@ -36,7 +36,7 @@ describe('pharmacy summary', () => {
   });
 
   describe('nominated pharmacy address for community pharmacy', () => {
-    let pharmacySummaryAddress;
+    let pharmacyAddressComponent;
 
     beforeEach(() => {
       props.pharmacy.pharmacySubType = 'Community Pharmacy';
@@ -44,38 +44,16 @@ describe('pharmacy summary', () => {
         $store,
         propsData: props,
       });
-      pharmacySummaryAddress = wrapper.find('#pharmacyAddress');
+      pharmacyAddressComponent = wrapper.find('#pharmacy-address-component');
     });
 
     it('will display the address', () => {
-      expect(pharmacySummaryAddress.exists()).toBe(true);
-    });
-
-    it('will format the address', () => {
-      expect(pharmacySummaryAddress.text()).toEqual('1 Stuart St, Brooklyn Avenue, ' +
-        'Bangor, London, Greater London, SE254NQ');
-    });
-  });
-
-  describe('nominated pharmacy website url for community pharmacy', () => {
-    let pharmacyWebsiteUrl;
-
-    beforeEach(() => {
-      props.pharmacy.pharmacySubType = 'Community Pharmacy';
-      wrapper = mount(PharmacySummary, {
-        $store,
-        propsData: props,
-      });
-      pharmacyWebsiteUrl = wrapper.find('#url');
-    });
-
-    it('will not be displayed', () => {
-      expect(pharmacyWebsiteUrl.exists()).toBe(false);
+      expect(pharmacyAddressComponent.exists()).toBe(true);
     });
   });
 
   describe('nominated pharmacy address for internet pharmacy', () => {
-    let pharmacySummaryAddress;
+    let pharmacyAddressComponent;
 
     beforeEach(() => {
       props.pharmacy.pharmacySubType = 'Internet Pharmacy';
@@ -83,67 +61,16 @@ describe('pharmacy summary', () => {
         $store,
         propsData: props,
       });
-      pharmacySummaryAddress = wrapper.find('#address');
+      pharmacyAddressComponent = wrapper.find('#pharmacy-address-component');
     });
 
     it('will not be displayed', () => {
-      expect(pharmacySummaryAddress.exists()).toBe(false);
+      expect(pharmacyAddressComponent.exists()).toBe(false);
     });
   });
 
-  describe('nominated pharmacy website url for internet pharmacy', () => {
-    let pharmacyWebsiteUrl;
-
-    beforeEach(() => {
-      props.pharmacy.pharmacySubType = 'Internet Pharmacy';
-      wrapper = mount(PharmacySummary, {
-        $store,
-        propsData: props,
-      });
-      pharmacyWebsiteUrl = wrapper.find('#url');
-    });
-
-    it('will be displayed', () => {
-      expect(pharmacyWebsiteUrl.exists()).toBe(true);
-    });
-
-    it('will have target set to blank', () => {
-      expect(pharmacyWebsiteUrl.attributes().target).toEqual('_blank');
-    });
-
-    it('will go to share decision external url', () => {
-      expect(pharmacyWebsiteUrl.attributes().href).toEqual('//http://www.myBestPharmacy.net');
-    });
-  });
-
-  describe('show nominated pharmacy telephone number', () => {
-    let pharmacySummaryPhoneNumber;
-
-    beforeEach(() => {
-      pharmacySummaryPhoneNumber = wrapper.find('#phoneNumber');
-    });
-
+  describe('will show nominated pharmacy name', () => {
     it('will exist', () => {
-      expect(pharmacySummaryPhoneNumber.exists()).toBe(true);
-    });
-
-    it('will format the address', () => {
-      expect(pharmacySummaryPhoneNumber.text()).toEqual('01234567899');
-    });
-  });
-
-  describe('show nominated pharmacy name as header', () => {
-    it('will exist', () => {
-      const pharmacyName = wrapper.find('#pharmacyName');
-      const pharmacyNameText = pharmacyName.find('h2');
-      expect(pharmacyNameText.exists()).toBe(true);
-      expect(pharmacyNameText.text()).toEqual('My Pharmacy');
-    });
-  });
-
-  describe('will show nominated pharmacy name when pharmacyNameAsHeader is false', () => {
-    it('will exist', () => {
-      props.pharmacyNameAsHeader = false;
       wrapper = mount(PharmacySummary, {
         $store,
         propsData: props,

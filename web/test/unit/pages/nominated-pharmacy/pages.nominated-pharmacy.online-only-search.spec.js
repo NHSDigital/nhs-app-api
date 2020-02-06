@@ -81,7 +81,8 @@ describe('nominated pharmacy online only search page', () => {
     });
 
     describe('no results found content', () => {
-      it('is displayed when noResultsFound is true', async () => {
+      it('is displayed when showMainPageHeader is false', async () => {
+        wrapper.vm.showMainPageHeader = false;
         wrapper.vm.foundNoResultsMessage = 'message';
         noResultsFoundHelpText = wrapper.find('#noResultsFoundText');
         noResultsFoundHeader = wrapper.find('#noResultsFoundHeader');
@@ -131,7 +132,7 @@ describe('nominated pharmacy online only search page', () => {
         expect(wrapper.vm.showErrorMessage).toBe(false);
         expect(wrapper.find('#invalid-search-term-error').exists()).toBe(false);
         expect($http.getV1PatientOnlinePharmacies).toHaveBeenCalled();
-        expect(wrapper.vm.foundNoResultsMessage).toBe('translate_nominatedPharmacyOnlineOnlySearch.noResultsHelpText');
+        expect(wrapper.vm.noResultsFoundMessage).toBe('translate_nominatedPharmacyOnlineOnlySearch.noResultsHelpText');
       });
     });
   });

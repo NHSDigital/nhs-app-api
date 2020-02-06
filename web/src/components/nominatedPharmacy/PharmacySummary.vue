@@ -1,37 +1,22 @@
 <template>
   <div>
-    <div id="pharmacyName">
-      <h2 v-if="pharmacyNameAsHeader" class="nhsuk-u-margin-bottom-1">
-        {{ pharmacy.pharmacyName }} </h2>
-      <p v-else> {{ pharmacy.pharmacyName }} </p>
-    </div>
     <div>
+      <p id="pharmacyName" class="nhsuk-u-margin-bottom-1"> {{ pharmacy.pharmacyName }} </p>
       <p v-if="!isInternetPharmacy" id="pharmacyAddress" class="nhsuk-u-margin-bottom-1">
-        {{ formatAddress(pharmacy) }}</p>
-      <!--
-        We get pharmacy urls without http/https.
-        So // in the href tells it this is a new root address.
-      -->
-      <analytics-tracked-tag v-if="isInternetPharmacy"
-                             id="url"
-                             :href="`//${pharmacy.url}`"
-                             :text="$t(pharmacy.url)"
-                             tag="a" target="_blank">
-        {{ pharmacy.url }}
-      </analytics-tracked-tag>
-      <p id="phoneNumber" class="nhsuk-u-margin-bottom-1"> {{ pharmacy.telephoneNumber }} </p>
+        <pharmacy-address-component id="pharmacy-address-component" :pharmacy="pharmacy"/>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
 import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import PharmacyAddressComponent from './PharmacyAddressComponent';
 
 export default {
   name: 'PharmacySummary',
   components: {
-    AnalyticsTrackedTag,
+    PharmacyAddressComponent,
   },
   props: {
     pharmacy: {

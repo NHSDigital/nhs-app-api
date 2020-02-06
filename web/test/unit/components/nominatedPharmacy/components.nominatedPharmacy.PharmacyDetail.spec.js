@@ -1,6 +1,6 @@
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
-
 import { createStore, mount } from '../../helpers';
+import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 
 const createPharmacyDetailComponentForP1CommunityPharmacy = ({ $store }) => mount(PharmacyDetail, {
   propsData: {
@@ -105,6 +105,9 @@ describe('pharmacy detail', () => {
           device: {
             source: 'android',
           },
+          nominatedPharmacy: {
+            chosenType: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
+          },
         },
       });
       wrapper = createPharmacyDetailComponentForP1CommunityPharmacy({ $store });
@@ -122,6 +125,18 @@ describe('pharmacy detail', () => {
       });
     });
 
+    describe('online only pharmacy detail component', () => {
+      let onlineOnlyPharmacyDetail;
+
+      beforeEach(() => {
+        onlineOnlyPharmacyDetail = wrapper.find('#online-pharmacy-summary');
+      });
+
+      it('will not be displayed for community pharmacies', () => {
+        expect(onlineOnlyPharmacyDetail.exists()).toEqual(false);
+      });
+    });
+
     describe('instruction about pharmacy', () => {
       let instruction;
 
@@ -132,18 +147,6 @@ describe('pharmacy detail', () => {
       it('will display nominated pharmacy instruction', () => {
         expect(instruction.exists()).toEqual(true);
         expect(instruction.text()).toEqual('translate_nominated_pharmacy.confirm.line1');
-      });
-    });
-
-    describe('statement about internet pharmacy', () => {
-      let statement;
-
-      beforeEach(() => {
-        statement = wrapper.find('#statement');
-      });
-
-      it('will not display the statement', () => {
-        expect(statement.exists()).toEqual(false);
       });
     });
 
@@ -170,6 +173,10 @@ describe('pharmacy detail', () => {
           device: {
             source: 'android',
           },
+        },
+
+        nominatedPharmacy: {
+          chosenType: PharmacyTypeChoice.ONLINE_PHARMACY,
         },
       });
       wrapper = createPharmacyDetailComponentForP1InternetPharmacy({ $store });
@@ -199,15 +206,15 @@ describe('pharmacy detail', () => {
       });
     });
 
-    describe('statement about internet pharmacy', () => {
-      let statement;
+    describe('online only pharmacy detail component', () => {
+      let onlineOnlyPharmacyDetail;
 
       beforeEach(() => {
-        statement = wrapper.find('#statement');
+        onlineOnlyPharmacyDetail = wrapper.find('#online-pharmacy-summary');
       });
 
-      it('will display the statement', () => {
-        expect(statement.exists()).toEqual(true);
+      it('will be displayed for community pharmacies', () => {
+        expect(onlineOnlyPharmacyDetail.exists()).toEqual(true);
       });
     });
 
@@ -274,6 +281,9 @@ describe('pharmacy detail', () => {
         state: {
           device: {
             source: 'android',
+          },
+          nominatedPharmacy: {
+            chosenType: PharmacyTypeChoice.HIGH_STREET_PHARMACY,
           },
         },
       });

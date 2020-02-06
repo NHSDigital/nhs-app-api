@@ -132,25 +132,6 @@ class NominatedPharmacyStepDefinitions {
         Assert.assertTrue(searchNominatedPharmacyPage.isSearchAgainVisible())
     }
 
-    @When("^I click on item (\\d+) pharmacy from the list of online pharmacies$")
-    fun iClickOnAPharmacyFromTheListOfOnlinePharmacies(positionInTheList: Int) {
-        val index = positionInTheList - 1
-
-        val clickedOnlinePharmacy = nominatedPharmacyResultsPage.getOnlinePharmacies()[index]
-
-        val sessionData = NominatedPharmacySerenityHelpers
-                .SEARCH_RESULTS
-                .getOrFail<NhsAzureSearchOrganisationReply>().value
-
-            val result = (sessionData.find { it.OrganisationName.equals(clickedOnlinePharmacy.pharmacyName)})
-            if (result != null) {
-                NominatedPharmacySerenityHelpers.PHARMACY_TO_BE_NOMINATED.set(result)
-            } else {
-                Assert.fail("Selected pharmacy not found in the session data")
-            }
-
-        nominatedPharmacyResultsPage.selectPharmacyAtIndex(index)
-    }
 
     @When("^I click on item (\\d+) pharmacy from the list of pharmacies$")
     fun iClickOnAPharmacyFromTheListOfPharmacies(positionInTheList: Int) {
@@ -184,16 +165,38 @@ class NominatedPharmacyStepDefinitions {
         assertEquals(
                 "Organisation name is not correct",
                 myNominatedPharmacy.OrganisationName, nominatedPharmacyChangeSuccessPage.pharmacyName.text)
-        assertEquals(
-                "Address is not correct",
-                myNominatedPharmacy.addressFormatted(), nominatedPharmacyChangeSuccessPage.pharmacyAddress.text)
+
+        Assert.assertEquals(
+                "Address Line 1 is not correct",
+                myNominatedPharmacy.Address1, nominatedPharmacyChangeSuccessPage.pharmacyAddressLine1.text)
+
+
+        Assert.assertEquals(
+                "Address Line 2 is not correct",
+                myNominatedPharmacy.Address2, nominatedPharmacyChangeSuccessPage.pharmacyAddressLine2.text)
+
+        Assert.assertEquals(
+                "Address Line 3 is not correct",
+                myNominatedPharmacy.Address3, nominatedPharmacyChangeSuccessPage.pharmacyAddressLine3.text)
+
+        Assert.assertEquals(
+                "City is not correct",
+                myNominatedPharmacy.City, nominatedPharmacyChangeSuccessPage.pharmacyCity.text)
+
+        Assert.assertEquals(
+                "County is not correct",
+                myNominatedPharmacy.County, nominatedPharmacyChangeSuccessPage.pharmacyCounty.text)
+
+        Assert.assertEquals(
+                "Postcode is not correct",
+                myNominatedPharmacy.Postcode, nominatedPharmacyChangeSuccessPage.pharmacyPostcode.text)
 
         val phoneNumber = myNominatedPharmacy.primaryPhone()
 
         if (phoneNumber != null) {
             assertEquals(
                     "Phone number is not correct",
-                    "Telephone: " + phoneNumber, confirmNominatedPharmacyPage.pharmacyPhoneNumber.text)
+                    "Telephone: " + phoneNumber, nominatedPharmacyChangeSuccessPage.pharmacyPhoneNumber.text)
         }
     }
 
@@ -300,35 +303,6 @@ class NominatedPharmacyStepDefinitions {
         }
     }
 
-    @Then("^I see list of online only pharmacies displayed on the result page$")
-    fun iSeeOnlineOnlyPharmaciesOnResultsPage(){
-        nominatedPharmacyResultsPage.isLoaded()
-        val expectedData = NominatedPharmacySerenityHelpers
-                .SEARCH_RESULTS
-                .getOrFail<NhsAzureSearchOrganisationReply>().value
-
-        val searchResults = nominatedPharmacyResultsPage.getOnlinePharmacies()
-
-        expectedData.forEachIndexed {
-            index, dataItem ->
-            assertEquals(
-                    "Online Pharmacy name is not correct",
-                    dataItem.OrganisationName, searchResults[index].pharmacyName)
-            if(dataItem.URL != null){
-                assertEquals(
-                        "Online Pharmacy URL is not correct",
-                        dataItem.URL, searchResults[index].website)
-            }
-
-            val phoneNumberData = dataItem.primaryPhone()
-            val phoneNumber = "Telephone: $phoneNumberData"
-            if (phoneNumberData != null) {
-                assertEquals(
-                        "Online Pharmacy Phone number is not correct",
-                        phoneNumber, searchResults[index].phoneNumber)
-            }
-        }
-    }
 
     @Then("^I see confirm nominated page with selected pharmacy details$")
     fun iSeeConfirmNominatedPharmacyPage() {
@@ -339,14 +313,38 @@ class NominatedPharmacyStepDefinitions {
         assertEquals(
                 "Organisation name is not correct",
                 selectedPharmacy.OrganisationName, confirmNominatedPharmacyPage.pharmacyName.text)
-        assertEquals(
-                "Address is not correct",
-                selectedPharmacy.addressFormatted(), confirmNominatedPharmacyPage.pharmacyAddress.text)
+
+        Assert.assertEquals(
+                "Address Line 1 is not correct",
+                selectedPharmacy.Address1, nominatedPharmacyChangeSuccessPage.pharmacyAddressLine1.text)
+
+
+        Assert.assertEquals(
+                "Address Line 2 is not correct",
+                selectedPharmacy.Address2, nominatedPharmacyChangeSuccessPage.pharmacyAddressLine2.text)
+
+        Assert.assertEquals(
+                "Address Line 3 is not correct",
+                selectedPharmacy.Address3, nominatedPharmacyChangeSuccessPage.pharmacyAddressLine3.text)
+
+        Assert.assertEquals(
+                "City is not correct",
+                selectedPharmacy.City, nominatedPharmacyChangeSuccessPage.pharmacyCity.text)
+
+        Assert.assertEquals(
+                "County is not correct",
+                selectedPharmacy.County, nominatedPharmacyChangeSuccessPage.pharmacyCounty.text)
+
+        Assert.assertEquals(
+                "Postcode is not correct",
+                selectedPharmacy.Postcode, nominatedPharmacyChangeSuccessPage.pharmacyPostcode.text)
+
         val phoneNumber = selectedPharmacy.primaryPhone()
+
         if (phoneNumber != null) {
             assertEquals(
                     "Phone number is not correct",
-                    phoneNumber, confirmNominatedPharmacyPage.pharmacyPhoneNumber.text)
+                    "Telephone: " + phoneNumber, confirmNominatedPharmacyPage.pharmacyPhoneNumber.text)
         }
     }
 
@@ -383,8 +381,38 @@ class NominatedPharmacyStepDefinitions {
         assertEquals(
                 "Pharmacy name is not correct",
                 selectedPharmacy.OrganisationName, nominatedPharmacyPage.pharmacyName.text)
-        assertEquals(
-                "Pharmacy address is not correct",
-                selectedPharmacy.addressFormatted(), nominatedPharmacyPage.pharmacyAddress.text)
+
+        Assert.assertEquals(
+                "Address Line 1 is not correct",
+                selectedPharmacy.Address1, nominatedPharmacyPage.pharmacyAddressLine1.text)
+
+
+        Assert.assertEquals(
+                "Address Line 2 is not correct",
+                selectedPharmacy.Address2, nominatedPharmacyPage.pharmacyAddressLine2.text)
+
+        Assert.assertEquals(
+                "Address Line 3 is not correct",
+                selectedPharmacy.Address3, nominatedPharmacyPage.pharmacyAddressLine3.text)
+
+        Assert.assertEquals(
+                "City is not correct",
+                selectedPharmacy.City, nominatedPharmacyPage.pharmacyCity.text)
+
+        Assert.assertEquals(
+                "County is not correct",
+                selectedPharmacy.County, nominatedPharmacyPage.pharmacyCounty.text)
+
+        Assert.assertEquals(
+                "Postcode is not correct",
+                selectedPharmacy.Postcode, nominatedPharmacyPage.pharmacyPostcode.text)
+
+        val phoneNumber = selectedPharmacy.primaryPhone()
+
+        if (phoneNumber != null) {
+            assertEquals(
+                    "Phone number is not correct",
+                    "Telephone: " + phoneNumber, nominatedPharmacyPage.pharmacyPhoneNumber.text)
+        }
     }
 }

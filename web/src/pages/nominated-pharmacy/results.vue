@@ -2,10 +2,10 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div>
-        <p v-if="isHighStreetSearch">
+        <p v-if="isHighStreetSearch" id="distance-information">
           {{ $t('nominatedPharmacySearchResults.resultSummary.distanceInformation') }}
         </p>
-        <p v-else-if="!isOnlineWithSearch">
+        <p v-else-if="!isOnlineWithSearch" id="random-results-information">
           {{ $t('nominatedPharmacySearchResults.online.random.information') }}
         </p>
         <menu-item-list id="searchResults">
@@ -23,37 +23,8 @@
                        `${formatTelephone(pharmacy.telephoneNumber)}`,
                        `${formatDistance(pharmacy.distance)}`)">
             <slot>
-              <div class="nhsuk-u-padding-left-2">
-                <p v-if="pharmacy.addressLine1" id="pharmacy-address-line-1"
-                   class="nhsuk-u-margin-bottom-0" :class="$style['results-styling']">
-                  {{ pharmacy.addressLine1 }}</p>
-                <p v-if="pharmacy.addressLine2" id="pharmacy-address-line-2"
-                   class="nhsuk-u-margin-bottom-0" :class="$style['results-styling']">
-                  {{ pharmacy.addressLine2 }}</p>
-                <p v-if="pharmacy.addressLine3" id="pharmacy-address-line-3"
-                   class="nhsuk-u-margin-bottom-0" :class="$style['results-styling']">
-                  {{ pharmacy.addressLine3 }}</p>
-                <p v-if="pharmacy.city" id="pharmacy-city"
-                   class="nhsuk-u-margin-bottom-0" :class="$style['results-styling']">
-                  {{ pharmacy.city }}</p>
-                <p v-if="pharmacy.county" id="pharmacy-county"
-                   class="nhsuk-u-margin-bottom-0" :class="$style['results-styling']">
-                  {{ pharmacy.county }}</p>
-                <p v-if="pharmacy.postcode" id="pharmacy-postcode" class="nhsuk-u-margin-bottom-0"
-                   :class="$style['results-styling']">
-                  {{ pharmacy.postcode }}</p>
-                <p v-if="isOnline && pharmacy.url" id="pharmacy-url"
-                   class="nhsuk-u-margin-bottom-3" :class="$style['results-styling']">
-                  {{ pharmacy.url }}</p>
-                <p v-if="pharmacy.telephoneNumber" id="pharmacy-telephone-number"
-                   class="nhsuk-u-margin-bottom-3" :class="$style['results-styling']">
-                  {{ $t('nominatedPharmacySearchResults.telephoneLabel') +
-                    pharmacy.telephoneNumber }}</p>
-                <p v-if="pharmacy.distance !== null" id="pharmacy-distance-away"
-                   :class="$style['results-styling']">
-                  {{ $t('nominatedPharmacySearchResults.distanceAway').
-                    replace('{distance}', pharmacy.distance) }}
-                </p>
+              <div class="nhsuk-u-padding-left-2" :class="$style['results-styling']">
+                <pharmacy-address-component id="resultAddressComponent" :pharmacy="pharmacy"/>
               </div>
             </slot>
           </menu-item>
@@ -85,10 +56,12 @@ import { redirectTo } from '@/lib/utils';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
+import PharmacyAddressComponent from '@/components/nominatedPharmacy/PharmacyAddressComponent';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
+    PharmacyAddressComponent,
     MenuItem,
     MenuItemList,
     AnalyticsTrackedTag,

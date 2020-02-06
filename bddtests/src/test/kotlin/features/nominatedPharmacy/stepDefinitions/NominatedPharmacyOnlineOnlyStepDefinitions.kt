@@ -8,6 +8,7 @@ import features.nominatedPharmacy.steps.NominatedPharmacyDataSetupSteps
 import features.nominatedPharmacy.steps.NominatedPharmacyOnlinePharmacyDataSetupSteps
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
+import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.nominatedPharmacy.NominatedPharmacyOnlineOnlySearchPage
@@ -37,7 +38,6 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
 
     private lateinit var nominatedPharmacyDspInterruptPage: NominatedPharmacyDspInterruptPage
 
-    private lateinit var nominated: OnlineNominatedPharmacyChangeSuccessPage
     @Steps
     private lateinit var nominatedPharmacyOnlinePharmacyDataSetupSteps: NominatedPharmacyOnlinePharmacyDataSetupSteps
 
@@ -179,19 +179,71 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
         nominatedPharmacyChooseTypePage.onlinePharmacyRadioButton.click()
     }
 
+    @Then("^I see list of online only pharmacies displayed on the result page$")
+    fun iSeeOnlineOnlyPharmaciesOnResultsPage(){
+        nominatedPharmacyResultsPage.isLoaded()
+        val expectedData = NominatedPharmacySerenityHelpers
+                .SEARCH_RESULTS
+                .getOrFail<NhsAzureSearchOrganisationReply>().value
+
+        val searchResults = nominatedPharmacyResultsPage.getOnlinePharmacies()
+
+        expectedData.forEachIndexed {
+            index, dataItem ->
+            Assert.assertEquals(
+                    "Online Pharmacy name is not correct",
+                    dataItem.OrganisationName, searchResults[index].pharmacyName)
+            if(dataItem.URL != null){
+                Assert.assertEquals(
+                        "Online Pharmacy URL is not correct",
+                        dataItem.URL, searchResults[index].website)
+            }
+
+            val phoneNumberData = dataItem.primaryPhone()
+            val phoneNumber = "Telephone: $phoneNumberData"
+            if (phoneNumberData != null) {
+                Assert.assertEquals(
+                        "Online Pharmacy Phone number is not correct",
+                        phoneNumber, searchResults[index].phoneNumber)
+            }
+        }
+    }
+
     @Then("^I click on the choose type continue button$")
     fun iClickOnTheChooseTypeContinueButton() {
         nominatedPharmacyChooseTypePage.continueButton.click()
     }
 
-    @Then("^I see the dsp interrupt  page is loaded$")
+    @Then("^I see the dsp interrupt page is loaded$")
     fun iSeeDspInterruptPageIsLoaded() {
         nominatedPharmacyDspInterruptPage.isLoaded()
     }
 
     @Then("^I click on the DSP Interrupt continue button$")
-    fun iClickTheDspInterruptContinuePutton() {
+    fun iClickTheDspInterruptContinueButton() {
         nominatedPharmacyDspInterruptPage.continueButton.click()
+    }
+
+    @When("^I click on item (\\d+) pharmacy from the list of online pharmacies$")
+    fun iClickOnAPharmacyFromTheListOfOnlinePharmacies(positionInTheList: Int) {
+        val index = positionInTheList - 1
+
+        val clickedOnlinePharmacy = nominatedPharmacyResultsPage.getOnlinePharmacies()[index]
+        // Finds all of the search results that are displayed on screen
+        val sessionData = NominatedPharmacySerenityHelpers
+                .SEARCH_RESULTS
+                .getOrFail<NhsAzureSearchOrganisationReply>().value
+
+        // Does a comparison on the sessionData and populates the SerenityHelper with the correct
+        // pharmacy result based on pharmacyName matching
+        val result = (sessionData.find { it.OrganisationName.equals(clickedOnlinePharmacy.pharmacyName)})
+        if (result != null) {
+            NominatedPharmacySerenityHelpers.PHARMACY_TO_BE_NOMINATED.set(result)
+        } else {
+            Assert.fail("Selected pharmacy not found in the session data")
+        }
+        //Performs click action on the pharmacy result to navigate to next page in flow
+        nominatedPharmacyResultsPage.selectPharmacyAtIndex(index)
     }
 
     @Then("^I see list of random online pharmacies displayed on the result page$")

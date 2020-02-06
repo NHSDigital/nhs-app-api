@@ -3,12 +3,16 @@
     <div class="nhsuk-body">
       <p v-if="showInstruction" id="instruction" class="nhsuk-u-margin-top-0">
         {{ instructionText }}</p>
-      <pharmacy-summary id="pharmacy-summary"
-                        :pharmacy="pharmacy" />
-      <p v-if="isInternetPharmacy" id="statement"
-         :class="[$style['spacing-top']]">{{ $t('nominated_pharmacy.internetPharmacy') }}</p>
-      <pharmacy-opening-times v-if="!isInternetPharmacy" id="pharmacy-opening-times"
-                              :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
+
+      <div v-if="isHighStreetPharmacy">
+        <pharmacy-summary id="pharmacy-summary"
+                          :pharmacy="pharmacy" />
+        <pharmacy-opening-times v-if="!isInternetPharmacy" id="pharmacy-opening-times"
+                                :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
+      </div>
+      <div v-else-if="isInternetPharmacy">
+        <online-only-pharmacy-detail id="online-pharmacy-summary" :pharmacy="pharmacy"/>
+      </div>
       <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink &&
                                displayChangeMyNominatedPharmacyButton"
                              id="button-to-change-pharmacy"
@@ -39,10 +43,12 @@ import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
 import { redirectTo } from '@/lib/utils';
 import GenericButton from '@/components/widgets/GenericButton';
+import OnlineOnlyPharmacyDetail from './OnlineOnlyPharmacyDetail';
 
 export default {
   name: 'PharmacyDetail',
   components: {
+    OnlineOnlyPharmacyDetail,
     GenericButton,
     AnalyticsTrackedTag,
     PharmacySummary,
@@ -87,10 +93,10 @@ export default {
       return (this.isMyNominatedPharmacy && this.canChangePharmacy);
     },
     isInternetPharmacy() {
-      if (this.pharmacy.pharmacySubType === PharmacySubType.InternetPharmacy) {
-        return true;
-      }
-      return false;
+      return this.pharmacy.pharmacySubType === PharmacySubType.InternetPharmacy;
+    },
+    isHighStreetPharmacy() {
+      return this.pharmacy.pharmacySubType === PharmacySubType.CommunityPharmacy;
     },
     instructionText() {
       return this.$t('nominated_pharmacy.confirm.line1');

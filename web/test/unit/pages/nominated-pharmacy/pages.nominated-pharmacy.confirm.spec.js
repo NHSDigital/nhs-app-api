@@ -1,6 +1,5 @@
 import * as dependency from '@/lib/utils';
 import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY_CHANGE_SUCCESS } from '@/lib/routes';
-import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import ConfirmNominatedPharmacy from '@/pages/nominated-pharmacy/confirm';
 import { create$T, createStore, mount } from '../../helpers';
@@ -49,7 +48,9 @@ describe('confirm nominated pharmacy', () => {
   const mountPage = () => mount(ConfirmNominatedPharmacy, { $store, $t });
 
   describe('nominated pharmacy details when isHighStreetSelected is true', () => {
-    let pharmacyDetails;
+    let pharmacyOpeningTimes;
+    let pharmacySummary;
+    let pharmacyWarningMessage;
 
     it('will exist', () => {
       $store = createStore({
@@ -57,38 +58,20 @@ describe('confirm nominated pharmacy', () => {
       });
       wrapper = mountPage();
       wrapper.vm.isHighStreetSelected = true;
-      pharmacyDetails = wrapper.find(PharmacyDetail);
-      expect(pharmacyDetails.exists()).toBe(true);
-    });
-
-    it('will translate the line text for pharmacy', () => {
-      const state = createState();
-      state.nominatedPharmacy.selectedNominatedPharmacy.pharmacyType = PharmacyType.P1;
-      $store = createStore({
-        dispatch: jest.fn(() => Promise.resolve()), state,
-      });
-      wrapper = mountPage();
-      wrapper.vm.isHighStreetSelected = true;
-      pharmacyDetails = wrapper.find(PharmacyDetail);
-      expect($t).toHaveBeenCalledWith('nominated_pharmacy.confirm.line1');
-    });
-
-    it('will translate the line text for dispensing practice', () => {
-      const state = createState();
-      state.nominatedPharmacy.selectedNominatedPharmacy.pharmacyType = PharmacyType.P3;
-      $store = createStore({
-        dispatch: jest.fn(() => Promise.resolve()), state,
-      });
-      wrapper = mountPage();
-      wrapper.vm.isHighStreetSelected = true;
-      pharmacyDetails = wrapper.find(PharmacyDetail);
-      expect($t).toHaveBeenCalledWith('nominated_pharmacy.confirm.line1');
+      pharmacySummary = wrapper.find('#pharmacy-summary');
+      pharmacyWarningMessage = wrapper.find('#confirm-help-text');
+      pharmacyOpeningTimes = wrapper.find('#pharmacy-opening-times');
+      expect(pharmacySummary.exists()).toBe(true);
+      expect(pharmacyOpeningTimes.exists()).toBe(true);
+      expect(pharmacyWarningMessage.exists()).toBe(true);
     });
   });
 
   describe('nominated pharmacy details when isOnlineOnlySelected is true', () => {
-    let pharmacyDetails;
+    let pharmacySummary;
     let onlinePharmacyDetails;
+    let pharmacyOpeningTimes;
+    let pharmacyWarningMessage;
 
     beforeEach(() => {
       $store = createStore({
@@ -98,9 +81,39 @@ describe('confirm nominated pharmacy', () => {
       wrapper.vm.isOnlineOnlySelected = true;
     });
 
-    it('will not have the pharmacy detail component', () => {
-      pharmacyDetails = wrapper.find(PharmacyDetail);
-      expect(pharmacyDetails.exists()).toBe(false);
+    it('will not have the high street pharmacy details', () => {
+      pharmacySummary = wrapper.find('#pharmacy-summary');
+      pharmacyOpeningTimes = wrapper.find('#pharmacy-opening-times');
+      expect(pharmacySummary.exists()).toBe(false);
+      expect(pharmacyOpeningTimes.exists()).toBe(false);
+    });
+
+    it('will have the content for online only nominated pharmacy', () => {
+      onlinePharmacyDetails = wrapper.find(OnlineOnlyPharmacyDetail);
+      pharmacyWarningMessage = wrapper.find('#confirm-help-text');
+      expect(onlinePharmacyDetails.exists()).toBe(true);
+      expect(pharmacyWarningMessage.exists()).toBe(true);
+    });
+  });
+
+  describe('nominated pharmacy details when isOnlineOnlySelected is true', () => {
+    let onlinePharmacyDetails;
+    let pharmacyOpeningTimes;
+    let pharmacySummary;
+
+    beforeEach(() => {
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()), state: createStateWithP1Pharmacy(),
+      });
+      wrapper = mountPage();
+      wrapper.vm.isOnlineOnlySelected = true;
+    });
+
+    it('will not have the high street pharmacy details ', () => {
+      pharmacySummary = wrapper.find('#pharmacy-summary');
+      pharmacyOpeningTimes = wrapper.find('#pharmacy-opening-times');
+      expect(pharmacySummary.exists()).toBe(false);
+      expect(pharmacyOpeningTimes.exists()).toBe(false);
     });
 
     it('will have the content for online only nominated pharmacy', () => {

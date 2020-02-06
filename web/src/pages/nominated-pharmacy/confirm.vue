@@ -2,11 +2,16 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <pharmacy-detail v-if="isHighStreetSelected" id="pharmacy-detail"
-                         :pharmacy="nominatedPharmacy"
-                         :is-my-nominated-pharmacy="false" />
-        <online-only-pharmacy-detail v-else-if="isOnlineOnlySelected" id="online-pharmacy-detail"
-                                     :pharmacy="nominatedPharmacy"/>
+        <p id="confirm-help-text">{{ $t('nominated_pharmacy.confirm.confirmHelpText') }}</p>
+        <div v-if="isOnlineOnlySelected">
+          <online-only-pharmacy-detail :pharmacy="nominatedPharmacy"/>
+        </div>
+        <div v-else-if="isHighStreetSelected">
+          <pharmacy-summary id="pharmacy-summary"
+                            :pharmacy="nominatedPharmacy"/>
+          <pharmacy-opening-times id="pharmacy-opening-times"
+                                  :pharmacy-opening-time="nominatedPharmacy.openingTimesFormatted"/>
+        </div>
         <generic-button id="confirm-button"
                         :button-classes="['nhsuk-button']"
                         @click.stop.prevent="submitNominatedPharmacy">
@@ -14,12 +19,7 @@
         </generic-button>
         <analytics-tracked-tag :text="$t('generic.backButton.text')"
                                :tabindex="-1">
-          <generic-button v-if="$store.state.device.isNativeApp" id="back-button"
-                          :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                          tabindex="0" @click.prevent="cancelButtonClicked">
-            {{ $t('generic.backButton.text') }}
-          </generic-button>
-          <desktopGenericBackLink v-else
+          <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                   id="back-link"
                                   :path="nominatedPharmacySearchResultsPath"
                                   :button-text="'generic.backButton.text'"
@@ -34,8 +34,9 @@
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
-import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
+import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
+import PharmacySummary from '../../components/nominatedPharmacy/PharmacySummary';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { redirectTo } from '@/lib/utils';
 import { NOMINATED_PHARMACY_SEARCH_RESULTS, PRESCRIPTIONS, NOMINATED_PHARMACY_CHANGE_SUCCESS } from '@/lib/routes';
@@ -46,12 +47,15 @@ export default {
   components: {
     GenericButton,
     AnalyticsTrackedTag,
-    PharmacyDetail,
     OnlineOnlyPharmacyDetail,
     DesktopGenericBackLink,
+    PharmacySummary,
+    PharmacyOpeningTimes,
   },
   data() {
     return {
+      openingTimes: this.$store.state.nominatedPharmacy
+        .selectedNominatedPharmacy.openingTimesFormatted,
       nominatedPharmacy: this.$store.state.nominatedPharmacy.selectedNominatedPharmacy,
       nominatedPharmacySearchResultsPath: NOMINATED_PHARMACY_SEARCH_RESULTS.path,
       isHighStreetSelected:

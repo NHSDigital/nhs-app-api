@@ -391,28 +391,43 @@ open class PrescriptionsSubmissionStepDefinitions {
     fun iSeeNominatedPharmacyInformationIsCorrect() {
 
         val component = confirmRepeatPrescriptionsOrderPage.pharmacyDetailComponent
-        Assert.assertTrue("PharmacyDetailComponent is not visible", component.isVisible())
-
-        val actualPharmacyName = component.pharmacyName.text
-        val actualPharmacyAddress = component.pharmacyAddress.text
-        val actualPhoneNumber = component.pharmacyPhoneNumber.text
 
         val myNominatedPharmacy =
                 NominatedPharmacySerenityHelpers.MY_NOMINATED_PHARMACY.getOrFail<NhsAzureSearchOrganisationItem>()
 
         Assert.assertEquals(
                 "Nominated Pharmacy name is not correct",
-                myNominatedPharmacy.OrganisationName, actualPharmacyName)
+                myNominatedPharmacy.OrganisationName, component.pharmacyName.text)
 
         Assert.assertEquals(
-                "Nominated Pharmacy address is not correct",
-                myNominatedPharmacy.addressFormatted(), actualPharmacyAddress)
+                    "Address Line 1 is not correct",
+                myNominatedPharmacy.Address1, component.pharmacyAddressLine1.text)
 
-        val expectedPhoneNumber = myNominatedPharmacy.primaryPhone()
-        if (expectedPhoneNumber != null) {
+
+        Assert.assertEquals(
+                    "Address Line 2 is not correct",
+                myNominatedPharmacy.Address2, component.pharmacyAddressLine2.text)
+
+        Assert.assertEquals(
+                    "Address Line 3 is not correct",
+                myNominatedPharmacy.Address3, component.pharmacyAddressLine3.text)
+
+        Assert.assertEquals(
+                    "City is not correct",
+                myNominatedPharmacy.City, component.pharmacyCity.text)
+
+        Assert.assertEquals(
+                    "County is not correct",
+                myNominatedPharmacy.County, component.pharmacyCounty.text)
+
+        Assert.assertEquals(
+                    "Postcode is not correct",
+                myNominatedPharmacy.Postcode, component.pharmacyPostcode.text)
+
+        if (myNominatedPharmacy.primaryPhone() != null) {
             Assert.assertEquals(
                     "Nominated Pharmacy phone number is not correct",
-                    expectedPhoneNumber, actualPhoneNumber)
+                    "Telephone: " + myNominatedPharmacy.primaryPhone(), component.pharmacyPhoneNumber.text)
         }
     }
 
@@ -423,7 +438,7 @@ open class PrescriptionsSubmissionStepDefinitions {
                 confirmRepeatPrescriptionsOrderPage.pharmacyDetailComponent)
 
         Assert.assertFalse(
-                "PharmacyDetailComponent is visible",
+                "PharmacyDetailComponent is not visible",
                 confirmRepeatPrescriptionsOrderPage.pharmacyDetailComponent.isVisible())
     }
 }

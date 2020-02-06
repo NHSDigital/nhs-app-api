@@ -31,8 +31,7 @@
               <hr>
               <p class="nhsuk-u-margin-bottom-0"><b>{{ pharmacyHeader }}</b></p>
               <pharmacy-summary id="pharmacy-summary"
-                                :pharmacy="nominatedPharmacy"
-                                :pharmacy-name-as-header="false" />
+                                :pharmacy="nominatedPharmacy"/>
             </div>
           </sjr-if>
         </Card>
