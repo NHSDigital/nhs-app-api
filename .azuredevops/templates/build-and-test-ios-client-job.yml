@@ -6,17 +6,6 @@ jobs:
     steps:
       - template: set-branch-tag-steps.yml
 
-      - task: InstallAppleCertificate@2
-        displayName: 'Install Dev Apple certificate'
-        inputs:
-          certSecureFile: 'iOSDevelopmentCertificate.p12'
-          certPwd: '$(ios.development.certificate.password)'
-
-      - task: InstallAppleProvisioningProfile@1
-        displayName: 'Install Development provisioning profile'
-        inputs:
-          provProfileSecureFile: 'iOSDevelopment.mobileprovision'
-
       - task: Bash@3
         displayName: Configure git authentication
         env:
@@ -35,12 +24,12 @@ jobs:
       - task: Xcode@5
         displayName: 'Build and Run Unit Tests'
         inputs:
-          actions: test
-          configuration: Development
-          sdk: iphonesimulator
-          xcWorkspacePath: ios/NHSOnline/NHSOnline.xcworkspace
-          scheme: NHSOnline
           xcodeDeveloperDir: /Applications/Xcode_10.1.app
+          xcWorkspacePath: ios/NHSOnline/NHSOnline.xcworkspace
+          sdk: iphonesimulator
+          scheme: NHSOnline
+          configuration: Development
+          actions: test
           signingOption: auto
           destinationPlatformOption: iOS
           destinationSimulators: 'iPhone 8'
@@ -85,3 +74,37 @@ jobs:
         inputs:
           pathToPublish: 'ios/NHSOnline/reports/coverage'
           artifactName: 'coverage'
+
+      - task: InstallAppleCertificate@2
+        displayName: 'Install Dev Apple certificate'
+        inputs:
+          certSecureFile: 'iOSDevelopmentCertificate.p12'
+          certPwd: '$(ios.development.certificate.password)'
+
+      - task: InstallAppleProvisioningProfile@1
+        displayName: 'Install Development provisioning profile'
+        inputs:
+          provProfileSecureFile: 'iOSDevelopment$(ios.target).mobileprovision'
+          removeProfile: true
+
+      - task: Xcode@5
+        displayName: 'Build $(ios.target)'
+        inputs:
+          xcodeDeveloperDir: /Applications/Xcode_10.1.app
+          xcWorkspacePath: ios/NHSOnline/NHSOnline.xcworkspace
+          sdk: iphoneos
+          scheme: NHSOnline Dev
+          configuration: $(ios.target)
+          actions: build
+          packageApp: true
+          exportPath: ipa/$(ios.target)
+          signingOption: manual
+          signingIdentity: $(APPLE_CERTIFICATE_SIGNING_IDENTITY)
+          provisioningProfileName: 'NHS App Dev $(ios.target)'
+          provisioningProfileUuid: $(APPLE_PROV_PROFILE_UUID)
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish iOS package files
+        inputs:
+          pathToPublish: '$(Build.SourcesDirectory)/ipa'
+          artifactName: iOS Package Files
