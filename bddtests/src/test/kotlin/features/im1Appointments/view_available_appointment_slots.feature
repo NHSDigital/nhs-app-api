@@ -82,7 +82,7 @@ Feature: View Available Appointment Slots Frontend
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I select a particular slot type and location
-    And I select time period for 'Next four weeks'
+    And I select time period for 'Next eight weeks'
     Then I only see results for the selected filter options
     Examples:
       | GP System |
@@ -96,7 +96,7 @@ Feature: View Available Appointment Slots Frontend
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I select a particular slot type and location
-    And I select time period for 'Next four weeks'
+    And I select time period for 'Next eight weeks'
     Then I only see results for the selected filter options
     Examples:
       | GP System |
@@ -277,12 +277,12 @@ Feature: View Available Appointment Slots Frontend
     Then I only see results for days that have available slots
 
   # GP System agnostic scenario, so only need to test with TPP
-  Scenario: A TPP user only sees days with available slots, if filtering by "Next four weeks" but no appointments are available for some days
+  Scenario: A TPP user only sees days with available slots, if filtering by "Next eight weeks" but no appointments are available for some days
     Given there are appointment slots on some days in the next few weeks but not others, provided by TPP
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I select a type and location that have available slots
-    And I select time period for 'Next four weeks'
+    And I select time period for 'Next eight weeks'
     Then I only see results for days that have available slots
 
     #502

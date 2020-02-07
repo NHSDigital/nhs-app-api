@@ -15,7 +15,7 @@ import worker.models.appointments.SlotResponseObject
 import java.time.ZonedDateTime
 import java.util.*
 
-private const val DEFAULT_NUMBER_OF_DAYS_IN_RANGE = 29L
+private const val DEFAULT_NUMBER_OF_DAYS_IN_RANGE = 57L
 
 class AppointmentSlotsFactoryHelper {
 

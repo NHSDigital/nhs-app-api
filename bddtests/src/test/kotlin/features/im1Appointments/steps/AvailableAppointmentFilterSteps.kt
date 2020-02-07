@@ -156,7 +156,6 @@ open class AvailableAppointmentFilterSteps {
     fun selectOptionsToRevealSlots() {
         selectFilterOptionsToRevealSlots()
         availableAppointmentsPage.timePeriodFilter.selectByText(ALL_OPTION)
-
     }
 
     companion object {
@@ -164,6 +163,6 @@ open class AvailableAppointmentFilterSteps {
         const val TOMORROW_OPTION = "Tomorrow"
         const val THIS_WEEK_OPTION = "This week"
         const val NEXT_WEEK_OPTION = "Next week"
-        const val ALL_OPTION = "Next four weeks"
+        const val ALL_OPTION = "Next eight weeks"
     }
 }

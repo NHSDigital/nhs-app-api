@@ -741,7 +741,7 @@ export default {
             tomorrow: 'Tomorrow',
             this_week: 'This week',
             next_week: 'Next week',
-            all: 'Next four weeks',
+            all: 'Next eight weeks',
           },
         },
       },

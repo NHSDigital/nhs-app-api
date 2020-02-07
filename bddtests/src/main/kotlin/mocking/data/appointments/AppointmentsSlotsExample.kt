@@ -33,7 +33,7 @@ const val CLINIC_SESSION_TYPE = "Clinic"
 private const val STARTING_LOCATION_ID = 1
 private const val STARTING_CLINICIAN_ID = 1
 private const val STARTING_SLOT_TYPE_ID = 1
-const val FOUR_WEEKS_IN_DAYS = DAYS_IN_WEEK * 4
+const val EIGHT_WEEKS_IN_DAYS = DAYS_IN_WEEK * 8
 
 open class AppointmentsSlotsExample {
 
@@ -44,7 +44,7 @@ open class AppointmentsSlotsExample {
 
     private val tomorrowDate = LocalDateTime.now().plusDays(1)
     private val nextWeekDate = LocalDateTime.now().plusDays( DAYS_IN_WEEK)
-    private val nextFourWeeksDate = LocalDateTime.now().plusDays( FOUR_WEEKS_IN_DAYS)
+    private val nextEightWeeksDate = LocalDateTime.now().plusDays( EIGHT_WEEKS_IN_DAYS)
 
     private var nextLocationId = STARTING_LOCATION_ID
     private var nextStaffId = STARTING_CLINICIAN_ID
@@ -65,8 +65,8 @@ open class AppointmentsSlotsExample {
             DEFAULT_TIME_HOUR,
             DEFAULT_TIME_MIN
     )
-    private val startDateNextFourWeeksAppointment1 = AppointmentDate(
-            nextFourWeeksDate,
+    private val startDateNextEightWeeksAppointment1 = AppointmentDate(
+            nextEightWeeksDate,
             DEFAULT_TIME_HOUR,
             DEFAULT_TIME_MIN
     )
@@ -243,7 +243,7 @@ open class AppointmentsSlotsExample {
                 dates = arrayListOf(
                         startDateAppointment1,
                         startDateNextWeekAppointment1,
-                        startDateNextFourWeeksAppointment1)
+                        startDateNextEightWeeksAppointment1)
         )
 
         val appointmentsSlotsExampleBuilder = AppointmentsSlotsExampleBuilderWithExpectations()

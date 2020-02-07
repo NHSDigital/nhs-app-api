@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         private const string GetAvailableAppointmentsServiceDefinitionName = "VOAPP.GetAvailableAppointments";
         private const int VisionAppointmentSlotsRequestCount = 50;
         private const string Environment = "environment";
-        
+
         private Mock<ICertificateService> _mockCertificateService;
         private Mock<IEnvelopeService> _mockEnvelopeService;
 
@@ -64,33 +64,33 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
 
-            _visionConfig = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl, 
-                CertificatePath, CertificatePassphrase, RequestUserName, VisionSenderUserName, 
+            _visionConfig = new VisionConfigurationSettings(ApplicationProviderId, ApiUrl,
+                CertificatePath, CertificatePassphrase, RequestUserName, VisionSenderUserName,
                 VisionSenderFullName, VisionSenderUserIdentity, VisionSenderUserRole, 50, 100, 100, Environment);
-            
+
             _mockCertificateService = _fixture.Freeze<Mock<ICertificateService>>();
             _mockEnvelopeService = _fixture.Freeze<Mock<IEnvelopeService>>();
             _connectionToken = _fixture.Create<VisionConnectionToken>();
             _odsCode = _fixture.Create<string>();
             _visionUserSession = _fixture.Create<VisionUserSession>();
-            
+
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(VisionConstants.GetVisionRequestXml);
 
             _mockEnvelopeService.Setup(x => x.BuildEnvelope(It.IsAny<X509Certificate2>(), It.IsAny<VisionRequest<Object>>(), It.IsAny<string>())).Returns("AnyString");
-            
+
             _mockCertificateService.Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>())).Returns(
                 new X509Certificate2(Path, Passphrase));
-            
+
             _mockHttpHandler = new MockHttpMessageHandler();
             _httpClient = new VisionPFSHttpClient(new HttpClient(_mockHttpHandler), _visionConfig);
 
             _fixture.Inject(_httpClient);
             _fixture.Inject(_visionConfig);
-            
+
             _systemUnderTest = _fixture.Create<VisionPFSClient>();
         }
 
@@ -99,14 +99,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         {
             // Arrange
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
-            
+
             var xmlText = File.ReadAllText($"{VisionTestDataDirectory}/requestWasInvalidResponse.xml");
             var responseContent = new StringContent(xmlText);
             _mockHttpHandler
                 .WhenVision(HttpMethod.Post, ApiUrl)
                 .WithVisionHeaders(GetConfigurationServiceDefinitionName)
                 .Respond(HttpStatusCode.OK, responseContent);
-            
+
             // Act
             var response = await _systemUnderTest.GetConfiguration(_connectionToken, _odsCode);
 
@@ -183,15 +183,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         {
             // Arrange
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
-            
+
             var bodyResponse  = _fixture.Create<VisionResponseEnvelope<PatientConfigurationResponse>>();
-            
+
             var responseContent = new StringContent(bodyResponse.SerializeXml());
             _mockHttpHandler
                 .WhenVision(HttpMethod.Post, ApiUrl)
                 .WithVisionHeaders(GetConfigurationServiceDefinitionName)
                 .Respond(HttpStatusCode.OK, responseContent);
-            
+
             // Act
             var response = await _systemUnderTest.GetConfiguration(_connectionToken, _odsCode);
 
@@ -199,13 +199,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-        
+
         [TestMethod]
         public async Task GetEligibleRepeatsPostRequest_ReturnsEligibleRepeats_WhenValidRequested()
         {
             // Arrange
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
-            
+
             var bodyResponse  = _fixture.Create<VisionResponseEnvelope<PatientConfigurationResponse>>();
 
             var responseContent = new StringContent(bodyResponse.SerializeXml());
@@ -213,7 +213,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .WhenVision(HttpMethod.Post, ApiUrl)
                 .WithVisionHeaders(GetConfigurationServiceDefinitionName)
                 .Respond(HttpStatusCode.OK, responseContent);
-            
+
             // Act
             var response = await _systemUnderTest.GetConfiguration(_connectionToken, _odsCode);
 
@@ -221,16 +221,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-        
+
         [TestMethod]
         public async Task GetEligibleRepeats_ReturnsEligibleRepeats_WhenValidRequested()
         {
             // Arrange
-            var bodyResponse = _fixture.Create<VisionResponseEnvelope<EligibleRepeatsResponse>>(); 
-            
+            var bodyResponse = _fixture.Create<VisionResponseEnvelope<EligibleRepeatsResponse>>();
+
             _mockEnvelopeService.Setup(x => x.BuildEnvelope(
                 It.IsAny<X509Certificate2>(),
-                It.IsAny<VisionRequest<CoursesRequest>>(), 
+                It.IsAny<VisionRequest<CoursesRequest>>(),
                 It.IsAny<string>())).Returns("AnyString");
 
             var responseContent = new StringContent(bodyResponse.SerializeXml());
@@ -246,7 +246,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-        
+
         [TestMethod]
         public async Task GetHistoricPrescriptions_ReturnsPrescriptionHistory_WhenValidRequested()
         {
@@ -307,7 +307,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         public async Task GetAvailableAppointments_FormatsRequestCorrectly()
         {
             // Arrange
-            var dateRange = new AppointmentSlotsDateRange(DateTimeOffset.Now, DateTimeOffset.Now.AddDays(29));
+            var dateRange = new AppointmentSlotsDateRange(DateTimeOffset.Now, DateTimeOffset.Now.AddDays(57));
             var bodyResponse = _fixture.Create<VisionResponseEnvelope<AvailableAppointmentsResponse>>();
             var received = new VisionRequest<AvailableAppointmentsRequest>();
 
