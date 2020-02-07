@@ -41,9 +41,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             ILogger<EmisPatientRecordService> logger,
             IEmisClient emisClient, IEmisMyRecordMapper emisMyRecordMapper,
             GetAllergiesTaskChecker allergiesTaskChecker,
-            GetMedicationsTaskChecker medicationsTaskChecker, 
+            GetMedicationsTaskChecker medicationsTaskChecker,
             GetImmunisationsTaskChecker immunisationsTaskChecker,
-            GetTestResultsTaskChecker testResultsTaskChecker, 
+            GetTestResultsTaskChecker testResultsTaskChecker,
             GetProblemsTaskChecker problemsTaskChecker,
             GetConsultationsTaskChecker consultationsTaskChecker,
             GetDocumentsTaskChecker documentsTaskChecker,
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             try
             {
                 var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
-                
+
                 _logger.LogInformation("Creating patient record api tasks");
                 var allergiesTask = RetrieveAllergies(emisRequestParameters);
                 var medicationsTask = RetrieveMedications(emisRequestParameters);
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             }
         }
 
-        public async Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid,
+        public async Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier,
             string documentType, string documentName)
         {
             _logger.LogEnter();
@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             try
             {
                 var getDocumentsTask = _emisClient.MedicalDocumentGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, documentGuid, emisUserSession.EndUserSessionId);
+                    emisUserSession.SessionId, documentIdentifier, emisUserSession.EndUserSessionId);
 
                 await Task.WhenAll(getDocumentsTask);
 
@@ -151,8 +151,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 _logger.LogExit();
             }
         }
-        
-        public async Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentGuid,
+
+        public async Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentIdentifier,
             string documentType, string documentName)
         {
             _logger.LogEnter();
@@ -162,7 +162,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             try
             {
                 var getDocumentsTask = _emisClient.MedicalDocumentGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, documentGuid, emisUserSession.EndUserSessionId);
+                    emisUserSession.SessionId, documentIdentifier, emisUserSession.EndUserSessionId);
 
                 await Task.WhenAll(getDocumentsTask);
 
@@ -185,14 +185,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             }
             catch (NullReferenceException e)
             {
-                _logger.LogError(e, "Record document retrieval return null body"); 
+                _logger.LogError(e, "Record document retrieval return null body");
                 return new PatientDocument {
                     HasErrored = true
                 };
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Exception when retrieving document for download"); 
+                _logger.LogError(e, "Exception when retrieving document for download");
                 return new PatientDocument {
                     HasErrored = true
                 };
@@ -214,18 +214,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             var isTextType = Constants.FileConstants.FileTypes.TextTypes.Contains(type);
             var isPdfType = type.Equals(Constants.FileConstants.FileTypes.DocumentType.Pdf, StringComparison.Ordinal);
             byte[] data = null;
-            
+
             var doc = new HtmlDocument
             {
                 OptionWriteEmptyNodes = true
             };
 
             doc.LoadHtml(content);
-            
+
 
             if (isImageType || isTextType)
             {
-                
+
                 if (isImageType)
                 {
                     data = IsImage(doc);
@@ -233,7 +233,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 else
                 {
                     _logger.LogInformation("File is a text type");
-                    data = Encoding.UTF8.GetBytes(System.Net.WebUtility.HtmlDecode(doc.DocumentNode.InnerText)); 
+                    data = Encoding.UTF8.GetBytes(System.Net.WebUtility.HtmlDecode(doc.DocumentNode.InnerText));
                 }
             }
             else if (Constants.FileConstants.FileTypes.DocumentTypes.Contains(type))
@@ -264,7 +264,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         {
             _logger.LogInformation("File is an image type");
             var imgNodes = document.DocumentNode.SelectNodes(".//img");
-            
+
             byte[] data;
 
             if (imgNodes == null)
@@ -429,6 +429,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 };
             }
         }
-        
+
     }
 }

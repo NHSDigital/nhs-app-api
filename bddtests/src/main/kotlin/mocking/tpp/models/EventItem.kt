@@ -9,5 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 data class EventItem(
         @XmlAttribute var type: String = "default type",
-        @XmlAttribute var details: String = "default details"
+        @XmlAttribute var details: String = "default details",
+        @XmlAttribute var binaryDataId: String = "default binaryDataId"
 )

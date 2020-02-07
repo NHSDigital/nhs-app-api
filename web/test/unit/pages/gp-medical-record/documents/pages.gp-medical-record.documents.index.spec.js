@@ -52,8 +52,8 @@ describe('gp-medical-record documents', () => {
     describe('document items', () => {
       it('will render a menu item for every document', () => {
         const theDocuments = { data: [
-          { documentGuid: '1', extension: 'pdf', effectiveDate: { value: '2019-08-08T12:03:44+00:00' }, size: 10 },
-          { documentGuid: '3', extension: 'pdf', effectiveDate: { value: '2019-08-08T12:03:44+00:00' }, size: 10 },
+          { documentIdentifier: '1', extension: 'pdf', effectiveDate: { value: '2019-08-08T12:03:44+00:00' }, size: 10 },
+          { documentIdentifier: '3', extension: 'pdf', effectiveDate: { value: '2019-08-08T12:03:44+00:00' }, size: 10 },
         ] };
 
         mountPage({ data: () => ({ documents: theDocuments }) });
@@ -67,7 +67,7 @@ describe('gp-medical-record documents', () => {
       });
       it('will set appropriate attributes on a document item that has a term', () => {
         const document = {
-          documentGuid: '1',
+          documentIdentifier: '1',
           extension: 'pdf',
           effectiveDate: { value: '2019-08-08T12:03:44+00:00', datePart: 'YearMonth' },
           size: 10,
@@ -80,13 +80,13 @@ describe('gp-medical-record documents', () => {
         const titleString = 'Document term translate_my_record.documents.documentMenuItemTitle';
         const description = '(PDF, 10B)';
 
-        expect(documentItem.vm.id).toEqual(document.documentGuid);
+        expect(documentItem.vm.id).toEqual(document.documentIdentifier);
         expect(documentItem.vm.text).toEqual(titleString);
         expect(documentItem.vm.description).toEqual(description);
       });
       it('will set appropriate attributes on a document item that has no term', () => {
         const document = {
-          documentGuid: '1',
+          documentIdentifier: '1',
           extension: 'pdf',
           effectiveDate: { value: '2019-08-08T12:03:44+00:00', datePart: 'YearMonth' },
           size: 10,
@@ -98,13 +98,13 @@ describe('gp-medical-record documents', () => {
         const documentItem = page.find('menu-item-stub[id="1"]');
         const dateString = '8 August 2019';
         const description = '(PDF, 10B)';
-        expect(documentItem.vm.id).toEqual(document.documentGuid);
+        expect(documentItem.vm.id).toEqual(document.documentIdentifier);
         expect(documentItem.vm.text).toEqual(dateString);
         expect(documentItem.vm.description).toEqual(description);
       });
       it('will set not show the size on a document item that has a null size', () => {
         const document = {
-          documentGuid: '1',
+          documentIdentifier: '1',
           extension: 'pdf',
           effectiveDate: { value: '2019-08-08T12:03:44+00:00', datePart: 'YearMonth' },
           size: null,
@@ -116,7 +116,7 @@ describe('gp-medical-record documents', () => {
         const documentItem = page.find('menu-item-stub[id="1"]');
         const dateString = '8 August 2019';
         const description = '(PDF)';
-        expect(documentItem.vm.id).toEqual(document.documentGuid);
+        expect(documentItem.vm.id).toEqual(document.documentIdentifier);
         expect(documentItem.vm.text).toEqual(dateString);
         expect(documentItem.vm.description).toEqual(description);
       });

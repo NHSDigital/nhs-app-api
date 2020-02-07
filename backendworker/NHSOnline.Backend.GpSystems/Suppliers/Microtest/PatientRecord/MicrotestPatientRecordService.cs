@@ -68,21 +68,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             myRecordResponse.Supplier =
                 microtestUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
 
-            return new GetMyRecordResult.Success(myRecordResponse);        
+            return new GetMyRecordResult.Success(myRecordResponse);
         }
 
         public Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
         {
             throw new NotImplementedException();
         }
-        
-        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentGuid, string documentType,
+
+        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentIdentifier, string documentType,
             string documentName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid,
+        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier,
             string documentType, string documentName)
         {
             throw new NotImplementedException();
@@ -103,13 +103,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             {
                 return HandleSuccess(microtestUserSession, medicalRecordResponse.Result);
             }
-            
+
             if (medicalRecordResponse.Result.HasForbiddenResponse)
             {
                 _logger.LogError("The Microtest patient record service is not enabled");
                 return new GetMyRecordResult.Success(new MyRecordResponse());
             }
-            
+
             _logger.LogError("Microtest system is currently unavailable");
             return HandleSuccess(microtestUserSession, getEmptyMicrotestMedicalRecordResponse());
         }

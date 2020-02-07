@@ -2,12 +2,16 @@
 @documents
 Feature: Documents Frontend - Medical Record v2
 
-  Scenario: An EMIS user who has no Documents on their record can see a message informing them of this - Medical Record v2
-    Given I am a EMIS user setup to use medical record version 2
+  Scenario Outline: An <GP System> user who has no Documents on their record can see a message informing them of this - Medical Record v2
+    Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has no documents
     And I am on the medical record page
     When I click the Documents link on my record - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
   Scenario: An EMIS user who does not have access to Documents on their record can see a message informing them of this - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
@@ -16,12 +20,16 @@ Feature: Documents Frontend - Medical Record v2
     When I click the Documents link on my record - Medical Record v2
     Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2
 
-  Scenario: An EMIS user can view a list of Documents on their record - Medical Record v2
-    Given I am a EMIS user setup to use medical record version 2
+  Scenario Outline: An <GP System> user can view a list of Documents on their record - Medical Record v2
+    Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has multiple documents
     And I am on the medical record page
     When I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
   Scenario: An EMIS user can view a list of Documents on their record if the pageCount is null
     Given I am a EMIS user setup to use medical record version 2

@@ -17,6 +17,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private const string TestResultDateFormat = "yyyy-MM-ddTHH:mm:ss.f'Z'";
         private readonly ILogger<TppPatientRecordService> _logger;
         private readonly IGetPatientDcrEventsTaskChecker _patientDcrEventsChecker;
+        private readonly IGetPatientDocumentsFromDcrEventsTaskChecker _patientDocumentsFromDcrEventsTaskChecker;
         private readonly IGetPatientOverviewTaskChecker _patientOverviewTaskChecker;
         private readonly IGetPatientTestResultsTaskChecker _patientTestResultsChecker;
         private readonly IGetTppDetailedTestResultChecker _patientDetailedTestResultChecker;
@@ -27,12 +28,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             IGetPatientOverviewTaskChecker patientOverviewTaskChecker,
             IGetPatientTestResultsTaskChecker patientTestResultsChecker,
             IGetTppDetailedTestResultChecker patientDetailedTestResultChecker,
+            IGetPatientDocumentsFromDcrEventsTaskChecker patientDocumentsFromDcrEventsTaskChecker,
             ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper)
         {
             _patientDcrEventsChecker = patientDcrEventsChecker;
             _patientOverviewTaskChecker = patientOverviewTaskChecker;
             _patientTestResultsChecker = patientTestResultsChecker;
             _patientDetailedTestResultChecker = patientDetailedTestResultChecker;
+            _patientDocumentsFromDcrEventsTaskChecker = patientDocumentsFromDcrEventsTaskChecker;
             _tppClient = tppClient;
             _tppMyRecordMapper = tppMyRecordMapper;
             _logger = logger;
@@ -49,8 +52,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             {
                 // TPP does not yet handle concurrent requests
                 var patientOverviewItems = await RetrievePatientOverviewItems(tppUserSession);
-                var dcrEvents = await RetrieveDcrEvents(tppUserSession);
+                var dcrItems = await RetrievePatientRecordDcrItems(tppUserSession);
+                var documentItems = dcrItems.PatientDocuments;
+                var dcrEvents = dcrItems.TppDcrEvents;
                 var testResults = await RetrieveTestResults(tppUserSession);
+
+                _logger.LogInformation($"Number of documents for user " +
+                                       $" at ODSCode {tppUserSession.OdsCode} is " +
+                                       $"{documentItems.Data.Count()}");
 
                 var allergies = patientOverviewItems.Item1;
                 var medications = patientOverviewItems.Item2;
@@ -58,7 +67,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 _logger.LogInformation($"Mapping TPP responses to universal {nameof(MyRecordResponse)} class instance");
                 var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications,
                     dcrEvents,
-                    testResults);
+                    testResults,
+                    documentItems);
                 myRecordResponse.Supplier = tppUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
 
                 return new GetMyRecordResult.Success(myRecordResponse);
@@ -79,13 +89,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid,
+        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier,
             string documentType, string documentName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentGuid, string documentType,
+        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentIdentifier, string documentType,
             string documentName)
         {
             throw new NotImplementedException();
@@ -189,27 +199,43 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             };
         }
 
-        private async Task<TppDcrEvents> RetrieveDcrEvents(TppUserSession tppUserSession)
+        private async Task<TppDcrItems> RetrievePatientRecordDcrItems(TppUserSession tppUserSession)
         {
-          try
-          {
-
-            _logger.LogInformation("Retrieving DCR Events.");
-            var patientRecord = await _tppClient.RequestPatientRecordPost(tppUserSession);
-
-            _logger.LogDebug($"Mapping TPP DCR responses to instance of {nameof(TppDcrEvents)} class");
-            return _patientDcrEventsChecker.Check(patientRecord);
-
-          }
-          catch(Exception e) {
-
-            _logger.LogError(e, "Retrieving dcrEvents failed. Returning hasErrored as true");
-            return new TppDcrEvents
+            try
             {
-              HasErrored = true
-            };
-          }
+
+                _logger.LogInformation("Retrieving PatientDocuments from DCR Events.");
+                var patientRecord = await _tppClient.RequestPatientRecordPost(tppUserSession);
+
+                _logger.LogDebug($"Mapping TPP DCR responses to instance of {nameof(DocumentItem)} class");
+                var dcrItems = new TppDcrItems
+                {
+                    PatientDocuments = _patientDocumentsFromDcrEventsTaskChecker.Check(patientRecord),
+                    TppDcrEvents = _patientDcrEventsChecker.Check(patientRecord)
+                };
+
+                return dcrItems;
+
+
+            }
+            catch(Exception e) {
+
+                _logger.LogError(e, "Retrieving dcr events failed. Returning hasErrored as true" +
+                                    " for Documents and DCR events");
+                return new TppDcrItems
+                {
+                    PatientDocuments = new PatientDocuments()
+                    {
+                        HasErrored = true
+                    },
+                    TppDcrEvents =  new TppDcrEvents
+                    {
+                        HasErrored = true
+                    }
+                };
+            }
         }
+
         private async Task<TestResults> RetrieveTestResults(TppUserSession tppUserSession)
         {
           try

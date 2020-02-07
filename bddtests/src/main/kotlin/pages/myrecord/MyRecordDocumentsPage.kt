@@ -38,14 +38,16 @@ class MyRecordDocumentsPage : HybridPageObject() {
     fun assertDocumentItemsVisible(expectedDocuments: List<ExpectedDocument>) {
         for(expectedDocument in expectedDocuments){
             setBaseDocumentItemPath(expectedDocument.id)
-            assertEquals("Document type or size incorrect",
-                expectedDocument.typeAndSize,
-                getDocumentDateAndType().text)
+            if (expectedDocument.typeAndSize != null) {
+                assertEquals("Document type or size incorrect",
+                        expectedDocument.typeAndSize,
+                        getDocumentDateAndType().text)
+            }
             if (expectedDocument.term != null) {
                 assertEquals("Document name or date incorrect",
-                    "${expectedDocument.term} added on ${expectedDocument.date}",
-                    getDocumentTerm().text)
-            } else {
+                        "${expectedDocument.term} added on ${expectedDocument.date}",
+                        getDocumentTerm().text)
+            }else {
                 assertEquals("Document date is incorrect",
                         expectedDocument.date,
                         getDocumentTerm().text)

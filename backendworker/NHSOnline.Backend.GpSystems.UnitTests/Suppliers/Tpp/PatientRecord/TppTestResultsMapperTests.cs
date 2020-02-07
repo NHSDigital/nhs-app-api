@@ -29,11 +29,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
 
             // Act
             var tppTestResults = new TppTestResultsMapper().Map(item);
-            var result = _mapper.Map(new Allergies(), new Medications(), new TppDcrEvents(), tppTestResults);
+            var result = _mapper.Map(new Allergies(), new Medications(), new TppDcrEvents(), tppTestResults , new PatientDocuments());
 
             // Assert
             result.Should().NotBeNull();
-            result.TestResults.Data.Should().BeEmpty();           
+            result.TestResults.Data.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             {
                 new TestResultItem
                 {
-                    
+
                     Date = new MyRecordDate { Value = DateTimeOffset.Parse(testResultsViewReply.Items[0].Date, CultureInfo.InvariantCulture) },
                     Description = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", testResultsViewReply.Items[0].Description, testResultsViewReply.Items[0].Value)
                 },
@@ -54,11 +54,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 {
                     Date = new MyRecordDate { Value = DateTimeOffset.Parse(testResultsViewReply.Items[1].Date, CultureInfo.InvariantCulture) },
                     Description = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", testResultsViewReply.Items[1].Description, testResultsViewReply.Items[1].Value)
-                }                
+                }
             };
             // Act
             var result = new TppTestResultsMapper().Map(testResultsViewReply);
-            
+
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().BeEquivalentTo(testResults);
@@ -67,23 +67,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         private static TestResultsViewReply GetTppTestResults()
         {
             return new TestResultsViewReply
-            {     
+            {
                 Items = new List<TestResultsViewReplyItem>
                 {
                     new TestResultsViewReplyItem
                     {
-                        
+
                         Date = "2001-06-14T00:00:00.0Z",
-                        Description = "Pathology", 
+                        Description = "Pathology",
                         Value = "Anticoag Control (Warfarin), Read",
                     },
                     new TestResultsViewReplyItem
-                    {                      
+                    {
                         Date = "2001-06-28T00:00:00.0Z",
-                        Description = "Pathology", 
+                        Description = "Pathology",
                         Value = "Mic Cult Sens (Urine), Read",
                     },
-                }                
+                }
             };
         }
     }

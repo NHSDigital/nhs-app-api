@@ -581,7 +581,7 @@ components:
       properties:
         date:
           $ref: "#/components/schemas/Date"
-        documentGuid:
+        documentIdentifier:
           type: string
           description: Unique identifier of the document
         term:

@@ -3,7 +3,11 @@
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
     public interface ITppMyRecordMapper
-    {       
-        MyRecordResponse Map(Allergies allergies, Medications medications, TppDcrEvents dcrEvents, TestResults testResults);  
+    {
+        MyRecordResponse Map(Allergies allergies,
+            Medications medications,
+            TppDcrEvents dcrEvents,
+            TestResults testResults,
+            PatientDocuments patientDocumentItems);
     }
 }

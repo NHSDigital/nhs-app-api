@@ -83,10 +83,10 @@ paths:
     $ref: ./nhsonline.userinfo.yaml#/paths/~1users~1info
   /v1/api/log:
     $ref: ./nhsonline.log.yaml#/paths/~1log
-  /v1/documents/{documentGuid}:
-    $ref: ./nhsonline.documents.yaml#/paths/~1documents~1{documentGuid}
-  /v1/documents/{documentGuid}/download:
-    $ref: ./nhsonline.documents.yaml#/paths/~1documents~1{documentGuid}~1download
+  /v1/documents/{documentIdentifier}:
+    $ref: ./nhsonline.documents.yaml#/paths/~1documents~1{documentIdentifier}
+  /v1/documents/{documentIdentifier}/download:
+    $ref: ./nhsonline.documents.yaml#/paths/~1documents~1{documentIdentifier}~1download
   /v1/service-definition/{provider}/{serviceDefinitionId}:
     $ref: ./nhsonline.cds.yaml#/paths/~1service-definition~1{provider}~1{serviceDefinitionId}
   /v1/service-definition/{provider}/{serviceDefinitionId}/$evaluate:

@@ -10,13 +10,13 @@ using FileTypes = NHSOnline.Backend.Support.Constants.FileConstants.FileTypes;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
-    
+
     public class PatientDocumentController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<PatientDocumentController> _logger;
         private readonly IAuditor _auditor;
-        
+
         public PatientDocumentController(
             ILogger<PatientDocumentController> logger,
             IGpSystemFactory gpSystemFactory,
@@ -26,22 +26,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             _logger = logger;
             _auditor = auditor;
         }
-        
+
         [HttpPost]
-        [ApiVersionRoute("documents/{documentGuid}")]
+        [ApiVersionRoute("documents/{documentIdentifier}")]
         public async Task<IActionResult> GetPatientDocument(
-            [FromRoute(Name = "documentGuid")] string documentGuid,
+            [FromRoute(Name = "documentIdentifier")] string documentIdentifier,
             [FromBody] DocumentInfo documentInfo)
         {
             try
             {
                 _logger.LogEnter();
-                
+
                 if (!ModelState.IsValid)
                 {
                     return new BadRequestObjectResult(ModelState);
                 }
-                
+
                 await _auditor.Audit(AuditingOperations.GetDocumentAuditTypeRequest,
                     "Attempting to view document");
 
@@ -55,10 +55,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                 _logger.LogInformation("Fetching patient document");
                 var result = await patientRecordService.GetPatientDocument(
                     userSession.GpUserSession,
-                    documentGuid,
+                    documentIdentifier,
                     documentInfo.Type,
                     documentInfo.Name);
-                
+
                 await result.Accept(new PatientDocumentAuditingVisitor(_auditor, _logger));
                 return result.Accept(new PatientDocumentVisitor());
             }
@@ -67,32 +67,32 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                 _logger.LogExit();
             }
         }
-        
+
         [HttpPost]
-        [ApiVersionRoute("documents/{documentGuid}/download")]
-        public async Task<IActionResult> GetPatientDocumentForDownload(            
-            [FromRoute(Name = "documentGuid")] string documentGuid,
+        [ApiVersionRoute("documents/{documentIdentifier}/download")]
+        public async Task<IActionResult> GetPatientDocumentForDownload(
+            [FromRoute(Name = "documentIdentifier")] string documentIdentifier,
             [FromBody] DocumentInfo documentInfo)
         {
             try
             {
                 _logger.LogEnter();
-                
+
                 _logger.LogInformation("Fetching PatientRecordService for supplier");
 
                 var userSession = HttpContext.GetUserSession();
-                
+
                 var patientRecordService = _gpSystemFactory
                     .CreateGpSystem(userSession.GpUserSession.Supplier)
                     .GetPatientRecordService();
-                
+
                 var type = documentInfo.Type;
                 var name = documentInfo.Name;
-                
+
                 var result = await patientRecordService.GetPatientDocumentForDownload(
                     userSession.GpUserSession,
-                    documentGuid, documentInfo.Type, documentInfo.Name);
-                
+                    documentIdentifier, documentInfo.Type, documentInfo.Name);
+
                 var data = patientRecordService.ConvertDocumentToCorrectFormat(type, result.Content);
 
                 if (data != null)

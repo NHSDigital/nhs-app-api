@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             _mapper = new TppMyRecordMapper();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _logger = Mock.Of<ILogger<TppPatientOverviewMapper>>();
-        } 
+        }
 
         [TestMethod]
         public void MapAllergyRequestsGetResponseToAllergyListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
 
             // Act
             var (item1, item2) = new TppPatientOverviewMapper(_logger).Map(item);
-            var result = _mapper.Map(item1, item2, new TppDcrEvents(), new TestResults());
+            var result = _mapper.Map(item1, item2, new TppDcrEvents(), new TestResults(), new PatientDocuments());
 
             // Assert
             result.Should().NotBeNull();
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             var tppAcuteMedications = CreateListPatientOverviewItem(3);
             var tppCurrentRepeatMedications = CreateListPatientOverviewItem(4);
             var tppPastRepeatMedications = CreateListPatientOverviewItem(5);
-            
+
             var patientOverview = new ViewPatientOverviewReply
             {
                 Allergies = tppAllergies,
@@ -65,18 +65,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 CurrentRepeats = tppCurrentRepeatMedications,
                 PastRepeats = tppPastRepeatMedications,
             };
-                    
+
             var expectedAllergies = CreateListAllergyItem(patientOverview.Allergies);
             expectedAllergies.AddRange(CreateListAllergyItem(patientOverview.DrugSensitivities));
             var expectedAcuteMedications = CreateListMedicationItem(patientOverview.Drugs);
             var expectedCurrentRepeatMedications = CreateListMedicationItem(patientOverview.CurrentRepeats);
             var expectedPastRepeatMedications = CreateListMedicationItem(patientOverview.PastRepeats);
-            
+
             // Act
             var result = new TppPatientOverviewMapper(_logger).Map(patientOverview);
             var mappedAllergies = result.Item1;
             var mappedMedications= result.Item2;
-            
+
             // Assert
             result.Should().NotBeNull();
             mappedAllergies.Data.Should().HaveCount(patientOverview.Allergies.Count + patientOverview.DrugSensitivities.Count);
@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             mappedMedications.Data.CurrentRepeatMedications.Should().HaveCount(patientOverview.CurrentRepeats.Count);
             mappedMedications.Data.CurrentRepeatMedications.Should().BeEquivalentTo(expectedCurrentRepeatMedications);
             mappedMedications.Data.DiscontinuedRepeatMedications.Should().HaveCount(patientOverview.PastRepeats.Count);
-            mappedMedications.Data.DiscontinuedRepeatMedications.Should().BeEquivalentTo(expectedPastRepeatMedications);         
+            mappedMedications.Data.DiscontinuedRepeatMedications.Should().BeEquivalentTo(expectedPastRepeatMedications);
         }
 
         private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             }
             return result;
         }
-        
+
         private ViewPatientOverViewItem CreatePatientOverviewItem()
         {
             return new ViewPatientOverViewItem

@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             EmisRequestParameters emisRequestParameters, DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime);
 
         Task<EmisApiObjectResponse<IndividualDocument>> MedicalDocumentGet(string userPatientLinkToken,
-            string responseSessionId, string documentGuid, string endUserSessionId);
+            string responseSessionId, string documentIdentifier, string endUserSessionId);
 
         Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
             string responseSessionId, string endUserSessionId, PrescriptionRequestsPost model);

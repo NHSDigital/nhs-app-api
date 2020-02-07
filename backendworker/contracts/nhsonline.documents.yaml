@@ -5,7 +5,7 @@ info:
   description: NHS App Sub-API - endpoints pertaining to documents. All require an
     NHSO-Session-Id cookie (obtained from Session endpoint).
 paths:
-  /documents/{documentGuid}:
+  /documents/{documentIdentifier}:
     post:
       tags:
         - patient document
@@ -22,7 +22,7 @@ paths:
         x-name: GetPatientDocumentRequest
       parameters:
         - in: path
-          name: documentGuid
+          name: documentIdentifier
           required: true
           description: document Guid of specific document to return
           schema:
@@ -46,7 +46,7 @@ paths:
             application/json:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
-  /documents/{documentGuid}/download:
+  /documents/{documentIdentifier}/download:
     post:
       tags:
         - patient document
@@ -63,7 +63,7 @@ paths:
         x-name: GetPatientDocumentRequest
       parameters:
         - in: path
-          name: documentGuid
+          name: documentIdentifier
           required: true
           description: document Guid of specific document to return
           schema:

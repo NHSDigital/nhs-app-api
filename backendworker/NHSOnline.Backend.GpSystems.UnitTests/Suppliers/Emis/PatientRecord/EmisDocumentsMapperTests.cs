@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 {
                     new DocumentItem
                     {
-                        DocumentGuid = document1.DocumentGuid,
+                        DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
                         IsAvailable = document1.Available,
                         Extension = document1.Extension,
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     },
                     new DocumentItem
                     {
-                        DocumentGuid = document2.DocumentGuid,
+                        DocumentIdentifier = document2.DocumentGuid,
                         Term = document2.Observation.Term,
                         IsAvailable = document2.Available,
                         Extension = document2.Extension,
@@ -161,7 +161,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 {
                     new DocumentItem
                     {
-                        DocumentGuid = document1.DocumentGuid,
+                        DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
                         IsAvailable = document1.Available,
                         Extension = document1.Extension,
@@ -210,7 +210,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 {
                     new DocumentItem
                     {
-                        DocumentGuid = document1.DocumentGuid,
+                        DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
                         IsAvailable = document1.Available,
                         Extension = document1.Extension,
@@ -259,7 +259,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 {
                     new DocumentItem
                     {
-                        DocumentGuid = document1.DocumentGuid,
+                        DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
                         IsAvailable = document1.Available,
                         Extension = document1.Extension,
@@ -304,7 +304,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 {
                     new DocumentItem
                     {
-                        DocumentGuid = document1.DocumentGuid,
+                        DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
                         IsAvailable = document1.Available,
                         Extension = document1.Extension,
@@ -349,7 +349,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 {
                     new DocumentItem
                     {
-                        DocumentGuid = document1.DocumentGuid,
+                        DocumentIdentifier = document1.DocumentGuid,
                         Term = document1.Observation.Term,
                         IsAvailable = document1.Available,
                         Extension = document1.Extension,

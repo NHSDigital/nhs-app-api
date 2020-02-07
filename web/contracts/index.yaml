@@ -1471,7 +1471,7 @@
                                             - "YearMonth"
                                             - "YearMonthDay"
                                             - "YearMonthDayTime"
-                                    documentGuid: 
+                                    documentIdentifier: 
                                       type: "string"
                                       description: "Unique identifier of the document"
                                     term: 
@@ -5160,7 +5160,7 @@
             description: "Required property missing or expired."
           500: 
             description: "An unexpected error occurred processing the request."
-    /v1/documents/{documentGuid}: 
+    /v1/documents/{documentIdentifier}: 
       post: 
         tags: 
           - "patient document"
@@ -5183,7 +5183,7 @@
         parameters: 
           - 
             in: "path"
-            name: "documentGuid"
+            name: "documentIdentifier"
             required: true
             description: "document Guid of specific document to return"
             schema: 
@@ -5225,7 +5225,7 @@
                     serviceDeskReference: 
                       type: "string"
                       description: "Six character service desk reference code."
-    /v1/documents/{documentGuid}/download: 
+    /v1/documents/{documentIdentifier}/download: 
       post: 
         tags: 
           - "patient document"
@@ -5248,7 +5248,7 @@
         parameters: 
           - 
             in: "path"
-            name: "documentGuid"
+            name: "documentIdentifier"
             required: true
             description: "document Guid of specific document to return"
             schema: 

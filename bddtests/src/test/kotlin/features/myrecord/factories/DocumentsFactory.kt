@@ -18,12 +18,13 @@ abstract class DocumentsFactory {
 
     val mockingClient = MockingClient.instance
 
-    companion object : SupplierSpecificFactory<DocumentsFactoryEmis>() {
+    companion object : SupplierSpecificFactory<DocumentsFactory>() {
 
-        override val map: HashMap<Supplier, (() -> DocumentsFactoryEmis)>
+        override val map: HashMap<Supplier, (() -> DocumentsFactory)>
             by lazy {
-                hashMapOf(Supplier.EMIS to { DocumentsFactoryEmis() })
+                hashMapOf(
+                        Supplier.EMIS to { DocumentsFactoryEmis() },
+                        Supplier.TPP to { DocumentsFactoryTpp() })
             }
-
     }
 }

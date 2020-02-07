@@ -7,13 +7,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         public static IServiceCollection RegisterTppPatientRecordServices(this IServiceCollection services)
         {
             services.AddTransient<TppPatientRecordService>();
-            
+
             services.AddTransient<ITppMyRecordMapper, TppMyRecordMapper>();
             services.AddTransient<IGetPatientDcrEventsTaskChecker, GetPatientDcrEventsTaskChecker>();
+            services.AddTransient<IGetPatientDocumentsFromDcrEventsTaskChecker, GetPatientDocumentsFromDcrEventsTaskChecker>();
             services.AddTransient<IGetPatientOverviewTaskChecker, GetPatientOverviewTaskChecker>();
             services.AddTransient<IGetPatientTestResultsTaskChecker, GetPatientTestResultsTaskChecker>();
             services.AddTransient<IGetTppDetailedTestResultChecker, GetTppDetailedTestResultChecker>();
             services.AddTransient<ITppDcrEventsMapper, TppDcrEventsMapper>();
+            services.AddTransient<ITppDcrEventsDocumentsMapper, TppDcrEventsDocumentsMapper>();
             services.AddTransient<ITppDcrEventItemsMapper, TppDcrEventItemsMapper>();
             services.AddTransient<ITppDetailedTestResultMapper, TppDetailedTestResultMapper>();
             services.AddTransient<ITppTestResultsMapper, TppTestResultsMapper>();

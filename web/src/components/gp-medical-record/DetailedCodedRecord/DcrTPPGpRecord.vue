@@ -23,6 +23,19 @@
                :click-func="goToUrl"
                :click-param="eventsPath"
                :count="record.tppDcrEvents.data.length"/>
+
+    <menu-item v-if="documentsEnabled"
+               id="documents"
+               data-purpose="documents"
+               :href="documentsPath"
+               header-tag="h2"
+               :text="$t('my_record.documents.sectionHeader')"
+               :aria-label="
+                 getAriaLabel($t('my_record.documents.sectionHeader'),
+                              record.documents.data.length)"
+               :click-func="goToUrl"
+               :click-param="documentsPath"
+               :count="record.documents.data.length"/>
   </div>
 </template>
 
@@ -30,7 +43,9 @@
 import MenuItem from '@/components/MenuItem';
 import { TESTRESULTS,
   EVENTS,
+  DOCUMENTS,
 } from '@/lib/routes';
+import { isTruthy } from '@/lib/utils';
 
 export default {
   name: 'DcrTPPGpRecord',
@@ -42,6 +57,8 @@ export default {
       record: this.$store.state.myRecord.record,
       testResultsPath: TESTRESULTS.path,
       eventsPath: EVENTS.path,
+      documentsPath: DOCUMENTS.path,
+      documentsEnabled: isTruthy(this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED),
     };
   },
   methods: {

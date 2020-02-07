@@ -74,9 +74,9 @@ export default {
       = await this.app.$http.getV1PatientTestResult({ testResultId }) || {};
     commit(LOADED_DETAILED_TEST_RESULT, { data });
   },
-  async loadDocument({ commit, state }, documentGuid) {
-    const { response } = await this.app.$http.postV1DocumentsByDocumentguid({
-      documentGuid,
+  async loadDocument({ commit, state }, documentIdentifier) {
+    const { response } = await this.app.$http.postV1DocumentsByDocumentidentifier({
+      documentIdentifier,
       getPatientDocumentRequest: {
         type: state.document.type,
         name: state.document.name,
@@ -85,9 +85,9 @@ export default {
     const { content } = response || {};
     commit(LOADED_DOCUMENT, content);
   },
-  downloadDocument({ state }, documentGuid) {
-    return this.app.$http.postV1DocumentsByDocumentguidDownload({
-      documentGuid,
+  downloadDocument({ state }, documentIdentifier) {
+    return this.app.$http.postV1DocumentsByDocumentidentifierDownload({
+      documentIdentifier,
       getPatientDocumentRequest: {
         type: state.document.type,
         name: state.document.name,

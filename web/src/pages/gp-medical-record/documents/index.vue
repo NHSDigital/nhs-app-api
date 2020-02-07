@@ -8,16 +8,19 @@
       <div class="nhsuk-grid-column-full">
         <menu-item-list>
           <menu-item v-for="(document, index) in orderedDocuments"
-                     :id="document.documentGuid"
+                     :id="document.documentIdentifier"
                      :key="index"
                      header-tag="h2"
                      :target="'_blank'"
-                     :text="documentTitle(document.term, document.effectiveDate)"
+                     :text="documentTitle(document.term, document.effectiveDate, document.type)"
                      :click-func="documentClicked"
                      :click-param="document"
                      :description="documentDescription(document.extension, document.size)"
-                     :aria-label="`${documentTitle(document.term, document.effectiveDate)}.
-                                ${documentDescription(document.extension, document.size)}`"/>
+                     :aria-label="`${documentTitle(document.term,
+                                                   document.effectiveDate,
+                                                   document.type)}.
+                                ${documentDescription(document.extension,
+                     document.size)}`"/>
         </menu-item-list>
       </div>
     </div>
@@ -83,12 +86,15 @@ export default {
       redirectTo(this, this.backPath);
     },
     documentDescription(extension, size) {
-      if (size) {
-        return `(${extension.toUpperCase()}, ${readableBytes(size)})`;
+      if (extension) {
+        if (size) {
+          return `(${extension.toUpperCase()}, ${readableBytes(size)})`;
+        }
+        return `(${extension.toUpperCase()})`;
       }
-      return `(${extension.toUpperCase()})`;
+      return '';
     },
-    documentTitle(title, date) {
+    documentTitle(title, date, type) {
       let dateString;
       if (date && date.value) {
         dateString = datePart(date.value, 'YearMonthDay');
@@ -98,6 +104,10 @@ export default {
 
       if (title) {
         return `${title} ${this.$t('my_record.documents.documentMenuItemTitle', { date: dateString })}`;
+      }
+
+      if (type) {
+        return `${type} ${this.$t('my_record.documents.documentMenuItemTitle', { date: dateString })}`;
       }
       return dateString;
     },
@@ -112,7 +122,7 @@ export default {
         size: document.size,
         isValidFile: document.isValidFile,
       });
-      this.$router.push({ name: DOCUMENT.name, params: { id: document.documentGuid } });
+      this.$router.push({ name: DOCUMENT.name, params: { id: document.documentIdentifier } });
     },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;

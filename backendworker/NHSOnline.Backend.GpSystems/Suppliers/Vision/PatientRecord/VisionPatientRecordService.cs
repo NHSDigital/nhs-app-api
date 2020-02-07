@@ -38,8 +38,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             VisionImmunisationsMapper immunisationsMapper,
             VisionProblemsMapper problemsMapper,
             VisionTestResultsMapper testResultsMapper,
-            VisionDiagnosisMapper diagnosisMapper, 
-            VisionExaminationsMapper examinationsMapper, 
+            VisionDiagnosisMapper diagnosisMapper,
+            VisionExaminationsMapper examinationsMapper,
             VisionProceduresMapper proceduresMapper)
         {
             _logger = logger;
@@ -80,9 +80,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                     immunisationsTask.Result, problemsTask.Result, testResultsTask.Result, diagnosisTask.Result,
                     examinationsTask.Result, proceduresTask.Result);
                 response.Supplier = visionUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
-                
+
                 _logger.LogInformation("Patient record tasks completed");
-                
+
                 return new GetMyRecordResult.Success(response);
             }
             catch (Exception e)
@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             {
                 return await GetProcedureResults(visionUserSession);
             }
-            
+
             return new GetMyRecordSectionResult.BadRequest();
         }
 
@@ -139,7 +139,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                 Views.DIAGNOSIS,
                 ResponseFormats.HTML);
         }
-        
+
         private async Task<GetMyRecordSectionResult> GetExaminationResults(VisionUserSession visionUserSession)
         {
             return await GetMyRecordSection(
@@ -149,7 +149,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                 Views.EXAM_FINDINGS,
                 ResponseFormats.HTML);
         }
-        
+
         private async Task<GetMyRecordSectionResult> GetProcedureResults(VisionUserSession visionUserSession)
         {
             return await GetMyRecordSection(
@@ -159,8 +159,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                 Views.PROCEDURES,
                 ResponseFormats.HTML);
         }
-        
-        private async Task<GetMyRecordSectionResult> GetMyRecordSection<T>(VisionUserSession visionUserSession, IVisionMapper<T> mapper, VisionMapperType visionMapperType, string viewName, string responseFormat) 
+
+        private async Task<GetMyRecordSectionResult> GetMyRecordSection<T>(VisionUserSession visionUserSession, IVisionMapper<T> mapper, VisionMapperType visionMapperType, string viewName, string responseFormat)
             where T : IVisionPatientDataModel, new()
         {
             _logger.LogEnter();
@@ -292,7 +292,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             return new TestResults { HasErrored = true };
           }
         }
-        
+
         private async Task<Diagnosis> RetrieveDiagnosis(VisionUserSession visionUserSession)
         {
           try
@@ -337,13 +337,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             return new Procedures { HasErrored = true };
           }
         }
-        
+
         public Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentGuid,
+        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier,
             string documentType, string documentName)
         {
             throw new NotImplementedException();
@@ -352,8 +352,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
         {
             throw new NotImplementedException();
         }
-        
-        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentGuid, string documentType,
+
+        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentIdentifier, string documentType,
             string documentName)
         {
             throw new NotImplementedException();

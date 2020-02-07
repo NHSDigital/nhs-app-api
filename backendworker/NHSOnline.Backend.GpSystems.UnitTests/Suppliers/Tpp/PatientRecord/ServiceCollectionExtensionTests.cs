@@ -28,6 +28,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 typeof(TppPatientRecordService), ServiceLifetime.Transient);
             var tppMyRecordMapper = new ServiceDescriptor(typeof(ITppMyRecordMapper),
                 typeof(TppMyRecordMapper), ServiceLifetime.Transient);
+            var tppGetPatientDocumentsFromDcrEventsTaskChecker = new ServiceDescriptor(typeof(IGetPatientDocumentsFromDcrEventsTaskChecker),
+                typeof(GetPatientDocumentsFromDcrEventsTaskChecker), ServiceLifetime.Transient);
             var tppGetPatientDcrEventsTaskChecker = new ServiceDescriptor(typeof(IGetPatientDcrEventsTaskChecker),
                 typeof(GetPatientDcrEventsTaskChecker), ServiceLifetime.Transient);
             var tppGetPatientOverviewTaskChecker = new ServiceDescriptor(typeof(IGetPatientOverviewTaskChecker),
@@ -38,6 +40,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 typeof(GetTppDetailedTestResultChecker), ServiceLifetime.Transient);
             var tppDcrEventsMapper = new ServiceDescriptor(typeof(ITppDcrEventsMapper),
                 typeof(TppDcrEventsMapper), ServiceLifetime.Transient);
+            var tppDcrEventsDocumentMapper = new ServiceDescriptor(typeof(ITppDcrEventsDocumentsMapper),
+                typeof(TppDcrEventsDocumentsMapper), ServiceLifetime.Transient);
             var tppDcrEventItemsMapper = new ServiceDescriptor(typeof(ITppDcrEventItemsMapper),
                 typeof(TppDcrEventItemsMapper), ServiceLifetime.Transient);
             var tppDetailedTestResultMapper = new ServiceDescriptor(typeof(ITppDetailedTestResultMapper),
@@ -54,11 +58,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             registeredService.Should().ContainEquivalentOf(tppGetPatientOverviewTaskChecker);
             registeredService.Should().ContainEquivalentOf(tppGetPatientTestResultsTaskChecker);
             registeredService.Should().ContainEquivalentOf(tppGetTppDetailedTestResultChecker);
+            registeredService.Should().ContainEquivalentOf(tppGetPatientDocumentsFromDcrEventsTaskChecker);
             registeredService.Should().ContainEquivalentOf(tppDcrEventsMapper);
             registeredService.Should().ContainEquivalentOf(tppDcrEventItemsMapper);
             registeredService.Should().ContainEquivalentOf(tppDetailedTestResultMapper);
             registeredService.Should().ContainEquivalentOf(tppTestResultsMapper);
             registeredService.Should().ContainEquivalentOf(tppPatientOverviewMapper);
+            registeredService.Should().ContainEquivalentOf(tppDcrEventsDocumentMapper);
         }
     }
 }

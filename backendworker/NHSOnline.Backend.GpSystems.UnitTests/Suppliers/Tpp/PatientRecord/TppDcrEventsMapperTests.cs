@@ -30,11 +30,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
 
             // Act
             var tppDcrEvents = new TppDcrEventsMapper(_eventItemsMapper).Map(item);
-            var result = _mapper.Map(new Allergies(), new Medications(), tppDcrEvents, new TestResults());
+            var result = _mapper.Map(new Allergies(), new Medications(), tppDcrEvents, new TestResults(), new PatientDocuments());
 
             // Assert
             result.Should().NotBeNull();
-            result.TppDcrEvents.Data.Should().BeEmpty();           
+            result.TppDcrEvents.Data.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -47,55 +47,55 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 {
                     new Event
                     {
-                        Date = "2018-07-03T11:16:02.0Z", 
-                        DoneBy = "Mr General NhsApp", 
+                        Date = "2018-07-03T11:16:02.0Z",
+                        DoneBy = "Mr General NhsApp",
                         Items = new List<RequestPatientRecordItem>
                         {
-                            new RequestPatientRecordItem { 
-                                Details = "Alimemazine 10mg tablets - 1 pack of 28 tablet(s) - [08:00-1][12:00-1][16:00-1][22:00-1]", 
-                                Type = "Medication template"                             
+                            new RequestPatientRecordItem {
+                                Details = "Alimemazine 10mg tablets - 1 pack of 28 tablet(s) - [08:00-1][12:00-1][16:00-1][22:00-1]",
+                                Type = "Medication template"
                             },
-                            new RequestPatientRecordItem { 
-                                Details = "Benzoin tincture - 500 ml - use as directed", 
-                                Type = "Medication template"                             
+                            new RequestPatientRecordItem {
+                                Details = "Benzoin tincture - 500 ml - use as directed",
+                                Type = "Medication template"
                             },
-                            new RequestPatientRecordItem { 
-                                Details = "(R) Benzoin tincture - 500 ml - use as directed", 
-                                Type = "Medication"                             
+                            new RequestPatientRecordItem {
+                                Details = "(R) Benzoin tincture - 500 ml - use as directed",
+                                Type = "Medication"
                             }
                         },
                         Location = "Kainos GP Demo Unit (General Practice)"
                     },
                     new Event
                     {
-                        Date = "2016-09-12T12:34:03.0Z", 
-                        DoneBy = "Mr General NhsApp 2", 
+                        Date = "2016-09-12T12:34:03.0Z",
+                        DoneBy = "Mr General NhsApp 2",
                         Items = new List<RequestPatientRecordItem>
                         {
-                            new RequestPatientRecordItem { 
-                                Details = "Alimemazine 20mg tablets - 1 pack of 14 tablet(s)", 
-                                Type = "Medication template"                             
+                            new RequestPatientRecordItem {
+                                Details = "Alimemazine 20mg tablets - 1 pack of 14 tablet(s)",
+                                Type = "Medication template"
                             },
-                            new RequestPatientRecordItem { 
-                                Details = "(R) Benzoin tincture - 250 ml - use as directed", 
-                                Type = "Medication"                             
+                            new RequestPatientRecordItem {
+                                Details = "(R) Benzoin tincture - 250 ml - use as directed",
+                                Type = "Medication"
                             }
                         },
                         Location = "Kainos GP Demo Unit (General Practice)"
                     },
                     new Event
                     {
-                        Date = null, 
-                        DoneBy = "Mr General NhsApp 2", 
+                        Date = null,
+                        DoneBy = "Mr General NhsApp 2",
                         Items = new List<RequestPatientRecordItem>
                         {
-                            new RequestPatientRecordItem { 
-                                Details = "Alimemazine 20mg tablets - 1 pack of 14 tablet(s)", 
-                                Type = "Medication template"                             
+                            new RequestPatientRecordItem {
+                                Details = "Alimemazine 20mg tablets - 1 pack of 14 tablet(s)",
+                                Type = "Medication template"
                             },
-                            new RequestPatientRecordItem { 
-                                Details = "(R) Benzoin tincture - 250 ml - use as directed", 
-                                Type = "Medication"                             
+                            new RequestPatientRecordItem {
+                                Details = "(R) Benzoin tincture - 250 ml - use as directed",
+                                Type = "Medication"
                             }
                         },
                         Location = "Kainos GP Demo Unit (General Practice)"
@@ -109,35 +109,35 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 {
                     Date = DateTimeOffset.Parse(requestPatientRecordReply.Events[0].Date, CultureInfo.InvariantCulture),
                     LocationAndDoneBy = $"{requestPatientRecordReply.Events[0].Location} - {requestPatientRecordReply.Events[0].DoneBy}",
-                    EventItems = new List<string> { 
+                    EventItems = new List<string> {
                         $"{requestPatientRecordReply.Events[0].Items[0].Type} - { requestPatientRecordReply.Events[0].Items[0].Details}",
                         $"{requestPatientRecordReply.Events[0].Items[1].Type} - { requestPatientRecordReply.Events[0].Items[1].Details}",
-                        $"{requestPatientRecordReply.Events[0].Items[2].Type} - { requestPatientRecordReply.Events[0].Items[2].Details}"     
+                        $"{requestPatientRecordReply.Events[0].Items[2].Type} - { requestPatientRecordReply.Events[0].Items[2].Details}"
                     }
                 },
                 new TppDcrEvent
                 {
                     Date = DateTimeOffset.Parse(requestPatientRecordReply.Events[1].Date, CultureInfo.InvariantCulture),
                     LocationAndDoneBy = $"{requestPatientRecordReply.Events[1].Location} - {requestPatientRecordReply.Events[1].DoneBy}",
-                    EventItems = new List<string> { 
+                    EventItems = new List<string> {
                         $"{requestPatientRecordReply.Events[1].Items[0].Type} - { requestPatientRecordReply.Events[1].Items[0].Details}",
-                        $"{requestPatientRecordReply.Events[1].Items[1].Type} - { requestPatientRecordReply.Events[1].Items[1].Details}",    
+                        $"{requestPatientRecordReply.Events[1].Items[1].Type} - { requestPatientRecordReply.Events[1].Items[1].Details}",
                     }
                 },
                 new TppDcrEvent
                 {
                     Date = null,
                     LocationAndDoneBy = $"{requestPatientRecordReply.Events[1].Location} - {requestPatientRecordReply.Events[1].DoneBy}",
-                    EventItems = new List<string> { 
+                    EventItems = new List<string> {
                         $"{requestPatientRecordReply.Events[1].Items[0].Type} - { requestPatientRecordReply.Events[1].Items[0].Details}",
-                        $"{requestPatientRecordReply.Events[1].Items[1].Type} - { requestPatientRecordReply.Events[1].Items[1].Details}",    
+                        $"{requestPatientRecordReply.Events[1].Items[1].Type} - { requestPatientRecordReply.Events[1].Items[1].Details}",
                     }
-                }  
+                }
             };
-            
+
             // Act
             var result = new TppDcrEventsMapper(_eventItemsMapper).Map(requestPatientRecordReply);
-            
+
             // Assert
             result.Should().NotBeNull();
             result.Data.Should().BeEquivalentTo(tppDcrEvents);
@@ -153,18 +153,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 {
                     new Event
                     {
-                        Date = "2018-07-03T11:16:02.0Z", 
-                        DoneBy = "Mr General NhsApp", 
+                        Date = "2018-07-03T11:16:02.0Z",
+                        DoneBy = "Mr General NhsApp",
                         Items = new List<RequestPatientRecordItem>
                         {
-                            new RequestPatientRecordItem { 
-                                Details = "\nBenzoin tincture - 500 ml\nuse as\t directed\n", 
-                                Type = "Medication template"                             
+                            new RequestPatientRecordItem {
+                                Details = "\nBenzoin tincture - 500 ml\nuse as\t directed\n",
+                                Type = "Medication template"
                             },
                         },
                         Location = "Kainos GP Demo Unit (General Practice)"
                     },
-                }              
+                }
             };
 
             var result = new TppDcrEventsMapper(_eventItemsMapper).Map(requestPatientRecordReply);

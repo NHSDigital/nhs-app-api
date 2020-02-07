@@ -127,13 +127,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         }
 
         public async Task<EmisApiObjectResponse<IndividualDocument>> MedicalDocumentGet(string userPatientLinkToken,
-            string responseSessionId, string documentGuid, string endUserSessionId)
+            string responseSessionId, string documentIdentifier, string endUserSessionId)
         {
 
-            _logger.LogInformation("EMIS: Fetching patient document - {0}", documentGuid);
+            _logger.LogInformation("EMIS: Fetching patient document - {0}", documentIdentifier);
               var path = string.Format(CultureInfo.InvariantCulture,
                 DocumentPath,
-                documentGuid,
+                documentIdentifier,
                 userPatientLinkToken);
 
             return await Get<IndividualDocument>(

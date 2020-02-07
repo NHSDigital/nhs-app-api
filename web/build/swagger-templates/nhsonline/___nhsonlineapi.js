@@ -436,7 +436,7 @@ class NHSOnlineApi {
 
   queryParameters = this.mergeQueryParams(parameters, queryParameters);
 
-  {{#ifEquals ../operationId 'postV1DocumentsByDocumentguidDownload'  }}
+  {{#ifEquals ../operationId 'postV1DocumentsByDocumentidentifierDownload'  }}
   this.request({
     method: '{{toUpperCase @key}}',
     url: domain + path,

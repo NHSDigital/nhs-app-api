@@ -6,8 +6,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord
     {
         [XmlAttribute("type")]
         public string Type { get; set; }
-        
+
         [XmlAttribute("details")]
         public string Details { get; set; }
+
+        [XmlAttribute("binaryDataId")]
+        public string BinaryDataId { get; set; }
     }
 }
