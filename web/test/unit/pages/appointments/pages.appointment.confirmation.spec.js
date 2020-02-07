@@ -100,6 +100,11 @@ describe('appointments confirmation page', () => {
             expect(telephoneError.exists()).toEqual(true);
           });
 
+          it('will add the error class to the telephone input element', () => {
+            const telephoneText = wrapper.find('#telephoneNumberText');
+            expect(telephoneText.classes()).toContain('nhsuk-input--error');
+          });
+
           describe('telephone number subsequently inputted', () => {
             beforeEach(() => {
               wrapper.vm.telephoneNumber = '1234';

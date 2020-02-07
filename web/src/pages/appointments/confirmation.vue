@@ -99,6 +99,7 @@
                                     :a-labelled-by="telephoneNumberTextAriaLabelledBy"
                                     :text-area-classes="defaultClasses"
                                     :required="true"
+                                    :error="showTelephoneError"
                                     :class="showReasonError"
                                     name="telephoneNumber"
                                     pattern=".*[^ ].*"
