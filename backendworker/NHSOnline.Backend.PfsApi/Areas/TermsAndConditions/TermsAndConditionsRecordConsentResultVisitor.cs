@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Support;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 
 namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
@@ -17,9 +17,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             return new OkObjectResult(result);
         }
 
-        public IActionResult Visit(TermsAndConditionsRecordConsentResult.FailureToRecordConsent result)
+        public IActionResult Visit(TermsAndConditionsRecordConsentResult.InternalServerError result)
         {
-            return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status462FailedToRecordConsent);
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }
 }

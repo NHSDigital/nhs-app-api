@@ -19,8 +19,6 @@ namespace NHSOnline.Backend.Support
         {
             public const int Status460LimitReached = 460;
             public const int Status461TooLate = 461;
-            public const int Status462FailedToRecordConsent = 462;
-            public const int Status463FailedToFetchConsent = 463;
             public const int Status464OdsCodeNotSupportedOrNoNhsNumber = 464;
             public const int Status465FailedAgeRequirement = 465;
             public const int Status466MedicationAlreadyOrderedWithinLast30Days = 466;
@@ -93,7 +91,7 @@ namespace NHSOnline.Backend.Support
                     public const string Tga = "tga";
                     public const string Tpic = "tpic";
                 }
-        
+
                 public static readonly List<string> ImageTypes = new List<string>
                 {
                     ImageType.Bmp,
@@ -109,7 +107,7 @@ namespace NHSOnline.Backend.Support
                     ImageType.Tga,
                     ImageType.Tpic
                 };
-        
+
                 public static class DocumentType
                 {
                     public const string Pdf = "pdf";
@@ -119,7 +117,7 @@ namespace NHSOnline.Backend.Support
                     public const string Dot = "dot";
                     public const string Rtf = "rtf";
                 }
-        
+
                 public static readonly List<string> DocumentTypes = new List<string>
                 {
                     DocumentType.Doc,
@@ -127,19 +125,19 @@ namespace NHSOnline.Backend.Support
                     DocumentType.Docm,
                     DocumentType.Dot
                 };
-                
+
                 public static class TextType
                 {
                     public const string Txt = "txt";
                     public const string Rtf = "rtf";
                 }
-        
+
                 public static readonly List<string> TextTypes = new List<string>
                 {
                     TextType.Txt,
                     TextType.Rtf
                 };
-                
+
                 public static readonly Dictionary<string, string> DocumentMimeTypes = new Dictionary<string, string>
                 {
                     { DocumentType.Pdf, "application/pdf" },

@@ -7,7 +7,6 @@ using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
@@ -24,18 +23,16 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         private bool _disposed;
         private readonly ITermsAndConditionsConfig _termsConfig;
         private readonly DateTimeOffset _latestEffectiveDate;
-        private readonly IAuditor _auditor;
         public TermsAndConditionsService(ITermsAndConditionsConfig termsConfig,
-            IConfiguration appConfig, ILogger<TermsAndConditionsService> logger, IAuditor auditor)
+            IConfiguration appConfig, ILogger<TermsAndConditionsService> logger)
         {
             _logger = logger;
             _termsConfig = termsConfig;
-            _auditor = auditor;
-            
+
             var latestEffectiveDateStr = appConfig.ConfigurationSettings().GetOrWarn(
                 "CurrentTermsConditionsEffectiveDate",
                 _logger);
-            
+
             _latestEffectiveDate = DateTimeOffset.Parse(latestEffectiveDateStr, CultureInfo.InvariantCulture);
 
             _logger.LogDebug("Effective date {0}", _latestEffectiveDate.ToString(DateFormat, CultureInfo.InvariantCulture));
@@ -44,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             {
                 _client = new DocumentClient(_termsConfig.EndpointUri, _termsConfig.AuthKey);
                 _collectionUri = UriFactory.CreateDocumentCollectionUri(_termsConfig.DatabaseId, _termsConfig.CollectionName);
-            }            
+            }
         }
 
         public async Task<TermsAndConditionsFetchConsentResult> FetchConsent(string nhsNumber)
@@ -63,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                 _logger.LogExitWith("patient consent found");
                 return new TermsAndConditionsFetchConsentResult.Success(response);
             }
-            
+
             try
             {
                 if (_disposed)
@@ -76,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                 if (termsAndConditions != null)
                 {
                     _logger.LogInformation("Patient consent found for terms and conditions");
-                    
+
                     //Updated consent required if date of last consent is prior to date of updated terms
                     var updatedConsentRequired = _latestEffectiveDate <= DateTimeOffset.Now
                                                  && _latestEffectiveDate > termsAndConditions.DateOfConsent;
@@ -87,11 +84,11 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                         UpdatedConsentRequired = updatedConsentRequired,
                         AnalyticsCookieAccepted = termsAndConditions.AnalyticsCookieAccepted,
                     };
-                    
+
                     _logger.LogDebug($"{nameof(termsAndConditions.ConsentGiven)}: {termsAndConditions.ConsentGiven}, " +
                                      $"{nameof(response.UpdatedConsentRequired)}: {updatedConsentRequired}, " +
                                      $"{nameof(termsAndConditions.AnalyticsCookieAccepted)}: {termsAndConditions.AnalyticsCookieAccepted}");
-                    
+
                     return new TermsAndConditionsFetchConsentResult.Success(response);
                 }
 
@@ -101,7 +98,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             catch (Exception e)
             {
                 _logger.LogError(e, "Unsuccessful request to fetch patient consent");
-                return new TermsAndConditionsFetchConsentResult.FailureToFetchConsent();
+                return new TermsAndConditionsFetchConsentResult.InternalServerError();
             }
             finally
             {
@@ -133,14 +130,12 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                         odsCode);
                 }
 
-                await AuditCookieAccepted(request, termsAndConditionsAcceptanceDate);
-
                 if (_disposed)
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
-                
-                var termsAndConditions = new TermsAndConditionsRecord(nhsNumber, 
+
+                var termsAndConditions = new TermsAndConditionsRecord(nhsNumber,
                     request.ConsentGiven, request.AnalyticsCookieAccepted, termsAndConditionsAcceptanceDate,
                             request.AnalyticsCookieAccepted ? termsAndConditionsAcceptanceDate : (DateTimeOffset?)null);
 
@@ -151,22 +146,12 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             catch (Exception e)
             {
                 _logger.LogError(e, "Unsuccessful request to record patient consent");
-                return new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
+                return new TermsAndConditionsRecordConsentResult.InternalServerError();
             }
             finally
             {
                 _logger.LogExit();
             }
-        }
-
-
-        private async Task AuditCookieAccepted(ConsentRequest request, DateTimeOffset termsAndConditionsAcceptanceDate)
-        {
-            var formattedAcceptanceString = termsAndConditionsAcceptanceDate.ToString(CultureInfo.InvariantCulture);
-            string cookieAccepted = request.AnalyticsCookieAccepted ? $" at DateAnalyticsCookieAccepted={formattedAcceptanceString}" : string.Empty;
-
-            await _auditor.Audit(AuditingOperations.TermsAndConditionsAnalyticsCookieAcceptance,
-                $"Attempting to record analytics cookies acceptance - {nameof(request.AnalyticsCookieAccepted)}={request.AnalyticsCookieAccepted}{cookieAccepted}");
         }
 
         private async Task<TermsAndConditionsRecordConsentResult> UpdateConsent(string nhsNumber, ConsentRequest request, DateTimeOffset termsAndConditionsConsentDate)
@@ -179,7 +164,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                 {
                     return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
                 }
-            
+
                 if (_disposed)
                 {
                     throw new ObjectDisposedException(GetType().FullName);
@@ -193,16 +178,16 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                     termsAndConditions.DateOfConsent = termsAndConditionsConsentDate;
 
                     await ReplaceDocument(termsAndConditions);
-                    
+
                     return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
                 }
-                
-                return new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
+
+                return new TermsAndConditionsRecordConsentResult.InternalServerError();
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Unsuccessful request to update patient consent");
-                return new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
+                return new TermsAndConditionsRecordConsentResult.InternalServerError();
             }
             finally
             {
@@ -219,7 +204,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                 {
                     return new ToggleAnalyticsCookieAcceptanceResult.Success();
                 }
-            
+
                 if (_disposed)
                 {
                     throw new ObjectDisposedException(GetType().FullName);
@@ -236,7 +221,7 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 
                     return new ToggleAnalyticsCookieAcceptanceResult.Success();
                 }
-                
+
                 return new ToggleAnalyticsCookieAcceptanceResult.Failure();
             }
             catch (Exception e)

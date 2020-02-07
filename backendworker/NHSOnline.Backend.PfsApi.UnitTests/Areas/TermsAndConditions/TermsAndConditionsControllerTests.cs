@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         {
             // Arrange
             var request = _fixture.Create<ConsentRequest>();
-            var response = new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
+            var response = new TermsAndConditionsRecordConsentResult.InternalServerError();
             _termsAndConditionsService.Setup(x => x.RecordConsent(
                     _userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request,
                     It.IsAny<DateTimeOffset>()))
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber,
                 _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
             result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status462FailedToRecordConsent);
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
         [TestMethod]
@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         public async Task Get_Returns_Failure()
         {
             // Arrange
-            var response = new TermsAndConditionsFetchConsentResult.FailureToFetchConsent();
+            var response = new TermsAndConditionsFetchConsentResult.InternalServerError();
             _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber))
                 .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
 
@@ -187,7 +187,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             // Assert
             _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber));
             result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status463FailedToFetchConsent);
+                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
         [TestMethod]

@@ -36,7 +36,6 @@ namespace NHSOnline.Backend.Auditing
         public const string GetNdopTokenAuditTypeRequest = "Ndop_GetToken_Request";
         public const string TermsAndConditionsRecordConsentAuditTypeRequest = "TermsAndConditions_RecordConsent_Request";
         public const string TermsAndConditionsRecordConsentAuditTypeResponse = "TermsAndConditions_RecordConsent_Response";
-        public const string TermsAndConditionsAnalyticsCookieAcceptance = "TermsAndConditions_RecordAnalyticsCookie_Acceptance";
         public const string TermsAndConditionsToggleAnalyticsCookieAcceptanceRequest = "TermsAndConditions_ToggleAnalyticsCookieAcceptance_Request";
         public const string TermsAndConditionsToggleAnalyticsCookieAcceptanceResponse = "TermsAndConditions_ToggleAnalyticsCookieAcceptance_Response";
         public const string GetOrganDonationAuditTypeResponse = "OrganDonation_Get_Response";

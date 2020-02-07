@@ -2827,8 +2827,8 @@
                     analyticsCookieAccepted: 
                       type: "boolean"
                       description: "Flag indicating whether the user has consented to the use of analytics"
-          463: 
-            description: "Unable to fetch consent at this time."
+          500: 
+            description: "An unexpected error occurred processing the request."
       post: 
         tags: 
           - "termsAndConditions"
@@ -2858,8 +2858,8 @@
         responses: 
           201: 
             description: "Appointment successfully created."
-          462: 
-            description: "Unable to record consent at this time."
+          500: 
+            description: "An unexpected error occurred processing the request."
     /v1/patient/terms-and-conditions/toggle-analytics-cookie-acceptance: 
       post: 
         tags: 
@@ -3064,9 +3064,9 @@
                   subject: 
                     type: "string"
                     description: "The subject of the message"
-                  recipients: 
+                  recipient: 
                     type: "string"
-                    description: "The recipient of the message"
+                    description: "The guid of recipient of the message"
           description: "The message to be sent"
           required: true
         responses: 
@@ -3079,6 +3079,7 @@
                   properties: 
                     messageSent: 
                       type: "boolean"
+                      nullable: true
                       description: "Indicates if the message has been successfully sent"
           400: 
             description: "Upstream system returned BadRequest status."

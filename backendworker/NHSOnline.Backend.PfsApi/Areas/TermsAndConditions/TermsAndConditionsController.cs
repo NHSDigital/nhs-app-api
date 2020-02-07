@@ -59,12 +59,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 
             var termsAndConditionsAcceptanceDate = DateTimeOffset.Now;
 
-            await AuditAttemptRecordConsent(model, termsAndConditionsAcceptanceDate);
+            await _auditor.Audit(AuditingOperations.TermsAndConditionsRecordConsentAuditTypeRequest,
+                $"Attempting to record patient consent - ConsentGiven={model.ConsentGiven}, " +
+                $"AnalyticsCookieAccepted={model.AnalyticsCookieAccepted} " +
+                $"at DateOfConsent={termsAndConditionsAcceptanceDate.ToString(CultureInfo.InvariantCulture)}");
 
             if (!model.AnalyticsCookieAccepted)
             {
                 _logger.LogInformation(
-                    $"Recording user did not accept optional analytics cookies. {nameof(userSession.GpUserSession.OdsCode)}: {userSession.GpUserSession.OdsCode}");
+                    $"Recording user did not accept optional analytics cookies." +
+                    $" {nameof(userSession.GpUserSession.OdsCode)}: {userSession.GpUserSession.OdsCode}");
             }
 
             _logger.LogDebug("Recording user consent");
@@ -73,10 +77,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
                 userSession.GpUserSession.NhsNumber, userSession.GpUserSession.OdsCode,
                 model, termsAndConditionsAcceptanceDate);
 
-            // Audit result of attempting to record consent
-            recordConsentResult.Accept(new TermsAndConditionsRecordConsentAuditingVisitor(_auditor, model.ConsentGiven,
-                termsAndConditionsAcceptanceDate,
-                model.AnalyticsCookieAccepted, model.UpdatingConsent));
+            await recordConsentResult.Accept(new TermsAndConditionsRecordConsentAuditingVisitor(
+                _auditor, _logger, model, termsAndConditionsAcceptanceDate));
 
             _logger.LogExit();
             return recordConsentResult.Accept(new TermsAndConditionsRecordConsentResultVisitor());
@@ -96,42 +98,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 
             var userSession = HttpContext.GetUserSession();
             var dateTimeOffset = DateTimeOffset.Now;
-            await AuditAttemptToggleAnalyticsCookieAcceptance(analyticsCookieAcceptance, dateTimeOffset);
-            
+
+            await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceRequest,
+                $"Attempting to toggle analytics cookie acceptance - " +
+                $"AnalyticsCookieAccepted={analyticsCookieAcceptance.AnalyticsCookieAccepted} " +
+                $"at DateAnalyticsCookieAccepted={dateTimeOffset.ToString(CultureInfo.InvariantCulture)}");
+
             var result = await _termsAndConditionsService.ToggleAnalyticsCookieAcceptance(
                 userSession.GpUserSession.NhsNumber,
                 analyticsCookieAcceptance, dateTimeOffset);
 
-            await result.Accept(new ToggleAnalyticsCookieAcceptanceAuditingVisitor(_auditor, _logger, dateTimeOffset, analyticsCookieAcceptance.AnalyticsCookieAccepted));
-       
+            await result.Accept(new ToggleAnalyticsCookieAcceptanceAuditingVisitor(_auditor, _logger,
+                dateTimeOffset, analyticsCookieAcceptance.AnalyticsCookieAccepted));
+
             _logger.LogExit();
 
             return result.Accept(new ToggleAnalyticsCookieAcceptanceResultVisitor());
-        }
-
-        private async Task AuditAttemptRecordConsent(ConsentRequest model, DateTimeOffset time)
-        {
-            var formattedDate = time.ToString(CultureInfo.InvariantCulture);
-
-            await _auditor.Audit(AuditingOperations.TermsAndConditionsRecordConsentAuditTypeRequest,
-                $"Attempting to record patient consent - {nameof(model.ConsentGiven)}={model.ConsentGiven} " +
-                $"at DateOfConsent={formattedDate}");
-
-            string cookieAcceptedLog = model.AnalyticsCookieAccepted
-                ? $" at DateAnalyticsCookieAccepted={formattedDate}"
-                : string.Empty;
-
-            await _auditor.Audit(AuditingOperations.TermsAndConditionsAnalyticsCookieAcceptance,
-                $"Attempting to record analytics cookies acceptance - {nameof(model.AnalyticsCookieAccepted)}={model.AnalyticsCookieAccepted}" +
-                $"{cookieAcceptedLog}");
-        }
-
-        private async Task AuditAttemptToggleAnalyticsCookieAcceptance(AnalyticsCookieAcceptance model, DateTimeOffset time)
-        {
-            var formattedDate = time.ToString(CultureInfo.InvariantCulture);
-            
-            await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceRequest,
-                $"Attempting to toggle analytics cookie acceptance - {nameof(model.AnalyticsCookieAccepted)}={model.AnalyticsCookieAccepted} at DateAnalyticsCookieAccepted={formattedDate}");
         }
     }
 }

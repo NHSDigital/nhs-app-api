@@ -17,8 +17,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConsentResponse'
-        "463":
-          description: Unable to fetch consent at this time.
+        "500":
+          description: An unexpected error occurred processing the request.
     post:
       tags:
         - termsAndConditions
@@ -35,8 +35,8 @@ paths:
       responses:
         "201":
           description: Appointment successfully created.
-        "462":
-          description: Unable to record consent at this time.
+        "500":
+          description: An unexpected error occurred processing the request.
   /toggle-analytics-cookie-acceptance:
     post:
       tags:

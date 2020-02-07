@@ -4,6 +4,6 @@
     {
         T Visit(TermsAndConditionsFetchConsentResult.Success result);
         T Visit(TermsAndConditionsFetchConsentResult.NoConsentFound result);
-        T Visit(TermsAndConditionsFetchConsentResult.FailureToFetchConsent result);       
+        T Visit(TermsAndConditionsFetchConsentResult.InternalServerError result);
     }
 }
