@@ -5,6 +5,7 @@ import {
   LOADED,
   LOADED_DETAILED_TEST_RESULT,
   TOGGLE_PATIENT_DETAIL,
+  SET_RELOAD,
 } from '@/store/modules/myRecord/mutation-types';
 
 describe('my record mutations', () => {
@@ -33,10 +34,7 @@ describe('my record mutations', () => {
       },
       patientDetails: 'details',
     };
-
-    state = {
-      record: initialState(),
-    };
+    state = initialState();
   });
 
   describe('ACCEPT_TERMS', () => {
@@ -46,6 +44,16 @@ describe('my record mutations', () => {
 
     it('will set the my record term acceptance flag ', () => {
       expect(state.hasAcceptedTerms).toEqual(true);
+    });
+  });
+
+  describe('SET_RELOAD', () => {
+    beforeEach(() => {
+      mutations[SET_RELOAD](state, false);
+    });
+
+    it('will set reload to false', () => {
+      expect(state.reload).toEqual(false);
     });
   });
 

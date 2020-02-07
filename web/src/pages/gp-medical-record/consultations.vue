@@ -72,13 +72,14 @@
 
 <script>
 import orderBy from 'lodash/fp/orderBy';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
-import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import Card from '@/components/widgets/card/Card';
-import { MYRECORD } from '@/lib/routes';
-import Glossary from '@/components/Glossary';
-import { redirectTo } from '@/lib/utils';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import Glossary from '@/components/Glossary';
+import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
+import { MYRECORD } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -89,6 +90,7 @@ export default {
     Glossary,
     DcrErrorNoAccessGpRecord,
   },
+  mixins: [ReloadRecordMixin],
   data() {
     return {
       backPath: MYRECORD.path,

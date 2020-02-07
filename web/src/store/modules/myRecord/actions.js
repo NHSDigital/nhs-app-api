@@ -11,6 +11,7 @@ import {
   LOADED_DOCUMENT,
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
+  SET_RELOAD,
   SET_SELECTED_DOCUMENT_INFO,
 } from '@/store/modules/myRecord/mutation-types';
 import AnalyticsValues from '@/lib/analytics-values';
@@ -92,6 +93,9 @@ export default {
         name: state.document.name,
       },
     });
+  },
+  reload({ commit }, value) {
+    commit(SET_RELOAD, value);
   },
   setSelectedDocumentInfo({ commit }, selectedDocumentInfo) {
     commit(SET_SELECTED_DOCUMENT_INFO, selectedDocumentInfo);

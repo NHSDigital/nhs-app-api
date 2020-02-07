@@ -17,6 +17,10 @@ describe('my record mutation types', () => {
       expect(state.hasLoaded).toBe(false);
     });
 
+    it('will have a reload value of true', () => {
+      expect(state.reload).toBe(true);
+    });
+
     it('will have a is patient details collapsed of true', () => {
       expect(state.isPatientDetailsCollapsed).toBe(true);
     });

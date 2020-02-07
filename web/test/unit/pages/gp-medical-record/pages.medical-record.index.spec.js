@@ -129,11 +129,11 @@ describe('gp-medical-record', () => {
       expect(page.vm.shouldLoadRecord()).toBe(true);
     });
 
-    it('should load the medical record if the medical record is already loaded ' +
-       'and the user comes from an external page', () => {
+    it('should load the medical record if the medical record is already loaded' +
+    'and the `reload` flag has been set to true ', () => {
       agreedToMedicalWarning.mockImplementation(() => true);
       $store.state.myRecord.hasLoaded = true;
-      $router.previousPaths = ['/', '/symptoms'];
+      $store.state.myRecord.reload = true;
 
       page = mountPage({ $store, $router });
 
@@ -141,10 +141,10 @@ describe('gp-medical-record', () => {
     });
 
     it('should not load the medical record if the medical record is already loaded ' +
-       'and the user comes from within the medical record', () => {
+       'and the `reload` flag has been set to false ', () => {
       agreedToMedicalWarning.mockImplementation(() => true);
       $store.state.myRecord.hasLoaded = true;
-      $router.previousPaths = ['/', '/gp-medical-record/medicines'];
+      $store.state.myRecord.reload = false;
 
       page = mountPage({ $store, $router });
 

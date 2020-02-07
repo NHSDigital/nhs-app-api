@@ -45,11 +45,12 @@
 </template>
 
 <script>
-import MenuItem from '@/components/MenuItem';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
 import { ACUTE_MEDICINES, CURRENT_MEDICINES, DISCONTINUED_MEDICINES, MYRECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
-import MenuItemList from '@/components/MenuItemList';
 
 export default {
   layout: 'nhsuk-layout',
@@ -58,6 +59,7 @@ export default {
     DesktopGenericBackLink,
     MenuItemList,
   },
+  mixins: [ReloadRecordMixin],
   data() {
     return {
       backPath: MYRECORD.path,

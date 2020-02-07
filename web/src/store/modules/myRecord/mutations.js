@@ -12,15 +12,16 @@ import {
   LOADED_DOCUMENT,
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
+  SET_RELOAD,
   SET_SELECTED_DOCUMENT_INFO,
   initialState,
 } from './mutation-types';
-
 
 const clearState = (state) => {
   state.hasAcceptedTerms = false;
   state.nojsData = JSON.stringify({ myRecord: { hasAcceptedTerms: false } });
   state.hasLoaded = false;
+  state.reload = true;
   state.isPatientDetailsCollapsed = true;
   state.record = {};
   state.patientDetails = {};
@@ -85,6 +86,9 @@ export default {
   },
   [LOADED_DOCUMENT](state, documentData) {
     state.document.data = documentData;
+  },
+  [SET_RELOAD](state, value) {
+    state.reload = value;
   },
   [SET_SELECTED_DOCUMENT_INFO](state, documentInfo) {
     if (!state.document) {

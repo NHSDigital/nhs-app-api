@@ -27,12 +27,13 @@
 
 <script>
 import get from 'lodash/fp/get';
-import { MYRECORD } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
 import Card from '@/components/widgets/card/Card';
-import Glossary from '@/components/Glossary';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
+import Glossary from '@/components/Glossary';
+import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
+import { MYRECORD } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -42,6 +43,7 @@ export default {
     Card,
     Glossary,
   },
+  mixins: [ReloadRecordMixin],
   data() {
     return {
       backPath: MYRECORD.path,

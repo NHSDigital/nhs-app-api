@@ -58,6 +58,7 @@ import { MYRECORD } from '@/lib/routes';
 import Glossary from '@/components/Glossary';
 import { redirectTo } from '@/lib/utils';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
+import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 
 export default {
   layout: 'nhsuk-layout',
@@ -68,6 +69,7 @@ export default {
     Glossary,
     DcrErrorNoAccessGpRecord,
   },
+  mixins: [ReloadRecordMixin],
   data() {
     return {
       resultsCollapsed: true,

@@ -29,13 +29,14 @@
 </template>
 
 <script>
+import orderBy from 'lodash/fp/orderBy';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
-import { GP_MEDICAL_RECORD, DOCUMENT } from '@/lib/routes';
-import { isFalsy, redirectTo, readableBytes, datePart } from '@/lib/utils';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MenuItem from '@/components/MenuItem';
+import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import MenuItemList from '@/components/MenuItemList';
-import orderBy from 'lodash/fp/orderBy';
+import { GP_MEDICAL_RECORD, DOCUMENT } from '@/lib/routes';
+import { isFalsy, redirectTo, readableBytes, datePart } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -45,6 +46,7 @@ export default {
     MenuItem,
     MenuItemList,
   },
+  mixins: [ReloadRecordMixin],
   data() {
     return {
       glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,

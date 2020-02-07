@@ -3,6 +3,7 @@ import {
   ACCEPT_TERMS,
   LOADED,
   LOADED_DETAILED_TEST_RESULT,
+  SET_RELOAD,
   TOGGLE_PATIENT_DETAIL,
 } from '@/store/modules/myRecord/mutation-types';
 
@@ -104,6 +105,17 @@ describe('my record actions', () => {
 
       it('will commit LOADED_DETAILED_TEST_RESULT with the received results', () => {
         expect(context.commit).toHaveBeenCalledWith(LOADED_DETAILED_TEST_RESULT, { data });
+      });
+    });
+
+    describe('reload', () => {
+      const flag = false;
+      beforeEach(() => {
+        actions.reload(context, flag);
+      });
+
+      it('will commit SET_RELOAD with false', () => {
+        expect(context.commit).toHaveBeenCalledWith(SET_RELOAD, flag);
       });
     });
 

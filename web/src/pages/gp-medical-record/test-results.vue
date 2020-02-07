@@ -85,6 +85,7 @@ import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedCompo
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
+import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { redirectTo } from '@/lib/utils';
 import { MYRECORD } from '@/lib/routes';
 
@@ -97,6 +98,7 @@ export default {
     MedicalRecordCardGroupItem,
     Glossary,
   },
+  mixins: [ReloadRecordMixin],
   data() {
     return {
       backPath: MYRECORD.path,

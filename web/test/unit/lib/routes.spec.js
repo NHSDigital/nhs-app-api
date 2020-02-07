@@ -42,39 +42,23 @@ describe('routes', () => {
     });
   });
 
+  /* eslint-disable indent */
   describe('backLinkOverrides', () => {
-    it('will go to more from organ donation by default and not ignore store override', () => {
-      const override = backLinkOverrides['organ-donation'];
-      expect(override.defaultPath).toBe('/more');
-      expect(override.ignoreStore).toBe(undefined);
-    });
+    it.each`
+      name                                          | path                              | ignoreStore
+      ${'organ-donation'}                           | ${'/more'}                        | ${undefined}
+      ${'organ-donation-view-decision'}             | ${'/more'}                        | ${undefined}
+      ${'patient-practice-messaging'}               | ${'/more'}                        | ${true}
+      ${'patient-practice-messaging-view-details'}  | ${'/patient-practice-messaging'}  | ${true}
+      ${'switch-profile'}                           | ${'/'}                            | ${true}
+      `('will go to $path from $name by default', ({ name, path, ignoreStore }) => {
+        const override = backLinkOverrides[name];
+        expect(override.defaultPath).toBe(path);
+        expect(override.ignoreStore).toBe(ignoreStore);
+      });
 
-    it('will go to more from organ donation view decision by default and not ignore store override', () => {
-      const override = backLinkOverrides['organ-donation-view-decision'];
-      expect(override.defaultPath).toBe('/more');
-      expect(override.ignoreStore).toBe(undefined);
-    });
-
-    it('will go to more from patient messaging inbox by default and ignore store override', () => {
-      const override = backLinkOverrides['patient-practice-messaging'];
-      expect(override.defaultPath).toBe('/more');
-      expect(override.ignoreStore).toBe(true);
-    });
-
-    it('will go to patient messaging inbox from patient messaging details by default and ignore store override', () => {
-      const override = backLinkOverrides['patient-practice-messaging-view-details'];
-      expect(override.defaultPath).toBe('/patient-practice-messaging');
-      expect(override.ignoreStore).toBe(true);
-    });
-
-    it('will go to home from switch profile by default and ignore store override', () => {
-      const override = backLinkOverrides['switch-profile'];
-      expect(override.defaultPath).toBe('/');
-      expect(override.ignoreStore).toBe(true);
-    });
-
-    it('will have a default path in each overriding configuration', () => {
-      Object.keys(backLinkOverrides).forEach((key) => {
+      it('will have a default path in each overriding configuration', () => {
+        Object.keys(backLinkOverrides).forEach((key) => {
         expect(backLinkOverrides[key].defaultPath).toBeDefined();
       });
     });
