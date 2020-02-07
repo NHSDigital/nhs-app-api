@@ -10,6 +10,8 @@ import {
   SET_CHOSEN_TYPE,
   CLEAR_SEARCH_JOURNEY,
   SET_ONLINE_ONLY_KNOWN_OPTION,
+  SET_INTERRUPT_BACK_TO,
+  CLEAR_INTERRUPT_BACK_TO,
 } from './mutation-types';
 
 export default {
@@ -51,7 +53,10 @@ export default {
     state.chosenType = null;
     state.onlineOnlyKnownOption = null;
   },
-  [CLEAR_PREVIOUS_PAGE_TO_SEARCH](state) {
-    state.previousPageToSearch = null;
+  [SET_INTERRUPT_BACK_TO](state, data) {
+    state.interruptBackTo = data;
+  },
+  [CLEAR_INTERRUPT_BACK_TO](state) {
+    state.interruptBackTo = null;
   },
 };

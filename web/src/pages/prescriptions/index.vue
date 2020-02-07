@@ -80,13 +80,14 @@ import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import Card from '@/components/widgets/card/Card';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import GenericButton from '@/components/widgets/GenericButton';
+import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 
 const loadData = async (store) => {
   store.dispatch('prescriptions/clear');
   await store.dispatch('prescriptions/load');
 
   if (store.getters['serviceJourneyRules/nominatedPharmacyEnabled']) {
-    store.dispatch('nominatedPharmacy/clearPreviousPageToSearch');
+    store.dispatch('nominatedPharmacy/clearInterruptBackTo');
 
     if (store.state.nominatedPharmacy.hasLoaded === false) {
       store.dispatch('nominatedPharmacy/clear');
@@ -194,15 +195,18 @@ export default {
     onNominatedPharmacyDetailClicked() {
       if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
         this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_INTERRUPT.path, true);
+        this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.PRESCRIPTIONS);
         redirectTo(this, NOMINATED_PHARMACY_INTERRUPT.path);
       } else {
         this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY.path, true);
+        this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_SUMMARY);
         redirectTo(this, NOMINATED_PHARMACY.path);
       }
     },
     onOrderRepeatPrescriptionClicked() {
       const path = this.getContinueButtonPath();
       this.$store.app.$analytics.trackButtonClick(path, true);
+      this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_CHECK);
       redirectTo(this, path);
     },
     getContinueButtonPath() {

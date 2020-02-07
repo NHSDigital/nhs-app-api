@@ -1,7 +1,8 @@
 import { create$T, createStore, mount } from '../../helpers';
 import NominatedPharmacyInterrupt from '@/pages/nominated-pharmacy/interrupt';
-import { NOMINATED_PHARMACY } from '@/lib/routes';
+import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_CHECK, PRESCRIPTIONS } from '@/lib/routes';
 import * as dependency from '@/lib/utils';
+import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 
 const $t = create$T();
 
@@ -96,11 +97,52 @@ describe('nominated pharmacy not found', () => {
       it('will exist', () => {
         expect(backLink.exists()).toBe(true);
       });
+    });
 
-      it('will navigate to nominated pharmacy page when clicked ', () => {
+    describe('back link navigation', () => {
+      beforeEach(() => {
+        $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+        dependency.redirectTo = jest.fn();
+      });
+
+      it('will navigate to nominated pharmacy page when clicked if nominated pharmacy has been set in the store', () => {
+        $store.getters['nominatedPharmacy/getInterruptBackTo'] = InterruptBackTo.NOMINATED_PHARMACY_SUMMARY;
+        wrapper = mountPage();
+        backLink = wrapper.find('#back-link').find('a');
+
         backLink.trigger('click');
         expect(dependency.redirectTo)
           .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path);
+      });
+
+      it('will navigate to prescriptions page when clicked if prescriptions has been set in the store', () => {
+        $store.getters['nominatedPharmacy/getInterruptBackTo'] = InterruptBackTo.PRESCRIPTIONS;
+        wrapper = mountPage();
+        backLink = wrapper.find('#back-link').find('a');
+
+        backLink.trigger('click');
+        expect(dependency.redirectTo)
+          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
+      });
+
+      it('will navigate to prescriptions page when clicked if InterruptBackTo has not been set', () => {
+        $store.getters['nominatedPharmacy/getInterruptBackTo'] = null;
+        wrapper = mountPage();
+        backLink = wrapper.find('#back-link').find('a');
+
+        backLink.trigger('click');
+        expect(dependency.redirectTo)
+          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
+      });
+
+      it('will navigate to check page when clicked if check is set in the store', () => {
+        $store.getters['nominatedPharmacy/getInterruptBackTo'] = InterruptBackTo.NOMINATED_PHARMACY_CHECK;
+        wrapper = mountPage();
+        backLink = wrapper.find('#back-link').find('a');
+
+        backLink.trigger('click');
+        expect(dependency.redirectTo)
+          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHECK.path);
       });
     });
   });

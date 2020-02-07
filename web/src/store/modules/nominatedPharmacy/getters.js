@@ -14,4 +14,7 @@ export default {
   getOnlineOnlyKnownOption(state) {
     return state.onlineOnlyKnownOption;
   },
+  getInterruptBackTo(state) {
+    return state.interruptBackTo;
+  },
 };

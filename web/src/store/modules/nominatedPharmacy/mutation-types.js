@@ -10,6 +10,8 @@ export const CLEAR_SEARCH_JOURNEY = 'CLEAR_SEARCH_JOURNEY';
 export const SET_ONLINE_ONLY_KNOWN_OPTION = 'SET_ONLINE_ONLY_KNOWN_OPTION';
 export const HIGH_STREET_PHARMACY = 'highStreet';
 export const ONLINE_PHARMACY = 'online';
+export const SET_INTERRUPT_BACK_TO = 'SET_INTERRUPT_BACK_TO';
+export const CLEAR_INTERRUPT_BACK_TO = 'CLEAR_INTERRUPT_BACK_TO';
 
 export const initialState = () => ({
   pharmacy: {},
@@ -24,4 +26,5 @@ export const initialState = () => ({
   justUpdated: false,
   chosenType: null,
   onlineOnlyKnownOption: null,
+  interruptBackTo: null,
 });

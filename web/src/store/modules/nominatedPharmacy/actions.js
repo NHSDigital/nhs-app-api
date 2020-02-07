@@ -9,6 +9,8 @@ import {
   SET_CHOSEN_TYPE,
   CLEAR_SEARCH_JOURNEY,
   SET_ONLINE_ONLY_KNOWN_OPTION,
+  SET_INTERRUPT_BACK_TO,
+  CLEAR_INTERRUPT_BACK_TO,
 } from './mutation-types';
 import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 
@@ -71,7 +73,10 @@ export default {
   clearSearchJourney({ commit }) {
     commit(CLEAR_SEARCH_JOURNEY);
   },
-  clearPreviousPageToSearch({ commit }) {
-    commit(CLEAR_PREVIOUS_PAGE_TO_SEARCH);
+  setInterruptBackTo({ commit }, backTo) {
+    commit(SET_INTERRUPT_BACK_TO, backTo);
+  },
+  clearInterruptBackTo({ commit }) {
+    commit(CLEAR_INTERRUPT_BACK_TO);
   },
 };
