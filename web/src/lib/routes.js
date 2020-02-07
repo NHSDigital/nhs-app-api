@@ -892,6 +892,16 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
   },
+  NOMINATED_PHARMACY_DSP_INTERRUPT: {
+    name: 'nominated-pharmacy-dsp-interrupt',
+    path: '/nominated-pharmacy/dsp-interrupt',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+  },
   NOMINATED_PHARMACY_SEARCH_RESULTS: {
     name: 'nominated-pharmacy-results',
     path: '/nominated-pharmacy/results',
@@ -1550,6 +1560,7 @@ export const {
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
   NOMINATED_PHARMACY_CHANGE_SUCCESS,
   NOMINATED_PHARMACY_INTERRUPT,
+  NOMINATED_PHARMACY_DSP_INTERRUPT,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   NOMINATED_PHARMACY_CHECK,
   NOMINATED_PHARMACY_CHOOSE_TYPE,

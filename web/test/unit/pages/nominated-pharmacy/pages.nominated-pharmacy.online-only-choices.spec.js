@@ -2,7 +2,7 @@ import { create$T, createStore, mount } from '../../helpers';
 import NominatedPharmacyOnlineOnlyChoices from '@/pages/nominated-pharmacy/online-only-choices';
 import RadioGroup from '@/components/RadioGroup';
 import {
-  NOMINATED_PHARMACY_CHOOSE_TYPE,
+  NOMINATED_PHARMACY_DSP_INTERRUPT,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
 } from '@/lib/routes';
@@ -118,10 +118,10 @@ describe('nominated pharmacy online only choices page', () => {
           .toEqual('translate_generic.backButton.text');
       });
 
-      it('it will go back to the previous page set in the store', () => {
+      it('it will go back to the dsp interrupt page', () => {
         backLink.trigger('click');
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHOOSE_TYPE.path);
+          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_DSP_INTERRUPT.path);
       });
     });
 

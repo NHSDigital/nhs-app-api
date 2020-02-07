@@ -2,7 +2,7 @@ import { createStore, mount } from '../../helpers';
 import NominatedPharmacyChooseType from '@/pages/nominated-pharmacy/choose-type';
 import RadioGroup from '@/components/RadioGroup';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
-import { NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
+import { NOMINATED_PHARMACY_DSP_INTERRUPT, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
 import * as dependency from '@/lib/utils';
 
 describe('nominated pharmacy choose type page', () => {
@@ -41,8 +41,7 @@ describe('nominated pharmacy choose type page', () => {
     });
 
     it('will use "nominated_pharmacy.chooseType.buttonText" for text', () => {
-      expect(continueButton.text())
-        .toEqual('translate_nominated_pharmacy.chooseType.buttonText');
+      expect(continueButton.text()).toEqual('translate_nominated_pharmacy.chooseType.buttonText');
     });
 
     it('will redirect to the nominated pharmacy search page', () => {
@@ -56,7 +55,7 @@ describe('nominated pharmacy choose type page', () => {
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path);
     });
 
-    it('will redirect to the nominated pharmacy page', () => {
+    it('will redirect to the dsp interrupt page', () => {
       wrapper.vm.selected(PharmacyTypeChoice.ONLINE_PHARMACY);
       continueButton.trigger('click');
       errorComponent = wrapper.find('#errorHeading');
@@ -64,7 +63,7 @@ describe('nominated pharmacy choose type page', () => {
       expect(errorComponent.exists()).toBe(false);
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/setChosenType', PharmacyTypeChoice.ONLINE_PHARMACY);
       expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm,
-        NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path);
+        NOMINATED_PHARMACY_DSP_INTERRUPT.path);
     });
 
     it('will not redirect to next page in flow when no radio button is selected', () => {

@@ -32,7 +32,7 @@
                                :tabindex="-1">
           <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                   id="back-link"
-                                  :path="nominatedPharmacyChooseType"
+                                  :path="dspInterrupt"
                                   :button-text="'generic.backButton.text'"
                                   @clickAndPrevent="backButtonClicked"/>
         </analytics-tracked-tag>
@@ -52,9 +52,9 @@ import MessageList from '@/components/widgets/MessageList';
 import RadioGroup from '@/components/RadioGroup';
 import { redirectTo } from '@/lib/utils';
 import {
-  NOMINATED_PHARMACY_CHOOSE_TYPE,
   NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
+  NOMINATED_PHARMACY_DSP_INTERRUPT,
   PRESCRIPTIONS,
 } from '@/lib/routes';
 
@@ -72,7 +72,7 @@ export default {
   },
   data() {
     return {
-      nominatedPharmacyChooseType: NOMINATED_PHARMACY_CHOOSE_TYPE.path,
+      dspInterrupt: NOMINATED_PHARMACY_DSP_INTERRUPT.path,
       hasTriedToContinue: false,
       onlineOnlyChoice: this.$store.getters['nominatedPharmacy/getOnlineOnlyKnownOption'],
       radioButtons: [
@@ -151,7 +151,7 @@ export default {
       this.onlineOnlyChoice = value;
     },
     backButtonClicked() {
-      redirectTo(this, this.nominatedPharmacyChooseType);
+      redirectTo(this, this.dspInterrupt);
     },
   },
 };

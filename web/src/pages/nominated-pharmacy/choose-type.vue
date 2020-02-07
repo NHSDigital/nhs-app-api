@@ -61,7 +61,7 @@ import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import RadioGroup from '@/components/RadioGroup';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
-import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES, PRESCRIPTIONS } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_INTERRUPT, NOMINATED_PHARMACY_DSP_INTERRUPT, PRESCRIPTIONS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -79,7 +79,7 @@ export default {
     return {
       interruptPath: NOMINATED_PHARMACY_INTERRUPT.path,
       highStreetSearchPath: NOMINATED_PHARMACY_SEARCH.path,
-      onlineOnlyChoicesPath: NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path,
+      dspInterruptPath: NOMINATED_PHARMACY_DSP_INTERRUPT.path,
       hasTriedToContinue: false,
       radioButtons: [
         {
@@ -125,7 +125,7 @@ export default {
       if (this.selectedValue === PharmacyTypeChoice.HIGH_STREET_PHARMACY) {
         redirectTo(this, this.highStreetSearchPath);
       } else {
-        redirectTo(this, this.onlineOnlyChoicesPath);
+        redirectTo(this, this.dspInterruptPath);
       }
     },
     selected(value) {

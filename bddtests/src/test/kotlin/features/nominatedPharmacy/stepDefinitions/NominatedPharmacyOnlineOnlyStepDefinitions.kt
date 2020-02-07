@@ -16,6 +16,7 @@ import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
 import pages.nominatedPharmacy.NominatedPharmacyOnlineOnlyChoicesPage
 import pages.nominatedPharmacy.ConfirmOnlineNominatedPharmacyPage
 import pages.nominatedPharmacy.OnlineNominatedPharmacyChangeSuccessPage
+import pages.nominatedPharmacy.NominatedPharmacyDspInterruptPage
 import pages.text
 import utils.getOrFail
 import utils.set
@@ -33,6 +34,8 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
     private lateinit var nominatedPharmacyOnlineConfirmPage: ConfirmOnlineNominatedPharmacyPage
 
     private lateinit var nominatedPharmacyOnlineOnlyChangeSuccessPage: OnlineNominatedPharmacyChangeSuccessPage
+
+    private lateinit var nominatedPharmacyDspInterruptPage: NominatedPharmacyDspInterruptPage
 
     private lateinit var nominated: OnlineNominatedPharmacyChangeSuccessPage
     @Steps
@@ -179,6 +182,16 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
     @Then("^I click on the choose type continue button$")
     fun iClickOnTheChooseTypeContinueButton() {
         nominatedPharmacyChooseTypePage.continueButton.click()
+    }
+
+    @Then("^I see the dsp interrupt  page is loaded$")
+    fun iSeeDspInterruptPageIsLoaded() {
+        nominatedPharmacyDspInterruptPage.isLoaded()
+    }
+
+    @Then("^I click on the DSP Interrupt continue button$")
+    fun iClickTheDspInterruptContinuePutton() {
+        nominatedPharmacyDspInterruptPage.continueButton.click()
     }
 
     @Then("^I see list of random online pharmacies displayed on the result page$")

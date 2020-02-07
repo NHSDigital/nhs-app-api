@@ -93,6 +93,7 @@ import {
   TESTRESULTID,
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_INTERRUPT,
+  NOMINATED_PHARMACY_DSP_INTERRUPT,
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
   NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH,
   NOMINATED_PHARMACY_SEARCH,
@@ -478,6 +479,11 @@ export default function ({ route, store, app }) {
         route.meta.headerKey = 'pageHeaders.nominatedPharmacyFoundInterrupt';
         route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyFoundInterrupt';
       }
+      break;
+    case NOMINATED_PHARMACY_DSP_INTERRUPT.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.nominatedPharmacyDspInterrupt';
+      route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyDspInterrupt';
       break;
     case NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.name:
       store.dispatch('navigation/setNewMenuItem', 2);

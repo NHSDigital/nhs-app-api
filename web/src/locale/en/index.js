@@ -917,6 +917,9 @@ export default {
       nominatedPharmacyFoundLine2: 'Your new pharmacy can help to check on any outstanding prescriptions for you.',
       continueButton: 'Continue',
     },
+    dspInterrupt: {
+      continueButton: 'Continue',
+    },
   },
   gp_medical_record: {
     testResults: {
@@ -1520,6 +1523,7 @@ export default {
     nominatedPharmacyOnlineOnlySearch: 'Find an online-only pharmacy',
     nominatedPharmacyNotFoundInterrupt: 'The pharmacy you choose is where your prescriptions will be sent',
     nominatedPharmacyFoundInterrupt: 'Any outstanding prescriptions may still arrive at your current nominated pharmacy',
+    nominatedPharmacyDspInterrupt: 'If you nominate an online-only pharmacy, you may still need to register with that pharmacy separately ',
     nominatedPharmacyOnlineOnlySearchNoResults: 'No results found for "{searchQuery}"',
     nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
     dispensingPracticeFound: 'Check the dispensing practice this will be sent to',
@@ -1600,6 +1604,7 @@ export default {
     nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
     nominatedPharmacyNotFoundInterrupt: 'The pharmacy you choose is where your prescriptions will be sent',
     nominatedPharmacyFoundInterrupt: 'Any outstanding prescriptions may still arrive at your current nominated pharmacy',
+    nominatedPharmacyDspInterrupt: 'If you nominate an online-only pharmacy, you may still need to register with that pharmacy separately ',
     nominatedPharmacyOnlineOnlyChoices: 'Is there a specific online-only pharmacy that you want to use?',
     nominatedPharmacyOnlineOnlySearch: 'Find an online-only pharmacy',
     nominatedPharmacyOnlineOnlySearchNoResults: 'No results found for "{searchQuery}"',

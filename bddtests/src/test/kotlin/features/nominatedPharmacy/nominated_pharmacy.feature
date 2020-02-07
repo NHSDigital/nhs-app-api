@@ -57,6 +57,8 @@ Feature: nominated pharmacy journey
     Then I see the choose type page is loaded
     Then I select online pharmacy
     And I click on the choose type continue button
+    Then I see the dsp interrupt  page is loaded
+    And I click on the DSP Interrupt continue button
     Then I see the online choices page loaded
     Then I click the Yes radio button on the online choices page
     And I click on the continue button on the online choices page
@@ -95,6 +97,8 @@ Feature: nominated pharmacy journey
     Then I see the choose type page is loaded
     Then I select online pharmacy
     And I click on the choose type continue button
+    Then I see the dsp interrupt  page is loaded
+    And I click on the DSP Interrupt continue button
     Then I see the online choices page loaded
     Then I click the Yes radio button on the online choices page
     And I click on the continue button on the online choices page
@@ -155,6 +159,8 @@ Feature: nominated pharmacy journey
     Then I see the choose type page is loaded
     Then I select online pharmacy
     And I click on the choose type continue button
+    Then I see the dsp interrupt  page is loaded
+    And I click on the DSP Interrupt continue button
     Then I see the online choices page loaded
     Then I click the Yes radio button on the online choices page
     And I click on the continue button on the online choices page
@@ -358,6 +364,8 @@ Feature: nominated pharmacy journey
     Then I see the choose type page is loaded
     Then I select online pharmacy
     And I click on the choose type continue button
+    Then I see the dsp interrupt  page is loaded
+    And I click on the DSP Interrupt continue button
     Then I see the online choices page loaded
     And I click the No radio button on the online choices page
     Given searching for randomized online pharmacies has results
