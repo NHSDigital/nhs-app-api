@@ -332,3 +332,4 @@ appsettings.Development.json
 coverage.json
 *.trx
 TestResults
+launchSettings.json

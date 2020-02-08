@@ -43,4 +43,6 @@ $(if $(filter-out local,$(3)),\
 $(if $(filter-out local,$(3)),\
 	$(1): export $(2)_DOCKER_TAG=$(3))
 
+$(1): export $(2)=$(3)
+
 endef

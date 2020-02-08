@@ -1,9 +1,13 @@
 #!/bin/bash
 
-IMAGES="WEB PFSAPI CIDAPI SJRCONFIG SJRAPI USERSAPI USERINFOAPI LOGAPI MESSAGESAPI"
+# Change current working directory to be the root, regardless of how this script is invoked
+cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
+
+# shellcheck source=lib/set_env.sh
+source build/lib/set_env.sh
 
 MISSING_IMAGES=0
-for IMAGE in $IMAGES; do
+for IMAGE in "${IMAGE_SETTING_NAMES[@]}"; do
     REGISTRY_VAR="${IMAGE}_DOCKER_REGISTRY"
     REGISTRY=${!REGISTRY_VAR:-local};
 

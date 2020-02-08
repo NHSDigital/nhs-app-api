@@ -60,6 +60,15 @@ function pull_docker_images () {
 }
 
 function start_services_under_test () {
+  if [ -z "$TF_BUILD" ]; then
+    # shellcheck source=../../../build/lib/set_env.sh
+    source ../build/lib/set_env.sh
+    # shellcheck source=../../../build/lib/generate_host_settings.sh
+    source ../build/lib/generate_host_settings.sh
+
+    generate_host_settings
+  fi
+
   if [ "$RUN_LOCAL_BDD" == 1 ]; then
     docker-compose -p "$TRANCHE_TAG" "${DOCKER_COMPOSE_FILES_ARGS[@]}" up
     exit

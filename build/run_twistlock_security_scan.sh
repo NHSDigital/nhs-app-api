@@ -2,7 +2,11 @@
 
 set -e
 
-IMAGES=(nhsonline-web nhsonline-backendpfsapi nhsonline-backendcidapi nhsonline-backendservicejourneyrulesapi nhsonline-backendusersapi nhsonline-backenduserinfoapi nhsonline-backendmessagesapi)
+# Change current working directory to be the root, regardless of how this script is invoked
+cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
+
+# shellcheck source=lib/set_env.sh
+source build/lib/set_env.sh
 
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-local}
 DOCKER_TAG=${DOCKER_TAG:-latest}
@@ -28,13 +32,13 @@ else
 fi
 
 if [ "$DOCKER_REGISTRY" != "local" ]; then
-  for IMAGE in "${IMAGES[@]}"
+  for IMAGE in "${IMAGE_NAMES[@]}"
   do
       docker pull "$DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG"
   done
 fi
 
-for IMAGE in "${IMAGES[@]}"
+for IMAGE in "${IMAGE_NAMES[@]}"
 do
   echo
   echo "Scanning $DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG"
