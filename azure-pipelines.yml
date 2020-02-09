@@ -18,29 +18,27 @@ variables:
   source.tag: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
 
 stages:
-  - template: .azuredevops/templates/initialise-stage.yml
-
   - stage: backend
     displayName: Backend
-    dependsOn: init
+    dependsOn:
     jobs:
       - template: .azuredevops/templates/build-and-test-backend-job.yml
 
   - stage: web
     displayName: Web
-    dependsOn: init
+    dependsOn:
     jobs:
       - template: .azuredevops/templates/build-and-test-web-job.yml
 
   - stage: android
     displayName: Android Client
-    dependsOn: init
+    dependsOn:
     jobs:
       - template: .azuredevops/templates/build-and-test-android-client-job.yml
 
   - stage: ios
     displayName: iOS Client
-    dependsOn: init
+    dependsOn:
     jobs:
       - template: .azuredevops/templates/build-and-test-ios-client-job.yml
 
