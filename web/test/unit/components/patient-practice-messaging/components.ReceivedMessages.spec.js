@@ -1,5 +1,5 @@
 import ReceivedMessages from '@/components/patient-practice-messaging/ReceivedMessages';
-import { mount, createStore } from '../../helpers';
+import { mount, createStore, create$T } from '../../helpers';
 
 const $store = () => (
   createStore({
@@ -40,6 +40,7 @@ describe('Received Messages', () => {
     beforeEach(() => {
       wrapper = mount(ReceivedMessages, {
         $store: $store(),
+        $t: create$T(false),
       });
     });
 
@@ -56,13 +57,13 @@ describe('Received Messages', () => {
     it('will display read message time', () => {
       const dateTime = wrapper.find('#readMessageReplyDateTime0').element.firstChild.data;
       const dateTimeSingleLine = dateTime.replace(/\n|\r/g, '').replace(/  +/g, ' ');
-      expect(dateTimeSingleLine.trim()).toBe('Sent 09 December 2019 at 1:56pm');
+      expect(dateTimeSingleLine.trim()).toBe('Sent 9 December 2019 at 1:56pm');
     });
 
     it('will display unread message time', () => {
       const dateTime = wrapper.find('#unreadMessageReplyDateTime0').element.firstChild.data;
       const dateTimeSingleLine = dateTime.replace(/\n|\r/g, '').replace(/  +/g, ' ');
-      expect(dateTimeSingleLine.trim()).toBe('Sent 09 December 2019 at 1:56pm');
+      expect(dateTimeSingleLine.trim()).toBe('Sent 9 December 2019 at 1:56pm');
     });
 
     it('will display read message content', () => {

@@ -1,6 +1,6 @@
 package features.patientPracticeMessaging.factories
 
-import mocking.data.messaging.MessagingData
+import mocking.data.patientPracticeMessaging.MessagingData
 import mocking.emis.models.PatientPracticeMessagingTypes
 import mocking.emis.patientPracticeMessaging.MessagesResponseModel
 import mocking.emis.patientPracticeMessaging.PatientMessageSummary
@@ -57,8 +57,7 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
     }
 
     override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean){
-        val messages = MessagingData.getDefaultMessagesData(REPLY_COUNT, hasUnread)
-        setUpMessageDataAndStubs(patient, messages)
+        setUpMessageDataAndStubs(patient, hasUnread)
     }
 
     override fun patientSuccessfullySendsAMessage(patient: Patient, createMessageRequest: CreateMessageRequest) {
@@ -74,18 +73,22 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
     }
 
     override fun getExpectedMessages(expectedMessages: List<PatientMessageSummary>): List<ExpectedMessage>{
-        return expectedMessages.map(fun(message): ExpectedMessage {
+        val expectedInboxMessageDates = SerenityHelpers
+                .getValueOrNull<List<String>>(PatientPracticeMessagingTypes.EXPECTED_INBOX_MESSAGE_DATES)
+        return expectedMessages.mapIndexed(fun(index, message): ExpectedMessage {
             return ExpectedMessage(
                     message.messageId,
                     message.subject,
-                    "18 February 2018",
+                    expectedInboxMessageDates!![index],
                     message.recipients.first().name!!,
                     message.hasUnreadReplies)
         })
     }
 
-    private fun setUpMessageDataAndStubs(patient: Patient, messages: MessagesResponseModel) {
+    private fun setUpMessageDataAndStubs(patient: Patient, hasUnread: Boolean) {
+        val messages = MessagingData.getDefaultMessagesData(REPLY_COUNT, hasUnread)
         val recipients = MessagingData.getDefaultMessageRecipients()
+        val messageDetails = MessagingData.getDefaultMessageDetailsWithReplies()
         val createMessageRequest = CreateMessageRequest("Test Results",
                 "When will my test results be ready", recipients.MessageRecipients[0].recipientGuid!!)
 
@@ -93,7 +96,7 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
                 PatientPracticeMessagingTypes.EXPECTED_MESSAGES, getExpectedMessages(messages.messages))
 
         SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingTypes.AVAILABLE_MESSAGE, MessagingData.getMessagesWithReplies())
+                PatientPracticeMessagingTypes.AVAILABLE_MESSAGE, messageDetails)
 
         SerenityHelpers.setSerenityVariableIfNotAlreadySet(
                 PatientPracticeMessagingTypes.AVAILABLE_RECIPIENTS, MessagingData.getDefaultMessageRecipients())
@@ -108,7 +111,7 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         }
         mockingClient.forEmis {
             messaging.viewConversationRequest(patient)
-                    .respondWithSuccess(MessagingData.getMessagesWithReplies())
+                    .respondWithSuccess(messageDetails)
         }
 
         mockingClient.forEmis {
@@ -131,6 +134,6 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
     }
 
     companion object {
-        const val REPLY_COUNT = 3;
+        const val REPLY_COUNT = 3
     }
 }

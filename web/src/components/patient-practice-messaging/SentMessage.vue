@@ -1,29 +1,28 @@
 <template>
-  <ul :v-if="getSentMessage !== undefined"
+  <ul v-if="getSentMessage !== undefined"
       :class="[$style['nhsuk-app-chat'], 'nhsuk-u-margin-bottom-0', 'nhsuk-u-padding-left-0']">
     <li id="sentMessage" :class="$style['nhsuk-panel-group__item']">
       <div :class="$style['nhsuk-panel-sender-container']">
-        <div>
-          <div :class="$style['nhsuk-panel-sender']">
-            <span class="nhsuk-u-font-size-16">You</span>
-          </div>
-          <div id="messageSentPanel"
-               :class="[$style['nhsuk-panel'], 'nhsuk-u-margin-top-0', 'nhsuk-u-padding-2']">
-            <h2 id="messageSubject"
-                class="nhsuk-heading-s nhsuk-u-font-size-19 nhsuk-u-margin-bottom-0">
-              {{ getSentMessage.subject }}</h2>
-            <linkify-content
-              class="panel-content nhsuk-u-font-size-19"
-              :content="getSentMessage.content" tag="p"/>
-          </div>
+        <div :class="$style['nhsuk-panel-sender']">
+          <span class="nhsuk-u-font-size-16">
+            {{ $t('patient_practice_messaging.view_details.you') }}
+          </span>
+        </div>
+        <div id="messageSentPanel"
+             :class="[$style['nhsuk-panel'], 'nhsuk-u-margin-top-0', 'nhsuk-u-padding-2']">
+          <h2 id="messageSubject"
+              class="nhsuk-heading-s nhsuk-u-font-size-19 nhsuk-u-margin-bottom-0">
+            {{ getSentMessage.subject }}</h2>
+          <linkify-content class="panel-content nhsuk-u-font-size-19"
+                           :content="getSentMessage.content" tag="p"/>
         </div>
         <div>
-          <time id="messageSentDateTime"
-                class="nhsuk-u-font-size-16"
-                :datetime="getSentMessage.sentDateTime | formatDate('YYYY-MM-DD h:mma')">
-            Sent {{ getSentMessage.sentDateTime | formatDate('DD MMMM YYYY') }}
-            at {{ getSentMessage.sentDateTime | formatDate('h:mma') }}
-          </time>
+          <p id="messageSentDateTime"
+             :class="[$style.messageSentDateTime,
+                      'nhsuk-u-font-size-16',
+                      'nhsuk-u-margin-bottom-0']">
+            {{ formattedTime }}
+          </p>
         </div>
       </div>
     </li>
@@ -31,6 +30,7 @@
 </template>
 <script>
 import LinkifyContent from '@/components/widgets/LinkifyContent';
+import { formatIndividualMessageTime } from '@/lib/utils';
 
 export default {
   name: 'SentMessage',
@@ -40,12 +40,12 @@ export default {
       return this.$store.state.patientPracticeMessaging
         .selectedMessageDetails.messageDetails;
     },
+    formattedTime() {
+      return formatIndividualMessageTime(this.getSentMessage.sentDateTime, this.$t.bind(this));
+    },
   },
 };
 </script>
-<style lang="scss">
-</style>
-
 <style module lang="scss" scoped>
   @import '~nhsuk-frontend/packages/core/settings/all';
   @import '~nhsuk-frontend/packages/core/tools/all';
@@ -73,6 +73,7 @@ export default {
       float: right;
     }
   }
+
   .nhsuk-app-chat {
     list-style-type: none;
 
@@ -81,9 +82,8 @@ export default {
     }
   }
 
-  time {
+  .messageSentDateTime {
     text-align: right;
     float: right;
   }
-
 </style>

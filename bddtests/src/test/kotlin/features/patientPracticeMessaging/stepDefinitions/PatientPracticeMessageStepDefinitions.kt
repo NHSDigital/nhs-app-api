@@ -250,17 +250,17 @@ open class PatientPracticeMessageStepDefinitions {
         patientPracticeMessagingContactYourGpPage.assertCareCardContent(expectedCareCardContent)
     }
 
+    @Then("^the patient to practice inbox page is displayed$")
+    fun thePatientToPracticePageisDisplayed() {
+        patientPracticeMessagingPage.assertDisplayed()
+    }
+
     @Then("^I see a list of patient practice messages$")
     fun iSeeAListOfPatientPracticeMessages() {
         patientPracticeMessagingPage
                 .assertCorrectMessagesDisplayed(
                         SerenityHelpers.getValueOrNull<List<ExpectedMessage>>(
                                 PatientPracticeMessagingTypes.EXPECTED_MESSAGES)!!)
-    }
-
-    @Then("^the patient to practice inbox page is displayed$")
-    fun thePatientToPracticePageisDisplayed() {
-        patientPracticeMessagingPage.assertDisplayed()
     }
 
     @Then("^I see a message indicating that I have no patient practice messages$")
@@ -321,6 +321,12 @@ open class PatientPracticeMessageStepDefinitions {
         val message = SerenityHelpers.getValueOrNull<MessageResponseModel>(
                 PatientPracticeMessagingTypes.SELECTED_MESSAGE)!!.Message
         val replies = message.messageReplies
+        val expectedSentMessageDate = SerenityHelpers.getValueOrNull<String>(
+                PatientPracticeMessagingTypes.EXPECTED_MESSAGE_SENT_DATE)!!
+        val expectedReadMessageReplyDates = SerenityHelpers.getValueOrNull<List<String>>(
+                PatientPracticeMessagingTypes.EXPECTED_READ_MESSAGE_REPLY_DATES)
+        val expectedUnreadMessageReplyDates = SerenityHelpers.getValueOrNull<List<String>>(
+                PatientPracticeMessagingTypes.EXPECTED_UNREAD_MESSAGE_REPLY_DATES)
 
         val unreadReplies = mutableListOf<MessageReply>()
         val readReplies = mutableListOf<MessageReply>()
@@ -329,13 +335,13 @@ open class PatientPracticeMessageStepDefinitions {
         patientPracticeMessagingDetailsPage.assertReadRepliesCorrect(readReplies)
         patientPracticeMessagingDetailsPage.assertUnreadRepliesCorrect(unreadReplies)
         patientPracticeMessagingDetailsPage.assertSentMessageCorrect(message.content)
-        patientPracticeMessagingDetailsPage.assertSentDateTimeCorrect()
+        patientPracticeMessagingDetailsPage.assertSentDateTimeCorrect(expectedSentMessageDate)
         patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(message.subject)
         if (unreadReplies.count() > 1) {
-            patientPracticeMessagingDetailsPage.assertUnreadReceivedDateTimeCorrect()
+            patientPracticeMessagingDetailsPage.assertReceivedDateTimesCorrect(expectedUnreadMessageReplyDates!!, false)
             patientPracticeMessagingDetailsPage.assertUnreadDividerIsOnSceen()
         } else {
-            patientPracticeMessagingDetailsPage.assertReadReceivedDateTimeCorrect()
+            patientPracticeMessagingDetailsPage.assertReceivedDateTimesCorrect(expectedReadMessageReplyDates!!, true)
         }
     }
 

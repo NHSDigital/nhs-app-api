@@ -1,4 +1,5 @@
 import get from 'lodash/fp/get';
+import capitalize from 'lodash/fp/capitalize';
 import isEqual from 'lodash/fp/isEqual';
 import moment from 'moment-timezone';
 
@@ -23,6 +24,62 @@ export const isEmptyArray = array => (Array.isArray(array) && array.length === 0
 export const isFalsy = value => !(value && value !== 'false');
 
 export const isTruthy = value => !isFalsy(value);
+
+const get12HourTimeFormat = (dateTime, $t, capitaliseOutput = false) => {
+  let localeValue;
+
+  if (moment.isMoment(dateTime)) {
+    const hours = dateTime.hours();
+    const minutes = dateTime.minutes();
+
+    if (minutes === 0) {
+      if (hours === 12) {
+        localeValue = $t('messageDateTimeFormats.midday');
+      } else if (hours === 0) {
+        localeValue = $t('messageDateTimeFormats.midnight');
+      }
+    }
+
+    if (capitaliseOutput) {
+      localeValue = capitalize(localeValue);
+    }
+  }
+
+  return localeValue
+    ? `[${localeValue}]`
+    : 'h:mma';
+};
+
+export const formatInboxMessageTime = (inboxMessageTime, $t) => {
+  const inboxMessageMoment = moment(inboxMessageTime);
+
+  const formatConfig = {
+    sameDay: get12HourTimeFormat(inboxMessageMoment, $t, true),
+    lastDay: `[${$t('messageDateTimeFormats.yesterday')}]`,
+    lastWeek: 'dddd',
+    sameElse: 'D MMMM YYYY',
+  };
+
+  return inboxMessageMoment.calendar(moment.tz('Europe/London'), formatConfig);
+};
+
+export const formatIndividualMessageTime = (messageTime, $t) => {
+  const messageMoment = moment(messageTime);
+
+  const localeParams = {
+    dateFormat: 'D MMMM YYYY',
+    timeFormat: get12HourTimeFormat(messageMoment, $t),
+  };
+
+  const formatConfig = {
+    sameDay: $t('messageDateTimeFormats.sentAtTimeTodayFormat', localeParams),
+    lastDay: $t('messageDateTimeFormats.sentAtTimeYesterdayFormat', localeParams),
+    lastWeek: $t('messageDateTimeFormats.sentDateAndTimeFormat', localeParams),
+    sameElse: $t('messageDateTimeFormats.sentDateAndTimeFormat', localeParams),
+  };
+
+  return messageMoment.calendar(moment.tz('Europe/London'), formatConfig);
+};
 
 export const key = {
   ArrowDown: 'ArrowDown',

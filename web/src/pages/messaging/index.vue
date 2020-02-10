@@ -17,6 +17,7 @@
                          :href="generateMessageUrl(senderMessage.sender)"
                          :list-index="messageIndex"
                          :has-unread-messages="isUnread(senderMessage)"
+                         date-format="DD/MM/YYYY"
                          @click="goToMessages(senderMessage.sender)"/>
       </li>
     </ul>

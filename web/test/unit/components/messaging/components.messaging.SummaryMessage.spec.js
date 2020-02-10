@@ -1,5 +1,10 @@
 import SummaryMessage from '@/components/messaging/SummaryMessage';
 import { createRouter, createStore, mount } from '../../helpers';
+import { formatInboxMessageTime } from '@/lib/utils';
+import { formatDate } from '@/plugins/filters';
+
+jest.mock('@/lib/utils');
+jest.mock('@/plugins/filters');
 
 describe('summary message', () => {
   const dateTimeClass = 'nhs-app-message__date';
@@ -15,7 +20,11 @@ describe('summary message', () => {
   let $store;
   let wrapper;
 
-  const mountSummaryMessage = ({ unreadCount = 0, hasUnreadMessages = false } = {}) => mount(
+  const mountSummaryMessage = ({
+    unreadCount = 0,
+    hasUnreadMessages = false,
+    dateFormat = undefined,
+  } = {}) => mount(
     SummaryMessage, {
       $router,
       $store,
@@ -29,6 +38,7 @@ describe('summary message', () => {
         title,
         subTitle,
         dateTime,
+        dateFormat,
         unreadCount,
         hasUnreadMessages,
         listIndex,
@@ -40,10 +50,10 @@ describe('summary message', () => {
   beforeEach(() => {
     $router = createRouter();
     $store = createStore();
-    wrapper = mountSummaryMessage();
   });
 
   it('will set the href on the root element', () => {
+    wrapper = mountSummaryMessage();
     expect(wrapper.attributes().href).toContain(href);
   });
 
@@ -90,19 +100,39 @@ describe('summary message', () => {
   });
 
   describe('dateTime', () => {
-    let sentTime;
+    it('will format dateTime using formattedInboxMessageTime util if dateFormat not given', () => {
+      const expectedFormattedTime = 'Sent 14 September 2019 at 2:15am';
+      formatInboxMessageTime.mockImplementation(date => (
+        date === dateTime
+          ? expectedFormattedTime
+          : ''
+      ));
 
-    beforeEach(() => {
-      sentTime = wrapper.find(`.${dateTimeClass}`);
+      wrapper = mountSummaryMessage();
+      const sentTime = wrapper.find(`.${dateTimeClass}`);
+
+      expect(sentTime.text()).toBe(expectedFormattedTime);
     });
 
-    it('will format sent time to `DD/MM/YYYY` london time', () => {
-      expect(sentTime.text()).toBe('14/09/2019');
+    it('will format dateTime using provided dateFormat if given', () => {
+      const expectedFormattedTime = '14/09/2019';
+      const dateFormat = 'DD/MM/YYYY';
+      formatDate.mockImplementation(date => (
+        date === dateTime
+          ? expectedFormattedTime
+          : ''
+      ));
+
+      wrapper = mountSummaryMessage({ dateFormat });
+      const sentTime = wrapper.find(`.${dateTimeClass}`);
+
+      expect(sentTime.text()).toBe(expectedFormattedTime);
     });
   });
 
   describe('click', () => {
     beforeEach(() => {
+      wrapper = mountSummaryMessage();
       wrapper.trigger('click');
     });
 

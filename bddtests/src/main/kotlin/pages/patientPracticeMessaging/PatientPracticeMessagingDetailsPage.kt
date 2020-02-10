@@ -68,31 +68,27 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
         return assert(pageDivider.isVisible)
     }
 
-    fun assertSentDateTimeCorrect(){
+    fun assertSentDateTimeCorrect(expectedSentMessageDate: String){
         val sentDateTimeMessage =  HybridPageElement(
                 webDesktopLocator = "//*[@id='messageSentDateTime']",
                 androidLocator = null,
                 page = this)
 
-        return assertEquals(sentDateTimeMessage.text, "Sent 05 December 2019 at 1:39pm")
+        return assertEquals(expectedSentMessageDate, sentDateTimeMessage.text)
     }
 
-    fun assertReadReceivedDateTimeCorrect(){
-        val sentDateTimeMessage =  HybridPageElement(
-                webDesktopLocator = "//*[@id='readMessageReplyDateTime0']",
-                androidLocator = null,
-                page = this)
-
-        return assertEquals(sentDateTimeMessage.text, "Sent 05 December 2019 at 1:39pm")
+    private fun getReceivedDateTimeMessage(index: Int, read: Boolean): HybridPageElement {
+        val idPrefix = if (read) "readMessageReplyDateTime" else "unreadMessageReplyDateTime"
+        return HybridPageElement(
+            webDesktopLocator = "//*[@id='$idPrefix$index']",
+            androidLocator = null,
+            page = this)
     }
 
-    fun assertUnreadReceivedDateTimeCorrect(){
-        val sentDateTimeMessage =  HybridPageElement(
-                webDesktopLocator = "//*[@id='unreadMessageReplyDateTime0']",
-                androidLocator = null,
-                page = this)
-
-        return assertEquals(sentDateTimeMessage.text, "Sent 05 December 2019 at 1:39pm")
+    fun assertReceivedDateTimesCorrect(expectedDates: List<String>, read: Boolean){
+        expectedDates.forEachIndexed(fun (index, date) {
+            assertEquals(date, getReceivedDateTimeMessage(index, read).text)
+        })
     }
 
     private fun setReadMessageReplyId(replyId: Int) {

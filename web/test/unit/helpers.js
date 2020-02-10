@@ -17,12 +17,19 @@ import {
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-export const create$T = () => jest
+export const create$T = (stubbed = true) => jest
   .fn()
-  .mockImplementation((key) => {
-    const value = get(key)(_locale);
+  .mockImplementation((key, formatParams) => {
+    let value = get(key)(_locale);
     if (isString(value) || value === undefined) {
-      return `translate_${key}`;
+      if (stubbed) {
+        return `translate_${key}`;
+      }
+      if (formatParams) {
+        Object.keys(formatParams).forEach((formatParam) => {
+          value = value.replace(`{${formatParam}}`, formatParams[formatParam]);
+        });
+      }
     }
 
     return value;

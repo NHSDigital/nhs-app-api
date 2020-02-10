@@ -1,7 +1,7 @@
 package mocking.stubs.patientPracticeMessaging
 
 import mocking.MockingClient
-import mocking.data.messaging.MessagingData
+import mocking.data.patientPracticeMessaging.MessagingData
 import mocking.emis.patientPracticeMessaging.EmisMessageReadStatusUpdateBuilder
 import mocking.stubs.EmisStubsPatientFactory
 import mocking.stubs.InputResponse

@@ -42,7 +42,7 @@ class PatientPracticeMessagingPage: HybridPageObject() {
             assertEquals(getMessageDate().text, expectedMessage.lastMessageDateTime)
             assertEquals(getMessageSubject().text, expectedMessage.subject)
             if (expectedMessage.hasUnreadReplies) {
-                assert(getUnreadIndicator(--expectedMessage.id).isVisible)
+                assert(getUnreadIndicator(expectedMessage.id).isVisible)
             }
         }
     }

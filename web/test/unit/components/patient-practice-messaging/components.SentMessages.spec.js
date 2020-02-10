@@ -1,5 +1,5 @@
 import SentMessage from '@/components/patient-practice-messaging/SentMessage';
-import { mount, createStore } from '../../helpers';
+import { mount, createStore, create$T } from '../../helpers';
 
 const createPropsData = () => ({
 });
@@ -34,6 +34,7 @@ describe('Sent Message', () => {
       wrapper = mount(SentMessage, {
         $store: $store(),
         propsData: createPropsData(),
+        $t: create$T(false),
       });
     });
 
@@ -45,7 +46,7 @@ describe('Sent Message', () => {
     it('will display time', () => {
       const dateTime = wrapper.find('#messageSentDateTime').element.firstChild.data;
       const dateTimeSingleLine = dateTime.replace(/\n|\r/g, '').replace(/  +/g, ' ');
-      expect(dateTimeSingleLine.trim()).toBe('Sent 09 December 2019 at 1:56pm');
+      expect(dateTimeSingleLine.trim()).toBe('Sent 9 December 2019 at 1:56pm');
     });
 
     it('will display message content', () => {

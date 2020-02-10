@@ -1283,6 +1283,7 @@ export default {
       },
     },
     view_details: {
+      you: 'You',
       unreadMessages: 'Unread messages',
       unreadMessage: 'Unread message',
       deleteMenuItemText: 'Delete conversation',
@@ -2480,5 +2481,13 @@ export default {
     listItem2: 'you’ve been in contact with someone with a confirmed case of coronavirus',
     paragraph2: 'Call NHS 111 instead.',
     paragraph3: 'You can read more about coronavirus on NHS.UK',
+  },
+  messageDateTimeFormats: {
+    midday: 'midday',
+    midnight: 'midnight',
+    yesterday: 'Yesterday',
+    sentDateAndTimeFormat: '[Sent ]{dateFormat}[ at ]{timeFormat}',
+    sentAtTimeTodayFormat: '[Sent today at ]{timeFormat}',
+    sentAtTimeYesterdayFormat: '[Sent yesterday at ]{timeFormat}',
   },
 };

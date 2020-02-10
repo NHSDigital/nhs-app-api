@@ -12,19 +12,18 @@
       <linkify-content class="panel-content nhsuk-u-font-size-19"
                        :content="message.replyContent" tag="p"/>
     </div>
-    <time :id="idPrefix+`MessageReplyDateTime`+index"
-          class="nhsuk-u-font-size-16"
-          :datetime="message.sentDateTime | formatDate('YYYY-MM-DD h:mma')">
-      Sent {{ message.sentDateTime | formatDate('DD MMMM YYYY') }}
-      at {{ message.sentDateTime | formatDate('h:mma') }}
-    </time>
+    <p :id="idPrefix+`MessageReplyDateTime`+index"
+       class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-0">
+      {{ formattedTime }}
+    </p>
   </div>
 </template>
 <script>
 import LinkifyContent from '@/components/widgets/LinkifyContent';
+import { formatIndividualMessageTime } from '@/lib/utils';
 
 export default {
-  name: 'MessagePanel',
+  name: 'ReceivedMessagePanel',
   components: { LinkifyContent },
   props: {
     index: {
@@ -40,6 +39,11 @@ export default {
       required: true,
     },
   },
+  computed: {
+    formattedTime() {
+      return formatIndividualMessageTime(this.message.sentDateTime, this.$t.bind(this));
+    },
+  },
 };
 </script>
 
@@ -53,12 +57,11 @@ export default {
   @import "../../style/colours";
 
   .nhsuk-panel {
-      border: 1px solid $border_grey;
-      width: fit-content;
+    border: 1px solid $border_grey;
+    width: fit-content;
   }
 
   .nhsuk-panel-sender {
-      text-align: left;
+    text-align: left;
   }
-
 </style>

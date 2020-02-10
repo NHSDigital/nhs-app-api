@@ -138,7 +138,7 @@ describe('practice patient messaging inbox', () => {
       expect(summaryMessage.vm.$props.title).toEqual('Dr NHS Online');
       expect(summaryMessage.vm.$props.subTitle).toEqual('This is the message subject');
       expect(summaryMessage.vm.$props.dateTime).toEqual('2020-01-01T13:37:00.137Z');
-      expect(summaryMessage.vm.$props.dateFormat).toEqual('D MMMM YYYY');
+      expect(summaryMessage.vm.$props.dateFormat).toBeUndefined();
       expect(summaryMessage.vm.$props.ariaLabel).toEqual('translate_im01.summary.hidden');
       expect(summaryMessage.vm.$props.hasUnreadMessages).toBe(true);
     });

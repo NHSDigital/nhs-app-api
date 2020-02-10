@@ -20,7 +20,6 @@
                              :aria-label="getMessageLabel(summary)"
                              :has-unread-messages="summary.hasUnreadReplies"
                              :list-index="index"
-                             date-format="D MMMM YYYY"
                              @click="goToMessageDetails(summary.id, summary.recipient)"/>
           </li>
         </ul>

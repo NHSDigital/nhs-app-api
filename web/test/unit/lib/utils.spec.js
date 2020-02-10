@@ -1,7 +1,16 @@
 import each from 'jest-each';
 import mockdate from 'mockdate';
 import moment from 'moment';
-import { isFalsy, isTruthy, redirectTo, readableBytes, stripHtml } from '@/lib/utils';
+import {
+  isFalsy,
+  isTruthy,
+  redirectTo,
+  readableBytes,
+  stripHtml,
+  formatInboxMessageTime,
+  formatIndividualMessageTime,
+} from '@/lib/utils';
+import { create$T } from '../helpers';
 
 let self;
 
@@ -193,6 +202,57 @@ describe('util library', () => {
 
     it('will return sanitized content', () => {
       expect(result).toBe('Sample content with html');
+    });
+  });
+
+  describe('message date time formatters', () => {
+    const $t = create$T(false);
+
+    beforeEach(() => {
+      mockdate.set('2020-01-28T13:11:00.000Z');
+    });
+
+    describe('formatInboxMessageTime', () => {
+      each([
+        { messageDate: '2020-01-28T11:23:01.000Z', expectedFormattedDate: '11:23am' },
+        { messageDate: '2020-01-28T12:00:01.000Z', expectedFormattedDate: 'Midday' },
+        { messageDate: '2020-01-28T00:00:01.000Z', expectedFormattedDate: 'Midnight' },
+        { messageDate: '2020-01-27T11:23:01.000Z', expectedFormattedDate: 'Yesterday' },
+        { messageDate: '2020-01-26T11:23:01.000Z', expectedFormattedDate: 'Sunday' },
+        { messageDate: '2020-01-22T11:23:01.000Z', expectedFormattedDate: 'Wednesday' },
+        { messageDate: '2020-01-21T11:23:01.000Z', expectedFormattedDate: '21 January 2020' },
+      ]).it('will format the dates appropriately for displaying in the inbox',
+        ({ messageDate, expectedFormattedDate }) => {
+          expect(formatInboxMessageTime(messageDate, $t)).toEqual(expectedFormattedDate);
+        });
+    });
+
+    describe('formatIndividualMessageTime', () => {
+      each([{
+        messageDate: '2020-01-28T11:23:01.000Z',
+        expectedFormattedDate: 'Sent today at 11:23am',
+      }, {
+        messageDate: '2020-01-28T12:00:01.000Z',
+        expectedFormattedDate: 'Sent today at midday',
+      }, {
+        messageDate: '2020-01-28T00:00:01.000Z',
+        expectedFormattedDate: 'Sent today at midnight',
+      }, {
+        messageDate: '2020-01-27T11:23:01.000Z',
+        expectedFormattedDate: 'Sent yesterday at 11:23am',
+      }, {
+        messageDate: '2020-01-26T14:12:01.000Z',
+        expectedFormattedDate: 'Sent 26 January 2020 at 2:12pm',
+      }, {
+        messageDate: '2020-01-22T12:00:01.000Z',
+        expectedFormattedDate: 'Sent 22 January 2020 at midday',
+      }, {
+        messageDate: '2020-01-21T00:00:01.000Z',
+        expectedFormattedDate: 'Sent 21 January 2020 at midnight',
+      }]).it('will format the dates appropriately for displaying beneath an individual message',
+        ({ messageDate, expectedFormattedDate }) => {
+          expect(formatIndividualMessageTime(messageDate, $t)).toEqual(expectedFormattedDate);
+        });
     });
   });
 });

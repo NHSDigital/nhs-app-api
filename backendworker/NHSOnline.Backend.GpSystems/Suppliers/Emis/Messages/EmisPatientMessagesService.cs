@@ -94,7 +94,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
 
             try
             {
-
                 var emisRequestParameters = new EmisRequestParameters((EmisUserSession) gpUserSession);
 
                 var putRequestBody = new UpdateMessageReadStatusRequest
