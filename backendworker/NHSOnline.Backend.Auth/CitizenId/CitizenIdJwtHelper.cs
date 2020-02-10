@@ -27,11 +27,6 @@ namespace NHSOnline.Backend.Auth.CitizenId
             ILogger<CitizenIdJwtHelper> logger, 
             ICitizenIdConfig config)
         {
-            if (config.AuthenticationType != CitizenIdAuthenticationType.Jwt)
-            {
-                return;
-            }
-            
             _logger = logger;
             _config = config;
             

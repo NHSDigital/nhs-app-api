@@ -37,7 +37,6 @@
         "MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION": "messages",
         "CITIZEN_ID_BASE_URL": "https://auth.ext.signin.nhs.uk/",
         "CITIZEN_ID_CLIENT_ID": "nhs-online",
-        "CITIZEN_ID_CLIENT_SECRET": "secret",
         "CITIZEN_ID_JWT_ISSUER": "https://auth.ext.signin.nhs.uk"
       }
     }
