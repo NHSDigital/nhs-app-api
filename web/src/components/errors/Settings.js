@@ -27,12 +27,17 @@ import {
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
   PATIENT_PRACTICE_MESSAGING,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+  PATIENT_PRACTICE_MESSAGING_URGENCY,
+  PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
+  PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
+  PATIENT_PRACTICE_MESSAGING_CREATE,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
   TESTRESULTID,
   TESTRESULTS,
   TESTRESULTSDETAIL,
+  MORE,
 } from '@/lib/routes';
 
 export default {
@@ -186,11 +191,41 @@ export default {
       action: {
         400: 'patientPracticeMessaging/clearErrorsAndLoadMessages',
       },
+      redirectUrl: {
+        default: MORE.path,
+      },
     },
     {
       route: PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path,
       action: {
         400: 'patientPracticeMessaging/clearErrorsAndLoadDetails',
+      },
+      redirectUrl: {
+        default: MORE.path,
+      },
+    },
+    {
+      route: PATIENT_PRACTICE_MESSAGING_URGENCY.path,
+      redirectUrl: {
+        default: MORE.path,
+      },
+    },
+    {
+      route: PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP.path,
+      redirectUrl: {
+        default: MORE.path,
+      },
+    },
+    {
+      route: PATIENT_PRACTICE_MESSAGING_RECIPIENTS.path,
+      redirectUrl: {
+        default: MORE.path,
+      },
+    },
+    {
+      route: PATIENT_PRACTICE_MESSAGING_CREATE.path,
+      redirectUrl: {
+        default: MORE.path,
       },
     },
     {
