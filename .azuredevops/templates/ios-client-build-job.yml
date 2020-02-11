@@ -1,0 +1,71 @@
+parameters:
+  - name: name
+    type: string
+    default: 'target'
+  - name: condition
+    type: string
+    default: 'succeeded()'
+  - name: target
+    type: string
+    default: $(ios.target)
+  - name: certSecureFile
+    type: string
+    default: 'iOSDevelopmentCertificate.p12'
+  - name: certPwd
+    type: string
+    default: '$(ios.development.certificate.password)'
+  - name: scheme
+    type: string
+    default: 'NHSOnline Dev'
+  - name: provProfileSecureFile
+    type: string
+    default: 'iOSDevelopment$(ios.target).mobileprovision'
+  - name: provisioningProfileName
+    type: string
+    default: 'NHS App Dev $(ios.target)'
+
+jobs:
+  - job: build_ios_${{ parameters.name }}
+    displayName: Build ${{ parameters.name }}
+    dependsOn:
+      - unit_test_ios
+    condition: ${{ parameters.condition }}
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+      - template: set-branch-tag-steps.yml
+      - template: ios-install-cocoapods-steps.yml
+
+      - task: InstallAppleCertificate@2
+        displayName: 'Install Dev Apple certificate'
+        inputs:
+          certSecureFile: '${{ parameters.certSecureFile }}'
+          certPwd: '${{ parameters.certPwd }}'
+
+      - task: InstallAppleProvisioningProfile@1
+        displayName: 'Install Development provisioning profile'
+        inputs:
+          provProfileSecureFile: '${{ parameters.provProfileSecureFile }}'
+          removeProfile: true
+
+      - task: Xcode@5
+        displayName: 'Build ${{ parameters.target }}'
+        inputs:
+          xcodeDeveloperDir: /Applications/Xcode_10.1.app
+          xcWorkspacePath: ios/NHSOnline/NHSOnline.xcworkspace
+          sdk: iphoneos
+          scheme: '${{ parameters.scheme }}'
+          configuration: ${{ parameters.target }}
+          actions: build
+          packageApp: true
+          exportPath: ipa/${{ parameters.target }}
+          signingOption: manual
+          signingIdentity: $(APPLE_CERTIFICATE_SIGNING_IDENTITY)
+          provisioningProfileName: '${{ parameters.provisioningProfileName }}'
+          provisioningProfileUuid: $(APPLE_PROV_PROFILE_UUID)
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publish iOS package files
+        inputs:
+          pathToPublish: '$(Build.SourcesDirectory)/ipa'
+          artifactName: iOS Package Files

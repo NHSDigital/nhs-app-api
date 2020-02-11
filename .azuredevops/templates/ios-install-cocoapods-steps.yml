@@ -1,0 +1,15 @@
+steps:
+  - task: Bash@3
+    displayName: Configure git authentication
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+    inputs:
+      targetType: 'inline'
+      script: |
+        git config --global 'http.https://nhsapp@dev.azure.com/.extraheader' "AUTHORIZATION: bearer $SYSTEM_ACCESSTOKEN"
+
+  - task: CocoaPods@0
+    displayName: Install CocoaPods
+    inputs:
+      forceRepoUpdate: false
+      projectDirectory: $(Build.SourcesDirectory)/ios/NHSOnline

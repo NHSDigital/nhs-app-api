@@ -40,7 +40,41 @@ stages:
     displayName: iOS Client
     dependsOn:
     jobs:
-      - template: .azuredevops/templates/build-and-test-ios-client-job.yml
+      - template: .azuredevops/templates/ios-client-test-job.yml
+
+      - template: .azuredevops/templates/ios-client-build-job.yml
+        parameters:
+          name: Client
+
+      - template: .azuredevops/templates/ios-client-build-job.yml
+        parameters:
+          name: Preview
+          condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), ne(variables['android.target'], 'previewRelease'))
+          target: Preview
+          provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
+          provisioningProfileName: 'NHS App Dev Preview'
+
+      - template: .azuredevops/templates/ios-client-build-job.yml
+        parameters:
+          name: Demo
+          condition: and(succeeded(), eq(variables['source.tag'], 'True'))
+          target: Demo
+          certSecureFile: iOSProductionCertificate.p12
+          certPwd: '$(ios.production.certificate.password)'
+          scheme: 'NHSOnline Demo'
+          provProfileSecureFile: iOSDemo.mobileprovision
+          provisioningProfileName: 'NHS App Demo Distribution'
+
+      - template: .azuredevops/templates/ios-client-build-job.yml
+        parameters:
+          name: Release
+          condition: and(succeeded(), eq(variables['source.tag'], 'True'))
+          target: Production
+          certSecureFile: iOSProductionCertificate.p12
+          certPwd: '$(ios.production.certificate.password)'
+          scheme: 'NHSOnline'
+          provProfileSecureFile: iOSProduction.mobileprovision
+          provisioningProfileName: 'NHS App Distribution'
 
   - stage: generate_code_coverage
     displayName: Generate Code Coverage

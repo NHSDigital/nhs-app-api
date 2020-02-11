@@ -1,25 +1,11 @@
 jobs:
-  - job: build_and_unit_test_ios
-    displayName: Build and Unit Test
+  - job: unit_test_ios
+    displayName: Unit Test
     pool:
       vmImage: 'macos-latest'
     steps:
       - template: set-branch-tag-steps.yml
-
-      - task: Bash@3
-        displayName: Configure git authentication
-        env:
-          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-        inputs:
-          targetType: 'inline'
-          script: |
-            git config --global 'http.https://nhsapp@dev.azure.com/.extraheader' "AUTHORIZATION: bearer $SYSTEM_ACCESSTOKEN"
-
-      - task: CocoaPods@0
-        displayName: Install CocoaPods
-        inputs:
-          forceRepoUpdate: false
-          projectDirectory: $(Build.SourcesDirectory)/ios/NHSOnline
+      - template: ios-install-cocoapods-steps.yml
 
       - task: Xcode@5
         displayName: 'Build and Run Unit Tests'
@@ -74,37 +60,3 @@ jobs:
         inputs:
           pathToPublish: 'ios/NHSOnline/reports/coverage'
           artifactName: 'coverage'
-
-      - task: InstallAppleCertificate@2
-        displayName: 'Install Dev Apple certificate'
-        inputs:
-          certSecureFile: 'iOSDevelopmentCertificate.p12'
-          certPwd: '$(ios.development.certificate.password)'
-
-      - task: InstallAppleProvisioningProfile@1
-        displayName: 'Install Development provisioning profile'
-        inputs:
-          provProfileSecureFile: 'iOSDevelopment$(ios.target).mobileprovision'
-          removeProfile: true
-
-      - task: Xcode@5
-        displayName: 'Build $(ios.target)'
-        inputs:
-          xcodeDeveloperDir: /Applications/Xcode_10.1.app
-          xcWorkspacePath: ios/NHSOnline/NHSOnline.xcworkspace
-          sdk: iphoneos
-          scheme: NHSOnline Dev
-          configuration: $(ios.target)
-          actions: build
-          packageApp: true
-          exportPath: ipa/$(ios.target)
-          signingOption: manual
-          signingIdentity: $(APPLE_CERTIFICATE_SIGNING_IDENTITY)
-          provisioningProfileName: 'NHS App Dev $(ios.target)'
-          provisioningProfileUuid: $(APPLE_PROV_PROFILE_UUID)
-
-      - task: PublishBuildArtifacts@1
-        displayName: Publish iOS package files
-        inputs:
-          pathToPublish: '$(Build.SourcesDirectory)/ipa'
-          artifactName: iOS Package Files
