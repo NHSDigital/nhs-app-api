@@ -16,12 +16,12 @@
         </div>
       </div>
     </div>
+    <glossary v-if="!showError"/>
     <desktopGenericBackLink
       v-if="!$store.state.device.isNativeApp"
       :path="backPath"
       :button-text="'my_record.diagnosisDetails.backButton'"
       @clickAndPrevent="onBackButtonClicked"/>
-    <glossary v-if="!showError"/>
   </div>
 </template>
 
