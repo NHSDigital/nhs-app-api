@@ -12,16 +12,8 @@ then
   docker rm nhsonline-backend-test-run
 fi
 
-set +e
-
-ARGS=()
-if [ -n "$TEAMCITY_VERSION" ]; then
-  ARGS+=('--cpus=1')
-fi;
-
 docker run \
   --name nhsonline-backend-test-run \
-  "${ARGS[@]}" \
   "local/backend-build:$COMMIT_ID" \
   bash -c "
     mkdir /coverage; \
@@ -45,13 +37,3 @@ docker run \
       ((index+=1)); \
     done;
     exit \$test_run_result;"
-
-test_run_result=$?
-
-set -e
-
-if [ -n "$TEAMCITY_VERSION" ]; then
-  exit
-fi;
-
-exit $test_run_result

@@ -36,7 +36,6 @@ if [ "$RUN_NATIVE" == 1 ]; then
   echo "IS_NATIVE_APP_RUN=true" >> vars_ci_run.env
 fi
 
-# Support TeamCity running with APP_DOCKER_TAG
 APP_DOCKER_REGISTRY=${APP_DOCKER_REGISTRY:-nhsapp.azurecr.io}
 export WEB_DOCKER_TAG=${WEB_DOCKER_TAG:-$APP_DOCKER_TAG}
 export WEB_DOCKER_REGISTRY=${WEB_DOCKER_REGISTRY:-$APP_DOCKER_REGISTRY}
@@ -100,20 +99,6 @@ ADROIDURLSUFFIX="?source=android"
 XSLTPROC_DOCKER_IMAGE=hinesteve/xsltproc
 USER_ID=`id -u`
 GROUP_ID=`id -g`
-
-# Free up some docker space if on TC
-
-if [ $MODE == "teamcity" ]
-then
-  info "Cleaning up docker networks"
-  docker network prune -f
-
-  info "Cleaning docker volumes"
-  docker volume prune -f
-
-  info "Cleaning docker system"
-  docker system prune -f -a
-fi
 
 DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
 DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
@@ -253,28 +238,14 @@ info "Working Directory: $workingDir"
 # Prepare for Run
 if [ "$SKIP_PREPARE" != 1 ]
 then
-  if [ $MODE == "teamcity" ]
-  then
-    docker run \
-    --cpus $TC_CPUS \
-    --memory $TC_RAM \
-    --rm \
-    -v $workingDir/../:/repo \
-    $DOCKER_IMAGE bash -c " \
-      set -e ; \
-      cd /repo ; \
-      ./gradlew --no-daemon clean prepare; \
-      chown -R $USER_ID:$GROUP_ID /repo"
-  else
-    docker run \
-    --rm \
-    -v $workingDir/../:/repo \
-    $DOCKER_IMAGE bash -c " \
-      set -e ; \
-      cd /repo ; \
-      ./gradlew --no-daemon clean prepare; \
-      chown -R $USER_ID:$GROUP_ID /repo"
-  fi
+  docker run \
+  --rm \
+  -v $workingDir/../:/repo \
+  $DOCKER_IMAGE bash -c " \
+    set -e ; \
+    cd /repo ; \
+    ./gradlew --no-daemon clean prepare; \
+    chown -R $USER_ID:$GROUP_ID /repo"
 fi
 
 DOCKER_IMAGES=$(docker-compose $DOCKER_COMPOSE_FILES_ARG config | grep image | sed -e 's/^[[:space:]]*image: //' | sort -u)
@@ -381,61 +352,27 @@ for TAG in ${TAGS[*]}; do
       info BROWSERSTACK_LOCAL_STRING
   fi
 
-  if [ $MODE == "teamcity" ]
-  then
-    docker run \
-      --name $TAG \
-      --rm \
-      --network $NETWORK \
-      --env-file vars_test_runner.env \
-      --env-file vars_ci_run.env \
-      --cpus $TC_CPUS \
-      --memory $TC_RAM \
-      -v $TEST_RUN_FOLDER/$TAG/:/repo \
-      $DOCKER_IMAGE bash -c " \
-        echo $(date) - $TAG Starting \
-        set -e ; \
-        cd /repo ; \
-        $BROWSERSTACK_LOCAL_STRING \
-        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX\
-        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
-        ./gradlew test --no-daemon --stacktrace \
-          -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
-          -Dwebdriver.provided.type=$BROWSER \
-          $APPIUM_TYPE \
-          -Dwebdriver.base.url=$(cat vars_test_runner.env | grep url | cut -f2 -d'=') ; \
-          echo $(date) - $TAG Completed; \
-        chown -R $USER_ID:$GROUP_ID /repo" &
+  docker run \
+    --name $TAG \
+    --rm \
+    --network $NETWORK \
+    --env-file vars_test_runner.env \
+    --env-file vars_ci_run.env \
+    -v $TEST_RUN_FOLDER/$TAG/:/repo \
+    $DOCKER_IMAGE bash -c " \
+      set -e ; \
+      cd /repo ; \
+      $BROWSERSTACK_LOCAL_STRING \
+      BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX\
+      APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
+      ./gradlew test --no-daemon --stacktrace \
+        -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
+        -Dwebdriver.provided.type=$BROWSER \
+        $APPIUM_TYPE \
+        -Dwebdriver.base.url=$(cat vars_test_runner.env | grep url | cut -f2 -d'='); \
+      chown -R $USER_ID:$GROUP_ID /repo" &
 
     PID=$!
-
-    # give the test container time to startup
-    echo "Sleeping for 10 seconds to allow the test container to start"
-    sleep 10
-
-  else
-    docker run \
-      --name $TAG \
-      --rm \
-      --network $NETWORK \
-      --env-file vars_test_runner.env \
-      --env-file vars_ci_run.env \
-      -v $TEST_RUN_FOLDER/$TAG/:/repo \
-      $DOCKER_IMAGE bash -c " \
-        set -e ; \
-        cd /repo ; \
-        $BROWSERSTACK_LOCAL_STRING \
-        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX\
-        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
-        ./gradlew test --no-daemon --stacktrace \
-          -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
-          -Dwebdriver.provided.type=$BROWSER \
-          $APPIUM_TYPE \
-          -Dwebdriver.base.url=$(cat vars_test_runner.env | grep url | cut -f2 -d'='); \
-        chown -R $USER_ID:$GROUP_ID /repo" &
-
-      PID=$!
-  fi
 
   if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ]
   then
@@ -559,28 +496,14 @@ for TAG in ${TAGS[*]}; do
   cp -r $TEST_RUN_FOLDER/$TAG/$ACCESSIBILITY_OUTPUT $workingDir/../.
 done
 
-if [ "$MODE" == "teamcity" ]
-then
-  docker run \
-    --cpus $TC_CPUS \
-    --memory $TC_RAM \
-    --rm \
-    -v $workingDir/../:/repo \
-    $DOCKER_IMAGE bash -c " \
-      set -e ; \
-      cd /repo ; \
-      ./gradlew --no-daemon aggregate; \
-      chown -R $USER_ID:$GROUP_ID /repo"
-else
-  docker run \
-    --rm \
-    -v $workingDir/../:/repo \
-    $DOCKER_IMAGE bash -c " \
-      set -e ; \
-      cd /repo ; \
-      ./gradlew --no-daemon aggregate; \
-      chown -R $USER_ID:$GROUP_ID /repo"
-fi
+docker run \
+  --rm \
+  -v $workingDir/../:/repo \
+  $DOCKER_IMAGE bash -c " \
+    set -e ; \
+    cd /repo ; \
+    ./gradlew --no-daemon aggregate; \
+    chown -R $USER_ID:$GROUP_ID /repo"
 
 mkdir -p logs
 
@@ -601,12 +524,6 @@ if [ -z "$TF_BUILD" ]; then
   rm -rf $TEST_RUN_FOLDER
   rm -rf docker-compose.ci-run.yml
   rm -rf vars_ci_run.env
-
-  if [ $MODE == "teamcity" ]; then
-    info "Deleting all docker containers"
-    CONTAINERS=$(docker ps -aq)
-    [ -z "$CONTAINERS" ] || docker rm -f $CONTAINERS
-  fi;
 
   exit $test_run_result
 fi;

@@ -10,25 +10,8 @@ then
   docker rm nhsonline-web-test-run
 fi
 
-ARGS=()
-if [ -n "$TEAMCITY_VERSION" ]; then
-  ARGS+=('--cpus=1')
-fi;
-
-set +e
-
 docker run \
   --name nhsonline-web-test-run \
   "${ARGS[@]}" \
   local/nhsonline-web-build \
   npm run test-jest
-
-test_run_result=$?
-
-set -e
-
-if [ -n "$TEAMCITY_VERSION" ]; then
-  exit
-fi;
-
-exit $test_run_result
