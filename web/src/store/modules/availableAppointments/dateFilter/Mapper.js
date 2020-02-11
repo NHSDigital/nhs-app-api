@@ -1,4 +1,3 @@
-/* eslint-disable */
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
 
 export default class Mapper {

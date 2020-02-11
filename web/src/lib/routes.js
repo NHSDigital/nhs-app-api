@@ -563,10 +563,6 @@ const routes = {
     },
     helpUrl: baseNhsAppHelpUrl,
     redirectRules: [{
-      condition: 'device/isNativeApp',
-      value: false,
-      url: '/',
-    }, {
       condition: 'session/isProxying',
       value: true,
       url: '/linked-profiles/shutter/more',

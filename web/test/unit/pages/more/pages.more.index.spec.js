@@ -18,12 +18,13 @@ describe('more', () => {
     appMessagingEnabled = false,
     im1MessagingEnabled = false,
     patientPracticeMessagingToggleEnabled = true,
+    isNativeApp = false,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
       state: {
         device: {
-          isNativeApp: false,
+          isNativeApp,
         },
         practiceSettings: {
           im1MessagingEnabled,
@@ -31,6 +32,7 @@ describe('more', () => {
       },
       $env: {
         PATIENT_PRACTICE_MESSAGING_ENABLED: patientPracticeMessagingToggleEnabled,
+        YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com',
       },
     });
     $store.getters['serviceJourneyRules/cdssAdminEnabled'] = cdssAdminEnabled;
@@ -40,6 +42,7 @@ describe('more', () => {
 
   beforeEach(() => {
     wrapper = mountAs();
+    window.open = jest.fn();
   });
 
   it('will dispatch device/unlockNavBar when page mounted', () => {
@@ -92,15 +95,23 @@ describe('more', () => {
 
       beforeEach(() => {
         global.digitalData = {};
-        wrapper = mountAs({ appMessagingEnabled: true });
-        messagingLink = getMessagingLink(wrapper);
       });
 
       it('will show link', () => {
+        wrapper = mountAs({ appMessagingEnabled: true, isNativeApp: true });
+        messagingLink = getMessagingLink(wrapper);
         expect(messagingLink.exists()).toBe(true);
       });
 
+      it('will not show the link on desktop if enabled', () => {
+        wrapper = mountAs({ appMessagingEnabled: true, isNativeApp: false });
+        messagingLink = getMessagingLink(wrapper);
+        expect(messagingLink.exists()).toBe(false);
+      });
+
       it('will redirect to MESSAGING when clicked', () => {
+        wrapper = mountAs({ appMessagingEnabled: true, isNativeApp: true });
+        messagingLink = getMessagingLink(wrapper);
         messagingLink.trigger('click');
         expect($router.push).toBeCalledWith(MESSAGING.path);
       });
@@ -137,14 +148,25 @@ describe('more', () => {
   });
 
   describe('methods', () => {
-    it('will navigate to data preferences when data preferences menu item clicked', () => {
-      wrapper = mountAs();
+    it('will navigate to data preferences when data preferences menu item clicked if native', () => {
+      wrapper = mountAs({ isNativeApp: true });
       wrapper.find('#btn_data_sharing').trigger('click');
       const event = createEvent({ currentTarget: { pathname: DATA_SHARING_PREFERENCES.path } });
-      wrapper.vm.navigate(event);
+      wrapper.vm.navigateToDataSharing(event);
 
       expect($router.push).toHaveBeenCalledWith(DATA_SHARING_PREFERENCES.path);
       expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('will navigate to ndop home page when data preferences menu item clicked if not native', () => {
+      wrapper = mountAs();
+      wrapper.find('#btn_data_sharing').trigger('click');
+      const event = createEvent({ currentTarget: { pathname: 'testYourDataMattersUrl.com' } });
+      wrapper.vm.navigateToDataSharing(event);
+
+      expect($router.push).not.toHaveBeenCalledWith('testYourDataMattersUrl.com');
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(window.open).toHaveBeenCalledWith('testYourDataMattersUrl.com', '_blank');
     });
 
     it('will navigate to admin help when request gp admin help menu item clicked', () => {
@@ -158,7 +180,7 @@ describe('more', () => {
 
     it('will navigate to /messaging when appMessagingEnabled' +
        ' and messaging menu item clicked', () => {
-      wrapper = mountAs({ appMessagingEnabled: true });
+      wrapper = mountAs({ appMessagingEnabled: true, isNativeApp: true });
       wrapper.find('#btn_messaging').trigger('click');
       const event = createEvent({ currentTarget: { pathname: MESSAGING.path } });
       wrapper.vm.navigate(event);

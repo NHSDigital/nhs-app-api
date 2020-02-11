@@ -1,5 +1,4 @@
-/* eslint-disable */
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
 
 export default class DataProvider {
   constructor(DateProvider) {

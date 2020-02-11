@@ -1,5 +1,4 @@
-/* eslint-disable */
-/*jshint esversion: 6 */
+/* jshint esversion: 6 */
 import assign from 'lodash/fp/assign';
 
 export default class FilterDataProvider {
@@ -185,10 +184,24 @@ export default class FilterDataProvider {
     slot18.ref = 'slot_18';
 
     return {
-      slot1, slot2, slot3, slot4, slot5,
-      slot6, slot7, slot8, slot9, slot10,
-      slot11, slot12, slot13, slot14, slot15,
-      slot16, slot17, slot18
+      slot1,
+      slot2,
+      slot3,
+      slot4,
+      slot5,
+      slot6,
+      slot7,
+      slot8,
+      slot9,
+      slot10,
+      slot11,
+      slot12,
+      slot13,
+      slot14,
+      slot15,
+      slot16,
+      slot17,
+      slot18,
     };
   }
 }

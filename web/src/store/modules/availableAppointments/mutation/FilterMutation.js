@@ -1,4 +1,6 @@
-/* eslint-disable */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable class-methods-use-this */
+
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
 import sortBy from 'lodash/fp/sortBy';
 import each from 'lodash/each';
@@ -16,7 +18,7 @@ export default class FilterMutation {
     if (selectedOptions.date !== DateFilterValues.ALL) {
       dateRange = {
         from: this.dateMapper.mapToStartDate(selectedOptions.date),
-        to: this.dateMapper.mapToEndDate(selectedOptions.date)
+        to: this.dateMapper.mapToEndDate(selectedOptions.date),
       };
     }
 
@@ -94,7 +96,7 @@ export default class FilterMutation {
 
       if (filteredSlots.has(day)) {
         const slotCollection = filteredSlots.get(day);
-        const lastSlot = slotCollection[slotCollection.length -1];
+        const lastSlot = slotCollection[slotCollection.length - 1];
         if (lastSlot.sessionName.toLowerCase() === slot.sessionName.toLowerCase()
           && selectedOptions.clinician === ''
           && this.dateProvider.create(lastSlot.startTime).isSame(this.dateProvider.create(slot.startTime), 'minute')) {
@@ -103,11 +105,9 @@ export default class FilterMutation {
 
         slotCollection.push(slot);
         filteredSlots.set(day, slotCollection);
-
       } else {
         filteredSlots.set(day, [slot]);
       }
-
     });
 
     return filteredSlots;

@@ -37,7 +37,8 @@
                  :href="dataSharingPath"
                  :text="$t('sc04.dataSharing.subheader')"
                  :description="$t('sc04.dataSharing.body')"
-                 :click-func="navigate"
+                 :click-func="navigateToDataSharing"
+                 target="_blank"
                  :aria-label="ariaLabelCaption(
                    'sc04.dataSharing.subheader',
                    'sc04.dataSharing.body')"/>
@@ -60,7 +61,7 @@ import {
   PATIENT_PRACTICE_MESSAGING,
 } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, isTruthy } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -73,7 +74,6 @@ export default {
     return {
       appMessagingEnabled: srjIf({ $store: this.$store, journey: 'messaging' }),
       adminHelpEnabled: srjIf({ $store: this.$store, journey: 'cdssAdmin' }),
-      dataSharingPath: DATA_SHARING_PREFERENCES.path,
       patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
       appMessagingPath: MESSAGING.path,
       morePath: MORE.path,
@@ -84,12 +84,21 @@ export default {
     };
   },
   computed: {
+    dataSharingPath() {
+      return (this.$store.state.device.isNativeApp) ?
+        DATA_SHARING_PREFERENCES.path : this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL;
+    },
     patientPracticeMessagingEnabled() {
-      return this.$store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED
+      return isTruthy(this.$store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)
         && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
+    // patientpracticemessaging should be shown on desktop & native if enabled
+    // appMessaging should only be shown on native devices if enabled
     messagingEnabled() {
-      return this.patientPracticeMessagingEnabled || this.appMessagingEnabled;
+      if (this.$store.state.device.isNativeApp) {
+        return this.patientPracticeMessagingEnabled || this.appMessagingEnabled;
+      }
+      return this.patientPracticeMessagingEnabled;
     },
     messagingPath() {
       return this.patientPracticeMessagingEnabled
@@ -108,6 +117,13 @@ export default {
     },
     navigateToMessaging(event) {
       this.navigate(event);
+    },
+    navigateToDataSharing(event) {
+      if (this.$store.state.device.isNativeApp) {
+        this.navigate(event);
+      } else {
+        window.open(this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL, '_blank');
+      }
     },
     navigate(event) {
       redirectTo(this, event.currentTarget.pathname);

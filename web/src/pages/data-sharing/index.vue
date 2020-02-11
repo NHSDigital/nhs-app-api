@@ -48,6 +48,8 @@ import MakeYourChoice from '@/components/data-sharing/MakeYourChoice';
 import Overview from '@/components/data-sharing/Overview';
 import WhereConfidentialPatientInformationIsUsed from '@/components/data-sharing/WhereConfidentialPatientInformationIsUsed';
 import WhereYourChoiceDoesNotApply from '@/components/data-sharing/WhereYourChoiceDoesNotApply';
+import { redirectTo } from '@/lib/utils';
+import { MORE } from '@/lib/routes';
 
 export default {
   components: {
@@ -71,6 +73,9 @@ export default {
     pageId() {
       return this.pageIds[this.pageIndex];
     },
+    morePath() {
+      return MORE.path;
+    },
   },
   mounted() {
     if (!this.$store.state.navigation.menuItemStatusAt[4]) {
@@ -87,6 +92,9 @@ export default {
     },
     isLinkActive(pageId) {
       return pageId === this.pageIds[this.pageIndex] ? this.$style.active : undefined;
+    },
+    backLinkClicked() {
+      redirectTo(this, this.morePath);
     },
     async startNow() {
       const scope = this;

@@ -8,12 +8,12 @@ import features.sharedSteps.NavigationSteps
 import features.sharedSteps.PageUrl
 import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
 import pages.MorePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
 import pages.assertElementNotPresent
+import pages.isDisplayed
 
 class MoreStepDefinitions {
 
@@ -55,7 +55,9 @@ class MoreStepDefinitions {
     @Then("^I am on the More Page$")
     fun iAmOnTheMorePage() {
         pageHeaderVisible()
-        moreButtonOnNavBarIsHighlighted()
+        if(headerNative.onMobile()){
+            moreButtonOnNavBarIsHighlighted()
+        }
         morePage.assertLinksPresent()
     }
 
@@ -76,63 +78,66 @@ class MoreStepDefinitions {
 
     @Then("I see and can follow links within the more page body$")
     fun iSeeAndCanFollowLinksWithinTheMorePageBody() {
-        morePage.assertLinksPresent()
         val linksToFollow = arrayListOf(
                 { followDataSharingLink() },
                 { followOrganDonationLink() }
         )
 
-        Assert.assertEquals("Test Setup Incorrect. Expected Number of links does not match those to follow. " +
-                "This test must be updated if a link is added or removed.",
-                morePage.links.count(),
-                linksToFollow.count())
-
         linksToFollow.forEachIndexed { index, link ->
             link.invoke()
-            if (index != linksToFollow.size - 1)
+            if (index != linksToFollow.size - 1 && headerNative.onMobile())
                 navigateBackToMorePage()
         }
     }
 
-    @Then("And I see and can follow links including online consultation links within the more page body")
+    @Then("I see and can follow links including online consultation links within the more page body")
     fun iSeeAndCanFollowLinksIncludingOnlineConsultationsWithinTheMorePageBody() {
-        morePage.assertLinksPresent()
         val linksToFollow = arrayListOf(
+                { followRequestGPHelpLink() },
                 { followDataSharingLink() },
-                { followOrganDonationLink() },
-                { followRequestGPHelpLink() }
+                { followOrganDonationLink() }
         )
-
-        Assert.assertEquals("Test Setup Incorrect. Expected Number of links does not match those to follow. " +
-                "This test must be updated if a link is added or removed.",
-                morePage.links.count(),
-                linksToFollow.count())
 
         linksToFollow.forEachIndexed { index, link ->
             link.invoke()
-            if (index != linksToFollow.size - 1)
+            if (index != linksToFollow.size - 1 && headerNative.onMobile())
                 navigateBackToMorePage()
         }
     }
 
     private fun followDataSharingLink() {
-        morePage.btnDataSharing.click()
-        morePage.locatorMethods.waitForNativeStepToComplete()
-        webHeader.getPageTitle().withText("Find out why your data matters")
-        nav.assertSelectedTab(NavBarNative.NavBarType.MORE)
+        if (headerNative.onMobile()) {
+            morePage.btnDataSharing.click()
+            morePage.locatorMethods.waitForNativeStepToComplete()
+            webHeader.getPageTitle().withText("Find out why your data matters")
+            nav.assertSelectedTab(NavBarNative.NavBarType.MORE)
+        } else {
+            browser.storeCurrentTabCount()
+            morePage.btnDataSharing.click()
+            browser.assertNewTab()
+        }
+
     }
 
     private fun followOrganDonationLink() {
-        morePage.btnOrganDonation.click()
-        organDonationSteps.iAmOnTheOrganDonationPage()
+        if (headerNative.onMobile()){
+            morePage.btnOrganDonation.click()
+            organDonationSteps.iAmOnTheOrganDonationPage()
+        } else{
+            browser.storeCurrentTabCount()
+            morePage.btnOrganDonation.click()
+            browser.assertNewTab()
+        }
     }
 
     private fun followRequestGPHelpLink() {
-        morePage.btnRequestGpHelp.click()
+        morePage.btnRequestGpHelp.isDisplayed
     }
 
     private fun navigateBackToMorePage() {
-        nav.select(NavBarNative.NavBarType.MORE)
-        iAmOnTheMorePage()
+        if(headerNative.onMobile()) {
+            nav.select(NavBarNative.NavBarType.MORE)
+            iAmOnTheMorePage()
+        }
     }
 }

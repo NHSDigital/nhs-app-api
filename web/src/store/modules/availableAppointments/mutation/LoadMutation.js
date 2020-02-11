@@ -1,7 +1,8 @@
-/* eslint-disable */
+/* eslint-disable no-param-reassign */
+/* eslint-disable class-methods-use-this */
 import forEach from 'lodash/forEach';
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
-import namedObjectComparator  from '@/lib/comparators'
+import namedObjectComparator from '@/lib/comparators';
 
 export default class LoadMutation {
   constructor(DateProvider) {
@@ -9,17 +10,13 @@ export default class LoadMutation {
   }
 
   execute(data) {
-    console.log(data.slots)
     const filters = new Map();
     const types = [];
     const locations = [];
     const clinicians = [];
     let defaultLocationSelectedOption = '';
-    console.log(filters)
-    const slots = data.slots;
-    console.log(slots);
+    const { slots } = data;
     forEach(slots, (slot, index) => {
-      console.log("slot")
       slot.ref = `slot_${index}`;
 
       if (!filters.has(slot.type)) {
@@ -68,7 +65,7 @@ export default class LoadMutation {
         clinicians,
         dates,
       },
-      defaultLocationSelectedOption
+      defaultLocationSelectedOption,
     };
   }
 }

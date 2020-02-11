@@ -48,10 +48,6 @@ describe('middleware/conditionalRedirect', () => {
         getters['device/isNativeApp'] = false;
         callConditionalRedirect(MORE);
       });
-
-      it('will redirect to index', () => {
-        expect(redirect).toBeCalledWith('302', INDEX.path);
-      });
     });
 
     describe('is native app', () => {
