@@ -19,7 +19,7 @@
                id="count"
                :class="['nhsuk-u-font-weight-regular',
                         $style['count']]"
-               :aria-label="ariaText">{{ count }}</div>
+               aria-hidden="true">{{ count }}</div>
           <p v-if="description"
              :id="descriptionId"
              :data-sid="descriptionDataSid"
