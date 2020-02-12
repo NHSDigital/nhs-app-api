@@ -8,6 +8,7 @@ import {
   SELECT,
   CLEAR_SELECTED_NOMINATED_PHARMACY,
   SET_PREVIOUS_PAGE_TO_SEARCH,
+  CLEAR_PREVIOUS_PAGE_TO_SEARCH,
 } from './mutation-types';
 
 export default {
@@ -41,5 +42,8 @@ export default {
   },
   [SET_PREVIOUS_PAGE_TO_SEARCH](state, data) {
     state.previousPageToSearch = data;
+  },
+  [CLEAR_PREVIOUS_PAGE_TO_SEARCH](state) {
+    state.previousPageToSearch = null;
   },
 };

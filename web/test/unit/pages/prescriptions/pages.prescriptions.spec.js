@@ -90,6 +90,7 @@ describe('prescriptions/index.vue -', () => {
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/clearPreviousPageToSearch');
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/clear');
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/load');
     });
@@ -106,6 +107,7 @@ describe('prescriptions/index.vue -', () => {
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/clearPreviousPageToSearch');
       expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/clear');
       expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/load');
     });
@@ -120,6 +122,7 @@ describe('prescriptions/index.vue -', () => {
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/clearPreviousPageToSearch');
       expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/clear');
       expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/load');
     });
@@ -142,6 +145,7 @@ describe('prescriptions/index.vue -', () => {
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/clearPreviousPageToSearch');
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/clear');
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/load');
     });
@@ -158,6 +162,7 @@ describe('prescriptions/index.vue -', () => {
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/clearPreviousPageToSearch');
       expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/clear');
       expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/load');
     });
@@ -172,6 +177,7 @@ describe('prescriptions/index.vue -', () => {
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
+      expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/clearPreviousPageToSearch');
       expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/clear');
       expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/load');
     });
