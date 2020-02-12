@@ -48,8 +48,7 @@ open class ResourceMockingClass {
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/",
-                    "https://www.nhs.uk/your-nhs-data-matters/",
-                    "https://www.nhs.uk/conditions/"
+                    "https://www.nhs.uk/your-nhs-data-matters/"
                     )
             on { getString(R.string.nhs_111_header_description) } doReturn "one one one Online"
 
@@ -89,7 +88,8 @@ open class ResourceMockingClass {
             on { getStringArray(R.array.nativeAppHosts) } doReturn arrayOf(
                 "https://111.nhs.uk/",
                 "https://111.service.nhs.uk/",
-                "https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/"
+                "https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/",
+                "https://www.nhs.uk/conditions/"
             )
             on { getStringArray(R.array.nhsLoginPrefixList) } doReturn arrayOf(
                 "account",

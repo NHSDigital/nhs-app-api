@@ -82,10 +82,15 @@ class KnownServices(private val context: Context) {
             fetchStringResource(R.string.data_preferences_header),
             fetchStringResource(R.string.data_preferences_header),
             false)
+        val conditions = KnownService(fetchStringResource(R.string.conditions),
+            fetchStringResource(R.string.conditions_header),
+            fetchStringResource(R.string.conditions_header_description),
+            false)
 
         services.add(nhsAppService)
         services.add(nhs111)
         services.add(dataPref)
+        services.add(conditions)
 
         val nhsLoginPrefixList = fetchStringArrayResource(R.array.nhsLoginPrefixList)
 

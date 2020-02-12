@@ -69,7 +69,6 @@
         <item>@string/medicalRecordAbbreviationsURL</item>
         <item>@string/accessibilityStatementURL</item>
         <item>@string/dataSharingURL</item>
-        <item>@string/conditions</item>
     </string-array>
 
     <string-array name="nativeAppHosts">
@@ -77,6 +76,7 @@
         <item>@string/nhs111Location</item>
         <item>@string/baseURL</item>
         <item>@string/nhsLoginSuffix</item>
+        <item>@string/conditions</item>
     </string-array>
 
     <string-array name="nativeReloadOnBackUrls">

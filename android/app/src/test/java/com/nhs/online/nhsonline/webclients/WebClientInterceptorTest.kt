@@ -289,9 +289,8 @@ class WebClientInterceptorTest {
         )
 
         val header = serviceInfo?.header
-        if (header != null) {
-            verify(uiInteractorMock).setHeaderText(header, null)
-        }
+        val description = serviceInfo?.nativeHeaderDescription
+        verify(uiInteractorMock).setHeaderText(header!!, description)
     }
 
     @Test
