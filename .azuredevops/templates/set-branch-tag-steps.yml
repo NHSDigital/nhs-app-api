@@ -8,7 +8,7 @@ steps:
         BRANCH_TAG=$BUILD_SOURCEBRANCHNAME
         if [ -n "$SYSTEM_PULLREQUEST_PULLREQUESTID" ]; then
           BUILDNUMBER="PR $SYSTEM_PULLREQUEST_PULLREQUESTID ($SYSTEM_PULLREQUEST_PULLREQUESTITERATION)"
-          BRANCH_TAG="PR$SYSTEM_PULLREQUEST_PULLREQUESTID"
+          BRANCH_TAG="pr$SYSTEM_PULLREQUEST_PULLREQUESTID"
         fi
         echo "##vso[build.updatebuildnumber]$BUILDNUMBER"
         echo "##vso[task.setvariable variable=branch.tag]$BRANCH_TAG"
