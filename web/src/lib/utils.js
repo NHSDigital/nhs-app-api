@@ -18,6 +18,8 @@ export const datePart = (value, dateFormat) => {
   }
 };
 
+export const isEmptyArray = array => (Array.isArray(array) && array.length === 0);
+
 export const isFalsy = value => !(value && value !== 'false');
 
 export const isTruthy = value => !isFalsy(value);

@@ -12,12 +12,13 @@ describe('patient practice messaging recipients page', () => {
   const mountPage = ({
     toggle = true,
     isNativeApp = true,
+    messageRecipients = [],
   } = {}) => {
     store = createStore({
       $env: { PATIENT_PRACTICE_MESSAGING_ENABLED: toggle },
       state: {
         patientPracticeMessaging: {
-          messageRecipients: [],
+          messageRecipients,
           loadedRecipients: true,
         },
         device: { isNativeApp },
@@ -44,12 +45,11 @@ describe('patient practice messaging recipients page', () => {
         await wrapper.vm.$options.fetch({ store, redirect });
       });
 
-      it('will dispatch load', () => {
-        expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/loadRecipients');
-      });
-
-      it('will not redirect', () => {
-        expect(redirect).not.toHaveBeenCalled();
+      it('will show me my recipients if there is recipients', () => {
+        const messageRecipients = [{ recipientGuid: '1', name: 'Dr. Test' }];
+        mountPage({ toggle, messageRecipients });
+        expect(wrapper.find('#recipientsMenuList').exists()).toBe(true);
+        expect(store.dispatch).not.toHaveBeenCalledWith('header/updateHeaderText');
       });
     });
 

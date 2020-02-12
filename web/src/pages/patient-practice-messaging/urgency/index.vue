@@ -1,33 +1,46 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <message-dialog v-if="isError" message-type="error" role="alert">
-        <message-text>
-          {{ $t('im02.noOptionSelectedErrorHeader') }}
-        </message-text>
-        <message-list>
-          <li>
-            <p class="nhsuk-u-margin-left-2">
-              {{ $t('im02.noOptionSelectedErrorText') }}</p>
-          </li>
-        </message-list>
-      </message-dialog>
-      <question :error="isError" :required="true">
-        <question-choice id="messagingUrgency"
-                         v-model="answer"
-                         :error="isError"
-                         :error-text="[$t('im02.noOptionSelectedErrorText')]"
-                         :options="questionOptions"
-                         :required="true"
-                         :legend="$t('pageTitles.patientPracticeMessagingUrgency')"
-                         name="messagingUrgency"
-                         @validate="onAnswerValidate"/>
-      </question>
-      <generic-button id="continueButton"
-                      :button-classes="['nhsuk-button']"
-                      @click="continueButtonClicked">
-        {{ $t('im02.continueButtonText') }}
-      </generic-button>
+      <div v-if="messageRecipients && messageRecipients.length > 0">
+        <message-dialog v-if="isError" message-type="error" role="alert">
+          <message-text>
+            {{ $t('im02.noOptionSelectedErrorHeader') }}
+          </message-text>
+          <message-list>
+            <li>
+              <p class="nhsuk-u-margin-left-2">
+                {{ $t('im02.noOptionSelectedErrorText') }}</p>
+            </li>
+          </message-list>
+        </message-dialog>
+        <question :error="isError" :required="true">
+          <question-choice id="messagingUrgency"
+                           v-model="answer"
+                           :error="isError"
+                           :error-text="[$t('im02.noOptionSelectedErrorText')]"
+                           :options="questionOptions"
+                           :required="true"
+                           :legend="$t('pageTitles.patientPracticeMessagingUrgency')"
+                           name="messagingUrgency"
+                           @validate="onAnswerValidate"/>
+        </question>
+        <generic-button id="continueButton"
+                        :button-classes="['nhsuk-button']"
+                        @click="continueButtonClicked">
+          {{ $t('im02.continueButtonText') }}
+        </generic-button>
+      </div>
+      <div v-else id="noRecipients">
+        <p id="subHeader" class="nhsuk-hint" :aria-label="$t('im02.ariaLabel')">
+          {{ $t('im02.noRecipientsMessage') }}
+          <a style="display:inline" href="https://111.nhs.uk">
+            {{ $t('im02.nhs111Link') }}</a>
+          {{ $t('im02.or') }}
+          <a style="display:inline" href="tel:111">
+            {{ $t('im02.call111Link') }}.
+          </a>
+        </p>
+      </div>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
                                  :path="messagingPath"
                                  @clickAndPrevent="backLinkClicked"/>
@@ -49,7 +62,7 @@ import {
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
 } from '@/lib/routes';
-import { isFalsy, redirectTo } from '@/lib/utils';
+import { isFalsy, redirectTo, isEmptyArray } from '@/lib/utils';
 
 const YES = 'yes';
 const NO = 'no';
@@ -87,10 +100,22 @@ export default {
         this.$store.dispatch('patientPracticeMessaging/setUrgencyChoice', value);
       },
     },
+    messageRecipients() {
+      return Array.isArray(this.$store.state.patientPracticeMessaging.messageRecipients) ?
+        this.$store.state.patientPracticeMessaging.messageRecipients : [];
+    },
   },
-  fetch({ store, redirect }) {
+  async fetch({ store, redirect, app }) {
     if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)) {
       redirect(INDEX.path);
+    }
+
+    await store.dispatch('patientPracticeMessaging/loadRecipients');
+    const { messageRecipients } = store.state.patientPracticeMessaging;
+
+    if (!messageRecipients || isEmptyArray(messageRecipients)) {
+      store.dispatch('pageTitle/updatePageTitle', app.i18n.t('im02.noRecipients'));
+      store.dispatch('header/updateHeaderText', app.i18n.t('im02.noRecipients'));
     }
   },
   methods: {

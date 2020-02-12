@@ -3,7 +3,7 @@
     <div class="nhsuk-grid-column-full">
       <p id="infoRecipients">{{ $t('im04.info') }}</p>
       <menu-item-list id="recipientsMenuList" class="nhsuk-u-margin-bottom-3">
-        <menu-item v-for="recipient in recipients"
+        <menu-item v-for="recipient in messageRecipients"
                    :id="`recipient-${recipient.recipientGuid}`"
                    :key="`recipient-${recipient.recipientGuid}`"
                    :text="recipient.name"
@@ -28,7 +28,7 @@ import {
   PATIENT_PRACTICE_MESSAGING_URGENCY,
   PATIENT_PRACTICE_MESSAGING_CREATE,
 } from '@/lib/routes';
-import { isFalsy, redirectTo } from '@/lib/utils';
+import { isFalsy, redirectTo, isEmptyArray } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -40,14 +40,15 @@ export default {
   data() {
     return {
       urgencyPath: PATIENT_PRACTICE_MESSAGING_URGENCY.path,
-      recipients: this.$store.state.patientPracticeMessaging.messageRecipients,
+      messageRecipients: this.$store.state.patientPracticeMessaging.messageRecipients,
     };
   },
-  async fetch({ store, redirect }) {
-    if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)) {
-      return redirect(INDEX.path);
+  fetch({ store, redirect }) {
+    const { messageRecipients } = store.state.patientPracticeMessaging;
+    if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED) ||
+      !messageRecipients || isEmptyArray(messageRecipients)) {
+      redirect(INDEX.path);
     }
-    return store.dispatch('patientPracticeMessaging/loadRecipients');
   },
   methods: {
     backLinkClicked() {

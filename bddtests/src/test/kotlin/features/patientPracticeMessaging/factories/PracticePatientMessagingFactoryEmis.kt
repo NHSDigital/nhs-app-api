@@ -43,6 +43,13 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         }
     }
 
+    override fun noRecipients(patient: Patient) {
+        mockingClient.forEmis {
+            messaging.getRecipientsRequest(patient)
+                    .respondWithSuccess(MessagingData.getEmptyRecipients())
+        }
+    }
+
     override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean){
         val messages = MessagingData.getDefaultMessagesData(REPLY_COUNT, hasUnread)
         setUpMessageDataAndStubs(patient, messages)

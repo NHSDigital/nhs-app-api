@@ -1408,6 +1408,12 @@ export default {
     noOptionSelectedErrorHeader: 'There\'s a problem',
     noOptionSelectedErrorText: 'You need to select yes or no',
     continueButtonText: 'Continue',
+    noRecipients: 'You cannot currently send messages',
+    noRecipientsMessage: 'Contact your GP surgery for more information. For urgent medical advice, go to ',
+    or: 'or',
+    nhs111Link: '111.nhs.uk',
+    call111Link: 'call 111',
+    ariaLabel: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call one one one.',
   },
   im03: {
     info: {

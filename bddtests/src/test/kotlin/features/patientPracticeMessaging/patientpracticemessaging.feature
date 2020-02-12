@@ -53,6 +53,16 @@ Feature: Patient to practice messaging
     And I click send message
     Then I see validation errors for subject and message
 
+  Scenario: A user sees a message indicating that they have no recipients for patient practice messaging
+    Given I am a user who can access patient practice messaging
+    And I am logged in
+    And I have patient practice messages in my inbox, some of which are unread
+    And I navigate to the Patient Practice Messaging page
+    And I have no recipients for patient practice messaging
+    When I click the Send a message button on the patient practice messaging inbox
+    Then I see a message indicating that I have no recipients for patient practice messaging
+
+
   @smoketest
   Scenario: A user can see a patient practice message conversation with unread messages
     Given I am a user who can access patient practice messaging

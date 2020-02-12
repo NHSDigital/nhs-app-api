@@ -73,6 +73,10 @@ object MessagingData {
         )
     }
 
+    fun getEmptyRecipients() : MessageRecipientsResponseModel {
+        return MessageRecipientsResponseModel()
+    }
+
     fun getUpdatedResponse(): MessageReadStatusUpdateResponse {
         return MessageReadStatusUpdateResponse("Updated")
     }

@@ -8,16 +8,21 @@ describe('patient practice messaging urgency page', () => {
   let wrapper;
   let store;
   let redirect;
+  let app;
 
   const mountPage = ({
     toggle = true,
     isNativeApp = true,
+    messageRecipients = [],
     urgencyChoice = undefined,
   } = {}) => {
     store = createStore({
       $env: { PATIENT_PRACTICE_MESSAGING_ENABLED: toggle },
       state: {
-        patientPracticeMessaging: { urgencyChoice },
+        patientPracticeMessaging: {
+          urgencyChoice,
+          messageRecipients,
+        },
         device: { isNativeApp },
       },
     });
@@ -31,6 +36,12 @@ describe('patient practice messaging urgency page', () => {
 
     beforeEach(() => {
       redirect = jest.fn();
+
+      app = {
+        i18n: {
+          t: jest.fn(),
+        },
+      };
     });
 
     describe('patient practice messaging toggle enabled', () => {
@@ -39,9 +50,18 @@ describe('patient practice messaging urgency page', () => {
         isFalsy.mockImplementation(toggle).mockReturnValue(false);
 
         mountPage({ toggle });
-        await wrapper.vm.$options.fetch({ store, redirect });
+        await wrapper.vm.$options.fetch({ store, redirect, app });
 
         expect(redirect).not.toHaveBeenCalled();
+        expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/loadRecipients');
+      });
+
+      it('will inform me if there is no recipients', async () => {
+        mountPage({ toggle });
+        await wrapper.vm.$options.fetch({ store, redirect, app });
+
+        expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/loadRecipients');
+        expect(wrapper.find('#noRecipients').exists()).toBe(true);
       });
     });
 
@@ -52,7 +72,7 @@ describe('patient practice messaging urgency page', () => {
 
         mountPage({ toggle });
 
-        await wrapper.vm.$options.fetch({ store, redirect });
+        await wrapper.vm.$options.fetch({ store, redirect, app });
         expect(redirect).toHaveBeenCalledWith('/');
       });
     });
@@ -70,8 +90,11 @@ describe('patient practice messaging urgency page', () => {
   });
 
   describe('continue clicked', () => {
-    it('will show a validation error when making no choice', () => {
-      mountPage();
+    it('will show a validation error when making no choice', async () => {
+      const messageRecipients = [{ recipientGuid: '1', name: 'Dr. Test' }];
+      mountPage({ messageRecipients });
+
+      await wrapper.vm.$options.fetch({ store, redirect, app });
 
       wrapper.find('#continueButton').trigger('click');
 
@@ -82,16 +105,22 @@ describe('patient practice messaging urgency page', () => {
       expect(validationError.text()).toEqual('translate_im02.noOptionSelectedErrorText');
     });
 
-    it('will redirect to /patient-practice-messaging/contact-your-gp when the answer is yes', () => {
-      mountPage({ urgencyChoice: 'yes' });
+    it('will redirect to /patient-practice-messaging/contact-your-gp when the answer is yes', async () => {
+      const messageRecipients = [{ recipientGuid: '1', name: 'Dr. Test' }];
+      mountPage({ urgencyChoice: 'yes', messageRecipients });
+
+      await wrapper.vm.$options.fetch({ store, redirect, app });
 
       wrapper.find('#continueButton').trigger('click');
 
       expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/patient-practice-messaging/urgency/contact-your-gp');
     });
 
-    it('will redirect to /patient-practice-messaging/recipients when the answer is no', () => {
-      mountPage({ urgencyChoice: 'no' });
+    it('will redirect to /patient-practice-messaging/recipients when the answer is no', async () => {
+      const messageRecipients = [{ recipientGuid: '1', name: 'Dr. Test' }];
+      mountPage({ urgencyChoice: 'no', messageRecipients });
+
+      await wrapper.vm.$options.fetch({ store, redirect, app });
 
       wrapper.find('#continueButton').trigger('click');
 

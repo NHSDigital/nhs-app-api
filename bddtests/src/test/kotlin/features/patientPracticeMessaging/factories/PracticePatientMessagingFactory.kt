@@ -19,6 +19,7 @@ abstract class PracticePatientMessagingFactory {
     abstract fun patientHasNoMessages(patient: Patient)
     abstract fun patientSuccessfullySendsAMessage(patient: Patient, createMessageRequest: CreateMessageRequest)
     abstract fun errorSendingAMessage(patient: Patient, createMessageRequest: CreateMessageRequest)
+    abstract fun noRecipients(patient: Patient)
 
     val mockingClient = MockingClient.instance
 

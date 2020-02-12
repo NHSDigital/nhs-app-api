@@ -1,12 +1,18 @@
 package pages.patientPracticeMessaging
 
+import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.isDisplayed
+import pages.navigation.WebHeader
 import pages.sharedElements.RadioButtons
+import pages.text
 
 class PatientPracticeMessagingUrgencyPage: HybridPageObject() {
     private val urgentRadioButtonLabel = "Yes, I need advice now"
     private val nonUrgentRadioButtonLabel = "No, my message is not urgent"
+
+    private lateinit var header: WebHeader
 
     private val radioButtons by lazy { RadioButtons.create(this) }
 
@@ -25,5 +31,23 @@ class PatientPracticeMessagingUrgencyPage: HybridPageObject() {
         val nonUrgentRadio = radioButtons.button(nonUrgentRadioButtonLabel)
         nonUrgentRadio.select()
         continueButton.click()
+    }
+
+    fun assertNoRecipientsHeader() {
+        Assert.assertEquals(
+                "Header should contain text 'You currently cannot send messages'",
+                "You cannot currently send messages",
+                header.getPageTitle().text)
+    }
+
+    fun assertNoRecipientsMessage() {
+        val noRecipientsMessage = HybridPageElement(
+                "//div[@id='noRecipients']//p",
+                page=this
+        )
+        Assert.assertTrue(noRecipientsMessage.isDisplayed)
+        Assert.assertEquals("Contact your GP surgery for more information. For urgent medical advice, " +
+                "go to 111.nhs.uk or call 111.",
+                noRecipientsMessage.text);
     }
 }

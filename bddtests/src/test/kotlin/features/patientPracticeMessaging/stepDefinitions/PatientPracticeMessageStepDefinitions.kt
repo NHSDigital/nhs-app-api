@@ -184,9 +184,21 @@ open class PatientPracticeMessageStepDefinitions {
                 .errorWithPatientPracticeMessagingMessageDetails(SerenityHelpers.getPatient())
     }
 
+    @When("I have no recipients for patient practice messaging$")
+    fun iHaveNoRecipients() {
+       PracticePatientMessagingFactory
+               .getForSupplier(SerenityHelpers.getGpSupplier())
+               .noRecipients(SerenityHelpers.getPatient())
+    }
+
     @When("^I select a patient practice message in my inbox$")
     fun iSelectAPatientPracticeMessageInMyInbox() {
         clickMessageBySerenityVariable(PatientPracticeMessagingTypes.AVAILABLE_MESSAGE)
+    }
+
+    @When("^I click the Send a message button on the patient practice messaging inbox$")
+    fun iClickSendMessageOnThePatientPracticeMessagingInbox() {
+        patientPracticeMessagingPage.clickSendAMessageButton()
     }
 
     @When("^I click the Send a message button and " +
@@ -211,6 +223,12 @@ open class PatientPracticeMessageStepDefinitions {
     @Then("^I see the patient practice messaging recipients page$")
     fun iSeeThePatientPracticeMessagingUrgencyRecipientsPage() {
         patientPracticeMessagingRecipientsPage.assertIsDisplayed()
+    }
+
+    @Then("^I see a message indicating that I have no recipients for patient practice messaging$")
+    fun iSeeThePatientPracticeMessagingUrgencyRecipientsPageWithNoRecipientsMessage() {
+        patientPracticeMessagingUrgencyPage.assertNoRecipientsHeader()
+        patientPracticeMessagingUrgencyPage.assertNoRecipientsMessage()
     }
 
     @Then("^I see a message explaining patient practice messaging is not for urgent advice$")

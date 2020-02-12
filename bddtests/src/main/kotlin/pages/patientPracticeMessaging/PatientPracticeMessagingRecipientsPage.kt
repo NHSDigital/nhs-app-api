@@ -2,8 +2,8 @@ package pages.patientPracticeMessaging
 
 import mocking.emis.patientPracticeMessaging.Recipient
 import org.junit.Assert
-import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.HybridPageElement
 import pages.assertIsVisible
 import pages.navigation.WebHeader
 import pages.sharedElements.LinksContent
