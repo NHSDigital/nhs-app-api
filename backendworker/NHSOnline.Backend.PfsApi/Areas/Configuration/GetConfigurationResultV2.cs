@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
         public class Success : GetConfigurationResultV2
         {
             public Success(Uri fidoServerUrl, string minimumSupportedAndroidVersion, string minimumSupportediOSVersion,
-                List<KnownService> knownServices)
+                List<RootService> knownServices)
             {
                 Response = new GetConfigurationResponseV2
                 {

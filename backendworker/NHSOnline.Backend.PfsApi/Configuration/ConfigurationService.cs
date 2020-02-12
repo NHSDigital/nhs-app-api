@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.Configuration
 
             foreach (var service in knownServices)
             {
-                if (service.Url == null && service.Service.Equals(Service.NhsOnline))
+                if (string.Equals(service.Url.Host, "WebAppBaseUrl", StringComparison.OrdinalIgnoreCase))
                 {
                     service.Url = settings.WebAppBaseUrl;
                 }

@@ -1,262 +1,288 @@
 {
   "Services": [
     {
-      "Service": "Nhs111",
       "Url": "https://111.nhs.uk/",
-      "TitleKey": "NHS111Title",
-      "AccessibleTitleKey": "AccessibleNHS111Title",
-      "IsExternal": false,
       "AllowNativeInteraction": false,
-      "UseCustomTabs": true
+      "MenuTab": -1,
+      "OpenExternally": false,
+      "RequiresAssertedLoginIdentity": false,
+      "ValidateSession": false
     },
     {
-      "Service": "Nhs111",
       "Url": "https://111.service.nhs.uk/",
-      "TitleKey": "NHS111Title",
-      "AccessibleTitleKey": "AccessibleNHS111Title",
-      "IsExternal": false,
       "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-
-    {
-      "Service": "DataPreferences",
-      "Url": "https://ndopapp-int1.thunderbird.service.nhs.uk/",
-      "TitleKey": "DataPreferencesTitle",
-      "AccessibleTitleKey": "",
-      "IsExternal": false,
-      "AllowNativeInteraction": true,
-      "UseCustomTabs": true
+      "MenuTab": -1,
+      "OpenExternally": false,
+      "RequiresAssertedLoginIdentity": false,
+      "ValidateSession": false
     },
     {
-      "Service": "",
-      "Url": "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
+      "Url": "https://www.nhs.uk/",
       "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "",
-      "Url": "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/android-fingerprint-ID-help/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "",
-      "Url": "https://www.nhs.uk/conditions/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "",
-      "Url": "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "",
-      "Url": "https://www.nhs.uk/your-nhs-data-matters/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "",
-      "Url": "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "HotJar",
-      "Url": "https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": false
-    },
-    {
-      "Service": "",
-      "Url": "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "",
-      "Url": "https://account.ext.signin.nhs.uk/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "",
-      "Url": "https://auth.ext.signin.nhs.uk",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "",
-      "Url": "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "",
-      "Url": "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "",
-      "Url": "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": true,
-      "AllowNativeInteraction": false,
-      "UseCustomTabs": true
-    },
-    {
-      "Service": "NhsOnline",
-      "url": "",
-      "TitleKey": "",
-      "AccessibleTitleKey": "",
-      "IsExternal": false,
-      "AllowNativeInteraction": true,
-      "UseCustomTabs": false,
-      "PathInfo": [
+      "MenuTab": -1,
+      "OpenExternally": true,
+      "RequiresAssertedLoginIdentity": false,
+      "ValidateSession": false,
+      "SubServices":[
         {
-          "Path": "account",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "Account",
-          "TitleKey": "my_account_header",
-          "MenuTab": 5
-        },
-        {
-          "Path": "appointments",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "Appointments",
-          "TitleKey": "appointments_header",
-          "MenuTab": 1
-        },
-        {
-          "Path": "appointments/admin-help",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "AdminHelp",
-          "TitleKey": "admin_help_header",
-          "MenuTab": 1
-        },
-        {
-          "Path": "appointments/gp-at-hand",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "Appointments",
-          "TitleKey": "service_unavailable",
-          "MenuTab": 1
-        },
-        {
-          "Path": "appointments/informatica",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "Appointments",
-          "TitleKey": "service_unavailable",
-          "MenuTab": 1
-        },
-        {
-          "Path": "check-your-symptoms",
-          "ValidateSession": false,
+          "Path": "/conditions",
+          "QueryString": "",
           "AllowNativeInteraction": false,
-          "Service": "NhsOnline",
-          "TitleKey": "symptoms_header",
-          "MenuTab": 0
+          "MenuTab": -1,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
         },
         {
-          "Path": "more",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "More",
-          "TitleKey": "more_header",
-          "MenuTab": 4
+          "Path": "/using-the-nhs/nhs-services/the-nhs-app/abbreviations",
+          "QueryString": "",
+          "AllowNativeInteraction": false,
+          "MenuTab": -1,
+          "OpenExternally": true,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
         },
         {
-          "Path": "my-record",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "MyRecord",
-          "TitleKey": "MyRecord_header",
-          "MenuTab": 3
+          "Path": "/using-the-nhs/nhs-services/the-nhs-app/accessibility",
+          "QueryString": "",
+          "AllowNativeInteraction": false,
+          "MenuTab": -1,
+          "OpenExternally": true,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
         },
         {
-          "Path": "my-record/gp-at-hand",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "MyRecord",
-          "TitleKey": "service_unavailable",
-          "MenuTab": 3
+          "Path": "/using-the-nhs/nhs-services/the-nhs-app/android-fingerprint-ID-help",
+          "QueryString": "",
+          "AllowNativeInteraction": false,
+          "MenuTab": -1,
+          "OpenExternally": true,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
         },
         {
-          "Path": "organ-donation",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "OrganDonation",
-          "TitleKey": "organ_donation_header",
-          "MenuTab": 4
+          "Path": "/using-the-nhs/nhs-services/the-nhs-app/cookies",
+          "QueryString": "",
+          "AllowNativeInteraction": false,
+          "MenuTab": -1,
+          "OpenExternally": true,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
         },
         {
-          "Path": "Prescriptions",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "Prescriptions",
-          "TitleKey": "Prescriptions_header",
-          "MenuTab": 2
+          "Path": "/using-the-nhs/nhs-services/the-nhs-app/help",
+          "QueryString": "",
+          "AllowNativeInteraction": false,
+          "MenuTab": -1,
+          "OpenExternally": true,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
         },
         {
-          "Path": "Prescriptions/gp-at-hand",
-          "ValidateSession": true,
-          "AllowNativeInteraction": true,
-          "Service": "Prescriptions",
-          "TitleKey": "service_unavailable",
-          "MenuTab": 2
+          "Path": "/using-the-nhs/nhs-services/the-nhs-app/open-source",
+          "QueryString": "",
+          "AllowNativeInteraction": false,
+          "MenuTab": -1,
+          "OpenExternally": true,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
         },
         {
-          "Path": "symptoms",
-          "ValidateSession": true,
+          "Path": "/using-the-nhs/nhs-services/the-nhs-app/privacy",
+          "QueryString": "",
+          "AllowNativeInteraction": false,
+          "MenuTab": -1,
+          "OpenExternally": true,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
+        }, 
+        {
+          "Path": "/using-the-nhs/nhs-services/the-nhs-app/terms",
+          "QueryString": "",
+          "AllowNativeInteraction": false,
+          "MenuTab": -1,
+          "OpenExternally": true,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
+        },
+        {
+          "Path": "/your-nhs-data-matters",
+          "QueryString": "",
+          "AllowNativeInteraction": false,
+          "MenuTab": -1,
+          "OpenExternally": true,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
+        }
+      ]
+    },
+    {
+      "Url": "https://ndopapp-int1.thunderbird.service.nhs.uk/",
+      "AllowNativeInteraction": true,
+      "MenuTab": -1,
+      "OpenExternally": false,
+      "RequiresAssertedLoginIdentity": false,
+      "ValidateSession": false
+    },
+    {
+      "Url": "https://in.hotjar.com/",
+      "AllowNativeInteraction": false,
+      "MenuTab": -1,
+      "OpenExternally": false,
+      "RequiresAssertedLoginIdentity": false,
+      "ValidateSession": false,
+      "SubServices":[
+        {
+          "Path": "/s",
+          "QueryString": "siteId=859152&amp;surveyId=95785",
+          "AllowNativeInteraction": false,
+          "MenuTab": -1,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
+        }
+      ]
+    },
+    {
+      "Url": "https://account.ext.signin.nhs.uk/",
+      "AllowNativeInteraction": false,
+      "MenuTab": -1,
+      "OpenExternally": false,
+      "RequiresAssertedLoginIdentity": false,
+      "ValidateSession": false
+    },
+    {
+      "Url": "https://auth.ext.signin.nhs.uk",
+      "AllowNativeInteraction": false,
+      "MenuTab": -1,
+      "OpenExternally": false,
+      "RequiresAssertedLoginIdentity": false,
+      "ValidateSession": false
+    },
+    {
+      "Url": "https://WebAppBaseUrl",
+      "AllowNativeInteraction": true,
+      "MenuTab": 1,
+      "OpenExternally": false,
+      "RequiresAssertedLoginIdentity": false,
+      "ValidateSession": false,
+      "SubServices": [
+        {
+          "Path": "/account",
+          "QueryString": "",
           "AllowNativeInteraction": true,
-          "Service": "Symptoms",
-          "TitleKey": "symptoms_header",
-          "MenuTab": 0
+          "MenuTab": -1,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/appointments",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 1,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/appointments/admin-help",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 1,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/appointments/gp-at-hand",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 1,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/appointments/informatica",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 1,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/check-your-symptoms",
+          "QueryString": "",
+          "AllowNativeInteraction": false,
+          "MenuTab": 0,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": false
+        },
+        {
+          "Path": "/more",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 4,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/my-record",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 3,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/my-record/gp-at-hand",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 3,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/organ-donation",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 4,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/Prescriptions",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 2,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/Prescriptions/gp-at-hand",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 2,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
+        },
+        {
+          "Path": "/Symptoms",
+          "QueryString": "",
+          "AllowNativeInteraction": true,
+          "MenuTab": 0,
+          "OpenExternally": false,
+          "RequiresAssertedLoginIdentity": false,
+          "ValidateSession": true
         }
       ]
     }

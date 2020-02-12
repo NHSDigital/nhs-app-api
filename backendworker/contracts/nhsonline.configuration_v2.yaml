@@ -24,23 +24,6 @@ paths:
           description: An unexpected error occurred processing the request.
 components:
   schemas:
-    Service:
-      type: string
-      enum:
-        - "Account"
-        - "AdminHelp"
-        - "Appointments"
-        - "DataPreferences"
-        - "More"
-        - "HotJar"
-        - "MyRecord"
-        - "Nhs111"
-        - "NhsOnline"
-        - "OrganDonation"
-        - "Others"
-        - "Prescriptions"
-        - "Symptoms"
-        - ""
     GetConfigurationResponseV2:
       type: object
       properties:
@@ -57,42 +40,40 @@ components:
           type: array
           description: Returns a list of know services for the NHS App.
           items:
-            $ref: "#/components/schemas/KnownService"
-    KnownService:
+            $ref: "#/components/schemas/RootService"
+    RootService:
       type: object
       properties:
-        service:
-          $ref: "#/components/schemas/Service"
         url:
           type: string
-        titleKey:
-          type: string
-        accessibleTitleKey:
-          type: string
-        isExternal:
-          type: boolean
         allowNativeInteraction:
           type: boolean
-        useCustomTabs:
+        menuTab:
+          type: integer
+        openExternally:
           type: boolean
-        pathInfoDictionary:
+        requiresAssertedLoginIdentity:
+          type: boolean
+        validateSession:
+          type: boolean
+        subServices:
           type: array
           items:
-            $ref: "#/components/schemas/PathInfo"
-    PathInfo:
+            $ref: "#/components/schemas/SubService"
+    SubService:
       type: object
       properties:
         path:
           type: string
-        validateSession:
-          type: boolean
+        queryString:
+          type: string
         allowNativeInteraction:
           type: boolean
-        service:
-          $ref: "#/components/schemas/Service"
-        titleKey:
-          type: string
-        accessibleTitleKey:
-          type: string
         menuTab:
           type: integer
+        openExternally:
+          type: boolean
+        requiresAssertedLoginIdentity:
+          type: boolean
+        validateSession:
+          type: boolean

@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration.Models
 
         public Uri FidoServerUrl { get; set; }
 
-        public List<KnownService> KnownServices { get; set; }
+        public List<RootService> KnownServices { get; set; }
     }
 }
  

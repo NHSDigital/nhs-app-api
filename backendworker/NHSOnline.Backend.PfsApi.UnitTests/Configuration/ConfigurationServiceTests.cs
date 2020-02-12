@@ -50,20 +50,23 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
 
             _fixture.Inject(_settings);
             _fixture.Inject(_logger);
-            
-            _knownServices = new KnownServices();
-            _knownServices.Services = new List<KnownService>();
-            _knownServices.Services.Add(new KnownService()
+
+            _knownServices = new KnownServices
             {
-                 AccessibleTitleKey = "titlekey",
-                 AllowNativeInteraction = false,
-                 IsExternal = true,
-                 PathInfo = null,
-                 Service = Service.Account,
-                 TitleKey = "titlekey",
-                 Url = new Uri("http://test.test.com"),
-                 UseCustomTabs = true
-            });
+                Services = new List<RootService>
+                {
+                    new RootService()
+                    {
+                        AllowNativeInteraction = false,
+                        MenuTab = 1,
+                        OpenExternally = false,
+                        SubServices = null,
+                        Url = new Uri("http://test.test.com"),
+                        ValidateSession = false,
+                        RequiresAssertedLoginIdentity = false
+                    }
+                }
+            };
 
             _mockKnownServices = _fixture.Freeze<Mock<IOptions<KnownServices>>>();
             _mockKnownServices.Setup(x => x.Value)
