@@ -6,7 +6,7 @@ using static NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
 {
-    public static class TppIm1VerifyErrorMapper
+    internal static class TppIm1VerifyErrorMapper
     {
         private static Dictionary<string, InternalCode> KeyToEnumMapper =>
             new Dictionary<string, InternalCode>

@@ -9,7 +9,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
     internal sealed class TppClient : ITppClient
     {
-        private readonly ITppClientRequest<LinkAccount, LinkAccountReply> _linkAccountPost;
         private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticatePost;
         private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccessesPost;
         private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelectedPost;
@@ -28,7 +27,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         private readonly ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> _requestSystmOnlineMessages;
 
         public TppClient(
-            ITppClientRequest<LinkAccount, LinkAccountReply> linkAccountPost,
             ITppClientRequest<Authenticate, AuthenticateReply> authenticatePost,
             ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccessesPost,
             ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelectedPost,
@@ -46,7 +44,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             ITppClientRequest<(CancelAppointment cancelAppointment, string suid), CancelAppointmentReply> cancelAppointmentPost,
             ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> requestSystmOnlineMessages)
         {
-            _linkAccountPost = linkAccountPost;
             _authenticatePost = authenticatePost;
             _listServiceAccessesPost = listServiceAccessesPost;
             _patientSelectedPost = patientSelectedPost;
@@ -64,9 +61,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             _cancelAppointmentPost = cancelAppointmentPost;
             _requestSystmOnlineMessages = requestSystmOnlineMessages;
         }
-
-        public async Task<TppApiObjectResponse<LinkAccountReply>> LinkAccountPost(LinkAccount linkAccountModel)
-            => await _linkAccountPost.Post(linkAccountModel);
 
         public async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticate)
             => await _authenticatePost.Post(authenticate);

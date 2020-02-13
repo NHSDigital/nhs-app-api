@@ -25,16 +25,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
     [TestClass]
     public sealed class TppClientTests : IDisposable
     {
-        private const string ResponseSuidHeader = "suid";
-        private const string RequestTypeHeader = "type";
-        private const string RequestSuidHeader = "suid";
-
-        private const string UnitId = "unitId";
-
-        private const string MediaType = "application/xml";
-        private const string Suid = "session_id";
-        private const string LoggingMessageTemplate = "Sending TPP REQUEST TYPE: {0} UUID: {1}";
-
         private TppClientTestsContext Context { get; set; }
         private ITppClient SystemUnderTest { get; set; }
 
@@ -55,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             // Arrange
             var authenticateRequestModel = new Authenticate
             {
-                UnitId = UnitId,
+                UnitId = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion
             };
@@ -71,10 +61,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, authenticateRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, authenticateRequestModel.RequestType }
             };
 
-            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal) { { ResponseSuidHeader, Suid } };
+            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                { TppClientTestsContext.ResponseSuidHeader, TppClientTestsContext.Suid }
+            };
 
             var responseContent = new StringContent(expectedAuthenticateResponse.SerializeXml());
 
@@ -92,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
-            VerifyLogging(authenticateRequestModel);
+            Context.VerifyLogging(authenticateRequestModel);
         }
 
         [TestMethod]
@@ -101,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             // Arrange
             var authenticateRequestModel = new Authenticate
             {
-                UnitId = UnitId,
+                UnitId = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion
             };
@@ -117,10 +110,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, authenticateRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, authenticateRequestModel.RequestType }
             };
 
-            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal) { { ResponseSuidHeader, Suid } };
+            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                { TppClientTestsContext.ResponseSuidHeader, TppClientTestsContext.Suid }
+            };
 
             var responseBody = expectedAuthenticateResponse.SerializeXml();
             // Deliberately screw up the XML, change uuid to be not a GUID so it won't deserialize
@@ -139,7 +135,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             // Assert
             await act.Should().ThrowAsync<NhsUnparsableException>();
-            VerifyLogging(authenticateRequestModel);
+            Context.VerifyLogging(authenticateRequestModel);
         }
 
         [TestMethod]
@@ -148,7 +144,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             // Arrange
             var authenticateRequestModel = new Authenticate
             {
-                UnitId = UnitId,
+                UnitId = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion
             };
@@ -164,14 +160,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, authenticateRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, authenticateRequestModel.RequestType }
             };
 
             MockHttpHandler
                 .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
                 .WithHeaders(tppRequestHeaders)
                 .WithContent(authenticateRequestModel.SerializeXml())
-                .Respond(MediaType, errorResponseBuilder.BuildXml());
+                .Respond(TppClientTestsContext.MediaType, errorResponseBuilder.BuildXml());
 
             // Act
             var response = await SystemUnderTest.AuthenticatePost(authenticateRequestModel);
@@ -182,7 +178,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.Body.Should().BeNull();
             response.Headers.Should().BeNull();
 
-            VerifyLogging(authenticateRequestModel);
+            Context.VerifyLogging(authenticateRequestModel);
         }
 
         [TestMethod]
@@ -196,7 +192,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             // Arrange
             var authenticateRequestModel = new Authenticate
             {
-                UnitId = UnitId,
+                UnitId = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion
             };
@@ -210,7 +206,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, authenticateRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, authenticateRequestModel.RequestType }
             };
 
             MockHttpHandler
@@ -225,7 +221,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
 
-            VerifyLogging(authenticateRequestModel);
+            Context.VerifyLogging(authenticateRequestModel);
         }
 
         [TestMethod]
@@ -235,7 +231,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             // Arrange
             var requestMedicationRequestModel = new RequestMedication
             {
-                UnitId = UnitId,
+                UnitId = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion
             };
@@ -246,10 +242,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, requestMedicationRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, requestMedicationRequestModel.RequestType }
             };
 
-            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal) { { ResponseSuidHeader, Suid } };
+            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                { TppClientTestsContext.ResponseSuidHeader, TppClientTestsContext.Suid }
+            };
 
             var responseContent = new StringContent(expectedMedicationResponse.SerializeXml());
 
@@ -268,125 +267,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
 
-            VerifyLogging(requestMedicationRequestModel);
-        }
-        
-        [TestMethod]
-        public async Task LinkAccountPostRequest_ReturnsLinkAccountReply_WhenValidlyRequested()
-        {
-            // Arrange
-            var linkRequestModel = new LinkAccount
-            {
-                OrganisationCode = UnitId,
-                Uuid = TppClientTestsContext.Uuid,
-                ApiVersion = TppClientTestsContext.ApiVersion,
-                Application = CreateApplication()
-            };
-
-            var expectedLinkAccountResponse = new LinkAccountReply
-            {
-                ProviderId = TppClientTestsContext.ApplicationProviderId
-            };
-
-            var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                { RequestTypeHeader, linkRequestModel.RequestType }
-            };
-
-            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal) { { ResponseSuidHeader, Suid } };
-            
-            var responseContent = new StringContent(expectedLinkAccountResponse.SerializeXml());
-            
-            MockHttpHandler
-                .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
-                .WithHeaders(requestHeaders)
-                .WithContent(linkRequestModel.SerializeXml())
-                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);    
-
-            // Act
-            var response = await SystemUnderTest.LinkAccountPost(linkRequestModel);
-
-            // Assert
-            response.Body.Should().BeEquivalentTo(expectedLinkAccountResponse);
-            response.Headers.Should().BeEquivalentTo(responseHeaders);
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.ErrorResponse.Should().BeNull();
-
-            VerifyLogging(linkRequestModel);
-        }
-        
-        [TestMethod]
-        public async Task LinkAccountPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
-        {   
-            // Arrange
-            var linkAccountRequestModel = new LinkAccount
-            {
-                OrganisationCode = UnitId,
-                Uuid = TppClientTestsContext.Uuid,
-                ApiVersion = TppClientTestsContext.ApiVersion,
-                Application = CreateApplication()
-            };
-
-            var errorResponseBuilder = new TppErrorResponseBuilder();
-
-            var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                { RequestTypeHeader, linkAccountRequestModel.RequestType }
-            };
-            
-            MockHttpHandler
-                .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
-                .WithHeaders(tppRequestHeaders)
-                .WithContent(linkAccountRequestModel.SerializeXml())
-                .Respond(MediaType, errorResponseBuilder.BuildXml());
-
-            // Act
-            var response = await SystemUnderTest.LinkAccountPost(linkAccountRequestModel);
-
-            // Assert
-            response.ErrorResponse.Should().BeEquivalentTo(errorResponseBuilder.BuildExpected());
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.Body.Should().BeNull();
-            response.Headers.Should().BeNull();
-
-            VerifyLogging(linkAccountRequestModel);
-        }
-
-        [TestMethod]
-        [DataRow(HttpStatusCode.BadGateway)]
-        [DataRow(HttpStatusCode.BadRequest)]
-        [DataRow(HttpStatusCode.Unauthorized)]
-        [DataRow(HttpStatusCode.NotFound)]
-        public async Task LinkAccountPostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
-            HttpStatusCode value)
-        {
-            // Arrange
-            var linkAccountRequestModel = new LinkAccount
-            {
-                OrganisationCode = UnitId,
-                Uuid = TppClientTestsContext.Uuid,
-                ApiVersion = TppClientTestsContext.ApiVersion,
-                Application = CreateApplication()
-            };
-
-            var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                { RequestTypeHeader, linkAccountRequestModel.RequestType }
-            };
-
-            MockHttpHandler
-                .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
-                .WithHeaders(tppRequestHeaders)
-                .Respond(value);
-
-            // Act
-            var response = await SystemUnderTest.LinkAccountPost(linkAccountRequestModel);
-
-            // Assert
-            response.StatusCode.Should().Be(value);
-            response.HasSuccessResponse.Should().BeFalse();
-
-            VerifyLogging(linkAccountRequestModel);
+            Context.VerifyLogging(requestMedicationRequestModel);
         }
 
         [TestMethod]
@@ -394,10 +275,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         {
             var addNhsUserRequestModel = new AddNhsUserRequest
             {
-                OrganisationCode = UnitId,
+                OrganisationCode = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion,
-                Application = CreateApplication()
+                Application = TppClientTestsContext.CreateApplication()
             };
 
             var expectedLinkAccountResponse = new AddNhsUserResponse
@@ -407,10 +288,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, addNhsUserRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, addNhsUserRequestModel.RequestType }
             };
 
-            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal) { { ResponseSuidHeader, Suid } };
+            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                { TppClientTestsContext.ResponseSuidHeader, TppClientTestsContext.Suid }
+            };
             
             var responseContent = new StringContent(expectedLinkAccountResponse.SerializeXml());
             
@@ -427,7 +311,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
 
-            VerifyLogging(addNhsUserRequestModel);
+            Context.VerifyLogging(addNhsUserRequestModel);
         }
         
         [TestMethod]
@@ -436,24 +320,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             // Arrange
             var nhsAddUserRequestModel = new AddNhsUserRequest
             {
-                OrganisationCode = UnitId,
+                OrganisationCode = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion,
-                Application = CreateApplication()
+                Application = TppClientTestsContext.CreateApplication()
             };
 
             var errorResponseBuilder = new TppErrorResponseBuilder();
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, nhsAddUserRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, nhsAddUserRequestModel.RequestType }
             };
             
             MockHttpHandler
                 .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
                 .WithHeaders(tppRequestHeaders)
                 .WithContent(nhsAddUserRequestModel.SerializeXml())
-                .Respond(MediaType, errorResponseBuilder.BuildXml());
+                .Respond(TppClientTestsContext.MediaType, errorResponseBuilder.BuildXml());
 
             // Act
             var response = await SystemUnderTest.NhsUserPost(nhsAddUserRequestModel);
@@ -464,7 +348,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.Body.Should().BeNull();
             response.Headers.Should().BeNull();
 
-            VerifyLogging(nhsAddUserRequestModel);
+            Context.VerifyLogging(nhsAddUserRequestModel);
         }
 
         [TestMethod]
@@ -477,15 +361,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         {
             var addNhsUserRequestModel = new AddNhsUserRequest
             {
-                OrganisationCode = UnitId,
+                OrganisationCode = TppClientTestsContext.UnitId,
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion,
-                Application = CreateApplication()
+                Application = TppClientTestsContext.CreateApplication()
             };
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, addNhsUserRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, addNhsUserRequestModel.RequestType }
             };
 
             MockHttpHandler
@@ -498,7 +382,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
 
-            VerifyLogging(addNhsUserRequestModel);
+            Context.VerifyLogging(addNhsUserRequestModel);
         }
 
         [TestMethod]
@@ -515,7 +399,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, logoffRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, logoffRequestModel.RequestType }
             };
 
             var tppUserSession = new TppUserSession();
@@ -524,7 +408,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
                 .WithHeaders(tppRequestHeaders)
                 .WithContent(logoffRequestModel.SerializeXml())
-                .Respond(MediaType, errorResponseBuilder.BuildXml());
+                .Respond(TppClientTestsContext.MediaType, errorResponseBuilder.BuildXml());
 
             var response = await SystemUnderTest.LogoffPost(tppUserSession);
 
@@ -533,7 +417,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.Body.Should().BeNull();
             response.Headers.Should().BeNull();
 
-            VerifyLogging(logoffRequestModel);
+            Context.VerifyLogging(logoffRequestModel);
         }
 
         [TestMethod]
@@ -552,7 +436,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, logoffRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, logoffRequestModel.RequestType }
             };
 
             MockHttpHandler
@@ -568,48 +452,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.ErrorResponse.Should().BeNull();
             response.Headers.Should().BeNull();
 
-            VerifyLogging(logoffRequestModel);
-        }
-
-        [TestMethod]
-        public async Task AnyRequest_ThrowsUnauthorisedHttpResponseException_WhenResponseIndicatesNotAuthorised()
-        {
-            // Arrange
-            var linkAccountRequestModel = new LinkAccount
-            {
-                OrganisationCode = UnitId,
-                Uuid = TppClientTestsContext.Uuid,
-                ApiVersion = TppClientTestsContext.ApiVersion,
-                Application = CreateApplication()
-            };
-
-            var errorResponseBuilder = new TppErrorResponseBuilder().ErrorCode("3");
-
-            var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                { RequestTypeHeader, linkAccountRequestModel.RequestType }
-            };
-
-            MockHttpHandler
-                .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
-                .WithHeaders(tppRequestHeaders)
-                .WithContent(linkAccountRequestModel.SerializeXml())
-                .Respond(MediaType, errorResponseBuilder.BuildXml());
-
-            // Act
-            Func<Task> act = async () => { await SystemUnderTest.LinkAccountPost(linkAccountRequestModel); };
-
-            // Assert
-            await act.Should().ThrowAsync<UnauthorisedGpSystemHttpRequestException>();
-
-            VerifyLogging(linkAccountRequestModel);
+            Context.VerifyLogging(logoffRequestModel);
         }
 
         [TestMethod]
         public async Task RequestSystmOnlineMessagesPost_ReturnsRequestSystmOnlineMessagesReply_WhenValidlyRequested()
         {
             // Arrange
-            var requestModel = new RequestSystmOnlineMessages(new TppUserSession { OdsCode = UnitId })
+            var requestModel = new RequestSystmOnlineMessages(new TppUserSession { OdsCode = TppClientTestsContext.UnitId })
             {
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion
@@ -617,11 +467,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, requestModel.RequestType },
-                { RequestSuidHeader, Suid }
+                { TppClientTestsContext.RequestTypeHeader, requestModel.RequestType },
+                { TppClientTestsContext.RequestSuidHeader, TppClientTestsContext.Suid }
             };
 
-            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal) { { ResponseSuidHeader, Suid } };
+            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                { TppClientTestsContext.ResponseSuidHeader, TppClientTestsContext.Suid }
+            };
             
             var expectedResponse = new RequestSystmOnlineMessagesReply();
             var responseContent = new StringContent(expectedResponse.SerializeXml());
@@ -633,7 +486,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);    
 
             // Act
-            var response = await SystemUnderTest.RequestSystmOnlineMessages(requestModel, Suid);
+            var response = await SystemUnderTest.RequestSystmOnlineMessages(requestModel, TppClientTestsContext.Suid);
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
@@ -641,14 +494,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
 
-            VerifyLogging(requestModel);
+            Context.VerifyLogging(requestModel);
         }
 
         [TestMethod]
         public async Task RequestSystmOnlineMessagesPost_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
         {
             // Arrange
-            var requestModel = new RequestSystmOnlineMessages(new TppUserSession { OdsCode = UnitId })
+            var requestModel = new RequestSystmOnlineMessages(new TppUserSession { OdsCode = TppClientTestsContext.UnitId })
             {
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion
@@ -656,8 +509,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, requestModel.RequestType },
-                { RequestSuidHeader, Suid }
+                { TppClientTestsContext.RequestTypeHeader, requestModel.RequestType },
+                { TppClientTestsContext.RequestSuidHeader, TppClientTestsContext.Suid }
             };
 
             var errorResponseBuilder = new TppErrorResponseBuilder();
@@ -666,10 +519,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
                 .WithHeaders(requestHeaders)
                 .WithContent(requestModel.SerializeXml())
-                .Respond(MediaType, errorResponseBuilder.BuildXml());
+                .Respond(TppClientTestsContext.MediaType, errorResponseBuilder.BuildXml());
             
             // Act
-            var response = await SystemUnderTest.RequestSystmOnlineMessages(requestModel, Suid);
+            var response = await SystemUnderTest.RequestSystmOnlineMessages(requestModel, TppClientTestsContext.Suid);
             
             // Assert
             response.ErrorResponse.Should().BeEquivalentTo(errorResponseBuilder.BuildExpected());
@@ -677,7 +530,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             response.Body.Should().BeNull();
             response.Headers.Should().BeNull();
 
-            VerifyLogging(requestModel);
+            Context.VerifyLogging(requestModel);
         }
         
         [TestMethod]
@@ -689,7 +542,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             HttpStatusCode value)
         {
             // Act
-            var requestModel = new RequestSystmOnlineMessages(new TppUserSession { OdsCode = UnitId })
+            var requestModel = new RequestSystmOnlineMessages(new TppUserSession { OdsCode = TppClientTestsContext.UnitId })
             {
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion
@@ -697,8 +550,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { RequestTypeHeader, requestModel.RequestType },
-                { RequestSuidHeader, Suid }
+                { TppClientTestsContext.RequestTypeHeader, requestModel.RequestType },
+                { TppClientTestsContext.RequestSuidHeader, TppClientTestsContext.Suid }
             };
 
             MockHttpHandler
@@ -707,38 +560,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .Respond(value);
 
             // Act
-            var response = await SystemUnderTest.RequestSystmOnlineMessages(requestModel, Suid);
+            var response = await SystemUnderTest.RequestSystmOnlineMessages(requestModel, TppClientTestsContext.Suid);
 
             // Assert
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
 
-            VerifyLogging(requestModel);
+            Context.VerifyLogging(requestModel);
         }
 
         [TestCleanup]
         public void Dispose()
         {
             Context.Dispose();
-        }
-
-        private static Application CreateApplication()
-        {
-            return new Application 
-            {
-                Name = TppClientTestsContext.ApplicationName,
-                Version = TppClientTestsContext.ApplicationVersion,
-                ProviderId = TppClientTestsContext.ApplicationProviderId,
-                DeviceType = TppClientTestsContext.ApplicationDeviceType 
-            };
-        }
-
-        private void VerifyLogging(ITppRequest requestModel)
-        {
-            MockLogger.VerifyLogger(LogLevel.Information, string.Format(CultureInfo.InvariantCulture,
-                LoggingMessageTemplate,
-                requestModel.RequestType,
-                requestModel.Uuid), Times.Once());
         }
     }
 }

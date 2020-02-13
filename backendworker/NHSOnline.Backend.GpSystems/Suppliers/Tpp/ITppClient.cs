@@ -10,8 +10,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
     public interface ITppClient
     {
         Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticate);
-
-        Task<TppApiObjectResponse<LinkAccountReply>> LinkAccountPost(LinkAccount linkAccountModel);
         
         Task<TppApiObjectResponse<ListRepeatMedicationReply>> ListRepeatMedicationPost(TppUserSession tppUserSession);
         

@@ -9,6 +9,10 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Settings;
 using RichardSzalay.MockHttp;
+using System.Globalization;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
+using UnitTestHelper;
+using Application = NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Application;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 {
@@ -22,6 +26,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         internal const string CertificatePath = "CertificatePath";
         internal const string CertificatePassphrase = "CerticiatePassphrase";
         internal const string Environment = "environment";
+
+        internal const string ResponseSuidHeader = "suid";
+        internal const string RequestTypeHeader = "type";
+        internal const string RequestSuidHeader = "suid";
+
+        internal const string UnitId = "unitId";
+
+        internal const string MediaType = "application/xml";
+        internal const string Suid = "session_id";
+        internal const string LoggingMessageTemplate = "Sending TPP REQUEST TYPE: {0} UUID: {1}";
 
         internal static readonly Guid Uuid = new Guid("8a1c6b80-7bcb-49fd-9c6f-4801e12207d6");
         internal static readonly Uri ApiUrl = new Uri("http://tppapitest:60015/Test/");
@@ -66,5 +80,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         }
 
         public void Dispose() => MockHttpHandler.Dispose();
+
+        internal static Application CreateApplication()
+        {
+            return new Application
+            {
+                Name = TppClientTestsContext.ApplicationName,
+                Version = TppClientTestsContext.ApplicationVersion,
+                ProviderId = TppClientTestsContext.ApplicationProviderId,
+                DeviceType = TppClientTestsContext.ApplicationDeviceType
+            };
+        }
+
+        internal void VerifyLogging(ITppRequest requestModel)
+        {
+            MockLogger.VerifyLogger(LogLevel.Information, string.Format(CultureInfo.InvariantCulture,
+                TppClientTestsContext.LoggingMessageTemplate,
+                requestModel.RequestType,
+                requestModel.Uuid), Times.Once());
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
@@ -6,7 +6,7 @@ using static NHSOnline.Backend.GpSystems.Im1Connection.Im1ConnectionErrorCodes;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
 {
-    public static class TppIm1RegisterErrorMapper
+    internal static class TppIm1RegisterErrorMapper
     {
         private static Dictionary<string, InternalCode> KeyToEnumMapper =>
             new Dictionary<string, InternalCode>

@@ -9,20 +9,23 @@ using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
 {
-    public class TppIm1ConnectionService : IIm1ConnectionService
+    internal class TppIm1ConnectionService : IIm1ConnectionService
     {
         private readonly ITppClient _tppClient;
+        private readonly ITppClientRequest<LinkAccount, LinkAccountReply> _linkAccount;
         private readonly IIm1CacheService _im1CacheService;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly ILogger<TppIm1ConnectionService> _logger;
 
-        public TppIm1ConnectionService(ITppClient tppClient, IIm1CacheService im1CacheService,
+        public TppIm1ConnectionService(ITppClient tppClient, ITppClientRequest<LinkAccount, LinkAccountReply> linkAccount, IIm1CacheService im1CacheService,
             IIm1CacheKeyGenerator im1CacheKeyGenerator, ILogger<TppIm1ConnectionService> logger)
         {
             _tppClient = tppClient;
+            _linkAccount = linkAccount;
             _im1CacheService = im1CacheService;
             _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _logger = logger;
@@ -103,7 +106,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                 else
                 {
                     _logger.LogInformation("IM1 connection token not found in cache.");
-                    var linkAccountReply = await _tppClient.LinkAccountPost(linkAccountRequest);
+                    var linkAccountReply = await _linkAccount.Post(linkAccountRequest);
 
                     if (!linkAccountReply.HasSuccessResponse)
                     {
