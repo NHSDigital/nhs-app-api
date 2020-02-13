@@ -49,9 +49,9 @@ jobs:
           artifactName: Android Client Code Coverage Report
 
       - task: Bash@3
-        displayName: Build ${{ variables['android.target'] }}
+        displayName: Build $(android.target)
         env:
-          TARGET: ${{ variables['android.target'] }}
+          TARGET: $(android.target)
         inputs:
           filePath: android/buildscripts/02_build.sh
 

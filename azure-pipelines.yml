@@ -49,7 +49,7 @@ stages:
       - template: .azuredevops/templates/ios-client-build-job.yml
         parameters:
           name: Preview
-          condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), ne(variables['android.target'], 'previewRelease'))
+          condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), ne(variables['ios.target'], 'Preview'))
           target: Preview
           provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
           provisioningProfileName: 'NHS App Dev Preview'
