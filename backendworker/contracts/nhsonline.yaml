@@ -47,8 +47,6 @@ paths:
     $ref: ./nhsonline.patientmessages.yaml#/paths/~1messages~1updateReadStatus
   /v1/gpsearch:
     $ref: ./nhsonline.gpsearch.yaml#/paths/~1gpsearch
-  /v1/brothermailer:
-    $ref: ./nhsonline.brothermailer.yaml#/paths/~1brothermailer
   /v1/session:
     $ref: ./nhsonline.usersession.yaml#/paths/~1session
   /v1/session/extend:

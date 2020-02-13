@@ -48,7 +48,6 @@ class ConfigurationServiceTest : ResourceMockingClass() {
             object : IVolleyCallback {
                 override fun onSuccess(configurationResponse: ConfigurationResponse) {
                     Assert.assertTrue(configurationResponse.isValidConfiguration)
-                    Assert.assertTrue(configurationResponse.isThrottlingEnabled)
                     Assert.assertEquals("https://uaf.ext.signin.nhs.uk",
                         configurationResponse.fidoServerUrl)
                 }
@@ -64,7 +63,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
     }
 
     private fun getValidResponse(): String {
-        return "{\"isDeviceSupported\":true,\"isThrottlingEnabled\":true,\"fidoServerUrl\":\"https://uaf.ext.signin.nhs.uk\"}"
+        return "{\"isDeviceSupported\":true,\"fidoServerUrl\":\"https://uaf.ext.signin.nhs.uk\"}"
     }
 
 }

@@ -29,7 +29,6 @@ import serviceJourneyRules from './modules/serviceJourneyRules';
 import session from './modules/session';
 import spinner from './modules/spinner';
 import termsAndConditions from './modules/termsAndConditions';
-import throttling from './modules/throttling';
 
 
 export const modules = {
@@ -64,7 +63,6 @@ export const modules = {
   session,
   spinner,
   termsAndConditions,
-  throttling,
 };
 
 export const actions = {

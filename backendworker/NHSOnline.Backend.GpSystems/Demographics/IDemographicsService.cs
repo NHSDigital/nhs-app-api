@@ -1,4 +1,3 @@
-﻿using System;
 using NHSOnline.Backend.Support;
 using System.Threading.Tasks;
 

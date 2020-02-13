@@ -198,16 +198,6 @@ class NhsWeb(
         uiInteractor.dismissSessionExtensionDialog()
     }
 
-    fun onBetaCookieStoreRequest() {
-        val cookies: String? = CookieManager.getInstance()
-                .getCookie(activity.resources.getString(R.string.cookieDomain))
-                ?.takeIf { it.contains("BetaCookie=") }
-        if (cookies != null) {
-            val betaCookie = cookies.split("; ").first { it.startsWith("BetaCookie=") }
-            appPersistData.storeBetaCookie(betaCookie)
-        }
-    }
-
     fun onBiometricOptionChanged() {
         val cookies: String? = CookieManager.getInstance()
                 .getCookie(activity.resources.getString(R.string.cookieDomain))

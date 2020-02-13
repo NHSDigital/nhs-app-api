@@ -28,7 +28,6 @@ namespace NHSOnline.Backend.Support
         public static class AppConfig
         {
             public const string GitCommitId = "Version:CommitId";
-            public const string ThrottlingEnabled = "ThrottlingEnabled";
         }
 
         public static class EnvironmentalVariables

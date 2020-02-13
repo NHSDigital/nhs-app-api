@@ -10,7 +10,6 @@ import mocking.models.Mapping
 import mocking.ndop.NdopMappingBuilder
 import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.spine.SpineMappingBuilder
-import mocking.throttling.BrotherMailerMappingBuilder
 import mocking.tpp.TppMappingRouter
 import mocking.vision.VisionMappingRouter
 
@@ -62,13 +61,6 @@ class MockingClient(configuration: MockingConfiguration): WiremockHelper(configu
 
     fun forNdop(method: String = "POST", resolver: NdopMappingBuilder.() -> Mapping) {
         val mappingBuilder = NdopMappingBuilder(method)
-        val mapping: Mapping = mappingBuilder.resolver()
-
-        this.postMapping(mapping)
-    }
-
-    fun forBrotherMailer(method: String = "POST", resolver: BrotherMailerMappingBuilder.() -> Mapping) {
-        val mappingBuilder = BrotherMailerMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)

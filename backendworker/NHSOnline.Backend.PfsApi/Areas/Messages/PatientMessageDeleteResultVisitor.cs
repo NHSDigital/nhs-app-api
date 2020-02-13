@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.GpSystems.Messages;
-using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Messages

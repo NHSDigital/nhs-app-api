@@ -6,8 +6,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
     {
         Uri NhsSearchBaseUrl { get; }
 
-        int GpLookupApiResultsLimit { get; }
-
         int PharmacySearchApiLimit { get; }
 
         int OnlinePharmacyRandomisedSearchResultLimit { get; }
@@ -16,11 +14,9 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 
         string GpLookupApiKey { get; }
 
-        string PostcodeLookupSearchRadiusKm { get; }
-
         /// <summary>
         /// Required for testing as our test ODS codes do not exist in NHS search results.
         /// </summary>
-        string GpPraticeOdsCodeForEpsEnabledCheckOverride { get; }
+        string GpPracticeOdsCodeForEpsEnabledCheckOverride { get; }
     }
 }

@@ -8,12 +8,8 @@
 	<string>html</string>
 	<key>IntroCarouselFileName</key>
 	<string>appintro</string>
-	<key>ThrottlingCarouselFileName</key>
-	<string>throttling</string>
 	<key>IsFirstTimeOpened</key>
 	<string>IsFirstTimeOpened</string>
-	<key>HaveShownThrottlingCarouselBefore</key>
-	<string>HaveShownThrottlingCarouselBefore</string>
 	<key>HomeUrl</key>
 	<string>https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/</string>
 	<key>HotJarLinkUrl</key>

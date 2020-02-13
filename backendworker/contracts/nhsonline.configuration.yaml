@@ -46,10 +46,6 @@ components:
           type: boolean
           description: Returns true if the version of NHS App installed on device is
             supported, otherwise false.
-        isThrottlingEnabled:
-          type: boolean
-          description: Returns true if throttling is enabled on the environment, otherwise
-            false.
         fidoServerUrl:
           type: string
           description: Returns the URL of the FIDO server for the given environment.

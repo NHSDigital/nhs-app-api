@@ -7,7 +7,6 @@ import cucumber.api.java.en.When
 import features.loggedOut.steps.CookieBannerSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.CookieSteps
-import features.throttling.stepDefinitions.GpFinderPageStepDefinitions
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.CheckMySymptomsPage
@@ -27,8 +26,6 @@ class CookieBannerStepDefinitions {
     private lateinit var cookieSteps : CookieSteps
     @Steps
     lateinit var cookieBannerSteps: CookieBannerSteps
-    @Steps
-    lateinit var gpFinderSteps: GpFinderPageStepDefinitions
 
     private lateinit var loginPage: LoginPage
     private lateinit var checkMySymptomsPage: CheckMySymptomsPage
@@ -67,11 +64,6 @@ class CookieBannerStepDefinitions {
         loginPage.symptomsButton.click()
         checkMySymptomsPage.isConditionsHeaderVisible()
         checkMySymptomsPage.isNhs111HeaderVisible()
-    }
-
-    @When("^I am on the gp finder logged-out page$")
-    fun iAmOnTheGpFinderLoggedOutPage(){
-        gpFinderSteps.iHaveNotLoggedInAndIHaveNotPreviouslySelectedMyGPPractice()
     }
 
     @When("^I close the cookie banner$")

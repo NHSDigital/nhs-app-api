@@ -172,12 +172,6 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
-    fun storeBetaCookie() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering storeBetaCookie")
-        activity.runOnUiThread { nhsWeb.onBetaCookieStoreRequest() }
-    }
-
-    @JavascriptInterface
     fun updateHeaderText(text: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateHeaderText")
         activity.runOnUiThread {

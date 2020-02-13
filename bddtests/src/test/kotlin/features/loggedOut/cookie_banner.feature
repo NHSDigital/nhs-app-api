@@ -13,10 +13,8 @@ Feature: Cookie Banner
       | target page         | js enabled? |
       | login               | enabled     |
       | check your symptoms | enabled     |
-      | gp finder           | enabled     |
       | login               | disabled    |
       | check your symptoms | disabled    |
-      | gp finder           | disabled    |
 
   @native
   @nativesmoketest
@@ -27,7 +25,6 @@ Feature: Cookie Banner
       | target page         |
       | login               |
       | check your symptoms |
-      | gp finder           |
 
   Scenario Outline: When the Cookie Banner is acknowledged on the <target page> web page with Javascript enabled, the banner no longer appears with a refresh but cookies will reappear when swapping page
     Given I have enabled javascript
@@ -37,13 +34,11 @@ Feature: Cookie Banner
     Then I do not see the cookie banner
     And pages will display the cookie banner
       | /login               |
-      | /gp-finder           |
       | /check-your-symptoms |
     Examples:
       | target page         |
       | login               |
       | check your symptoms |
-      | gp finder           |
 
   Scenario Outline: Cookie Banner doesn't appear when logged in on web, when Javascript <js enabled?>
     Given I have <js enabled?> javascript

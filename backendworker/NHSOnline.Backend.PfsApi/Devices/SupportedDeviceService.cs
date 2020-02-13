@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Areas.Configuration;
-using NHSOnline.Backend.Support.Settings;
 using static NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.PfsApi.Devices
@@ -11,31 +10,20 @@ namespace NHSOnline.Backend.PfsApi.Devices
     public class SupportedDeviceService : ISupportedDeviceService
     {
         private readonly ILogger<SupportedDeviceService> _logger;
-        private readonly Dictionary<string, string> SupportedAppVersions;
-        private bool _throttlingEnabled;
+        private readonly Dictionary<string, string> _supportedAppVersions;
         private Uri _fidoServerUrl;
 
         public SupportedDeviceService(ILogger<SupportedDeviceService> logger, DeviceConfigurationSettings settings)
         {
             _logger = logger;
 
-            SupportedAppVersions = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+            _supportedAppVersions = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
             {
                 { SupportedDeviceNames.Android, settings.MinimumSupportedAndroidVersion },
                 { SupportedDeviceNames.iOS, settings.MinimumSupportediOSVersion }
             };
 
-            CheckIfThrottlingEnabled(settings);
-
             GetFidoServerUrl(settings);
-        }
-
-        private void CheckIfThrottlingEnabled(DeviceConfigurationSettings settings)
-        {
-            if (!bool.TryParse(settings.ThrottlingEnabled, out _throttlingEnabled))
-            {
-                throw new ConfigurationNotFoundException();
-            }
         }
 
         private void GetFidoServerUrl(DeviceConfigurationSettings settings)
@@ -54,13 +42,13 @@ namespace NHSOnline.Backend.PfsApi.Devices
 
             _logger.LogDebug($"Checking if device name {device.Name} is valid");
 
-            if (!SupportedAppVersions.ContainsKey(device.Name))
+            if (!_supportedAppVersions.ContainsKey(device.Name))
             {
                 _logger.LogError($"Device name {device.Name} not recognised:");
                 return new GetConfigurationResult.BadRequest();
             }
 
-            var minimumSupportedVersionForDevice = SupportedAppVersions[device.Name];
+            var minimumSupportedVersionForDevice = _supportedAppVersions[device.Name];
 
             if (string.IsNullOrEmpty(minimumSupportedVersionForDevice))
             {
@@ -88,12 +76,10 @@ namespace NHSOnline.Backend.PfsApi.Devices
                 _logger.LogInformation(
                     $"App version {device.NativeAppVersion} is less than minimum supported version {minimumSupportedVersionForDevice}");
                 return new GetConfigurationResult.Success(isDeviceSupported: false,
-                    isThrottlingEnabled: _throttlingEnabled,
                     fidoServerUrl: _fidoServerUrl);
             }
 
             return new GetConfigurationResult.Success(isDeviceSupported: true,
-                isThrottlingEnabled: _throttlingEnabled,
                 fidoServerUrl: _fidoServerUrl);
         }
     }

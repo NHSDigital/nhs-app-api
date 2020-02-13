@@ -252,15 +252,6 @@ export default {
     return false;
   },
 
-  storeBetaCookie() {
-    const app = window.nativeApp;
-    if (app && app.storeBetaCookie) {
-      app.storeBetaCookie();
-      return true;
-    }
-    return false;
-  },
-
   updateHeaderText(header) {
     const app = window.nativeApp;
     if (app && app.updateHeaderText) {

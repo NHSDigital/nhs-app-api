@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Im1Connection;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
 {

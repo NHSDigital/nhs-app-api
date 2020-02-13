@@ -8,7 +8,7 @@
       <div v-else-if="shouldShowSlimDesktopHeader">
         <web-header :show-menu="false" :show-links="false"/>
       </div>
-      <content-header v-if="!isGpFinderPage" id="content-header"
+      <content-header id="content-header"
                       :show-bread-crumb="shouldShowBreadCrumb"
                       :show-content-header="shouldShowContentHeader"/>
       <div id="maincontent" ref="mainContent" tabindex="-1">
@@ -59,7 +59,6 @@ import showShutterPage from '@/lib/proxy/shutter';
 import {
   findByName,
   getCrumbTrailForRoute,
-  GP_FINDER,
   INDEX,
   isAnonymous,
   LOGIN,
@@ -142,9 +141,6 @@ export default {
     },
     currentCrumb() {
       return (this.currentRoute || INDEX).crumb;
-    },
-    isGpFinderPage() {
-      return this.$route.name === GP_FINDER.name;
     },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;

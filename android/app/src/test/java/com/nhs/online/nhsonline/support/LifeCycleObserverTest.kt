@@ -225,33 +225,6 @@ class LifeCycleObserverTest {
     }
 
     @Test
-    fun onMoveToForeground_withAUrl_shouldNotValidateSession_noPreviousConfigurationCheck_withValidConfiguration_throttlingEnable() {
-        val url = "Bazz"
-        val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
-
-        contextSpy.webview.loadUrl(url)
-        doNothing().whenever(contextSpy).hideBlankScreen()
-
-        val fidoServerUrl = "https://test@test.com"
-        val cr = ConfigurationResponse()
-        cr.isValidConfiguration = true
-        cr.isThrottlingEnabled = true
-        cr.fidoServerUrl = fidoServerUrl
-        doAnswer {
-            val callback = it.arguments[0] as IVolleyCallback
-            callback.onSuccess(cr)
-        }.whenever(configurationServiceMock).getConfiguration(any())
-
-        lifeCycleObserver.onMoveToForeground()
-
-        verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
-        verify(contextSpy, times(1)).hideBlankScreen()
-        verify(contextSpy, times(1)).configBiometricSetup(fidoServerUrl)
-        verify(appDialogsMock, times(0)).showVersionUpgradeDialog()
-        assertEquals(true, contextSpy.isSuccessfulConfigCheck)
-    }
-
-    @Test
     fun onMoveToForeground_withAUrl_shouldNotValidateSession_noPreviousConfigurationCheck_withInvalidConfiguration_showVersionUpgradeDialog() {
         val url = "Bazz"
         val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
@@ -262,7 +235,6 @@ class LifeCycleObserverTest {
         val fidoServerUrl = "https://test@test.com"
         val cr = ConfigurationResponse()
         cr.isValidConfiguration = false
-        cr.isThrottlingEnabled = true
         cr.fidoServerUrl = fidoServerUrl
         doAnswer {
             val callback = it.arguments[0] as IVolleyCallback

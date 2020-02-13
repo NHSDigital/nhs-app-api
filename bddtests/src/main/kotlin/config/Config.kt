@@ -26,7 +26,6 @@ class Config private constructor() {
     var dataPreferencesHost: String
     var dataPreferencesPath: String
     var dataPreferencesUrl: String
-    var brotherMailerPath: String
 
     var browserstackAccessKey: String
     var browserstackUrl: String
@@ -46,7 +45,6 @@ class Config private constructor() {
     var sessionExpiryMinutes: Long
     val showPageSourceForXPathQuery: Boolean
     val gpLookupApiKey: String
-    val postcodeLookupSearchRadiusKm: String
     var isDockerised: Boolean
 
     val mongoDbHost: String
@@ -115,10 +113,8 @@ class Config private constructor() {
 
         messagesMongoDbHost = envOrDefault("MESSAGES_MONGO_DATABASE_HOST", "127.0.0.1")
         messagesMongoDbPort = envOrDefault("MESSAGES_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
-        brotherMailerPath = "/brothermailer/signup.ashx"
 
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
-        postcodeLookupSearchRadiusKm = envOrDefault("POSTCODE_LOOKUP_SEARCH_RADIUS_KM", "10");
 
         accessibilityOutputFolder = envOrDefault("ACCESSIBILITY_OUTPUT_FOLDER", "accessibilityoutput")
     }

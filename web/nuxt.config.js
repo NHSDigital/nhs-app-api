@@ -94,7 +94,6 @@ const config = {
     // Organ Donation
     ORGAN_DONATION_FIND_OUT_MORE_URL: 'https://www.organdonation.nhs.uk/app/app-donation/',
     ORGAN_DONATION_URL: 'https://www.organdonation.nhs.uk/',
-    ORGAN_DONATION_THROTTLING_URL: 'https://www.organdonation.nhs.uk/',
     BLOOD_DONATION_URL: 'https://www.blood.co.uk/',
     ORGAN_DONATION_ALREADY_REGISTERED_URL: 'https://www.organdonation.nhs.uk/app/app-check/',
     ORGAN_DONATION_SHARE_DECISION_URL: 'https://www.organdonation.nhs.uk/app/app-share/',
@@ -131,9 +130,6 @@ const config = {
     CORONAVIRUS_INFORMATION_URL: 'https://www.nhs.uk/conditions/wuhan-novel-coronavirus/',
     // App Version
     VERSION_TAG: 'dev_web_npm',
-    // Throttling
-    THROTTLING_ENABLED: false,
-    GP_LOOKUP_API_RESULTS_LIMIT: 20,
     COMMIT_ID: 'dev',
     CE_MARK_ENABLED: false,
     ORGAN_DONATION_INTEGRATION_ENABLED: true,

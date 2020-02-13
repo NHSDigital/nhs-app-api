@@ -41,20 +41,6 @@ class LoginPage : HybridPageObject() {
             page = this
     )
 
-    val recordMyOrganDonationDecisionLink = HybridPageElement(
-            webDesktopLocator = "//*[@id='btn_organDonation']",
-            webMobileLocator = "//*[@id='btn_organDonation']",
-            androidLocator = null,
-            page = this
-    )
-
-    val throttlingNotParticipatingHeader = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(), 'More features will be coming soon to this GP surgery')]",
-            webMobileLocator = "//h2[contains(text(), 'More features will be coming soon to this GP surgery')]",
-            androidLocator = null,
-            page = this
-    )
-
     private val helpIcon = HybridPageElement(
             webDesktopLocator = "//a[@id='help_icon']/*[name()='svg']",
             androidLocator = null,

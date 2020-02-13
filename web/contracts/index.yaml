@@ -39,9 +39,6 @@
                     isDeviceSupported: 
                       type: "boolean"
                       description: "Returns true if the version of NHS App installed on device is supported, otherwise false."
-                    isThrottlingEnabled: 
-                      type: "boolean"
-                      description: "Returns true if throttling is enabled on the environment, otherwise false."
                     fidoServerUrl: 
                       type: "string"
                       description: "Returns the URL of the FIDO server for the given environment."
@@ -3602,37 +3599,6 @@
                     organisationQueryCount: 
                       type: "integer"
                       description: "Total count of Gp Practices in query"
-          400: 
-            description: "Bad request. Supplied request is incomplete or invalid."
-          500: 
-            description: "An unexpected error occurred processing the request."
-          502: 
-            description: "Bad response received from upstream system."
-    /v1/brothermailer: 
-      post: 
-        tags: 
-          - "brothermailer"
-        summary: "Signup to Brothermailer"
-        description: "Returns status code indicating if signup to brothermailer was successful"
-        requestBody: 
-          content: 
-            application/json: 
-              schema: 
-                type: "object"
-                description: "Brothermailer Request"
-                properties: 
-                  emailAddress: 
-                    type: "string"
-                    description: "Email Address to signup with"
-                  odsCode: 
-                    type: "string"
-                    description: "Ods Code of selected GP Practice"
-          description: "Details of OdsCode and Email Address used for signup to Brothermailer"
-          required: true
-          x-name: "BrothermailerRequest"
-        responses: 
-          200: 
-            description: "Successfully signed up"
           400: 
             description: "Bad request. Supplied request is incomplete or invalid."
           500: 

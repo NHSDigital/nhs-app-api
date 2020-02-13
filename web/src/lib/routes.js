@@ -413,61 +413,6 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
-  GP_FINDER: {
-    name: 'gp-finder',
-    path: '/gp-finder',
-    isAnonymous: true,
-    crumb: {
-      get parentRoute() {
-        return undefined;
-      },
-    },
-    helpUrl: baseNhsAppHelpUrl,
-  },
-  GP_FINDER_RESULTS: {
-    name: 'gp-finder-results',
-    path: '/gp-finder/results',
-    isAnonymous: true,
-    crumb: {
-      get parentRoute() {
-        return undefined;
-      },
-    },
-    helpUrl: baseNhsAppHelpUrl,
-  },
-  GP_FINDER_SENDING_EMAIL: {
-    name: 'gp-finder-sending-email',
-    path: '/gp-finder/sending-email',
-    isAnonymous: true,
-    crumb: {
-      get parentRoute() {
-        return undefined;
-      },
-    },
-    helpUrl: baseNhsAppHelpUrl,
-  },
-  GP_FINDER_WAITING_LIST_JOINED: {
-    name: 'gp-finder-waiting-list-joined',
-    path: '/gp-finder/waiting-list-joined',
-    isAnonymous: true,
-    crumb: {
-      get parentRoute() {
-        return undefined;
-      },
-    },
-    helpUrl: baseNhsAppHelpUrl,
-  },
-  GP_FINDER_PARTICIPATION: {
-    name: 'gp-finder-participation',
-    path: '/gp-finder/participation',
-    isAnonymous: true,
-    crumb: {
-      get parentRoute() {
-        return undefined;
-      },
-    },
-    helpUrl: baseNhsAppHelpUrl,
-  },
   INDEX: {
     name: 'index',
     path: '/',
@@ -1527,11 +1472,6 @@ export const {
   DISCONTINUED_MEDICINES,
   ENCOUNTERS,
   EXAMINATIONS_V2,
-  GP_FINDER,
-  GP_FINDER_RESULTS,
-  GP_FINDER_PARTICIPATION,
-  GP_FINDER_SENDING_EMAIL,
-  GP_FINDER_WAITING_LIST_JOINED,
   INDEX,
   INTERSTITIAL_REDIRECTOR,
   LEGACY_MYRECORDWARNING,

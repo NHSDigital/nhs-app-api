@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Configuration
@@ -9,12 +9,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
 
         public class Success : GetConfigurationResult
         {
-            public Success(bool isDeviceSupported, bool isThrottlingEnabled, Uri fidoServerUrl)
+            public Success(bool isDeviceSupported, Uri fidoServerUrl)
             {
                 Response = new GetConfigurationResponse
                 {
                     IsDeviceSupported = isDeviceSupported,
-                    IsThrottlingEnabled = isThrottlingEnabled,
                     FidoServerUrl = fidoServerUrl
                 };
             }

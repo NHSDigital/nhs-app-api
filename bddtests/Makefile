@@ -26,11 +26,6 @@ run-others: run-deps	## Run the other integration tests
 	./buildscripts/02_integration_test_code_analysis.sh
 	./buildscripts/03_integration_test_run_others.sh
 
-$(eval $(call expand_run_options_docker_images,run-throttling))
-run-throttling: run-deps	## Run the throttling integration tests
-	./buildscripts/02_integration_test_code_analysis.sh
-	./buildscripts/03_integration_test_run_throttling.sh
-
 $(eval $(call expand_run_options_docker_images,run-local))
 run-local: run-deps	## Run in docker with ports open
 	./buildscripts/02_integration_test_code_analysis.sh
@@ -49,6 +44,6 @@ run-native-ios:	run-deps ## Run the nativesmoketests in BrowserStack against iOS
 run-deps:
 	$(MAKE) -C .. run-deps
 
-.PHONY: run run-others run-throttling run-local run-native-android run-native-ios run-deps validate_local_secrets validate_local_images
+.PHONY: run run-others run-local run-native-android run-native-ios run-deps validate_local_secrets validate_local_images
 
 -include ../build/util.make

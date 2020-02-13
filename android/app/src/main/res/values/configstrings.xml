@@ -53,7 +53,6 @@
     <string name="accessibilityStatementURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/</string>
     <string name="configurationApiPath">configuration?nativeAppVersion=%1$s&amp;deviceName=Android</string>
     <string name="isSupportedVersion">isDeviceSupported</string>
-    <string name="isThrottlingEnabled">isThrottlingEnabled</string>
     <string name="fidoServerUrlConfigurationKey">fidoServerUrl</string>
     <string name="menuTimeoutSeconds">10</string>
     <string name="secureFlag">enabled</string>

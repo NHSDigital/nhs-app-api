@@ -11,20 +11,17 @@ namespace NHSOnline.Backend.PfsApi.Devices
         public string MinimumSupportediOSVersion { get; set; }
 
         public Uri FidoServerUrl { get; set; }
-
-        public string ThrottlingEnabled { get; set; }
         
         public Uri WebAppBaseUrl { get; set; }
 
         public DeviceConfigurationSettings() {}
         
         public DeviceConfigurationSettings(string minimumSupportedAndroidVersion,
-            string minimumSupportediOSVersion, Uri fidoServerUrl, string throttlingEnabled, Uri webAppBaseUrl)
+            string minimumSupportediOSVersion, Uri fidoServerUrl, Uri webAppBaseUrl)
         {
             MinimumSupportedAndroidVersion = minimumSupportedAndroidVersion;
             MinimumSupportediOSVersion  = minimumSupportediOSVersion;
             FidoServerUrl = fidoServerUrl;
-            ThrottlingEnabled = throttlingEnabled;
             WebAppBaseUrl = webAppBaseUrl;
         }
         
@@ -38,11 +35,6 @@ namespace NHSOnline.Backend.PfsApi.Devices
             if(MinimumSupportediOSVersion == null)
             {
                 throw new ConfigurationNotFoundException(nameof(MinimumSupportediOSVersion));
-            }
-
-            if (ThrottlingEnabled == null)
-            {
-                throw new ConfigurationNotFoundException(nameof(ThrottlingEnabled));
             }
 
             if (FidoServerUrl == null)

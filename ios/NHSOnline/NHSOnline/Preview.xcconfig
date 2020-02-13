@@ -1,9 +1,7 @@
 CAROUSEL_DIRECTORY = assets
 CAROUSEL_CONTENT_TYPE = html
 INTRO_CAROUSEL_FILE_NAME = appintro
-THROTTLING_CAROUSEL_FILE_NAME = throttling
 IS_FIRST_TIME_OPENED = IsFirstTimeOpened
-HAVE_SHOWN_THROTTLING_CAROUSEL_BEFORE = HaveShownThrottlingCarouselBefore
 HOME_URL = www-preview.dev.nonlive.nhsapp.service.nhs.uk/
 HOT_JAR_LINK_URL = in.hotjar.com/s?siteId=859152&amp;surveyId=95785
 NHS_111_URL = 111.nhs.uk

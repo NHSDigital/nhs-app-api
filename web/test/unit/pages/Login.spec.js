@@ -29,8 +29,6 @@ describe('login page', () => {
   const mountWithQueryData = ({ isNativeApp = true, query, source = 'android', data }) => {
     const $env = {
       BIOMETRICS_ENABLED: true,
-      THROTTLING_ENABLED: true,
-      ORGAN_DONATION_THROTTLING_URL: 'www.foo.com',
     };
 
     const $cookies = {
@@ -99,10 +97,6 @@ describe('login page', () => {
     expect(AuthorisationService).not.toHaveBeenCalled();
   });
 
-  it('will not display record organ donation link', () => {
-    expect(wrapper.find('#btn_organDonation').exists()).toBe(false);
-  });
-
   describe('login button', () => {
     let loginButton;
 
@@ -129,31 +123,6 @@ describe('login page', () => {
 
       it('will be disabled', () => {
         expect(wrapper.vm.isButtonDisabled).toBe(true);
-      });
-    });
-  });
-
-  describe('throttling', () => {
-    beforeEach(() => {
-      wrapper = mountWithQueryData({
-        query: defaultQuery,
-        data: () => ({ practiceParticipating: false }),
-      });
-    });
-
-    describe('record organ donation link', () => {
-      let link;
-
-      beforeEach(() => {
-        link = wrapper.find('#btn_organDonation');
-      });
-
-      it('will exist', () => {
-        expect(link.exists()).toBe(true);
-      });
-
-      it('will translate "shared.organDonation.recordDecision"', () => {
-        expect(link.text()).toBe('translate_shared.organDonation.recordDecision');
       });
     });
   });

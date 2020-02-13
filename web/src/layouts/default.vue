@@ -25,7 +25,7 @@ PLEASE INSTEAD USE nhsuk-layout.vue
         <div v-else-if="shouldShowSlimDesktopHeader">
           <web-header :show-menu="false" :show-links="false"/>
         </div>
-        <content-header v-if="!isGpFinderPage()" id="content-header"
+        <content-header id="content-header"
                         :show-bread-crumb="shouldShowBreadCrumb"
                         :show-content-header="!isLoginPage()"/>
       </div>
@@ -74,7 +74,6 @@ import WebHeader from '@/components/widgets/WebHeader';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import {
   findByName,
-  GP_FINDER,
   INDEX,
   isAnonymous,
   LOGIN,
@@ -266,9 +265,6 @@ export default {
   methods: {
     isLoginPage() {
       return this.$route.name === LOGIN.name;
-    },
-    isGpFinderPage() {
-      return this.$route.name === GP_FINDER.name;
     },
     setSurveyBarStatus(isBarOpen) {
       this.surveyBarOpen = isBarOpen;

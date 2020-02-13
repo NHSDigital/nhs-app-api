@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
-using NHSOnline.Backend.PfsApi.Areas.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -38,7 +37,7 @@ namespace NHSOnline.Backend.Support.UnitTests.ResponseParsers
             var failing = "<Test SearchTerm=\"1\"></Test>";
 
             // Act
-            Action act = () => parser.ParseBody<GpSearchRequest>(failing);
+            Action act = () => parser.ParseBody<Application>(failing);
 
             // Assert
             act.Should().Throw<NhsUnparsableException>()

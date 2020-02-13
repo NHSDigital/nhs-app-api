@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace NHSOnline.Backend.GpSystems.Im1Connection.Models
 {

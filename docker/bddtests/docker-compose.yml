@@ -36,7 +36,6 @@ services:
 
   pfs.local.bitraft.io:
     env_file:
-      - ./docker/bddtests/env/brothermailer_connectivity.env
       - ./docker/bddtests/env/emis_connectivity.env
       - ./docker/bddtests/env/gplookup_connectivity.env
       - ./docker/bddtests/env/microtest_connectivity.env

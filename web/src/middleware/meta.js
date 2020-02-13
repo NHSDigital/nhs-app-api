@@ -24,11 +24,6 @@ import {
   ENCOUNTERS,
   DIAGNOSIS_V2,
   EXAMINATIONS_V2,
-  GP_FINDER,
-  GP_FINDER_RESULTS,
-  GP_FINDER_PARTICIPATION,
-  GP_FINDER_SENDING_EMAIL,
-  GP_FINDER_WAITING_LIST_JOINED,
   DATA_SHARING_PREFERENCES,
   INDEX,
   INTERSTITIAL_REDIRECTOR,
@@ -195,27 +190,6 @@ export default function ({ route, store, app }) {
     case PROCEDURES_V2.name:
       route.meta.headerKey = 'pageHeaders.proceduresV2';
       route.meta.pageTitleKey = 'pageTitles.proceduresV2';
-      break;
-    case GP_FINDER.name:
-    case GP_FINDER_RESULTS.name:
-      store.dispatch('navigation/clearPreviousSelectedMenuItem');
-      route.meta.headerKey = 'pageHeaders.gpFinder';
-      route.meta.pageTitleKey = 'pageTitles.gpFinder';
-      break;
-    case GP_FINDER_PARTICIPATION.name:
-      store.dispatch('navigation/clearPreviousSelectedMenuItem');
-      route.meta.headerKey = 'pageHeaders.gpFinderParticipation';
-      route.meta.pageTitleKey = 'pageTitles.gpFinderParticipation';
-      break;
-    case GP_FINDER_SENDING_EMAIL.name:
-      store.dispatch('navigation/clearPreviousSelectedMenuItem');
-      route.meta.headerKey = 'pageHeaders.gpFinderWaitingListSignup';
-      route.meta.pageTitleKey = 'pageTitles.gpFinderWaitingListSignup';
-      break;
-    case GP_FINDER_WAITING_LIST_JOINED.name:
-      store.dispatch('navigation/clearPreviousSelectedMenuItem');
-      route.meta.headerKey = 'pageHeaders.gpFinderWaitingListJoined';
-      route.meta.pageTitleKey = 'pageTitles.gpFinderWaitingListJoined';
       break;
     case SYMPTOMS.name:
     case CHECKYOURSYMPTOMS.name:

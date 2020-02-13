@@ -18,7 +18,6 @@ import org.json.JSONObject
 
 class ConfigurationResponse {
     var isValidConfiguration: Boolean = false
-    var isThrottlingEnabled: Boolean = false
     var fidoServerUrl: String = ""
 }
 
@@ -59,18 +58,15 @@ class ConfigurationService(private val context: Context) {
     fun handleGetConfigurationResponse(response: String, callback: IVolleyCallback) {
         try {
             val isValidConfiguration = parseBoolean(response, R.string.isSupportedVersion)
-            val isThrottlingEnabled = parseBoolean(response, R.string.isThrottlingEnabled)
             val fidoServerUrl = parseString(response, R.string.fidoServerUrlConfigurationKey)
 
             val configurationResponse = ConfigurationResponse()
-            configurationResponse.isThrottlingEnabled = isThrottlingEnabled
             configurationResponse.isValidConfiguration = isValidConfiguration
             configurationResponse.fidoServerUrl = fidoServerUrl
 
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Configuration success: isValidConfiguration " +
-                        "${configurationResponse.isValidConfiguration}. " +
-                        "Throttling enabled: ${configurationResponse.isThrottlingEnabled}.")
+                        "${configurationResponse.isValidConfiguration}.")
 
             callback.onSuccess(configurationResponse)
         } catch (error: ClassCastException) {

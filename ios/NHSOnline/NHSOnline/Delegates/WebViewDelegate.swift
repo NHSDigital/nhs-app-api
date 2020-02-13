@@ -307,12 +307,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
 
-        var shouldAllowNativeInteraction = false;
-        
-        let url = self.viewController.webViewController?.webView.url;
-        if(url?.absoluteString.contains("throttling"))!{
-            shouldAllowNativeInteraction = true
-        }
+        let shouldAllowNativeInteraction = false;
         
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
             switch message.name {

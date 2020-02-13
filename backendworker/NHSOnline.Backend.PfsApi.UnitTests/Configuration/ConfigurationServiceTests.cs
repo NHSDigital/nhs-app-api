@@ -12,7 +12,7 @@ using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.Configuration;
 using NHSOnline.Backend.PfsApi.Devices;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
+namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
 {
     [TestClass]
     public class ConfigurationServiceTests
@@ -40,7 +40,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
                 MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
                 MinimumSupportediOSVersion = MinimumSupportediOSVersion,
                 FidoServerUrl = _testFidoServerUrl,
-                ThrottlingEnabled = "true", 
                 WebAppBaseUrl = _testWebAppBaseUrl
             };
 

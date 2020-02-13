@@ -34,14 +34,6 @@ class ConfigurationStepDefinitions {
         Assert.assertNotNull("IsDeviceSupported property is not populated", response.isDeviceSupported)
     }
 
-    @Then("^the configuration response will have a isThrottlingEnabled property$")
-    fun theConfigurationResponseWillHaveAIsThrottlingEnabledProperty() {
-        val response = ConfigurationSerenityHelpers.CONFIGURATION_RESPONSE.getOrFail<ConfigurationResponse>()
-
-        Assert.assertNotNull("Configuration response expected, but was null", response)
-        Assert.assertNotNull("isThrottlingEnabled property is not populated", response.isThrottlingEnabled)
-    }
-
     @Then("^the configuration response will have a fidoServerUrl property$")
     fun theConfigurationResponseWillHaveAFidoServerUrlProperty() {
         val response = ConfigurationSerenityHelpers.CONFIGURATION_RESPONSE.getOrFail<ConfigurationResponse>()

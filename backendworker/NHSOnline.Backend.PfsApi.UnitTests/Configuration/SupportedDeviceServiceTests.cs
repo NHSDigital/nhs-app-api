@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -32,7 +32,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             {
                 MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
                 MinimumSupportediOSVersion = MinimumSupportediOSVersion,
-                ThrottlingEnabled = "true",
                 FidoServerUrl = _testFidoServerUrl
             };
 
@@ -147,7 +146,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             var settings = new DeviceConfigurationSettings
             {
                 MinimumSupportedAndroidVersion = "1.blah",
-                ThrottlingEnabled = "true",
                 FidoServerUrl = _testFidoServerUrl
             };
 

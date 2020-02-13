@@ -44,7 +44,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
         {
             var response = new GetConfigurationResult.Success(
                 _fixture.Create<bool>(),
-                _fixture.Create<bool>(),
                 _fixture.Create<Uri>());
 
             _mockSupportedDeviceService.Setup(x => x.IsDeviceSupported(It.IsAny<DeviceDetails>()))

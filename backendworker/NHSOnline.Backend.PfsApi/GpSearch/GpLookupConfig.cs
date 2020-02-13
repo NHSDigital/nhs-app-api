@@ -7,19 +7,15 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 {
     public class GpLookupConfig: IGpLookupConfig
     {
-        public int GpLookupApiResultsLimit { get; }
         public int PharmacySearchApiLimit { get; }
         public int OnlinePharmacyRandomisedSearchResultLimit { get; }
         public int OnlinePharmacySearchResultLimit { get; }
         public Uri NhsSearchBaseUrl { get; }
         public string GpLookupApiKey { get; }
-        public string PostcodeLookupSearchRadiusKm { get; }
-        public string GpPraticeOdsCodeForEpsEnabledCheckOverride { get; }
+        public string GpPracticeOdsCodeForEpsEnabledCheckOverride { get; }
 
         public GpLookupConfig(IConfiguration configuration, ILogger<GpLookupConfig> logger)
         {
-            GpLookupApiResultsLimit = configuration.GetIntOrThrow("GP_LOOKUP_API_RESULTS_LIMIT", logger);
-
             PharmacySearchApiLimit = configuration.GetIntOrThrow("PHARMACY_API_RESULT_LIMIT", logger);
 
             OnlinePharmacyRandomisedSearchResultLimit = configuration.GetIntOrThrow("ONLINE_PHARMACY_RANDOMISED_SEARCH_RESULT_LIMIT", logger);
@@ -35,9 +31,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 
             GpLookupApiKey = configuration.GetOrWarn("GP_LOOKUP_API_KEY", logger);
 
-            PostcodeLookupSearchRadiusKm = configuration.GetOrWarn("POSTCODE_LOOKUP_SEARCH_RADIUS_KM", logger);
-
-            GpPraticeOdsCodeForEpsEnabledCheckOverride = configuration.GetOrWarn("GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE", logger);
+            GpPracticeOdsCodeForEpsEnabledCheckOverride = configuration.GetOrWarn("GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE", logger);
         }
     }
 }

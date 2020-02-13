@@ -85,30 +85,12 @@ header.logged {
         color: $dark_grey;
     }
 
-    .moreFeaturesComingSoon {
-        text-align: left;
-    }
-
     a {
         @include default_text;
         color: $nhs_blue;
         width: 100%;
         display: inline;
         cursor: pointer
-    }
-
-    .organDonationLink {
-        text-align: left;
-        cursor: pointer;
-        display: inline;
-    }
-
-    .organDonationLink:focus {
-        @include linkFocusStyle;
-    }
-
-    .organDonationLink:hover {
-        @include linkHoverStyle;
     }
 }
 .checkFeaturesLink {
@@ -160,4 +142,3 @@ main.logged {
     height: $logged_height;
     overflow: auto;
 }
-
