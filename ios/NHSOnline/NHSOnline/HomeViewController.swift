@@ -22,8 +22,7 @@ class HomeViewController : UIViewController {
     @IBOutlet weak var webviewHeaderTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var webviewNavMenuBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var webviewHeaderSlimTopConstraint: NSLayoutConstraint!
-    
-    let knownServices = KnownServices(config: config())
+
     var lifecycleHandlers: LifecycleHandlers?
     var webViewController: WebViewController?
     var errorViewController: PageUnavailabilityViewController?
@@ -44,9 +43,10 @@ class HomeViewController : UIViewController {
     var biometricService: BiometricService?
     var configurationService: ConfigurationServiceProtocol?
     var notificationsService: NotificationsService?
-    
+    var knownServices = KnownServices()
+    var configurationResponse: ConfigurationResponse? = nil
     public var selectedTab: Int?
-    
+
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
     }
@@ -72,27 +72,40 @@ class HomeViewController : UIViewController {
     override func viewDidLoad() {
         self.setNeedsStatusBarAppearanceUpdate()
         super.viewDidLoad()
-        
+
+        self.configurationResponse = ConfigurationServiceManager().GetConfigurationResponse()
+
         setupNhsLogo()
         setupBackArrow()
         setupMyAccountIcon()
         setupHelpIcon()
-        
+
+        if (self.configurationResponse!.callSuccessful){
+            self.knownServices = configurationResponse!.knownServices
+        }
+
         webAppInterface = WebAppInterface(controller: self)
         webViewDelegate = WebViewDelegate(controller: self, knownServices: knownServices, webAppInterface: webAppInterface!)
         tabBarDelegate = TabBarDelegate(controller: self)
         tabBar.delegate = tabBarDelegate
         tabBar.setDefaultTabBarItemsAppearance()
-        
+
         setUpControllers()
+
+        if (!self.configurationResponse!.callSuccessful){
+            apiCallFailure()
+            return
+        }
+
         self.addChildViewController(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
-        
-        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices,
-                                              webViewController: webViewController!,
-                                              homeViewController: self)
+
         appWebInterface = AppWebInterface(webView: webViewController?.webView)
         notificationsService = NotificationsService(appWebInterface: appWebInterface!)
+        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices,
+                                              webViewController: webViewController!,
+                                              homeViewController: self,
+                                              configurationResponse: configurationResponse!)
         
         guard apiConfigCallError else {
             guard let urlToLoad = UserDefaults.standard.url(forKey: config().NotificationLinkPropertyName) else {
@@ -105,7 +118,7 @@ class HomeViewController : UIViewController {
             return
         }
     }
-    
+
     func apiCallFailure() {
         guard isOffline() else {
             apiConfigCallError = true
@@ -145,16 +158,11 @@ class HomeViewController : UIViewController {
     @objc @available(iOS 10.0, *)
     public func attemptBiometricLoginIfAppVersionValid() {
         do {
-            configurationService!.isUserDeviceAllowed(homeViewController: self) { (response) in
-                if let result = response {
-                    if (result.isValidConfiguration == true) {
-                        self.attemptBiometricLogin()
-                        self.biometricsHasBeenAttempted = true
-                    }
-                    else {
-                        return
-                    }
-                }
+            if (configurationResponse!.isSupportedVersion) {
+                self.attemptBiometricLogin()
+                self.biometricsHasBeenAttempted = true
+            } else {
+                return
             }
         }
     }
@@ -186,6 +194,7 @@ class HomeViewController : UIViewController {
     
     func setUpControllers() {
         webViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController
+        webViewController?.setKnownServices(knownServices: knownServices)
         webViewController?.loadViewIfNeeded()
         webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
         webViewController?.view.translatesAutoresizingMaskIntoConstraints = false
@@ -261,12 +270,7 @@ class HomeViewController : UIViewController {
             if(error != nil) {
                 let description = error.debugDescription
                 print(description)
-                
-                if #available(iOS 10.0, *) {
-                    os_log("An error occured setting the app version number.", log: OSLog.default, type: .error)
-                } else {
-                    NSLog("An error occured setting the app version number.")
-                }
+                Logger.logInfo(message: "An error occurred setting the app version number")
             }
         }
         
@@ -516,29 +520,19 @@ class HomeViewController : UIViewController {
     }
     
     func isCheckYourSymptomsPath(webview: WKWebView!) -> Bool {
-        if #available(iOS 10.0, *) {
-            os_log("Checking current url for symtoms path", log: OSLog.default, type: .info)
-        } else {
-            NSLog("Checking current url for symtoms path")
-        }
+        Logger.logInfo(message: "Checking current url for symptoms path")
+
         let baseUrl = URL(string: config().HomeUrl)
         return (webview.url?.host == baseUrl?.host && webview.url?.path == config().CheckSymptomsUrlPath)
     }
     
     func hasCidUrlSuffix(webview: WKWebView!) -> Bool {
-        if #available(iOS 10.0, *) {
-            os_log("Checking current url for CidSuffix", log: OSLog.default, type: .info)
-        } else {
-            NSLog("Checking current url for CidSuffix")
-        }
+        Logger.logInfo(message: "Checking current url for CidSuffix")
+
         let absoluteUrl = webview.url?.absoluteString
         
         if(absoluteUrl == nil) {
-            if #available(iOS 10.0, *) {
-                os_log("Current webview url is nil on checkSymptomsAndCIDBack call", log: OSLog.default, type: .info)
-            } else {
-                NSLog("Current webview url is nil on checkSymptomsAndCIDBack call")
-            }
+            Logger.logInfo(message: "Current webview url is nil on checkSymptomsAndCIDBack call")
             return false
         } else {
             return absoluteUrl!.contains(config().CidUrlSuffix)

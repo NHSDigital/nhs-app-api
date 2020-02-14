@@ -51,9 +51,6 @@ class BiometricsViewControllerTests : XCTestCase {
         
         assert(homeViewController.showWebViewContainerCalled == true,
                "Expected the showWebViewContainer() Method to be invoked")
-        
-        assert(homeViewController.updateHeaderTextCalled == true,
-               "Expected the updateHeaderText() Method to be invoked")
     }
 }
 

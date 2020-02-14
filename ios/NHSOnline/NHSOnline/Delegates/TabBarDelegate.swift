@@ -14,17 +14,38 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     init(controller: HomeViewController) {
         viewController = controller
     }
-    
-    func selectMenu(menu: Menu) {
+
+    func setMenuBarItem(index: Int){
         if let tabBar = viewController.tabBar, let items = tabBar.items {
-            tabBar.selectedItem = items[menu.rawValue] as UITabBarItem
-            viewController.selectedTab = menu.rawValue
+            if(index >= 0 && index < items.count){
+                tabBar.selectedItem = items[index]
+                viewController.selectedTab = index
+            }
         }
+    }
+
+    func setMenuBarItem(menuTab: MenuTab){
+        var index: Int
+        switch menuTab {
+            case .Symptoms:
+                index = 0
+            case .Appointments:
+                index = 1
+            case .Prescriptions:
+                index = 2
+            case .MyRecord:
+                index = 3
+            case .More:
+                index = 4
+            default:
+                index = -1
+        }
+        setMenuBarItem(index: index)
     }
     
     func tabBar(_ tabBar: UITabBar, didSelect: UITabBarItem) {
         if(!viewController.applicationState.isReady()) {
-            selectMenu(menu: Menu(rawValue: viewController.selectedTab!)!)
+            setMenuBarItem(index: viewController.selectedTab!)
             return
         }
         

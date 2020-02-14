@@ -2,27 +2,20 @@ import XCTest
 @testable import NHSOnline
 
 class LifecycleHandlersTests: XCTestCase {
-    
     var lifecycleHandlers: MockLifecycleHandlers?
     var knownServices: KnownServices?
     var homeController: HomeViewController?
-    var mockConfigurationService: MockConfigurationService?
     var webViewController: WebViewController?
     let queue = DispatchQueue(label: "MyTestQueue")
     
     override func setUp() {
         super.setUp()
-        
-        knownServices = KnownServices(config: config())
-        
+        knownServices = KnownServices.init(nil)
         homeController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
-        
         webViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WebViewController") as? WebViewController
-        
-        mockConfigurationService = MockConfigurationService()
-        
-        lifecycleHandlers = MockLifecycleHandlers(knownServices: knownServices!, webViewController: webViewController!, homeViewController: homeController!)
-        lifecycleHandlers?.configurationService = mockConfigurationService
+
+        let configurationResponse = ConfigurationResponse(false, "", false)
+        lifecycleHandlers = MockLifecycleHandlers(knownServices: knownServices!, webViewController: webViewController!, homeViewController: homeController!, configurationResponse: configurationResponse)
     }
     
     override func tearDown() {
@@ -34,7 +27,6 @@ class LifecycleHandlersTests: XCTestCase {
     }
     
     func test_ensureValueForHasCheckedAppVersionSinceAppOpened_verifyDisplayAppVersionOutOfDateIsCalled() {
-        self.mockConfigurationService?.isValidConfiguration = false
         lifecycleHandlers?.performAppVersionCheck(onQueue: queue)
         queue.sync {}
         assert(lifecycleHandlers?.displayAppVersionOutOfDateWasCalled == true,
@@ -42,29 +34,20 @@ class LifecycleHandlersTests: XCTestCase {
     }
     
     func test_ensureValueForHasCheckedAppVersionSinceAppOpened_verifyDisplayAppVersionOutOfDateIsNotCalled() {
-        self.mockConfigurationService?.isValidConfiguration = true
+        let configurationResponse = ConfigurationResponse(true, "", true)
+        lifecycleHandlers = MockLifecycleHandlers(knownServices: knownServices!, webViewController: webViewController!, homeViewController: homeController!, configurationResponse: configurationResponse)
+
         lifecycleHandlers?.performAppVersionCheck(onQueue: queue)
         queue.sync {}
         assert(lifecycleHandlers?.displayAppVersionOutOfDateWasCalled == false,
                "Expected the displayAppVersionOutOfDate() Method not to be invoked")
     }
-    
-    class MockConfigurationService: ConfigurationServiceProtocol {
-        var isValidConfiguration = false
-        
-        func isUserDeviceAllowed(homeViewController: HomeViewController, completionHandler: @escaping (ConfigurationResponse?) -> Void) {
-            
-            let response = ConfigurationResponse(isValidConfiguration, "", false)
-            
-            completionHandler(response)
-        }
-    }
-    
+
     class MockLifecycleHandlers : LifecycleHandlers {
         var displayAppVersionOutOfDateWasCalled = false
 
-        override init(knownServices: KnownServices, webViewController: WebViewController, homeViewController: HomeViewController) {
-            super.init(knownServices: knownServices, webViewController: webViewController, homeViewController: homeViewController)
+        override init(knownServices: KnownServices, webViewController: WebViewController, homeViewController: HomeViewController, configurationResponse: ConfigurationResponse) {
+            super.init(knownServices: knownServices, webViewController: webViewController, homeViewController: homeViewController, configurationResponse: configurationResponse)
         }
         override func displayAppVersionOutOfDate() {
             displayAppVersionOutOfDateWasCalled = true

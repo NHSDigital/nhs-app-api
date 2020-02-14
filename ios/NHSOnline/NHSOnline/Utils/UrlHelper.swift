@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 class UrlHelper {
     private static let defaultScheme: String = "https"
@@ -34,5 +35,37 @@ class UrlHelper {
     
     static func resolveAppScheme(url: String) -> URL? {
         return ensureUrlWithScheme(url: url)
+    }
+
+
+    static func getReloadUrl(url:URL) -> URL {
+        if url.absoluteString.starts(with: config().DataPreferencesURL) {
+            return URL(string: config().DataSharingUrlPath, relativeTo: URL(string: config().HomeUrl))!
+        }
+        return url
+    }
+
+    static func isSameSchemeAndHostAsHomeUrl(url: URL?) -> Bool {
+        if let homeUrl = URL(string: config().HomeUrl) {
+            if(url?.scheme == config().BaseScheme) {
+                return homeUrl.host == url?.host
+            }
+            return false
+        }
+        return false
+    }
+    
+    static func isValidHomeUrl(url: URL?) -> Bool {
+        if let homeUrl = URL(string: config().HomeUrl) {
+            return homeUrl.host == url?.host && homeUrl.path == url?.path
+        }
+        return false
+    }
+
+    static func verifyUrl(urlString: String?) -> Bool {
+        guard let urlString = urlString, let url = URL(string: urlString) else {
+            return false
+        }
+        return UIApplication.shared.canOpenURL(url)
     }
 }

@@ -18,7 +18,7 @@ class WebViewDelegateTests: XCTestCase {
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         vc = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
-        let ks: KnownServices = KnownServices(config: config())
+        let ks: KnownServices = KnownServices.init(nil)
         let wai: WebAppInterface = WebAppInterface(controller: vc!)
         webViewDelegate = MockWebViewDelegate(controller: vc!, knownServices: ks, webAppInterface: wai)
         
@@ -128,7 +128,6 @@ class IProovMockWebViewDelegate : WebViewDelegate {
     override func launchIproov(url: URL, webView: WKWebView) {
         attemptedIProovLaunch = true;
     }
-    
 }
 
 class MockWKWebView : WKWebView {

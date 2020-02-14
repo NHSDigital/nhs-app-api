@@ -2,7 +2,10 @@ IS_FIRST_TIME_OPENED = IsFirstTimeOpened
 HOT_JAR_LINK_URL = in.hotjar.com/s?siteId=859152&amp;surveyId=95785
 NHS_111_URL = 111.nhs.uk
 NHS_111_LOCATION_URL = 111.service.nhs.uk/
+
 MORE_URL = /more
+DATA_SHARING_URL_PATH = /data-sharing
+
 MY_RECORD_URL_PATH = /my-record
 APPOINTMENTS_URL_PATH = /appointments
 ADMIN_HELP_URL_PATH = /appointments/admin-help
@@ -34,7 +37,7 @@ ACCESSIBILITY_STATEMENT_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/
 DATA_SHARING_URL = www.nhs.uk/your-nhs-data-matters/
 CONDITIONS_URL_PATH = www.nhs.uk/conditions/
 RESPONSE_WAITING_TIME = 20
-CONFIGURATION_API_PATH = configuration?deviceName=iOS&nativeAppVersion=%@
+CONFIGURATION_API_PATH = v2/configuration
 APP_STORE_SCHEME = itms-apps
 APP_STORE_URL = itunes.apple.com/app/
 APP_STORE_ID = id1388411277

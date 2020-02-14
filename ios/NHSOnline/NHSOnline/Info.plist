@@ -85,7 +85,7 @@
 	<string>https://$(COOKIES_POLICY_URL_OLD)</string>
 	<key>DataPreferencesURL</key>
 	<string>https://$(DATA_PREFERENCES_URL)</string>
-	<key>DataSharingUrlPath</key>
+	<key>DataSharingUrl</key>
 	<string>https://$(DATA_SHARING_URL)</string>
 	<key>FidoLoginErrorPath</key>
 	<string>error=server_data_expired</string>
@@ -127,6 +127,8 @@
 	<integer>10</integer>
 	<key>MoreUrlPath</key>
 	<string>$(MORE_URL)</string>
+	<key>DataSharingUrlPath</key>
+	<string>$(DATA_SHARING_URL_PATH)</string>
 	<key>MyAccountUrlPath</key>
 	<string>$(MY_ACCOUNT_URL_PATH)</string>
 	<key>MyRecordGpAtHandUrlPath</key>

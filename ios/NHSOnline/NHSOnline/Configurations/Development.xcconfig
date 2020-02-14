@@ -3,4 +3,4 @@
 #include "Pods/Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.development.xcconfig"
 
 HOME_URL = local.bitraft.io/
-BASE_API_URL = local.bitraft.io:444/v1/
+BASE_API_URL = local.bitraft.io:444/

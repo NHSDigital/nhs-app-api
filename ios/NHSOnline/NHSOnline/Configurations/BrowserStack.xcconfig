@@ -2,5 +2,5 @@
 #include "Pods/Target Support Files/Pods-NHSOnline/Pods-NHSOnline.browserstack.xcconfig"
 
 HOME_URL = web.local.bitraft.io:3000/
-BASE_API_URL = api.local.bitraft.io:8089/v1/
+BASE_API_URL = api.local.bitraft.io:8089/
 BASE_SCHEME = http

@@ -37,7 +37,7 @@ class CookieHandler {
                 timer.invalidate()
             }else{
                 timer.invalidate()
-                NSLog("Could not retrieve access token")
+                Logger.logInfo(message: "Could not retrieve access token")
             }
         })
     }

@@ -6,7 +6,7 @@ import WebKit
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     var window: UIWindow?
     var rootViewController: UINavigationController?
-    var knownServices = KnownServices(config: config())
+    var knownServices = KnownServices()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         clearCaches()
@@ -104,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         let convertedUrl = UrlHelper.ensureUrlWithScheme(url: url)
-        if knownServices.isSameSchemeAndHostAsHomeUrl(url: convertedUrl)
+        if UrlHelper.isSameSchemeAndHostAsHomeUrl(url: convertedUrl)
         {
             getViewController().webViewController?.loadPage(url: convertedUrl!)
         }
@@ -128,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         let convertedUrl = UrlHelper.ensureUrlWithScheme(url: url)
-        if knownServices.isSameSchemeAndHostAsHomeUrl(url: convertedUrl)
+        if UrlHelper.isSameSchemeAndHostAsHomeUrl(url: convertedUrl)
         {
             UserDefaults.standard.set(convertedUrl, forKey: config().NotificationLinkPropertyName)
         }

@@ -2,24 +2,10 @@
 "HomeTitle" = "Home";
 "MyAccountTitle" = "My account";
 "HelpTitle" = "Help and support";
-"OrganDonationTitle" = "My organ donation decision";
-"DataPreferencesTitle" = "Sharing health data preferences";
-"NHS111Title" = "111 Online";
-"ConditionsTitle" = "Health A-Z";
-"AppointmentsTitle" = "My appointments";
-"AdminHelpTitle" = "GP help without an appointment";
-"SymptomsTitle" = "Check my symptoms";
-"PrescriptionsTitle" = "My repeat prescriptions";
-"MyRecordTitle" = "My medical record";
-"MoreTitle" = "More";
-"HomeTitle" = "Home";
 "ServiceUnavailableTitle" = "Service unavailable";
-"CheckSymptomsTitle" = "Check my symptoms";
 "BackArrowTitle" = "Back button";
 "LoginAndPasswordOptions" = "Login & password options";
 "NHSLoginTitle" = "NHS Login";
-/*Data sharing header should be updated in Android, iOS, and Web if changed*/
-"DataSharingTitle" = "Find out why your data matters";
 
 /*Error messages*/
 "ConnectionErrorHeader" = "Internet connection error";
@@ -36,8 +22,6 @@
 "HelpHint" = "Navigates to help page";
 "NHSAppHomeTitle" = "NHS App Home";
 "NHSAppHomeHint" = "Takes you to NHS App home page";
-"AccessibleConditionsTitle" = "Health A to Z";
-"AccessibleNHS111Title" = "one one one Online";
 "AccessibilityConnectionErrorMessage" = "Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.";
 "AccessibilityBiometricsTimeoutMessage" = "It was not your fault, Try Logging in again.";
 "AccessibilityAPIUnavailableErrorMessage" = "You currently cannot use this service. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.";

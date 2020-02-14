@@ -1,208 +1,132 @@
+import UIKit
+import SafariServices
+import WebKit
+import os.log
 import Foundation
 
 class KnownServices {
-    private let config:Config
-    private let homeTitle = NSLocalizedString("HomeTitle", comment: "")
-    private let nhsOnlineErrorTitle = NSLocalizedString("ConnectionErrorTitle", comment: "")
-    private let nhsOnlineErrorMessage = NSLocalizedString("ConnectionErrorMessage", comment: "")
-    private let accessibleNhsOnlineErrorMessage = NSLocalizedString("AccessibilityConnectionErrorMessage", comment: "")
-    private let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
-    private let accessibleNhs111Title = NSLocalizedString("AccessibleNHS111Title", comment: "")
-    private let conditionsTitle = NSLocalizedString("ConditionsTitle", comment: "")
-    private let accessibleConditionsTitle = NSLocalizedString("AccessibleConditionsTitle", comment: "")
-    private let symptomsTitle = NSLocalizedString("SymptomsTitle", comment: "")
-    private let appointmentsTitle = NSLocalizedString("AppointmentsTitle", comment: "")
-    private let adminHelpTitle = NSLocalizedString("AdminHelpTitle", comment: "")
-    private let prescriptionsTitle = NSLocalizedString("PrescriptionsTitle", comment: "")
-    private let myRecordTitle = NSLocalizedString("MyRecordTitle", comment: "")
-    private let moreTitle = NSLocalizedString("MoreTitle", comment: "")
-    private let myAccountTitle = NSLocalizedString("MyAccountTitle", comment: "")
-    private let organDonationTitle = NSLocalizedString("OrganDonationTitle", comment: "")
-    private let dataPreferencesTitle = NSLocalizedString("DataPreferencesTitle", comment: "")
-    private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
-    private let hotJarTitle = NSLocalizedString("HotJarTitle", comment: "")
-    private let dataSharingTitle = NSLocalizedString("DataSharingTitle", comment: "")
-    private let serviceUnavailableTitle = NSLocalizedString("ServiceUnavailableTitle", comment: "")
-    private var serviceList = Array<KnownService>()
-    private var externalSites = Array<URL>()
-    
-    init(config:Config) {
-        self.config = config
-       
-        self.buildExternalSites()
-        self.buildKnownServices()
+    let rootServices: [RootService]?
+
+    init() {
+        self.rootServices = nil
     }
-    
-    func shouldURLOpenExternally(_ url: URL) -> Bool {
-        return externalSites.contains(url)
+
+    init(_ rootServices: [RootService]?) {
+        self.rootServices = rootServices
     }
-    
+
+    public func findMatchingKnownService(_ url: URL?) -> KnownService {
+        guard let theUrl = url, let rootService = getRootServiceByHostAndScheme(host: (theUrl.host)!, scheme: (theUrl.scheme)!) else {
+            return RootService(url: "", javaScriptInteractionMode: .None, menuTab: .None, viewMode: .AppTab, validateSession: false, subServices: nil)
+        }
+        guard let subService = findMatchingSubService(rootService: rootService, path: theUrl.path, query: theUrl.query) else {
+            return rootService
+        }
+        return subService
+    }
+
+    private func findMatchingSubService(rootService: RootService, path: String?, query: String?) -> KnownService? {
+        guard let subServices = rootService.subServices else {
+            return nil
+        }
+        if (path == nil || path == "" || path == "/") && (query == nil) {
+            return nil
+        }
+
+        var bestServiceMatch: SubServiceMatch?
+
+        let queryItems = queryStringToArray(query)
+
+        for subService in subServices {
+            bestServiceMatch = compareServices(path: path, queryItems: queryItems, bestServiceMatch: bestServiceMatch, subService: subService)
+        }
+        return bestServiceMatch?.subService
+    }
+
+    private func findMatch(path: String?, queryItems: [String], subService: SubService) -> SubServiceMatch {
+        let thePath = makePathSafe(path: path)
+        let subServicePath = makePathSafe(path: subService.path)
+
+        let pathMatch = subServicePath != "/" ? thePath.hasPrefix(subServicePath) : subServicePath == thePath
+        let subServiceQueryItems = queryStringToArray(subService.queryString)
+
+        if subServiceQueryItems.isEmpty {
+            return SubServiceMatch.init(
+                    subService: subService,
+                    pathMatch: pathMatch,
+                    queryMatch: queryItems.isEmpty ? true : false,
+                    queryMatchCount: 0)
+        }
+
+        return SubServiceMatch.init(
+                subService: subService,
+                pathMatch: pathMatch,
+                queryMatch: Set(subServiceQueryItems).isSubset(of: Set(queryItems)),
+                queryMatchCount: Set(subServiceQueryItems).intersection(Set(queryItems)).count
+        )
+    }
+
+    private func makePathSafe(path: String?) -> String {
+        path != nil && path != "/" ? path! + "/" : "/"
+    }
+
+    private func compareServices(path: String?, queryItems: [String], bestServiceMatch: SubServiceMatch?, subService: SubService) -> SubServiceMatch? {
+        let subServiceMatch = findMatch(path: path, queryItems: queryItems, subService: subService)
+
+        if !(subServiceMatch.pathMatch || subServiceMatch.queryMatch) {
+            return bestServiceMatch
+        }
+
+        if bestServiceMatch == nil {
+            return subServiceMatch.pathMatch && subServiceMatch.subService.queryString == nil || (subServiceMatch.queryMatch && subServiceMatch.queryMatchCount > 0) ? subServiceMatch : nil
+        }
+
+        if !subServiceMatch.pathMatch && bestServiceMatch!.pathMatch {
+            return bestServiceMatch
+        }
+
+        if subServiceMatch.pathMatch && !bestServiceMatch!.pathMatch {
+            return subServiceMatch
+        }
+
+        if !subServiceMatch.queryMatch && bestServiceMatch!.queryMatch {
+            return bestServiceMatch
+        }
+
+        if subServiceMatch.queryMatch && !bestServiceMatch!.queryMatch {
+            return subServiceMatch
+        }
+
+        return subServiceMatch.queryMatchCount > bestServiceMatch!.queryMatchCount ? subServiceMatch : bestServiceMatch
+    }
+
+    private func queryStringToArray(_ query: String?) -> [String] {
+        guard let theQuery: String = query else {
+            return []
+        }
+        return theQuery.components(separatedBy: "&")
+    }
+
+    public func getRootServiceByHostAndScheme(host: String, scheme: String) -> RootService? {
+        if let i = rootServices?.firstIndex(where: {
+            URL(string: $0.url)?.host! == host && URL(string: $0.url)?.scheme! == scheme
+        }) {
+            return rootServices?[i]
+        }
+        return nil
+    }
+
     func getUnavailabilityErrorMessageForService(_ url: URL?) -> ErrorMessage {
-        guard findMatchingKnownServiceInfo(url: url) != nil else {
+        guard let theUrl = url, getRootServiceByHostAndScheme(host: (theUrl.host)!, scheme: (theUrl.scheme)!) != nil else {
             return ErrorMessage(.ServiceUnavailable)
         }
         return ErrorMessage(.NoInternetConnection)
     }
 
-    func findMatchingKnownServiceForHostname(hostname: String?) -> KnownService? {
-        if let theHost = hostname {
-            for service in serviceList {
-                if service.url.host == theHost { return service }
-            }
-        }
-        return nil
-    }
-    
-    func isValidHomeUrl(url: URL?) -> Bool {
-        if let homeUrl = URL(string: config.HomeUrl) {
-            return homeUrl.host == url?.host && homeUrl.path == url?.path
-        }
-        return false
-    }
-    
-    func isSameSchemeAndHostAsHomeUrl(url: URL?) -> Bool {
-        if let homeUrl = URL(string: config.HomeUrl) {
-            if(url?.scheme == config.BaseScheme) {
-                return homeUrl.host == url?.host
-            }
-            return false
-        }
-        return false
-    }
-    
-    func shouldAllowNativeInteraction(host:String?) -> Bool {
-        if let knownService = findMatchingKnownServiceForHostname(hostname: host){
-            return knownService.defaultPathInfo.allowNativeInteraction
-        }
-        return false
-    }
-    
-    func shouldValidateSession(host: String?) -> Bool {
-        if let knownService = findMatchingKnownServiceForHostname(hostname: host) {
-            return knownService.defaultPathInfo.validateSession
-        }
-        return true
-    }
-    
-    func findMatchingKnownServiceInfo(url: URL?, withExactMatchingPath: Bool = false) -> KnownService.Info? {
-        guard let theUrl = url, let matchingService = findMatchingKnownService(url: url) else { return nil }
-        return matchingService.findMatchingServicePathInfo(urlString: theUrl.absoluteString)
-    }
-    
-    func findMatchingKnownService(url: URL?) -> KnownService? {
-        if let theUrl = url, let service = findMatchingKnownServiceForHostname(hostname: theUrl.host) {
-            return service
-        }
-        return nil
-    }
-    func isCIDRedirectUrl(urlString:String) -> Bool {
-        if let url = URL(string: urlString), let nhsUrl = URL(string: config.HomeUrl) {
-            return url.host == nhsUrl.host && url.path == config.AuthRedirectPath
-        }
-        return false
-    }
-    
-    func getPostRequestReloadUrl(url:URL) -> URL? {
-        switch url {
-        case  _ where url.absoluteString.starts(with: config.DataPreferencesURL):
-            return URL(string: config.DataSharingUrlPath, relativeTo: URL(string: config.HomeUrl))
-        default:
-            return nil
-        }
-    }
-    
-    func isFidoAuthResponse(urlString: String) -> Bool {
-        if let url = URLComponents(string: urlString), let nhsUrl = URL(string: config.HomeUrl) {
-            return url.host == nhsUrl.host && (url.query?.contains(config.BiometricAuthResponseParam) ?? false)
-        }
-        return false
-    }
-    
-    private func buildExternalSites() {
-        let helpURL: URL = URL(string: config.HelpURL)!
-        let helpAppointmentsURL: URL = URL(string: config.HelpAppointmentsURL)!
-        let HelpAccountURL: URL = URL(string: config.HelpAccountURL)!
-        let HelpLoginURL: URL = URL(string: config.HelpLoginURL)!
-        let helpPrescriptionsURL: URL = URL(string: config.HelpPrescriptionsURL)!
-        let helpRecordURL: URL = URL(string: config.HelpRecordURL)!
-        let termsAndConditionsURL: URL = URL(string: config.TermsAndConditionsURL)!
-        let privacyPolicyURL: URL = URL(string: config.PrivacyPolicyURL)!
-        let cookiesPolicyURL: URL = URL(string: config.CookiesPolicyURL)!
-        let openSourceLicensesURL: URL = URL(string: config.OpenSourceLicencesURL)!
-        let medicalRecordAbbreviationsURL: URL = URL(string: config.MedicalRecordAbbreviationsURL)!
-        let accessibilityStatementURL: URL = URL(string: config.AccessibilityStatementURL)!
-        
-        let helpURLOld: URL = URL(string: config.HelpURLOld)!
-        let termsAndConditionsURLOld: URL = URL(string: config.TermsAndConditionsURLOld)!
-        let privacyPolicyURLOld: URL = URL(string: config.PrivacyPolicyURLOld)!
-        let cookiesPolicyURLOld: URL = URL(string: config.CookiesPolicyURLOld)!
-        let openSourceLicensesURLOld: URL = URL(string: config.OpenSourceLicencesURLOld)!
-        let medicalRecordAbbreviationsURLOld: URL = URL(string: config.MedicalRecordAbbreviationsURLOld)!
-        let accessibilityStatementURLOld: URL = URL(string: config.AccessibilityStatementURLOld)!
-        
-        let biometricsHelpURl: URL = URL(string: config.BiometricHelpURL)!
-        let dataSharingUrl: URL = URL(string: config.DataSharingUrlPath)!
-        
-        externalSites = [
-            helpURL,
-            HelpAccountURL,
-            helpAppointmentsURL,
-            HelpLoginURL,
-            helpPrescriptionsURL,
-            helpRecordURL,
-            termsAndConditionsURL,
-            privacyPolicyURL,
-            cookiesPolicyURL,
-            openSourceLicensesURL,
-            medicalRecordAbbreviationsURL,
-            accessibilityStatementURL,
-            biometricsHelpURl,
-            helpURLOld,
-            termsAndConditionsURLOld,
-            privacyPolicyURLOld,
-            cookiesPolicyURLOld,
-            openSourceLicensesURLOld,
-            medicalRecordAbbreviationsURLOld,
-            accessibilityStatementURLOld,
-            dataSharingUrl
-        ]
-    }
-    
-    private func buildKnownServices() {
-        let nhsoService = buildNhsoService()
-        let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111,title: nhs111Title, accessibleTitle: accessibleNhs111Title, validateSession: false, allowNativeInteraction: false)
-        let nhs111LocationService = KnownService(serviceUrl: config.Nhs111LocationUrl, service: .NHS_111,  title: nhs111Title, validateSession: false, allowNativeInteraction: false)
-        let dataPrefService = KnownService(serviceUrl: config.DataPreferencesURL, service: .DATA_PREFERENCES, title: dataPreferencesTitle, validateSession: false, allowNativeInteraction: true)
-        let nhsConditionsService = KnownService(serviceUrl: config.ConditionsUrlPath, service: .CONDITIONS, title: conditionsTitle, accessibleTitle: accessibleConditionsTitle, validateSession: false, allowNativeInteraction: false)
-        
-        self.serviceList.append(nhsoService)
-        self.serviceList.append(nhs111Service)
-        self.serviceList.append(nhs111LocationService)
-        self.serviceList.append(dataPrefService)
-        self.serviceList.append(nhsConditionsService)
-    }
-
-    private func buildNhsoService()-> KnownService {
-        let nhsoService = KnownService(serviceUrl: config.HomeUrl, service: .NHS_ONLINE, title: homeTitle, validateSession: true, allowNativeInteraction: true)
-        nhsoService.addPathInfo(path: config.SymptomsUrlPath, service: .SYMPTOMS, validateSession: true, allowNativeInteraction: true, title: symptomsTitle)
-        nhsoService.addPathInfo(path: config.CheckSymptomsUrlPath, service: .NHS_ONLINE, validateSession: false,  allowNativeInteraction: false, title: symptomsTitle)
-        nhsoService.addPathInfo(path: config.AppointmentsUrlPath, service: .APPOINTMENTS,validateSession: true,  allowNativeInteraction: true, title: appointmentsTitle)
-        nhsoService.addPathInfo(path: config.AppontmentsGpAtHandUrlPath, service: .APPOINTMENTS,validateSession: true,  allowNativeInteraction: true, title: serviceUnavailableTitle)
-        nhsoService.addPathInfo(path: config.InformaticaUrlPath, service: .APPOINTMENTS,validateSession: true,  allowNativeInteraction: true, title: serviceUnavailableTitle)
-        nhsoService.addPathInfo(path: config.AdminHelpUrlPath, service: .ADMIN_HELP, validateSession: true,  allowNativeInteraction: true, title:adminHelpTitle)
-        nhsoService.addPathInfo(path: config.PrescriptionsUrlPath, service: .PRESCRIPTIONS, validateSession: true, allowNativeInteraction: true, title: prescriptionsTitle)
-        nhsoService.addPathInfo(path: config.PrescriptionsGpAtHandUrlPath, service: .PRESCRIPTIONS,validateSession: true,  allowNativeInteraction: true, title: serviceUnavailableTitle)
-        nhsoService.addPathInfo(path: config.MyRecordUrlPath, service: .MY_RECORD,validateSession: true,  allowNativeInteraction: true, title: myRecordTitle)
-        nhsoService.addPathInfo(path: config.MyRecordGpAtHandUrlPath, service: .MY_RECORD,validateSession: true,  allowNativeInteraction: true, title: serviceUnavailableTitle)
-        nhsoService.addPathInfo(path: config.MoreUrlPath, service: .MORE, validateSession: true, allowNativeInteraction: true, title: moreTitle)
-        nhsoService.addPathInfo(path: config.MyAccountUrlPath, service: .ACCOUNT, validateSession: true, allowNativeInteraction: true, title: myAccountTitle)
-        nhsoService.addPathInfo(path: config.OrganDonationUrlPath, service: .ORGAN_DONATION, validateSession: true, allowNativeInteraction: true, title: organDonationTitle)
-        return nhsoService
-    }
-    
-    enum Service {
-        case NHS_111, NHS_ONLINE, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, ADMIN_HELP, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT, ORGAN_DONATION, CONDITIONS;
+    struct SubServiceMatch {
+        let subService: SubService
+        let pathMatch: Bool
+        let queryMatch: Bool
+        let queryMatchCount: Int
     }
 }
-
-

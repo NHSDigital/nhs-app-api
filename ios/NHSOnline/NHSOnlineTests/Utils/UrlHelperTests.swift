@@ -2,8 +2,7 @@ import XCTest
 import Foundation
 @testable import NHSOnline
 
-class UrlHelperTests : XCTestCase {
-    
+class UrlHelperTests: XCTestCase {
     func test_EnsureUrlWithScheme_WhenNotAUrl_ReturnsNil() {
         let nonUrl = "This is not a url"
         
@@ -67,5 +66,63 @@ class UrlHelperTests : XCTestCase {
         
         XCTAssertNotNil(result)
         XCTAssertEqual(result?.scheme, "tel")
+    }
+
+    func test_IsSameSchemeAndHostAsHomeUrl_ReturnsTrueWhenUrlHostIsNhsoUrl() {
+        let homeUrl = URL(string: config().HomeUrl)
+        let homeUrlSameHostAsHome = UrlHelper.isSameSchemeAndHostAsHomeUrl(url: homeUrl)
+
+        XCTAssertTrue(homeUrlSameHostAsHome)
+    }
+
+    func test_IsSameSchemeAndHostAsHomeUrl_ReturnsFalseWhenUrlHostIsNhs111Url() {
+        let nhs111Url = URL(string: config().Nhs111Url)
+        let nhs111UrlSameAsHomeHost = UrlHelper.isSameSchemeAndHostAsHomeUrl(url: nhs111Url)
+
+        XCTAssertFalse(nhs111UrlSameAsHomeHost)
+    }
+
+    func test_isValidHomeUrl_ReturnsTrueWhenIsHomeUrlNoQueryString() {
+        let homeUrl = URL(string: config().HomeUrl)
+        let isValidHomeUrl = UrlHelper.isValidHomeUrl(url: homeUrl)
+
+        XCTAssertTrue(isValidHomeUrl)
+    }
+
+    func test_isValidHomeUrl_ReturnsTrueWhenIsHomeUrlWithQueryString() {
+        let homeUrl = URL(string: config().HomeUrl + "?param1=abc")
+        let isValidHomeUrl = UrlHelper.isValidHomeUrl(url: homeUrl)
+
+        XCTAssertTrue(isValidHomeUrl)
+    }
+
+    func test_isValidHomeUrl_ReturnsFalseWhenIsNotHomeUrl() {
+        let homeUrl = URL(string: config().HomeUrl + "/appointments")
+        let isValidHomeUrl = UrlHelper.isValidHomeUrl(url: homeUrl)
+
+        XCTAssertFalse(isValidHomeUrl)
+    }
+
+    func test_isValidHomeUrl_ReturnsFalseWhenExternalUrl() {
+        let homeUrl = URL(string: config().Nhs111Url)
+        let isValidHomeUrl = UrlHelper.isValidHomeUrl(url: homeUrl)
+
+        XCTAssertFalse(isValidHomeUrl)
+    }
+
+    func test_getReloadUrl_ReturnsNilWhenUrlIsNotDataPreferencesURL() {
+        let url = URL(string: config().HomeUrl + "/some/path")
+        let result = UrlHelper.getReloadUrl(url: url!)
+        let expectedResult = url?.absoluteString
+
+        XCTAssertTrue(result.absoluteString == expectedResult, "unexpected URL: " + result.absoluteString)
+    }
+
+    func test_getReloadUrl_ReturnsUrlWhenUrlIsDataPreferencesURL() {
+        let url = URL(string: config().DataPreferencesURL)
+        let result = UrlHelper.getReloadUrl(url: url!)
+        let expectedResult = config().HomeUrl + "data-sharing"
+
+        XCTAssertTrue(result.absoluteString == expectedResult, "unexpected URL: " + result.absoluteString)
     }
 }

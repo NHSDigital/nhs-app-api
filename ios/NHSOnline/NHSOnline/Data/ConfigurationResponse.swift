@@ -1,12 +1,16 @@
 struct ConfigurationResponse {
-    
-    init(_ isValidConfiguration: Bool = false, _ FidoServerUrl: String = "", _ CallFailed: Bool = true) {
-        self.isValidConfiguration = isValidConfiguration
-        self.FidoServerUrl = FidoServerUrl
-        self.callFailed = CallFailed
+    var callSuccessful: Bool
+    var fidoServerUrl: String
+    var isSupportedVersion: Bool
+    var knownServices: KnownServices
+
+    init(_ callSuccessful: Bool = false,
+         _ fidoServerUrl: String = "",
+         _ isSupportedVersion: Bool = false,
+         _ knownServices: KnownServices = KnownServices()){
+        self.callSuccessful = callSuccessful
+        self.fidoServerUrl = fidoServerUrl
+        self.isSupportedVersion = isSupportedVersion
+        self.knownServices = knownServices
     }
-    
-    public var isValidConfiguration: Bool
-    public var FidoServerUrl: String
-    public var callFailed: Bool
 }

@@ -28,16 +28,17 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.webAppInterface = webAppInterface
         self.schemeHandlers = SchemeHandlers()
         self.schemeHandlers.registerHandler(handler: MailToSchemeHandler())
+        self.schemeHandlers.registerHandler(handler: TelSchemeHandler())
     }
-    
+
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         if let response = navigationResponse.response as? HTTPURLResponse {
-            
+
             let url = self.viewController.webViewController?.webView.url
             let baseUrl = URL(string: config().HomeUrl)
             let statusCode = response.statusCode
-            
-            if ((url?.host==baseUrl?.host) && statusCode >= 400) {
+
+            if ((url?.host == baseUrl?.host) && statusCode >= 400) {
                 badResponse = true
                 return decisionHandler(.cancel)
             } else {
@@ -46,7 +47,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
         }
     }
-    
+
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -59,12 +60,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             return;
 
         }
-
         navigate(webView: webView, navigationAction: navigationAction, decisionHandler: decisionHandler);
-        
     }
-    
-    func checkIfIproov (navigationAction: WKNavigationAction) -> Bool  {
+
+    func checkIfIproov(navigationAction: WKNavigationAction) -> Bool {
         if (navigationAction.navigationType == .linkActivated && navigationAction.request.url?.host == "iproov.app") {
             return true;
         } else {
@@ -72,9 +71,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
     }
 
-    
     private func navigate(webView: WKWebView, navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-
         shouldHandleErrors = false
 
         if let initialUrl = navigationAction.request.url {
@@ -110,7 +107,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 return
             }
 
-            if knownServices.shouldURLOpenExternally(url) {
+            let knownService = knownServices.findMatchingKnownService(url)
+
+            if (knownService.viewMode == .AppTab) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)
                 return
@@ -118,45 +117,33 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
             self.failedUrl = url
 
-            if shouldOpenInSafari(url: url) {
-                decisionHandler(.cancel)
-                openInSafari(url: url)
-                return;
-            }
+            self.updateNavigationMenu(knownService: knownService)
         }
 
-        self.updateHeaderAndNavigationMenu(url: navigationAction.request.url!)
         decisionHandler(.allow)
-        return
-
     }
-    
+
     func launchIproov(url: URL, webView: WKWebView) {
         if (url.pathComponents.count < 2) {
-            NSLog("Too few path components")
+            Logger.logInfo(message: "Too few path components")
             return;
         }
 
         let token = url.pathComponents[1]
 
-        NSLog("Launching IProov")
+        Logger.logInfo(message: "Launching IProov")
         let options = Options()
         options.ui.title = NSLocalizedString("NHSLoginTitle", comment: "")
-        
+
         let completionHandler: (Any?, Error?) -> Void = {
             (data, error) in
-            if(error != nil || data == nil) {
-                if #available(iOS 10.0, *) {
-                    os_log("An error occured when attempting to navigate to the iProov page.",
-                           log: OSLog.default, type: .error)
-                } else {
-                    NSLog("An error occured when attempting to navigate to the iProov page.")
-                }
+            if (error != nil || data == nil) {
+                Logger.logError(message: "An error occurred when attempting to navigate to the iProov page.")
                 return;
             }
             // The if statement below has been added to mitigate a bug in iProov and should be removed when this has been resolved.
             // This is covered in further detail in the Jira ticket NHSO-8203.
-            if(!Reachability.isConnectedToNetwork()) {
+            if (!Reachability.isConnectedToNetwork()) {
                 self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
                 return
             }
@@ -166,36 +153,36 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         webView.evaluateJavaScript("window.getIproovEndpoint()", completionHandler: completionHandler)
     }
-    
+
 
     private func checkIproovStatus(status: Status) {
-            switch status {
-            case let .processing(progress, message):
-                // The SDK will update your app with the progress of streaming to the server and authenticating
-                // the user. This will be called multiple time as the progress updates.
-                NSLog("IProov - Processing: progress = \(progress), message = \(message)")
+        switch status {
+        case let .processing(progress, message):
+            // The SDK will update your app with the progress of streaming to the server and authenticating
+            // the user. This will be called multiple time as the progress updates.
+            Logger.logInfo(message: "IProov - Processing: progress = %@, message = %@", progress, message)
 
-            case .success(_):
-                // The user was successfully verified/enrolled and the token has been validated.
-                // The token passed back will be the same as the one passed in to the original call.
-                NSLog("IProov - Success")
+        case .success(_):
+            // The user was successfully verified/enrolled and the token has been validated.
+            // The token passed back will be the same as the one passed in to the original call.
+            Logger.logInfo(message: "IProov - Success")
 
-            case let .failure(reason, feedbackCode):
-                // The user was not successfully verified/enrolled, as their identity could not be verified,
-                // or there was another issue with their verification/enrollment. A reason (as a string)
-                // is provided as to why the claim failed, along with a feedback code from the back-end.
-                NSLog("IProov - Failure: reason = \(reason), feedbackCode = \(feedbackCode)")
+        case let .failure(reason, feedbackCode):
+            // The user was not successfully verified/enrolled, as their identity could not be verified,
+            // or there was another issue with their verification/enrollment. A reason (as a string)
+            // is provided as to why the claim failed, along with a feedback code from the back-end.
+            Logger.logInfo(message: "IProov - Failure: reason = %@, feedbackCode = %@", reason, feedbackCode)
 
-            case .cancelled:
-                // The user cancelled iProov, either by pressing the close button at the top right, or sending
-                // the app to the background.
-                NSLog("IProov - Cancelled")
+        case .cancelled:
+            // The user cancelled iProov, either by pressing the close button at the top right, or sending
+            // the app to the background.
+            Logger.logInfo(message: "IProov - Cancelled")
 
-            case let .error(error):
-                // The user was not successfully verified/enrolled due to an error (e.g. lost internet connection)
-                // along with an `iProovError` with more information about the error (NSError in Objective-C).
-                // It will be called once, or never.
-                NSLog("IProov - Error: error = \(error)")
+        case let .error(error):
+            // The user was not successfully verified/enrolled due to an error (e.g. lost internet connection)
+            // along with an `iProovError` with more information about the error (NSError in Objective-C).
+            // It will be called once, or never.
+            Logger.logError(message: "IProov - Error: error = %@", "\(error)")
         }
     }
 
@@ -208,43 +195,40 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
         checkPageLoadOriginAndStartActivityIndicator()
     }
-    
+
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
         self.showWebViewContainer()
 
-        if (knownServices.isValidHomeUrl(url: webView.url)) {
+        if (UrlHelper.isValidHomeUrl(url: webView.url)) {
             viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Full)
         }
-        
-        if(webView.url!.absoluteString.contains(config().CidUrlSuffix)) {
+
+        if (webView.url!.absoluteString.contains(config().CidUrlSuffix)) {
             viewController.updateHeaderText(headerText: "Log in to the NHS App", accessibilityLabel: "Login using Patient ID")
             viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Slim)
         }
-        
+
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
-        
-        if !self.knownServices.isSameSchemeAndHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
+
+        if !UrlHelper.isSameSchemeAndHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
             self.viewController.resetFocusAndAnnouncePageTitle(pageTitle: webView.title)
         }
     }
-    
+
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
         if withError._code == NSURLErrorCancelled {
-            if #available(iOS 10.0, *) {
-                os_log("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", log: OSLog.default, type: .info, withError.localizedDescription)
-            } else {
-                NSLog("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", withError.localizedDescription)
-            }
+            Logger.logInfo(message: "Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", withError.localizedDescription)
+
             stopActivityIndicator()
             viewController.applicationState.unBlock()
             return
         }
-        
+
         if shouldHandleErrors {
             if badResponse {
                 return self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
             }
-            
+
             if withError._domain == "NSURLErrorDomain" {
                 if let info = withError._userInfo as? [String: Any] {
                     if let url = info["NSErrorFailingURLKey"] as? URL {
@@ -254,62 +238,40 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             } else {
                 self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(webView.url))
             }
-            
-            if #available(iOS 10.0, *) {
-                os_log("Failed to load the page with error: %@", log: OSLog.default, type: .error, withError.localizedDescription)
-            } else {
-                NSLog("Failed to load the page with error: %@", withError.localizedDescription)
-            }
+
+            Logger.logError(message: "Failed to load the page with error: %@", withError.localizedDescription)
         }
         stopActivityIndicator()
         viewController.applicationState.unBlock()
     }
-    
+
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
-            self.updateHeaderAndNavigationMenu(url: navigationAction.request.url!)
+            let knownService = knownServices.findMatchingKnownService(navigationAction.request.url!)
+            self.updateNavigationMenu(knownService: knownService)
         }
-        
         return nil
     }
-    
-    func shouldOpenInSafari(url: URL) -> Bool {
-        
-        let nativeWebViewUrlParts = ["login",
-                                     config().CidUrlSuffix]
-        
-        if(url.absoluteString.containsAnyOf(nativeWebViewUrlParts)) {
-            return false
-        }
-        
-        if let _ = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
-            return false
-        }
-        
-        return true
-    }
-    
+
     func openInSafari(url: URL) {
-        if (url.scheme == "tel") {
-            UIApplication.shared.openURL(url)
-        } else {
-            self.safariViewController = SFSafariViewController(url: url)
-            self.safariViewController?.delegate = self
-            self.viewController.present(safariViewController!, animated: true, completion: nil)
-        }
+        self.safariViewController = SFSafariViewController(url: url)
+        self.safariViewController?.delegate = self
+        self.viewController.present(safariViewController!, animated: true, completion: nil)
     }
-    
+
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         self.viewController.delayedBiometricsStart(0.1)
     }
-    
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
 
-        let shouldAllowNativeInteraction = false;
-        
-        if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard let rootService = knownServices.getRootServiceByHostAndScheme(
+                host: message.frameInfo.securityOrigin.host, scheme: message.frameInfo.securityOrigin.protocol
+        ) else {
+            return
+        }
+
+        if (rootService.javaScriptInteractionMode == .NhsApp) {
             switch message.name {
             case "getNotificationsStatus":
                 viewController.getNotificationsStatus()
@@ -327,16 +289,16 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 goToLoginOptions()
                 break
             case "hideHeader":
-                viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
+                viewController.setVisibilityOfHeaderAndMenuBars(headerType: .None)
                 break
             case "hideWhiteScreen":
                 UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
                 break
             case "hideHeaderSlim":
-                viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
+                viewController.setVisibilityOfHeaderAndMenuBars(headerType: .None)
                 break
             case "hideMenuBar":
-                viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
+                viewController.setVisibilityOfHeaderAndMenuBars(headerType: .None)
                 break
             case "onLogin":
                 WebViewController.Properties.usingAbsoluteUri = false
@@ -373,46 +335,44 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 setMenuBarItem(index: message.body as? Int ?? 0)
                 break
             case "showHeader":
-                viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Full)
+                viewController.setVisibilityOfHeaderAndMenuBars(headerType: .Full)
                 break
             case "showHeaderSlim":
-                viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Slim)
+                viewController.setVisibilityOfHeaderAndMenuBars(headerType: .Slim)
+                break
+            case "startDownload":
+                viewController.downloadFile(messageBody: String(describing: message.body))
                 break
             case "updateHeaderText":
-                if(!Reachability.isConnectedToNetwork()) {
+                if (!Reachability.isConnectedToNetwork()) {
                     self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
                     return
                 }
                 viewController.updateHeaderText(headerText: String(describing: message.body))
-                break
-            case "startDownload":
-                viewController.downloadFile(messageBody: String(describing: message.body))
                 break
             default:
                 break
             }
         }
     }
-    
+
     func goToLoginOptions() {
         CookieHandler().readAccessTokenFromCookie()
         viewController.showBiometricViewContainer()
     }
-    
-    func setMenuBarItem(index: Int){
-        let tabBar = self.viewController.tabBar!
-        if(index >= 0 && index < tabBar.items!.count){
-            tabBar.selectedItem = tabBar.items![index]
-            viewController.selectedTab = index
+
+    func setMenuBarItem(index: Int) {
+        if let tabBarDelegate = self.viewController.tabBarDelegate {
+            tabBarDelegate.setMenuBarItem(index: index)
         }
     }
-    
-    func setHelpUrl(url: String){
-        UserDefaults.standard.set(url, forKey: "HelpUrl" )
+
+    func setHelpUrl(url: String) {
+        UserDefaults.standard.set(url, forKey: "HelpUrl")
     }
-    
-    func setRetryUrl(path: String){
-        if(!path.isEmpty){
+
+    func setRetryUrl(path: String) {
+        if (!path.isEmpty) {
             var suffix = path
             suffix.remove(at: suffix.startIndex)
             failedUrl = URL(string: config().HomeUrl + suffix)
@@ -420,71 +380,44 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
 
     func ensureSupportedScheme(_ url: URL) -> URL {
-        if(url.scheme==config().AppScheme) {
+        if (url.scheme == config().AppScheme) {
             self.viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
             return URL(string: url.absoluteString.replacingOccurrences(of: config().AppScheme + ":", with: config().BaseScheme + ":"))!
         }
         return url
     }
-    
+
     func clearMenuBarItem() {
         self.viewController.tabBar.selectedItem = nil
         self.viewController.selectedTab = nil
     }
-    
+
     @objc func pageIsNotResponding() {
-        if(self.viewController.webViewController?.webView.isLoading)! {
-            if #available(iOS 10.0, *) {
-                os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
-            } else {
-                NSLog("Page is not responding for a long time, loading stoped.")
-            }
+        if (self.viewController.webViewController?.webView.isLoading)! {
+            Logger.logError(message: "Page is not responding for a long time, loading stopped.")
+
             self.viewController.webViewController?.webView.stopLoading()
             let url = self.viewController.webViewController?.webView.url
             let baseUrl = URL(string: config().HomeUrl)
-            if (url?.host==baseUrl?.host){ self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
+            if (url?.host == baseUrl?.host) {
+                self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
             }
         }
         stopActivityIndicator()
     }
-    
-    func updateHeaderAndNavigationMenu(url: URL?) {
-        
+
+    func updateNavigationMenu(knownService: KnownService) {
         if let tabBarDelegate = self.viewController.tabBarDelegate {
-            guard let serviceInfo = knownServices.findMatchingKnownServiceInfo(url: url) else {
-                return
-            }
-            switch serviceInfo.serviceName {
-            case .NHS_111, .SYMPTOMS:
-                tabBarDelegate.selectMenu(menu: .Symptoms)
-                break
-            case .APPOINTMENTS:
-                tabBarDelegate.selectMenu(menu: .Appointments)
-                break
-            case .PRESCRIPTIONS:
-                tabBarDelegate.selectMenu(menu: .Prescriptions)
-                break
-            case .MY_RECORD:
-                tabBarDelegate.selectMenu(menu: .MyRecord)
-                break
-            case .ORGAN_DONATION:
-                tabBarDelegate.selectMenu(menu: .More)
-                break;
-            default : break
-            }
-            
-            if let serviceTitle = serviceInfo.title, !serviceTitle.isEmpty {
-                viewController.updateHeaderText(headerText: serviceTitle, accessibilityLabel: serviceInfo.accessibleTitle)
-            }
+            tabBarDelegate.setMenuBarItem(menuTab: knownService.menuTab)
         }
     }
-    
+
     private func showWebViewContainer() {
         clearTimer()
         self.viewController.showWebViewContainer()
         stopActivityIndicator()
     }
-    
+
     func showNativeViewContainerWithError(_ errorMessage: ErrorMessage) {
         clearTimer()
         stopActivityIndicator()
@@ -495,32 +428,28 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
     }
-    
+
     func clearTimer() {
         if self.timer != nil {
             self.timer.invalidate()
             self.timer = nil
         }
     }
-    
+
     func checkPageLoadOriginAndStartActivityIndicator() {
-        if(self.viewController.goingBack) {
-            self.viewController.goingBack=false
-            if #available(iOS 10.0, *) {
-                os_log("Page looks like it came from a goBack - not starting native spinner", log: OSLog.default, type: .info)
-            } else {
-                NSLog("Page looks like it came from a goBack - not starting native spinner")
-            }
+        if (self.viewController.goingBack) {
+            self.viewController.goingBack = false
+            Logger.logInfo(message: "Page looks like it came from a goBack - not starting native spinner")
         } else {
             startActivityIndicator()
         }
     }
-    
+
     func startActivityIndicator() {
         self.activityIndicator.startAnimating()
         UIApplication.shared.beginIgnoringInteractionEvents()
     }
-    
+
     func stopActivityIndicator() {
         UIApplication.shared.endIgnoringInteractionEvents()
         self.activityIndicator.stopAnimating()

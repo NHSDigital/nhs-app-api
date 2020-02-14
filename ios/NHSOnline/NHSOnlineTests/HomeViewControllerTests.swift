@@ -5,15 +5,15 @@ import WebKit
 class HomeViewControllerTests: XCTestCase {
     var vcHome: HomeViewController!
     var testWebview: WKWebView!
-
     var mockConfigurationService: MockConfigurationService!
+    var mockConfigurationServiceManager: MockConfigurationServiceManager!
     var mockApplicationState: MockApplicationState!
 
     let app = XCUIApplication.self
 
     override func setUp() {
         super.setUp()
-        
+
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc: HomeViewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
         testWebview = WKWebView()
@@ -21,7 +21,9 @@ class HomeViewControllerTests: XCTestCase {
         _ = vcHome.view
 
         mockConfigurationService = MockConfigurationService();
+        mockConfigurationServiceManager = MockConfigurationServiceManager();
         vcHome?.configurationService = mockConfigurationService
+        vcHome?.configurationResponse = mockConfigurationServiceManager.GetConfigurationResponse()
         
         mockApplicationState = MockApplicationState();
         vcHome?.applicationState = mockApplicationState
@@ -93,15 +95,19 @@ class HomeViewControllerTests: XCTestCase {
     }
     
     func test_biometricsShownIfAppVersionIsValidAndBiometricsIsAvailable() {
-        self.mockConfigurationService?.isValidConfiguration = true
-        
+        self.mockConfigurationServiceManager?.callSuccessful = true
+        self.mockConfigurationServiceManager?.isSupportedVersion = true
+        vcHome.configurationResponse = mockConfigurationServiceManager.GetConfigurationResponse()
+
         vcHome.attemptBiometricLoginIfAppVersionValid()
 
         assert(vcHome.biometricsHasBeenAttempted == true)
     }
-    
+
     func test_biometricsNotShownIfAppVersionIsInvalid() {
-        self.mockConfigurationService?.isValidConfiguration = false
+        self.mockConfigurationServiceManager?.callSuccessful = false
+        self.mockConfigurationServiceManager?.isSupportedVersion = false
+        vcHome.configurationResponse = mockConfigurationServiceManager.GetConfigurationResponse()
         
         vcHome.attemptBiometricLoginIfAppVersionValid()
 
@@ -158,7 +164,16 @@ class HomeViewControllerTests: XCTestCase {
             isBlocked = false
         }
     }
-    
+
+    class MockConfigurationServiceManager {
+        var callSuccessful = false
+        var isSupportedVersion = false
+
+        func GetConfigurationResponse() -> ConfigurationResponse {
+            ConfigurationResponse(callSuccessful, "", isSupportedVersion)
+        }
+    }
+
     class MockDocumentInteractionController: UIDocumentInteractionController {
         var menuOpened = false
         
@@ -171,12 +186,22 @@ class HomeViewControllerTests: XCTestCase {
     }
     
     class MockConfigurationService: ConfigurationServiceProtocol {
-        var isValidConfiguration = false
+        var isSupportedVersion = false
+        var mockRootServices: [RootService] = []
         
         func isUserDeviceAllowed(homeViewController: HomeViewController, completionHandler: @escaping (ConfigurationResponse?) -> Void) {
             
-            let response = ConfigurationResponse(isValidConfiguration, "", false)
+            let response = ConfigurationResponse(false, "", isSupportedVersion)
+
             completionHandler(response)
+        }
+
+        func getConfigurationResponse(completion: @escaping (Configuration?) -> ()) {
+            mockRootServices.append(RootService.init(url: "https://test.com", javaScriptInteractionMode: .NhsApp,
+                    menuTab: .Symptoms, viewMode: .AppTab, validateSession: false, subServices: nil))
+
+            let response = Configuration(fidoServerUrl: "", minimumSupportediOSVersion: "", knownServices: mockRootServices)
+            completion(response)
         }
     }
 }

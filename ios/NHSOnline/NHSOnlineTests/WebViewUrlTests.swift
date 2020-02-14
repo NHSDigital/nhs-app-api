@@ -10,7 +10,7 @@ class WebViewUrlTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        knownServices = KnownServices(config: config())
+        knownServices = KnownServices(nil)
         viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
         let webAppInterface = WebAppInterface(controller: viewController!)
         webViewDelegate = WebViewDelegate(controller: viewController!, knownServices: knownServices!, webAppInterface: webAppInterface)
@@ -27,27 +27,15 @@ class WebViewUrlTests: XCTestCase {
          XCTAssertTrue(validatedUrl!.scheme=="https")
     }
     
-    func test_When_KnownServiceIsNotFoundNilIsReturned() {
+    func test_When_KnownServiceIsNotFound_DefaultServiceIsReturned() {
         let urlString = "http://notknown.service.url/"
         let webViewUrl = URL(string: urlString)
         
-        let knownService = knownServices?.findMatchingKnownService(url: webViewUrl)
-        
-        XCTAssertNil(knownService)
+        let result = knownServices?.findMatchingKnownService(webViewUrl)
+
+        XCTAssertNotNil(result)
+        XCTAssert(result is RootService)
+        XCTAssert((result as! RootService).url == "")
     }
-    
-    func test_When_KnownServiceHeaderTitleIsRequested_ThenCorrectTitleForPathIsReturned() {
-        let serviceUrlTitleDictionary = [
-            config().HomeUrl : NSLocalizedString("HomeTitle", comment: ""),
-            config().Nhs111Url:NSLocalizedString("NHS111Title", comment: ""),
-        ]
-        for (urlString, title) in serviceUrlTitleDictionary {
-            let url = URL(string:urlString)
-            guard let knownServiceInfo = knownServices?.findMatchingKnownServiceInfo(url: url) else {
-                assertionFailure("known service not found for \(urlString)")
-                return
-            }
-            XCTAssertEqual( title,knownServiceInfo.title, "expected title \(title ) for url \(urlString) not found")
-        }
-    }
+
 }

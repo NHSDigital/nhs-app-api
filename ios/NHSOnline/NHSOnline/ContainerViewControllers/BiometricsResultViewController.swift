@@ -34,6 +34,5 @@ class BiometricsResultViewController: UIViewController {
     @IBAction func backToMyAccount(_ sender: Any) {
         UserDefaults.standard.set(config().HelpAccountURL, forKey: "HelpUrl")
         viewController?.showWebViewContainer()
-        viewController!.updateHeaderText(headerText: NSLocalizedString("MyAccountTitle", comment: ""))
     }
 }

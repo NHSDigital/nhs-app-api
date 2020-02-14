@@ -15,7 +15,7 @@ protocol BiometricProtocol {
 class BiometricService: BiometricProtocol {
     let homeViewController: HomeViewController
     let biometricViewController: BiometricsViewController
-    let FidoServerUrl: String = ConfigurationService.shared().FidoServerUrl()
+    let FidoServerUrl: String = ConfigurationServiceManager.shared().FidoServerUrl()
     lazy var endpointHelper = FidoEndpointHelper(
         FidoServerUrl: FidoServerUrl,
         BiometricsRegistrationRequestEndpoint: config().BiometricsRegistrationRequestEndpoint,
@@ -48,7 +48,7 @@ class BiometricService: BiometricProtocol {
                return biometricViewController.biometricToggle.isUserInteractionEnabled = true
             }
         } catch {
-            os_log("An unknown error occured", log: OSLog.default, type: OSLogType.error)
+            Logger.logError(message: "An unknown error occurred")
         }
          biometricViewController.showBiometricRegistrationError()
     }
@@ -74,7 +74,7 @@ class BiometricService: BiometricProtocol {
         } catch let error as FidoError {
             handleError(error)
         } catch {
-            os_log("An unknown error occured", log: OSLog.default, type: OSLogType.error)
+            Logger.logError(message: "An unknown error occurred")
         }
     }
     
@@ -90,7 +90,7 @@ class BiometricService: BiometricProtocol {
         } catch let error as FidoError {
             handleError(error)
         } catch {
-            os_log("An unknown error occured", log: OSLog.default, type: OSLogType.error)
+            Logger.logError(message: "An unknown error occurred")
         }
     }
     
@@ -98,19 +98,19 @@ class BiometricService: BiometricProtocol {
     func handleError(_ error: FidoError){
         switch error {
         case .invalidBiometrics:
-            os_log("Invalid Biometrics used", log: OSLog.default, type: OSLogType.error)
+            Logger.logError(message: "Invalid Biometrics used")
         case .keyRetrievalError:
-            os_log("An error occured during key retrieval", log: OSLog.default, type: OSLogType.error)
+            Logger.logError(message: "An error occurred during key retrieval")
         case .parsingError:
-            os_log("A parsing error occured", log: OSLog.default, type: OSLogType.error)
+            Logger.logError(message: "A parsing error occurred")
         case .encryptionError:
-            os_log("An encryption error occured", log: OSLog.default, type: OSLogType.error)
+            Logger.logError(message: "An encryption error occurred")
         case .networkRequestError:
-            os_log("A network error occured", log: OSLog.default, type: OSLogType.error)
+            Logger.logError(message: "A network error occurred")
         case .accessTokenError:
-            os_log("An access token error occured", log: OSLog.default, type: OSLogType.error)
+            Logger.logError(message: "An access token error occurred")
         case .genericError:
-            os_log("A generic error occured", log: OSLog.default, type: OSLogType.error)
+            Logger.logError(message: "A generic error occurred")
         }
     }
 }
