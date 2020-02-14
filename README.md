@@ -10,43 +10,17 @@ Clone the repo: https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
 git clone https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
 ```
 
-## Migrating from GitLab
-
-1. Switch the origin URL, either:
-
-    * HTTP
-
-        ```bash
-        git remote set-url origin https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
-        ```
-
-    * SSH
-
-        ```bash
-        git remote set-url origin git@ssh.dev.azure.com:v3/nhsapp/NHS%20App/nhsapp
-        ```
-
-2. Prune old remote branches (only develop has been migrated)
-
-    ```bash
-    git fetch --prune
-    ```
-
-3. Review the [Git Branching Strategy](https://confluence.service.nhs.uk/display/NO/Git+Branching+Strategy) (this is now being enforced)
-
-4. Rename active feature branches
-
-    ```bash
-    git branch -m feature-nhso-1234-active-feature-branch feature/nhso-1234-active-feature-branch
-    ```
-
 ## Build code
 
 ```bash
 make build
 ```
 
-## Unit Tests
+## Commit code
+
+Review the [Git Branching Strategy](https://confluence.service.nhs.uk/display/NO/Git+Branching+Strategy).
+
+## Unit tests
 
 ```bash
 make test
@@ -86,23 +60,23 @@ A `launchsettings.json` file will be automatically generated for any backend API
 make run TAG=develop WEB=host
 ```
 
-## BDD (Integration) Tests
+## Integration Tests (BDD)
 
 ### Run Locally
 
-To build and start the application ready to run the BDD tests against (e.g. in IntelliJ)
+To build and start the application ready to run the Integration tests against (e.g. in IntelliJ)
 
 ```bash
 make localbdd
 ```
 
-To start the locally built application ready to run the BDD tests against
+To start the locally built application ready to run the Integration tests against
 
 ```bash
 make run-localbdd
 ```
 
-To start a CI built application version ready to run the BDD tests against
+To start a CI built application version ready to run the Integration tests against
 
 ```bash
 make run-localbdd TAG=[tag]
@@ -114,7 +88,7 @@ Run make with no arguments for more details on the available options.
 
 ### Run Pipeline
 
-To run the BDD tests in a fully containerised environment as is done in CI
+To run the Integration tests in a fully containerised environment as is done in CI
 
 ```bash
 make run-bdd
@@ -126,11 +100,11 @@ The Makefile in the `bddtests` contains additional targets for common configurat
 
 The following can be specified with `make run-bdd` to customise the behaviour
 
-| Option           | Description                                                                                                   |
-| ---------------  | -----------                                                                                                   |
-| RUN_LOCAL_BDD=1  | Starts the containers configured as specified but with ports exposed to allow local running of the BDD tests. |
-| SKIP_ANALYSIS=1  | Bypasses the gradle code analysis step.                                                                       |
-| TAG=[dockertag]  | Pull images with the specified \[dockertag\] to run the tests against.                                        |
+| Option           | Description                                                                                                           |
+| ---------------  | -----------                                                                                                           |
+| RUN_LOCAL_BDD=1  | Starts the containers configured as specified but with ports exposed to allow local running of the Integration tests. |
+| SKIP_ANALYSIS=1  | Bypasses the gradle code analysis step.                                                                               |
+| TAG=[dockertag]  | Pull images with the specified \[dockertag\] to run the tests against.                                                |
 
 ## Secrets
 

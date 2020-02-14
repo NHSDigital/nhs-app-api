@@ -1,25 +1,28 @@
 #!/bin/bash
 
-DOCKER_COMPOSE_FILES_TRANCHE=()
-DOCKER_TEST_RUN_IMAGES=()
-TRANCHE_RUN_ADDITIONAL_ARGS=()
-TRANCHE_RUN_SETUP=
-TRANCHE_RUN_GRADLE_TASKS=(compileTestKotlin test aggregate)
+export DOCKER_COMPOSE_FILES_TRANCHE=()
+export DOCKER_TEST_RUN_IMAGES=()
+export TRANCHE_RUN_ADDITIONAL_ARGS=()
+export TRANCHE_RUN_SETUP=
+export TRANCHE_RUN_GRADLE_TASKS=(compileTestKotlin test aggregate)
+export TRANCHE_RUN_GRADLE_ARGS=(--stacktrace "-Dwebdriver.base.url=http://web.local.bitraft.io:3000")
 
-export DOCKER_COMPOSE_FILES_TRANCHE
-export DOCKER_TEST_RUN_IMAGES
-export TRANCHE_RUN_ADDITIONAL_ARGS
-export TRANCHE_RUN_SETUP
-export TRANCHE_RUN_GRADLE_TASKS
+export APP_DOCKER_REGISTRY=${DOCKER_REGISTRY:-local}
+export APP_DOCKER_TAG=${DOCKER_TAG:-latest}
 
-APP_DOCKER_REGISTRY=${DOCKER_REGISTRY:-local}
-APP_DOCKER_TAG=${DOCKER_TAG:-latest}
+export DOCKER_PROJECT_NAME="${DOCKER_PROJECT_NAME:-int_test}"
+export DOCKER_NETWORK="${DOCKER_PROJECT_NAME}_default"
 
-DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
+export DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 
 # Should replace with an image that has just the required software
-DOCKER_IMAGE_GRADLE=${DOCKER_IMAGE_GRADLE:-$DOCKER_REGISTRY/chrome:latest}
-DOCKER_IMAGE_CHROME=${DOCKER_IMAGE_CHROME:-$DOCKER_REGISTRY/chrome:latest}
+export DOCKER_IMAGE_GRADLE=${DOCKER_IMAGE_GRADLE:-$DOCKER_REGISTRY/chrome:latest}
+export DOCKER_IMAGE_CHROME=${DOCKER_IMAGE_CHROME:-$DOCKER_REGISTRY/chrome:latest}
+export DOCKER_IMAGE_BROWSERSTACK=${DOCKER_IMAGE_BROWSERSTACK:-$DOCKER_REGISTRY/browserstack:latest}
+
+export DOCKER_IMAGE=${DOCKER_IMAGE_CHROME}
+
+export BROWSER=${BROWSER:-chromeheadless}
 
 if [[ $(uname -s) =~ ^MING.* ]]
 then
@@ -28,12 +31,11 @@ else
   WORKING_DIR=$(pwd)
 fi
 
+export NATIVE_APP_PATH_ANDROID=${NATIVE_APP_PATH_ANDROID:-../android/app/build/outputs/apk/browserstack/app-browserstack-unsigned.apk}
+
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
-export DOCKER_REGISTRY
-export DOCKER_IMAGE_GRADLE
-export DOCKER_IMAGE_CHROME
 export WORKING_DIR
 export USER_ID
 export GROUP_ID

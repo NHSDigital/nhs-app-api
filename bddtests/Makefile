@@ -37,12 +37,14 @@ run-local: run-deps	## Run in docker with ports open
 	RUN_LOCAL_BDD=1 ./buildscripts/03_integration_test_run_tranche.sh
 
 $(eval $(call expand_run_options_docker_images,run-native-android))
-run-native-android: run-deps	## Run the nativesmoketests in BrowserStack against Android; BROWSERSTACK_APPPATH must be set (e.g. ops20/AndroidTCv1.17.0)
-	$(MAKE) -C ops run RUN_NATIVE=1 RUN_AS_DEVELOP=1 BROWSER=browserstack_android
+run-native-android: run-deps	## Run the nativesmoketests in BrowserStack against Android
+	./buildscripts/02_integration_test_code_analysis.sh
+	./buildscripts/03_integration_test_run_browserstack_android.sh
 
 $(eval $(call expand_run_options_docker_images,run-native-ios))
-run-native-ios:	run-deps ## Run the nativesmoketests in BrowserStack against iOS; BROWSERSTACK_APPPATH must be set (e.g. ops20/iOSTCv1.17.0)
-	$(MAKE) -C ops run RUN_NATIVE=1 RUN_AS_DEVELOP=1 BROWSER=browserstack_ios
+run-native-ios:	run-deps ## Run the nativesmoketests in BrowserStack against iOS; NATIVE_APP_PATH_IOS must be set to the path to the ipa to test
+	./buildscripts/02_integration_test_code_analysis.sh
+	./buildscripts/03_integration_test_run_browserstack_ios.sh
 
 run-deps:
 	$(MAKE) -C .. run-deps

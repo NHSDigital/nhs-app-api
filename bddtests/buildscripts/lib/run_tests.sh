@@ -11,19 +11,19 @@ pull_docker_images
 start_services_under_test
 
 docker run \
-  --name "${TRANCHE_TAG}_test_runner" \
+  --name "${DOCKER_PROJECT_NAME}_test_runner" \
   --network "$DOCKER_NETWORK" \
   --env-file ../docker/bddtests/env/vars_test_runner.env \
   -v "$WORKING_DIR:/repo" \
   "${TRANCHE_RUN_ADDITIONAL_ARGS[@]}" \
-  "$DOCKER_IMAGE_CHROME" bash -c " \
+  "$DOCKER_IMAGE" bash -c " \
     set -e ; \
     cd /repo ; \
     $TRANCHE_RUN_SETUP \
-    ./gradlew ${TRANCHE_RUN_GRADLE_TASKS[*]} --stacktrace \
+    ./gradlew ${TRANCHE_RUN_GRADLE_TASKS[*]} \
+      -Dwebdriver.provided.type=$BROWSER \
       -Dcucumber.options=\"--strict --tags '$TAGS' \" \
-      -Dwebdriver.provided.type=chromeheadless \
-      -Dwebdriver.base.url=$(grep url ops/vars_test_runner.env | cut -f2 -d'='); \
+      ${TRANCHE_RUN_GRADLE_ARGS[*]}; \
     chown -R $USER_ID:$GROUP_ID /repo"
 
 stop_services_under_test

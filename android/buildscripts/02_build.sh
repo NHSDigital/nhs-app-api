@@ -9,6 +9,10 @@ TARGET=${TARGET:-browserstack}
 
 # shellcheck source=lib/set_env.sh
 source "buildscripts/lib/set_env.sh"
+# shellcheck source=lib/functions.sh
+source "buildscripts/lib/functions.sh"
+
+validate_maven_settings
 
 if [ -n "$ANDROID_KEY_STORE_PASSWORD" ] && [ -n "$ANDROID_KEY_STORE_LOCATION" ]; then
   DOCKER_ARGS+=(-v "$ANDROID_KEY_STORE_LOCATION:/secret/AndroidKeyStore")

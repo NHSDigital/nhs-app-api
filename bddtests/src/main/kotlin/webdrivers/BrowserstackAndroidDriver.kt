@@ -34,6 +34,8 @@ class BrowserstackAndroidDriver : DriverSource {
             caps.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, true)
             caps.setCapability("browserstack.local", "true")
             caps.setCapability("browserstack.debug","true")
+            caps.setCapability("project", "NHSApp")
+            caps.setCapability("build", Config.instance.browserstackBuild)
 
             if(Config.instance.browserstackLocalIdentifier!="")
                 caps.setCapability("browserstack.localIdentifier",Config.instance.browserstackLocalIdentifier)

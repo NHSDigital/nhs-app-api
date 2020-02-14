@@ -1,0 +1,21 @@
+jobs:
+  - job: ios_int_tests
+    displayName: Tranche iOS
+    timeoutInMinutes: 180
+    variables:
+      - template: integration-tests-variables.yml
+        parameters:
+          additionalVariables:
+            tests.name: "iOS"
+            tests.script: "03_integration_test_run_browserstack_ios.sh"
+            native.app.path.ios: "$(System.ArtifactsDirectory)/iOS Package Files/BrowserStack/NHSOnline Dev.ipa"
+            browserstack.build: $(Build.BuildNumber)
+    steps:
+      - task: DownloadBuildArtifacts@0
+        displayName: Download IPA
+        inputs:
+          downloadType: single
+          artifactName: iOS Package Files
+          itemPattern: '**/BrowserStack/NHSOnline Dev.ipa'
+
+      - template: integration-tests-steps.yml

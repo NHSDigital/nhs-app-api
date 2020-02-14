@@ -33,6 +33,8 @@ class BrowserstackIOSDriver : DriverSource {
             caps.setCapability("browserstack.debug","true")
             caps.setCapability("autoWebview","true")
             caps.setCapability(MobileCapabilityType.APP,Config.instance.appPath)
+            caps.setCapability("project", "NHSApp")
+            caps.setCapability("build", Config.instance.browserstackBuild)
 
             if(Config.instance.browserstackLocalIdentifier!="")
                 caps.setCapability("browserstack.localIdentifier",Config.instance.browserstackLocalIdentifier)

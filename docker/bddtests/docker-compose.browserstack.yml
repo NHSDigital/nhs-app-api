@@ -1,0 +1,8 @@
+version: "3.4"
+
+services:
+
+  web.local.bitraft.io:
+    environment:
+      ConfigurationSettings__DefaultSessionExpiryMinutes: 5
+      EXPIRE_AFTER_SECONDS: 300

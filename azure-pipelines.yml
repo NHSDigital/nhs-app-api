@@ -46,35 +46,35 @@ stages:
         parameters:
           name: Client
 
-      - template: .azuredevops/templates/ios-client-build-job.yml
-        parameters:
-          name: Preview
-          condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), ne(variables['ios.target'], 'Preview'))
-          target: Preview
-          provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
-          provisioningProfileName: 'NHS App Dev Preview'
+      - ${{ if or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')) }}:
+        - template: .azuredevops/templates/ios-client-build-job.yml
+          condition: and(succeeded(), ne(variables['ios.target'], 'Preview'))
+          parameters:
+            name: Preview
+            target: Preview
+            provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
+            provisioningProfileName: 'NHS App Dev Preview'
 
-      - template: .azuredevops/templates/ios-client-build-job.yml
-        parameters:
-          name: Demo
-          condition: and(succeeded(), eq(variables['source.tag'], 'True'))
-          target: Demo
-          certSecureFile: iOSProductionCertificate.p12
-          certPwd: '$(ios.production.certificate.password)'
-          scheme: 'NHSOnline Demo'
-          provProfileSecureFile: iOSDemo.mobileprovision
-          provisioningProfileName: 'NHS App Demo Distribution'
+      - ${{ if eq(variables['source.tag'], 'True') }}:
+        - template: .azuredevops/templates/ios-client-build-job.yml
+          parameters:
+            name: Demo
+            target: Demo
+            certSecureFile: iOSProductionCertificate.p12
+            certPwd: '$(ios.production.certificate.password)'
+            scheme: 'NHSOnline Demo'
+            provProfileSecureFile: iOSDemo.mobileprovision
+            provisioningProfileName: 'NHS App Demo Distribution'
 
-      - template: .azuredevops/templates/ios-client-build-job.yml
-        parameters:
-          name: Release
-          condition: and(succeeded(), eq(variables['source.tag'], 'True'))
-          target: Production
-          certSecureFile: iOSProductionCertificate.p12
-          certPwd: '$(ios.production.certificate.password)'
-          scheme: 'NHSOnline'
-          provProfileSecureFile: iOSProduction.mobileprovision
-          provisioningProfileName: 'NHS App Distribution'
+        - template: .azuredevops/templates/ios-client-build-job.yml
+          parameters:
+            name: Release
+            target: Production
+            certSecureFile: iOSProductionCertificate.p12
+            certPwd: '$(ios.production.certificate.password)'
+            scheme: 'NHSOnline'
+            provProfileSecureFile: iOSProduction.mobileprovision
+            provisioningProfileName: 'NHS App Distribution'
 
   - stage: generate_code_coverage
     displayName: Generate Code Coverage
@@ -115,3 +115,23 @@ stages:
           - template: .azuredevops/templates/integration-tests-variables.yml
         steps:
           - template: .azuredevops/templates/integration-tests-steps.yml
+
+  - stage: android_integration_tests
+    displayName: Android Integration Tests
+    dependsOn:
+      - web
+      - backend
+      - android
+    condition: and(succeeded(), eq(variables['int.tests.run.native.android'], 'True'))
+    jobs:
+      - template: .azuredevops/templates/integration-tests-android-job.yml
+
+  - stage: ios_integration_tests
+    displayName: iOS Integration Tests
+    condition: and(succeeded(), eq(variables['int.tests.run.native.ios'], 'True'))
+    dependsOn:
+      - web
+      - backend
+      - ios
+    jobs:
+      - template: .azuredevops/templates/integration-tests-ios-job.yml

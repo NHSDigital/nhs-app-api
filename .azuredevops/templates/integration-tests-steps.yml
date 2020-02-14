@@ -9,6 +9,7 @@ steps:
     env:
       AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY: $(azure.notification.hub.shared.access.key)
       TERMS_CONDITIONS_COSMOS_AUTH_KEY: $(terms.conditions.cosmos.auth.key)
+      BROWSERSTACK_ACCESS_KEY: $(browserstack.access.key)
     inputs:
       scriptPath: bddtests/buildscripts/$(tests.script)
 

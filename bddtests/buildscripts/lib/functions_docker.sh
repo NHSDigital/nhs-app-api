@@ -8,11 +8,12 @@ function cleanup_docker_containers () {
     docker ps
 
     info "Cleaning up hanging containers"
-    for CONTAINER in $(docker ps | grep -v clair | grep -v CONTAINER | awk '{print $1}'); do
-      docker kill "$CONTAINER"
+    for CONTAINER in $(docker ps -q --filter=name="${DOCKER_PROJECT_NAME}_*"); do
+      docker stop "$CONTAINER"
     done
-    [ -z "$(docker ps -q --filter="name=${TRANCHE_TAG}_test_runner")" ] || docker stop "${TRANCHE_TAG}_test_runner"
-    [ -z "$(docker ps -aq --filter="name=${TRANCHE_TAG}_test_runner")" ] || docker rm "${TRANCHE_TAG}_test_runner"
+    for CONTAINER in $(docker ps -qa --filter=name="${DOCKER_PROJECT_NAME}_*"); do
+      docker rm "$CONTAINER"
+    done
   fi
 }
 
@@ -70,26 +71,24 @@ function start_services_under_test () {
   fi
 
   if [ "$RUN_LOCAL_BDD" == 1 ]; then
-    docker-compose -p "$TRANCHE_TAG" "${DOCKER_COMPOSE_FILES_ARGS[@]}" up
+    docker-compose -p "$DOCKER_PROJECT_NAME" "${DOCKER_COMPOSE_FILES_ARGS[@]}" up
     exit
   fi
 
-  docker-compose -p "$TRANCHE_TAG" "${DOCKER_COMPOSE_FILES_ARGS[@]}" up -d || die "Docker compose failure"
-
-  export DOCKER_NETWORK="${TRANCHE_TAG}_default"
+  docker-compose -p "$DOCKER_PROJECT_NAME" "${DOCKER_COMPOSE_FILES_ARGS[@]}" up -d || die "Docker compose failure"
 }
 
 function stop_services_under_test () {
   if [ -z "$TF_BUILD" ]; then
-    docker stop "${TRANCHE_TAG}_test_runner"
-    docker-compose -p "$TRANCHE_TAG" "${DOCKER_COMPOSE_FILES_ARGS[@]}" stop
+    docker stop "${DOCKER_PROJECT_NAME}_test_runner"
+    docker-compose -p "$DOCKER_PROJECT_NAME" "${DOCKER_COMPOSE_FILES_ARGS[@]}" stop
   fi
 }
 
 function destroy_services_under_test () {
   if [ -z "$TF_BUILD" ]; then
-    docker rm "${TRANCHE_TAG}_test_runner"
-    docker-compose -p "$TRANCHE_TAG" "${DOCKER_COMPOSE_FILES_ARGS[@]}" down
+    docker rm "${DOCKER_PROJECT_NAME}_test_runner"
+    docker-compose -p "$DOCKER_PROJECT_NAME" "${DOCKER_COMPOSE_FILES_ARGS[@]}" down
   fi
 }
 

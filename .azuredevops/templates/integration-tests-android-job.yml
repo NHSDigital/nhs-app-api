@@ -1,0 +1,21 @@
+jobs:
+  - job: android_int_tests
+    displayName: Tranche Android
+    timeoutInMinutes: 180
+    variables:
+      - template: integration-tests-variables.yml
+        parameters:
+          additionalVariables:
+            tests.name: "Android"
+            tests.script: "03_integration_test_run_browserstack_android.sh"
+            native.app.path.android: "$(System.ArtifactsDirectory)/Android Package Files/browserstack/app-browserstack-unsigned.apk"
+            browserstack.build: $(Build.BuildNumber)
+    steps:
+      - task: DownloadBuildArtifacts@0
+        displayName: Download APK
+        inputs:
+          downloadType: single
+          artifactName: Android Package Files
+          itemPattern: '**/app-browserstack-unsigned.apk'
+
+      - template: integration-tests-steps.yml

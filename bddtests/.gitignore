@@ -7,7 +7,6 @@ lib/*.jar
 
 # Log Files
 *.log
-ops/logs/
 
 # Generated files
 out/
@@ -37,10 +36,6 @@ browserstack.err
 .classpath
 .project
 .settings
-
-# runtime files created while running docker_tests.sh
-ops/docker-compose.ci-run.yml
-ops/vars_ci_run.env
 
 .gradle/
 

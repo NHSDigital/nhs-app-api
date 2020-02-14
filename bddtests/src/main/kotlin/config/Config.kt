@@ -38,6 +38,7 @@ class Config private constructor() {
     var browserstackNetworkProfile:String
     var browserstackDeviceName:String
     var browserstackDeviceOSversion:String
+    var browserstackBuild:String
     var isNativeAppTestRun:Boolean
     var autoLogin: String
     var appPath: String
@@ -69,7 +70,7 @@ class Config private constructor() {
         isDockerised = envOrDefault("DOCKER",false)
 
         val browserstackUsername = envOrDefault("BROWSERSTACK_USERNAME", "NOT_PROVIDED")
-        browserstackAccessKey = envOrDefault("BROWSERSTACK_ACCESSKEY", "NOT_PROVIDED")
+        browserstackAccessKey = envOrDefault("BROWSERSTACK_ACCESS_KEY", "NOT_PROVIDED")
         browserstackUrl = "http://$browserstackUsername:$browserstackAccessKey@hub-cloud.browserstack.com/wd/hub"
         browserstackLocal = envOrDefault("BROWSERSTACK_LOCAL", "true")
         browserstackLocalIdentifier = envOrDefault("BROWSERSTACK_LOCAL_IDENTIFIER","")
@@ -77,6 +78,7 @@ class Config private constructor() {
         browserstackaAppVersion = envOrDefault("BROWSERSTACK_APP_VERSION","")
         browserstackNetworkProfile = envOrDefault("BROWSERSTACK_NETWORK_PROFILE","")
         browserstackTimezone = envOrDefault("BROWSERSTACK_TIMEZONE", "UTC")
+        browserstackBuild = envOrDefault("BROWSERSTACK_BUILD", "manual")
         showPageSourceForXPathQuery = envOrDefault("XPATH_PAGE_SOURCE", false)
         appPath = envOrDefault("APP_PATH", "NOT_PROVIDED")
         appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")
