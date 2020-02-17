@@ -1,10 +1,10 @@
 package com.nhs.online.nhsonline.biometrics
 
+import android.content.res.Resources
 import android.os.Build
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.fidoclient.exceptions.FidoInvalidSignatureException
-import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.fidoclient.uaf.client.operation.Authentication
 import com.nhs.online.fidoclient.uaf.crypto.FidoKeystoreAndroidM
 import com.nhs.online.fidoclient.utils.extractJSONString
@@ -22,20 +22,31 @@ import org.robolectric.util.ReflectionHelpers
 import java.security.Signature
 
 @RunWith(RobolectricTestRunner::class)
-@Ignore("Create MainActivity is too slow")
 class FingerprintServiceTest {
-    private lateinit var biometricsInteractor: IBiometricsInteractor
+    private lateinit var biometricsInteractor: BiometricsInteractor
     private lateinit var fidoEndpointConfig: FidoEndpointConfig
     private lateinit var signatureMock: Signature
     private lateinit var authenticationMock: Authentication
     private lateinit var fingerprintService: FingerprintService
     private lateinit var preferencesServiceMock: FingerprintSharedPreferences
+    private lateinit var mainActivityMock: MainActivity
 
     private val fidoServerUrl = "\"test@test.com\""
 
     @Before
     fun setUp() {
-        biometricsInteractor = Robolectric.setupActivity(MainActivity::class.java)
+        val resourceMock: Resources = mock {
+            on { getString(any())}.thenReturn("bazz")
+        }
+        mainActivityMock = mock {
+            on { resources }.thenReturn(resourceMock)
+            on { getString(any())}.thenReturn("bazz")
+        }
+
+        biometricsInteractor = mock {
+            on { getActivity() }.thenReturn(mainActivityMock)
+        }
+
         fidoEndpointConfig = FidoEndpointConfig(
             "test@test.com",
             "/authGet",
@@ -69,7 +80,15 @@ class FingerprintServiceTest {
     }
 
     @Test
+    @Ignore("Create MainActivity is too slow")
     fun fingerprintServiceCompanionClass_ReturnsNonNullWhenApiVersionEqualOrHigherThan23() {
+
+        val newMainActivity = Robolectric.buildActivity(MainActivity::class.java).create().get()
+
+        biometricsInteractor = mock {
+            on { getActivity() }.thenReturn(newMainActivity)
+        }
+
         val marshmallowOrHigherApis =
             listOf(Build.VERSION_CODES.M, Build.VERSION_CODES.N, Build.VERSION_CODES.O)
         val interactor: IInteractor = mock()
@@ -84,6 +103,7 @@ class FingerprintServiceTest {
 
     @Test
     fun fingerprintServiceCompanionClass_ReturnsNullWhenApiVersionLessThan23() {
+
         val lollipopOrLowerApis =
             listOf(Build.VERSION_CODES.LOLLIPOP_MR1,
                 Build.VERSION_CODES.LOLLIPOP,

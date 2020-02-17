@@ -47,6 +47,7 @@ class RegistrationService(
         val facetId = fidoHelpers.getFacetId(activity)
         val accessToken = cookieService.getAccessTokenFromCookie()
         if (facetId == null || accessToken == null || accessToken.isEmpty()) {
+            biometricsInteractor.toggleBiometricSwitch(false)
             biometricsInteractor.showBiometricRegistrationError()
             return
         }
@@ -61,10 +62,16 @@ class RegistrationService(
     private fun isRegistrationReady(): Boolean {
         val fidoUser = preferencesService.getFidoUsername()
         val registeredState = preferencesService.getFingerprintRegisteredState()
-        if (fidoUser.isNotEmpty() || registeredState)
+        if (fidoUser.isNotEmpty() || registeredState) {
             biometricCleanupHelper.removeFidoData()
+        }
 
-        return fingerprintSystemChecker.preRegistrationCheck()
+        val preRegCheckResult = fingerprintSystemChecker.preRegistrationCheck()
+
+        if (!preRegCheckResult) {
+            biometricsInteractor.toggleBiometricSwitch(false)
+        }
+        return preRegCheckResult
     }
 
     private fun handleRegistrationResponse(response: BiometricCallResult) {
@@ -72,6 +79,7 @@ class RegistrationService(
             biometricsInteractor.dismissProgressDialog()
             if (response.statusCode != BiometricAsyncHandler.OK) {
                 biometricsInteractor.showBiometricRegistrationError()
+                biometricsInteractor.toggleBiometricSwitch(false)
                 return
             }
             val result = response.result
@@ -85,9 +93,11 @@ class RegistrationService(
 
                 override fun cancel() {
                     biometricState.registrationStateChangeInProgress = false
+                    biometricsInteractor.toggleBiometricSwitch(false)
                 }
 
                 override fun error() {
+                    biometricsInteractor.toggleBiometricSwitch(false)
                     return
                 }
             }
@@ -126,7 +136,6 @@ class RegistrationService(
                 if (verifyIfRegistrationSuccess(response.result)) {
                     preferencesService.storeFingerprintState(true)
                     biometricState.registered = true
-                    biometricsInteractor.toggleBiometricSwitch(biometricState.registered)
                     biometricsInteractor.showBiometricsOnRegistrationSuccessMessage()
                 } else {
                     biometricCleanupHelper.removeFidoData()
@@ -143,11 +152,13 @@ class RegistrationService(
     private fun removeAndShowRegistrationError() {
         biometricsInteractor.showBiometricRegistrationError()
         biometricCleanupHelper.removeFidoData()
+        biometricsInteractor.toggleBiometricSwitch(false)
     }
 
     private fun removeAndShowDeviceError() {
         biometricsInteractor.showBiometricDeviceError()
         biometricCleanupHelper.removeFidoData()
+        biometricsInteractor.toggleBiometricSwitch(false)
     }
 
     private fun processUafRegistrationMsg(inMsg: String, signature: Signature): String {

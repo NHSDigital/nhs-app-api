@@ -5,14 +5,15 @@ import android.support.v7.app.AlertDialog
 import android.widget.TextView
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.biometrics.BiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.support.AppDialogs
 import com.nhs.online.nhsonline.web.NhsWeb
-import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.error_layout.*
+import kotlinx.android.synthetic.main.biometric_layout_content.*
+import kotlinx.android.synthetic.main.error_layout.retryButton
 import org.junit.Assert
 import org.junit.Assert.assertFalse
 import org.junit.Before
@@ -23,6 +24,7 @@ import org.mockito.internal.util.reflection.FieldSetter
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowDialog
+import org.robolectric.util.ReflectionHelpers
 
 @RunWith(RobolectricTestRunner::class)
 @Ignore("Create MainActivity is too slow")
@@ -125,9 +127,7 @@ class MainActivityTest {
         val nhsWebMock: NhsWeb = mock {
             on { isUserLoggedIn }.thenReturn(false)
         }
-        FieldSetter.setField(spyActivity,
-            spyActivity::class.java.getDeclaredField("nhsWeb"),
-            nhsWebMock)
+        FieldSetter.setField(spyActivity, spyActivity::class.java.getDeclaredField("nhsWeb"), nhsWebMock)
 
         try {
             spyActivity.onBackPressed()
@@ -243,7 +243,7 @@ class MainActivityTest {
 
         val result = spyActivity.showBiometricLoginIfEnabled()
 
-        Assert.assertFalse(result)
+        assertFalse(result)
         verify(biometricsInterfaceMock, never()).showBiometricLoginIfEnabled()
     }
 
@@ -262,7 +262,7 @@ class MainActivityTest {
 
         val result = spyActivity.showBiometricLoginIfEnabled()
 
-        Assert.assertFalse(result)
+        assertFalse(result)
         verify(biometricsInterfaceMock, never()).showBiometricLoginIfEnabled()
     }
 
@@ -280,8 +280,89 @@ class MainActivityTest {
 
         val result = spyActivity.showBiometricLoginIfEnabled()
 
-        Assert.assertFalse(result)
+        assertFalse(result)
         verify(biometricsInterfaceMock, never()).showBiometricLoginIfEnabled()
+    }
+
+    @Test
+    fun testBiometricToggleSwitchListenerIsFiredWhenBiometicsIsEnabled() {
+        //arrange
+        val biometricsInterfaceMock: BiometricsInterface = mock {
+            on { showBiometricLoginIfEnabled() }.thenReturn(true)
+            on { isFingerprintServiceInitialised() }.thenReturn(false)
+            on { requestBiometricsRegistrationStateChange() }.thenReturn(true)
+        }
+
+        FieldSetter.setField(mainActivity,
+                mainActivity::class.java.getDeclaredField("biometricsInterface"),
+                biometricsInterfaceMock)
+
+        val biometricsInteractorMock: BiometricsInteractor = mock {}
+        FieldSetter.setField(mainActivity,
+                mainActivity::class.java.getDeclaredField("biometricsInteractor"), biometricsInteractorMock)
+
+        // act
+        mainActivity.configBiometricSetup("")
+        mainActivity.biometricToggleSwitch.isChecked = true
+
+        //assert
+        verify(biometricsInterfaceMock, times(1)).initializeFingerprintService("")
+        verify(biometricsInterfaceMock, times(1)).requestBiometricsRegistrationStateChange()
+        verify(biometricsInteractorMock, times(1)).dismissNotifications()
+        Assert.assertTrue(mainActivity.biometricToggleSwitch.isChecked)
+    }
+
+
+    @Test
+    fun testBiometricToggleSwitchListenerIsTurnedOffAfterErrorScenario() {
+
+        spyActivity.configurationResponse.callSuccessful = true
+
+        //arrange
+        val biometricsInterfaceMock: BiometricsInterface = mock {
+            on { showBiometricLoginIfEnabled() }.thenReturn(true)
+            on { isFingerprintServiceInitialised() }.thenReturn(false)
+            on { requestBiometricsRegistrationStateChange() }.thenReturn(false)
+        }
+
+        val nhsWebMock: NhsWeb = mock { }
+
+        ReflectionHelpers.setField(mainActivity, "biometricsInterface", biometricsInterfaceMock)
+        ReflectionHelpers.setField(mainActivity, "nhsWeb", nhsWebMock)
+
+        // act
+        mainActivity.configBiometricSetup("")
+        mainActivity.biometricToggleSwitch.isChecked = true
+
+        //assert
+        verify(biometricsInterfaceMock, times(1)).initializeFingerprintService("")
+        verify(biometricsInterfaceMock, times(1)).requestBiometricsRegistrationStateChange()
+        assertFalse(mainActivity.biometricToggleSwitch.isChecked)
+    }
+
+    @Test
+    fun testBiometricsRegistrationNotCalledOnCheckChangedListener() {
+        //arrange
+        val biometricsInterfaceMock: BiometricsInterface = mock {
+            on { showBiometricLoginIfEnabled() }.thenReturn(true)
+            on { isFingerprintServiceInitialised() }.thenReturn(false)
+            on { isFingerprintRegistered }.thenReturn(false)
+        }
+
+        val nhsWebMock: NhsWeb = mock { }
+
+        ReflectionHelpers.setField(mainActivity, "biometricsInterface", biometricsInterfaceMock)
+        ReflectionHelpers.setField(mainActivity, "nhsWeb", nhsWebMock)
+
+        // act
+        mainActivity.configBiometricSetup("")
+        mainActivity.biometricToggleSwitch.isChecked = false
+
+        //assert
+        verify(biometricsInterfaceMock, times(1)).initializeFingerprintService("")
+        verify(biometricsInterfaceMock, times(0)).requestBiometricsRegistrationStateChange()
+        verifyZeroInteractions(nhsWebMock)
+        assertFalse(mainActivity.biometricToggleSwitch.isChecked)
     }
 
     @Test

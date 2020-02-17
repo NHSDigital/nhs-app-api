@@ -13,16 +13,15 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.util.Log
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
 import android.webkit.WebSettings
-import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.biometrics.BiometricsInteractor
 import com.nhs.online.nhsonline.biometrics.BiometricsInterface
 import com.nhs.online.nhsonline.clients.FirebaseClient
 import com.nhs.online.nhsonline.clients.HttpClient
@@ -38,17 +37,16 @@ import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.support.*
-import com.nhs.online.nhsonline.support.STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.utils.NotificationManagerCompat
 import com.nhs.online.nhsonline.web.NhsWeb
-import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
-import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
-import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
 import com.nhs.online.nhsonline.utils.UrlHelper
 import com.nhs.online.nhsonline.support.intentHandlers.FirebaseMessagingIntentHandler
 import com.nhs.online.nhsonline.support.intentHandlers.IntentHandlers
 import com.nhs.online.nhsonline.support.intentHandlers.ViewIntentHandler
 import com.nhs.online.nhsonline.support.intentHandlers.FidoIntentHandler
+import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
+import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
+import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.biometric_layout_content.*
@@ -66,17 +64,16 @@ private val TAG = MainActivity::class.java.simpleName
 class MainActivity :
         IInteractor,
         AppCompatActivity(),
-        IBiometricsInteractor,
         LifeCycleObserverContext {
-
     private val logger = Logger.getLogger(TAG)
     private lateinit var biometricsInterface: BiometricsInterface
+    private lateinit var biometricsInteractor: BiometricsInteractor
     private lateinit var connectionStateMonitor: ConnectionStateMonitor
     private lateinit var nhsWeb: NhsWeb
     lateinit var appDialogs: AppDialogs
     private lateinit var appWebInterface: AppWebInterface
     private var lifeCycleObserver: LifeCycleObserver? = null
-    private lateinit var activityViewSwitcher: MainActivityViewSwitcher
+    lateinit var activityViewSwitcher: MainActivityViewSwitcher
     private val nhsAndroidUserAgent = "nhsapp-android/" + com.nhs.online.nhsonline.BuildConfig.VERSION_NAME
     private lateinit var downloadHelper: FileDownloadHelper
     private lateinit var notificationsService: NotificationsService
@@ -103,9 +100,9 @@ class MainActivity :
 
 
         if (resources.getString(R.string.secureFlag) != "disabled" &&
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+              Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                    WindowManager.LayoutParams.FLAG_SECURE)
+                WindowManager.LayoutParams.FLAG_SECURE)
         }
         urlHelper = UrlHelper(this)
         appPersistData = PersistData(this)
@@ -128,15 +125,13 @@ class MainActivity :
         val notificationManager = NotificationManagerCompat(this)
         notificationsService = NotificationsService(appWebInterface, FirebaseClient(), notificationManager)
 
-        biometricsInterface = BiometricsInterface(this)
-
         connectionStateMonitor = ConnectionStateMonitor(this)
         connectionStateMonitor.registerNetworkCallback()
 
         configService = ConfigurationService(resources.getString(R.string.baseApiURL) +
                 resources.getString(R.string.configurationApiPath),
                 this,
-                ErrorMessageHandler(this),
+                ErrorMessageHandler(this.resources),
                 HttpClient()
         )
         configServiceManager = ConfigurationServiceManager(this, configService)
@@ -146,6 +141,8 @@ class MainActivity :
         }
 
         initialiseNhsWeb()
+        initialiseBiometrics()
+        loadWelcomePage()
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
 
@@ -160,7 +157,6 @@ class MainActivity :
     private fun initialiseActivityElements() {
         knownServices = configurationResponse.knownServices!!
         nhsLoginLoggedInPaths = configurationResponse.nhsLoginLoggedInPaths!!
-        configBiometricSetup(configurationResponse.fidoServerUrl)
     }
 
     private fun initialiseNhsWeb() {
@@ -168,7 +164,15 @@ class MainActivity :
         menuBar.nhsWeb = nhsWeb
 
         setHelpUrl(resources.getString(R.string.helpURL))
+    }
 
+    private fun initialiseBiometrics() {
+        biometricsInteractor = BiometricsInteractor(this.resources, this, nhsWeb, this)
+        biometricsInterface = BiometricsInterface(biometricsInteractor, this)
+        configBiometricSetup(configurationResponse.fidoServerUrl)
+    }
+
+    private fun loadWelcomePage() {
         nhsWeb.loadWelcomePage()
     }
 
@@ -192,7 +196,7 @@ class MainActivity :
 
         if (!isConnectedToNetwork) {
             logger.info(
-                    "${this::class.java.simpleName}: Leaving OnErrorRetryButton as presently no network access")
+                "${this::class.java.simpleName}: Leaving OnErrorRetryButton as presently no network access")
             return
         }
 
@@ -226,7 +230,7 @@ class MainActivity :
             lifeCycleObserver?.onMoveToForeground()
         }
 
-        intentHandlers.handleIntent(intent,true, nhsWeb);
+        intentHandlers.handleIntent(intent,true, nhsWeb)
 
         lifeCycleObserver?.onMoveToForeground()
     }
@@ -251,7 +255,7 @@ class MainActivity :
         val fileUploadCallback = nhsWeb.getFileUploadCallback()
 
         logger.log(Level.WARNING,
-                "${this::class.java.simpleName}: Entering onActivityResult with request code: $requestCode")
+            "${this::class.java.simpleName}: Entering onActivityResult with request code: $requestCode")
 
         try {
             if (resultCode == Activity.RESULT_OK) {
@@ -293,21 +297,25 @@ class MainActivity :
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intent?.let {
-            intentHandlers.handleIntent(intent,false, nhsWeb);
+            intentHandlers.handleIntent(intent, false, nhsWeb)
         }
     }
 
     fun configBiometricSetup(fidoServerUrl: String) {
-        if (biometricsInterface.isFingerprintServiceInitialised()) return
+        if (biometricsInterface.isFingerprintServiceInitialised()) {
+            return
+        }
         biometricsInterface.initializeFingerprintService(fidoServerUrl)
 
-        biometricToggleSwitch.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_UP) {
-
-                return@setOnTouchListener biometricsInterface
-                        .requestBiometricsRegistrationStateChange()
+        biometricToggleSwitch.setOnCheckedChangeListener{ _, _ ->
+            if (biometricToggleSwitch.isChecked || biometricsInterface.isFingerprintRegistered) {
+                biometricsInteractor.let {
+                    it.dismissNotifications()
+                    if (!biometricsInterface.requestBiometricsRegistrationStateChange()) {
+                        it.toggleBiometricSwitch(false)
+                    }
+                }
             }
-            return@setOnTouchListener true
         }
     }
 
@@ -341,18 +349,6 @@ class MainActivity :
         }
         nhsWeb.stopLoading()
         nhsWeb.loadUrl(path)
-    }
-
-    override fun loadBiometricLoginPage(url: String) {
-        var currentUrl = webview.url
-
-        currentUrl += when(currentUrl.contains("?")) {
-            true -> "&$url"
-            false -> "?$url"
-        }
-
-        nhsWeb.requiresFullPageLoad = true
-        nhsWeb.loadUrl(currentUrl)
     }
 
     override fun startDownload(base64Data: String, fileName: String, mimeType: String) {
@@ -471,7 +467,7 @@ class MainActivity :
         if (progressBarLayout.visibility == GONE) {
             progressBarLayout.visibility = VISIBLE
             window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         }
     }
 
@@ -491,40 +487,9 @@ class MainActivity :
             menuBar.switchActiveMenuItemTo(navigationMenuId)
     }
 
-    override fun getActivity(): FragmentActivity = this
-
-    override fun toggleBiometricSwitch(isChecked: Boolean) {
-        nhsWeb.onBiometricOptionChanged()
-        biometricToggleSwitch.isChecked = isChecked
-    }
-
-    override fun showBiometricsOnRegistrationSuccessMessage() {
-        successTextView.text =
-                resources.getString(R.string.fingerprint_registration_success_dialog_message)
-        activityViewSwitcher.switchTo(ActivityView.FINGERPRINT_SUCCESS)
-    }
-
-    override fun showBiometricsOnDeRegistrationSuccessMessage() {
-        successTextView.text =
-                resources.getString(R.string.fingerprint_de_registration_success_dialog_message)
-        activityViewSwitcher.switchTo(ActivityView.FINGERPRINT_SUCCESS)
-    }
-
-    override fun showBiometricRegistrationError() {
-        val biometricDeviceErrorMessage = ErrorMessage(this, ErrorType.BiometricRegistrationFailure)
-        Log.d(Application.TAG, "Biometric registration failed")
-        showErrorScreen(biometricDeviceErrorMessage)
-    }
-
-    override fun showBiometricDeviceError() {
-        val biometricDeviceErrorMessage = ErrorMessage(this, ErrorType.BiometricDeviceFailure)
-        Log.d(Application.TAG, "Biometric device failed")
-        showErrorScreen(biometricDeviceErrorMessage)
-    }
-
     private fun showDownloadDocumentFailureError() {
         Log.d(Application.TAG, "Download document failed")
-        showErrorScreen(ErrorMessage(this, ErrorType.DownloadDocumentError))
+        showErrorScreen( ErrorMessage(this.resources, ErrorType.DownloadDocumentError))
     }
 
     override fun showUnavailabilityError(errorMessage: ErrorMessage) {
@@ -572,8 +537,8 @@ class MainActivity :
     override fun setWebViewVisible() = activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>, grantResults: IntArray
     ) {
         when (requestCode) {
             LOCATION_REQUEST_CODE -> nhsWeb.handleWebClientLocationResult(grantResults)
@@ -685,7 +650,7 @@ class MainActivity :
     }
 
     override fun showBiometricLoginIfEnabled(forceStart: Boolean): Boolean {
-        if (!configurationResponse.callSuccessful) {
+        if (!configurationResponse.callSuccessful){
             return false
         }
 
@@ -729,7 +694,7 @@ class MainActivity :
             path = URL(currentUrl).path
         } catch (e: MalformedURLException) {
             logger.log(Level.WARNING,
-                    "${this::class.java.simpleName}: MalformedUrlException: ${webview.url} $e")
+                "${this::class.java.simpleName}: MalformedUrlException: ${webview.url} $e")
         }
 
         return path
@@ -752,5 +717,23 @@ class MainActivity :
         } else {
             Log.d(TAG, "Permission not granted")
         }
+    }
+
+    override fun getActivity(): FragmentActivity = this
+
+    override fun toggleBiometricSwitchOn() {
+        biometricToggleSwitch.isChecked = true
+    }
+
+    override fun toggleBiometricSwitchOff() {
+        biometricToggleSwitch.isChecked = false
+    }
+
+    override fun setSuccessViewMessage(id: Int) {
+        successTextView.text = resources.getString(id)
+    }
+
+    override fun switchToFingerprintSuccessView() {
+        activityViewSwitcher.switchTo(ActivityView.FINGERPRINT_SUCCESS)
     }
 }

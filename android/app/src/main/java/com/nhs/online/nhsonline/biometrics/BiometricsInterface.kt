@@ -5,7 +5,7 @@ import com.nhs.online.nhsonline.biometrics.utils.FingerprintSystemChecker
 import com.nhs.online.nhsonline.interfaces.IInteractor
 
 
-class BiometricsInterface(private val biometricsInteractor: IBiometricsInteractor, private val interactor: IInteractor = biometricsInteractor as IInteractor) {
+class BiometricsInterface(private val biometricsInteractor: BiometricsInteractor, private val interactor: IInteractor) {
     private var fingerprintService: FingerprintService? = null
     var isFingerprintRegistered: Boolean
         get() = fingerprintService?.biometricState?.registered ?: false
@@ -26,16 +26,11 @@ class BiometricsInterface(private val biometricsInteractor: IBiometricsInteracto
 
     fun requestBiometricsRegistrationStateChange(): Boolean {
         fingerprintService?.let {
-            if (it.biometricState.registrationStateChangeInProgress) {
-                biometricsInteractor.toggleBiometricSwitch(isFingerprintRegistered)
-                return false
-            }
-
-            if (it.biometricState.registered)
+            if (it.biometricState.registered){
                 it.deRegisterBiometrics()
-            else
+            } else {
                 it.startFidoRegistration()
-
+            }
             return true
         }
         if (FingerprintSystemChecker.checkIfAndroidMOrAbove()) {

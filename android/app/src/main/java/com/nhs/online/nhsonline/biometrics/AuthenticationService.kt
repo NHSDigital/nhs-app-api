@@ -15,6 +15,7 @@ import com.nhs.online.fidoclient.uaf.client.AuthAssertionBuilder
 import com.nhs.online.fidoclient.uaf.client.operation.Authentication
 import com.nhs.online.fidoclient.uaf.crypto.FidoSignerAndroidM
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.biometrics.utils.*
 import com.nhs.online.nhsonline.support.toBase64
 import org.json.JSONObject
@@ -26,7 +27,7 @@ private val TAG = AuthenticationService::class.java.simpleName
 class AuthenticationService(
         private val activity: FragmentActivity,
         private val biometricAsyncHandler: BiometricAsyncHandler,
-        private val biometricsInteractor: IBiometricsInteractor,
+        private val biometricsInteractor: BiometricsInteractor,
         private val biometricState: BiometricState,
         private val biometricCleanupHelper: BiometricCleanupHelper,
         private val fingerprintDialog: FingerprintDialog,
@@ -34,7 +35,6 @@ class AuthenticationService(
         private val preferencesService: FingerprintSharedPreferences,
         private val uafAuthenticator: Authentication
 ) {
-
     var isFingerprintLoginStarted = false
 
     fun showBiometricLoginIfEnabled(forceStart: Boolean = false): Boolean {
@@ -45,7 +45,11 @@ class AuthenticationService(
             return false
 
         Log.d(TAG, "isRegistered")
-        biometricsInteractor.toggleBiometricSwitch(true)
+        with(biometricsInteractor) {
+            toggleBiometricSwitch(true)
+            dismissNotifications()
+        }
+
         startFidoSignIn()
         return true
     }

@@ -1,9 +1,9 @@
 package com.nhs.online.nhsonline.data
 
-import android.content.Context
+import android.content.res.Resources
 
-class ErrorMessageHandler(val context: Context) {
+class ErrorMessageHandler(val resources: Resources) {
     fun getErrorMessage(type: ErrorType): ErrorMessage {
-        return ErrorMessage(context, type)
+        return ErrorMessage(resources, type)
     }
 }

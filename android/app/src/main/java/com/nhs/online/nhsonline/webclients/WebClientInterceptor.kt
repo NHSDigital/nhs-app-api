@@ -42,7 +42,7 @@ class WebClientInterceptor(
         val logger = Logger.getLogger(WebClientInterceptor::class.java.simpleName)!!
     }
 
-    private val errorMessageHandler = ErrorMessageHandler(context)
+    private val errorMessageHandler = ErrorMessageHandler(context.resources)
     private val handler = Handler()
     private var noConnectionHandled = false
     private var shouldShowErrorPage = false

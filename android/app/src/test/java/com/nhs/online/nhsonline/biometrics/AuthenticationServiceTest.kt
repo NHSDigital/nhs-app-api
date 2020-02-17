@@ -25,7 +25,7 @@ class AuthenticationServiceTest {
     private lateinit var authenticationService: AuthenticationService
     private lateinit var fragmentActivityMock: FragmentActivity
     private lateinit var biometricAsyncHandlerMock: BiometricAsyncHandler
-    private lateinit var biometricsInteractorMock: IBiometricsInteractor
+    private lateinit var biometricsInteractorMock: BiometricsInteractor
     private lateinit var biometricStateMock: BiometricState
     private lateinit var biometricCleanupHelperMock: BiometricCleanupHelper
     private lateinit var fingerprintDialogMock: FingerprintDialog

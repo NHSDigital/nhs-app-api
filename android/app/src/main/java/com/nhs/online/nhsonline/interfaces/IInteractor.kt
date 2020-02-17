@@ -1,5 +1,6 @@
 package com.nhs.online.nhsonline.interfaces
 
+import android.support.v4.app.FragmentActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
 
 interface IInteractor {
@@ -52,7 +53,7 @@ interface IInteractor {
 
     fun showExtendSessionDialogue()
 
-    fun showBiometricLoginIfEnabled(forceStart:Boolean = false): Boolean
+    fun showBiometricLoginIfEnabled(forceStart: Boolean = false): Boolean
 
     fun dismissBiometricDialog()
 
@@ -67,4 +68,15 @@ interface IInteractor {
     fun canDisplayBiometricLogin(): Boolean
 
     fun dismissSplashScreen()
+
+    fun getActivity(): FragmentActivity
+
+    fun toggleBiometricSwitchOn()
+
+    fun toggleBiometricSwitchOff()
+
+    fun setSuccessViewMessage(id:Int)
+
+    fun switchToFingerprintSuccessView()
+
 }

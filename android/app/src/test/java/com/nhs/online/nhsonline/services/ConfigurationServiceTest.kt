@@ -33,7 +33,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
     @Before
     fun setUp() {
         context = mockConnectedContext()
-        errorMessageHandler = ErrorMessageHandler(context)
+        errorMessageHandler = ErrorMessageHandler(context.resources)
         httpClientMock = mock()
         uiIInteractor = mock()
         configurationService = ConfigurationService("configurationUrlMock", uiIInteractor, errorMessageHandler, httpClientMock)

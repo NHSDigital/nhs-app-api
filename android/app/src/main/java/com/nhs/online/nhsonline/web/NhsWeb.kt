@@ -48,7 +48,7 @@ class NhsWeb(
     private val urlHelper = UrlHelper(activity)
     private val chromeClient = ChromeClientLocationHandler(activity)
     private val appPersistData = PersistData(activity)
-    private val errorMessageHandler = ErrorMessageHandler(activity)
+    private val errorMessageHandler = ErrorMessageHandler(activity.resources)
     private val settingsService = SettingsService(activity)
 
     var applicationState =

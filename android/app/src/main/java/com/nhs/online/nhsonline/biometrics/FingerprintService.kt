@@ -4,7 +4,6 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.support.v4.app.FragmentActivity
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
-import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.fidoclient.uaf.client.operation.Authentication
 import com.nhs.online.fidoclient.uaf.crypto.FidoKeystoreAndroidM
 import com.nhs.online.nhsonline.R
@@ -15,7 +14,7 @@ private const val keyIdPrefix = "com.nhs.online.nhsonline.fidouafclient.keystore
 
 @TargetApi(Build.VERSION_CODES.M)
 class FingerprintService(
-        biometricsInteractor: IBiometricsInteractor,
+        biometricsInteractor: BiometricsInteractor,
         private val interactor: IInteractor,
         fidoKeystore: FidoKeystoreAndroidM,
         fingerprintSystemChecker: FingerprintSystemChecker,
@@ -34,7 +33,7 @@ class FingerprintService(
 
     init {
 
-        val fidoDataHelper = BiometricCleanupHelper(biometricsInteractor,
+        val fidoDataHelper = BiometricCleanupHelper(
             biometricState,
             fidoKeystore,
             preferencesService)
@@ -97,9 +96,9 @@ class FingerprintService(
     companion object {
 
         fun createIfDeviceSupported(
-                biometricsInteractor: IBiometricsInteractor,
-                fidoServerUrl: String,
-                interactor: IInteractor
+            biometricsInteractor: BiometricsInteractor,
+            fidoServerUrl: String,
+            interactor: IInteractor
         ): FingerprintService? {
             if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.M) || fidoServerUrl.isEmpty())
                 return null

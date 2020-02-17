@@ -1,9 +1,10 @@
 package com.nhs.online.nhsonline.data
 
 import android.content.Context
+import android.content.res.Resources
 import com.nhs.online.nhsonline.R
 
-class ErrorMessage(context: Context, errorType: ErrorType) {
+class ErrorMessage(resources: Resources, errorType: ErrorType) {
     var header: String = ""
     var title: String
     var message:String?
@@ -13,47 +14,47 @@ class ErrorMessage(context: Context, errorType: ErrorType) {
     init {
         when(errorType){
             ErrorType.NoConnection -> {
-                header = context.resources.getString(R.string.connection_error_header)
-                title = context.resources.getString(R.string.connection_error_title)
-                message = context.resources.getString(R.string.connection_error_message)
-                accessibleMessage = context.resources.getString(R.string.Accessible_connection_error_message)
+                header = resources.getString(R.string.connection_error_header)
+                title = resources.getString(R.string.connection_error_title)
+                message = resources.getString(R.string.connection_error_message)
+                accessibleMessage = resources.getString(R.string.Accessible_connection_error_message)
                 isRetry = true
             }
             ErrorType.ServiceUnavailable -> {
-                title = context.resources.getString(R.string.server_error_title)
-                message = context.resources.getString(R.string.server_error_message)
-                accessibleMessage = context.resources.getString(R.string.accessible_server_error_message)
+                title = resources.getString(R.string.server_error_title)
+                message = resources.getString(R.string.server_error_message)
+                accessibleMessage = resources.getString(R.string.accessible_server_error_message)
                 isRetry = true
             }
             ErrorType.ApiCallFailure -> {
-                title = context.resources.getString(R.string.service_unavailable)
-                message = context.resources.getString(R.string.apiUnavailableErrorMessage)
-                accessibleMessage = context.resources.getString(R.string.accessible_apiUnavailableErrorMessage)
+                title = resources.getString(R.string.service_unavailable)
+                message = resources.getString(R.string.apiUnavailableErrorMessage)
+                accessibleMessage = resources.getString(R.string.accessible_apiUnavailableErrorMessage)
                 isRetry = true
             }
             ErrorType.BrowserNotAvailable -> {
-                title = context.resources.getString(R.string.browser_unavailable)
-                message = context.resources.getString(R.string.browser_unavailable_message)
-                accessibleMessage = context.resources.getString(R.string.accessible_browser_unavailable_message)
+                title = resources.getString(R.string.browser_unavailable)
+                message = resources.getString(R.string.browser_unavailable_message)
+                accessibleMessage = resources.getString(R.string.accessible_browser_unavailable_message)
                 isRetry = true
             }
             ErrorType.BiometricDeviceFailure -> {
-                title = context.resources.getString(R.string.biometric_header)
-                message = context.resources.getString(R.string.biometric_device_failure_message)
-                accessibleMessage = context.resources.getString(R.string.biometric_device_failure_message)
+                title = resources.getString(R.string.biometric_header)
+                message = resources.getString(R.string.biometric_device_failure_message)
+                accessibleMessage = resources.getString(R.string.biometric_device_failure_message)
                 isRetry = false
             }
             ErrorType.BiometricRegistrationFailure -> {
-                title = context.resources.getString(R.string.biometric_registration_header)
-                message = context.resources.getString(R.string.biometric_registration_failure_message)
-                accessibleMessage = context.resources.getString(R.string.biometric_device_failure_message)
+                title = resources.getString(R.string.biometric_registration_header)
+                message = resources.getString(R.string.biometric_registration_failure_message)
+                accessibleMessage = resources.getString(R.string.biometric_device_failure_message)
                 isRetry = false
             }
             ErrorType.DownloadDocumentError -> {
-                header = context.resources.getString(R.string.download_failure_title)
+                header = resources.getString(R.string.download_failure_title)
                 title = ""
-                message = context.resources.getString(R.string.download_failure_message)
-                accessibleMessage = context.resources.getString(R.string.accessible_download_failure_message)
+                message = resources.getString(R.string.download_failure_message)
+                accessibleMessage = resources.getString(R.string.accessible_download_failure_message)
                 isRetry = false
             }
         }

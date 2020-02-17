@@ -55,7 +55,7 @@ class WebClientInterceptorTest {
         knownServicesMock = mock()
         nhsLoginLoggedInPaths = mock()
         contextMock = ResourceMockingClass().mockContext()
-        errorMessageHandler = ErrorMessageHandler(contextMock)
+        errorMessageHandler = ErrorMessageHandler(contextMock.resources)
         nhsWebMock = mock()
         schemeHandlersMock = mock { on { handleUrl(any()) } doReturn false }
         webClientInterceptor = WebClientInterceptor(uiInteractorMock,

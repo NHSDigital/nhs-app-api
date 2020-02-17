@@ -35,7 +35,7 @@ class OpenUrlInBrowserActivityTest : ResourceMockingClass() {
         val url = "https://www.nhs.uk/"
         val resolvedActivityList: List<ResolveInfo> = emptyList()
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        val errorMessage = ErrorMessage(context, ErrorType.BrowserNotAvailable)
+        val errorMessage = ErrorMessage(context.resources, ErrorType.BrowserNotAvailable)
 
         whenever(context.packageManager).thenReturn(packageManager)
         whenever(packageManager.queryIntentActivities(intent, 0)).thenReturn(resolvedActivityList)

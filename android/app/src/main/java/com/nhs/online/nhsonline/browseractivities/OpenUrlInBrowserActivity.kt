@@ -40,7 +40,7 @@ class OpenUrlInBrowserActivity : ActivityInterface {
            if (intent.resolveActivity(context.packageManager) != null) {
                ContextCompat.startActivity(context, intent, null)
            } else {
-               val unavailableErrorMessage = ErrorMessage(context, ErrorType.BrowserNotAvailable)
+               val unavailableErrorMessage = ErrorMessage(context.resources, ErrorType.BrowserNotAvailable)
                Log.d(Application.TAG, "Browser is unavailable or disabled")
                interactor.showUnavailabilityError(unavailableErrorMessage)
            }

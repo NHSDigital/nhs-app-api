@@ -1,6 +1,8 @@
 package com.nhs.online.nhsonline.data
 
 import android.content.Context
+import android.content.res.Resources
+import com.nhaarman.mockito_kotlin.mock
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import org.junit.Before
@@ -19,7 +21,7 @@ class ErrorMessageHandlerTest : ResourceMockingClass() {
     @Before
     fun setUp() {
         contextMock = mockContext()
-        errorMessageHandler = ErrorMessageHandler(contextMock)
+        errorMessageHandler = ErrorMessageHandler(contextMock.resources)
     }
 
     @Test
