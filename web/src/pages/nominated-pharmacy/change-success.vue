@@ -19,11 +19,11 @@
                     {'pharmacyName': pharmacy.pharmacyName}) }}
               <analytics-tracked-tag v-if="pharmacy.url"
                                      id="pharmacy-url"
-                                     :href="`//${pharmacy.url}`"
-                                     :text="$t(pharmacy.url)"
+                                     :href="hrefForUrl"
+                                     :text="displayUrl"
                                      tag="a" target="_blank"
                                      style="vertical-align: baseline; display: inline;">
-                {{ pharmacy.url }}</analytics-tracked-tag>.
+                {{ displayUrl }}</analytics-tracked-tag>.
             </p>
             <p v-else id="registrationWarningWithNoUrl">
               {{ $t('nominated_pharmacy.changeSuccess.registrationWarningWithNoUrl',
@@ -56,7 +56,7 @@ import { PRESCRIPTIONS, NOMINATED_PHARMACY_CHANGE_SUCCESS } from '@/lib/routes';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import AnalyticsTrackedTag from '../../components/widgets/AnalyticsTrackedTag';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, hrefForURL, displayedURL } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -76,6 +76,14 @@ export default {
       isOnlineOnlySelected:
         this.$store.state.nominatedPharmacy.chosenType === PharmacyTypeChoice.ONLINE_PHARMACY,
     };
+  },
+  computed: {
+    displayUrl() {
+      return displayedURL(this.pharmacy.url);
+    },
+    hrefForUrl() {
+      return hrefForURL(this.pharmacy.url);
+    },
   },
   async mounted() {
     await this.$store.dispatch('nominatedPharmacy/clear');

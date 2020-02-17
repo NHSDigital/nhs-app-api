@@ -296,7 +296,7 @@ export default {
     },
     resultSummary: {
       distanceInformation: 'Distances given are in a straight line but travel routes may be longer.',
-      beMoreSpecific: 'We can only show {max} results for what you search. The more specific your search, the better the results',
+      beMoreSpecific: 'We can only show {max} results for your search. To improve these results, be as specific as possible with the name of the online-only pharmacy.',
     },
     backButton: 'Search again',
     distanceAway: '{distance} miles away',

@@ -332,4 +332,64 @@ describe('nominated pharmacy search results', () => {
     expect(wrapper.find('#pharmacy-url').text()).toEqual(pharmacyDetail.url);
     expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual(`translate_nominated_pharmacy.telephoneLabel${pharmacyDetail.telephoneNumber}`);
   });
+
+  it('will correctly display the url in the search results without the http://', () => {
+    const pharmacyDetail = {
+      pharmacyName: 'drug store',
+      odsCode: 'ABC1',
+      addressLine1: '',
+      addressLine2: '',
+      addressLine3: '',
+      city: '',
+      county: '',
+      postcode: '',
+      telephoneNumber: '0819283',
+      distance: '',
+      url: 'http://www.testurl.com',
+    };
+
+    $store.state.nominatedPharmacy = {
+      searchQuery: 'rg1',
+      searchResults: {
+        pharmacies: [pharmacyDetail],
+        technicalError: false,
+        noResultsFound: false,
+      },
+      chosenType: PharmacyTypeChoice.ONLINE_PHARMACY,
+    };
+
+    wrapper = mountPage();
+    expect(wrapper.find('#pharmacy-url').text()).toEqual('www.testurl.com');
+    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual(`translate_nominated_pharmacy.telephoneLabel${pharmacyDetail.telephoneNumber}`);
+  });
+
+  it('will correctly display the url in the search results without the https://', () => {
+    const pharmacyDetail = {
+      pharmacyName: 'drug store',
+      odsCode: 'ABC1',
+      addressLine1: '',
+      addressLine2: '',
+      addressLine3: '',
+      city: '',
+      county: '',
+      postcode: '',
+      telephoneNumber: '0819283',
+      distance: '',
+      url: 'https://www.testurl.com',
+    };
+
+    $store.state.nominatedPharmacy = {
+      searchQuery: 'rg1',
+      searchResults: {
+        pharmacies: [pharmacyDetail],
+        technicalError: false,
+        noResultsFound: false,
+      },
+      chosenType: PharmacyTypeChoice.ONLINE_PHARMACY,
+    };
+
+    wrapper = mountPage();
+    expect(wrapper.find('#pharmacy-url').text()).toEqual('www.testurl.com');
+    expect(wrapper.find('#pharmacy-telephone-number').text()).toEqual(`translate_nominated_pharmacy.telephoneLabel${pharmacyDetail.telephoneNumber}`);
+  });
 });

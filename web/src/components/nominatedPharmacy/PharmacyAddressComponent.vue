@@ -19,7 +19,7 @@
       {{ pharmacy.postcode }}</p>
     <p v-if="isOnline && pharmacy.url" id="pharmacy-url"
        class="nhsuk-u-margin-bottom-3">
-      {{ pharmacy.url }}</p>
+      {{ displayUrl }}</p>
     <p v-if="pharmacy.telephoneNumber" id="pharmacy-telephone-number"
        class="nhsuk-u-margin-bottom-3">
       {{ $t('nominated_pharmacy.telephoneLabel') +
@@ -34,6 +34,7 @@
 <script>
 
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
+import { displayedURL } from '@/lib/utils';
 
 export default {
   name: 'PharmacyAddressComponent',
@@ -49,6 +50,11 @@ export default {
       isOnline: (this.$store.state.nominatedPharmacy.chosenType ===
         PharmacyTypeChoice.ONLINE_PHARMACY),
     };
+  },
+  computed: {
+    displayUrl() {
+      return displayedURL(this.pharmacy.url);
+    },
   },
 };
 </script>

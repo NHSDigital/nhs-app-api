@@ -3,6 +3,9 @@ import capitalize from 'lodash/fp/capitalize';
 import isEqual from 'lodash/fp/isEqual';
 import moment from 'moment-timezone';
 
+const protocol = 'http://';
+const secureProtocol = 'https://';
+
 export const datePart = (value, dateFormat) => {
   switch (dateFormat) {
     case 'Unknown':
@@ -140,3 +143,27 @@ export const redirectTo = ({ $router, $store }, path, query) => {
 };
 
 export const stripHtml = content => (content || '').replace(/<[^>]*>?/g, '');
+
+export const displayedURL = (originalURL) => {
+  if (!originalURL) {
+    return '';
+  }
+  let displayUrl = originalURL;
+  if (originalURL.includes(protocol)) {
+    displayUrl = originalURL.replace(protocol, '');
+  } else if (originalURL.includes(secureProtocol)) {
+    displayUrl = originalURL.replace(secureProtocol, '');
+  }
+  return displayUrl;
+};
+
+export const hrefForURL = (originalURL) => {
+  if (!originalURL) {
+    return '';
+  }
+  if (originalURL.includes(secureProtocol) ||
+    originalURL.includes(protocol)) {
+    return originalURL;
+  }
+  return `//${originalURL}`;
+};

@@ -35,12 +35,33 @@ const createPharmacyAddressComponentForOnline = ({ $store }) => mount(PharmacyAd
       city: '',
       county: '',
       postcode: '',
-      url: 'testurl.com',
+      url: 'http://www.testurl.com',
       distance: null,
     },
   },
   $store,
 });
+
+const createPharmacyAddressComponentForOnlineWithHttps =
+  ({ $store }) => mount(PharmacyAddressComponent, {
+    propsData: {
+      pharmacy: {
+        pharmacyName: 'Best pharmacy',
+        pharmacyType: 'P1',
+        pharmacySubType: 'Internet Pharmacy',
+        telephoneNumber: '666668',
+        addressLine1: '',
+        addressLine2: '',
+        addressLine3: '',
+        city: '',
+        county: '',
+        postcode: '',
+        url: 'https://www.testurl.com',
+        distance: null,
+      },
+    },
+    $store,
+  });
 
 describe('pharmacy address component', () => {
   let addressLine1;
@@ -103,8 +124,10 @@ describe('pharmacy address component', () => {
         expect(city.text()).toEqual('city');
         expect(county.text()).toEqual('county');
         expect(postcode.text()).toEqual('postcode');
-        expect(telephoneNumber.text()).toEqual('translate_nominated_pharmacy.telephoneLabel666668');
-        expect(distanceAway.text()).toEqual('translate_nominatedPharmacySearchResults.distanceAway');
+        expect(telephoneNumber.text())
+          .toEqual('translate_nominated_pharmacy.telephoneLabel666668');
+        expect(distanceAway.text())
+          .toEqual('translate_nominatedPharmacySearchResults.distanceAway');
       });
     });
   });
@@ -153,8 +176,48 @@ describe('pharmacy address component', () => {
       });
 
       it('will have the correct values', () => {
-        expect(telephoneNumber.text()).toEqual('translate_nominated_pharmacy.telephoneLabel666668');
-        expect(url.text()).toEqual('testurl.com');
+        expect(telephoneNumber.text())
+          .toEqual('translate_nominated_pharmacy.telephoneLabel666668');
+        expect(url.text()).toEqual('www.testurl.com');
+      });
+    });
+
+    describe('url is handled correctly', () => {
+      beforeEach(() => {
+        url = wrapper.find('#pharmacy-url');
+      });
+
+      it('will remove the http:// when in the url data', () => {
+        expect(url.text()).toEqual('www.testurl.com');
+      });
+    });
+  });
+
+  describe('pharmacy address component with an online pharmacy with https url', () => {
+    let wrapper;
+    let $store;
+
+    beforeEach(() => {
+      $store = createStore({
+        state: {
+          device: {
+            source: 'android',
+          },
+          nominatedPharmacy: {
+            chosenType: PharmacyTypeChoice.ONLINE_PHARMACY,
+          },
+        },
+      });
+      wrapper = createPharmacyAddressComponentForOnlineWithHttps({ $store });
+    });
+
+    describe('url will be handled correctly', () => {
+      beforeEach(() => {
+        url = wrapper.find('#pharmacy-url');
+      });
+
+      it('will remove the https in the url', () => {
+        expect(url.text()).toEqual('www.testurl.com');
       });
     });
   });
