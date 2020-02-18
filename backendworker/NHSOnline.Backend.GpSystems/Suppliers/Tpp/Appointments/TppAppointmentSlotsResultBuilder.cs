@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
@@ -9,7 +9,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
-    public class TppAppointmentSlotsResultBuilder
+    internal class TppAppointmentSlotsResultBuilder
     {
         private readonly ILogger<TppAppointmentSlotsService> _logger;
         private readonly IAppointmentSlotsMapper _appointmentSlotsMapper;

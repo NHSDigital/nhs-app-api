@@ -1,4 +1,4 @@
-﻿using AutoFixture;
+using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +18,7 @@ using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
@@ -29,7 +30,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private IFixture _fixture;
         private TppAppointmentsService _systemUnderTest;
         private TppUserSession _tppUserSession;
-        private Mock<ITppClient> _mockTppClient;
+
+        private Mock<ITppClientRequest<(ViewAppointments viewAppointments, string suid), ViewAppointmentsReply>>
+            _mockViewAppointments;
+
         private Mock<IAppointmentsReplyMapper> _mockResponseMapper;
         private AppointmentsResponse _mappedResponse;
         private ViewAppointmentsReply _tppViewPastAppointmentsReply;
@@ -44,17 +48,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         {
             _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+
             _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
             _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
                 .Returns(DateTime.UtcNow);
 
             _tppUserSession = _fixture.Create<TppUserSession>();
-            
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);  
-            
-            _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
-            
+
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
+
+            _mockViewAppointments =
+                _fixture
+                    .Freeze<Mock<ITppClientRequest<(ViewAppointments viewAppointments, string suid),
+                        ViewAppointmentsReply>>>();
+
             _tppViewPastAppointmentsReply = new ViewAppointmentsReply()
             {
                 OnlineUserId = _tppUserSession.OnlineUserId,
@@ -62,7 +69,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 UuId = "uuid",
                 Appointments = new List<Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment>()
                 {
-                    new Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment {
+                    new Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment
+                    {
                         StartDate = "2017-12-12T09:30:00",
                         EndDate = "2017-12-12T09:40:00",
                         Address = "Address",
@@ -77,30 +85,31 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Body = _tppViewPastAppointmentsReply
             };
             MockTppClientAppointmentsGetMethod(response1, false);
-            
+
             _tppViewUpcomingAppointmentsReply = new ViewAppointmentsReply()
             {
                 OnlineUserId = _tppUserSession.OnlineUserId,
                 PatientId = _tppUserSession.PatientId,
                 UuId = "uuid",
                 Appointments = new List<Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment>()
-                 {
-                     new Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment {
-                         StartDate = "2018-12-12T09:30:00",
-                         EndDate = "2018-12-12T09:40:00",
-                         Address = "Address",
-                         ApptId = "apptId",
-                         Details = "Details",
-                         SiteName = "TheSite"
-                     }
-                 }
+                {
+                    new Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment
+                    {
+                        StartDate = "2018-12-12T09:30:00",
+                        EndDate = "2018-12-12T09:40:00",
+                        Address = "Address",
+                        ApptId = "apptId",
+                        Details = "Details",
+                        SiteName = "TheSite"
+                    }
+                }
             };
             var response2 = new TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.OK)
             {
                 Body = _tppViewUpcomingAppointmentsReply
             };
             MockTppClientAppointmentsGetMethod(response2, true);
-            
+
             _tppErrorResponse =
                 new TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.Ambiguous)
                 {
@@ -113,8 +122,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 {
                     new PastAppointment
                     {
-                        StartTime = new DateTimeOffset(DateTime.Parse("2017-12-12T09:30:00", CultureInfo.InvariantCulture)),
-                        EndTime = new DateTimeOffset(DateTime.Parse("2017-12-12T09:40:00", CultureInfo.InvariantCulture)),
+                        StartTime = new DateTimeOffset(DateTime.Parse("2017-12-12T09:30:00",
+                            CultureInfo.InvariantCulture)),
+                        EndTime = new DateTimeOffset(
+                            DateTime.Parse("2017-12-12T09:40:00", CultureInfo.InvariantCulture)),
                         Id = "apptId",
                         Location = "TheSite",
                         Type = "Details"
@@ -124,8 +135,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 {
                     new UpcomingAppointment
                     {
-                        StartTime = new DateTimeOffset(DateTime.Parse("2018-12-12T09:30:00", CultureInfo.InvariantCulture)),
-                        EndTime = new DateTimeOffset(DateTime.Parse("2018-12-12T09:40:00", CultureInfo.InvariantCulture)),
+                        StartTime = new DateTimeOffset(DateTime.Parse("2018-12-12T09:30:00",
+                            CultureInfo.InvariantCulture)),
+                        EndTime = new DateTimeOffset(
+                            DateTime.Parse("2018-12-12T09:40:00", CultureInfo.InvariantCulture)),
                         Id = "apptId",
                         Location = "TheSite",
                         Type = "Details"
@@ -139,22 +152,31 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .Returns(_mappedResponse);
 
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
-            var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
+            configBuilder.AddInMemoryCollection(new[]
+            {
+                new KeyValuePair<string, string>("TIMEZONE",
+                    TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform())
+            });
+            var timeZoneInfoProvider =
+                new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
 
             var builder = new TppAppointmentsResultBuilder(
                 _fixture.Create<ILogger<TppAppointmentsService>>(),
                 _mockResponseMapper.Object
             );
-            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
+            var dateTimeOffsetProvider =
+                new DateTimeOffsetProvider(timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
 
             _systemUnderTest = new TppAppointmentsService(
                 new TppAppointmentsRetrievalService(Mock.Of<ILogger<TppAppointmentsRetrievalService>>(),
-                    _mockTppClient.Object, builder),
+                    _mockViewAppointments.Object, builder),
                 new TppAppointmentsBookingService(Mock.Of<ILogger<TppAppointmentsBookingService>>(),
-                    _mockTppClient.Object, dateTimeOffsetProvider),
+                    _fixture.Freeze<Mock<ITppClientRequest<(TppUserSession, BookAppointment), BookAppointmentReply>>>()
+                        .Object,
+                    dateTimeOffsetProvider),
                 new TppAppointmentsCancellationService(Mock.Of<ILogger<TppAppointmentsCancellationService>>(),
-                    _mockTppClient.Object));
+                    _fixture.Freeze<Mock<ITppClientRequest<(CancelAppointment, string ), CancelAppointmentReply>>>()
+                        .Object));
         }
 
         [TestMethod]
@@ -167,7 +189,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var response = result.Should().BeAssignableTo<AppointmentsResult.Success>().Subject.Response;
             response.Should().BeEquivalentTo(_mappedResponse);
             response.PastAppointmentsEnabled.Should().BeTrue();
-            _mockTppClient.VerifyAll();
+            _mockViewAppointments.VerifyAll();
             _mockResponseMapper.VerifyAll();
         }
 
@@ -175,11 +197,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task GetAppointments_TppClientThrows_ReturnsBadGateway()
         {
             // Arrange
-            _mockTppClient.Setup(x => x.ViewAppointmentsPost(
-                    It.Is<ViewAppointments>(p =>
-                        string.Equals(p.PatientId, _tppUserSession.PatientId, StringComparison.Ordinal)
-                        && string.Equals(p.OnlineUserId, _tppUserSession.OnlineUserId, StringComparison.Ordinal)),
-                    It.IsAny<string>()))
+            _mockViewAppointments.Setup(x => x.Post(
+                    It.Is<(ViewAppointments, string)>(tuple => 
+                    string.Equals(tuple.Item1.PatientId, _tppUserSession.PatientId, StringComparison.Ordinal)
+                        && string.Equals(tuple.Item1.OnlineUserId, _tppUserSession.OnlineUserId, StringComparison.Ordinal))
+                    ))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -208,7 +230,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task GetAppointments_TppClientReturnsForbiddenCode_ReturnsForbidden()
         {
             // Arrange
-            var tppResponse = new TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.OK) { ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.NoAccess } };
+            var tppResponse = new TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.OK)
+            {
+                ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.NoAccess }
+            };
             MockTppClientAppointmentsGetMethod(tppResponse, false);
             MockTppClientAppointmentsGetMethod(tppResponse, true);
 
@@ -228,9 +253,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             errorResponse.ErrorCode = TppApiErrorCodes.NoAccess;
 
             var tppResponse = new TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.InternalServerError)
-                {
-                    ErrorResponse = errorResponse
-                };
+            {
+                ErrorResponse = errorResponse
+            };
             MockTppClientAppointmentsGetMethod(tppResponse, false);
             MockTppClientAppointmentsGetMethod(tppResponse, true);
 
@@ -255,7 +280,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
-        
+
         [TestMethod]
         public async Task GetAppointments_TppClientReturnsUnknownErrorOnPastAppointmentsRequest_ReturnsBadGateway()
         {
@@ -268,7 +293,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
-        
+
         [TestMethod]
         public async Task GetAppointments_TppClientReturnsUnknownErrorOnUpcomingAppointmentsRequest_ReturnsBadGateway()
         {
@@ -285,12 +310,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private void MockTppClientAppointmentsGetMethod(
             TppApiObjectResponse<ViewAppointmentsReply> response, bool futureAppointments)
         {
-            _mockTppClient.Setup(x => x.ViewAppointmentsPost(
-                     It.Is<ViewAppointments>(p =>
-                         string.Equals(p.PatientId, _tppUserSession.PatientId, StringComparison.Ordinal)
-                         && string.Equals(p.OnlineUserId, _tppUserSession.OnlineUserId, StringComparison.Ordinal)
-                         && string.Equals(p.FutureAppointments, futureAppointments ? "Y" : "N", StringComparison.Ordinal)),
-                    It.IsAny<string>()))
+            _mockViewAppointments.Setup(x => x.Post(It.Is<(ViewAppointments, string)>(tuple =>
+                    string.Equals(tuple.Item1.PatientId, _tppUserSession.PatientId, StringComparison.Ordinal)
+                    && string.Equals(tuple.Item1.OnlineUserId, _tppUserSession.OnlineUserId, StringComparison.Ordinal)
+                    && string.Equals(tuple.Item1.FutureAppointments, futureAppointments ? "Y" : "N",
+                        StringComparison.Ordinal))))
                 .ReturnsAsync(response);
         }
     }

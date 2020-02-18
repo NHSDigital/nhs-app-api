@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
@@ -12,6 +12,7 @@ using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Support;
@@ -27,12 +28,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private const string EndTime = "2017-07-12T09:20:00+00:00";
 
         private IFixture _fixture;
-        private Mock<ITppClient> _mockTppClient;
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
         private TppUserSession _tppUserSession;
         private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
+        private Mock<ITppClientRequest<(TppUserSession, BookAppointment), BookAppointmentReply>> _mockBookAppointmentSlot;
 
         [TestInitialize]
         public void TestInitialize()
@@ -40,13 +41,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             _patientId = Guid.NewGuid();
                 
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
-            _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
+
+            _mockBookAppointmentSlot = _fixture
+                .Freeze<Mock<ITppClientRequest<(TppUserSession, BookAppointment ), BookAppointmentReply>>>(); 
 
             _tppUserSession = _fixture.Create<TppUserSession>();
 
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
-            
             _systemUnderTest = _fixture.Create<TppAppointmentsService>();
 
             _request = new AppointmentBookRequest
@@ -74,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
-            _mockTppClient.Verify();
+            _mockBookAppointmentSlot.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.Success>();
         }
 
@@ -82,8 +83,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Book_TppClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGateway()
         {
             // Arrange
-            _mockTppClient.Setup(x => x.BookAppointmentSlotPost(It.IsAny<BookAppointment>(),
-                    It.IsAny<TppUserSession>())).
+            _mockBookAppointmentSlot.Setup(x => x.Post(It.IsAny<(TppUserSession, BookAppointment)>())).
                 Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
-            _mockTppClient.Verify();
+            _mockBookAppointmentSlot.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
         }
 
@@ -111,7 +111,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
-            _mockTppClient.Verify();
+            _mockBookAppointmentSlot.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
 
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
-            _mockTppClient.Verify();
+            _mockBookAppointmentSlot.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
 
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
-            _mockTppClient.Verify();
+            _mockBookAppointmentSlot.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.AppointmentLimitReached>();
         }
 
@@ -171,7 +171,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
-            _mockTppClient.Verify();
+            _mockBookAppointmentSlot.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
 
@@ -191,7 +191,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
-            _mockTppClient.Verify();
+            _mockBookAppointmentSlot.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.Forbidden>();
         }
 
@@ -208,7 +208,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
-            _mockTppClient.Verify();
+            _mockBookAppointmentSlot.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
         }
         
@@ -241,11 +241,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
         private void MockTppClientAppointmentPostMethod(TppApiObjectResponse<BookAppointmentReply> response)
         {
-            _mockTppClient.Setup(x => x.BookAppointmentSlotPost(
-                It.Is<BookAppointment>(p=>
-                    p.Notes.Equals(BookingReason, StringComparison.Ordinal)
-                    && p.SessionId.Equals(SlotId, StringComparison.Ordinal)),
-                It.IsAny<TppUserSession>()
+            _mockBookAppointmentSlot.Setup(x => x.Post(
+                    It.Is<(TppUserSession, BookAppointment )>(tuple =>
+                        tuple.Item2.Notes.Equals(BookingReason, StringComparison.Ordinal)
+                        && tuple.Item2.SessionId.Equals(SlotId, StringComparison.Ordinal))
                 )
             ).Returns(
                 Task.FromResult(

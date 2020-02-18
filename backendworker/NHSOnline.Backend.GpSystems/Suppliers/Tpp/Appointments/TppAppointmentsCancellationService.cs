@@ -1,23 +1,26 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
-    public class TppAppointmentsCancellationService
+    internal class TppAppointmentsCancellationService
     {
         private readonly ILogger<TppAppointmentsCancellationService> _logger;
-        private readonly ITppClient _tppClient;
+        private readonly ITppClientRequest<(CancelAppointment cancelAppointment, string suid), CancelAppointmentReply> _cancelAppointment;
 
-        public TppAppointmentsCancellationService(ILogger<TppAppointmentsCancellationService> logger, ITppClient tppClient)
+        public TppAppointmentsCancellationService(
+            ILogger<TppAppointmentsCancellationService> logger,
+            ITppClientRequest<(CancelAppointment cancelAppointment, string suid), CancelAppointmentReply> cancelAppointment)
         {
             _logger = logger;
-            _tppClient = tppClient;
+            _cancelAppointment = cancelAppointment;
         }
 
         public async Task<AppointmentCancelResult> Cancel(GpLinkedAccountModel gpLinkedAccountModel, AppointmentCancelRequest request)
@@ -29,7 +32,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 
                 var postRequest = new CancelAppointment(userSession, request);
                 
-                var response = await _tppClient.CancelAppointmentPost(postRequest, userSession.Suid);
+                var response = await _cancelAppointment.Post((postRequest, userSession.Suid));
                 return InterpretCancelAppointmentReply(response);
             }
             catch (HttpRequestException exception)

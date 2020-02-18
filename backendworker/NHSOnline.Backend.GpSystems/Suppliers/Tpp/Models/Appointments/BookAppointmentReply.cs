@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments

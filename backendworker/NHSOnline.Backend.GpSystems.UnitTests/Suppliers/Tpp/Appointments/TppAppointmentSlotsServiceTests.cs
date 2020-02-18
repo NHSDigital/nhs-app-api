@@ -14,6 +14,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Support;
@@ -35,7 +36,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private DateTimeOffset _toDateTimeOffset;
         private AppointmentSlotsDateRange _dateRange;
         private GpLinkedAccountModel _gpLinkedAccountModel;
-            
+        private Mock<ITppClientRequest<(ListSlots, string), ListSlotsReply>> _listSlots;
+
 
         [TestInitialize]
         public void TestInitialize()
@@ -50,8 +52,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
-            
+
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
+            _listSlots = _fixture.Freeze<Mock<ITppClientRequest<(ListSlots, string), ListSlotsReply>>>(); 
             _mockSlotsMapper = _fixture.Freeze<Mock<IAppointmentSlotsMapper>>();
 
             _tppUserSession = _fixture.Create<TppUserSession>();
@@ -62,7 +65,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
 
             _dateRange = new AppointmentSlotsDateRange(_fromDateTimeOffset, _toDateTimeOffset);
-            
+
             _systemUnderTest = _fixture.Create<TppAppointmentSlotsService>();
         }
 
@@ -70,8 +73,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task GetSlots_TppListSlotsPostThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
-            _mockTppClient
-                .Setup(x => x.ListSlotsPost(It.IsAny<ListSlots>(), _tppUserSession.Suid))
+            _listSlots
+                .Setup(x => x.Post(It.IsAny<(ListSlots, string)>()))
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
             
@@ -217,15 +220,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         {
             var expectedRequest = new ListSlots(_tppUserSession, _dateRange);
 
-            _mockTppClient
-                .Setup(x => x.ListSlotsPost(
-                    It.Is<ListSlots>(p => 
-                        p.PatientId.Equals(expectedRequest.PatientId, StringComparison.Ordinal)
-                        && p.OnlineUserId.Equals(expectedRequest.OnlineUserId, StringComparison.Ordinal)
-                        && p.StartDate.Equals(expectedRequest.StartDate, StringComparison.Ordinal)
-                        && p.NumberOfDays.Equals(expectedRequest.NumberOfDays)
-                        ),
-                    _tppUserSession.Suid))
+            _listSlots
+                .Setup(x => x.Post(
+                    It.Is<(ListSlots, string)>(tuple => 
+                        tuple.Item1.PatientId.Equals(expectedRequest.PatientId, StringComparison.Ordinal)
+                        && tuple.Item1.OnlineUserId.Equals(expectedRequest.OnlineUserId, StringComparison.Ordinal)
+                        && tuple.Item1.StartDate.Equals(expectedRequest.StartDate, StringComparison.Ordinal)
+                        && tuple.Item1.NumberOfDays.Equals(expectedRequest.NumberOfDays)
+                        && tuple.Item2.Equals( _tppUserSession.Suid, StringComparison.Ordinal)
+                        )
+                    ))
                 .ReturnsAsync(response)
                 .Verifiable();
         }

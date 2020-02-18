@@ -1,25 +1,29 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
-    public class TppAppointmentsBookingService
+    internal class TppAppointmentsBookingService
     {
         private readonly ILogger<TppAppointmentsBookingService> _logger;
-        private readonly ITppClient _tppClient;
+        private readonly ITppClientRequest<(TppUserSession userSession, BookAppointment bookAppointment), BookAppointmentReply> _bookAppointmentSlot;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
 
-        public TppAppointmentsBookingService(ILogger<TppAppointmentsBookingService> logger, ITppClient tppClient, IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public TppAppointmentsBookingService(
+            ILogger<TppAppointmentsBookingService> logger,
+            ITppClientRequest<(TppUserSession userSession, BookAppointment bookAppointment), BookAppointmentReply> bookAppointmentSlot,
+            IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
             _logger = logger;
-            _tppClient = tppClient;
+            _bookAppointmentSlot = bookAppointmentSlot;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
         }
 
@@ -38,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                 
                 var bookAppointment = new BookAppointment(userSession, request, _dateTimeOffsetProvider);
 
-                var response = await _tppClient.BookAppointmentSlotPost(bookAppointment, userSession);
+                var response = await _bookAppointmentSlot.Post((userSession, bookAppointment));
                 return InterpretAppointmentsPostResponse(response);
             }
             catch (HttpRequestException exception)

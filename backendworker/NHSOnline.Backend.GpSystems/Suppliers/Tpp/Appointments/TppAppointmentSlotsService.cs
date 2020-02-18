@@ -1,27 +1,31 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
-    public class TppAppointmentSlotsService : IAppointmentSlotsService
+    internal class TppAppointmentSlotsService : IAppointmentSlotsService
     {
         private readonly ITppClient _tppClient;
         private readonly ILogger<TppAppointmentSlotsService> _logger;
+        private readonly ITppClientRequest<(ListSlots listSlots, string suid), ListSlotsReply> _listSlots;
         private readonly IAppointmentSlotsMapper _appointmentSlotsMapper;
         public TppAppointmentSlotsService(
-            ITppClient tppClient, 
+            ITppClient tppClient,
             ILogger<TppAppointmentSlotsService> logger,
+            ITppClientRequest<(ListSlots listSlots, string suid), ListSlotsReply> listSlots,
             IAppointmentSlotsMapper appointmentSlotsMapper)
         {
             _tppClient = tppClient;
             _logger = logger;
+            _listSlots = listSlots;
             _appointmentSlotsMapper = appointmentSlotsMapper;
         }
         public async Task<AppointmentSlotsResult> GetSlots(
@@ -33,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             
                 var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
                 var listSlotsRequest = new ListSlots(tppUserSession, dateRange);
-                var listSlotsTask = _tppClient.ListSlotsPost(listSlotsRequest, tppUserSession.Suid);
+                var listSlotsTask = _listSlots.Post((listSlotsRequest, tppUserSession.Suid));
                 await listSlotsTask;
 
                 var messagesRequest = new RequestSystmOnlineMessages(tppUserSession);

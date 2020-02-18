@@ -5,7 +5,7 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
-    public class TppAppointmentsService : IAppointmentsService
+    internal class TppAppointmentsService : IAppointmentsService
     {
         private readonly TppAppointmentsRetrievalService _getter;
         private readonly TppAppointmentsBookingService _booker;
