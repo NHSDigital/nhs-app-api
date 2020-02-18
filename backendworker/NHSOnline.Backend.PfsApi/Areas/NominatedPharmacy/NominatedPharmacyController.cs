@@ -142,6 +142,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 _logger.LogInformation("Fetching random list of online pharmacies");
                 return await _pharmacySearchService.SearchOnlineOnlyPharmacies();
             }
+            
+            var isValid = new ValidateAndLog(_logger)
+                .IsSafeString(searchTerm, nameof(searchTerm))
+                .IsValid();
+
+            if (!isValid)
+            {
+                _logger.LogInformation($"Potentially unsafe search - searchTerm={searchTerm}");
+                return new PharmacySearchResult.UnsafeSearchTerm();
+            }
 
             await _auditor.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeRequest,
                 $"Attempting to search for Online Pharmacies by name using search term: {searchTerm}");

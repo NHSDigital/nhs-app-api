@@ -727,5 +727,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             
             _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
+        
+        [TestMethod]
+        public async Task OnlineOnlyPharmacySearchByName_ReturnsUnsafeSearchTermResult_WhenSearchTermIsDeemedUnsafe()
+        {
+            // Arrange
+            var searchTerm = "<nastyScriptTag>";
+            var expectedResult = new PharmacySearchResultResponse();
+
+            // Act
+            var result = await _systemUnderTest.OnlineOnlyPharmacySearch(searchTerm);
+
+            // Assert
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeEquivalentTo(expectedResult);
+
+            _mockPharmacySearchService.Verify(x => x.SearchOnlineOnlyPharmacies(It.IsAny<string>()), Times.Never);
+            
+            _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
+        }
     }
 }

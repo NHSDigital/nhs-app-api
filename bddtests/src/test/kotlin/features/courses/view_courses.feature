@@ -195,13 +195,13 @@ Feature: View Courses Frontend
     And I see the entered special request text
     Examples:
       | GP System |
-#      | EMIS      |
+      | EMIS      |
       | VISION    |
-#      | MICROTEST |
-#  @smoketest
-#    Examples:
-#      | GP System |
-#      | TPP       |
+      | MICROTEST |
+    @smoketest
+    Examples:
+      | GP System |
+      | TPP       |
 
   Scenario Outline: The <GP System> special request text is optional and 'None' is displayed if they don't enter a value
     Given I am a <GP System> patient

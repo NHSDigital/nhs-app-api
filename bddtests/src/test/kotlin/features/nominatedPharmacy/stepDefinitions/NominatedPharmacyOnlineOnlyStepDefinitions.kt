@@ -64,8 +64,14 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
     }
 
     @When("^I search for an online only pharmacy with (.*) and click on search button$")
-    fun iSearchForAOnlineOnlyPharmacyWithPostcodeAndClickOnSearch(searchText: String) {
+    fun iSearchForAOnlineOnlyPharmacyWithTextAndClickOnSearch(searchText: String) {
         nominatedPharmacyOnlineOnlySearchPage.enterTextToSearchField(searchText)
+        nominatedPharmacyOnlineOnlySearchPage.searchButton.click()
+    }
+
+    @When("^I search for an online only pharmacy using dangerous text and click on search button$")
+    fun iSearchForAOnlineOnlyPharmacyWithDangerousTextAndClickOnSearch() {
+        nominatedPharmacyOnlineOnlySearchPage.enterTextToSearchField("<script>")
         nominatedPharmacyOnlineOnlySearchPage.searchButton.click()
     }
 

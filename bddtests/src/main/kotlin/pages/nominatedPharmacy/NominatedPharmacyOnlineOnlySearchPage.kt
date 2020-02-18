@@ -49,6 +49,7 @@ open class NominatedPharmacyOnlineOnlySearchPage : HybridPageObject() {
 
     fun enterTextToSearchField(searchQuery: String) {
         searchField.actOnTheElement {
+            it.clear()
             it.type<WebElementFacade>(searchQuery)
         }
         hideKeyboardIfOnMobile()

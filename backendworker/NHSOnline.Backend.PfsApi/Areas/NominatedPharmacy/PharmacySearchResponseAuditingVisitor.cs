@@ -92,5 +92,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PharmacySearchResult.ModelValidationError)}");
             }
         }
+        
+        public async Task Visit(PharmacySearchResult.UnsafeSearchTerm result)
+        {
+            try
+            {
+                await _auditor.Audit(AuditType, "Unsafe search term detected");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PharmacySearchResult.UnsafeSearchTerm)}");
+            }
+        }
     }
 }

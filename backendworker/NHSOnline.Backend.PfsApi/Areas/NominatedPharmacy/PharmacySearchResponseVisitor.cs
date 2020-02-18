@@ -36,5 +36,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
+        
+        public IActionResult Visit(PharmacySearchResult.UnsafeSearchTerm result)
+        {
+            return new OkObjectResult(new PharmacySearchResultResponse());
+        }
     }
 }

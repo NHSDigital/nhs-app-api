@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         T Visit(PharmacySearchResult.PostcodeResultFailure result);
         T Visit(PharmacySearchResult.BadRequest result);
         T Visit(PharmacySearchResult.InternalServerError result);
+        T Visit(PharmacySearchResult.UnsafeSearchTerm result);
         T Visit(PharmacySearchResult.ModelValidationError result);
     }
 }

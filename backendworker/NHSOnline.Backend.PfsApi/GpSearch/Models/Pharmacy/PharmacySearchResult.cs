@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
             {
                 return visitor.Visit(this);
             }
-        }       
+        }
         
         public class PostcodeResultFailure : PharmacySearchResult
         {
@@ -49,6 +49,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
                 return visitor.Visit(this);
             }
         }
+        
         
         public class BadRequest : PharmacySearchResult
         {
@@ -68,6 +69,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
         
         public class ModelValidationError : PharmacySearchResult
         {      
+            public override T Accept<T>(IPharmacySearchResponseVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+        
+        public class UnsafeSearchTerm : PharmacySearchResult
+        {
             public override T Accept<T>(IPharmacySearchResponseVisitor<T> visitor)
             {
                 return visitor.Visit(this);

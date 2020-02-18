@@ -103,6 +103,10 @@ Feature: nominated pharmacy journey
     Then I click the Yes radio button on the online choices page
     And I click on the continue button on the online choices page
     Then I see nominated pharmacy online only search page loaded
+    # try first with potentially dangerous request
+    Then I search for an online only pharmacy using dangerous text and click on search button
+    And I see the no results found page
+    # then valid search which needs data setup
     Given searching for online pharmacies with <search text> has 0 results
     Then I search for an online only pharmacy with <search text> and click on search button
     And I see the no results found page
