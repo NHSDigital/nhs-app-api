@@ -28,6 +28,8 @@ import pages.patientPracticeMessaging.PatientPracticeMessagingDeleteSuccessPage
 import pages.patientPracticeMessaging.PracticePatientMessagingCreateMessagePage
 import worker.models.patientPracticeMessaging.CreateMessageRequest
 
+const val RACE_CONDITION_WAIT: Long = 60
+
 open class PatientPracticeMessageStepDefinitions {
 
     private lateinit var patientPracticeMessagingPage: PatientPracticeMessagingPage
@@ -370,6 +372,8 @@ open class PatientPracticeMessageStepDefinitions {
 
     @Then("^I see a page indicating my patient practice message has been deleted$")
     fun iSeeTheDeleteSuccessPage(){
+        //This wait has been added to ensure race condition does not occur
+        Thread.sleep(RACE_CONDITION_WAIT)
         patientPracticeMessagingDeleteSuccessPage.assertDisplayed()
     }
 

@@ -32,6 +32,7 @@ describe('gp-medical-record documents', () => {
       $env: {
         CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
         MY_RECORD_DOCUMENTS_ENABLED: true,
+        MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS: ['EMIS'],
       },
       state: {
         myRecord: initialState(),
@@ -40,6 +41,8 @@ describe('gp-medical-record documents', () => {
     });
     hasAgreedToMedicalWarning.mockClear();
     hasAgreedToMedicalWarning.mockReturnValue(true);
+
+    $store.state.myRecord.record.supplier = 'EMIS';
   });
 
   describe('asyncData', () => {

@@ -20,6 +20,7 @@ const newStore = ({ isDocumentsEnabled = true,
   createStore({
     $env: {
       MY_RECORD_DOCUMENTS_ENABLED: isDocumentsEnabled,
+      MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS: ['EMIS'],
       CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
     },
     state: {
@@ -27,6 +28,9 @@ const newStore = ({ isDocumentsEnabled = true,
         document,
         hasAcceptedTerms: true,
         documentConsultationsWithComments,
+        record: {
+          supplier: 'EMIS',
+        },
       },
       device: {
         isNativeApp: false,

@@ -24,7 +24,7 @@
                :click-param="eventsPath"
                :count="record.tppDcrEvents.data.length"/>
 
-    <menu-item v-if="documentsEnabled"
+    <menu-item v-if="documentsEnabledForSupplier"
                id="documents"
                data-purpose="documents"
                :href="documentsPath"
@@ -46,6 +46,7 @@ import { TESTRESULTS,
   DOCUMENTS,
 } from '@/lib/routes';
 import { isTruthy } from '@/lib/utils';
+import get from 'lodash/fp/get';
 
 export default {
   name: 'DcrTPPGpRecord',
@@ -58,8 +59,18 @@ export default {
       testResultsPath: TESTRESULTS.path,
       eventsPath: EVENTS.path,
       documentsPath: DOCUMENTS.path,
-      documentsEnabled: isTruthy(this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED),
     };
+  },
+  computed: {
+    documentsEnabledForSupplier() {
+      const documentEnabledSupplierList =
+        this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS;
+      if (isTruthy(this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED) &&
+        documentEnabledSupplierList !== null) {
+        return documentEnabledSupplierList.includes(get('$store.state.myRecord.record.supplier')(this));
+      }
+      return false;
+    },
   },
   methods: {
     getAriaLabel(sectionTitle, count) {

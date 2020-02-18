@@ -48,7 +48,7 @@
                :click-param="consultationsPath"
                :count="record.consultations.data.length"/>
 
-    <menu-item v-if="documentsEnabled"
+    <menu-item v-if="documentsEnabledForSupplier"
                id="documents"
                data-purpose="documents"
                :href="documentsPath"
@@ -72,6 +72,7 @@ import { TESTRESULTS,
   HEALTH_CONDITIONS,
   DOCUMENTS,
 } from '@/lib/routes';
+import get from 'lodash/fp/get';
 
 export default {
   name: 'DcrEMISGpRecord',
@@ -86,8 +87,18 @@ export default {
       consultationsPath: CONSULTATIONS.path,
       healthConditionsPath: HEALTH_CONDITIONS.path,
       documentsPath: DOCUMENTS.path,
-      documentsEnabled: isTruthy(this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED),
     };
+  },
+  computed: {
+    documentsEnabledForSupplier() {
+      const documentEnabledSupplierList =
+        this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS;
+      if (isTruthy(this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED) &&
+        documentEnabledSupplierList !== null) {
+        return documentEnabledSupplierList.includes(get('$store.state.myRecord.record.supplier')(this));
+      }
+      return false;
+    },
   },
   methods: {
     getAriaLabel(sectionTitle, count) {

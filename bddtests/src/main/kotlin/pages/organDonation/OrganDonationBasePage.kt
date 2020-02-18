@@ -5,7 +5,7 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
 
-const val RACE_CONDITION_WAIT: Long = 50
+const val RACE_CONDITION_WAIT: Long = 60
 //This wait is used to fix an issue with Chrome bug and will need removing
 //as part of NHSO-8408 when tickets NHSO-8407 and NHSO-8408
 const val RELOAD_WAIT: Long = 125

@@ -72,8 +72,11 @@ export default {
     }
 
     const { documents } = store.state.myRecord.record;
+    const documentEnabledSupplierList =
+      store.app.$env.MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS;
 
-    if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED)) {
+    if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED) ||
+      !documentEnabledSupplierList.includes(store.state.myRecord.record.supplier)) {
       redirect(GP_MEDICAL_RECORD.path);
     }
 

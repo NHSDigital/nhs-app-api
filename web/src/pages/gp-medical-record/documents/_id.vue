@@ -111,7 +111,10 @@ export default {
   asyncData({ store, redirect }) {
     const date = get('state.myRecord.document.date', store);
 
-    if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED)
+    const documentEnabledSupplierList =
+      store.app.$env.MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS;
+    if ((isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED) ||
+      !documentEnabledSupplierList.includes(get('state.myRecord.record.supplier', store)))
           || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning())
     ) {
       redirect(GP_MEDICAL_RECORD.path);

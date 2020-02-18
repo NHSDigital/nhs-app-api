@@ -10,6 +10,8 @@ import pages.organDonation.OrganDonationViewRegistrationPage
 import utils.getOrFail
 import utils.set
 
+const val RACE_CONDITION_WAIT: Long = 60
+
 open class OrganDonationViewRegistrationStepDefinitions {
 
     private lateinit var organDonationViewRegistrationPage: OrganDonationViewRegistrationPage
@@ -33,6 +35,8 @@ open class OrganDonationViewRegistrationStepDefinitions {
 
     @Then("^the Organ Donation View Registration page is displayed$")
     fun theOrganDonationViewRegistrationPageIsDisplayed() {
+        //This wait has been added to ensure race condition does not occur on organ donation pages
+        Thread.sleep(RACE_CONDITION_WAIT)
         organDonationViewRegistrationPage.assertDisplayed()
     }
 
