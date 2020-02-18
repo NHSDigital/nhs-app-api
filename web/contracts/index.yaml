@@ -75,13 +75,30 @@
                       items: 
                         type: "object"
                         properties: 
+                          id: 
+                            type: "string"
                           url: 
                             type: "string"
-                          allowNativeInteraction: 
-                            type: "boolean"
+                          javaScriptInteractionMode: 
+                            type: "string"
+                            enum: 
+                              - "None"
+                              - "NhsApp"
                           menuTab: 
-                            type: "integer"
-                          openExternally: 
+                            type: "string"
+                            enum: 
+                              - "None"
+                              - "Symptoms"
+                              - "Appointments"
+                              - "Prescriptions"
+                              - "MyRecord"
+                              - "More"
+                          viewMode: 
+                            type: "string"
+                            enum: 
+                              - "AppTab"
+                              - "WebView"
+                          showThirdPartyWarning: 
                             type: "boolean"
                           requiresAssertedLoginIdentity: 
                             type: "boolean"
@@ -96,11 +113,26 @@
                                   type: "string"
                                 queryString: 
                                   type: "string"
-                                allowNativeInteraction: 
-                                  type: "boolean"
+                                javaScriptInteractionMode: 
+                                  type: "string"
+                                  enum: 
+                                    - "None"
+                                    - "NhsApp"
                                 menuTab: 
-                                  type: "integer"
-                                openExternally: 
+                                  type: "string"
+                                  enum: 
+                                    - "None"
+                                    - "Symptoms"
+                                    - "Appointments"
+                                    - "Prescriptions"
+                                    - "MyRecord"
+                                    - "More"
+                                viewMode: 
+                                  type: "string"
+                                  enum: 
+                                    - "AppTab"
+                                    - "WebView"
+                                showThirdPartyWarning: 
                                   type: "boolean"
                                 requiresAssertedLoginIdentity: 
                                   type: "boolean"

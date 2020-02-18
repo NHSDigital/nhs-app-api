@@ -44,13 +44,17 @@ components:
     RootService:
       type: object
       properties:
+        id:
+          type: string
         url:
           type: string
-        allowNativeInteraction:
-          type: boolean
+        javaScriptInteractionMode:
+          $ref: '#/components/schemas/JavaScriptInteractionMode'
         menuTab:
-          type: integer
-        openExternally:
+          $ref: '#/components/schemas/MenuTab'
+        viewMode:
+          $ref: '#/components/schemas/ViewMode'
+        showThirdPartyWarning:
           type: boolean
         requiresAssertedLoginIdentity:
           type: boolean
@@ -67,13 +71,34 @@ components:
           type: string
         queryString:
           type: string
-        allowNativeInteraction:
-          type: boolean
+        javaScriptInteractionMode:
+          $ref: '#/components/schemas/JavaScriptInteractionMode'
         menuTab:
-          type: integer
-        openExternally:
+          $ref: '#/components/schemas/MenuTab'
+        viewMode:
+          $ref: '#/components/schemas/ViewMode'
+        showThirdPartyWarning:
           type: boolean
         requiresAssertedLoginIdentity:
           type: boolean
         validateSession:
           type: boolean
+    MenuTab:
+      type: string
+      enum:
+        - None
+        - Symptoms
+        - Appointments
+        - Prescriptions
+        - MyRecord
+        - More
+    ViewMode:
+      type: string
+      enum:
+        - AppTab
+        - WebView
+    JavaScriptInteractionMode:
+      type: string
+      enum:
+        - None
+        - NhsApp

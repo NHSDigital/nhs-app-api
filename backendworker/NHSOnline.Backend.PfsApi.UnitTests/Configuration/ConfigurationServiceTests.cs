@@ -54,13 +54,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                 {
                     new RootService()
                     {
-                        AllowNativeInteraction = false,
-                        MenuTab = 1,
-                        OpenExternally = false,
+                        MenuTab = MenuTab.Prescriptions, Id = "MyId",
                         SubServices = null,
                         Url = new Uri("http://test.test.com"),
                         ValidateSession = false,
-                        RequiresAssertedLoginIdentity = false
+                        RequiresAssertedLoginIdentity = false, 
+                        JavaScriptInteractionMode = JavaScriptInteractionMode.NhsApp, 
+                        ShowThirdPartyWarning = false, 
+                        ViewMode = ViewMode.WebView
                     }
                 }
             };
