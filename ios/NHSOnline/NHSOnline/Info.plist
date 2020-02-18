@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
 	<key>AAID</key>
 	<string>EBA0#0001</string>
 	<key>AccessibilityStatementURL</key>
@@ -30,10 +26,10 @@
 	<string>$(BASE_SCHEME)://$(BASE_API_URL)</string>
 	<key>BaseScheme</key>
 	<string>$(BASE_SCHEME)</string>
+	<key>BiometricAuthResponseParam</key>
+	<string>fidoAuthResponse</string>
 	<key>BiometricHelpURL</key>
 	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/apple-touch-and-face-ID-help/</string>
-	<key>BiometricRedirectURL</key>
-	<string>login?device=ios&amp;fidoAuthResponse=</string>
 	<key>BiometricsAssertionScheme</key>
 	<string>UAFV1TLV</string>
 	<key>BiometricsAuthenticationRequestEndpoint</key>
@@ -92,7 +88,7 @@
 	<key>DataSharingUrlPath</key>
 	<string>https://$(DATA_SHARING_URL)</string>
 	<key>FidoLoginErrorPath</key>
-	<string>auth-return?error=server_data_expired&amp;state=A</string>
+	<string>error=server_data_expired</string>
 	<key>HelpAccountURL</key>
 	<string>https://$(HELP_ACCOUNT_URL)</string>
 	<key>HelpAppointmentsURL</key>
@@ -119,6 +115,8 @@
 	<string>$(INFORMATICA_URL_PATH)</string>
 	<key>IsFirstTimeOpened</key>
 	<string>$(IS_FIRST_TIME_OPENED)</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MedicalRecordAbbreviationsURL</key>
@@ -135,8 +133,6 @@
 	<string>$(MY_RECORD_GP_AT_HAND_URL_PATH)</string>
 	<key>MyRecordUrlPath</key>
 	<string>$(MY_RECORD_URL_PATH)</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This is so that you can download your photos.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -152,10 +148,14 @@
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>So you can record your video</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This is so that you can download your photos.</string>
 	<key>Nhs111LocationUrl</key>
 	<string>https://$(NHS_111_LOCATION_URL)</string>
 	<key>Nhs111Url</key>
 	<string>https://$(NHS_111_URL)</string>
+	<key>NotificationLinkPropertyName</key>
+	<string>url</string>
 	<key>OpenSourceLicencesURL</key>
 	<string>https://$(OPEN_SOURCE_LICENCE_URL)</string>
 	<key>OpenSourceLicencesURLOld</key>
@@ -182,14 +182,18 @@
 	<integer>20</integer>
 	<key>SessionUrlPath</key>
 	<string>$(SESSION_URL_PATH)</string>
-	<key>UIFileSharingEnabled</key>
-	<true/>
 	<key>SymptomsUrlPath</key>
 	<string>$(SYMPTOMS_URL_PATH)</string>
 	<key>TermsAndConditionsURL</key>
 	<string>https://$(TERMS_AND_CONDITIONS_URL)</string>
 	<key>TermsAndConditionsURLOld</key>
 	<string>https://$(TERMS_AND_CONDITIONS_URL_OLD)</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -211,5 +215,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
 </dict>
 </plist>

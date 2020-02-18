@@ -60,9 +60,15 @@ class BiometricService: BiometricProtocol {
             let authenticationUrl: String = endpointHelper.authenticationRequestEndpoint
             
             let base64Response = try FidoClient().completeAuthorisationRequestAndRetrieveBase64Response(aaid: aaid, BiometricsAssertionScheme: BiometricsAssertionScheme, privateKeyLabel: privateKeyLabel, authenticationUrl: authenticationUrl)
-            let url = config().BiometricRedirectURL + base64Response
-            let validLoginUrl = config().HomeUrl + url
-            homeViewController.webViewController?.loadPage(url: validLoginUrl)
+            
+            let currenturl = homeViewController.webViewController?.webView.url
+            var urlComponents = URLComponents(url: currenturl!, resolvingAgainstBaseURL: false)
+            
+            var queryItems = urlComponents?.queryItems ?? []
+            queryItems.append(URLQueryItem(name: config().BiometricAuthResponseParam,value: base64Response))
+            urlComponents?.queryItems = queryItems
+            
+            homeViewController.webViewController?.loadPage(url: (urlComponents?.url)!)
             homeViewController.tabBar.selectedItem = nil
             homeViewController.selectedTab = nil
         } catch let error as FidoError {

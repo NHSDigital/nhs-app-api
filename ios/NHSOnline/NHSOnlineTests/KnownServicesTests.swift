@@ -96,8 +96,8 @@ class KnownServicesTests: XCTestCase {
     func test_IsSameHostAsHomeUrl_ReturnsTrueWhenUrlHostIsNhsoUrl_ButFalseWhenNot() {
         let homeUrl = URL(string: config().HomeUrl)
         let nhs111Url = URL(string: config().Nhs111Url)
-        let homeUrlSameHostAsHome = knownServices.isSameHostAsHomeUrl(url: homeUrl)
-        let nhs111UrlSameAsHomeHost = knownServices.isSameHostAsHomeUrl(url: nhs111Url)
+        let homeUrlSameHostAsHome = knownServices.isSameSchemeAndHostAsHomeUrl(url: homeUrl)
+        let nhs111UrlSameAsHomeHost = knownServices.isSameSchemeAndHostAsHomeUrl(url: nhs111Url)
         XCTAssertTrue(homeUrlSameHostAsHome)
         XCTAssertFalse(nhs111UrlSameAsHomeHost)
     }
@@ -127,8 +127,13 @@ class KnownServicesTests: XCTestCase {
     }
     
     func test_theURLIsABiometricRedirectURL_ReturnsTrue() {
-        let url = config().HomeUrl + config().BiometricRedirectURL
-        print(url)
+        var urlComponents = URLComponents(string: config().HomeUrl)
+        urlComponents?.queryItems = [URLQueryItem(name: config().BiometricAuthResponseParam, value: "anyValue")]
+        guard let url = urlComponents?.url?.absoluteString else {
+            assertionFailure("Url incorrectly constructed, config incorrect")
+            return
+        }
+        
         let result = knownServices.isFidoAuthResponse(urlString: url)
         XCTAssertTrue(result, "Biometric URL should return true")
     }

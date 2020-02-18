@@ -106,10 +106,14 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
     
     private func shouldLoadUrlAsSpaPage(urlToNavigateTo:String) -> Bool{
-        guard knownServices.isSameHostAsHomeUrl(url: webView.url) else {
+        guard knownServices.isSameSchemeAndHostAsHomeUrl(url: webView.url) else {
             return false
         }
-        return knownServices.isSameHostAsHomeUrl(url: URL(string: urlToNavigateTo))
+        return knownServices.isSameSchemeAndHostAsHomeUrl(url: URL(string: urlToNavigateTo))
+    }
+    
+    func loadPage(url: URL) {
+        loadPage(url: url.absoluteString, isConnectedToNetwork: Reachability.isConnectedToNetwork())
     }
     
     func loadPage(url: String) {
@@ -117,7 +121,6 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
     
     func loadPage(url: String, isConnectedToNetwork: Bool) {
-        
         self.webViewDelegate?.clearTimer()
         self.webViewDelegate?.stopActivityIndicator()
         
@@ -125,21 +128,24 @@ class WebViewController: UIViewController, WKUIDelegate {
             webViewDelegate?.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
             return
         }
-        self.webViewDelegate?.failedUrl = URL(string: url)
         
-        var urlToNavigateTo = url        
-        let urlIsValid = verifyUrl(urlString: urlToNavigateTo)
-        self.webViewDelegate?.updateHeaderAndNavigationMenu(url: URL(string: url))
-        
-        if(!urlIsValid) {
-            urlToNavigateTo = homeUrl + urlToNavigateTo
+        guard var resolvedUrl = UrlHelper.resolveAppScheme(url: url) else {
+            return
         }
         
-        if(shouldOpenInWebView(urlToNavigateTo)) {
-            webView.loadPage(url: urlToNavigateTo)
+        if (!UIApplication.shared.canOpenURL(resolvedUrl)) {
+            resolvedUrl = URL(string: homeUrl)!
+        }
+        
+        self.webViewDelegate?.failedUrl = resolvedUrl
+        
+        self.webViewDelegate?.updateHeaderAndNavigationMenu(url: resolvedUrl)
+                
+        if(shouldOpenInWebView(resolvedUrl.absoluteString)) {
+            webView.loadPage(url: resolvedUrl.absoluteString)
         } else {
-            self.loadSpaPage(path: urlToNavigateTo)
-            if(webView.url!.absoluteString == urlToNavigateTo) {
+            self.loadSpaPage(path: resolvedUrl.absoluteString)
+            if(webView.url!.absoluteString == resolvedUrl.absoluteString) {
                 webViewDelegate?.viewController.applicationState.unBlock()
             }
         }
@@ -153,11 +159,9 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
     
     func verifyUrl(urlString: String?) -> Bool {
-        guard let urlString = urlString,
-            let url = URL(string: urlString) else {
-                return false
+        guard let url = URL(string: urlString!) else {
+            return false
         }
-        
         return UIApplication.shared.canOpenURL(url)
     }
     

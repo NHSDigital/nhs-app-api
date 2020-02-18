@@ -32,7 +32,6 @@ class HomeViewController : UIViewController {
     var currentNativeViewController: UIViewController?
     var webViewDelegate: WebViewDelegate?
     var tabBarDelegate: TabBarDelegate?
-    var pageUrl = config().HomeUrl
     var myAccountUrl = config().MyAccountUrlPath
     var appVersionCheckError: Bool = false
     var apiConfigCallError: Bool = false
@@ -96,7 +95,13 @@ class HomeViewController : UIViewController {
         notificationsService = NotificationsService(appWebInterface: appWebInterface!)
         
         guard apiConfigCallError else {
-            self.webViewController?.loadPage(url: pageUrl)
+            guard let urlToLoad = UserDefaults.standard.url(forKey: config().NotificationLinkPropertyName) else {
+                self.webViewController?.loadPage(url: config().HomeUrl)
+                return
+            }
+            
+            self.webViewController?.loadPage(url: urlToLoad)
+            UserDefaults.standard.removeObject(forKey: config().NotificationLinkPropertyName)
             return
         }
     }
@@ -115,7 +120,7 @@ class HomeViewController : UIViewController {
     }
     
     func checkForLoginPageAndTriggerBiometricTimer(_ webView: WKWebView, _ timer: Double) {
-        if isOnLogin(webView: webView) {
+        if isOnBiometricsLogin(webView: webView) {
             clearSelectedTab()
             self.showWebViewContainer()
             if #available(iOS 10.0, *) {
@@ -131,10 +136,10 @@ class HomeViewController : UIViewController {
         selectedTab = nil
     }
     
-    func isOnLogin(webView: WKWebView) -> Bool {
+    func isOnBiometricsLogin(webView: WKWebView) -> Bool {
         let loginURLString = config().HomeUrl + "login"
-        
-        return webView.url?.absoluteString == loginURLString
+        guard let fidoUrl = webView.url?.absoluteString.contains("fidoAuthResponse") else { return false }
+        return !fidoUrl && (webView.url?.absoluteString.contains(loginURLString))!
     }
     
     @objc @available(iOS 10.0, *)
@@ -172,7 +177,7 @@ class HomeViewController : UIViewController {
     }
     
     func reloadLoginPage() {
-        self.webViewController?.loadPage(url: pageUrl)
+        self.webViewController?.loadPage(url: config().HomeUrl)
     }
     
     func backToAccountPage() {
@@ -432,8 +437,8 @@ class HomeViewController : UIViewController {
     }
     
     @objc func selectMyAccount(sender : UITapGestureRecognizer) {
-        self.pageUrl = createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyAccountUrlPath)
-        webViewController?.loadPage(url: self.pageUrl)
+        let urlToLoad = createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyAccountUrlPath)
+        webViewController?.loadPage(url: urlToLoad)
         self.tabBar.selectedItem = nil
         self.selectedTab = nil
     }
@@ -442,19 +447,16 @@ class HomeViewController : UIViewController {
         if (UserDefaults.standard.string(forKey: "HelpUrl") == nil) {
             UserDefaults.standard.set(config().HelpURL, forKey: "HelpUrl")
         }
-
-        if (UserDefaults.standard.string(forKey: "HelpUrl") == config().HelpLoginURL) {
-            self.pageUrl = config().HelpLoginURL
-        } else {
-            self.pageUrl = UserDefaults.standard.string(forKey: "HelpUrl") ?? config().HelpURL
-        }
         
-        webViewController?.webView.loadPage(url: self.pageUrl)
+        let urlToLoad = UserDefaults.standard.string(forKey: "HelpUrl") == config().HelpLoginURL
+            ? config().HelpLoginURL
+            : UserDefaults.standard.string(forKey: "HelpUrl") ?? config().HelpURL
+
+        webViewController?.webView.loadPage(url: urlToLoad)
     }
     
     @objc func goHome(sender: UITapGestureRecognizer) {
-        self.pageUrl = config().HomeUrl
-        self.webViewController?.loadPage(url: self.pageUrl)
+        self.webViewController?.loadPage(url: config().HomeUrl)
         self.tabBar.selectedItem = nil
         self.selectedTab = nil
     }

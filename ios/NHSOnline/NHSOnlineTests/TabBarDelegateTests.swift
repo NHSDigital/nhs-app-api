@@ -12,7 +12,7 @@ class TabBarDelegateTests : XCTestCase {
         super.setUp()
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        viewController = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
+        viewController = (storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController)
        
         tabBarDelegate = MockTabBarDelegate(controller: viewController!)
         

@@ -7,8 +7,8 @@ struct Config: Decodable {
         case ResponseWaitingTime, SessionTimeout, ApiCallTimeoutSeconds
         case HelpURL, HelpAccountURL, HelpAppointmentsURL, HelpLoginURL, HelpPrescriptionsURL, HelpRecordURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld, ConditionsUrlPath, DataSharingUrlPath
         case BaseApiUrl, ConfigurationApiPath, AppStoreUrl, SessionCookieName, AAID, PrivateKeyLabel
-        case BiometricHelpURL, FidoLoginErrorPath, BiometricRedirectURL, BiometricsRegistrationResponseEndpoint, BiometricsAuthenticationRequestEndpoint, BiometricsRegistrationRequestEndpoint, BiometricsDeregistrationRequestEndpoint, BiometricsAssertionScheme, CidUrlSuffix
-        case MenuTimeoutSeconds
+        case BiometricHelpURL, FidoLoginErrorPath, BiometricAuthResponseParam, BiometricsRegistrationResponseEndpoint, BiometricsAuthenticationRequestEndpoint, BiometricsRegistrationRequestEndpoint, BiometricsDeregistrationRequestEndpoint, BiometricsAssertionScheme, CidUrlSuffix
+        case MenuTimeoutSeconds, NotificationLinkPropertyName
     }
     
     let HomeUrl: String
@@ -67,7 +67,7 @@ struct Config: Decodable {
     let PrivateKeyLabel: String
     let FidoLoginErrorPath: String
     let BiometricHelpURL: String
-    let BiometricRedirectURL: String
+    let BiometricAuthResponseParam: String
     let BiometricsRegistrationResponseEndpoint: String
     let BiometricsAuthenticationRequestEndpoint: String
     let BiometricsRegistrationRequestEndpoint: String
@@ -77,11 +77,20 @@ struct Config: Decodable {
     let MenuTimeoutSeconds: Double
     let HomeHost: String
     let ApiCallTimeoutSeconds: Int
+    let NotificationLinkPropertyName: String
 }
 
+private var instance: Config! = nil
+
 func config() -> Config {
+    if (instance != nil) {
+        return instance!
+    }
+    
     let url = Bundle.main.url(forResource: "Info", withExtension: "plist")!
     let data = try! Data(contentsOf: url)
     let decoder = PropertyListDecoder()
-    return try! decoder.decode(Config.self, from: data)
+    instance = try! decoder.decode(Config.self, from: data)
+    
+    return instance
 }

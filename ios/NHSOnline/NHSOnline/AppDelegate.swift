@@ -6,6 +6,7 @@ import WebKit
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     var window: UIWindow?
     var rootViewController: UINavigationController?
+    var knownServices = KnownServices(config: config())
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         clearCaches()
@@ -18,8 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self
         }
-        
         setLocale()
+        handleNotifications(launchOptions: launchOptions)
         return true
     }
     
@@ -33,9 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         clearCaches()
-        
-        let webPageUrl = resolveAppScheme(url: url)
-        self.finishLoginToApp(webPageUrl)
+                
+        self.finishLoginToApp(url.absoluteString)
         return true
     }
     
@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     private func finishLoginToApp(_ url: String) {
         let viewController = getViewController()
-        if(url == config().HomeUrl + config().FidoLoginErrorPath) {
+        if url.contains(config().FidoLoginErrorPath) {
             viewController.showBiometricSessionError()
         } else {
             loadPageAndShowView(url, viewController)
@@ -68,17 +68,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func setLocale() {
         let locale = NSLocalizedString("locale", comment: "")
         UserDefaults.standard.set([locale], forKey: "AppleLanguages")
-    }
-    
-    func resolveAppScheme(url: URL) -> String {
-        var webPageUrl = url.absoluteString;
-        if(url.scheme == config().AppScheme) {
-            var comps = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-            comps.scheme = config().BaseScheme
-            webPageUrl = comps.url!.absoluteString
-        }
-        
-        return webPageUrl
     }
     
     func application(
@@ -103,7 +92,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         completionHandler([.alert, .badge, .sound])
     }
     
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        guard let aps = userInfo["aps"] as? [String: AnyObject] else {
+            completionHandler(.failed)
+            return
+        }
+        
+        guard let url = aps[config().NotificationLinkPropertyName] as? String else {
+            return
+        }
+        
+        let convertedUrl = UrlHelper.ensureUrlWithScheme(url: url)
+        if knownServices.isSameSchemeAndHostAsHomeUrl(url: convertedUrl)
+        {
+            getViewController().webViewController?.loadPage(url: convertedUrl!)
+        }
+    }
+
     private func getViewController() -> HomeViewController {
         return rootViewController?.childViewControllers.first as! HomeViewController;
+    }
+    
+    private func handleNotifications(launchOptions: [UIApplicationLaunchOptionsKey: Any]?) {
+        guard let notificationOption = launchOptions?[.remoteNotification] as? [String: AnyObject] else {
+            return
+        }
+        
+        guard let aps = notificationOption["aps"] as? [String: AnyObject] else {
+            return
+        }
+        
+        guard let url = aps[config().NotificationLinkPropertyName] as? String else {
+            return
+        }
+        
+        let convertedUrl = UrlHelper.ensureUrlWithScheme(url: url)
+        if knownServices.isSameSchemeAndHostAsHomeUrl(url: convertedUrl)
+        {
+            UserDefaults.standard.set(convertedUrl, forKey: config().NotificationLinkPropertyName)
+        }
     }
 }

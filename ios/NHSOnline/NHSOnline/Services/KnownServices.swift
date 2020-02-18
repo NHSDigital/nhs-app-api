@@ -60,9 +60,12 @@ class KnownServices {
         return false
     }
     
-    func isSameHostAsHomeUrl(url: URL?) -> Bool {
+    func isSameSchemeAndHostAsHomeUrl(url: URL?) -> Bool {
         if let homeUrl = URL(string: config.HomeUrl) {
-            return homeUrl.host == url?.host
+            if(url?.scheme == config.BaseScheme) {
+                return homeUrl.host == url?.host
+            }
+            return false
         }
         return false
     }
@@ -109,9 +112,8 @@ class KnownServices {
     }
     
     func isFidoAuthResponse(urlString: String) -> Bool {
-        if let url = URL(string: urlString), let nhsUrl = URL(string: config.HomeUrl) {
-            return url.host == nhsUrl.host &&
-                urlString.contains(config.BiometricRedirectURL)
+        if let url = URLComponents(string: urlString), let nhsUrl = URL(string: config.HomeUrl) {
+            return url.host == nhsUrl.host && (url.query?.contains(config.BiometricAuthResponseParam) ?? false)
         }
         return false
     }

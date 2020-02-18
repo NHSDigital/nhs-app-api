@@ -81,18 +81,18 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
             let url = ensureSupportedScheme(initialUrl)
             
-            if(url != initialUrl) {
+            if url != initialUrl {
                 decisionHandler(.cancel)
                 webView.loadPage(url: url.absoluteString)
                 return
             }
 
-            if(schemeHandlers.handleUrl(url: url)) {
+            if schemeHandlers.handleUrl(url: url) {
                 decisionHandler(.cancel)
                 return
             }
 
-            if(url.absoluteString == config().HomeUrl + config().FidoLoginErrorPath) {
+            if url.absoluteString.contains(config().FidoLoginErrorPath) {
                 viewController.showBiometricSessionError()
                 stopActivityIndicator()
                 decisionHandler(.cancel)
@@ -104,13 +104,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 return
             }
 
-            if(!Reachability.isConnectedToNetwork()) {
+            if !Reachability.isConnectedToNetwork() {
                 decisionHandler(.cancel)
                 self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
                 return
             }
 
-            if knownServices.shouldURLOpenExternally( url) {
+            if knownServices.shouldURLOpenExternally(url) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)
                 return
@@ -223,7 +223,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
         
-        if !self.knownServices.isSameHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
+        if !self.knownServices.isSameSchemeAndHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
             self.viewController.resetFocusAndAnnouncePageTitle(pageTitle: webView.title)
         }
     }

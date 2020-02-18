@@ -32,9 +32,11 @@
 		2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */; };
 		2E0CFB24223DC714002ABFA1 /* BaseSchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */; };
 		2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */; };
+		2E66859B238EDC3000DD79ED /* UrlHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E66859A238EDC3000DD79ED /* UrlHelper.swift */; };
 		2EC6C6CA224312BC00EE49B9 /* MailToSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC6C6C9224312BC00EE49B9 /* MailToSchemeHandlerTests.swift */; };
 		2EC6C6CC224312CE00EE49B9 /* SchemeHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC6C6CB224312CE00EE49B9 /* SchemeHandlersTests.swift */; };
 		2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF7D81B23C76377005C03ED /* HeaderEnum.swift */; };
+		2EF485C0239EAC6900C4CFC3 /* UrlHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF485BF239EAC6900C4CFC3 /* UrlHelperTests.swift */; };
 		30178302224E1FE400CCB5EA /* HomeViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */; };
 		3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */; };
 		3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */; };
@@ -166,11 +168,13 @@
 		2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlers.swift; sourceTree = "<group>"; };
 		2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSchemeHandlers.swift; sourceTree = "<group>"; };
 		2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailToSchemeHandler.swift; sourceTree = "<group>"; };
+		2E66859A238EDC3000DD79ED /* UrlHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlHelper.swift; sourceTree = "<group>"; };
 		2EC60A6C23194F94004094F3 /* NHSOnline.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NHSOnline.entitlements; sourceTree = "<group>"; };
 		2EC6C6C9224312BC00EE49B9 /* MailToSchemeHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailToSchemeHandlerTests.swift; sourceTree = "<group>"; };
 		2EC6C6CB224312CE00EE49B9 /* SchemeHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlersTests.swift; sourceTree = "<group>"; };
 		2EE2C6262371CCAA00C02299 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		2EF7D81B23C76377005C03ED /* HeaderEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderEnum.swift; sourceTree = "<group>"; };
+		2EF485BF239EAC6900C4CFC3 /* UrlHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlHelperTests.swift; sourceTree = "<group>"; };
 		30178301224E1FE400CCB5EA /* HomeViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerTests.swift; sourceTree = "<group>"; };
 		3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlersTests.swift; sourceTree = "<group>"; };
 		30DC9CD1EB30D0B0FE83C615 /* Pods-NHSOnlineTests.scratch5.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch5.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch5.xcconfig"; sourceTree = "<group>"; };
@@ -432,6 +436,7 @@
 		2EC6C6C82243128900EE49B9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				2EF485BF239EAC6900C4CFC3 /* UrlHelperTests.swift */,
 				2EC6C6C9224312BC00EE49B9 /* MailToSchemeHandlerTests.swift */,
 				2EC6C6CB224312CE00EE49B9 /* SchemeHandlersTests.swift */,
 			);
@@ -722,6 +727,7 @@
 		F07607F420B4655B00069F7F /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				2E66859A238EDC3000DD79ED /* UrlHelper.swift */,
 				135171A621C9EF78001EC74B /* CookieHandler.swift */,
 				F07607F520B465E400069F7F /* FileReader.swift */,
 				2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */,
@@ -1001,6 +1007,7 @@
 				139D331821F71C0700E6C92C /* BiometricResultStrings.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */,
+				2E66859B238EDC3000DD79ED /* UrlHelper.swift in Sources */,
 				4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */,
 				DB4B658722FADDB300C8EE99 /* BiometricBreadcrumb.swift in Sources */,
 				1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */,
@@ -1070,6 +1077,7 @@
 				3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */,
 				14E3FDF12295768200CA280C /* BiometricsViewControllerTests.swift in Sources */,
 				2EC6C6CC224312CE00EE49B9 /* SchemeHandlersTests.swift in Sources */,
+				2EF485C0239EAC6900C4CFC3 /* UrlHelperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

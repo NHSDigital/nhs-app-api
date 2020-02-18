@@ -63,6 +63,12 @@ class LifecycleHandlers: NSObject {
     
     @objc
     func appEnteredForeground() {
+        if knownServices.shouldValidateSession(host: webViewController?.webView.url?.host) {
+            validateSession(knownServices: self.knownServices, webView: (self.webViewController?.webView)!)
+        } else {
+            hideWhiteScreen()
+        }
+
         self.homeViewController.delayedBiometricsStart(0.5)
     }
     
@@ -104,14 +110,7 @@ class LifecycleHandlers: NSObject {
     }
     
     @objc func didBecomeActive() {
-        
         performAppVersionCheck()
-        
-        if knownServices.shouldValidateSession(host: webViewController?.webView.url?.host) {
-            validateSession(knownServices: self.knownServices, webView: (self.webViewController?.webView)!)
-        } else {
-            hideWhiteScreen()
-        }
     }
     
     @objc func didEnterBackground() {

@@ -14,8 +14,7 @@ class WebViewDelegateTests: XCTestCase {
     var vc: HomeViewController?
     
     override func setUp() {
-        super.setUp()
-        
+        super.setUp()        
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         vc = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
