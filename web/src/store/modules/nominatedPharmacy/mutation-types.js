@@ -23,7 +23,6 @@ export const initialState = () => ({
     pharmacies: [],
   },
   nominatedPharmacyEnabled: null,
-  justUpdated: false,
   chosenType: null,
   onlineOnlyKnownOption: null,
   interruptBackTo: null,

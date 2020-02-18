@@ -511,17 +511,8 @@ export default function ({ route, store, app }) {
     }
     case NOMINATED_PHARMACY.name:
       store.dispatch('navigation/setNewMenuItem', 2);
-      if (store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] &&
-          !store.getters['nominatedPharmacy/justUpdated']) {
-        route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFound';
-        route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFound';
-      } else if (store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P3) {
-        route.meta.headerKey = 'pageHeaders.dispensingPractice';
-        route.meta.pageTitleKey = 'pageTitles.dispensingPractice';
-      } else {
-        route.meta.headerKey = 'pageHeaders.nominatedPharmacy';
-        route.meta.pageTitleKey = 'pageTitles.nominatedPharmacy';
-      }
+      route.meta.headerKey = 'pageHeaders.nominatedPharmacy';
+      route.meta.pageTitleKey = 'pageTitles.nominatedPharmacy';
       break;
     case NOMINATED_PHARMACY_CHECK.name:
       store.dispatch('navigation/setNewMenuItem', 2);

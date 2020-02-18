@@ -21,6 +21,7 @@
                                :text="$t('generic.backButton.text')"
                                :tabindex="-1">
           <desktopGenericBackLink id="back-link"
+                                  :path="previousPagePath"
                                   :button-text="'generic.backButton.text'"
                                   @clickAndPrevent="backButtonClicked"/>
         </analytics-tracked-tag>

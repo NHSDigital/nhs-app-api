@@ -1,11 +1,6 @@
 <template>
   <div v-if="showTemplate">
-    <div v-if="hasNoNominatedPharmacy" class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <no-nominated-pharmacy-warning/>
-      </div>
-    </div>
-    <div v-else class="nhsuk-grid-row">
+    <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <pharmacy-detail
           :pharmacy="nominatedPharmacy"
@@ -52,7 +47,6 @@ import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import { PRESCRIPTIONS, NOMINATED_PHARMACY } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
@@ -63,7 +57,6 @@ export default {
     AnalyticsTrackedTag,
     PharmacyDetail,
     DesktopGenericBackLink,
-    NoNominatedPharmacyWarning,
     MessageDialog,
     MessageText,
   },
@@ -80,12 +73,6 @@ export default {
       return (
         this.$store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P1);
     },
-  },
-  async asyncData({ store }) {
-    if (store.state.nominatedPharmacy.hasLoaded === false) {
-      await store.dispatch('nominatedPharmacy/clear');
-      await store.dispatch('nominatedPharmacy/load');
-    }
   },
   created() {
     if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled'] || this.nominatedPharmacy === null) {

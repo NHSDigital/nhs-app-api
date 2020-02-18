@@ -3,7 +3,7 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p id="confirm-help-text">{{ $t('nominated_pharmacy.confirm.confirmHelpText') }}</p>
-        <div v-if="isOnlineOnlySelected">
+        <div v-if="isOnlineOnlySelected" class="nhsuk-u-padding-bottom-3">
           <online-only-pharmacy-detail :pharmacy="nominatedPharmacy"/>
         </div>
         <div v-else-if="isHighStreetSelected">

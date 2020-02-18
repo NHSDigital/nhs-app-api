@@ -25,11 +25,9 @@ export default {
     state.pharmacy = {};
     state.hasLoaded = false;
     state.nominatedPharmacyEnabled = null;
-    state.justUpdated = false;
   },
   [NOMINATED_PHARMACY_UPDATED](state) {
     state.hasLoaded = false;
-    state.justUpdated = true;
   },
   [SET_ONLINE_ONLY_KNOWN_OPTION](state, choice) {
     state.onlineOnlyKnownOption = choice;

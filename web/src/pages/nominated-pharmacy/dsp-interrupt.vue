@@ -15,6 +15,7 @@
                                :text="$t('generic.backButton.text')"
                                :tabindex="-1">
           <desktopGenericBackLink id="back-link"
+                                  :path="nominatedPharmacyChooseType"
                                   :button-text="'generic.backButton.text'"
                                   @clickAndPrevent="backButtonClicked"/>
         </analytics-tracked-tag>
@@ -37,12 +38,17 @@ export default {
     DesktopGenericBackLink,
     AnalyticsTrackedTag,
   },
+  data() {
+    return {
+      nominatedPharmacyChooseType: NOMINATED_PHARMACY_CHOOSE_TYPE.path,
+    };
+  },
   methods: {
     continueButtonClicked() {
       redirectTo(this, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path);
     },
     backButtonClicked() {
-      redirectTo(this, NOMINATED_PHARMACY_CHOOSE_TYPE.path);
+      redirectTo(this, this.nominatedPharmacyChooseType);
     },
   },
 };
