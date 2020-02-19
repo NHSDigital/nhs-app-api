@@ -1,32 +1,33 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 {
-    public class TppCourseService : ICourseService
+    internal class TppCourseService : ICourseService
     {
+        private readonly ITppClientRequest<TppUserSession, ListRepeatMedicationReply> _listRepeatMedication;
         private readonly ILogger<TppCourseService> _logger;
         private readonly TppConfigurationSettings _settings;
-        private readonly ITppClient _tppClient;
         private readonly ITppCourseMapper _tppCourseMapper;
 
         public TppCourseService(
+            ITppClientRequest<TppUserSession, ListRepeatMedicationReply> listRepeatMedication,
             ILogger<TppCourseService> logger, 
             TppConfigurationSettings settings,
-            ITppClient tppClient, 
             ITppCourseMapper tppCourseMapper)
         {
+            _listRepeatMedication = listRepeatMedication;
             _logger = logger;
             _settings = settings;
-            _tppClient = tppClient;
             _tppCourseMapper = tppCourseMapper;
 
             _settings.Validate();
@@ -40,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             {
                 _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Courses for user");
-                var response = await _tppClient.ListRepeatMedicationPost(tppUserSession);
+                var response = await _listRepeatMedication.Post(tppUserSession);
                 _logger.LogDebug("Fetch Courses for user complete");
                 
                 if (response.HasSuccessResponse)

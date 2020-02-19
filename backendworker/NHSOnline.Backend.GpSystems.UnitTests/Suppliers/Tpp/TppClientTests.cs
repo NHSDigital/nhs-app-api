@@ -11,7 +11,6 @@ using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Support;
 using RichardSzalay.MockHttp;
 
@@ -32,52 +31,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             Context = new TppClientTestsContext();
             Context.Initialise();
             SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClient>();
-        }
-
-        [TestMethod]
-        public async Task
-            OrderPrescriptionPostRequest_MakesHttpRequestToCorrectUrlWithCorrectHeaders_AndRespondsWithDeserializedXml()
-        {
-            // Arrange
-            var requestMedicationRequestModel = new RequestMedication
-            {
-                UnitId = TppClientTestsContext.UnitId,
-                Uuid = TppClientTestsContext.Uuid,
-                ApiVersion = TppClientTestsContext.ApiVersion
-            };
-
-            var expectedMedicationResponse = new RequestMedicationReply();
-
-            var tppUserSession = new TppUserSession();
-
-            var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                { TppClientTestsContext.RequestTypeHeader, requestMedicationRequestModel.RequestType }
-            };
-
-            var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                { TppClientTestsContext.ResponseSuidHeader, TppClientTestsContext.Suid }
-            };
-
-            var responseContent = new StringContent(expectedMedicationResponse.SerializeXml());
-
-            MockHttpHandler
-                .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
-                .WithHeaders(requestHeaders)
-                .WithContent(requestMedicationRequestModel.SerializeXml())
-                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
-
-            // Act
-            var response = await SystemUnderTest.OrderPrescriptionsPost(tppUserSession, requestMedicationRequestModel);
-
-            // Assert
-            response.Body.Should().BeEquivalentTo(expectedMedicationResponse);
-            response.Headers.Should().BeEquivalentTo(responseHeaders);
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.ErrorResponse.Should().BeNull();
-
-            Context.VerifyLogging(requestMedicationRequestModel);
         }
 
         [TestMethod]

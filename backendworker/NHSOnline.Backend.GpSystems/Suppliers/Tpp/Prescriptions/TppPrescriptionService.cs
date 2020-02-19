@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Support.Logging;
@@ -14,18 +15,25 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 {
-    public class TppPrescriptionService : IPrescriptionService
+    internal class TppPrescriptionService : IPrescriptionService
     {
         private readonly ILogger<TppPrescriptionService> _logger;
         private readonly TppConfigurationSettings _settings;
+        private readonly ITppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply> _orderPrescriptions;
+        private readonly ITppClientRequest<TppUserSession, ListRepeatMedicationReply> _listRepeatMedication;
         private readonly ITppClient _tppClient;
         private readonly ITppPrescriptionMapper _tppPrescriptionMapper;
 
         public TppPrescriptionService(
+            ITppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply> orderPrescriptions,
+            ITppClientRequest<TppUserSession, ListRepeatMedicationReply> listRepeatMedication,
             ILogger<TppPrescriptionService> logger,
             TppConfigurationSettings settings,
-            ITppClient tppClient, ITppPrescriptionMapper tppPrescriptionMapper)
+            ITppClient tppClient,
+            ITppPrescriptionMapper tppPrescriptionMapper)
         {
+            _orderPrescriptions = orderPrescriptions;
+            _listRepeatMedication = listRepeatMedication;
             _tppClient = tppClient;
             _settings = settings;
             _logger = logger;
@@ -34,7 +42,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             _settings.Validate();
         }
 
-        public async Task<GetPrescriptionsResult> GetPrescriptions(GpLinkedAccountModel gpLinkedAccountModel, DateTimeOffset? fromDate = null,
+        public async Task<GetPrescriptionsResult> GetPrescriptions(
+            GpLinkedAccountModel gpLinkedAccountModel,
+            DateTimeOffset? fromDate = null,
             DateTimeOffset? toDate = null)
         {
             var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
@@ -43,7 +53,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             {
                 _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Prescriptions For User");
-                var response = await _tppClient.ListRepeatMedicationPost(tppUserSession);
+                var response = await _listRepeatMedication.Post(tppUserSession);
                 _logger.LogDebug("Fetch Prescriptions For User Complete");
 
                 if (!response.HasSuccessResponse)
@@ -110,7 +120,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             try
             {
                 _logger.LogInformation("Beginning Place Prescription Request");
-                var response = await _tppClient.OrderPrescriptionsPost(tppUserSession, postRequest);
+                var response = await _orderPrescriptions.Post((tppUserSession, postRequest));
 
                 if (!response.HasSuccessResponse) return InterpretOrderPrescriptionError(response);
 

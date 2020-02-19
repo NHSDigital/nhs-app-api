@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
@@ -16,8 +15,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         private readonly ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> _testResultsViewDetailed;
         private readonly ITppClientRequest<TppUserSession, LogoffReply> _logoffPost;
         private readonly ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> _nhsUserPost;
-        private readonly ITppClientRequest<TppUserSession, ListRepeatMedicationReply> _listRepeatMedicationPost;
-        private readonly ITppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply> _orderPrescriptionsPost;
         private readonly ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> _requestSystmOnlineMessages;
 
         public TppClient(
@@ -29,8 +26,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> testResultsViewDetailed,
             ITppClientRequest<TppUserSession, LogoffReply> logoffPost,
             ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> nhsUserPost,
-            ITppClientRequest<TppUserSession, ListRepeatMedicationReply> listRepeatMedicationPost,
-            ITppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply> orderPrescriptionsPost,
             ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> requestSystmOnlineMessages)
         {
             _listServiceAccessesPost = listServiceAccessesPost;
@@ -41,8 +36,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             _testResultsViewDetailed = testResultsViewDetailed;
             _logoffPost = logoffPost;
             _nhsUserPost = nhsUserPost;
-            _listRepeatMedicationPost = listRepeatMedicationPost;
-            _orderPrescriptionsPost = orderPrescriptionsPost;
             _requestSystmOnlineMessages = requestSystmOnlineMessages;
         }
 
@@ -69,12 +62,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 
         public async Task<TppApiObjectResponse<AddNhsUserResponse>> NhsUserPost(AddNhsUserRequest addNhsUserRequest)
             => await _nhsUserPost.Post(addNhsUserRequest);
-
-        public async Task<TppApiObjectResponse<ListRepeatMedicationReply>> ListRepeatMedicationPost(TppUserSession tppUserSession)
-            => await _listRepeatMedicationPost.Post(tppUserSession);
-
-        public async Task<TppApiObjectResponse<RequestMedicationReply>> OrderPrescriptionsPost(TppUserSession tppUserSession, RequestMedication requestMedication)
-            => await _orderPrescriptionsPost.Post((tppUserSession, requestMedication));
 
         public async Task<TppApiObjectResponse<RequestSystmOnlineMessagesReply>> RequestSystmOnlineMessages(RequestSystmOnlineMessages requestModel, string suid)
             => await _requestSystmOnlineMessages.Post((requestModel, suid));
