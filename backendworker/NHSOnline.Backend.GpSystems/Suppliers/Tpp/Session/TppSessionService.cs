@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Session;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
@@ -12,17 +13,19 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 {
-    public class TppSessionService : ISessionService
+    internal class TppSessionService : ISessionService
     {
         private readonly ITppClient _client;
+        private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
         private readonly ILogger<TppSessionService> _logger;
         private readonly ITppSessionMapper _sessionMapper;
 
-        public TppSessionService(ITppClient client,
-            ILogger<TppSessionService> logger,
+        public TppSessionService(ITppClient client, ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
+        ILogger<TppSessionService> logger,
             ITppSessionMapper sessionMapper)
         {
             _client = client;
+            _authenticate = authenticate;
             _logger = logger;
             _sessionMapper = sessionMapper;
         }
@@ -43,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                     UnitId = odsCode
                 };
 
-                var reply = await _client.AuthenticatePost(authenticate);
+                var reply = await _authenticate.Post(authenticate);
 
                 if (!reply.HasSuccessResponse)
                 {

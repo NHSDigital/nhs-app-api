@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,8 +13,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support;
 using RichardSzalay.MockHttp;
-using UnitTestHelper;
-using Application = NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Application;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 {

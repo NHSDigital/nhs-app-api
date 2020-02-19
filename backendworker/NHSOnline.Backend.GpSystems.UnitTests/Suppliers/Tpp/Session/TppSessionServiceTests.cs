@@ -18,6 +18,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using UnitTestHelper;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 {
@@ -26,6 +27,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
     {
         private IFixture _fixture;
         private Mock<ITppClient> _mockTppClient;
+        private Mock<ITppClientRequest<Authenticate, AuthenticateReply>> _mockauthenticate;
         private Mock<IConfigurationSettings> _mockConfigurationSettings;
         private Mock<ITppSessionMapper> _mockTppSessionMapper;
         private TppSessionService _systemUnderTest;
@@ -47,15 +49,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             _actual = null;
             _authenticatePostResult = null;
 
-            _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
-            _mockTppClient
-                .Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate = _fixture.Freeze<Mock<ITppClientRequest<Authenticate, AuthenticateReply>>>();
+            _mockauthenticate
+                .Setup(x => x.Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => _authenticatePostResult)
                 .Callback<Authenticate>(x =>
                 {
                     _actual = x;
                 });
 
+            _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
             _mockTppClient
                 .Setup(x => x.PatientSelectedPost(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => null);
@@ -77,8 +80,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         {
             // Arrange
             // Tpp client throws HttpRequestException
-            _mockTppClient
-                .Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate
+                .Setup(x => x.Post(It.IsAny<Authenticate>()))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -211,8 +214,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             const string odsCode = "1234";
             var reply = CreateReply(expectedName);
 
-            _mockTppClient
-                .Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate
+                .Setup(x => x.Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _mockTppSessionMapper
@@ -246,8 +249,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var userSession = CreateUserSession(expectedPatientName, odsCode, expectedSessionId,
                 expectedOnlineUserId, expectedPatientId, _nhsNumber);
 
-            _mockTppClient.Setup(x => x
-                .AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate.Setup(x => x
+                .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _mockTppSessionMapper
@@ -287,8 +290,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var userSession = CreateUserSession(odsCode, expectedSessionId,
                 expectedOnlineUserId, expectedPatientId, _nhsNumber);
 
-            _mockTppClient.Setup(x => x
-                    .AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate.Setup(x => x
+                    .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             var listServicesAccessesResponse = new ListServiceAccessesReply
@@ -337,8 +340,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var userSession = CreateUserSession(odsCode, expectedSessionId,
                 expectedOnlineUserId, expectedPatientId, _nhsNumber);
 
-            _mockTppClient.Setup(x => x
-                    .AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate.Setup(x => x
+                    .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
             var listServicesAccessesResponse = new ListServiceAccessesReply
             {
@@ -377,8 +380,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var reply = CreateReply();
             reply.ErrorResponse = new Error{ ErrorCode = "9" };
 
-            _mockTppClient.Setup(x => x
-                .AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate.Setup(x => x
+                .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _systemUnderTest = _fixture.Create<TppSessionService>();
@@ -397,8 +400,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var reply = CreateReply();
             reply.ErrorResponse = new Error();
 
-            _mockTppClient.Setup(x => x
-                    .AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate.Setup(x => x
+                    .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _systemUnderTest = _fixture.Create<TppSessionService>();
@@ -417,8 +420,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var reply = CreateReply();
             reply.StatusCode = HttpStatusCode.BadGateway;
 
-            _mockTppClient.Setup(x => x
-                .AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate.Setup(x => x
+                .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _systemUnderTest = _fixture.Create<TppSessionService>();
@@ -438,8 +441,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var reply = CreateReply();
             reply.StatusCode = HttpStatusCode.BadGateway;
 
-            _mockTppClient.Setup(x => x
-                    .AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate.Setup(x => x
+                    .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _mockTppSessionMapper

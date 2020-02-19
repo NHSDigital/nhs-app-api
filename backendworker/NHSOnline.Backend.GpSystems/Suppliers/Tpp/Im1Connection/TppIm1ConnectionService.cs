@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,17 +14,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
 {
     internal class TppIm1ConnectionService : IIm1ConnectionService
     {
-        private readonly ITppClient _tppClient;
         private readonly ITppClientRequest<LinkAccount, LinkAccountReply> _linkAccount;
+        private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
         private readonly IIm1CacheService _im1CacheService;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly ILogger<TppIm1ConnectionService> _logger;
 
-        public TppIm1ConnectionService(ITppClient tppClient, ITppClientRequest<LinkAccount, LinkAccountReply> linkAccount, IIm1CacheService im1CacheService,
+        public TppIm1ConnectionService(ITppClientRequest<LinkAccount, LinkAccountReply> linkAccount,
+            ITppClientRequest<Authenticate, AuthenticateReply> authenticate, IIm1CacheService im1CacheService,
             IIm1CacheKeyGenerator im1CacheKeyGenerator, ILogger<TppIm1ConnectionService> logger)
         {
-            _tppClient = tppClient;
             _linkAccount = linkAccount;
+            _authenticate = authenticate;
             _im1CacheService = im1CacheService;
             _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _logger = logger;
@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
                 var authenticateRequest = connectionToken.DeserializeJson<Authenticate>();
                 authenticateRequest.UnitId = odsCode;
 
-                var authenticateReply = await _tppClient.AuthenticatePost(authenticateRequest);
+                var authenticateReply = await _authenticate.Post(authenticateRequest);
 
                 if (!authenticateReply.HasSuccessResponse)
                 {
@@ -138,7 +138,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection
         {
             var authenticateRequest = CreateAuthenticate(connectionToken, linkAccountRequest);
 
-            var authenticateReply = await _tppClient.AuthenticatePost(authenticateRequest);
+            var authenticateReply = await _authenticate.Post(authenticateRequest);
 
             if (!authenticateReply.HasSuccessResponse)
             {

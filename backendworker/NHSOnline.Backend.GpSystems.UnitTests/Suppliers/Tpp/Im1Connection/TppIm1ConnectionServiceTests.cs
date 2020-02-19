@@ -30,8 +30,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         private const string DefaultOdsCode = "token";
 
         private IFixture _fixture;
-        private Mock<ITppClient> _mockTppClient;
         private Mock<ITppClientRequest<LinkAccount, LinkAccountReply>> _mocklinkAccount;
+        private Mock<ITppClientRequest<Authenticate, AuthenticateReply>> _mockauthenticate;
         private Mock<IIm1CacheService> _mockIm1CacheService;
         private Mock<IIm1CacheKeyGenerator> _mockIm1CacheKeyGenerator;
         private Mock<ILogger<TppIm1ConnectionService>> _mockLogger;
@@ -41,8 +41,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
             _mocklinkAccount = _fixture.Freeze<Mock<ITppClientRequest<LinkAccount, LinkAccountReply>>>();
+            _mockauthenticate = _fixture.Freeze<Mock<ITppClientRequest<Authenticate, AuthenticateReply>>>();
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _mockIm1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
             _mockLogger = _fixture.Freeze<Mock<ILogger<TppIm1ConnectionService>>>();
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                 }
             };
 
-            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+            _mockauthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         public async Task Verify_ReturnsAEmptyNhsNumbers_WhenTppRespondsWithEmptyNhsNumber()
         {
             // Arrange
-            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+            _mockauthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
@@ -110,7 +110,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         public async Task Verify_ReturnsUnmappedErrorWithStatusCode_WhenTppClientReturnsErrorResponse()
         {
             // Arrange
-            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+            _mockauthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         public async Task Verify_ReturnsBadGateway_WhenTppClientReturnsBadGateway()
         {
             // Arrange
-            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+            _mockauthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.BadGateway)
                     {
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         {
             // Arrange
             var authenticateReply = _fixture.Create<AuthenticateReply>();
-            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+            _mockauthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         {
             // Arrange
             var authenticateReply = _fixture.Create<AuthenticateReply>();
-            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+            _mockauthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
@@ -207,7 +207,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                     }));
 
             var authenticateReply = _fixture.Create<AuthenticateReply>();
-            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+            _mockauthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
@@ -251,7 +251,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                     }));
 
             var authenticateReply = _fixture.Create<AuthenticateReply>();
-            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+            _mockauthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
@@ -401,7 +401,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                     }));
 
             var errorResponse = _fixture.Create<Error>();
-            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+            _mockauthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
@@ -447,8 +447,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
                         Body = linkAccountReply,
                     }));
 
-            _mockTppClient
-                .Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockauthenticate
+                .Setup(x => x.Post(It.IsAny<Authenticate>()))
                 .Throws<HttpRequestException>();
             var systemUnderTest = CreateSystemUnderTest();
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
@@ -462,7 +462,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
         private TppIm1ConnectionService CreateSystemUnderTest()
         {
-            return new TppIm1ConnectionService(_mockTppClient.Object, _mocklinkAccount.Object, _mockIm1CacheService.Object,
+            return new TppIm1ConnectionService(_mocklinkAccount.Object, _mockauthenticate.Object, _mockIm1CacheService.Object,
                 _mockIm1CacheKeyGenerator.Object, _mockLogger.Object);
         }
 
@@ -480,7 +480,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             authenticateReply.User.Person.NationalId.Value = nhsNumber;
 
-            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+            _mockauthenticate.Setup(x => x.Post(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
