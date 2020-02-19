@@ -18,7 +18,7 @@ export DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 # Should replace with an image that has just the required software
 export DOCKER_IMAGE_GRADLE=${DOCKER_IMAGE_GRADLE:-$DOCKER_REGISTRY/chrome:latest}
 export DOCKER_IMAGE_CHROME=${DOCKER_IMAGE_CHROME:-$DOCKER_REGISTRY/chrome:latest}
-export DOCKER_IMAGE_BROWSERSTACK=${DOCKER_IMAGE_BROWSERSTACK:-$DOCKER_REGISTRY/browserstack:latest}
+export DOCKER_IMAGE_BROWSERSTACK_LOCAL=${DOCKER_IMAGE_BROWSERSTACK_LOCAL:-$DOCKER_REGISTRY/nhsonline-browserstack-local:latest}
 
 export DOCKER_IMAGE=${DOCKER_IMAGE_CHROME}
 

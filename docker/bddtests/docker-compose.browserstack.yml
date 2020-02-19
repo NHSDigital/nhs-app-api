@@ -6,3 +6,14 @@ services:
     environment:
       ConfigurationSettings__DefaultSessionExpiryMinutes: 5
       EXPIRE_AFTER_SECONDS: 300
+
+  browserstack.local:
+    image: ${DOCKER_IMAGE_BROWSERSTACK_LOCAL}
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        BrowserStackLocal --key "$$BROWSERSTACK_ACCESS_KEY" --force-local --local-identifier "$$BROWSERSTACK_LOCAL_IDENTIFIER" --verbose 2
+    environment:
+      BROWSERSTACK_ACCESS_KEY: "${BROWSERSTACK_ACCESS_KEY}"
+      BROWSERSTACK_LOCAL_IDENTIFIER: "${BROWSERSTACK_LOCAL_IDENTIFIER}"

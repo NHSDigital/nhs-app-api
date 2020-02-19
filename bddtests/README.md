@@ -58,3 +58,97 @@ run-native-android             Run the nativesmoketests in BrowserStack against 
 run-native-ios                 Run the nativesmoketests in BrowserStack against iOS; NATIVE_APP_PATH_IOS must be set to the path to the ipa to test
 help                           This help.
 ```
+
+## BrowserStack Native Tests
+
+BrowserStack App Automate (https://app-automate.browserstack.com/) is used to execute the integration tests against the app running on a device (iOS or Android).
+
+### App Location
+
+In order to run the tests the app must be uploaded to BrowserStack. Both iOS and android apps have specific BrowserStack bulid configurations containing the appropriate URLs for the integration tests.
+
+#### App Location - Android
+
+The environment variable `NATIVE_APP_PATH_ANDROID` should point to the apk to upload. This defaults to `android/app/build/outputs/apk/browserstack/app-browserstack-unsigned.apk` which is where the android build (`make -C android build`) places the browserstack apk.
+
+#### App Location - iOS
+
+The environment variable `NATIVE_APP_PATH_IOS` should point to the ipa to upload. To get an ipa to test it needs to be extracted from XCode ("archive" then "export") or downloaded from a build in Azure DevOps.
+
+### BrowserStack Local
+
+Running the appropriate `make` configuration (`run-native-android` or `run-native-ios`) will startup the [BrowserStack Local](https://www.browserstack.com/local-testing/app-automate) binary in a container alongside the App containers. The BrowserStack Local binary proxies requests from the native device running on BrowserStack's service to the local services running in docker. The `BROWSERSTACK_LOCAL_IDENTIFIER` setting is used to connect the test runner to the appropriate BrowserStack Local instance.
+
+### BrowserStack in IntelliJ
+
+In order to run the integration tests in IntelliJ a number of configuration settings need to be setup. It is recommended that a specific build configuration is setup for both Android and iOS BrowserStack tests, based on the standard configuration.
+
+#### BrowserStack in IntelliJ - Android
+
+Add the following "VM options":
+
+```bash
+-Dwebdriver.provided.type=browserstack_android
+-Dappium.platformName=ANDROID
+```
+
+Add the following environment variables:
+
+| Name                          | Description                                                                                                       |
+| ------------------------------| ----------------------------------------------------------------------------------------------------------------- |
+| BROWSERSTACK_USERNAME         | Your BrowserStack username                                                                                        |
+| BROWSERSTACK_ACCESS_KEY       | Your BrowserStack access key                                                                                      |
+| BROWSERSTACK_LOCAL_IDENTIFIER | BrowserStack Local instance id - the build script defaults this to `int_test_$HOSTNAME` (e.g. `int_test_LPT4128`) |
+| BROWSERSTACK_DEVICE_NAME      | Device to test - the build script defaults this to `Google Pixel 2`                                               |
+| BROWSERSTACK_OS_VERSION       | OS Version to test - the build script defaults this to `8.0`                                                      |
+| APP_PATH                      | Path to uploaded app in BrowserStack - the build script uploads to `$HOSTNAME-android` (e.g. `LPT4128-android`)   |
+| APP_SCHEME                    | Set to `nhsapp`                                                                                                   |
+| AUTO_LOGIN                    | Set to `true`                                                                                                     |
+| XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
+
+To start the service to test the following command should be used (substituting your BrowserStack access key and username where approriate):
+
+```bash
+make run-native-android BROWSERSTACK_USERNAME="Your Username" BROWSERSTACK_ACCESS_KEY="Your Access Key" RUN_LOCAL_BDD=1
+```
+
+If you have used a different value to any of the defaults in the table above these should also be specified on the command line. e.g. to use a different device:
+
+```bash
+make run-native-android BROWSERSTACK_USERNAME="Your Username" BROWSERSTACK_ACCESS_KEY="Your Access Key" BROWSERSTACK_DEVICE_NAME="Nexus 5" RUN_LOCAL_BDD=1
+```
+
+#### BrowserStack in IntelliJ - iOS
+
+Add the following "VM options":
+
+```bash
+-Dwebdriver.provided.type=browserstack_ios
+-Dappium.platformName=iOS
+```
+
+Add the following environment variables:
+
+| Name                          | Description                                                                                                       |
+| ------------------------------| ----------------------------------------------------------------------------------------------------------------- |
+| BROWSERSTACK_USERNAME         | Your BrowserStack username                                                                                        |
+| BROWSERSTACK_ACCESS_KEY       | Your BrowserStack access key                                                                                      |
+| BROWSERSTACK_LOCAL_IDENTIFIER | BrowserStack Local instance id - the build script defaults this to `int_test_$HOSTNAME` (e.g. `int_test_LPT4128`) |
+| BROWSERSTACK_DEVICE_NAME      | Device to test - the build script defaults this to `iPhone 8`                                                     |
+| BROWSERSTACK_OS_VERSION       | OS Version to test - the build script defaults this to `12.1`                                                     |
+| APP_PATH                      | Path to uploaded app in BrowserStack - the build script uploads to `$HOSTNAME-ios` (e.g. `LPT4128-ios`)           |
+| APP_SCHEME                    | Set to `nhsapp`                                                                                                   |
+| AUTO_LOGIN                    | Set to `true`                                                                                                     |
+| XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
+
+To start the service to test the following command should be used (substituting your BrowserStack access key and username where approriate):
+
+```bash
+make run-native-ios BROWSERSTACK_USERNAME="Your Username" BROWSERSTACK_ACCESS_KEY="Your Access Key" RUN_LOCAL_BDD=1
+```
+
+If you have used a different value to any of the defaults in the table above these should also be specified on the command line. e.g. to use a different device:
+
+```bash
+make run-native-ios BROWSERSTACK_USERNAME="Your Username" BROWSERSTACK_ACCESS_KEY="Your Access Key" BROWSERSTACK_DEVICE_NAME="iPhone X" RUN_LOCAL_BDD=1
+```

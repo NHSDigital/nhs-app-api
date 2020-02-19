@@ -56,8 +56,6 @@ class Config private constructor() {
     val messagesMongoDbHost: String
     val messagesMongoDbPort: Long
 
-    val nativeUrlSuffix: String
-
     val accessibilityOutputFolder: String
 
     init {
@@ -123,7 +121,6 @@ class Config private constructor() {
         postcodeLookupSearchRadiusKm = envOrDefault("POSTCODE_LOOKUP_SEARCH_RADIUS_KM", "10");
 
         accessibilityOutputFolder = envOrDefault("ACCESSIBILITY_OUTPUT_FOLDER", "accessibilityoutput")
-        nativeUrlSuffix = envOrDefault("URL_NATIVE_SUFFIX","")
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {
