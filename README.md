@@ -78,6 +78,8 @@ make run WEB=host
 make run PFSAPI=host
 ```
 
+A `launchsettings.json` file will be automatically generated for any backend API services which are set to run on the host. This will match the specified run configuration.
+
 ### Debugging web locally with develop versions of the rest
 
 ```bash
