@@ -5,9 +5,11 @@ set -e
 # Change current working directory to be the root of backendworker, regardless of how this script is invoked
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
-# Cleanup old containers
-OLD_CONTAINERS=$(docker images --filter=reference=local/nhsonline*api --filter=reference=local/backend-build -q)
-[ -z "$OLD_CONTAINERS" ] || docker rmi -f $OLD_CONTAINERS || true
+# Cleanup old build containers and images
+for IMAGE in $(docker images --filter=reference=local/backend-build --format='{{.Repository}}:{{.Tag}}'); do
+  for CONTAINER in $(docker ps -aq --filter=ancestor="$IMAGE"); do docker rm --force "$CONTAINER"; done
+  docker rmi --force "$IMAGE"
+done
 
 COMMIT_ID=$(git rev-parse --short HEAD)
 
