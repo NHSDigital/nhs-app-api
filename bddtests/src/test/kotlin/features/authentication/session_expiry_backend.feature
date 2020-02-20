@@ -43,8 +43,7 @@ Feature: Session Extend Backend
       | EMIS      |
       | TPP       |
 
-  # this test fails after moving it out from session_expiry.feature, which was tagged as @native
-  @native
+  @bug @NHSO-7780
   Scenario Outline: <GP System> GP practice session has expired
     Given I have logged into <GP System> and have a valid session cookie
     And the GP System session has expired when viewing prescriptions

@@ -280,5 +280,8 @@ Feature: Session Expiry and Extend Frontend
     Then I see the login page with the session expiry notification
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
+    @bug @NHSO-7780
+    Examples:
+      | GP System |
+      | EMIS      |
