@@ -128,7 +128,7 @@ stages:
 
   - stage: ios_integration_tests
     displayName: iOS Integration Tests
-    condition: and(succeeded(), eq(variables['int.tests.run.native.ios'], 'True'))
+    condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'), eq(variables['int.tests.run.native.ios'], 'True')))
     dependsOn:
       - web
       - backend

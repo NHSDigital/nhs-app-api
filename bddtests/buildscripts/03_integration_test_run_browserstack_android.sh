@@ -10,7 +10,7 @@ source "buildscripts/lib/set_env.sh"
 # shellcheck source=lib/functions.sh
 source "buildscripts/lib/functions.sh"
 
-TRANCHE_TAG=nativesmoketest
+TRANCHE_TAG=native
 
 TRANCHE_RUN_GRADLE_ARGS+=("-Dappium.platformName=ANDROID")
 
