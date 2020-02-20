@@ -10,7 +10,6 @@ Feature: Display More Menu
     And I navigate to More
     And I see the more page header
     Then I see more button on the nav bar is highlighted
-    And I see and can follow links within the more page body
 
   @smoketest
   Scenario: A logged in user using desktop can navigate to the more screen
