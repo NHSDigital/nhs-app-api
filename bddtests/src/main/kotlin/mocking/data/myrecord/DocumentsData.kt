@@ -31,7 +31,7 @@ object DocumentsData {
         var nameFormat = "Name %d"
         var termFormat = "Letter %d"
         var type = "pdf"
-        var size: Long? = REGULAR_DOCUMENT_SIZE.toLong()
+        var size: Long? = REGULAR_DOCUMENT_SIZE
 
         if (!includeName) {
             nameFormat = ""

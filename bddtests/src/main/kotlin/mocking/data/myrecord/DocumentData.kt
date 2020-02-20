@@ -1,16 +1,34 @@
 package mocking.data.myrecord
 
 import mocking.emis.documents.DocumentResponseModel
+import org.apache.commons.codec.binary.Base64OutputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.nio.file.Paths
+import java.util.zip.GZIPOutputStream
 
 
 object DocumentData {
 
-    private const val COMPRESSED_DOCUMENT = "H4sIAAAAAAAEAH2QyWrEMAyGX0UYesx2GCiJYxiGXntpoGdPosSGeKmtDJM+fZ2E0g6UghYk" +
-            "pI9f4orMLLhCOQhukCQoIp/hx6JvLbs4S2gp61aPDPqjahnhnYptsYFeyRCR2oXG7JlB8Q/kjdYZ/0T1Mf6sWmmwZRNaDJJc+DV7jt5F" +
-            "zN9dGCKMLkD++tJBdcqrKi/zckeQphkFL77zcdjVDavgg74J7iFuOlo2JmwW9SfWVeWpgVlbzBTqSVHqnJ4aMDJM2talJ9i8SoEJHr20" +
-            "D4xRGj2v9UXO+hp0A49gJjqlIySTQBgJBtfft7CYdFTOi42XhPrku8DiELv/V3wBbzBSSJ8BAAA="
-
     fun getDefaultDocumentData(): DocumentResponseModel {
-        return DocumentResponseModel(COMPRESSED_DOCUMENT)
+        return DocumentResponseModel(loadFile())
+    }
+
+    private fun loadFile(): String {
+        var data = ""
+        val path = Paths.get("").toAbsolutePath().toString()
+        val fileLocation = "$path/src/main/kotlin/mocking/data/myrecord/pdf.html"
+        File(fileLocation).forEachLine {
+            data += it
+        }
+
+        return ByteArrayOutputStream().use { baos ->
+            Base64OutputStream(baos).use { base64 ->
+                GZIPOutputStream(base64).use { gzip ->
+                    gzip.write(data.toByteArray())
+                }
+            }
+            baos.toString()
+        }
     }
 }

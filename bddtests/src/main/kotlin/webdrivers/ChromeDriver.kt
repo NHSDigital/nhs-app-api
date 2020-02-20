@@ -46,8 +46,13 @@ open class ChromeDriver : DriverSource {
     }
 
     open fun configureOptions(): ChromeOptions {
+        val currentDir = System.getProperty("user.dir")
         val options = ChromeOptions()
+        val prefs: MutableMap<String, Any> = HashMap()
         val userAgent = GlobalSerenityHelpers.USER_AGENT.getOrNull<String>()
+        prefs["download.default_directory"] = "$currentDir/tmpDownloads"
+        options.setExperimentalOption("prefs", prefs)
+        options.addArguments("--disable-extensions")
 
         if(userAgent != null){
             options.addArguments("user-agent=$userAgent")

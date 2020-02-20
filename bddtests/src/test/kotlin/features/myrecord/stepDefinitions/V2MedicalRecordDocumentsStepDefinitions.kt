@@ -12,7 +12,6 @@ import pages.myrecord.MyRecordDocumentInformationPage
 import pages.myrecord.MyRecordDocumentPage
 import pages.myrecord.MyRecordDocumentsPage
 import utils.SerenityHelpers
-import pages.isCurrentlyEnabled
 
 open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -113,6 +112,7 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
     fun iClickTheActionLinkONTheDocumentInformationPage(action: String) {
         when (action) {
             "View" -> myRecordDocumentInformationPage.viewActionLink.click()
+            "Download" -> myRecordDocumentInformationPage.downloadActionLink.click()
             else -> throw IllegalArgumentException("$action is not a valid document action")
         }
     }
@@ -133,16 +133,18 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
                 "The document added on " + selectedDocument.date + " is not available through the NHS App")
     }
 
+    @Then("^The file has been downloaded")
+    fun theFileHasBeenDownloaded() {
+        val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
+        val fileName = selectedDocument.name + ".pdf"
+        Assert.assertTrue(myRecordDocumentInformationPage.hasFileDownloaded(fileName))
+    }
+
     @Then("^I see a list of documents$")
     fun iSeeAListOfDocuments() {
         myRecordDocumentsPage
             .assertDocumentItemsVisible(
                 SerenityHelpers.getValueOrNull<List<ExpectedDocument>>(SerenityVariable.EXPECTED_DOCUMENTS)!!)
-    }
-
-    @Then("The download action item is enabled")
-    fun iClickTheDocumentDownloadLink(){
-        Assert.assertTrue(myRecordDocumentInformationPage.downloadActionLink.isCurrentlyEnabled)
     }
 
     @Then("^I see the appropriate error message for a document server error$")

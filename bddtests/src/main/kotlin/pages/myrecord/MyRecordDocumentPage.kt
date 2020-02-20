@@ -7,8 +7,7 @@ class MyRecordDocumentPage : HybridPageObject() {
 
     val document =
             HybridPageElement(
-                    webDesktopLocator = "//div[@id='document']" +
-                                        "//span[text()='This is a test docx document.']",
+                    webDesktopLocator = "//div[@id='document']",
                     androidLocator = null,
                     page = this)
 
