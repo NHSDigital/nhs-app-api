@@ -6,14 +6,14 @@ import pages.text
 
 open class CancellingSuccessPage : AppointmentSharedElementsPage() {
 
-    private val cancellationSuccessMessage = "Your appointment has been cancelled"
+    private val cancellationSuccessMessage = "Your GP appointment has been cancelled"
 
     private val successMessage = HybridPageElement(
             webDesktopLocator ="//h1[contains(text(),\"$cancellationSuccessMessage\")]",
             page = this
     )
 
-    override val titleText: String = "Your appointment has been cancelled"
+    override val titleText: String = "Your GP appointment has been cancelled"
 
     fun checkCancelSuccessMessage() {
         Assert.assertEquals(cancellationSuccessMessage, successMessage.text)

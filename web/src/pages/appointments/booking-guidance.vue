@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { APPOINTMENT_BOOKING, APPOINTMENTS, INDEX, SYMPTOMS } from '@/lib/routes';
+import { APPOINTMENT_BOOKING, GP_APPOINTMENTS, INDEX, SYMPTOMS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
@@ -104,7 +104,7 @@ export default {
       redirectTo(this, SYMPTOMS.path);
     },
     onBackButtonClicked() {
-      redirectTo(this, APPOINTMENTS.path);
+      redirectTo(this, GP_APPOINTMENTS.path);
     },
   },
 };

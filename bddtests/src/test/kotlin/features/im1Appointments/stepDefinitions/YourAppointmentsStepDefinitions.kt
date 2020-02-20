@@ -17,6 +17,7 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.ErrorDialogPage
+import pages.AppointmentHubPage
 import pages.appointments.BookingSuccessPage
 import pages.appointments.CancellingSuccessPage
 import pages.assertSingleElementPresent
@@ -43,6 +44,8 @@ class YourAppointmentsStepDefinitions {
     lateinit var cancelSuccessPage: CancellingSuccessPage
     @Steps
     lateinit var yourAppointmentsTelephoneSteps: YourAppointmentsTelephoneSteps
+    @Steps
+    lateinit var appointmentHubPage: AppointmentHubPage
 
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
@@ -126,6 +129,11 @@ class YourAppointmentsStepDefinitions {
         yourAppointmentsUISteps.checkBackToAppointmentsLink()
     }
 
+    @Then("^the Appointment Hub page is displayed$")
+    fun appointmentHubPage() {
+        appointmentHubPage.assertLinksPresent()
+    }
+
     @Then("^the booked appointment before cutoff time is correctly displayed with ability to cancel$")
     fun bookedAppointmentIsCorrectlyDisplayedWithCancel() {
         yourAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
@@ -162,7 +170,7 @@ class YourAppointmentsStepDefinitions {
                 yourAppointmentsUISteps.yourAppointmentsPage.bookButton.isCurrentlyEnabled)
     }
 
-    @Then("^the page title is \"Your appointments\"$")
+    @Then("^the page title is \"Your GP appointments\"$")
     fun thePageTitleIsYourAppointments() {
         yourAppointmentsUISteps.checkHeaderTextIsCorrect()
     }

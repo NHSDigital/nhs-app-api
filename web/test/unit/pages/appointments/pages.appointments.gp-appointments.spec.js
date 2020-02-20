@@ -1,8 +1,8 @@
 import each from 'jest-each';
-import Appointments from '@/pages/appointments';
+import GPAppointments from '@/pages/appointments/gp-appointments';
 import { createStore, mount } from '../../helpers';
 
-const createAppointmentsPage = ({ $store }) => mount(Appointments, {
+const createAppointmentsPage = ({ $store }) => mount(GPAppointments, {
   $store,
   methods: {
     reload: jest.fn(),

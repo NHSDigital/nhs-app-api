@@ -10,6 +10,6 @@ class AppointmentCancellationSuccessPage : HybridPageObject() {
     private lateinit var headerNative: HeaderNative
 
     fun isLoaded(patientName: String) {
-        headerNative.waitForPageHeaderText(patientName + "\'s appointment has been cancelled")
+        headerNative.waitForPageHeaderText(patientName + "\'s GP appointment has been cancelled")
     }
 }

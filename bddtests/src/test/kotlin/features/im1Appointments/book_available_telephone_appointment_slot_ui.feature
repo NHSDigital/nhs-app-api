@@ -20,7 +20,11 @@ Feature: Book Telephone Appointments Frontend
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
     And I select the back to home link on the appointments page
-    And I can see the booked telephone appointment and it has a cancel link
+    # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
+    # Will need removing/altering when either a fix is complete or story to add appointment details to the
+    # success page is done.
+    Then the Appointment Hub page is displayed
+    # And I can see the booked telephone appointment and it has a cancel link
     Examples:
       | GP System |
       | EMIS      |
@@ -216,7 +220,11 @@ Feature: Book Telephone Appointments Frontend
     When I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
     And I select the back to home link on the appointments page
-    And I can see the booked telephone appointment and it has a cancel link
+    # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
+    # Will need removing/altering when either a fix is complete or story to add appointment details to the
+    # success page is done.
+    Then the Appointment Hub page is displayed
+    # And I can see the booked telephone appointment and it has a cancel link
     Examples:
       | GP System |
       | EMIS      |
@@ -249,7 +257,11 @@ Feature: Book Telephone Appointments Frontend
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
     And I select the back to home link on the appointments page
-    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+    # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
+    # Will need removing/altering when either a fix is complete or story to add appointment details to the
+    # success page is done.
+    Then the Appointment Hub page is displayed
+    # And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
   Scenario Outline: A <GP System> user receives an error if a telephone number is manually entered, but no reason entered, but a reason is required
     Given I wish to book a <GP System> telephone appointment
@@ -281,4 +293,8 @@ Feature: Book Telephone Appointments Frontend
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
     And I select the back to home link on the appointments page
-    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+    # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
+    # Will need removing/altering when either a fix is complete or story to add appointment details to the
+    # success page is done.
+    Then the Appointment Hub page is displayed
+    # And the booked appointment before cutoff time is correctly displayed with ability to cancel

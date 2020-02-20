@@ -34,6 +34,8 @@ Feature: Use the navigation header bar
     And there are EMIS appointments available to book with a reason
     And a booked appointment can be cancelled
     When I follow the Appointments link from the home page
+    Then the Appointments Hub page is displayed
+    And I click the GP Appointments link
     And I select "Book an appointment" button
     And I select "Book an appointment" button
     And I have selected an appointment slot to book
@@ -44,6 +46,8 @@ Feature: Use the navigation header bar
     Then I am on the Appointments Guidance page
     When I click the 'Back' breadcrumb
     Then the Your Appointments page is displayed
+    When I click the 'Back' breadcrumb
+    Then the Appointments Hub page is displayed
     And the breadcrumb bar is not visible
 
   Scenario: A user can navigate through organ donation with the dynamic back button

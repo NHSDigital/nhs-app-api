@@ -243,7 +243,7 @@ import NoJsForm from '@/components/no-js/NoJsForm';
 import channel from '@/lib/channel';
 import necessity from '@/lib/necessity';
 import {
-  APPOINTMENTS,
+  GP_APPOINTMENTS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_CONFIRMATIONS,
   APPOINTMENT_BOOKING_SUCCESS,
@@ -276,7 +276,7 @@ export default {
   data() {
     return {
       appointmentBookingPath: APPOINTMENT_BOOKING.path,
-      appointmentsPath: APPOINTMENTS.path,
+      appointmentsPath: GP_APPOINTMENTS.path,
       confirmBookingPath: APPOINTMENT_CONFIRMATIONS.path,
       contactUsUrl: this.$env.CONTACT_US_URL,
       isJavascriptOn: false,
@@ -378,7 +378,7 @@ export default {
 
       if (!store.state.availableAppointments.error) {
         uri = createUri({
-          path: APPOINTMENTS.path,
+          path: this.appointmentsPath,
           noJs: {
             flashMessage: {
               show: true,
@@ -392,7 +392,7 @@ export default {
   },
   mounted() {
     if (!this.slot) {
-      redirectTo(this, APPOINTMENTS.path);
+      redirectTo(this, this.appointmentsPath);
     }
   },
   created() {

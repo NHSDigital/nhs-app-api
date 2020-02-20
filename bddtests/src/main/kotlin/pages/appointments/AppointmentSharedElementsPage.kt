@@ -18,8 +18,8 @@ import java.util.*
 abstract class AppointmentSharedElementsPage : HybridPageObject() {
     val problemTitle = "Sorry, there is a problem - Appointments"
     val problemHeader = "Sorry, there is a problem"
-    val problemLoadingTitle = "Sorry, there is a problem with loading appointments"
-    val unavailableTitle = "Appointment booking unavailable"
+    val problemLoadingTitle = "Sorry, there is a problem with loading GP appointments"
+    val unavailableTitle = "GP appointment booking unavailable"
     val goBackAndTryAgainProblem = "Go back and try again. If the problem continues and you need to book or cancel " +
             "an appointment now, contact your GP surgery directly. For urgent medical advice, visit 111.nhs.uk " +
             "or call 111."

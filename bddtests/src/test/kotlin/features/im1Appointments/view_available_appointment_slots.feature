@@ -194,7 +194,7 @@ Feature: View Available Appointment Slots Frontend
       | MICROTEST |
 
   #403
-  Scenario:  TPP user sees appropriate error message when not allowed to retrieve appointment slots
+  Scenario: TPP user sees appropriate error message when not allowed to retrieve appointment slots
     Given TPP user is not allowed to retrieve appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly

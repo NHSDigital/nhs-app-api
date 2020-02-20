@@ -8,7 +8,7 @@ const adminHelpDisabledRedirect = {
 
 const gpAdviceDisabledRedirect = {
   journey_disabled: 'cdssAdvice',
-  url: '/appointments',
+  url: '/appointments/gp-appointments',
 };
 
 const gpAtHandAppointmentRedirect = {
@@ -43,7 +43,7 @@ const gpAtHandPrescriptionsRedirect = {
 
 const im1AppointmentRedirect = {
   journey: 'im1Appointments',
-  url: '/appointments',
+  url: '/appointments/gp-appointments',
 };
 
 const im1MyRecordRedirect = {
@@ -160,13 +160,26 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+  },
+  GP_APPOINTMENTS: {
+    name: 'appointments-gp-appointments',
+    path: '/appointments/gp-appointments',
+    crumb: {
+      nativeDisabled: false,
+      i18nKey: 'gpAppointments',
+      get parentRoute() {
+        return this.allRoutes.APPOINTMENTS;
+      },
+    },
     sjrRedirectRules: [
       linkedAccountAppointmentRedirect,
       gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
     ],
     proxyShutterPath: '/linked-profiles/shutter/appointments',
+    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
+
   APPOINTMENT_ADMIN_HELP: {
     name: 'appointments-admin-help',
     path: '/appointments/admin-help',
@@ -203,7 +216,7 @@ const routes = {
     crumb: {
       i18nKey: 'appointmentsBooking',
       get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
+        return this.allRoutes.GP_APPOINTMENTS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
@@ -212,10 +225,9 @@ const routes = {
     name: 'appointments-booking-guidance',
     path: '/appointments/booking-guidance',
     crumb: {
-      enabled: true,
       i18nKey: 'appointmentsGuidanceBooking',
       get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
+        return this.allRoutes.GP_APPOINTMENTS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
@@ -241,7 +253,7 @@ const routes = {
     crumb: {
       i18nKey: 'appointmentsCancelling',
       get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
+        return this.allRoutes.GP_APPOINTMENTS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
@@ -253,13 +265,13 @@ const routes = {
       nativeDisabled: true,
       i18nKey: 'appointmentsConfirmation',
       get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
+        return this.allRoutes.GP_APPOINTMENTS;
       },
     },
     redirectRules: [{
       condition: 'myAppointments/isCancellingAppointmentInProgress',
       value: false,
-      url: '/appointments',
+      url: '/appointments/gp-appointments',
     }],
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
@@ -269,7 +281,7 @@ const routes = {
     crumb: {
       i18nKey: 'appointmentsConfirmation',
       get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
+        return this.allRoutes.GP_APPOINTMENTS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
@@ -281,13 +293,13 @@ const routes = {
       nativeDisabled: true,
       i18nKey: 'appointmentsConfirmation',
       get parentRoute() {
-        return this.allRoutes.APPOINTMENTS;
+        return this.allRoutes.GP_APPOINTMENTS;
       },
     },
     redirectRules: [{
       condition: 'availableAppointments/isBookingAppointmentInProgress',
       value: false,
-      url: '/appointments',
+      url: '/appointments/gp-appointments',
     }],
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
@@ -295,10 +307,9 @@ const routes = {
     name: 'appointments-gp-at-hand',
     path: '/appointments/gp-at-hand',
     crumb: {
-      enabled: true,
       i18nKey: 'appointmentsGpAtHand',
       get parentRoute() {
-        return this.allRoutes.INDEX;
+        return this.allRoutes.APPOINTMENTS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
@@ -311,10 +322,9 @@ const routes = {
     name: 'appointments-informatica',
     path: '/appointments/informatica',
     crumb: {
-      enabled: true,
       i18nKey: 'appointmentsInformatica',
       get parentRoute() {
-        return this.allRoutes.INDEX;
+        return this.allRoutes.APPOINTMENTS;
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
@@ -546,7 +556,6 @@ const routes = {
     name: 'my-record-gp-at-hand',
     path: '/my-record/gp-at-hand',
     crumb: {
-      enabled: true,
       i18nKey: 'myRecordGpAtHand',
       get parentRoute() {
         return this.allRoutes.INDEX;
@@ -561,7 +570,6 @@ const routes = {
     name: 'gp-medical-record-gp-at-hand',
     path: '/gp-medical-record/gp-at-hand',
     crumb: {
-      enabled: true,
       i18nKey: 'myRecordGpAtHand',
       get parentRoute() {
         return this.allRoutes.INDEX;
@@ -1139,7 +1147,6 @@ const routes = {
     name: 'prescriptions-gp-at-hand',
     path: '/prescriptions/gp-at-hand',
     crumb: {
-      enabled: true,
       i18nKey: 'prescriptionsGpAtHand',
       get parentRoute() {
         return this.allRoutes.INDEX;
@@ -1369,6 +1376,14 @@ const routes = {
  * to be ignored and the default path is to always be used, be sure to set ignoreStore: true
  */
 export const backLinkOverrides = {
+  [routes.APPOINTMENT_CANCELLING_SUCCESS.name]: {
+    ignoreStore: true,
+    defaultPath: routes.APPOINTMENTS.path,
+  },
+  [routes.APPOINTMENT_BOOKING_SUCCESS.name]: {
+    ignoreStore: true,
+    defaultPath: routes.APPOINTMENTS.path,
+  },
   [routes.ORGAN_DONATION.name]: {
     defaultPath: routes.MORE.path,
   },
@@ -1468,6 +1483,7 @@ export const {
   DISCONTINUED_MEDICINES,
   ENCOUNTERS,
   EXAMINATIONS_V2,
+  GP_APPOINTMENTS,
   INDEX,
   INTERSTITIAL_REDIRECTOR,
   LEGACY_MYRECORDWARNING,

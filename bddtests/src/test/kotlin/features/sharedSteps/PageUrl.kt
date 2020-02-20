@@ -8,7 +8,8 @@ open class PageUrl {
             hashMapOf(
                     "appointment booking" to "/appointments/booking",
                     "appointment guidance" to "/appointments/booking-guidance",
-                    "your appointments" to "/appointments",
+                    "appointment hub" to "/appointments",
+                    "your gp appointments" to "/appointments/gp-appointments",
                     "informatica appointments" to "/appointments/informatica",
                     "gp at hand appointments" to "/appointments/gp-at-hand",
                     "data sharing" to "/data-sharing",

@@ -2,7 +2,7 @@ import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidan
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import BookingGuidancePage from '@/pages/appointments/booking-guidance';
 import { createStore, mount, createRouter } from '../../helpers';
-import { APPOINTMENT_BOOKING, APPOINTMENTS, SYMPTOMS } from '@/lib/routes';
+import { APPOINTMENT_BOOKING, GP_APPOINTMENTS, SYMPTOMS } from '@/lib/routes';
 
 describe('booking guidance', () => {
   let wrapper;
@@ -58,7 +58,7 @@ describe('booking guidance', () => {
     wrapper = mountAs({ onlineConsultationsEnabled: true });
     wrapper.find(DesktopGenericBackLink).find('a').trigger('click');
 
-    expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
+    expect($router.push).toHaveBeenCalledWith(GP_APPOINTMENTS.path);
   });
 
   it('will go to the appointments booking page when book appointment button clicked', () => {

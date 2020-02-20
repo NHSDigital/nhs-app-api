@@ -8,7 +8,7 @@ import pages.assertElementNotPresent
 import pages.text
 import pages.withoutRetrying
 
-@DefaultUrl("http://web.local.bitraft.io:3000/appointments")
+@DefaultUrl("http://web.local.bitraft.io:3000/appointments/gp-appointments")
 class YourAppointmentsPage : AppointmentSharedElementsPage() {
 
     val upcomingAppointmentsHeading = HybridPageElement(
@@ -58,7 +58,7 @@ class YourAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    override val titleText: String = "Your appointments"
+    override val titleText: String = "Your GP appointments"
 
     private val upcomingAppointmentParentXpath = "//div[@data-purpose='upcoming-appointments']"
     private val historicalAppointmentParentXpath = "//div[@data-purpose='past-appointments']"

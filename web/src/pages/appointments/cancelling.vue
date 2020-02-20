@@ -156,7 +156,7 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import { redirectTo } from '@/lib/utils';
-import { APPOINTMENTS, APPOINTMENT_CANCEL_NOJS, APPOINTMENT_CANCELLING_SUCCESS } from '@/lib/routes';
+import { GP_APPOINTMENTS, APPOINTMENT_CANCEL_NOJS, APPOINTMENT_CANCELLING_SUCCESS } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -183,7 +183,7 @@ export default {
     return {
       appointment: null,
       appointmentCancelPath: APPOINTMENT_CANCEL_NOJS.path,
-      appointmentsPath: APPOINTMENTS.path,
+      appointmentsPath: GP_APPOINTMENTS.path,
       cancellationReasons: [],
       contactUsUrl: this.$env.CONTACT_US_URL,
       isReasonRequired: true,

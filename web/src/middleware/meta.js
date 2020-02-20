@@ -24,6 +24,7 @@ import {
   ENCOUNTERS,
   DIAGNOSIS_V2,
   EXAMINATIONS_V2,
+  GP_APPOINTMENTS,
   DATA_SHARING_PREFERENCES,
   INDEX,
   INTERSTITIAL_REDIRECTOR,
@@ -206,6 +207,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.appointments';
       route.meta.pageTitleKey = 'pageTitles.appointments';
+      break;
+    case GP_APPOINTMENTS.name:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.headerKey = 'pageHeaders.gpAppointments';
+      route.meta.pageTitleKey = 'pageTitles.gpAppointments';
       break;
     case APPOINTMENT_BOOKING.name:
       store.dispatch('navigation/setNewMenuItem', 1);

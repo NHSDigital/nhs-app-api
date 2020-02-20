@@ -130,7 +130,7 @@ import Filters from '@/components/appointments/booking/Filters';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import SlotList from '@/components/appointments/booking/SlotList';
-import { APPOINTMENT_BOOKING, APPOINTMENTS } from '@/lib/routes';
+import { APPOINTMENT_BOOKING, GP_APPOINTMENTS } from '@/lib/routes';
 import { get, isEmpty } from 'lodash/fp';
 import { noJsParameterName } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
@@ -174,7 +174,7 @@ export default {
   mixins: [ErrorPageMixin],
   data() {
     return {
-      appointmentsPath: APPOINTMENTS.path,
+      appointmentsPath: GP_APPOINTMENTS.path,
       availableAppointmentsScreenReaderMessage: [],
       bookingPath: APPOINTMENT_BOOKING.path,
       contactUsUrl: this.$env.CONTACT_US_URL,
@@ -255,7 +255,7 @@ export default {
       return `error-dialog-${this.error.status}`;
     },
     goBack() {
-      redirectTo(this, APPOINTMENTS.path);
+      redirectTo(this, this.appointmentsPath);
     },
     filterSlots(val) {
       this.$store.dispatch('availableAppointments/setSelectedFilters', val);

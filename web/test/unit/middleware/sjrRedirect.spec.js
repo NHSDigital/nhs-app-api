@@ -1,14 +1,14 @@
 import sjrRedirect from '@/middleware/sjrRedirect';
 import {
   ACCOUNT_NOTIFICATIONS,
-  APPOINTMENTS,
   APPOINTMENT_GP_AT_HAND,
   APPOINTMENT_INFORMATICA,
+  GP_APPOINTMENTS,
+  GP_MEDICAL_RECORD,
+  GP_MEDICAL_RECORD_GP_AT_HAND,
   INDEX,
   MYRECORD,
   MYRECORD_GP_AT_HAND,
-  GP_MEDICAL_RECORD,
-  GP_MEDICAL_RECORD_GP_AT_HAND,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
 } from '@/lib/routes';
@@ -38,7 +38,7 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will redirect to appointments', () => {
-        expect(redirect).toBeCalledWith('302', APPOINTMENTS.path);
+        expect(redirect).toBeCalledWith('302', GP_APPOINTMENTS.path);
       });
     });
 
@@ -69,7 +69,7 @@ describe('middleware/sjrRedirect', () => {
     describe('sjr im1 enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/im1AppointmentsEnabled'] = true;
-        callSjrRedirect(APPOINTMENTS);
+        callSjrRedirect(GP_APPOINTMENTS);
       });
 
       it('will not redirect', () => {
@@ -80,7 +80,7 @@ describe('middleware/sjrRedirect', () => {
     describe('sjr informatica enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/informaticaAppointmentsEnabled'] = true;
-        callSjrRedirect(APPOINTMENTS);
+        callSjrRedirect(GP_APPOINTMENTS);
       });
 
       it('will redirect to appointments informatica', () => {
@@ -91,7 +91,7 @@ describe('middleware/sjrRedirect', () => {
     describe('sjr gp at hand enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/gpAtHandAppointmentsEnabled'] = true;
-        callSjrRedirect(APPOINTMENTS);
+        callSjrRedirect(GP_APPOINTMENTS);
       });
 
       it('will redirect to appointments gp at hand', () => {
@@ -108,7 +108,7 @@ describe('middleware/sjrRedirect', () => {
       });
 
       it('will redirect to appointments', () => {
-        expect(redirect).toBeCalledWith('302', APPOINTMENTS.path);
+        expect(redirect).toBeCalledWith('302', GP_APPOINTMENTS.path);
       });
     });
 

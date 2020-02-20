@@ -7,10 +7,13 @@ import features.im1Appointments.steps.AvailableAppointmentsSteps
 import features.im1Appointments.steps.YourAppointmentsUISteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
+import pages.AppointmentHubPage
 import pages.navigation.NavBarNative
 
 class AppointmentNavigationStepDefinitions {
 
+    @Steps
+    lateinit var appointmentsHubPage: AppointmentHubPage
     @Steps
     lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
     @Steps
@@ -20,9 +23,16 @@ class AppointmentNavigationStepDefinitions {
     @Steps
     lateinit var navigation: NavigationSteps
 
+    @Given("^I am on the Appointments hub page$")
+    fun iAmOnTheAppointmentsHubPage() {
+        navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
+        appointmentsHubPage.assertLinksPresent()
+    }
+
     @Given("^I am on the Your Appointments page$")
     fun iAmOnMyAppointmentsPage() {
-        navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
+        iAmOnTheAppointmentsHubPage()
+        appointmentsHubPage.btnGPAppointmentsLinksWithDescriptionsContent.click()
         myAppointmentsUI.yourAppointmentsPage.
                 locatorMethods.assertNativeElementsLoaded(myAppointmentsUI.yourAppointmentsPage.bookButton)
     }

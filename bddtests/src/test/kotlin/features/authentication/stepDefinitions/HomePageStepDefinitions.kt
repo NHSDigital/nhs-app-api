@@ -18,6 +18,7 @@ import org.junit.Assert
 import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
+import pages.AppointmentHubPage
 import pages.prescription.PrescriptionsPage
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
@@ -28,6 +29,8 @@ private const val SURVEY_URL = "https://in.hotjar.com/s?siteId=859152&surveyId=9
 
 class HomePageStepDefinitions {
 
+    @Steps
+    private lateinit var appointmentHubPage: AppointmentHubPage
     @Steps
     private lateinit var browser: BrowserSteps
     @Steps
@@ -172,8 +175,8 @@ class HomePageStepDefinitions {
 
     private fun followAppointmentsLink() {
         homeSteps.homePage.bookAndManageAppointmentsLink.click()
-        myAppointmentsUISteps.checkHeaderTextIsCorrect()
-        myAppointmentsUISteps.checkNoUpcomingAppointmentsTextIsDisplaying()
+        appointmentHubPage.assertAppointmentsHubIsDisplayed()
+        appointmentHubPage.assertLinksPresent()
         navBar.isHighlighted(NavBarNative.NavBarType.APPOINTMENTS)
     }
 

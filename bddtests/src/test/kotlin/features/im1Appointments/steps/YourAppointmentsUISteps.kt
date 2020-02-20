@@ -23,7 +23,7 @@ open class YourAppointmentsUISteps {
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
 
-    private val pageHeader = "Your appointments"
+    private val pageHeader = "Your GP appointments"
 
     private val backLink = "Go to your appointments"
 

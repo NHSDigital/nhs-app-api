@@ -36,7 +36,7 @@ class CancelAppointmentPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    override val titleText: String = "Cancel appointment"
+    override val titleText: String = "Cancel GP appointment"
 
     fun getCheckDetailsText(): String {
         return checkDetailsText.text

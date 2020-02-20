@@ -27,10 +27,11 @@ import { redirectTo } from '@/lib/utils';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 export default {
+  name: 'CancellingSuccess',
   layout: 'nhsuk-layout',
   components: {
-    SwitchProfileButton,
     DesktopGenericBackLink,
+    SwitchProfileButton,
   },
   data() {
     return {
@@ -41,7 +42,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
-    this.$store.dispatch('availableAppointments/completeCancellingJourney');
+    this.$store.dispatch('myAppointments/completeCancellingJourney');
   },
   methods: {
     backButtonClicked() {

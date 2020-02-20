@@ -2,7 +2,7 @@ import * as dependency from '@/lib/utils';
 import Channel from '@/lib/channel';
 import Confirmation from '@/pages/appointments/confirmation';
 import Necessity from '@/lib/necessity';
-import { APPOINTMENTS } from '@/lib/routes';
+import { GP_APPOINTMENTS } from '@/lib/routes';
 import { createStore, mount } from '../../helpers';
 
 describe('appointments confirmation page', () => {
@@ -45,7 +45,7 @@ describe('appointments confirmation page', () => {
       });
 
       it('will redirect to appointments hub page', () => {
-        expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, APPOINTMENTS.path);
+        expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, GP_APPOINTMENTS.path);
       });
     });
 

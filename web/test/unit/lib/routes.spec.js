@@ -5,7 +5,7 @@ import {
   APPOINTMENT_BOOKING_GUIDANCE,
   LOGIN,
   BEGINLOGIN,
-
+  GP_APPOINTMENTS,
   backLinkOverrides,
   isAnonymous,
   executeHomeNavigationRule,
@@ -75,7 +75,8 @@ describe('routes', () => {
 
   describe('getCrumbTrailForRoute', () => {
     it('should return the corresponding crumb trail with some depth', () => {
-      expect(getCrumbTrailForRoute(APPOINTMENT_BOOKING_GUIDANCE)).toEqual([INDEX, APPOINTMENTS]);
+      expect(getCrumbTrailForRoute(APPOINTMENT_BOOKING_GUIDANCE))
+        .toEqual([INDEX, APPOINTMENTS, GP_APPOINTMENTS]);
     });
 
     it('should return the corresponding crumb trail with no depth', () => {

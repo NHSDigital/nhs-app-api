@@ -31,7 +31,11 @@ Feature: Book Appointments Frontend
     And  I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
     And I select the back to home link on the appointments page
-    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+    # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
+    # Will need removing/altering when either a fix is complete or story to add appointment details to the
+    # success page is done.
+    Then the Appointment Hub page is displayed
+    # And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
       | EMIS      |
@@ -65,7 +69,11 @@ Feature: Book Appointments Frontend
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
     And I select the back to home link on the appointments page
-    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+    # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
+    # Will need removing/altering when either a fix is complete or story to add appointment details to the
+    # success page is done.
+    Then the Appointment Hub page is displayed
+    # And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
       | EMIS      |
@@ -87,7 +95,11 @@ Feature: Book Appointments Frontend
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed without reference to being able to cancel
     And I select the back to home link on the appointments page
-    And the booked appointment is correctly displayed without ability to cancel
+    # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
+    # Will need removing/altering when either a fix is complete or story to add appointment details to the
+    # success page is done.
+    Then the Appointment Hub page is displayed
+    # And the booked appointment is correctly displayed without ability to cancel
 
   #400
   Scenario Outline: A <GP System> user cannot enter dangerous text for booking reason
@@ -230,7 +242,11 @@ Feature: Book Appointments Frontend
     When I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
     And I select the back to home link on the appointments page
-    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+    # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
+    # Will need removing/altering when either a fix is complete or story to add appointment details to the
+    # success page is done.
+    Then the Appointment Hub page is displayed
+    # And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
   Scenario: An EMIS user can book an appointment with describing symptoms
     Given there are EMIS appointments available to book where booking reason is set optional with a reason entered
@@ -243,7 +259,11 @@ Feature: Book Appointments Frontend
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
     And I select the back to home link on the appointments page
-    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+    # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
+    # Will need removing/altering when either a fix is complete or story to add appointment details to the
+    # success page is done.
+    Then the Appointment Hub page is displayed
+    # And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
     # Positive submission cases
   Scenario: An EMIS user cannot enter or select a phone number for non phone appointments

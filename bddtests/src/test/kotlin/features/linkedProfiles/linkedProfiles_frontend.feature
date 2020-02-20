@@ -30,6 +30,8 @@ Feature: Login with proxy access
     And the yellow banner contains details for the user I am acting on behalf of
     And I do not see the home page links
     And I click on the Appointments link on the header
+    Then the Appointments Hub page is displayed
+    And I click the GP Appointments link
     Then the appointments shutter page is displayed
     Examples:
       | Appointments Provider |
@@ -53,7 +55,7 @@ Feature: Login with proxy access
     And there are EMIS appointments available to book with a reason
     And I have no booked appointments for EMIS
     And I click on the Appointments link on the header
-    Then the page title is "Your appointments"
+    Then the page title is "Your GP appointments"
     Examples:
       | Appointments Provider |
       | ECONSULT              |
@@ -105,6 +107,8 @@ Feature: Login with proxy access
     When I navigate to Prescriptions
     Then the prescriptions shutter page is displayed
     When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    And I click the GP Appointments link
     Then the appointments shutter page is displayed
     When I navigate to My_Record
     And I click continue
@@ -145,7 +149,9 @@ Feature: Login with proxy access
     And there are EMIS appointments available to book with a reason
     And I have no booked appointments for EMIS
     And I click on the Appointments link on the header
-    Then the page title is "Your appointments"
+    Then the Appointments Hub page is displayed
+    And I click the GP Appointments link
+    Then the page title is "Your GP appointments"
     When I select "Book an appointment" button
     Then I am on the Appointments Guidance page
     When I select the Book an Appointment button on the guidance page
@@ -168,7 +174,9 @@ Feature: Login with proxy access
     Then I see the home page
     And EMIS is available to cancel a previously booked appointment before cutoff time because No longer required
     And I click on the Appointments link on the header
-    Then the page title is "Your appointments"
+    Then the Appointments Hub page is displayed
+    And I click the GP Appointments link
+    Then the page title is "Your GP appointments"
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of No longer required
     When I select "Cancel appointment" button
