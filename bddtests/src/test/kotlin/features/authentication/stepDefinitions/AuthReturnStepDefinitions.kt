@@ -1,22 +1,17 @@
 package features.authentication.stepDefinitions
 
 import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.emis.practices.SettingsResponseModel
-import models.patients.EmisPatients
 import models.Patient
+import models.patients.EmisPatients
 import models.patients.TppPatients
 import net.thucydides.core.annotations.Steps
-import pages.ErrorPage
-import pages.HybridPageObject
-import pages.clickOnActionContainingText
 
 class AuthReturnStepDefinitions {
-    val backToHomeText = "Back to home"
     @Steps
     lateinit var browser: BrowserSteps
     @Steps
@@ -24,8 +19,6 @@ class AuthReturnStepDefinitions {
 
     private lateinit var patient: Patient
 
-    lateinit var pageActions: HybridPageObject
-    lateinit var errorPage: ErrorPage
     private val mockingClient = MockingClient.instance
 
     @Given("^I am logged into Citizen ID but am receiving invalid data$")
@@ -65,17 +58,5 @@ class AuthReturnStepDefinitions {
         }
         browser.goToApp()
         login.using(this.patient)
-    }
-
-    @Then("I click on the navigation button")
-    fun thenICLickOnTheNavigationButton() {
-        val retryButtonText = backToHomeText
-        pageActions.clickOnButtonContainingText(retryButtonText)
-    }
-
-    @Then("I click on the navigation action")
-    fun thenICLickOnTheNavigationAction() {
-        val retryText = backToHomeText
-        pageActions.clickOnActionContainingText(retryText)
     }
 }

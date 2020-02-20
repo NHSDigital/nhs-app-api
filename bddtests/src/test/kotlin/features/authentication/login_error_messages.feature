@@ -8,8 +8,8 @@ Feature: Login error messages
   Scenario: CitizenID provides invalid data after successful login
     Given I am logged into Citizen ID but am receiving invalid data
     Then In the error message I see the service reference number prefix with "3a"
-    And Contact us link is appended with the error code as a query parameter
-    When I click on the navigation action
+    And I see the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3a'
+    When I click the error 'Back to home' link
     Then I see the login page
 
 #403
@@ -17,23 +17,24 @@ Feature: Login error messages
   Scenario: CitizenID login is successful but TPP GP System authentication fails
     Given I am logged into Citizen ID but GP System authentication fails
     Then In the error message I see the service reference number prefix with "3c"
-    And Contact us link is appended with the error code as a query parameter
-    When I click on the navigation action
+    And I see the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3c'
+    When I click the error 'Back to home' link
     Then I see the login page
 
 #403
   Scenario: Cannot log in as an EMIS user with no userPatientLinkToken
     Given I attempt to log in as an EMIS user with no userPatientLinkToken
     Then In the error message I see the service reference number prefix with "3c"
-    And Contact us link is appended with the error code as a query parameter
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3c'
+    Then a new tab has been opened by the link
 
 #502
   @nativesmoketest
   Scenario: CitizenID login is successful but EMIS session cannot be established
     Given I am logged into Citizen ID but EMIS session cannot be established
     Then In the error message I see the service reference number prefix with "3e"
-    And Contact us link is appended with the error code as a query parameter
-    When I click on the navigation action
+    And I see the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3e'
+    When I click the error 'Back to home' link
     Then I see the login page
 
   #465
@@ -50,17 +51,16 @@ Feature: Login error messages
       | EMIS      |
 
     #465
-  Scenario Outline: Cannot log in as a <GP System> user with an age under 13
-    Given I attempt to log in as a <GP System> user with an age under 13
+  Scenario: Cannot log in as a TPP user with an age under 13
+    Given I attempt to log in as a TPP user with an age under 13
     Then I see an error message informing me I cannot log in as I am under the minimum age
-    Examples:
-      | GP System |
-      | TPP       |
 
     #464
   Scenario Outline: Cannot log in as a <GP System> user with no NHS Number
     Given I attempt to log in as a <GP System> user without an NHS Number
     Then In the error message I see the service reference number prefix with "3f"
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3f'
+    Then a new tab has been opened by the link
     Examples:
       | GP System |
       | TPP       |
@@ -72,16 +72,15 @@ Feature: Login error messages
 
   #464
   @nativesmoketest
-  Scenario Outline: Cannot log in as a <GP System> user with invalid ODS Code
-    Given I attempt to log in as a <GP System> user with invalid ODS Code
+  Scenario: Cannot log in as a EMIS user with invalid ODS Code
+    Given I attempt to log in as a EMIS user with invalid ODS Code
     Then In the error message I see the service reference number prefix with "3f"
-    And Contact us link is appended with the error code as a query parameter
-    Examples:
-      | GP System |
-      | EMIS      |
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=3f'
+    Then a new tab has been opened by the link
 
 #504 timeout
-  Scenario: Cannot log in as a <GP System> when the request timeout I see error code with "zn" prefix
+  Scenario: Cannot log in as a EMIS when the request timeout I see error code with "zn" prefix
     Given I attempt to log in as an EMIS and the CID request timeout
     Then In the error message I see the service reference number prefix with "zn"
-    And Contact us link is appended with the error code as a query parameter
+    When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us?errorcode=zn'
+    Then a new tab has been opened by the link

@@ -47,8 +47,7 @@
                                 :action="contactUsUrl"
                                 :target="target"
                                 :query-param="contactUsParam"/>
-                    <error-link from="auth_return.error.backButtonText"
-                                :action="loginUrl"/>
+                    <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
                   </error-container>
                   <error-container v-else-if="errorStatusCode===403">
                     <error-title title="auth_return.error.title.loginFailed"/>
@@ -61,8 +60,7 @@
                                 :action="contactUsUrl"
                                 :target="target"
                                 :query-param="contactUsParam"/>
-                    <error-link from="auth_return.error.backButtonText"
-                                :action="loginUrl"/>
+                    <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
                   </error-container>
                   <error-container v-else-if="errorStatusCode===500">
                     <error-title title="auth_return.error.title.loginFailed"/>
@@ -73,7 +71,8 @@
                     <error-paragraph from="auth_return.error.500.line5" />
                     <error-link from="generic.contactUsButton.text"
                                 :action="contactUsUrl"
-                                :target="target"/>
+                                :target="target"
+                                :query-param="contactUsParam"/>
                     <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
                   </error-container>
                   <error-container v-else-if="errorStatusCode===502">
@@ -114,7 +113,7 @@
                     <error-link from="generic.contactUsButton.text"
                                 :action="contactUsUrl"
                                 :target="target"
-                                :class="$style['api-error-button']"/>
+                                :query-param="contactUsParam"/>
                     <error-link from="auth_return.error.backButtonText" :action="loginUrl"/>
                   </error-container>
                 </div>
@@ -191,7 +190,7 @@ export default {
     contactUsParam() {
       return {
         param: 'errorcode',
-        value: this.serviceDeskReference.text,
+        value: this.serviceDeskReference,
       };
     },
     errorStatusCode() {

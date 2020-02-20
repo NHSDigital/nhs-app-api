@@ -44,17 +44,15 @@ class ErrorDialogPage : HybridPageObject() {
         return this
     }
 
-    fun clickOnLink(linkText: String, url: String? = null) {
+    fun assertLink(linkText: String, url: String? = null) : HybridPageElement {
         var locator = "$errorContainerLocator//a[contains(text(),'$linkText')]"
         var message: String? = null
 
         if (!url.isNullOrBlank()) {
-            locator += "[@href='$url']"
+            locator += "[starts-with(@href, '$url')]"
             message = "Expected the link called $linkText with target of $url to be available"
         }
-        val action = findElementByLocator(locator, message)
-
-        action.assertIsVisible().click()
+        return findElementByLocator(locator, message).assertIsVisible()
     }
 
     private fun findElementByLocator(locator: String, iOSLocator: String? = null,
