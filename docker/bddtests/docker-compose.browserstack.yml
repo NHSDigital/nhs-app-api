@@ -4,8 +4,11 @@ services:
 
   web.local.bitraft.io:
     environment:
-      ConfigurationSettings__DefaultSessionExpiryMinutes: 5
       EXPIRE_AFTER_SECONDS: 300
+
+  pfs.local.bitraft.io:
+    environment:
+      ConfigurationSettings__DefaultSessionExpiryMinutes: 5
 
   browserstack.local:
     image: ${DOCKER_IMAGE_BROWSERSTACK_LOCAL}

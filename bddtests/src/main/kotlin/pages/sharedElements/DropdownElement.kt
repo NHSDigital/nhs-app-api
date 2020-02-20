@@ -11,7 +11,7 @@ import pages.selectedVisibleTextValue
 import pages.assertElementNotPresent
 import pages.text
 
-const val DROPDOWN_WAIT_TIME = 60
+const val DROPDOWN_WAIT_TIME = 20
 
 class DropdownElement(val label: String, val helpfulName: String, pageObject: HybridPageObject) {
 
