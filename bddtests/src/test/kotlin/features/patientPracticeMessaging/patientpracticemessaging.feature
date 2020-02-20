@@ -9,8 +9,7 @@ Feature: Patient to practice messaging
     Given I am a user who can access patient practice messaging
     And I am logged in
     And I have no patient practice messages in my inbox
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I follow the Messages link from the home page
     Then the patient to practice inbox page is displayed
     And I see a message indicating that I have no patient practice messages
 
@@ -18,16 +17,14 @@ Feature: Patient to practice messaging
     Given I am a user who can access patient practice messaging
     And I am logged in
     And there is a forbidden error getting patient practice messages
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I follow the Messages link from the home page
     Then I see the appropriate forbidden error for patient practice messaging
 
   Scenario: A user receives an error message if there is an unknown error when trying to access their patient practice messages
     Given I am a user who can access patient practice messaging
     And I am logged in
     And there is an unknown error getting patient practice messages
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I follow the Messages link from the home page
     Then I see the appropriate error for listing patient practice message(s)
 
   Scenario: A user receives a validation error if they enter invalid data when sending a patient practice message
@@ -59,8 +56,7 @@ Feature: Patient to practice messaging
     Given I am a user who can access patient practice messaging
     And I am logged in
     And I have patient practice messages in my inbox, some of which are unread
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I follow the Messages link from the home page
     Then the patient to practice inbox page is displayed
     When I click the Send a message button and I choose that I do not need urgent advice via patient practice messaging
     Then I see the patient practice messaging recipients page
@@ -76,8 +72,7 @@ Feature: Patient to practice messaging
     Given I am a user who can access patient practice messaging
     And I am logged in
     And I have patient practice messages in my inbox, some of which are unread
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I follow the Messages link from the home page
     Then the patient to practice inbox page is displayed
     And I see a list of patient practice messages
     When I select a patient practice message in my inbox
@@ -93,8 +88,7 @@ Feature: Patient to practice messaging
     Given I am a user who can access patient practice messaging
     And I am logged in
     And I have patient practice messages in my inbox, some of which are unread
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I follow the Messages link from the home page
     Then the patient to practice inbox page is displayed
     And I see a list of patient practice messages
     When I select a patient practice message in my inbox
@@ -109,8 +103,7 @@ Feature: Patient to practice messaging
     Given I am a user who can access patient practice messaging
     And I am logged in
     And I have patient practice messages in my inbox, all of which are read
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I follow the Messages link from the home page
     Then the patient to practice inbox page is displayed
     And I see a list of patient practice messages
     When I select a patient practice message in my inbox
@@ -120,8 +113,7 @@ Feature: Patient to practice messaging
     Given I am a user who can access patient practice messaging
     And I am logged in
     And I have patient practice messages in my inbox, all of which are read
-    When I navigate to the More page
-    And I click the Messages link on the More page
+    When I follow the Messages link from the home page
     Then the patient to practice inbox page is displayed
     And there is an unknown error getting patient practice message details
     When I select a patient practice message in my inbox

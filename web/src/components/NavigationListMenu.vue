@@ -49,6 +49,16 @@
                :aria-label="$t('navigationMenuList.linkedProfiles')"
                :click-func="goToUrl"
                :click-param="linkedProfilesPath"/>
+
+    <menu-item v-if="messagingEnabled"
+               id="btn_messaging"
+               header-tag="h2"
+               data-purpose="text_link"
+               :href="messagingPath"
+               :text="$t('navigationMenuList.messaging')"
+               :click-func="navigate"
+               :aria-label="$t('navigationMenuList.messaging')"/>
+
   </menu-item-list>
 </template>
 
@@ -57,7 +67,10 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { APPOINTMENTS, MYRECORD, PRESCRIPTIONS, SYMPTOMS, LINKED_PROFILES, INDEX } from '@/lib/routes';
+import { APPOINTMENTS, MYRECORD, PRESCRIPTIONS, SYMPTOMS, LINKED_PROFILES, INDEX,
+  PATIENT_PRACTICE_MESSAGING, MESSAGING } from '@/lib/routes';
+import srjIf from '@/lib/sjrIf';
+import { redirectTo, isTruthy } from '@/lib/utils';
 
 export default {
   name: 'NavigationListMenu',
@@ -74,6 +87,9 @@ export default {
   },
   data() {
     return {
+      appMessagingEnabled: srjIf({ $store: this.$store, journey: 'messaging' }),
+      patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
+      appMessagingPath: MESSAGING.path,
       organDonationUrl: this.$store.app.$env.ORGAN_DONATION_URL,
     };
   },
@@ -96,10 +112,35 @@ export default {
     indexPath() {
       return INDEX.path;
     },
+    patientPracticeMessagingEnabled() {
+      return isTruthy(this.$store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)
+        && this.$store.state.practiceSettings.im1MessagingEnabled;
+    },
+    // patientpracticemessaging should be shown on desktop & native if enabled
+    // appMessaging should only be shown on native devices if enabled
+    messagingEnabled() {
+      if (this.$store.state.device.isNativeApp) {
+        return this.patientPracticeMessagingEnabled || this.appMessagingEnabled;
+      }
+      return this.patientPracticeMessagingEnabled;
+    },
+    messagingPath() {
+      return this.patientPracticeMessagingEnabled
+        ? this.patientPracticeMessagingPath
+        : this.appMessagingPath;
+    },
   },
   methods: {
     hasLinkedProfiles() {
       return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
+    },
+    navigateToMessaging(event) {
+      this.navigate(event);
+    },
+
+    navigate(event) {
+      redirectTo(this, event.currentTarget.pathname);
+      event.preventDefault();
     },
   },
 };

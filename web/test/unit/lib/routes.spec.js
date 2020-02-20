@@ -48,17 +48,16 @@ describe('routes', () => {
       name                                          | path                              | ignoreStore
       ${'organ-donation'}                           | ${'/more'}                        | ${undefined}
       ${'organ-donation-view-decision'}             | ${'/more'}                        | ${undefined}
-      ${'patient-practice-messaging'}               | ${'/more'}                        | ${true}
       ${'patient-practice-messaging-view-details'}  | ${'/patient-practice-messaging'}  | ${true}
       ${'switch-profile'}                           | ${'/'}                            | ${true}
       `('will go to $path from $name by default', ({ name, path, ignoreStore }) => {
-        const override = backLinkOverrides[name];
-        expect(override.defaultPath).toBe(path);
-        expect(override.ignoreStore).toBe(ignoreStore);
-      });
+      const override = backLinkOverrides[name];
+      expect(override.defaultPath).toBe(path);
+      expect(override.ignoreStore).toBe(ignoreStore);
+    });
 
-      it('will have a default path in each overriding configuration', () => {
-        Object.keys(backLinkOverrides).forEach((key) => {
+    it('will have a default path in each overriding configuration', () => {
+      Object.keys(backLinkOverrides).forEach((key) => {
         expect(backLinkOverrides[key].defaultPath).toBeDefined();
       });
     });

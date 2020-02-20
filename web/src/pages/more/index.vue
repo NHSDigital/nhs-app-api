@@ -9,7 +9,7 @@
                  :href="messagingPath"
                  :text="$t('sc04.messaging.subheader')"
                  :description="$t('sc04.messaging.body')"
-                 :click-func="navigate"
+                 :click-func="navigateToMessaging"
                  :aria-label="$t('sc04.messaging.subheader') |
                    join($t('sc04.messaging.body') ,'. ')"/>
 
@@ -110,9 +110,9 @@ export default {
     navigateToAdminHelp(event) {
       this.navigate(event);
       this.$store.dispatch('navigation/setNewMenuItem', 4);
-      this.$store.dispatch('onlineConsultations/setPreviousRoute', this.morePath);
     },
     navigateToMessaging(event) {
+      this.$store.dispatch('navigation/setBackLinkOverride', this.morePath);
       this.navigate(event);
     },
     navigateToDataSharing(event) {

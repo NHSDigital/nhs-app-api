@@ -33,7 +33,8 @@ open class PageUrl {
                     "gp medical record test results detail" to "/gp-medical-record/test-results-detail",
                     "gp medical record procedures" to "/gp-medical-record/procedures",
                     "patient practice messaging" to "/patient-practice-messaging",
-                    "notifications settings" to "/account/notifications"
+                    "notifications settings" to "/account/notifications",
+                    "home" to "/"
             )
 
     private val mobileOverrides =

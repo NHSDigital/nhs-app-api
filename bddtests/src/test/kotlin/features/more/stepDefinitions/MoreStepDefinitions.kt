@@ -2,6 +2,7 @@ package features.more.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.authentication.steps.HomeSteps
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -25,6 +26,8 @@ class MoreStepDefinitions {
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var organDonationSteps: OrganDonationStepDefinitions
+    @Steps
+    private lateinit var homeSteps: HomeSteps
 
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader

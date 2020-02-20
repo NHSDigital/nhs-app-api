@@ -95,6 +95,8 @@ open class HomePage : HybridPageObject() {
 
     val linkedProfilesLink = link("Linked profiles")
 
+    val messagesLink = link("View your messages")
+
     val expectedLinks = arrayListOf(checkSymptomsLink,
             bookAndManageAppointmentsLink,
             orderRepeatPrescriptionLink,

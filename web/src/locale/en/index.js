@@ -1830,6 +1830,7 @@ export default {
     myRecord: 'View your GP medical record',
     organDonation: 'Manage your organ donation decision',
     linkedProfiles: 'Linked profiles',
+    messaging: 'View your messages',
   },
   organ_donation: {
     errors: {

@@ -1375,10 +1375,6 @@ export const backLinkOverrides = {
   [routes.ORGAN_DONATION_VIEW_DECISION.name]: {
     defaultPath: routes.MORE.path,
   },
-  [routes.PATIENT_PRACTICE_MESSAGING.name]: {
-    ignoreStore: true,
-    defaultPath: routes.MORE.path,
-  },
   [routes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.name]: {
     ignoreStore: true,
     defaultPath: routes.PATIENT_PRACTICE_MESSAGING.path,

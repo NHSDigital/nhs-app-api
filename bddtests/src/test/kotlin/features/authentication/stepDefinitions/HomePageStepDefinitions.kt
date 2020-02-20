@@ -15,6 +15,7 @@ import features.sharedSteps.NavigationSteps
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
 import pages.prescription.PrescriptionsPage
@@ -70,6 +71,11 @@ class HomePageStepDefinitions {
         followAppointmentsLink()
     }
 
+    @When("I follow the Messages link from the home page$")
+    fun iFollowTheMesaagesLinkFromHomePage() {
+        followMessagesLink()
+    }
+
     @Then("^I see the home page$")
     fun iSeeTheHomePage() {
         homeSteps.assertHeaderVisible()
@@ -110,6 +116,11 @@ class HomePageStepDefinitions {
     fun iSeeProxyPatientDetails() {
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
         homeSteps.assertProxyPatientDetailsShownFor(selectedProfile)
+    }
+
+    @Then("the link to Messages is not available on the Home page")
+    fun theLinkToMessagesIsNotAvailableOnTheHomePage() {
+        homeSteps.homePage.messagesLink.assertElementNotPresent()
     }
 
     @Then("^I see a welcome message$")
@@ -164,6 +175,10 @@ class HomePageStepDefinitions {
         myAppointmentsUISteps.checkHeaderTextIsCorrect()
         myAppointmentsUISteps.checkNoUpcomingAppointmentsTextIsDisplaying()
         navBar.isHighlighted(NavBarNative.NavBarType.APPOINTMENTS)
+    }
+
+    private fun followMessagesLink() {
+        homeSteps.homePage.messagesLink.click()
     }
 
     private fun followPrescriptionLink() {

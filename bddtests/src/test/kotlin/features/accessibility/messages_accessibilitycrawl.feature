@@ -6,8 +6,7 @@
       Given I am using the native app user agent
       And I am a user wishing to view my messages
       And I am logged in
-      When I navigate to the More page
-      And I click the Messages link on the More page
+      When I follow the Messages link from the home page
       Then the Messages Inbox page is displayed
       Then the MessagesInbox page is saved to disk
       When I click on a sender in the Messages Inbox
@@ -23,8 +22,7 @@
       Given I am using the native app user agent
       And I am a user wishing to view my messages, but I have no messages
       And I am logged in
-      When I navigate to the More page
-      And I click the Messages link on the More page
+      When I follow the Messages link from the home page
       Then the Messages Inbox page is displayed
       And a message is displayed indicating that there are no messages in the Messages Inbox
       Then the Messages_NoMessages page is saved to disk
