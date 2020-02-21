@@ -20,9 +20,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
         private static ILogger<TppDcrEventsDocumentsMapper> _logger;
 
+        private static List<string> _tppDocumentTypeWhiteList;
+        private static string _documentDetailsComments;
+        private static string _tppDocumentDetailsRegexWithoutComments;
+        private static string _tppDocumentDetailsRegexWithComments;
+        private static string _documentDetailsExtensionConstants;
+
         public TppDcrEventsDocumentsMapper(ILogger<TppDcrEventsDocumentsMapper> logger)
         {
             _logger = logger;
+            _tppDocumentTypeWhiteList = Constants.FileConstants.FileTypes.TppWhiteListTypes;
+            _documentDetailsComments = Constants.TppDocumentConstants.DocumentDetailsComments;
+            _tppDocumentDetailsRegexWithoutComments = Constants.Regex.TppDocumentDetailsRegexWithoutComments;
+            _tppDocumentDetailsRegexWithComments = Constants.Regex.TppDocumentDetailsRegexWithComments;
+            _documentDetailsExtensionConstants = Constants.TppDocumentConstants.DocumentDetailsExtension;
         }
 
         public PatientDocuments Map(RequestPatientRecordReply requestPatientRecordReply)
@@ -46,11 +57,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
         private static IEnumerable<DocumentItem> MapEvents(List<Event> events)
         {
+            _logger.LogEnter();
             if (events == null)
             {
                 return new List<DocumentItem>();
             }
 
+            _logger.LogExit();
             return events.ToDictionary(
                     dcrEvent => dcrEvent,
                     dcrEvent => dcrEvent.Items.Where(eventItem =>
@@ -72,32 +85,37 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
         private static DocumentItem MapDocument(RequestPatientRecordItem inputEventItem, MyRecordDate date)
         {
+            _logger.LogEnter();
             var match = GetRegexMatch(inputEventItem.Details);
 
+            var extension = match.Groups[_documentDetailsExtensionConstants].ToString();
+            var comments = match.Groups[_documentDetailsComments].ToString();
+
+            _logger.LogExit();
             return new DocumentItem
             {
                 EffectiveDate = date,
                 DocumentIdentifier = inputEventItem.BinaryDataId,
                 IsAvailable = true,
                 Type = inputEventItem.Type.Equals("Attachment", StringComparison.Ordinal) ? "Document" : "Letter",
-                IsValidFile = true,
-                Comments =
-                    string.IsNullOrEmpty(match.Groups[Constants.TppDocumentConstants.DocumentDetailsComments].ToString())
+                IsValidFile =
+                    _tppDocumentTypeWhiteList.Contains(extension),
+                Comments = string.IsNullOrEmpty(comments)
                     ? null
-                    : match.Groups[Constants.TppDocumentConstants.DocumentDetailsComments].ToString(),
-                Extension = match.Groups[Constants.TppDocumentConstants.DocumentDetailsExtension].ToString()
+                    : comments,
+                Extension = extension
             };
         }
 
         private static Match GetRegexMatch(string inputEventItemDetails)
         {
-            var pattern = new Regex(Constants.Regex.TppDocumentDetailsRegexWithComments);
+            var pattern = new Regex(_tppDocumentDetailsRegexWithComments);
             var match = pattern.Match(inputEventItemDetails);
 
-            if (string.IsNullOrEmpty(match.Groups[Constants.TppDocumentConstants.DocumentDetailsComments].ToString()))
+            if (string.IsNullOrEmpty(match.Groups[_documentDetailsComments].ToString()))
             {
                 _logger.LogInformation("Regex failed to match with comments, using regex without comments");
-                var patternNoComments = new Regex(Constants.Regex.TppDocumentDetailsRegexWithoutComments);
+                var patternNoComments = new Regex(_tppDocumentDetailsRegexWithoutComments);
                 return patternNoComments.Match(inputEventItemDetails);
             }
 

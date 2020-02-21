@@ -181,7 +181,22 @@ namespace NHSOnline.Backend.Support
                     TextType.Txt,
                     TextType.Rtf
                 };
+
+                public static readonly List<string> TppWhiteListTypes = new List<string>
+                {
+                    ImageType.Bmp,
+                    ImageType.Dib,
+                    ImageType.Gif,
+                    ImageType.Jpg,
+                    ImageType.Jpeg,
+                    ImageType.Jpe,
+                    ImageType.Jfif,
+                    ImageType.Png,
+                };
             }
+
+            public const string ImageHtmlFormat =
+                "<img src=\"data:{0};base64,{1}\"/>";
         }
 
         public static class TppConstants

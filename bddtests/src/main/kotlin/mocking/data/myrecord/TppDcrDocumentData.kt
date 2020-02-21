@@ -6,23 +6,29 @@ import mocking.tpp.models.RequestPatientRecordReply
 
 object TppDcrDocumentData {
 
-    fun getMultipleDcrEventsForTppDcrDocuments(): RequestPatientRecordReply {
+    fun getMultipleDcrEventsForTppDcrDocuments(hasInvalidType: Boolean = false): RequestPatientRecordReply {
 
         val tppDcrEvents = mutableListOf<Event>()
 
+        var details = "JPEG: Blood-tests.jpeg - some comments"
+
+        if (hasInvalidType) {
+            details = "TGA: Blood-tests.tga - some comments"
+        }
+
         tppDcrEvents.add(Event("2018-02-18T11:12:55.0Z", "Mr General NhsApp",
                 "Kainos GP Demo Unit (General Practice)", mutableListOf(
-                EventItem("Attachment", "JPEG: Blood-tests.jpeg - some comments",
+                EventItem("Attachment", details,
                         "123456433546"),
-                EventItem("Attachment", "JPEG: Blood-tests.jpeg - some comments",
+                EventItem("Attachment", details,
                         "123456433543")
         )))
 
         tppDcrEvents.add(Event("2018-02-18T12:03:23.0Z", "Mr General NhsApp",
                 "Kainos GP Demo Unit (General Practice)", mutableListOf(
-                EventItem("Attachment", "JPEG: Blood-tests.jpeg",
+                EventItem("Attachment", details,
                         "123456433541"),
-                EventItem("Attachment", "JPEG: Blood-tests.jpeg",
+                EventItem("Attachment", details,
                         "123456433548")
         )))
 

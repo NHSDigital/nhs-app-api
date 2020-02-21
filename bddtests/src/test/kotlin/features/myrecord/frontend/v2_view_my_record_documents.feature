@@ -90,17 +90,21 @@ Feature: Documents Frontend - Medical Record v2
     When I select an available document
     Then I see the document information page without actions
 
-  Scenario: An EMIS user who selects a document with an invalid type cannot download or view it - Medical Record v2
-    Given I am a EMIS user setup to use medical record version 2
+  Scenario Outline: A <GP System> user who selects a document with an invalid type cannot download or view it - Medical Record v2
+    Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has documents with invalid types
     And I am on the medical record page
     When I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page without actions
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
-  Scenario: An EMIS user can view an individual Document from their record - Medical Record v2
-    Given I am a EMIS user setup to use medical record version 2
+  Scenario Outline: An <GP System> user can view an individual Document from their record - Medical Record v2
+    Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has multiple documents
     And I am on the medical record page
     When I click the Documents link on my record - Medical Record v2
@@ -111,6 +115,10 @@ Feature: Documents Frontend - Medical Record v2
     Then I can see my document
     When I click the Back link
     Then I see the document information page with actions
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
   #This test only works on Chrome
   Scenario: An EMIS user can download a document from their record - Medical Record v2

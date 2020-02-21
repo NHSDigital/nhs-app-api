@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -126,10 +127,21 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
 
     @Then("^I see the document information page with actions$")
     fun iSeeTheDocumentInformationPageWithActions() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
         myRecordDocumentInformationPage.assertDocumentActionsVisible(selectedDocument.actions)
-        myRecordDocumentInformationPage.documentInfoContains(selectedDocument.date)
-        myRecordDocumentInformationPage.headerContainsText("Name")
+        when (gpSystem) {
+            Supplier.EMIS -> {
+                myRecordDocumentInformationPage.documentInfoContains(selectedDocument.date)
+                myRecordDocumentInformationPage.headerContainsText("Name")
+            }
+            Supplier.TPP -> {
+                myRecordDocumentInformationPage.headerContainsText(selectedDocument.date)
+            }
+            else -> {
+                throw IllegalArgumentException("${gpSystem.supplierName} not implemented for Medical Record Documents")
+            }
+        }
     }
 
     @Then("^I see the document information page without actions")
@@ -182,7 +194,8 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
     @Then("^I see the document information page with the letter header$")
     fun thenISeeTheDocumentInformationPageWithTheLetterHeader() {
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
-        myRecordDocumentInformationPage.headerContainsText("Letter added on ${selectedDocument.date}")
+        myRecordDocumentInformationPage.headerContainsText(
+                "The letter added on ${selectedDocument.date} is not available through the NHS App")
     }
 
     @Then("^I see the document information page with comments$")

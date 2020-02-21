@@ -1,5 +1,6 @@
 package mocking.tpp
 
+import mocking.tpp.documents.TppRequestBinaryDataBuilder
 import mocking.tpp.patientSelected.TppPatientSelectedBuilder
 import mocking.tpp.requestPatientRecord.TppRequestPatientRecordBuilder
 import mocking.tpp.testResultDetail.TppTestResultDetailBuilder
@@ -20,4 +21,6 @@ class TppMappingBuilderMyRecord{
     fun viewPatientOverviewPost(tppUserSession: TppUserSession) = TppViewPatientOverviewBuilder(tppUserSession)
 
     fun patientSelectedPost(tppUserSession: TppUserSession) = TppPatientSelectedBuilder(tppUserSession)
+
+    fun documentRequest(tppUserSession: TppUserSession) = TppRequestBinaryDataBuilder(tppUserSession)
 }

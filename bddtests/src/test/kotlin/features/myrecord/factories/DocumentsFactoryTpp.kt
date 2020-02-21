@@ -2,6 +2,7 @@ package features.myrecord.factories
 
 import features.myrecord.stepDefinitions.V2MedicalRecordDocumentsStepDefinitions
 import mocking.data.myrecord.TppDcrDocumentData
+import mocking.data.myrecord.TppDocumentData
 import mocking.tpp.models.RequestPatientRecordReply
 import models.ExpectedDocument
 import models.Patient
@@ -34,7 +35,12 @@ class DocumentsFactoryTpp: DocumentsFactory() {
                                       hasInvalidType: Boolean) {
         setExpectedAndAvailableDocs(
                 patient,
-                TppDcrDocumentData.getMultipleDcrEventsForTppDcrDocuments())
+                TppDcrDocumentData.getMultipleDcrEventsForTppDcrDocuments(hasInvalidType))
+
+        mockingClient.forTpp {
+            myRecord.documentRequest(patient.tppUserSession!!)
+                    .respondWithSuccess(TppDocumentData.getDefaultDocumentData())
+        }
     }
 
     override fun enabledWithDocumentsWithNoNameOrTerm(patient: Patient, isLarge: Boolean) {

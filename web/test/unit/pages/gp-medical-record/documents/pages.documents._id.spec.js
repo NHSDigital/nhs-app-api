@@ -347,7 +347,11 @@ describe('document view', () => {
 
     it('will display a different header if the document is too large', async () => {
       // Arrange
-      const document = { name: undefined, type: 'jpg', size: 4000000, date: { value: '2019-08-08T12:03:44+00:00' } };
+      const document = { name: undefined,
+        type: 'jpg',
+        size: 4000000,
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        documentType: null };
       const documentComments = [{
         documentKey: {
           eventGuid: 'test',

@@ -159,6 +159,17 @@ export default {
       } else {
         store.dispatch('header/updateHeaderText', dateString);
       }
+    } else if (documentType !== null) {
+      store.dispatch('header/updateHeaderText',
+        store.app.i18n.t('my_record.documents.documentTypeUnavailableHeader', {
+          date: datePartString,
+          type: documentType.toLowerCase(),
+        }));
+      store.dispatch('pageTitle/updatePageTitle',
+        store.app.i18n.t('my_record.documents.documentTypeUnavailablePageTitle', {
+          date: datePartString,
+          type: documentType.toLowerCase(),
+        }));
     } else {
       store.dispatch('header/updateHeaderText',
         store.app.i18n.t('my_record.documents.documentUnavailableHeader', { date: datePartString }));

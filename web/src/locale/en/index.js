@@ -1115,7 +1115,9 @@ export default {
       docTypePageSubtext: 'added on',
       documentUnavailableSubtext: 'To access it, contact your GP surgery directly.',
       documentUnavailableHeader: 'The document added on {date} is not available through the NHS App',
+      documentTypeUnavailableHeader: 'The {type} added on {date} is not available through the NHS App',
       documentUnavailablePageTitle: 'The document added on {date} is not available',
+      documentTypeUnavailablePageTitle: 'The {type} added on {date} is not available',
       actions: {
         view: 'View',
         download: 'Download',
