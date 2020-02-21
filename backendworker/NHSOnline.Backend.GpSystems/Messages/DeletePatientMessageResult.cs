@@ -1,5 +1,3 @@
-using NHSOnline.Backend.GpSystems.Messages.Models;
-
 namespace NHSOnline.Backend.GpSystems.Messages
 {
     public abstract class DeletePatientMessageResult

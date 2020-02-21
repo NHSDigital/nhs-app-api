@@ -1,6 +1,4 @@
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.IdGenerators;
 using NHSOnline.Backend.Support.Repository;
 
 namespace NHSOnline.Backend.UserInfoApi.Repository

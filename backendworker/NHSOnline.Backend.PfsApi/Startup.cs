@@ -37,7 +37,6 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.PfsApi.SpineSearch;
-using NHSOnline.Backend.Support.Certificate;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using Wkhtmltopdf.NetCore;

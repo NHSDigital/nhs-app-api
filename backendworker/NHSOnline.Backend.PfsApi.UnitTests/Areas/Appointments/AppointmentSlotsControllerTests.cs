@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<AppointmentSlotsResponse>();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Available appointment slots successfully viewed - {_slotsResponse.Slots.Count()} slots"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Available appointment slots successfully viewed - {_slotsResponse.Slots.Count} slots"));
         }
 
         [TestMethod]
@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             // Assert
             var expectedLogMessage =
                 $"Appointment Slot Count: Supplier=Emis OdsCode={_userSession.GpUserSession.OdsCode} " +
-                $"Count={_slotsResponse.Slots.Count()}";
+                $"Count={_slotsResponse.Slots.Count}";
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
 

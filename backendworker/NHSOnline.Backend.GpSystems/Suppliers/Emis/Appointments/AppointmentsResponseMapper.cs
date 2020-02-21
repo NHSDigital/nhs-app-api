@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Appointments;

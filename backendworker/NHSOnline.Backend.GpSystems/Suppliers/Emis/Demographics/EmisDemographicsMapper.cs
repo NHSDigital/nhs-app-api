@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;

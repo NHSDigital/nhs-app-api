@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.PatientRecord
 {

@@ -1,7 +1,4 @@
-using System;
 using System.Net.Http;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Certificate;
 using NHSOnline.Backend.Support.Settings;

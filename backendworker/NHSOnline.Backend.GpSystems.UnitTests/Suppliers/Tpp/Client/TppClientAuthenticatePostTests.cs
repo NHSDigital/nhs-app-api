@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -9,15 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
-using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using RichardSzalay.MockHttp;
-using UnitTestHelper;
 using Application = NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Application;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp

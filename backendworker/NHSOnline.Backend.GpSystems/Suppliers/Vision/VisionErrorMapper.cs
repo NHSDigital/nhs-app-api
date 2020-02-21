@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Azure.Documents.SystemFunctions;
+using System;
 using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision

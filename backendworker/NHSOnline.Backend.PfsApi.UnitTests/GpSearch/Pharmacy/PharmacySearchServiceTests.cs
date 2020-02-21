@@ -8,8 +8,6 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using GeoCoordinatePortable;
-using Hl7.Fhir.Model;
-using Microsoft.AspNetCore.Rewrite.Internal;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;

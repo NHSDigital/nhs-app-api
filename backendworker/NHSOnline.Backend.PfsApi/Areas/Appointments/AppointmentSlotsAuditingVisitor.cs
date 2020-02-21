@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
@@ -22,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
         public async Task Visit(AppointmentSlotsResult.Success result)
         {
-            var slotCount = result.Response?.Slots?.Count() ?? 0;
+            var slotCount = result.Response?.Slots?.Count ?? 0;
 
             try
             {

@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.ResponseParsers;
 
 namespace NHSOnline.Backend.ServiceJourneyRules.Common.Models

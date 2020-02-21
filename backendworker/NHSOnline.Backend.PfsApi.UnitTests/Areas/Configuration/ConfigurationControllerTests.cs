@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -11,7 +10,6 @@ using NHSOnline.Backend.PfsApi.Areas.Configuration;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.Configuration;
 using NHSOnline.Backend.PfsApi.Devices;
-using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration

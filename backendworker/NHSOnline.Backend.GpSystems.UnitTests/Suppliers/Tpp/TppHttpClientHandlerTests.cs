@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Security.Cryptography.X509Certificates;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
