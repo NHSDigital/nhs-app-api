@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 function generate_host_settings() {
   local IMAGE

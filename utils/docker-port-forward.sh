@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 ports=$(docker ps -q | xargs -I{} docker port {} | cut -f2 -d':' | tr '\n' ' ')
 

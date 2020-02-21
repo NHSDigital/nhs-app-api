@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 TEXT_FILE="target/site/Gherkin-Report.txt"
 HTML_REPORT="target/site/Gherkin-Report.html"

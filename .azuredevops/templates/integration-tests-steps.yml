@@ -2,6 +2,7 @@
 steps:
   - template: set-branch-tag-steps.yml
   - template: docker-login-steps.yml
+  - template: integration-tests-gradle-cache.yml
 
   - task: ShellScript@2
     displayName: Run

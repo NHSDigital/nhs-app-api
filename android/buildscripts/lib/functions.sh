@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 # shellcheck source=functions_logging.sh
 source "buildscripts/lib/functions_logging.sh"

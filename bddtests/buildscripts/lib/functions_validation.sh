@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 function validate_azure_notification_hub_key () {
   if [ ! -f ~/.nhsonline/secrets/azure_notification_hub_key_bdd ]; then

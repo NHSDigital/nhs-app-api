@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 function cleanup_docker_containers () {
   local CONTAINER
@@ -52,11 +52,6 @@ function pull_docker_images () {
         *) docker pull "$IMAGE_TO_PULL";;
       esac
     done
-
-    for IMAGE_TO_PULL in "${DOCKER_TEST_RUN_IMAGES[@]}"; do
-      info "Pulling image $IMAGE_TO_PULL"
-      docker pull "$IMAGE_TO_PULL"
-    done
   fi
 }
 
@@ -102,4 +97,23 @@ function fetch_container_logs () {
     info "Fetching logs for $CONTAINER_NAME ($CONTAINER_ID)"
     docker logs "$CONTAINER_NAME" >& "./logs/$CONTAINER_NAME.log"
   done
+}
+
+function rebuild_image_with_user() {
+  baseImage="$1"
+
+  docker pull "${baseImage}"
+
+  if ! [[ $(uname -s) =~ ^Linux.* ]]; then
+    # permission only needs to be fixed on linux hosts
+    return
+  fi
+
+  docker build \
+    -t "${baseImage}" \
+    --build-arg "BASE_IMAGE=${baseImage}" \
+    --build-arg "USER_NAME=${USER}" \
+    --build-arg "USER_ID=$(id -u)" \
+    --build-arg "GROUP_ID=$(id -g)" \
+    "."
 }

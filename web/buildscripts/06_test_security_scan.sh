@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#! /usr/bin/env bash
 set -e
 
 # Change current working directory to be the root of web, regardless of how this script is invoked
@@ -7,15 +6,15 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
 HAWKEYE_IMAGE="${DOCKER_REGISTRY:-nhsapp.azurecr.io}/security-hawkeye:1.02"
 HAWKEYE_CONTAINER_NAME=nhsonline-web-hawkeye
+WORKING_DIR=$(pwd)
+DOCKER_ROOT="/"
 
-if [[ $(uname -s) =~ ^MING.* ]]
-then
+if [[ $(uname -s) =~ ^MING.* ]]; then
   WORKING_DIR=$(pwd -W)
-  HAWKEYE_RESULTS_FILE_PATH=//hawkeye-results.json
-else
-  WORKING_DIR=$(pwd)
-  HAWKEYE_RESULTS_FILE_PATH=/hawkeye-results.json
+  DOCKER_ROOT="//"
 fi
+
+HAWKEYE_RESULTS_FILE_PATH="${DOCKER_ROOT}hawkeye-results.json"
 
 if [ 1 -eq "$(docker ps -a | grep -c $HAWKEYE_CONTAINER_NAME)" ]
 then
@@ -26,7 +25,11 @@ docker pull "$HAWKEYE_IMAGE"
 
 set +e
 
-docker run --name "$HAWKEYE_CONTAINER_NAME" -v "$WORKING_DIR:/target:ro" "$HAWKEYE_IMAGE" scan -f critical -j "$HAWKEYE_RESULTS_FILE_PATH"
+docker run \
+  --name "$HAWKEYE_CONTAINER_NAME" \
+  -v "$WORKING_DIR:${DOCKER_ROOT}target:ro" \
+  "$HAWKEYE_IMAGE" \
+  scan -f critical -j "$HAWKEYE_RESULTS_FILE_PATH"
 
 test_run_result=$?
 

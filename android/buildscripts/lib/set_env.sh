@@ -1,14 +1,28 @@
-#!/bin/bash
+#! /usr/bin/env bash
+
+CURRENT_DIR=$(pwd)
+MVN_CONFIG_PATH="${HOME}/.m2/settings.xml"
+GRADLE_PATH="${HOME}/.gradle"
 
 DOCKER_ARGS=(--rm)
-if [[ $(uname -s) =~ ^MING.* ]]
-then
-  DOCKER_ARGS+=(-v "$(cd ..; pwd -W)://repo")
-  DOCKER_ARGS+=(-v "$USERPROFILE/.m2/settings.xml://root/.m2/settings.xml")
-else
-  DOCKER_ARGS+=(-v "$(cd ..; pwd):/repo")
-  DOCKER_ARGS+=(-v "$HOME/.m2/settings.xml:/root/.m2/settings.xml")
+DOCKER_ROOT="/"
+
+if [[ $(uname -s) =~ ^MING.* ]]; then
+  CURRENT_DIR=$(pwd -W)
+  MVN_CONFIG_PATH="${USERPROFILE}/.m2/settings.xml"
+  GRADLE_PATH="${USERPROFILE}/.gradle"
+  DOCKER_ROOT="//"
 fi
+
+mkdir -p "${GRADLE_PATH}"
+
+DOCKER_ARGS+=(-v "${CURRENT_DIR}:${DOCKER_ROOT}data/repo")
+DOCKER_ARGS+=(-v "${MVN_CONFIG_PATH}:${DOCKER_ROOT}root/.m2/settings.xml")
+DOCKER_ARGS+=(-v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle")
+
+DOCKER_ARGS+=(-w "/data/repo")
+
+DOCKER_ARGS+=(-e "GRADLE_USER_HOME=/data/.gradle")
 
 GRADLE_ARGS=("-Dorg.gradle.jvmargs='-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap'")
 

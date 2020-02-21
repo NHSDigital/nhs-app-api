@@ -1,7 +1,6 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 export DOCKER_COMPOSE_FILES_TRANCHE=()
-export DOCKER_TEST_RUN_IMAGES=()
 export TRANCHE_RUN_ADDITIONAL_ARGS=()
 export TRANCHE_RUN_SETUP=
 export TRANCHE_RUN_GRADLE_TASKS=(compileTestKotlin test aggregate)
@@ -16,29 +15,31 @@ export DOCKER_NETWORK="${DOCKER_PROJECT_NAME}_default"
 export DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 
 # Should replace with an image that has just the required software
-export DOCKER_IMAGE_GRADLE=${DOCKER_IMAGE_GRADLE:-$DOCKER_REGISTRY/chrome:latest}
-export DOCKER_IMAGE_CHROME=${DOCKER_IMAGE_CHROME:-$DOCKER_REGISTRY/chrome:latest}
+export DOCKER_IMAGE_GRADLE=${DOCKER_IMAGE_GRADLE:-$DOCKER_REGISTRY/nhsonline-int-tests-base:jdk8-node12-1.0}
+export DOCKER_IMAGE_CHROME=${DOCKER_IMAGE_CHROME:-$DOCKER_REGISTRY/nhsonline-int-tests-chrome:jdk8-node12-chrome_latest-1.0}
 export DOCKER_IMAGE_BROWSERSTACK_LOCAL=${DOCKER_IMAGE_BROWSERSTACK_LOCAL:-$DOCKER_REGISTRY/nhsonline-browserstack-local:latest}
 
 export DOCKER_IMAGE=${DOCKER_IMAGE_CHROME}
 
 export BROWSER=${BROWSER:-chromeheadless}
 
-if [[ $(uname -s) =~ ^MING.* ]]
-then
+WORKING_DIR=$(pwd)
+GRADLE_PATH="$HOME/.gradle"
+DOCKER_ROOT="/"
+
+if [[ $(uname -s) =~ ^MING.* ]]; then
   WORKING_DIR=$(pwd -W)
-else
-  WORKING_DIR=$(pwd)
+  GRADLE_PATH="${USERPROFILE}/.gradle"
+  DOCKER_ROOT="//"
 fi
+
+# ensure cache paths exist locally
+mkdir -p "${GRADLE_PATH}"
 
 export NATIVE_APP_PATH_ANDROID=${NATIVE_APP_PATH_ANDROID:-../android/app/build/outputs/apk/browserstack/app-browserstack-unsigned.apk}
 
-USER_ID=$(id -u)
-GROUP_ID=$(id -g)
-
 export WORKING_DIR
-export USER_ID
-export GROUP_ID
+export GRADLE_PATH
 
 export WEB_DOCKER_TAG=${WEB_DOCKER_TAG:-$APP_DOCKER_TAG}
 export WEB_DOCKER_REGISTRY=${WEB_DOCKER_REGISTRY:-$APP_DOCKER_REGISTRY}

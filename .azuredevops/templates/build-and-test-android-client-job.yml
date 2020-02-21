@@ -8,6 +8,13 @@ jobs:
       - template: set-branch-tag-steps.yml
       - template: docker-login-steps.yml
 
+      - task: Cache@2
+        displayName: Android Gradle Cache
+        inputs:
+          key: gradle | $(Agent.OS) | android/build.gradle | android/app/build.gradle
+          restoreKeys: gradle
+          path: /home/vsts/.gradle
+
       - task: MavenAuthenticate@0
         displayName: 'Maven Authenticate'
         inputs:

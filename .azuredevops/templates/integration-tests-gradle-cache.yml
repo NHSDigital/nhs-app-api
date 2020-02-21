@@ -1,0 +1,7 @@
+steps:
+  - task: Cache@2
+    displayName: Integration Tests Gradle Cache
+    inputs:
+      key: gradle | $(Agent.OS) | bddtests/build.gradle
+      restoreKeys: gradle
+      path: /home/vsts/.gradle

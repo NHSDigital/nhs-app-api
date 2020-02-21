@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 # shellcheck source=functions_docker.sh
 source "buildscripts/lib/functions_docker.sh"

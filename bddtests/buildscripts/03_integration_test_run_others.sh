@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#! /usr/bin/env bash
 set -e
 
 # Change current working directory to be the root of bddtests, regardless of how this script is invoked
@@ -12,7 +11,6 @@ source "buildscripts/lib/set_env.sh"
 source "buildscripts/lib/functions.sh"
 
 TRANCHE_TAG=others
-DOCKER_TEST_RUN_IMAGES+=("$DOCKER_IMAGE_CHROME")
 
 info "Running ${TESTS_NAME:-$TRANCHE_TAG} tests"
 

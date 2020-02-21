@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
 TAGS_NEVER_RUN=(bug pending manual tech-debt)
 TAGS_TRANCHE_RUN=(organ-donation prescription appointments my-record)
