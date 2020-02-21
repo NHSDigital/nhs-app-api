@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -11,15 +10,15 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 {
-    public class VisionAppointmentSlotsService: IAppointmentSlotsService
+    public class VisionAppointmentSlotsService : IAppointmentSlotsService
     {
         private readonly IVisionClient _visionClient;
         private readonly ILogger<VisionAppointmentSlotsService> _logger;
         private readonly IAvailableAppointmentsResponseMapper _mapper;
         private readonly VisionConfigurationSettings _settings;
-        
+
         public VisionAppointmentSlotsService(
-            IVisionClient visionClient, 
+            IVisionClient visionClient,
             ILogger<VisionAppointmentSlotsService> logger,
             IAvailableAppointmentsResponseMapper mapper,
             VisionConfigurationSettings settings)
@@ -34,13 +33,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 
         public async Task<AppointmentSlotsResult> GetSlots(
             GpLinkedAccountModel gpLinkedAccountModel, AppointmentSlotsDateRange dateRange)
-        {          
+        {
             try
             {
                 _logger.LogEnter();
 
-                var visionUserSession = (VisionUserSession) gpLinkedAccountModel.GpUserSession;
-                
+                var visionUserSession = (VisionUserSession)gpLinkedAccountModel.GpUserSession;
+
                 if (!visionUserSession.IsAppointmentsEnabled)
                 {
                     _logger.LogError("Appointments not enabled");
@@ -79,7 +78,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 _logger.LogExit();
             }
         }
-        
+
         private AppointmentSlotsResult InterpretAppointmentsGetResponse(
             VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse> slotsResponse,
             VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> configResponse,
@@ -91,7 +90,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 _logger.LogVisionErrorResponse(slotsResponse);
                 return new AppointmentSlotsResult.Forbidden();
             }
-            
+
             if (slotsResponse.HasErrorResponse)
             {
                 _logger.LogError($"Call to VISION ({nameof(VisionAppointmentSlotsService)}) returned an unanticipated " +
@@ -99,16 +98,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 _logger.LogVisionErrorResponse(slotsResponse);
                 return new AppointmentSlotsResult.BadGateway();
             }
-            
+
             try
             {
                 var response = _mapper.Map(slotsResponse.Body, configResponse?.Body, userSession);
 
-                if (response.Slots.Count() == _settings.VisionAppointmentSlotsRequestCount)
+                if (response.Slots.Count == _settings.VisionAppointmentSlotsRequestCount)
                 {
                     _logger.LogWarning($"Appointment slots retrieved for Vision patient is equal to the maximum requested ({_settings.VisionAppointmentSlotsRequestCount}).");
                 }
-                
+
                 return new AppointmentSlotsResult.Success(response);
             }
             catch (Exception e)

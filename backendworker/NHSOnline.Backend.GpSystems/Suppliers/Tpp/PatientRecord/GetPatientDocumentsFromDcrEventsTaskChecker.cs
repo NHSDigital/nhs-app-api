@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         PatientDocuments Check(TppApiObjectResponse<RequestPatientRecordReply> taskResponse);
     }
 
-    public class GetPatientDocumentsFromDcrEventsTaskChecker : IGetPatientDocumentsFromDcrEventsTaskChecker
+    internal sealed class GetPatientDocumentsFromDcrEventsTaskChecker : IGetPatientDocumentsFromDcrEventsTaskChecker
     {
         private readonly ITppDcrEventsDocumentsMapper _dcrDocumentsMapper;
         private readonly ILogger<IGetPatientDocumentsFromDcrEventsTaskChecker> _logger;

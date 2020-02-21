@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Support.Repository
             var records = await GetCollection().FindAsync(filter);
             return records.ToEnumerable();
         }
-        
+
         protected async Task UpdateOne(Expression<Func<TRecord, bool>> filter, TRecord record)
             => await GetCollection().ReplaceOneAsync(filter, record);
 

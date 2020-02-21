@@ -32,26 +32,23 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
             set => SetPrivateBaseTypePropertyValue(this, nameof(Tags), value);
         }
 
-        private static Dictionary<Type, Dictionary<string, PropertyInfo>> PropertiesCache { get; }
-
-        static AppleRegistrationDescriptionTestWrapper()
-        {
-            PropertiesCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
-            GetProperties<AppleRegistrationDescription>();
-        }
+        private static Dictionary<Type, Dictionary<string, PropertyInfo>> PropertiesCache { get; } = GetProperties<AppleRegistrationDescription>();
 
         public AppleRegistrationDescriptionTestWrapper() : base("abcdef")
         {
         }
 
-        private static void GetProperties<T>()
+        private static Dictionary<Type, Dictionary<string, PropertyInfo>> GetProperties<T>()
         {
+            var propertiesCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
             var type = typeof(T);
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
             var objectProperties = properties.ToDictionary(property => property.Name);
 
-            PropertiesCache.TryAdd(type, objectProperties);
+            propertiesCache.TryAdd(type, objectProperties);
+
+            return propertiesCache;
         }
 
         private static void SetPrivateBaseTypePropertyValue<T>(object instance, string propName, T val)

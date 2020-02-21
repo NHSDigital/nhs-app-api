@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
 
         private StreamReader Log(LogLevel logLevel)
         {
-            var logProvider = new HttpContexedLoggerProvider(new StreamWriter(_stream), logLevel);
+            var logProvider = new HttpContextLoggerProvider(new StreamWriter(_stream), logLevel);
             return Log(logProvider);
         }
 
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         public void LogRange()
         {
             // Generate the log messages for a level range.
-            var streamReader = Log(new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Debug, LogLevel.Error));
+            var streamReader = Log(new HttpContextLoggerProvider(new StreamWriter(_stream), LogLevel.Debug, LogLevel.Error));
 
             // Check messages...
             streamReader.ReadLine().Should().Contain(string.Format(CultureInfo.InvariantCulture, LoggedMessageFormat, LogLevel.Debug));

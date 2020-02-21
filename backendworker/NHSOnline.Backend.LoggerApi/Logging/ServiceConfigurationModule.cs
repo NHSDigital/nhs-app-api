@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace NHOnline.Backend.LoggerApi.Logging
+namespace NHSOnline.Backend.LoggerApi.Logging
 {
-    public class ServiceConfigurationModule : NHSOnline.Backend.Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
@@ -11,6 +11,5 @@ namespace NHOnline.Backend.LoggerApi.Logging
 
             base.ConfigureServices(services, configuration);
         }
-
     }
 }

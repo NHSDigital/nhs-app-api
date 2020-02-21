@@ -1,4 +1,4 @@
-﻿﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
 using NHSOnline.Backend.Support;
@@ -19,10 +20,10 @@ namespace NHSOnline.Backend.NominatedPharmacy
 {
     public class NominatedPharmacyService : INominatedPharmacyService
     {
-        const string NominatedPharmacyCode = "P1";
-        const string MedicalApplianceCode = "P2";
-        const string DispensingDoctorCode = "P3";
-        const string DateOfBirthFormat = "yyyyMMdd";
+        private const string NominatedPharmacyCode = "P1";
+        private const string MedicalApplianceCode = "P2";
+        private const string DispensingDoctorCode = "P3";
+        private const string DateOfBirthFormat = "yyyyMMdd";
 
         private readonly ILogger<NominatedPharmacyService> _logger;
         private readonly INominatedPharmacyClient _prescriptionTrackingClient;
@@ -40,11 +41,158 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
         public async Task<GetNominatedPharmacyResult> GetNominatedPharmacy(string nhsNumber, CitizenIdUserSession cidUserSession)
         {
-            const string Dev = "DEV";
-            const string Instance = "INSTANCE";
+            _logger.LogEnter();
+
+            var request = CreateRequest(nhsNumber);
+
+            try
+            {
+                var result = await _prescriptionTrackingClient.NominatedPharmacyGet(request);
+
+                if (!result.HasSuccessResponse)
+                {
+                    return new GetNominatedPharmacyResult.PharmacyRetrievalFailure(result.StatusCode);
+                }
+
+                LogIssueEvents(result);
+
+                var nhsNumberReturned = GetNhsNumberReturned(result);
+
+                if (!nhsNumber.RemoveWhiteSpace().Equals(nhsNumberReturned, StringComparison.Ordinal))
+                {
+                    return new GetNominatedPharmacyResult.NhsNumberSuperseded(result.StatusCode, nhsNumber, nhsNumberReturned);
+                }
+
+                var confidentialityCode = GetPatientRoleConfidentialityCode(result);
+
+                if (confidentialityCode != null)
+                {
+                    return new GetNominatedPharmacyResult.ConfidentialAccount(result.StatusCode);
+                }
+
+                var knownPharmacyTypes = new[] { NominatedPharmacyCode, MedicalApplianceCode, DispensingDoctorCode };
+
+                var patientCareProvisionEvents = GetPatientCareProvisionEvents(result, knownPharmacyTypes);
+
+                var pharmacyCheck = CheckPharmacy(patientCareProvisionEvents);
+
+                string odsCode;
+                if (pharmacyCheck.IsValid)
+                {
+                    odsCode = GetOdsCode(pharmacyCheck);
+                    if (!string.IsNullOrEmpty(odsCode))
+                    {
+                        _logger.LogInformation($"User retrieved nominated pharmacy with ods code: {odsCode}");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Pharmacy ods code check passed because no current pharmacy ods code exists");
+                    }
+                }
+                else
+                {
+                    return new GetNominatedPharmacyResult.PharmacyChecksFailed(result.StatusCode);
+                }
+
+                var familyNameReturned = GetFamilyName(result);
+
+                var dateOfBirthReturned = GetDateOfBirth(result);
+
+                var personalDetailsCheck = CheckPersonalDetails(nhsNumber.RemoveWhiteSpace(), nhsNumberReturned, familyNameReturned, dateOfBirthReturned, cidUserSession);
+
+                var pertinentSerialChangeNumber = GetPertinentSerialChangeNumber(result);
+
+                var successResult = new GetNominatedPharmacyResponse(
+                    result.StatusCode,
+                    odsCode,
+                    pertinentSerialChangeNumber,
+                    pharmacyCheck.IsValid && personalDetailsCheck.IsValid,
+                    pharmacyCheck.PharmacyType);
+
+                if (!personalDetailsCheck.IsValid)
+                {
+                    return new GetNominatedPharmacyResult.PersonalChecksFailed(successResult);
+                }
+
+                return new GetNominatedPharmacyResult.Success(successResult);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while trying to get the patient's nominated pharmacy");
+                return new GetNominatedPharmacyResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private static string GetPertinentSerialChangeNumber(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
+        {
+            return result.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse
+                ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?.Value;
+        }
+
+        private static string GetDateOfBirth(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
+        {
+            return result.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse?.Subject
+                ?.PatientRole?.PatientPerson?.BirthTime?.Value;
+        }
+
+        private static string GetFamilyName(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
+        {
+            return result.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse?.Subject
+                ?.PatientRole?.PatientPerson?.COCTMT000203UK02PartOfWhole?.PartPerson?.Name?.Family;
+        }
+
+        private static string GetOdsCode(PharmacyCheck pharmacyCheck)
+        {
+            return pharmacyCheck.PatientCareProvisionEvent?.Performer?.AssignedEntity?.Id?.Extension;
+        }
+
+        private static IEnumerable<PatientCareProvisionEvent> GetPatientCareProvisionEvents(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result, string[] knownPharmacyTypes)
+        {
+            return result?.Body?.QUPAIN000009UK03?.ControlActEvent
+                ?.Subject?.PDSResponse?.Subject?.PatientRole?.PatientPerson?.PlayedOtherProviderPatients
+                ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent)
+                .Where(y => knownPharmacyTypes.Contains(y?.Code?.Code));
+        }
+
+        private static ConfidentialityCode GetPatientRoleConfidentialityCode(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
+        {
+            return result?.Body?.QUPAIN000009UK03?.ControlActEvent
+                ?.Subject?.PDSResponse?.Subject?.PatientRole?.ConfidentialityCode;
+        }
+
+        private static string GetNhsNumberReturned(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
+        {
+            return result.Body?.QUPAIN000009UK03?.ControlActEvent
+                ?.Subject?.PDSResponse?.Subject?.PatientRole?.Id?.Extension;
+        }
+
+        private void LogIssueEvents(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result)
+        {
+            var issueEvents =
+                result.Body?.QUPAIN000009UK03?.ControlActEvent?.Reasons?.Select(x => x.JustifyingDetectedIssueEvent);
+
+            if (issueEvents != null)
+            {
+                var issueEventsWithCode = issueEvents.Where(x => x.Code != null);
+                foreach (var issue in issueEventsWithCode)
+                {
+                    _logger.LogInformation("JustifyingDetectedIssueEvent returned from PDS Trace " +
+                                           $"with a code of [{issue.Code.Code}] and a displayName of [{issue.Code.DisplayName}]");
+                }
+            }
+        }
+
+        private QUPAIN000008UK02 CreateRequest(string nhsNumber)
+        {
+            const string dev = "DEV";
+            const string instance = "INSTANCE";
             var messageId = Guid.NewGuid();
 
-            var request = new QUPAIN000008UK02
+            return new QUPAIN000008UK02
             {
                 Id = new Id
                 {
@@ -89,8 +237,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
                             ClassCode = "AGNT",
                             AgentSystemSDSInner = new AgentSystemSDSInner
                             {
-                                ClassCode = Dev,
-                                DeterminerCode = Instance,
+                                ClassCode = dev,
+                                DeterminerCode = instance,
                                 Id = new Id
                                 {
                                     Extension = _config.PdsTraceConfigurationSettings.FromAsid,
@@ -142,113 +290,9 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 },
                 Xmlns = NominatedPharmacyNamespaces.Hl7,
             };
-
-            _logger.LogEnter();
-            try
-            {
-                var result = await _prescriptionTrackingClient.NominatedPharmacyGet(request);
-              
-                if (!result.HasSuccessResponse)
-                {  
-                    return new GetNominatedPharmacyResult.PharmacyRetrievalFailure(result.StatusCode);
-                }
-
-                var issueEvents = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Reasons?.Select(x => x.JustifyingDetectedIssueEvent);
-
-                if (issueEvents != null)
-                {
-                    var issueEventsWithCode = issueEvents.Where(x => x.Code != null);
-                    foreach (var issue in issueEventsWithCode)
-                    {
-                        _logger.LogInformation($"JustifyingDetectedIssueEvent returned from PDS Trace " +
-                                    $"with a code of [{issue.Code.Code}] and a displayName of [{issue.Code.DisplayName}]");
-                    }
-                }
-
-                var nhsNumberReturned = result?.Body?.QUPAIN000009UK03?.ControlActEvent
-                    ?.Subject?.PDSResponse?.Subject?.PatientRole?.Id?.Extension;
-                
-                if (!nhsNumber.RemoveWhiteSpace().Equals(nhsNumberReturned, StringComparison.Ordinal))
-                {
-                    return new GetNominatedPharmacyResult.NhsNumberSuperseded(result.StatusCode, nhsNumber, nhsNumberReturned);
-                } 
-              
-                var confidentialityCode = result?.Body?.QUPAIN000009UK03?.ControlActEvent
-                    ?.Subject?.PDSResponse?.Subject?.PatientRole?.ConfidentialityCode;
-                
-                if (confidentialityCode != null)
-                {
-                    return new GetNominatedPharmacyResult.ConfidentialAccount(result.StatusCode);
-                }  
-  
-                var knownPharmacyTypes = new[] { NominatedPharmacyCode, MedicalApplianceCode, DispensingDoctorCode };
-
-                var patientCareProvisionEvents = result?.Body?.QUPAIN000009UK03?.ControlActEvent
-                    ?.Subject?.PDSResponse?.Subject?.PatientRole?.PatientPerson?.PlayedOtherProviderPatients
-                    ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent)
-                    .Where(y => knownPharmacyTypes.Contains(y?.Code?.Code));
-                
-                string odsCode = null;
-
-                PharmacyCheck pharmacyCheck = new PharmacyCheck { IsValid = false };
-
-                pharmacyCheck = CheckPharmacy(patientCareProvisionEvents);
-
-
-                if (pharmacyCheck.IsValid)
-                {
-                    odsCode = pharmacyCheck.PatientCareProvisionEvent?.Performer?.AssignedEntity?.Id?.Extension;
-                    if (!string.IsNullOrEmpty(odsCode))
-                    {
-                        _logger.LogInformation($"User retrieved nominated pharmacy with ods code: {odsCode}");
-                    }
-                    else
-                    {
-                        _logger.LogInformation("Pharmacy ods code check passed because no current pharmacy ods code exists");
-                    }
-                }
-                else
-                {
-                    return new GetNominatedPharmacyResult.PharmacyChecksFailed(result.StatusCode);
-                }
-
-                var familyNameReturned = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse?.Subject
-                    ?.PatientRole?.PatientPerson?.COCTMT000203UK02PartOfWhole?.PartPerson?.Name?.Family;
-
-                var dateOfBirthReturned = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse?.Subject
-                    ?.PatientRole?.PatientPerson?.BirthTime?.Value;
-
-                var personalDetailsCheck = CheckPersonalDetails(nhsNumber.RemoveWhiteSpace(), nhsNumberReturned, familyNameReturned, dateOfBirthReturned, cidUserSession);
-
-                var pertinentSerialChangeNumber = result?.Body?.QUPAIN000009UK03?.ControlActEvent?.Subject?.PDSResponse
-                    ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?.Value;
-
-                var successResult = new GetNominatedPharmacyResponse(
-                    result.StatusCode,
-                    odsCode,
-                    pertinentSerialChangeNumber,
-                    pharmacyCheck.IsValid && personalDetailsCheck.IsValid,
-                    pharmacyCheck.PharmacyType);
-                
-                if (!personalDetailsCheck.IsValid)
-                {
-                    return new GetNominatedPharmacyResult.PersonalChecksFailed(successResult);
-                }
-                
-                return new GetNominatedPharmacyResult.Success(successResult);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"An error occurred while trying to get the patient's nominated pharmacy");                
-                return new GetNominatedPharmacyResult.InternalServerError();
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
         }
- 
-        public async Task<UpdateNominatedPharmacyResult> 
+
+        public async Task<UpdateNominatedPharmacyResult>
             UpdateNominatedPharmacy(NominatedPharmacyUpdate nominatedPharmacyUpdate)
         {
             _logger.LogEnter();
@@ -269,7 +313,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     _logger.LogInformation($"The request to update a patients nominated pharmacy was unsuccessful. Response from spine: {result.RawResponse}");
                     return new UpdateNominatedPharmacyResult(result.StatusCode);
                 }
-                
+
                 _logger.LogInformation($"Successfully completed request to update patient's nominated pharmacy. " +
                                        $"Spine ConversationId: { result.Response?.Header?.MessageHeader?.ConversationId }");
 
@@ -286,11 +330,11 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
         }
 
-        private  PersonalDetailsCheck CheckPersonalDetails(string nhsNumber, string nhsNumberReturned, 
-            string familyNameReturned, string dateOfBirthReturned,  CitizenIdUserSession cidUserSession)
-        {                
+        private PersonalDetailsCheck CheckPersonalDetails(string nhsNumber, string nhsNumberReturned,
+            string familyNameReturned, string dateOfBirthReturned, CitizenIdUserSession cidUserSession)
+        {
             var personalDetailsCheck = new PersonalDetailsCheck { IsValid = false };
-            
+
             if (!string.IsNullOrEmpty(nhsNumberReturned))
             {
                 if (!nhsNumberReturned.Equals(nhsNumber, StringComparison.Ordinal))
@@ -316,7 +360,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
             else
             {
-                _logger.LogInformation("Could not extract patient surname from result of PDS Trace request");      
+                _logger.LogInformation("Could not extract patient surname from result of PDS Trace request");
                 return personalDetailsCheck;
             }
 
@@ -328,11 +372,11 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     _logger.LogInformation($"Returned date of birth {returnedDobParsed} " +
                                   $"did not match expected date of birth {cidUserSession.DateOfBirth}");
                     return personalDetailsCheck;
-                }          
+                }
             }
             else
             {
-                _logger.LogInformation("Could not extract patient dateOfBirth from result of PDS Trace request");       
+                _logger.LogInformation("Could not extract patient dateOfBirth from result of PDS Trace request");
                 return personalDetailsCheck;
             }
 
@@ -378,24 +422,24 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     _logger.LogInformation($"Patient has a valid {NominatedPharmacyCode} pharmacy");
                     return new PharmacyCheck
                     {
-                        IsValid = true, 
+                        IsValid = true,
                         PatientCareProvisionEvent = patientCareSection.Value,
                         PharmacyType = NominatedPharmacyCode,
                     };
                 case MedicalApplianceCode:
                 case DispensingDoctorCode:
-                     _logger.LogInformation(
-                         $"Patient has a {patientCareSection.Key} pharmacy which is not a valid pharmacy type");
-                     return new PharmacyCheck
-                     {
-                        IsValid = false, 
+                    _logger.LogInformation(
+                        $"Patient has a {patientCareSection.Key} pharmacy which is not a valid pharmacy type");
+                    return new PharmacyCheck
+                    {
+                        IsValid = false,
                         PatientCareProvisionEvent = null,
-                     };
+                    };
                 default:
                     _logger.LogError("Unknown error when filtering nominated pharmacy");
                     return new PharmacyCheck
                     {
-                        IsValid = false, 
+                        IsValid = false,
                         PatientCareProvisionEvent = null
                     };
             }

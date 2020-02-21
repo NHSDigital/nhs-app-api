@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.CidApi
             {
                 loggerFactory.AddConsole(LogLevel.Debug);
             }
-            
+
             _apiAppVersion = Configuration.GetApiAppVersion();
 
             _modularStartup = new ModularStartup(configuration, loggerFactory);
@@ -65,9 +65,9 @@ namespace NHSOnline.Backend.CidApi
         {
             var environment = Configuration.GetOrWarn("ASPNETCORE_ENVIRONMENT", _logger);
             SetupConfigurationSettings(services, environment);
-        
+
             services.AddCorrelationId();
-            
+
             services.AddCors();
 
             services.AddMemoryCache();
@@ -133,10 +133,7 @@ namespace NHSOnline.Backend.CidApi
         {
             app.UseAuthentication();
 
-            // Read in optional log configuration...
-            var logSettings = LoggingSettings.GetSettings(Configuration);
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel, logSettings.ErrorLevel, logSettings.CensorFilters));
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel, LogLevel.None, logSettings.CensorFilters));
+            loggerFactory.ConfigureLogging(Configuration);
 
             if (env.IsDevelopment())
             {
@@ -165,7 +162,7 @@ namespace NHSOnline.Backend.CidApi
                     .AllowCredentials()
                 );
             }
-            
+
             app.UseCorrelationId(new CorrelationIdOptions
             {
                 Header = Constants.HttpHeaders.CorrelationIdentifier,
@@ -178,7 +175,7 @@ namespace NHSOnline.Backend.CidApi
                 HeaderName = Constants.HttpHeaders.CorrelationIdentifier,
                 LogTemplate = "CorrelationId={value}",
             });
-            
+
             app.UseLogRequestHeader(new LogRequestHeaderOptions
             {
                 HeaderName = Constants.HttpHeaders.LoginClient,
@@ -214,8 +211,8 @@ namespace NHSOnline.Backend.CidApi
             var prescriptionsDefaultLastNumberMonthsToDisplay = Configuration.GetIntOrWarn(
                 "ConfigurationSettings:PrescriptionsDefaultLastNumberMonthsToDisplay", _logger
             );
-            var defaultSessionExpiryMinutes = Configuration.GetIntOrWarn("ConfigurationSettings:DefaultSessionExpiryMinutes" ,_logger);
-            var defaultHttpTimeoutSeconds = Configuration.GetIntOrWarn("ConfigurationSettings:DefaultHttpTimeoutSeconds" ,_logger);
+            var defaultSessionExpiryMinutes = Configuration.GetIntOrWarn("ConfigurationSettings:DefaultSessionExpiryMinutes", _logger);
+            var defaultHttpTimeoutSeconds = Configuration.GetIntOrWarn("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
             var minimumAppAge = Configuration.GetIntOrWarn("ConfigurationSettings:MinimumAppAge", _logger);
             var minimumLinkageAge = Configuration.GetIntOrWarn("ConfigurationSettings:MinimumLinkageAge", _logger);
 
@@ -223,15 +220,16 @@ namespace NHSOnline.Backend.CidApi
                 Configuration.GetOrWarn("ConfigurationSettings:CurrentTermsConditionsEffectiveDate", _logger),
                 CultureInfo.InvariantCulture
             );
-            
-            var config =  new ConfigurationSettings(cookieDomain, prescriptionsDefaultLastNumberMonthsToDisplay,
-            defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds,  minimumAppAge, minimumLinkageAge, currentTermsConditionsEffectiveDate);
+
+            var config = new ConfigurationSettings(cookieDomain, prescriptionsDefaultLastNumberMonthsToDisplay,
+            defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds, minimumAppAge, minimumLinkageAge, currentTermsConditionsEffectiveDate);
 
             config.Validate();
             return config;
         }
 
-        private EmisConfigurationSettings CreateAndValidateEmisEnvironmentVariables(string environment){
+        private EmisConfigurationSettings CreateAndValidateEmisEnvironmentVariables(string environment)
+        {
             var emisBaseUrl = Configuration.GetOrWarn("EMIS_BASE_URL", _logger);
             var applicationId = Configuration.GetOrWarn("EMIS_APPLICATION_ID", _logger);
             var version = Configuration.GetOrWarn("EMIS_VERSION", _logger);
@@ -242,7 +240,7 @@ namespace NHSOnline.Backend.CidApi
             var defaultHttpTimeoutSeconds = Configuration.GetIntOrWarn("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
             var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
             var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
-            
+
             var config = new EmisConfigurationSettings(new Uri(emisBaseUrl, UriKind.Absolute), applicationId, version, certificatePath, certificatePassphrase,
              emisExtendedHttpTimeoutSeconds, defaultHttpTimeoutSeconds, coursesMaxCoursesLimit, prescriptionsMaxCoursesSoftLimit, environment);
             config.Validate();
@@ -264,7 +262,8 @@ namespace NHSOnline.Backend.CidApi
             return config;
         }
 
-        private TppConfigurationSettings CreateAndValidateTppEnvironmentVariables(string environment){
+        private TppConfigurationSettings CreateAndValidateTppEnvironmentVariables(string environment)
+        {
             var tppBaseUrl = Configuration.GetOrWarn("TPP_BASE_URL", _logger);
             var apiVersion = Configuration.GetOrWarn("TPP_API_VERSION", _logger);
             var applicationName = Configuration.GetOrWarn("TPP_APPLICATION_NAME", _logger);
@@ -280,18 +279,18 @@ namespace NHSOnline.Backend.CidApi
             var config = new TppConfigurationSettings(
                 new Uri(tppBaseUrl, UriKind.Absolute),
                 apiVersion,
-                applicationName, 
+                applicationName,
                 applicationVersion,
                 applicationProviderId,
                 applicationDeviceType,
-                certificatePath, 
+                certificatePath,
                 certificatePassphrase,
                 prescriptionsMaxCoursesSoftLimit,
                 coursesMaxCoursesLimit,
                 environment);
 
-                config.Validate();
-                return config;
+            config.Validate();
+            return config;
         }
 
         private VisionConfigurationSettings CreateAndValidateVisionEnvironmentVariables(string environment)

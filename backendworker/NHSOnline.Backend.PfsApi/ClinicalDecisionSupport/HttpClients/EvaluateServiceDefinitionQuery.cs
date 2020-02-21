@@ -37,26 +37,29 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.HttpClients
                     Constants.CdsApiEndpoints.EvaluateServiceDefinitionPathFormat,
                     serviceDefinitionId);
 
-                var requestMessage = new HttpRequestMessage(HttpMethod.Post, path)
+                using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, path)
                 {
                     Content = new StringContent(requestBody, Encoding.UTF8, MediaTypeNames.Application.Json)
-                };
-                
-                requestMessage.Headers.Add(Support.Constants.OnlineConsultationConstants.ProviderIdentifierHeader, providerKey);
-
-                if (!string.IsNullOrWhiteSpace(sessionId))
+                })
                 {
-                    requestMessage.Headers.Add(Support.Constants.OnlineConsultationConstants.SessionIdentifierHeader, sessionId);
+                    requestMessage.Headers.Add(Support.Constants.OnlineConsultationConstants.ProviderIdentifierHeader,
+                        providerKey);
+
+                    if (!string.IsNullOrWhiteSpace(sessionId))
+                    {
+                        requestMessage.Headers.Add(
+                            Support.Constants.OnlineConsultationConstants.SessionIdentifierHeader, sessionId);
+                    }
+
+                    if (addJavascriptDisabledHeader)
+                    {
+                        requestMessage.Headers.Add(Support.Constants.HttpHeaders.JavascriptDisabled, "true");
+                    }
+
+                    _logger.LogInformation("Answer Successfully posted");
+
+                    return await httpClient.SendAsync(requestMessage);
                 }
-
-                if (addJavascriptDisabledHeader)
-                {
-                    requestMessage.Headers.Add(Support.Constants.HttpHeaders.JavascriptDisabled, "true");
-                }
-
-                _logger.LogInformation("Answer Successfully posted");
-
-                return await httpClient.SendAsync(requestMessage);
             }
             finally
             {

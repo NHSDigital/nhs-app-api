@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -68,11 +68,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                 {
                     logBuilder.ClearProviders();
 
-                    var logSettings = LoggingSettings.GetSettings(context.Configuration);
-                    logBuilder.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel,
-                        logSettings.ErrorLevel, logSettings.CensorFilters));
-                    logBuilder.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel,
-                        LogLevel.None, logSettings.CensorFilters));
+                    logBuilder.ConfigureLogging(context.Configuration);
                 })
                 .Build();
 

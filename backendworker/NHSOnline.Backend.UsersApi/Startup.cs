@@ -1,4 +1,3 @@
-﻿using System;
 using System.Security.Cryptography;
 using CorrelationId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,7 +21,6 @@ using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.Support.Repository;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.UsersApi
 {
@@ -47,7 +45,7 @@ namespace NHSOnline.Backend.UsersApi
         public void ConfigureServices(IServiceCollection services)
         {
             SetupConfigurationSettings(services);
-            
+
             services
                 .AddMvc(ConfigureMvcOptions)
                 .AddJsonOptions(
@@ -74,7 +72,7 @@ namespace NHSOnline.Backend.UsersApi
         {
             var mongoConfiguration = CreateMongoConfiguration();
             services.AddSingleton(mongoConfiguration);
-            
+
             var config = CreateAzureNotificationConfiguration();
             services.AddSingleton(config);
         }
@@ -114,12 +112,7 @@ namespace NHSOnline.Backend.UsersApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            // Read in optional log configuration...
-            var logSettings = LoggingSettings.GetSettings(Configuration);
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel,
-                logSettings.ErrorLevel, logSettings.CensorFilters));
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel,
-                LogLevel.None, logSettings.CensorFilters));
+            loggerFactory.ConfigureLogging(Configuration);
 
             if (IsDevelopment)
             {

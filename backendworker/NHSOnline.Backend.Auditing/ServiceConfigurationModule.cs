@@ -1,3 +1,4 @@
+using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Support.Repository;
@@ -18,13 +19,12 @@ namespace NHSOnline.Backend.Auditing
             {
                 throw new ConfigurationNotFoundException("AUDIT_SINK_TYPE");
             }
-            
+
             switch (sinkType.ToUpperInvariant())
             {
                 case "FILE":
                     var filePath = configuration["AUDIT_FILE"] ?? "audit.txt";
-                    services.AddSingleton<IAuditSink>(
-                        new StreamAuditSink(new System.IO.FileStream(filePath, System.IO.FileMode.Append)));
+                    services.AddSingleton<IAuditSink>(_ => new StreamAuditSink(new FileStream(filePath, FileMode.Append)));
                     break;
                 case "MONGO":
                     services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));

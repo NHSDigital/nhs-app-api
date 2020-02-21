@@ -1,4 +1,4 @@
-﻿using AutoFixture;
+using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -189,7 +189,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             };
 
             _stream = new MemoryStream();
-            logBuilder.AddProvider(new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Critical,
+            logBuilder.AddProvider(new HttpContextLoggerProvider(new StreamWriter(_stream), LogLevel.Critical,
                 LogLevel.None, filters));
         }
 
@@ -325,6 +325,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
 
         public void Dispose()
         {
+            _stream?.Dispose();
             _systemUnderTest.Dispose();
         }
     }

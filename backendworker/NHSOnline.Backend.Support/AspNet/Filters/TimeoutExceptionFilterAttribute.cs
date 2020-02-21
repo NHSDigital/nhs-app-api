@@ -9,11 +9,12 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
     public sealed class TimeoutExceptionFilterAttribute : ExceptionFilterAttribute
     {
-        public ILogger<TimeoutExceptionFilterAttribute> Logger { get; }
+        private ILogger<TimeoutExceptionFilterAttribute> Logger { get; }
 
-        public IErrorReferenceGenerator ErrorReferenceGenerator { get; }
+        private IErrorReferenceGenerator ErrorReferenceGenerator { get; }
 
-        public TimeoutExceptionFilterAttribute(ILogger<TimeoutExceptionFilterAttribute> logger,
+        public TimeoutExceptionFilterAttribute(
+            ILogger<TimeoutExceptionFilterAttribute> logger,
             IErrorReferenceGenerator errorReferenceGenerator)
         {
             Logger = logger;
@@ -26,7 +27,7 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
             {
                 return;
             }
-            
+
             if (context.Exception is TimeoutException)
             {
                 var sourceApi = SourceApi.None;
@@ -38,7 +39,7 @@ namespace NHSOnline.Backend.Support.AspNet.Filters
 
                 var serviceDeskReference = ErrorReferenceGenerator.GenerateAndLogErrorReference(ErrorCategory.Timeout,
                     StatusCodes.Status504GatewayTimeout, sourceApi);
-                
+
                 Logger.LogError($"Operation timed out - exception: {context.Exception}");
 
                 context.Result = new ObjectResult(new PfsErrorResponse

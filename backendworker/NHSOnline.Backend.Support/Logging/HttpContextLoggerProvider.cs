@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,9 @@ using System.Text;
 
 namespace NHSOnline.Backend.Support.Logging
 {
-    public class HttpContexedLoggerProvider : ILoggerProvider
+    internal sealed class HttpContextLoggerProvider : ILoggerProvider
     {
-        private readonly TextWriter _logwriter;
+        private readonly TextWriter _logWriter;
         private readonly LogLevel _minLogLevel;
         private readonly LogLevel _maxLogLevelLimit;
         private readonly LoggerExternalScopeProvider _scopeProvider;
@@ -17,15 +17,13 @@ namespace NHSOnline.Backend.Support.Logging
 
         private bool _disposed;
 
-        public HttpContexedLoggerProvider
-        (
-            TextWriter logwriter,
+        public HttpContextLoggerProvider(
+            TextWriter logWriter,
             LogLevel minLogLevel,
             LogLevel maxLogLevelLimit = LogLevel.None,
-            IEnumerable<LogCensorFilter> regexFilterList = null
-        )
+            IEnumerable<LogCensorFilter> regexFilterList = null)
         {
-            _logwriter = logwriter;
+            _logWriter = logWriter;
             _minLogLevel = minLogLevel;
             _maxLogLevelLimit = maxLogLevelLimit;
             _scopeProvider = new LoggerExternalScopeProvider();
@@ -34,27 +32,12 @@ namespace NHSOnline.Backend.Support.Logging
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~HttpContexedLoggerProvider()
-        {
-            Dispose(false);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
             if (_disposed)
             {
                 return;
             }
 
-            if (disposing)
-            {
-                _logwriter.Dispose();
-            }
-
+            _logWriter.Dispose();
             _disposed = true;
         }
 
@@ -65,10 +48,10 @@ namespace NHSOnline.Backend.Support.Logging
                 throw new ObjectDisposedException(GetType().FullName);
             }
 
-            return new HttpContexedLogger(categoryName, _logwriter, _minLogLevel, _maxLogLevelLimit, _scopeProvider, _regexFilterList);
+            return new HttpContextLogger(categoryName, _logWriter, _minLogLevel, _maxLogLevelLimit, _scopeProvider, _regexFilterList);
         }
 
-        private class HttpContexedLogger : ILogger
+        private sealed class HttpContextLogger : ILogger
         {
             private readonly TextWriter _textWriter;
             private readonly LogLevel _minLogLevel;
@@ -77,7 +60,13 @@ namespace NHSOnline.Backend.Support.Logging
             private readonly string _categoryName;
             private readonly IEnumerable<LogCensorFilter> _regexFilterList;
 
-            public HttpContexedLogger(string categoryName, TextWriter logWriter, LogLevel minLogLevel, LogLevel maxLogLevelLimit, LoggerExternalScopeProvider scopeProvider, IEnumerable<LogCensorFilter> regexFilterList)
+            public HttpContextLogger(
+                string categoryName,
+                TextWriter logWriter,
+                LogLevel minLogLevel,
+                LogLevel maxLogLevelLimit,
+                LoggerExternalScopeProvider scopeProvider,
+                IEnumerable<LogCensorFilter> regexFilterList)
             {
                 _textWriter = logWriter;
                 _categoryName = categoryName;

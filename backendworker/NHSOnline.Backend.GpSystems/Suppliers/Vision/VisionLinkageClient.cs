@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         private readonly IJsonResponseParser _responseParser;
 
         private const string LinkageBasePath = "organisations/{0}/onlineservices/linkage";
-        
+
         private readonly string GetLinkagePath = LinkageBasePath + "?nhsNumber={1}";
 
         public VisionLinkageClient(
@@ -46,31 +46,34 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         public async Task<VisionApiObjectResponse<LinkageKeyPostResponse>> CreateLinkageKey(CreateLinkageKey createLinkageKey)
         {
             var path = string.Format(CultureInfo.InvariantCulture, LinkageBasePath, createLinkageKey.OdsCode);
-            
+
             return await Post<LinkageKeyPostResponse>(createLinkageKey.LinkageKeyPostRequest, path);
-            
         }
 
         private async Task<VisionApiObjectResponse<TResponse>> Get<TResponse>(string path)
         {
-            var request = BuildVisionRequest(HttpMethod.Get, path);
-            return await SendRequestAndParseResponse<TResponse>(request);
+            using (var request = BuildVisionRequest(HttpMethod.Get, path))
+            {
+                return await SendRequestAndParseResponse<TResponse>(request);
+            }
         }
-        
+
         private async Task<VisionApiObjectResponse<TResponse>> Post<TResponse>(LinkageKeyPostRequest model, string path)
         {
-            var request = BuildVisionRequest(HttpMethod.Post, path);
+            using (var request = BuildVisionRequest(HttpMethod.Post, path))
+            {
+                var body = JsonConvert.SerializeObject(model,
+                    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
-            var body = JsonConvert.SerializeObject(model, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
-            request.Content = new StringContent(body, Encoding.UTF8, "application/json");
-
-            return await SendRequestAndParseResponse<TResponse>(request);
+                return await SendRequestAndParseResponse<TResponse>(request);
+            }
         }
 
         private static HttpRequestMessage BuildVisionRequest(HttpMethod httpMethod, string path)
         {
             var request = new HttpRequestMessage(httpMethod, path);
-            
+
             return request;
         }
 
@@ -117,11 +120,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 string stringResponse)
             {
                 Body = responseParser.ParseBody<TBody>(stringResponse);
-                
+
                 if (!HasSuccessResponse)
                 {
                     var errorWrapper = responseParser.ParseBody<ErrorResponseWrapper>(stringResponse);
-                    ErrorResponse = errorWrapper?.Error ?? default;
+                    ErrorResponse = errorWrapper?.Error;
                 }
             }
 

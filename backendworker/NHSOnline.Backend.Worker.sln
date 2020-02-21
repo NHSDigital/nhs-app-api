@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.779
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.PfsApi", "NHSOnline.Backend.PfsApi\NHSOnline.Backend.PfsApi.csproj", "{12C2445B-9D16-4B95-B6B8-4CE591B8B06B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.PfsApi", "NHSOnline.Backend.PfsApi\NHSOnline.Backend.PfsApi.csproj", "{12C2445B-9D16-4B95-B6B8-4CE591B8B06B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.PfsApi.UnitTests", "NHSOnline.Backend.PfsApi.UnitTests\NHSOnline.Backend.PfsApi.UnitTests.csproj", "{E65A94D3-8C1B-4BAB-96C7-F4259BD3813A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.PfsApi.UnitTests", "NHSOnline.Backend.PfsApi.UnitTests\NHSOnline.Backend.PfsApi.UnitTests.csproj", "{E65A94D3-8C1B-4BAB-96C7-F4259BD3813A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{24778223-5844-4C8C-97D5-DD64B27839E8}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,30 +15,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.appointments.yaml = contracts\nhsonline.appointments.yaml
 		contracts\nhsonline.brothermailer.yaml = contracts\nhsonline.brothermailer.yaml
 		contracts\nhsonline.configuration.yaml = contracts\nhsonline.configuration.yaml
+		contracts\nhsonline.configuration_v2.yaml = contracts\nhsonline.configuration_v2.yaml
 		contracts\nhsonline.demographics.yaml = contracts\nhsonline.demographics.yaml
+		contracts\nhsonline.documents.yaml = contracts\nhsonline.documents.yaml
 		contracts\nhsonline.gpsearch.yaml = contracts\nhsonline.gpsearch.yaml
 		contracts\nhsonline.journey.yaml = contracts\nhsonline.journey.yaml
+		contracts\nhsonline.linkedaccounts.yaml = contracts\nhsonline.linkedaccounts.yaml
+		contracts\nhsonline.log.yaml = contracts\nhsonline.log.yaml
+		contracts\nhsonline.messages.yaml = contracts\nhsonline.messages.yaml
 		contracts\nhsonline.myrecord.yaml = contracts\nhsonline.myrecord.yaml
 		contracts\nhsonline.ndop.yaml = contracts\nhsonline.ndop.yaml
 		contracts\nhsonline.nominatedpharmacy.yaml = contracts\nhsonline.nominatedpharmacy.yaml
 		contracts\nhsonline.odscode.yaml = contracts\nhsonline.odscode.yaml
 		contracts\nhsonline.organdonation.yaml = contracts\nhsonline.organdonation.yaml
+		contracts\nhsonline.patientmessages.yaml = contracts\nhsonline.patientmessages.yaml
 		contracts\nhsonline.pharmacies.yaml = contracts\nhsonline.pharmacies.yaml
 		contracts\nhsonline.prescriptions.yaml = contracts\nhsonline.prescriptions.yaml
 		contracts\nhsonline.shared.yaml = contracts\nhsonline.shared.yaml
 		contracts\nhsonline.termsandconditions.yaml = contracts\nhsonline.termsandconditions.yaml
+		contracts\nhsonline.userinfo.yaml = contracts\nhsonline.userinfo.yaml
 		contracts\nhsonline.users.yaml = contracts\nhsonline.users.yaml
 		contracts\nhsonline.usersession.yaml = contracts\nhsonline.usersession.yaml
-		contracts\nhsonline.linkedaccounts.yaml = contracts\nhsonline.linkedaccounts.yaml
 		contracts\nhsonline.yaml = contracts\nhsonline.yaml
 		contracts\ReadMe.md = contracts\ReadMe.md
 		contracts\servicejourneyrules.yaml = contracts\servicejourneyrules.yaml
-		contracts\nhsonline.log.yaml = contracts\nhsonline.log.yaml
-		contracts\nhsonline.messages.yaml = contracts\nhsonline.messages.yaml
-		contracts\nhsonline.userinfo.yaml = contracts\nhsonline.userinfo.yaml
-		contracts\nhsonline.documents.yaml = contracts\nhsonline.documents.yaml
-		contracts\nhsonline.patientmessages.yaml = contracts\nhsonline.patientmessages.yaml
-		contracts\nhsonline.configuration_v2.yaml = contracts\nhsonline.configuration_v2.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F3286FE-0E62-411C-A0A2-4C9AEFE54EC1}"
@@ -47,39 +47,39 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TestCode.ruleset = TestCode.ruleset
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.GpSystems", "NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj", "{6CF3BB47-F842-4154-B445-C6CB41D57159}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.GpSystems", "NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj", "{6CF3BB47-F842-4154-B445-C6CB41D57159}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Support", "NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj", "{67E506C3-0E86-4E79-8168-32F1DCFE38CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Support", "NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj", "{67E506C3-0E86-4E79-8168-32F1DCFE38CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Support.UnitTests", "NHSOnline.Backend.Support.UnitTests\NHSOnline.Backend.Support.UnitTests.csproj", "{0DF8D60E-0C7A-4F9F-B5F1-BCDF54D2471A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Support.UnitTests", "NHSOnline.Backend.Support.UnitTests\NHSOnline.Backend.Support.UnitTests.csproj", "{0DF8D60E-0C7A-4F9F-B5F1-BCDF54D2471A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.GpSystems.UnitTests", "NHSOnline.Backend.GpSystems.UnitTests\NHSOnline.Backend.GpSystems.UnitTests.csproj", "{D81BF0EF-F83E-43A8-8DD5-C1ACCCEA18EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.GpSystems.UnitTests", "NHSOnline.Backend.GpSystems.UnitTests\NHSOnline.Backend.GpSystems.UnitTests.csproj", "{D81BF0EF-F83E-43A8-8DD5-C1ACCCEA18EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestHelper", "UnitTestHelper\UnitTestHelper.csproj", "{7FEB06ED-2F40-4142-988D-BFDC1B0C559B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestHelper", "UnitTestHelper\UnitTestHelper.csproj", "{7FEB06ED-2F40-4142-988D-BFDC1B0C559B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.NominatedPharmacy", "NHSOnline.Backend.NominatedPharmacy\NHSOnline.Backend.NominatedPharmacy.csproj", "{E548D99F-D3E5-4657-BF1D-5E0E0586AD96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.NominatedPharmacy", "NHSOnline.Backend.NominatedPharmacy\NHSOnline.Backend.NominatedPharmacy.csproj", "{E548D99F-D3E5-4657-BF1D-5E0E0586AD96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.NominatedPharmacy.UnitTests", "NHSOnline.Backend.NominatedPharmacy.UnitTests\NHSOnline.Backend.NominatedPharmacy.UnitTests.csproj", "{A81F5C0B-10CE-47CD-B01C-FB9F946B5DA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.NominatedPharmacy.UnitTests", "NHSOnline.Backend.NominatedPharmacy.UnitTests\NHSOnline.Backend.NominatedPharmacy.UnitTests.csproj", "{A81F5C0B-10CE-47CD-B01C-FB9F946B5DA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.CidApi", "NHSOnline.Backend.CidApi\NHSOnline.Backend.CidApi.csproj", "{087E5837-79BC-4B9A-878E-18C9298D8D5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.CidApi", "NHSOnline.Backend.CidApi\NHSOnline.Backend.CidApi.csproj", "{087E5837-79BC-4B9A-878E-18C9298D8D5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.CidApi.UnitTests", "NHSOnline.Backend.CidApi.UnitTests\NHSOnline.Backend.CidApi.UnitTests.csproj", "{8F641323-98A0-4DC6-A50C-0BEFD770A2E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.CidApi.UnitTests", "NHSOnline.Backend.CidApi.UnitTests\NHSOnline.Backend.CidApi.UnitTests.csproj", "{8F641323-98A0-4DC6-A50C-0BEFD770A2E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests", "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests\NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.csproj", "{BA421B7B-6AB8-4095-A3CB-2B9F0C2A1B85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests", "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests\NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.csproj", "{BA421B7B-6AB8-4095-A3CB-2B9F0C2A1B85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRulesApi", "NHSOnline.Backend.ServiceJourneyRulesApi\NHSOnline.Backend.ServiceJourneyRulesApi.csproj", "{C8D4E4FC-316C-4535-A89F-23DD34ADA155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRulesApi", "NHSOnline.Backend.ServiceJourneyRulesApi\NHSOnline.Backend.ServiceJourneyRulesApi.csproj", "{C8D4E4FC-316C-4535-A89F-23DD34ADA155}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRulesApi.Models", "NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj", "{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRulesApi.Models", "NHSOnline.Backend.ServiceJourneyRulesApi.Models\NHSOnline.Backend.ServiceJourneyRulesApi.Models.csproj", "{593297B2-0A0F-4094-A9B3-3A0E2AF5E1D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Auditing", "NHSOnline.Backend.Auditing\NHSOnline.Backend.Auditing.csproj", "{C0E7FBCE-181D-47D0-8DAF-B98BB09C4426}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Auditing", "NHSOnline.Backend.Auditing\NHSOnline.Backend.Auditing.csproj", "{C0E7FBCE-181D-47D0-8DAF-B98BB09C4426}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Auditing.UnitTests", "NHSOnline.Backend.Auditing.UnitTests\NHSOnline.Backend.Auditing.UnitTests.csproj", "{87E70C51-990A-466A-B656-60FA86A00D28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Auditing.UnitTests", "NHSOnline.Backend.Auditing.UnitTests\NHSOnline.Backend.Auditing.UnitTests.csproj", "{87E70C51-990A-466A-B656-60FA86A00D28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Auth", "NHSOnline.Backend.Auth\NHSOnline.Backend.Auth.csproj", "{11A3FAB4-7B8C-473D-96F4-35DFD8BC6712}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Auth", "NHSOnline.Backend.Auth\NHSOnline.Backend.Auth.csproj", "{11A3FAB4-7B8C-473D-96F4-35DFD8BC6712}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Auth.UnitTests", "NHSOnline.Backend.Auth.UnitTests\NHSOnline.Backend.Auth.UnitTests.csproj", "{EC0CD78E-0866-45DA-A4BF-6BBFE749DC1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Auth.UnitTests", "NHSOnline.Backend.Auth.UnitTests\NHSOnline.Backend.Auth.UnitTests.csproj", "{EC0CD78E-0866-45DA-A4BF-6BBFE749DC1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.UsersApi.UnitTests", "NHSOnline.Backend.UsersApi.UnitTests\NHSOnline.Backend.UsersApi.UnitTests.csproj", "{3E119DBD-FB24-4960-82B8-8858832393F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.UsersApi.UnitTests", "NHSOnline.Backend.UsersApi.UnitTests\NHSOnline.Backend.UsersApi.UnitTests.csproj", "{3E119DBD-FB24-4960-82B8-8858832393F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GpSupplierSpecific", "GpSupplierSpecific", "{736E9543-7D67-4D77-822A-79BFD65E80CB}"
 	ProjectSection(SolutionItems) = preProject
@@ -87,23 +87,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GpSupplierSpecific", "GpSup
 		contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.MessagesApi.UnitTests", "NHSOnline.Backend.MessagesApi.UnitTests\NHSOnline.Backend.MessagesApi.UnitTests.csproj", "{DC1B54DB-8F80-4B09-BC2D-E7DE1DA72520}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.MessagesApi.UnitTests", "NHSOnline.Backend.MessagesApi.UnitTests\NHSOnline.Backend.MessagesApi.UnitTests.csproj", "{DC1B54DB-8F80-4B09-BC2D-E7DE1DA72520}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.MessagesApi", "NHSOnline.Backend.MessagesApi\NHSOnline.Backend.MessagesApi.csproj", "{2AEDCC47-819E-4229-B46A-A52D6C6FD612}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.MessagesApi", "NHSOnline.Backend.MessagesApi\NHSOnline.Backend.MessagesApi.csproj", "{2AEDCC47-819E-4229-B46A-A52D6C6FD612}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.LoggerApi", "NHSOnline.Backend.LoggerApi\NHSOnline.Backend.LoggerApi.csproj", "{37A118C6-606C-4803-B785-235E6A54DC0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.LoggerApi", "NHSOnline.Backend.LoggerApi\NHSOnline.Backend.LoggerApi.csproj", "{37A118C6-606C-4803-B785-235E6A54DC0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.LoggerApi.UnitTests", "NHSOnline.Backend.LoggerApi.UnitTests\NHSOnline.Backend.LoggerApi.UnitTests.csproj", "{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.LoggerApi.UnitTests", "NHSOnline.Backend.LoggerApi.UnitTests\NHSOnline.Backend.LoggerApi.UnitTests.csproj", "{7DF21FD7-92D4-4581-B7CD-BBC14228ED75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.UserInfoApi", "NHSOnline.Backend.UserInfoApi\NHSOnline.Backend.UserInfoApi.csproj", "{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.UserInfoApi", "NHSOnline.Backend.UserInfoApi\NHSOnline.Backend.UserInfoApi.csproj", "{98E8AA2E-450C-4973-815E-FA2CFFA8D81D}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "NHSOnline.Backend.UsersApi", "NHSOnline.Backend.UsersApi\NHSOnline.Backend.UsersApi.csproj", "{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.UsersApi", "NHSOnline.Backend.UsersApi\NHSOnline.Backend.UsersApi.csproj", "{CC8869DC-0E52-479F-A1D9-98227AB6FC4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.UserInfoApi.UnitTests", "NHSOnline.Backend.UserInfoApi.UnitTests\NHSOnline.Backend.UserInfoApi.UnitTests.csproj", "{F84EB744-22DE-4067-B76A-C211C678A2AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.UserInfoApi.UnitTests", "NHSOnline.Backend.UserInfoApi.UnitTests\NHSOnline.Backend.UserInfoApi.UnitTests.csproj", "{F84EB744-22DE-4067-B76A-C211C678A2AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRules.Common", "NHSOnline.Backend.ServiceJourneyRules.Common\NHSOnline.Backend.ServiceJourneyRules.Common.csproj", "{F3E8E9DE-CC0F-488D-A427-4CF234092F27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRules.Common", "NHSOnline.Backend.ServiceJourneyRules.Common\NHSOnline.Backend.ServiceJourneyRules.Common.csproj", "{F3E8E9DE-CC0F-488D-A427-4CF234092F27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRules.Common.UnitTests", "NHSOnline.Backend.ServiceJourneyRules.Common.UnitTests\NHSOnline.Backend.ServiceJourneyRules.Common.UnitTests.csproj", "{955D32E4-8D74-46A0-909F-48DFCD643E6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.ServiceJourneyRules.Common.UnitTests", "NHSOnline.Backend.ServiceJourneyRules.Common.UnitTests\NHSOnline.Backend.ServiceJourneyRules.Common.UnitTests.csproj", "{955D32E4-8D74-46A0-909F-48DFCD643E6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

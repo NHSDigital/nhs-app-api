@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.Support
 
             try
             {
-                value = (TEnum) ParseFromDescriptionInternal(type, description);
+                value = (TEnum)ParseFromDescriptionInternal(type, description);
                 return true;
             }
             catch
@@ -38,14 +38,18 @@ namespace NHSOnline.Backend.Support
         {
             var type = typeof(TEnum);
             if (!type.IsEnum)
+            {
                 throw new ArgumentException("Type provided must be an Enum.");
+            }
 
             return type;
         }
+
         public static IEnumerable<TEnum> GetValues<TEnum>()
         {
             return Enum.GetValues(typeof(TEnum)).Cast<TEnum>();
-        }        
+        }
+
         public static string GetDescriptionOrThrowException<TEnum>(TEnum enumerationValue)
         {
             var type = GetType<TEnum>();
@@ -65,10 +69,14 @@ namespace NHSOnline.Backend.Support
         private static object ParseFromDescriptionInternal(Type type, string description)
         {
             if (description == null)
+            {
                 throw new ArgumentNullException(nameof(description));
+            }
 
             if (string.IsNullOrWhiteSpace(description))
+            {
                 throw new ArgumentException("Must specify valid information for parsing in the string.");
+            }
 
             var enumName = GetDescriptions(type)
                 .Where(d => string.Equals(d.Value, description, StringComparison.Ordinal))
@@ -76,7 +84,9 @@ namespace NHSOnline.Backend.Support
                 .FirstOrDefault();
 
             if (enumName == null)
+            {
                 throw new ArgumentException($"Requested value '{description}' was not found.");
+            }
 
             return Enum.Parse(type, enumName);
         }
@@ -84,13 +94,15 @@ namespace NHSOnline.Backend.Support
         private static IDictionary<string, string> GetDescriptions(Type type)
         {
             if (DescriptionsCache.TryGetValue(type, out var descriptions))
+            {
                 return descriptions;
+            }
 
             var newDescriptions = new ConcurrentDictionary<string, string>();
 
             foreach (var fieldInfo in type.GetFields())
             {
-                var attribute = (DescriptionAttribute) fieldInfo.GetCustomAttributes(DescriptionAttributeType, false)
+                var attribute = (DescriptionAttribute)fieldInfo.GetCustomAttributes(DescriptionAttributeType, false)
                     .FirstOrDefault();
 
                 newDescriptions.TryAdd(fieldInfo.Name, attribute != null ? attribute.Description : fieldInfo.Name);

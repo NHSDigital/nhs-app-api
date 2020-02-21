@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,7 +14,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
-    internal class TppPatientRecordService : IPatientRecordService
+    internal sealed class TppPatientRecordService : IPatientRecordService
     {
         private const string TestResultDateFormat = "yyyy-MM-ddTHH:mm:ss.f'Z'";
         private readonly ILogger<TppPatientRecordService> _logger;
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             IGetPatientDocumentsFromDcrEventsTaskChecker patientDocumentsFromDcrEventsTaskChecker,
             ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper,
             ITppClientRequest<TppUserSession, RequestPatientRecordReply> requestPatientRecord)
-            
+
         {
             _patientDcrEventsChecker = patientDcrEventsChecker;
             _patientOverviewTaskChecker = patientOverviewTaskChecker;
@@ -55,7 +55,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _logger.LogEnter();
 
             var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
-
 
             try
             {
@@ -183,7 +182,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             return new TestResults { Data = combinedTestResults };
         }
 
-        private List<TppTestResultDates> GetTestResultDateParams()
+        private static List<TppTestResultDates> GetTestResultDateParams()
         {
 
             var today = DateTime.Now.Date;
@@ -227,7 +226,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
 
             }
-            catch(Exception e) {
+            catch (Exception e)
+            {
 
                 _logger.LogError(e, "Retrieving dcr events failed. Returning hasErrored as true" +
                                     " for Documents and DCR events");
@@ -237,7 +237,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                     {
                         HasErrored = true
                     },
-                    TppDcrEvents =  new TppDcrEvents
+                    TppDcrEvents = new TppDcrEvents
                     {
                         HasErrored = true
                     }
@@ -247,40 +247,41 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
         private async Task<TestResults> RetrieveTestResults(TppUserSession tppUserSession)
         {
-          try
-          {
-
-            _logger.LogInformation("Retrieving Test Results.");
-            return await GetLast180DaysTestResults(tppUserSession);
-
-          }
-          catch(Exception e) {
-
-            _logger.LogError(e, "Retrieving testResults failed. Returning hasErrored as true");
-            return new TestResults
+            try
             {
-              HasErrored = true
-            };
-          }
+
+                _logger.LogInformation("Retrieving Test Results.");
+                return await GetLast180DaysTestResults(tppUserSession);
+
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e, "Retrieving testResults failed. Returning hasErrored as true");
+                return new TestResults
+                {
+                    HasErrored = true
+                };
+            }
         }
 
         private async Task<Tuple<Allergies, Medications>> RetrievePatientOverviewItems(TppUserSession tppUserSession)
         {
-          try
-          {
-            var patientOverview = await _patientOverview.Post(tppUserSession);
-            _logger.LogDebug($"Mapping TPP Patient Overview responses to lists of {nameof(Allergies)} and {nameof(Medications)} classes");
-            return _patientOverviewTaskChecker.Check(patientOverview);
-          }
-          catch(Exception e)
-          {
-             _logger.LogError(e, "Retrieving patientOverViewItems failed. Returning hasErrored as true");
-            var result = new Tuple<Allergies, Medications>(new Allergies(), new Medications());
-            result.Item1.HasErrored = true;
-            result.Item2.HasErrored = true;
+            try
+            {
+                var patientOverview = await _patientOverview.Post(tppUserSession);
+                _logger.LogDebug($"Mapping TPP Patient Overview responses to lists of {nameof(Allergies)} and {nameof(Medications)} classes");
+                return _patientOverviewTaskChecker.Check(patientOverview);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Retrieving patientOverViewItems failed. Returning HasErrored as true");
+                var result = new Tuple<Allergies, Medications>(new Allergies(), new Medications());
+                result.Item1.HasErrored = true;
+                result.Item2.HasErrored = true;
 
-            return result;
-          }
+                return result;
+            }
         }
     }
 }

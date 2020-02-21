@@ -4,13 +4,20 @@
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" />
+  </ItemGroup>
 
   <Choose>
     <When Condition="$(MSBuildProjectName.EndsWith('UnitTests'))">
       <PropertyGroup>
         <IsPublishable>false</IsPublishable>
-        <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/TestCode.ruleset</CodeAnalysisRuleSet>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <Optimize>false</Optimize>
       </PropertyGroup>
@@ -18,19 +25,19 @@
     <When Condition="$(MSBuildProjectName.Contains('UnitTest'))">
       <PropertyGroup>
         <IsPublishable>false</IsPublishable>
-        <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/TestCode.ruleset</CodeAnalysisRuleSet>
         <Optimize>false</Optimize>
       </PropertyGroup>
     </When>
     <When Condition="$(MSBuildProjectName.EndsWith('Api'))">
       <PropertyGroup>
-        <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/ProductionCode.ruleset</CodeAnalysisRuleSet>
       </PropertyGroup>
     </When>
     <Otherwise>
       <PropertyGroup>
         <IsPublishable>false</IsPublishable>
-        <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/ProductionCode.ruleset</CodeAnalysisRuleSet>
       </PropertyGroup>
     </Otherwise>
   </Choose>

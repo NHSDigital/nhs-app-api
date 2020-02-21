@@ -7,70 +7,66 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
-    public class EmisProblemMapper
+    internal sealed class EmisProblemMapper
     {
         private const string DateFormat = "d MMMM yyyy";
-        
+
         public Problems Map(MedicationRootObject problemsGetResponse)
         {
-            if(problemsGetResponse == null)
+            if (problemsGetResponse == null)
             {
                 throw new ArgumentNullException(nameof(problemsGetResponse));
             }
 
             var problems = new Problems();
-            
-            if (problemsGetResponse.MedicalRecord != null)
+
+            var medicalRecord = problemsGetResponse.MedicalRecord;
+
+            if (medicalRecord?.Problems != null)
             {
-                var medicalRecord = problemsGetResponse.MedicalRecord;
-                var problemData = new List<ProblemItem>();
-
-                if (medicalRecord.Problems != null)
-                {
-                    foreach (var problem in medicalRecord.Problems)
-                    {
-                        var problemItem = new ProblemItem();
-                        
-                        problemItem.EffectiveDate = problem.Observation.EffectiveDate != null
-                            ? new MyRecordDate
-                            {
-                                Value = problem.Observation.EffectiveDate.Value,
-                                DatePart = problem.Observation.EffectiveDate.DatePart
-                            }
-                            : new MyRecordDate();
-                        
-                        problemItem.LineItems = new List<ProblemLineItem>
-                        {
-                            new ProblemLineItem { Text = problem.Observation.Term },
-                            new ProblemLineItem { Text = "Significance: " + problem.Significance },
-                            new ProblemLineItem { Text = "Status: " + problem.Status }
-                        };
-
-                        if (problem.Observation.AssociatedText != null)
-                        {
-                            problemItem.LineItems.Add(new ProblemLineItem
-                            {
-                                Text = "Notes:", 
-                                LineItems = problem.Observation.AssociatedText.Select(x => x.Text).ToList(),
-                            });                            
-                        }
-
-                        if (problem.ProblemEndDate != null)
-                        {
-                            problemItem.LineItems.Add(new ProblemLineItem
-                            {
-                                Text = "Ended: " + problem.ProblemEndDate.Value.ToString(DateFormat, CultureInfo.InvariantCulture)
-                            });                           
-                        }
-
-                        problemData.Add(problemItem);
-                    }
-
-                    problems.Data = problemData;
-                }
+                problems.Data = medicalRecord.Problems.Select(Map).ToList();
             }
 
             return problems;
+        }
+
+        private static ProblemItem Map(Problem problem)
+        {
+            var problemItem = new ProblemItem
+            {
+                EffectiveDate = problem.Observation.EffectiveDate != null
+                    ? new MyRecordDate
+                    {
+                        Value = problem.Observation.EffectiveDate.Value,
+                        DatePart = problem.Observation.EffectiveDate.DatePart
+                    }
+                    : new MyRecordDate(),
+                LineItems = new List<ProblemLineItem>
+                {
+                    new ProblemLineItem { Text = problem.Observation.Term },
+                    new ProblemLineItem { Text = "Significance: " + problem.Significance },
+                    new ProblemLineItem { Text = "Status: " + problem.Status }
+                }
+            };
+
+            if (problem.Observation.AssociatedText != null)
+            {
+                problemItem.LineItems.Add(new ProblemLineItem
+                {
+                    Text = "Notes:",
+                    LineItems = problem.Observation.AssociatedText.Select(x => x.Text).ToList(),
+                });
+            }
+
+            if (problem.ProblemEndDate != null)
+            {
+                problemItem.LineItems.Add(new ProblemLineItem
+                {
+                    Text = "Ended: " + problem.ProblemEndDate.Value.ToString(DateFormat, CultureInfo.InvariantCulture)
+                });
+            }
+
+            return problemItem;
         }
     }
 }

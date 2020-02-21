@@ -1,7 +1,6 @@
 FROM nhsapp.azurecr.io/nhsonline-dotnetcore-build as dependencies
 WORKDIR /src
-COPY *.sln ./
-COPY */*.csproj ./
+COPY *.sln */*.csproj Directory.Build.props ./
 RUN for file in *.csproj; do mkdir "${file%.*}" && mv "$file" "${file%.*}"; done
 RUN dotnet restore
 

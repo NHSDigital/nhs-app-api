@@ -3,32 +3,28 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Brothermailer.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.Brothermailer
 {
-    public class BrothermailerClient: IBrothermailerClient
+    public class BrothermailerClient : IBrothermailerClient
     {
         private readonly BrothermailerHttpClient _brothermailerHttpClient;
-        private readonly ILogger<IBrothermailerClient> _logger;
         private readonly IBrothermailerConfig _brothermailerConfig;
         private const string BrothermailerPath = "signup.ashx";
-        
+
         public BrothermailerClient(
-            ILogger<BrothermailerClient> logger, 
-            BrothermailerHttpClient brothermailerHttpClient, 
+            BrothermailerHttpClient brothermailerHttpClient,
             IBrothermailerConfig brothermailerConfig)
         {
-            _logger = logger;
             _brothermailerHttpClient = brothermailerHttpClient;
             _brothermailerConfig = brothermailerConfig;
         }
-        
+
         public async Task<BrothermailerApiObjectResponse> SendEmailAddress(BrothermailerRequest brothermailerRequest)
-        {            
+        {
             var brothermailerData = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("userid", _brothermailerConfig.BrothermailerUserId),
@@ -40,50 +36,50 @@ namespace NHSOnline.Backend.PfsApi.Brothermailer
             };
 
             var brothermailerFormContent = new FormUrlEncodedContent(brothermailerData);
-        
-            return await Post(brothermailerFormContent,
-                BrothermailerPath);            
+
+            return await Post(brothermailerFormContent, BrothermailerPath);
         }
-        
+
         private async Task<BrothermailerApiObjectResponse> Post(FormUrlEncodedContent brothermailerFormContent, string path)
         {
-            var request = BuildBrothermailerRequest(HttpMethod.Post, path);
-            
-            request.Content = brothermailerFormContent;
-            
-            return await SendRequestAndParseResponse(request);
+            using (var request = BuildBrothermailerRequest(HttpMethod.Post, path))
+            {
+                request.Content = brothermailerFormContent;
+
+                return await SendRequestAndParseResponse(request);
+            }
         }
-        
+
         private static HttpRequestMessage BuildBrothermailerRequest(HttpMethod httpMethod, string path)
         {
             return new HttpRequestMessage(httpMethod, path);
         }
-        
+
         private async Task<BrothermailerApiObjectResponse> SendRequestAndParseResponse(
             HttpRequestMessage request)
         {
             var responseMessage = await _brothermailerHttpClient.Client.SendAsync(request);
-           
+
             var response = new BrothermailerApiObjectResponse(responseMessage.StatusCode);
             return response.Parse(responseMessage);
         }
-        
-        public abstract class BrothermailerApiReponse: ApiResponse
+
+        public abstract class BrothermailerApiReponse : ApiResponse
         {
-            protected BrothermailerApiReponse(HttpStatusCode statusCode) :base(statusCode)
-            {}
+            protected BrothermailerApiReponse(HttpStatusCode statusCode) : base(statusCode)
+            { }
 
             public override bool HasSuccessResponse =>
                 StatusCode.IsSuccessStatusCode() || StatusCode == HttpStatusCode.Redirect;
         }
-        
+
         public class BrothermailerApiObjectResponse : BrothermailerApiReponse
         {
             public bool IsSuccess { get; set; }
-            public bool IsInvalidEmail  { get; set; }
-            
+            public bool IsInvalidEmail { get; set; }
+
             public BrothermailerApiObjectResponse(HttpStatusCode statusCode) : base(statusCode)
-            {}
+            { }
 
             public BrothermailerApiObjectResponse Parse(
                 HttpResponseMessage responseMessage)
@@ -94,9 +90,9 @@ namespace NHSOnline.Backend.PfsApi.Brothermailer
             private BrothermailerApiObjectResponse ParseLocationHeaders(
                 HttpResponseMessage responseMessage)
             {
-                IsSuccess = responseMessage?.Headers?.Location?.ToString()?.Contains("result=success", 
+                IsSuccess = responseMessage?.Headers?.Location?.ToString()?.Contains("result=success",
                                 StringComparison.InvariantCultureIgnoreCase) ?? false;
-                IsInvalidEmail = responseMessage?.Headers?.Location?.ToString()?.Contains("reason=invalidemail", 
+                IsInvalidEmail = responseMessage?.Headers?.Location?.ToString()?.Contains("reason=invalidemail",
                                      StringComparison.InvariantCultureIgnoreCase) ?? false;
                 return this;
             }

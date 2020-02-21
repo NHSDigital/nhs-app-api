@@ -34,7 +34,10 @@ namespace NHSOnline.Backend.Support
         {
             try
             {
-                if (source == null) return;
+                if (source == null)
+                {
+                    return;
+                }
 
                 var duplicates = source
                     .Select(x => new { Key = keySelector(x), Element = elementSelector(x) })

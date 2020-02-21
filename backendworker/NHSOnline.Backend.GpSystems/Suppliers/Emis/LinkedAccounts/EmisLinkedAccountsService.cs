@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
         {
             var emisUserSession = (EmisUserSession)gpUserSession;
             var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
-            return (proxy != null || emisUserSession.Id == id);
+            return proxy != null || emisUserSession.Id == id;
         }
 
         public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
             if (IsValidLinkedAccount(gpUserSession, id))
             {
-                var emisUserSession = (EmisUserSession) gpUserSession;
+                var emisUserSession = (EmisUserSession)gpUserSession;
 
                 linkedAccountAuditResult.IsProxyMode = true;
                 linkedAccountAuditResult.ProxyNhsNumber
@@ -164,7 +164,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                     _logger.LogWarning("Not all demographics calls for proxy patients were successful.");
                 }
 
-                var linkedAccounts = successResults.Select(x => {
+                var linkedAccounts = successResults.Select(x =>
+                {
                     var demographics = (DemographicsResult.Success)x.Value.Result;
 
                     var dateOfBirth = demographics.Response.DateOfBirth;
@@ -203,12 +204,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
             return new LinkedAccountsResult.Success(summary, hasAnyNhsNumberBeenUpdatedInSession);
         }
-        private Boolean IsValidLinkedAccount(GpUserSession gpUserSession, Guid id)
+        private bool IsValidLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
             return IsValidAccountOrLinkedAccountId(gpUserSession, id) && (id != gpUserSession.Id);
         }
 
-        public AgeData CalculateAgeInMonthsAndYears(DateTime? dateOfBirth)
+        public static AgeData CalculateAgeInMonthsAndYears(DateTime? dateOfBirth)
         {
             if (dateOfBirth != null)
             {
@@ -286,7 +287,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             }
 
             _logger.LogInformation($"Linked_profiles_count={linkedAccounts.Count()}, " +
-                                   $"excluded_for_not_having_NHS_number={withoutNhsNumbers.Count()}, " +
+                                   $"excluded_for_not_having_NHS_number={withoutNhsNumbers.Count}, " +
                                    $"excluding_for_having_different_ODS_code={mismatchingOdsCodes.Count}, " +
                                    $"valid_and_being_returned: {validAccounts.Count}");
 

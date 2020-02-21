@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             // Assert
             result.Should().BeAssignableTo<AppointmentSlotsResult.Success>()
-                .Subject.Response.Slots.Count().Should().Be(_visionClientSlotsResponse.ServiceContent.Appointments.Slots.Count);
+                .Subject.Response.Slots.Count.Should().Be(_visionClientSlotsResponse.ServiceContent.Appointments.Slots.Count);
             _mockVisionClient.VerifyAll();
         }
 
@@ -125,8 +125,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         public async Task GetSlots_NumberOfSlotsReturnedEqualsMaximumRequested_LogsAWarning()
         {
             // Arrange
-            _settings.VisionAppointmentSlotsRequestCount = _mappedSlots.Count();
-            _mockLogger.SetupLogger(LogLevel.Warning, $"Appointment slots retrieved for Vision patient is equal to the maximum requested ({_mappedSlots.Count()})", null).Verifiable();
+            _settings.VisionAppointmentSlotsRequestCount = _mappedSlots.Count;
+            _mockLogger.SetupLogger(LogLevel.Warning, $"Appointment slots retrieved for Vision patient is equal to the maximum requested ({_mappedSlots.Count})", null).Verifiable();
             var systemUnderTest = BuildSystemUnderTest();
             
             // Act
@@ -135,7 +135,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             // Assert
             var response = result.Should().BeAssignableTo<AppointmentSlotsResult.Success>().Subject.Response;
 
-            response.Slots.Count().Should().Be(3);
+            response.Slots.Count.Should().Be(3);
             _mockVisionClient.VerifyAll();
             _mockLogger.Verify();
         }
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             
             // Assert
             result.Should().BeAssignableTo<AppointmentSlotsResult.Success>()
-                .Subject.Response.Slots.Count().Should().Be(3);
+                .Subject.Response.Slots.Count.Should().Be(3);
             _mockVisionClient.VerifyAll();
             _mockLogger.VerifyLogger(LogLevel.Warning, "Appointment slots retrieved for Vision patient is equal to the maximum requested", Times.Never());
         }

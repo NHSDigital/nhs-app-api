@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHOnline.Backend.LoggerApi.Logging;
 using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
+using NHSOnline.Backend.LoggerApi.Logging;
 
 namespace NHSOnline.Backend.LoggerApi.Areas.Logging
 {
@@ -13,15 +13,14 @@ namespace NHSOnline.Backend.LoggerApi.Areas.Logging
     {
         private readonly ILogger<LoggingController> _logger;
         private readonly ILoggingService _loggingService;
-        
+
         public LoggingController(
             ILogger<LoggingController> logger, ILoggingService loggingService)
         {
             _logger = logger;
             _loggingService = loggingService;
         }
-        
-        
+
         [HttpPost, AllowAnonymous]
         public IActionResult Post([FromBody] CreateLogRequest model)
         {
@@ -31,7 +30,7 @@ namespace NHSOnline.Backend.LoggerApi.Areas.Logging
             {
                 return new BadRequestResult();
             }
-            
+
             try
             {
                 _loggingService.LogMessage(model);

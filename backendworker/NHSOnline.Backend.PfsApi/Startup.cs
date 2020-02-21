@@ -64,9 +64,7 @@ namespace NHSOnline.Backend.PfsApi
             Configuration = configuration;
             _env = env;
 
-            var logSettings = LoggingSettings.GetSettings(Configuration);
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel, logSettings.ErrorLevel, logSettings.CensorFilters));
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel, LogLevel.None, logSettings.CensorFilters));
+            loggerFactory.ConfigureLogging(Configuration);
 
             if (env.IsDevelopment())
             {
@@ -246,9 +244,7 @@ namespace NHSOnline.Backend.PfsApi
         {
             app.UseAuthentication();
 
-            var logSettings = LoggingSettings.GetSettings(Configuration);
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel, logSettings.ErrorLevel, logSettings.CensorFilters));
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel, LogLevel.None, logSettings.CensorFilters));
+            loggerFactory.ConfigureLogging(Configuration);
 
             if (env.IsDevelopment())
             {
@@ -303,8 +299,8 @@ namespace NHSOnline.Backend.PfsApi
             var prescriptionsDefaultLastNumberMonthsToDisplay = Configuration.GetIntOrThrow(
                 "ConfigurationSettings:PrescriptionsDefaultLastNumberMonthsToDisplay", _logger
             );
-            var defaultSessionExpiryMinutes = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultSessionExpiryMinutes" ,_logger);
-            var defaultHttpTimeoutSeconds = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds" ,_logger);
+            var defaultSessionExpiryMinutes = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultSessionExpiryMinutes", _logger);
+            var defaultHttpTimeoutSeconds = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
             var minimumAppAge = Configuration.GetIntOrThrow("ConfigurationSettings:MinimumAppAge", _logger);
             var minimumLinkageAge = Configuration.GetIntOrThrow("ConfigurationSettings:MinimumLinkageAge", _logger);
             var currentTermsConditionsEffectiveDate = DateTimeOffset.Parse(
@@ -312,8 +308,8 @@ namespace NHSOnline.Backend.PfsApi
                 CultureInfo.InvariantCulture
             );
 
-            var config =  new ConfigurationSettings(cookieDomain, prescriptionsDefaultLastNumberMonthsToDisplay,
-            defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds,  minimumAppAge, minimumLinkageAge, currentTermsConditionsEffectiveDate);
+            var config = new ConfigurationSettings(cookieDomain, prescriptionsDefaultLastNumberMonthsToDisplay,
+            defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds, minimumAppAge, minimumLinkageAge, currentTermsConditionsEffectiveDate);
 
             config.Validate();
             return config;
@@ -344,7 +340,8 @@ namespace NHSOnline.Backend.PfsApi
             return config;
         }
 
-        public EmisConfigurationSettings CreateAndValidateEmisEnvironmentVariables(string environment){
+        public EmisConfigurationSettings CreateAndValidateEmisEnvironmentVariables(string environment)
+        {
             var emisBaseUrl = Configuration.GetOrWarn("EMIS_BASE_URL", _logger);
             var applicationId = Configuration.GetOrWarn("EMIS_APPLICATION_ID", _logger);
             var version = Configuration.GetOrWarn("EMIS_VERSION", _logger);
@@ -406,7 +403,6 @@ namespace NHSOnline.Backend.PfsApi
 
             var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
             var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
-            var minimumLinkageAge = Configuration.GetIntOrWarn("ConfigurationSettings:MinimumLinkageAge", _logger);
 
             var config = new TppConfigurationSettings(
                 new Uri(tppBaseUrl, UriKind.Absolute),
@@ -486,7 +482,7 @@ namespace NHSOnline.Backend.PfsApi
             where TOptions : class, IValidatable, new()
         {
             services.Configure<TOptions>(configuration);
-            services.AddSingleton<TOptions>(ctx => ctx.GetRequiredService<IOptions<TOptions>>().Value);
+            services.AddSingleton(ctx => ctx.GetRequiredService<IOptions<TOptions>>().Value);
             services.AddSingleton<IValidatable>(ctx => ctx.GetRequiredService<IOptions<TOptions>>().Value);
             return services;
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 
 namespace NHSOnline.Backend.PfsApi
@@ -7,12 +7,7 @@ namespace NHSOnline.Backend.PfsApi
     {
         public static string FormatToYYYYMMDD(this DateTime? dateTimeValue)
         {
-            if (dateTimeValue == null)
-            {
-                return null;
-            }
-
-            return dateTimeValue.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            return dateTimeValue?.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         }
     }
 }

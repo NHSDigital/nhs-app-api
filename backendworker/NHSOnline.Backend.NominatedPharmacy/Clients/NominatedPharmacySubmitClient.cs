@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,9 +38,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
 
                 var content = BuildContent(nominatedPharmacyUpdateRequest);
 
-                var httpRequest = BuildHttpRequest(_pdsPath, content);
-
-                return await SendRequestAndParseResponse(httpRequest);
+                using (var httpRequest = BuildHttpRequest(_pdsPath, content))
+                {
+                    return await SendRequestAndParseResponse(httpRequest);
+                }
             }
             catch (Exception ex)
             {

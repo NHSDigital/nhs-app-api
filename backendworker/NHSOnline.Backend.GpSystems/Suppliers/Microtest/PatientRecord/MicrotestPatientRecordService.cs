@@ -12,7 +12,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 {
-    public class MicrotestPatientRecordService : IPatientRecordService
+    internal sealed class MicrotestPatientRecordService : IPatientRecordService
     {
         private readonly ILogger<MicrotestPatientRecordService> _logger;
         private readonly IMicrotestClient _microtestClient;
@@ -33,12 +33,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
         {
             _logger.LogEnter();
 
-            var microtestUserSession = (MicrotestUserSession) gpLinkedAccountModel.GpUserSession;
+            var microtestUserSession = (MicrotestUserSession)gpLinkedAccountModel.GpUserSession;
 
             try
             {
 
-               return await RetrieveMicrotestPatientRecord(microtestUserSession);
+                return await RetrieveMicrotestPatientRecord(microtestUserSession);
             }
             catch (HttpRequestException e)
             {
@@ -56,8 +56,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
         }
 
-        private GetMyRecordResult HandleSuccess(MicrotestUserSession microtestUserSession,
-            MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse> medicalRecordResponse )
+        private GetMyRecordResult HandleSuccess(
+            MicrotestUserSession microtestUserSession,
+            MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse> medicalRecordResponse)
         {
             _logger.LogInformation("Patient record tasks completed");
 
@@ -76,14 +77,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             throw new NotImplementedException();
         }
 
-        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentIdentifier, string documentType,
+        public Task<PatientDocument> GetPatientDocumentForDownload(
+            GpUserSession gpUserSession,
+            string documentIdentifier,
+            string documentType,
             string documentName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier,
-            string documentType, string documentName)
+        public Task<GetPatientDocumentResult> GetPatientDocument(
+            GpUserSession gpUserSession,
+            string documentIdentifier,
+            string documentType,
+            string documentName)
         {
             throw new NotImplementedException();
         }
@@ -94,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
 
         private async Task<GetMyRecordResult> RetrieveMicrotestPatientRecord(MicrotestUserSession microtestUserSession)
         {
-            var medicalRecordResponse =  _microtestClient.MedicalRecordGet(microtestUserSession.OdsCode,
+            var medicalRecordResponse = _microtestClient.MedicalRecordGet(microtestUserSession.OdsCode,
                     microtestUserSession.NhsNumber);
 
             await medicalRecordResponse;
@@ -111,12 +118,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
 
             _logger.LogError("Microtest system is currently unavailable");
-            return HandleSuccess(microtestUserSession, getEmptyMicrotestMedicalRecordResponse());
+            return HandleSuccess(microtestUserSession, GetEmptyMicrotestMedicalRecordResponse());
         }
 
-        private MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse> getEmptyMicrotestMedicalRecordResponse()
-        {
-            return new MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>(HttpStatusCode.OK)
+        private static MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse> GetEmptyMicrotestMedicalRecordResponse() =>
+            new MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>(HttpStatusCode.OK)
             {
                 Body = new PatientRecordGetResponse
                 {
@@ -131,7 +137,5 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
                     MedicalHistoryData = { HasErrored = true }
                 }
             };
-        }
-
     }
 }

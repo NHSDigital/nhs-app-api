@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         private readonly IAuditor _auditor;
         private readonly AccessToken _accessToken;
         private readonly ILogger<MessagesController> _logger;
-        
+
         private const Supplier Supplier = Support.Supplier.Microsoft;
         private const string AuditType = AuditingOperations.GetUserMessagesAuditTypeResponse;
 
@@ -29,8 +29,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         {
             try
             {
-                var auditMessage = $"{result.Response.Sum(x => x.Messages.Count())} user messages retrieved";
-                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier,AuditType, auditMessage);
+                var auditMessage = $"{result.Response.Sum(x => x.Messages.Count)} user messages retrieved";
+                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier, AuditType, auditMessage);
             }
             catch (Exception e)
             {
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             try
             {
                 var auditMessage = "No user messages retrieved";
-                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier,AuditType, auditMessage);
+                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier, AuditType, auditMessage);
             }
             catch (Exception e)
             {
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             try
             {
                 var auditMessage = "User messages request unsuccessful due to BadGateway";
-                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier,AuditType, auditMessage);
+                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier, AuditType, auditMessage);
             }
             catch (Exception e)
             {
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             try
             {
                 var auditMessage = "User messages request unsuccessful due to BadRequest";
-                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier,AuditType, auditMessage);
+                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier, AuditType, auditMessage);
             }
             catch (Exception e)
             {
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             try
             {
                 var auditMessage = "User messages request unsuccessful due to InternalServerError";
-                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier,AuditType, auditMessage);
+                await _auditor.AuditSecureTokenEvent(_accessToken, Supplier, AuditType, auditMessage);
             }
             catch (Exception e)
             {

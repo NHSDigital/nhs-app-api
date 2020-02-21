@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Support
             var stringResponse = responseMessage.Content != null
                 ? await responseMessage.Content.ReadAsStringAsync()
                 : null;
-            
+
             if (string.IsNullOrEmpty(stringResponse))
             {
                 logger.LogError($"Response with status code {responseMessage.StatusCode} and no body");

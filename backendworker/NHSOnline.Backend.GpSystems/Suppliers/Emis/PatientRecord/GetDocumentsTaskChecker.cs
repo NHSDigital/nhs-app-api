@@ -6,7 +6,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
-    public class GetDocumentsTaskChecker
+    internal sealed class GetDocumentsTaskChecker
     {
         private readonly ILogger<GetDocumentsTaskChecker> _logger;
         private readonly EmisDocumentsMapper _mapper;

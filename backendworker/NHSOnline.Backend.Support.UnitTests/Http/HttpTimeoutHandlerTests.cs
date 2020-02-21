@@ -177,6 +177,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
         [TestCleanup]
         public void Dispose()
         {
+            _httpRequestMessage?.Dispose();
             _mockHttpHandler?.Dispose();
         }
     }

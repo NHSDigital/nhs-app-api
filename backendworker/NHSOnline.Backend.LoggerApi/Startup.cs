@@ -18,20 +18,17 @@ using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.Support.Settings;
 
-namespace NHOnline.Backend.LoggerApi
+namespace NHSOnline.Backend.LoggerApi
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _env;
         private readonly string _apiAppVersion;
         private IConfiguration Configuration { get; }
         private readonly ModularStartup _modularStartup;
-        private readonly ILogger<Startup> _logger;
 
         public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
-            _env = env;
 
             if (env.IsDevelopment())
             {
@@ -41,14 +38,13 @@ namespace NHOnline.Backend.LoggerApi
             _apiAppVersion = Configuration.GetApiAppVersion();
 
             _modularStartup = new ModularStartup(configuration, loggerFactory);
-            _logger = loggerFactory.CreateLogger<Startup>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {   
+        {
             services.AddCors();
-                        
+
             services
                 .AddMvc(ConfigureMvcOptions)
                 .AddJsonOptions(
@@ -75,7 +71,7 @@ namespace NHOnline.Backend.LoggerApi
 
             _modularStartup.ConfigureServices(services);
         }
-        
+
         private static void ConfigureMvcOptions(MvcOptions options)
         {
             options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
@@ -88,10 +84,8 @@ namespace NHOnline.Backend.LoggerApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            var logSettings = LoggingSettings.GetSettings(Configuration);
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel, logSettings.ErrorLevel, logSettings.CensorFilters));
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel, LogLevel.None, logSettings.CensorFilters));
-        
+            loggerFactory.ConfigureLogging(Configuration);
+
             loggerFactory.AddDebug();
             app.UseDeveloperExceptionPage();
 

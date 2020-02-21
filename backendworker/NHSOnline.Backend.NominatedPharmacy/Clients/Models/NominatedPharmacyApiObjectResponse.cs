@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients.Models
 
         protected override bool FormatResponseIfUnsuccessful => false;
     }
-    
+
     public abstract class NominatedPharmacyApiResponse : ApiResponse
     {
         protected NominatedPharmacyApiResponse(HttpStatusCode statusCode) : base(statusCode)

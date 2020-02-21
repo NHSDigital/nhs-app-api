@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
         private readonly ILogger _logger;
         private readonly IProcessState _processState;
         private readonly IFileHandler _fileHandler;
-        
+
         private const string ErrorReadingMessage = "Error reading the GP info csv file";
 
         public GpInfoReader(ILogger<GpInfoReader> logger, IFileHandler fileHandler, IProcessState processState)
@@ -22,12 +22,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
             _fileHandler = fileHandler;
             _processState = processState;
         }
-        
+
         public IDictionary<string, GpInfo> GetGpInfo(string filePath)
         {
             try
             {
-                var result = ReadGpInfoFromCsv(filePath).ToList();
+                var result = ReadGpInfoFromCsv(filePath);
 
                 if (!_processState.HasError)
                 {
@@ -42,21 +42,23 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
             {
                 _logger.LogError(e, ErrorReadingMessage);
             }
-            
+
             return null;
         }
-        
+
         private IEnumerable<GpInfo> ReadGpInfoFromCsv(string filePath)
         {
             var reader = _fileHandler.GetTextReader(filePath);
-            
-            var csvReader = new CsvReader(reader);
-            
-            csvReader.Configuration.TypeConverterCache.AddConverter<GpInfoSupplier>(new EnumDescriptionConverter<GpInfoSupplier>(_processState, _logger));
-            
-            csvReader.Configuration.PrepareHeaderForMatch = (header, index) => header.ToUpperInvariant();
-            
-            return csvReader.GetRecords<GpInfo>();
+
+            using (var csvReader = new CsvReader(reader))
+            {
+                csvReader.Configuration.TypeConverterCache.AddConverter<GpInfoSupplier>(
+                    new EnumDescriptionConverter<GpInfoSupplier>(_processState, _logger));
+
+                csvReader.Configuration.PrepareHeaderForMatch = (header, index) => header.ToUpperInvariant();
+
+                return csvReader.GetRecords<GpInfo>().ToList();
+            }
         }
     }
 }

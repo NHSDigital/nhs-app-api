@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
         {
             _logger.LogEnter();
             var visionUserSession = (VisionUserSession)gpLinkedAccountModel.GpUserSession;
-            
+
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {
                 _logger.LogError("The Vision repeat prescriptions service is not enabled");
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             try
             {
                 _logger.LogDebug("Beginning Fetch Courses for user");
-                
+
                 var coursesResponse = await _visionClient.GetEligibleRepeats(visionUserSession);
 
                 _logger.LogDebug("Fetch Courses for user complete");
@@ -62,20 +62,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                             .LogDebug("Filtering courses from successful vision response. Unfiltered number of courses: " +
                                       $"{coursesResponse.Body.EligibleRepeats.Repeats.Count}");
 
-                        coursesResponse.Body.EligibleRepeats.Repeats = 
+                        coursesResponse.Body.EligibleRepeats.Repeats =
                             coursesResponse.Body.EligibleRepeats.Repeats
                             .OrderBy(x => x.Drug).ToList();
-                        
-                        if(_settings.CoursesMaxCoursesLimit.HasValue) 
+
+                        if (_settings.CoursesMaxCoursesLimit.HasValue)
                         {
-                            coursesResponse.Body.EligibleRepeats.Repeats = 
+                            coursesResponse.Body.EligibleRepeats.Repeats =
                                 coursesResponse.Body.EligibleRepeats.Repeats
                                 .Take(_settings.CoursesMaxCoursesLimit.Value).ToList();
                         }
 
-                        var numberOfCoursesAfterFiltering = coursesResponse.Body.EligibleRepeats.Repeats.Count();
+                        var numberOfCoursesAfterFiltering = coursesResponse.Body.EligibleRepeats.Repeats.Count;
                         var numberOfCoursesDiscarded = totalCourses - numberOfCoursesAfterFiltering;
-                        
+
                         var coursesCount = new FilteringCounts
                         {
                             ReceivedCount = totalCourses,
@@ -90,8 +90,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 
                         visionUserSession.AllowFreeTextPrescriptions = coursesResponse.Body.EligibleRepeats.Settings.AllowFreeText;
 
-                        return new GetCoursesResult.Success(courseListResponse, 
-                            coursesCount, 
+                        return new GetCoursesResult.Success(courseListResponse,
+                            coursesCount,
                             visionUserSession.AllowFreeTextPrescriptions);
                     }
                     catch (Exception e)
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                         return new GetCoursesResult.InternalServerError();
                     }
                 }
-                
+
                 _logger.LogError($"Vision system encountered an error: { coursesResponse.ErrorForLogging }");
                 _logger.LogVisionErrorResponse(coursesResponse);
 

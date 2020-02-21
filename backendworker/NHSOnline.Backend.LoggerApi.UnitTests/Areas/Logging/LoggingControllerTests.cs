@@ -6,9 +6,9 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHOnline.Backend.LoggerApi.Logging;
 using NHSOnline.Backend.LoggerApi.Areas.Logging;
 using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
+using NHSOnline.Backend.LoggerApi.Logging;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging

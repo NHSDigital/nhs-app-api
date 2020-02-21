@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Logging;
 
@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.Support.ValidationAttributes
     public sealed class SafeStringAttribute : ValidationAttribute
     {
         public SafeStringAttribute()
-            :base("The value was not deemed safe")
+            : base("The value was not deemed safe")
         {
         }
 
@@ -20,12 +20,12 @@ namespace NHSOnline.Backend.Support.ValidationAttributes
             {
                 return ValidationResult.Success;
             }
-            
-            if (!(value is String valueToValidate))
+
+            if (!(value is string valueToValidate))
             {
                 return new ValidationResult(ErrorMessageString);
             }
-            
+
             if (valueToValidate.Contains("<script>", StringComparison.OrdinalIgnoreCase))
             {
                 var logger = (ILogger<SafeStringAttribute>)validationContext.GetService(typeof(ILogger<SafeStringAttribute>));

@@ -1,4 +1,4 @@
-﻿using System.Xml;
+using System.Xml;
 using System.Xml.XPath;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -6,8 +6,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Envelope.Servic
 {
     public abstract class AbstractXmlEvaluator
     {
-        protected readonly XPathNavigator Nav;
-        protected readonly XmlNamespaceManager Manager;
+        protected XPathNavigator Nav { get;  }
+        protected XmlNamespaceManager Manager { get; }
 
         protected const string SoapBody = "boolean(//soapenv:Envelope/soapenv:Body/";
 

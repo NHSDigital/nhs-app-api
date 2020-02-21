@@ -6,14 +6,13 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
-    public interface ITppDcrEventsDocumentsMapper
+    internal interface ITppDcrEventsDocumentsMapper
     {
         PatientDocuments Map(RequestPatientRecordReply requestPatientRecordReply);
     }
 
-    public class TppDcrEventsDocumentsMapper : ITppDcrEventsDocumentsMapper
+    internal sealed class TppDcrEventsDocumentsMapper : ITppDcrEventsDocumentsMapper
     {
-
         public PatientDocuments Map(RequestPatientRecordReply requestPatientRecordReply)
         {
             if (requestPatientRecordReply == null)
@@ -29,23 +28,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             };
         }
 
-        private IEnumerable<DocumentItem> MapEvents(List<Event> events)
+        private static IEnumerable<DocumentItem> MapEvents(List<Event> events)
         {
             if (events == null)
             {
                 return new List<DocumentItem>();
             }
 
-            return events?.ToDictionary(
+            return events.ToDictionary(
                     dcrEvent => dcrEvent,
                     dcrEvent => dcrEvent.Items.Where(eventItem => eventItem.Type.Equals("Letter", StringComparison.Ordinal)
-                                             || eventItem.Type.Equals("Attachment", StringComparison.Ordinal))
-                )
+                                             || eventItem.Type.Equals("Attachment", StringComparison.Ordinal)))
                 .SelectMany(eventItemPair =>
                     eventItemPair.Value.Select(item =>
                         MapDocument(
                             item,
-                            new MyRecordDate()
+                            new MyRecordDate
                             {
                                 Value = eventItemPair.Key.Date.SafeParseToNullableDateTimeOffset(),
                             }
@@ -55,7 +53,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 .ToList();
         }
 
-        private DocumentItem MapDocument(RequestPatientRecordItem inputEventItem, MyRecordDate date)
+        private static DocumentItem MapDocument(RequestPatientRecordItem inputEventItem, MyRecordDate date)
         {
             return new DocumentItem
             {

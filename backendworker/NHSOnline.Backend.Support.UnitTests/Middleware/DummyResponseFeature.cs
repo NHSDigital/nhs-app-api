@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
 
         public bool HasStarted { get; private set; }
 
-        public IHeaderDictionary Headers { get; set; }
+        IHeaderDictionary IHttpResponseFeature.Headers { get; set; } = new HeaderDictionary();
 
         public string ReasonPhrase { get; set; }
 

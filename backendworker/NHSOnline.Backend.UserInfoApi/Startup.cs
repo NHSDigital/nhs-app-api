@@ -116,12 +116,7 @@ namespace NHSOnline.Backend.UserInfoApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            // Read in optional log configuration...
-            var logSettings = LoggingSettings.GetSettings(Configuration);
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel,
-                logSettings.ErrorLevel, logSettings.CensorFilters));
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel,
-                LogLevel.None, logSettings.CensorFilters));
+            loggerFactory.ConfigureLogging(Configuration);
 
             if (IsDevelopment)
             {

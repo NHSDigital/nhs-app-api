@@ -77,32 +77,37 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         private async Task<OrganDonationResponse<TResponse>> Get<TResponse>(string path)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, path);
-            return await SendRequestAndParseResponse<TResponse>(request);
+            using (var request = new HttpRequestMessage(HttpMethod.Get, path))
+            {
+                return await SendRequestAndParseResponse<TResponse>(request);
+            }
         }
 
         private async Task<OrganDonationResponse<TResponse>> Post<TRequest, TResponse>(
             TRequest model, UserSession userSession, string path)
         {
-            var request = BuildRegistrationRequest(HttpMethod.Post, userSession, path, model);
-
-            return await SendRequestAndParseResponse<TResponse>(request);
+            using (var request = BuildRegistrationRequest(HttpMethod.Post, userSession, path, model))
+            {
+                return await SendRequestAndParseResponse<TResponse>(request);
+            }
         }
 
         private async Task<OrganDonationResponse<TResponse>> Put<TRequest, TResponse>(
             TRequest model, UserSession userSession, string path)
         {
-            var request = BuildRegistrationRequest(HttpMethod.Put, userSession, path, model);
-
-            return await SendRequestAndParseResponse<TResponse>(request);
+            using (var request = BuildRegistrationRequest(HttpMethod.Put, userSession, path, model))
+            {
+                return await SendRequestAndParseResponse<TResponse>(request);
+            }
         }
 
         private async Task<OrganDonationResponse<TResponse>> Delete<TRequest, TResponse>(
             TRequest model, UserSession userSession, string path)
         {
-            var request = BuildRegistrationRequest(HttpMethod.Delete, userSession, path, model);
-
-            return await SendRequestAndParseResponse<TResponse>(request);
+            using (var request = BuildRegistrationRequest(HttpMethod.Delete, userSession, path, model))
+            {
+                return await SendRequestAndParseResponse<TResponse>(request);
+            }
         }
 
         private HttpRequestMessage BuildRegistrationRequest<TRequest>(HttpMethod httpMethod, UserSession userSession, string path, TRequest model)

@@ -6,34 +6,40 @@ using System;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
-    public class EmisImmunisationMapper
+    internal sealed class EmisImmunisationMapper
     {
-        public Immunisations Map(MedicationRootObject immunisationsGetResponse)
+        internal Immunisations Map(MedicationRootObject immunisationsGetResponse)
         {
-            if(immunisationsGetResponse == null)
+            if (immunisationsGetResponse == null)
             {
                 throw new ArgumentNullException(nameof(immunisationsGetResponse));
             }
 
             var immunisations = new Immunisations();
 
-            if (immunisationsGetResponse.MedicalRecord == null) return immunisations;
-            
+            if (immunisationsGetResponse.MedicalRecord == null)
+            {
+                return immunisations;
+            }
+
             var medicalRecord = immunisationsGetResponse.MedicalRecord;
 
             immunisations.Data = (medicalRecord.Immunisations ?? Enumerable.Empty<Immunisation>())
                 .Where(i => !string.IsNullOrEmpty(i.Term))
-                .Select(x =>
-                    new ImmunisationItem
-                    {
-                        Term = x.Term,
-                        EffectiveDate = x.EffectiveDate != null ? new MyRecordDate
-                        {
-                            Value = x.EffectiveDate?.Value,
-                            DatePart = x.EffectiveDate?.DatePart
-                        } : new MyRecordDate()
-                    });
+                .Select(Map);
+
             return immunisations;
-        }   
+        }
+
+        private static ImmunisationItem Map(Immunisation immunisation)
+            => new ImmunisationItem
+            {
+                Term = immunisation.Term,
+                EffectiveDate = immunisation.EffectiveDate != null ? new MyRecordDate
+                {
+                    Value = immunisation.EffectiveDate?.Value,
+                    DatePart = immunisation.EffectiveDate?.DatePart
+                } : new MyRecordDate()
+            };
     }
 }

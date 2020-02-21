@@ -19,7 +19,7 @@ using Document = DocumentFormat.OpenXml.Wordprocessing.Document;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
-    public class EmisPatientRecordService : IPatientRecordService
+    internal sealed class EmisPatientRecordService : IPatientRecordService
     {
         private readonly ILogger<EmisPatientRecordService> _logger;
         private readonly IEmisClient _emisClient;
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
         private readonly GetAllergiesTaskChecker _allergiesTaskChecker;
         private readonly GetMedicationsTaskChecker _medicationsTaskChecker;
-        private readonly GetImmunisationsTaskChecker _immunistationsTaskChecker;
+        private readonly GetImmunisationsTaskChecker _immunisationsTaskChecker;
         private readonly GetTestResultsTaskChecker _testResultsTaskChecker;
         private readonly GetProblemsTaskChecker _problemsTaskChecker;
         private readonly GetConsultationsTaskChecker _consultationsTaskChecker;
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
             _allergiesTaskChecker =allergiesTaskChecker;
             _medicationsTaskChecker = medicationsTaskChecker;
-            _immunistationsTaskChecker = immunisationsTaskChecker;
+            _immunisationsTaskChecker = immunisationsTaskChecker;
             _testResultsTaskChecker = testResultsTaskChecker;
             _problemsTaskChecker = problemsTaskChecker;
             _consultationsTaskChecker = consultationsTaskChecker;
@@ -345,7 +345,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             {
                 var immunisationsTask = _emisClient.MedicalRecordGet(emisRequestParameters, RecordType.Immunisations);
                 await immunisationsTask;
-                return _immunistationsTaskChecker.Check(immunisationsTask);
+                return _immunisationsTaskChecker.Check(immunisationsTask);
             }
             catch(Exception e)
             {

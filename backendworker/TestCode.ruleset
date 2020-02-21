@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="New Rule Set" Description=" " ToolsVersion="15.0">
+<RuleSet Name="New Rule Set" Description=" " ToolsVersion="16.0">
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1000" Action="Warning" />
     <Rule Id="CA1001" Action="Warning" />
@@ -58,14 +58,14 @@
     <Rule Id="CA1059" Action="Warning" />
     <Rule Id="CA1060" Action="Warning" />
     <Rule Id="CA1061" Action="Warning" />
-    <Rule Id="CA1062" Action="Warning" />
+    <Rule Id="CA1062" Action="Info" />
     <Rule Id="CA1063" Action="Warning" />
     <Rule Id="CA1064" Action="Warning" />
     <Rule Id="CA1065" Action="Warning" />
     <Rule Id="CA1300" Action="Warning" />
     <Rule Id="CA1301" Action="Warning" />
     <Rule Id="CA1302" Action="Warning" />
-    <Rule Id="CA1303" Action="Warning" />
+    <Rule Id="CA1303" Action="Info" />
     <Rule Id="CA1304" Action="Warning" />
     <Rule Id="CA1305" Action="Warning" />
     <Rule Id="CA1306" Action="Warning" />
@@ -93,7 +93,7 @@
     <Rule Id="CA1502" Action="Warning" />
     <Rule Id="CA1504" Action="Warning" />
     <Rule Id="CA1505" Action="Warning" />
-    <Rule Id="CA1506" Action="Warning" />
+    <Rule Id="CA1506" Action="Info" />
     <Rule Id="CA1600" Action="Warning" />
     <Rule Id="CA1601" Action="Warning" />
     <Rule Id="CA1700" Action="Warning" />
@@ -141,7 +141,7 @@
     <Rule Id="CA1900" Action="Warning" />
     <Rule Id="CA1901" Action="Warning" />
     <Rule Id="CA1903" Action="Warning" />
-    <Rule Id="CA2000" Action="Warning" />
+    <Rule Id="CA2000" Action="Info" />
     <Rule Id="CA2001" Action="Warning" />
     <Rule Id="CA2002" Action="Warning" />
     <Rule Id="CA2003" Action="Warning" />
@@ -216,7 +216,7 @@
     <Rule Id="CA2224" Action="Warning" />
     <Rule Id="CA2225" Action="Warning" />
     <Rule Id="CA2226" Action="Warning" />
-    <Rule Id="CA2227" Action="Warning" />
+    <Rule Id="CA2227" Action="Info" />
     <Rule Id="CA2228" Action="Warning" />
     <Rule Id="CA2229" Action="Warning" />
     <Rule Id="CA2230" Action="Warning" />
@@ -659,5 +659,14 @@
     <Rule Id="C6993" Action="Warning" />
     <Rule Id="C6995" Action="Warning" />
     <Rule Id="C6997" Action="Warning" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
+    <Rule Id="CA1062" Action="Info" />
+    <Rule Id="CA1506" Action="Info" />
+    <Rule Id="CA2227" Action="Info" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.NetCore.Analyzers" RuleNamespace="Microsoft.NetCore.Analyzers">
+    <Rule Id="CA1303" Action="Info" />
+    <Rule Id="CA2000" Action="Info" />
   </Rules>
 </RuleSet>

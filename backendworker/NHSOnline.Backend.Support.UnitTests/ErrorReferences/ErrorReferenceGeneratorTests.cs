@@ -229,26 +229,13 @@ namespace NHSOnline.Backend.Support.UnitTests
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~ErrorReferenceGeneratorTests()
-        {
-            Dispose(false);
-        }
-
-        private void Dispose(bool disposing)
-        {
             if (_disposed)
             {
                 return;
             }
 
-            if (disposing)
-            {
-                _randomStringGenerator.Dispose();
-            }
+            _loggerFactory.Dispose();
+            _randomStringGenerator.Dispose();
 
             _disposed = true;
         }

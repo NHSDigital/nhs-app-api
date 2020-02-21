@@ -80,7 +80,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
                 AppointmentsPath, odsCode, nhsNumber);
             _logger.LogExit();
             return response;
-            
         }
 
         public async Task<MicrotestApiResponse> AppointmentsDelete(
@@ -145,7 +144,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             _logger.LogEnter();
 
             var path = PrescriptionsHistoryPath;
-            
+
             if (fromDate.HasValue)
             {
                 var fromDateString = fromDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
@@ -190,50 +189,55 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             string odsCode = null,
             string nhsNumber = null)
         {
-            var request = BuildRequest(HttpMethod.Get, path, odsCode, nhsNumber);
-            return await SendRequestAndParseResponse<TResponse>(request);
+            using (var request = BuildRequest(HttpMethod.Get, path, odsCode, nhsNumber))
+            {
+                return await SendRequestAndParseResponse<TResponse>(request);
+            }
         }
 
         private async Task<MicrotestApiObjectResponse<TResponse>> Post<TRequest, TResponse>(
             TRequest requestBody,
             string path,
             string odsCode = null,
-            string nhsNumber = null
-        )
+            string nhsNumber = null)
         {
-            var request = BuildRequest(HttpMethod.Post, path, odsCode, nhsNumber);
-            var requestBodyJson = JsonConvert.SerializeObject(requestBody);
-            request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
+            using (var request = BuildRequest(HttpMethod.Post, path, odsCode, nhsNumber))
+            {
+                var requestBodyJson = JsonConvert.SerializeObject(requestBody);
+                request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
 
-            return await SendRequestAndParseResponse<TResponse>(request);
+                return await SendRequestAndParseResponse<TResponse>(request);
+            }
         }
 
         private async Task<MicrotestApiResponse> PostWithoutParsing<TRequest>(
             TRequest requestBody,
             string path,
             string odsCode = null,
-            string nhsNumber = null
-        )
+            string nhsNumber = null)
         {
-            var request = BuildRequest(HttpMethod.Post, path, odsCode, nhsNumber);
-            var requestBodyJson = JsonConvert.SerializeObject(requestBody);
-            request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
+            using (var request = BuildRequest(HttpMethod.Post, path, odsCode, nhsNumber))
+            {
+                var requestBodyJson = JsonConvert.SerializeObject(requestBody);
+                request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
 
-            return await SendRequest(request);
+                return await SendRequest(request);
+            }
         }
 
         private async Task<MicrotestApiResponse> Delete<TRequest>(
             TRequest requestBody,
             string path,
             string odsCode = null,
-            string nhsNumber = null
-        )
+            string nhsNumber = null)
         {
-            var request = BuildRequest(HttpMethod.Delete, path, odsCode, nhsNumber);
-            var requestBodyJson = JsonConvert.SerializeObject(requestBody);
-            request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
+            using (var request = BuildRequest(HttpMethod.Delete, path, odsCode, nhsNumber))
+            {
+                var requestBodyJson = JsonConvert.SerializeObject(requestBody);
+                request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
 
-            return await SendRequest(request);
+                return await SendRequest(request);
+            }
         }
 
         private static HttpRequestMessage BuildRequest(
@@ -291,7 +295,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             {
             }
 
-            public string ErrorResponseMessage { get; set; }
+            private string ErrorResponseMessage { get; set; }
 
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
 
@@ -318,25 +322,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             }
 
             public TBody Body { get; set; }
-            
-            public async Task<MicrotestApiObjectResponse<TBody>> Parse(
-                HttpResponseMessage responseMessage,
+
+            public async Task Parse(HttpResponseMessage responseMessage,
                 IJsonResponseParser responseParser,
                 ILogger logger)
             {
                 var stringResponse = await GetStringResponse(responseMessage, logger);
-                return string.IsNullOrEmpty(stringResponse)
-                    ? this
-                    : ParseResponse(responseParser,
-                        stringResponse);
+                if (!string.IsNullOrEmpty(stringResponse))
+                {
+                    ParseResponse(responseParser, stringResponse);
+                }
             }
 
-            private MicrotestApiObjectResponse<TBody> ParseResponse(
-                IResponseParser responseParser,
-                string stringResponse)
+            private void ParseResponse(IResponseParser responseParser, string stringResponse)
             {
                 Body = responseParser.ParseBody<TBody>(stringResponse);
-                return this;
             }
         }
     }

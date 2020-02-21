@@ -4,32 +4,36 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
-    public class EmisAllergyMapper
+    internal sealed class EmisAllergyMapper
     {
-        public Allergies Map(MedicationRootObject allergiesGetResponse)
+        internal Allergies Map(MedicationRootObject allergiesGetResponse)
         {
-            if(allergiesGetResponse == null)
+            if (allergiesGetResponse == null)
             {
                 throw new System.ArgumentNullException(nameof(allergiesGetResponse));
             }
 
             var allergies = new Allergies();
-            
+
             if (allergiesGetResponse.MedicalRecord != null)
             {
                 var medicalRecord = allergiesGetResponse.MedicalRecord;
 
-                allergies.Data = (medicalRecord.Allergies ?? Enumerable.Empty<Allergy>()).Select(x =>
-                    new AllergyItem
-                    {
-                        Name = x.Term,
-                        Date = x.EffectiveDate != null ? 
-                                        new MyRecordDate { Value = x.EffectiveDate.Value, DatePart = x.EffectiveDate.DatePart } :
-                                        new MyRecordDate()
-                    });
+                allergies.Data = (medicalRecord.Allergies ?? Enumerable.Empty<Allergy>()).Select(Map).ToList();
             }
 
             return allergies;
+        }
+
+        private static AllergyItem Map(Allergy allergy)
+        {
+            return new AllergyItem
+            {
+                Name = allergy.Term,
+                Date = allergy.EffectiveDate != null ?
+                    new MyRecordDate { Value = allergy.EffectiveDate.Value, DatePart = allergy.EffectiveDate.DatePart } :
+                    new MyRecordDate()
+            };
         }
     }
 }

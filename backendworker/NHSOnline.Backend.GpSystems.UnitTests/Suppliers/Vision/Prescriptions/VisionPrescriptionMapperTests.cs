@@ -406,7 +406,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             result.Should().NotBeNull();
-            result.Courses.Should().HaveCount(item.Repeats.Count());
+            result.Courses.Should().HaveCount(item.Repeats.Count);
 
             var expectedResult = new CourseListResponse
             {

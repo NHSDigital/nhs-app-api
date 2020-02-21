@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
@@ -6,7 +6,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
-    public class GetProblemsTaskChecker
+    internal sealed class GetProblemsTaskChecker
     {
         private readonly ILogger<GetProblemsTaskChecker> _logger;
         private readonly EmisProblemMapper _mapper;

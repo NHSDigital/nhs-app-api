@@ -15,12 +15,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Middleware
         public async Task Response_IsAdding_NoCacheHeaders()
         {
             // Arrange
-            var feature = new DummyResponseFeature
-            {
-                Headers = new HeaderDictionary()
-            };
-
-            feature.Headers = new HeaderDictionary();
+            var feature = new DummyResponseFeature();
             var context = new DefaultHttpContext();
 
             context.Features.Set<IHttpResponseFeature>(feature);

@@ -45,25 +45,26 @@ namespace NHSOnline.Backend.Auth.CitizenId
             {
                 _logger.LogEnter();
 
-                var request = new HttpRequestMessage(HttpMethod.Post, _config.TokenPath);
-
-                var token = _citizenIdJwtHelper.CreateClientAuthJwt();
-
-                var dict = new Dictionary<string, string>
+                using (var request = new HttpRequestMessage(HttpMethod.Post, _config.TokenPath))
                 {
-                    { "grant_type", "authorization_code" },
-                    { "code", authCode },
-                    { "redirect_uri", redirectUrl },
-                    { "code_verifier", codeVerifier },
-                    { "code_challenge_method", "S256" },
-                    { "client_assertion", token },
-                    { "client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer" }
-                };
+                    var token = _citizenIdJwtHelper.CreateClientAuthJwt();
 
-                request.Content = new FormUrlEncodedContent(dict);
+                    var dict = new Dictionary<string, string>
+                    {
+                        { "grant_type", "authorization_code" },
+                        { "code", authCode },
+                        { "redirect_uri", redirectUrl },
+                        { "code_verifier", codeVerifier },
+                        { "code_challenge_method", "S256" },
+                        { "client_assertion", token },
+                        { "client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer" }
+                    };
 
-                var response = await SendRequestAndParseResponse<Token>(request);
-                return response;
+                    request.Content = new FormUrlEncodedContent(dict);
+
+                    var response = await SendRequestAndParseResponse<Token>(request);
+                    return response;
+                }
             }
             finally
             {
@@ -73,20 +74,22 @@ namespace NHSOnline.Backend.Auth.CitizenId
 
         public async Task<CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string accessToken)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, UserInfoPath);
+            using (var request = new HttpRequestMessage(HttpMethod.Get, UserInfoPath))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-            var response = await SendRequestAndParseResponse<UserInfo>(request);
-            return response;
+                var response = await SendRequestAndParseResponse<UserInfo>(request);
+                return response;
+            }
         }
 
         public async Task<CitizenIdApiObjectResponse<JsonWebKeySet>> GetSigningKeys()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, SigningKeysPath);
-
-            var response = await SendRequestAndParseResponse<JsonWebKeySet>(request);
-            return response;
+            using (var request = new HttpRequestMessage(HttpMethod.Get, SigningKeysPath))
+            {
+                var response = await SendRequestAndParseResponse<JsonWebKeySet>(request);
+                return response;
+            }
         }
 
         private async Task<CitizenIdApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(

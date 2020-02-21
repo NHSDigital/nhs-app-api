@@ -77,29 +77,29 @@ namespace NHSOnline.Backend.Support.Certificate
             }
         }
 
-        public void LogCertInfo(string intro, X509Certificate certificate, bool logAsDebug = false )
+        public void LogCertInfo(string intro, X509Certificate certificate, bool logAsDebug = false)
         {
             try
             {
-                var xh5092 = new X509Certificate2(certificate);
-                var sb = new StringBuilder();
-                sb.Append($"{intro} cert info: ");
-                sb.Append($"Subject: {xh5092.Subject}, ");
-                sb.Append($"Issuer: {xh5092.Issuer}, ");
-                sb.Append($"Version: {xh5092.Version}, ");
-                sb.Append($"Valid Date: {xh5092.NotBefore}, ");
-                sb.Append($"Expiry Date: {xh5092.NotAfter}");
-
-                if (logAsDebug)
+                using (var xh5092 = new X509Certificate2(certificate))
                 {
-                    _logger.LogDebug(sb.ToString());
-                }
-                else
-                {
-                    _logger.LogInformation(sb.ToString());
-                }
+                    var sb = new StringBuilder();
+                    sb.Append($"{intro} cert info: ");
+                    sb.Append($"Subject: {xh5092.Subject}, ");
+                    sb.Append($"Issuer: {xh5092.Issuer}, ");
+                    sb.Append($"Version: {xh5092.Version}, ");
+                    sb.Append($"Valid Date: {xh5092.NotBefore}, ");
+                    sb.Append($"Expiry Date: {xh5092.NotAfter}");
 
-
+                    if (logAsDebug)
+                    {
+                        _logger.LogDebug(sb.ToString());
+                    }
+                    else
+                    {
+                        _logger.LogInformation(sb.ToString());
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -113,17 +113,17 @@ namespace NHSOnline.Backend.Support.Certificate
             if (string.IsNullOrEmpty(certificatePath))
             {
                 _logger.LogError("Could not add client certificate due to missing certificate path.");
-                valid= false;
+                valid = false;
             }
             if (string.IsNullOrEmpty(certificatePassphrase))
             {
                 _logger.LogError("Could not add client certificate due to missing certificate passphrase.");
-                valid= false;
+                valid = false;
             }
             if (!File.Exists(certificatePath))
             {
                 _logger.LogError("Could not add client certificate due to file {CertificatePath} not existing in certificate path.", certificatePath);
-                valid= false;
+                valid = false;
             }
             return valid;
         }

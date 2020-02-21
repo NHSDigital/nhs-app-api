@@ -12,7 +12,6 @@
     <PackageReference Include="CorrelationId" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.14" />
     <PackageReference Include="Microsoft.Azure.NotificationHubs" Version="3.1.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.8.1" />

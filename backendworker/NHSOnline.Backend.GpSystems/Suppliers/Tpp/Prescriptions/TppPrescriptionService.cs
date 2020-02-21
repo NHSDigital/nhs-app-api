@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             DateTimeOffset? fromDate = null,
             DateTimeOffset? toDate = null)
         {
-            var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
+            var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
 
             try
             {
@@ -64,14 +64,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 {
                     var medicationsToBeFiltered = response.Body.Medications.ToList();
                     var medicationListFiltered = GetMaxPrescriptions(medicationsToBeFiltered);
-                    var numberOfPrescriptionsDiscarded = medicationsToBeFiltered.Count() - medicationListFiltered.Count();
+                    var numberOfPrescriptionsDiscarded = medicationsToBeFiltered.Count - medicationListFiltered.Count;
 
                     var prescriptionsCount = new FilteringCounts
                     {
-                        ReceivedCount = medicationsToBeFiltered.Count(),
-                        FilteredRemainingRepeatsCount = medicationsToBeFiltered.Count(),
+                        ReceivedCount = medicationsToBeFiltered.Count,
+                        FilteredRemainingRepeatsCount = medicationsToBeFiltered.Count,
                         FilteredMaxAllowanceDiscardedCount = numberOfPrescriptionsDiscarded,
-                        ReturnedCount =  medicationListFiltered.Count()
+                        ReturnedCount = medicationListFiltered.Count
                     };
 
                     _logger.LogDebug(
@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
         {
             _logger.LogEnter();
 
-            var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
+            var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
 
             var postRequest = new RequestMedication
             {
@@ -122,7 +122,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 _logger.LogInformation("Beginning Place Prescription Request");
                 var response = await _orderPrescriptions.Post((tppUserSession, postRequest));
 
-                if (!response.HasSuccessResponse) return InterpretOrderPrescriptionError(response);
+                if (!response.HasSuccessResponse)
+                {
+                    return InterpretOrderPrescriptionError(response);
+                }
 
                 _logger.LogDebug($"Prescription order placed successfully");
                 return new OrderPrescriptionResult.Success();
@@ -160,7 +163,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 
         private List<Medication> GetMaxPrescriptions(List<Medication> medications)
         {
-            if(_settings.PrescriptionsMaxCoursesSoftLimit.HasValue)
+            if (_settings.PrescriptionsMaxCoursesSoftLimit.HasValue)
             {
                 medications = medications.Take(_settings.PrescriptionsMaxCoursesSoftLimit.Value).ToList();
             }
@@ -179,7 +182,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 return new GetPrescriptionsResult.Forbidden();
             }
 
-            if (InvalidCourseId(response) || RequestNoteTooLarge(response) || MustViewMedications(response) )
+            if (InvalidCourseId(response) || RequestNoteTooLarge(response) || MustViewMedications(response))
             {
                 _logger.LogError($"The tpp prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponse.TechnicalMessage)}");
 
@@ -209,7 +212,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 return new OrderPrescriptionResult.CannotReorderPrescription();
             }
 
-            if (InvalidCourseId(response) || RequestNoteTooLarge(response) || MustViewMedications(response) )
+            if (InvalidCourseId(response) || RequestNoteTooLarge(response) || MustViewMedications(response))
             {
                 _logger.LogError($"The tpp prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponse.TechnicalMessage)}");
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -111,7 +111,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             // Act
-            var calculatedAge = _systemUnderTest.CalculateAgeInMonthsAndYears(dateOfBirth);
+            var calculatedAge = EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(dateOfBirth);
 
             // Assert
             calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
@@ -133,7 +133,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             // Act
-            var calculatedAge = _systemUnderTest.CalculateAgeInMonthsAndYears(dateOfBirth);
+            var calculatedAge = EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(dateOfBirth);
 
             // Assert
             calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             // Act
-            var calculatedAge = _systemUnderTest.CalculateAgeInMonthsAndYears(dateOfBirth);
+            var calculatedAge = EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(dateOfBirth);
 
             // Assert
             calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
@@ -389,8 +389,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
                 linkedAccountDetail.Id.Should().Be(emisProxyPatient.Id);
                 linkedAccountDetail.Name.Should().Be(demographicsResponseForUser.PatientName);
-                linkedAccountDetail.AgeMonths.Should().Be(_systemUnderTest.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
-                linkedAccountDetail.AgeYears.Should().Be(_systemUnderTest.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
+                linkedAccountDetail.AgeMonths.Should().Be(EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
+                linkedAccountDetail.AgeYears.Should().Be(EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
             }
 
             _demographicsService.VerifyAll();
@@ -637,10 +637,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
                 linkedAccountDetail.Id.Should().Be(emisProxyPatient.Id);
                 linkedAccountDetail.Name.Should().Be(demographicsResponseForUser.PatientName);
-                linkedAccountDetail.AgeMonths.Should().Be(_systemUnderTest
-                    .CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
-                linkedAccountDetail.AgeYears.Should().Be(_systemUnderTest
-                    .CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
+                linkedAccountDetail.AgeMonths.Should().Be(EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
+                linkedAccountDetail.AgeYears.Should().Be(EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
             }
 
             _demographicsService.VerifyAll();

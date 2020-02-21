@@ -3,11 +3,11 @@ using NHSOnline.Backend.Support.AspNet;
 
 namespace NHSOnline.Backend.Support.Logging
 {
-    public class HttpContextLoggerScope
+    internal sealed class HttpContextLoggerScope
     {
         private readonly HttpContext _httpContext;
 
-        public HttpContextLoggerScope(HttpContext httpContext)
+        internal HttpContextLoggerScope(HttpContext httpContext)
         {
             _httpContext = httpContext;
         }

@@ -105,34 +105,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
 
                 try
                 {
-                    var searchDeviceResult = await _deviceRepositoryService.Find(devicePns, accessToken);
-                    if (!(searchDeviceResult is SearchDeviceResult.Found foundDeviceResult))
-                    {
-                        await searchDeviceResult.Accept(
-                            new SearchDeviceAuditingVisitor(_logger,
-                                _auditor,
-                                accessToken,
-                                AuditingOperations.UsersDeviceDeleteAuditTypeResponse));
-                        return searchDeviceResult.Accept(new SearchDeviceResultVisitor());
-                    }
-
-                    var userDevice = foundDeviceResult.UserDevice;
-
-                    var deleteRegistrationResult = await _notificationService.Delete(userDevice.RegistrationId);
-                    if (!(deleteRegistrationResult is DeleteRegistrationResult.Success))
-                    {
-                        await deleteRegistrationResult.Accept(
-                            new DeleteRegistrationAuditingVisitor(_logger, _auditor, accessToken));
-                        return deleteRegistrationResult.Accept(new DeleteRegistrationResultVisitor());
-                    }
-
-                    var deleteDeviceResult = await _deviceRepositoryService.Delete(userDevice.DeviceId, accessToken);
-                    await deleteDeviceResult.Accept(new DeleteDeviceAuditingVisitor(
-                        _logger,
-                        _auditor,
-                        accessToken,
-                        AuditingOperations.UsersDeviceDeleteAuditTypeResponse));
-                    return deleteDeviceResult.Accept(new DeleteDeviceResultVisitor());
+                    return await Delete(devicePns, accessToken);
                 }
                 catch (Exception e)
                 {
@@ -144,6 +117,42 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             {
                 _logger.LogExit();
             }
+        }
+
+        private async Task<IActionResult> Delete(string devicePns, AccessToken accessToken)
+        {
+            var searchDeviceResult = await _deviceRepositoryService.Find(devicePns, accessToken);
+            if (!(searchDeviceResult is SearchDeviceResult.Found foundDeviceResult))
+            {
+                await searchDeviceResult.Accept(
+                    new SearchDeviceAuditingVisitor(_logger,
+                        _auditor,
+                        accessToken,
+                        AuditingOperations.UsersDeviceDeleteAuditTypeResponse));
+                {
+                    return searchDeviceResult.Accept(new SearchDeviceResultVisitor());
+                }
+            }
+
+            var userDevice = foundDeviceResult.UserDevice;
+
+            var deleteRegistrationResult = await _notificationService.Delete(userDevice.RegistrationId);
+            if (!(deleteRegistrationResult is DeleteRegistrationResult.Success))
+            {
+                await deleteRegistrationResult.Accept(
+                    new DeleteRegistrationAuditingVisitor(_logger, _auditor, accessToken));
+                {
+                    return deleteRegistrationResult.Accept(new DeleteRegistrationResultVisitor());
+                }
+            }
+
+            var deleteDeviceResult = await _deviceRepositoryService.Delete(userDevice.DeviceId, accessToken);
+            await deleteDeviceResult.Accept(new DeleteDeviceAuditingVisitor(
+                _logger,
+                _auditor,
+                accessToken,
+                AuditingOperations.UsersDeviceDeleteAuditTypeResponse));
+            return deleteDeviceResult.Accept(new DeleteDeviceResultVisitor());
         }
 
         [HttpPost]

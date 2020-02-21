@@ -131,7 +131,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         {
 
             _logger.LogInformation("EMIS: Fetching patient document - {0}", documentIdentifier);
-              var path = string.Format(CultureInfo.InvariantCulture,
+            var path = string.Format(
+                CultureInfo.InvariantCulture,
                 DocumentPath,
                 documentIdentifier,
                 userPatientLinkToken);
@@ -386,12 +387,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             List<HttpStatusCode> successStatusCodes,
             string endUserSessionId = null, string sessionId = null)
         {
-            var request = BuildEmisRequest(HttpMethod.Delete, path, endUserSessionId, sessionId);
+            using (var request = BuildEmisRequest(HttpMethod.Delete, path, endUserSessionId, sessionId))
+            {
+                var body = JsonConvert.SerializeObject(model);
+                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
-            var body = JsonConvert.SerializeObject(model);
-            request.Content = new StringContent(body, Encoding.UTF8, "application/json");
-
-            return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+                return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+            }
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Get<TResponse>(string path,
@@ -399,11 +401,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             List<HttpStatusCode> successStatusCodes,
             string endUserSessionId = null, string sessionId = null, int? customTimeout = null)
         {
-            var request = BuildEmisRequest(HttpMethod.Get, path, endUserSessionId, sessionId);
+            using (var request = BuildEmisRequest(HttpMethod.Get, path, endUserSessionId, sessionId))
+            {
+                request.CheckAndSetCustomTimeout(customTimeout);
 
-            request.CheckAndSetCustomTimeout(customTimeout);
-
-            return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+                return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+            }
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string path,
@@ -411,14 +414,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             List<HttpStatusCode> successStatusCodes,
             string endUserSessionId = null, string sessionId = null, int? customTimeout = null)
         {
-            var request = BuildEmisRequest(HttpMethod.Post, path, endUserSessionId, sessionId);
+            using (var request = BuildEmisRequest(HttpMethod.Post, path, endUserSessionId, sessionId))
+            {
+                request.CheckAndSetCustomTimeout(customTimeout);
 
-            request.CheckAndSetCustomTimeout(customTimeout);
+                var body = JsonConvert.SerializeObject(model);
+                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
-            var body = JsonConvert.SerializeObject(model);
-            request.Content = new StringContent(body, Encoding.UTF8, "application/json");
-
-            return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+                return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+            }
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Post<TResponse>(string path,
@@ -426,11 +430,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             List<HttpStatusCode> successStatusCodes,
             string endUserSessionId = null, string sessionId = null, int? customTimeout = null)
         {
-            var request = BuildEmisRequest(HttpMethod.Post, path, endUserSessionId, sessionId);
+            using (var request = BuildEmisRequest(HttpMethod.Post, path, endUserSessionId, sessionId))
+            {
+                request.CheckAndSetCustomTimeout(customTimeout);
 
-            request.CheckAndSetCustomTimeout(customTimeout);
-
-            return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+                return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+            }
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Put<TRequest, TResponse>(TRequest model, string path,
@@ -438,14 +443,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             List<HttpStatusCode> successStatusCodes,
             string endUserSessionId = null, string sessionId = null, int? customTimeout = null)
         {
-            var request = BuildEmisRequest(HttpMethod.Put, path, endUserSessionId, sessionId);
+            using (var request = BuildEmisRequest(HttpMethod.Put, path, endUserSessionId, sessionId))
+            {
+                request.CheckAndSetCustomTimeout(customTimeout);
 
-            request.CheckAndSetCustomTimeout(customTimeout);
+                var body = JsonConvert.SerializeObject(model);
+                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
-            var body = JsonConvert.SerializeObject(model);
-            request.Content = new StringContent(body, Encoding.UTF8, "application/json");
-
-            return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+                return await SendRequestAndParseResponse<TResponse>(request, requestType, successStatusCodes);
+            }
         }
 
         private static List<HttpStatusCode> GetDefaultSuccessStatusCodeList()
@@ -490,10 +496,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return response;
         }
 
-        public abstract class EmisApiResponse: ApiResponse
+        public abstract class EmisApiResponse : ApiResponse
         {
-            protected EmisApiResponse(HttpStatusCode statusCode) :base(statusCode)
-            {}
+            protected EmisApiResponse(HttpStatusCode statusCode) : base(statusCode)
+            {
+            }
 
             public string RawResponse { get; protected internal set; }
             public StandardErrorResponse StandardErrorResponse { get; set; }
@@ -509,7 +516,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
             public bool HasInternalErrorCode(EmisApiErrorCode code)
             {
-                return StandardErrorResponse?.InternalResponseCode == (int) code;
+                return StandardErrorResponse?.InternalResponseCode == (int)code;
             }
 
             public bool HasStatusCodeAndErrorCode(HttpStatusCode statusCode, EmisApiErrorCode emisApiErrorCode)
@@ -606,7 +613,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
                 var successStrategy = GetOutcomeEvaluator(RequestType);
                 Body = successStrategy.IsSuccess(StatusCodes, StatusCode,
-                    responseMessage.IsSuccessStatusCode , stringResponse) ?  responseParser.ParseBody<TBody>(stringResponse): default;
+                    responseMessage.IsSuccessStatusCode, stringResponse) ? responseParser.ParseBody<TBody>(stringResponse) : default;
 
                 if (successStrategy.PopulateErrors(StatusCodes, responseMessage.IsSuccessStatusCode, StatusCode))
                 {

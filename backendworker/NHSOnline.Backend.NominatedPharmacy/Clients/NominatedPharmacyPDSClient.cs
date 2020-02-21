@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
 using NHSOnline.Backend.Support.ResponseParsers;
 using System.Globalization;
@@ -52,10 +52,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
         private async Task<NominatedPharmacyApiObjectResponse<TResponse>> Post<TResponse, TRequest>(
             IServiceDefinition serviceDefinition, string path, TRequest request)
         {
-            var httpRequest = BuildHttpRequest(serviceDefinition, path, request);
-            var response = await SendRequestAndParseResponse<TResponse>(httpRequest);
-
-            return response;
+            using (var httpRequest = BuildHttpRequest(serviceDefinition, path, request))
+            {
+                return await SendRequestAndParseResponse<TResponse>(httpRequest);
+            }
         }
 
         private HttpRequestMessage BuildHttpRequest<T>(IServiceDefinition serviceDefinition, string path, T request)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Support
             {
                 return string.Empty;
             }
-            
+
             return JsonConvert.SerializeObject(toJson);
         }
 
@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Support
             xmlNamespaces.Add(string.Empty, string.Empty);
 
             var stringWriter = new StringWriterWithEncoding(Encoding.UTF8);
-                
+
             using (var writer = XmlWriter.Create(stringWriter))
             {
                 xmlserializer.Serialize(writer, toXml, xmlNamespaces);
@@ -67,10 +67,13 @@ namespace NHSOnline.Backend.Support
                 Console.WriteLine($"XML was null or empty when attempting to deserialize: { typeof(T).FullName }");
                 return default;
             }
-            
+
             var serializer = new XmlSerializer(typeof(T));
 
-            return (T) serializer.Deserialize(new StringReader(xml));
+            using (var stringReader = new StringReader(xml))
+            {
+                return (T)serializer.Deserialize(stringReader);
+            }
         }
     }
 }

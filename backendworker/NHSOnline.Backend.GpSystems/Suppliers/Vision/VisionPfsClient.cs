@@ -256,10 +256,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
         private async Task<VisionApiObjectResponse<TResponse>> Post<TResponse, TRequest>(VisionRequest<TRequest> request)
         {
-            var httpRequest = BuildHttpRequest(request);
-            var response = await TransmitAsync<TResponse>(httpRequest);
-
-            return response;
+            using (var httpRequest = BuildHttpRequest(request))
+            {
+                return await TransmitAsync<TResponse>(httpRequest);
+            }
         }
 
         private HttpRequestMessage BuildHttpRequest<T>(VisionRequest<T> request)
@@ -380,7 +380,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 }
                 catch (InvalidOperationException e)
                 {
-                    logger.LogError(e, $"Vision Error Response could not be parsed: : {stringResponse}" );
+                    logger.LogError(e, $"Vision Error Response could not be parsed: : {stringResponse}");
                     UnparsableResultMessage = stringResponse;
                 }
 

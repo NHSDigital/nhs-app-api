@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
@@ -26,11 +26,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                 _logger.LogCritical($"Null prescription object provided to mapper");
                 throw new ArgumentNullException(nameof(prescriptionGetResponse));
             }
-            
+
             var allPrescriptionsGrouped = new List<PrescriptionItem>();
             var allCourses = new List<Course>();
-            
-            _logger.LogInformation($"Mapping {prescriptionGetResponse.Requests.Count()} prescriptions.");
+
+            _logger.LogInformation($"Mapping {prescriptionGetResponse.Requests.Count} prescriptions.");
 
             if (prescriptionGetResponse.Requests?.Count > 0)
             {
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 
                         allPrescriptionsGrouped.Add(foundPrescriptionGroup);
                     }
-                    
+
                     foreach (var course in prescription.Repeats)
                     {
                         // The prescriptions call for Vision does not return an id for each course,
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                     }
                 }
             }
-            
+
             var result = new PrescriptionListResponse
             {
                 Prescriptions = allPrescriptionsGrouped,
@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 
             _logger.LogInformation($"{result.Prescriptions.Count()} prescriptions mapped");
             _logger.LogInformation($"{result.Courses.Count()} courses mapped");
-            
+
             return result;
         }
 
@@ -96,7 +96,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 
             return result;
         }
-    
+
         private static Course MapPrescriptionRepeatToCourse(string id, GetPrescriptionRepeat course)
         {
             var details = GetDetails(course);
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                 Details = details,
             };
         }
-        
+
         private static Course MapRepeatToCourse(Repeat course)
         {
             var details = GetDetails(course);
@@ -124,7 +124,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
         private static string GetDetails(IRepeat course)
         {
             string details = null;
-            
+
             if (!string.IsNullOrEmpty(course.Dosage) && !string.IsNullOrEmpty(course.Quantity))
             {
                 details = $"{course.Dosage} ‐ {course.Quantity}";
