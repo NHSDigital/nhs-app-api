@@ -9,7 +9,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
     {
         private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccessesPost;
         private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelectedPost;
-        private readonly ITppClientRequest<TppUserSession, ViewPatientOverviewReply> _patientOverviewPost;
         private readonly ITppClientRequest<TppUserSession, RequestPatientRecordReply> _requestPatientRecordPost;
         private readonly ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> _testResultsView;
         private readonly ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> _testResultsViewDetailed;
@@ -19,7 +18,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         public TppClient(
             ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccessesPost,
             ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelectedPost,
-            ITppClientRequest<TppUserSession, ViewPatientOverviewReply> patientOverviewPost,
             ITppClientRequest<TppUserSession, RequestPatientRecordReply> requestPatientRecordPost,
             ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> testResultsView,
             ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> testResultsViewDetailed,
@@ -28,7 +26,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         {
             _listServiceAccessesPost = listServiceAccessesPost;
             _patientSelectedPost = patientSelectedPost;
-            _patientOverviewPost = patientOverviewPost;
             _requestPatientRecordPost = requestPatientRecordPost;
             _testResultsView = testResultsView;
             _testResultsViewDetailed = testResultsViewDetailed;
@@ -41,9 +38,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 
         public async Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession)
             => await _patientSelectedPost.Post(tppUserSession);
-
-        public async Task<TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(TppUserSession tppUserSession)
-            => await _patientOverviewPost.Post(tppUserSession);
 
         public async Task<TppApiObjectResponse<RequestPatientRecordReply>> RequestPatientRecordPost(TppUserSession tppUserSession)
             => await _requestPatientRecordPost.Post(tppUserSession);
@@ -59,5 +53,5 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 
         public async Task<TppApiObjectResponse<AddNhsUserResponse>> NhsUserPost(AddNhsUserRequest addNhsUserRequest)
             => await _nhsUserPost.Post(addNhsUserRequest);
-    }
+  }
 }

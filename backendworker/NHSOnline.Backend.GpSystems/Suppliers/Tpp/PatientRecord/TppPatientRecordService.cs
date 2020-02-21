@@ -9,10 +9,12 @@ using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
-    public class TppPatientRecordService : IPatientRecordService
+    internal class TppPatientRecordService : IPatientRecordService
     {
         private const string TestResultDateFormat = "yyyy-MM-ddTHH:mm:ss.f'Z'";
         private readonly ILogger<TppPatientRecordService> _logger;
@@ -23,11 +25,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private readonly IGetTppDetailedTestResultChecker _patientDetailedTestResultChecker;
         private readonly ITppClient _tppClient;
         private readonly ITppMyRecordMapper _tppMyRecordMapper;
+        private readonly ITppClientRequest<TppUserSession, ViewPatientOverviewReply> _patientOverview;
 
         public TppPatientRecordService(IGetPatientDcrEventsTaskChecker patientDcrEventsChecker,
             IGetPatientOverviewTaskChecker patientOverviewTaskChecker,
             IGetPatientTestResultsTaskChecker patientTestResultsChecker,
             IGetTppDetailedTestResultChecker patientDetailedTestResultChecker,
+            ITppClientRequest<TppUserSession, ViewPatientOverviewReply> patientOverview,
             IGetPatientDocumentsFromDcrEventsTaskChecker patientDocumentsFromDcrEventsTaskChecker,
             ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper)
         {
@@ -35,6 +39,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _patientOverviewTaskChecker = patientOverviewTaskChecker;
             _patientTestResultsChecker = patientTestResultsChecker;
             _patientDetailedTestResultChecker = patientDetailedTestResultChecker;
+            _patientOverview = patientOverview;
             _patientDocumentsFromDcrEventsTaskChecker = patientDocumentsFromDcrEventsTaskChecker;
             _tppClient = tppClient;
             _tppMyRecordMapper = tppMyRecordMapper;
@@ -259,7 +264,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         {
           try
           {
-            var patientOverview = await _tppClient.PatientOverviewPost(tppUserSession);
+            var patientOverview = await _patientOverview.Post(tppUserSession);
             _logger.LogDebug($"Mapping TPP Patient Overview responses to lists of {nameof(Allergies)} and {nameof(Medications)} classes");
             return _patientOverviewTaskChecker.Check(patientOverview);
           }

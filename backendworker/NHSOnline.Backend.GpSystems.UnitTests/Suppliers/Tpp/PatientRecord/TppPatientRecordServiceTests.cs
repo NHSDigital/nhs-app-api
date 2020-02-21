@@ -14,6 +14,7 @@ using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
 {
@@ -22,21 +23,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
     {
         private TppPatientRecordService _systemUnderTest;
         private Mock<ITppClient> _tppClient;
+
         private GpUserSession _gpUserSession;
         private IFixture _fixture;
         private Mock<IGetPatientDcrEventsTaskChecker> _patientDcrEventsChecker;
         private Mock<IGetPatientOverviewTaskChecker> _patientOverviewTaskChecker;
         private Mock<IGetPatientTestResultsTaskChecker> _patientTestResultsChecker;
+        private Mock<ITppClientRequest<TppUserSession, ViewPatientOverviewReply>> _patientOverview;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
             _gpUserSession = _fixture.Create<TppUserSession>();
-            
             _tppClient = _fixture.Freeze<Mock<ITppClient>>();
-            
+            _patientOverview = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, ViewPatientOverviewReply>>>();
             _patientDcrEventsChecker = _fixture.Freeze<Mock<IGetPatientDcrEventsTaskChecker>>();
             _patientOverviewTaskChecker = _fixture.Freeze<Mock<IGetPatientOverviewTaskChecker>>();
             _patientTestResultsChecker = _fixture.Freeze<Mock<IGetPatientTestResultsTaskChecker>>();
@@ -78,7 +79,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 }
             };
             
-            _tppClient.Setup(x => x.PatientOverviewPost(It.IsAny<TppUserSession>()))
+            _patientOverview.Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<ViewPatientOverviewReply>(HttpStatusCode.OK)
                     {
@@ -93,8 +94,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         Body = patientRecordResponse,
                         ErrorResponse = null,
                     }));  
-            
-            _tppClient.Setup(x => x.TestResultsView(It.IsAny<TppUserSession>(), It.IsAny<string>(), It.IsAny<string>()))
+                    
+             _tppClient.Setup(x => x.TestResultsView(It.IsAny<TppUserSession>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<TestResultsViewReply>(HttpStatusCode.OK)
                     {
@@ -121,7 +122,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             var result = await _systemUnderTest.GetMyRecord(new GpLinkedAccountModel(_gpUserSession));
 
             // Assert
-            _tppClient.Verify(x => x.PatientOverviewPost(It.IsAny<TppUserSession>()));
+            _patientOverview.Verify(x => x.Post(It.IsAny<TppUserSession>()));
             _patientDcrEventsChecker.Verify();
             _patientOverviewTaskChecker.Verify();
             _patientTestResultsChecker.Verify();
