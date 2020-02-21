@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
     public class TppAppointmentSlotsServiceTests
     {
         private IFixture _fixture;
-        private Mock<ITppClient> _mockTppClient;
         private Mock<IAppointmentSlotsMapper> _mockSlotsMapper;
         private TppAppointmentSlotsService _systemUnderTest;
         private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
@@ -37,6 +36,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private AppointmentSlotsDateRange _dateRange;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private Mock<ITppClientRequest<(ListSlots, string), ListSlotsReply>> _listSlots;
+        private Mock<ITppClientRequest<(RequestSystmOnlineMessages, string), RequestSystmOnlineMessagesReply>> _requestSystmOnlineMessages;
 
 
         [TestInitialize]
@@ -52,9 +52,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
-
-            _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
-            _listSlots = _fixture.Freeze<Mock<ITppClientRequest<(ListSlots, string), ListSlotsReply>>>(); 
+            
+            _listSlots = _fixture.Freeze<Mock<ITppClientRequest<(ListSlots, string), ListSlotsReply>>>();
+            _requestSystmOnlineMessages = _fixture.Freeze<Mock<ITppClientRequest<(RequestSystmOnlineMessages , string ), RequestSystmOnlineMessagesReply>>>();
             _mockSlotsMapper = _fixture.Freeze<Mock<IAppointmentSlotsMapper>>();
 
             _tppUserSession = _fixture.Create<TppUserSession>();
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
             
             // Assert
-            _mockTppClient.Verify();
+            _requestSystmOnlineMessages.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
 
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
-            _mockTppClient.Verify();
+            _requestSystmOnlineMessages.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
 
@@ -112,8 +112,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task GetSlots_TppRequestSystmOnlineMessagesThrowsHttpRequestException_ReturnsSuccessfullyAnyway()
         {
             // Arrange
-            _mockTppClient
-                .Setup(x => x.RequestSystmOnlineMessages(It.IsAny<RequestSystmOnlineMessages>(), It.IsAny<string>()))
+            _requestSystmOnlineMessages
+                .Setup(x => x.Post(It.IsAny<(RequestSystmOnlineMessages, string)>()))
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
             
@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
-            _mockTppClient.Verify();
+            _requestSystmOnlineMessages.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
 
@@ -145,7 +145,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
-            _mockTppClient.Verify();
+            _requestSystmOnlineMessages.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
 
@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
-            _mockTppClient.Verify();
+            _requestSystmOnlineMessages.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.Forbidden>();
         }
 
@@ -189,7 +189,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
-            _mockTppClient.Verify();
+            _requestSystmOnlineMessages.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.InternalServerError>();
         }
 
@@ -212,7 +212,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
             // Assert
-            _mockTppClient.Verify();
+            _requestSystmOnlineMessages.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
 
@@ -238,13 +238,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         {
             var expectedRequest = new RequestSystmOnlineMessages(_tppUserSession);
             
-            _mockTppClient
-                .Setup(x => x.RequestSystmOnlineMessages(
-                    It.Is<RequestSystmOnlineMessages>(p => 
-                        p.PatientId.Equals(expectedRequest.PatientId, StringComparison.Ordinal)
-                        && p.OnlineUserId.Equals(expectedRequest.OnlineUserId, StringComparison.Ordinal)
-                        ),
-                    _tppUserSession.Suid))
+            _requestSystmOnlineMessages
+                .Setup(x => x.Post(
+                    It.Is<(RequestSystmOnlineMessages, string)>(p => 
+                        p.Item1.PatientId.Equals(expectedRequest.PatientId, StringComparison.Ordinal)
+                        && p.Item1.OnlineUserId.Equals(expectedRequest.OnlineUserId, StringComparison.Ordinal)
+                        && p.Item2.Equals(_tppUserSession.Suid, StringComparison.Ordinal)
+                        )))
                 .ReturnsAsync(response)
                 .Verifiable();
         }

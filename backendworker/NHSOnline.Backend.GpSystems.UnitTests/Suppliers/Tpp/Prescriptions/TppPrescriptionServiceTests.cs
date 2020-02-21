@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
     public class TppPrescriptionServiceTests
     {
         private TppPrescriptionService _systemUnderTest;
-        private Mock<ITppClient> _tppClient;
         private Mock<ITppClientRequest<TppUserSession, ListRepeatMedicationReply>> _listRepeatMedication;
         private Mock<ITppPrescriptionMapper> _tppPrescriptionMapper;
         private Mock<ILogger<TppPrescriptionService>> _logger;
@@ -42,6 +41,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         private const string ApplicationDeviceType = "deviceType";
         private static readonly Uri ApiUrl = new Uri("http://tppapitest:60015/Test/");
         private Mock<ITppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply>> _orderPrescriptionsPost;
+        private Mock<ITppClientRequest<(RequestSystmOnlineMessages, string), RequestSystmOnlineMessagesReply>> _requestSystmOnlineMessages;
         private const string ApiVersion = "12";
         private const string CertificatePath = "CertificatePath";
         private const string CertificatePassphrase = "CerticiatePassphrase";
@@ -58,10 +58,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             _tppUserSession = _fixture.Create<TppUserSession>();
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
 
-            _tppClient = _fixture.Freeze<Mock<ITppClient>>();
             _listRepeatMedication = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, ListRepeatMedicationReply>>>();
             _orderPrescriptionsPost =
                 _fixture.Freeze<Mock<ITppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply>>>();
+            _requestSystmOnlineMessages = _fixture.Freeze<Mock<ITppClientRequest<(RequestSystmOnlineMessages, string), RequestSystmOnlineMessagesReply>>>();
             _tppPrescriptionMapper = _fixture.Freeze<Mock<ITppPrescriptionMapper>>();
             _logger = _fixture.Freeze<Mock<ILogger<TppPrescriptionService>>>();
 
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                         Body = prescriptionsResponse,
                     }));
 
-            _tppClient.Setup(x => x.RequestSystmOnlineMessages(It.IsAny<RequestSystmOnlineMessages>(), _tppUserSession.Suid)).Returns(
+            _requestSystmOnlineMessages.Setup(x => x.Post(It.IsAny<(RequestSystmOnlineMessages, string)>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK)
                     {
@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _listRepeatMedication.Verify(x => x.Post(_tppUserSession));
-            _tppClient.Verify(x => x.RequestSystmOnlineMessages(It.IsAny<RequestSystmOnlineMessages>(), _tppUserSession.Suid));
+            _requestSystmOnlineMessages.Verify(x => x.Post(It.IsAny<(RequestSystmOnlineMessages, string)>()));
 
             result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
                 .Subject.Response.Should().NotBeNull();
@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                         Body = listRepeatMedicationReply,
                     }));
 
-            _tppClient.Setup(x => x.RequestSystmOnlineMessages(It.IsAny<RequestSystmOnlineMessages>(), _tppUserSession.Suid)).Returns(
+            _requestSystmOnlineMessages.Setup(x => x.Post(It.IsAny<(RequestSystmOnlineMessages, string)>())).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK)
                     {
@@ -167,8 +167,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
                 .Subject.Response.Should().Be(response);
 
-            _tppClient.Verify(x => x.RequestSystmOnlineMessages(It.IsAny<RequestSystmOnlineMessages>(), _tppUserSession.Suid));
-
+            _requestSystmOnlineMessages.Verify(x => x.Post(It.IsAny<(RequestSystmOnlineMessages, string)>()));
             capturedItemToMap.Should().HaveCount(expectedNumberOfPrescriptions);
         }
 
@@ -185,7 +184,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                         Body = prescriptionsResponse,
                     }));
 
-            _tppClient.Setup(x => x.RequestSystmOnlineMessages(It.IsAny<RequestSystmOnlineMessages>(), _tppUserSession.Suid))
+            _requestSystmOnlineMessages.Setup(x => x.Post(It.IsAny<(RequestSystmOnlineMessages, string)>()))
                 .ThrowsAsync(new TimeoutException());
 
             // Act
@@ -193,7 +192,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _listRepeatMedication.Verify(x => x.Post(_tppUserSession));
-            _tppClient.Verify(x => x.RequestSystmOnlineMessages(It.IsAny<RequestSystmOnlineMessages>(), _tppUserSession.Suid));
+            _requestSystmOnlineMessages.Verify(x => x.Post(It.IsAny<(RequestSystmOnlineMessages, string)>()));
 
             result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
                 .Subject.Response.Should().NotBeNull();

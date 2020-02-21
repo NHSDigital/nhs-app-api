@@ -21,20 +21,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
         private readonly TppConfigurationSettings _settings;
         private readonly ITppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply> _orderPrescriptions;
         private readonly ITppClientRequest<TppUserSession, ListRepeatMedicationReply> _listRepeatMedication;
-        private readonly ITppClient _tppClient;
+        private readonly ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> _requestSystmOnlineMessages;
         private readonly ITppPrescriptionMapper _tppPrescriptionMapper;
 
         public TppPrescriptionService(
             ITppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply> orderPrescriptions,
             ITppClientRequest<TppUserSession, ListRepeatMedicationReply> listRepeatMedication,
+            ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> requestSystmOnlineMessages,
             ILogger<TppPrescriptionService> logger,
             TppConfigurationSettings settings,
-            ITppClient tppClient,
             ITppPrescriptionMapper tppPrescriptionMapper)
         {
             _orderPrescriptions = orderPrescriptions;
             _listRepeatMedication = listRepeatMedication;
-            _tppClient = tppClient;
+            _requestSystmOnlineMessages = requestSystmOnlineMessages;
             _settings = settings;
             _logger = logger;
             _tppPrescriptionMapper = tppPrescriptionMapper;
@@ -145,7 +145,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 
             try
             {
-                var messages = await _tppClient.RequestSystmOnlineMessages(messagesRequest, tppUserSession.Suid);
+                var messages = await _requestSystmOnlineMessages.Post((messagesRequest, tppUserSession.Suid));
 
                 const string intro = "Prescription Messaging from practice:";
                 var confirmation = messages?.Body?.RequestMedicationConfirmation?.Trim() ?? string.Empty;

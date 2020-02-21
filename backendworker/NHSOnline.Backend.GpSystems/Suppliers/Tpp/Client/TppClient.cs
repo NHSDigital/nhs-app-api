@@ -15,8 +15,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         private readonly ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> _testResultsViewDetailed;
         private readonly ITppClientRequest<TppUserSession, LogoffReply> _logoffPost;
         private readonly ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> _nhsUserPost;
-        private readonly ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> _requestSystmOnlineMessages;
-
+        
         public TppClient(
             ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccessesPost,
             ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelectedPost,
@@ -25,8 +24,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> testResultsView,
             ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> testResultsViewDetailed,
             ITppClientRequest<TppUserSession, LogoffReply> logoffPost,
-            ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> nhsUserPost,
-            ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> requestSystmOnlineMessages)
+            ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> nhsUserPost)
         {
             _listServiceAccessesPost = listServiceAccessesPost;
             _patientSelectedPost = patientSelectedPost;
@@ -36,7 +34,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             _testResultsViewDetailed = testResultsViewDetailed;
             _logoffPost = logoffPost;
             _nhsUserPost = nhsUserPost;
-            _requestSystmOnlineMessages = requestSystmOnlineMessages;
         }
 
         public async Task<TppApiObjectResponse<ListServiceAccessesReply>> ListServiceAccessesPost(TppUserSession tppUserSession)
@@ -62,8 +59,5 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 
         public async Task<TppApiObjectResponse<AddNhsUserResponse>> NhsUserPost(AddNhsUserRequest addNhsUserRequest)
             => await _nhsUserPost.Post(addNhsUserRequest);
-
-        public async Task<TppApiObjectResponse<RequestSystmOnlineMessagesReply>> RequestSystmOnlineMessages(RequestSystmOnlineMessages requestModel, string suid)
-            => await _requestSystmOnlineMessages.Post((requestModel, suid));
     }
 }
