@@ -15,8 +15,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         
         Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession, string testResultId);
         
-        Task<TppApiObjectResponse<LogoffReply>> LogoffPost(TppUserSession tppUserSession);
-        
         Task<TppApiObjectResponse<AddNhsUserResponse>> NhsUserPost(AddNhsUserRequest addNhsUserRequest);
     }
 }

@@ -147,77 +147,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             Context.VerifyLogging(addNhsUserRequestModel);
         }
-
-        [TestMethod]
-        public async Task LogoffPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
-        {
-            var logoffRequestModel = new Logoff
-            {
-                UnitId = null,
-                Uuid = TppClientTestsContext.Uuid,
-                ApiVersion = TppClientTestsContext.ApiVersion
-            };
-
-            var errorResponseBuilder = new TppErrorResponseBuilder();
-
-            var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                { TppClientTestsContext.RequestTypeHeader, logoffRequestModel.RequestType }
-            };
-
-            var tppUserSession = new TppUserSession();
-            
-            MockHttpHandler
-                .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
-                .WithHeaders(tppRequestHeaders)
-                .WithContent(logoffRequestModel.SerializeXml())
-                .Respond(TppClientTestsContext.MediaType, errorResponseBuilder.BuildXml());
-
-            var response = await SystemUnderTest.LogoffPost(tppUserSession);
-
-            response.ErrorResponse.Should().BeEquivalentTo(errorResponseBuilder.BuildExpected());
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.Body.Should().BeNull();
-            response.Headers.Should().BeNull();
-
-            Context.VerifyLogging(logoffRequestModel);
-        }
-
-        [TestMethod]
-        public async Task LogoffPostRequest_ReturnsLogoffReply_WhenGivenValidRequest()
-        {
-            var logoffRequestModel = new Logoff
-            {
-                UnitId = null,
-                Uuid = TppClientTestsContext.Uuid,
-                ApiVersion = TppClientTestsContext.ApiVersion
-            };
-
-            var expectedLogoffResponse = new LogoffReply();
-            var responseContent = new StringContent(expectedLogoffResponse.SerializeXml());
-            var tppUserSession = new TppUserSession();
-
-            var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                { TppClientTestsContext.RequestTypeHeader, logoffRequestModel.RequestType }
-            };
-
-            MockHttpHandler
-                .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
-                .WithHeaders(tppRequestHeaders)
-                .WithContent(logoffRequestModel.SerializeXml())
-                .Respond(HttpStatusCode.OK, responseContent);
-
-            var response = await SystemUnderTest.LogoffPost(tppUserSession);
-
-            response.Body.Should().BeEquivalentTo(expectedLogoffResponse);
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.ErrorResponse.Should().BeNull();
-            response.Headers.Should().BeNull();
-
-            Context.VerifyLogging(logoffRequestModel);
-        }
-
+        
         [TestCleanup]
         public void Dispose()
         {

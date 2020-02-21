@@ -16,15 +16,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
     internal class TppSessionService : ISessionService
     {
         private readonly ITppClient _client;
+        private readonly ITppClientRequest<TppUserSession, LogoffReply> _logoff;
         private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
         private readonly ILogger<TppSessionService> _logger;
         private readonly ITppSessionMapper _sessionMapper;
 
-        public TppSessionService(ITppClient client, ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
-        ILogger<TppSessionService> logger,
+        public TppSessionService(ITppClient client,
+            ITppClientRequest<TppUserSession, LogoffReply> logoff,
+            ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
+            ILogger<TppSessionService> logger,
             ITppSessionMapper sessionMapper)
         {
             _client = client;
+            _logoff = logoff;
             _authenticate = authenticate;
             _logger = logger;
             _sessionMapper = sessionMapper;
@@ -97,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 _logger.LogEnter();
 
                 var tppUserSession = (TppUserSession) gpUserSession;
-                var logoffReply = await _client.LogoffPost(tppUserSession);
+                var logoffReply = await _logoff.Post(tppUserSession);
 
                 if (!logoffReply.HasSuccessResponse)
                 {

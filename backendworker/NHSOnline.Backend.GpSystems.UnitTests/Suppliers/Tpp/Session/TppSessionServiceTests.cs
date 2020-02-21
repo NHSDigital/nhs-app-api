@@ -38,6 +38,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         private const string ResponseSuidHeader = "suid";
         private TppApiObjectResponse<AuthenticateReply> _authenticatePostResult;
         private Mock<ILogger<TppSessionService>> _logger;
+        private Mock<ITppClientRequest<TppUserSession, LogoffReply>> _mockLogOff;
 
         [TestInitialize]
         public void TestInitialize()
@@ -62,6 +63,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             _mockTppClient
                 .Setup(x => x.PatientSelectedPost(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => null);
+
+            _mockLogOff = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, LogoffReply>>>();
 
             _nhsNumber = _fixture.Create<string>();
             _sessionTimeoutMinutes = _fixture.Create<int>();
@@ -464,8 +467,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             // Arrange
             var reply = LogoffReply();
 
-            _mockTppClient.Setup(x => x
-                .LogoffPost(It.IsAny<TppUserSession>()))
+            _mockLogOff.Setup(x => x
+                .Post(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => reply);
 
             _systemUnderTest = _fixture.Create<TppSessionService>();
@@ -484,8 +487,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var reply = LogoffReply();
             reply.ErrorResponse = new Error();
 
-            _mockTppClient
-                .Setup(x => x.LogoffPost(It.IsAny<TppUserSession>()))
+            _mockLogOff
+                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => reply);
 
             _systemUnderTest = _fixture.Create<TppSessionService>();
@@ -504,8 +507,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var reply = LogoffReply();
             reply.StatusCode = HttpStatusCode.BadGateway;
 
-            _mockTppClient
-                .Setup(x => x.LogoffPost(It.IsAny<TppUserSession>()))
+            _mockLogOff
+                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -522,8 +525,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         public async Task Logoff_WhenCalledWithInvalidSession_ReturnsNotAuthenticated()
         {
             // Arrange
-            _mockTppClient
-                .Setup(x => x.LogoffPost(It.IsAny<TppUserSession>()))
+            _mockLogOff
+                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .ThrowsAsync(new UnauthorisedGpSystemHttpRequestException());
 
             _systemUnderTest = _fixture.Create<TppSessionService>();
