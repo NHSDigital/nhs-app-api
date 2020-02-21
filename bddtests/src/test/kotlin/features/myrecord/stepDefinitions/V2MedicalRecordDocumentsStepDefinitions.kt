@@ -83,6 +83,13 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
                 .enabledWithDocumentsWithNoNameOrTerm(SerenityHelpers.getPatient())
     }
 
+    @Given("^the GP Practice has multiple letters with no name or term$")
+    fun theGpPracticeHasMultipleLettersWithNoNameOrTerm() {
+        DocumentsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithLettersWithNoNameOrTerm(SerenityHelpers.getPatient())
+    }
+
     @Given("^the GP Practice has multiple documents where one has an invalid id$")
     fun theGpPracticeHasMultipleDocumentsWhereOneHasAnInvalidId(){
         theGpPracticeHasMultipleDocuments()
@@ -164,6 +171,23 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
     fun thenISeeTheDocumentInformationPageWithTheDocumentDateAsTheHeader() {
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
         myRecordDocumentInformationPage.headerContainsText("Document added on ${selectedDocument.date}")
+    }
+
+    @Then("^I see the document information page with the document header$")
+    fun thenISeeTheDocumentInformationPageWithTheDocumentHeader() {
+        val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
+        myRecordDocumentInformationPage.headerContainsText("Document added on ${selectedDocument.date}")
+    }
+
+    @Then("^I see the document information page with the letter header$")
+    fun thenISeeTheDocumentInformationPageWithTheLetterHeader() {
+        val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
+        myRecordDocumentInformationPage.headerContainsText("Letter added on ${selectedDocument.date}")
+    }
+
+    @Then("^I see the document information page with comments$")
+    fun thenISeeTheDocumentInformationPageWithComments() {
+        myRecordDocumentInformationPage.documentCommentContains("some comments")
     }
 
     @Then("^I see the expected list of documents displayed with unknown date for the last result$")

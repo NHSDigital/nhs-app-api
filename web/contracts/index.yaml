@@ -1518,6 +1518,9 @@
                                     name: 
                                       type: "string"
                                       description: "The name of the document"
+                                    comments: 
+                                      type: "string"
+                                      description: "The comments of the document"
                     recalls: 
                       type: "object"
                       properties: 
@@ -5315,6 +5318,9 @@
                     content: 
                       type: "string"
                       description: "base64 encoded string of document"
+                    type: 
+                      type: "string"
+                      description: "type of document"
           401: 
             description: "User session has expired."
           500: 

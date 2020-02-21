@@ -8,14 +8,14 @@
           <p v-if="name && isValid">{{ dateString }}</p>
           <p v-if="!isValid">{{ $t('my_record.documents.documentUnavailableSubtext') }}</p>
         </div>
-        <div v-if="hasComments">
+        <div v-if="hasComments" class="nhsuk-u-padding-bottom-3">
           <b>{{ $t('my_record.documents.commentsHeader') }}</b>
-          <div v-for="(comment, index) in retrieveComments"
-               :id="'documentComment' + index"
-               :key="'Comment'+index"
-               :data-purpose="'documentCommentContainer'+index">
-            <p :data-purpose="'documentComment'+index">{{ comment }}</p>
-          </div>
+          <span v-for="(comment, index) in retrieveComments"
+                :id="'documentComment' + index"
+                :key="'Comment'+index"
+                :data-purpose="'documentComment'+index">
+            <pre class="'nhsuk-u-font-size-16">{{ comment }}</pre>
+          </span>
         </div>
         <menu-item-list v-if="isValid" data-sid="action-list-menu">
           <menu-item id="btn_viewDocument"
@@ -123,8 +123,11 @@ export default {
 
     const datePartString = (!date || !date.value) ? 'Unknown Date' : datePart(date.value, 'YearMonthDay');
     const name = get('state.myRecord.document.name', store);
-    const dateString = `${store.app.i18n.t('my_record.documents.documentPageSubtext')} ${datePartString}`;
     const type = get('state.myRecord.document.type', store);
+    const documentType = get('state.myRecord.document.documentType', store);
+    const dateString = documentType !== null ?
+      `${documentType} ${store.app.i18n.t('my_record.documents.docTypePageSubtext')} ${datePartString}` :
+      `${store.app.i18n.t('my_record.documents.documentPageSubtext')} ${datePartString}`;
     const codeId = get('state.myRecord.document.codeId', store);
     const term = get('state.myRecord.document.term', store);
     const eventGuid = get('state.myRecord.document.eventGuid', store);
@@ -133,7 +136,9 @@ export default {
     const comments = [];
     const size = get('state.myRecord.document.size', store);
 
-    if (documentConsultationsWithComments !== null
+    if (get('state.myRecord.document.comments', store) !== null) {
+      comments.push(get('state.myRecord.document.comments', store));
+    } else if (documentConsultationsWithComments !== null
       && documentConsultationsWithComments.length > 0) {
       const documentConsultation = (documentConsultationsWithComments || []).filter(p =>
         p.consultationHeaders.filter(x => x.observationsWithTerm.filter(r => r.codeId === codeId &&
@@ -263,4 +268,10 @@ export default {
 </script>
 <style module lang="scss" scoped>
   @import '../../../style/textstyles';
+  @import '~nhsuk-frontend/packages/core/settings/typography';
+  @import '~nhsuk-frontend/packages/core/settings/globals';
+
+  pre {
+    font-family: $nhsuk-font;
+  }
 </style>

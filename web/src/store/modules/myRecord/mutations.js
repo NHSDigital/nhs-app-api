@@ -102,6 +102,8 @@ export default {
       state.document.codeId = documentInfo.codeId;
       state.document.size = documentInfo.size;
       state.document.isValidFile = documentInfo.isValidFile;
+      state.document.comments = documentInfo.comments;
+      state.document.documentType = documentInfo.documentType;
     }
   },
   [TOGGLE_PATIENT_DETAIL](state) {

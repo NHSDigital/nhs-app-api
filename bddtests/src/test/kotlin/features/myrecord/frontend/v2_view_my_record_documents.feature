@@ -54,6 +54,33 @@ Feature: Documents Frontend - Medical Record v2
     When I select an available document
     Then I see the document information page with the document date as the header
 
+  Scenario: A TPP user who views a document will see the correct header
+    Given I am a TPP user setup to use medical record version 2
+    And the GP Practice has multiple documents with no name or term
+    And I am on the medical record page
+    When I click the Documents link on my record - Medical Record v2
+    Then I see a list of documents
+    When I select an available document
+    Then I see the document information page with the document header
+
+  Scenario: A TPP user who views a document with comments can see them
+    Given I am a TPP user setup to use medical record version 2
+    And the GP Practice has multiple documents with no name or term
+    And I am on the medical record page
+    When I click the Documents link on my record - Medical Record v2
+    Then I see a list of documents
+    When I select an available document
+    Then I see the document information page with comments
+
+  Scenario: A TPP user who views a letter will see the correct header
+    Given I am a TPP user setup to use medical record version 2
+    And the GP Practice has multiple letters with no name or term
+    And I am on the medical record page
+    When I click the Documents link on my record - Medical Record v2
+    Then I see a list of documents
+    When I select an available document
+    Then I see the document information page with the letter header
+
   Scenario: An EMIS user who selects a large document cannot download or view it - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
     And the GP Practice has multiple large documents

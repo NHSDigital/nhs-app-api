@@ -7,6 +7,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
@@ -67,6 +68,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 .AddTppClientRequest<TppUserSession, PatientSelectedReply, TppClientPatientSelectedPost>()
                 .AddTppClientRequest<LinkAccount, LinkAccountReply, TppClientLinkAccountPost>()
                 .AddTppClientRequest<TppUserSession, RequestPatientRecordReply, TppClientRequestPatientRecordPost>()
+                .AddTppClientRequest<(RequestBinaryData, TppUserSession), RequestBinaryDataReply, TppClientRequestBinaryDataPost>()
                 .AddTppClientRequest<(RequestSystmOnlineMessages, string), RequestSystmOnlineMessagesReply, TppClientRequestSystmOnlineMessages>()
                 .AddTppClientRequest<(TppUserSession, string, string), TestResultsViewReply, TppClientTestResultsView>()
                 .AddTppClientRequest<(TppUserSession, string), TestResultsViewReply, TppClientTestResultsViewDetailed>()

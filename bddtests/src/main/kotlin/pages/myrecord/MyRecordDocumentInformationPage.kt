@@ -12,6 +12,7 @@ import java.lang.IllegalArgumentException
 class MyRecordDocumentInformationPage : HybridPageObject() {
     private val listMenuPath = "//ul[@data-sid='action-list-menu']//a"
     private val documentInfoPath = "//div[@id='documentInfo']/p"
+    private val documentCommentsPath = "//span[@id='documentComment0']/pre"
 
     private fun link(id: String): HybridPageElement {
         return HybridPageElement(
@@ -27,6 +28,14 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
                 androidLocator = null,
                 page = this,
                 helpfulName = "Document Info Text")
+    }
+
+    private fun documentComment(commentText: String): HybridPageElement {
+        return HybridPageElement(
+                webDesktopLocator = "$documentCommentsPath${String.format(containsTextXpathSubstring, commentText)}",
+                androidLocator = null,
+                page = this,
+                helpfulName = "Document Comment Text")
     }
 
     private fun header(headerText: String): HybridPageElement {
@@ -81,5 +90,9 @@ class MyRecordDocumentInformationPage : HybridPageObject() {
 
     fun documentInfoContains(text: String) {
         documentInfo(text).waitForElement()
+    }
+
+    fun documentCommentContains(text: String) {
+        documentComment(text).waitForElement()
     }
 }

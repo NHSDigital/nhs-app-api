@@ -1112,6 +1112,7 @@ export default {
       documentsLink: 'View your documents',
       documentMenuItemTitle: 'added on {date}',
       documentPageSubtext: 'Document added on',
+      docTypePageSubtext: 'added on',
       documentUnavailableSubtext: 'To access it, contact your GP surgery directly.',
       documentUnavailableHeader: 'The document added on {date} is not available through the NHS App',
       documentUnavailablePageTitle: 'The document added on {date} is not available',

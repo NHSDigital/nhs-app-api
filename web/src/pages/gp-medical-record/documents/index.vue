@@ -124,6 +124,8 @@ export default {
         eventGuid: document.eventGuid,
         size: document.size,
         isValidFile: document.isValidFile,
+        comments: document.comments,
+        documentType: document.type,
       });
       this.$router.push({ name: DOCUMENT.name, params: { id: document.documentIdentifier } });
     },

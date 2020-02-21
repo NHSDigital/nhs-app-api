@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
@@ -21,6 +22,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private readonly IGetPatientDcrEventsTaskChecker _patientDcrEventsChecker;
         private readonly IGetPatientDocumentsFromDcrEventsTaskChecker _patientDocumentsFromDcrEventsTaskChecker;
         private readonly IGetPatientOverviewTaskChecker _patientOverviewTaskChecker;
+        private readonly IGetPatientDocumentTaskChecker _patientDocumentTaskChecker;
         private readonly IGetPatientTestResultsTaskChecker _patientTestResultsChecker;
         private readonly IGetTppDetailedTestResultChecker _patientDetailedTestResultChecker;
         private readonly ITppClient _tppClient;
@@ -31,6 +33,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
         public TppPatientRecordService(IGetPatientDcrEventsTaskChecker patientDcrEventsChecker,
             IGetPatientOverviewTaskChecker patientOverviewTaskChecker,
+            IGetPatientDocumentTaskChecker patientDocumentTaskChecker,
             IGetPatientTestResultsTaskChecker patientTestResultsChecker,
             IGetTppDetailedTestResultChecker patientDetailedTestResultChecker,
             ITppClientRequest<TppUserSession, ViewPatientOverviewReply> patientOverview,
@@ -38,10 +41,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper,
             ITppClientRequest<TppUserSession, RequestPatientRecordReply> requestPatientRecord,
             ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> testResultsView)
-
         {
             _patientDcrEventsChecker = patientDcrEventsChecker;
             _patientOverviewTaskChecker = patientOverviewTaskChecker;
+            _patientDocumentTaskChecker = patientDocumentTaskChecker;
             _patientTestResultsChecker = patientTestResultsChecker;
             _patientDetailedTestResultChecker = patientDetailedTestResultChecker;
             _patientOverview = patientOverview;
@@ -69,7 +72,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 var testResults = await RetrieveTestResults(tppUserSession);
 
                 _logger.LogInformation($"Number of documents for user " +
-                                       $" at ODSCode {tppUserSession.OdsCode} is " +
+                                       $"at ODSCode {tppUserSession.OdsCode} is " +
                                        $"{documentItems.Data.Count()}");
 
                 var allergies = patientOverviewItems.Item1;
@@ -100,10 +103,37 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier,
+        public async Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier,
             string documentType, string documentName)
         {
-            throw new NotImplementedException();
+            _logger.LogEnter();
+
+            var tppUserSession = (TppUserSession) gpUserSession;
+
+            try
+            {
+                var patientOverviewItems = await RetrievePatientDocument(documentIdentifier, tppUserSession);
+
+                _logger.LogInformation($"Document type for user document " +
+                                       $"at ODSCode {tppUserSession.OdsCode} is " +
+                                       $"{patientOverviewItems.Type}");
+
+                return new GetPatientDocumentResult.Success(patientOverviewItems);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Unsuccessful request retrieving my record");
+                return new GetPatientDocumentResult.BadGateway();
+            }
+            catch (NullReferenceException e)
+            {
+                _logger.LogError(e, "My record retrieval return null body");
+                return new GetPatientDocumentResult.BadGateway();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
 
         public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentIdentifier, string documentType,
@@ -283,6 +313,35 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 result.Item1.HasErrored = true;
                 result.Item2.HasErrored = true;
 
+                return result;
+            }
+        }
+
+        private async Task<PatientDocument> RetrievePatientDocument(string documentIdentifier, TppUserSession tppUserSession)
+        {
+            _logger.LogEnter();
+            var binaryDataRequest = new RequestBinaryData
+            {
+                PatientId = tppUserSession.PatientId,
+                OnlineUserId = tppUserSession.OnlineUserId,
+                UnitId = tppUserSession.UnitId,
+                BinaryDataId = documentIdentifier
+            };
+
+            try
+            {
+                var patientOverview = await _tppClient.RequestBinaryData(binaryDataRequest, tppUserSession);
+                _logger.LogExit();
+                return _patientDocumentTaskChecker.Check(patientOverview);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Retrieving patientOverViewItems failed. Returning hasErrored as true");
+                var result = new PatientDocument
+                {
+                    HasErrored = true
+                };
+                _logger.LogExit();
                 return result;
             }
         }

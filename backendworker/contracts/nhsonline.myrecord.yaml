@@ -599,6 +599,9 @@ components:
         name:
           type: string
           description: The name of the document
+        comments:
+          type: string
+          description: The comments of the document
     Recalls:
       type: object
       properties:

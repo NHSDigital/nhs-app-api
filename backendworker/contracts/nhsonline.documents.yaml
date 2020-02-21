@@ -96,3 +96,6 @@ components:
         content:
           type: string
           description: base64 encoded string of document
+        type:
+          type: string
+          description: type of document

@@ -12,10 +12,35 @@ object TppDcrDocumentData {
 
         tppDcrEvents.add(Event("2018-02-18T11:12:55.0Z", "Mr General NhsApp",
                 "Kainos GP Demo Unit (General Practice)", mutableListOf(
-                EventItem("Letter",
-                          "DOCX: Blood-tests.docx",
+                EventItem("Attachment", "JPEG: Blood-tests.jpeg - some comments",
                         "123456433546"),
+                EventItem("Attachment", "JPEG: Blood-tests.jpeg - some comments",
+                        "123456433543")
+        )))
+
+        tppDcrEvents.add(Event("2018-02-18T12:03:23.0Z", "Mr General NhsApp",
+                "Kainos GP Demo Unit (General Practice)", mutableListOf(
                 EventItem("Attachment", "JPEG: Blood-tests.jpeg",
+                        "123456433541"),
+                EventItem("Attachment", "JPEG: Blood-tests.jpeg",
+                        "123456433548")
+        )))
+
+        return RequestPatientRecordReply(
+                event = tppDcrEvents)
+    }
+
+    fun getMultipleLetterDcrEventsForTppDcrDocuments(): RequestPatientRecordReply {
+
+        val tppDcrEvents = mutableListOf<Event>()
+
+        tppDcrEvents.add(Event("2018-02-18T11:12:55.0Z", "Mr General NhsApp",
+                "Kainos GP Demo Unit (General Practice)", mutableListOf(
+                EventItem("Letter",
+                        "DOCX: Blood-tests.docx - some comments",
+                        "123456433546"),
+                EventItem("Letter",
+                        "DOCX: Blood-tests.docx - some comments",
                         "123456433543")
         )))
 
@@ -25,7 +50,9 @@ object TppDcrDocumentData {
                         "DOCX: Blood-tests.docx" +
                                 "[08:00-1][12:00-1][16:00-1][22:00-1]",
                         "123456433541"),
-                EventItem("Attachment", "JPEG: Blood-tests.jpeg",
+                EventItem("Letter",
+                        "DOCX: Blood-tests.docx" +
+                                "[08:00-1][12:00-1][16:00-1][22:00-1]",
                         "123456433548")
         )))
 

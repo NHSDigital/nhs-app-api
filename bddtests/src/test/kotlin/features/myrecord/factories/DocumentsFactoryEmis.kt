@@ -104,6 +104,10 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         }
     }
 
+    override fun enabledWithLettersWithNoNameOrTerm(patient: Patient, isLarge: Boolean) {
+        //Not required for emis
+    }
+
     override fun enabledWithDocumentsWithUnknownDate(patient: Patient, isLarge: Boolean) {
         val documents = if (isLarge) DocumentsData.getLargeDocumentData()
         else DocumentsData.getDefaultDocumentsData(true, true)

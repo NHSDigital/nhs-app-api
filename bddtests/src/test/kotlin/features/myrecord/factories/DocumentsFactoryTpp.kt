@@ -32,21 +32,21 @@ class DocumentsFactoryTpp: DocumentsFactory() {
 
     override fun enabledWithDocuments(patient: Patient, isLarge: Boolean, mockUnavailableDocument: Boolean,
                                       hasInvalidType: Boolean) {
-
-        val docs = TppDcrDocumentData.getMultipleDcrEventsForTppDcrDocuments()
-
-        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(docs)
-        setSerenityVariable(
-                V2MedicalRecordDocumentsStepDefinitions.SerenityVariable.EXPECTED_DOCUMENTS,
-                expectedDocuments)
-        mockingClient.forTpp {
-            myRecord.patientRecordRequest(patient.tppUserSession!!)
-                    .respondWithSuccess(TppDcrDocumentData.getMultipleDcrEventsForTppDcrDocuments())
-        }
+        setExpectedAndAvailableDocs(
+                patient,
+                TppDcrDocumentData.getMultipleDcrEventsForTppDcrDocuments())
     }
 
     override fun enabledWithDocumentsWithNoNameOrTerm(patient: Patient, isLarge: Boolean) {
-        TODO("not implemented")
+        setExpectedAndAvailableDocs(
+                patient,
+                TppDcrDocumentData.getMultipleDcrEventsForTppDcrDocuments())
+    }
+
+    override fun enabledWithLettersWithNoNameOrTerm(patient: Patient, isLarge: Boolean) {
+        setExpectedAndAvailableDocs(
+                patient,
+                TppDcrDocumentData.getMultipleLetterDcrEventsForTppDcrDocuments())
     }
 
     override fun enabledWithDocumentsWithUnknownDate(patient: Patient, isLarge: Boolean) {
@@ -77,5 +77,22 @@ class DocumentsFactoryTpp: DocumentsFactory() {
         }
         return expectedDocuments
 
+    }
+
+    private fun setExpectedAndAvailableDocs(patient: Patient, docs: RequestPatientRecordReply) {
+
+        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(docs)
+        setSerenityVariable(
+                V2MedicalRecordDocumentsStepDefinitions.SerenityVariable.EXPECTED_DOCUMENTS,
+                expectedDocuments)
+        mockingClient.forTpp {
+            myRecord.patientRecordRequest(patient.tppUserSession!!)
+                    .respondWithSuccess(docs)
+        }
+
+        val availableDocument = expectedDocuments[0]
+        setSerenityVariable(
+                V2MedicalRecordDocumentsStepDefinitions.SerenityVariable.AVAILABLE_DOCUMENT,
+                availableDocument)
     }
 }

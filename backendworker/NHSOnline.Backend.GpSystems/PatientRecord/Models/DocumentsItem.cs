@@ -13,5 +13,6 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord.Models
         public long? CodeId { get; set; }
         public string Type { get; set; }
         public bool IsValidFile { get; set; }
+        public string Comments { get; set; }
     }
 }

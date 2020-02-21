@@ -103,11 +103,39 @@ describe('document view', () => {
 
     it('will set the header to the document date if no name exists', async () => {
       // Arrange
-      const document = { name: undefined, type: 'jpg', size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' }, isValidFile: true };
+      const document = {
+        name: undefined,
+        type: 'jpg',
+        size: 1000000,
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        isValidFile: true,
+        documentType: null,
+      };
       $store = newStore({ document });
       const page = mountPage({ $store });
 
       const dateString = 'translate_my_record.documents.documentPageSubtext 8 August 2019';
+
+      // Act
+      await page.vm.$options.asyncData({ store: $store, redirect });
+
+      // Assert
+      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', dateString);
+    });
+
+    it('will set the header to the letter date if documentType exists and is letter', async () => {
+      // Arrange
+      const document = {
+        name: undefined,
+        type: 'jpg',
+        size: 1000000,
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        isValidFile: true,
+        documentType: 'Letter' };
+      $store = newStore({ document });
+      const page = mountPage({ $store });
+
+      const dateString = 'Letter translate_my_record.documents.docTypePageSubtext 8 August 2019';
 
       // Act
       await page.vm.$options.asyncData({ store: $store, redirect });
@@ -200,7 +228,7 @@ describe('document view', () => {
       const page = mountPage({ $store, data });
 
       // Act
-      const documentComment = page.find('#documentComment0 p');
+      const documentComment = page.find('#documentComment0 pre');
 
       // Assert
       expect(documentComment.exists()).toBe(true);
@@ -239,9 +267,9 @@ describe('document view', () => {
       const page = mountPage({ $store, data });
 
       // Act
-      const firstDocumentComment = page.find('#documentComment0 p');
-      const secondDocumentComment = page.find('#documentComment1 p');
-      const thirdDocumentComment = page.find('#documentComment2 p');
+      const firstDocumentComment = page.find('#documentComment0 pre');
+      const secondDocumentComment = page.find('#documentComment1 pre');
+      const thirdDocumentComment = page.find('#documentComment2 pre');
 
       // Assert
       expect(firstDocumentComment.exists()).toBe(true);

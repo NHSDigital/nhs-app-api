@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
@@ -12,12 +15,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
     [TestClass]
     public class TppDcrEventsDocumentsMapperTests
     {
-        private ITppMyRecordMapper _mapper;
+        private TppDcrEventsDocumentsMapper _mapper;
+        private ILogger<TppDcrEventsDocumentsMapper> _logger;
+        private IFixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _mapper = new TppMyRecordMapper();
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _logger = _fixture.Freeze<ILogger<TppDcrEventsDocumentsMapper>>();
+            _mapper = new TppDcrEventsDocumentsMapper(_logger);
         }
 
         [TestMethod]
@@ -36,13 +43,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         {
                             new RequestPatientRecordItem
                             {
-                                Details = "test",
+                                Details = "test: test.jpg",
                                 Type = "Letter",
                                 BinaryDataId = "123454"
                             },
                             new RequestPatientRecordItem
                             {
-                                Details = "test 2",
+                                Details = "test: test1.jpg - with comments",
                                 Type = "Attachment",
                                 BinaryDataId = "123454"
                             },
@@ -70,7 +77,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         },
                         DocumentIdentifier = requestPatientRecordReply.Events[0].Items[0].BinaryDataId,
                         IsAvailable = true,
-                        Type = requestPatientRecordReply.Events[0].Items[0].Type
+                        Type = requestPatientRecordReply.Events[0].Items[0].Type,
+                        IsValidFile = true,
+                        Extension = "jpg",
                     },
                     new DocumentItem
                     {
@@ -81,7 +90,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         },
                         DocumentIdentifier = requestPatientRecordReply.Events[0].Items[1].BinaryDataId,
                         IsAvailable = true,
-                        Type = "Document"
+                        Type = "Document",
+                        IsValidFile = true,
+                        Comments = "with comments",
+                        Extension = "jpg"
                     }
                 },
                 HasAccess = true,
@@ -89,8 +101,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             };
 
             // Act
-            var tppDcrEvents = new TppDcrEventsDocumentsMapper().Map(requestPatientRecordReply);
-            //var result = _mapper.Map(new Allergies(), new Medications(), tppDcrEvents, new TestResults(), new PatientDocuments());
+            var tppDcrEvents = new TppDcrEventsDocumentsMapper(_logger).Map(requestPatientRecordReply);
 
             // Assert
             tppDcrEvents.Should().NotBeNull();
