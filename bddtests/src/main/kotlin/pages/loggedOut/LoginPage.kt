@@ -15,7 +15,8 @@ class LoginPage : HybridPageObject() {
     private val symptomsButtonHeading = HybridPageElement(
             webDesktopLocator = "//h3[contains(text(), 'How are you feeling today?')]",
             webMobileLocator = "//h3[contains(text(), 'How are you feeling today?')]",
-            androidLocator = null,
+            androidLocator = "//h2[contains(text(), 'How are you feeling today?')]",
+            iOSLocator = "//h2[contains(text(), 'How are you feeling today?')]",
             page = this
     )
 
