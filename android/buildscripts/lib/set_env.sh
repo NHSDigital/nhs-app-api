@@ -20,9 +20,9 @@ DOCKER_ARGS+=(-v "${CURRENT_DIR}:${DOCKER_ROOT}data/repo")
 DOCKER_ARGS+=(-v "${MVN_CONFIG_PATH}:${DOCKER_ROOT}root/.m2/settings.xml")
 DOCKER_ARGS+=(-v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle")
 
-DOCKER_ARGS+=(-w "/data/repo")
+DOCKER_ARGS+=(-w "${DOCKER_ROOT}data/repo")
 
-DOCKER_ARGS+=(-e "GRADLE_USER_HOME=/data/.gradle")
+DOCKER_ARGS+=(-e "GRADLE_USER_HOME=${DOCKER_ROOT}data/.gradle")
 
 GRADLE_ARGS=("-Dorg.gradle.jvmargs='-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap'")
 

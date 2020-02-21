@@ -29,8 +29,8 @@ runAnalysis() {
     --rm \
     -v "${WORKING_DIR}:${DOCKER_ROOT}data/repo" \
     -v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle" \
-    -w "/data/repo" \
-    -e "GRADLE_USER_HOME=/data/.gradle" \
+    -w "${DOCKER_ROOT}data/repo" \
+    -e "GRADLE_USER_HOME=${DOCKER_ROOT}data/.gradle" \
     "${DOCKER_IMAGE_GRADLE}" \
     bash -c "./gradlew --no-daemon ${GRADLE_TASKS[*]}"
 }
