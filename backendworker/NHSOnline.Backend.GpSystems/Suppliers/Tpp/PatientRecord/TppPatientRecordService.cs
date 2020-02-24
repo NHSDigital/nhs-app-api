@@ -26,6 +26,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private readonly ITppClient _tppClient;
         private readonly ITppMyRecordMapper _tppMyRecordMapper;
         private readonly ITppClientRequest<TppUserSession, ViewPatientOverviewReply> _patientOverview;
+        private readonly ITppClientRequest<TppUserSession, RequestPatientRecordReply> _requestPatientRecord;
 
         public TppPatientRecordService(IGetPatientDcrEventsTaskChecker patientDcrEventsChecker,
             IGetPatientOverviewTaskChecker patientOverviewTaskChecker,
@@ -33,7 +34,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             IGetTppDetailedTestResultChecker patientDetailedTestResultChecker,
             ITppClientRequest<TppUserSession, ViewPatientOverviewReply> patientOverview,
             IGetPatientDocumentsFromDcrEventsTaskChecker patientDocumentsFromDcrEventsTaskChecker,
-            ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper)
+            ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper,
+            ITppClientRequest<TppUserSession, RequestPatientRecordReply> requestPatientRecord)
+            
         {
             _patientDcrEventsChecker = patientDcrEventsChecker;
             _patientOverviewTaskChecker = patientOverviewTaskChecker;
@@ -43,6 +46,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _patientDocumentsFromDcrEventsTaskChecker = patientDocumentsFromDcrEventsTaskChecker;
             _tppClient = tppClient;
             _tppMyRecordMapper = tppMyRecordMapper;
+            _requestPatientRecord = requestPatientRecord;
             _logger = logger;
         }
 
@@ -210,7 +214,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             {
 
                 _logger.LogInformation("Retrieving PatientDocuments from DCR Events.");
-                var patientRecord = await _tppClient.RequestPatientRecordPost(tppUserSession);
+                var patientRecord = await _requestPatientRecord.Post(tppUserSession);
 
                 _logger.LogDebug($"Mapping TPP DCR responses to instance of {nameof(DocumentItem)} class");
                 var dcrItems = new TppDcrItems
