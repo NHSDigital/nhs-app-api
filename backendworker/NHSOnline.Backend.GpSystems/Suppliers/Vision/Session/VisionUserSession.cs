@@ -8,6 +8,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
     public class VisionUserSession : GpUserSession, IVisionUserSession
     {
         public override Supplier Supplier => Supplier.Vision;
+        
+        public override bool HasLinkedAccounts => false;
 
         public string RosuAccountId { get; set; }
 

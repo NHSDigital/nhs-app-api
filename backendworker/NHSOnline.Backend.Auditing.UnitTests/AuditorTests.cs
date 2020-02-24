@@ -37,6 +37,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         private class UnknownSupplierSession : GpUserSession
         {
             public override Supplier Supplier => Supplier.Unknown;
+            public override bool HasLinkedAccounts => false;
         }
         
         private class NestedCallClass

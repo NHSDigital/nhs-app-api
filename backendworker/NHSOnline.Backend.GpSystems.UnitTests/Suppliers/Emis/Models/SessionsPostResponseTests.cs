@@ -22,7 +22,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Models
             
             //assert
             Assert.AreEqual(SelfUpt, sessionPostResponse.ExtractUserPatientLinkToken() );
-            Assert.IsFalse(sessionPostResponse.HasLinkedPatients());
         }
 
         [TestMethod]
@@ -48,7 +47,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Models
             
             //assert
             Assert.AreEqual(SelfUpt, sessionPostResponse.ExtractUserPatientLinkToken() );
-            Assert.IsTrue(sessionPostResponse.HasLinkedPatients());
             var proxies = sessionPostResponse.ExtractLinkedPatients();
             Assert.AreEqual(1, proxies.Count());
             Assert.AreEqual( proxyUser, proxies.FirstOrDefault()  );

@@ -263,7 +263,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         [DataRow("Mr", "Fred", "", "Mr Fred")]
         public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData(string title, string firstname, string surname, string expected)
         {
-
             // Arrange
             _sessionsResponse.Title = title;
             _sessionsResponse.FirstName = firstname;
@@ -281,16 +280,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _mockEmisClient.VerifyAll();
             var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
 
-            var expectedResult = new GpSessionCreateResult.Success(new EmisUserSession
-            {
-                Name = expected,
-                Id = createdResult.UserSession.Id,
-                NhsNumber = _nhsNumber,
-                OdsCode = _odsCode,
-                HasLinkedAccounts = true
-            });
-
-            createdResult.Should().BeEquivalentTo(expectedResult);
+            createdResult.UserSession.Name.Should().Be(expected);
+            createdResult.UserSession.Id.Should().NotBeEmpty();
+            createdResult.UserSession.NhsNumber.Should().Be(_nhsNumber);
+            createdResult.UserSession.OdsCode.Should().Be(_odsCode);
         }
 
         [TestMethod]
@@ -453,17 +446,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             // Assert
             _mockEmisClient.VerifyAll();
             var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
-
-            var expectedResult = new GpSessionCreateResult.Success(new EmisUserSession
-            {
-                Name = expectedName,
-                Id = createdResult.UserSession.Id,
-                NhsNumber = _nhsNumber,
-                OdsCode = _odsCode,
-                HasLinkedAccounts = true
-            });
-
-            createdResult.Should().BeEquivalentTo(expectedResult);
+            
+            createdResult.UserSession.Name.Should().Be(expectedName);
+            createdResult.UserSession.Id.Should().NotBeEmpty();
+            createdResult.UserSession.NhsNumber.Should().Be(_nhsNumber);
+            createdResult.UserSession.OdsCode.Should().Be(_odsCode);
+            createdResult.UserSession.HasLinkedAccounts.Should().BeTrue();
         }
 
 

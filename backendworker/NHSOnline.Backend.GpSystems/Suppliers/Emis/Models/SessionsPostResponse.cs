@@ -29,10 +29,5 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models
             return UserPatientLinks
                 ?.FirstOrDefault(x => x.AssociationType == AssociationType.Self);
         }
-
-        public bool HasLinkedPatients()
-        {
-            return ExtractLinkedPatients().Any();
-        }
     }
 }

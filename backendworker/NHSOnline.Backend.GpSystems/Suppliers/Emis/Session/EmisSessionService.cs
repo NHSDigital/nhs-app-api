@@ -124,7 +124,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                     session.SessionId = sessionResponse.Body.SessionId;
                     session.UserPatientLinkToken = sessionResponse.Body.ExtractUserPatientLinkToken();
-                    session.HasLinkedAccounts = sessionResponse.Body.HasLinkedPatients();
                     session.ProxyPatients = sessionResponse.Body.ExtractLinkedPatients()
                         .Select(x => new EmisProxyUserSession
                         {

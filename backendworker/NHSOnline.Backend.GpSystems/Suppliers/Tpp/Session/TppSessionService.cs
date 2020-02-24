@@ -80,7 +80,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 }
 
                 var tppUserSession = userSession.ValueOrFailure();
-                await _client.PatientSelectedPost(tppUserSession);
+
+                // The PatientSelected call is only required if
+                // more than 1 person is found in the response.
+                if (tppUserSession.ProxyPatients.Any())
+                {
+                    await _client.PatientSelectedPost(tppUserSession);
+                }
                 
                 _logMessagingService.FetchAndLogAccessInformation(tppUserSession);
 

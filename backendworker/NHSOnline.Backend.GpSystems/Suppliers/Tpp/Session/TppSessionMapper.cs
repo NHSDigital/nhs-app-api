@@ -31,14 +31,25 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             
             var suidHeader = GetSuidHeader(authenticateResponse);
 
+            var linkedPatients = authenticateResponse.Body.ExtractLinkedPatients();
+            
             return Option.Some(new TppUserSession
             {
+                Id = Guid.NewGuid(),
                 Suid = suidHeader?.Value,
                 OnlineUserId = authenticateResponse.Body.OnlineUserId,
                 PatientId = authenticateResponse.Body.User.Person.PatientId,
                 OdsCode = odsCode,
                 NhsNumber = nhsNumber,
-                Name = authenticateResponse.Body.User?.Person?.PersonName?.Name
+                Name = authenticateResponse.Body.User?.Person?.PersonName?.Name,
+                ProxyPatients = linkedPatients.Select(x => new TppProxyUserSession
+                {
+                    Id = Guid.NewGuid(),
+                    Name = x.PersonName?.Name,
+                    DateOfBirth = x.DateOfBirth,
+                    NhsNumber = x.NationalId.Value,
+                    PatientId = x.PatientId,
+                }).ToList(),
             });
         }
         

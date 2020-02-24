@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Support
 
         public abstract Supplier Supplier { get; }
 
-        public bool HasLinkedAccounts { get; set; }
+        public abstract bool HasLinkedAccounts { get; }
         
         public bool Im1MessagingEnabled { get; set; }
         

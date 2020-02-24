@@ -28,6 +28,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models
                     },
                 }
             },
+            People = new List<Person>
+            {
+                new Person(),
+            }
         };
 
         [TestMethod]
@@ -53,6 +57,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models
         public void Serialization_User_SerializesAsElement()
         {
             Element.Should().HaveElement("User");
+        }
+        
+        [TestMethod]
+        public void Serialization_Person_SerializesAsElement()
+        {
+            Element.Should().HaveElement("Person");
         }
     }
 }

@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private Mock<IOdsCodeMassager> _mockOdsCodeMassager;
         private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
         private Mock<IGpSessionManager> _mockGpSessionManager;
-        
+
 
         private const string DateFormat = "yyyy-MM-dd";
 
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _im1ConnectionToken = _fixture.Create<string>();
 
             _apiSessionId = _fixture.Create<string>();
-            
+
             _serviceDeskReference = _fixture.Create<string>();
 
             _emisUserSession = _fixture.Create<EmisUserSession>();
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _serviceJourneyRulesResponse.Journeys.Supplier = Supplier.Emis;
 
             _sessionConfigSettings = _fixture.Freeze<SessionConfigurationSettings>();
-            
+
             _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
 
             _serviceJourneyRulesConfigResult =
@@ -215,7 +215,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockOdsCodeMassager.Setup(x => x.CheckOdsCode(_userProfile.OdsCode)).Returns(_userProfile.OdsCode);
 
             _mockGpSessionManager = _fixture.Freeze<Mock<IGpSessionManager>>();
-            
+
             _configurationSettings = _fixture.Freeze<ConfigurationSettings>();
             _configurationSettings.CookieDomain = CookieDomain;
             _configurationSettings.PrescriptionsDefaultLastNumberMonthsToDisplay =
@@ -247,7 +247,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     StatusCode = (int) HttpStatusCode.BadRequest
                 }))
                 .Verifiable();
-            
+
             _mockServiceDeskErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Login,
                     StatusCodes.Status400BadRequest, SourceApi.None))
@@ -287,7 +287,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     StatusCode = (int) HttpStatusCode.BadGateway
                 }))
                 .Verifiable();
-            
+
             _mockServiceDeskErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Login,
                     StatusCodes.Status502BadGateway, SourceApi.NhsLogin))
@@ -368,7 +368,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
-            
+
             _mockAuditor.Setup(x => x.AuditSessionEvent(
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber,
@@ -434,7 +434,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Verifiable();
 
             var returnResult = new CreateSessionResult.Failure(StatusCodes.Status403Forbidden);
-            
+
             _mockGpSessionManager
                 .Setup(
                     x => x.CreateSession(
@@ -465,7 +465,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     Supplier.Emis))
                 .Returns(_serviceDeskReference)
                 .Verifiable();
-            
+
             var expectedValue = new PfsErrorResponse
             {
                 ServiceDeskReference = _serviceDeskReference
@@ -480,7 +480,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
-            
+
             _mockAuditor.Setup(x => x.AuditSessionEvent(
                     _citizenIdUserSession.AccessToken,
                     _userProfile.NhsNumber,
@@ -492,17 +492,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Verifiable();
 
             var returnResult = new CreateSessionResult.Failure(StatusCodes.Status502BadGateway);
-            
+
             _mockGpSessionManager
                 .Setup(
                     x => x.CreateSession(
                         _mockGpSystem.Object,
                         _citizenIdSessionResult))
                 .ReturnsAsync(returnResult);
-            
+
             // Act
             var result = await _systemUnderTest.Post(_userSessionRequest);
-            
+
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
@@ -519,8 +519,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         {
             // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
-            _userSession.GpUserSession.HasLinkedAccounts = true;
-            
+            _emisUserSession.ProxyPatients = new List<EmisProxyUserSession>
+            {
+                new EmisProxyUserSession()
+            };
+
             _mockServiceDeskErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginOdsCodeNotFoundOrNotSupported>()))
                 .Returns(_serviceDeskReference)
@@ -569,13 +572,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         {
             // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
-            _userSession.GpUserSession.HasLinkedAccounts = true;
-            
+            _emisUserSession.ProxyPatients = new List<EmisProxyUserSession>
+            {
+                new EmisProxyUserSession()
+            };
+
             _mockServiceDeskErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginServiceJourneyRulesOtherError>()))
                 .Returns(_serviceDeskReference)
                 .Verifiable();
-            
+
             var expectedValue = new PfsErrorResponse
             {
                 ServiceDeskReference = _serviceDeskReference
@@ -599,7 +605,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
-            
+
             // Act
             var result = await _systemUnderTest.Post(_userSessionRequest);
 
@@ -617,22 +623,27 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
 
-      [TestMethod] 
+      [TestMethod]
       public async Task Post_HappyPath_ReturnsUsersSessionResponse()
         {
             _sessionConfigSettings.ProxyEnabled = true;
-            _userSession.GpUserSession.HasLinkedAccounts = true;
+
+            _emisUserSession.ProxyPatients = new List<EmisProxyUserSession>
+            {
+                new EmisProxyUserSession()
+            };
+
             _userSession.Key = "123";
 
             var returnResult = new CreateSessionResult.Success(_userSession);
-            
+
             _mockGpSessionManager
                 .Setup(
                     x => x.CreateSession(
                         _mockGpSystem.Object,
                         _citizenIdSessionResult))
                 .ReturnsAsync(returnResult);
-            
+
             // Act
             var result = await _systemUnderTest.Post(_userSessionRequest);
 
@@ -669,14 +680,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_Im1ConnectionTokenHasCacheKey_AttemptsToDeleteFromCache()
         {   // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
-            _userSession.GpUserSession.HasLinkedAccounts = true;
+            _emisUserSession.ProxyPatients = new List<EmisProxyUserSession>
+            {
+                new EmisProxyUserSession()
+            };
             _userSession.Key = "123";
-            
+
             _mockIm1CacheService.Setup(x => x.DeleteIm1ConnectionToken(_connectionToken.Im1CacheKey))
                 .Returns(Task.FromResult(true));
 
             var returnResult = new CreateSessionResult.Failure(StatusCodes.Status204NoContent);
-            
+
             _mockGpSessionManager
                 .Setup(
                     x => x.CreateSession(
@@ -696,7 +710,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             // Arrange
             _userProfile.Im1ConnectionToken = _fixture.Create<Guid>().ToString();
 
-            
+
             _mockCitizenIdSessionService
                 .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier,
                     _userSessionRequest.RedirectUrl))

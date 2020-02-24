@@ -19,6 +19,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
         public User User { get; set; }
 
         public Registration Registration { get; set; }
+        
+        [XmlElement("Person")]
+        public List<Person> People { get; set; } = new List<Person>();
 
         public IEnumerable<PatientNhsNumber> ExtractNhsNumbers()
         {
@@ -37,6 +40,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
             }
 
             return nhsNumbers;
+        }
+
+        public IEnumerable<Person> ExtractLinkedPatients()
+        {
+            return People.Where(x =>
+                x.PatientId != null && !OnlineUserId.Equals(x.PatientId, StringComparison.Ordinal));
         }
     }
 }

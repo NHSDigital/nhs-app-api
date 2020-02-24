@@ -350,7 +350,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             var proxyPatients = _fixture.Create<List<EmisProxyUserSession>>();
             proxyPatients.ForEach(x => x.OdsCode = _emisUserSession.OdsCode); // set all to have same Ods code
             proxyPatients.ForEach(x => x.NhsNumber = null); // set all to have null NhsNumber (simulate first time)
-            _emisUserSession.HasLinkedAccounts = true;
             _emisUserSession.ProxyPatients = proxyPatients;
 
             var demographicsResponses = new Dictionary<Guid, DemographicsResponse>();
@@ -401,7 +400,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         {
             var proxyPatients = _fixture.Create<List<EmisProxyUserSession>>(); // will auto set all NHS numbers
             proxyPatients.ForEach(x => x.OdsCode = _emisUserSession.OdsCode); // set all to have same Ods code
-            _emisUserSession.HasLinkedAccounts = true;
+            
             _emisUserSession.ProxyPatients = proxyPatients;
 
             var demographicsResponses = new Dictionary<Guid, DemographicsResponse>();
@@ -465,8 +464,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                     UserPatientLinkToken = patient.UserPatientLinkToken,
                 });
             }
-
-            _emisUserSession.HasLinkedAccounts = true;
 
             var demographicsResponses = new Dictionary<Guid, DemographicsResponse>();
 
@@ -551,7 +548,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         [TestMethod]
         public async Task GetLinkedAccounts_ReturnsEmptyResponse_WhenHasLinkedAccountsIsFalse()
         {
-            _emisUserSession.HasLinkedAccounts = false;
+            _emisUserSession.ProxyPatients = new List<EmisProxyUserSession>();
 
             // Act
             var result = await _systemUnderTest.GetLinkedAccounts(_emisUserSession);
@@ -566,8 +563,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         [TestMethod]
         public async Task GetLinkedAccounts_ReturnsEmptyResponse_WhenDemographicServiceReturnsNothing()
         {
-            _emisUserSession.HasLinkedAccounts = true;
-            _emisUserSession.ProxyPatients = new List<EmisProxyUserSession>();
+            _emisUserSession.ProxyPatients = new List<EmisProxyUserSession>
+            {
+                new EmisProxyUserSession(),
+            };
 
             // Act
             var result = await _systemUnderTest.GetLinkedAccounts(_emisUserSession);
@@ -585,7 +584,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             var proxyPatients = _fixture.Create<List<EmisProxyUserSession>>();
             proxyPatients.ForEach(x => x.OdsCode = _emisUserSession.OdsCode); // set all to have same Ods code
             proxyPatients.ForEach(x => x.NhsNumber = null); // set all to have null NhsNumber (simulate first time)
-            _emisUserSession.HasLinkedAccounts = true;
             _emisUserSession.ProxyPatients = proxyPatients;
             var demographicsResponses = new Dictionary<Guid, DemographicsResponse>();
 

@@ -31,6 +31,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         private Mock<ILogger<ServiceJourneyRulesController>> _mockLogger;
         private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
         private SessionConfigurationSettings _sessionConfigSettings;
+        private Mock<GpUserSession> _gpUserSession;
         private UserSession _userSession;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Guid _patientId;
@@ -52,6 +53,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
             _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
             _sessionConfigSettings = _fixture.Freeze<SessionConfigurationSettings>();
+            _gpUserSession = _fixture.Create<Mock<GpUserSession>>();
+            _fixture.Customize<UserSession>(x => x.With(y => y.GpUserSession, _gpUserSession.Object));
             _userSession = _fixture.Create<UserSession>();
             _userSession.GpUserSession.NhsNumber = _fixture.Create<string>();
             _userSession.GpUserSession.OdsCode = _fixture.Create<string>();
@@ -147,7 +150,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         {
             // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
-            _userSession.GpUserSession.HasLinkedAccounts = true;
+             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(false);
 
             var expectedResponse = new LinkedAccountsConfigResponse
@@ -172,7 +175,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         {
             // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
-            _userSession.GpUserSession.HasLinkedAccounts = false;
+            _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(false);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
             var expectedResponse = new LinkedAccountsConfigResponse
@@ -197,7 +200,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         {
             // Arrange
             _sessionConfigSettings.ProxyEnabled = false;
-            _userSession.GpUserSession.HasLinkedAccounts = true;
+            _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
             var linkedAccountsBreakdownSummary = _fixture.Create<LinkedAccountsBreakdownSummary>();
@@ -228,7 +231,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         {
             // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
-            _userSession.GpUserSession.HasLinkedAccounts = true;
+            _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
             var linkedAccountsBreakdownSummary = _fixture.Create<LinkedAccountsBreakdownSummary>();
@@ -259,7 +262,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         {
             // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
-            _userSession.GpUserSession.HasLinkedAccounts = true;
+            _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
             var linkedAccountsBreakdownSummary = new LinkedAccountsBreakdownSummary();
@@ -290,7 +293,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         {
             // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
-            _userSession.GpUserSession.HasLinkedAccounts = true;
+            _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
             var linkedAccountsBreakdownSummary = new LinkedAccountsBreakdownSummary
@@ -325,7 +328,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         {
             // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
-            _userSession.GpUserSession.HasLinkedAccounts = true;
+            _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
             var linkedAccountsBreakdownSummary = new LinkedAccountsBreakdownSummary

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -212,6 +213,53 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             _actual.UnitId.Should().Be(expected);
         }
 
+        [TestMethod]
+        public async Task Create_WhenResponseHasAtLeastOneLinkedAccount_CallsAuthenticate()
+        {
+            // Arrange
+            const string expectedName = "Montel";
+            const string odsCode = "1234";
+            var proxyPatientIds = new List<string> { "282", "383" };
+            var reply = CreateReply(expectedName, proxyPatientIds: proxyPatientIds);
+
+            _authenticatePostResult = reply;
+
+            _mockTppSessionMapper
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber))
+                .Returns(Option.Some(CreateUserSession(expectedName, odsCode, nhsNumber: _nhsNumber, proxyPatientIds: proxyPatientIds)));
+            
+            // Act
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
+
+            // Assert
+            var created = (GpSessionCreateResult.Success) result;
+            created.UserSession.Name.Should().Be(expectedName);
+            _mockTppClient.Verify(x => x.PatientSelectedPost(It.IsAny<TppUserSession>()), Times.Once);
+        }
+        
+        [TestMethod]
+        public async Task Create_WhenResponseHasNoLinkedAccounts_DoesNotCallAuthenticate()
+        {
+            // Arrange
+            const string expectedName = "Montel";
+            const string odsCode = "1234";
+            var reply = CreateReply(expectedName, proxyPatientIds: new List<string>());
+
+            _authenticatePostResult = reply;
+
+            _mockTppSessionMapper
+                .Setup(x => x.Map(reply, odsCode, _nhsNumber))
+                .Returns(Option.Some(CreateUserSession(expectedName, odsCode, _nhsNumber, proxyPatientIds: new List<string>())));
+            
+            // Act
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
+
+            // Assert
+            var created = (GpSessionCreateResult.Success) result;
+            created.UserSession.Name.Should().Be(expectedName);
+            _mockTppClient.Verify(x => x.PatientSelectedPost(It.IsAny<TppUserSession>()), Times.Never);
+        }
+        
         [TestMethod]
         public async Task Create_WhenCalledSuccessfully_SetsTheName()
         {
@@ -460,7 +508,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             string name = "Joanie",
             string suid = "dimsum",
             string onlineUserId = "123",
-            string patientId = "123")
+            string patientId = "123",
+            List<string> proxyPatientIds = null)
         {
             var response = new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
             {
@@ -485,13 +534,31 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                                 SiteDetails = new SiteDetails()
                             }
                         }
-                    }
+                    },
+                    People = new List<Person>
+                    {
+                        new Person
+                        {
+                            PatientId = patientId,
+                        }
+                    },
                 },
                 Headers = new Dictionary<string, string>
                 {
                     { ResponseSuidHeader, suid }
                 }
             };
+
+            if (proxyPatientIds != null)
+            {
+                foreach (var proxyPatientId in proxyPatientIds)
+                {
+                    response.Body.People.Add(new Person
+                    {
+                        PatientId = proxyPatientId,
+                    });
+                }
+            }
 
             return response;
         }
@@ -502,17 +569,30 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             string sessionId = "dimsum",
             string onlineUserId = "123",
             string patientId = "123",
-            string nhsNumber = "123456789")
+            string nhsNumber = "123456789",
+            List<string> proxyPatientIds = null)
         {
-            return new TppUserSession
+            var tppUserSession = new TppUserSession
             {
                 Name = patientName,
                 Suid = sessionId,
                 OnlineUserId = onlineUserId,
                 PatientId = patientId,
                 OdsCode = odsCode,
-                NhsNumber = nhsNumber
+                NhsNumber = nhsNumber,
+                ProxyPatients = new List<TppProxyUserSession>(),
             };
+
+            if (proxyPatientIds != null)
+            {
+                tppUserSession.ProxyPatients = proxyPatientIds.Select(x => new TppProxyUserSession
+                {
+                    Id = Guid.NewGuid(),
+                    PatientId = x,
+                }).ToList();
+            }
+
+            return tppUserSession;
         }
 
         private static TppApiObjectResponse<LogoffReply> LogoffReply()

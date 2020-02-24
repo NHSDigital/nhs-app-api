@@ -585,8 +585,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         public async Task Post_ReturnsSuccessfulResponseForHappyPath_WhenProxying_AndWhenSuccessfulResponseFromEmis()
         {
             // Arrange
-            _emisUserSession.HasLinkedAccounts = true;
-
             _emisClient.Setup(x => x.PrescriptionsPost(
                     _emisUserSession.SessionId,
                     _emisUserSession.EndUserSessionId,
