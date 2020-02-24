@@ -25,12 +25,8 @@ runAnalysis() {
   configureEnv
   rebuild_image_with_user "${DOCKER_IMAGE_GRADLE}"
 
-  docker run \
-    --rm \
-    -v "${WORKING_DIR}:${DOCKER_ROOT}data/repo" \
-    -v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle" \
-    -w "${DOCKER_ROOT}data/repo" \
-    -e "GRADLE_USER_HOME=${DOCKER_ROOT}data/.gradle" \
+  docker run --rm \
+    "${DOCKER_ARGS[@]}" \
     "${DOCKER_IMAGE_GRADLE}" \
     bash -c "./gradlew --no-daemon ${GRADLE_TASKS[*]}"
 }

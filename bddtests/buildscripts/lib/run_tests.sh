@@ -16,9 +16,7 @@ docker run \
   --name "${DOCKER_PROJECT_NAME}_test_runner" \
   --network "${DOCKER_NETWORK}" \
   --env-file ../docker/bddtests/env/vars_test_runner.env \
-  -v "${WORKING_DIR}:${DOCKER_ROOT}data/repo" \
-  -v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle" \
-  -w "/data/repo" \
+  "${DOCKER_ARGS[@]}" \
   "${TRANCHE_RUN_ADDITIONAL_ARGS[@]}" \
   "${DOCKER_IMAGE}" bash -c " \
     set -e; \

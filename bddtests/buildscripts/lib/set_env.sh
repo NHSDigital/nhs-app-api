@@ -23,6 +23,7 @@ export DOCKER_IMAGE=${DOCKER_IMAGE_CHROME}
 
 export BROWSER=${BROWSER:-chromeheadless}
 
+DOCKER_ARGS=()
 WORKING_DIR=$(pwd)
 GRADLE_PATH="$HOME/.gradle"
 DOCKER_ROOT="/"
@@ -33,13 +34,21 @@ if [[ $(uname -s) =~ ^MING.* ]]; then
   DOCKER_ROOT="//"
 fi
 
-# ensure cache paths exist locally
-mkdir -p "${GRADLE_PATH}"
+if [ -n "${TF_BUILD}" ]; then
+  # cache gradle files when running in devops
+  mkdir -p "${GRADLE_PATH}"
+  DOCKER_ARGS+=(-v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle")
+fi
+
+DOCKER_ARGS+=(-v "${WORKING_DIR}:${DOCKER_ROOT}data/repo")
+DOCKER_ARGS+=(-w "${DOCKER_ROOT}data/repo")
+DOCKER_ARGS+=(-e "GRADLE_USER_HOME=${DOCKER_ROOT}data/.gradle")
+
+export DOCKER_ARGS
 
 export NATIVE_APP_PATH_ANDROID=${NATIVE_APP_PATH_ANDROID:-../android/app/build/outputs/apk/browserstack/app-browserstack-unsigned.apk}
 
 export WORKING_DIR
-export GRADLE_PATH
 
 export WEB_DOCKER_TAG=${WEB_DOCKER_TAG:-$APP_DOCKER_TAG}
 export WEB_DOCKER_REGISTRY=${WEB_DOCKER_REGISTRY:-$APP_DOCKER_REGISTRY}
