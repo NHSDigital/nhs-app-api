@@ -1,0 +1,51 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: NHS App Sub-API - Asserted Login Identity
+  description: NHS App Sub-API - endpoints relating to the creation of asserted login identity 
+    JWTs  to be used for the purpose of single sign-on into other NHS Login relying parties.
+paths:
+  /asserted-login-identity:
+    post:
+      tags:
+        - asserted-login-identity
+        - single-sign-on
+      summary: Creates an asserted login identity javacript web token for the logged-in user.
+      description: Creates and returns an asserted login identity javascript web token for the 
+        logged-in users. This can be used for the purpose of single sign-on into other NHS Login
+        relying parties. Requires NHSO-Session-Id cookie in header from the Session endpoint.
+      requestBody:
+        x-name: AssertedLoginIdentityRequest
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJwtRequest"
+        description: Creates an asserted login identity javascript web token for the logged-in user.
+        required: true
+      responses:
+        "201":
+          description: Asserted login identity Jwt successfully creasted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateJwtResponse"
+        "500":
+          description: An unexpected error occurred processing the request.
+components:
+  schemas:
+    CreateJwtRequest:
+      type: object
+      required:
+        - intendedRelyingPartyUrl
+      properties:
+        intendedRelyingPartyUrl:
+          type: string
+          description: URL of the intended relying party that the asserted login identity will be used to access.
+    CreateJwtResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Signed Jwt.
+        
+            

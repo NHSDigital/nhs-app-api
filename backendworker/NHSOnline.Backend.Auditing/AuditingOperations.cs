@@ -98,5 +98,7 @@ namespace NHSOnline.Backend.Auditing
         public const string CreatePracticePatientMessageResponse = "PracticePatientMessage_Create_Response";
         public const string DeletePracticePatientMessageRequest = "PracticePatientMessage_Delete_Request";
         public const string DeletePracticePatientMessageResponse = "PracticePatientMessage_Delete_Response";
+        public const string CreateAssertedLoginIdentityTokenRequest = "AssertedLoginIdentity_CreateJwt_Request";
+        public const string CreateAssertedLoginIdentityTokenResponse = "AssertedLoginIdentity_CreateJwt_Response";
     }
 }

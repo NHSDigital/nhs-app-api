@@ -6,8 +6,9 @@ export default {
   },
   async load({ commit }) {
     const knownServiceList = await this.app.$httpV2.getV2Configuration();
-    const urls = knownServiceList.knownServices.map(({ url }) => url);
-    commit(LOADSERVICES, urls);
+    const services = knownServiceList.knownServices.map(({ url, requiresAssertedLoginIdentity }) =>
+      ({ url, requiresAssertedLoginIdentity }));
+    commit(LOADSERVICES, services);
     return true;
   },
 };

@@ -10,7 +10,7 @@ paths:
       tags:
         - ndop
       summary: Request Ndop Token
-      description: Returns a signed Jwt token to be passed to Ndop Web Page
+      description: Returns a signed Jwt to be passed to Ndop Web Page
       responses:
         "200":
           description: Token successfully created.
@@ -28,4 +28,4 @@ components:
       properties:
         token:
           type: string
-          description: signed Jwt Token
+          description: signed Jwt

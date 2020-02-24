@@ -18,8 +18,8 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<CitizenIdSessionService> _logger;
         private const string DateFormat = "yyyy-MM-dd";
-        
-        public CitizenIdSessionService(ICitizenIdService citizenIdService, IMinimumAgeValidator minimumAgeValidator, 
+
+        public CitizenIdSessionService(ICitizenIdService citizenIdService, IMinimumAgeValidator minimumAgeValidator,
             ConfigurationSettings settings, ILogger<CitizenIdSessionService> logger)
         {
             _citizenIdService = citizenIdService;
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
             _settings = settings;
             _logger = logger;
         }
-        
+
         [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
         public async Task<CitizenIdSessionResult> Create(string authCode, string codeVerifier, string redirectUrl)
         {
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                 if (!cidUserProfileOption.HasValue)
                 {
                     _logger.LogError("No CID profile was found for received authcode and code verifier");
-                    return new CitizenIdSessionResult()
+                    return new CitizenIdSessionResult
                     {
                         StatusCode = (int) userProfileResult.StatusCode
                     };
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                 var dateOfBirthParsed = ValidateAndParseDateOfBirth(cidUserProfile.DateOfBirth);
                 if (!dateOfBirthParsed.HasValue)
                 {
-                    return new CitizenIdSessionResult()
+                    return new CitizenIdSessionResult
                     {
                         StatusCode = Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement
                     };
@@ -64,25 +64,26 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                 if (string.IsNullOrEmpty(nhsNumberFormatted))
                 {
                     _logger.LogError($"No NHS number was found");
-                    return new CitizenIdSessionResult()
+                    return new CitizenIdSessionResult
                     {
                         StatusCode = Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber
                     };
                 }
 
-                return new CitizenIdSessionResult()
+                return new CitizenIdSessionResult
                 {
                     DateOfBirth = dateOfBirthParsed.Value,
                     Im1ConnectionToken = cidUserProfile.Im1ConnectionToken,
                     OdsCode = cidUserProfile.OdsCode,
                     StatusCode = (int) userProfileResult.StatusCode,
                     NhsNumber = nhsNumberFormatted,
-                    Session = new CitizenIdUserSession()
+                    Session = new CitizenIdUserSession
                     {
                         AccessToken = cidUserProfile.AccessToken,
                         FamilyName = cidUserProfile.FamilyName,
-                        DateOfBirth = dateOfBirthParsed.Value
-                    },
+                        DateOfBirth = dateOfBirthParsed.Value,
+                        IdTokenJti = userProfileResult.IdTokenJti
+                    }
                 };
             }
             finally
@@ -90,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                 _logger.LogExit();
             }
         }
-        
+
         private DateTime? ValidateAndParseDateOfBirth(string dateOfBirth)
         {
             if (!DateTime.TryParseExact(dateOfBirth, DateFormat, CultureInfo.InvariantCulture,

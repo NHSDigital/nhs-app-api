@@ -9,5 +9,4 @@
         public string AccessToken { get; set; }
         public string FamilyName { get; set; }
     }
-    
 }

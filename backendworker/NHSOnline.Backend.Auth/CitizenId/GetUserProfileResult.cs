@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
     public class GetUserProfileResult
     {
         public Option<UserProfile> UserProfile { get; set; }
-        public HttpStatusCode StatusCode { get; set; }     
+        public HttpStatusCode StatusCode { get; set; }
+        public string IdTokenJti { get; set; }
     }
 }

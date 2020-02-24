@@ -1,4 +1,5 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using Newtonsoft.Json;
 
 namespace NHSOnline.Backend.Auth.CitizenId.Models
@@ -6,10 +7,10 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
     [Serializable]
     public class UserInfo
     {
-        [JsonProperty("given_name")]
+        [JsonProperty(JwtRegisteredClaimNames.GivenName)]
         public string GivenName { get; set; }
 
-        [JsonProperty("family_name")]
+        [JsonProperty(JwtRegisteredClaimNames.FamilyName)]
         public string FamilyName { get; set; }
 
         [JsonProperty("gp_integration_credentials")]
@@ -20,11 +21,11 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
 
         [JsonProperty("im1_token")]
         public string Im1ConnectionToken { get; set; }
-        
-        [JsonProperty("sub")]
+
+        [JsonProperty(JwtRegisteredClaimNames.Sub)]
         public string Subject { get; set; }
-        
-        [JsonProperty("birthdate")]
+
+        [JsonProperty(JwtRegisteredClaimNames.Birthdate)]
         public string Birthdate { get; set; }
     }
 }

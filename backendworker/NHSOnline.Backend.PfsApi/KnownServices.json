@@ -285,6 +285,24 @@
           "ValidateSession": true
         }
       ]
+    },
+    {
+      "Url": "https://pat.rc.refer.nhs.uk/",
+      "TitleKey": "ERSTitle",
+      "AccessibleTitleKey": "AccessibleERSTitle",
+      "IsExternal": false,
+      "AllowNativeInteraction": true,
+      "RequiresAssertedLoginIdentity": true,
+      "UseCustomTabs": true
+    },
+    {
+      "Url": "https://nhsapp-test.devstacks.pkb.io/",
+      "TitleKey": "PKBTitle",
+      "AccessibleTitleKey": "AccessiblePKBTitle",
+      "IsExternal": false,
+      "AllowNativeInteraction": true,
+      "RequiresAssertedLoginIdentity": true,
+      "UseCustomTabs": true
     }
   ]
 }

@@ -32,6 +32,7 @@ class IdTokenBuilder: JWTBuilder(){
                 .claim("id_status", "verified")
                 .claim("token_use", "id")
                 .claim("surname", patient.surname)
+                .claim("jti", jwtId)
                 .build()
     }
 }

@@ -9,8 +9,8 @@ export default {
       state[key] = blank[key];
     })(state);
   },
-  [LOADSERVICES](state, urls) {
-    state.knownServices = urls;
+  [LOADSERVICES](state, services) {
+    state.knownServices = services;
     state.isLoaded = true;
   },
 };

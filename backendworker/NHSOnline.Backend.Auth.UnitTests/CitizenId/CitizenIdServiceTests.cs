@@ -55,6 +55,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             // Assert
             actualResult.UserProfile.HasValue.Should().BeFalse();
             actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.IdTokenJti.Should().BeNull();
         }
 
         [DataTestMethod]
@@ -73,6 +74,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             // Assert
             actualResult.UserProfile.HasValue.Should().BeFalse();
             actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.IdTokenJti.Should().BeNull();
         }
 
         [DataTestMethod]
@@ -91,6 +93,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             // Assert
             actualResult.UserProfile.HasValue.Should().BeFalse();
             actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.IdTokenJti.Should().BeNull();
         }
 
         [DataTestMethod]
@@ -121,6 +124,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             // Assert
             _citizenIdClientMock.VerifyAll();
             actualResult.UserProfile.HasValue.Should().BeFalse();
+            actualResult.IdTokenJti.Should().BeNull();
 
             var mappedStatusCode = actualResult.StatusCode;
 
@@ -132,7 +136,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public async Task GetUserProfile_HappyPath_ReturnsMappedUserProfile()
         {
-            // Arrange 
+            // Arrange
             var token = _fixture.Create<Token>();
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
@@ -181,10 +185,10 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.ReadToken(token.IdToken, signingKeys))
                 .Returns(tokenServiceResponse);
 
-            // Act 
+            // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
-            // Assert 
+            // Assert
             _citizenIdSigningKeysMock.VerifyAll();
             _idTokenService.VerifyAll();
             _citizenIdClientMock.VerifyAll();
@@ -196,12 +200,14 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             actualUserProfile.AccessToken.Should().Be(tokenResponse.Body.AccessToken);
 
             actualResult.StatusCode.Should().Be(StatusCodes.Status200OK);
+
+            actualResult.IdTokenJti.Should().Be(idToken.Jti);
         }
 
         [TestMethod]
         public async Task GetUserProfile_SigningKeysFails_ReturnsNone()
         {
-            // Arrange 
+            // Arrange
             var token = _fixture.Create<Token>();
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
@@ -223,15 +229,16 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.GetSigningKeys())
                 .ReturnsAsync(signingKeysResponse);
 
-            // Act 
+            // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
-            // Assert 
+            // Assert
             _citizenIdSigningKeysMock.VerifyAll();
             _citizenIdClientMock.VerifyAll();
 
             actualResult.UserProfile.HasValue.Should().BeFalse();
             actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.IdTokenJti.Should().BeNull();
             _loggerMock.VerifyLogger(LogLevel.Error,
                 "Failed to get signing keys", Times.Once());
         }
@@ -239,7 +246,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public async Task GetUserProfile_ExchangeAuthTokenFails_ReturnsNone()
         {
-            // Arrange 
+            // Arrange
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
             var redirectUrl = _fixture.Create<string>();
@@ -261,15 +268,16 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.GetSigningKeys())
                 .ReturnsAsync(signingKeysResponse);
 
-            // Act 
+            // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
-            // Assert 
+            // Assert
             _citizenIdSigningKeysMock.VerifyAll();
             _citizenIdClientMock.VerifyAll();
 
             actualResult.UserProfile.HasValue.Should().BeFalse();
             actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.IdTokenJti.Should().BeNull();
             _loggerMock.VerifyLogger(LogLevel.Error,
                 "Failed to exchange auth token for access token", Times.Once());
         }
@@ -277,7 +285,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public async Task GetUserProfile_IdTokenReadFails_ReturnsNone()
         {
-            // Arrange 
+            // Arrange
             var token = _fixture.Create<Token>();
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
@@ -306,10 +314,10 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.ReadToken(token.IdToken, signingKeys))
                 .Returns(tokenServiceResponse);
 
-            // Act 
+            // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
-            // Assert 
+            // Assert
             _citizenIdSigningKeysMock.VerifyAll();
             _idTokenService.VerifyAll();
             _citizenIdClientMock.VerifyAll();
@@ -317,6 +325,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
             actualResult.UserProfile.HasValue.Should().BeFalse();
             actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.IdTokenJti.Should().BeNull();
             _loggerMock.VerifyLogger(LogLevel.Error,
                 "Failed to read ID Token", Times.Once());
         }
@@ -324,7 +333,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         [TestMethod]
         public async Task GetUserProfile_SubjectMismatch_ReturnsNone()
         {
-            // Arrange 
+            // Arrange
             var token = _fixture.Create<Token>();
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
@@ -366,15 +375,16 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 .Setup(x => x.ReadToken(token.IdToken, signingKeys))
                 .Returns(tokenServiceResponse);
 
-            // Act 
+            // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
-            // Assert 
+            // Assert
             _citizenIdSigningKeysMock.VerifyAll();
             _idTokenService.VerifyAll();
             _citizenIdClientMock.VerifyAll();
             actualResult.UserProfile.HasValue.Should().BeFalse();
             actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.IdTokenJti.Should().Be(idToken.Jti);
             _loggerMock.VerifyLogger(LogLevel.Error,
                 "Value of subject claim differed between Token and UserInfo responses", Times.Once());
         }
@@ -391,6 +401,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             actualResult.Should().NotBeNull();
             actualResult.UserProfile.HasValue.Should().BeFalse();
             actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            actualResult.IdTokenJti.Should().BeNull();
         }
 
         [TestMethod]
@@ -424,6 +435,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             actualResult.Should().NotBeNull();
             actualResult.StatusCode.Should().Be(StatusCodes.Status200OK);
             actualResult.UserProfile.HasValue.Should().BeTrue();
+            actualResult.IdTokenJti.Should().BeNull();
 
             var actualUserProfile = actualResult.UserProfile.ValueOrFailure();
             actualUserProfile.Im1ConnectionToken.Should().Be(userProfileResponse.Body.Im1ConnectionToken);

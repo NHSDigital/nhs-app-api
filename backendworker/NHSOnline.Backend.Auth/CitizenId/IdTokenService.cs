@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -45,15 +47,22 @@ namespace NHSOnline.Backend.Auth.CitizenId
             {
                 var validationParameters = _parameterBuilder.Build(signingKeys);
                 var principal = _jwtTokenHandler.ValidateToken(token, validationParameters, out _);
+
                 var subject = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-                
                 if (subject == null)
                 {
                     _logger.LogError("Invalid ID Token; does not contain a sub");
                     return Option.None<IdToken>();
                 }
-                
-                return Option.Some(new IdToken { Subject = subject });
+
+                var jti = principal.FindFirstValue(JwtRegisteredClaimNames.Jti);
+                if (jti == null)
+                {
+                    _logger.LogError("Invalid ID Token; does not contain a jti");
+                    return Option.None<IdToken>();
+                }
+
+                return Option.Some(new IdToken { Subject = subject, Jti = jti });
             }
             catch (Exception e)
             {

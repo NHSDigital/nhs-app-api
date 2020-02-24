@@ -75,6 +75,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
                         resultTask.Wait();
 
                         result = resultTask.Result;
+                        result.IdTokenJti = idToken.Jti;
 
                         return Option.Some(idToken);
                     })
