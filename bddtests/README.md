@@ -105,6 +105,7 @@ Add the following environment variables:
 | APP_SCHEME                    | Set to `nhsapp`                                                                                                   |
 | AUTO_LOGIN                    | Set to `true`                                                                                                     |
 | XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
+| SESSION_EXPIRY_MINUTES        | Set to 3                                                                                                          |
 
 To start the service to test the following command should be used (substituting your BrowserStack access key and username where approriate):
 
@@ -140,6 +141,7 @@ Add the following environment variables:
 | APP_SCHEME                    | Set to `nhsapp`                                                                                                   |
 | AUTO_LOGIN                    | Set to `true`                                                                                                     |
 | XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
+| SESSION_EXPIRY_MINUTES        | Set to 3                                                                                                          |
 
 To start the service to test the following command should be used (substituting your BrowserStack access key and username where approriate):
 

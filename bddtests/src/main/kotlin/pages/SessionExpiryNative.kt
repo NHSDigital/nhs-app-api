@@ -3,6 +3,7 @@ package pages
 import config.Config
 import org.openqa.selenium.NoSuchElementException
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 
 const val SCREEN_LOCK_PREVENTION_INTERVAL = 30_000L
@@ -18,14 +19,14 @@ open class SessionExpiryNative : NativePageObject() {
     )
 
     private val extendSessionButton = NativePageElement(
-            androidLocator = "//*[contains(@resource-id, 'extendSession')]",
+            androidLocator = "//android.widget.Button[@text = 'STAY LOGGED IN']",
             iOSAccessID = "sessionExpiryWarningStayLoggedIn",
             webDesktopLocator = "//button[contains(text(),'Stay logged in')]",
             page = this
     )
 
     private val logoutButton = NativePageElement(
-            androidLocator = "//*[contains(@resource-id, 'logOut')]",
+            androidLocator = "//android.widget.Button[@text = 'LOG OUT']",
             iOSAccessID = "sessionExpiryWarningLogOut",
             webDesktopLocator = "//a[contains(text(),'Log out')]",
             page = this
@@ -48,11 +49,11 @@ open class SessionExpiryNative : NativePageObject() {
 
     fun isOnPage(elementText: String): Boolean {
         return try {
-            super.findByAccessibilityId(elementText)
-            print("found element text")
+            findNativeByXpath("//android.widget.TextView[@text = \"$elementText\"]")
+            println("found element text: $elementText")
             true
         } catch (e: NoSuchElementException){
-            print("not found element text")
+            println("not found element text: $elementText")
             false
         }
     }
@@ -61,10 +62,18 @@ open class SessionExpiryNative : NativePageObject() {
          val timeoutMillis = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
          val modalDelayMillis = timeoutMillis - SESSION_EXPIRY_MODAL_DISPLAY_DURATION
          val modalDelaySeconds = TimeUnit.MILLISECONDS.toSeconds(modalDelayMillis)
-         val delayUtil = LocalDateTime.now().plusSeconds(modalDelaySeconds)
+         val delayUntil = LocalDateTime.now().plusSeconds(modalDelaySeconds)
 
-         while (LocalDateTime.now().isBefore(delayUtil)) {
-             Thread.sleep(SCREEN_LOCK_PREVENTION_INTERVAL)
+         while (true) {
+             val now = LocalDateTime.now()
+             val delay = now
+                     .until(delayUntil, ChronoUnit.MILLIS)
+                     .coerceAtMost(SCREEN_LOCK_PREVENTION_INTERVAL)
+             if (delay <= 0) {
+                 break;
+             }
+             println("$now: Sleeping ${delay}ms until $delayUntil")
+             Thread.sleep(delay)
              if (onMobile()) {
                  scrollAndroidNativePage()
              }

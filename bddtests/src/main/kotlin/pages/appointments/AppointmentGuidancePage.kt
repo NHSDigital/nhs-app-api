@@ -38,20 +38,8 @@ class AppointmentGuidancePage : HybridPageObject() {
 
     val gpAdviceMenuItem by lazy { menuLinks.link(gpAdviceTitle) }
 
-    val checkSymptomsButton = HybridPageElement(
-            webDesktopLocator = "//*[@id='btn_check_symptoms']",
-            androidLocator = null,
-            page = this
-    )
-
     val bookButton = HybridPageElement(
             webDesktopLocator = "//*[@id='btn_appointment']",
-            androidLocator = null,
-            page = this
-    )
-
-    private val main = HybridPageElement(
-            webDesktopLocator = mainXPath,
             androidLocator = null,
             page = this
     )
@@ -67,19 +55,4 @@ class AppointmentGuidancePage : HybridPageObject() {
         gpAdminMenuItem.isDisplayed &&
         gpAdviceMenuItem.isDisplayed)
     }
-
-
-    fun getGuidanceBody(): List<Pair<String, Boolean>> {
-        val list = arrayListOf<Pair<String, Boolean>>()
-        content.actOnTheElement {
-            val listElements = it.thenFindAll("*")
-            listElements.forEach { listElement ->
-                val guidanceLine = listElement.getTextWithoutUnicodeSuffix()
-                val isLineInBold = listElement.tagName == "strong"
-                list.add(Pair(guidanceLine, isLineInBold))
-            }
-        }
-        return list
-    }
-
 }

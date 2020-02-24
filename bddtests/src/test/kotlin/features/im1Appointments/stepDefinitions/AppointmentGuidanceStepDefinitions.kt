@@ -28,13 +28,6 @@ class AppointmentGuidanceStepDefinitions {
         appointmentGuidanceSteps.checkGuidanceItemsAreCorrectOLCEnabled()
     }
 
-    @Then("^I am given guidance as to my options before booking an appointment$")
-    @Throws(Exception::class)
-    fun thenIAmGivenGuidanceAsToMyOptionsBeforeBookingAnAppointment() {
-        appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
-        appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
-    }
-
     @Then("^I am on the Appointments Guidance page$")
     fun thenIAmOnTheAppointmentsGuidancePage() {
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()

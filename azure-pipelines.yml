@@ -122,7 +122,7 @@ stages:
       - web
       - backend
       - android
-    condition: and(succeeded(), eq(variables['int.tests.run.native.android'], 'True'))
+    condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'), eq(variables['int.tests.run.native.android'], 'True')))
     jobs:
       - template: .azuredevops/templates/integration-tests-android-job.yml
 

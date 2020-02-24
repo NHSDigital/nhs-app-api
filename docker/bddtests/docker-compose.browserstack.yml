@@ -2,16 +2,17 @@ version: "3.4"
 
 services:
 
-  web.local.bitraft.io:
-    environment:
-      EXPIRE_AFTER_SECONDS: 300
-
   pfs.local.bitraft.io:
-    environment:
-      ConfigurationSettings__DefaultSessionExpiryMinutes: 5
+    env_file:
+      - ./docker/bddtests/env/pfs_browserstack.env
+
+  mongo_seed:
+    env_file:
+      - ./docker/bddtests/env/mongo_seed_browserstack.env
 
   browserstack.local:
     image: ${DOCKER_IMAGE_BROWSERSTACK_LOCAL}
+    restart: always
     entrypoint:
       - /bin/bash
       - -c

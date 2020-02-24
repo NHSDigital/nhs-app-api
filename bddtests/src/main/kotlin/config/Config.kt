@@ -74,7 +74,9 @@ class Config private constructor() {
         browserstackaAppVersion = envOrDefault("BROWSERSTACK_APP_VERSION","")
         browserstackNetworkProfile = envOrDefault("BROWSERSTACK_NETWORK_PROFILE","")
         browserstackTimezone = envOrDefault("BROWSERSTACK_TIMEZONE", "UTC")
-        browserstackBuild = envOrDefault("BROWSERSTACK_BUILD", "manual")
+        browserstackBuild = envOrDefault(
+                "BROWSERSTACK_BUILD",
+                (System.getenv("HOSTNAME") ?: System.getenv("COMPUTERNAME") ?: "unknown") + "-manual")
         showPageSourceForXPathQuery = envOrDefault("XPATH_PAGE_SOURCE", false)
         appPath = envOrDefault("APP_PATH", "NOT_PROVIDED")
         appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")

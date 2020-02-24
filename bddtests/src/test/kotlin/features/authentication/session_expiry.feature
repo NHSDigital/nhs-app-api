@@ -78,6 +78,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
     And the user login details are cleared from cookies
 
+  @long-running
   @android
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
@@ -89,8 +90,9 @@ Feature: Session Expiry and Extend Frontend
     When I click to extend the session
     Then the dialog box is not visible on the screen
     When I select "Book an appointment" button
-    Then I am given guidance as to my options before booking an appointment
+    Then I am on the Appointments Guidance page
 
+  @long-running
   @android
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
@@ -103,6 +105,7 @@ Feature: Session Expiry and Extend Frontend
     Then I see the login page
     And the dialog box is not visible on the screen
 
+  @long-running
   @android
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
@@ -115,30 +118,32 @@ Feature: Session Expiry and Extend Frontend
     Then I see the login page with the session expiry notification
     And the dialog box is not visible on the screen
 
+  @long-running
   @android
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    And I navigate to more
-    When I choose to set my organ donation preferences
-    When I am idle long enough for the session expiry dialog box to appear
-    Then I navigate to Appointments
+    When I navigate to Symptoms
+    And I click Check if you need urgent help
+    And I am idle long enough for the session expiry dialog box to appear
+    And I navigate to Appointments
     Then the dialog box is not visible on the screen
     When I am idle long enough on a secure page for the session expiry dialog box to appear
-    When I click to extend the session
+    And I click to extend the session
     Then the dialog box is not visible on the screen
     When I select "Book an appointment" button
-    Then I am given guidance as to my options before booking an appointment
+    Then I am on the Appointments Guidance page
 
+  @long-running
   @android
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    And I navigate to more
-    When I choose to set my organ donation preferences
-    When I am idle long enough for the session expiry dialog box to appear
-    Then I am idle for a short time
-    Then I navigate to Appointments
+    When I navigate to Symptoms
+    And I click Check if you need urgent help
+    And I am idle long enough for the session expiry dialog box to appear
+    And I am idle for a short time
+    And I navigate to Appointments
     Then the dialog box is not visible on the screen
     When I am idle long enough for the session expiry dialog box to appear
     Then I see a dialog box prompting to extend the session
@@ -146,16 +151,17 @@ Feature: Session Expiry and Extend Frontend
     Then I see the login page
     And the dialog box is not visible on the screen
 
+  @long-running
   @android
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    And I navigate to more
-    When I choose to set my organ donation preferences
-    Then I scroll the device
-    When I am idle long enough for the session expiry dialog box to appear
-    Then I am idle for a short time
-    Then I navigate to Appointments
+    When I navigate to Symptoms
+    And I click Check if you need urgent help
+    And I scroll the device
+    And I am idle long enough for the session expiry dialog box to appear
+    And I am idle for a short time
+    And I navigate to Appointments
     Then the dialog box is not visible on the screen
     When I am idle long enough for the session expiry dialog box to appear
     Then I see a dialog box prompting to extend the session
@@ -163,57 +169,62 @@ Feature: Session Expiry and Extend Frontend
     Then I see the login page with the session expiry notification
     And the dialog box is not visible on the screen
 
-  @android
+  @long-running
+  @android @pending @NHSO-7927
   Scenario: The session expires, a user of the native app, on a non secure screen, when navigating back to a secure screen is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    And I navigate to more
-    When I choose to set my organ donation preferences
-    When I am idle long enough for the session to expire
-    Then I am idle for a short time
-    Then I navigate to Appointments
+    When I navigate to Symptoms
+    And I click Check if you need urgent help
+    And I am idle long enough for the session to expire
+    And I am idle for a short time
+    And I navigate to Appointments
     Then I see the login page
 
-  @android
+  @long-running
+  @android @pending @NHSO-7927
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    Then I navigate to Appointments
-    Then I background the app long enough for the session warning dialog to appear and bring it back to foreground
+    When I navigate to Appointments
+    And I background the app long enough for the session warning dialog to appear and bring it back to foreground
     Then I see a dialog box prompting to extend the session
     When I click to extend the session
     Then the dialog box is not visible on the screen
     When I select "Book an appointment" button
-    Then I am given guidance as to my options before booking an appointment
+    Then I am on the Appointments Guidance page
 
-  @android
+  @long-running
+  @android @pending @NHSO-7927
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    Then I navigate to Appointments
-    Then I background the app long enough for the session warning dialog to appear and bring it back to foreground
+    When I navigate to Appointments
+    And I background the app long enough for the session warning dialog to appear and bring it back to foreground
     Then I see a dialog box prompting to extend the session
     When I click to log out
     Then I see the login page
     And the dialog box is not visible on the screen
 
-  @android
+  @long-running
+  @android @pending @NHSO-7927
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    Then I navigate to Appointments
-    Then I background the app long enough for the session warning dialog to appear and bring it back to foreground
+    When I navigate to Appointments
+    And I background the app long enough for the session warning dialog to appear and bring it back to foreground
     Then I see a dialog box prompting to extend the session
     When I am idle long enough for the session to expire after the dialog
     Then I see the login page with the session expiry notification
     And the dialog box is not visible on the screen
 
-  @android
+  @long-running
+  @android @pending @NHSO-7927
   Scenario: The native app, on a secure screen is in the background. The session expires, the user brings the app to the foreground and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
-    Then I navigate to Appointments
-    Then I background the app long enough for the session expiry and bring it back to foreground
+    When I navigate to Appointments
+    And I background the app long enough for the session expiry and bring it back to foreground
     Then I see the login page
 
   @manual
@@ -229,7 +240,7 @@ Feature: Session Expiry and Extend Frontend
     Then the dialog box is not visible on the screen
     And I see the header
     When I select "Book an appointment" button
-    Then I am given guidance as to my options before booking an appointment
+    Then I am on the Appointments Guidance page
 
   @manual
   Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user unlocks the device and the session extension dialog box is displayed, opts to logout

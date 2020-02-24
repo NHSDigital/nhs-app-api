@@ -13,6 +13,7 @@ import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.CheckMySymptomsPage
 import pages.SessionExpiryNative
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
@@ -37,6 +38,8 @@ class SessionExpiryStepDefinitions  {
 
     lateinit var patient: Patient
 
+    lateinit var checkMySymptoms: CheckMySymptomsPage
+
     @Given("^I am logged in as a (.*) user expecting a \"(.*)\"\\ response when extending their session$")
     fun iClickToExtendSessionExpectingResponse(gpSystem: String, expectedResponse: String) {
         val supplier = Supplier.valueOf(gpSystem)
@@ -51,6 +54,11 @@ class SessionExpiryStepDefinitions  {
 
         PatientVerificationFactory.getForSupplier(supplier)
                 .setSessionExtendMockResponse(patient, expectedResponse)
+    }
+
+    @When("^I click Check if you need urgent help$")
+    fun iClickCheckIfYouNeedUrgentHelp() {
+        checkMySymptoms.clickNHS111Header()
     }
 
     @When("^I try to extend my session$")
