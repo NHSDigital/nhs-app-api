@@ -90,7 +90,6 @@ namespace NHSOnline.Backend.PfsApi
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(ConfigureServiceCookies);
-
             services.AddScoped<CustomCookieAuthenticationEvents>();
 
             services.AddCorrelationId();
@@ -121,13 +120,13 @@ namespace NHSOnline.Backend.PfsApi
             services.AddWkhtmltopdf();
 
             services.AddSingleton(Configuration);
-
             services.AddSingleton<IMongoSessionCacheServiceConfig, MongoSessionCacheServiceConfig>();
             services.AddTransient<IGuidCreator, GuidCreator>();
             services.AddTransient<ISessionCacheService, MongoSessionCacheService>();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddTransient<IIm1CacheService, Im1CacheService>();
             services.AddTransient<IUserSessionManager, UserSessionManager>();
+            services.AddTransient<IGpSessionManager, GpSessionManager>();
             services.AddTransient<IOdsCodeLookup, OdsCodeLookup>();
             services.AddTransient<IGpSystemResolver, GpSystemResolver>();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();

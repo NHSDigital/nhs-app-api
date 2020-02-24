@@ -17,6 +17,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private Mock<IAntiforgery> _mockAntiForgery;
         private Mock<HttpContext> _mockHttpContext;
         private string _csrfToken;
+        private string _im1ConnectionToken;
 
         private SessionMapper _systemUnderTest;
 
@@ -30,6 +31,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockHttpContext = _fixture.Freeze<Mock<HttpContext>>();
 
             _csrfToken = _fixture.Create<string>();
+            _im1ConnectionToken = _fixture.Create<string>();
+
             _mockAntiForgery
                 .Setup(x => x.GetTokens(_mockHttpContext.Object))
                 .Returns(new AntiforgeryTokenSet(_csrfToken, "", "", ""))
@@ -49,13 +52,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 CsrfToken = _csrfToken,
                 GpUserSession = gpUserSession,
-                CitizenIdUserSession = citizenIdUserSession
+                CitizenIdUserSession = citizenIdUserSession,
+                Im1ConnectionToken = _im1ConnectionToken
             };
 
             // Act
-            var result = _systemUnderTest.Map(_mockHttpContext.Object,
-                gpUserSession,
-                citizenIdUserSession);
+            var result = _systemUnderTest.Map(
+                _mockHttpContext.Object, gpUserSession, citizenIdUserSession, _im1ConnectionToken);
 
             // Assert
             result.Should().BeEquivalentTo(

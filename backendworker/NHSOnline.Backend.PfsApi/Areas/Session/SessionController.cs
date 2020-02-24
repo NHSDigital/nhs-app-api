@@ -14,6 +14,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
@@ -34,12 +35,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly ILogger<SessionController> _logger;
         private readonly IAuditor _auditor;
         private readonly IIm1CacheService _im1CacheService;
-        private readonly ISessionMapper _sessionMapper;
         private readonly IOdsCodeMassager _odsCodeMassager;
         private readonly IServiceJourneyRulesService _serviceJourneyRules;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
         private readonly IUserInfoService _userInfoService;
-        
+        private readonly IGpSessionManager _gpSessionManager;
 
         public SessionController(
             ICitizenIdSessionService citizenIdSessionService,
@@ -48,12 +48,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             ConfigurationSettings settings,
             ILogger<SessionController> logger,
             IAuditor auditor,
-            IIm1CacheService im1CacheService,
-            ISessionMapper sessionMapper,
+            IIm1CacheService iIm1CacheService,
             IOdsCodeMassager odsCodeMassager,
             IServiceJourneyRulesService serviceJourneyRules,
             IErrorReferenceGenerator errorReferenceGenerator,
-            IUserInfoService userInfoService
+            IUserInfoService userInfoService,
+            IGpSessionManager gpSessionManager
         )
         {
             _citizenIdSessionService = citizenIdSessionService;
@@ -62,12 +62,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _settings = settings;
             _logger = logger;
             _auditor = auditor;
-            _im1CacheService = im1CacheService;
-            _sessionMapper = sessionMapper;
+            _im1CacheService = iIm1CacheService;
             _odsCodeMassager = odsCodeMassager;
             _serviceJourneyRules = serviceJourneyRules;
             _errorReferenceGenerator = errorReferenceGenerator;
             _userInfoService = userInfoService;
+            _gpSessionManager = gpSessionManager;
         }
 
         [HttpGet]
@@ -81,9 +81,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 var userSession = HttpContext.GetUserSession();
 
                 var responseBody = new UserSessionResponse();
-                
+
                 PopulateUserSessionResponse(responseBody, userSession);
-                
+
                 await _auditor.Audit(AuditingOperations.SessionGetResponse, "Successfully retrieved session.");
 
                 return new OkObjectResult(responseBody);
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 _logger.LogExit();
             }
         }
-    
+
         [HttpPost, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] UserSessionRequest model)
         {
@@ -220,14 +220,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             CitizenIdSessionResult citizenIdSessionResult,
             ServiceJourneyRulesVisitorOutput serviceJourneyRulesResultVisited)
         {
-            // Create a session with the GP system, using the IM1 connection token.
-            var gpSessionCreatedResultVisited = await GetGpSessionCreateResultVisitorOutput(gpSystem,
-                citizenIdSessionResult.Im1ConnectionToken, citizenIdSessionResult.OdsCode,
-                citizenIdSessionResult.NhsNumber);
-            if (!gpSessionCreatedResultVisited.SessionWasCreated)
+            var result = await _gpSessionManager.CreateSession(gpSystem, citizenIdSessionResult);
+
+            if (!(result is CreateSessionResult.Success))
             {
+                var failureStatusCode = result.StatusCode;
+
                 var errorMessage =
-                    $"Creating the session failed with status code: '{gpSessionCreatedResultVisited.StatusCode}'";
+                    $"Creating the session failed with status code: '{failureStatusCode}'";
                 _logger.LogError(errorMessage);
                 await _auditor.AuditSessionEvent(
                     citizenIdSessionResult.Session.AccessToken,
@@ -237,28 +237,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     errorMessage);
 
                 // 502 Bad gateway error references differ by supplier. The other error types do not.
-                var objectResult = gpSessionCreatedResultVisited.StatusCode == StatusCodes.Status502BadGateway
-                    ? BuildErrorResult(ErrorCategory.Login, StatusCodes.Status502BadGateway,
-                        gpSystem.Supplier)
-                    : BuildErrorResult(ErrorCategory.Login, gpSessionCreatedResultVisited.StatusCode);
+                var objectResult = failureStatusCode == StatusCodes.Status502BadGateway
+                    ? BuildErrorResult(ErrorCategory.Login, StatusCodes.Status502BadGateway, gpSystem.Supplier)
+                    : BuildErrorResult(ErrorCategory.Login, failureStatusCode);
 
                 return objectResult;
             }
 
-            var userSession = _sessionMapper.Map(HttpContext, gpSessionCreatedResultVisited.UserSession,
-                citizenIdSessionResult.Session);
-
-            return await CreateSession(userSession, serviceJourneyRulesResultVisited, citizenIdSessionResult,
-                gpSessionCreatedResultVisited);
+            var successResult = result as CreateSessionResult.Success;
+            
+            return await CreateSession(successResult?.UserSession, serviceJourneyRulesResultVisited, citizenIdSessionResult);
         }
-       
+
         private async Task<IActionResult> CreateSession(UserSession userSession,
             ServiceJourneyRulesVisitorOutput serviceJourneyRulesVisitorOutput,
-            CitizenIdSessionResult citizenIdSessionResult,
-            GpSessionCreateResultVisitorOutput gpSessionCreatedResultVisited)
+            CitizenIdSessionResult citizenIdSessionResult)
         {
-            // retrieveConfiguration and save session token in our session cache
-            var sessionFetchTask = FetchSessionIdAndSaveInCookie(userSession);
+            var appendCookieToResponseTask = AppendCookieToResponse(userSession.Key);
 
             // Post to the UserInfo service
             if (serviceJourneyRulesVisitorOutput.Response.Journeys.UserInfo == true)
@@ -269,17 +264,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             // Delete connection token from cache
             var tokenDeletionTask = DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
 
-            await Task.WhenAll(sessionFetchTask, tokenDeletionTask);
+            await Task.WhenAll(appendCookieToResponseTask, tokenDeletionTask);
 
             // Audit that the user is logged on.
             HttpContext.SetUserSession(userSession);
             await _auditor.Audit(AuditingOperations.SessionCreateResponse, "Session successfully created.");
 
-            _logger.LogDebug($"Finished session post with status code {gpSessionCreatedResultVisited.StatusCode}");
-
             return await Task.FromResult(CreateCreatedResult(userSession, serviceJourneyRulesVisitorOutput.Response));
         }
-
+        
         [HttpDelete]
         public async Task<IActionResult> Delete()
         {
@@ -358,7 +351,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 _logger.LogExit();
             }
         }
-
+        
         private CreatedResult CreateCreatedResult(UserSession userSession,
             ServiceJourneyRulesResponse serviceJourneyRules)
         {
@@ -366,32 +359,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             {
                 ServiceJourneyRules = serviceJourneyRules
             };
-            
+
             PopulateUserSessionResponse(responseBody, userSession);
 
             return new CreatedResult(string.Empty, responseBody);
-        }
-
-        private async Task FetchSessionIdAndSaveInCookie(UserSession userSession)
-        {
-            // retrieveConfiguration and save session token in our session cache
-            var sessionId = await _sessionCacheService.CreateUserSession(userSession);
-
-            _logger.LogDebug($"Fetched Session Id: '{sessionId}'");
-
-            // Return the session token in a cookie.
-            await AppendCookieToResponse(sessionId);
-        }
-
-        private static async Task<GpSessionCreateResultVisitorOutput> GetGpSessionCreateResultVisitorOutput(
-            IGpSystem gpSystem,
-            string im1ConnectionToken, string odsCode, string nhsNumber)
-        {
-            var sessionService = gpSystem.GetSessionService();
-            var sessionCreateResult =
-                await sessionService.Create(im1ConnectionToken, odsCode, nhsNumber);
-
-            return sessionCreateResult.Accept(new GpSessionCreateResultVisitor());
         }
 
         private async Task<SessionLogoffResultVisitorOutput> GetSessionLogoffResultVisitorOutput(
@@ -419,7 +390,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             return BuildErrorResult(serviceDeskReference, statusCode);
         }
-
+        
         private ObjectResult BuildErrorResult(ErrorCategory errorCategory, int statusCode, Supplier supplier)
         {
             var serviceDeskReference =
@@ -438,19 +409,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 StatusCode = statusCode
             };
         }
-
+        
         private Option<IGpSystem> GetGpSystem(Supplier supplier)
         {
             return supplier == Supplier.Unknown ? Option.None<IGpSystem>() :
                 Option.Some(_gpSystemFactory.CreateGpSystem(supplier));
         }
-
+        
         private async Task<ServiceJourneyRulesVisitorOutput> GetServiceJourneyRulesVisitorOutput(string odsCode)
         {
             var serviceJourneyRulesConfig = await _serviceJourneyRules.GetServiceJourneyRulesForOdsCode(odsCode);
             return serviceJourneyRulesConfig.Accept(new ServiceJourneyRulesConfigResultVisitor());
         }
-
+        
         private async Task AppendCookieToResponse(string sessionId)
         {
             var claims = new List<Claim>
@@ -465,7 +436,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 new ClaimsPrincipal(claimsIdentity)
             );
         }
-
+        
         private async Task DeleteConnectionTokenFromCache(string im1ConnectionToken)
         {
             if (Guid.TryParse(im1ConnectionToken, out _))
@@ -485,7 +456,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 }
             }
         }
-
+        
         private void PopulateUserSessionResponse(UserSessionResponse response, UserSession userSession)
         {
             response.Name = userSession.GpUserSession.Name;

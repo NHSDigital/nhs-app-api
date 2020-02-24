@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 
@@ -12,13 +13,15 @@ namespace NHSOnline.Backend.PfsApi
 {
     public class CustomCookieAuthenticationEvents : CookieAuthenticationEvents
     {
-        private readonly ISessionCacheService _sessionCacheService;
         private readonly ILogger<CustomCookieAuthenticationEvents> _logger;
+        private readonly IGpSessionManager _gpSessionManager;
 
-        public CustomCookieAuthenticationEvents(ISessionCacheService sessionCacheService, ILogger<CustomCookieAuthenticationEvents> logger)
+        public CustomCookieAuthenticationEvents(
+            ILogger<CustomCookieAuthenticationEvents> logger,
+            IGpSessionManager gpSessionManager)
         {
             _logger = logger;
-            _sessionCacheService = sessionCacheService;
+            _gpSessionManager = gpSessionManager;
         }
         
         public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
@@ -30,46 +33,28 @@ namespace NHSOnline.Backend.PfsApi
                 {
                     return;
                 }
+                
+                var retrieveSessionResult = await RetrieveSession(context);
 
-                var userSessionOption = await GetUserSession(context);
-
-                if (!userSessionOption.HasValue)
+                if (retrieveSessionResult is RetrieveSessionResult.Success success)
                 {
-                    _logger.LogWarning("No user session found. Signing out.");
-                    await RejectPrincipalAndSignOut(context);
-                    return;
-                }
-                var userSession = userSessionOption.ValueOrFailure();
-
-                var token = context.Request.Headers["X-CSRF-TOKEN"];
-                if (token != userSession.CsrfToken)
-                {
-                    _logger.LogWarning("Invalid X-CSRF-Token. Signing out.");
-                    await RejectPrincipalAndSignOut(context);
+                    context.HttpContext.SetUserSession(success.UserSession);
+                    _logger.LogDebug("Finish: Validate Principal");
                     return;
                 }
 
-                _logger.LogInformation($"User session found: '{userSession.GetType()}'");
-
-                context.HttpContext.SetUserSession(userSession);
-                _logger.LogDebug("Finish: Validate Principal");
+                await RejectPrincipalAndSignOut(context);
             }
         }
 
-        private async Task<Option<UserSession>> GetUserSession(CookieValidatePrincipalContext context)
+        private async Task<RetrieveSessionResult> RetrieveSession(CookieValidatePrincipalContext context)
         {
-            var userPrincipal = context.Principal;
-
-            var sessionId = userPrincipal.Claims
+            var sessionId = context.Principal.Claims
                 .FirstOrDefault(x => Constants.ClaimTypes.SessionId.Equals(x.Type, StringComparison.Ordinal))?.Value;
 
-            if (string.IsNullOrEmpty(sessionId))
-            {
-                return Option.None<UserSession>();
-            }
+            var token = context.Request.Headers["X-CSRF-TOKEN"];
 
-            var userSession = await _sessionCacheService.GetUserSession(sessionId);
-            return userSession;
+            return  await _gpSessionManager.RetrieveSession(sessionId, token);
         }
 
         private static async Task RejectPrincipalAndSignOut(CookieValidatePrincipalContext context)

@@ -14,5 +14,7 @@ namespace NHSOnline.Backend.Support
         public CitizenIdUserSession CitizenIdUserSession { get; set; }
 
         public Guid OrganDonationSessionId { get; set; }
+        
+        public string Im1ConnectionToken { get; set; }
     }
 }
