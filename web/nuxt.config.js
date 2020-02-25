@@ -127,7 +127,6 @@ const config = {
     // Appointments
     CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/',
     ONLINE_CONSULTATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
-    CORONAVIRUS_INFORMATION_URL: 'https://www.nhs.uk/conditions/wuhan-novel-coronavirus/',
     // App Version
     VERSION_TAG: 'dev_web_npm',
     COMMIT_ID: 'dev',

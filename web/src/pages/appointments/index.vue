@@ -125,7 +125,6 @@ export default {
   mixins: [ErrorPageMixin],
   data() {
     return {
-      coronaVirusUrl: this.$store.app.$env.CORONAVIRUS_INFORMATION_URL,
       backToHomeUrl: INDEX.path,
       contactUsUrl: this.$env.CONTACT_US_URL,
       guidanceUrl: APPOINTMENT_BOOKING_GUIDANCE.path,
