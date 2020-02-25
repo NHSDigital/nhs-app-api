@@ -53,6 +53,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 HasExistingNominatedPharmacy = !string.IsNullOrEmpty(result.PharmacyOdsCode),
                 UpdatedOdsCode = updatedOdsCode,
                 PertinentSerialChangeNumber = result.PertinentSerialChangeNumber,
+                ObjectId = result.ObjectId,
             };
 
             var updateNominatedPharmacyResult = await _nominatedPharmacyService.UpdateNominatedPharmacy(nominatedPharmacyUpdate);

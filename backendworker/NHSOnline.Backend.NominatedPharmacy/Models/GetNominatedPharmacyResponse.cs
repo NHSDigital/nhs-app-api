@@ -8,6 +8,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
 
         public string PharmacyOdsCode { get; }
         
+        public string ObjectId { get; }
+        
         public string NominatedPharmacyType { get; }
 
         public string PertinentSerialChangeNumber { get; }
@@ -25,12 +27,19 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
             HaveAllChecksPassed = haveAllChecksPassed;
         }
         
-        public GetNominatedPharmacyResponse(HttpStatusCode httpStatusCode, string pharmacyOdsCode, string pertinentSerialChangeNumber, bool haveAllChecksPassed, string nominatedPharmacyType) : this(httpStatusCode)
+        public GetNominatedPharmacyResponse(
+            HttpStatusCode httpStatusCode,
+            string pharmacyOdsCode,
+            string pertinentSerialChangeNumber,
+            bool haveAllChecksPassed,
+            string nominatedPharmacyType,
+            string objectId) : this(httpStatusCode)
         {
             PharmacyOdsCode = pharmacyOdsCode;
             NominatedPharmacyType = nominatedPharmacyType;
             PertinentSerialChangeNumber = pertinentSerialChangeNumber;
             HaveAllChecksPassed = haveAllChecksPassed;
+            ObjectId = objectId;
         }
     }
 }

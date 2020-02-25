@@ -30,6 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         private const string OdsCode = "AB123";
         private const string UpdatedOdsCode = "BB999";
         private const string NominatedPharmacyType = "P1";
+        private const string ObjectId = "ABXXXY";
         private readonly string _pertinentSerialChangeNumber = Guid.NewGuid().ToString();
 
         private NominatedPharmacyController _systemUnderTest;
@@ -90,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nhsNumber = _userSession.GpUserSession.NhsNumber;
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(
-                new GetNominatedPharmacyResponse(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType));
+                new GetNominatedPharmacyResponse(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType, ObjectId));
 
             var pharmacyOrganisation = _fixture.Create<Organisation>();
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.OK, pharmacyOrganisation);
@@ -252,7 +253,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nhsNumber = _userSession.GpUserSession.NhsNumber;
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(new GetNominatedPharmacyResponse(
-                HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType));
+                HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType, ObjectId));
 
             var pharmacyOrganisation = _fixture.Create<Organisation>();
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.OK, pharmacyOrganisation);
@@ -305,7 +306,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             };
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(new GetNominatedPharmacyResponse(
-                HttpStatusCode.OK, odsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType));
+                HttpStatusCode.OK, odsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType, ObjectId));
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
             _mockGpSearchService
@@ -372,7 +373,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nhsNumber = _userSession.GpUserSession.NhsNumber;
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(new GetNominatedPharmacyResponse(
-                HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType ));
+                HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType, ObjectId));
 
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 

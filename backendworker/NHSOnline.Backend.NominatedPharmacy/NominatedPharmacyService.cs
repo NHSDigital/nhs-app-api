@@ -102,12 +102,15 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
                 var pertinentSerialChangeNumber = GetPertinentSerialChangeNumber(result);
 
+                var objectId = GetObjectId(pharmacyCheck);
+
                 var successResult = new GetNominatedPharmacyResponse(
                     result.StatusCode,
                     odsCode,
                     pertinentSerialChangeNumber,
                     pharmacyCheck.IsValid && personalDetailsCheck.IsValid,
-                    pharmacyCheck.PharmacyType);
+                    pharmacyCheck.PharmacyType,
+                    objectId);
 
                 if (!personalDetailsCheck.IsValid)
                 {
@@ -148,6 +151,11 @@ namespace NHSOnline.Backend.NominatedPharmacy
         private static string GetOdsCode(PharmacyCheck pharmacyCheck)
         {
             return pharmacyCheck.PatientCareProvisionEvent?.Performer?.AssignedEntity?.Id?.Extension;
+        }
+        
+        private static string GetObjectId(PharmacyCheck pharmacyCheck)
+        {
+            return pharmacyCheck.PatientCareProvisionEvent?.Id?.Extension;
         }
 
         private static IEnumerable<PatientCareProvisionEvent> GetPatientCareProvisionEvents(NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response> result, string[] knownPharmacyTypes)
@@ -302,10 +310,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 var result = await _prescriptionTrackingClient
                     .UpdateNominatedPharmacy(
                         new NominatedPharmacyUpdateRequest(
-                            nominatedPharmacyUpdate.NhsNumber,
-                            nominatedPharmacyUpdate.HasExistingNominatedPharmacy,
-                            nominatedPharmacyUpdate.UpdatedOdsCode,
-                            nominatedPharmacyUpdate.PertinentSerialChangeNumber,
+                            nominatedPharmacyUpdate,
                             _config));
 
                 if (!result.HasSuccessResponse)

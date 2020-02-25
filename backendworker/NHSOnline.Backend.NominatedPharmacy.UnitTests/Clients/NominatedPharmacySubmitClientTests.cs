@@ -46,12 +46,17 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
         [TestMethod]
         public async Task UpdateNominatedPharmacy_Returns202_WhenUpdatedRequested()
         {
-            // Arrange         
+            // Arrange
+            var nominatedPharmacyUpdate = new NominatedPharmacyUpdate
+            {
+                NhsNumber = "111",
+                UpdatedOdsCode = "ODSFFF",
+                HasExistingNominatedPharmacy = true,
+                PertinentSerialChangeNumber = "444",
+                ObjectId = "ABCX12",
+            };
             var nominatedPharmacyUpdateRequest = new NominatedPharmacyUpdateRequest(
-                "111",
-                true,
-                "ODSFFF",
-                "444",
+                nominatedPharmacyUpdate,
                 _configMock.Object);
 
             _mockHttpHandler
@@ -70,12 +75,17 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests.Clients
         [TestMethod]
         public async Task UpdateNominatedPharmacy_Returns403_WhenUpdatedRequested()
         {
-            // Arrange         
+            // Arrange
+            var nominatedPharmacyUpdate = new NominatedPharmacyUpdate
+            {
+                NhsNumber = "111",
+                UpdatedOdsCode = "ODSFFF",
+                HasExistingNominatedPharmacy = true,
+                PertinentSerialChangeNumber = "444",
+                ObjectId = "ABCX12",
+            };
             var nominatedPharmacyUpdateRequest = new NominatedPharmacyUpdateRequest(
-                "111",
-                true,
-                "ODSFFF",
-                "444",
+                nominatedPharmacyUpdate,
                 _configMock.Object);
 
             _mockHttpHandler

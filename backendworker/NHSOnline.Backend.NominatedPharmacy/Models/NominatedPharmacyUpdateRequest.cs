@@ -19,22 +19,21 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
         private readonly string _updatedOdsCode;
         private readonly string _pertinentSerialChangeNumber;
         private readonly string _nhsNumber;
+        private readonly string _objectId;
         private readonly INominatedPharmacyConfigurationSettings _config;
 
 
         public NominatedPharmacyUpdateRequest(
-            string nhsNumber,
-            bool hasExistingNominatedPharmacy,
-            string updatedOdsCode,
-            string pertinentSerialChangeNumber,
+            NominatedPharmacyUpdate nominatedPharmacyUpdate,
             INominatedPharmacyConfigurationSettings config)
         {
             _messageId = Guid.NewGuid();
             _hl7Time = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
-            _hasExistingNominatedPharmacy = hasExistingNominatedPharmacy;
-            _updatedOdsCode = updatedOdsCode;
-            _pertinentSerialChangeNumber = pertinentSerialChangeNumber;
-            _nhsNumber = nhsNumber;
+            _hasExistingNominatedPharmacy = nominatedPharmacyUpdate.HasExistingNominatedPharmacy;
+            _updatedOdsCode = nominatedPharmacyUpdate.UpdatedOdsCode;
+            _pertinentSerialChangeNumber = nominatedPharmacyUpdate.PertinentSerialChangeNumber;
+            _nhsNumber = nominatedPharmacyUpdate.NhsNumber;
+            _objectId = nominatedPharmacyUpdate.ObjectId;
             _config = config;
         }
 
@@ -180,7 +179,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                                                         Id = new NominatedPharmacyTypes.Id
                                                         {
                                                             Root = "2.16.840.1.113883.2.1.3.2.4.18.1",
-                                                            Extension = "P000000042"
+                                                            Extension = _objectId,
                                                         },
                                                         Performer = new UpdateNominatedPharmacyTypes.Performer
                                                         {
