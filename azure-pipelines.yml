@@ -59,6 +59,11 @@ parameters:
       - Scratch21
       - Preview
 
+  - name: intTestsRunNativeAndroidLongRunning
+    displayName: Run Android Native Long Running Integration Tests
+    type: boolean
+    default: false
+
 trigger:
   branches:
     include:
@@ -66,6 +71,14 @@ trigger:
   tags:
     include:
       - v*
+
+schedules:
+  - cron: 0 1 * * *
+    displayName: Nightly Build
+    branches:
+      include:
+        - develop
+    always: false
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -77,6 +90,10 @@ variables:
   source.tag: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
   native.android.target: ${{ parameters.androidTarget }}
   native.ios.target: ${{ parameters.iosTarget }}
+  ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+    int.tests.run.native.android.long-running: true
+  ${{ if ne(variables['Build.Reason'], 'Schedule') }}:
+    int.tests.run.native.android.long-running: ${{ parameters.intTestsRunNativeAndroidLongRunning }}
 
 stages:
   - stage: backend
@@ -182,9 +199,17 @@ stages:
       - web
       - backend
       - android
-    condition: and(succeeded(), eq(variables['native.android.target'], 'browserstack'), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'), eq(variables['int.tests.run.native.android'], 'True')))
+    condition: and(succeeded(), eq(variables['native.android.target'], 'browserstack'))
     jobs:
       - template: .azuredevops/templates/integration-tests-android-job.yml
+        parameters:
+          job.condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'), eq(variables['int.tests.run.native.android'], 'True')))
+
+      - ${{ if eq(variables['int.tests.run.native.android.long-running'], 'true') }}:
+        - template: .azuredevops/templates/integration-tests-android-job.yml
+          parameters:
+            job.name: Long Running
+            tranche.tag: long-running
 
   - stage: ios_integration_tests
     displayName: iOS Integration Tests

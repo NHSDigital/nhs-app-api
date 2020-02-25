@@ -1,6 +1,7 @@
 package features
 
 import config.Config
+import cucumber.api.Scenario
 import cucumber.api.java.After
 import cucumber.api.java.Before
 import mocking.MockingClient
@@ -33,7 +34,7 @@ class SetupAndTeardown {
     private val mockingClient = MockingClient.instance
 
     @Before
-    fun beforeEachScenario() {
+    fun beforeEachScenario(scenario: Scenario) {
         getCurrentSession().clear()
 
         val workerClient = WorkerClient()
@@ -43,14 +44,24 @@ class SetupAndTeardown {
         setSessionVariable(WorkerClient::class).to(workerClient)
         GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(false)
         GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidRedirectUri)
+        GlobalSerenityHelpers.SCENARIO_TITLE.set(scenario.name)
     }
 
     @After
+    @Suppress("TooGenericExceptionCaught") // Exception is re-thrown
     fun afterEachScenario() {
+        try {
+            executeTearDownActions()
+            assertNoConsoleLogs()
+        } catch (e: Exception) {
+            // If an exception is thrown from this method serenity fails to close the driver
+            getWebdriverManager().closeAllDrivers()
 
-        val tearDownActions = GlobalSerenityHelpers.TEAR_DOWN_ACTIONS.getOrNull<List<() -> Unit>>()
-        tearDownActions?.forEach { tearDownAction -> tearDownAction.invoke() }
+            throw e
+        }
+    }
 
+    private fun assertNoConsoleLogs() {
         var driver = getWebdriverManager().currentDriver
 
         if (driver != null && (driver.isAndroid() || driver.isIOS())) {
@@ -62,9 +73,13 @@ class SetupAndTeardown {
                     .filter { it.level == Level.SEVERE }
                     .filterNot { it.message.contains(CONSOLE_LOG_STRINGS_TO_IGNORE) }
 
-            Assert.assertTrue("There should not be any console logs but found: \r\n $logs",
-                    logs.isEmpty())
+            Assert.assertTrue("There should not be any console logs but found:\r\n$logs", logs.isEmpty())
         }
+    }
+
+    private fun executeTearDownActions() {
+        val tearDownActions = GlobalSerenityHelpers.TEAR_DOWN_ACTIONS.getOrNull<List<() -> Unit>>()
+        tearDownActions?.forEach { tearDownAction -> tearDownAction.invoke() }
     }
 
     private fun switchWebview(currentDriver: WebDriver): WebDriver? {

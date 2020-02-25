@@ -5,6 +5,7 @@ import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.ios.IOSDriver
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.WebDriverFacade
+import org.openqa.selenium.MutableCapabilities
 import org.openqa.selenium.WebDriver
 import pages.HybridPageElement
 import pages.LocatorStrategy
@@ -73,5 +74,11 @@ fun WebDriver.getLocatorStrategy(element: HybridPageElement): LocatorStrategy {
         LocatorStrategy.BROWSER_MOBILE
     } else {
         LocatorStrategy.BROWSER_DESKTOP
+    }
+}
+
+fun MutableCapabilities.setCapabilityIfNotNull(name: String, value: String?) {
+    if (value != null) {
+        this.setCapability(name, value)
     }
 }

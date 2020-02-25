@@ -10,7 +10,9 @@ source "buildscripts/lib/set_env.sh"
 # shellcheck source=lib/functions.sh
 source "buildscripts/lib/functions.sh"
 
-TRANCHE_TAG=native
+TRANCHE_TAG=${TRANCHE_TAG:-native}
+
+info "Running ${TESTS_NAME:-$TRANCHE_TAG} tests"
 
 TRANCHE_RUN_GRADLE_ARGS+=("-Dappium.platformName=ANDROID")
 
@@ -19,11 +21,19 @@ BROWSERSTACK_DEVICE_NAME=${BROWSERSTACK_DEVICE_NAME:-Google Pixel 2}
 BROWSERSTACK_OS_VERSION=${BROWSERSTACK_OS_VERSION:-8.0}
 BROWSERSTACK_CUSTOM_ID=${BROWSERSTACK_CUSTOM_ID:-${HOSTNAME}-android}
 
-EXCLUDE_TAGS=(ios long-running)
+export EXCLUDE_TAGS=(ios)
 
-validate_browserstack_environment "$NATIVE_APP_PATH_ANDROID"
+validate_browserstack_environment "NATIVE_APP_PATH_ANDROID"
 
-info "Running ${TESTS_NAME:-$TRANCHE_TAG} tests"
+setup_browserstack_environment_variables
 
-# shellcheck source=lib/run_browserstack.sh
-source "buildscripts/lib/run_browserstack.sh"
+generate_browserstack_local_identifier
+
+generate_tags_native "$TRANCHE_TAG"
+
+upload_app_to_browserstack
+
+set_browserstack_additional_args
+
+# shellcheck source=lib/run_tests.sh
+source "buildscripts/lib/run_tests.sh"

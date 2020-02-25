@@ -9,5 +9,6 @@ enum class GlobalSerenityHelpers : ISerenityHelperEnums{
     FUNCTIONS_TO_ADD_TO_WINDOW_NATIVE_APP_OBJECT,
     USER_SESSION_CREATED,
     SWITCHED_LINKED_ACCOUNT,
-    USER_AGENT
+    USER_AGENT,
+    SCENARIO_TITLE
 }

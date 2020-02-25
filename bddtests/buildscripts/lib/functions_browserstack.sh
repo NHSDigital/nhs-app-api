@@ -1,0 +1,55 @@
+#! /usr/bin/env bash
+
+function setup_browserstack_environment_variables () {
+  export DOCKER_IMAGE=${DOCKER_IMAGE_GRADLE}
+  DOCKER_COMPOSE_FILES_TRANCHE+=('../docker/bddtests/docker-compose.browserstack.yml')
+  BROWSERSTACK_USERNAME=${BROWSERSTACK_USERNAME:-ops20}
+  BROWSERSTACK_BUILD=${BROWSERSTACK_BUILD:-${HOSTNAME}-local}
+}
+
+function generate_browserstack_local_identifier () {
+  local RANDOM_NUMBER
+
+  # Generate a unique identifier that's predicable if we are running the tests locally (outside of docker)
+  if [ "$RUN_LOCAL_BDD" == 1 ]; then
+    BROWSERSTACK_LOCAL_IDENTIFIER=${BROWSERSTACK_LOCAL_IDENTIFIER:-"${DOCKER_PROJECT_NAME}_${HOSTNAME}"}
+  else
+    RANDOM_NUMBER=$(printf "%4X%4X" $RANDOM $RANDOM | tr ' ' '0')
+    BROWSERSTACK_LOCAL_IDENTIFIER=${BROWSERSTACK_LOCAL_IDENTIFIER:-"${DOCKER_PROJECT_NAME}_${HOSTNAME}_${RANDOM_NUMBER}"}
+  fi
+  export BROWSERSTACK_LOCAL_IDENTIFIER
+}
+
+function upload_app_to_browserstack () {
+  local BROWSERSTACK_UPLOAD_RESPONSE
+
+  info "Uploading native app to BrowserStack: $APP_PATH"
+
+  BROWSERSTACK_UPLOAD_RESPONSE=$(curl \
+    -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" \
+    -X POST \
+    -F "file=@$NATIVE_APP_PATH" \ \
+    -F "data={\"custom_id\": \"$BROWSERSTACK_CUSTOM_ID\"}" \
+    "https://api-cloud.browserstack.com/app-automate/upload")
+  info "BROWSERSTACK_UPLOAD_RESPONSE: $BROWSERSTACK_UPLOAD_RESPONSE"
+
+  # shellcheck disable=SC2001 #See if you can use ${variable//search/replace} instead.
+  BROWSERSTACK_APPPATH=$(echo "$BROWSERSTACK_UPLOAD_RESPONSE" | sed -e 's/^.*"app_url":"\([^"]*\)".*$/\1/')
+  info "BROWSERSTACK_APPPATH: $BROWSERSTACK_APPPATH"
+  export BROWSERSTACK_APPPATH
+}
+
+function set_browserstack_additional_args () {
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "BROWSERSTACK_ACCESS_KEY=$BROWSERSTACK_ACCESS_KEY")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "BROWSERSTACK_BUILD=$BROWSERSTACK_BUILD")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "BROWSERSTACK_DEVICE_NAME=$BROWSERSTACK_DEVICE_NAME")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "BROWSERSTACK_OS_VERSION=$BROWSERSTACK_OS_VERSION")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "APP_PATH=$BROWSERSTACK_APPPATH")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "BROWSERSTACK_LOCAL_IDENTIFIER=$BROWSERSTACK_LOCAL_IDENTIFIER")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "APP_SCHEME=nhsapp")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "AUTOLOGIN=true")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "XPATH_PAGE_SOURCE=false")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "SESSION_EXPIRY_MINUTES=3")
+  TRANCHE_RUN_ADDITIONAL_ARGS+=(--env "IS_NATIVE_APP_RUN=true")
+}

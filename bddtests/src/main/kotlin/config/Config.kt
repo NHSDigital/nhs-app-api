@@ -30,15 +30,15 @@ class Config private constructor() {
     var browserstackAccessKey: String
     var browserstackUrl: String
     var browserstackLocal: String
-    var browserstackLocalIdentifier: String
+    var browserstackLocalIdentifier: String?
     var browserstackBrowserResolution: String
     var browserstackTimezone: String
-    var browserstackaAppVersion:String
-    var browserstackNetworkProfile:String
-    var browserstackDeviceName:String
-    var browserstackDeviceOSversion:String
-    var browserstackBuild:String
-    var isNativeAppTestRun:Boolean
+    var browserstackAppVersion: String?
+    var browserstackNetworkProfile: String?
+    var browserstackDeviceName: String?
+    var browserstackDeviceOSversion: String?
+    var browserstackBuild: String
+    var isNativeAppTestRun: Boolean
     var autoLogin: String
     var appPath: String
     var appiumServer: String
@@ -69,10 +69,10 @@ class Config private constructor() {
         browserstackAccessKey = envOrDefault("BROWSERSTACK_ACCESS_KEY", "NOT_PROVIDED")
         browserstackUrl = "http://$browserstackUsername:$browserstackAccessKey@hub-cloud.browserstack.com/wd/hub"
         browserstackLocal = envOrDefault("BROWSERSTACK_LOCAL", "true")
-        browserstackLocalIdentifier = envOrDefault("BROWSERSTACK_LOCAL_IDENTIFIER","")
+        browserstackLocalIdentifier = envOrNull("BROWSERSTACK_LOCAL_IDENTIFIER")
         browserstackBrowserResolution = envOrDefault("BROWSERSTACK_BROWSER_RESOLUTION","")
-        browserstackaAppVersion = envOrDefault("BROWSERSTACK_APP_VERSION","")
-        browserstackNetworkProfile = envOrDefault("BROWSERSTACK_NETWORK_PROFILE","")
+        browserstackAppVersion = envOrNull("BROWSERSTACK_APP_VERSION")
+        browserstackNetworkProfile = envOrNull("BROWSERSTACK_NETWORK_PROFILE")
         browserstackTimezone = envOrDefault("BROWSERSTACK_TIMEZONE", "UTC")
         browserstackBuild = envOrDefault(
                 "BROWSERSTACK_BUILD",
@@ -80,8 +80,8 @@ class Config private constructor() {
         showPageSourceForXPathQuery = envOrDefault("XPATH_PAGE_SOURCE", false)
         appPath = envOrDefault("APP_PATH", "NOT_PROVIDED")
         appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")
-        browserstackDeviceName = envOrDefault("BROWSERSTACK_DEVICE_NAME", "")
-        browserstackDeviceOSversion = envOrDefault("BROWSERSTACK_OS_VERSION", "")
+        browserstackDeviceName = envOrNull("BROWSERSTACK_DEVICE_NAME")
+        browserstackDeviceOSversion = envOrNull("BROWSERSTACK_OS_VERSION")
         isNativeAppTestRun = envOrDefault("IS_NATIVE_APP_RUN", false)
 
         cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online")
@@ -126,8 +126,17 @@ class Config private constructor() {
                 .also { println("$key set as $it") }
     }
 
-    private fun envOrDefault(key: String, defaultValue: Long): Long {
+    private fun envOrNull(key: String): String? {
+        return (System.getenv(key))
+                .also {
+                    when (it) {
+                        null -> println("$key not set")
+                        else -> println("$key set as $it")
+                    }
+                }
+    }
 
+    private fun envOrDefault(key: String, defaultValue: Long): Long {
         return (System.getenv(key)?.toLong() ?: defaultValue)
                 .also { println("$key set as $it") }
     }

@@ -1,5 +1,4 @@
 package features.authentication.stepDefinitions
-import config.Config
 import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -20,12 +19,9 @@ import utils.SerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
-import java.util.concurrent.TimeUnit
 
 private const val DELAY_SECONDS_FOR_WAITING = 2000L
 private const val DELAY_BEFORE_RESUME = 10_000L
-private const val BACKGROUND_DURATION = 100L
-private const val ADDITIONAL_TIME_FOR_SESSION_TO_EXPIRE = 60_000
 
 class SessionExpiryStepDefinitions  {
 
@@ -57,9 +53,7 @@ class SessionExpiryStepDefinitions  {
     }
 
     @When("^I click Check if you need urgent help$")
-    fun iClickCheckIfYouNeedUrgentHelp() {
-        checkMySymptoms.clickNHS111Header()
-    }
+    fun iClickCheckIfYouNeedUrgentHelp() = checkMySymptoms.clickNHS111Header()
 
     @When("^I click Get advice about coronavirus$")
     fun iClickGetAdviceAboutCoronaVirus() {
@@ -83,28 +77,20 @@ class SessionExpiryStepDefinitions  {
         when(sessionExpiry.onMobile()){
             false -> {
                 sessionExpiry.waitForSessionExpiryAfterModalDisplay()
-                Thread.sleep(DELAY_BEFORE_RESUME)
             }
             true -> {
-                sessionExpiry.scrollAndroidNativePage()
-                sessionExpiry.waitForSessionExpiryModal()
-                sessionExpiry.scrollAndroidNativePage()
-                sessionExpiry.waitForSessionExpiryAfterModalDisplay()
-                sessionExpiry.scrollAndroidNativePage()
+                sessionExpiry.waitForSessionExpiry()
             }
         }
     }
 
     @When("^I am idle long enough for the session to expire after the dialog$")
-    fun iAmIdleLongEnoughForTheSessionToExpireAfterTheDialog() {
-        sessionExpiry.waitForSessionExpiryAfterModalDisplay()
-    }
+    fun iAmIdleLongEnoughForTheSessionToExpireAfterTheDialog() = sessionExpiry.waitForSessionExpiryAfterModalDisplay()
 
     @Given("I allow my session to expire")
     @When("I am idle long enough for the desktop session to expire")
     fun givenIAllowMySessionToExpire() {
-        val delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
-        Thread.sleep(delayTime + ADDITIONAL_TIME_FOR_SESSION_TO_EXPIRE)
+        sessionExpiry.waitForSessionExpiry()
     }
 
     @When("^I click to extend the session$")
@@ -116,20 +102,15 @@ class SessionExpiryStepDefinitions  {
     }
 
     @When("^I click to log out$")
-    fun iClickToLogOut() {
-        sessionExpiry.clickLogOut()
-    }
+    fun iClickToLogOut() = sessionExpiry.clickLogOut()
 
 
     @When("^I am idle long enough for the session expiry dialog box to appear$")
-    fun iAmIdleLongEnoughForSessionExpiryDialog() {
-        sessionExpiry.waitForSessionExpiryModal()
-    }
+    fun iAmIdleLongEnoughForSessionExpiryDialog() = sessionExpiry.waitForSessionExpiryModal()
 
     @When("^I am idle long enough on a secure page for the session expiry dialog box to appear$")
     fun iAmIdleLongEnoughOnASecurePageForSessionExpiryDialog() {
         sessionExpiry.waitForSessionExpiryModal()
-        Thread.sleep(DELAY_BEFORE_RESUME)
         val presentOnPage =  sessionExpiry.isSessionExpiryModalVisible()
         Assert.assertEquals(true, presentOnPage)
         if(sessionExpiry.onMobile()) {
@@ -147,30 +128,23 @@ class SessionExpiryStepDefinitions  {
     fun iSeeTheDialogBoxPromptingToExtendTheSession() {
         val presentOnPage =  sessionExpiry.isSessionExpiryModalVisible()
 
-        Assert.assertEquals(true, presentOnPage)
+        Assert.assertTrue("Session expiry modal visible", presentOnPage)
     }
 
     @Then("^the dialog box is not visible on the screen$")
     fun theDialogBoxIsNotVisibile() {
         val presentOnPage = sessionExpiry.isSessionExpiryModalVisible()
-        Assert.assertEquals(false, presentOnPage)
+        Assert.assertFalse("Session expiry modal visible", presentOnPage)
     }
 
     @Then("^I background the app long enough for the session warning dialog to appear and bring it back to foreground$")
-    fun iBackgroundTheAppForDialog() {
-        sessionExpiry.backgroundAndroidAppforDurationBeforeReturning(BACKGROUND_DURATION)
-    }
+    fun iBackgroundTheAppForDialog() = sessionExpiry.backgroundAppUntilSessionExpiryModalShouldBeDisplayed()
 
     @Then("^I background the app long enough for the session expiry and bring it back to foreground$")
-    fun iBackgroundTheAppForSessionExpiry() {
-        sessionExpiry.backgroundAndroidAppforDurationBeforeReturning(
-                TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes))
-    }
+    fun iBackgroundTheAppForSessionExpiry() = sessionExpiry.backgroundAppUntilSessionExpiry()
 
     @Then("^I lock the device$")
-    fun iLockTheDevice() {
-        sessionExpiry.lockAndroidDevice()
-    }
+    fun iLockTheDevice() = sessionExpiry.lockAndroidDevice()
 
     @Then("^I unlock the device$")
     fun iUnlockTheDevice() {
@@ -180,9 +154,7 @@ class SessionExpiryStepDefinitions  {
     }
 
     @Then("^I scroll the device$")
-    fun iScrollTheDevice() {
-        sessionExpiry.scrollAndroidNativePage()
-    }
+    fun iScrollTheDevice() = sessionExpiry.scrollAndroidNativePage()
 
     @Then("^I am idle for a short time$")
     fun iamIdleBeforeResume() {

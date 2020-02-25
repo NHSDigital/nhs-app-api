@@ -17,7 +17,7 @@ function validate_terms_conditions_cosmos_auth_key () {
 }
 
 function validate_browserstack_environment () {
-  export NATIVE_APP_PATH="$1"
+  export NATIVE_APP_PATH="${!1}"
 
   if [ -z "$BROWSERSTACK_ACCESS_KEY" ] && [ -f ~/.nhsonline/secrets/browserstack_accesskey ]; then
     BROWSERSTACK_ACCESS_KEY=$(<~/.nhsonline/secrets/browserstack_accesskey)
@@ -25,5 +25,5 @@ function validate_browserstack_environment () {
   fi
 
   [ -n "$BROWSERSTACK_ACCESS_KEY" ] || die "BROWSERSTACK_ACCESS_KEY is not specified, this is required to run native integration tests"
-  [ -f "$NATIVE_APP_PATH" ] || die "Native app (NATIVE_APP_PATH=$NATIVE_APP_PATH) does not exist, this is required to run native integration tests"
+  [ -f "$NATIVE_APP_PATH" ] || die "Native app ($1=$NATIVE_APP_PATH) does not exist, this is required to run native integration tests"
 }

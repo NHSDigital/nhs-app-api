@@ -8,10 +8,14 @@ import io.appium.java_client.remote.MobileCapabilityType
 import net.thucydides.core.webdriver.DriverSource
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.DesiredCapabilities
+import utils.GlobalSerenityHelpers
+import utils.getOrFail
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
 private const val TIMEOUT: Long = 5
+private const val DEFAULT_DEVICE_NAME = "iPhone 8"
+private const val DEFAULT_OS_VERSION = "12.1"
 
 class BrowserstackIOSDriver : DriverSource {
 
@@ -28,32 +32,28 @@ class BrowserstackIOSDriver : DriverSource {
     companion object {
         fun caps(): DesiredCapabilities {
             val caps = DesiredCapabilities()
+
+            caps.setCapability("autoWebview", "true")
             caps.setCapability(IOSMobileCapabilityType.ACCEPT_SSL_CERTS, true)
-            caps.setCapability("browserstack.local", "true")
-            caps.setCapability("browserstack.debug","true")
-            caps.setCapability("autoWebview","true")
-            caps.setCapability(MobileCapabilityType.APP,Config.instance.appPath)
+
             caps.setCapability("project", "NHSApp")
             caps.setCapability("build", Config.instance.browserstackBuild)
+            caps.setCapability("name", GlobalSerenityHelpers.SCENARIO_TITLE.getOrFail<String>())
 
-            if(Config.instance.browserstackLocalIdentifier!="")
-                caps.setCapability("browserstack.localIdentifier",Config.instance.browserstackLocalIdentifier)
+            caps.setCapability(MobileCapabilityType.APP, Config.instance.appPath)
+            caps.setCapabilityIfNotNull("browserstack.app_version", Config.instance.browserstackAppVersion)
 
-            if(Config.instance.browserstackDeviceName!="")
-                caps.setCapability(MobileCapabilityType.DEVICE_NAME, Config.instance.browserstackDeviceName)
-            else
-                caps.setCapability(MobileCapabilityType.DEVICE_NAME, "iPhone 8")
+            caps.setCapability(
+                    MobileCapabilityType.DEVICE_NAME,
+                    Config.instance.browserstackDeviceName ?: DEFAULT_DEVICE_NAME)
+            caps.setCapability(
+                    "os_version",
+                    Config.instance.browserstackDeviceOSversion ?: DEFAULT_OS_VERSION)
 
-            if(Config.instance.browserstackDeviceOSversion!="")
-                caps.setCapability("os_version",Config.instance.browserstackDeviceOSversion)
-            else
-                caps.setCapability("os_version","12.1")
-
-            if(Config.instance.browserstackaAppVersion!="")
-                caps.setCapability("browserstack.app_version",Config.instance.browserstackaAppVersion)
-
-            if(Config.instance.browserstackNetworkProfile!="")
-                caps.setCapability("browserstack.networkProfile",Config.instance.browserstackNetworkProfile)
+            caps.setCapabilityIfNotNull("browserstack.localIdentifier", Config.instance.browserstackLocalIdentifier)
+            caps.setCapabilityIfNotNull("browserstack.networkProfile", Config.instance.browserstackNetworkProfile)
+            caps.setCapability("browserstack.local", "true")
+            caps.setCapability("browserstack.debug","true")
 
             return caps
         }

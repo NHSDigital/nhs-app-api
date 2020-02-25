@@ -83,7 +83,7 @@ function stop_services_under_test () {
 function destroy_services_under_test () {
   if [ -z "$TF_BUILD" ]; then
     docker rm "${DOCKER_PROJECT_NAME}_test_runner"
-    docker-compose -p "$DOCKER_PROJECT_NAME" "${DOCKER_COMPOSE_FILES_ARGS[@]}" down
+    docker-compose -p "$DOCKER_PROJECT_NAME" "${DOCKER_COMPOSE_FILES_ARGS[@]}" down --volume
   fi
 }
 
@@ -102,7 +102,9 @@ function fetch_container_logs () {
 function rebuild_image_with_user() {
   baseImage="$1"
 
-  docker pull "${baseImage}"
+  if [ -z "$TF_BUILD" ] && [ -z "$NO_PULL" ]; then
+    docker pull "${baseImage}"
+  fi
 
   if ! [[ $(uname -s) =~ ^Linux.* ]]; then
     # permission only needs to be fixed on linux hosts

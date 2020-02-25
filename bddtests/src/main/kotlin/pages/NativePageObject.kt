@@ -9,7 +9,6 @@ import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.WebDriverException
 import webdrivers.getSpecificDriver
 import webdrivers.isAndroid
-import java.time.Duration
 
 const val NATIVE_CONTEXT: String = "native"
 
@@ -114,12 +113,6 @@ abstract class NativePageObject : HybridPageObject() {
     fun unlockAndroidDevice() {
         val driver = driver.getSpecificDriver<AndroidDriver<MobileElement>>()
         driver.unlockDevice()
-    }
-
-    fun backgroundAndroidAppforDurationBeforeReturning(seconds:Long){
-        val driver = driver.getSpecificDriver<AndroidDriver<MobileElement>>()
-        driver.runAppInBackground(Duration.ofSeconds(seconds))
-        scrollAndroidNativePage()
     }
 
     @Suppress("TooGenericExceptionCaught", "Any exception thrown from javascript")

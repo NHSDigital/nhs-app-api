@@ -89,8 +89,8 @@ Feature: Session Expiry and Extend Frontend
     Then I see a dialog box prompting to extend the session
     When I click to extend the session
     Then the dialog box is not visible on the screen
-    When I select "Book an appointment" button
-    Then I am on the Appointments Guidance page
+    When I click the GP Appointments link
+    Then the Your Appointments page is displayed
 
   @long-running
   @android
@@ -119,7 +119,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @long-running
-  @android
+  @android @bug @NHSO-8713
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -131,8 +131,8 @@ Feature: Session Expiry and Extend Frontend
     When I am idle long enough on a secure page for the session expiry dialog box to appear
     And I click to extend the session
     Then the dialog box is not visible on the screen
-    When I select "Book an appointment" button
-    Then I am on the Appointments Guidance page
+    When I click the GP Appointments link
+    Then the Your Appointments page is displayed
 
   @long-running
   @android
@@ -170,7 +170,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @long-running
-  @android @pending @NHSO-7927
+  @android
   Scenario: The session expires, a user of the native app, on a non secure screen, when navigating back to a secure screen is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -182,7 +182,7 @@ Feature: Session Expiry and Extend Frontend
     Then I see the login page
 
   @long-running
-  @android @pending @NHSO-7927
+  @android @bug @NHSO-8713
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -191,11 +191,11 @@ Feature: Session Expiry and Extend Frontend
     Then I see a dialog box prompting to extend the session
     When I click to extend the session
     Then the dialog box is not visible on the screen
-    When I select "Book an appointment" button
-    Then I am on the Appointments Guidance page
+    When I click the GP Appointments link
+    Then the Your Appointments page is displayed
 
   @long-running
-  @android @pending @NHSO-7927
+  @android @bug @NHSO-8713
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -207,7 +207,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @long-running
-  @android @pending @NHSO-7927
+  @android
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -219,7 +219,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @long-running
-  @android @pending @NHSO-7927
+  @android
   Scenario: The native app, on a secure screen is in the background. The session expires, the user brings the app to the foreground and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -239,8 +239,8 @@ Feature: Session Expiry and Extend Frontend
     When I click to extend the session
     Then the dialog box is not visible on the screen
     And I see the header
-    When I select "Book an appointment" button
-    Then I am on the Appointments Guidance page
+    When I click the GP Appointments link
+    Then the Your Appointments page is displayed
 
   @manual
   Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user unlocks the device and the session extension dialog box is displayed, opts to logout
