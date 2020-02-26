@@ -116,7 +116,7 @@ export default {
           commit(SHOW_SESSION_EXPIRING);
 
           if (window.nativeApp) {
-            NativeCallbacks.onSessionExpiring(state.durationSeconds / 60);
+            NativeCallbacks.onSessionExpiring();
           } else {
             this.dispatch('modal/show', { content: SessionExpiryModal });
           }

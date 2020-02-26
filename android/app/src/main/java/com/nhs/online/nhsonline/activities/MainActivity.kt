@@ -33,6 +33,7 @@ import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.support.*
 import com.nhs.online.nhsonline.utils.NotificationManagerCompat
 import com.nhs.online.nhsonline.web.NhsWeb
@@ -40,6 +41,7 @@ import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
 import com.nhs.online.nhsonline.support.STORAGE_REQUEST_CODE
+import com.nhs.online.nhsonline.utils.UrlHelper
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.biometric_layout_content.*
@@ -66,6 +68,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private lateinit var activityViewSwitcher: MainActivityViewSwitcher
     private val nhsAndroidUserAgent = "nhsapp-android/" + com.nhs.online.nhsonline.BuildConfig.VERSION_NAME
     private lateinit  var downloadHelper: FileDownloadHelper
+    private lateinit var knownServices: KnownServices
 
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
@@ -80,6 +83,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE)
         }
+
+        knownServices = KnownServices(this)
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.logged_in_header))
@@ -150,6 +155,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
                 appWebInterface, nhsWeb, appDialogs)
         }
 
+        handleNotificationIntent(intent, true)
+
         lifeCycleObserver?.onMoveToForeground()
     }
 
@@ -216,10 +223,16 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        handleNewIntent(intent)
+        intent?.let {
+            if (intent.extras?.isEmpty == false) {
+                handleNotificationIntent(intent, false)
+            } else {
+                handleNewIntentData(intent)
+            }
+        }
     }
 
-    private fun handleNewIntent(intent: Intent?) {
+    private fun handleNewIntentData(intent: Intent?) {
         intent?.data?.let { uri ->
             val uriPath = uri.path ?: ""
 
@@ -242,6 +255,20 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
                 showBlankScreen()
 
             nhsWeb.loadUrl(url)
+        }
+    }
+
+    private fun handleNotificationIntent(intent: Intent?, isAppClosed: Boolean) {
+        intent?.extras?.get("url")?.let {url ->
+            val urlString = UrlHelper(this).ensureUrlWithScheme(url.toString())
+            if (knownServices.isSameSchemeAndHostAsHomeUrl(urlString.toString())) {
+                if (isAppClosed) {
+                    val appPersistData = PersistData(this)
+                    urlString?.let { appPersistData.storePersistedLink(it.toString()) }
+                } else {
+                    urlString?.let { nhsWeb.loadUrl(it.toString()) }
+                }
+            }
         }
     }
 
@@ -291,16 +318,16 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         nhsWeb.loadUrl(path)
     }
 
-    override fun loadBiometricLoginPage(biometricsParams: String) {
-        var url = webview.url
+    override fun loadBiometricLoginPage(url: String) {
+        var fullUrl = webview.url
 
-        url += when(url.contains("?")) {
-            true -> "&$biometricsParams"
-            false -> "?$biometricsParams"
+        fullUrl += when(fullUrl.contains("?")) {
+            true -> "&$url"
+            false -> "?$url"
         }
 
         nhsWeb.requiresFullPageLoad = true
-        nhsWeb.loadUrl(url)
+        nhsWeb.loadUrl(fullUrl)
     }
 
     override fun startDownload(base64Data: String, fileName: String, mimeType: String) {

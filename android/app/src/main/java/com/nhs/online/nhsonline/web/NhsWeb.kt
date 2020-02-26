@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.webkit.CookieManager
+import android.webkit.URLUtil
 import android.webkit.WebView
 import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.R
@@ -109,6 +110,14 @@ class NhsWeb(
         val intent = Intent(Intent.ACTION_DIAL)
         intent.setData(Uri.parse(url))
         activity.startActivity(intent)
+    }
+
+    fun loadPersistedLink() {
+        val url = appPersistData.getPersistedLink().toString()
+        if (!url.isNullOrBlank() && URLUtil.isValidUrl(url)) {
+            appPersistData.storePersistedLink("")
+            loadUrl(url)
+        }
     }
 
     fun setReloadPath(path: String) {

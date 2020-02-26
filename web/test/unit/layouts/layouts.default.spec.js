@@ -148,7 +148,7 @@ describe('default.vue - is native', () => {
 
     createDefaultPage($store);
     expect($store.dispatch)
-      .toHaveBeenLastCalledWith('auth/nativeLogin');
+      .toHaveBeenCalledWith('auth/nativeLogin');
   });
 
   it('will show breadcrumb on the correct pages when native', () => {

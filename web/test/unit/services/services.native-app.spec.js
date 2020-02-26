@@ -52,7 +52,7 @@ describe('native app', () => {
   callNative('hideWhiteScreen');
   callNative('onLogin');
   callNative('onLogout');
-  callNative('onSessionExpiring', 115);
+  callNative('onSessionExpiring');
   callNative('openAppSettings');
   callNative('pageLoadComplete');
   callNative('requestPnsToken', 'load');

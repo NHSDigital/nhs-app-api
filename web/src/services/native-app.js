@@ -130,17 +130,10 @@ export default {
     return false;
   },
 
-  /**
-   * On session expiring event.
-   * //**
-   *  The old, on session expiring event.
-   * @deprecated since 1.23.0 (NHSO-5818), here for backwards compatibility
-   * @param {int} sessionDuration
-   */
-  onSessionExpiring(sessionDuration) {
+  onSessionExpiring() {
     const app = window.nativeApp;
     if (app && app.onSessionExpiring) {
-      app.onSessionExpiring(sessionDuration);
+      app.onSessionExpiring();
       return true;
     }
     return false;

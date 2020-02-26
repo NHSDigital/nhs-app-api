@@ -22,6 +22,7 @@ class LifeCycleObserver(
 ) {
     private val knownServices = KnownServices(context)
     private val configurationService = ConfigurationService(context)
+    private val appPersistData = PersistData(context)
 
     fun onMoveToForeground() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onMoveToForeground")
@@ -82,7 +83,11 @@ class LifeCycleObserver(
 
                 context.configBiometricSetup(configurationResponse.fidoServerUrl)
                 nhsWeb.setHelpLocation()
-                nhsWeb.loadWelcomePage()
+                if (!appPersistData.getPersistedLink().isNullOrBlank()) {
+                    nhsWeb.loadPersistedLink()
+                } else {
+                    nhsWeb.loadWelcomePage()
+                }
             }
 
             override fun onError(errorMessage: ErrorMessage) {

@@ -27,7 +27,6 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.logging.Logger
 
-
 private const val DELAY_PROGRESS_SHOW_TIME_MILLISECONDS = 500L
 private const val REQUEST_TIMEOUT_MILLISECONDS = 20 * 1000L
 private const val WOFF2 = "woff2"
@@ -129,6 +128,13 @@ class WebClientInterceptor(
 
     override fun onLoadResource(view: WebView?, url: String?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLoadResource > url $url")
+
+        if (!isUrlKnownService(view?.url)) {
+            Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLoadResource > isUrlKnownService > False")
+            view?.stopLoading()
+            nhsWeb.loadWelcomePage()
+            return
+        }
 
         if (!isConnectedToNetwork) {
             Log.d(Application.TAG,
@@ -266,7 +272,7 @@ class WebClientInterceptor(
                 uiInteractor.showHeaderSlim()
             }
 
-            if (!knownServices.isUrlHostSameAsHomeUrlHost(url))
+            if (!knownServices.isSameSchemeAndHostAsHomeUrl(url))
                 uiInteractor.announcePageTitle(view?.title)
         }
         super.onPageCommitVisible(view, url)
@@ -412,5 +418,16 @@ class WebClientInterceptor(
         } catch (exception: MalformedURLException) {
             false
         }
+    }
+
+    private fun isUrlKnownService(url: String?): Boolean {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering isUrlKnownService > url $url")
+
+        url?.let {urlString ->
+            if (knownServices.findMatchingKnownService(urlString) != null) {
+                return true
+            }
+        }
+        return false
     }
 }

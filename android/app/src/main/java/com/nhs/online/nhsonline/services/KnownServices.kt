@@ -3,18 +3,15 @@ package com.nhs.online.nhsonline.services
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.webkit.URLUtil
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.data.ErrorMessage
-import com.nhs.online.nhsonline.support.Optional
 import java.net.MalformedURLException
 import java.net.URL
-
 
 class KnownServices(private val context: Context) {
     private val serviceList = buildKnownServices()
     private val externalSites = buildExternalSites()
-
 
     fun shouldURLOpenExternally(url: URL): Boolean {
         return externalSites.contains(url)
@@ -26,8 +23,8 @@ class KnownServices(private val context: Context) {
     }
 
     fun findMatchingServiceInfo(
-        urlString: String,
-        withExactMatchingPath: Boolean = false
+            urlString: String,
+            withExactMatchingPath: Boolean = false
     ): KnownService.Info? {
         val matchingService = findMatchingKnownService(urlString) ?: return null
         return matchingService.findMatchingServicePathInfo(urlString, withExactMatchingPath)
@@ -46,7 +43,6 @@ class KnownServices(private val context: Context) {
         }
         return null
     }
-
 
     fun findNHSAppInternalServiceInfoByPath(path: String): KnownService.Info? {
         val nhsService = findMatchingKnownService(fetchStringResource(R.string.baseURL))
@@ -74,18 +70,18 @@ class KnownServices(private val context: Context) {
         val nhsAppService = buildNHSInternalAppService()
 
         val nhs111 = KnownService(fetchStringResource(
-            R.string.nhs111),
-            fetchStringResource(R.string.nhs_111_header),
-            fetchStringResource(R.string.nhs_111_header_description),
-            false)
+                R.string.nhs111),
+                fetchStringResource(R.string.nhs_111_header),
+                fetchStringResource(R.string.nhs_111_header_description),
+                false)
         val dataPref = KnownService(fetchStringResource(R.string.dataPreferencesBaseUrl),
-            fetchStringResource(R.string.data_preferences_header),
-            fetchStringResource(R.string.data_preferences_header),
-            false)
+                fetchStringResource(R.string.data_preferences_header),
+                fetchStringResource(R.string.data_preferences_header),
+                false)
         val conditions = KnownService(fetchStringResource(R.string.conditions),
-            fetchStringResource(R.string.conditions_header),
-            fetchStringResource(R.string.conditions_header_description),
-            false)
+                fetchStringResource(R.string.conditions_header),
+                fetchStringResource(R.string.conditions_header_description),
+                false)
 
         services.add(nhsAppService)
         services.add(nhs111)
@@ -100,17 +96,17 @@ class KnownServices(private val context: Context) {
             val newHost = "$nhsLoginPrefix.${nhsBaseLoginUrl.host}"
 
             val nhsLoginUri =
-                nhsBaseLoginUrl
-                    .buildUpon()
-                    .authority(newHost)
-                    .build()
+                    nhsBaseLoginUrl
+                            .buildUpon()
+                            .authority(newHost)
+                            .build()
 
             Log.d(Application.TAG, "Adding known service for $nhsLoginUri")
 
             services.add(KnownService(nhsLoginUri.toString(),
-                fetchStringResource(R.string.nhs_login_header),
-                fetchStringResource(R.string.nhs_login_accessibility_label),
-                false))
+                    fetchStringResource(R.string.nhs_login_header),
+                    fetchStringResource(R.string.nhs_login_accessibility_label),
+                    false))
         }
 
         return services
@@ -118,23 +114,23 @@ class KnownServices(private val context: Context) {
 
     private fun buildNHSInternalAppService(): KnownService {
         val internalService = KnownService(
-            fetchStringResource(R.string.baseURL),
-            fetchStringResource(R.string.home_header))
+                fetchStringResource(R.string.baseURL),
+                fetchStringResource(R.string.home_header))
         internalService.addPathInfo(fetchStringResource(R.string.symptomsPath),
-            true,
-            fetchStringResource(R.string.symptoms_header))
+                true,
+                fetchStringResource(R.string.symptoms_header))
         internalService.addPathInfo(fetchStringResource(R.string.checkYourSymptoms),
-            false,
-            fetchStringResource(R.string.symptoms_header))
+                false,
+                fetchStringResource(R.string.symptoms_header))
         internalService.addPathInfo(fetchStringResource(R.string.appointmentsPath),
-            true,
-            fetchStringResource(R.string.appointments_header))
+                true,
+                fetchStringResource(R.string.appointments_header))
         internalService.addPathInfo(fetchStringResource(R.string.prescriptionsPath),
-            true,
-            fetchStringResource(R.string.prescriptions_header))
+                true,
+                fetchStringResource(R.string.prescriptions_header))
         internalService.addPathInfo(fetchStringResource(R.string.myRecordPath),
-            true,
-            fetchStringResource(R.string.my_record_header))
+                true,
+                fetchStringResource(R.string.my_record_header))
         internalService.addPathInfo(fetchStringResource(R.string.informaticaPath),
                 true,
                 fetchStringResource(R.string.service_unavailable))
@@ -148,29 +144,30 @@ class KnownServices(private val context: Context) {
                 true,
                 fetchStringResource(R.string.service_unavailable))
         internalService.addPathInfo(fetchStringResource(R.string.morePath),
-            true,
-            fetchStringResource(R.string.more_header))
+                true,
+                fetchStringResource(R.string.more_header))
         internalService.addPathInfo(fetchStringResource(R.string.myAccountPath),
-            true,
-            fetchStringResource(R.string.my_account_header))
+                true,
+                fetchStringResource(R.string.my_account_header))
         internalService.addPathInfo(fetchStringResource(R.string.organDonationPath),
-            true,
-            fetchStringResource(R.string.organ_donation_header))
+                true,
+                fetchStringResource(R.string.organ_donation_header))
         internalService.addPathInfo(fetchStringResource(R.string.adminHelpPath),
-            true,
-            fetchStringResource(R.string.admin_help_header))
+                true,
+                fetchStringResource(R.string.admin_help_header))
         return internalService
     }
 
-    fun isUrlHostSameAsHomeUrlHost(urlString: String?): Boolean {
-        if (urlString.isNullOrBlank())
+    fun isSameSchemeAndHostAsHomeUrl(urlString: String?): Boolean {
+        if (!URLUtil.isValidUrl(urlString)) {
             return false
+        }
         val homeUrl = URL(context.resources.getString(R.string.baseURL))
         val url = URL(urlString)
-        return homeUrl.host == url.host
+        return homeUrl.host == url.host && homeUrl.protocol == url.protocol
     }
 
-    fun isUrlTelephone(urlString: String?) : Boolean {
+    fun isUrlTelephone(urlString: String?): Boolean {
         return urlString!!.startsWith("tel")
     }
 
@@ -185,7 +182,7 @@ class KnownServices(private val context: Context) {
     fun getPostRequestReloadUrl(url: String): String? {
         return when {
             url.startsWith((fetchStringResource(R.string.dataPreferencesBaseUrl))) -> fetchStringResource(
-                R.string.dataSharingURL)
+                    R.string.dataSharingURL)
             else -> null
         }
     }
@@ -193,10 +190,9 @@ class KnownServices(private val context: Context) {
     private fun buildExternalSites(): List<URL> {
         val eSites = arrayListOf<URL>()
         val sitesFromResource: Array<String>? =
-            context.resources.getStringArray(R.array.externalSiteUrls)
+                context.resources.getStringArray(R.array.externalSiteUrls)
 
         sitesFromResource?.forEach { site -> eSites.add(URL(site)) }
         return eSites
     }
-
 }

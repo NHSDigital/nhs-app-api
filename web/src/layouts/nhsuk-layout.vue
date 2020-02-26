@@ -241,8 +241,23 @@ export default {
     },
   },
   created() {
-    if (process.browser) {
+    if (process.client) {
       this.$store.dispatch('session/updateLastCalledAt');
+
+      NativeVersionSetup(this.$store);
+      if (this.loggedIn) {
+        this.$store.dispatch('session/startValidationChecking');
+        window.validateSession =
+          window.validateSession || (() => {
+            this.$store.dispatch('session/validate');
+          });
+
+        if (this.$store.state.device.isNativeApp) {
+          this.$store.dispatch('auth/nativeLogin');
+          NativeCallbacks.resetPageFocus();
+        }
+      }
+      this.configureWebContext(this.currentHelpUrl);
     }
 
     const appVersion = this.$store.app.$env.VERSION_TAG;
@@ -252,21 +267,6 @@ export default {
   },
   mounted() {
     EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
-
-    NativeVersionSetup(this.$store);
-    if (this.loggedIn) {
-      this.$store.dispatch('session/startValidationChecking');
-      window.validateSession =
-          window.validateSession || (() => {
-            this.$store.dispatch('session/validate');
-          });
-
-      if (this.$store.state.device.isNativeApp) {
-        this.$store.dispatch('auth/nativeLogin');
-        NativeCallbacks.resetPageFocus();
-      }
-    }
-    this.configureWebContext(this.currentHelpUrl);
   },
   updated() {
     if (this.pathChanged) {

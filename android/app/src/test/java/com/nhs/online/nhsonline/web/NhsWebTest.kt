@@ -17,6 +17,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import com.nhs.online.nhsonline.support.PersistData
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,6 +30,7 @@ import java.net.URL
 class NhsWebTest {
     private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private lateinit var spyActivity: Activity
+    private lateinit var persistData: PersistData
     private lateinit var interactorMock: IInteractor
     private lateinit var webViewMock: WebView
     private lateinit var notificationsServiceMock: NotificationsService
@@ -40,6 +42,7 @@ class NhsWebTest {
     @Before
     fun setUp() {
         spyActivity = spy(activity)
+        persistData = PersistData(spyActivity)
         interactorMock = mock()
         webSettings = mock()
         webViewMock = mock{

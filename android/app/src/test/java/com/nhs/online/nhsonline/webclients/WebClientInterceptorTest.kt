@@ -15,6 +15,7 @@ import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
+import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.web.NhsWeb
@@ -389,7 +390,15 @@ class WebClientInterceptorTest {
     }
 
     @Test
-    fun loadResourceConnected() {
+    fun loadResource_isKnownService_isConnected() {
+        val url = "https://111.nhs.uk/"
+        val expectedKnownService = KnownService(url)
+        val knownServicesMock: KnownServices = mock {
+            on { findMatchingKnownService(url) }.thenReturn(expectedKnownService)
+        }
+        val webViewMock: WebView = mock {
+            on { getUrl() }.thenReturn(url)
+        }
 
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
@@ -399,14 +408,25 @@ class WebClientInterceptorTest {
                 schemeHandlersMock
         )
 
-        webInterceptor.onLoadResource(webViewMock, "https://111.nhs.uk/")
+        webInterceptor.onLoadResource(webViewMock, url)
 
-        verify(uiInteractorMock, never()).dismissProgressDialog()
+        verify(knownServicesMock).findMatchingKnownService(url)
         verify(webViewMock, never()).stopLoading()
+        verify(nhsWebMock, never()).loadWelcomePage()
+        verify(uiInteractorMock, never()).dismissProgressDialog()
     }
 
     @Test
-    fun loadResourceNotConnected() {
+    fun loadResource_isKnownService_isNotConnected_dismissesProgressDialog() {
+        val url = "https://111.nhs.uk/"
+        val expectedKnownService = KnownService(url)
+        val knownServicesMock: KnownServices = mock {
+            on { findMatchingKnownService(url) }.thenReturn(expectedKnownService)
+        }
+        val webViewMock: WebView = mock {
+            on { getUrl() }.thenReturn(url)
+        }
+
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
@@ -415,12 +435,39 @@ class WebClientInterceptorTest {
                 schemeHandlersMock
         )
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
-        webInterceptor.onLoadResource(webViewMock, "https://111.nhs.uk/")
+
+        webInterceptor.onLoadResource(webViewMock, url)
+
         verify(uiInteractorMock).dismissProgressDialog()
     }
 
     @Test
-    fun loadResourceNotConnectedPreviouslyHandled() {
+    fun loadResource_isUnknownService_loadsWelcomePage() {
+        val url = "https://111.nhs.uk/"
+        val knownServicesMock: KnownServices = mock {
+            on { findMatchingKnownService(url) }.thenReturn(null)
+        }
+        val webViewMock: WebView = mock {
+            on { getUrl() }.thenReturn(url)
+        }
+
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                nhsWebMock,
+                resourceMock.mockContext(),
+                knownServicesMock,
+                schemeHandlersMock
+        )
+
+        webInterceptor.onLoadResource(webViewMock, url)
+
+        verify(knownServicesMock).findMatchingKnownService(url)
+        verify(webViewMock).stopLoading()
+        verify(nhsWebMock).loadWelcomePage()
+    }
+
+    @Test
+    fun loadResource_NotConnectedPreviouslyHandled_dismissesProgressDialog() {
 
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
