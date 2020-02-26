@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Values.iproxy.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ $.Values.iproxy.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.iproxy.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "nhsapp.name" . }}-{{ $.Values.iproxy.role }}
+        role: {{ $.Values.iproxy.role }}
+        version: {{ .Chart.AppVersion | quote }}
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "true"
+        rolleveryrelease: {{ randAlphaNum 5 | quote }}
+    spec:
+      volumes:
+      - name: wildcard-namespace-cert
+        secret:
+          secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
+      - name: iproxy-config
+        configMap:
+          name: iproxy-config-{{ .Chart.AppVersion }}
+      {{- if $.Values.iproxy.n3enabled }}
+      - name: n3-crt
+        secret:
+          secretName: n3-cert-{{ .Chart.AppVersion }}
+      {{- end }}
+      containers:
+      - name: iproxy
+        image: {{ $.Values.registry }}/{{ $.Values.iproxy.image }}:{{ $.Values.iproxy.image_tag }}
+        imagePullPolicy: {{ $.Values.iproxy.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.iproxy.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.iproxy.memoryRequest }}
+            cpu: {{ $.Values.iproxy.cpuRequest }}
+          limits:
+            memory: {{ $.Values.iproxy.memoryLimit }}
+            cpu: {{ $.Values.iproxy.cpuLimit }}
+        env:
+{{- with $.Values.iproxy.environmentVariables }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
+        volumeMounts:
+        - name: wildcard-namespace-cert
+          mountPath: /etc/nginx/ssl
+        - name: iproxy-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        {{- if $.Values.iproxy.n3enabled }}
+        - name: n3-crt
+          mountPath: /etc/nginx/ssl_n3
+        {{- end }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+      imagePullSecrets:
+        - name: azure-registry-{{ .Chart.AppVersion }}
+      dnsConfig:
+        options:
+          - name: single-request-reopen

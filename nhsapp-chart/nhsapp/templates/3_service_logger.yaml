@@ -1,0 +1,19 @@
+{{- if and ($.Values.logger.createService) ($.Values.loggerEnabled) -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.logger.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.logger.role }}
+    role: {{ $.Values.logger.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    role: {{ $.Values.logger.role }}
+    version: {{ .Chart.AppVersion | quote }}
+  ports:
+  - port: {{ $.Values.sidecar_proxy.containerPort }}
+    targetPort: {{ $.Values.sidecar_proxy.containerPort }}
+{{- end }}

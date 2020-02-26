@@ -1,0 +1,143 @@
+{{- if $.Values.networkPolicyEnabled -}}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-https-ingress-to-cid-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.cid.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: app-publishing
+    ports:
+    - protocol: TCP
+      port: {{ $.Values.sidecar_proxy.containerPort }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-emis-egress-from-cid-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.cid.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: {{ $.Values.emisIPTrust }}
+    ports:
+      - protocol: TCP
+        port: {{ $.Values.emisPort }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-vision-egress-from-cid-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.cid.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: {{ $.Values.visionIPTrust }}
+    ports:
+      - protocol: TCP
+        port: {{ $.Values.visionPort }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-tpp-egress-from-cid-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.cid.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: {{ $.Values.tppIPTrust }}
+    ports:
+      - protocol: TCP
+        port: {{ $.Values.tppPort }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-cosmosdb-egress-from-cid-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.cid.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+{{- range $.Values.cosmosDBIPTrust }}
+    - ipBlock:
+        cidr: {{ . }}
+{{- end }}
+    ports:
+{{- range $.Values.cosmosDBPortRange }}
+      - protocol: TCP
+        port: {{ . }}
+{{- end }}
+---
+{{- if $.Values.iproxy_microtest.deployMicrotest -}}
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-iproxy-microtest-egress-from-cid-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.cid.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          role: iproxy-microtest
+          version: {{ .Chart.AppVersion | quote }}
+    ports:
+      - protocol: TCP
+        port: {{ $.Values.sidecar_proxy.containerPort }}
+{{- end }}
+{{- end }}

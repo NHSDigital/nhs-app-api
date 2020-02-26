@@ -1,0 +1,159 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}
+        role: {{ $.Values.web.role }}
+        version: {{ .Chart.AppVersion | quote }}
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "true"
+        rolleveryrelease: {{ randAlphaNum 5 | quote }}
+    spec:
+      volumes:
+      - name: wildcard-namespace-cert
+        secret:
+          secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
+      - name: internal-ca-public-key
+        secret:
+          secretName: internal-ca-public-key
+      - name: sidecar-proxy-config
+        configMap:
+          name: sidecar-proxy-config-{{ .Chart.AppVersion }}
+      containers:
+      - name: www
+        image: {{ $.Values.registry }}/{{ $.Values.web.image }}:{{ $.Values.web.image_tag }}
+        imagePullPolicy: {{ $.Values.web.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.web.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.web.memoryRequest }}
+            cpu: {{ $.Values.web.cpuRequest }}
+          limits:
+            memory: {{ $.Values.web.memoryLimit }}
+            cpu: {{ $.Values.web.cpuLimit }}
+        env:
+{{- with $.Values.web.environmentVariables }}
+{{ toYaml . | trim | indent 8  }}
+{{- end }}
+        - name: PORT
+          value: "{{ $.Values.web.containerPort }}"
+        - name: ANALYTICS_ENVIRONMENT
+          value: "{{ $.Values.web.analyticsEnvironment }}"
+        - name: ANALYTICS_SCRIPT_URL
+          value: "{{ $.Values.web.analyticsURL }}"
+        - name: SECURE_COOKIES
+          value: "true"
+        - name: URI_FORMAT_CID_REDIRECT_WEB
+          value: "https://www{host}/auth-return"
+        - name: URI_FORMAT_CID_REDIRECT_NATIVE
+          value: "nhsapp://www{host}/auth-return"
+        - name: URI_FORMAT_API_CLIENT
+          value: "https://api{host}"
+        - name: API_HOST_SERVER
+          value: "https://api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+          {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
+        - name: CID_AUTH_ENDPOINT
+          value: "https://wiremock-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/citizenid/authorize"
+          {{- else }}
+        - name: CID_AUTH_ENDPOINT
+          value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}/authorize"
+          {{- end }}
+        - name: CID_CLIENT_ID
+          value: "{{ $.Values.cidClientID }}"
+        - name: HOTJAR_SITE_ID
+          value: "{{ $.Values.web.hotjarSiteId }}"
+        - name: NODE_EXTRA_CA_CERTS
+          value: "/usr/local/share/ca-certificates/tls.crt"
+        - name: DATA_PREFERENCES_URL
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.deployWiremock)) }}
+          value: https://wiremock-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/ndop/createsession
+        {{- else }}
+          value: "{{ $.Values.web.dataPreferencesUrl }}"
+        {{- end }}
+        - name: VERSION_TAG
+          value: "{{ $.Values.web.image_tag }}"
+        {{- if $.Values.biometricsEnabled }}
+        - name: BIOMETRICS_ENABLED
+          value: "true"
+        {{- end }}
+        {{- if $.Values.throttlingEnabled }}
+        - name: THROTTLING_ENABLED
+          value: "true"
+        {{- end }}
+        - name: GP_LOOKUP_API_RESULTS_LIMIT
+          value: "{{ $.Values.gpLookupApiResultsLimit }}"
+        - name: ORGAN_DONATION_INTEGRATION_ENABLED
+          value: "{{ $.Values.organDonationEnabled }}"
+        - name: ORGAN_DONATION_THROTTLING_URL
+          value: "{{ $.Values.web.organDonationThrottlingUrl }}"
+        - name: BLOOD_DONATION_URL
+          value: "{{ $.Values.web.bloodDonationUrl }}"
+        - name: CONTACT_US_URL
+          value: "{{ $.Values.contactUsUrl }}"
+        - name: MY_RECORD_DOCUMENTS_ENABLED
+          value: "{{ $.Values.web.myRecordDocumentsEnabled }}"
+        - name: MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS
+          value: "[{{ join ","  $.Values.web.myRecordDocumentsEnabledSuppliers }}]"
+        - name: PATIENT_PRACTICE_MESSAGING_ENABLED
+          value: "{{ $.Values.patientPracticeMessagingEnabled }}"
+        volumeMounts:
+        - name: internal-ca-public-key
+          mountPath: /usr/local/share/ca-certificates
+          readOnly: true
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+      - name: proxy
+        image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
+        imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.sidecar_proxy.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.sidecar_proxy.memoryRequest }}
+            cpu: {{ $.Values.sidecar_proxy.cpuRequest }}
+          limits:
+            memory: {{ $.Values.sidecar_proxy.memoryLimit }}
+            cpu: {{ $.Values.sidecar_proxy.cpuLimit }}
+        volumeMounts:
+        - name: wildcard-namespace-cert
+          mountPath: /etc/nginx/ssl
+        - name: wildcard-namespace-cert
+          mountPath: /usr/local/share/ca-certificates
+          readOnly: true
+        - name: sidecar-proxy-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      hostAliases:
+      - ip: "{{ trimSuffix "/32" $.Values.clusterIP }}"
+        hostnames:
+        - "api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+        - "www-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+      imagePullSecrets:
+        - name: azure-registry-{{ .Chart.AppVersion }}
+      dnsConfig:
+        options:
+          - name: single-request-reopen

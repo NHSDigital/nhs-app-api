@@ -1,0 +1,128 @@
+{{- if $.Values.environmentStubbed.cdssStubbed }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.cdsswiremock.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.cdsswiremock.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.cdsswiremock.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "nhsapp.name" . }}-{{ $.Values.cdsswiremock.role }}
+        role: {{ $.Values.cdsswiremock.role }}
+        version: {{ .Chart.AppVersion | quote }}
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "true"
+        rolleveryrelease: {{ randAlphaNum 5 | quote }}
+    spec:
+      volumes:
+      - name: session-key
+        secret:
+          secretName: session-key-{{ .Chart.AppVersion }}
+      - name: wildcard-namespace-cert
+        secret:
+          secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
+      - name: internal-ca-public-key
+        secret:
+          secretName: internal-ca-public-key
+      - name: sidecar-proxy-config
+        configMap:
+          name: cdsswiremock-sidecar-proxy-config-{{ .Chart.AppVersion }}
+      containers:
+      - name: cdsswiremock
+        image: {{ $.Values.registry }}/{{ $.Values.cdsswiremock.image }}:{{ $.Values.cdsswiremock.image_tag }}
+        imagePullPolicy: {{ $.Values.cdsswiremock.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.cdsswiremock.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.cdsswiremock.memoryRequest }}
+            cpu: {{ $.Values.cdsswiremock.cpuRequest }}
+          limits:
+            memory: {{ $.Values.cdsswiremock.memoryLimit }}
+            cpu: {{ $.Values.cdsswiremock.cpuLimit }}
+        env:
+{{- with $.Values.cdsswiremock.environmentVariables }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
+        - name: PORT
+          value: "{{ $.Values.cdsswiremock.containerPort }}"
+        - name: ASPNETCORE_URLS
+          value: "http://*:{{ $.Values.cdsswiremock.containerPort }}"
+        - name: VERSION_TAG
+          value: "{{ $.Values.cdsswiremock.image_tag }}"
+        - name: SESSION_ENCRYPTION_KEY_FILE
+          value: "/secrets/session-key/session.key"
+        - name: SESSION_MONGO_DATABASE_HOST
+          value: "nhsapp-{{ $.Values.zone }}-mongo.documents.azure.com"
+        - name: SESSION_MONGO_DATABASE_PORT
+          value: "{{ $.Values.cosmosDBMongoDefaultPort }}"
+        - name: SESSION_MONGO_DATABASE_NAME
+          {{- if $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}
+          {{- else }}
+          value: {{ $.Values.global.environment }}
+          {{- end }}
+        - name: SESSION_MONGO_DATABASE_USERNAME
+          value: "nhsapp-{{ $.Values.zone }}-mongo"
+        - name: SESSION_MONGO_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdb-mongo-key-{{ .Chart.AppVersion }}
+              key: password
+        volumeMounts:
+        - name: session-key
+          mountPath: "/secrets/session-key"
+          readOnly: true
+        - name: internal-ca-public-key
+          mountPath: /usr/local/share/ca-certificates/internalca
+          readOnly: true
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+      - name: proxy
+        image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
+        imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.sidecar_proxy.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.sidecar_proxy.memoryRequest }}
+            cpu: {{ $.Values.sidecar_proxy.cpuRequest }}
+          limits:
+            memory: {{ $.Values.sidecar_proxy.memoryLimit }}
+            cpu: {{ $.Values.sidecar_proxy.cpuLimit }}
+        volumeMounts:
+        - name: wildcard-namespace-cert
+          mountPath: /etc/nginx/ssl
+        - name: sidecar-proxy-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      hostAliases:
+      - ip: "{{ trimSuffix "/32" $.Values.clusterIP }}"
+        hostnames:
+        - "api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+        - "www-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+      imagePullSecrets:
+      - name: azure-registry-{{ .Chart.AppVersion }}
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+{{- end }}

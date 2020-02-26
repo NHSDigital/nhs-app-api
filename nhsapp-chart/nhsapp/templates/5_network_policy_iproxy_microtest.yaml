@@ -1,0 +1,52 @@
+{{- if and ($.Values.networkPolicyEnabled) ($.Values.iproxy_microtest.deployMicrotest) -}}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-https-ingress-to-iproxy-microtest-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.iproxy_microtest.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: api
+          version: {{ .Chart.AppVersion | quote }}
+    - podSelector:
+        matchLabels:
+          role: cid
+          version: {{ .Chart.AppVersion | quote }}
+    ports:
+    - protocol: TCP
+      port: {{ $.Values.iproxy_microtest.containerPort }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-https-egress-from-{{ $.Values.iproxy_microtest.role }}-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.iproxy_microtest.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    ports:
+    - protocol: TCP
+      port: 443
+{{- end }}

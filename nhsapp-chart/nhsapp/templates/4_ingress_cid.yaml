@@ -1,0 +1,34 @@
+{{- if $.Values.cid.createIngress -}}
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'false'
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    {{- if $.Values.cid.clientAuth }}
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "false"
+    nginx.ingress.kubernetes.io/auth-tls-secret: "kube-system/external-ca"
+    {{- end }}
+  name: {{ template "nhsapp.name" . }}-cid-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  rules:
+    - host: cid-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ template "nhsapp.name" . }}-cid-{{ .Chart.AppVersion | replace "." "-" }}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /
+  tls:
+    - hosts:
+      - cid-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
+      secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}
+{{- end }}

@@ -1,0 +1,15 @@
+{{- if $.Values.environmentStubbed.deployWiremock }}
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.wiremock.role }}-pdb-{{ .Chart.AppVersion }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  minAvailable: {{ $.Values.wiremock.minAvailable }}
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.wiremock.role }}
+      version: {{ .Chart.AppVersion | quote }}
+{{- end }}

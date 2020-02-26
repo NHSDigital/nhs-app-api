@@ -1,0 +1,19 @@
+{{- if and ($.Values.cdsswiremock.createService) ($.Values.environmentStubbed.cdssStubbed) -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.cdsswiremock.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.cdsswiremock.role }}
+    role: {{ $.Values.cdsswiremock.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    role: {{ $.Values.cdsswiremock.role }}
+    version: {{ .Chart.AppVersion | quote }}
+  ports:
+  - port: {{ $.Values.sidecar_proxy.containerPort }}
+    targetPort: {{ $.Values.sidecar_proxy.containerPort }}
+{{- end }}

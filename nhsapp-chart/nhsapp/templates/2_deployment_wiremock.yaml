@@ -1,0 +1,93 @@
+{{- if $.Values.environmentStubbed.deployWiremock }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.wiremock.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.wiremock.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "nhsapp.name" . }}-{{ $.Values.wiremock.role }}
+        role: {{ $.Values.wiremock.role }}
+        version: {{ .Chart.AppVersion | quote }}
+      annotations:
+        rolleveryrelease: {{ randAlphaNum 5 | quote }}
+    spec:
+      volumes:
+      - name: sidecar-tls
+        secret:
+          secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
+      - name: sidecar-proxy-config
+        configMap:
+          name: sidecar-proxy-config-{{ .Chart.AppVersion }}
+      containers:
+      - name: wiremock
+        image: {{ $.Values.registry }}/{{ $.Values.wiremock.image }}:{{ $.Values.wiremock.image_tag }}
+        imagePullPolicy: {{ $.Values.wiremock.imagePullPolicy }}
+        resources:
+          requests:
+            memory: {{ $.Values.wiremock.memoryRequest }}
+            cpu: {{ $.Values.wiremock.cpuRequest }}
+          limits:
+            memory: {{ $.Values.wiremock.memoryLimit }}
+            cpu: {{ $.Values.wiremock.cpuLimit }}
+        ports:
+        - containerPort: {{ $.Values.wiremock.containerPort }}
+        {{- if (not $.Values.environmentPerftest) }}
+        command: ["java", "-cp", "/var/wiremock/lib/*:/var/wiremock/extensions/*", "com.github.tomakehurst.wiremock.standalone.WireMockServerRunner", "--local-response-templating", "--verbose"]
+        {{- end }}
+        env:
+{{- with $.Values.wiremock.environmentVariables }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
+        - name: WIREMOCK_AUTHORITY
+          value: "wiremock-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}:443"
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
+        - name: CITIZEN_ID_BASE_URL
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
+        {{- end }}
+        - name: CID_REDIRECT_URI
+  {{- if $.Values.web.publicURL }}
+          value: "https://{{ $.Values.web.publicURL }}/auth-return"
+  {{- else}}
+          value: "https://www-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}/auth-return"
+  {{- end }}
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
+        - name: MockSettings__CitizenId__CitizenIdTokenIssuer
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
+        {{- else}}
+        - name: MockSettings__CitizenId__CitizenIdTokenIssuer
+          value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
+        {{- end }}
+      - name: proxy
+        image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
+        imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        resources:
+          requests:
+            memory: {{ $.Values.sidecar_proxy.memoryRequest }}
+            cpu: {{ $.Values.sidecar_proxy.cpuRequest }}
+          limits:
+            memory: {{ $.Values.sidecar_proxy.memoryLimit }}
+            cpu: {{ $.Values.sidecar_proxy.cpuLimit }}
+        ports:
+        - containerPort: {{ $.Values.sidecar_proxy.containerPort }}
+        volumeMounts:
+        - name: sidecar-tls
+          mountPath: /etc/nginx/ssl
+        - name: sidecar-proxy-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      imagePullSecrets:
+        - name: azure-registry-{{ .Chart.AppVersion }}
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+{{- end }}

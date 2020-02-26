@@ -1,0 +1,113 @@
+{{- if $.Values.loggerEnabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.logger.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.logger.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.logger.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "nhsapp.name" . }}-{{ $.Values.logger.role }}
+        role: {{ $.Values.logger.role }}
+        version: {{ .Chart.AppVersion | quote }}
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "true"
+        rolleveryrelease: {{ randAlphaNum 5 | quote }}
+    spec:
+      volumes:
+      - name: session-key
+        secret:
+          secretName: session-key-{{ .Chart.AppVersion }}
+      - name: wildcard-namespace-cert
+        secret:
+          secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
+      - name: internal-ca-public-key
+        secret:
+          secretName: internal-ca-public-key
+      - name: sidecar-proxy-config
+        configMap:
+          name: logger-sidecar-proxy-config-{{ .Chart.AppVersion }}
+      containers:
+      - name: logger
+        image: {{ $.Values.registry }}/{{ $.Values.logger.image }}:{{ $.Values.logger.image_tag }}
+        imagePullPolicy: {{ $.Values.logger.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.logger.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.logger.memoryRequest }}
+            cpu: {{ $.Values.logger.cpuRequest }}
+          limits:
+            memory: {{ $.Values.logger.memoryLimit }}
+            cpu: {{ $.Values.logger.cpuLimit }}
+        env:
+{{- with $.Values.logger.environmentVariables }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
+        - name: PORT
+          value: "{{ $.Values.logger.containerPort }}"
+        - name: ASPNETCORE_URLS
+          value: "http://*:{{ $.Values.logger.containerPort }}"
+        - name: VERSION_TAG
+          value: "{{ $.Values.logger.image_tag }}"
+        - name: SESSION_ENCRYPTION_KEY_FILE
+          value: "/secrets/session-key/session.key"
+        - name: CORS_AUTHORITY
+          value: "https://*.{{ $.Values.domain }}"
+        volumeMounts:
+        - name: session-key
+          mountPath: "/secrets/session-key"
+          readOnly: true
+        - name: internal-ca-public-key
+          mountPath: /usr/local/share/ca-certificates/internalca
+          readOnly: true
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+      - name: proxy
+        image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
+        imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.sidecar_proxy.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.sidecar_proxy.memoryRequest }}
+            cpu: {{ $.Values.sidecar_proxy.cpuRequest }}
+          limits:
+            memory: {{ $.Values.sidecar_proxy.memoryLimit }}
+            cpu: {{ $.Values.sidecar_proxy.cpuLimit }}
+        volumeMounts:
+        - name: wildcard-namespace-cert
+          mountPath: /etc/nginx/ssl
+        - name: sidecar-proxy-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      hostAliases:
+      - ip: "{{ trimSuffix "/32" $.Values.clusterIP }}"
+        hostnames:
+        - "api-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+        - "www-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+      imagePullSecrets:
+      - name: azure-registry-{{ .Chart.AppVersion }}
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+{{- end }}

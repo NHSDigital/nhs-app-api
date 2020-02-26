@@ -1,0 +1,15 @@
+{{- if $.Values.environmentStubbed.cdssStubbed }}
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.cdsswiremock.role }}-pdb-{{ .Chart.AppVersion }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  minAvailable: {{ $.Values.cdsswiremock.minAvailable }}
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.cdsswiremock.role }}
+      version: {{ .Chart.AppVersion | quote }}
+{{- end }}

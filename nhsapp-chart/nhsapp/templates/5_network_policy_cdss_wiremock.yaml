@@ -1,0 +1,48 @@
+{{- if and ($.Values.networkPolicyEnabled) ($.Values.environmentStubbed.cdssStubbed) -}}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-app-publishing-https-ingress-to-cdsswiremock-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.cdsswiremock.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: app-publishing
+    ports:
+    - protocol: TCP
+      port: {{ $.Values.sidecar_proxy.containerPort }}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-cdsswiremock-ingress-from-api-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.cdsswiremock.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: api
+    ports:
+    - protocol: TCP
+      port: {{ $.Values.sidecar_proxy.containerPort }}
+{{- end }}

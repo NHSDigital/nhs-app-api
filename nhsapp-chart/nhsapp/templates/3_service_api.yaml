@@ -1,0 +1,19 @@
+{{- if $.Values.api.createService -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.api.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.api.role }}
+    role: {{ $.Values.api.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    role: {{ $.Values.api.role }}
+    version: {{ .Chart.AppVersion | quote }}
+  ports:
+  - port: {{ $.Values.sidecar_proxy.containerPort }}
+    targetPort: {{ $.Values.sidecar_proxy.containerPort }}
+{{- end }}

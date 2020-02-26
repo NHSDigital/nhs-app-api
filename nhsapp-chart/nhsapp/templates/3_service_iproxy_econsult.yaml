@@ -1,0 +1,19 @@
+{{ if $.Values.econsultEnabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iproxy-econsult-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ $.Values.iproxy.role }}-econsult
+    role: {{ $.Values.iproxy.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    role: {{ $.Values.iproxy.role }}
+    version: {{ .Chart.AppVersion | quote }}
+  ports:
+  - port: {{ $.Values.iproxy.containerPort }}
+    targetPort: {{ $.Values.iproxy.containerPort }}
+{{- end }}

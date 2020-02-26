@@ -1,0 +1,27 @@
+{{- if $.Values.iproxy_microtest.deployMicrotest }}
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.iproxy_microtest.role }}
+    role: {{ $.Values.iproxy_microtest.role }}
+    version: {{ .Chart.AppVersion | quote }}
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.iproxy_microtest.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ $.Values.iproxy_microtest.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  minReplicas: {{ $.Values.iproxy_microtest.minReplicas }}
+  maxReplicas: {{ $.Values.iproxy_microtest.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ $.Values.iproxy_microtest.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ $.Values.iproxy_microtest.targetMemoryUtilizationPercentage }}
+{{- end }}

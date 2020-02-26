@@ -1,0 +1,25 @@
+{{- if and ($.Values.environmentStubbed.deployWiremock) ($.Values.wiremock.createService) }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.wiremock.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.wiremock.role }}
+    role: {{ $.Values.wiremock.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    role: {{ $.Values.wiremock.role }}
+    version: {{ .Chart.AppVersion | quote }}
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  - name: https
+    protocol: TCP
+    port: {{ $.Values.sidecar_proxy.containerPort }}
+    targetPort: {{ $.Values.sidecar_proxy.containerPort }}
+{{- end }}

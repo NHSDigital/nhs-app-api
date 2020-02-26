@@ -1,0 +1,60 @@
+{{- if $.Values.networkPolicyEnabled -}}
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-deny-all-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-dns-egress-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    ports:
+    - protocol: UDP
+      port: 53 # DNS
+    - protocol: TCP
+      port: 53 # DNS
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-https-egress-{{ .Chart.AppVersion }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: {{ $.Values.clusterIP }}
+{{- range $.Values.trustedNetworks }}
+    - ipBlock:
+        cidr: {{ . }}
+{{- end }}
+    ports:
+      - protocol: TCP
+        port: 443
+      - protocol: TCP
+        port: {{ $.Values.iproxy.containerPort }}
+{{- end }}

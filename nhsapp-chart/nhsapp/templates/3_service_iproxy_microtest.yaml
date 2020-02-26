@@ -1,0 +1,19 @@
+{{- if and ($.Values.iproxy_microtest.deployMicrotest) ($.Values.iproxy_microtest.createService) -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iproxy-microtest-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ $.Values.iproxy_microtest.role }}
+    role: {{ $.Values.iproxy_microtest.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    role: {{ $.Values.iproxy_microtest.role }}
+    version: {{ .Chart.AppVersion | quote }}
+  ports:
+  - port: {{ $.Values.iproxy_microtest.containerPort }}
+    targetPort: {{ $.Values.iproxy_microtest.containerPort }}
+{{- end }}

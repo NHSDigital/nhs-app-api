@@ -1,0 +1,533 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.api.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.api.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.api.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "nhsapp.name" . }}-{{ $.Values.api.role }}
+        role: {{ $.Values.api.role }}
+        version: {{ .Chart.AppVersion | quote }}
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "true"
+        rolleveryrelease: {{ randAlphaNum 5 | quote }}
+    spec:
+      volumes:
+      {{- if (and ($.Values.emisEnabled) ($.Values.emisCertEnabled) (not $.Values.environmentStubbed.emisStubbed)) }}
+      - name: emiscert
+        secret:
+          secretName: emiscert-{{ .Chart.AppVersion }}
+      {{- end }}
+      {{- if (not $.Values.environmentStubbed.tppStubbed) }}
+      - name: tpp-cert
+        secret:
+          secretName: tpp-cert-{{ .Chart.AppVersion }}
+      {{- end }}
+      {{- if (not $.Values.environmentStubbed.visionStubbed) }}
+      - name: vision-client-cert-pfx
+        secret:
+          secretName: vision-client-cert-pfx-{{ .Chart.AppVersion }}
+      {{- else if ($.Values.environmentStubbed.visionStubbed) }}
+      - name: vision-client-cert-pfx
+        secret:
+          secretName: vision-client-cert-pfx-stubbed-{{ .Chart.AppVersion }}
+      {{- end }}
+      - name: session-key
+        secret:
+          secretName: session-key-{{ .Chart.AppVersion }}
+      {{- if $.Values.ndopEnabled }}
+      - name: ndop-cert
+        secret:
+          secretName: ndop-cert-{{ .Chart.AppVersion }}
+      {{- end }}
+      {{- if (or ($.Values.spineLdapLookupEnabled) ($.Values.spinePdsEnabled)) }}
+      - name: spine-cert
+        secret:
+          secretName: spine-cert-{{ .Chart.AppVersion }}
+      {{- end }}
+      {{- if $.Values.organDonationEnabled }}
+      - name: organdonation-cert
+        secret:
+          secretName: organdonation-cert-{{ .Chart.AppVersion }}
+      {{- end }}
+      - name: nhslogin-key
+        secret:
+          secretName: nhslogin-key-{{ .Chart.AppVersion }}
+      - name: wildcard-namespace-cert
+        secret:
+          secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
+      - name: internal-ca-public-key
+        secret:
+          secretName: internal-ca-public-key
+      - name: sidecar-proxy-config
+        configMap:
+          name: api-sidecar-proxy-config-{{ .Chart.AppVersion }}
+      - name: knownservices-config
+        configMap:
+          name: api-knownservices-config-{{ .Chart.AppVersion }}
+      containers:
+      - name: api
+        image: {{ $.Values.registry }}/{{ $.Values.api.image }}:{{ $.Values.api.image_tag }}
+        imagePullPolicy: {{ $.Values.api.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.api.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.api.memoryRequest }}
+            cpu: {{ $.Values.api.cpuRequest }}
+          limits:
+            memory: {{ $.Values.api.memoryLimit }}
+            cpu: {{ $.Values.api.cpuLimit }}
+        env:
+{{- with $.Values.api.environmentVariables }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
+        - name: NHS_WEB_APP_BASE_URL
+          {{- if (and ($.Values.web.publicURL) (or (not $.Values.environmentStubbed) ($.Values.environmentPerftest))) }}
+          value: "https://{{ $.Values.web.publicURL }}"
+          {{- else }}
+          value: "https://www-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+          {{- end }}
+        - name: CORS_AUTHORITY
+          value: "https://*.{{ $.Values.domain }}"
+        - name: PORT
+          value: "{{ $.Values.api.containerPort }}"
+        - name: ASPNETCORE_URLS
+          value: "http://*:{{ $.Values.api.containerPort }}"
+        {{- if $.Values.throttlingEnabled }}
+        - name: ConfigurationSettings__ThrottlingEnabled
+          value: "true"
+        {{- end }}
+        - name: GP_LOOKUP_API_RESULTS_LIMIT
+          value: "{{ $.Values.gpLookupApiResultsLimit }}"
+        - name: NHS_SEARCH_BASE_URL
+          value: "https://iproxy-nhssearch-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}/"
+        - name: POSTCODE_LOOKUP_SEARCH_RADIUS_KM
+          value: "{{ $.Values.postcodeLookupSearchRadiusKm }}"
+        - name: GP_LOOKUP_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: gp-lookup-api-key-{{ .Chart.AppVersion }}
+              key: apikey
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.brothermailerStubbed)) }}
+        - name: BROTHER_MAILER_URL
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/brothermailer/"
+        {{- else }}
+        - name: BROTHER_MAILER_URL
+          value: "https://iproxy-brothermailer-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}/"
+        {{- end }}
+        - name: BROTHER_MAILER_ADDRESSBOOK_ID
+          value: "{{ $.Values.brotherMailerAddressBookID }}"
+        - name: BROTHER_MAILER_USER_ID
+          value: "{{ $.Values.brotherMailerUserID }}"
+        - name: BROTHER_MAILER_SIG
+          value: "{{ $.Values.brotherMailerSIG }}"
+        {{- if $.Values.emisEnabled }}
+        - name: GP_PROVIDER_ENABLED_EMIS
+          value: "true"
+        {{- end }}
+        {{- if $.Values.microtestEnabled }}
+        - name: GP_PROVIDER_ENABLED_MICROTEST
+          value: "true"
+        {{- end }}
+        {{- if $.Values.tppEnabled }}
+        - name: GP_PROVIDER_ENABLED_TPP
+          value: "true"
+        {{- end }}
+        {{- if $.Values.visionEnabled }}
+        - name: GP_PROVIDER_ENABLED_VISION
+          value: "true"
+        {{- end }}
+        - name: ODS_REMAP_ENABLED
+          value: "{{ $.Values.odsRemapEnabled }}"
+        - name: ODS_REMAP_MAP
+          value: "{{ $.Values.odsRemapMap }}"
+        {{- if $.Values.emisEnabled }}
+        - name: EMIS_APPLICATION_ID
+          value: "{{ $.Values.emisApplicationID }}"
+          {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.emisStubbed)) }}
+        - name: EMIS_BASE_URL
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/emis/"
+          {{- else }}
+        - name: EMIS_BASE_URL
+          value: "{{ $.Values.emisProtocol }}://{{ $.Values.emisHostname }}:{{ $.Values.emisPort }}/PFS/"
+            {{- if $.Values.emisCertEnabled }}
+        - name: EMIS_CERTIFICATE_PATH
+          value: "/secrets/emiscert/emis.pfx"
+        - name: EMIS_CERTIFICATE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: emiscert-password-{{ .Chart.AppVersion }}
+              key: password
+            {{- end }}
+          {{- end }}
+        {{- end }}
+        - name: KNOWNSERVICES_PATH
+          value: "/app/config/KnownServices.json"
+        - name: NOMINATED_PHARMACY_ENABLED
+          value: "{{ $.Values.nominatedpharmacyEnabled }}"
+        - name: PHARMACY_API_RESULT_LIMIT
+          value: "{{ $.Values.nominatedPharmacyApiResultLimit }}"
+        - name: ONLINE_PHARMACY_RANDOMISED_SEARCH_RESULT_LIMIT
+          value: "{{ $.Values.onlinePharmacyRandomisedSearchResultLimit }}"
+        - name: ONLINE_PHARMACY_SEARCH_RESULT_LIMIT
+          value: "{{ $.Values.onlinePharmacySearchResultLimit }}"
+        {{- if $.Values.nominatedpharmacyEnabled }}
+          {{- if $.Values.environmentStubbed.spineStubbed }}
+        - name: SPINE_PDS_URL
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/spine/"
+        - name: TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE
+          value: "xxx"  
+          {{- else }}
+        - name: SPINE_PDS_URL
+          value: "https://{{ $.Values.spinePdsHost }}/"
+          {{- end }}
+        - name: SPINE_PDS_URL_PATH
+          value: "{{ $.Values.spinePdsPath }}"
+        - name: GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE
+          value: "{{ $.Values.epsODSCheckOverride }}"
+        - name: DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS
+          value: "{{ $.Values.nominatedPharmacyDelayAfterUpdateInMilliseconds }}"
+        - name: PDS_QUERY_TO
+          value: "{{ $.Values.nominatedPharmacyPdsQueryTo }}"
+        - name: PDS_QUERY_FROM_ADDRESS
+          value: "{{ $.Values.nominatedPharmacyPdsQueryFrom }}"
+        {{- end }}
+        - name: PROXY_ACCESS_ENABLED
+          value: "{{ $.Values.proxyAccessEnabled }}"  
+        - name: ONLINECONSULTATIONSPROVIDERSSETTINGS__PROVIDERS__0__PROVIDER
+          value: stubs
+        - name: ONLINECONSULTATIONSPROVIDERSSETTINGS__PROVIDERS__0__BASEADDRESS
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cdssStubbed)) }}
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/"
+        {{- else }}
+          value: "https://nhsapp-cdsswiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/"
+        {{- end }}
+        - name: ONLINECONSULTATIONSPROVIDERSSETTINGS__PROVIDERS__1__PROVIDER
+          value: eConsult
+        - name: ONLINECONSULTATIONSPROVIDERSSETTINGS__PROVIDERS__1__BASEADDRESS
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cdssStubbed)) }}
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/"
+        {{- else }}
+          value: "https://iproxy-econsult-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}/"
+        {{- end }}
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
+        - name: CITIZEN_ID_BASE_URL
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
+        {{- else }}
+        - name: CITIZEN_ID_BASE_URL
+          value: "https://iproxy-cid-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}"
+        {{- end }}
+        - name: CITIZEN_ID_CLIENT_ID
+          value: "{{ $.Values.cidClientID }}"
+        - name: ConfigurationSettings__FidoServerUrl
+          value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidFidoHostname }}"
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.tppStubbed)) }}
+        - name: TPP_BASE_URL
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/tpp/"
+        {{- else }}
+        - name: TPP_BASE_URL
+          value: "{{ $.Values.tppProtocol }}://{{ $.Values.tppHostname }}:{{ $.Values.tppPort }}/Patient/"
+        {{- end }}
+        - name: TPP_CERTIFICATE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: tpp-{{ .Chart.AppVersion }}
+              key: password
+        - name: TPP_CERTIFICATE_PATH
+          value: "/secrets/tpp-cert/tpp.pfx"
+        - name: TPP_APPLICATION_PROVIDER_ID
+          value: "{{ $.Values.tppProviderID }}"
+        - name: TPP_API_VERSION
+          value: "{{ $.Values.tppApiVersion }}"
+        - name: TPP_APPLICATION_NAME
+          value: "{{ $.Values.tppApplicationName }}"
+        - name: TPP_APPLICATION_VERSION
+          value: "{{ $.Values.tppApplicationVersion }}"
+        - name: TPP_APPLICATION_DEVICE_TYPE
+          value: "{{ $.Values.tppApplicationDeviceType }}"
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.visionStubbed)) }}
+        - name: VISION_BASE_URI
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/vision/"
+        - name: VISION_CERT_PASSPHRASE
+          valueFrom:
+            secretKeyRef:
+              name: vision-client-cert-pfx-password-stubbed-{{ .Chart.AppVersion }}
+              key: password
+        {{- else }}
+        - name: VISION_BASE_URI
+          value: "{{ $.Values.visionProtocol }}://{{ $.Values.visionHostname }}:{{ $.Values.visionPort}}/"
+        - name: VISION_CERT_PASSPHRASE
+          valueFrom:
+            secretKeyRef:
+              name: vision-client-cert-pfx-password-{{ .Chart.AppVersion }}
+              key: password
+        {{- end }}
+        - name: VISION_APPLICATION_PROVIDER_ID
+          value: nhson001
+        - name: VISION_CERT_PATH
+          value: "/secrets/vision-client-cert-pfx/visionclientcert.pfx"
+        - name: VISION_USERNAME
+          value: "{{ $.Values.visionUsername }}"
+        - name: VISION_PFS_PATH
+          value: "{{ $.Values.visionPfsPath }}"
+        - name: VISION_SENDER_USERNAME
+          value: "{{ $.Values.visionSenderUsername }}"
+        - name: VISION_SENDER_USERFULLNAME
+          value: "{{ $.Values.visionSenderUserFullName }}"
+        - name: VISION_SENDER_USERIDENTITY
+          value: "{{ $.Values.visionSenderUserIdentity }}"
+        - name: VISION_SENDER_USERROLE
+          value: "{{ $.Values.visionSenderUserRole }}"
+        - name: SESSION_ENCRYPTION_KEY_FILE
+          value: "/secrets/session-key/session.key"
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
+        - name: CITIZEN_ID_JWT_ISSUER
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"
+        {{- else }}
+        - name: CITIZEN_ID_JWT_ISSUER
+          value: "{{ $.Values.cidProtocol }}://{{ $.Values.cidHostname }}"
+        {{- end }}
+        {{- if $.Values.ndopEnabled }}
+        - name: NDOP_CERTIFICATE_PATH
+          value: "/secrets/ndop-cert/ndop.pfx"
+        - name: NDOP_CERTIFICATE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ndop-cert-password-{{ .Chart.AppVersion }}
+              key: password
+        - name: NDOP_CLAIM_AUDIENCE
+          value: "{{ $.Values.ndopClaimAudience }}"
+        - name: NDOP_CLAIM_ISSUER
+          {{- if ($.Values.ndopClaimIssuer) }}
+          value: "{{ $.Values.ndopClaimIssuer }}"
+          {{- else if ($.Values.web.publicURL) }}
+          value: "https://{{ $.Values.web.publicURL }}"
+          {{- else }}
+          value: "https://www-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+          {{- end }}
+        {{- end }}
+        - name: SERVICE_JOURNEY_RULES_BASE_URL
+          value: "https://nhsapp-sjr.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
+        - name: NHSLOGIN_KEY_PATH
+          value: "/secrets/nhslogin-key/nhslogin.pem"
+        - name: NHSLOGIN_KEY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nhslogin-key-password-{{ .Chart.AppVersion }}
+              key: password
+          {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.microtestStubbed)) }}
+        - name: MICROTEST_BASE_URL
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/microtest/"
+          {{- else }}
+        - name: MICROTEST_BASE_URL
+          value: "https://iproxy-microtest-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy_microtest.containerPort }}/v1/"
+          {{- end }}
+        - name: AUDIT_COSMOS_URI
+          value: https://nhsapp-{{ $.Values.zone }}.documents.azure.com:{{ $.Values.cosmosDBDefaultPort }}
+        - name: ConfigurationSettings__CookieDomain
+          value: .{{ $.Values.domain }}
+        - name: ConfigurationSettings__EmisExtendedHttpTimeoutSeconds
+          value: "{{ $.Values.api.emisExtendedTimeout }}"
+        - name: AUDIT_COSMOS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdbkey-{{ .Chart.AppVersion }}
+              key: key
+        - name: TERMS_CONDITIONS_COSMOS_ENDPOINT_URI
+          value: https://nhsapp-{{ $.Values.zone }}.documents.azure.com:{{ $.Values.cosmosDBDefaultPort }}
+        - name: TERMS_CONDITIONS_COSMOS_AUTH_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdbkey-{{ .Chart.AppVersion }}
+              key: key
+        - name: TERMS_CONDITIONS_COSMOS_DATABASE_ID
+          {{- if $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}
+          {{- else }}
+          value: {{ $.Values.global.environment }}
+          {{- end }}
+        - name: AUDIT_COSMOS_DATABASE_ID
+          {{- if $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}
+          {{- else }}
+          value: {{ $.Values.global.environment }}
+          {{- end }}
+        {{- if $.Values.environmentStubbed.tsandcsStubbed }}
+        - name: STUB_TERMS_AND_CONDITIONS
+          value: "true"
+        {{- end }}
+        - name: SESSION_MONGO_DATABASE_HOST
+          value: "nhsapp-{{ $.Values.zone }}-mongo.documents.azure.com"
+        - name: SESSION_MONGO_DATABASE_PORT
+          value: "{{ $.Values.cosmosDBMongoDefaultPort }}"
+        - name: SESSION_MONGO_DATABASE_NAME
+          {{- if $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}
+          {{- else }}
+          value: {{ $.Values.global.environment }}
+          {{- end }}
+        - name: SESSION_MONGO_DATABASE_USERNAME
+          value: "nhsapp-{{ $.Values.zone }}-mongo"
+        - name: SESSION_MONGO_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdb-mongo-key-{{ .Chart.AppVersion }}
+              key: password
+        {{- if $.Values.appInsightsEnabled }}
+        - name: APPINSIGHTS_INSTRUMENTATIONKEY
+          valueFrom:
+            secretKeyRef:
+              name: app-insights
+              key: instrumentationKey
+        - name: ASPNETCORE_HOSTINGSTARTUPASSEMBLIES
+          value: "Microsoft.ApplicationInsights.Profiler.AspNetCore"
+        {{- end }}
+        - name: VERSION_TAG
+          value: "{{ $.Values.api.image_tag }}"
+          {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.organDonationStubbed)) }}
+        - name: ORGAN_DONATION_BASE_URL
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/organdonation/"
+          {{- else }}
+        - name: ORGAN_DONATION_BASE_URL
+          value: "{{ $.Values.organDonationProtocol }}://{{ $.Values.organDonationHostname }}:{{ $.Values.organDonationPort }}/{{ $.Values.organDonationPath }}"
+          {{- end }}
+        - name: ORGAN_DONATION_CLIENT_ID
+          value: "{{ $.Values.organDonationClientId }}"
+        - name: ORGAN_DONATION_OCP_APIM_SUBSCRIPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: organdonation-subscription-{{ .Chart.AppVersion }}
+              key: password
+        - name: ORGAN_DONATION_INTEGRATION_ENABLED
+          value: "{{ $.Values.organDonationEnabled }}"
+        - name: ORGAN_DONATION_CERT_PATH
+          value: "/secrets/organdonation-cert/organdonation.pfx"
+        - name: ORGAN_DONATION_CERT_PASSPHRASE
+          valueFrom:
+            secretKeyRef:
+              name: organdonation-{{ .Chart.AppVersion }}
+              key: password
+        - name: ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS
+          value: "{{ $.Values.organDonationDataExpirySeconds }}"
+        - name: SPINE_LDAP_LOOKUP_ENABLED
+          value: "{{ $.Values.spineLdapLookupEnabled }}"
+        - name: NHS_APP_PARTY_ID_FOR_SPINE
+          valueFrom:
+            secretKeyRef:
+              name: spine-party-id-{{ .Chart.AppVersion }}
+              key: secret
+      {{- if (or ($.Values.spineLdapLookupEnabled) ($.Values.spinePdsEnabled)) }}
+        - name: SPINE_CERT_PATH
+          value: "/secrets/spine-cert/spine.pfx"
+        - name: SPINE_CERT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: spine-password-{{ .Chart.AppVersion }}
+              key: password
+      {{- end }}
+        - name: USERINFO_API_BASE_URL
+          value: "https://nhsapp-info-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/v1/api/users/me/info"
+      {{- if $.Values.spineLdapLookupEnabled }}
+        - name: SPINE_LDAP_HOST
+          value: "{{ $.Values.spineLdapHost }}"
+        - name: SPINE_LDAP_PORT
+          value: "{{ $.Values.spineLdapPort }}"
+        - name: SPINE_LDAP_LOGIN_DN
+          value: "{{ $.Values.spineLdapLoginDN }}"
+        - name: SPINE_LDAP_CONNECTION_RETRY_WAIT_TIME_SECONDS
+          value: "{{ $.Values.spineLdapConnectionRetryWaitTimeSeconds }}"
+      {{- end }}
+        volumeMounts:
+    {{- if (and ($.Values.emisEnabled) ($.Values.emisCertEnabled) (not $.Values.environmentStubbed.emisStubbed)) }}
+        - name: emiscert
+          mountPath: "/secrets/emiscert"
+          readOnly: true
+    {{- end }}
+    {{- if (and ($.Values.tppEnabled) (not $.Values.environmentStubbed.tppStubbed)) }}
+        - name: tpp-cert
+          mountPath: "/secrets/tpp-cert"
+          readOnly: true
+    {{- end }}
+    {{- if $.Values.visionEnabled }}
+        - name: vision-client-cert-pfx
+          mountPath: "/secrets/vision-client-cert-pfx"
+          readOnly: true
+    {{- end }}
+    {{- if $.Values.ndopEnabled }}
+        - name: ndop-cert
+          mountPath: "/secrets/ndop-cert"
+          readOnly: true
+    {{- end }}
+    {{- if (or ($.Values.spineLdapLookupEnabled) ($.Values.spinePdsEnabled)) }}
+        - name: spine-cert
+          mountPath: "/secrets/spine-cert"
+          readOnly: true
+    {{- end }}
+    {{- if $.Values.organDonationEnabled }}
+        - name: organdonation-cert
+          mountPath: "/secrets/organdonation-cert"
+          readOnly: true
+    {{- end }}
+        - name: session-key
+          mountPath: "/secrets/session-key"
+          readOnly: true
+        - name: nhslogin-key
+          mountPath: "/secrets/nhslogin-key"
+          readOnly: true
+        - name: internal-ca-public-key
+          mountPath: /usr/local/share/ca-certificates/internalca
+          readOnly: true
+        - name: knownservices-config
+          mountPath: /app/config
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+      - name: proxy
+        image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
+        imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.sidecar_proxy.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.sidecar_proxy.memoryRequest }}
+            cpu: {{ $.Values.sidecar_proxy.cpuRequest }}
+          limits:
+            memory: {{ $.Values.sidecar_proxy.memoryLimit }}
+            cpu: {{ $.Values.sidecar_proxy.cpuLimit }}
+        volumeMounts:
+        - name: wildcard-namespace-cert
+          mountPath: /etc/nginx/ssl
+        - name: sidecar-proxy-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      hostAliases:
+      - ip: "{{ trimSuffix "/32" $.Values.clusterIP }}"
+        hostnames:
+        - "api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+        - "www-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+      imagePullSecrets:
+      - name: azure-registry-{{ .Chart.AppVersion }}
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+          

@@ -1,0 +1,24 @@
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.iproxy.role }}
+    role: {{ $.Values.iproxy.role }}
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.iproxy.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ $.Values.iproxy.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  minReplicas: {{ $.Values.iproxy.minReplicas }}
+  maxReplicas: {{ $.Values.iproxy.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ $.Values.iproxy.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ $.Values.iproxy.targetMemoryUtilizationPercentage }}

@@ -1,0 +1,15 @@
+{{- if $.Values.iproxy_microtest.deployMicrotest }}
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.iproxy_microtest.role }}-pdb-{{ .Chart.AppVersion }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  minAvailable: {{ $.Values.iproxy_microtest.minAvailable }}
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.iproxy_microtest.role }}
+      version: {{ .Chart.AppVersion | quote }}
+{{- end }}
