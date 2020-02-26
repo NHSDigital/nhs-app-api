@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
 
@@ -16,29 +17,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
     [TestClass]
     public class TppSessionExtendServiceTests
     {
-
         private IFixture _fixture;
         private TppUserSession _tppUserSession;
         private TppSessionExtendService _systemUnderTest;
-        private Mock<ITppClient> _mockTppClient;
+        private Mock<ITppClientRequest<TppUserSession, PatientSelectedReply>> _mockPatientSelected;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _tppUserSession = _fixture.Create<TppUserSession>();
-            _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
-
+            _mockPatientSelected = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, PatientSelectedReply>>>();
             _systemUnderTest = _fixture.Create<TppSessionExtendService>();
         }
 
         [TestMethod]
         public async Task Extend_WhenClientReturnsSuccess_ReturnsSuccess()
-        {    
+        {
             // Arrange
             var response = new TppApiObjectResponse<PatientSelectedReply>(HttpStatusCode.OK);
 
-            _mockTppClient.Setup(x => x.PatientSelectedPost(_tppUserSession))
+            _mockPatientSelected.Setup(x => x.Post(_tppUserSession))
                 .ReturnsAsync(response)
                 .Verifiable();
 
@@ -47,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.Success>();
-            _mockTppClient.Verify();
+            _mockPatientSelected.Verify();
         }
 
         [TestMethod]
@@ -56,7 +55,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             // Arrange
             var response = new TppApiObjectResponse<PatientSelectedReply>(HttpStatusCode.BadRequest);
 
-            _mockTppClient.Setup(x => x.PatientSelectedPost(_tppUserSession))
+            _mockPatientSelected.Setup(x => x.Post(_tppUserSession))
                 .ReturnsAsync(response)
                 .Verifiable();
 
@@ -65,14 +64,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.BadGateway>();
-            _mockTppClient.Verify();
+            _mockPatientSelected.Verify();
         }
 
         [TestMethod]
         public async Task Extend_WhenClientThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
-            _mockTppClient.Setup(x => x.PatientSelectedPost(_tppUserSession))
+            _mockPatientSelected.Setup(x => x.Post(_tppUserSession))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -81,8 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.BadGateway>();
-            _mockTppClient.Verify();
+            _mockPatientSelected.Verify();
         }
     }
 }
-

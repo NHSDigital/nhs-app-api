@@ -25,7 +25,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private readonly IGetPatientDocumentTaskChecker _patientDocumentTaskChecker;
         private readonly IGetPatientTestResultsTaskChecker _patientTestResultsChecker;
         private readonly IGetTppDetailedTestResultChecker _patientDetailedTestResultChecker;
-        private readonly ITppClient _tppClient;
         private readonly ITppMyRecordMapper _tppMyRecordMapper;
         private readonly ITppClientRequest<TppUserSession, ViewPatientOverviewReply> _patientOverview;
         private readonly ITppClientRequest<TppUserSession, RequestPatientRecordReply> _requestPatientRecord;
@@ -40,7 +39,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             IGetTppDetailedTestResultChecker patientDetailedTestResultChecker,
             ITppClientRequest<TppUserSession, ViewPatientOverviewReply> patientOverview,
             IGetPatientDocumentsFromDcrEventsTaskChecker patientDocumentsFromDcrEventsTaskChecker,
-            ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper,
+            ILogger<TppPatientRecordService> logger, ITppMyRecordMapper tppMyRecordMapper,
             ITppClientRequest<TppUserSession, RequestPatientRecordReply> requestPatientRecord,
             ITppClientRequest<(TppUserSession, string documentIdentifier), RequestBinaryDataReply> requestBinaryData,
             ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> testResultsView,
@@ -53,7 +52,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _patientDetailedTestResultChecker = patientDetailedTestResultChecker;
             _patientOverview = patientOverview;
             _patientDocumentsFromDcrEventsTaskChecker = patientDocumentsFromDcrEventsTaskChecker;
-            _tppClient = tppClient;
             _tppMyRecordMapper = tppMyRecordMapper;
             _requestPatientRecord = requestPatientRecord;
             _testResultsView = testResultsView;

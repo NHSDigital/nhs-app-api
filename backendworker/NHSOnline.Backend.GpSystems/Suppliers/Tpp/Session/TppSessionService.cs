@@ -16,24 +16,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 {
     internal class TppSessionService : ISessionService
     {
-        private readonly ITppClient _client;
         private readonly ITppClientRequest<TppUserSession, LogoffReply> _logoff;
         private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
         private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccesses;
+        private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelected;
         private readonly ILogger<TppSessionService> _logger;
         private readonly ITppSessionMapper _sessionMapper;
 
         public TppSessionService(
-            ITppClient client,
             ITppClientRequest<TppUserSession, LogoffReply> logoff,
             ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
+            ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelected,
             ILogger<TppSessionService> logger,
             ITppSessionMapper sessionMapper,
             ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccesses)
         {
-            _client = client;
             _logoff = logoff;
             _authenticate = authenticate;
+            _patientSelected = patientSelected;
             _logger = logger;
             _sessionMapper = sessionMapper;
             _listServiceAccesses = listServiceAccesses;
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 // more than 1 person is found in the response.
                 if (tppUserSession.ProxyPatients.Any())
                 {
-                    await _client.PatientSelectedPost(tppUserSession);
+                    await _patientSelected.Post(tppUserSession);
                 }
 
                 var serviceAccess = await _listServiceAccesses.Post(tppUserSession);
@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             {
                 _logger.LogEnter();
 
-                var tppUserSession = (TppUserSession) gpUserSession;
+                var tppUserSession = (TppUserSession)gpUserSession;
                 var logoffReply = await _logoff.Post(tppUserSession);
 
                 if (!logoffReply.HasSuccessResponse)
@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 }
 
                 var tppUserSession = userSession.ValueOrFailure();
-                await _client.PatientSelectedPost(tppUserSession);
+                await _patientSelected.Post(tppUserSession);
 
                 _logger.LogDebug($"TPP user session successfully recreated for patientId {patientId}");
                 return new GpSessionRecreateResult.Success(tppUserSession.Suid);

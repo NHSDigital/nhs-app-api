@@ -2,35 +2,37 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics
 {
-    public class TppDemographicsService : IDemographicsService
+    internal class TppDemographicsService : IDemographicsService
     {
         private readonly ILogger<TppDemographicsService> _logger;
-        private readonly ITppClient _tppClient;
+        private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelected;
         private readonly ITppDemographicsMapper _tppDemographicsMapper;
 
         public TppDemographicsService(
-            ILoggerFactory loggerFactory, 
-            ITppClient tppClient,
+            ILoggerFactory loggerFactory,
+            ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelected,
             ITppDemographicsMapper tppDemographicsMapper)
         {
             _logger = loggerFactory.CreateLogger<TppDemographicsService>();
-            _tppClient = tppClient;
+            _patientSelected = patientSelected;
             _tppDemographicsMapper = tppDemographicsMapper;
         }
 
         public async Task<DemographicsResult> GetDemographics(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
+            var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
 
             try
             {
                 _logger.LogEnter();
-                var demographicsResponse = await _tppClient.PatientSelectedPost(tppUserSession);
+                var demographicsResponse = await _patientSelected.Post(tppUserSession);
 
                 if (!demographicsResponse.HasSuccessResponse)
                 {
@@ -42,9 +44,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics
                     _logger.LogError($"Unsuccessful request retrieving patient selected information for Tpp. Status code: {(int)demographicsResponse.StatusCode}");
                     return new DemographicsResult.BadGateway();
                 }
-                
+
                 var result = _tppDemographicsMapper.Map(demographicsResponse.Body);
-                
+
                 return new DemographicsResult.Success(result);
             }
             catch (HttpRequestException e)

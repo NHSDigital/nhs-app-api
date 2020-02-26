@@ -42,7 +42,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             services.AddTransient<TppHttpRequestIdentifier>();
 
             services.AddTransient<IGpSystem, TppGpSystem>();
-            services.AddTransient<ITppClient, TppClient>();
 
             services.AddHttpClient<TppHttpClient>()
                 .ConfigurePrimaryHttpMessageHandler<TppHttpClientHandler>()

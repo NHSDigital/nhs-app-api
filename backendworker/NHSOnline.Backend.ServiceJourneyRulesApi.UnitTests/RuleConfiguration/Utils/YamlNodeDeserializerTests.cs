@@ -133,7 +133,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var tag = useValidTag ? _tag : _fixture.Create<string>();
             var value = $"{modelName}s/{fileName}";
             
-            var fullFileName = $"{_baseIncludePath}/{value}.yaml";
+            var fullFileName = Path.Join(_baseIncludePath,$"{value}.yaml");
             
             MockTextReaderBuilder(fullFileName, throwsFileNotFound);
             MockParserBuilder();
