@@ -1,0 +1,122 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.sjr.role }}-{{ .Chart.AppVersion | replace "." "-" }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.sjr.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.sjr.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "nhsapp.name" . }}-{{ $.Values.sjr.role }}
+        role: {{ $.Values.sjr.role }}
+        version: {{ .Chart.AppVersion | quote }}
+      annotations:
+        chaos.alpha.kubernetes.io/enabled: "true"
+        rolleveryrelease: {{ randAlphaNum 5 | quote }}
+    spec:
+      {{- if $.Values.sjrconfig.loadFiles }}
+      initContainers:
+      - name: sjr-config
+        image: {{ $.Values.registry }}/{{ $.Values.sjrconfig.image }}:{{ $.Values.sjrconfig.image_tag }}
+        imagePullPolicy: {{ $.Values.sjrconfig.imagePullPolicy }}
+        command: ["/bin/sh", "-c"]
+        args:
+          - cp -a /output/. {{ $.Values.sjrconfig.mountPath }};
+        volumeMounts:
+        - name: sjr-config
+          mountPath: {{ $.Values.sjrconfig.mountPath }}
+      {{- end }}
+      volumes:
+        {{- if $.Values.sjrconfig.loadFiles }}
+      - name: sjr-config
+        emptyDir: {}
+        {{- end }}
+      - name: wildcard-namespace-cert
+        secret:
+          secretName: wildcard-{{ $.Values.global.environment }}-tls-sjr-{{ .Chart.AppVersion }}
+      - name: sidecar-proxy-config
+        configMap:
+          name: sjr-sidecar-proxy-config-{{ .Chart.AppVersion }}
+      containers:
+      - name: sjr
+        image: {{ $.Values.registry }}/{{ $.Values.sjr.image }}:{{ $.Values.sjr.image_tag }}
+        imagePullPolicy: {{ $.Values.sjr.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.sjr.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.sjr.memoryRequest }}
+            cpu: {{ $.Values.sjr.cpuRequest }}
+          limits:
+            memory: {{ $.Values.sjr.memoryLimit }}
+            cpu: {{ $.Values.sjr.cpuLimit }}
+        env:
+{{- with $.Values.sjr.environmentVariables }}
+{{ toYaml . | trim | indent 8 }}
+{{- end }}
+        - name: PORT
+          value: "{{ $.Values.sjr.containerPort }}"
+        - name: INPUT_FOLDER_PATH
+          value: "{{ $.Values.sjr.inputPath }}"
+          {{- if $.Values.sjrconfig.loadFiles }}
+        - name: SJR_CONFIG_DIR
+          value: "{{ $.Values.sjrconfig.mountPath }}"
+          {{- end }}
+        - name: ASPNETCORE_URLS
+          value: "http://*:{{ $.Values.sjr.containerPort }}"
+        - name: VERSION_TAG
+          value: "{{ $.Values.sjr.image_tag }}"
+        volumeMounts:
+          {{- if $.Values.sjrconfig.loadFiles }}
+        - name: sjr-config
+          mountPath: {{ $.Values.sjrconfig.mountPath }}
+          {{- end }}
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 2
+      - name: proxy
+        image: {{ $.Values.registry }}/{{ $.Values.sidecar_proxy.image }}:{{ $.Values.sidecar_proxy.image_tag }}
+        imagePullPolicy: {{ $.Values.sidecar_proxy.imagePullPolicy }}
+        ports:
+        - containerPort: {{ $.Values.sidecar_proxy.containerPort }}
+        resources:
+          requests:
+            memory: {{ $.Values.sidecar_proxy.memoryRequest }}
+            cpu: {{ $.Values.sidecar_proxy.cpuRequest }}
+          limits:
+            memory: {{ $.Values.sidecar_proxy.memoryLimit }}
+            cpu: {{ $.Values.sidecar_proxy.cpuLimit }}
+        volumeMounts:
+        - name: wildcard-namespace-cert
+          mountPath: /etc/nginx/ssl
+          readOnly: true
+        - name: sidecar-proxy-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      hostAliases:
+      - ip: "{{ trimSuffix "/32" $.Values.clusterIP }}"
+        hostnames:
+        - "api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+        - "www-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
+      imagePullSecrets:
+      - name: azure-registry-sjr-{{ .Chart.AppVersion }}
+      dnsConfig:
+        options:
+          - name: single-request-reopen

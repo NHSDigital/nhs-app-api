@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+[ -z "$GIT_HOME_DIR" ]     && die "You need to set the GIT_HOME_DIR to the root directory of the git repo"
+
+source ${GIT_HOME_DIR}/script_helpers/dependency_check
+source ${GIT_HOME_DIR}/script_helpers/formatting
+
+function az_login () {
+	info "Logging into Azure CLI"
+	# Variable initialisation
+	[ -z "$ARM_CLIENT_ID" ]   && die "You need to set the ARM_CLIENT_ID environment variable"
+	[ -z "$ARM_CLIENT_SECRET" ] && die "You need to set the ARM_CLIENT_SECRET environment variable"
+	[ -z "$ARM_TENANT_ID" ] && die "You need to set the ARM_TENANT_ID environment variable"
+    az login --service-principal -u ${ARM_CLIENT_ID} -p ${ARM_CLIENT_SECRET} --tenant ${ARM_TENANT_ID}
+}
+
+function aks_get_creds () {
+	info "Getting AKS credentials"
+	# Retrieve K8 credentials from Azure
+    [ ! -d ~/.kube ] && mkdir -p ~/.kube
+	[ -z "$AKSCLUSTERNAME" ]   && die "You need to set the AKSCLUSTERNAME environment variable"
+    az aks get-credentials -n $AKSCLUSTERNAME -g $AKSCLUSTERNAME --admin || die "Problem retrieving azure AKS credentials"
+}
+
+function get_aks_access () {
+	az_login
+	aks_get_creds
+}

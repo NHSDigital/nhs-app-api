@@ -1,0 +1,6 @@
+sjr:
+  createService: true
+  role: sjr
+
+sidecar_proxy:
+  containerPort: 8443

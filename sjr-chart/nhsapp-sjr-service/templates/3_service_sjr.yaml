@@ -1,0 +1,19 @@
+{{- if $.Values.sjr.createService -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.sjr.role }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.sjr.role }}
+    role: {{ $.Values.sjr.role }}
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  selector:
+    role: {{ $.Values.sjr.role }}
+    version: {{ .Chart.AppVersion | quote }}
+  ports:
+  - port: {{ $.Values.sidecar_proxy.containerPort }}
+    targetPort: {{ $.Values.sidecar_proxy.containerPort }}
+{{- end }}

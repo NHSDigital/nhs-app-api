@@ -12,31 +12,25 @@ function trigger_sjr() {
 
 	case $TARGET_ENVIRONMENT in
 	"ops"*)
-		BUILD_CONFIG_ID="nhsapp_Deployment_2NonLiveSubscription_1Sandbox_Namespaces_1OpsSelfService_DeploySjr"
+		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_1Sandbox_Namespaces_1OpsSelfService_2DeploySjrAppRepoTest"
 	;;
 	"scratch"*)
-		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_TeamDevelopmentEnvironment_2DeploySjr"
+		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_TeamDevelopmentEnvironment_DeploySjrAppRepo"
 	;;
 	"preview")
-		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_Namespaces_1Preview_2_2DeploySjr"
+		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_Namespaces_1Preview_2_2DeploySjrAppRepo"
 	;;
 	"demo")
-		if [ $TARGET_ZONE = "dev" ]; then
-			BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_Namespaces_3Demo_2DeploySjr"
-		elif [ $TARGET_ZONE = "staging" ]; then
-			BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_2Staging_Namespaces_4Demo_2DeploySjr"
-		else
-			die "Unknown target zone $TARGET_ZONE."
-		fi
+		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_Namespaces_3Demo_2DeploySjrAppRepo"
 	;;
 	"stubbed"*)
-		BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_2Staging_Namespaces_3Stubbed_2DeploySjr"
+		BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_2Staging_Namespaces_3Stubbed_2DeploySjrAppRepo"
 	;;
 	"staging")
-		BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_2Staging_Namespaces_6Staging_2DeploySjr"
+		BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_2Staging_Namespaces_6Staging_2DeploySjrAppRepo"
 	;;
 	"production")
-		BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_3Production_Namespaces_Production_2DeploySjr"
+		BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_3Production_Namespaces_Production_2DeploySjrAppRepo"
 	;;
 	*)
 		die "Unable to find Build Config ID for $TARGET_ENVIRONMENT"
