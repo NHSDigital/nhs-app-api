@@ -21,8 +21,11 @@ import utils.set
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.serviceJourneyRules.AppointmentsProvider
+import worker.models.serviceJourneyRules.ConsultationsProvider
 import worker.models.serviceJourneyRules.MedicalRecordProvider
+import worker.models.serviceJourneyRules.MessagesProvider
 import worker.models.serviceJourneyRules.PrescriptionsProvider
+import worker.models.serviceJourneyRules.SecondaryAppointmentsProvider
 import worker.models.serviceJourneyRules.ServiceJourneyRulesResponse
 
 class ServiceJourneyRulesStepDefinitions {
@@ -39,7 +42,7 @@ class ServiceJourneyRulesStepDefinitions {
 
     @Given("^I am a (.*) user where the journey configurations are:$")
     fun iAmAGPSystemUserWhereTheJourneyConfigurationsAre(gpSystem: String,
-                                                 configurations: List<ServiceJourneyRulesConfiguration>) {
+                                                         configurations: List<ServiceJourneyRulesConfiguration>) {
         val supplier = Supplier.valueOf(gpSystem)
         createUser(supplier, configurations)
     }
@@ -82,24 +85,15 @@ class ServiceJourneyRulesStepDefinitions {
 
     @Then("^the service journey rules response will have appointments set to (\\w+)$")
     fun theServiceJourneyRulesResponseWillHaveAppointmentsSetTo(provider: String) {
-        val serviceJourneyRulesResponse =
-                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
-                        .getOrFail<ServiceJourneyRulesResponse>()
-
-        Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
         Assert.assertEquals("Service Journey Rules Appointments provider",
                 AppointmentsProvider.valueOf(provider),
                 serviceJourneyRulesResponse.journeys.appointments.provider)
     }
 
     @Then("^the service journey rules response will have medical record set to (\\w+)$")
-    fun theServiceJourneyRulesResponseWillHaveMedicalRecordSetTo(provider: String){
-        val serviceJourneyRulesResponse =
-                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
-                        .getOrFail<ServiceJourneyRulesResponse>()
-        Assert.assertNotNull(
-                "Service Journey Rules response expected, but was null",
-                serviceJourneyRulesResponse)
+    fun theServiceJourneyRulesResponseWillHaveMedicalRecordSetTo(provider: String) {
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
         Assert.assertEquals("Service Journey Rules Medical Record provider",
                 MedicalRecordProvider.valueOf(provider),
                 serviceJourneyRulesResponse.journeys.medicalRecord.provider)
@@ -107,24 +101,15 @@ class ServiceJourneyRulesStepDefinitions {
 
     @Then("^the service journey rules response will have medical record version set to (\\d+)$")
     fun theServiceJourneyRulesResponseWillHaveMedicalRecordVersionSetTo(version: String) {
-        val serviceJourneyRulesResponse =
-                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
-                        .getOrFail<ServiceJourneyRulesResponse>()
-        Assert.assertNotNull(
-                "Service Journey Rules response expected, but was null",
-                serviceJourneyRulesResponse)
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
         Assert.assertEquals("Service Journey Rules Medical Record version",
                 LazilyParsedNumber(version),
                 serviceJourneyRulesResponse.journeys.medicalRecord.version)
     }
 
     @Then("^the service journey rules response will have prescriptions set to (\\w+)$")
-    fun theServiceJourneyRulesResponseWillHavePrescriptionsSetTo(provider: String){
-        val serviceJourneyRulesResponse =
-                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
-                        .getOrFail<ServiceJourneyRulesResponse>()
-
-        Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
+    fun theServiceJourneyRulesResponseWillHavePrescriptionsSetTo(provider: String) {
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
         Assert.assertEquals("Service Journey Rules Prescriptions provider",
                 PrescriptionsProvider.valueOf(provider),
                 serviceJourneyRulesResponse.journeys.prescriptions.provider)
@@ -132,13 +117,50 @@ class ServiceJourneyRulesStepDefinitions {
 
     @Then("^the service journey rules response will have nominated pharmacy (enabled|disabled)$")
     fun theServiceJourneyRulesResponseWillHaveNominatedPharmacyEnabledOrDisabled(enabled: String) {
-        val serviceJourneyRulesResponse =
-                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
-                        .getOrFail<ServiceJourneyRulesResponse>()
-
-        Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
         Assert.assertEquals("Service Journey Rules nominated pharmacy provider",
                 enabled == "enabled",
                 serviceJourneyRulesResponse.journeys.nominatedPharmacy)
+    }
+
+    @Then("^the service journey rules response will have silver integration secondary appointments set to (.*)$")
+    fun theServiceJourneyRulesResponseWillHaveSecondaryAppointmentsSetTo(values: String) {
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
+        val expectedValues = values.split(",")
+                .map { value -> SecondaryAppointmentsProvider.valueOf(value.trim()) }
+        val actualValues =   serviceJourneyRulesResponse.journeys.silverIntegrations.secondaryAppointments
+        Assert.assertArrayEquals("Service Journey Rules secondary appointments provider",
+                expectedValues.toTypedArray().sortedArray(),
+                actualValues.toTypedArray().sortedArray())
+    }
+
+    @Then("^the service journey rules response will have silver integration messages set to (.*)$")
+    fun theServiceJourneyRulesResponseWillHaveMessagesSetTo(values: String) {
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
+        val expectedValues = values.split(",")
+                .map { value -> MessagesProvider.valueOf(value.trim()) }
+        val actualValues = serviceJourneyRulesResponse.journeys.silverIntegrations.messages
+        Assert.assertArrayEquals("Service Journey Rules messaging and consultations provider",
+                expectedValues.toTypedArray().sortedArray(),
+                actualValues.toTypedArray().sortedArray())
+    }
+
+    @Then("^the service journey rules response will have silver integration consultations set to (.*)$")
+    fun theServiceJourneyRulesResponseWillHaveConsultationsSetTo(values: String) {
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
+        val expectedValues = values.split(",")
+                .map { value -> ConsultationsProvider.valueOf(value.trim()) }
+        val actualValues = serviceJourneyRulesResponse.journeys.silverIntegrations.consultations
+        Assert.assertArrayEquals("Service Journey Rules messaging and consultations provider",
+                expectedValues.toTypedArray().sortedArray(),
+                actualValues.toTypedArray().sortedArray())
+    }
+
+    private fun getServiceJourneyRulesResponse(): ServiceJourneyRulesResponse {
+        val serviceJourneyRulesResponse =
+                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
+                        .getOrFail<ServiceJourneyRulesResponse>()
+        Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
+        return serviceJourneyRulesResponse
     }
 }

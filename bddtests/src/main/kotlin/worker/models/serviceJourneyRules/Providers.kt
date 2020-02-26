@@ -20,3 +20,15 @@ enum class PrescriptionsProvider{
     im1,
     gpAtHand
 }
+
+enum class SecondaryAppointmentsProvider {
+    ers,
+    pkb
+}
+
+enum class MessagesProvider {
+    pkb
+}
+enum class ConsultationsProvider {
+    pkb
+}

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
@@ -15,11 +16,30 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
 
         private readonly ILogger _logger;
 
+        private readonly JourneysValidator _journeysValidator =
+            new JourneysValidator()
+                .Add(journeys => journeys.Appointments?.Provider != null, "journeys.Appointments.Provider")
+                .Add(journeys => journeys.CdssAdvice?.Provider != null, "journeys.CdssAdvice.Provider")
+                .Add(journeys => journeys.CdssAdmin?.Provider != null, "journeys.CdssAdmin.Provider")
+                .Add(journeys => journeys.MedicalRecord?.Provider != null, "journeys.MedicalRecord.Provider")
+                .Add(journeys => journeys.Prescriptions?.Provider != null, "journeys.Prescriptions.Provider")
+                .Add(journeys => journeys.NominatedPharmacy.HasValue, "journeys.NominatedPharmacy")
+                .Add(journeys => journeys.Notifications.HasValue, "journeys.Notifications")
+                .Add(journeys => journeys.Messaging.HasValue, "journeys.Messaging")
+                .Add(journeys => journeys.UserInfo.HasValue, "journeys.UserInfo")
+                .Add(journeys => journeys.SilverIntegrations?.SecondaryAppointments != null,
+                    "journeys.SilverIntegrations.SecondaryAppointments")
+                .Add(journeys => journeys.SilverIntegrations?.Messages != null,
+                    "journeys.SilverIntegrations.Messages")
+                .Add(journeys => journeys.SilverIntegrations?.Consultations != null,
+                    "journeys.SilverIntegrations.Consultations")
+                .Add(journeys => journeys.Supplier != Supplier.Unknown, "journeys.Supplier");
+
         public ValidateOdsJourneys(ILogger<ValidateOdsJourneys> logger)
         {
             _logger = logger;
         }
-        
+
         public Task<bool> Execute(ConfigurationContext context)
         {
             return Execute((LoadContext) context);
@@ -44,36 +64,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
         private bool Validate(IDictionary<string, Journeys> odsJourneys)
         {
             var isValid = true;
-
             foreach (var (odsCode, journeys) in odsJourneys)
             {
-                if (journeys.Appointments?.Provider != null &&
-                    journeys.CdssAdvice?.Provider != null &&
-                    journeys.CdssAdmin?.Provider != null &&
-                    journeys.MedicalRecord?.Provider != null &&
-                    journeys.Prescriptions?.Provider != null &&
-                    journeys.NominatedPharmacy.HasValue &&
-                    journeys.Notifications.HasValue &&
-                    journeys.Messaging.HasValue &&
-                    journeys.UserInfo.HasValue  &&
-                    journeys.Supplier != Supplier.Unknown)
+                var errorList = _journeysValidator.GetAnyInvalidProperties(journeys);
+
+                if (errorList.Any())
+                {
+                    _logger.LogError($"Not all journey types have been defined for '{odsCode}'. Missing Values:\n" +
+                                     string.Join("\n", errorList));
+                    isValid = false;
+                }
+                else
                 {
                     _logger.LogDebug($"Validation successful for '{odsCode}'");
-                    continue;
                 }
-
-                _logger.LogError($"Not all journey types have been defined for '{odsCode}'.\n" +
-                                 $"\tAppointments: {journeys.Appointments?.Provider}\n" +
-                                 $"\tCdssAdvice: {journeys.CdssAdvice?.Provider}\n" +
-                                 $"\tCdssAdmin: {journeys.CdssAdmin?.Provider}\n" +
-                                 $"\tMedicalRecord: {journeys.MedicalRecord?.Provider}\n" +
-                                 $"\tPrescriptions: {journeys.Prescriptions?.Provider}\n" +
-                                 $"\tNominatedPharmacy: {journeys.NominatedPharmacy}\n" +
-                                 $"\tNotifications: {journeys.Notifications}\n" +
-                                 $"\tMessaging: {journeys.Messaging}\n" +
-                                 $"\tUserInfo: {journeys.UserInfo}\n" +
-                                 $"\tSupplier: {journeys.Supplier}");
-                isValid = false;
             }
 
             return isValid;

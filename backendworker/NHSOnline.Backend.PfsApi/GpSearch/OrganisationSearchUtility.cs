@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore.Internal;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch
@@ -13,7 +12,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 return $"\"{searchTerm}\"";
             }
 
-            var parts = searchTerm.Split(' ').Join("*+");
+            var parts = string.Join("*+", searchTerm.Split(' '));
             return $"{parts}*";
         }
 

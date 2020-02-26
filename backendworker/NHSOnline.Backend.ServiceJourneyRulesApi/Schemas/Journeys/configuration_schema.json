@@ -79,9 +79,13 @@
       "properties": {
         "provider": {
           "enum": [ "im1", "gpAtHand" ]
-        }
+        },
+        "version": {
+          "type": "string"
+        } 
       },
-      "required": [ "provider" ]
+      "required": [ "provider" ],
+      "additionalProperties": false
     },
     "prescriptionsJourney": {
       "properties": {
@@ -89,7 +93,35 @@
           "enum": [ "im1", "gpAtHand" ]
         }
       },
-      "required": [ "provider" ]
+      "required": [ "provider" ],
+      "additionalProperties": false
+    },
+    "silverIntegrations": {
+      "properties": {
+        "secondaryAppointments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "ers", "pkb" ]
+          }
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "pkb" ]
+          }
+        },
+        "consultations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "pkb" ]
+          }
+        }
+      },
+      "required": [ "secondaryAppointments", "messages", "consultations" ],
+      "additionalProperties": false
     }
   },
   "properties": {
@@ -135,7 +167,7 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "supplier": { "enum": ["emis", "tpp", "vision", "microtest"] }
+            "supplier": { "enum": [ "emis", "tpp", "vision", "microtest" ] }
           }
         }
       ]
@@ -149,11 +181,12 @@
         "cdssAdmin": { "$ref": "#/definitions/cdssAdminJourney" },
         "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" },
         "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
-        "nominatedPharmacy": { "enum": ["true", "false"]  },
-        "notifications": { "enum": ["true", "false"]  },
-        "messaging": { "enum": ["true", "false"]  },
+        "nominatedPharmacy": { "enum": [ "true", "false" ] },
+        "notifications": { "enum": [ "true", "false" ] },
+        "messaging": { "enum": [ "true", "false" ] },
         "supplier": { "enum": [ "Emis", "Tpp", "Vision", "Microtest" ] },
-        "userInfo": { "enum": ["true", "false"]  }
+        "silverIntegrations": { "$ref": "#/definitions/silverIntegrations" },
+        "userInfo": { "enum": [ "true", "false" ] }
       },
       "anyOf": [
         {
@@ -184,10 +217,13 @@
           "required": [ "supplier" ]
         },
         {
+          "required": [ "silverIntegrations" ]
+        },
+        {
           "required": [ "userInfo" ]
         }
       ]
     }
   },
-  "required": ["target", "journeys"]
+  "required": [ "target", "journeys" ]
 }

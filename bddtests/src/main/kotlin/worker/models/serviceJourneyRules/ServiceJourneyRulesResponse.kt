@@ -4,11 +4,11 @@ data class ServiceJourneyRulesResponse(var journeys : Journey)
 
 data class Journey(var appointments: AppointmentsJourneyRules,
                    var cdssAdvice: CdssJourneyRules,
-
                    var cdssAdmin: CdssJourneyRules,
                    var medicalRecord: MedicalRecordJourneyRules,
                    var prescriptions: PrescriptionsJourneyRules,
-                   var nominatedPharmacy: Boolean)
+                   var nominatedPharmacy: Boolean,
+                   var silverIntegrations: SilverIntegrationJourneyRules)
 
 data class AppointmentsJourneyRules(var informaticaUrl:String, var provider:AppointmentsProvider)
 
@@ -17,3 +17,7 @@ data class CdssJourneyRules(var serviceDefinition:String, var provider:CdssProvi
 data class MedicalRecordJourneyRules(var provider:MedicalRecordProvider, var version: Number?)
 
 data class PrescriptionsJourneyRules(var provider:PrescriptionsProvider)
+
+data class SilverIntegrationJourneyRules(var secondaryAppointments:ArrayList<SecondaryAppointmentsProvider>,
+                                         var messages: ArrayList<MessagesProvider>,
+                                         var consultations: ArrayList<ConsultationsProvider>)

@@ -67,94 +67,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public async Task Execute_WhenMissingJourneys_ReturnsFalse()
         {
             // Arrange
-            var context = new ConfigurationContext
-            {
-                MergedOdsJourneys = new Dictionary<string, Journeys>
-                {
-                    {
-                        "A1",
-                        ValidJourneys().Build()
-                    },
-                    {
-                        "A2",
-                        ValidJourneys()
-                            .AppointmentProvider(null)
-                            .Build()
-                    },
-                    {
-                        "A3",
-                        ValidJourneys()
-                            .CdssAdviceProvider(null)
-                            .Build()
-                    },
-                    {
-                        "A4",
-                        ValidJourneys()
-                            .CdssAdminProvider(null)
-                            .Build()
-                    },
-                    {
-                        "A5",
-                        ValidJourneys()
-                            .MedicalRecord(null, 1)
-                            .Build()
-                    },
-                    {
-                        "A6",
-                        ValidJourneys()
-                            .Prescriptions(null)
-                            .Build()
-                    },
-                    {
-                        "A7",
-                        ValidJourneys()
-                            .NominatedPharmacyEnabled(null)
-                            .Build()
-                    },
-                    {
-                        "A8",
-                        ValidJourneys()
-                            .NotificationsEnabled(null)
-                            .Build()
-                    },
-                    {
-                        "A9",
-                        ValidJourneys()
-                            .MessagingEnabled(null)
-                            .Build()
-                    },
-                    {
-                        "A10",
-                        ValidJourneys()
-                            .UserInfoEnabled(null)
-                            .Build()
-                    },
-                    {
-                        "A11",
-                        ValidJourneys()
-                            .WithSupplier(Supplier.Unknown)
-                            .Build()
-                    }
-                }
-            };
-
-            // Act
-            var result = await _step.Execute(context);
-
-            // Assert;
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A2'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A3'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A4'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A5'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A6'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A7'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A8'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A9'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A10'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A11'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
-
-            result.Should().BeFalse();
+            var context = new ConfigurationContext();
+            await TestInvalidJourneys(context);
         }
 
         [TestMethod]
@@ -177,6 +91,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(true)
                             .MessagingEnabled(true)
                             .UserInfoEnabled(true)
+                            .SilverIntegrations(_ => _
+                                .SecondaryAppointments( SecondaryAppointmentProvider.pkb )
+                                .Messages( MessagesProvider.pkb )
+                                .Consultations(ConsultationsProvider.pkb))
                             .WithSupplier(Supplier.Emis)
                             .Build()
                     },
@@ -192,6 +110,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(false)
                             .MessagingEnabled(false)
                             .UserInfoEnabled(false)
+                            .SilverIntegrations(_ => _
+                                .SecondaryAppointments()
+                                .Messages()
+                                .Consultations())
                             .WithSupplier(Supplier.Tpp)
                             .Build()
                     },
@@ -207,6 +129,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(true)
                             .MessagingEnabled(true)
                             .UserInfoEnabled(true)
+                            .SilverIntegrations(_ => _
+                                .SecondaryAppointments()
+                                .Messages()
+                                .Consultations())
                             .WithSupplier(Supplier.Vision)
                             .Build()
                     }
@@ -240,6 +166,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(true)
                             .MessagingEnabled(true)
                             .UserInfoEnabled(true)
+                            .SilverIntegrations(_ => _.SecondaryAppointments()
+                                .Messages()
+                                .Consultations())
                             .WithSupplier(Supplier.Microtest)
                             .Build()
                     },
@@ -255,6 +184,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(false)
                             .MessagingEnabled(false)
                             .UserInfoEnabled(false)
+                            .SilverIntegrations(_ => _
+                                .SecondaryAppointments()
+                                .Messages()
+                                .Consultations())
                             .WithSupplier(Supplier.Emis)
                             .Build()
                     },
@@ -270,6 +203,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(true)
                             .MessagingEnabled(true)
                             .UserInfoEnabled(true)
+                            .SilverIntegrations(_ => _
+                                .SecondaryAppointments()
+                                .Messages()
+                                .Consultations())
                             .WithSupplier(Supplier.Tpp)
                             .Build()
                     }
@@ -287,74 +224,97 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public async Task Execute_WhenMergedConfigFilesMissingJourneys_ReturnsFalse()
         {
             // Arrange
-            var context = new LoadContext
+            var context = new LoadContext();
+            await TestInvalidJourneys(context);
+        }
+
+        private async Task TestInvalidJourneys(LoadContext context)
+        {
+
+            // Arrange
+            context.MergedOdsJourneys = new Dictionary<string, Journeys>
             {
-                MergedOdsJourneys = new Dictionary<string, Journeys>
                 {
-                    {
-                        "A1",
-                        ValidJourneys().Build()
-                    },
-                    {
-                        "A2",
-                        ValidJourneys()
-                            .AppointmentProvider(null)
-                            .Build()
-                    },
-                    {
-                        "A3",
-                        ValidJourneys()
-                            .CdssAdviceProvider(null)
-                            .Build()
-                    },
-                    {
-                        "A4",
-                        ValidJourneys()
-                            .CdssAdminProvider(null)
-                            .Build()
-                    },
-                    {
-                        "A5",
-                        ValidJourneys()
-                            .MedicalRecord(null, 1)
-                            .Build()
-                    },
-                    {
-                        "A6",
-                        ValidJourneys()
-                            .Prescriptions(null)
-                            .Build()
-                    },
-                    {
-                        "A7",
-                        ValidJourneys()
-                            .NominatedPharmacyEnabled(null)
-                            .Build()
-                    },
-                    {
-                        "A8",
-                        ValidJourneys()
-                            .NotificationsEnabled(null)
-                            .Build()
-                    },
-                    {
-                        "A9",
-                        ValidJourneys()
-                            .MessagingEnabled(null)
-                            .Build()
-                    },
-                    {
-                        "A10",
-                        ValidJourneys()
-                            .UserInfoEnabled(null)
-                            .Build()
-                    },
-                    {
-                        "A11",
-                        ValidJourneys()
-                            .WithSupplier(Supplier.Unknown)
-                            .Build()
-                    }
+                    "A1",
+                    ValidJourneys().Build()
+                },
+                {
+                    "A2",
+                    ValidJourneys()
+                        .AppointmentProvider(null)
+                        .Build()
+                },
+                {
+                    "A3",
+                    ValidJourneys()
+                        .CdssAdviceProvider(null)
+                        .Build()
+                },
+                {
+                    "A4",
+                    ValidJourneys()
+                        .CdssAdminProvider(null)
+                        .Build()
+                },
+                {
+                    "A5",
+                    ValidJourneys()
+                        .MedicalRecord(null, 1)
+                        .Build()
+                },
+                {
+                    "A6",
+                    ValidJourneys()
+                        .Prescriptions(null)
+                        .Build()
+                },
+                {
+                    "A7",
+                    ValidJourneys()
+                        .NominatedPharmacyEnabled(null)
+                        .Build()
+                },
+                {
+                    "A8",
+                    ValidJourneys()
+                        .NotificationsEnabled(null)
+                        .Build()
+                },
+                {
+                    "A9",
+                    ValidJourneys()
+                        .MessagingEnabled(null)
+                        .Build()
+                },
+                {
+                    "A10",
+                    ValidJourneys()
+                        .UserInfoEnabled(null)
+                        .Build()
+                },
+                {
+                    "A11",
+                    ValidJourneys()
+                        .SilverIntegrations(_ => _.Consultations().Messages())
+                        .Build()
+                },
+                {
+                    "A12",
+                    ValidJourneys()
+                        .SilverIntegrations(_ => _.Consultations().SecondaryAppointments())
+                        .Build()
+                },
+                {
+                    "A13",
+                    ValidJourneys()
+                        .SilverIntegrations(_ => _.SecondaryAppointments().Messages())
+                        .Build()
+                },
+                {
+                    "A14",
+                    ValidJourneys()
+                        .WithSupplier(Supplier.Unknown)
+                        .Build()
                 }
             };
 
@@ -362,19 +322,29 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await _loadStep.Execute(context);
 
             // Assert;
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A2'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A3'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A4'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A5'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A6'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A7'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A8'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A9'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A10'.", Times.Once());
-            _mockLogger.VerifyLogger(LogLevel.Error, "Not all journey types have been defined for 'A11'.", Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Debug, "Validation successful for 'A1'", Times.Once());
+            AssertError("A2", "journeys.Appointments.Provider");
+            AssertError("A3", "journeys.CdssAdvice.Provider");
+            AssertError("A4", "journeys.CdssAdmin.Provider");
+            AssertError("A5", "journeys.MedicalRecord.Provider");
+            AssertError("A6", "journeys.Prescriptions.Provider");
+            AssertError("A7", "journeys.NominatedPharmacy");
+            AssertError("A8", "journeys.Notifications");
+            AssertError("A9", "journeys.Messaging");
+            AssertError("A10", "journeys.UserInfo");
+            AssertError("A11", "journeys.SilverIntegrations.SecondaryAppointments");
+            AssertError("A12", "journeys.SilverIntegrations.Messages");
+            AssertError("A13", "journeys.SilverIntegrations.Consultations");
+            AssertError("A14", "journeys.Supplier");
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
+        }
+
+        private void AssertError(string odsCode, string value)
+        {
+            _mockLogger.VerifyLogger(LogLevel.Error,
+                $"Not all journey types have been defined for '{odsCode}'. Missing Values:\n{value}", Times.Once());
         }
 
         private static JourneysBuilder ValidJourneys()
@@ -389,6 +359,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .NotificationsEnabled(true)
                 .MessagingEnabled(true)
                 .UserInfoEnabled(true)
+                .SilverIntegrations(_ => _
+                    .SecondaryAppointments()
+                    .Messages()
+                    .Consultations())
                 .WithSupplier(Supplier.Emis);
         }
     }

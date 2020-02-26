@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
@@ -167,7 +166,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         private static string FormatCourseIds(IEnumerable<string> courseIds)
         {
             var enumerable = courseIds.ToList();
-            return !EnumerableExtensions.Any(enumerable) ? "No course ID's provided" : string.Join(",", enumerable);
+            return !enumerable.Any() ? "No course ID's provided" : string.Join(",", enumerable);
         }
         
         private void LogPrescriptionInformation(FilteringCounts result) 

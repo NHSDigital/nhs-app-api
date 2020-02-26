@@ -21,6 +21,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         public bool? Messaging { get; set; }
 
         public Supplier Supplier { get; set; }
+
+        public SilverIntegrations SilverIntegrations { get; set; }
         
         public bool? UserInfo { get; set; }
 
@@ -35,6 +37,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             Notifications = Notifications,
             Messaging = Messaging,
             UserInfo = UserInfo,
+            SilverIntegrations = SilverIntegrations
         };
 
         public Journeys AddSupplier(Supplier supplier)

@@ -95,13 +95,56 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 if (journeys.Messaging.HasValue)
                 {
                     currentJourneys.Messaging = journeys.Messaging;
-                } 
-                
+                }
+
                 if (journeys.UserInfo.HasValue)
                 {
                     currentJourneys.UserInfo = journeys.UserInfo;
                 }
+
+                currentJourneys.SilverIntegrations =
+                    MergeSilverIntegrations(currentJourneys.SilverIntegrations, journeys.SilverIntegrations);
             }
+        }
+
+        private static SilverIntegrations MergeSilverIntegrations(SilverIntegrations current, SilverIntegrations merge) 
+        {
+            if (current == null)
+            {
+                current = new SilverIntegrations();
+            }
+
+            if (current.SecondaryAppointments == null)
+            {
+                current.SecondaryAppointments = new List<SecondaryAppointmentProvider>();
+            }
+
+            if (current.Messages == null)
+            {
+                current.Messages = new List<MessagesProvider>();
+            }
+
+            if (current.Consultations == null)
+            {
+                current.Consultations = new List<ConsultationsProvider>();
+            }
+
+            if (merge?.SecondaryAppointments != null)
+            {
+                current.SecondaryAppointments = merge.SecondaryAppointments;
+            }
+
+            if (merge?.Messages != null)
+            {
+                current.Messages = merge.Messages;
+            }
+
+            if (merge?.Consultations != null)
+            {
+                current.Consultations = merge.Consultations;
+            }
+
+            return current;
         }
     }
 }

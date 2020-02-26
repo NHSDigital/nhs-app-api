@@ -67,10 +67,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationsEnabled(true)
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
+                    .SilverIntegrations(_ => _.SecondaryAppointments(new[] { SecondaryAppointmentProvider.ers }))
                     .Build(),
                 new JourneysBuilder()
                     .CdssAdminProvider(CdssProvider.none)
                     .MedicalRecord(MedicalRecordProvider.im1, 1)
+                    .SilverIntegrations(_ => _.SecondaryAppointments(new[] { SecondaryAppointmentProvider.ers }))
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
@@ -81,6 +83,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationsEnabled(false)
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
+                    .SilverIntegrations(_ => _.SecondaryAppointments(new[] { SecondaryAppointmentProvider.pkb }))
                     .Build(),
                 new JourneysBuilder().Build()
             );
@@ -88,7 +91,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var anotherFolderJourneys = CreateOdsJourneys(
                 new JourneysBuilder()
                     .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
-                    .MedicalRecord(MedicalRecordProvider.im1, 1)
+                    .MedicalRecord(MedicalRecordProvider.im1, 2)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .Build(),
                 new JourneysBuilder()
@@ -99,14 +102,19 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationsEnabled(true)
                     .MessagingEnabled(true)
                     .UserInfoEnabled(true)
+                    .SilverIntegrations(_ => _
+                        .SecondaryAppointments(SecondaryAppointmentProvider.pkb)
+                        .Messages(MessagesProvider.pkb)
+                        .Consultations(ConsultationsProvider.pkb))
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
                     .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
                     .MedicalRecord(MedicalRecordProvider.gpAtHand, 1)
                     .Prescriptions(PrescriptionsProvider.im1)
-                    .MessagingEnabled(true) 
+                    .MessagingEnabled(true)
                     .UserInfoEnabled(true)
+                    .SilverIntegrations(_ => _.SecondaryAppointments())
                     .Build(),
                 new JourneysBuilder().Build()
             );
@@ -116,12 +124,16 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
                     .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
                     .CdssAdminProvider(CdssProvider.eConsult, "adminDefinition")
-                    .MedicalRecord(MedicalRecordProvider.im1, 1)
+                    .MedicalRecord(MedicalRecordProvider.im1, 2)
                     .Prescriptions(PrescriptionsProvider.gpAtHand)
                     .NominatedPharmacyEnabled(true)
                     .NotificationsEnabled(true)
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
+                    .SilverIntegrations(_ => _
+                        .SecondaryAppointments(SecondaryAppointmentProvider.ers)
+                        .Messages()
+                        .Consultations())
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.gpAtHand)
@@ -133,6 +145,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationsEnabled(true)
                     .MessagingEnabled(true)
                     .UserInfoEnabled(true)
+                    .SilverIntegrations(_ => _
+                        .SecondaryAppointments(SecondaryAppointmentProvider.pkb)
+                        .Messages(MessagesProvider.pkb)
+                        .Consultations(ConsultationsProvider.pkb))
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -143,6 +159,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationsEnabled(false)
                     .MessagingEnabled(true)
                     .UserInfoEnabled(true)
+                    .SilverIntegrations(_ => _
+                        .SecondaryAppointments()
+                        .Messages()
+                        .Consultations())
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(null)
@@ -153,8 +173,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationsEnabled(null)
                     .MessagingEnabled(null)
                     .UserInfoEnabled(null)
+                    .SilverIntegrations(_ => _
+                        .SecondaryAppointments()
+                        .Messages()
+                        .Consultations())
                     .Build()
-                );
+            );
 
             var context = new ConfigurationContext
             {
@@ -177,7 +201,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             Journeys secondJourney,
             Journeys thirdJourney,
             Journeys fourthJourney
-            )
+        )
         {
             return new Dictionary<string, Journeys>
             {

@@ -1,3 +1,4 @@
+using System;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 
@@ -21,6 +22,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             {
                 _journeys.Appointments = null;
             }
+
             return this;
         }
 
@@ -41,6 +43,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             {
                 _journeys.CdssAdvice = null;
             }
+
             return this;
         }
 
@@ -59,13 +62,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             {
                 _journeys.CdssAdmin = null;
             }
+
             return this;
         }
 
-        public JourneysBuilder MedicalRecord(MedicalRecordProvider? provider, 
+        public JourneysBuilder MedicalRecord(MedicalRecordProvider? provider,
             int version = 1)
         {
-            
+
             if (provider != null)
             {
                 _journeys.MedicalRecord = new MedicalRecord
@@ -78,6 +82,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             {
                 _journeys.MedicalRecord = null;
             }
+
             return this;
         }
 
@@ -94,6 +99,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             {
                 _journeys.Prescriptions = null;
             }
+
             return this;
         }
 
@@ -126,7 +132,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             _journeys.UserInfo = enabled;
             return this;
         }
-        
+
+        public JourneysBuilder SilverIntegrations(Action<SilverIntegrationsBuilder> actions)
+        {
+            var silverIntegrationsBuilder = new SilverIntegrationsBuilder();
+            actions.Invoke(silverIntegrationsBuilder);
+            _journeys.SilverIntegrations = silverIntegrationsBuilder.Build();
+            return this;
+        }
+
         public Journeys Build()
         {
             return _journeys;
