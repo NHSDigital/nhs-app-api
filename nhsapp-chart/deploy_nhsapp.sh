@@ -2,10 +2,10 @@
 # Envvars:
 # - $AKSCLUSTERNAME - The cluster you are deploying to
 # - $TARGET_ENVIRONMENT - The environment you are creating (namespace)
-source nhsapp-chart/script_helpers/dependency_check
-source nhsapp-chart/script_helpers/formatting
-source nhsapp-chart/script_helpers/aks_access
-source nhsapp-chart/script_helpers/unlock_repo
+source script_helpers/dependency_check
+source script_helpers/formatting
+source script_helpers/aks_access
+source script_helpers/unlock_repo
 
 function trigger_sjr() {
     info "Triggering SJR deployment job for $TARGET_ENVIRONMENT"
