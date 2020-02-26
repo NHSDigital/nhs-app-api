@@ -84,7 +84,7 @@
           "type": "string"
         } 
       },
-      "required": [ "provider" ],
+      "required": [ "provider", "version" ],
       "additionalProperties": false
     },
     "prescriptionsJourney": {
