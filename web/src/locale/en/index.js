@@ -2442,10 +2442,9 @@ export default {
   },
   coronaVirus: {
     title: 'Coronavirus',
-    paragraphText1: 'Do not book a GP appointment if you have returned from ',
-    linkText1: 'any of these countries or areas ',
-    paragraphText2: 'in the last 14 days. Stay at home and call 111.',
-    linkText2: 'You can read more about coronavirus on NHS.UK',
+    paragraphText1: 'Do not book a GP appointment if you think you might have coronavirus.',
+    paragraphText2: 'Stay at home and avoid close contact with other people.',
+    linkText1: 'Use the 111 coronavirus service to see if you need medical help',
   },
   messageDateTimeFormats: {
     midday: 'midday',

@@ -4,18 +4,14 @@
     message-type="warning"
     :icon-text="$t('coronaVirus.title')">
     <p class="nhsuk-u-margin-bottom-0">
-      <span>
-        {{ $t('coronaVirus.paragraphText1') }}
-      </span>
-      <a href="https://www.gov.uk/government/publications/covid-19-specified-countries-and-areas/covid-19-specified-countries-and-areas-with-implications-for-returning-travellers-or-visitors-arriving-in-the-uk" target="_blank">
-        {{ $t('coronaVirus.linkText1') }}</a>
-      <span>
-        {{ $t('coronaVirus.paragraphText2') }}
-      </span>
+      {{ $t('coronaVirus.paragraphText1') }}
     </p>
-    <br>
-    <p class=" nhsuk-u-padding-top-0"><a href="https://www.nhs.uk/conditions/coronavirus-covid-19/" target="_blank">
-      {{ $t('coronaVirus.linkText2') }}</a>.
+    <p class="nhsuk-u-margin-bottom-0">
+      {{ $t('coronaVirus.paragraphText2') }}
+    </p>
+    <p class="nhsuk-u-margin-bottom-0">
+      <a href="https://111.nhs.uk/PWCorona/35fa201f-99cb-4327-b2a5-fda8fb673bf6/COVID-19/about" target="_blank">
+        {{ $t('coronaVirus.linkText1') }}</a>
     </p>
   </message-dialog>
 </template>
