@@ -36,6 +36,15 @@
                :click-func="goToUrl"
                :click-param="myRecordPath"/>
 
+    <menu-item v-if="messagingEnabled"
+               id="btn_messaging"
+               header-tag="h2"
+               data-purpose="text_link"
+               :href="messagingPath"
+               :text="$t('navigationMenuList.messaging')"
+               :click-func="navigate"
+               :aria-label="$t('navigationMenuList.messaging')"/>
+
     <organ-donation-link id="organ-donation-link"
                          data-sid="organ-donation-menu-item"
                          :back-link-override="indexPath"/>
@@ -50,20 +59,10 @@
                :click-func="goToUrl"
                :click-param="linkedProfilesPath"/>
 
-    <menu-item v-if="messagingEnabled"
-               id="btn_messaging"
-               header-tag="h2"
-               data-purpose="text_link"
-               :href="messagingPath"
-               :text="$t('navigationMenuList.messaging')"
-               :click-func="navigate"
-               :aria-label="$t('navigationMenuList.messaging')"/>
-
   </menu-item-list>
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
