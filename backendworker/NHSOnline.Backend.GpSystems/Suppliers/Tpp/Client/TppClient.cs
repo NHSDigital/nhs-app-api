@@ -9,20 +9,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
     {
         private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccessesPost;
         private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelectedPost;
-        private readonly ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> _testResultsView;
         private readonly ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> _testResultsViewDetailed;
         private readonly ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> _nhsUserPost;
         
         public TppClient(
             ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccessesPost,
             ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelectedPost,
-            ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> testResultsView,
             ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> testResultsViewDetailed,
             ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> nhsUserPost)
         {
             _listServiceAccessesPost = listServiceAccessesPost;
             _patientSelectedPost = patientSelectedPost;
-            _testResultsView = testResultsView;
             _testResultsViewDetailed = testResultsViewDetailed;
             _nhsUserPost = nhsUserPost;
         }
@@ -32,9 +29,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 
         public async Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession)
             => await _patientSelectedPost.Post(tppUserSession);
-
-        public async Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsView(TppUserSession tppUserSession, string startDate, string endDate)
-            =>  await _testResultsView.Post((tppUserSession, startDate, endDate));
 
         public async Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession, string testResultId)
             => await _testResultsViewDetailed.Post((tppUserSession, testResultId));

@@ -27,6 +27,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private readonly ITppMyRecordMapper _tppMyRecordMapper;
         private readonly ITppClientRequest<TppUserSession, ViewPatientOverviewReply> _patientOverview;
         private readonly ITppClientRequest<TppUserSession, RequestPatientRecordReply> _requestPatientRecord;
+        private readonly ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> _testResultsView;
 
         public TppPatientRecordService(IGetPatientDcrEventsTaskChecker patientDcrEventsChecker,
             IGetPatientOverviewTaskChecker patientOverviewTaskChecker,
@@ -35,7 +36,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             ITppClientRequest<TppUserSession, ViewPatientOverviewReply> patientOverview,
             IGetPatientDocumentsFromDcrEventsTaskChecker patientDocumentsFromDcrEventsTaskChecker,
             ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper,
-            ITppClientRequest<TppUserSession, RequestPatientRecordReply> requestPatientRecord)
+            ITppClientRequest<TppUserSession, RequestPatientRecordReply> requestPatientRecord,
+            ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> testResultsView)
 
         {
             _patientDcrEventsChecker = patientDcrEventsChecker;
@@ -47,6 +49,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _tppClient = tppClient;
             _tppMyRecordMapper = tppMyRecordMapper;
             _requestPatientRecord = requestPatientRecord;
+            _testResultsView = testResultsView;
             _logger = logger;
         }
 
@@ -162,9 +165,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _logger.LogDebug("Grouping test results by date");
             foreach (var testResultDates in tppTestResultDates)
             {
-                var testResultsView = await _tppClient.TestResultsView(tppUserSession,
+                var testResultsView = await _testResultsView.Post((tppUserSession,
                     testResultDates.StartDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture),
-                    testResultDates.EndDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture));
+                    testResultDates.EndDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture)));
 
                 _logger.LogDebug($"Mapping TPP test results to instance of {nameof(TestResults)} class");
                 var testResults = _patientTestResultsChecker.Check(testResultsView);

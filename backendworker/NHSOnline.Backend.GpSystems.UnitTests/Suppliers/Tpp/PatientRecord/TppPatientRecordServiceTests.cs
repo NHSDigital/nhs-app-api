@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
@@ -22,7 +22,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
     public class TppPatientRecordServiceTests
     {
         private TppPatientRecordService _systemUnderTest;
-        private Mock<ITppClient> _tppClient;
 
         private GpUserSession _gpUserSession;
         private IFixture _fixture;
@@ -31,15 +30,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         private Mock<IGetPatientTestResultsTaskChecker> _patientTestResultsChecker;
         private Mock<ITppClientRequest<TppUserSession, ViewPatientOverviewReply>> _patientOverview;
         private Mock<ITppClientRequest<TppUserSession, RequestPatientRecordReply>> _requestPatientRecord;
+        private Mock<ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply>> _testResultsView;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _gpUserSession = _fixture.Create<TppUserSession>();
-            _tppClient = _fixture.Freeze<Mock<ITppClient>>();
             _patientOverview = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, ViewPatientOverviewReply>>>();
             _requestPatientRecord = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, RequestPatientRecordReply>>>();
+            _testResultsView = _fixture.Freeze<Mock<ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply>>>();
             _patientDcrEventsChecker = _fixture.Freeze<Mock<IGetPatientDcrEventsTaskChecker>>();
             _patientOverviewTaskChecker = _fixture.Freeze<Mock<IGetPatientOverviewTaskChecker>>();
             _patientTestResultsChecker = _fixture.Freeze<Mock<IGetPatientTestResultsTaskChecker>>();
@@ -95,9 +95,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                     {
                         Body = patientRecordResponse,
                         ErrorResponse = null,
-                    }));  
-                    
-             _tppClient.Setup(x => x.TestResultsView(It.IsAny<TppUserSession>(), It.IsAny<string>(), It.IsAny<string>()))
+                    }));
+
+            _testResultsView.Setup(x => x.Post(It.IsAny<(TppUserSession, string, string)>()))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<TestResultsViewReply>(HttpStatusCode.OK)
                     {
