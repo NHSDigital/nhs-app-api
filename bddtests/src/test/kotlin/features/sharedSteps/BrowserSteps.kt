@@ -71,9 +71,12 @@ open class BrowserSteps {
     }
 
     @Step
-    open fun shouldHaveUrl(url: String) {
+    open fun shouldHaveUrl(url: String, originalPath: String? = null) {
+        val originalPathMessage= if (originalPath != null) {" Original Path : '$originalPath'"} else {""}
         WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
                 .pollingEvery(Duration.ofMillis(POLLING_DURATION))
+                .withMessage("Expected url to be '$url', but was '${loginPage.driver.currentUrl}'"
+                        + originalPathMessage)
                 .until {
                     it.currentUrl == url
                 }

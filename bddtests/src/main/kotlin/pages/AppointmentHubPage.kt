@@ -30,11 +30,11 @@ open class AppointmentHubPage : HybridPageObject() {
         links.link(gpAppointmentsTitle)
     }
 
-    fun assertAppointmentsHubIsDisplayed() {
-        pageTitle.assertIsVisible()
+    val hospitalAppointmentsLink by lazy {
+        links.link("Hospital and other appointments")
     }
 
-    fun assertLinksPresent() {
-        links.assertLinksPresent(true)
+    fun assertAppointmentsHubIsDisplayed() {
+        pageTitle.assertIsVisible()
     }
 }

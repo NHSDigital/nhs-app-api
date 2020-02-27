@@ -25,6 +25,7 @@ import {
   DIAGNOSIS_V2,
   EXAMINATIONS_V2,
   GP_APPOINTMENTS,
+  HOSPITAL_APPOINTMENTS,
   DATA_SHARING_PREFERENCES,
   INDEX,
   INTERSTITIAL_REDIRECTOR,
@@ -212,6 +213,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.gpAppointments';
       route.meta.pageTitleKey = 'pageTitles.gpAppointments';
+      break;
+    case HOSPITAL_APPOINTMENTS.name:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.headerKey = 'pageHeaders.hospitalAppointments';
+      route.meta.pageTitleKey = 'pageTitles.hospitalAppointments';
       break;
     case APPOINTMENT_BOOKING.name:
       store.dispatch('navigation/setNewMenuItem', 1);

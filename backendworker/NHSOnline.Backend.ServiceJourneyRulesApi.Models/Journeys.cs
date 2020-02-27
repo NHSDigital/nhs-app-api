@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
             Notifications = Notifications,
             Messaging = Messaging,
             UserInfo = UserInfo,
-            SilverIntegrations = SilverIntegrations,
+            SilverIntegrations = SilverIntegrations?.Clone(),
             Documents = Documents,
             Im1Messaging = Im1Messaging,
         };

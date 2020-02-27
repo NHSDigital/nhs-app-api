@@ -95,6 +95,13 @@ class LinkedProfilesStepDefinitions {
         login.using(patient)
     }
 
+    @Given("I have switched to a linked profile")
+    fun iHaveSwitchedToALinkedProfile(){
+        iSelectTheLinkedProfilesLink()
+        iSelectALinkedProfile()
+        iClickTheSwitchToThisProfileButtonForTheProxyUser()
+        home.actingAsOtherUserWarning.click()
+    }
 
     @Given("^I click on the Appointments link on the header$")
     fun iClickOnAppointmentsLinkInHeader() {

@@ -68,7 +68,7 @@ import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { APPOINTMENTS, MYRECORD, PRESCRIPTIONS, SYMPTOMS, LINKED_PROFILES, INDEX,
   PATIENT_PRACTICE_MESSAGING, MESSAGING } from '@/lib/routes';
-import srjIf from '@/lib/sjrIf';
+import sjrIf from '@/lib/sjrIf';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -86,11 +86,11 @@ export default {
   },
   data() {
     return {
-      appMessagingEnabled: srjIf({ $store: this.$store, journey: 'messaging' }),
+      appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
       patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
       appMessagingPath: MESSAGING.path,
       organDonationUrl: this.$store.app.$env.ORGAN_DONATION_URL,
-      im1MessagingSjrEnabled: srjIf({ $store: this.$store, journey: 'im1Messaging' }),
+      im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
       im1MessagingPracticeEnabled: this.$store.state.practiceSettings.im1MessagingEnabled,
     };
   },

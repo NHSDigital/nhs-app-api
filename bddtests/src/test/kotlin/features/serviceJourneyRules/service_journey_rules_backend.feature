@@ -90,6 +90,20 @@ Feature: Service Journey Rules Backend
     And the service journey rules response will have silver integration messages set to pkb
     And the service journey rules response will have silver integration consultations set to pkb
 
+
+  Scenario: A user can see the configuration where silver service integrations are not enabled in SJR
+    Given I am a user where the journey configurations are:
+      | Journey                                    | Value  |
+      | silver integration secondary appointments  | none   |
+      | silver integration messages                | none   |
+      | silver integration consultations           | none   |
+    And I have logged in and have a valid session cookie
+    When I request the service journey rules for my ODS Code
+    Then I receive an "Ok" success code
+    And the service journey rules response will have no silver integration secondary appointments
+    And the service journey rules response will have no silver integration messages
+    And the service journey rules response will have no silver integration consultations
+
   Scenario Outline: API call for SJR can return a response with documents and im1 messaging <Toggle>
     Given I am a EMIS user where the journey configurations are:
       | Journey       | Value    |

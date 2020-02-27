@@ -131,7 +131,7 @@ class YourAppointmentsStepDefinitions {
 
     @Then("^the Appointment Hub page is displayed$")
     fun appointmentHubPage() {
-        appointmentHubPage.assertLinksPresent()
+        appointmentHubPage.assertAppointmentsHubIsDisplayed()
     }
 
     @Then("^the booked appointment before cutoff time is correctly displayed with ability to cancel$")

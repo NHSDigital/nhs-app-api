@@ -42,7 +42,7 @@
 
 <script>
 import { APPOINTMENT_GP_ADVICE, SYMPTOMS } from '@/lib/routes';
-import srjIf from '@/lib/sjrIf';
+import sjrIf from '@/lib/sjrIf';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import { redirectTo } from '@/lib/utils';
@@ -70,7 +70,7 @@ export default {
       return this.$store.getters['session/isLoggedIn'];
     },
     isCdssAdvice() {
-      return srjIf({ $store: this.$store, journey: 'cdssAdvice' });
+      return sjrIf({ $store: this.$store, journey: 'cdssAdvice' });
     },
     gpAdviceConditionsPath() {
       const noJsData = {

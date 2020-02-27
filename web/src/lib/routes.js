@@ -189,7 +189,21 @@ const routes = {
     proxyShutterPath: '/linked-profiles/shutter/appointments',
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
-
+  HOSPITAL_APPOINTMENTS: {
+    name: 'appointments-hospital-appointments',
+    path: '/appointments/hospital-appointments',
+    crumb: {
+      nativeDisabled: false,
+      i18nKey: 'hospitalAppointments',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.APPOINTMENTS];
+      },
+      get parentRoute() {
+        return this.allRoutes.APPOINTMENTS;
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+  },
   APPOINTMENT_ADMIN_HELP: {
     name: 'appointments-admin-help',
     path: '/appointments/admin-help',
@@ -1522,6 +1536,7 @@ export const {
   ENCOUNTERS,
   EXAMINATIONS_V2,
   GP_APPOINTMENTS,
+  HOSPITAL_APPOINTMENTS,
   INDEX,
   INTERSTITIAL_REDIRECTOR,
   LEGACY_MYRECORDWARNING,

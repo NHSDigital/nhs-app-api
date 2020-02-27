@@ -26,7 +26,7 @@ class AppointmentNavigationStepDefinitions {
     @Given("^I am on the Appointments hub page$")
     fun iAmOnTheAppointmentsHubPage() {
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
-        appointmentsHubPage.assertLinksPresent()
+        appointmentsHubPage.assertAppointmentsHubIsDisplayed()
     }
 
     @Given("^I am on the Your Appointments page$")

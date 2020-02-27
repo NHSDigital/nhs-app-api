@@ -155,7 +155,7 @@ class AuthenticationStepDefinitions {
                 home.assertHeaderVisible()
             }
             "relevant" -> {
-                browser.shouldHaveUrl(Config.instance.url + destination)
+                browser.shouldHaveUrl(Config.instance.url + destination, path)
             }
         }
     }

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import srjIf from '@/lib/sjrIf';
+import sjrIf from '@/lib/sjrIf';
 
 export default {
   name: 'SjrIf',
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     show() {
-      return srjIf({ $store: this.$store,
+      return sjrIf({ $store: this.$store,
         journey: this.journey,
         disabled: this.disabled,
         context: this.context });

@@ -73,27 +73,36 @@ Feature: Authorisation occurs during each URL visit
       | /symptoms                                   |
       | /terms-and-conditions                       |
     
-  Scenario: User browses to url when logged in
+Scenario: User browses to url when logged in
+  Given I am a EMIS patient
+  And I am about to directly access every page
+  And I am logged in
+  And I see the home page
+  When I browse to the pages at the following urls I see the relevant page
+    | /account                                    | /account                       |
+    | /appointments                               | /appointments                  |
+    | /appointments/booking-guidance              | /appointments/booking-guidance |
+    | /appointments/booking                       | /appointments/booking          |
+    | /data-sharing                               | /data-sharing                  |
+    | /                                           | /                              |
+    | /my-record                                  | /gp-medical-record             |
+    | /prescriptions                              | /prescriptions                 |
+    | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
+    | /prescriptions/confirm-prescription-details | /prescriptions                 |
+    | /symptoms                                   | /symptoms                      |
+    | /terms-and-conditions                       | /                              |
+    | /logout                                     | /login                         |
+
+@bug @NHSO-8672
+  #To be merged into the above test once the bug is fixed
+  Scenario: User browses to url when logged in - Appointments Bug NHSO-8672
     Given I am a EMIS patient
     And I am about to directly access every page
     And I am logged in
     And I see the home page
     When I browse to the pages at the following urls I see the relevant page
-      | /account                                    | /account                       |
-      | /appointments                               | /appointments                  |
-      | /appointments/booking-guidance              | /appointments/booking-guidance |
       | /appointments/cancelling                    | /appointments/gp-appointments  |
-      | /appointments/booking                       | /appointments/booking          |
       | /appointments/confirmation                  | /appointments/gp-appointments  |
-      | /data-sharing                               | /data-sharing                  |
-      | /                                           | /                              |
-      | /my-record                                  | /gp-medical-record             |
-      | /prescriptions                              | /prescriptions                 |
-      | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
-      | /prescriptions/confirm-prescription-details | /prescriptions                 |
-      | /symptoms                                   | /symptoms                      |
-      | /terms-and-conditions                       | /                              |
-      | /logout                                     | /login                         |
 
   Scenario Outline: User has never logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after login
     Given I am a EMIS patient

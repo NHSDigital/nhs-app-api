@@ -18,7 +18,7 @@ journeys:
   messaging: true
   userInfo: true
   silverIntegrations: 
-    secondaryAppointments:
+    secondaryAppointments: 
       - ers
     messages: []
     consultations: []

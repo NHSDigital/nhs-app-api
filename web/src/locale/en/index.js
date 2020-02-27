@@ -1486,6 +1486,7 @@ export default {
     cookies: 'Manage cookies',
     appointments: 'Appointments',
     gpAppointments: 'Your GP appointments',
+    hospitalAppointments: 'Hospital and other appointments',
     allergiesAndReactions: 'Allergies and adverse reactions',
     testResults: 'Test results',
     testResult: 'Test result',
@@ -1546,6 +1547,7 @@ export default {
     home: 'Home',
     appointments: 'Appointments',
     gpAppointments: 'Your GP appointments',
+    hospitalAppointments: 'Hospital and other appointments',
     appointmentAdminHelp: 'Additional GP services',
     appointmentGpAdvice: 'Ask your GP for advice',
     appointmentGuidance: 'Things to try before you book a GP appointment',
@@ -2269,12 +2271,8 @@ export default {
       body: 'View and manage appointments at your surgery',
     },
     hospitalAppointments: {
-      subheader: 'Hospital and clinic appointments',
-      body: 'Manage your referrals and view your hospital or clinic appointments',
-    },
-    hospitalAppointmentsMessage: {
-      subheader: 'Referral appointments - coming soon',
-      body: 'The NHS e-Referral Service (e-RS) will soon be available through the NHS App. With this service, You\'ll be able to book, view, and manage your referral appointments.',
+      subheader: 'Hospital and other appointments',
+      body: 'Manage your referral appointments',
     },
   },
   ds01: {

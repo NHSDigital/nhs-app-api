@@ -50,7 +50,7 @@ import {
 } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import { createUri } from '@/lib/noJs';
-import srjIf from '@/lib/sjrIf';
+import sjrIf from '@/lib/sjrIf';
 
 export default {
   name: 'AppointmentGuidanceMenu',
@@ -75,10 +75,10 @@ export default {
       });
     },
     isCdssAdmin() {
-      return srjIf({ $store: this.$store, journey: 'cdssAdmin' });
+      return sjrIf({ $store: this.$store, journey: 'cdssAdmin' });
     },
     isCdssAdvice() {
-      return srjIf({ $store: this.$store, journey: 'cdssAdvice' });
+      return sjrIf({ $store: this.$store, journey: 'cdssAdvice' });
     },
   },
   mounted() {

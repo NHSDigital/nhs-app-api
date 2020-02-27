@@ -123,6 +123,15 @@ class ServiceJourneyRulesStepDefinitions {
                 serviceJourneyRulesResponse.journeys.nominatedPharmacy)
     }
 
+    @Then("^the service journey rules response will have no silver integration secondary appointments$")
+    fun theServiceJourneyRulesResponseWillHaveNoSecondaryAppointments() {
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
+        val actualValues =   serviceJourneyRulesResponse.journeys.silverIntegrations.secondaryAppointments
+        Assert.assertArrayEquals("Service Journey Rules secondary appointments provider",
+                arrayOf(),
+                actualValues.toTypedArray().sortedArray())
+    }
+
     @Then("^the service journey rules response will have silver integration secondary appointments set to (.*)$")
     fun theServiceJourneyRulesResponseWillHaveSecondaryAppointmentsSetTo(values: String) {
         val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
@@ -145,14 +154,31 @@ class ServiceJourneyRulesStepDefinitions {
                 actualValues.toTypedArray().sortedArray())
     }
 
+    @Then("^the service journey rules response will have no silver integration messages$")
+    fun theServiceJourneyRulesResponseWillHaveNoMessages() {
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
+        val actualValues =   serviceJourneyRulesResponse.journeys.silverIntegrations.messages
+        Assert.assertArrayEquals("Service Journey Rules messages provider",
+                arrayOf(),
+                actualValues.toTypedArray().sortedArray())
+    }
+
     @Then("^the service journey rules response will have silver integration consultations set to (.*)$")
     fun theServiceJourneyRulesResponseWillHaveConsultationsSetTo(values: String) {
         val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
         val expectedValues = values.split(",")
                 .map { value -> ConsultationsProvider.valueOf(value.trim()) }
         val actualValues = serviceJourneyRulesResponse.journeys.silverIntegrations.consultations
-        Assert.assertArrayEquals("Service Journey Rules messaging and consultations provider",
+        Assert.assertArrayEquals("Service Journey Rules consultations provider",
                 expectedValues.toTypedArray().sortedArray(),
+                actualValues.toTypedArray().sortedArray())
+    }
+    @Then("^the service journey rules response will have no silver integration consultations$")
+    fun theServiceJourneyRulesResponseWillHaveNoConsultations() {
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
+        val actualValues =   serviceJourneyRulesResponse.journeys.silverIntegrations.consultations
+        Assert.assertArrayEquals("Service Journey Rules consultations provider",
+                arrayOf(),
                 actualValues.toTypedArray().sortedArray())
     }
 

@@ -176,7 +176,6 @@ class HomePageStepDefinitions {
     private fun followAppointmentsLink() {
         homeSteps.homePage.bookAndManageAppointmentsLink.click()
         appointmentHubPage.assertAppointmentsHubIsDisplayed()
-        appointmentHubPage.assertLinksPresent()
         navBar.isHighlighted(NavBarNative.NavBarType.APPOINTMENTS)
     }
 
