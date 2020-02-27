@@ -1,3 +1,5 @@
+import thirdPartyProviders from './third-party-providers';
+
 export default {
   language: 'en-GB',
   appTitle: 'NHS App',
@@ -2071,14 +2073,14 @@ export default {
         dialogText: 'Decision found',
         registrationHeader: 'We are still processing your registration',
         registrationText: 'Please check back in 2 working days. You’ll then be able to view and amend your ' +
-                              'decision via the NHS App.',
+          'decision via the NHS App.',
       },
       decisionSubmitted: {
         messageText: 'We have successfully received your organ donation decision.',
         dialogText: 'Decision submitted',
         registrationHeader: 'What happens next',
         registrationText: 'We will process your registration and you will then be able to view and ' +
-                              'amend this via the NHS App. This may take up to 2 working days.',
+          'amend this via the NHS App. This may take up to 2 working days.',
       },
       successMessageText: 'Your decision has been recorded',
       successMessageDialogText: 'Success',
@@ -2427,8 +2429,8 @@ export default {
     },
     sessionExpiry: {
       warningDurationInformation:
-                        'For security reasons, you\'ll be logged out in 1 minute. ' +
-                        '| For security reasons, you\'ll be logged out in {time} minutes.',
+        'For security reasons, you\'ll be logged out in 1 minute. ' +
+        '| For security reasons, you\'ll be logged out in {time} minutes.',
       warningGetMoreTime: 'Stay logged in',
       warningLogOut: 'Log out',
     },
@@ -2454,4 +2456,5 @@ export default {
     sentAtTimeTodayFormat: '[Sent today at ]{timeFormat}',
     sentAtTimeYesterdayFormat: '[Sent yesterday at ]{timeFormat}',
   },
+  thirdPartyProviders,
 };

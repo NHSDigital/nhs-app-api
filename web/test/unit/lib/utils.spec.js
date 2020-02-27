@@ -9,6 +9,7 @@ import {
   stripHtml,
   formatInboxMessageTime,
   formatIndividualMessageTime,
+  getThirdPartyLocaleText,
 } from '@/lib/utils';
 import { create$T } from '../helpers';
 
@@ -252,6 +253,27 @@ describe('util library', () => {
       }]).it('will format the dates appropriately for displaying beneath an individual message',
         ({ messageDate, expectedFormattedDate }) => {
           expect(formatIndividualMessageTime(messageDate, $t)).toEqual(expectedFormattedDate);
+        });
+    });
+
+    describe('getThirdPartyLocaleText', () => {
+      const $te = create$T(false);
+      each([{
+        textType: 'headerText',
+        redirectPath: 'nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftag%3D',
+        feature: 'jumpOffContent',
+        expectedText: 'Messages and consultations',
+      }, {
+        textType: 'featureName',
+        redirectPath: 'nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftag%3D',
+        feature: 'thirdPartyWarning',
+        expectedText: 'Third party warning',
+      }]).it('will bring back the correct third party locale text',
+        ({ textType, redirectPath, feature, expectedText }) => {
+          const thirdPartyLocales = $te('thirdPartyProviders.pkb') ? $t('thirdPartyProviders.pkb') : '';
+          const retrievedText =
+            getThirdPartyLocaleText(thirdPartyLocales, textType, redirectPath, feature);
+          expect(retrievedText).toEqual(expectedText);
         });
     });
   });

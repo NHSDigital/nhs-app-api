@@ -167,3 +167,12 @@ export const hrefForURL = (originalURL) => {
   }
   return `//${originalURL}`;
 };
+
+export const getThirdPartyLocaleText = (thirdPartyLocales, type, redirectPath, feature) => {
+  for (let i = 0; i < thirdPartyLocales.jumpOffs.length; i += 1) {
+    if (thirdPartyLocales.jumpOffs[i].path === redirectPath) {
+      return thirdPartyLocales.jumpOffs[i][feature][type];
+    }
+  }
+  return '';
+};
