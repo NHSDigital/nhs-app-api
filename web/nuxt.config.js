@@ -17,6 +17,7 @@ const config = {
     publicPath: `/_nuxt/${APP_VERSION_TAG}`.replace(/\./g, '-'),
     babel: {
       babelrc: true,
+      configFile: true,
     },
   },
   head: {
