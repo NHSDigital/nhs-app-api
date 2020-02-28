@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
 # Cleanup old containers
-OLD_CONTAINERS=$(docker images | grep nhsonline-web | grep -v dependencies | grep -v nhsonline-web-base | awk '{print $3}')
+OLD_CONTAINERS=$(docker images | grep nhsonline-web | grep -v dependencies | awk '{print $3}')
 [ -z "$OLD_CONTAINERS" ] || docker rmi -f $OLD_CONTAINERS || true
 
 docker build \

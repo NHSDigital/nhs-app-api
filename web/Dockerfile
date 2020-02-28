@@ -1,44 +1,49 @@
-FROM nhsapp.azurecr.io/nhsonline-web-base AS base
-
-COPY --chown=node:node package.json .
-COPY --chown=node:node package-lock.json .
-COPY --chown=node:node .npmrc .
-COPY --chown=node:node lint/package.json lint/package.json
-
-# Production Dependencies
-FROM base AS production_dependencies
-RUN npm set progress=false && npm config set depth 0
-RUN npm install --only=production
-
 # Build Dependencies
-FROM production_dependencies as build_dependencies
+FROM nhsapp.azurecr.io/nhsonline-nodejs-build:node8-1.0 as build_dependencies
+
+COPY package.json .
+COPY package-lock.json .
+COPY .npmrc .
+COPY lint/package.json lint/package.json
+
+RUN npm set progress=false && npm config set depth 0
 RUN npm install
 
 # Build
 FROM build_dependencies as build
-COPY --chown=node:node . .
 
 ARG COMMIT_ID
-RUN sed -i "s/.*COMMIT_ID:.*/    COMMIT_ID: '$COMMIT_ID',/" nuxt.config.js
-
 ARG APP_VERSION_TAG
-RUN if [ -n "$APP_VERSION_TAG" ] ; \
- then \
- sed -i "s/.*const APP_VERSION_TAG.*/const APP_VERSION_TAG = '$APP_VERSION_TAG';/" nuxt.config.js; \
- fi
 
-RUN npm run build
+COPY . .
+
+## add version info to config
+RUN sed -i "s/.*COMMIT_ID:.*/    COMMIT_ID: '$COMMIT_ID',/" nuxt.config.js && \
+  if [ -n "$APP_VERSION_TAG" ] ; then \
+    sed -i "s/.*const APP_VERSION_TAG.*/const APP_VERSION_TAG = '$APP_VERSION_TAG';/" nuxt.config.js; \
+  fi
+
+RUN npm run build && ls -la
 
 # Tests
 FROM build_dependencies AS test
-COPY --chown=node:node . .
+COPY . .
+
+# Production Dependencies
+FROM nhsapp.azurecr.io/nhsonline-nodejs-runtime:node8-1.0 AS production_dependencies
+
+COPY --chown=node:node package.json .
+COPY --chown=node:node package-lock.json .
+
+RUN npm set progress=false && npm config set depth 0
+RUN npm install --only=production
 
 # Final image
 FROM production_dependencies AS release
-COPY --chown=node:node --from=build /opt/app/.nuxt ./.nuxt
-COPY --chown=node:node --from=build /opt/app/src ./src
-COPY --chown=node:node --from=build /opt/app/nuxt.config.js ./nuxt.config.js
-RUN rm -r lint
+
+COPY --chown=node:node --from=build /data/.nuxt ./.nuxt
+COPY --chown=node:node --from=build /data/src ./src
+COPY --chown=node:node --from=build /data/nuxt.config.js ./nuxt.config.js
 
 EXPOSE $PORT
 CMD sudo update-ca-certificates && exec node ./node_modules/nuxt/bin/nuxt start
