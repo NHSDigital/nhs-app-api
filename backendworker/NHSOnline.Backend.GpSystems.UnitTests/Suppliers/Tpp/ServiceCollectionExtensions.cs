@@ -2,13 +2,22 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Options;
+using Moq;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 {
     internal static class ServiceCollectionExtensions
     {
+        internal static Mock<TService> AddMock<TService>(this IServiceCollection services) where TService : class
+        {
+            var mock = new Mock<TService>();
+            services.Replace(ServiceDescriptor.Singleton(mock.Object));
+            return mock;
+        }
+
         internal static void ReplacePrimaryHttpMessageHandler<TClient, THandler>(
             this ServiceCollection services)
             where THandler : HttpMessageHandler

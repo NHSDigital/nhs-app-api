@@ -20,18 +20,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
         private readonly ILogger<TppSessionService> _logger;
         private readonly ITppSessionMapper _sessionMapper;
+        private readonly ITppLogMessagingService _logMessagingService;
 
-        public TppSessionService(ITppClient client,
+        public TppSessionService(
+            ITppClient client,
             ITppClientRequest<TppUserSession, LogoffReply> logoff,
             ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
             ILogger<TppSessionService> logger,
-            ITppSessionMapper sessionMapper)
+            ITppSessionMapper sessionMapper,
+            ITppLogMessagingService logMessagingService)
         {
             _client = client;
             _logoff = logoff;
             _authenticate = authenticate;
             _logger = logger;
             _sessionMapper = sessionMapper;
+            _logMessagingService = logMessagingService;
         }
 
         public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
@@ -78,7 +82,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 var tppUserSession = userSession.ValueOrFailure();
                 await _client.PatientSelectedPost(tppUserSession);
                 
-                LogAccessInformation(tppUserSession);
+                _logMessagingService.FetchAndLogAccessInformation(tppUserSession);
 
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
                 return new GpSessionCreateResult.Success(tppUserSession);
@@ -128,31 +132,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             }
         }
 
-        private async void LogAccessInformation(TppUserSession userSession)
-        {
-            try
-            {
-                var response = await _client.ListServiceAccessesPost(userSession);
-                response.Body?.ServiceAccess?.ForEach(x =>
-                {
-                    if (string.Equals(x.Description, "Messaging", StringComparison.Ordinal))
-                    {
-                        _logger.LogInformation($"ODSCode {userSession.OdsCode}  " +
-                                               $"PFS messaging enabled: {x.Status} " +
-                                               $"with description: {x.StatusDesc}");
-                    }
-                });
-            }
-            catch (HttpRequestException e)
-            {
-                _logger.LogError(e, "Failed request to get list of service accesses, HttpRequestException has been thrown.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Failed request to get list of service accesses, Exception has been thrown");
-            }
-        }
-
         private void LogProxyInformation(AuthenticateReply response)
         {
             var patientId = response.User?.Person?.PatientId;
@@ -168,8 +147,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             var selfPatient = patientAccessItems.FirstOrDefault(
                 x => patientId.Equals(x.PatientId, StringComparison.Ordinal));
 
-            var linkedPatients = patientAccessItems.Where(
-                x => !patientId.Equals(x.PatientId, StringComparison.Ordinal));
+            var linkedPatients = patientAccessItems
+                .Where(x => !patientId.Equals(x.PatientId, StringComparison.Ordinal))
+                .ToList();
 
             if (selfPatient == null)
             {
@@ -180,8 +160,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
             var userPractice = new
             {
-                UnitName = selfPatient.SiteDetails?.UnitName,
-                Address = selfPatient.SiteDetails?.Address?.Address,
+                selfPatient.SiteDetails?.UnitName,
+                selfPatient.SiteDetails?.Address?.Address,
             };
 
             if (userPractice.UnitName == null || userPractice.Address == null)
@@ -196,7 +176,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 !userPractice.Address.Equals(x.SiteDetails.Address.Address, StringComparison.Ordinal));
 
             _logger.LogInformation(
-                $"User has linked_accounts={linkedPatients.Count()}, with different_ods_codes_to_user={differentPracticeAddressCount}");
+                $"User has linked_accounts={linkedPatients.Count}, with different_ods_codes_to_user={differentPracticeAddressCount}");
         }
     }
 }

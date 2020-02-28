@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
 using NHSOnline.Backend.Support;
@@ -25,33 +23,40 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
     [TestClass]
     public class TppSessionServiceTests
     {
-        private IFixture _fixture;
+        private const string ResponseSuidHeader = "suid";
+
         private Mock<ITppClient> _mockTppClient;
-        private Mock<ITppClientRequest<Authenticate, AuthenticateReply>> _mockauthenticate;
+        private Mock<ITppClientRequest<Authenticate, AuthenticateReply>> _mockAuthenticate;
+        private Mock<ITppClientRequest<TppUserSession, LogoffReply>> _mockLogOff;
+
         private Mock<IConfigurationSettings> _mockConfigurationSettings;
         private Mock<ITppSessionMapper> _mockTppSessionMapper;
-        private TppSessionService _systemUnderTest;
+        private Mock<ITppLogMessagingService> _mockTppLogMessagingService;
+
         private Authenticate _actual;
         private GpUserSession _tppUserSession;
         private int _sessionTimeoutMinutes;
         private string _nhsNumber;
-        private const string ResponseSuidHeader = "suid";
         private TppApiObjectResponse<AuthenticateReply> _authenticatePostResult;
-        private Mock<ILogger<TppSessionService>> _logger;
-        private Mock<ITppClientRequest<TppUserSession, LogoffReply>> _mockLogOff;
+
+        private ServiceProvider _serviceProvider;
+
+        private TppSessionService _systemUnderTest;
+
+        private Mock<ILogger<TppSessionService>> TppSessionServiceLogger => _serviceProvider.MockLogger<TppSessionService>();
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            var services = new ServiceCollection();
+            services.RegisterTppSessionServices();
 
-            _tppUserSession = _fixture.Create<TppUserSession>();
-
+            _tppUserSession = new TppUserSession();
             _actual = null;
             _authenticatePostResult = null;
 
-            _mockauthenticate = _fixture.Freeze<Mock<ITppClientRequest<Authenticate, AuthenticateReply>>>();
-            _mockauthenticate
+            _mockAuthenticate = services.AddMock<ITppClientRequest<Authenticate, AuthenticateReply>>();
+            _mockAuthenticate
                 .Setup(x => x.Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => _authenticatePostResult)
                 .Callback<Authenticate>(x =>
@@ -59,22 +64,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                     _actual = x;
                 });
 
-            _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
+            _mockTppClient = services.AddMock<ITppClient>();
             _mockTppClient
                 .Setup(x => x.PatientSelectedPost(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => null);
 
-            _mockLogOff = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, LogoffReply>>>();
+            _mockLogOff = services.AddMock<ITppClientRequest<TppUserSession, LogoffReply>>();
 
-            _nhsNumber = _fixture.Create<string>();
-            _sessionTimeoutMinutes = _fixture.Create<int>();
+            _nhsNumber = "123456";
+            _sessionTimeoutMinutes = 10;
 
-            _mockConfigurationSettings = new Mock<IConfigurationSettings>();
+            _mockConfigurationSettings = services.AddMock<IConfigurationSettings>();
             _mockConfigurationSettings.SetupGet(x => x.DefaultHttpTimeoutSeconds).Returns(_sessionTimeoutMinutes);
 
-            _mockTppSessionMapper = _fixture.Freeze<Mock<ITppSessionMapper>>();
-            _logger = new Mock<ILogger<TppSessionService>>();
-            _fixture.Inject(_logger);
+            _mockTppSessionMapper = services.AddMock<ITppSessionMapper>();
+            _mockTppLogMessagingService = services.AddMock<ITppLogMessagingService>();
+
+            services.AddMockLoggers();
+
+            _serviceProvider = services.BuildServiceProvider();
+            _systemUnderTest = _serviceProvider.GetRequiredService<TppSessionService>();
         }
 
         [TestMethod]
@@ -83,18 +92,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         {
             // Arrange
             // Tpp client throws HttpRequestException
-            _mockauthenticate
+            _mockAuthenticate
                 .Setup(x => x.Post(It.IsAny<Authenticate>()))
                 .Throws<HttpRequestException>()
                 .Verifiable();
-
-            _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "bar", _nhsNumber);
 
             // Assert
-            _mockTppClient.Verify();
+            _mockAuthenticate.Verify();
             result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
@@ -150,7 +157,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             for (var i = 0; i < numberOfLinkedAccounts; i++)
             {
-                var linkedAccount = _fixture.Create<PatientAccess>();
+                var linkedAccount = new PatientAccess { SiteDetails = new SiteDetails { Address = new TppAddress() } };
                 if (i < numberToSetupWithSameGpPractice)
                 {
                     linkedAccount.SiteDetails.UnitName = gpPracticeName;
@@ -159,13 +166,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 _authenticatePostResult.Body.Registration.PatientAccess.Add(linkedAccount);
             }
 
-            _systemUnderTest = _fixture.Create<TppSessionService>();
-
             // Act
             await _systemUnderTest.Create(tppConnectionToken, "bar", _nhsNumber);
 
             // Assert
-            _logger.VerifyLogger(LogLevel.Information,
+            TppSessionServiceLogger.VerifyLogger(LogLevel.Information,
                 $"User has linked_accounts={numberOfLinkedAccounts}, with different_ods_codes_to_user={ofWhichHaveDifferentAddress}", Times.Once());
         }
 
@@ -181,8 +186,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 Body = new AuthenticateReply()
             };
 
-            _systemUnderTest = _fixture.Create<TppSessionService>();
-
             // Act
             await _systemUnderTest.Create(tppConnectionToken, "bar", _nhsNumber);
 
@@ -196,7 +199,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         {
             // Arrange
             const string expected = "bar";
-            _systemUnderTest = _fixture.Create<TppSessionService>();
+
             _authenticatePostResult = new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.Accepted)
             {
                 Body = new AuthenticateReply()
@@ -217,15 +220,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             const string odsCode = "1234";
             var reply = CreateReply(expectedName);
 
-            _mockauthenticate
+            _mockAuthenticate
                 .Setup(x => x.Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _mockTppSessionMapper
                 .Setup(x => x.Map(reply, odsCode, _nhsNumber))
                 .Returns(Option.Some(CreateUserSession(expectedName, odsCode, _nhsNumber)));
-
-            _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
@@ -252,15 +253,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var userSession = CreateUserSession(expectedPatientName, odsCode, expectedSessionId,
                 expectedOnlineUserId, expectedPatientId, _nhsNumber);
 
-            _mockauthenticate.Setup(x => x
+            _mockAuthenticate.Setup(x => x
                 .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _mockTppSessionMapper
                 .Setup(x => x.Map(reply, odsCode, _nhsNumber))
                 .Returns(Option.Some(userSession));
-
-            _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
@@ -278,7 +277,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         }
         
         [TestMethod]
-        public async Task Create_WhenCalledSuccessfully_LogsMessaging()
+        public async Task Create_WhenCalledSuccessfully_CallsFetchAndLogAccessInformationWithUserSession()
         {
             // Arrange
             const string expectedSessionId = "ff5246bc-ef03-458a-a1ff-4b6e80268671";
@@ -293,89 +292,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var userSession = CreateUserSession(odsCode, expectedSessionId,
                 expectedOnlineUserId, expectedPatientId, _nhsNumber);
 
-            _mockauthenticate.Setup(x => x
+            _mockAuthenticate.Setup(x => x
                     .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
-            var listServicesAccessesResponse = new ListServiceAccessesReply
-            {
-                ServiceAccess = new List<ServiceAccess> { new ServiceAccess 
-                    {
-                        Description = "Messaging", Status = "A", StatusDesc = "Enabled"
-                    } 
-                }
-            };
-            
-            _mockTppClient.Setup(x => x
-                    .ListServiceAccessesPost(It.IsAny<TppUserSession>()))
-                .ReturnsAsync(() => ListServiceAccessesReply(listServicesAccessesResponse));
-            
             _mockTppSessionMapper
                 .Setup(x => x.Map(reply, odsCode, _nhsNumber))
                 .Returns(Option.Some(userSession));
-
-            _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
             await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
 
             // Assert
-            _logger.VerifyLogger(LogLevel.Information,
-                $"ODSCode {userSession.OdsCode}  " +
-                $"PFS messaging enabled: A " +
-                $"with description: Enabled",
-                Times.Once());
+            _mockTppLogMessagingService.Verify(x => x.FetchAndLogAccessInformation(userSession));
         }
         
-        [TestMethod]
-        public async Task Create_WhenCalledSuccessfully_LogsNothingIfNoMessaging()
-        {
-            // Arrange
-            const string expectedSessionId = "ff5246bc-ef03-458a-a1ff-4b6e80268671";
-            const string expectedOnlineUserId = "abcde";
-            const string expectedPatientId = "12345";
-            const string odsCode = "1234";
-            var reply = CreateReply(
-                suid: expectedSessionId,
-                onlineUserId: expectedOnlineUserId,
-                patientId: expectedPatientId);
-
-            var userSession = CreateUserSession(odsCode, expectedSessionId,
-                expectedOnlineUserId, expectedPatientId, _nhsNumber);
-
-            _mockauthenticate.Setup(x => x
-                    .Post(It.IsAny<Authenticate>()))
-                .ReturnsAsync(() => reply);
-            var listServicesAccessesResponse = new ListServiceAccessesReply
-            {
-                ServiceAccess = new List<ServiceAccess> { new ServiceAccess 
-                    {
-                        Description = "PaperTrail", Status = "A", StatusDesc = "Not Enabled"
-                    }
-                }
-            };
-            
-            _mockTppClient.Setup(x => x
-                    .ListServiceAccessesPost(It.IsAny<TppUserSession>()))
-                .ReturnsAsync(() => ListServiceAccessesReply(listServicesAccessesResponse));
-            
-            _mockTppSessionMapper
-                .Setup(x => x.Map(reply, odsCode, _nhsNumber))
-                .Returns(Option.Some(userSession));
-
-            _systemUnderTest = _fixture.Create<TppSessionService>();
-
-            // Act
-            await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
-
-            // Assert
-            _logger.VerifyLogger(LogLevel.Information,
-                $"ODSCode {userSession.OdsCode}  " +
-                $"PFS messaging enabled: A " +
-                $"with description: Not Enabled",
-                Times.Never());
-        }
-
         [TestMethod]
         public async Task Create_WhenCalledWithErrorResponseProblemLoggingOn_ReturnsForbidden()
         {
@@ -383,11 +314,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var reply = CreateReply();
             reply.ErrorResponse = new Error{ ErrorCode = "9" };
 
-            _mockauthenticate.Setup(x => x
+            _mockAuthenticate.Setup(x => x
                 .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
-
-            _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber);
@@ -403,11 +332,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var reply = CreateReply();
             reply.ErrorResponse = new Error();
 
-            _mockauthenticate.Setup(x => x
+            _mockAuthenticate.Setup(x => x
                     .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
-
-            _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber);
@@ -423,11 +350,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var reply = CreateReply();
             reply.StatusCode = HttpStatusCode.BadGateway;
 
-            _mockauthenticate.Setup(x => x
+            _mockAuthenticate.Setup(x => x
                 .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
-
-            _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber);
@@ -444,15 +369,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var reply = CreateReply();
             reply.StatusCode = HttpStatusCode.BadGateway;
 
-            _mockauthenticate.Setup(x => x
+            _mockAuthenticate.Setup(x => x
                     .Post(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _mockTppSessionMapper
                 .Setup(x => x.Map(reply, odsCode, _nhsNumber))
                 .Returns(Option.None<TppUserSession>());
-
-            _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
@@ -471,8 +394,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 .Post(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => reply);
 
-            _systemUnderTest = _fixture.Create<TppSessionService>();
-
             // Act
             var result = await _systemUnderTest.Logoff(_tppUserSession);
 
@@ -490,8 +411,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             _mockLogOff
                 .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => reply);
-
-            _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
             var result = await _systemUnderTest.Logoff(_tppUserSession);
@@ -512,8 +431,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
-            _systemUnderTest = _fixture.Create<TppSessionService>();
-
             // Act
             var result = await _systemUnderTest.Logoff(_tppUserSession);
 
@@ -529,8 +446,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .ThrowsAsync(new UnauthorisedGpSystemHttpRequestException());
 
-            _systemUnderTest = _fixture.Create<TppSessionService>();
-
             // Act
             var result = await _systemUnderTest.Logoff(_tppUserSession);
 
@@ -541,8 +456,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         private static string CreateConnectionTokenJson(string accountId = "", string passphrase = "") =>
             $"{{ \"accountId\": \"{accountId}\", \"passphrase\": \"{passphrase}\" }}";
 
-        private TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie",
-            string suid = "dimsum", string onlineUserId = "123", string patientId = "123")
+        private TppApiObjectResponse<AuthenticateReply> CreateReply(
+            string name = "Joanie",
+            string suid = "dimsum",
+            string onlineUserId = "123",
+            string patientId = "123")
         {
             var response = new TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
             {
@@ -564,7 +482,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                             new PatientAccess
                             {
                                 PatientId = patientId,
-                                SiteDetails = _fixture.Create<SiteDetails>(),
+                                SiteDetails = new SiteDetails()
                             }
                         }
                     }
@@ -578,8 +496,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             return response;
         }
 
-        private static TppUserSession CreateUserSession(string patientName, string odsCode, string sessionId = "dimsum",
-            string onlineUserId = "123", string patientId = "123", string nhsNumber = "123456789")
+        private static TppUserSession CreateUserSession(
+            string patientName,
+            string odsCode,
+            string sessionId = "dimsum",
+            string onlineUserId = "123",
+            string patientId = "123",
+            string nhsNumber = "123456789")
         {
             return new TppUserSession
             {
@@ -603,20 +526,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 Headers = new Dictionary<string, string>
                 {
                     { ResponseSuidHeader, "dimsum" }
-                }
-            };
-
-            return response;
-        }
-        
-        private static TppApiObjectResponse<ListServiceAccessesReply> ListServiceAccessesReply(ListServiceAccessesReply reply)
-        {
-            var response = new TppApiObjectResponse<ListServiceAccessesReply>(HttpStatusCode.OK)
-            {
-                Body = reply,
-                Headers = new Dictionary<string, string>
-                {
-                    { ResponseSuidHeader, "suid" }
                 }
             };
 
