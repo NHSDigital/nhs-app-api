@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Temporal;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 {
@@ -23,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
     public class TppLinkageServiceTests
     {
         private IFixture _fixture;
-        private Mock<ITppClient> _tppClient;
+        private Mock<ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse>> _nhsUser;
         private Mock<IIm1CacheKeyGenerator> _mockIm1CacheKeyGenerator;
         private Mock<IIm1CacheService> _mockIm1CacheService;
         private ConfigurationSettings _settings;
@@ -44,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _tppClient = _fixture.Freeze<Mock<ITppClient>>();
+            _nhsUser = _fixture.Freeze<Mock<ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse>>>();
             _mockIm1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _mockLinkageMapper = _fixture.Freeze<Mock<ITppLinkageMapper>>();
@@ -101,8 +102,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             var userResponse = new TppApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.OK)
                 { Body = nhsUserResponse };
 
-            _tppClient
-                .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
+            _nhsUser
+                .Setup(x => x.Post(It.IsAny<AddNhsUserRequest>()))
                 .ReturnsAsync(userResponse);
 
             const string key = "CACHEKEY";
@@ -140,8 +141,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             // Arrange
             var request = ValidCreateLinkageRequest();
 
-            _tppClient
-                .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
+            _nhsUser
+                .Setup(x => x.Post(It.IsAny<AddNhsUserRequest>()))
                 .Throws<HttpRequestException>();
 
             // Act
@@ -158,8 +159,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             var request = ValidCreateLinkageRequest();
             var userResponse = new TppApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.OK);
 
-            _tppClient
-                .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
+            _nhsUser
+                .Setup(x => x.Post(It.IsAny<AddNhsUserRequest>()))
                 .ReturnsAsync(userResponse);
 
             // Act
@@ -175,8 +176,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             // Arrange
             var request = ValidCreateLinkageRequest();
             var exception = new UnauthorisedGpSystemHttpRequestException();
-            _tppClient
-                .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
+            _nhsUser
+                .Setup(x => x.Post(It.IsAny<AddNhsUserRequest>()))
                 .ThrowsAsync(exception);
 
             // Act
@@ -237,8 +238,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
                 ErrorResponse = new Error { ErrorCode = errorCode }
             };
 
-            _tppClient
-                .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
+            _nhsUser
+                .Setup(x => x.Post(It.IsAny<AddNhsUserRequest>()))
                 .ReturnsAsync(userResponse);
 
             // Act

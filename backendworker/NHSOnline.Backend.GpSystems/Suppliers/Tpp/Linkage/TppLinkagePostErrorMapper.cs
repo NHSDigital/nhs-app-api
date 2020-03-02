@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
@@ -6,7 +6,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
 {
-    public static class TppLinkagePostErrorMapper
+    internal static class TppLinkagePostErrorMapper
     {
         private static Dictionary<string, Im1ConnectionErrorCodes.InternalCode> KeyToEnumMapper=>
             new Dictionary<string, Im1ConnectionErrorCodes.InternalCode>

@@ -11,7 +11,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccessesPost;
         private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelectedPost;
         private readonly ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> _testResultsViewDetailed;
-        private readonly ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> _nhsUserPost;
         private readonly
             ITppClientRequest<(RequestBinaryData requestBinaryData, TppUserSession tppUserSession),
                 RequestBinaryDataReply> _requestBinaryData;
@@ -20,14 +19,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccessesPost,
             ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelectedPost,
             ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> testResultsViewDetailed,
-            ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> nhsUserPost,
             ITppClientRequest<(RequestBinaryData requestBinaryData, TppUserSession tppUserSession),
             RequestBinaryDataReply> requestBinaryData)
             {
             _listServiceAccessesPost = listServiceAccessesPost;
             _patientSelectedPost = patientSelectedPost;
             _testResultsViewDetailed = testResultsViewDetailed;
-            _nhsUserPost = nhsUserPost;
             _requestBinaryData = requestBinaryData;
         }
 
@@ -41,12 +38,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         public async Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession, string testResultId)
             => await _testResultsViewDetailed.Post((tppUserSession, testResultId));
 
-        public async Task<TppApiObjectResponse<AddNhsUserResponse>> NhsUserPost(AddNhsUserRequest addNhsUserRequest)
-            => await _nhsUserPost.Post(addNhsUserRequest);
-
         public async Task<TppApiObjectResponse<RequestBinaryDataReply>> RequestBinaryData(
             RequestBinaryData requestBinaryData, TppUserSession tppUserSession)
             => await _requestBinaryData.Post((requestBinaryData, tppUserSession));
-
     }
 }

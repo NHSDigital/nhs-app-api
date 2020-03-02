@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
@@ -13,9 +14,9 @@ using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
 {
-    public class TppLinkageService : ILinkageService
+    internal class TppLinkageService : ILinkageService
     {
-        private readonly ITppClient _tppClient;
+        private readonly ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> _nhsUser;
         private readonly ITppLinkageMapper _linkageMapper;
         private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly IIm1CacheService _im1CacheService;
@@ -23,7 +24,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
         private readonly IMinimumAgeValidator _minimumAgeValidator;
         private readonly ConfigurationSettings _settings;
 
-        public TppLinkageService(ITppClient client,
+        public TppLinkageService(
+            ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> nhsUser,
             ITppLinkageMapper linkageMapper,
             IIm1CacheKeyGenerator im1CacheKeyGenerator,
             IIm1CacheService im1CacheService,
@@ -31,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
             IMinimumAgeValidator minimumAgeValidator,
             ConfigurationSettings settings)
         {
-            _tppClient = client;
+            _nhsUser = nhsUser;
             _linkageMapper = linkageMapper;
             _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _im1CacheService = im1CacheService;
@@ -52,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage
                 _logger.LogEnter();
                 var request = CreateRequest(createLinkageRequest);
 
-                var createNhsUserResponse = await _tppClient.NhsUserPost(request);
+                var createNhsUserResponse = await _nhsUser.Post(request);
 
                 if (createNhsUserResponse.HasSuccessResponse)
                 {

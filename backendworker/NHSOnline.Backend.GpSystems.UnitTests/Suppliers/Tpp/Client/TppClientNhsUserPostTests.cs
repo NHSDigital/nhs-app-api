@@ -18,10 +18,10 @@ using RichardSzalay.MockHttp;
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 {
     [TestClass]
-    public sealed class TppClientTests : IDisposable
+    public sealed class TppClientNhsUserPostTests : IDisposable
     {
         private TppClientTestsContext Context { get; set; }
-        private ITppClient SystemUnderTest { get; set; }
+        private ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse> SystemUnderTest { get; set; }
 
         private MockHttpMessageHandler MockHttpHandler => Context.MockHttpHandler;
         private Mock<ILogger<TppClientRequestExecutor>> MockLogger => Context.MockLogger;
@@ -31,45 +31,28 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         {
             Context = new TppClientTestsContext();
             Context.Initialise();
-            SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClient>();
+            SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClientRequest<AddNhsUserRequest, AddNhsUserResponse>>();
         }
 
         [TestMethod]
-        public async Task RequestBinaryDataPostRequest_ReturnsBinaryDataReply_WhenValidlyRequested()
+        public async Task NhsUserPostRequest_ReturnsAddNhsUserReply_WhenValidlyRequested()
         {
-
-            var tppUserSession = new TppUserSession
+            var addNhsUserRequestModel = new AddNhsUserRequest
             {
-                PatientId = "1234",
-                OnlineUserId = "12345",
-                OdsCode = "1234"
-            };
-
-            var binaryDataRequest = new RequestBinaryData
-            {
-                PatientId = tppUserSession.PatientId,
-                OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
-                BinaryDataId = "test",
+                OrganisationCode = TppClientTestsContext.UnitId,
+                Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion,
-                Uuid = TppClientTestsContext.Uuid
+                Application = TppClientTestsContext.CreateApplication()
             };
 
-            var expectedBinaryRequestResponse = new RequestBinaryDataReply
+            var expectedLinkAccountResponse = new AddNhsUserResponse
             {
-                BinaryData = new BinaryDataElement
-                {
-                    FileType = "jpg",
-                    BinaryDataPage = new BinaryDataPage
-                    {
-                        BinaryData = "test",
-                    }
-                }
+                ProviderId = TppClientTestsContext.ApplicationProviderId
             };
 
             var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { TppClientTestsContext.RequestTypeHeader, binaryDataRequest.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, addNhsUserRequestModel.RequestType }
             };
 
             var responseHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -77,65 +60,59 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 { TppClientTestsContext.ResponseSuidHeader, TppClientTestsContext.Suid }
             };
 
-            var responseContent = new StringContent(expectedBinaryRequestResponse.SerializeXml());
+            var responseContent = new StringContent(expectedLinkAccountResponse.SerializeXml());
 
             MockHttpHandler
                 .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
                 .WithHeaders(requestHeaders)
-                .WithContent(binaryDataRequest.SerializeXml())
+                .WithContent(addNhsUserRequestModel.SerializeXml())
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
 
-            var response = await SystemUnderTest.RequestBinaryData(binaryDataRequest, tppUserSession);
+            var response = await SystemUnderTest.Post(addNhsUserRequestModel);
 
-            response.Body.Should().BeEquivalentTo(expectedBinaryRequestResponse);
+            response.Body.Should().BeEquivalentTo(expectedLinkAccountResponse);
             response.Headers.Should().BeEquivalentTo(responseHeaders);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
+
+            Context.VerifyLogging(addNhsUserRequestModel);
         }
 
         [TestMethod]
-        public async Task RequestBinaryDataPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
+        public async Task NhsUserPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
         {
             // Arrange
-            var tppUserSession = new TppUserSession
+            var nhsAddUserRequestModel = new AddNhsUserRequest
             {
-                PatientId = "1234",
-                OnlineUserId = "12345",
-                OdsCode = "1234"
-            };
-
-            var binaryDataRequest = new RequestBinaryData
-            {
-                PatientId = tppUserSession.PatientId,
-                OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
-                BinaryDataId = "test",
+                OrganisationCode = TppClientTestsContext.UnitId,
+                Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion,
-                Uuid = TppClientTestsContext.Uuid
+                Application = TppClientTestsContext.CreateApplication()
             };
-
 
             var errorResponseBuilder = new TppErrorResponseBuilder();
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { TppClientTestsContext.RequestTypeHeader, binaryDataRequest.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, nhsAddUserRequestModel.RequestType }
             };
 
             MockHttpHandler
                 .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
                 .WithHeaders(tppRequestHeaders)
-                .WithContent(binaryDataRequest.SerializeXml())
+                .WithContent(nhsAddUserRequestModel.SerializeXml())
                 .Respond(TppClientTestsContext.MediaType, errorResponseBuilder.BuildXml());
 
             // Act
-            var response = await SystemUnderTest.RequestBinaryData(binaryDataRequest, tppUserSession);
+            var response = await SystemUnderTest.Post(nhsAddUserRequestModel);
 
             // Assert
             response.ErrorResponse.Should().BeEquivalentTo(errorResponseBuilder.BuildExpected());
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Body.Should().BeNull();
             response.Headers.Should().BeNull();
+
+            Context.VerifyLogging(nhsAddUserRequestModel);
         }
 
         [TestMethod]
@@ -143,31 +120,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         [DataRow(HttpStatusCode.BadRequest)]
         [DataRow(HttpStatusCode.Unauthorized)]
         [DataRow(HttpStatusCode.NotFound)]
-        public async Task RequestBinaryDataPostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
+        public async Task NhsUserPostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
             HttpStatusCode value)
         {
-            // Arrange
-            var tppUserSession = new TppUserSession
+            var addNhsUserRequestModel = new AddNhsUserRequest
             {
-                PatientId = "1234",
-                OnlineUserId = "12345",
-                OdsCode = "1234"
-            };
-
-            var binaryDataRequest = new RequestBinaryData
-            {
-                PatientId = tppUserSession.PatientId,
-                OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
-                BinaryDataId = "test",
+                OrganisationCode = TppClientTestsContext.UnitId,
+                Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion,
-                Uuid = TppClientTestsContext.Uuid
+                Application = TppClientTestsContext.CreateApplication()
             };
-
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { TppClientTestsContext.RequestTypeHeader, binaryDataRequest.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, addNhsUserRequestModel.RequestType }
             };
 
             MockHttpHandler
@@ -175,10 +141,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithHeaders(tppRequestHeaders)
                 .Respond(value);
 
-            var response = await SystemUnderTest.RequestBinaryData(binaryDataRequest, tppUserSession);
+            var response = await SystemUnderTest.Post(addNhsUserRequestModel);
 
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
+
+            Context.VerifyLogging(addNhsUserRequestModel);
         }
 
         [TestCleanup]

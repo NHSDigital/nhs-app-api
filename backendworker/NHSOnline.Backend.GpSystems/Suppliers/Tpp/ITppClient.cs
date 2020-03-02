@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
@@ -12,8 +12,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
         Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession);
         Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession, string testResultId);
-
-        Task<TppApiObjectResponse<AddNhsUserResponse>> NhsUserPost(AddNhsUserRequest addNhsUserRequest);
 
         Task<TppApiObjectResponse<RequestBinaryDataReply>> RequestBinaryData(RequestBinaryData requestBinaryData,
             TppUserSession tppUserSession);
