@@ -1,6 +1,7 @@
 <template>
   <p v-if="isVisible">
     <a :href="actionUrl"
+       :rel="target === '_blank' ? 'noopener noreferrer': undefined"
        :target="target"
        data-purpose="main-back-button"
        @click.stop.prevent="onRetryButtonClicked">

@@ -12,7 +12,8 @@
             <p>
               {{ $t('cookieBanner.caption.line2') }}
               <a :href="cookieBannerUrl"
-                 target="_blank">
+                 target="_blank"
+                 rel="noopener noreferrer">
                 {{ $t('cookieBanner.caption.linkText') }}</a>.
             </p>
           </div>

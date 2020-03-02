@@ -13,7 +13,8 @@
           </a>
 
           <p>
-            <a :class="$style['inline-link']" :href="linkHref()" target="_blank">
+            <a :class="$style['inline-link']" :href="linkHref()"
+               target="_blank" rel="noopener noreferrer">
               {{ linkText() }}
             </a>
           </p>

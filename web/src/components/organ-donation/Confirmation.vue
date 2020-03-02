@@ -25,7 +25,7 @@
                         checkbox-id="privacy-checkbox"
                         @input="selectedValueChanged('privacy-checkbox')">
         {{ $t('organDonation.reviewYourDecision.confirmation.privacyText1') }}
-        <a :href="privacyUrl" target="_blank">
+        <a :href="privacyUrl" target="_blank" rel="noopener noreferrer">
           {{ $t('organDonation.reviewYourDecision.confirmation.privacyLinkText') }}</a>
         {{ $t('organDonation.reviewYourDecision.confirmation.privacyText2') }}
       </generic-checkbox>

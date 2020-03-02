@@ -8,7 +8,8 @@
               { providerName: providerName }) }}
         <span><a id="online_consultations_help_link"
                  :href="onlineConsultationsUrl"
-                 target="_blank">{{ $t('onlineConsultations.warning.warningLink') }}</a>
+                 target="_blank" rel="noopener noreferrer">
+          {{ $t('onlineConsultations.warning.warningLink') }}</a>
         </span>
       </p>
     </message-dialog>
@@ -28,7 +29,8 @@
             {{ $t('onlineConsultations.demographics.checkboxLabel') }}
             <span>
               <a :href="privacyPolicyUrl"
-                 target="_blank">{{ $t('onlineConsultations.demographics.checkboxLink') }}.</a>
+                 target="_blank" rel="noopener noreferrer">
+                {{ $t('onlineConsultations.demographics.checkboxLink') }}.</a>
             </span>
           </span>
         </generic-checkbox>

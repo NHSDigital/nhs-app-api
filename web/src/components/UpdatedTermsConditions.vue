@@ -18,17 +18,17 @@
           <!-- opening and closing tag must be on one line to
           avoid the inline-block white space issue
           -->
-          <a :href="termsAndConditionsURL"
-             target="_blank">{{ $t('updatedTermsAndConditions.link1') }}</a>
+          <a :href="termsAndConditionsURL" target="_blank" rel="noopener noreferrer">
+            {{ $t('updatedTermsAndConditions.link1') }}</a>
         </span>,
         <span>
-          <a :href="privacyPolicyURL"
-             target="_blank">{{ $t('updatedTermsAndConditions.link2') }}</a>
+          <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer">
+            {{ $t('updatedTermsAndConditions.link2') }}</a>
         </span>
         and
         <span>
-          <a :href="cookiesPolicyURL"
-             target="_blank">{{ $t('updatedTermsAndConditions.link3') }}</a>
+          <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer">
+            {{ $t('updatedTermsAndConditions.link3') }}</a>
         </span>.
       </p>
       <p> {{ $t('updatedTermsAndConditions.body2') }} </p>
@@ -48,17 +48,17 @@
           <span>
             <!-- opening and closing tag must be on one line
             to avoid the inline-block white space issue -->
-            <a :href="termsAndConditionsURL" target="_blank"
+            <a :href="termsAndConditionsURL" target="_blank" rel="noopener noreferrer"
                @click="stopProp($event)">{{ $t('updatedTermsAndConditions.link1') }}</a>
           </span>
           and
           <span>
-            <a :href="privacyPolicyURL" target="_blank"
+            <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer"
                @click="stopProp($event)">{{ $t('updatedTermsAndConditions.link2') }}</a>
           </span>.
           {{ $t('updatedTermsAndConditions.checkBoxText2') }}
           <span>
-            <a :href="cookiesPolicyURL" target="_blank"
+            <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer"
                @click="stopProp($event)">{{ $t('updatedTermsAndConditions.link3') }}</a>
           </span>.
         </span>

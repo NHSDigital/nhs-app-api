@@ -13,14 +13,17 @@
       <p> {{ $t('termsAndConditions.body1') }}
         <span>
           <!-- inline links achieved through span to ensure font boosting is possible -->
-          <a :href="termsAndConditionsURL" target="_blank">{{ $t('termsAndConditions.link1') }}</a>
+          <a :href="termsAndConditionsURL" target="_blank" rel="noopener noreferrer">
+            {{ $t('termsAndConditions.link1') }}</a>
         </span>,
         <span>
-          <a :href="privacyPolicyURL" target="_blank">{{ $t('termsAndConditions.link2') }}</a>
+          <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer">
+            {{ $t('termsAndConditions.link2') }}</a>
         </span>
         and
         <span>
-          <a :href="cookiesPolicyURL" target="_blank">{{ $t('termsAndConditions.link3') }}</a>
+          <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer">
+            {{ $t('termsAndConditions.link3') }}</a>
         </span>.
         {{ $t('termsAndConditions.body2') }} </p>
       <p> {{ $t('termsAndConditions.body3') }} </p>
@@ -34,7 +37,8 @@
       <p>
         {{ $t('termsAndConditions.cookiesText1') }}
         <span>
-          <a :href="cookiesPolicyURL" target="_blank">{{ $t('termsAndConditions.link4') }}</a>
+          <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer">
+            {{ $t('termsAndConditions.link4') }}</a>
         </span>
         {{ $t('termsAndConditions.cookiesText2') }}
       </p>
@@ -57,17 +61,17 @@
             avoid the inline-block white space issue - inline block
             prevents font boosting - accessibility issue
             -->
-            <a :href="termsAndConditionsURL" target="_blank"
+            <a :href="termsAndConditionsURL" target="_blank" rel="noopener noreferrer"
                @click="stopProp($event)">{{ $t('termsAndConditions.link1') }}</a>
           </span>
           and
           <span>
-            <a :href="privacyPolicyURL" target="_blank"
+            <a :href="privacyPolicyURL" target="_blank" rel="noopener noreferrer"
                @click="stopProp($event)">{{ $t('termsAndConditions.link2') }}</a>.
           </span>
           {{ $t('termsAndConditions.checkBoxText2') }}
           <span>
-            <a :href="cookiesPolicyURL" target="_blank"
+            <a :href="cookiesPolicyURL" target="_blank" rel="noopener noreferrer"
                @click="stopProp($event)">{{ $t('termsAndConditions.link3') }}</a>.
           </span>
         </span>

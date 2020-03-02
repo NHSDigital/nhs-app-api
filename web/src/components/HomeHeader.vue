@@ -2,7 +2,7 @@
   <div :class="$style['home-header']">
     <header>
       <a id="help_icon" :class="[$style['anchor-icon'],$style['fixed-right']]"
-         :href="helpAndSupportURL" target="_blank" tabindex="-1">
+         :href="helpAndSupportURL" target="_blank" rel="noopener noreferrer" tabindex="-1">
         <help-icon/>
       </a>
       <div :class="$style.spacer" />

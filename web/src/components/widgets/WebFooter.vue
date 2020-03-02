@@ -7,7 +7,8 @@
         </h2>
         <ul class="nhsuk-footer__list">
           <li v-for="(link, index) in links" :key="index" class="nhsuk-footer__list-item">
-            <a class="nhsuk-footer__list-item-link" :href="link.url" target="_blank">
+            <a class="nhsuk-footer__list-item-link" :href="link.url"
+               target="_blank" rel="noopener noreferrer">
               {{ $t(link.localeLabel) }}
             </a>
           </li>

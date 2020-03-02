@@ -7,7 +7,7 @@
     <div :class="[$style.surveyContent, !open ? $style.closed : undefined]"
          data-purpose="content">
       <p data-purpose="info" >{{ $t('surveyBar.barText') }}
-        <a :href="hotJarLinkUrl" data-purpose="link" target="_blank">
+        <a :href="hotJarLinkUrl" data-purpose="link" target="_blank" rel="noopener noreferrer">
           {{ $t('surveyBar.linkText') }}</a>
       </p>
     </div>

@@ -4,6 +4,7 @@
   <component :is="tag"
              :id="id"
              :href="href"
+             :rel="tag === 'a' && target === '_blank' ? 'noopener noreferrer': undefined"
              :role="tag === 'a' && !href ? 'link': undefined"
              :target="tag === 'a' ? target : undefined"
              :tabindex="tabindex"
