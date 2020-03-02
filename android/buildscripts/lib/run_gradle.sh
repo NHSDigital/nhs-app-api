@@ -8,5 +8,7 @@ docker run \
       rm -f 'local.properties'; \
     fi; \
     ./gradlew --no-daemon ${GRADLE_ARGS[*]}; \
-    chmod -R 777 /data
+    test_run_result=\$?; \
+    chmod -R 777 /data;
+    exit \$test_run_result
   "
