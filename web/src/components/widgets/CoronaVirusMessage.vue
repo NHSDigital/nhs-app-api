@@ -10,19 +10,26 @@
       {{ $t('coronaVirus.paragraphText2') }}
     </p>
     <p class="nhsuk-u-margin-bottom-0">
-      <a href="https://111.nhs.uk/PWCorona/35fa201f-99cb-4327-b2a5-fda8fb673bf6/COVID-19/about" target="_blank">
-        {{ $t('coronaVirus.linkText1') }}</a>
+      <analytics-tracked-tag
+        href="https://111.nhs.uk/PWCorona/35fa201f-99cb-4327-b2a5-fda8fb673bf6/COVID-19/about"
+        :text="$t('coronaVirus.linkText1')"
+        tag="a"
+        target="_blank">
+        {{ $t('coronaVirus.linkText1') }}
+      </analytics-tracked-tag>
     </p>
   </message-dialog>
 </template>
 
 <script>
 import MessageDialog from '@/components/widgets/MessageDialog';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
   name: 'CoronaVirusMessage',
   components: {
     MessageDialog,
+    AnalyticsTrackedTag,
   },
 };
 </script>

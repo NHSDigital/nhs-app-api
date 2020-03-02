@@ -5,10 +5,12 @@
       <api-error/>
     </div>
     <div v-else id="app">
+      <corona-virus-banner v-if="this.$store.state.device.isNativeApp" />
       <div :class="dynamicStyle('login-app-header-flex-container')">
         <home-header v-if="this.$store.state.device.isNativeApp"/>
         <div v-else :class="$style['header-container-desktop']">
           <web-header :show-menu="false" :show-links="false" :show-header-buttons="false"/>
+          <corona-virus-banner />
         </div>
         <session-expired-banner v-if="showSessionExpiredBanner"/>
         <div v-if="this.$store.state.device.isNativeApp">
@@ -63,6 +65,7 @@ import WebFooter from '@/components/widgets/WebFooter';
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 import { findByName } from '@/lib/routes';
+import CoronaVirusBanner from '@/components/widgets/CoronaVirusBanner';
 
 export default {
   components: {
@@ -74,6 +77,7 @@ export default {
     ConnectionError,
     FlashMessage,
     SessionExpiredBanner,
+    CoronaVirusBanner,
   },
   data() {
     return {
@@ -146,7 +150,7 @@ export default {
 .login-app-header-flex-container {
   display:flex;
   flex-direction:column;
-  height:105vh;
+  height:90vh;
 }
 
 .login-app-header-full-container {

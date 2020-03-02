@@ -2449,6 +2449,10 @@ export default {
     paragraphText2: 'Stay at home and avoid close contact with other people.',
     linkText1: 'Use the 111 coronavirus service to see if you need medical help',
   },
+  coronaVirusBanner: {
+    header: 'Coronavirus (COVID-19)',
+    text: 'Get information about coronavirus on NHS.UK',
+  },
   messageDateTimeFormats: {
     midday: 'midday',
     midnight: 'midnight',

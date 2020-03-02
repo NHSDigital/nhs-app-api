@@ -1,7 +1,16 @@
 <template>
-  <p :class="$style['error-timeout']" data-purpose="session-timeout">
-    {{ $t('icons.sessionExpired.title') }}
-  </p>
+  <div :class="[$style['error-timeout'],
+                this.$store.state.device.isNativeApp ? $style['center'] : '']">
+    <div class="nhsuk-width-container">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <p data-purpose="session-timeout">
+            {{ $t('icons.sessionExpired.title') }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -16,10 +25,12 @@ export default {
   background: $warning_title;
   @include default_text;
   color: #000;
-  text-align: center;
   width: 100%;
   margin-top: 0.1em;
   padding: 0.3em;
 }
 
+.center {
+  text-align: center;
+}
 </style>
