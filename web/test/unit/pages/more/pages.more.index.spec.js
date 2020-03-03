@@ -19,6 +19,8 @@ describe('more', () => {
     im1MessagingEnabled = false,
     patientPracticeMessagingToggleEnabled = true,
     isNativeApp = false,
+    context = { serviceProvider: 'pkb',
+      serviceType: 'messages' },
   } = {}) => {
     $router = createRouter();
     $store = createStore({
@@ -29,6 +31,9 @@ describe('more', () => {
         practiceSettings: {
           im1MessagingEnabled,
         },
+      },
+      getters: {
+        'serviceJourneyRules/silverIntegrationEnabled': () => (context),
       },
       $env: {
         PATIENT_PRACTICE_MESSAGING_ENABLED: patientPracticeMessagingToggleEnabled,

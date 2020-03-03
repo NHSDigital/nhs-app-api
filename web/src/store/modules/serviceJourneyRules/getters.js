@@ -11,6 +11,7 @@ import {
   NOTIFICATIONS,
   ONLINE_CONSULTATIONS,
   LINKED_ACCOUNT,
+  SILVER_INTEGRATION,
 } from './mutation-types';
 
 export default {
@@ -73,5 +74,8 @@ export default {
   },
   [`${NOTIFICATIONS}Enabled`](state) {
     return get('rules.notifications')(state);
+  },
+  [`${SILVER_INTEGRATION}Enabled`](state) {
+    return ({ provider, serviceType }) => get(`rules.silverIntegrations.${serviceType}`)(state).includes(provider);
   },
 };

@@ -22,12 +22,18 @@ export default {
       default: 'DIV',
       type: String,
     },
+    // eslint-disable-next-line vue/require-prop-types
+    context: {
+      default: null,
+    },
   },
   computed: {
     show() {
-      return srjIf({ $store: this.$store, journey: this.journey, disabled: this.disabled });
+      return srjIf({ $store: this.$store,
+        journey: this.journey,
+        disabled: this.disabled,
+        context: this.context });
     },
   },
 };
 </script>
-

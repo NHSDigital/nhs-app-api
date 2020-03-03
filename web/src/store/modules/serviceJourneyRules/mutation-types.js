@@ -11,6 +11,7 @@ export const NOTIFICATIONS = 'notifications';
 export const SET_RULES = 'SET_RULES';
 export const ONLINE_CONSULTATIONS = 'onlineConsultations';
 export const LINKED_ACCOUNT = 'linkedAccount';
+export const SILVER_INTEGRATION = 'silverIntegration';
 
 export const initialState = () => ({
   isLoaded: false,
@@ -32,6 +33,17 @@ export const initialState = () => ({
     notifications: false,
     prescriptions: {
       provider: IM1_PROVIDER,
+    },
+    silverIntegration: {
+      consultations: {
+        items: [],
+      },
+      messages: {
+        items: [],
+      },
+      secondaryAppointments: {
+        items: [],
+      },
     },
   },
 });
