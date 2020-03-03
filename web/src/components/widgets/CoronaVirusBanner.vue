@@ -1,5 +1,5 @@
 <template>
-  <yellow-banner id="yellow-banner">
+  <yellow-banner id="corona-virus-banner">
     <analytics-tracked-tag
       :class="$style['banner']"
       :text="$t('coronaVirusBanner.header')"

@@ -1,6 +1,7 @@
 import each from 'jest-each';
 import { createStore, mount } from '../../helpers';
 import ContentHeader from '@/components/widgets/ContentHeader';
+import { LINKED_PROFILES } from '@/lib/routes';
 
 
 describe('ContentHeader.vue', () => {
@@ -96,6 +97,71 @@ describe('ContentHeader.vue', () => {
         expect(wrapper.vm.showYellowBanner).toBe(true);
         expect(warning.exists()).toBe(true);
       });
+    });
+  });
+
+  describe('Corona Virus banner on home', () => {
+    let $route;
+    let $store;
+    let wrapper;
+    let coronaVirusBanner;
+
+    const mountAs = ({ native = true, linkedAccountsState = {} }) => {
+      getter['appVersion/isNativeVersionAfter'] = jest.fn();
+      $store = createStore({
+        state: {
+          device: {
+            isNativeApp: native,
+          },
+          navigation: {
+            crumbSetName: 'testCrumb',
+          },
+          header: {
+            headerText: 'Test',
+          },
+          linkedAccounts: linkedAccountsState,
+          session: {
+            csrfToken: 'someToken',
+          },
+        },
+        getters: getter,
+      });
+      $route = {
+        name: 'index',
+      };
+      return mount(ContentHeader, { $store, $route });
+    };
+
+    it('will show Corona Virus Banner when on home page and proxying is false', () => {
+      wrapper = mountAs({ native: true });
+      coronaVirusBanner = wrapper.find('#corona-virus-banner');
+      getter['session/isProxying'] = false;
+      expect(wrapper.vm.showCoronaVirusBanner).toEqual(true);
+      expect(coronaVirusBanner.exists()).toEqual(true);
+    });
+
+    it('will not show Corona Virus Banner when not on the home page and proxying is false', () => {
+      wrapper = mountAs({ native: true });
+      coronaVirusBanner = wrapper.find('#corona-virus-banner');
+      $route.name = LINKED_PROFILES.name;
+      getter['session/isProxying'] = false;
+      expect(wrapper.vm.showCoronaVirusBanner).toEqual(false);
+      expect(coronaVirusBanner.exists()).toEqual(false);
+    });
+
+    it('will not show Corona Virus Banner when on home page and proxying is true', () => {
+      getter['session/isProxying'] = true;
+      wrapper = mountAs({
+        native: true,
+        linkedAccountsState: {
+          actingAsUser: {
+            name: 'david',
+          },
+        },
+      });
+      coronaVirusBanner = wrapper.find('#corona-virus-banner');
+      expect(wrapper.vm.showCoronaVirusBanner).toEqual(false);
+      expect(coronaVirusBanner.exists()).toEqual(false);
     });
   });
 

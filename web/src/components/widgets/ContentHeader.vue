@@ -3,11 +3,12 @@
     <div :class="$style[isNative ? 'fix-breadcrumb' : '']">
       <bread-crumb-trail v-if="isBreadCrumbVisible" id="bread-crumb"
                          :routes="currentBreadCrumbs()"/>
-      <yellow-banner v-if="showYellowBanner"
+      <yellow-banner v-if="showYellowBanner || showCoronaVirusBanner"
                      id="yellow-banner-line"
                      :class="$style['bannerLine']"/>
     </div>
     <div :class="[$style[isNative && isBreadCrumbVisible ? 'native-padding' : '']]">
+      <corona-virus-banner v-if="showCoronaVirusBanner"/>
       <yellow-banner v-if="showYellowBanner" id="yellow-banner"
                      :class="[isNative ? $style['bannerLine-padding'] : $style['']]">
         <div v-if="showExternalServiceWarning" id="external-service-warning">
@@ -56,8 +57,10 @@ import {
   APPOINTMENT_GP_ADVICE,
   APPOINTMENT_ADMIN_HELP,
   SWITCH_PROFILE,
+  INDEX,
 } from '@/lib/routes';
 import YellowBanner from './YellowBanner';
+import CoronaVirusBanner from './CoronaVirusBanner';
 
 export default {
   name: 'ContentHeader',
@@ -65,6 +68,7 @@ export default {
     YellowBanner,
     BreadCrumbTrail,
     PageTitle,
+    CoronaVirusBanner,
   },
   props: {
     showBreadCrumb: {
@@ -87,6 +91,9 @@ export default {
       const store = this.$store;
       const isNativeVersionAfter = store.getters['appVersion/isNativeVersionAfter'];
       return !store.state.device.isNativeApp || isNativeVersionAfter('1.17.0');
+    },
+    showCoronaVirusBanner() {
+      return !this.isProxying && this.$route.name === INDEX.name;
     },
     demographicsQuestionAnswered() {
       return this.$store.state.onlineConsultations.demographicsQuestionAnswered;
