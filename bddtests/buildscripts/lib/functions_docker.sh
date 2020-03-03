@@ -115,5 +115,5 @@ function rebuild_image_with_user() {
     --build-arg "USER_NAME=${USER}" \
     --build-arg "USER_ID=$(id -u)" \
     --build-arg "GROUP_ID=$(id -g)" \
-    "."
+    "." || die "Failed to build docker image with Linux permissions"
 }

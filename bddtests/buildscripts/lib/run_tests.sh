@@ -33,7 +33,12 @@ fetch_container_logs
 destroy_services_under_test
 
 if [ -f "build/failures.txt" ]; then
-  info "Tests failed"
-  cat build/failures.txt
-  exit 1
+  FAILED_TESTS=$(wc -l build/failures.txt | awk '{ print $1 }')
+  if [ "$FAILED_TESTS" -lt 5 ]; then
+    grep -v '^ *#' < build/failures.txt | while IFS= read -r TEST_NAME; do
+      error "Failed: $TEST_NAME"
+    done
+  fi
+
+  die "${TESTS_NAME:-$TRANCHE_TAG} $FAILED_TESTS Integration Tests Failed"
 fi

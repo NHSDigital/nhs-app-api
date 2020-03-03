@@ -7,8 +7,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 # shellcheck source=lib/set_env.sh
 . "buildscripts/lib/set_env.sh"
 
-# shellcheck source=lib/functions_docker.sh
-. "buildscripts/lib/functions_docker.sh"
+# shellcheck source=lib/functions.sh
+. "buildscripts/lib/functions.sh"
 
 GRADLE_TASKS=()
 
@@ -28,7 +28,7 @@ runAnalysis() {
   docker run --rm \
     "${DOCKER_ARGS[@]}" \
     "${DOCKER_IMAGE_GRADLE}" \
-    bash -c "./gradlew --no-daemon ${GRADLE_TASKS[*]}"
+    bash -c "./gradlew --no-daemon ${GRADLE_TASKS[*]}" || die "Integration Tests Code Analysis Failed"
 }
 
 if [ "$SKIP_ANALYSIS" != 1 ]; then

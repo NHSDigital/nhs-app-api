@@ -1,6 +1,5 @@
 #! /usr/bin/env bash
 
-CURRENT_DIR=$(pwd)
 MVN_CONFIG_PATH="${HOME}/.m2/settings.xml"
 GRADLE_PATH="${HOME}/.gradle"
 
@@ -9,7 +8,6 @@ DOCKER_ROOT="/"
 REPO_ROOT=$(cd ..; pwd)
 
 if [[ $(uname -s) =~ ^MING.* ]]; then
-  CURRENT_DIR=$(pwd -W)
   MVN_CONFIG_PATH="${USERPROFILE}/.m2/settings.xml"
   GRADLE_PATH="${USERPROFILE}/.gradle"
   DOCKER_ROOT="//"

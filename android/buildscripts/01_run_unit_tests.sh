@@ -11,6 +11,7 @@ source "buildscripts/lib/functions.sh"
 
 validate_maven_settings
 
+SCRIPT_NAME="unit tests"
 GRADLE_ARGS+=("testDebugUnitTest")
 
 # shellcheck source=lib/run_gradle.sh

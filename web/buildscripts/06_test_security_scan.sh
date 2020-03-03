@@ -4,6 +4,9 @@ set -e
 # Change current working directory to be the root of web, regardless of how this script is invoked
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
+# shellcheck source=../../buildscripts/lib/functions_logging.sh
+source "../buildscripts/lib/functions_logging.sh"
+
 HAWKEYE_IMAGE="${DOCKER_REGISTRY:-nhsapp.azurecr.io}/security-hawkeye:1.02"
 HAWKEYE_CONTAINER_NAME=nhsonline-web-hawkeye
 WORKING_DIR=$(pwd)
@@ -18,7 +21,7 @@ HAWKEYE_RESULTS_FILE_PATH="${DOCKER_ROOT}hawkeye-results.json"
 
 if [ 1 -eq "$(docker ps -a | grep -c $HAWKEYE_CONTAINER_NAME)" ]
 then
-  docker rm nhsonline-web-test-run
+  docker rm "$HAWKEYE_CONTAINER_NAME"
 fi
 
 docker pull "$HAWKEYE_IMAGE"
@@ -43,4 +46,6 @@ fi
 
 docker rm "$HAWKEYE_CONTAINER_NAME"
 
-exit $test_run_result
+if [ $test_run_result -ne 0 ]; then
+  die "Hawkeye security scan failed"
+fi

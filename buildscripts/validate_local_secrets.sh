@@ -1,13 +1,22 @@
 #! /usr/bin/env bash
 set -e
 
+# Change current working directory to be the root, regardless of how this script is invoked
+cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
+
+# shellcheck source=lib/set_env.sh
+source buildscripts/lib/set_env.sh
+
+# shellcheck source=lib/functions_logging.sh
+source buildscripts/lib/functions_logging.sh
+
 MISSING_SECRETS=0
 
 POSSIBLE_KEYBASE_PATHS=(/k /Volumes/Keybase /keybase)
 for possible_keybase_path in ${POSSIBLE_KEYBASE_PATHS[*]}; do
   if [ -d "$possible_keybase_path" ]; then
     KEYBASE_PATH=$possible_keybase_path
-  break
+    break
   fi
 done
 
@@ -26,7 +35,7 @@ function validate_secret {
   fi
 
   if [ ! -f "$SECRET_LOCAL_PATH" ]; then
-    echo "Missing secret $SECRET_LOCAL_PATH (from Keybase $SECRET_KEYBASE_PATH)"
+    error "Missing secret $SECRET_LOCAL_PATH (from Keybase $SECRET_KEYBASE_PATH)"
     MISSING_SECRETS=$((MISSING_SECRETS+1))
   fi
 }

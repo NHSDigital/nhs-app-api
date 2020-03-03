@@ -13,6 +13,7 @@ source "buildscripts/lib/functions.sh"
 
 validate_maven_settings
 
+SCRIPT_NAME="build"
 if [ -n "$ANDROID_KEY_STORE_PASSWORD" ] && [ -n "$ANDROID_KEY_STORE_LOCATION" ]; then
   DOCKER_ARGS+=(-v "$ANDROID_KEY_STORE_LOCATION:/secret/AndroidKeyStore")
   GRADLE_ARGS+=("-Prelease_store_password='$ANDROID_KEY_STORE_PASSWORD'" "-Prelease_store_location='/secret/AndroidKeyStore'")

@@ -7,6 +7,9 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 # shellcheck source=lib/set_env.sh
 source buildscripts/lib/set_env.sh
 
+# shellcheck source=lib/functions_logging.sh
+source buildscripts/lib/functions_logging.sh
+
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-local}
 DOCKER_TAG=${DOCKER_TAG:-latest}
 
@@ -19,8 +22,7 @@ if [ -z "$TWISTLOCK_CLI_PASSWORD" ] && [ -f "$HOME/.nhsonline/secrets/twistlock.
 fi
 
 if [ -z "$TWISTLOCK_CLI_PASSWORD" ]; then
-  echo "Twistlock password is required (TWISTLOCK_CLI_PASSWORD or $HOME/.nhsonline/secrets/twistlock.password)"
-  exit 1
+  die "Twistlock password is required (TWISTLOCK_CLI_PASSWORD or $HOME/.nhsonline/secrets/twistlock.password)"
 fi
 
 if [[ $(uname -s) =~ ^MING.* ]]
@@ -50,5 +52,5 @@ do
     -u "$TWISTLOCK_CLI_USER" -p "$TWISTLOCK_CLI_PASSWORD" --address "$TWISTLOCK_CLI_CONSOLE" \
     --vulnerability-threshold critical \
     --details \
-    "$DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG"
+    "$DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG" || die "Twistlock security scan failed for $DOCKER_REGISTRY/$IMAGE:$DOCKER_TAG"
 done
