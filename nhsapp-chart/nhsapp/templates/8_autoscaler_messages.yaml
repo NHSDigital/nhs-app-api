@@ -1,0 +1,27 @@
+{{- if $.Values.messagesEnabled }}
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.messages.role }}
+    role: {{ $.Values.messages.role }}
+    version: {{ .Chart.AppVersion | quote }}
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.messages.role }}-{{ .Chart.AppVersion }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: {{ template "nhsapp.name" . }}-{{ $.Values.messages.role }}-{{ .Chart.AppVersion }}
+  minReplicas: {{ $.Values.messages.minReplicas }}
+  maxReplicas: {{ $.Values.messages.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ $.Values.messages.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ $.Values.messages.targetMemoryUtilizationPercentage }}
+{{- end }}

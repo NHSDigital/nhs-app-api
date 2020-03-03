@@ -1,0 +1,15 @@
+{{- if $.Values.usersEnabled }}
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.users.role }}-pdb-{{ .Chart.AppVersion }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  minAvailable: {{ $.Values.users.minAvailable }}
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.users.role }}
+      version: {{ .Chart.AppVersion | quote }}
+{{- end }}

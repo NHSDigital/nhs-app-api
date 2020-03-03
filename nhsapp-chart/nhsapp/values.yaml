@@ -205,6 +205,11 @@ eConsult:
 # Logger API
 loggerEnabled: true
 
+# Messages, Devices and Users Services
+usersEnabled: false
+infoEnabled: false
+messagesEnabled: false
+
 # N3 Endpoint
 n3Protocol: https
 n3Hostname: 10.239.14.29
@@ -448,6 +453,78 @@ wiremock:
   environmentVariables:
   - name: WAIT_FOR_TIMEOUT
     value: "60"
+
+users:
+  createIngress: true
+  createService: true
+  containerPort: 8080
+  publicURL: null
+  role: users
+  image: nhsonline-backendusersapi
+  image_tag: latest
+  imagePullPolicy: Always
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "256Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "125m"
+  cpuLimit: "250m"
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+  mongoDatabaseUserDeviceCollection: devices
+  mongoDatabaseUserDeviceAuditCollection: audit_devices
+  environmentVariables:
+  - name: ASPNETCORE_ENVIRONMENT
+    value: "Production"
+
+messages:
+  createIngress: true
+  createService: true
+  containerPort: 8080
+  publicURL: null
+  role: messages
+  image: nhsonline-backendmessagesapi
+  image_tag: develop
+  imagePullPolicy: Always
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "256Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "125m"
+  cpuLimit: "250m"
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+  mongoDatabaseMessagesCollection: messages
+  mongoDatabaseMessagesAuditCollection: audit_messages
+  environmentVariables:
+  - name: ASPNETCORE_ENVIRONMENT
+    value: "Production"
+
+info:
+  createIngress: true
+  createService: true
+  containerPort: 8080
+  publicURL: null
+  role: info
+  image: nhsonline-backenduserinfoapi
+  image_tag: 3229
+  imagePullPolicy: Always
+  minAvailable: 0
+  minReplicas: 1
+  maxReplicas: 1
+  memoryRequest: "256Mi"
+  memoryLimit: "512Mi"
+  cpuRequest: "125m"
+  cpuLimit: "250m"
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+  mongoDatabaseInfoCollection: info
+  mongoDatabaseInfoAuditCollection: audit_info
+  environmentVariables:
+  - name: ASPNETCORE_ENVIRONMENT
+    value: "Production"
 
 global:
   environment: ""

@@ -232,4 +232,28 @@ spec:
       - protocol: TCP
         port: {{ $.Values.spinePdsPort }}
 {{- end }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api-egress-to-userinfo-{{ .Chart.AppVersion }}
+  namespace: {{ $.Values.global.environment }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      role: {{ $.Values.api.role }}
+      version: {{ .Chart.AppVersion | quote }}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          role: info
+          version: {{ .Chart.AppVersion | quote }}
+    ports:
+    - protocol: TCP
+      port: {{ $.Values.sidecar_proxy.containerPort }}
 {{- end }}

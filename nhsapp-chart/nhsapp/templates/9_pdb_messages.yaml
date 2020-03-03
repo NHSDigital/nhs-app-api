@@ -1,0 +1,15 @@
+{{- if $.Values.messagesEnabled }}
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.messages.role }}-pdb-{{ .Chart.AppVersion }}
+  labels:
+    version: {{ .Chart.AppVersion | quote }}
+spec:
+  minAvailable: {{ $.Values.messages.minAvailable }}
+  selector:
+    matchLabels:
+      app: {{ template "nhsapp.name" . }}-{{ $.Values.messages.role }}
+      version: {{ .Chart.AppVersion | quote }}
+{{- end }}

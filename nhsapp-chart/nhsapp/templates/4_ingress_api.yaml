@@ -9,6 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/secure-backends: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     nginx.ingress.kubernetes.io/proxy-body-size: "3m"
+    nginx.ingress.kubernetes.io/use-regex: "true"
   name: {{ template "nhsapp.name" . }}-api-{{ .Chart.AppVersion | replace "." "-" }}
   namespace: {{ $.Values.global.environment }}
   labels:
@@ -22,11 +23,37 @@ spec:
               serviceName: {{ template "nhsapp.name" . }}-api-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /
+          {{- if $.Values.infoEnabled }}
+          - backend: 
+              serviceName: {{ template "nhsapp.name" . }}-info-{{ .Chart.AppVersion | replace "." "-"}}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v[1,2]/api/users/info
+          - backend: 
+              serviceName: {{ template "nhsapp.name" . }}-info-{{ .Chart.AppVersion | replace "." "-"}}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v[1,2]/api/users/me/info
+          {{- end }}
+          {{- if $.Values.messagesEnabled }}
+          - backend: 
+              serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v[1,2]/api/users/me/messages
+          - backend: 
+              serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v[1,2]/api/users/.{36}/messages
+          {{- end }}
           {{- if $.Values.loggerEnabled }}
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v1/api/log
+          {{- end }}
+          {{- if $.Values.usersEnabled }}
+          - backend:
+              serviceName: {{ template "nhsapp.name" . }}-users-{{ .Chart.AppVersion | replace "." "-" }}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v[1,2]/api/users
           {{- end }}
     - host: api-{{ $.Values.global.environment | replace "." "-" }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
       http:
@@ -40,6 +67,22 @@ spec:
               serviceName: {{ template "nhsapp.name" . }}-logger-{{ .Chart.AppVersion  | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
             path: /v1/api/log
+          {{- end }}
+          {{- if $.Values.messagesEnabled }}
+          - backend: 
+              serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v[1,2]/api/users/me/messages
+          - backend: 
+              serviceName: {{ template "nhsapp.name" . }}-messages-{{ .Chart.AppVersion | replace "." "-"}}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v[1,2]/api/users/.{36}/messages
+          {{- end }}
+          {{- if $.Values.usersEnabled }}
+          - backend:
+              serviceName: {{ template "nhsapp.name" . }}-users-{{ .Chart.AppVersion | replace "." "-" }}
+              servicePort: {{ $.Values.sidecar_proxy.containerPort }}
+            path: /v[1,2]/api/users
           {{- end }}
 
   tls:

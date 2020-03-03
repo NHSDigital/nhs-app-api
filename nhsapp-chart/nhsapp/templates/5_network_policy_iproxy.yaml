@@ -28,6 +28,18 @@ spec:
         matchLabels:
           role: www
           version: {{ .Chart.AppVersion | quote }}
+    - podSelector:
+        matchLabels:
+          role: users
+          version: {{ .Chart.AppVersion | quote }}
+    - podSelector:
+        matchLabels:
+          role: messages
+          version: {{ .Chart.AppVersion | quote }}
+    - podSelector:
+        matchLabels:
+          role: info
+          version: {{ .Chart.AppVersion | quote }}
     ports:
     - protocol: TCP
       port: {{ $.Values.iproxy.containerPort }}
