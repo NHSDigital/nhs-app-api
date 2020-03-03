@@ -112,7 +112,6 @@ class WebViewController: UIViewController, WKUIDelegate {
 
     func loadPage(url: String, isConnectedToNetwork: Bool) {
         self.webViewDelegate?.clearTimer()
-        self.webViewDelegate?.stopActivityIndicator()
 
         if (!isConnectedToNetwork) {
             webViewDelegate?.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))

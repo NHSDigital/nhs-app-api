@@ -55,6 +55,7 @@
 		64C1C76B23E2E33600FCBA57 /* TelSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C1C76A23E2E33600FCBA57 /* TelSchemeHandler.swift */; };
 		64C1C76D23E2E56E00FCBA57 /* UrlHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C1C76C23E2E56E00FCBA57 /* UrlHelperTests.swift */; };
 		64C1C76F23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C1C76E23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift */; };
+		79B916E5240D1BCA008CD587 /* ProgressSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B916E2240D1BCA008CD587 /* ProgressSpinner.swift */; };
 		8A78F37E22F9A36C00BB161F /* FidoEndpointHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37D22F9A36C00BB161F /* FidoEndpointHelper.swift */; };
 		8A78F38022F9B52200BB161F /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F37F22F9B52200BB161F /* UserDefaultsManager.swift */; };
 		8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78F38122F9B58A00BB161F /* BiometricState.swift */; };
@@ -228,6 +229,7 @@
 		76888F1C9DE3FF4C8C704D35 /* Pods-NHSOnlineTests.scratch18.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch18.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch18.xcconfig"; sourceTree = "<group>"; };
 		76958DC8A60575B9E5D140D4 /* Pods-NHSOnlineTests.scratch7.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch7.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch7.xcconfig"; sourceTree = "<group>"; };
 		772E2411D84FBB442C97198E /* Pods-NHSOnlineTests.scratch3.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch3.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch3.xcconfig"; sourceTree = "<group>"; };
+		79B916E2240D1BCA008CD587 /* ProgressSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressSpinner.swift; sourceTree = "<group>"; };
 		7D0FAE6F7F153865CB3B7553 /* Pods-NHSOnlineTests.scratch15.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.scratch15.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.scratch15.xcconfig"; sourceTree = "<group>"; };
 		7EB00BFC273B621D0B251911 /* Pods-NHSOnline.browserstack.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.browserstack.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.browserstack.xcconfig"; sourceTree = "<group>"; };
 		7F23D2A5B69881CB61D6FB57 /* Pods-NHSOnline.scratch4.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch4.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch4.xcconfig"; sourceTree = "<group>"; };
@@ -707,6 +709,7 @@
 		C276D560207B571A00F3B1E5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				79B916E2240D1BCA008CD587 /* ProgressSpinner.swift */,
 				DB4B657C22F9AB2900C8EE99 /* BreadcrumbTextView */,
 				C2D9864320C8003800F19792 /* ErrorTextView */,
 				C2D9864220C8000C00F19792 /* HeaderBar */,
@@ -1114,6 +1117,7 @@
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
 				2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */,
 				139D331421F71B6700E6C92C /* BiometricControllerStrings.swift in Sources */,
+				79B916E5240D1BCA008CD587 /* ProgressSpinner.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				981E9E32214E5FB300DA80EB /* Config.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,

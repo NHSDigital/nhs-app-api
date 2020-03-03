@@ -49,6 +49,7 @@ class WebViewDelegateTests: XCTestCase {
     }
     
     func test_webViewDidFailProvisionalNavigationWithNSURLErrorCancelled_VerifyStopActivityIndicatorIsCalled() {
+        wKWebView?.loadPage(url: config().HomeUrl)
         webViewDelegate?.webView(wKWebView!, didFailProvisionalNavigation: wKNavigation, withError: nSURLErrorCancelled!)
         
         assert(webViewDelegate?.stopActivityIndicatorWasCalled == true,
@@ -57,11 +58,32 @@ class WebViewDelegateTests: XCTestCase {
         assert(vc!.applicationState.isReady() == true)
     }
     
+    func test_webViewDidFailProvisionalNavigationWithNSURLErrorCancelled_VerifyStopActivityIndicatorIsNotCalled() {
+        wKWebView?.loadPage(url: config().HomeUrl + "auth-return?code=something")
+        webViewDelegate?.webView(wKWebView!, didFailProvisionalNavigation: wKNavigation, withError: nSURLErrorCancelled!)
+        
+        assert(webViewDelegate?.stopActivityIndicatorWasCalled == false,
+               "Expected the stopActivityIndicator() Method to not have been invoked")
+        
+        assert(vc!.applicationState.isReady() == true)
+    }
+    
     func test_webViewDidFailProvisionalNavigationWithOtherNSError_VerifyStopActivityIndicatorIsCalled() {
+        wKWebView?.loadPage(url: config().HomeUrl)
         webViewDelegate?.webView(wKWebView!, didFailProvisionalNavigation: wKNavigation, withError: error!)
         
         assert(webViewDelegate?.stopActivityIndicatorWasCalled == true,
                "Expected the stopActivityIndicator() Method to be invoked")
+        
+        assert(vc!.applicationState.isReady() == true)
+    }
+    
+    func test_webViewDidFailProvisionalNavigationWithOtherNSError_VerifyStopActivityIndicatorIsNotCalled() {
+        wKWebView?.loadPage(url: config().HomeUrl + "auth-return?code=something")
+        webViewDelegate?.webView(wKWebView!, didFailProvisionalNavigation: wKNavigation, withError: error!)
+        
+        assert(webViewDelegate?.stopActivityIndicatorWasCalled == false,
+               "Expected the stopActivityIndicator() Method to not have been invoked")
         
         assert(vc!.applicationState.isReady() == true)
     }

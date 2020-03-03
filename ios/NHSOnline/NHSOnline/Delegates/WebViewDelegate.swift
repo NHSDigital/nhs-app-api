@@ -8,6 +8,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     let knownServices: KnownServices
     let viewController: HomeViewController
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+    let progressSpinner = ProgressSpinner()
     let responseWaitingTime = config().ResponseWaitingTime
     var failedUrl: URL? = nil
     var nativeViewController: PageUnavailabilityViewController?
@@ -189,11 +190,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
         if timer != nil {
             clearTimer()
-            stopActivityIndicator()
         }
         shouldHandleErrors = true
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
-        checkPageLoadOriginAndStartActivityIndicator()
+
+        if !webView.url!.absoluteString.contains(config().AuthRedirectPath) && !webView.url!.absoluteString.contains(config().CidUrlSuffix) {
+            checkPageLoadOriginAndStartActivityIndicator()
+        }
     }
 
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
@@ -213,13 +216,19 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         if !UrlHelper.isSameSchemeAndHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
             self.viewController.resetFocusAndAnnouncePageTitle(pageTitle: webView.title)
         }
+
+        if !webView.url!.absoluteString.contains(config().BiometricAuthResponseParam) {
+            stopActivityIndicator()
+        }
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
+        if !webView.url!.absoluteString.contains(config().AuthRedirectPath) {
+            stopActivityIndicator()
+        }
         if withError._code == NSURLErrorCancelled {
             Logger.logInfo(message: "Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", withError.localizedDescription)
 
-            stopActivityIndicator()
             viewController.applicationState.unBlock()
             return
         }
@@ -241,7 +250,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
             Logger.logError(message: "Failed to load the page with error: %@", withError.localizedDescription)
         }
-        stopActivityIndicator()
         viewController.applicationState.unBlock()
     }
 
@@ -415,7 +423,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     private func showWebViewContainer() {
         clearTimer()
         self.viewController.showWebViewContainer()
-        stopActivityIndicator()
     }
 
     func showNativeViewContainerWithError(_ errorMessage: ErrorMessage) {
@@ -446,12 +453,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
 
     func startActivityIndicator() {
-        self.activityIndicator.startAnimating()
-        UIApplication.shared.beginIgnoringInteractionEvents()
+        self.progressSpinner.show(uiView: self.viewController.view)
     }
 
     func stopActivityIndicator() {
-        UIApplication.shared.endIgnoringInteractionEvents()
-        self.activityIndicator.stopAnimating()
+        self.progressSpinner.hide(uiView: self.viewController.view)
     }
 }
