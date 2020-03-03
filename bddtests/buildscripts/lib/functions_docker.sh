@@ -57,10 +57,10 @@ function pull_docker_images () {
 
 function start_services_under_test () {
   if [ -z "$TF_BUILD" ]; then
-    # shellcheck source=../../../build/lib/set_env.sh
-    source ../build/lib/set_env.sh
-    # shellcheck source=../../../build/lib/generate_host_settings.sh
-    source ../build/lib/generate_host_settings.sh
+    # shellcheck source=../../../buildscripts/lib/set_env.sh
+    source ../buildscripts/lib/set_env.sh
+    # shellcheck source=../../../buildscripts/lib/generate_host_settings.sh
+    source ../buildscripts/lib/generate_host_settings.sh
 
     generate_host_settings
   fi

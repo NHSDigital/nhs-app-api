@@ -9,4 +9,4 @@ test: $(TEST_SCRIPTS)	## Unit test android client
 $(ALL_SCRIPTS):
 	$@
 
--include ../build/util.make
+-include ../buildscripts/util.make

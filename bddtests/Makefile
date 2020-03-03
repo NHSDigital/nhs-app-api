@@ -1,5 +1,5 @@
 
--include ../build/expand_run_options_docker_images.make
+-include ../buildscripts/expand_run_options_docker_images.make
 
 $(eval $(call expand_run_options_docker_images,run))
 run: run-deps	## Run the integration tests
@@ -46,4 +46,4 @@ run-deps:
 
 .PHONY: run run-others run-local run-native-android run-native-ios run-deps validate_local_secrets validate_local_images
 
--include ../build/util.make
+-include ../buildscripts/util.make

@@ -4,7 +4,7 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
 # shellcheck source=lib/set_env.sh
-source build/lib/set_env.sh
+source buildscripts/lib/set_env.sh
 
 MISSING_IMAGES=0
 for IMAGE in "${IMAGE_SETTING_NAMES[@]}"; do

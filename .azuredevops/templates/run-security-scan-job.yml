@@ -10,4 +10,4 @@ jobs:
         env:
           TWISTLOCK_CLI_PASSWORD: $(twistlock.cli.password)
         inputs:
-          scriptPath: build/run_twistlock_security_scan.sh
+          scriptPath: buildscripts/run_twistlock_security_scan.sh

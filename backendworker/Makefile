@@ -10,4 +10,4 @@ $(ALL_SCRIPTS):
 	$@
 
 
--include ../build/util.make
+-include ../buildscripts/util.make

@@ -113,7 +113,7 @@ Secrets required for running the app locally are stored in Keybase (`team/nhsonl
 ### Adding Secrets
 
 1. Add a file containing the secret to the `development_secrets` directory in keybase
-2. Add a line to `build/validate_local_secrets.sh` containing the name of the secret. e.g.
+2. Add a line to `buildscripts/validate_local_secrets.sh` containing the name of the secret. e.g.
 
     ```bash
     validate_secret my_new_secret

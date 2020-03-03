@@ -4,10 +4,10 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
 # shellcheck source=lib/set_env.sh
-source build/lib/set_env.sh
+source buildscripts/lib/set_env.sh
 
 # shellcheck source=lib/generate_host_settings.sh
-source build/lib/generate_host_settings.sh
+source buildscripts/lib/generate_host_settings.sh
 
 DOCKER_COMPOSE_FILES_ARGS=()
 for file in "$@"; do

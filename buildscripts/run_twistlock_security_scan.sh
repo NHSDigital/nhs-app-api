@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
 # shellcheck source=lib/set_env.sh
-source build/lib/set_env.sh
+source buildscripts/lib/set_env.sh
 
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-local}
 DOCKER_TAG=${DOCKER_TAG:-latest}
