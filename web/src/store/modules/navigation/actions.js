@@ -4,6 +4,7 @@ import {
   INIT_NAVIGATION,
   SET_BACK_LINK_OVERRIDE,
   SET_NEWMENUITEM,
+  SET_ROUTE_CRUMB,
 } from './mutation-types';
 
 export default {
@@ -18,6 +19,9 @@ export default {
   },
   setBackLinkOverride({ commit }, backLinkOverride) {
     commit(SET_BACK_LINK_OVERRIDE, backLinkOverride);
+  },
+  setRouteCrumb({ commit }, crumbSetName) {
+    commit(SET_ROUTE_CRUMB, crumbSetName);
   },
   setNewMenuItem({ commit }, menuItem) {
     commit(SET_NEWMENUITEM, menuItem);

@@ -77,6 +77,7 @@ describe('online consultations store mutations', () => {
           carePlans: [],
           referralRequests: [],
           isLoadingFile: true,
+          journeyInfo: {},
           demographicsConsentGiven: true,
           demographicsQuestionAnswered: true,
         };
@@ -110,6 +111,7 @@ describe('online consultations store mutations', () => {
           validationErrorMessageFromResponse: ['error one', 'error two'],
           error: true,
           carePlans: [],
+          journeyInfo: {},
           referralRequests: [],
           isLoadingFile: true,
           demographicsConsentGiven: true,

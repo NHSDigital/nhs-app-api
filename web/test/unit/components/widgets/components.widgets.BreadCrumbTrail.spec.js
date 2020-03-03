@@ -19,6 +19,7 @@ describe('BreadCrumbTrail.vue', () => {
           navigation: { backLinkOverride },
           device: { isNativeApp },
           session: { csrfToken },
+          onlineConsultations: {},
         },
       }),
       methods: { goToUrl },

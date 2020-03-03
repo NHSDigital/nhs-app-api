@@ -23,6 +23,7 @@ export const SET_DEMOGRAPHICS_QUESTION_ANSWERED = 'SET_DEMOGRAPHICS_QUESTION_ANS
 export const SET_ADMIN_PROVIDER_NAME = 'SET_ADMIN_PROVIDER_NAME';
 export const SET_ADVICE_PROVIDER_NAME = 'SET_ADVICE_PROVIDER_NAME';
 export const SET_CONDITIONS_LIST = 'SET_CONDITIONS_LIST';
+export const SET_JOURNEY_INFO = 'SET_JOURNEY_INFO';
 
 export const initialState = () => ({
   demographicsQuestionAnswered: false,
@@ -53,4 +54,5 @@ export const initialState = () => ({
   adminProviderName: undefined,
   adviceProviderName: undefined,
   conditionsList: undefined,
+  journeyInfo: {},
 });

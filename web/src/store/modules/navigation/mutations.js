@@ -7,6 +7,7 @@ import {
   SET_NEWMENUITEM,
   INIT_NAVIGATION,
   SET_BACK_LINK_OVERRIDE,
+  SET_ROUTE_CRUMB,
 } from './mutation-types';
 
 /* eslint-disable no-shadow */
@@ -39,5 +40,8 @@ export default {
   },
   [SET_BACK_LINK_OVERRIDE](state, backLinkOverride) {
     state.backLinkOverride = backLinkOverride;
+  },
+  [SET_ROUTE_CRUMB](state, crumbSetName) {
+    state.crumbSetName = crumbSetName;
   },
 };

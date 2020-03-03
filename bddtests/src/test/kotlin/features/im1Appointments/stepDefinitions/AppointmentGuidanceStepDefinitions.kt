@@ -37,4 +37,10 @@ class AppointmentGuidanceStepDefinitions {
     fun whenISelectBookAppointmentButton() {
         appointmentGuidanceSteps.appointmentGuidancePage.bookButton.click()
     }
+
+    @When("^I select the GP Advice menu item on the guidance page$")
+    fun whenISelectTheGPAdviceMenuItem() {
+        appointmentGuidanceSteps.appointmentGuidancePage.gpAdviceMenuItem.click()
+    }
+
 }

@@ -51,6 +51,11 @@ export const createRouter = () => ({
   go: jest.fn(),
   goBack: jest.fn(),
   push: jest.fn(),
+  history: {
+    router: {
+      previousPaths: [],
+    },
+  },
 });
 
 export const createStore = ({

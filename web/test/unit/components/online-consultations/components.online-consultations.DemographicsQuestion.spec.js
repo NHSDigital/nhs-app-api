@@ -1,6 +1,6 @@
 import DemographicsQuestion from '@/components/online-consultations/DemographicsQuestion';
 import GenericButton from '@/components/widgets/GenericButton';
-import { mount, shallowMount, createStore, createScrollTo } from '../../helpers';
+import { mount, shallowMount, createStore, createScrollTo, createRouter } from '../../helpers';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import NativeApp from '@/services/native-app';
 import each from 'jest-each';
@@ -33,6 +33,7 @@ const mountComponent = ({
     },
     slots,
     methods,
+    $router: createRouter(),
   })
 );
 

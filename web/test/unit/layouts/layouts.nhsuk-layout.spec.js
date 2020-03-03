@@ -79,6 +79,7 @@ const createLayoutStore = isNativeApp => createStore({
       webVersion: '1.2.3',
       nativeVersion: '3.2.1',
     },
+    onlineConsultations: {},
     device: {
       isNativeApp,
       source: 'ios',

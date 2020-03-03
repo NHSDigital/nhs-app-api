@@ -3,6 +3,7 @@ package mocking
 import config.Config
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.defaults.EmisMockDefaults
+import mocking.emis.OnlineConsultationsMappingBuilder
 import mocking.emis.EmisMappingRouter
 import mocking.favicon.FaviconMappingBuilder
 import mocking.microtest.MicrotestMappingRouter
@@ -69,6 +70,13 @@ class MockingClient(configuration: MockingConfiguration): WiremockHelper(configu
     fun forOrganDonation(method: String = "POST", resolver: OrganDonationMappingBuilder.() -> Mapping) {
         val mappingBuilder = OrganDonationMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
+
+    fun forOnlineConsultations(method: String = "POST", resolver: OnlineConsultationsMappingBuilder.() -> Mapping) {
+        val mappingBuilder = OnlineConsultationsMappingBuilder(method)
+        val mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)
     }

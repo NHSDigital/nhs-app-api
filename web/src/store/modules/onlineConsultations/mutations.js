@@ -24,6 +24,7 @@ import {
   SET_ADMIN_PROVIDER_NAME,
   SET_ADVICE_PROVIDER_NAME,
   SET_CONDITIONS_LIST,
+  SET_JOURNEY_INFO,
 } from './mutation-types';
 
 export default {
@@ -135,5 +136,8 @@ export default {
   },
   [SET_CONDITIONS_LIST](state, conditionsList) {
     state.conditionsList = conditionsList;
+  },
+  [SET_JOURNEY_INFO](state, journeyInfo) {
+    state.journeyInfo = journeyInfo;
   },
 };

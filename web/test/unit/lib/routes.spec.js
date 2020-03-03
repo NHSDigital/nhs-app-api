@@ -1,15 +1,12 @@
 import {
   TERMSANDCONDITIONS,
-  INDEX,
   APPOINTMENTS,
   APPOINTMENT_BOOKING_GUIDANCE,
   LOGIN,
   BEGINLOGIN,
-  GP_APPOINTMENTS,
   backLinkOverrides,
   isAnonymous,
   executeHomeNavigationRule,
-  getCrumbTrailForRoute,
   getRouteNames,
   findByName,
   findByPath,
@@ -70,17 +67,6 @@ describe('routes', () => {
 
     it('anything route\'s  header link should resolve to index', () => {
       expect(executeHomeNavigationRule(APPOINTMENTS.name)).toBe('/');
-    });
-  });
-
-  describe('getCrumbTrailForRoute', () => {
-    it('should return the corresponding crumb trail with some depth', () => {
-      expect(getCrumbTrailForRoute(APPOINTMENT_BOOKING_GUIDANCE))
-        .toEqual([INDEX, APPOINTMENTS, GP_APPOINTMENTS]);
-    });
-
-    it('should return the corresponding crumb trail with no depth', () => {
-      expect(getCrumbTrailForRoute(INDEX)).toEqual([]);
     });
   });
 
@@ -155,19 +141,6 @@ describe('routes', () => {
         }
       });
       done();
-    });
-  });
-
-  describe('check the depth of the crumb trail does ' +
-    'not breach 3 levels as per the spec - see NHSO-4085', () => {
-    it('should ensure that all calculated crumb trail does not breach 3 levels.', () => {
-      const routeNames = getRouteNames();
-
-      expect(routeNames.length).toBeTruthy();
-
-      routeNames
-        .map(name => findByName(name))
-        .forEach(route => expect(getCrumbTrailForRoute(route).length <= 3).toBe(true));
     });
   });
 });

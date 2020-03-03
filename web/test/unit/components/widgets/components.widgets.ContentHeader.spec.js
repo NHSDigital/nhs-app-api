@@ -2,6 +2,7 @@ import each from 'jest-each';
 import { createStore, mount } from '../../helpers';
 import ContentHeader from '@/components/widgets/ContentHeader';
 
+
 describe('ContentHeader.vue', () => {
   let getter;
 
@@ -13,6 +14,7 @@ describe('ContentHeader.vue', () => {
     let $route;
     let $store;
     let wrapper;
+    let $router;
 
     const mountAs = ({ native = true, linkedAccountsState = {} }) => {
       getter['appVersion/isNativeVersionAfter'] = jest.fn();
@@ -23,6 +25,9 @@ describe('ContentHeader.vue', () => {
           },
           header: {
             headerText: 'Test',
+          },
+          navigation: {
+            crumbSetName: 'testCrumb',
           },
           onlineConsultations: {
             demographicsQuestionAnswered: true,
@@ -45,12 +50,19 @@ describe('ContentHeader.vue', () => {
       $route = {
         name: 'Login',
       };
-      return mount(ContentHeader, { $store, $route });
+      $router = {
+        history: {
+          pending: {
+            name: 'Login',
+          },
+        },
+      };
+      return mount(ContentHeader, { $store, $route, $router });
     };
 
     it('currentBreadCrumbs will return nothing when in Login page', () => {
       wrapper = mountAs({ native: true });
-      expect(wrapper.vm.currentBreadCrumbs).toEqual([]);
+      expect(wrapper.vm.currentBreadCrumbs()).toEqual([]);
     });
 
     it('showYellowBanner will return undefined', () => {
@@ -106,6 +118,9 @@ describe('ContentHeader.vue', () => {
           header: {
             headerText: 'Test',
           },
+          navigation: {
+            crumbSetName: 'testCrumb',
+          },
           onlineConsultations: {
             demographicsQuestionAnswered,
           },
@@ -138,6 +153,9 @@ describe('ContentHeader.vue', () => {
       wrapper = mountAs({
         native: true,
         demographicsQuestionAnswered: false,
+        route: {
+          name: 'appointments-admin-help',
+        },
         linkedAccountsState: {
           actingAsUser: {
             name: 'david',

@@ -41,7 +41,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import { APPOINTMENT_GP_ADVICE, SYMPTOMS } from '@/lib/routes';
 import srjIf from '@/lib/sjrIf';
 import MenuItem from '@/components/MenuItem';
@@ -84,13 +83,15 @@ export default {
   },
   methods: {
     navigate(event) {
-      redirectTo(this, event.currentTarget.pathname);
-      event.preventDefault();
-
-      if (event.currentTarget.pathname === this.gpAdviceConditionsPath) {
+      if (event.currentTarget.pathname === APPOINTMENT_GP_ADVICE.path) {
         this.$store.dispatch('onlineConsultations/setPreviousRoute', this.symptomsPath);
+        this.$store.dispatch('navigation/setBackLinkOverride', this.symptomsPath);
+        this.$store.dispatch('navigation/setRouteCrumb', 'symptomsCrumb');
         this.$store.dispatch('navigation/setNewMenuItem', 0);
       }
+
+      redirectTo(this, event.currentTarget.pathname);
+      event.preventDefault();
     },
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;

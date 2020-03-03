@@ -1,4 +1,4 @@
-import { mount } from '../../../helpers';
+import { mount, createRouter } from '../../../helpers';
 import each from 'jest-each';
 import AdminHelpPage from '@/pages/appointments/admin-help/index';
 import { noJsParameterName } from '@/lib/noJs';
@@ -56,6 +56,7 @@ describe('Admin Help page', () => {
       showTemplate: () => true,
       stubs,
       getters,
+      $router: createRouter(),
     });
   };
 

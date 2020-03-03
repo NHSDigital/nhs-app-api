@@ -133,10 +133,6 @@ export default {
     hasLinkedProfiles() {
       return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
     },
-    navigateToMessaging(event) {
-      this.navigate(event);
-    },
-
     navigate(event) {
       redirectTo(this, event.currentTarget.pathname);
       event.preventDefault();

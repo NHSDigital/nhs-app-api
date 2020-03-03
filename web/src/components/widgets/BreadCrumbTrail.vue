@@ -34,8 +34,8 @@
                  class="nhsuk-breadcrumb__backlink"
                  tabindex="0"
                  :class="$style['native'] "
-                 @keypress.enter.prevent="backLinkClicked"
-                 @click.prevent="backLinkClicked" >
+                 @keypress.enter.prevent="backClicked"
+                 @click.prevent="backClicked" >
                 <span v-if="isProxyPage">Back to Home</span>
                 <span v-else>Back</span>
               </a>
@@ -51,6 +51,8 @@
 import last from 'lodash/fp/last';
 import isEmpty from 'lodash/fp/isEmpty';
 import { navigateBack } from '@/lib/utils';
+import NativeApp from '@/services/native-app';
+import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import {
   SWITCH_PROFILE,
   backLinkOverrides,
@@ -68,6 +70,9 @@ export default {
     isProxyPage() {
       return this.$route.name === SWITCH_PROFILE.name;
     },
+    olcBack() {
+      return this.$store.state.onlineConsultations.previousQuestion !== undefined;
+    },
     lastCrumb() {
       return last(this.routes);
     },
@@ -79,6 +84,14 @@ export default {
     },
   },
   methods: {
+    backClicked() {
+      if (this.olcBack) {
+        this.goToPreviousQuestion();
+        return;
+      }
+
+      this.backLinkClicked();
+    },
     backLinkClicked() {
       const override = backLinkOverrides[this.$route.name];
       if (override) {
@@ -89,6 +102,23 @@ export default {
       } else {
         navigateBack(this);
       }
+    },
+    async goToPreviousQuestion() {
+      const { provider, serviceDefinitionId } = this.$store.state.onlineConsultations.journeyInfo;
+      document.activeElement.blur();
+
+      await this.$store.dispatch('onlineConsultations/setPrevious');
+      await this.$store.dispatch('onlineConsultations/evaluateServiceDefinition', {
+        provider,
+        serviceDefinitionId,
+      });
+
+      if (this.isNativeApp) {
+        NativeApp.resetPageFocus();
+      } else {
+        EventBus.$emit(FOCUS_NHSAPP_ROOT);
+      }
+      window.scrollTo(0, 0);
     },
   },
 };
@@ -123,5 +153,4 @@ export default {
   .native-back {
     display: block;
   }
-
 </style>

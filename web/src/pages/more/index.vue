@@ -20,7 +20,7 @@
                  :href="adminHelpPath"
                  :text="$t('sc04.requestGpHelp.subheader')"
                  :description="$t('sc04.requestGpHelp.body')"
-                 :click-func="navigate"
+                 :click-func="navigateToAdminHelp"
                  :aria-label="$t('sc04.requestGpHelp.subheader') |
                    join($t('sc04.requestGpHelp.body') ,'. ')"/>
 
@@ -110,6 +110,9 @@ export default {
     navigateToAdminHelp(event) {
       this.navigate(event);
       this.$store.dispatch('navigation/setNewMenuItem', 4);
+      this.$store.dispatch('onlineConsultations/setPreviousRoute', this.morePath);
+      this.$store.dispatch('navigation/setBackLinkOverride', this.morePath);
+      this.$store.dispatch('navigation/setRouteCrumb', 'moreCrumb');
     },
     navigateToMessaging(event) {
       this.$store.dispatch('navigation/setBackLinkOverride', this.morePath);

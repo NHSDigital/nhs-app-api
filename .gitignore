@@ -16,6 +16,9 @@ chromedriver
 bddtests/target/site/
 /testRunFolder
 
+#bdd downloadTest temporary folder
+bddtests/tmpDownloads/
+
 # user settings file
 *.DotSettings.user
 

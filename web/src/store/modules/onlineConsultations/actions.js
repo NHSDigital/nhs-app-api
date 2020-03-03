@@ -25,6 +25,7 @@ import {
   SET_ADMIN_PROVIDER_NAME,
   SET_ADVICE_PROVIDER_NAME,
   SET_CONDITIONS_LIST,
+  SET_JOURNEY_INFO,
 } from './mutation-types';
 import {
   getDataRequirements,
@@ -245,5 +246,8 @@ export default {
   },
   setDemographicsQuestionAnswered({ commit }) {
     commit(SET_DEMOGRAPHICS_QUESTION_ANSWERED);
+  },
+  setJourneyInfo({ commit }, journeyInfo) {
+    commit(SET_JOURNEY_INFO, journeyInfo);
   },
 };

@@ -79,7 +79,20 @@ class LinkedProfilesStepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = Patient.getPatientWithNoLinkedProfiles(supplier)
         SerenityHelpers.setGpSupplier(supplier)
-        setupAndLogIn(patient, supplier)
+
+        SerenityHelpers.setPatient(patient)
+
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory
+                .getForSupplier(supplier, mockingClient)
+                .createFor(patient)
+
+        DemographicsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabled(patient)
+
+        browser.goToApp()
+        login.using(patient)
     }
 
 

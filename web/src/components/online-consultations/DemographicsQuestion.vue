@@ -39,6 +39,11 @@
           {{ $t('onlineConsultations.orchestrator.continueButton') }}
         </generic-button>
       </no-js-form>
+      <desktopGenericBackLink v-if="!isNativeApp"
+                              data-purpose="back-link"
+                              :path="backLink"
+                              :button-text="$t('onlineConsultations.orchestrator.backButton')"
+                              @clickAndPrevent="backClicked"/>
     </question>
   </div>
 </template>
@@ -54,8 +59,11 @@ import {
   DEMOGRAPHICS_QUESTION_NAME,
   DEMOGRAPHICS_QUESTION_OPTION,
 } from '@/lib/online-consultations/constants/nojsInputNames';
+import { APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import NativeApp from '@/services/native-app';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 
 export default {
   name: 'DemographicsQuestion',
@@ -65,6 +73,7 @@ export default {
     NoJsForm,
     GenericCheckbox,
     GenericButton,
+    DesktopGenericBackLink,
   },
   props: {
     provider: {
@@ -99,6 +108,13 @@ export default {
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
     },
+    bookingGuidancePath() {
+      return APPOINTMENT_BOOKING_GUIDANCE.path;
+    },
+    backLink() {
+      const { previousPaths } = this.$router.history.router;
+      return previousPaths[previousPaths.length - 1];
+    },
   },
   methods: {
     selectValueChanged() {
@@ -108,6 +124,9 @@ export default {
     },
     stopProp(event) {
       event.stopPropagation();
+    },
+    backClicked() {
+      redirectTo(this, this.backLink);
     },
     async demographicsContinueClicked() {
       document.activeElement.blur();

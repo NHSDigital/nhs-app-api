@@ -49,7 +49,8 @@
                      :render-as-html="true"
                      @validate="onAnswerValidate"/>
         </question>
-        <generic-button :button-classes="['nhsuk-button']"
+        <generic-button id="continueButton"
+                        :button-classes="['nhsuk-button']"
                         click-delay="short"
                         @click.prevent="continueClicked">
           {{ $t('onlineConsultations.orchestrator.continueButton') }}
@@ -72,25 +73,23 @@
       </div>
     </div>
 
-    <desktopGenericBackLink v-if="showDesktopBackLink"
+    <desktopGenericBackLink v-if="showBackToHomeButton"
                             :path="indexPath"
                             :button-text="backButtonText"
                             data-purpose="back-to-home-button"
                             @clickAndPrevent="backToHomeClicked"/>
-    <no-js-form v-else-if="showBackButton" :value="noJsState" method="post">
-      <input type="hidden" name="direction" value="back">
-      <generic-button :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                      click-delay="short"
-                      @click.prevent="backClicked">
-        {{ $t('onlineConsultations.orchestrator.backButton') }}
-      </generic-button>
-    </no-js-form>
-    <form v-else :action="indexPath">
-      <generic-button :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
-                      @click.prevent="goBack">
-        {{ $t(backButtonText) }}
-      </generic-button>
-    </form>
+    <desktopGenericBackLink v-else-if="showBackButton && !isNativeApp"
+                            id="desktopBackLink"
+                            data-purpose="back-to-home-button"
+                            :path="indexPath"
+                            :button-text="$t('onlineConsultations.orchestrator.backButton')"
+                            @clickAndPrevent="backClicked"/>
+    <generic-button v-else-if="!showBackButton"
+                    id="endMyConsultationButton"
+                    :button-classes="['nhsuk-button', 'nhsuk-button--secondary']"
+                    @click.prevent="goBack">
+      {{ $t('onlineConsultations.orchestrator.endMyConsultationButton') }}
+    </generic-button>
   </div>
 </template>
 
@@ -240,8 +239,8 @@ export default {
     indexPath() {
       return INDEX.path;
     },
-    showDesktopBackLink() {
-      return !this.isNativeApp && this.isSuccess;
+    showBackToHomeButton() {
+      return this.isSuccess;
     },
     noJSPath() {
       if (this.serviceDefinitionId ===
@@ -347,7 +346,6 @@ export default {
   .errorDialog {
     margin-bottom: 2em;
   }
-
   .container {
     margin-top: 1em;
 

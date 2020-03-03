@@ -380,25 +380,26 @@ describe('orchestrator', () => {
       each([{
         isNativeApp: true,
         status: 'success',
-        expectedValue: false,
+        isShown: false,
       }, {
         isNativeApp: false,
         status: 'data-required',
-        expectedValue: false,
+        isShown: false,
       }, {
         isNativeApp: false,
         status: 'success',
-        expectedValue: true,
-      }]).it('will return true if not on native and status is success', ({ isNativeApp, status, expectedValue }) => {
+        isShown: false,
+      }]).it('will return true if not on native and status is success', ({ isNativeApp, status, isShown }) => {
         // Arrange
         store.state.device.isNativeApp = isNativeApp;
         store.state.onlineConsultations.status = status;
 
         // Act
         mountOrchestrator();
+        const desktopBackLink = orchestrator.find('#desktopBackLink');
 
         // Assert
-        expect(orchestrator.vm.showDesktopBackLink).toBe(expectedValue);
+        expect(desktopBackLink.exists()).toBe(isShown);
       });
     });
 

@@ -94,6 +94,8 @@ export default {
       }
     }
 
+    store.dispatch('onlineConsultations/setJourneyInfo', journeyInfo);
+
     const demographicsAnswered = store.state.onlineConsultations.demographicsQuestionAnswered;
     const { answerIsValid } = store.state.onlineConsultations;
 

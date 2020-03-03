@@ -105,7 +105,7 @@ class EmisPatients {
                 linkageKey = "vVGO8bgV6fvPb",
                 userPatientLinkToken = "gpSWtREiH9499bPzix8v5b",
                 im1ConnectionToken = montelFryeIm1ConnectionToken,
-                linkedAccounts = setOf(paulSmith, alanCook)
+                linkedAccounts = setOf(alanCook, paulSmith)
         )
 
         val picaJones = Patient(

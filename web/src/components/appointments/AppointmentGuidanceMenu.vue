@@ -86,13 +86,14 @@ export default {
   },
   methods: {
     navigate(event) {
-      redirectTo(this, event.currentTarget.pathname);
-      event.preventDefault();
-
       if (event.currentTarget.id !== 'btn_symptoms_link') {
         this.$store.dispatch('onlineConsultations/setPreviousRoute', APPOINTMENT_BOOKING_GUIDANCE.path);
         this.$store.dispatch('navigation/setNewMenuItem', 1);
+        this.$store.dispatch('navigation/setBackLinkOverride', APPOINTMENT_BOOKING_GUIDANCE.path);
       }
+
+      redirectTo(this, event.currentTarget.pathname);
+      event.preventDefault();
     },
     ariaLabelCaption(header, body) {
       return `${this.$t(header)}. ${this.$t(body)}`;

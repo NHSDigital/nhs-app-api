@@ -2,7 +2,7 @@
   <div>
     <div :class="$style[isNative ? 'fix-breadcrumb' : '']">
       <bread-crumb-trail v-if="isBreadCrumbVisible" id="bread-crumb"
-                         :routes="currentBreadCrumbs"/>
+                         :routes="currentBreadCrumbs()"/>
       <yellow-banner v-if="showYellowBanner"
                      id="yellow-banner-line"
                      :class="$style['bannerLine']"/>
@@ -53,7 +53,6 @@ import isEmpty from 'lodash/fp/isEmpty';
 import PageTitle from '@/components/widgets/PageTitle';
 import {
   findByName,
-  getCrumbTrailForRoute,
   APPOINTMENT_GP_ADVICE,
   APPOINTMENT_ADMIN_HELP,
   SWITCH_PROFILE,
@@ -84,9 +83,6 @@ export default {
     isNative() {
       return this.$store.state.device.isNativeApp;
     },
-    currentBreadCrumbs() {
-      return getCrumbTrailForRoute(findByName(this.$route.name));
-    },
     showHeader() {
       const store = this.$store;
       const isNativeVersionAfter = store.getters['appVersion/isNativeVersionAfter'];
@@ -97,7 +93,7 @@ export default {
     },
     isBreadCrumbVisible() {
       return this.showBreadCrumb &&
-        !isEmpty(this.currentBreadCrumbs);
+        !isEmpty(this.currentBreadCrumbs());
     },
     showYellowBanner() {
       return this.showExternalServiceWarning ||
@@ -132,6 +128,26 @@ export default {
       if (this.$route.name !== SWITCH_PROFILE.name) {
         this.goToUrl(SWITCH_PROFILE.path);
       }
+    },
+    currentBreadCrumbs() {
+      const route = findByName(
+        (this.$router.history !== undefined &&
+          this.$router.history.pending !== undefined &&
+          this.$router.history.pending !== null) ?
+          this.$router.history.pending.name :
+          this.$route.name,
+      );
+      const { crumbSetName } = this.$store.state.navigation;
+
+      if (route === undefined) {
+        return [];
+      }
+
+      if (route.crumb[crumbSetName] === undefined) {
+        this.$store.dispatch('navigation/setRouteCrumb', 'defaultCrumb');
+        return route.crumb.defaultCrumb;
+      }
+      return route.crumb[crumbSetName];
     },
   },
 };

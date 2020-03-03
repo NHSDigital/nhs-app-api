@@ -127,6 +127,8 @@ export default {
       answeringConditionsQuestion: !!selectedCondition,
     };
 
+    store.dispatch('onlineConsultations/setJourneyInfo', journeyInfo);
+
     if (selectedCondition) {
       await store.dispatch('onlineConsultations/evaluateServiceDefinition', journeyInfo);
     } else if (!answeringConsultationQuestion && demographicsAnswered) {

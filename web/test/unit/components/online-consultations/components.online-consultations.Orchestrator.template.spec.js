@@ -406,7 +406,7 @@ describe('orchestrator', () => {
           // Act
           mountOrchestrator();
 
-          const backLink = orchestrator.find('generic-button-stub[buttonclasses="nhsuk-button,nhsuk-button--secondary"]');
+          const backLink = orchestrator.find('generic-button-stub');
           /*
           TODO -- change this text to a link when desktop work is
            undertaken and the result should be false.
@@ -416,12 +416,12 @@ describe('orchestrator', () => {
         });
       });
 
-      describe('back button', () => {
+      describe('end my consultation button', () => {
         it('will be shown', () => {
           // Act
           mountOrchestrator();
           // Assert
-          const backButton = orchestrator.find('generic-button-stub[buttonclasses="nhsuk-button,nhsuk-button--secondary"]');
+          const backButton = orchestrator.find('#endMyConsultationButton');
           expect(backButton.exists()).toBe(true);
           expect(backButton.text()).toEqual('translate_onlineConsultations.orchestrator.endMyConsultationButton');
         });
@@ -463,10 +463,8 @@ describe('orchestrator', () => {
           mountOrchestrator();
 
           // Assert
-          const form = orchestrator.find('form[action=\\/]');
-          const backButton = form.find('generic-button-stub[buttonclasses="nhsuk-button,nhsuk-button--secondary"]');
+          const backButton = orchestrator.find('generic-button-stub');
 
-          expect(form.exists()).toBe(true);
           expect(backButton.exists()).toBe(true);
         });
       });
@@ -527,7 +525,7 @@ describe('orchestrator', () => {
         each([{
           isNativeApp: true,
           status: 'success',
-          isShown: false,
+          isShown: true,
         }, {
           isNativeApp: false,
           status: 'success',

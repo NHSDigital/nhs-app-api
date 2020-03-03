@@ -58,7 +58,6 @@ import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import showShutterPage from '@/lib/proxy/shutter';
 import {
   findByName,
-  getCrumbTrailForRoute,
   INDEX,
   isAnonymous,
   LOGIN,
@@ -133,9 +132,6 @@ export default {
     currentRoute() {
       return findByName(this.$route.name);
     },
-    currentBreadCrumbs() {
-      return getCrumbTrailForRoute(this.currentRoute);
-    },
     currentHelpUrl() {
       return (this.currentRoute || INDEX).helpUrl;
     },
@@ -178,8 +174,13 @@ export default {
       );
     },
     breadcrumbDisabledNative() {
+      const { previousQuestion, demographicsQuestionAnswered, carePlans } =
+      this.$store.state.onlineConsultations;
+
       return this.$store.state.device.isNativeApp &&
-        this.currentCrumb.nativeDisabled;
+        (this.currentCrumb.nativeDisabled ||
+        (previousQuestion === undefined && demographicsQuestionAnswered)
+        || carePlans !== undefined);
     },
     shouldShowContentHeader() {
       // the shouldShowContentHeader field is only
