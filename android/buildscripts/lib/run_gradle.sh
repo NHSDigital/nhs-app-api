@@ -9,6 +9,6 @@ docker run \
     fi; \
     ./gradlew --no-daemon ${GRADLE_ARGS[*]}; \
     gradle_result=\$?; \
-    chmod -R 777 /data;
+    chmod -R 755 /data/.gradle/daemon;
     exit \$gradle_result
   " || die "Android ${SCRIPT_NAME:-gradle} failed"
