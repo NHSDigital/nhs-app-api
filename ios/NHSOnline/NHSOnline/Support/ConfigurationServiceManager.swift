@@ -7,7 +7,7 @@ class ConfigurationServiceManager{
     private var configurationService: ConfigurationServiceProtocol?
     private var configurationResponse = ConfigurationResponse()
 
-    init() {
+    private init() {
         self.configurationService = ConfigurationService.shared()
         ProcessConfigurationResponse()
     }

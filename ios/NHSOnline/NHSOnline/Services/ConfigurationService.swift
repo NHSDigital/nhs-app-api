@@ -4,6 +4,9 @@ import os.log
 class ConfigurationService: ConfigurationServiceProtocol {
     private static var sharedConfigurationService = ConfigurationService()
     private var configurationResponse = ConfigurationResponse()
+    
+    private init() {
+    }
 
     func getConfigurationResponse(completion: @escaping (Configuration?) -> ()) {
         let requestUrl = URL(string: config().BaseApiUrl + config().ConfigurationApiPath)!

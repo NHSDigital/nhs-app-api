@@ -73,7 +73,9 @@ class HomeViewController : UIViewController {
         self.setNeedsStatusBarAppearanceUpdate()
         super.viewDidLoad()
 
-        self.configurationResponse = ConfigurationServiceManager().GetConfigurationResponse()
+        self.configurationResponse = ConfigurationServiceManager
+            .shared()
+            .GetConfigurationResponse()
 
         setupNhsLogo()
         setupBackArrow()
