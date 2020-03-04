@@ -12,7 +12,13 @@ function trigger_sjr() {
 
 	case $TARGET_ENVIRONMENT in
 	"ops"*)
-		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_1Sandbox_Namespaces_1OpsSelfService_2DeploySjrAppRepoTest"
+		if [ $TARGET_ZONE = "sandbox" ]; then
+			BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_1Sandbox_Namespaces_1OpsSelfService_DeploySjr"
+		elif [ $TARGET_ZONE = "dev" ]; then
+			BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_TeamDevelopmentEnvironment_DeploySjrAppRepo"
+		else
+		  die "Unknown target zone $TARGET_ZONE."
+		fi
 	;;
 	"scratch"*)
 		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_TeamDevelopmentEnvironment_DeploySjrAppRepo"
