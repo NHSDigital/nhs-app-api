@@ -19,7 +19,6 @@ import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
-import android.webkit.URLUtil
 import android.webkit.WebSettings
 import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.nhsonline.Application
@@ -53,7 +52,6 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.logging.Level
 import java.util.logging.Logger
-
 
 private val TAG = MainActivity::class.java.simpleName
 
@@ -93,6 +91,9 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         activityViewSwitcher = MainActivityViewSwitcher(this)
         appDialogs = AppDialogs(this)
 
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+
         configureWebView()
 
         appWebInterface = AppWebInterface(webview)
@@ -125,7 +126,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         webview.settings.allowUniversalAccessFromFileURLs = true
         webview.settings.cacheMode = WebSettings.LOAD_DEFAULT
         val userAgent = webview.settings.userAgentString
-        webview.settings.setUserAgentString("$userAgent $nhsAndroidUserAgent")
+        webview.settings.userAgentString = "$userAgent $nhsAndroidUserAgent"
     }
 
     private fun onErrorRetryButton() {
@@ -141,6 +142,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             clearMenuBarItem()
             showProgressDialog()
             nhsWeb.reloadCurrentUrl()
+            dismissProgressDialog()
             return
         }
         lifeCycleObserver?.checkAndHandleConfiguration()
@@ -217,8 +219,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         } catch (exception: Exception) {
             logger.log(Level.SEVERE, "Unexpected error in onActivityResult" , exception)
         }
-
-
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -319,15 +319,15 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun loadBiometricLoginPage(url: String) {
-        var fullUrl = webview.url
+        var currentUrl = webview.url
 
-        fullUrl += when(fullUrl.contains("?")) {
+        currentUrl += when(currentUrl.contains("?")) {
             true -> "&$url"
             false -> "?$url"
         }
 
         nhsWeb.requiresFullPageLoad = true
-        nhsWeb.loadUrl(fullUrl)
+        nhsWeb.loadUrl(currentUrl)
     }
 
     override fun startDownload(base64Data: String, fileName: String, mimeType: String) {
@@ -453,7 +453,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         }
-
     }
 
     override fun dismissProgressDialog() {
@@ -523,7 +522,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         } catch (e: Exception) {
             logger.log(Level.WARNING, "${this::class.java.simpleName}: Unable to show error page $e")
         }
-
     }
 
     private fun showErrorScreen() {
@@ -553,15 +551,16 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         requestCode: Int,
         permissions: Array<out String>, grantResults: IntArray
     ) {
-        if (requestCode == LOCATION_REQUEST_CODE) {
-            nhsWeb.handleWebClientLocationResult(grantResults)
-        } else if (requestCode == CAMERA_STORAGE_REQUEST_CODE) {
-            logger.info("Checking Camera Storage Request Code: $CAMERA_STORAGE_REQUEST_CODE")
-
-            nhsWeb.handleCameraFilePermissionResult(grantResults)
-        } else if (requestCode == STORAGE_REQUEST_CODE) {
-            logger.info("Storage permission granted, starting download")
-            handleDownloadPermissionResult(grantResults)
+        when (requestCode) {
+            LOCATION_REQUEST_CODE -> nhsWeb.handleWebClientLocationResult(grantResults)
+            CAMERA_STORAGE_REQUEST_CODE -> {
+                logger.info("Checking Camera Storage Request Code: $CAMERA_STORAGE_REQUEST_CODE")
+                nhsWeb.handleCameraFilePermissionResult(grantResults)
+            }
+            STORAGE_REQUEST_CODE -> {
+                logger.info("Storage permission granted, starting download")
+                handleDownloadPermissionResult(grantResults)
+            }
         }
     }
 
@@ -649,7 +648,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     override fun hideBlankScreen() {
         logger.info("Entering hideBlankScreen")
-        dismissProgressDialog()
         viewSwitcher.visibility = VISIBLE
         blankScreen.visibility = GONE
     }
@@ -662,7 +660,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun dismissSessionExtensionDialog() {
         appDialogs.dismissExtendSessionDialog()
     }
-
 
     override fun showBiometricLoginIfEnabled(forceStart: Boolean): Boolean {
         if (!isSuccessfulConfigCheck){
@@ -678,6 +675,10 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         }
 
         return false
+    }
+
+    override fun dismissBiometricDialog() {
+        biometricsInterface.dismissBiometricDialog()
     }
 
     override fun displayBiometricLoginErrorOccurrence() {

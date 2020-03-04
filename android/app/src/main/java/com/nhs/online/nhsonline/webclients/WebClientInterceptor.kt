@@ -27,7 +27,6 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.logging.Logger
 
-private const val DELAY_PROGRESS_SHOW_TIME_MILLISECONDS = 500L
 private const val REQUEST_TIMEOUT_MILLISECONDS = 20 * 1000L
 private const val WOFF2 = "woff2"
 
@@ -155,7 +154,7 @@ class WebClientInterceptor(
                 "${this::class.java.simpleName}: Entering onReceivedSslError")
 
         if (canHandleUnavailability(view)) {
-            handleUnavailability(view?.url, WebViewClient.ERROR_CONNECT)
+            handleUnavailability(view?.url, ERROR_CONNECT)
         }
     }
 
@@ -164,7 +163,7 @@ class WebClientInterceptor(
                 "${this::class.java.simpleName}: Entering onReceivedHttpError")
         if (canHandleUnavailability(view) && !isNHSApi(request)) {
             cancelTrackingWebRequestResponse()
-            handleUnavailability(view?.url, WebViewClient.ERROR_CONNECT)
+            handleUnavailability(view?.url, ERROR_CONNECT)
         }
     }
 
@@ -239,7 +238,6 @@ class WebClientInterceptor(
         return WebResourceResponse(woff2MimeType, WOFF2, inputStream)
     }
 
-
     override fun onPageFinished(view: WebView?, url: String?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageFinished")
         if (shouldHandleUnavailability(url)) {
@@ -258,9 +256,6 @@ class WebClientInterceptor(
     override fun onPageCommitVisible(view: WebView?, url: String?) {
         Log.d(Application.TAG,
             "${this::class.java.simpleName}: Entering onPageCommitVisible and url: $url")
-        if (shouldHandleUnavailability(url)) {
-            uiInteractor.dismissProgressDialog()
-        }
 
         if (!shouldShowErrorPage) {
             if (url == context.resources.getString(R.string.baseURL)) {
@@ -272,8 +267,10 @@ class WebClientInterceptor(
                 uiInteractor.showHeaderSlim()
             }
 
-            if (!knownServices.isSameSchemeAndHostAsHomeUrl(url))
+            if (!knownServices.isSameSchemeAndHostAsHomeUrl(url)) {
                 uiInteractor.announcePageTitle(view?.title)
+                uiInteractor.dismissBiometricDialog()
+            }
         }
         super.onPageCommitVisible(view, url)
     }
@@ -347,8 +344,6 @@ class WebClientInterceptor(
     private fun trackWebRequestResponse(view: WebView?, url: String?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering trackWebRequestResponse")
 
-        val showDialogFn = { uiInteractor.showProgressDialog() }
-
         val expireRequestFn = {
             view?.stopLoading()
             uiInteractor.dismissProgressDialog()
@@ -357,16 +352,12 @@ class WebClientInterceptor(
             handleUnavailability(url)
         }
 
-        handler.postDelayed(showDialogFn,
-            DELAY_PROGRESS_SHOW_TIME_MILLISECONDS)
         handler.postDelayed(expireRequestFn, REQUEST_TIMEOUT_MILLISECONDS)
-
     }
 
     private fun cancelTrackingWebRequestResponse() {
         Log.d(Application.TAG,
             "${this::class.java.simpleName}: Entering cancelTrackingWebRequestResponse")
-        uiInteractor.dismissProgressDialog()
         handler.removeCallbacksAndMessages(null)
     }
 
@@ -392,6 +383,8 @@ class WebClientInterceptor(
             "${this::class.java.simpleName}: HandleUnavailability -> ErrorMessage Type:  ${errorMessage.title}")
         uiInteractor.showUnavailabilityError(errorMessage)
         uiInteractor.setHeaderText(pageHeader)
+        uiInteractor.dismissBiometricDialog()
+        uiInteractor.dismissProgressDialog()
 
         logger.info("Failing Url: $failingUrl with error code: $errorCode")
     }

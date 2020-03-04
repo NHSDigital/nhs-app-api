@@ -29,6 +29,15 @@ export default {
     return false;
   },
 
+  dismissProgressBar() {
+    const app = window.nativeApp;
+    if (app && app.dismissProgressBar) {
+      app.dismissProgressBar();
+      return true;
+    }
+    return false;
+  },
+
   fetchNativeAppVersion() {
     const app = window.nativeApp;
     if (app && app.fetchNativeAppVersion) {

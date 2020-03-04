@@ -88,6 +88,7 @@ class FingerprintService(
 
     fun showBiometricLoginIfEnabled(forceStart: Boolean = false) = authenticationService.showBiometricLoginIfEnabled(forceStart)
 
+    fun dismissBiometricDialog() = authenticationService.dismissBiometricDialog()
 
     fun notifyLoginErrorOccurrence() {
         biometricState.hasLoginError = true

@@ -34,6 +34,7 @@
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
+import NativeCallbacks from '@/services/native-app';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 import { findByName } from '@/lib/routes';
 import ContentHeader from '@/components/widgets/ContentHeader';
@@ -107,6 +108,9 @@ export default {
     window.validateSession =
       window.validateSession || (() => this.$store.dispatch('session/validate'));
     this.configureWebContext(this.currentHelpUrl);
+    if (this.$store.state.device.isNativeApp) {
+      NativeCallbacks.dismissProgressBar();
+    }
   },
   created() {
     if (process.browser) {

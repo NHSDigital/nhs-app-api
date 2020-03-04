@@ -57,10 +57,8 @@ class AuthenticationService(
         }
         val facetId = fidoHelpers.getFacetId(activity) ?: return
         isFingerprintLoginStarted = true
-        biometricsInteractor.showProgressDialog()
         biometricAsyncHandler.requestUafAuthenticationMessage(facetId) { response: BiometricCallResult ->
             if (response.statusCode != BiometricAsyncHandler.OK) {
-                biometricsInteractor.dismissProgressDialog()
                 return@requestUafAuthenticationMessage
             }
             completeSignInStart(response)
@@ -74,21 +72,24 @@ class AuthenticationService(
                     completeFidoSignIn(cryptObj, this.uafMessage)
 
                 override fun cancel() {
+                    biometricsInteractor.dismissProgressDialog()
                     isFingerprintLoginStarted = false
                 }
 
                 override fun error() {
+                    biometricsInteractor.dismissProgressDialog()
                     showBiometricLoginIfEnabled(true)
                 }
             }
-            biometricsInteractor.dismissProgressDialog()
             val fingerprintContent = fingerprintDialog.generateFingerprintContent(false)
             fingerprintDialog.showFingerprintAuthDialog(signInCallback, fingerprintContent)
         } catch (e: FidoInvalidSignatureException) {
+            biometricsInteractor.dismissProgressDialog()
             isFingerprintLoginStarted = false
             handleInvalidKeys()
         } catch (e: IllegalStateException) {
             Log.d(TAG, "Unable to show the fingerprint dialog: ", e)
+            biometricsInteractor.dismissProgressDialog()
             isFingerprintLoginStarted = false
         }
     }
@@ -108,8 +109,10 @@ class AuthenticationService(
         isFingerprintLoginStarted = false
         biometricState.hasLoginError = false
         return if (processedLoginMsg.isEmpty()) {
+            biometricsInteractor.dismissProgressDialog()
             Activity.RESULT_CANCELED
         } else {
+            biometricsInteractor.showProgressDialog()
             val biometricLoginUrl = getLoginPathFromUafMessage(processedLoginMsg)
             biometricsInteractor.loadBiometricLoginPage(biometricLoginUrl)
             Activity.RESULT_OK
@@ -144,5 +147,10 @@ class AuthenticationService(
             fingerprintSystemChecker.showInvalidFingerprintDialog()
             ""
         }
+    }
+
+    fun dismissBiometricDialog() {
+        fingerprintDialog.dismissFingerprintAuthDialog()
+        isFingerprintLoginStarted = false
     }
 }

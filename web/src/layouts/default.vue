@@ -66,6 +66,7 @@ import FlashMessage from '@/components/widgets/FlashMessage';
 import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
 import HotJar from '@/components/widgets/HotJar';
 import Modal from '@/components/modal/Modal';
+import NativeCallbacks from '@/services/native-app';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 import Spinner from '@/components/widgets/Spinner';
 import SurveyBar from '@/components/SurveyBar';
@@ -251,6 +252,9 @@ export default {
   },
   mounted() {
     EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
+    if (this.$store.state.device.isNativeApp) {
+      NativeCallbacks.dismissProgressBar();
+    }
   },
   updated() {
     if (this.pathChanged) {

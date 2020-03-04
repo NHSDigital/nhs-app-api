@@ -56,6 +56,8 @@ interface IInteractor {
 
     fun showBiometricLoginIfEnabled(forceStart:Boolean = false): Boolean
 
+    fun dismissBiometricDialog()
+
     fun showNativeBiometricOptions()
 
     fun resetFocusToNhsLogoForAccessibility()

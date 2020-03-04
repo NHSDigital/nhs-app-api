@@ -27,7 +27,7 @@ import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import java.net.MalformedURLException
 import java.net.URL
-
+import java.util.Locale
 
 private val TAG = NhsWeb::class.java.simpleName
 private const val NATIVE_APP = "nativeApp"
@@ -108,7 +108,7 @@ class NhsWeb(
 
     fun loadTelephoneUrl(url: String) {
         val intent = Intent(Intent.ACTION_DIAL)
-        intent.setData(Uri.parse(url))
+        intent.data = Uri.parse(url)
         activity.startActivity(intent)
     }
 
@@ -121,7 +121,7 @@ class NhsWeb(
     }
 
     fun setReloadPath(path: String) {
-        if(path.isNullOrBlank()){
+        if(path.isBlank()){
             return
         }
 
@@ -143,13 +143,6 @@ class NhsWeb(
         return false
     }
 
-    fun isLoginPath(): Boolean{
-        if(webView.url == null){
-            return false
-        }
-        return (webView.url.contains(readResourceString(R.string.loginPath)))
-    }
-
     fun reloadLoginUrl() {
         val loginUrl =
                 readResourceString(R.string.baseURL) + readResourceString(R.string.loginPath)
@@ -160,7 +153,7 @@ class NhsWeb(
 
         if (currentUrl.isEmpty() || isFidoLoginUrl) {
             loadUrl(loginUrl)
-        } else if (webView.url.toLowerCase().startsWith(loginUrl.toLowerCase())) {
+        } else if (webView.url.toLowerCase(Locale.ROOT).startsWith(loginUrl.toLowerCase(Locale.ROOT))) {
             webView.reload()
         }
     }
@@ -255,10 +248,12 @@ class NhsWeb(
         webView.stopLoading()
         uiInteractor.setHeaderText(readResourceString(R.string.connection_error_header))
         uiInteractor.showUnavailabilityError(errorMessageHandler.getErrorMessage(ErrorType.NoConnection))
+        uiInteractor.dismissProgressDialog()
+        uiInteractor.dismissBiometricDialog()
         return
     }
 
-    fun clearSessionCookies() {
+    private fun clearSessionCookies() {
         val host = readResourceString(R.string.baseHost)
         val allHosts = host.split('.')
             .foldRight(listOf<String>()) { e, accumulator -> accumulator + if (accumulator.any()) "$e.${accumulator.last()}" else e }
@@ -271,7 +266,7 @@ class NhsWeb(
         CookieManager.getInstance().flush()
     }
 
-    fun readResourceString(resourceId: Int): String {
+    private fun readResourceString(resourceId: Int): String {
         return activity.getString(resourceId)
     }
 
@@ -286,7 +281,6 @@ class NhsWeb(
         } catch (exception: MalformedURLException) {
             false
         }
-
     }
 
     fun setHelpLocation(url: String? = readResourceString(R.string.helpURL)) {

@@ -90,16 +90,19 @@
         android:id="@+id/progressBarLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/progress_spinner_background"
         android:gravity="center">
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
+            android:minHeight="55dip"
+            android:minWidth="55dip"
+            android:interpolator="@android:anim/linear_interpolator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminateTint="@color/progressbar_color"
-            android:indeterminateTintMode="src_in" />
+            android:indeterminateTintMode="src_in"
+            android:background = "@drawable/progress_spinner_icon_background"/>
     </LinearLayout>
 
     <com.nhs.online.nhsonline.navigation.MenuBar

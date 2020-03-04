@@ -12,9 +12,8 @@ import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.SettingsService
 import com.nhs.online.nhsonline.web.NhsWeb
-import junit.framework.Assert
 import org.junit.Test
-
+import org.junit.Assert
 import org.junit.Before
 import org.junit.runner.RunWith
 import org.mockito.Mockito
@@ -51,7 +50,9 @@ class WebAppInterfaceTest {
         settingsService = mock()
         doNothing().whenever(settingsService).openSettings()
 
-        nhsWebMock = mock()
+        nhsWebMock = mock{
+            on { applicationState }.thenReturn((mock()))
+        }
         webAppInterface = WebAppInterface(contextMock, contextMock, nhsWebMock, settingsService)
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
 
@@ -104,7 +105,6 @@ class WebAppInterfaceTest {
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).clearMenuBarItem()
     }
-
 
     @Test
     fun hideHeaderTest() {
@@ -216,5 +216,75 @@ class WebAppInterfaceTest {
         val version = webAppInterface.fetchNativeAppVersion()
         Assert.assertNotNull(version)
         Assert.assertEquals(version, BuildConfig.VERSION_NAME)
+    }
+
+    @Test
+    fun dismissProgressBarTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.dismissProgressBar()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).dismissProgressDialog()
+    }
+
+    @Test
+    fun getNotificationStatusTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.getNotificationsStatus()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(nhsWebMock).getNotificationsStatus()
+    }
+
+    @Test
+    fun attemptBiometricLoginTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.attemptBiometricLogin()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).showBiometricLoginIfEnabled()
+    }
+
+    @Test
+    fun configureWebContextTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.configureWebContext("url", "retryPath")
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).setHelpUrl("url")
+        verify(contextMock).setRetryPath("retryPath")
+    }
+
+    @Test
+    fun pageLoadCompleteTest() {
+        webAppInterface.pageLoadComplete()
+        verify(nhsWebMock.applicationState).unBlock()
+    }
+
+    @Test
+    fun setHelpUrlTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.setHelpUrl("url")
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).setHelpUrl("url")
+    }
+
+    @Test
+    fun setZoomableTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.setZoomable(true)
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).setZoomable(true)
+    }
+
+    @Test
+    fun startDownloadTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.startDownload("base64", "file", "mime")
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).startDownload("base64", "file", "mime")
     }
 }

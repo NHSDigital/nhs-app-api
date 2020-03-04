@@ -14,14 +14,21 @@ class FingerprintDialog(
         private val biometricState: BiometricState,
         private val signingHelper: SigningHelper
 ) {
+    private var fingerprintAuthFragment: FingerprintAuthenticationDialogFragment? = null
+
     fun showFingerprintAuthDialog(
             fingerprintAuthProcessor: FingerprintAuthProcessor,
             fingerprintContent: FingerprintContent
     ) {
-        val fingerprintAuthFragment = createFingerprintAuthenticationDialogFragment(signingHelper, fingerprintContent, fingerprintAuthProcessor)
+        fingerprintAuthFragment = createFingerprintAuthenticationDialogFragment(signingHelper, fingerprintContent, fingerprintAuthProcessor)
 
         Log.d(TAG, "Showing fingerprint fragment: $fingerprintAuthFragment")
-        fingerprintAuthFragment.show(activity.supportFragmentManager, BiometricConstants.DIALOG_FRAGMENT_TAG)
+        fingerprintAuthFragment?.show(activity.supportFragmentManager, BiometricConstants.DIALOG_FRAGMENT_TAG)
+    }
+
+    fun dismissFingerprintAuthDialog() {
+        fingerprintAuthFragment?.dismissAllowingStateLoss()
+        fingerprintAuthFragment = null
     }
 
     fun generateFingerprintContent(forRegistration: Boolean): FingerprintContent {

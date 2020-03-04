@@ -26,8 +26,6 @@ import org.junit.Assert.assertEquals
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import java.io.InputStream
-import java.net.URL
-
 
 @Suppress("DEPRECATION")
 @RunWith(RobolectricTestRunner::class)
@@ -43,7 +41,6 @@ class WebClientInterceptorTest {
     private lateinit var schemeHandlersMock: SchemeHandlers
     private lateinit var errorMessageHandler: ErrorMessageHandler
     private val resourceMock = ResourceMockingClass()
-
 
     @Before
     fun setUp() {
@@ -92,7 +89,6 @@ class WebClientInterceptorTest {
             verify(requestMock, times(2)).url
         }
     }
-
 
     @Test
     fun shouldInterceptRequest_WOFF2Request_notAppFont_returnNull() {
@@ -147,7 +143,6 @@ class WebClientInterceptorTest {
         verify(resourceMock).getStringArray(R.array.fonts)
         verify(assetManagerMock).open("fonts/bazz.woff2")
     }
-
 
     @Test
     fun shouldInterceptRequest_WOFF2Request_AppFont_CaseInsensitive_returnBundle() {
@@ -315,38 +310,6 @@ class WebClientInterceptorTest {
     }
 
     @Test
-    fun pageFinishWithUnknownURLFollowedByKnownURLToBeOpenedInWebview() {
-        val webInterceptor = WebClientInterceptor(
-                uiInteractorMock,
-                nhsWebMock,
-                resourceMock.mockDisconnectedContext(),
-                KnownServices(resourceMock.mockContext()),
-                schemeHandlersMock
-        )
-
-        webInterceptor.onPageFinished(webViewMock, "https://google.com")
-        verify(uiInteractorMock, never()).dismissProgressDialog()
-
-        webInterceptor.onPageFinished(webViewMock, "https://111.nhs.uk")
-        verify(uiInteractorMock).dismissProgressDialog()
-    }
-
-    @Test
-    fun pageFinishKnownURLToBeOpenedInWebview() {
-        val webInterceptor = WebClientInterceptor(
-                uiInteractorMock,
-                nhsWebMock,
-                resourceMock.mockDisconnectedContext(),
-                KnownServices(resourceMock.mockContext()),
-                schemeHandlersMock
-        )
-
-        webInterceptor.onPageFinished(webViewMock, "https://111.nhs.uk")
-
-        verify(uiInteractorMock, times(1)).dismissProgressDialog()
-    }
-
-    @Test
     fun receivedErrorNonKnownURL() {
 
         val webInterceptor = WebClientInterceptor(
@@ -378,15 +341,13 @@ class WebClientInterceptorTest {
 
         val url = "https://111.nhs.uk"
         whenever(contextMock.getString(R.string.baseHost)).thenReturn("111.nhs.uk")
-        whenever(webViewMock?.url).thenReturn(url)
+        whenever(webViewMock.url).thenReturn(url)
 
         webInterceptor.onReceivedError(webViewMock, 404, "Error", url)
 
         val knownUrlErrorMessage = errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
 
-        verify(uiInteractorMock).dismissProgressDialog()
         verify(uiInteractorMock).showUnavailabilityError(knownUrlErrorMessage)
-
     }
 
     @Test
@@ -417,31 +378,6 @@ class WebClientInterceptorTest {
     }
 
     @Test
-    fun loadResource_isKnownService_isNotConnected_dismissesProgressDialog() {
-        val url = "https://111.nhs.uk/"
-        val expectedKnownService = KnownService(url)
-        val knownServicesMock: KnownServices = mock {
-            on { findMatchingKnownService(url) }.thenReturn(expectedKnownService)
-        }
-        val webViewMock: WebView = mock {
-            on { getUrl() }.thenReturn(url)
-        }
-
-        val webInterceptor = WebClientInterceptor(
-                uiInteractorMock,
-                nhsWebMock,
-                resourceMock.mockDisconnectedContext(),
-                knownServicesMock,
-                schemeHandlersMock
-        )
-        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
-
-        webInterceptor.onLoadResource(webViewMock, url)
-
-        verify(uiInteractorMock).dismissProgressDialog()
-    }
-
-    @Test
     fun loadResource_isUnknownService_loadsWelcomePage() {
         val url = "https://111.nhs.uk/"
         val knownServicesMock: KnownServices = mock {
@@ -464,26 +400,6 @@ class WebClientInterceptorTest {
         verify(knownServicesMock).findMatchingKnownService(url)
         verify(webViewMock).stopLoading()
         verify(nhsWebMock).loadWelcomePage()
-    }
-
-    @Test
-    fun loadResource_NotConnectedPreviouslyHandled_dismissesProgressDialog() {
-
-        val webInterceptor = WebClientInterceptor(
-                uiInteractorMock,
-                nhsWebMock,
-                resourceMock.mockDisconnectedContext(),
-                knownServicesMock,
-                schemeHandlersMock
-        )
-        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
-
-        whenever(webViewMock?.url).thenReturn("https://www.111.nhs.uk")
-        webInterceptor.onPageStarted(webViewMock, "https://www.111.nhs.uk", null)
-
-        whenever(webViewMock?.url).thenReturn("https://111.nhs.uk")
-        webInterceptor.onLoadResource(webViewMock, "https://111.nhs.uk/")
-        verify(uiInteractorMock, times(1)).dismissProgressDialog()
     }
 
     private fun createWebView(): WebView {

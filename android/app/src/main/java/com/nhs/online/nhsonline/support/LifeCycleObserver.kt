@@ -68,11 +68,9 @@ class LifeCycleObserver(
 
         if (appDialogs.isUpgradeDialogActive()) return
 
-        context.showProgressDialog()
         configurationService.getConfiguration(object : IVolleyCallback {
             override fun onSuccess(configurationResponse: ConfigurationResponse) {
                 context.dismissProgressDialog()
-
                 if (configurationResponse.isValidConfiguration) {
                     context.isSuccessfulConfigCheck = true
                 }

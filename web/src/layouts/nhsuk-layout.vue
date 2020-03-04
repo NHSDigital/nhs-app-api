@@ -267,6 +267,9 @@ export default {
   },
   mounted() {
     EventBus.$on(FOCUS_NHSAPP_ROOT, this.focusNhsAppRoot);
+    if (this.$store.state.device.isNativeApp) {
+      NativeCallbacks.dismissProgressBar();
+    }
   },
   updated() {
     if (this.pathChanged) {

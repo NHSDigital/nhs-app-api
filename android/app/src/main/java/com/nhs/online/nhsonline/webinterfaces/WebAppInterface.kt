@@ -16,13 +16,6 @@ class WebAppInterface(
     private val nhsWeb: NhsWeb,
     private val settingsService: SettingsService
 ) {
-
-    @JavascriptInterface
-    fun getNotificationsStatus() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering getNotificationsStatus")
-        activity.runOnUiThread { nhsWeb.getNotificationsStatus() }
-    }
-
     @JavascriptInterface
     fun attemptBiometricLogin() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering attemptBiometricLogin")
@@ -36,9 +29,29 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
+    fun configureWebContext(helpUrl: String, retryPath: String) {
+        activity.runOnUiThread {
+            uiInteractor.setHelpUrl(helpUrl)
+            uiInteractor.setRetryPath(retryPath)
+        }
+    }
+
+    @JavascriptInterface
+    fun dismissProgressBar() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering dismissProgressBar")
+        activity.runOnUiThread { uiInteractor.dismissProgressDialog() }
+    }
+
+    @JavascriptInterface
     fun fetchNativeAppVersion(): String {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering fetchNativeAppVersion")
         return BuildConfig.VERSION_NAME
+    }
+
+    @JavascriptInterface
+    fun getNotificationsStatus() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering getNotificationsStatus")
+        activity.runOnUiThread { nhsWeb.getNotificationsStatus() }
     }
 
     @JavascriptInterface
@@ -91,9 +104,10 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
-    fun showMenuBar() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showMenuBar")
-        activity.runOnUiThread { uiInteractor.showMenuBar() }
+    @Deprecated(message = "since 1.23.0 (NHSO-5818), here for backwards compatibility",
+            replaceWith = ReplaceWith(expression = "onSessionExpiring()"))
+    fun onSessionExpiring(sessionDuration: Int) {
+        onSessionExpiring()
     }
 
     @JavascriptInterface
@@ -109,12 +123,6 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
-    fun setZoomable(canZoom: Boolean) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering setZoomable")
-        activity.runOnUiThread{ uiInteractor.setZoomable(canZoom) }
-    }
-
-    @JavascriptInterface
     fun requestPnsToken(trigger: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering requestPnsToken")
         activity.runOnUiThread { nhsWeb.requestPnsToken(trigger) }
@@ -127,29 +135,21 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
+    fun setHelpUrl(url: String) {
+        Log.d(Application.TAG, "${this::class.java.simpleName} Entering setHelpUrl")
+        activity.runOnUiThread { uiInteractor.setHelpUrl(url) }
+    }
+
+    @JavascriptInterface
     fun setMenuBarItem(index: Int) {
         Log.d(Application.TAG, "${this::class.java.simpleName} Entering setMenuBarItem")
         activity.runOnUiThread { uiInteractor.setMenuBarItem(index) }
     }
 
     @JavascriptInterface
-    fun configureWebContext(helpUrl: String, retryPath: String) {
-        activity.runOnUiThread {
-            uiInteractor.setHelpUrl(helpUrl)
-            uiInteractor.setRetryPath(retryPath)
-        }
-
-    }
-
-    @JavascriptInterface
-    fun setHelpUrl(url: String) {
-        activity.runOnUiThread { uiInteractor.setHelpUrl(url) }
-    }
-
-    @JavascriptInterface
-    fun startDownload(base64Data: String, fileName: String, mimeType: String) {
-            Log.d(Application.TAG, "${this::class.java.simpleName}: Entering startDownload")
-            activity.runOnUiThread{ uiInteractor.startDownload(base64Data, fileName, mimeType) }
+    fun setZoomable(canZoom: Boolean) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering setZoomable")
+        activity.runOnUiThread{ uiInteractor.setZoomable(canZoom) }
     }
 
     @JavascriptInterface
@@ -162,6 +162,18 @@ class WebAppInterface(
     fun showHeaderSlim() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
         activity.runOnUiThread { uiInteractor.showHeaderSlim() }
+    }
+
+    @JavascriptInterface
+    fun showMenuBar() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showMenuBar")
+        activity.runOnUiThread { uiInteractor.showMenuBar() }
+    }
+
+    @JavascriptInterface
+    fun startDownload(base64Data: String, fileName: String, mimeType: String) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering startDownload")
+        activity.runOnUiThread{ uiInteractor.startDownload(base64Data, fileName, mimeType) }
     }
 
     @JavascriptInterface

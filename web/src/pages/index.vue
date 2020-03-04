@@ -12,12 +12,11 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
-import WelcomeSection from '../components/WelcomeSection';
-import ProxyWelcomeSection from '../components/ProxyWelcomeSection';
-import NavigationListMenu from '../components/NavigationListMenu';
 import BiometricBanner from '../components/widgets/BiometricBanner';
 import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
+import NavigationListMenu from '../components/NavigationListMenu';
+import ProxyWelcomeSection from '../components/ProxyWelcomeSection';
+import WelcomeSection from '../components/WelcomeSection';
 
 export default {
   layout: 'nhsuk-layout',
