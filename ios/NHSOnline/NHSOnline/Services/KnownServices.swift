@@ -54,6 +54,7 @@ class KnownServices {
             return SubServiceMatch.init(
                     subService: subService,
                     pathMatch: pathMatch,
+                    pathMatchCount: subServicePath.count,
                     queryMatch: queryItems.isEmpty ? true : false,
                     queryMatchCount: 0)
         }
@@ -61,6 +62,7 @@ class KnownServices {
         return SubServiceMatch.init(
                 subService: subService,
                 pathMatch: pathMatch,
+                pathMatchCount: subServicePath.count,
                 queryMatch: Set(subServiceQueryItems).isSubset(of: Set(queryItems)),
                 queryMatchCount: Set(subServiceQueryItems).intersection(Set(queryItems)).count
         )
@@ -97,7 +99,11 @@ class KnownServices {
             return subServiceMatch
         }
 
-        return subServiceMatch.queryMatchCount > bestServiceMatch!.queryMatchCount ? subServiceMatch : bestServiceMatch
+        if subServiceMatch.queryMatchCount > 0 || bestServiceMatch!.queryMatchCount > 0 {
+            return subServiceMatch.queryMatchCount > bestServiceMatch!.queryMatchCount ? subServiceMatch : bestServiceMatch
+        }
+
+        return subServiceMatch.pathMatchCount > bestServiceMatch!.pathMatchCount ? subServiceMatch : bestServiceMatch
     }
 
     private func queryStringToArray(_ query: String?) -> [String] {
@@ -126,6 +132,7 @@ class KnownServices {
     struct SubServiceMatch {
         let subService: SubService
         let pathMatch: Bool
+        let pathMatchCount: Int
         let queryMatch: Bool
         let queryMatchCount: Int
     }

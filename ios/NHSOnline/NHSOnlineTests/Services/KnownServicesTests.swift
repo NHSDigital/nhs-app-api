@@ -10,9 +10,11 @@ class KnownServicesTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        testSubServices.append(SubService.init(path: nil, queryString: "foo=bar", javaScriptInteractionMode: .Unknown, 
-                menuTab: .Unknown, viewMode: .Unknown, validateSession: false))
         testSubServices.append(SubService.init(path: "/path", queryString: nil, javaScriptInteractionMode: .Unknown,
+                menuTab: .Unknown, viewMode: .Unknown, validateSession: false))
+        testSubServices.append(SubService.init(path: "/path/valid-subpath", queryString: nil, javaScriptInteractionMode: .Unknown,
+                menuTab: .Unknown, viewMode: .Unknown, validateSession: false))
+        testSubServices.append(SubService.init(path: nil, queryString: "foo=bar", javaScriptInteractionMode: .Unknown,
                 menuTab: .Unknown, viewMode: .Unknown, validateSession: false))
         testSubServices.append(SubService.init(path: "/path", queryString: "foo=bar", javaScriptInteractionMode: .Unknown,
                 menuTab: .Unknown, viewMode: .Unknown, validateSession: false))
@@ -76,6 +78,15 @@ class KnownServicesTests: XCTestCase {
         XCTAssertNotNil(result)
         XCTAssert(result is SubService)
         XCTAssert((result as! SubService).path == "/path")
+        XCTAssert((result as! SubService).queryString == nil)
+    }
+
+    func test_findMatchingSubService_ResolveToSubService_WhenUrlHasValidTwoLevelPath(){
+        let result = testKnownServices!.findMatchingKnownService(URL(string: "https://test.com/path/valid-subpath"))
+
+        XCTAssertNotNil(result)
+        XCTAssert(result is SubService)
+        XCTAssert((result as! SubService).path == "/path/valid-subpath")
         XCTAssert((result as! SubService).queryString == nil)
     }
 

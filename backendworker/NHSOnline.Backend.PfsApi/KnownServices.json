@@ -41,6 +41,16 @@
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
+        },
+        {
+          "path": "/conditions/coronavirus-covid-19",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
         }
       ]
     },
