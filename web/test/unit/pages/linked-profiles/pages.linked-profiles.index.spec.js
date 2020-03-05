@@ -18,13 +18,13 @@ describe('linked profile is there', () => {
       items: [
         {
           id: 'user-id-0',
-          name: 'user 0',
+          fullName: 'user 0',
           ageMonths: '0',
           ageYears: '20',
         },
         {
           id: 'user-id-1',
-          name: 'user 1',
+          fullName: 'user 1',
           ageMonths: '10',
           ageYears: '42',
         },

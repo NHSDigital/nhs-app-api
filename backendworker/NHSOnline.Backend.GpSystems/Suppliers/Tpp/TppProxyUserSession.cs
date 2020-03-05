@@ -14,6 +14,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         
         public string NhsNumber { get; set; }
 
-        public string Name { get; set; }
+        public string FullName { get; set; }
     }
 }

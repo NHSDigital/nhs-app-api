@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 ProxyPatients = linkedPatients.Select(x => new TppProxyUserSession
                 {
                     Id = Guid.NewGuid(),
-                    Name = x.PersonName?.Name,
+                    FullName = x.PersonName?.Name,
                     DateOfBirth = x.DateOfBirth,
                     NhsNumber = x.NationalId.Value,
                     PatientId = x.PatientId,

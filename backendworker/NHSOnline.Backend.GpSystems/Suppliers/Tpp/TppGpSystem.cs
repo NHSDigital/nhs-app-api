@@ -14,6 +14,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
@@ -107,7 +108,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
         public ILinkedAccountsService GetLinkedAccountsService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<TppLinkedAccountsService>();
         }
 
         public IPatientMessagesService GetPatientMessagesService()

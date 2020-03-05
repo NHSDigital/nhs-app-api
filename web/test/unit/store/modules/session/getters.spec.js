@@ -150,7 +150,7 @@ describe('getters', () => {
         ageMonths: '10',
         ageYears: '39',
         givenName: 'harry',
-        name: 'harry dixon',
+        fullName: 'harry dixon',
       };
 
       const mockGetters = {

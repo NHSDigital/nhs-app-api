@@ -8,6 +8,7 @@ const $t = create$T();
 describe('linked profile is there', () => {
   let $store;
   let wrapper;
+  let $state;
 
   const createState = (state = {
     device: {
@@ -23,11 +24,31 @@ describe('linked profile is there', () => {
         canBookAppointment: true,
         canOrderRepeatPrescription: true,
         canViewMedicalRecord: false,
+        displayPersonalizedContent: false,
       },
     },
   }) => state;
 
-  const mountPage = () => mount(LinkedProfileSummary, { $store, $t });
+  const createStateWithPersonalizedContentTrue = (state = {
+    device: {
+      source: 'web',
+    },
+    linkedAccounts: {
+      selectedLinkedAccount: {
+        id: 'user-id-0',
+        name: 'mr user 0',
+        dateOfBirth: '2019-07-04T00:00:00.000',
+        gpPracticeName: 'practice x',
+        nhsNumber: 999111222,
+        canBookAppointment: true,
+        canOrderRepeatPrescription: true,
+        canViewMedicalRecord: false,
+        displayPersonalizedContent: true,
+      },
+    },
+  }) => state;
+
+  const mountPage = () => mount(LinkedProfileSummary, { $store, $t, $state });
 
   describe('show linked profile links', () => {
     beforeEach(() => {
@@ -35,6 +56,7 @@ describe('linked profile is there', () => {
         dispatch: jest.fn(() => Promise.resolve()),
         state: createState(),
       });
+      $store.getters['linkedAccounts/getSelectedLinkedAccount'] = $store.state.linkedAccounts.selectedLinkedAccount;
       wrapper = mountPage();
     });
 
@@ -80,6 +102,10 @@ describe('linked profile is there', () => {
   });
 
   describe('icons are not focusable', () => {
+    beforeEach(() => {
+      $store.getters['linkedAccounts/getSelectedLinkedAccount'] = $store.state.linkedAccounts.selectedLinkedAccount;
+    });
+
     it('focus is disabled on icons of services you can access', () => {
       const appointmentIconAttributes = wrapper
         .find('[id="book-an-appointment"]')
@@ -99,6 +125,32 @@ describe('linked profile is there', () => {
         .find('svg[class*="nhsuk-icon__cross"]').attributes();
 
       expect(medicalRecordIconAttributes.focusable).toEqual('false');
+    });
+  });
+
+  describe('displayPersonalisedButton dependent on displayPersonalizedContent', () => {
+    it('will not display displayPersonalisedButton when displayPersonalizedContent is false', () => {
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()),
+        state: createState(),
+      });
+      $store.getters['linkedAccounts/getSelectedLinkedAccount'] = $store.state.linkedAccounts.selectedLinkedAccount;
+      wrapper = mountPage();
+      const button = wrapper.find('#btn-switch-profile');
+      expect(button.exists()).toEqual(true);
+      expect(button.text()).toEqual('translate_linkedProfiles.switchProfileButtonWithoutName');
+    });
+
+    it('will display displayPersonalisedButton when displayPersonalizedContent is true', () => {
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()),
+        state: createStateWithPersonalizedContentTrue(),
+      });
+      $store.getters['linkedAccounts/getSelectedLinkedAccount'] = $store.state.linkedAccounts.selectedLinkedAccount;
+      wrapper = mountPage();
+      const button = wrapper.find('#btn-switch-profile');
+      expect(button.exists()).toEqual(true);
+      expect(button.text()).toEqual('translate_linkedProfiles.switchProfileButton');
     });
   });
 });

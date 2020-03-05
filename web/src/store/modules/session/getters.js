@@ -30,10 +30,12 @@ export default {
   currentProfile(state, getters, rootState) {
     if (getters.isProxying) {
       return {
-        name: rootState.linkedAccounts.actingAsUser.name,
         ageMonths: rootState.linkedAccounts.actingAsUser.ageMonths,
         ageYears: rootState.linkedAccounts.actingAsUser.ageYears,
         givenName: rootState.linkedAccounts.actingAsUser.givenName,
+        fullName: rootState.linkedAccounts.actingAsUser.fullName,
+        displayPersonalizedContent:
+          rootState.linkedAccounts.actingAsUser.displayPersonalizedContent,
       };
     }
 

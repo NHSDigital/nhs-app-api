@@ -10,4 +10,7 @@ export default {
   isRecoveringFromProxyLoss(state) {
     return get('recoverFromProxyLoss')(state);
   },
+  getSelectedLinkedAccount(state) {
+    return get('selectedLinkedAccount')(state);
+  },
 };

@@ -4,7 +4,7 @@
       <div class="nhsuk-grid-column-full">
         <div class="nhsuk-do-dont-list nhsuk-u-margin-top-3">
           <p :class="[$style['user-info'], 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3']">
-            {{ `${$t('linkedProfiles.thingsYouCanDoOnBehalfOf.text')} ${linkedAccount.name}` }}
+            {{ `${$t('linkedProfiles.thingsYouCanDoOnBehalfOf.text')} ${linkedAccount.fullName}` }}
           </p>
           <ul v-for="item in thingsYouCanDoOnBehalfOf"
               :key="item.text"
@@ -19,8 +19,7 @@
         <generic-button id="btn-switch-profile"
                         :button-classes="['nhsuk-button']"
                         @click.stop.prevent="switchProfileButtonClicked">
-          {{ $t('linkedProfiles.switchProfileButton').replace('{givenName}',
-                                                              linkedAccount.givenName) }}
+          {{ switchButtonText }}
         </generic-button>
       </div>
     </div>
@@ -43,7 +42,7 @@ export default {
   },
   data() {
     return {
-      linkedAccount: this.$store.state.linkedAccounts.selectedLinkedAccount,
+      linkedAccount: this.$store.getters['linkedAccounts/getSelectedLinkedAccount'],
     };
   },
   computed: {
@@ -62,6 +61,14 @@ export default {
         canDo: this.linkedAccount.canViewMedicalRecord,
       }];
     },
+    displayPersonalisedButton() {
+      return this.linkedAccount.displayPersonalizedContent;
+    },
+    switchButtonText() {
+      return this.displayPersonalisedButton
+        ? this.$t('linkedProfiles.switchProfileButton', { givenName: this.linkedAccount.givenName })
+        : this.$t('linkedProfiles.switchProfileButtonWithoutName');
+    },
   },
   asyncData({ store, redirect }) {
     if (store.state.linkedAccounts.selectedLinkedAccount === null) {
@@ -74,8 +81,8 @@ export default {
     );
   },
   mounted() {
-    this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.linkedProfilesSummary').replace('{name}', this.linkedAccount.name));
-    this.$store.dispatch('pageTitle/updatePageTitle', this.$t('pageTitles.linkedProfilesSummary').replace('{name}', this.linkedAccount.name));
+    this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.linkedProfilesSummary').replace('{fullName}', this.linkedAccount.fullName));
+    this.$store.dispatch('pageTitle/updatePageTitle', this.$t('pageTitles.linkedProfilesSummary').replace('{fullName}', this.linkedAccount.fullName));
   },
   beforeDestroy() {
     this.$store.dispatch('linkedAccounts/clearSelectedLinkedAccount');

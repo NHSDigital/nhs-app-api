@@ -5,6 +5,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
@@ -29,7 +30,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             services.RegisterTppPatientRecordServices();
             services.RegisterTppSessionServices();
             services.RegisterTppLinkedAccountServices();
-
             return services;
         }
 

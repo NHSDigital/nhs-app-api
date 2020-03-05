@@ -10,7 +10,7 @@
             v-for="(item, index) in linkedAccounts"
             :id="'linked-account-menu-item-' + index"
             :key="index"
-            :text="item.name"
+            :text="item.fullName"
             :click-func="onLinkedProfileClicked"
             :click-param="item.id"
             :description="getDisplayedAgeText(item)"

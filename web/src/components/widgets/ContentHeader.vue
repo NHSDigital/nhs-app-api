@@ -117,7 +117,7 @@ export default {
       return route.warningBanner;
     },
     actingAsPersonName() {
-      return this.$store.state.linkedAccounts.actingAsUser.name;
+      return this.$store.state.linkedAccounts.actingAsUser.fullName;
     },
     getProviderName() {
       const route = findByName(this.$route.name);

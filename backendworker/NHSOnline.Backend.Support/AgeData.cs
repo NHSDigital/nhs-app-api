@@ -1,4 +1,4 @@
-namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models
+namespace NHSOnline.Backend.Support
 {
     public class AgeData
     {

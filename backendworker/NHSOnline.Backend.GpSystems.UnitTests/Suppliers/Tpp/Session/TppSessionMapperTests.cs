@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             {
                 var associatedPerson = response.Body.People.First(x => string.Equals(x.PatientId, proxy.PatientId, StringComparison.Ordinal));
                 proxy.Id.Should().NotBeEmpty();
-                proxy.Name.Should().Be(associatedPerson.PersonName.Name);
+                proxy.FullName.Should().Be(associatedPerson.PersonName.Name);
                 proxy.NhsNumber.Should().Be(associatedPerson.NationalId.Value);
                 proxy.PatientId.Should().Be(associatedPerson.PatientId);
                 proxy.DateOfBirth.Should().Be(associatedPerson.DateOfBirth);
@@ -231,7 +231,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             {
                 var associatedPerson = response.Body.People.First(x => string.Equals(x.PatientId, proxy.PatientId, StringComparison.Ordinal));
                 proxy.Id.Should().NotBeEmpty();
-                proxy.Name.Should().Be(associatedPerson.PersonName.Name);
+                proxy.FullName.Should().Be(associatedPerson.PersonName.Name);
                 proxy.NhsNumber.Should().Be(associatedPerson.NationalId.Value);
                 proxy.PatientId.Should().Be(associatedPerson.PatientId);
                 proxy.DateOfBirth.Should().Be(associatedPerson.DateOfBirth);

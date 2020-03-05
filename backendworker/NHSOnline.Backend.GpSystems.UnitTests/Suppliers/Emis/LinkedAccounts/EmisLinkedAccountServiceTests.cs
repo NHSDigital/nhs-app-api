@@ -98,70 +98,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             // Assert
             resultOdsCode.Should().Be(proxyOdsCode);
         }
-
-        [TestMethod]
-        public void CalculateAgeInMonthsAndYears_ReturnsEmptyAgeDataObjectWhenDateOfBirthIsNull()
-        {
-            // Arrange
-            DateTime? dateOfBirth = null;
-            var ageDataObject = new AgeData
-            {
-                AgeMonths = null,
-                AgeYears = null
-            };
-
-            // Act
-            var calculatedAge = EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(dateOfBirth);
-
-            // Assert
-            calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
-            calculatedAge.AgeYears.Should().Be(ageDataObject.AgeYears);
-        }
-
-        [TestMethod]
-        public void CalculateAgeInMonthsAndYears_ReturnsCorrectAgeDataObjectWhenDateOfBirthIsValidAndGreaterThan1Year()
-        {
-            // Arrange
-            DateTime? dateOfBirth = (DateTime.Now).AddMonths(-2);
-            dateOfBirth = dateOfBirth.Value.AddYears(-5);
-
-            var ageDataObject = new AgeData
-            {
-                //If the age is above 1, then the ageMonths will be 0
-                AgeMonths = 0,
-                AgeYears = 5
-            };
-
-            // Act
-            var calculatedAge = EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(dateOfBirth);
-
-            // Assert
-            calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
-            calculatedAge.AgeYears.Should().Be(ageDataObject.AgeYears);
-        }
-
-        [TestMethod]
-        public void CalculateAgeInMonthsAndYears_ReturnsCorrectAgeDataObjectWhenDateOfBirthIsValidAndLessThan1Year()
-        {
-            // Arrange
-            DateTime? dateOfBirth = (DateTime.Now).AddMonths(-5);
-            dateOfBirth = dateOfBirth.Value.AddYears(0);
-
-            var ageDataObject = new AgeData
-            {
-                AgeMonths = 5,
-                AgeYears = 0
-            };
-
-            // Act
-            var calculatedAge = EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(dateOfBirth);
-
-            // Assert
-            calculatedAge.AgeMonths.Should().Be(ageDataObject.AgeMonths);
-            calculatedAge.AgeYears.Should().Be(ageDataObject.AgeYears);
-        }
-
-
+        
         [TestMethod]
         public void GetOdsCodeForLinkedAccount_ReturnsNull_WhenLinkedAccountWithMatchingIdFoundInUserSession()
         {
@@ -250,7 +187,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         }
 
         [TestMethod]
-        public void IsValidAccountOrLinkedAccountId_ReturnsFalse_WhenLinkedAccountWithMatchingIdFoundInUserSession()
+        public void IsValidAccountOrLinkedAccountId_ReturnsFalse_WhenLinkedAccountWithMatchingIdIsNotFoundInUserSession()
         {
             // Arrange
             var randomGuidWhichWontBeFound = Guid.NewGuid();
@@ -387,9 +324,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 emisProxyPatient.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
 
                 linkedAccountDetail.Id.Should().Be(emisProxyPatient.Id);
-                linkedAccountDetail.Name.Should().Be(demographicsResponseForUser.PatientName);
-                linkedAccountDetail.AgeMonths.Should().Be(EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
-                linkedAccountDetail.AgeYears.Should().Be(EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
+                linkedAccountDetail.FullName.Should().Be(demographicsResponseForUser.PatientName);
+                linkedAccountDetail.AgeMonths.Should().Be(CalculateAge.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
+                linkedAccountDetail.AgeYears.Should().Be(CalculateAge.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
             }
 
             _demographicsService.VerifyAll();
@@ -538,7 +475,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             {
                 patientData.Patient.NhsNumber.Should().Be(patientData.DemographicsResponse.NhsNumber);
                 patientData.LinkedAccountDetail.Id.Should().Be(patientData.Patient.Id);
-                patientData.LinkedAccountDetail.Name.Should().Be(patientData.DemographicsResponse.PatientName);
+                patientData.LinkedAccountDetail.FullName.Should().Be(patientData.DemographicsResponse.PatientName);
                 patientData.LinkedAccountDetail.GivenName.Should().Be(patientData.DemographicsResponse.NameParts.Given);
             }
 
@@ -634,9 +571,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 emisProxyPatient.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
 
                 linkedAccountDetail.Id.Should().Be(emisProxyPatient.Id);
-                linkedAccountDetail.Name.Should().Be(demographicsResponseForUser.PatientName);
-                linkedAccountDetail.AgeMonths.Should().Be(EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
-                linkedAccountDetail.AgeYears.Should().Be(EmisLinkedAccountsService.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
+                linkedAccountDetail.FullName.Should().Be(demographicsResponseForUser.PatientName);
+                linkedAccountDetail.AgeMonths.Should().Be(CalculateAge.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeMonths);
+                linkedAccountDetail.AgeYears.Should().Be(CalculateAge.CalculateAgeInMonthsAndYears(demographicsResponseForUser.DateOfBirth).AgeYears);
             }
 
             _demographicsService.VerifyAll();

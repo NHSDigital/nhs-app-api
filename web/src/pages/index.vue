@@ -36,6 +36,10 @@ export default {
     },
     greetingMessage() {
       const message = this.$t('homeLoggedIn.welcome');
+      if (this.isProxying) {
+        const { fullName } = this.currentProfile;
+        return `${message}, ${fullName}`;
+      }
       const { name } = this.currentProfile;
       return `${message}, ${name}`;
     },
