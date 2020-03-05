@@ -22,6 +22,18 @@ spec:
         chaos.alpha.kubernetes.io/enabled: "true"
         rolleveryrelease: {{ randAlphaNum 5 | quote }}
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: role
+                  operator: In
+                  values:
+                  - {{ $.Values.api.role }}
+              topologyKey: kubernetes.io/hostname
       volumes:
       {{- if (and ($.Values.emisEnabled) ($.Values.emisCertEnabled) (not $.Values.environmentStubbed.emisStubbed)) }}
       - name: emiscert
@@ -187,7 +199,7 @@ spec:
         - name: SPINE_PDS_URL
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/spine/"
         - name: TEST_ONLY_SPINE_LDAP_LOOKUP_DUMMY_VALUE
-          value: "xxx"  
+          value: "xxx"
           {{- else }}
         - name: SPINE_PDS_URL
           value: "https://{{ $.Values.spinePdsHost }}/"
@@ -204,7 +216,7 @@ spec:
           value: "{{ $.Values.nominatedPharmacyPdsQueryFrom }}"
         {{- end }}
         - name: PROXY_ACCESS_ENABLED
-          value: "{{ $.Values.proxyAccessEnabled }}"  
+          value: "{{ $.Values.proxyAccessEnabled }}"
         - name: ONLINECONSULTATIONSPROVIDERSSETTINGS__PROVIDERS__0__PROVIDER
           value: stubs
         - name: ONLINECONSULTATIONSPROVIDERSSETTINGS__PROVIDERS__0__BASEADDRESS
@@ -530,4 +542,3 @@ spec:
       dnsConfig:
         options:
           - name: single-request-reopen
-          

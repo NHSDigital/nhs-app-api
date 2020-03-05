@@ -22,6 +22,18 @@ spec:
         chaos.alpha.kubernetes.io/enabled: "true"
         rolleveryrelease: {{ randAlphaNum 5 | quote }}
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: role
+                  operator: In
+                  values:
+                  - {{ $.Values.cid.role }}
+              topologyKey: kubernetes.io/hostname
       volumes:
       {{- if (and ($.Values.emisEnabled) ($.Values.emisCertEnabled)) }}
       - name: emiscert
