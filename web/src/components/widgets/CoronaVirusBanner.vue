@@ -40,9 +40,11 @@ export default {
     text-decoration: none;
     padding: 0 10px;
     margin: 0 -10px;
+    background-position: right 10px center;
 
     &:hover {
       text-decoration: underline;
+      box-shadow: none;
       cursor: pointer;
     }
 

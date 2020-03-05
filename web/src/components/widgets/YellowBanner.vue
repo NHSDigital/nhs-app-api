@@ -2,7 +2,7 @@
   <div :class="$style.bannerContainer">
     <div class="nhsuk-width-container">
       <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-one-half">
+        <div class="nhsuk-grid-column-two-thirds">
           <slot/>
         </div>
       </div>
