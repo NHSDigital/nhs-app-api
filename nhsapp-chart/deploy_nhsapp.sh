@@ -152,10 +152,10 @@ if [[ $TARGET_ZONE == "sandbox" ]] || [[ $TARGET_ZONE == "dev" ]]; then
 	[[ $(az cosmosdb mongodb database list --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "$COSMOS_DB_NAME") ]] || az cosmosdb mongodb database create --name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}"
 
 	info "CosmosDB - Creating Session Collection"
-	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "session") ]] || az cosmosdb mongodb collection create --name session --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --shard "_id" --throughput 400 --default-ttl 600
+	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "session") ]] || az cosmosdb mongodb collection create --name session --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --shard "_id" --throughput 400 --ttl 600
 
 	info "CosmosDB - Creating im1cache Collection"
-	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "im1cache") ]] || az cosmosdb mongodb collection create --name im1cache --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --shard "_id" --throughput 400 --default-ttl 604800
+	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "im1cache") ]] || az cosmosdb mongodb collection create --name im1cache --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --shard "_id" --throughput 400 --ttl 604800
 
 elif [[ $TARGET_ZONE == "staging" ]] || [[ $TARGET_ZONE == "production" ]]; then
 	info "CosmosDB - Creating SQL API Database $COSMOS_DB_NAME"
@@ -171,10 +171,10 @@ elif [[ $TARGET_ZONE == "staging" ]] || [[ $TARGET_ZONE == "production" ]]; then
 	[[ $(az cosmosdb mongodb database list --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "$COSMOS_DB_NAME") ]] || az cosmosdb mongodb database create --name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}"
 
 	info "CosmosDB - Creating Session Collection"
-	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "session") ]] || az cosmosdb mongodb collection create --name session --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --throughput 10000 --default-ttl 600
+	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "session") ]] || az cosmosdb mongodb collection create --name session --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --throughput 10000 --ttl 600
 
 	info "CosmosDB - Creating im1cache Collection"
-	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "im1cache") ]] || az cosmosdb mongodb collection create --name im1cache --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --throughput 400 --default-ttl 604800
+	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "im1cache") ]] || az cosmosdb mongodb collection create --name im1cache --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --throughput 400 --ttl 604800
 fi
 
 CURRENT_RELEASE=$(helm ls --namespace "$TARGET_ENVIRONMENT" --deployed | grep "$TARGET_ENVIRONMENT" | grep "$CHART" | awk '{print $2}')
