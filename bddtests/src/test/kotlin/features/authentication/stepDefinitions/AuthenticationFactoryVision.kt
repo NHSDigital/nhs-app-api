@@ -2,6 +2,7 @@ package features.authentication.stepDefinitions
 
 import constants.Supplier
 import mocking.defaults.VisionMockDefaults
+import mocking.vision.models.Register
 import models.Patient
 import utils.SerenityHelpers
 import java.time.Duration
@@ -97,6 +98,24 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
                         VisionMockDefaults.getVisionUserSession(patient))
                         .respondWithSuccess(
                                 VisionMockDefaults.visionConfigurationResponse)
+            }
+        }
+
+        fun configurationRequestInvalid(patient: Patient) {
+            mockingClient.forVision {
+                authentication.getRegisterRequest(
+                        VisionMockDefaults.getVisionUserSession(patient),
+                        patient)
+                        .respondWithSuccess(
+                                Register(
+                                        rosuAccountId = patient.rosuAccountId,
+                                        apiToken = patient.apiKey)
+                        )
+            }
+            mockingClient.forVision {
+                authentication.getConfigurationRequest(
+                        VisionMockDefaults.getVisionUserSession(patient))
+                        .respondWithInvalidRequest()
             }
         }
     }

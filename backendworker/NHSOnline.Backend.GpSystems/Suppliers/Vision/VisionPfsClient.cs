@@ -323,7 +323,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             private Fault Fault => RawResponse?.Body?.Fault;
             private Outcome Outcome => RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome;
 
-            private bool FaultExists => Fault != null;
+            public bool FaultExists => Fault != null;
 
             private bool OutcomeUnsuccessful => bool.FalseString.Equals(
                 Outcome?.Successful,

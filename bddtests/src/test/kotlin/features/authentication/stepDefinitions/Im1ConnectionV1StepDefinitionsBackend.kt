@@ -161,6 +161,14 @@ class Im1ConnectionV1StepDefinitionsBackend {
         setSessionVariable("HttpExceptionExpected").to(true)
     }
 
+    @Given("^I have data for a Vision patient but the configuration request fails with invalid request")
+    fun iHaveDataForAVisionPatientButTheConfigurationRequestFailsWithInvalidRequest() {
+        val patient = Patient.getDefault(Supplier.VISION)
+        AuthenticationFactoryVision.configurationRequestInvalid(patient)
+        setIm1Request(patient)
+        setSessionVariable("HttpExceptionExpected").to(true)
+    }
+
     private fun setIm1Request(patient:Patient) {
         AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(
                 AccountId = patient.accountId,

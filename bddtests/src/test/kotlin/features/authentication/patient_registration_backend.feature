@@ -99,6 +99,11 @@ Feature: Patient Registration Backend
     When I register the user's IM1 credentials
     Then I get a "Bad Gateway" error
 
+  Scenario: VISION responding to the configuration request with invalid request creates a Bad Gateway response
+    Given I have data for a Vision patient but the configuration request fails with invalid request
+    When I register the user's IM1 credentials
+    Then I get a "Bad Gateway" error
+
   Scenario: ODS Code not in the expected format
     Given I have a user's IM1 credentials with an ODS Code not in the expected format
     When I register the user's IM1 credentials

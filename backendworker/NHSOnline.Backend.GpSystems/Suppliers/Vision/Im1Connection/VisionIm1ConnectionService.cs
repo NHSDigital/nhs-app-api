@@ -130,10 +130,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 var configResponse = await _visionClient.GetConfiguration(connectionToken, request.OdsCode);
                 if (configResponse.HasErrorResponse)
                 {
-                    _logger.LogError("Error occurred when trying to obtain nhs number from get configuration. " +
-                                     $"Error Code: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Code}. " +
-                                     $"Error description: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Description}.");
-                    _logger.LogVisionErrorResponse(configResponse);
+                    if (configResponse.FaultExists)
+                    {
+                        _logger.LogError("Error occurred when trying to obtain nhs number from get configuration. " +
+                                         $"Error: {configResponse.ErrorForLogging}.");
+                    }
+                    else
+                    {
+                        _logger.LogError("Error occurred when trying to obtain nhs number from get configuration. " +
+                                         $"Error Code: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Code}. " +
+                                         $"Error description: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Description}.");
+                        _logger.LogVisionErrorResponse(configResponse);
+                    }
                     return new Im1ConnectionRegisterResult.BadGateway();
                 }
 
