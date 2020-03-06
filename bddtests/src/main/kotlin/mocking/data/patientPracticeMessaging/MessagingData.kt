@@ -1,7 +1,7 @@
 package mocking.data.patientPracticeMessaging
 
 import constants.DateTimeFormats
-import mocking.emis.models.PatientPracticeMessagingTypes
+import mocking.emis.models.PatientPracticeMessagingSerenityHelpers
 import mocking.emis.patientPracticeMessaging.ConversationDeletedResponse
 import mocking.emis.patientPracticeMessaging.MessageDetails
 import mocking.emis.patientPracticeMessaging.MessageRecipientsResponseModel
@@ -11,7 +11,7 @@ import mocking.emis.patientPracticeMessaging.MessagesResponseModel
 import mocking.emis.patientPracticeMessaging.PatientMessageSummary
 import mocking.emis.patientPracticeMessaging.MessageReadStatusUpdateResponse
 import mocking.emis.patientPracticeMessaging.Recipient
-import utils.SerenityHelpers
+import utils.setIfNotAlreadySet
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -142,8 +142,7 @@ object MessagingData {
             ))
         })
 
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingTypes.EXPECTED_INBOX_MESSAGE_DATES, expectedDates)
+        PatientPracticeMessagingSerenityHelpers.EXPECTED_INBOX_MESSAGE_DATES.setIfNotAlreadySet(expectedDates)
         return MessagesResponseModel(messages)
     }
 
@@ -168,15 +167,18 @@ object MessagingData {
         })
 
         if (isUnread) {
-            SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                    PatientPracticeMessagingTypes.EXPECTED_UNREAD_MESSAGE_REPLY_DATES, expectedDates)
+            PatientPracticeMessagingSerenityHelpers
+                .EXPECTED_UNREAD_MESSAGE_REPLY_DATES
+                .setIfNotAlreadySet(expectedDates)
         } else {
-            SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                    PatientPracticeMessagingTypes.EXPECTED_READ_MESSAGE_REPLY_DATES, expectedDates)
+            PatientPracticeMessagingSerenityHelpers
+                .EXPECTED_READ_MESSAGE_REPLY_DATES
+                .setIfNotAlreadySet(expectedDates)
         }
 
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingTypes.EXPECTED_MESSAGE_SENT_DATE,
+        PatientPracticeMessagingSerenityHelpers
+            .EXPECTED_MESSAGE_SENT_DATE
+            .setIfNotAlreadySet(
                 getExpectedFormattedIndividualMessageDate(sentDate, MessageDateFormat.DETAILS_BEFORE_YESTERDAY))
 
         return MessageDetails(
@@ -221,8 +223,12 @@ object MessagingData {
     }
 
     fun getDefaultMessageRecipients(): MessageRecipientsResponseModel {
+        PatientPracticeMessagingSerenityHelpers
+            .AVAILABLE_RECIPIENTS
+            .setIfNotAlreadySet(arrayListOf(RECIPIENT_1, RECIPIENT_2))
+
         return MessageRecipientsResponseModel(
-            arrayListOf(RECIPIENT_1, RECIPIENT_2)
+            arrayListOf(RECIPIENT_1, RECIPIENT_2, RECIPIENT_1)
         )
     }
 

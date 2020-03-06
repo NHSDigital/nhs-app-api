@@ -23,6 +23,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         private IFixture _fixture;
 
         private Mock<IEmisClient> _mockClient;
+        private Mock<IEmisPatientMessageRecipientsMapper> _mockMapper;
 
         private EmisUserSession _userSession;
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
@@ -35,6 +36,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _mockClient = _fixture.Freeze<Mock<IEmisClient>>();
+            _mockMapper = _fixture.Freeze<Mock<IEmisPatientMessageRecipientsMapper>>();
 
             _userSession = _fixture.Create<EmisUserSession>();
 
@@ -47,11 +49,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         }
 
         [TestMethod]
-        public async Task GetMessageRecipients_WhenSuccessfulResponseFromEmis_ReturnsSuccess()
+        public async Task GetMessageRecipients_WhenSuccessfulResponseFromEmis_MapsResponseAndReturnsSuccess()
         {
             // Arrange
             var messageRecipientsGetResponse = _fixture.Create<MessageRecipientsGetResponse>();
-
+            
             _mockClient
                 .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
                 .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessageRecipientsGetResponse>(
@@ -61,12 +63,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
                     Body = messageRecipientsGetResponse
                 }))
                 .Verifiable();
+            _mockMapper
+                .Setup(m => m.Map(It.Is<MessageRecipientsGetResponse>(r => r.Equals(messageRecipientsGetResponse))))
+                .Returns(messageRecipientsGetResponse)
+                .Verifiable();
 
             // Act
             var result = await _systemUnderTest.GetMessageRecipients(_userSession);
 
             // Assert
             _mockClient.Verify();
+            _mockMapper.Verify();
 
             result.Should().BeAssignableTo<GetPatientMessageRecipientsResult.Success>()
                 .Subject.Response.Should().BeEquivalentTo(messageRecipientsGetResponse);

@@ -2,7 +2,7 @@ package mocking.emis.models
 
 import utils.ISerenityHelperEnums
 
-enum class PatientPracticeMessagingTypes: ISerenityHelperEnums {
+enum class PatientPracticeMessagingSerenityHelpers: ISerenityHelperEnums {
     EXPECTED_MESSAGES,
     EXPECTED_INBOX_MESSAGE_DATES,
     EXPECTED_MESSAGE_SENT_DATE,

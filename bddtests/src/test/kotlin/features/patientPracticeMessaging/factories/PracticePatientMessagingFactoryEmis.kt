@@ -1,12 +1,13 @@
 package features.patientPracticeMessaging.factories
 
 import mocking.data.patientPracticeMessaging.MessagingData
-import mocking.emis.models.PatientPracticeMessagingTypes
+import mocking.emis.models.PatientPracticeMessagingSerenityHelpers
 import mocking.emis.patientPracticeMessaging.MessagesResponseModel
 import mocking.emis.patientPracticeMessaging.PatientMessageSummary
 import models.ExpectedMessage
 import models.Patient
-import utils.SerenityHelpers
+import utils.getOrNull
+import utils.setIfNotAlreadySet
 import worker.models.patientPracticeMessaging.CreateMessageRequest
 
 class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
@@ -73,8 +74,9 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
     }
 
     override fun getExpectedMessages(expectedMessages: List<PatientMessageSummary>): List<ExpectedMessage>{
-        val expectedInboxMessageDates = SerenityHelpers
-                .getValueOrNull<List<String>>(PatientPracticeMessagingTypes.EXPECTED_INBOX_MESSAGE_DATES)
+        val expectedInboxMessageDates = PatientPracticeMessagingSerenityHelpers
+            .EXPECTED_INBOX_MESSAGE_DATES
+            .getOrNull<List<String>>()
         return expectedMessages.mapIndexed(fun(index, message): ExpectedMessage {
             return ExpectedMessage(
                     message.messageId,
@@ -92,17 +94,12 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         val createMessageRequest = CreateMessageRequest("Test Results",
                 "When will my test results be ready", recipients.MessageRecipients[0].recipientGuid!!)
 
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingTypes.EXPECTED_MESSAGES, getExpectedMessages(messages.messages))
-
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingTypes.AVAILABLE_MESSAGE, messageDetails)
-
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingTypes.AVAILABLE_RECIPIENTS, MessagingData.getDefaultMessageRecipients())
-
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet(PatientPracticeMessagingTypes.SENT_MESSAGE,
-                createMessageRequest)
+        PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES
+            .setIfNotAlreadySet(getExpectedMessages(messages.messages))
+        PatientPracticeMessagingSerenityHelpers.AVAILABLE_MESSAGE
+            .setIfNotAlreadySet(messageDetails)
+        PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE
+            .setIfNotAlreadySet(createMessageRequest)
 
 
         mockingClient.forEmis {
@@ -113,7 +110,6 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
             messaging.viewConversationRequest(patient)
                     .respondWithSuccess(messageDetails)
         }
-
         mockingClient.forEmis {
             messaging.updateReadStatusRequest(patient)
                     .respondWithSuccess(MessagingData.getUpdatedResponse())
@@ -126,7 +122,6 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
             messaging.sendMessageRequest(patient, createMessageRequest)
                     .respondWithSuccess()
         }
-
         mockingClient.forEmis {
             messaging.deleteConversationRequest(patient)
                     .respondWithSuccess(MessagingData.getDeleteResponse())

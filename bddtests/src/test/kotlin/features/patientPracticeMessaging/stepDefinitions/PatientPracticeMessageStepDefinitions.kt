@@ -8,8 +8,7 @@ import cucumber.api.java.en.When
 import features.patientPracticeMessaging.factories.PracticePatientMessagingFactory
 import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
-import mocking.emis.models.PatientPracticeMessagingTypes
-import mocking.emis.patientPracticeMessaging.MessageRecipientsResponseModel
+import mocking.emis.models.PatientPracticeMessagingSerenityHelpers
 import mocking.emis.practices.SettingsResponseModel
 import models.ExpectedMessage
 import org.junit.Assert.assertNotNull
@@ -22,10 +21,13 @@ import pages.patientPracticeMessaging.PatientPracticeMessagingUrgencyPage
 import utils.SerenityHelpers
 import mocking.emis.patientPracticeMessaging.MessageReply
 import mocking.emis.patientPracticeMessaging.MessageResponseModel
+import mocking.emis.patientPracticeMessaging.Recipient
 import net.thucydides.core.annotations.Steps
 import pages.patientPracticeMessaging.PatientPracticeMessagingDeletePage
 import pages.patientPracticeMessaging.PatientPracticeMessagingDeleteSuccessPage
 import pages.patientPracticeMessaging.PracticePatientMessagingCreateMessagePage
+import utils.getOrNull
+import utils.setIfNotAlreadySet
 import worker.models.patientPracticeMessaging.CreateMessageRequest
 
 const val RACE_CONDITION_WAIT: Long = 60
@@ -147,25 +149,26 @@ open class PatientPracticeMessageStepDefinitions {
 
     @Then("^I am on the send message page")
     fun iAmOnTheSendMessagePage() {
-        val expectedRecipients = SerenityHelpers.getValueOrNull<MessageRecipientsResponseModel>(
-                PatientPracticeMessagingTypes.AVAILABLE_RECIPIENTS)!!.MessageRecipients
+        val expectedRecipients = PatientPracticeMessagingSerenityHelpers
+            .AVAILABLE_RECIPIENTS
+            .getOrNull<List<Recipient>>()!!
         patientPracticePatientMessagingCreateMessagePage.assertHeaderContainsRecipient(expectedRecipients[0].name!!)
         patientPracticePatientMessagingCreateMessagePage.assertDisplayed()
     }
 
     @When("^I insert a subject and message")
     fun iInsertSubjectAndMessageText() {
-        val messageDetails = SerenityHelpers
-                .getValueOrNull<CreateMessageRequest>(PatientPracticeMessagingTypes.SENT_MESSAGE)!!
+        val messageDetails = PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE.getOrNull<CreateMessageRequest>()!!
         patientPracticePatientMessagingCreateMessagePage.insertSubjectAndMessageText(
-                messageDetails.subject,
-                messageDetails.messageBody)
+            messageDetails.subject,
+            messageDetails.messageBody)
     }
 
     @When("^I click on a recipient$")
     fun iClickOnARecipient(){
-        val expectedRecipients = SerenityHelpers.getValueOrNull<MessageRecipientsResponseModel>(
-                PatientPracticeMessagingTypes.AVAILABLE_RECIPIENTS)!!.MessageRecipients
+        val expectedRecipients = PatientPracticeMessagingSerenityHelpers
+            .AVAILABLE_RECIPIENTS
+            .getOrNull<List<Recipient>>()!!
         patientPracticeMessagingRecipientsPage.clickRecipient(expectedRecipients)
     }
 
@@ -187,27 +190,27 @@ open class PatientPracticeMessageStepDefinitions {
     @Given("^there is an unknown error getting patient practice message details$")
     fun givenThereIsAnErrorGettingPatientPracticeMessagesDetails() {
         PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .errorWithPatientPracticeMessagingMessageDetails(SerenityHelpers.getPatient())
+            .getForSupplier(SerenityHelpers.getGpSupplier())
+            .errorWithPatientPracticeMessagingMessageDetails(SerenityHelpers.getPatient())
     }
 
     @When("I have no recipients for patient practice messaging$")
     fun iHaveNoRecipients() {
         PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .noRecipients(SerenityHelpers.getPatient())
+            .getForSupplier(SerenityHelpers.getGpSupplier())
+            .noRecipients(SerenityHelpers.getPatient())
     }
 
     @And("^there is a bad request deleting the patient practice conversation$")
     fun givenThereIsABadRequestDeletingThePatientPracticeConversation() {
         PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .errorWithPatientPracticeMessagingConversationDelete(SerenityHelpers.getPatient())
+            .getForSupplier(SerenityHelpers.getGpSupplier())
+            .errorWithPatientPracticeMessagingConversationDelete(SerenityHelpers.getPatient())
     }
 
     @When("^I select a patient practice message in my inbox$")
     fun iSelectAPatientPracticeMessageInMyInbox() {
-        clickMessageBySerenityVariable(PatientPracticeMessagingTypes.AVAILABLE_MESSAGE)
+        clickMessageBySerenityVariable(PatientPracticeMessagingSerenityHelpers.AVAILABLE_MESSAGE)
     }
 
     @When("^I click the Send a message button on the patient practice messaging inbox$")
@@ -260,9 +263,8 @@ open class PatientPracticeMessageStepDefinitions {
     @Then("^I see a list of patient practice messages$")
     fun iSeeAListOfPatientPracticeMessages() {
         patientPracticeMessagingPage
-                .assertCorrectMessagesDisplayed(
-                        SerenityHelpers.getValueOrNull<List<ExpectedMessage>>(
-                                PatientPracticeMessagingTypes.EXPECTED_MESSAGES)!!)
+            .assertCorrectMessagesDisplayed(
+                PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES.getOrNull<List<ExpectedMessage>>()!!)
     }
 
     @Then("^I see a message indicating that I have no patient practice messages$")
@@ -312,23 +314,27 @@ open class PatientPracticeMessageStepDefinitions {
 
     @Then("^I see my new message after it has been sent")
     fun iSeeMyNewMessageAfterItHasBeenSent(){
-        val messageDetails = SerenityHelpers
-                .getValueOrNull<CreateMessageRequest>(PatientPracticeMessagingTypes.SENT_MESSAGE)!!
+        val messageDetails = PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE.getOrNull<CreateMessageRequest>()!!
         patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(messageDetails.subject)
         patientPracticeMessagingDetailsPage.assertSentMessageCorrect(messageDetails.messageBody)
     }
 
     @Then("^I see my patient practice message along with the replies from the GP")
     fun iSeeMyPatientPracticeMessageAlongWithTheReplies() {
-        val message = SerenityHelpers.getValueOrNull<MessageResponseModel>(
-                PatientPracticeMessagingTypes.SELECTED_MESSAGE)!!.Message
+        val message = PatientPracticeMessagingSerenityHelpers
+            .SELECTED_MESSAGE
+            .getOrNull<MessageResponseModel>()!!
+            .Message
         val replies = message.messageReplies
-        val expectedSentMessageDate = SerenityHelpers.getValueOrNull<String>(
-                PatientPracticeMessagingTypes.EXPECTED_MESSAGE_SENT_DATE)!!
-        val expectedReadMessageReplyDates = SerenityHelpers.getValueOrNull<List<String>>(
-                PatientPracticeMessagingTypes.EXPECTED_READ_MESSAGE_REPLY_DATES)
-        val expectedUnreadMessageReplyDates = SerenityHelpers.getValueOrNull<List<String>>(
-                PatientPracticeMessagingTypes.EXPECTED_UNREAD_MESSAGE_REPLY_DATES)
+        val expectedSentMessageDate = PatientPracticeMessagingSerenityHelpers
+            .EXPECTED_MESSAGE_SENT_DATE
+            .getOrNull<String>()!!
+        val expectedReadMessageReplyDates = PatientPracticeMessagingSerenityHelpers
+            .EXPECTED_READ_MESSAGE_REPLY_DATES
+            .getOrNull<List<String>>()
+        val expectedUnreadMessageReplyDates = PatientPracticeMessagingSerenityHelpers
+            .EXPECTED_UNREAD_MESSAGE_REPLY_DATES
+            .getOrNull<List<String>>()
 
         val unreadReplies = mutableListOf<MessageReply>()
         val readReplies = mutableListOf<MessageReply>()
@@ -349,8 +355,9 @@ open class PatientPracticeMessageStepDefinitions {
 
     @Then("^I see a list of patient practice messaging recipients$")
     fun iSeeAListOfPatientPracticeMessagingRecipients() {
-        val expectedRecipients = SerenityHelpers.getValueOrNull<MessageRecipientsResponseModel>(
-                PatientPracticeMessagingTypes.AVAILABLE_RECIPIENTS)!!.MessageRecipients
+        val expectedRecipients = PatientPracticeMessagingSerenityHelpers
+            .AVAILABLE_RECIPIENTS
+            .getOrNull<List<Recipient>>()!!
         patientPracticeMessagingRecipientsPage.assertInfoText()
         patientPracticeMessagingRecipientsPage.assertRecipients(expectedRecipients)
     }
@@ -382,12 +389,12 @@ open class PatientPracticeMessageStepDefinitions {
         patientPracticeMessagingDeleteSuccessPage.clickBackToMessages()
     }
 
-    private fun clickMessageBySerenityVariable(messageToClick: PatientPracticeMessagingTypes) {
+    private fun clickMessageBySerenityVariable(messageToClick: PatientPracticeMessagingSerenityHelpers) {
         assertNotNull("Expected the value for the serenity variable 'messageToClick' to not be null",
-                SerenityHelpers.getValueOrNull<MessageResponseModel>(messageToClick)!!)
-        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
-                PatientPracticeMessagingTypes.SELECTED_MESSAGE,
-                SerenityHelpers.getValueOrNull<MessageResponseModel>(messageToClick)!!)
+            SerenityHelpers.getValueOrNull<MessageResponseModel>(messageToClick)!!)
+        PatientPracticeMessagingSerenityHelpers
+            .SELECTED_MESSAGE
+            .setIfNotAlreadySet(SerenityHelpers.getValueOrNull<MessageResponseModel>(messageToClick)!!)
         patientPracticeMessagingPage.clickFirstMessage()
     }
 }

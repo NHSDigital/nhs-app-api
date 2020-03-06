@@ -18,6 +18,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         private readonly IEmisPatientMessageMapper _messageMapper;
         private readonly IEmisPatientMessageUpdateMapper _messageUpdateMapper;
         private readonly IEmisPatientMessageSendMapper _messageSendWrapper;
+        private readonly IEmisPatientMessageRecipientsMapper _messageRecipientsMapper;
 
         public EmisPatientMessagesService(
             ILogger<EmisPatientMessagesService> logger,
@@ -25,7 +26,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             IEmisPatientMessagesMapper messageListMapper,
             IEmisPatientMessageMapper messageMapper,
             IEmisPatientMessageUpdateMapper messageUpdateMapper,
-            IEmisPatientMessageSendMapper messageSendMapper)
+            IEmisPatientMessageSendMapper messageSendMapper,
+            IEmisPatientMessageRecipientsMapper messageRecipientsMapper)
         {
             _logger = logger;
             _emisClient = emisClient;
@@ -33,6 +35,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             _messageMapper = messageMapper;
             _messageUpdateMapper = messageUpdateMapper;
             _messageSendWrapper = messageSendMapper;
+            _messageRecipientsMapper = messageRecipientsMapper;
         }
 
         public async Task<GetPatientMessagesResult> GetMessages(GpUserSession gpUserSession)
@@ -276,13 +279,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                 _logger.LogInformation("Mapping EMIS patient message update status");
                 var mapped = _messageUpdateMapper.Map(response.Body);
 
-                if (mapped == null)
+                if (mapped != null)
                 {
-                    _logger.LogInformation("Mapping EMIS patient message update status returned null");
-                    return new PutPatientMessageReadStatusResult.BadGateway();
+                    return new PutPatientMessageReadStatusResult.Success(mapped);
                 }
+                
+                _logger.LogInformation("Mapping EMIS patient message update status returned null");
+                return new PutPatientMessageReadStatusResult.BadGateway();
 
-                return new PutPatientMessageReadStatusResult.Success(mapped);
             }
 
             if (response.HasForbiddenResponse())
@@ -308,8 +312,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         {
             if (response.HasSuccessResponse)
             {
-                _logger.LogInformation($"Number of recipients: {response.Body?.MessageRecipients?.Count}");
-                return new GetPatientMessageRecipientsResult.Success(response.Body);
+                var messageRecipientsResponse = response.Body;
+
+                _logger.LogInformation($"Number of recipients: {messageRecipientsResponse?.MessageRecipients?.Count}");
+                return new GetPatientMessageRecipientsResult.Success(_messageRecipientsMapper.Map(messageRecipientsResponse));
             }
 
             if (response.HasForbiddenResponse())
@@ -368,7 +374,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             if (response.HasSuccessResponse)
             {
 
-                if (response.Body != null && response.Body.IsDeleted != null && !response.Body.IsDeleted.Value)
+                if (response.Body?.IsDeleted != null && !response.Body.IsDeleted.Value)
                 {
                     return new DeletePatientMessageResult.BadGateway();
                 }
