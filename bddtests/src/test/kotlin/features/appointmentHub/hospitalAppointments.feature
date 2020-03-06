@@ -17,9 +17,8 @@ Feature: Hospital Appointments
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
     And the 'Hospital and other services' link is not available on the Appointments Hub
-    #TODO @NHSO-8715
-    #And I browse to the pages at the following urls I see the relevant page
-    #| /appointments/hospital-appointments  | /appointments |
+    And I browse to the pages at the following urls I see the relevant page
+    | /appointments/hospital-appointments  | /appointments |
 
   Scenario: A user can navigate back from the hospital appointments page to the appointments hub using the breadcrumb
     Given I am a user who can manage their hospital appointments

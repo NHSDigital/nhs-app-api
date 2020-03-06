@@ -71,6 +71,15 @@ const linkedAccountAppointmentRedirect = {
   url: '/linked-profiles/shutter/appointments',
 };
 
+const silverIntegrationsSecondaryAppointmentsRedirect = {
+  journey: 'silverIntegration',
+  url: '/appointments',
+  rule_context: {
+    provider: 'ers',
+    serviceType: 'secondaryAppointments',
+  },
+};
+
 const documentsDisabledRedirect = {
   journey_disabled: 'documents',
   url: '/',
@@ -207,6 +216,9 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
+    sjrRedirectRules: [
+      silverIntegrationsSecondaryAppointmentsRedirect,
+    ],
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   APPOINTMENT_ADMIN_HELP: {

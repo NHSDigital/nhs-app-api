@@ -11,7 +11,12 @@ export default ({ redirect, route, store }) => {
       const disabled = has('journey_disabled')(rule);
       const journey = disabled ? rule.journey_disabled : rule.journey;
 
-      if (sjrIf({ $store: store, journey, disabled })) {
+      const hasContext = has('rule_context')(rule);
+      const silverIntegrationRedirect = hasContext
+        ? !store.getters[`serviceJourneyRules/${journey}Enabled`](rule.rule_context)
+        : false;
+
+      if (sjrIf({ $store: store, journey, disabled }) || silverIntegrationRedirect) {
         if (routeDetail.path === rule.url) {
           break;
         }

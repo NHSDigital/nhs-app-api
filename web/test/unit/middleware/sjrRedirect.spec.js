@@ -1,11 +1,13 @@
 import sjrRedirect from '@/middleware/sjrRedirect';
 import {
+  APPOINTMENTS,
   ACCOUNT_NOTIFICATIONS,
   APPOINTMENT_GP_AT_HAND,
   APPOINTMENT_INFORMATICA,
   GP_APPOINTMENTS,
   GP_MEDICAL_RECORD,
   GP_MEDICAL_RECORD_GP_AT_HAND,
+  HOSPITAL_APPOINTMENTS,
   INDEX,
   MYRECORD,
   MYRECORD_GP_AT_HAND,
@@ -362,6 +364,42 @@ describe('middleware/sjrRedirect', () => {
       it('will redirect to home', () => {
         expect(redirect).toBeCalledWith('302', INDEX.path);
         expect(redirect).toHaveBeenCalledTimes(im1MessagingRoutes.length);
+      });
+    });
+  });
+
+  describe('secondary appointments rules', () => {
+    const routes = [
+      HOSPITAL_APPOINTMENTS,
+    ];
+
+    describe('secondary appointments enabled', () => {
+      beforeEach(() => {
+        store = {
+          getters: {
+            'serviceJourneyRules/silverIntegrationEnabled': () => (true),
+          },
+        };
+        routes.forEach(route => callSjrRedirect(route));
+      });
+
+      it('will not redirect', () => {
+        expect(redirect).not.toBeCalled();
+      });
+    });
+
+    describe('secondary appointments disabled', () => {
+      beforeEach(() => {
+        store = {
+          getters: {
+            'serviceJourneyRules/silverIntegrationEnabled': () => (false),
+          },
+        };
+        routes.forEach(route => callSjrRedirect(route));
+      });
+
+      it('will redirect to appointments', () => {
+        expect(redirect).toBeCalledWith('302', APPOINTMENTS.path);
       });
     });
   });
