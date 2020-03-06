@@ -71,6 +71,16 @@ const linkedAccountAppointmentRedirect = {
   url: '/linked-profiles/shutter/appointments',
 };
 
+const documentsDisabledRedirect = {
+  journey_disabled: 'documents',
+  url: '/',
+};
+
+const im1MessagingDisabledRedirect = {
+  journey_disabled: 'im1Messaging',
+  url: '/',
+};
+
 const baseNhsAppHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
 
 const routes = {
@@ -783,6 +793,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    sjrRedirectRules: [documentsDisabledRedirect],
   },
   DOCUMENT: {
     name: 'gp-medical-record-documents-id',
@@ -793,6 +804,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    sjrRedirectRules: [documentsDisabledRedirect],
   },
   DOCUMENT_DETAIL: {
     name: 'gp-medical-record-documents-detail-id',
@@ -804,6 +816,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    sjrRedirectRules: [documentsDisabledRedirect],
   },
   NOMINATED_PHARMACY: {
     name: 'nominated-pharmacy',
@@ -1046,6 +1059,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DELETE: {
     name: 'patient-practice-messaging-delete',
@@ -1060,6 +1074,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY: {
     name: 'patient-practice-messaging-urgency',
@@ -1074,6 +1089,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP: {
     name: 'patient-practice-messaging-urgency-contact-your-gp',
@@ -1088,6 +1104,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS: {
     name: 'patient-practice-messaging-recipients',
@@ -1102,6 +1119,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE: {
     name: 'patient-practice-messaging-view-details',
@@ -1116,6 +1134,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_CREATE: {
     name: 'patient-practice-messaging-send-message',
@@ -1130,6 +1149,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS: {
     name: 'patient-practice-messaging-delete-success',
@@ -1145,6 +1165,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PRESCRIPTIONS: {
     name: 'prescriptions',

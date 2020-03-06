@@ -72,7 +72,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details |
       | /symptoms                                   |
       | /terms-and-conditions                       |
-
+    
   Scenario: User browses to url when logged in
     Given I am a EMIS patient
     And I am about to directly access every page
@@ -82,9 +82,9 @@ Feature: Authorisation occurs during each URL visit
       | /account                                    | /account                       |
       | /appointments                               | /appointments                  |
       | /appointments/booking-guidance              | /appointments/booking-guidance |
-      | /appointments/cancelling                    | /appointments                  |
+      | /appointments/cancelling                    | /appointments/gp-appointments  |
       | /appointments/booking                       | /appointments/booking          |
-      | /appointments/confirmation                  | /appointments                  |
+      | /appointments/confirmation                  | /appointments/gp-appointments  |
       | /data-sharing                               | /data-sharing                  |
       | /                                           | /                              |
       | /my-record                                  | /gp-medical-record             |

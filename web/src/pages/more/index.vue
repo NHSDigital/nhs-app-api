@@ -45,7 +45,6 @@
 
 <script>
 /* eslint-disable import/extensions */
-import srjIf from '@/lib/sjrIf';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
@@ -56,8 +55,9 @@ import {
   MORE,
   PATIENT_PRACTICE_MESSAGING,
 } from '@/lib/routes';
+import sjrIf from '@/lib/sjrIf';
 import { createUri } from '@/lib/noJs';
-import { redirectTo, isTruthy } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -68,8 +68,9 @@ export default {
   },
   data() {
     return {
-      appMessagingEnabled: srjIf({ $store: this.$store, journey: 'messaging' }),
-      adminHelpEnabled: srjIf({ $store: this.$store, journey: 'cdssAdmin' }),
+      appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
+      adminHelpEnabled: sjrIf({ $store: this.$store, journey: 'cdssAdmin' }),
+      im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
       patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
       appMessagingPath: MESSAGING.path,
       morePath: MORE.path,
@@ -86,16 +87,13 @@ export default {
         : this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL;
     },
     patientPracticeMessagingEnabled() {
-      return isTruthy(this.$store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)
-        && this.$store.state.practiceSettings.im1MessagingEnabled;
+      return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
     // patientpracticemessaging should be shown on desktop & native if enabled
     // appMessaging should only be shown on native devices if enabled
     messagingEnabled() {
-      if (this.$store.state.device.isNativeApp) {
-        return this.patientPracticeMessagingEnabled || this.appMessagingEnabled;
-      }
-      return this.patientPracticeMessagingEnabled;
+      return this.patientPracticeMessagingEnabled ||
+      (this.appMessagingEnabled && this.$store.state.device.isNativeApp);
     },
     messagingPath() {
       return this.patientPracticeMessagingEnabled

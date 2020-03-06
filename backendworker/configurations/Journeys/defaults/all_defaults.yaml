@@ -22,3 +22,5 @@ journeys:
       - ers
     messages: []
     consultations: []
+  documents: false
+  im1Messaging: false

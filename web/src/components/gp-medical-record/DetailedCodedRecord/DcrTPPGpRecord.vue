@@ -24,34 +24,36 @@
                :click-param="eventsPath"
                :count="record.tppDcrEvents.data.length"/>
 
-    <menu-item v-if="documentsEnabledForSupplier"
-               id="documents"
-               data-purpose="documents"
-               :href="documentsPath"
-               header-tag="h2"
-               :text="$t('my_record.documents.sectionHeader')"
-               :aria-label="
-                 getAriaLabel($t('my_record.documents.sectionHeader'),
-                              record.documents.data.length)"
-               :click-func="goToUrl"
-               :click-param="documentsPath"
-               :count="record.documents.data.length"/>
+    <sjr-if journey="documents">
+      <menu-item id="documents"
+                 data-purpose="documents"
+                 :href="documentsPath"
+                 header-tag="h2"
+                 :text="$t('my_record.documents.sectionHeader')"
+                 :aria-label="
+                   getAriaLabel($t('my_record.documents.sectionHeader'),
+                                record.documents.data.length)"
+                 :click-func="goToUrl"
+                 :click-param="documentsPath"
+                 :count="record.documents.data.length"/>
+    </sjr-if>
   </div>
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { TESTRESULTS,
+import SjrIf from '@/components/SjrIf';
+import {
+  TESTRESULTS,
   EVENTS,
   DOCUMENTS,
 } from '@/lib/routes';
-import { isTruthy } from '@/lib/utils';
-import get from 'lodash/fp/get';
 
 export default {
   name: 'DcrTPPGpRecord',
   components: {
     MenuItem,
+    SjrIf,
   },
   data() {
     return {
@@ -60,17 +62,6 @@ export default {
       eventsPath: EVENTS.path,
       documentsPath: DOCUMENTS.path,
     };
-  },
-  computed: {
-    documentsEnabledForSupplier() {
-      const documentEnabledSupplierList =
-        this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS;
-      if (isTruthy(this.$store.app.$env.MY_RECORD_DOCUMENTS_ENABLED) &&
-        documentEnabledSupplierList !== null) {
-        return documentEnabledSupplierList.includes(get('$store.state.myRecord.record.supplier')(this));
-      }
-      return false;
-    },
   },
   methods: {
     getAriaLabel(sectionTitle, count) {

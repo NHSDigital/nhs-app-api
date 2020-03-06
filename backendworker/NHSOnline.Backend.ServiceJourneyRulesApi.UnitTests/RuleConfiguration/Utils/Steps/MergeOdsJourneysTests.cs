@@ -68,6 +68,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
                     .SilverIntegrations(_ => _.SecondaryAppointments(new[] { SecondaryAppointmentProvider.ers }))
+                    .DocumentsEnabled(false)
+                    .Im1MessagingEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .CdssAdminProvider(CdssProvider.none)
@@ -84,6 +86,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
                     .SilverIntegrations(_ => _.SecondaryAppointments(new[] { SecondaryAppointmentProvider.pkb }))
+                    .DocumentsEnabled(false)
+                    .Im1MessagingEnabled(false)
                     .Build(),
                 new JourneysBuilder().Build()
             );
@@ -106,6 +110,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .SecondaryAppointments(SecondaryAppointmentProvider.pkb)
                         .Messages(MessagesProvider.pkb)
                         .Consultations(ConsultationsProvider.pkb))
+                    .DocumentsEnabled(true)
+                    .Im1MessagingEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -115,6 +121,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(true)
                     .UserInfoEnabled(true)
                     .SilverIntegrations(_ => _.SecondaryAppointments())
+                    .DocumentsEnabled(true)
+                    .Im1MessagingEnabled(true)
                     .Build(),
                 new JourneysBuilder().Build()
             );
@@ -134,6 +142,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .SecondaryAppointments(SecondaryAppointmentProvider.ers)
                         .Messages()
                         .Consultations())
+                    .DocumentsEnabled(false)
+                    .Im1MessagingEnabled(false)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.gpAtHand)
@@ -149,6 +159,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .SecondaryAppointments(SecondaryAppointmentProvider.pkb)
                         .Messages(MessagesProvider.pkb)
                         .Consultations(ConsultationsProvider.pkb))
+                    .DocumentsEnabled(true)
+                    .Im1MessagingEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.im1)
@@ -163,6 +175,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .SecondaryAppointments()
                         .Messages()
                         .Consultations())
+                    .DocumentsEnabled(true)
+                    .Im1MessagingEnabled(true)
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(null)
@@ -177,6 +191,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .SecondaryAppointments()
                         .Messages()
                         .Consultations())
+                    .DocumentsEnabled(null)
+                    .Im1MessagingEnabled(null)
                     .Build()
             );
 

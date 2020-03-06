@@ -25,12 +25,11 @@
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import GenericButton from '@/components/widgets/GenericButton';
 import {
-  INDEX,
   PATIENT_PRACTICE_MESSAGING,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
 } from '@/lib/routes';
-import { isFalsy, redirectTo } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -53,15 +52,8 @@ export default {
     },
   },
   fetch({ store, redirect }) {
-    if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)) {
-      redirect(INDEX.path);
-    }
-
-    if (store.state.patientPracticeMessaging.selectedMessageId === undefined) {
-      redirect(PATIENT_PRACTICE_MESSAGING.path);
-    }
-
-    if (store.app.router.currentRoute.path !== PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path) {
+    if (store.state.patientPracticeMessaging.selectedMessageId === undefined ||
+        store.app.router.currentRoute.path !== PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path) {
       redirect(PATIENT_PRACTICE_MESSAGING.path);
     }
   },

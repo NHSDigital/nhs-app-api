@@ -11,6 +11,7 @@ import {
   findByName,
   findByPath,
 } from '@/lib/routes';
+import each from 'jest-each';
 
 describe('routes', () => {
   describe('isAnonymous', () => {
@@ -39,19 +40,18 @@ describe('routes', () => {
     });
   });
 
-  /* eslint-disable indent */
+
   describe('backLinkOverrides', () => {
-    it.each`
-      name                                          | path                              | ignoreStore
-      ${'organ-donation'}                           | ${'/more'}                        | ${undefined}
-      ${'organ-donation-view-decision'}             | ${'/more'}                        | ${undefined}
-      ${'patient-practice-messaging-view-details'}  | ${'/patient-practice-messaging'}  | ${true}
-      ${'switch-profile'}                           | ${'/'}                            | ${true}
-      `('will go to $path from $name by default', ({ name, path, ignoreStore }) => {
-      const override = backLinkOverrides[name];
-      expect(override.defaultPath).toBe(path);
-      expect(override.ignoreStore).toBe(ignoreStore);
-    });
+    each([
+      ['organ-donation', '/more', undefined],
+      ['organ-donation-view-decision', '/more', undefined],
+      ['patient-practice-messaging-view-details', '/patient-practice-messaging', true],
+      ['switch-profile', '/', true]])
+      .it('will go to $path from $name by default', (name, path, ignoreStore) => {
+        const override = backLinkOverrides[name];
+        expect(override.defaultPath).toBe(path);
+        expect(override.ignoreStore).toBe(ignoreStore);
+      });
 
     it('will have a default path in each overriding configuration', () => {
       Object.keys(backLinkOverrides).forEach((key) => {

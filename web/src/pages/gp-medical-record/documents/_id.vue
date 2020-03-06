@@ -49,7 +49,7 @@ import MenuItemList from '@/components/MenuItemList';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { DOCUMENT_DETAIL, DOCUMENTS, GP_MEDICAL_RECORD } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
-import { isFalsy, redirectTo, datePart } from '@/lib/utils';
+import { redirectTo, datePart } from '@/lib/utils';
 import NativeCallbacks from '@/services/native-app';
 import Glossary from '@/components/Glossary';
 
@@ -111,12 +111,7 @@ export default {
   asyncData({ store, redirect }) {
     const date = get('state.myRecord.document.date', store);
 
-    const documentEnabledSupplierList =
-      store.app.$env.MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS;
-    if ((isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED) ||
-      !documentEnabledSupplierList.includes(get('state.myRecord.record.supplier', store)))
-          || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning())
-    ) {
+    if (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) {
       redirect(GP_MEDICAL_RECORD.path);
       return {};
     }

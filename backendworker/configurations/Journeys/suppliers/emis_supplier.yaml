@@ -7,3 +7,4 @@ journeys:
   notifications: false
   messaging: false
   userInfo: false
+  documents: true

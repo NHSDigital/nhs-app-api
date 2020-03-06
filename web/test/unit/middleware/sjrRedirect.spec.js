@@ -11,6 +11,17 @@ import {
   MYRECORD_GP_AT_HAND,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
+  DOCUMENTS,
+  DOCUMENT,
+  DOCUMENT_DETAIL,
+  PATIENT_PRACTICE_MESSAGING,
+  PATIENT_PRACTICE_MESSAGING_URGENCY,
+  PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
+  PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
+  PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+  PATIENT_PRACTICE_MESSAGING_CREATE,
+  PATIENT_PRACTICE_MESSAGING_DELETE,
+  PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
 } from '@/lib/routes';
 
 describe('middleware/sjrRedirect', () => {
@@ -288,6 +299,69 @@ describe('middleware/sjrRedirect', () => {
 
       it('will redirect to account', () => {
         expect(redirect).toBeCalledWith('302', INDEX.path);
+      });
+    });
+  });
+
+  describe('documents rules', () => {
+    const documentsRoutes = [DOCUMENTS, DOCUMENT, DOCUMENT_DETAIL];
+
+    describe('documents enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/documentsEnabled'] = true;
+        documentsRoutes.forEach(route => callSjrRedirect(route));
+      });
+
+      it('will not redirect', () => {
+        expect(redirect).not.toBeCalled();
+      });
+    });
+
+    describe('documents disabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/documentsEnabled'] = false;
+        documentsRoutes.forEach(route => callSjrRedirect(route));
+      });
+
+      it('will redirect to home', () => {
+        expect(redirect).toBeCalledWith('302', INDEX.path);
+        expect(redirect).toHaveBeenCalledTimes(documentsRoutes.length);
+      });
+    });
+  });
+
+  describe('im1Messaging rules', () => {
+    const im1MessagingRoutes = [
+      PATIENT_PRACTICE_MESSAGING,
+      PATIENT_PRACTICE_MESSAGING_URGENCY,
+      PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
+      PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
+      PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+      PATIENT_PRACTICE_MESSAGING_CREATE,
+      PATIENT_PRACTICE_MESSAGING_DELETE,
+      PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
+    ];
+
+    describe('im1Messaging enabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/im1MessagingEnabled'] = true;
+        im1MessagingRoutes.forEach(route => callSjrRedirect(route));
+      });
+
+      it('will not redirect', () => {
+        expect(redirect).not.toBeCalled();
+      });
+    });
+
+    describe('im1Messaging disabled', () => {
+      beforeEach(() => {
+        getters['serviceJourneyRules/im1MessagingEnabled'] = false;
+        im1MessagingRoutes.forEach(route => callSjrRedirect(route));
+      });
+
+      it('will redirect to home', () => {
+        expect(redirect).toBeCalledWith('302', INDEX.path);
+        expect(redirect).toHaveBeenCalledTimes(im1MessagingRoutes.length);
       });
     });
   });

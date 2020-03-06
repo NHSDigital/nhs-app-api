@@ -67,6 +67,10 @@ components:
               type: boolean
             userInfo:
               type: boolean
+            documents:
+              type: boolean
+            im1Messaging:
+              type: boolean
     defaultProvider:
       type: object
       properties:

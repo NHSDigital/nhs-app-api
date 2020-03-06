@@ -33,6 +33,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     "journeys.SilverIntegrations.Messages")
                 .Add(journeys => journeys.SilverIntegrations?.Consultations != null,
                     "journeys.SilverIntegrations.Consultations")
+                .Add(journeys => journeys.Documents.HasValue, "journeys.Documents")
+                .Add(journeys => journeys.Im1Messaging.HasValue, "journeys.im1Messaging")
                 .Add(journeys => journeys.Supplier != Supplier.Unknown, "journeys.Supplier");
 
         public ValidateOdsJourneys(ILogger<ValidateOdsJourneys> logger)
@@ -79,7 +81,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     _logger.LogDebug($"Validation successful for '{odsCode}'");
                 }
             }
-
             return isValid;
         }
     }

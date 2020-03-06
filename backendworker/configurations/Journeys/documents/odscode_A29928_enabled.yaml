@@ -1,0 +1,5 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A29928"
+journeys:
+  documents: true

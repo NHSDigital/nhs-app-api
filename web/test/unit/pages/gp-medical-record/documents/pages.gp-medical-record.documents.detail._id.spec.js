@@ -31,8 +31,6 @@ describe('gp-medical-record documents', () => {
     $store = createStore({
       $env: {
         CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
-        MY_RECORD_DOCUMENTS_ENABLED: true,
-        MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS: ['EMIS'],
       },
       state: {
         myRecord: initialState(),
@@ -41,8 +39,6 @@ describe('gp-medical-record documents', () => {
     });
     hasAgreedToMedicalWarning.mockClear();
     hasAgreedToMedicalWarning.mockReturnValue(true);
-
-    $store.state.myRecord.record.supplier = 'EMIS';
   });
 
   describe('asyncData', () => {
@@ -51,11 +47,6 @@ describe('gp-medical-record documents', () => {
     beforeEach(() => redirect.mockClear());
 
     describe('redirect', () => {
-      it('will redirect to gp-medical-record if feature toggle is off', async () => {
-        $store.app.$env.MY_RECORD_DOCUMENTS_ENABLED = false;
-        await DocumentPage.asyncData({ redirect, store: $store });
-        expect(redirect).toHaveBeenCalledWith('/gp-medical-record');
-      });
       it('will redirect to gp-medical-record if not accepted terms and not hasAgreedToMedicalWarning', async () => {
         hasAgreedToMedicalWarning.mockReturnValue(false);
         await DocumentPage.asyncData({ redirect, store: $store });

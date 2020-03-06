@@ -69,7 +69,7 @@ import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { APPOINTMENTS, MYRECORD, PRESCRIPTIONS, SYMPTOMS, LINKED_PROFILES, INDEX,
   PATIENT_PRACTICE_MESSAGING, MESSAGING } from '@/lib/routes';
 import srjIf from '@/lib/sjrIf';
-import { redirectTo, isTruthy } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'NavigationListMenu',
@@ -90,6 +90,8 @@ export default {
       patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
       appMessagingPath: MESSAGING.path,
       organDonationUrl: this.$store.app.$env.ORGAN_DONATION_URL,
+      im1MessagingSjrEnabled: srjIf({ $store: this.$store, journey: 'im1Messaging' }),
+      im1MessagingPracticeEnabled: this.$store.state.practiceSettings.im1MessagingEnabled,
     };
   },
   computed: {
@@ -112,19 +114,16 @@ export default {
       return INDEX.path;
     },
     patientPracticeMessagingEnabled() {
-      return isTruthy(this.$store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)
-        && this.$store.state.practiceSettings.im1MessagingEnabled;
+      return this.im1MessagingSjrEnabled && this.im1MessagingPracticeEnabled;
     },
     // patientpracticemessaging should be shown on desktop & native if enabled
     // appMessaging should only be shown on native devices if enabled
     messagingEnabled() {
-      if (this.$store.state.device.isNativeApp) {
-        return this.patientPracticeMessagingEnabled || this.appMessagingEnabled;
-      }
-      return this.patientPracticeMessagingEnabled;
+      return this.patientPracticeMessagingEnabled ||
+      (this.appMessagingEnabled && this.$store.state.device.isNativeApp);
     },
     messagingPath() {
-      return this.patientPracticeMessagingEnabled
+      return (this.patientPracticeMessagingEnabled)
         ? this.patientPracticeMessagingPath
         : this.appMessagingPath;
     },

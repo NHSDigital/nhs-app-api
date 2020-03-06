@@ -10,6 +10,9 @@ describe('index', () => {
     $router = createRouter();
     $store = createStore({
       state: {
+        practiceSettings: {
+          im1MessagingEnabled: false,
+        },
         linkedAccounts: {
           actingAsUser: {
             id: 'user-id-0',

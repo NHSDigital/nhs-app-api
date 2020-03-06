@@ -3,7 +3,6 @@
 import DocumentsPage from '@/pages/gp-medical-record/documents/index';
 import { createStore, shallowMount } from '../../../helpers';
 
-
 let page;
 let $store;
 const defaultDocuments = ['data', 'to', 'be', 'chunked'];
@@ -24,7 +23,6 @@ describe('gp-medical-record documents', () => {
     $store = createStore({
       $env: {
         CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
-        MY_RECORD_DOCUMENTS_ENABLED: true,
       },
       state: {
         device: { isNativeApp: false },
@@ -36,19 +34,8 @@ describe('gp-medical-record documents', () => {
       },
     });
   });
+
   describe('template', () => {
-    describe('asyncData', () => {
-      const redirect = jest.fn();
-      beforeEach(() => redirect.mockClear());
-
-      it('will redirect to my-record if feature toggle is off', async () => {
-        $store.app.$env.MY_RECORD_DOCUMENTS_ENABLED = false;
-
-        await DocumentsPage.asyncData({ redirect, store: $store });
-
-        expect(redirect).toHaveBeenCalledWith('/gp-medical-record');
-      });
-    });
     describe('document items', () => {
       it('will render a menu item for every document', () => {
         const theDocuments = { data: [

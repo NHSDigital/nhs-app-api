@@ -57,12 +57,11 @@ import MessageText from '@/components/widgets/MessageText';
 import Question from '@/components/online-consultations/Question';
 import QuestionChoice from '@/components/online-consultations/QuestionChoice';
 import {
-  INDEX,
   PATIENT_PRACTICE_MESSAGING,
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
 } from '@/lib/routes';
-import { isFalsy, redirectTo, isEmptyArray } from '@/lib/utils';
+import { redirectTo, isEmptyArray } from '@/lib/utils';
 
 const YES = 'yes';
 const NO = 'no';
@@ -105,11 +104,7 @@ export default {
         this.$store.state.patientPracticeMessaging.messageRecipients : [];
     },
   },
-  async fetch({ store, redirect, app }) {
-    if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)) {
-      redirect(INDEX.path);
-    }
-
+  async fetch({ store, app }) {
     await store.dispatch('patientPracticeMessaging/loadRecipients');
     const { messageRecipients } = store.state.patientPracticeMessaging;
 

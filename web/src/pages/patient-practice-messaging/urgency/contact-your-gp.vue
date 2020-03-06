@@ -32,11 +32,8 @@
 <script>
 import CareCard from '@/components/widgets/CareCard';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import {
-  INDEX,
-  PATIENT_PRACTICE_MESSAGING_URGENCY,
-} from '@/lib/routes';
-import { isFalsy, redirectTo } from '@/lib/utils';
+import { PATIENT_PRACTICE_MESSAGING_URGENCY } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -48,11 +45,6 @@ export default {
     return {
       urgencyPath: PATIENT_PRACTICE_MESSAGING_URGENCY.path,
     };
-  },
-  fetch({ store, redirect }) {
-    if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)) {
-      redirect(INDEX.path);
-    }
   },
   methods: {
     backLinkClicked() {

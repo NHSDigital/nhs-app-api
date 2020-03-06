@@ -28,13 +28,13 @@ const mountAs = ({
     },
     getters: {
       'linkedAccounts/hasLinkedAccounts': isLinkedEnabledEnabled,
+      'serviceJourneyRules/messagingEnabled': appMessagingEnabled,
+      'serviceJourneyRules/im1MessagingEnabled': patientPracticeMessagingToggleEnabled,
     },
     $env: {
-      PATIENT_PRACTICE_MESSAGING_ENABLED: patientPracticeMessagingToggleEnabled,
       YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com',
     },
   });
-  $store.getters['serviceJourneyRules/messagingEnabled'] = appMessagingEnabled;
   return mount(NavigationListMenu, { $store, $router });
 };
 

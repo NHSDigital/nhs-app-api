@@ -39,7 +39,7 @@ import MenuItem from '@/components/MenuItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import MenuItemList from '@/components/MenuItemList';
 import { GP_MEDICAL_RECORD, DOCUMENT } from '@/lib/routes';
-import { isFalsy, redirectTo, readableBytes, datePart } from '@/lib/utils';
+import { redirectTo, readableBytes, datePart } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -66,22 +66,13 @@ export default {
       return orderBy([document => this.getEffectiveDate(document.effectiveDate, '')], ['desc'])(this.documents.data);
     },
   },
-  async asyncData({ store, redirect }) {
+  async asyncData({ store }) {
     if (!store.state.myRecord.record.documents) {
       await store.dispatch('myRecord/load');
     }
 
-    const { documents } = store.state.myRecord.record;
-    const documentEnabledSupplierList =
-      store.app.$env.MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS;
-
-    if (isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED) ||
-      !documentEnabledSupplierList.includes(store.state.myRecord.record.supplier)) {
-      redirect(GP_MEDICAL_RECORD.path);
-    }
-
     return {
-      documents,
+      documents: store.state.myRecord.record.documents,
     };
   },
   methods: {

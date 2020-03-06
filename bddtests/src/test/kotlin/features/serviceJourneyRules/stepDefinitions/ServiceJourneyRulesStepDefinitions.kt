@@ -163,4 +163,30 @@ class ServiceJourneyRulesStepDefinitions {
         Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
         return serviceJourneyRulesResponse
     }
+
+
+    @Then("^the service journey rules response will have im1 messaging (enabled|disabled)$")
+    fun theServiceJourneyRulesResponseWillHaveIm1MessagingEnabledOrDisabled(enabled: String) {
+        val serviceJourneyRulesResponse =
+                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
+                        .getOrFail<ServiceJourneyRulesResponse>()
+
+        Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
+        Assert.assertEquals("Service Journey Rules im1 messaging",
+                enabled == "enabled",
+                serviceJourneyRulesResponse.journeys.im1Messaging)
+    }
+
+    @Then("^the service journey rules response will have documents (enabled|disabled)$")
+    fun theServiceJourneyRulesResponseWillHaveDocumentsEnabledOrDisabled(enabled: String) {
+        val serviceJourneyRulesResponse =
+                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
+                        .getOrFail<ServiceJourneyRulesResponse>()
+
+        Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
+        Assert.assertEquals("Service Journey Rules documents",
+                enabled == "enabled",
+                serviceJourneyRulesResponse.journeys.documents)
+    }
 }
+

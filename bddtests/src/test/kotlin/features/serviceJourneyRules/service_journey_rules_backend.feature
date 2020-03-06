@@ -89,3 +89,18 @@ Feature: Service Journey Rules Backend
     And the service journey rules response will have silver integration secondary appointments set to ers, pkb
     And the service journey rules response will have silver integration messages set to pkb
     And the service journey rules response will have silver integration consultations set to pkb
+
+  Scenario Outline: API call for SJR can return a response with documents and im1 messaging <Toggle>
+    Given I am a EMIS user where the journey configurations are:
+      | Journey       | Value    |
+      | documents     | <Toggle> |
+      | im1 messaging | <Toggle> |
+    And I have logged in and have a valid session cookie
+    When I request the service journey rules for my ODS Code
+    Then I receive an "Ok" success code
+    And the service journey rules response will have documents <Toggle>
+    And the service journey rules response will have im1 messaging <Toggle>
+    Examples:
+      | Toggle   |
+      | enabled  |
+      | disabled |

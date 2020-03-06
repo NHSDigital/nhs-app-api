@@ -132,9 +132,6 @@ const config = {
     COMMIT_ID: 'dev',
     CE_MARK_ENABLED: false,
     ORGAN_DONATION_INTEGRATION_ENABLED: true,
-    MY_RECORD_DOCUMENTS_ENABLED: false,
-    MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS: ['EMIS'],
-    PATIENT_PRACTICE_MESSAGING_ENABLED: false,
     // Session
     SESSION_EXPIRING_WARNING_SECONDS: 60,
     // Click debounce delay in ms

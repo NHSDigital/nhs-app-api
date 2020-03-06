@@ -28,8 +28,7 @@ export default {
     };
   },
   fetch({ store, redirect }) {
-    if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED) ||
-    isFalsy(store.state.patientPracticeMessaging.messageDeleted)) {
+    if (isFalsy(store.state.patientPracticeMessaging.messageDeleted)) {
       redirect(INDEX.path);
     }
   },

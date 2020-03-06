@@ -6,6 +6,7 @@ open class PageUrl {
 
     val map: HashMap<String, String> =
             hashMapOf(
+                    "home" to "/",
                     "appointment booking" to "/appointments/booking",
                     "appointment guidance" to "/appointments/booking-guidance",
                     "appointment hub" to "/appointments",
@@ -33,9 +34,21 @@ open class PageUrl {
                     "gp medical record examinations" to "/gp-medical-record/examinations",
                     "gp medical record test results detail" to "/gp-medical-record/test-results-detail",
                     "gp medical record procedures" to "/gp-medical-record/procedures",
+                    "gp medical record documents" to "/gp-medical-record/documents",
+                    "gp medical record document information" to "/gp-medical-record/documents/1",
+                    "gp medical record document detail" to "/gp-medical-record/documents/detail/1",
                     "patient practice messaging" to "/patient-practice-messaging",
                     "notifications settings" to "/account/notifications",
-                    "home" to "/"
+                    "home" to "/",
+                    "patient practice messaging urgency" to "/patient-practice-messaging/urgency",
+                    "patient practice messaging contact your gp" to
+                            "/patient-practice-messaging/urgency/contact-your-gp",
+                    "patient practice messaging recipients" to "/patient-practice-messaging/recipients",
+                    "patient practice messaging view details" to "/patient-practice-messaging/view-details",
+                    "patient practice messaging send message" to "/patient-practice-messaging/send-message",
+                    "patient practice messaging delete" to "/patient-practice-messaging/delete",
+                    "patient practice messaging delete success" to "/patient-practice-messaging/delete-success",
+                    "notifications settings" to "/account/notifications"
             )
 
     private val mobileOverrides =

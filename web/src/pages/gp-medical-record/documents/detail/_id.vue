@@ -16,7 +16,6 @@ import NativeAppCallbacks from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import { GP_MEDICAL_RECORD, LOGIN, LOGOUT, DOCUMENT } from '@/lib/routes';
-import { isFalsy } from '@/lib/utils';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
@@ -43,12 +42,7 @@ export default {
     },
   },
   async asyncData({ store, route, redirect }) {
-    const documentEnabledSupplierList =
-      store.app.$env.MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS;
-    if ((isFalsy(store.app.$env.MY_RECORD_DOCUMENTS_ENABLED) ||
-      !documentEnabledSupplierList.includes(store.state.myRecord.record.supplier))
-      || (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning())
-    ) {
+    if (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) {
       redirect(GP_MEDICAL_RECORD.path);
       return;
     }

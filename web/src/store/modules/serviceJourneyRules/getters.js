@@ -12,6 +12,8 @@ import {
   ONLINE_CONSULTATIONS,
   LINKED_ACCOUNT,
   SILVER_INTEGRATION,
+  DOCUMENTS,
+  IM1MESSAGING,
 } from './mutation-types';
 
 export default {
@@ -77,5 +79,11 @@ export default {
   },
   [`${SILVER_INTEGRATION}Enabled`](state) {
     return ({ provider, serviceType }) => get(`rules.silverIntegrations.${serviceType}`)(state).includes(provider);
+  },
+  [`${DOCUMENTS}Enabled`](state) {
+    return get('rules.documents')(state);
+  },
+  [`${IM1MESSAGING}Enabled`](state) {
+    return get('rules.im1Messaging')(state);
   },
 };

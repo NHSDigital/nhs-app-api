@@ -320,6 +320,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("\"messaging\": \"false\"")]
         [DataRow("\"userInfo\": \"true\"")]
         [DataRow("\"userInfo\": \"false\"")]
+        [DataRow("\"documents\": \"true\"")]
+        [DataRow("\"documents\": \"false\"")]
+        [DataRow("\"im1Messaging\": \"true\"")]
+        [DataRow("\"im1Messaging\": \"false\"")]
         public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidJourneys_ReturnsTrue(
             string journeys)
         {
@@ -365,6 +369,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("messaging", "\"test\"", "NotInEnumeration: #/journeys.messaging", false)]
         [DataRow("userInfo", "\"\"", "NotInEnumeration: #/journeys.userInfo", false)]
         [DataRow("userInfo", "\"test\"", "NotInEnumeration: #/journeys.userInfo", false)]
+        [DataRow("documents", "\"\"", "NotInEnumeration: #/journeys.documents", false)]
+        [DataRow("documents", "\"test\"", "NotInEnumeration: #/journeys.documents", false)]
+        [DataRow("im1Messaging", "\"\"", "NotInEnumeration: #/journeys.im1Messaging", false)]
+        [DataRow("im1Messaging", "\"test\"", "NotInEnumeration: #/journeys.im1Messaging", false)]
         public async Task
             ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidJourney_ReturnsFalse(
                 string journeyType, string value, string expectedError, bool oneOfMultipleOptions)

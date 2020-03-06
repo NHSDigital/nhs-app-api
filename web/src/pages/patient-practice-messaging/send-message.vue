@@ -26,10 +26,10 @@
       </div>
       <p id="subHeader" class="nhsuk-hint" :aria-label="$t('im03.info.paragraph2.ariaLabel')">
         {{ $t('patient_practice_messaging.createMessage.subHeader') }}
-        <a style="display:inline" href="https://111.nhs.uk">
+        <a style="display:inline; vertical-align: baseline" href="https://111.nhs.uk">
           {{ $t('patient_practice_messaging.createMessage.nhs111Link') }}</a>
         {{ $t('patient_practice_messaging.createMessage.or') }}
-        <a style="display:inline" href="tel:111">
+        <a style="display:inline; vertical-align: baseline" href="tel:111">
           {{ $t('patient_practice_messaging.createMessage.call111Link') }}.
         </a>
       </p>
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { redirectTo, isFalsy } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import { INDEX, PATIENT_PRACTICE_MESSAGING_RECIPIENTS, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE } from '@/lib/routes';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
@@ -126,8 +126,7 @@ export default {
     },
   },
   fetch({ store, redirect }) {
-    if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED) ||
-      store.state.patientPracticeMessaging.selectedMessageRecipient === undefined) {
+    if (store.state.patientPracticeMessaging.selectedMessageRecipient === undefined) {
       redirect(INDEX.path);
     }
   },

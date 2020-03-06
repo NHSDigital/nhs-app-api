@@ -3,9 +3,9 @@
     <div class="nhsuk-grid-column-full">
       <p id="infoRecipients">{{ $t('im04.info') }}</p>
       <menu-item-list id="recipientsMenuList" class="nhsuk-u-margin-bottom-3">
-        <menu-item v-for="recipient in messageRecipients"
-                   :id="`recipient-${recipient.recipientGuid}`"
-                   :key="`recipient-${recipient.recipientGuid}`"
+        <menu-item v-for="(recipient, index) in messageRecipients"
+                   :id="`recipient-${recipient.recipientGuid}-${index}`"
+                   :key="`recipient-${recipient.recipientGuid}-${index}`"
                    :text="recipient.name"
                    :click-func="recipientClicked"
                    :click-param="recipient"
@@ -28,7 +28,7 @@ import {
   PATIENT_PRACTICE_MESSAGING_URGENCY,
   PATIENT_PRACTICE_MESSAGING_CREATE,
 } from '@/lib/routes';
-import { isFalsy, redirectTo, isEmptyArray } from '@/lib/utils';
+import { redirectTo, isEmptyArray } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -45,8 +45,7 @@ export default {
   },
   fetch({ store, redirect }) {
     const { messageRecipients } = store.state.patientPracticeMessaging;
-    if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED) ||
-      !messageRecipients || isEmptyArray(messageRecipients)) {
+    if (!messageRecipients || isEmptyArray(messageRecipients)) {
       redirect(INDEX.path);
     }
   },

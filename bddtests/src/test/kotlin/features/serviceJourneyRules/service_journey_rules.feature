@@ -87,3 +87,34 @@ Feature: Service Journey Rules Frontend
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
     Then I am redirected to the 'GP at Hand Prescriptions' page
+
+  Scenario Outline: A user with documents disabled navigates directly to any documents page is redirected to the home page
+    Given I am a EMIS user where the journey configurations are:
+      | Journey            | Value     |
+      | documents          | disabled  |
+    And I am logged in
+    When I retrieve the '<Documents Page>' page directly
+    Then I am redirected to the 'Home' page
+    Examples:
+    | Documents Page |
+    | Gp Medical Record Documents |
+    | Gp Medical Record Document Information |
+    | Gp Medical Record Document Detail |
+
+  Scenario Outline: A user with im1Messaging disabled navigates directly to any im1 messaging page is redirected to the home page
+    Given I am a EMIS user where the journey configurations are:
+      | Journey             | Value     |
+      | im1 messaging       | disabled  |
+    And I am logged in
+    When I retrieve the '<Im1Messaging Page>' page directly
+    Then I am redirected to the 'Home' page
+    Examples:
+      | Im1Messaging Page                          |
+      | Patient Practice Messaging                 |
+      | Patient Practice Messaging Urgency         |
+      | Patient Practice Messaging Contact Your Gp |
+      | Patient Practice Messaging Recipients      |
+      | Patient Practice Messaging View Details    |
+      | Patient Practice Messaging Send Message    |
+      | Patient Practice Messaging Delete          |
+      | Patient Practice Messaging Delete Success  |

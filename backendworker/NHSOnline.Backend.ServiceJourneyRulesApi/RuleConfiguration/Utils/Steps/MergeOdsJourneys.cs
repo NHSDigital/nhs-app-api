@@ -102,12 +102,22 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     currentJourneys.UserInfo = journeys.UserInfo;
                 }
 
+                if (journeys.Documents.HasValue)
+                {
+                    currentJourneys.Documents = journeys.Documents;
+                }
+
+                if (journeys.Im1Messaging.HasValue)
+                {
+                    currentJourneys.Im1Messaging = journeys.Im1Messaging;
+                }
+
                 currentJourneys.SilverIntegrations =
                     MergeSilverIntegrations(currentJourneys.SilverIntegrations, journeys.SilverIntegrations);
             }
         }
 
-        private static SilverIntegrations MergeSilverIntegrations(SilverIntegrations current, SilverIntegrations merge) 
+        private static SilverIntegrations MergeSilverIntegrations(SilverIntegrations current, SilverIntegrations merge)
         {
             if (current == null)
             {

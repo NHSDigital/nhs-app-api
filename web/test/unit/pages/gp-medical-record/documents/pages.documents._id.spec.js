@@ -1,7 +1,7 @@
 import each from 'jest-each';
 import { mount, createRouter, createStore } from '../../../helpers';
 import DocumentInformation from '@/pages/gp-medical-record/documents/_id';
-import { DOCUMENT_DETAIL, GP_MEDICAL_RECORD } from '@/lib/routes';
+import { DOCUMENT_DETAIL } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 
 jest.mock('@/lib/sessionStorage');
@@ -14,13 +14,12 @@ const $route = {
   },
 };
 
-const newStore = ({ isDocumentsEnabled = true,
+const newStore = ({
   document,
-  documentConsultationsWithComments = [] } = {}) => (
+  documentConsultationsWithComments = [],
+} = {}) => (
   createStore({
     $env: {
-      MY_RECORD_DOCUMENTS_ENABLED: isDocumentsEnabled,
-      MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS: ['EMIS'],
       CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
     },
     state: {
@@ -28,9 +27,6 @@ const newStore = ({ isDocumentsEnabled = true,
         document,
         hasAcceptedTerms: true,
         documentConsultationsWithComments,
-        record: {
-          supplier: 'EMIS',
-        },
       },
       device: {
         isNativeApp: false,
@@ -38,31 +34,39 @@ const newStore = ({ isDocumentsEnabled = true,
     },
   }));
 
-const mountPage = ({ $store, data = () => ({ comments: [] }) }) =>
+const mountPage = ({ $store = newStore(), data = () => ({ comments: [] }) } = {}) =>
   mount(DocumentInformation, { $store, $router, $route, data });
 
 describe('document view', () => {
-  let $store;
-
   beforeEach(() => {
     redirect = jest.fn();
     hasAgreedToMedicalWarning.mockClear();
     hasAgreedToMedicalWarning.mockReturnValue(true);
   });
 
-  describe('asyncData', () => {
-    it('will redirect to the my record page if the document environment variable is not enabled', async () => {
+  describe('methods', () => {
+    it('will navigate to the view document page with the correct id in the path', () => {
       // Arrange
-      $store = newStore({ isDocumentsEnabled: false });
-      const page = mountPage({ $store });
+      const route = { name: DOCUMENT_DETAIL.name, params: { id: 1 } };
+      const page = mountPage();
 
       // Act
-      await page.vm.$options.asyncData({ store: $store, redirect });
+      page.vm.navigateToView();
 
       // Assert
-      expect(redirect).toBeCalledWith(GP_MEDICAL_RECORD.path);
+      expect($router.push).toHaveBeenCalledWith(route);
     });
+    it('will convert map the download type correctly', async () => {
+      // Arrange
+      const page = mountPage();
 
+      // Act & Assert
+      expect(page.vm.mapFileTypeToDownloadType('docm')).toEqual('doc');
+      expect(page.vm.mapFileTypeToDownloadType('jpeg')).toEqual('jpeg');
+    });
+  });
+
+  describe('template', () => {
     it('will display Unknown Date if there is no document date', async () => {
       // Arrange
       const data = () => ({
@@ -73,7 +77,7 @@ describe('document view', () => {
         dateString: 'translate_my_record.documents.documentPageSubtext Unknown Date',
         isValidFile: true,
       });
-      const page = mountPage({ $store, data });
+      const page = mountPage({ data });
 
       // Act
       const documentInfo = page.find('#documentInfo p');
@@ -91,7 +95,7 @@ describe('document view', () => {
         size: 1000000,
         date: { value: '2019-08-08T12:03:44+00:00' },
         isValidFile: true };
-      $store = newStore({ document });
+      const $store = newStore({ document });
       const page = mountPage({ $store });
 
       // Act
@@ -103,15 +107,8 @@ describe('document view', () => {
 
     it('will set the header to the document date if no name exists', async () => {
       // Arrange
-      const document = {
-        name: undefined,
-        type: 'jpg',
-        size: 1000000,
-        date: { value: '2019-08-08T12:03:44+00:00' },
-        isValidFile: true,
-        documentType: null,
-      };
-      $store = newStore({ document });
+      const document = { name: undefined, type: 'jpg', size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' }, isValidFile: true, documentType: null };
+      const $store = newStore({ document });
       const page = mountPage({ $store });
 
       const dateString = 'translate_my_record.documents.documentPageSubtext 8 August 2019';
@@ -131,8 +128,9 @@ describe('document view', () => {
         size: 1000000,
         date: { value: '2019-08-08T12:03:44+00:00' },
         isValidFile: true,
-        documentType: 'Letter' };
-      $store = newStore({ document });
+        documentType: 'Letter',
+      };
+      const $store = newStore({ document });
       const page = mountPage({ $store });
 
       const dateString = 'Letter translate_my_record.documents.docTypePageSubtext 8 August 2019';
@@ -146,28 +144,6 @@ describe('document view', () => {
   });
 
   describe('methods', () => {
-    it('will navigate to the view document page with the correct id in the path', () => {
-      // Arrange
-      const route = { name: DOCUMENT_DETAIL.name, params: { id: 1 } };
-      const page = mountPage({ $store });
-
-      // Act
-      page.vm.navigateToView();
-
-      // Assert
-      expect($router.push).toHaveBeenCalledWith(route);
-    });
-    it('will convert map the download type correctly', async () => {
-      // Arrange
-      const page = mountPage({ $store });
-
-      // Act & Assert
-      expect(page.vm.mapFileTypeToDownloadType('docm')).toEqual('doc');
-      expect(page.vm.mapFileTypeToDownloadType('jpeg')).toEqual('jpeg');
-    });
-  });
-
-  describe('template', () => {
     it('will display the date subtext if there is a name', () => {
       // Arrange
       const data = () => ({
@@ -178,7 +154,7 @@ describe('document view', () => {
         dateString: 'translate_my_record.documents.documentPageSubtext 8 August 2019',
         isValidFile: true,
       });
-      const page = mountPage({ $store, data });
+      const page = mountPage({ data });
 
       // Act
       const documentInfo = page.find('#documentInfo p');
@@ -214,7 +190,6 @@ describe('document view', () => {
         },
         ],
       }];
-      $store = newStore({ document, documentComments });
       const data = () => ({
         name: 'Doc1',
         date: { value: '2019-08-08T12:03:44+00:00' },
@@ -225,7 +200,7 @@ describe('document view', () => {
         comments: ['this is a test'],
         isValidFile: true,
       });
-      const page = mountPage({ $store, data });
+      const page = mountPage({ $store: newStore({ document, documentComments }), data });
 
       // Act
       const documentComment = page.find('#documentComment0 pre');
@@ -253,7 +228,6 @@ describe('document view', () => {
         },
         comments: ['this is a test', 'this is a second test', 'this is a third test'],
       }];
-      $store = newStore({ document, documentComments });
       const data = () => ({
         name: 'Doc1',
         date: { value: '2019-08-08T12:03:44+00:00' },
@@ -264,7 +238,7 @@ describe('document view', () => {
         comments: ['this is a test', 'this is a second test', 'this is a third test'],
         isValidFile: true,
       });
-      const page = mountPage({ $store, data });
+      const page = mountPage({ $store: newStore({ document, documentComments }), data });
 
       // Act
       const firstDocumentComment = page.find('#documentComment0 pre');
@@ -291,7 +265,6 @@ describe('document view', () => {
         eventGuid: 'test',
         codeId: 1234,
       };
-      $store = newStore({ document });
       const data = () => ({
         name: 'Doc1',
         date: { value: '2019-08-08T12:03:44+00:00' },
@@ -302,7 +275,7 @@ describe('document view', () => {
         comments: [],
         isValidFile: true,
       });
-      const page = mountPage({ $store, data });
+      const page = mountPage({ $store: newStore({ document }), data });
 
       // Act
       const documentComment = page.find('#documentComment0 p');
@@ -320,7 +293,7 @@ describe('document view', () => {
         type: 'jpg',
         isValidFile: true,
       });
-      const page = mountPage({ $store, data });
+      const page = mountPage({ data });
 
       // Act
       const documentInfo = page.find('#documentInfo p');
@@ -338,7 +311,7 @@ describe('document view', () => {
         isValidFile: true,
       });
       // Arrange
-      const page = mountPage({ $store, data });
+      const page = mountPage({ data });
 
       // Act
       const viewItem = page.find('#btn_viewDocument');
@@ -361,7 +334,7 @@ describe('document view', () => {
       });
 
       // Arrange
-      const page = mountPage({ $store, data });
+      const page = mountPage({ data });
 
       // Act
       const viewItem = page.find('#btn_viewDocument');
@@ -383,7 +356,7 @@ describe('document view', () => {
         },
         comments: ['this is a test', 'this is a second test', 'this is a third test'],
       }];
-      $store = newStore({ document, documentComments });
+      const $store = newStore({ document, documentComments });
       const page = mountPage({ $store });
 
       // Act
@@ -413,7 +386,7 @@ describe('document view', () => {
       // Arrange
       const { size, comments, type } = testData;
       const data = () => ({ type, size, comments });
-      const page = mountPage({ $store: newStore(), data });
+      const page = mountPage({ data });
 
       // Act
       const documentInfo = page.find('#documentInfo p');
@@ -442,7 +415,7 @@ describe('document view', () => {
       // Arrange
       const { size, comments, type } = testData;
       const data = () => ({ size, comments, type });
-      const page = mountPage({ $store: newStore(), data });
+      const page = mountPage({ data });
 
       // Act
       const downloadWarning = page.find('#downloadWarning');

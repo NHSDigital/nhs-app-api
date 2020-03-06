@@ -3869,6 +3869,10 @@
                                   type: "boolean"
                                 userInfo: 
                                   type: "boolean"
+                                documents: 
+                                  type: "boolean"
+                                im1Messaging: 
+                                  type: "boolean"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
             content: 
@@ -4465,6 +4469,10 @@
                           type: "boolean"
                         userInfo: 
                           type: "boolean"
+                        documents: 
+                          type: "boolean"
+                        im1Messaging: 
+                          type: "boolean"
           404: 
             description: "Service Journey Rules Configuration not found."
           500: 
@@ -4627,6 +4635,10 @@
                         messaging: 
                           type: "boolean"
                         userInfo: 
+                          type: "boolean"
+                        documents: 
+                          type: "boolean"
+                        im1Messaging: 
                           type: "boolean"
           404: 
             description: "Service Journey Rules Configuration not found."

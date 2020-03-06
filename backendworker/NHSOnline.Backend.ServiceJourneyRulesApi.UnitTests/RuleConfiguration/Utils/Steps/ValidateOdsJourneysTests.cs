@@ -95,6 +95,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments( SecondaryAppointmentProvider.pkb )
                                 .Messages( MessagesProvider.pkb )
                                 .Consultations(ConsultationsProvider.pkb))
+                            .DocumentsEnabled(true)
+                            .Im1MessagingEnabled(true)
                             .WithSupplier(Supplier.Emis)
                             .Build()
                     },
@@ -114,6 +116,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments()
                                 .Messages()
                                 .Consultations())
+                            .DocumentsEnabled(false)
+                            .Im1MessagingEnabled(false)
                             .WithSupplier(Supplier.Tpp)
                             .Build()
                     },
@@ -133,6 +137,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments()
                                 .Messages()
                                 .Consultations())
+                            .DocumentsEnabled(true)
+                            .Im1MessagingEnabled(true)
                             .WithSupplier(Supplier.Vision)
                             .Build()
                     }
@@ -169,6 +175,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .SilverIntegrations(_ => _.SecondaryAppointments()
                                 .Messages()
                                 .Consultations())
+                            .DocumentsEnabled(true)
+                            .Im1MessagingEnabled(true)
                             .WithSupplier(Supplier.Microtest)
                             .Build()
                     },
@@ -188,6 +196,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments()
                                 .Messages()
                                 .Consultations())
+                            .DocumentsEnabled(false)
+                            .Im1MessagingEnabled(false)
                             .WithSupplier(Supplier.Emis)
                             .Build()
                     },
@@ -207,6 +217,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments()
                                 .Messages()
                                 .Consultations())
+                            .DocumentsEnabled(true)
+                            .Im1MessagingEnabled(true)
                             .WithSupplier(Supplier.Tpp)
                             .Build()
                     }
@@ -363,6 +375,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .SecondaryAppointments()
                     .Messages()
                     .Consultations())
+                .DocumentsEnabled(true)
+                .Im1MessagingEnabled(true)
                 .WithSupplier(Supplier.Emis);
         }
     }

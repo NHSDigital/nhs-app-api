@@ -32,11 +32,11 @@
 import GenericButton from '@/components/widgets/GenericButton';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
 import {
-  INDEX,
   PATIENT_PRACTICE_MESSAGING_URGENCY,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+  INDEX,
 } from '@/lib/routes';
-import { isFalsy, redirectTo } from '@/lib/utils';
+import { redirectTo } from '@/lib/utils';
 import { formatDate } from '@/plugins/filters';
 
 export default {
@@ -58,11 +58,12 @@ export default {
       return !(this.summaries && this.summaries.length > 0);
     },
   },
-  async fetch({ store, redirect }) {
-    if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)) {
-      return redirect(INDEX.path);
+  async asyncData({ store, redirect }) {
+    if (!store.state.practiceSettings.im1MessagingEnabled) {
+      redirect(INDEX.path);
+      return;
     }
-    return store.dispatch('patientPracticeMessaging/loadMessages');
+    await store.dispatch('patientPracticeMessaging/loadMessages');
   },
   mounted() {
     this.$store.dispatch('patientPracticeMessaging/setUrgencyChoice', undefined);

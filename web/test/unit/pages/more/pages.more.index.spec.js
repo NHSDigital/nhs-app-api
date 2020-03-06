@@ -1,3 +1,4 @@
+import each from 'jest-each';
 import More from '@/pages/more';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { createEvent, createStore, mount, createRouter } from '../../helpers';
@@ -15,9 +16,9 @@ describe('more', () => {
 
   const mountAs = ({
     cdssAdminEnabled = false,
-    appMessagingEnabled = false,
-    im1MessagingEnabled = false,
-    patientPracticeMessagingToggleEnabled = true,
+    sjrMessagingEnabled = false,
+    practiceIm1MessagingEnabled = false,
+    sjrIm1MessagingEnabled = false,
     isNativeApp = false,
     context = { serviceProvider: 'pkb',
       serviceType: 'messages' },
@@ -25,23 +26,17 @@ describe('more', () => {
     $router = createRouter();
     $store = createStore({
       state: {
-        device: {
-          isNativeApp,
-        },
-        practiceSettings: {
-          im1MessagingEnabled,
-        },
+        device: { isNativeApp },
+        practiceSettings: { im1MessagingEnabled: practiceIm1MessagingEnabled },
       },
       getters: {
         'serviceJourneyRules/silverIntegrationEnabled': () => (context),
+        'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
+        'serviceJourneyRules/messagingEnabled': sjrMessagingEnabled,
+        'serviceJourneyRules/im1MessagingEnabled': sjrIm1MessagingEnabled,
       },
-      $env: {
-        PATIENT_PRACTICE_MESSAGING_ENABLED: patientPracticeMessagingToggleEnabled,
-        YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com',
-      },
+      $env: { YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com' },
     });
-    $store.getters['serviceJourneyRules/cdssAdminEnabled'] = cdssAdminEnabled;
-    $store.getters['serviceJourneyRules/messagingEnabled'] = appMessagingEnabled;
     return mount(More, { $store, $router });
   };
 
@@ -87,7 +82,7 @@ describe('more', () => {
 
     describe('sjr messaging disabled', () => {
       beforeEach(() => {
-        wrapper = mountAs({ appMessagingEnabled: false });
+        wrapper = mountAs({ sjrMessagingEnabled: false });
       });
 
       it('will not show link', () => {
@@ -103,51 +98,70 @@ describe('more', () => {
       });
 
       it('will show link', () => {
-        wrapper = mountAs({ appMessagingEnabled: true, isNativeApp: true });
+        wrapper = mountAs({ sjrMessagingEnabled: true, isNativeApp: true });
         messagingLink = getMessagingLink(wrapper);
         expect(messagingLink.exists()).toBe(true);
       });
 
       it('will not show the link on desktop if enabled', () => {
-        wrapper = mountAs({ appMessagingEnabled: true, isNativeApp: false });
+        wrapper = mountAs({ sjrMessagingEnabled: true, isNativeApp: false });
         messagingLink = getMessagingLink(wrapper);
         expect(messagingLink.exists()).toBe(false);
       });
 
       it('will redirect to MESSAGING when clicked', () => {
-        wrapper = mountAs({ appMessagingEnabled: true, isNativeApp: true });
+        wrapper = mountAs({ sjrMessagingEnabled: true, isNativeApp: true });
         messagingLink = getMessagingLink(wrapper);
         messagingLink.trigger('click');
         expect($router.push).toBeCalledWith(MESSAGING.path);
       });
     });
 
-    describe('im1 messaging disabled', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ im1MessagingEnabled: false });
+    describe('im1 messaging', () => {
+      describe('practice disabled or sjr disabled', () => {
+        each([
+          { practice: true, sjr: false },
+          { practice: false, sjr: true },
+          { practice: false, sjr: false },
+        ]).it('will not show link', ({ practice, sjr }) => {
+          wrapper = mountAs({
+            practiceIm1MessagingEnabled: practice,
+            sjrIm1MessagingEnabled: sjr,
+          });
+          expect(getMessagingLink(wrapper).exists()).toBe(false);
+        });
       });
 
-      it('will not show link', () => {
-        expect(getMessagingLink(wrapper).exists()).toBe(false);
+      describe('practice enabled and sjr enabled', () => {
+        let messagingLink;
+
+        beforeEach(() => {
+          global.digitalData = {};
+          wrapper = mountAs({ practiceIm1MessagingEnabled: true, sjrIm1MessagingEnabled: true });
+          messagingLink = getMessagingLink(wrapper);
+        });
+
+        it('will show link', () => {
+          expect(messagingLink.exists()).toBe(true);
+        });
+
+        it('will redirect to /patient-practice-messaging when clicked', () => {
+          messagingLink.trigger('click');
+          expect($router.push).toBeCalledWith(PATIENT_PRACTICE_MESSAGING.path);
+        });
       });
-    });
 
-    describe('im1 messaging enabled', () => {
-      let messagingLink;
+      describe('app messaging enabled and im1 messaging enabled', () => {
+        it('will redirect to /patient-practice-messaging when clicked', () => {
+          wrapper = mountAs({
+            sjrMessagingEnabled: true,
+            practiceIm1MessagingEnabled: true,
+            sjrIm1MessagingEnabled: true,
+          });
 
-      beforeEach(() => {
-        global.digitalData = {};
-        wrapper = mountAs({ im1MessagingEnabled: true });
-        messagingLink = getMessagingLink(wrapper);
-      });
-
-      it('will show link', () => {
-        expect(messagingLink.exists()).toBe(true);
-      });
-
-      it('will redirect to PATIENT_PRACTICE_MESSAGING when clicked', () => {
-        messagingLink.trigger('click');
-        expect($router.push).toBeCalledWith(PATIENT_PRACTICE_MESSAGING.path);
+          getMessagingLink(wrapper).trigger('click');
+          expect($router.push).toBeCalledWith(PATIENT_PRACTICE_MESSAGING.path);
+        });
       });
     });
   });
@@ -155,7 +169,6 @@ describe('more', () => {
   describe('methods', () => {
     it('will navigate to data preferences when data preferences menu item clicked if native', () => {
       wrapper = mountAs({ isNativeApp: true });
-      wrapper.find('#btn_data_sharing').trigger('click');
       const event = createEvent({ currentTarget: { pathname: DATA_SHARING_PREFERENCES.path } });
       wrapper.vm.navigateToDataSharing(event);
 
@@ -165,7 +178,6 @@ describe('more', () => {
 
     it('will navigate to ndop home page when data preferences menu item clicked if not native', () => {
       wrapper = mountAs();
-      wrapper.find('#btn_data_sharing').trigger('click');
       const event = createEvent({ currentTarget: { pathname: 'testYourDataMattersUrl.com' } });
       wrapper.vm.navigateToDataSharing(event);
 
@@ -176,43 +188,34 @@ describe('more', () => {
 
     it('will navigate to admin help when request gp admin help menu item clicked', () => {
       wrapper = mountAs({ cdssAdminEnabled: true });
-      wrapper.find('#btn_gp_help').trigger('click');
-      const event = createEvent({ currentTarget: { pathname: APPOINTMENT_ADMIN_HELP.path } });
-      wrapper.vm.navigate(event);
+      wrapper.vm.navigate(
+        createEvent({ currentTarget: { pathname: APPOINTMENT_ADMIN_HELP.path } }),
+      );
 
       expect($router.push).toHaveBeenCalledWith(APPOINTMENT_ADMIN_HELP.path);
     });
 
-    it('will navigate to /messaging when appMessagingEnabled' +
-       ' and messaging menu item clicked', () => {
-      wrapper = mountAs({ appMessagingEnabled: true, isNativeApp: true });
-      wrapper.find('#btn_messaging').trigger('click');
-      const event = createEvent({ currentTarget: { pathname: MESSAGING.path } });
-      wrapper.vm.navigate(event);
+    it('will navigate to /messaging when messaging enabled in SJR ' +
+       'and messaging menu item clicked', () => {
+      wrapper = mountAs({ sjrMessagingEnabled: true, isNativeApp: true });
+      wrapper.vm.navigate(
+        createEvent({ currentTarget: { pathname: MESSAGING.path } }),
+      );
 
       expect($router.push).toHaveBeenCalledWith(MESSAGING.path);
     });
 
-    it('will navigate to /patient-practice-messaging when im1MessagingEnabled ' +
+    it('will navigate to /patient-practice-messaging when im1Messaging is on in SJR ' +
        'and messaging menu item clicked', () => {
-      wrapper = mountAs({ im1MessagingEnabled: true });
-      wrapper.find('#btn_messaging').trigger('click');
-      const event = createEvent({ currentTarget: { pathname: PATIENT_PRACTICE_MESSAGING.path } });
-      wrapper.vm.navigate(event);
+      wrapper = mountAs({
+        practiceIm1MessagingEnabled: true,
+        sjrIm1MessagingEnabled: true,
+      });
+      wrapper.vm.navigate(
+        createEvent({ currentTarget: { pathname: PATIENT_PRACTICE_MESSAGING.path } }),
+      );
 
       expect($router.push).toHaveBeenCalledWith(PATIENT_PRACTICE_MESSAGING.path);
-    });
-
-    it('will not display messaging menu item when patient practice toggle is off even if ' +
-       'the practice has it enabled', () => {
-      wrapper = mountAs({
-        im1MessagingEnabled: true,
-        patientPracticeMessagingToggleEnabled: false,
-      });
-
-      const messagingMenuItem = wrapper.find('#btn_messaging');
-
-      expect(messagingMenuItem.exists()).toBe(false);
     });
   });
 });

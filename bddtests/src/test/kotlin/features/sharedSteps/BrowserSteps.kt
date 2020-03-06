@@ -75,7 +75,7 @@ open class BrowserSteps {
         WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
                 .pollingEvery(Duration.ofMillis(POLLING_DURATION))
                 .until {
-                    it.currentUrl.startsWith(url)
+                    it.currentUrl == url
                 }
     }
 

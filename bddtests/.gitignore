@@ -44,3 +44,5 @@ browserstack.err
 
 # node modules folder
 node_modules/*
+
+tmpDownloads/*

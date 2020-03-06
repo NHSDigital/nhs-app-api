@@ -30,8 +30,8 @@ import ReceivedMessages from '@/components/patient-practice-messaging/ReceivedMe
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import { INDEX, PATIENT_PRACTICE_MESSAGING, PATIENT_PRACTICE_MESSAGING_DELETE } from '@/lib/routes';
-import { redirectTo, isFalsy } from '@/lib/utils';
+import { PATIENT_PRACTICE_MESSAGING, PATIENT_PRACTICE_MESSAGING_DELETE } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -56,9 +56,6 @@ export default {
     },
   },
   async fetch({ store, redirect }) {
-    if (isFalsy(store.app.$env.PATIENT_PRACTICE_MESSAGING_ENABLED)) {
-      return redirect(INDEX.path);
-    }
     if (store.state.patientPracticeMessaging.selectedMessageId === undefined) {
       return redirect(PATIENT_PRACTICE_MESSAGING.path);
     }

@@ -186,7 +186,9 @@
         "messaging": { "enum": [ "true", "false" ] },
         "supplier": { "enum": [ "Emis", "Tpp", "Vision", "Microtest" ] },
         "silverIntegrations": { "$ref": "#/definitions/silverIntegrations" },
-        "userInfo": { "enum": [ "true", "false" ] }
+        "userInfo": { "enum": ["true", "false"]  },
+        "documents": { "enum": ["true", "false"]  },
+        "im1Messaging": { "enum": ["true", "false"]  }
       },
       "anyOf": [
         {
@@ -221,6 +223,12 @@
         },
         {
           "required": [ "userInfo" ]
+        },
+        {
+          "required": [ "documents" ]
+        },
+        {
+          "required": [ "im1Messaging" ]
         }
       ]
     }

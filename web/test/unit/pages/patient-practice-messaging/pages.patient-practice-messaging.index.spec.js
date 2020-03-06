@@ -2,6 +2,7 @@ import Page from '@/pages/patient-practice-messaging/index';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
 import { createStore, create$T, mount } from '../../helpers';
 import { formatDate } from '@/plugins/filters';
+import { INDEX } from '@/lib/routes';
 
 jest.mock('@/plugins/filters');
 
@@ -9,8 +10,9 @@ describe('practice patient messaging inbox', () => {
   const messageItemClass = 'nhs-app-message__item';
   let wrapper;
   let store;
-  let redirect;
   let $t;
+
+  const redirect = jest.fn();
 
   const summaries = [{
     id: 'message-1',
@@ -23,7 +25,7 @@ describe('practice patient messaging inbox', () => {
   const mountPage = ({
     messageSummaries = summaries,
     loadedMessages = true,
-    toggle = true,
+    im1MessagingEnabled = false,
   } = {}) => {
     store = createStore({
       state: {
@@ -32,8 +34,10 @@ describe('practice patient messaging inbox', () => {
           loadedMessages,
           urgencyChoice: 'yes',
         },
+        practiceSettings: {
+          im1MessagingEnabled,
+        },
       },
-      $env: { PATIENT_PRACTICE_MESSAGING_ENABLED: toggle },
     });
     $t = create$T();
 
@@ -50,47 +54,17 @@ describe('practice patient messaging inbox', () => {
     formatDate.mockImplementation('2020-01-01T13:37:00.137Z', 'D MMMM YYYY').mockReturnValue('mock formatted date');
   });
 
-  describe('fetch', () => {
-    let toggle;
-
-    beforeEach(() => {
-      redirect = jest.fn();
+  describe('asyncData', () => {
+    it('will dispatch load if im1MessagingEnabled is enabled for the practice', async () => {
+      mountPage({ im1MessagingEnabled: true });
+      await wrapper.vm.$options.asyncData({ store, redirect });
+      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/loadMessages');
     });
 
-    describe('patient practice messaging toggle enabled', () => {
-      beforeEach(async () => {
-        toggle = true;
-
-        mountPage({ toggle });
-        await wrapper.vm.$options.fetch({ store, redirect });
-      });
-
-      it('will dispatch load', () => {
-        // Assert
-        expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/loadMessages');
-      });
-
-      it('will not redirect', () => {
-        expect(redirect).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('patient practice messaging toggle disabled', () => {
-      beforeEach(async () => {
-        toggle = 'false';
-
-        mountPage({ toggle });
-        await wrapper.vm.$options.fetch({ store, redirect });
-      });
-
-      it('will not dispatch load', () => {
-        // Assert
-        expect(store.dispatch).not.toHaveBeenCalledWith('patientPracticeMessaging/loadMessages');
-      });
-
-      it('will redirect to home', () => {
-        expect(redirect).toHaveBeenCalledWith('/');
-      });
+    it('will redirect if im1MessagingEnabled is not enabled for the practice', async () => {
+      mountPage();
+      await wrapper.vm.$options.asyncData({ store, redirect });
+      expect(redirect).toHaveBeenCalledWith(INDEX.path);
     });
   });
 

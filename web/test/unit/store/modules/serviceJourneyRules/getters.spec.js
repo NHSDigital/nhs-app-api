@@ -250,4 +250,32 @@ describe('getters', () => {
       expect(notificationsEnabled(currentState)).toBe(false);
     });
   });
+
+  describe('documentsEnabled', () => {
+    const { documentsEnabled } = getters;
+
+    it('will be true if documents is true', () => {
+      currentState.rules.documents = true;
+      expect(documentsEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if documents is false', () => {
+      currentState.rules.documents = false;
+      expect(documentsEnabled(currentState)).toBe(false);
+    });
+  });
+
+  describe('im1MessagingEnabled', () => {
+    const { im1MessagingEnabled } = getters;
+
+    it('will be true if im1Messaging is true', () => {
+      currentState.rules.im1Messaging = true;
+      expect(im1MessagingEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if im1Messaging is false', () => {
+      currentState.rules.im1Messaging = false;
+      expect(im1MessagingEnabled(currentState)).toBe(false);
+    });
+  });
 });

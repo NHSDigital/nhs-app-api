@@ -1,6 +1,6 @@
 import RecipientsPage from '@/pages/patient-practice-messaging/recipients';
 import { mount, createStore } from '../../helpers';
-import { isFalsy, redirectTo } from '@/lib/utils';
+import { redirectTo, isEmptyArray } from '@/lib/utils';
 
 jest.mock('@/lib/utils');
 
@@ -10,12 +10,10 @@ describe('patient practice messaging recipients page', () => {
   let redirect;
 
   const mountPage = ({
-    toggle = true,
     isNativeApp = true,
     messageRecipients = [],
   } = {}) => {
     store = createStore({
-      $env: { PATIENT_PRACTICE_MESSAGING_ENABLED: toggle },
       state: {
         patientPracticeMessaging: {
           messageRecipients,
@@ -30,55 +28,55 @@ describe('patient practice messaging recipients page', () => {
   };
 
   describe('fetch', () => {
-    let toggle;
-
     beforeEach(() => {
       redirect = jest.fn();
     });
 
-    describe('patient practice messaging toggle enabled', () => {
-      beforeEach(async () => {
-        toggle = true;
-        isFalsy.mockImplementation(toggle).mockReturnValue(false);
+    describe('no message recipients', () => {
+      it('will redirect to home', async () => {
+        isEmptyArray.mockReturnValueOnce(true);
+        mountPage();
 
-        mountPage({ toggle });
         await wrapper.vm.$options.fetch({ store, redirect });
-      });
 
-      it('will show me my recipients if there is recipients', () => {
-        const messageRecipients = [{ recipientGuid: '1', name: 'Dr. Test' }];
-        mountPage({ toggle, messageRecipients });
-        expect(wrapper.find('#recipientsMenuList').exists()).toBe(true);
-        expect(store.dispatch).not.toHaveBeenCalledWith('header/updateHeaderText');
-      });
-    });
-
-    describe('patient practice messaging toggle disabled', () => {
-      beforeEach(async () => {
-        toggle = 'false';
-        isFalsy.mockImplementation(toggle).mockReturnValue(true);
-
-        mountPage({ toggle });
-        await wrapper.vm.$options.fetch({ store, redirect });
-      });
-
-      it('will not dispatch load', () => {
-        expect(store.dispatch).not.toHaveBeenCalledWith('patientPracticeMessaging/loadRecipients');
-      });
-
-      it('will redirect to home', () => {
+        expect(isEmptyArray).toHaveBeenCalledWith([]);
         expect(redirect).toHaveBeenCalledWith('/');
       });
     });
 
-    describe('back link clicked', () => {
-      beforeEach(() => {
-        mountPage({ isNativeApp: false });
-      });
+    describe('has message recipients', () => {
+      it('will not redirect to home', async () => {
+        const messageRecipients = [{ recipientGuid: '1', name: 'Dr. Test' }];
+        isEmptyArray.mockReturnValueOnce(false);
+        mountPage({ messageRecipients });
 
+        await wrapper.vm.$options.fetch({ store, redirect });
+
+        expect(isEmptyArray).toHaveBeenCalledWith(messageRecipients);
+        expect(redirect).not.toHaveBeenCalledWith('/');
+      });
+    });
+  });
+
+  describe('template', () => {
+    describe('back link clicked', () => {
       it('will redirect to urgency question', () => {
+        mountPage({ isNativeApp: false });
+
         wrapper.vm.backLinkClicked();
+
         expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/patient-practice-messaging/urgency');
+      });
+    });
+
+    describe('has message recipients', () => {
+      it('will show a list of recipients', () => {
+        const messageRecipients = [{ recipientGuid: '1', name: 'Dr. Test' }];
+
+        mountPage({ messageRecipients });
+
+        expect(wrapper.find('#recipientsMenuList').exists()).toBe(true);
+        expect(store.dispatch).not.toHaveBeenCalledWith('header/updateHeaderText');
       });
     });
   });

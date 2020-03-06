@@ -8,7 +8,9 @@ data class Journey(var appointments: AppointmentsJourneyRules,
                    var medicalRecord: MedicalRecordJourneyRules,
                    var prescriptions: PrescriptionsJourneyRules,
                    var nominatedPharmacy: Boolean,
-                   var silverIntegrations: SilverIntegrationJourneyRules)
+                   var silverIntegrations: SilverIntegrationJourneyRules,
+                   var documents: Boolean,
+                   var im1Messaging: Boolean)
 
 data class AppointmentsJourneyRules(var informaticaUrl:String, var provider:AppointmentsProvider)
 

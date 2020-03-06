@@ -9,6 +9,8 @@ import java.util.*
 private const val ODSCODE_IM1_ECONSULT_OLC_DISABLED_NOMINATED_PHARMACY_ENABLED = "A11111"
 private const val ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED = "A22222"
 private const val ODSCODE_GP_AT_HAND_CONFIGURATIONS = "A44444"
+private const val ODSCODE_IM1_MESSAGING_DOCUMENTS_ENABLED = "A10003"
+private const val ODSCODE_IM1_MESSAGING_DOCUMENTS_DISABLED = "A10004"
 private const val TPP_ONLINE_CONSULTATIONS_DISABLED = "A55555"
 private const val VISION_ONLINE_CONSULTATIONS_DISABLED = "A66666"
 private const val EMIS_GP_MEDICAL_RECORD_V1 = "A80001"
@@ -60,7 +62,15 @@ class ServiceJourneyRulesMapper {
                 GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
                         EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
                 GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1)
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+
+                // Gp Medical Record Documents / Im1 Messaging
+                GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_ENABLED) to
+                        EnumSet.of(JourneyType.DOCUMENTS_ENABLED,
+                                JourneyType.IM1_MESSAGING_ENABLED),
+                GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_DISABLED) to
+                        EnumSet.of(JourneyType.DOCUMENTS_DISABLED,
+                                JourneyType.IM1_MESSAGING_DISABLED)
         )
 
         fun findPatientForConfiguration(gpSystem: Supplier?, journeyType:JourneyType): Patient {
@@ -75,8 +85,8 @@ class ServiceJourneyRulesMapper {
 
         private fun findPatientForConfiguration(gpSystem: Supplier?, journeyTypes: Collection<JourneyType>): Patient {
             val gpInformation = findGpInformation(gpSystem, journeyTypes)
-            Assert.assertNotNull("Test setup incorrect: Cannot find a matching ods code for system:"
-                    + gpSystem + "and odsCode: " + gpInformation?.odsCode + ", with given configuration in SJR",
+            Assert.assertNotNull("""Test setup incorrect: Cannot find a matching ods code for system:
+                    $gpSystem and odsCode: ${gpInformation?.odsCode}, with given configuration in SJR""",
                     gpInformation)
             val patient = Patient.getDefault(gpInformation!!.gpSupplier).copy(odsCode = gpInformation.odsCode)
             SerenityHelpers.setGpSupplier(gpInformation.gpSupplier)
@@ -123,6 +133,10 @@ class ServiceJourneyRulesMapper {
             SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB,
             USER_INFO_DISABLED,
             USER_INFO_ENABLED,
+            DOCUMENTS_ENABLED,
+            DOCUMENTS_DISABLED,
+            IM1_MESSAGING_ENABLED,
+            IM1_MESSAGING_DISABLED
         }
     }
 }

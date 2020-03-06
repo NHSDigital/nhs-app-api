@@ -18,7 +18,6 @@ describe('patient messaging messages', () => {
 
   const mountPage = ({
     messageDetaiils = messageDetails,
-    toggle = true,
     selectedId = undefined,
     loaded = false } = {}) => {
     store = createStore({
@@ -29,8 +28,8 @@ describe('patient messaging messages', () => {
           loadedDetails: loaded,
           selectedMessageRecipient: 'test',
         },
-        device: { isNativeApp: false } },
-      $env: { PATIENT_PRACTICE_MESSAGING_ENABLED: toggle },
+        device: { isNativeApp: false },
+      },
     });
     $t = create$T();
 
@@ -45,46 +44,36 @@ describe('patient messaging messages', () => {
   });
 
   describe('fetch', () => {
-    let toggle;
-    describe('has selected id', () => {
-      const id = '1';
+    describe('selected message id is defined', () => {
       beforeEach(async () => {
-        toggle = true;
-        mountPage({ toggle, selectedId: '1' });
+        mountPage({ selectedId: '1' });
         await wrapper.vm.$options.fetch({ store, redirect });
       });
 
       it('will dispatch `patientPracticeMessaging/loadMessage` with id', () => {
-        expect(store.dispatch).toBeCalledWith('patientPracticeMessaging/loadMessage', { id, clearApiError: true });
+        expect(store.dispatch).toBeCalledWith('patientPracticeMessaging/loadMessage', { id: '1', clearApiError: true });
       });
     });
-    describe('patient practice messaging toggle disabled', () => {
-      beforeEach(async () => {
-        toggle = 'false';
 
-        mountPage({ toggle });
+    describe('selected message id is undefined', () => {
+      beforeEach(async () => {
+        mountPage();
         await wrapper.vm.$options.fetch({ store, redirect });
       });
 
       it('will not dispatch load', () => {
-        // Assert
         expect(store.dispatch).not.toHaveBeenCalledWith('patientPracticeMessaging/loadMessage');
       });
 
-      it('will redirect to home', () => {
-        expect(redirect).toHaveBeenCalledWith('/');
+      it('will redirect to /patient-practice-messaging', () => {
+        expect(redirect).toHaveBeenCalledWith('/patient-practice-messaging');
       });
     });
   });
-  describe('mounted', () => {
-    let toggle;
-    beforeEach(async () => {
-      toggle = true;
-      mountPage({ toggle, selectedId: '1', loaded: true });
-      await wrapper.vm.$options.fetch({ store, redirect });
-    });
 
+  describe('mounted', () => {
     it('will dispatch update read status', () => {
+      mountPage({ selectedId: '1', loaded: true });
       expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/updateReadStatusAsRead');
     });
   });

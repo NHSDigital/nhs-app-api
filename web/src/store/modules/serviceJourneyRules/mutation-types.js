@@ -12,6 +12,8 @@ export const SET_RULES = 'SET_RULES';
 export const ONLINE_CONSULTATIONS = 'onlineConsultations';
 export const LINKED_ACCOUNT = 'linkedAccount';
 export const SILVER_INTEGRATION = 'silverIntegration';
+export const DOCUMENTS = 'documents';
+export const IM1MESSAGING = 'im1Messaging';
 
 export const initialState = () => ({
   isLoaded: false,
@@ -45,5 +47,7 @@ export const initialState = () => ({
         items: [],
       },
     },
+    documents: false,
+    im1Messaging: false,
   },
 });
