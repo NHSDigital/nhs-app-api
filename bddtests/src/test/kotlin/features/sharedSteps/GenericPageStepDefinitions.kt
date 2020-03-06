@@ -45,9 +45,9 @@ class GenericPageStepDefinitions {
     }
 
     @When("I click the link called '(.*)' with a url of '(.*)'")
-    fun iClickANamedLinkWithAUrl(linkTitle: String, url: String){
+    fun iClickANamedLinkWithAUrl(linkTitle: String, url: String) {
         browser.storeCurrentTabCount()
-        genericPage.assertLinkExistsAndClickIt(linkTitle,url)
+        genericPage.assertLinkExists(linkTitle, url, internal = false).click()
     }
 
     @Then("^a new tab has been opened by the link")

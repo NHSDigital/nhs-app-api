@@ -260,12 +260,12 @@ describe('util library', () => {
       const $te = create$T(false);
       each([{
         textType: 'headerText',
-        redirectPath: 'nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftag%3D',
+        redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages',
         feature: 'jumpOffContent',
-        expectedText: 'Messages and consultations',
+        expectedText: 'Messages and online consultations',
       }, {
         textType: 'featureName',
-        redirectPath: 'nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftag%3D',
+        redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages',
         feature: 'thirdPartyWarning',
         expectedText: 'Third party warning',
       }]).it('will bring back the correct third party locale text',

@@ -42,13 +42,6 @@ open class HybridPageObject : PageObject() {
             page = this
     )
 
-    private fun namedLinkWthGivenUrl(linkTitle: String, url: String) : HybridPageElement {
-        return HybridPageElement(
-            webDesktopLocator = "//a[@href='$url' and contains(.,'$linkTitle')]",
-            page = this
-        )
-    }
-
     private fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT) {
 
         actOnTheElement { elem ->
@@ -154,16 +147,14 @@ open class HybridPageObject : PageObject() {
         return this.text.removeSuffix(charValToRemove)
     }
 
-    fun assertLinkExists(linkTitle: String, url: String) {
-        namedLinkWthGivenUrl(linkTitle, url).actOnTheElement {
-            Assert.assertTrue("Expected the link called $linkTitle with target of $url to be available",
-                    it.isVisible)
-        }
-    }
-
-    fun assertLinkExistsAndClickIt(linkTitle: String, url: String) {
-        assertLinkExists(linkTitle, url)
-        namedLinkWthGivenUrl(linkTitle,url).click()
+    fun assertLinkExists(linkTitle: String, url: String, internal: Boolean): HybridPageElement {
+        val link = HybridPageElement(
+                webDesktopLocator = "//a[contains(.,'$linkTitle')]",
+                page = this
+        )
+        val expectedLink = if(internal) { Config.instance.url + url} else {url}
+        link.actOnTheElement { l -> Assert.assertEquals("link", expectedLink, l.getAttribute("href")) }
+        return link
     }
 
     fun attachJavascriptFunctionsToNativeAppWindow(scripts: ArrayList<String>){

@@ -478,7 +478,7 @@ const routes = {
         return [];
       },
     },
-    helpUrl: `${baseNhsAppHelpUrl}app-login/`,
+    helpUrl: `${baseNhsAppHelpUrl}`,
   },
   LOGIN: {
     name: 'Login',

@@ -1,6 +1,16 @@
 @appointmentsHub
 Feature: Hospital Appointments
 
+  Scenario: A user with correct permissions can navigate to the ers hospital appointments page
+    Given I am a user who can manage their hospital appointments
+    And I am logged in
+    When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    When I click the 'Hospital and other services' link on the Appointments Hub
+    Then the Hospital Appointments page is displayed
+    When I click the link called 'Book or cancel your referral appointment' with a url of 'http://web.local.bitraft.io:3000/redirector?redirect_to=https%3A%2F%2Fpat.rc.refer.nhs.uk/nhslogin'
+    Then a new tab has been opened by the link
+
   Scenario: A user without the secondary appointments permission will not be able to manage hospital appointments
     Given I am a user without the permission to manage their hospital appointments
     And I am logged in

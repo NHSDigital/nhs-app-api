@@ -152,12 +152,12 @@ class MessagesStepDefinitions {
     @Then("^I click on the '(.*)' link in the message$")
     fun iClickOnTheNamedLinkInTheMessages(link: String){
         val linkTitle = Config.instance.url + link
-        messagesPage.assertLinkExistsAndClickIt(linkTitle,link)
+        messagesPage.assertLinkExists(linkTitle,link, internal = true).click()
     }
 
     @Then("the email address '(.*)' is identified as a link in the message")
     fun theNamedEmailAddressIsIdentifiedAsALinkInTheMessage(email: String){
         val href = "mailto:$email"
-        messagesPage.assertLinkExists(email,href)
+        messagesPage.assertLinkExists(email,href, internal = false)
     }
 }
