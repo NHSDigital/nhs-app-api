@@ -31,6 +31,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private readonly ITppClientRequest<TppUserSession, RequestPatientRecordReply> _requestPatientRecord;
         private readonly ITppClientRequest<(TppUserSession tppUserSession, string documentIdentifier), RequestBinaryDataReply> _requestBinaryData;
         private readonly ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> _testResultsView;
+        private readonly ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> _testResultsViewDetailed;
 
         public TppPatientRecordService(IGetPatientDcrEventsTaskChecker patientDcrEventsChecker,
             IGetPatientOverviewTaskChecker patientOverviewTaskChecker,
@@ -42,7 +43,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper,
             ITppClientRequest<TppUserSession, RequestPatientRecordReply> requestPatientRecord,
             ITppClientRequest<(TppUserSession, string documentIdentifier), RequestBinaryDataReply> requestBinaryData,
-            ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> testResultsView)
+            ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> testResultsView,
+            ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> testResultsViewDetailed)
         {
             _patientDcrEventsChecker = patientDcrEventsChecker;
             _patientOverviewTaskChecker = patientOverviewTaskChecker;
@@ -56,6 +58,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _requestPatientRecord = requestPatientRecord;
             _testResultsView = testResultsView;
             _requestBinaryData = requestBinaryData;
+            _testResultsViewDetailed = testResultsViewDetailed;
             _logger = logger;
         }
 
@@ -159,7 +162,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             try
             {
                 _logger.LogDebug("Fetching TPP detailed test results");
-                var detailedTestResult = await _tppClient.TestResultsViewDetailed(tppUserSession, testResultId);
+                var detailedTestResult = await _testResultsViewDetailed.Post((tppUserSession, testResultId));
 
                 _logger.LogDebug($"Mapping TPP detailed test results to instance of {nameof(TestResultResponse)} class");
                 var tppTestResultResponse = _patientDetailedTestResultChecker.Check(detailedTestResult);
