@@ -2,7 +2,7 @@
   "services": [
     {
       "id": "111",
-      "url": "https://111.nhs.uk/",
+      "url": "https://111.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -13,7 +13,7 @@
     },
     {
       "id": "111-service",
-      "url": "https://111.service.nhs.uk/",
+      "url": "https://111.service.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -24,7 +24,7 @@
     },
     {
       "id": "nhs-uk",
-      "url": "https://www.nhs.uk/",
+      "url": "https://www.nhs.uk",
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "AppTab",
@@ -56,7 +56,7 @@
     },
     {
       "id": "ndop",
-      "url": "https://ndopapp-int1.thunderbird.service.nhs.uk/",
+      "url": "https://ndopapp-int1.thunderbird.service.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -67,7 +67,7 @@
     },
     {
       "id": "hotjar",
-      "url": "https://in.hotjar.com/",
+      "url": "https://in.hotjar.com",
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "AppTab",
@@ -89,7 +89,7 @@
     },
     {
       "id": "cid-account",
-      "url": "https://account.ext.signin.nhs.uk/",
+      "url": "https://account.ext.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -214,7 +214,7 @@
     },
     {
       "id": "ers",
-      "url": "https://pat.rc.refer.nhs.uk/",
+      "url": "https://pat.rc.refer.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -225,7 +225,7 @@
     },
     {
       "id": "pkb",
-      "url": "https://nhsapp-test.devstacks.pkb.io/",
+      "url": "https://nhsapp-test.devstacks.pkb.io",
       "subServices": null,
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
