@@ -24,26 +24,24 @@
       <analytics-tracked-tag :text="$t('signOutButton.signOut')"
                              data-purpose="button"
                              :tabindex="-1">
-        <form action="account/signout" method="post">
-          <generic-button id="signout-button"
-                          data-purpose="logout-button"
-                          class="nhsuk-button nhsuk-button--secondary"
-                          @click.prevent="signout">
-            {{ $t('signOutButton.signOut') }}
-          </generic-button>
-        </form>
+        <generic-button id="signout-button"
+                        data-purpose="logout-button"
+                        class="nhsuk-button nhsuk-button--secondary"
+                        @click.prevent="signout">
+          {{ $t('signOutButton.signOut') }}
+        </generic-button>
       </analytics-tracked-tag>
     </template>
 
     <about-us/>
 
     <p>
-      Version {{ this.$store.state.appVersion.webVersion }}
-      <span v-if="this.$store.state.appVersion.nativeVersion">
-        ({{ this.$store.state.appVersion.nativeVersion }})
+      Version {{ $store.state.appVersion.webVersion }}
+      <span v-show="$store.state.appVersion.nativeVersion">
+        ({{ $store.state.appVersion.nativeVersion }})
       </span>
     </p>
-    <p v-if="this.$store.app.$env.CE_MARK_ENABLED">
+    <p v-if="$store.app.$env.CE_MARK_ENABLED">
       <ce-mark-icon/>
     </p>
 
@@ -116,5 +114,4 @@ export default {
 @import "../../style/listmenu";
 @import "../../style/colours";
 @import "../../style/webshared";
-
 </style>

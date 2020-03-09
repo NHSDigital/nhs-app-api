@@ -1,5 +1,6 @@
 /* eslint-disable global-require */
 import NativeCallbacks from '@/services/native-app';
+import consola from 'consola';
 import { LOGIN } from '@/lib/routes';
 import { removeCookies } from '@/lib/cookie-manager';
 import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
@@ -56,7 +57,6 @@ export default {
     const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
     if (process.server) {
       const { nhsoRequestId } = this.app.context.res.locals;
-      const consola = require('consola');
       consola.info(`handleAuthResponse - codeVerifier=${codeVerifier}, redirectUrl=${redirectUrl}, CorrelationId=${nhsoRequestId}`);
     }
 
