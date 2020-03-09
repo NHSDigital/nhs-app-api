@@ -10,7 +10,7 @@ data class Journey(var appointments: AppointmentsJourneyRules,
                    var nominatedPharmacy: Boolean,
                    var silverIntegrations: SilverIntegrationJourneyRules,
                    var documents: Boolean,
-                   var im1Messaging: Boolean)
+                   var im1Messaging: Im1MesagingJourneyRules)
 
 data class AppointmentsJourneyRules(var informaticaUrl:String, var provider:AppointmentsProvider)
 
@@ -23,3 +23,6 @@ data class PrescriptionsJourneyRules(var provider:PrescriptionsProvider)
 data class SilverIntegrationJourneyRules(var secondaryAppointments:ArrayList<SecondaryAppointmentsProvider>,
                                          var messages: ArrayList<MessagesProvider>,
                                          var consultations: ArrayList<ConsultationsProvider>)
+
+data class Im1MesagingJourneyRules(var isEnabled: Boolean,
+                                   var canDeleteMessages: Boolean)

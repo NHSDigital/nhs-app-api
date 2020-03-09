@@ -10,6 +10,7 @@ describe('patient messaging delete', () => {
   let redirect;
 
   const mountPage = ({
+    deleteEnabled = true,
     selectedId = undefined,
     messageDeleted = false,
     currentRoutePath = '/patient-practice-messaging/view-details',
@@ -21,6 +22,9 @@ describe('patient messaging delete', () => {
           messageDeleted,
         },
         device: { isNativeApp: false },
+      },
+      getters: {
+        'serviceJourneyRules/deletePatientPracticeMessageEnabled': deleteEnabled,
       },
       router: {
         currentRoute: { path: currentRoutePath },

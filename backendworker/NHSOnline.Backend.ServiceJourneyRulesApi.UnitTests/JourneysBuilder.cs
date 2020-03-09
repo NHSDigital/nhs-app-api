@@ -147,11 +147,29 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
-        public JourneysBuilder Im1MessagingEnabled(bool? enabled)
+        public JourneysBuilder Im1MessagingEnabled(bool? isEnabled,
+            bool? canDeleteMessages)
         {
-            _journeys.Im1Messaging = enabled;
+            if (isEnabled != null)
+            {
+                _journeys.Im1Messaging = new Im1Messaging
+                {
+                    IsEnabled = isEnabled,
+                    CanDeleteMessages = canDeleteMessages
+                };
+            }
+            else
+            {
+                _journeys.Im1Messaging = new Im1Messaging
+                {
+                    IsEnabled = null,
+                    CanDeleteMessages = null
+                };
+            }
+
             return this;
         }
+
         public Journeys Build()
         {
             return _journeys;

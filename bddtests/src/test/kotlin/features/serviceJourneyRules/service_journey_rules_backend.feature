@@ -90,7 +90,6 @@ Feature: Service Journey Rules Backend
     And the service journey rules response will have silver integration messages set to pkb
     And the service journey rules response will have silver integration consultations set to pkb
 
-
   Scenario: A user can see the configuration where silver service integrations are not enabled in SJR
     Given I am a user where the journey configurations are:
       | Journey                                    | Value  |
@@ -104,17 +103,31 @@ Feature: Service Journey Rules Backend
     And the service journey rules response will have no silver integration messages
     And the service journey rules response will have no silver integration consultations
 
-  Scenario Outline: API call for SJR can return a response with documents and im1 messaging <Toggle>
+  Scenario Outline: API call for SJR can return a response with documents <Toggle>
     Given I am a EMIS user where the journey configurations are:
       | Journey       | Value    |
       | documents     | <Toggle> |
-      | im1 messaging | <Toggle> |
     And I have logged in and have a valid session cookie
     When I request the service journey rules for my ODS Code
     Then I receive an "Ok" success code
     And the service journey rules response will have documents <Toggle>
-    And the service journey rules response will have im1 messaging <Toggle>
     Examples:
       | Toggle   |
       | enabled  |
       | disabled |
+    
+  Scenario Outline: A user can see the configuration for im1Messaging in SJR
+    Given I am a user where the journey configurations are:
+      | Journey                                    | Value     |
+      | im1 messaging                               | <IsEnabledToggle>      |
+      | im1 messaging canDeleteMessages             | <CanDeleteToggle>      |
+    And I have logged in and have a valid session cookie
+    When I request the service journey rules for my ODS Code
+    Then I receive an "Ok" success code
+    And the service journey rules response will have im1Messaging is enabled set to <IsEnabledToggle>
+    And the service journey rules response will have im1Messaging can delete messages set to <CanDeleteToggle>
+    Examples:
+      | IsEnabledToggle   | CanDeleteToggle |
+      | enabled           | enabled            |
+      | disabled          | disabled           |
+

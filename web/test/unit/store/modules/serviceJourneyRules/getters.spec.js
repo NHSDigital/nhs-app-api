@@ -265,17 +265,31 @@ describe('getters', () => {
     });
   });
 
-  describe('im1MessagingEnabled', () => {
+  describe('im1MessagingIsEnabled', () => {
     const { im1MessagingEnabled } = getters;
 
-    it('will be true if im1Messaging is true', () => {
-      currentState.rules.im1Messaging = true;
+    it('will be true if im1Messaging is enabled is true', () => {
+      currentState.rules.im1Messaging.isEnabled = true;
       expect(im1MessagingEnabled(currentState)).toBe(true);
     });
 
-    it('will be false if im1Messaging is false', () => {
-      currentState.rules.im1Messaging = false;
+    it('will be false if im1Messaging is enabled is false', () => {
+      currentState.rules.im1Messaging.isEnabled = false;
       expect(im1MessagingEnabled(currentState)).toBe(false);
+    });
+  });
+
+  describe('im1MessagingCanDeleteMessagesEnabled', () => {
+    const { deletePatientPracticeMessageEnabled } = getters;
+
+    it('will be true if im1Messaging can delete messages is true', () => {
+      currentState.rules.im1Messaging.canDeleteMessages = true;
+      expect(deletePatientPracticeMessageEnabled(currentState)).toBe(true);
+    });
+
+    it('will be false if im1Messaging can delete messages  is false', () => {
+      currentState.rules.im1Messaging.canDeleteMessages = false;
+      expect(deletePatientPracticeMessageEnabled(currentState)).toBe(false);
     });
   });
 });

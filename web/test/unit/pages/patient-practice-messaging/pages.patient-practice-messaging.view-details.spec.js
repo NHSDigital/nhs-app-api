@@ -18,6 +18,7 @@ describe('patient messaging messages', () => {
 
   const mountPage = ({
     messageDetaiils = messageDetails,
+    deleteEnabled = true,
     selectedId = undefined,
     loaded = false } = {}) => {
     store = createStore({
@@ -29,6 +30,9 @@ describe('patient messaging messages', () => {
           selectedMessageRecipient: 'test',
         },
         device: { isNativeApp: false },
+      },
+      getters: {
+        'serviceJourneyRules/deletePatientPracticeMessageEnabled': deleteEnabled,
       },
     });
     $t = create$T();
@@ -75,6 +79,18 @@ describe('patient messaging messages', () => {
     it('will dispatch update read status', () => {
       mountPage({ selectedId: '1', loaded: true });
       expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/updateReadStatusAsRead');
+    });
+  });
+
+  describe('template', () => {
+    it('will show the delete button if the delete functionality is enabled', () => {
+      mountPage({ toggle: true, selectedId: '1', loaded: true });
+      expect(wrapper.find('#deleteMessage').exists()).toBe(true);
+    });
+
+    it('will hide the delete button if the delete functionality is disabled', () => {
+      mountPage({ deleteEnabled: false, toggle: true, selectedId: '1', loaded: true });
+      expect(wrapper.find('#deleteMessage').exists()).toBe(false);
     });
   });
 });

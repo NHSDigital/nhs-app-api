@@ -34,7 +34,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 .Add(journeys => journeys.SilverIntegrations?.Consultations != null,
                     "journeys.SilverIntegrations.Consultations")
                 .Add(journeys => journeys.Documents.HasValue, "journeys.Documents")
-                .Add(journeys => journeys.Im1Messaging.HasValue, "journeys.im1Messaging")
+                .Add(journeys => journeys.Im1Messaging?.IsEnabled != null, "journeys.im1Messaging.isEnabled")
+                .Add(journeys => journeys.Im1Messaging?.CanDeleteMessages != null, "journeys.im1Messaging.canDeleteMessages")
                 .Add(journeys => journeys.Supplier != Supplier.Unknown, "journeys.Supplier");
 
         public ValidateOdsJourneys(ILogger<ValidateOdsJourneys> logger)

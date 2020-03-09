@@ -122,6 +122,34 @@
       },
       "required": [ "secondaryAppointments", "messages", "consultations" ],
       "additionalProperties": false
+    },
+    "im1MessagingJourney": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "isEnabled": {
+              "enum": ["true"]
+            },
+            "canDeleteMessages": {
+              "enum": ["true", "false"]
+            }
+          },
+          "required": [ "isEnabled", "canDeleteMessages"]
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "isEnabled": {
+              "enum": ["false"]
+            },
+            "canDeleteMessages": {
+              "enum": ["false"]
+            }
+          },
+          "required": ["isEnabled"]
+        }
+      ]
     }
   },
   "properties": {
@@ -188,7 +216,7 @@
         "silverIntegrations": { "$ref": "#/definitions/silverIntegrations" },
         "userInfo": { "enum": ["true", "false"]  },
         "documents": { "enum": ["true", "false"]  },
-        "im1Messaging": { "enum": ["true", "false"]  }
+        "im1Messaging": { "$ref": "#/definitions/im1MessagingJourney" }
       },
       "anyOf": [
         {

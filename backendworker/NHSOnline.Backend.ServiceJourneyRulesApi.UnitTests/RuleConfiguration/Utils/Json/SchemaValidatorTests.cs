@@ -322,8 +322,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("\"userInfo\": \"false\"")]
         [DataRow("\"documents\": \"true\"")]
         [DataRow("\"documents\": \"false\"")]
-        [DataRow("\"im1Messaging\": \"true\"")]
-        [DataRow("\"im1Messaging\": \"false\"")]
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"true\" }")]
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"false\", \"canDeleteMessages\": \"false\" }")]
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"false\" }")]
+
         public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidJourneys_ReturnsTrue(
             string journeys)
         {
@@ -371,8 +373,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("userInfo", "\"test\"", "NotInEnumeration: #/journeys.userInfo", false)]
         [DataRow("documents", "\"\"", "NotInEnumeration: #/journeys.documents", false)]
         [DataRow("documents", "\"test\"", "NotInEnumeration: #/journeys.documents", false)]
-        [DataRow("im1Messaging", "\"\"", "NotInEnumeration: #/journeys.im1Messaging", false)]
-        [DataRow("im1Messaging", "\"test\"", "NotInEnumeration: #/journeys.im1Messaging", false)]
+        [DataRow("im1Messaging", "{\"isEnabled\": \"true\"}", "PropertyRequired: #/journeys.im1Messaging.canDeleteMessages", true)]
+        [DataRow("im1Messaging", "{\"isEnabled\": \"yes\", \"canDeleteMessages\" : \"true\"}", "NotInEnumeration: #/journeys.im1Messaging.isEnabled", false)]
         public async Task
             ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidJourney_ReturnsFalse(
                 string journeyType, string value, string expectedError, bool oneOfMultipleOptions)

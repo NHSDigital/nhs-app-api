@@ -70,10 +70,12 @@ class ServiceJourneyRulesMapper {
                 // Gp Medical Record Documents / Im1 Messaging
                 GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_ENABLED) to
                         EnumSet.of(JourneyType.DOCUMENTS_ENABLED,
-                                JourneyType.IM1_MESSAGING_ENABLED),
+                                JourneyType.IM1_MESSAGING_ENABLED,
+                               JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_ENABLED),
                 GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_DISABLED) to
                         EnumSet.of(JourneyType.DOCUMENTS_DISABLED,
-                                JourneyType.IM1_MESSAGING_DISABLED)
+                                JourneyType.IM1_MESSAGING_DISABLED,
+                               JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED)
         )
 
         fun findPatientForConfiguration(gpSystem: Supplier?, journeyType:JourneyType): Patient {
@@ -142,6 +144,8 @@ class ServiceJourneyRulesMapper {
             DOCUMENTS_ENABLED,
             DOCUMENTS_DISABLED,
             IM1_MESSAGING_ENABLED,
+            IM1_MESSAGING_CANDELETEMESSAGES_ENABLED,
+            IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
             IM1_MESSAGING_DISABLED
         }
     }

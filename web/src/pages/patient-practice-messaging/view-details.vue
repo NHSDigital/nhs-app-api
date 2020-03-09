@@ -5,7 +5,8 @@
         class="nhsuk-u-padding-bottom-4"/>
       <receivedMessages/>
       <menu-item-list id="messageDetailsOptionsList" class="nhsuk-u-margin-bottom-3">
-        <menu-item id="deleteMessage"
+        <menu-item v-if="deleteEnabled"
+                   id="deleteMessage"
                    :text="$t('patient_practice_messaging.view_details.deleteMenuItemText')"
                    :click-func="deleteClicked"
                    header-tag="h2"
@@ -32,6 +33,7 @@ import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import { PATIENT_PRACTICE_MESSAGING, PATIENT_PRACTICE_MESSAGING_DELETE } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
+import srjIf from '@/lib/sjrIf';
 
 export default {
   layout: 'nhsuk-layout',
@@ -53,6 +55,9 @@ export default {
     },
     messageID() {
       return this.$store.state.patientPracticeMessaging.selectedMessageId;
+    },
+    deleteEnabled() {
+      return srjIf({ $store: this.$store, journey: 'deletePatientPracticeMessage' });
     },
   },
   async fetch({ store, redirect }) {

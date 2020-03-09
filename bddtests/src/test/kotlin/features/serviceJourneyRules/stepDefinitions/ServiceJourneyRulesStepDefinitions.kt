@@ -143,6 +143,24 @@ class ServiceJourneyRulesStepDefinitions {
                 actualValues.toTypedArray().sortedArray())
     }
 
+    @Then("^the service journey rules response will have im1Messaging is enabled set to (enabled|disabled)$")
+    fun theServiceJourneyRulesResponseWillHaveim1MessagingSetTo(enabled: String) {
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
+        val actualValue = serviceJourneyRulesResponse.journeys.im1Messaging.isEnabled
+        Assert.assertEquals("Service Journey Rules im1 messaging is enabled",
+                                 enabled == "enabled",
+                                 actualValue)
+    }
+
+    @Then("^the service journey rules response will have im1Messaging can delete messages set to (enabled|disabled)$")
+    fun theServiceJourneyRulesResponseWillHaveim1MessagingCanDeleteSetTo(enabled: String) {
+        val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
+        val actualValue = serviceJourneyRulesResponse.journeys.im1Messaging.canDeleteMessages
+        Assert.assertEquals("Service Journey Rules im1 messaging can delete messages",
+                            enabled == "enabled",
+                            actualValue)
+    }
+
     @Then("^the service journey rules response will have silver integration messages set to (.*)$")
     fun theServiceJourneyRulesResponseWillHaveMessagesSetTo(values: String) {
         val serviceJourneyRulesResponse = getServiceJourneyRulesResponse()
@@ -190,18 +208,6 @@ class ServiceJourneyRulesStepDefinitions {
         return serviceJourneyRulesResponse
     }
 
-
-    @Then("^the service journey rules response will have im1 messaging (enabled|disabled)$")
-    fun theServiceJourneyRulesResponseWillHaveIm1MessagingEnabledOrDisabled(enabled: String) {
-        val serviceJourneyRulesResponse =
-                ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE
-                        .getOrFail<ServiceJourneyRulesResponse>()
-
-        Assert.assertNotNull("Service Journey Rules response expected, but was null", serviceJourneyRulesResponse)
-        Assert.assertEquals("Service Journey Rules im1 messaging",
-                enabled == "enabled",
-                serviceJourneyRulesResponse.journeys.im1Messaging)
-    }
 
     @Then("^the service journey rules response will have documents (enabled|disabled)$")
     fun theServiceJourneyRulesResponseWillHaveDocumentsEnabledOrDisabled(enabled: String) {

@@ -81,6 +81,11 @@ const im1MessagingDisabledRedirect = {
   url: '/',
 };
 
+const deleteMessageRedirect = {
+  journey_disabled: 'deletePatientPracticeMessage',
+  url: '/patient-practice-messaging',
+};
+
 const baseNhsAppHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
 
 const routes = {
@@ -1088,7 +1093,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
-    sjrRedirectRules: [im1MessagingDisabledRedirect],
+    sjrRedirectRules: [im1MessagingDisabledRedirect, deleteMessageRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY: {
     name: 'patient-practice-messaging-urgency',
@@ -1179,7 +1184,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
-    sjrRedirectRules: [im1MessagingDisabledRedirect],
+    sjrRedirectRules: [im1MessagingDisabledRedirect, deleteMessageRedirect],
   },
   PRESCRIPTIONS: {
     name: 'prescriptions',

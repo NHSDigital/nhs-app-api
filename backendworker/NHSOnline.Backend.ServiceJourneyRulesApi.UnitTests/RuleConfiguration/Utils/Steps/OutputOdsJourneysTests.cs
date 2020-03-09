@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MessagingEnabled(true)
                             .UserInfoEnabled(true)
                             .DocumentsEnabled(true)
-                            .Im1MessagingEnabled(true)
+                            .Im1MessagingEnabled(true, true)
                             .Build()
                     },
                     {
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MessagingEnabled(false)
                             .UserInfoEnabled(false)
                             .DocumentsEnabled(false)
-                            .Im1MessagingEnabled(false)
+                            .Im1MessagingEnabled(false, true)
                             .Build()
                     },
                     {
@@ -141,7 +141,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .MessagingEnabled(true)
                             .UserInfoEnabled(true)
                             .DocumentsEnabled(true)
-                            .Im1MessagingEnabled(true)
+                            .Im1MessagingEnabled(true, true)
                             .Build()
                     }
                 }

@@ -67,7 +67,8 @@ Feature: Patient to practice messaging
     And I click send message
     Then I see my new message after it has been sent
 
-  @smoketest
+  @pending
+  @NHSO-8671
   Scenario: A user can see their unread messages, view one and then delete the patient practice conversation
     Given I am a user who can access patient practice messaging
     And I am logged in
@@ -84,6 +85,8 @@ Feature: Patient to practice messaging
     When I click go back to patient practice messages
     Then the patient to practice inbox page is displayed
 
+  @pending
+  @NHSO-8671
   Scenario: A user cant delete a patient practice conversation and is shown an error
     Given I am a user who can access patient practice messaging
     And I am logged in

@@ -2,4 +2,6 @@ $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCode: "A10004"
 journeys:
-  im1Messaging: false
+  im1Messaging:
+    isEnabled: false
+    canDeleteMessages: false

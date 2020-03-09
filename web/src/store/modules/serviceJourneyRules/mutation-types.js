@@ -14,6 +14,7 @@ export const LINKED_ACCOUNT = 'linkedAccount';
 export const SILVER_INTEGRATION = 'silverIntegration';
 export const DOCUMENTS = 'documents';
 export const IM1MESSAGING = 'im1Messaging';
+export const DELETE_PATIENT_PRACTICE_MESSAGING = 'deletePatientPracticeMessage';
 
 export const initialState = () => ({
   isLoaded: false,
@@ -48,6 +49,9 @@ export const initialState = () => ({
       },
     },
     documents: false,
-    im1Messaging: false,
+    im1Messaging: {
+      isEnabled: false,
+      canDeleteMessages: false,
+    },
   },
 });

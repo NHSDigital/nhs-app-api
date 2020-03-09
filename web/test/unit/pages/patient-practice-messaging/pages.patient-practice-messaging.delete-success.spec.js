@@ -11,15 +11,18 @@ describe('patient messaging delete success', () => {
   let $t;
 
   const mountPage = ({
-    toggle = true,
+    deleteEnabled = true,
     messageDeleted = true } = {}) => {
     store = createStore({
       state: {
         patientPracticeMessaging: {
           messageDeleted,
         },
-        device: { isNativeApp: false } },
-      $env: { PATIENT_PRACTICE_MESSAGING_ENABLED: toggle },
+        device: { isNativeApp: false },
+      },
+      getters: {
+        'serviceJourneyRules/deletePatientPracticeMessageEnabled': deleteEnabled,
+      },
     });
     $t = create$T();
 
@@ -33,22 +36,6 @@ describe('patient messaging delete success', () => {
     redirect = jest.fn();
   });
 
-  describe('fetch toggle check', () => {
-    let toggle;
-    describe('patient practice messaging toggle disabled', () => {
-      beforeEach(async () => {
-        toggle = 'false';
-        isFalsy.mockImplementation(toggle).mockReturnValue(true);
-
-        mountPage({ toggle });
-        await wrapper.vm.$options.fetch({ store, redirect });
-      });
-
-      it('will redirect to home', () => {
-        expect(redirect).toHaveBeenCalledWith('/');
-      });
-    });
-  });
   describe('fetch deleted', () => {
     let messageDeleted;
     describe('patient practice messaging messaging deleted false', () => {
@@ -56,7 +43,7 @@ describe('patient messaging delete success', () => {
         messageDeleted = false;
         isFalsy.mockImplementation(messageDeleted).mockReturnValue(true);
 
-        mountPage({ toggle: 'true', messageDeleted });
+        mountPage({ messageDeleted });
         await wrapper.vm.$options.fetch({ store, redirect });
       });
 

@@ -8,3 +8,6 @@ journeys:
   messaging: false
   userInfo: false
   documents: true
+  im1Messaging:
+    isEnabled: true
+    canDeleteMessages: false

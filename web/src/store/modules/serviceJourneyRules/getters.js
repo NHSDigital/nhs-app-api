@@ -14,6 +14,7 @@ import {
   SILVER_INTEGRATION,
   DOCUMENTS,
   IM1MESSAGING,
+  DELETE_PATIENT_PRACTICE_MESSAGING,
 } from './mutation-types';
 
 export default {
@@ -84,6 +85,9 @@ export default {
     return get('rules.documents')(state);
   },
   [`${IM1MESSAGING}Enabled`](state) {
-    return get('rules.im1Messaging')(state);
+    return get('rules.im1Messaging.isEnabled')(state);
+  },
+  [`${DELETE_PATIENT_PRACTICE_MESSAGING}Enabled`](state) {
+    return get('rules.im1Messaging.canDeleteMessages')(state);
   },
 };
