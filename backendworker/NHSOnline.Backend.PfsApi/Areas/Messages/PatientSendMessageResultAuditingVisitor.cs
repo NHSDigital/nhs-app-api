@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<PatientMessagesController> _logger;
-        private const string AuditType = AuditingOperations.CreatePracticePatientMessageResponse;
+        private const string AuditType = AuditingOperations.CreatePatientPracticeMessageResponse;
 
         public PatientSendMessageResultAuditingVisitor(IAuditor auditor, ILogger<PatientMessagesController> logger)
         {
@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Patient messages successfully retrieved");
+                await _auditor.Audit(AuditType, "Patient practice message successfully sent");
             }
             catch (Exception e)
             {

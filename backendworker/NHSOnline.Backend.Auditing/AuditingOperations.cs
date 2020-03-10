@@ -93,11 +93,10 @@ namespace NHSOnline.Backend.Auditing
         public const string GetPatientPracticeMessageRecipientsResponse = "PatientPracticeMessageRecipients_Get_Response";
         public const string UpdatePatientPracticeMessageUnreadStatusRequest = "PatientPracticeMessageUnreadStatus_Update_Request";
         public const string UpdatePatientPracticeMessageUnreadStatusResponse = "PatientPracticeMessageUnreadStatus_Update_Response";
-        public const string ViewPracticePatientMessagesRequest = "PracticePatientMessages_View_Request";
-        public const string CreatePracticePatientMessageRequest = "PracticePatientMessage_Create_Request";
-        public const string CreatePracticePatientMessageResponse = "PracticePatientMessage_Create_Response";
-        public const string DeletePracticePatientMessageRequest = "PracticePatientMessage_Delete_Request";
-        public const string DeletePracticePatientMessageResponse = "PracticePatientMessage_Delete_Response";
+        public const string CreatePatientPracticeMessageRequest = "PatientPracticeMessage_Create_Request";
+        public const string CreatePatientPracticeMessageResponse = "PatientPracticeMessage_Create_Response";
+        public const string DeletePatientPracticeMessageRequest = "PatientPracticeMessage_Delete_Request";
+        public const string DeletePatientPracticeMessageResponse = "PatientPracticeMessage_Delete_Response";
         public const string CreateAssertedLoginIdentityTokenRequest = "AssertedLoginIdentity_CreateJwt_Request";
         public const string CreateAssertedLoginIdentityTokenResponse = "AssertedLoginIdentity_CreateJwt_Response";
     }

@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
         {
             try
             {
-                await _auditor.Audit(AuditType, "Patient messages successfully retrieved");
+                await _auditor.Audit(AuditType, "Patient message read status successfully updated");
             }
             catch (Exception e)
             {

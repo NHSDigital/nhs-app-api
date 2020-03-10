@@ -43,9 +43,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
 
             await _auditor.Audit(AuditingOperations.ViewPatientPracticeMessagesRequest, "Viewing Patient to Practice Messages");
 
-            await _auditor.Audit(AuditingOperations.ViewPracticePatientMessagesRequest,
-                "Viewing Practice to Patient Messages");
-
             var userSession = HttpContext.GetUserSession();
             var gpUserSession = userSession.GpUserSession;
 
@@ -161,7 +158,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
                 return new BadRequestObjectResult(ModelState);
             }
 
-            await _auditor.Audit(AuditingOperations.CreatePracticePatientMessageRequest,
+            await _auditor.Audit(AuditingOperations.CreatePatientPracticeMessageRequest,
                 "Creating a patient to practice message");
 
             var userSession = HttpContext.GetUserSession();
@@ -190,8 +187,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
                 return new BadRequestObjectResult(ModelState);
             }
 
-            await _auditor.Audit(AuditingOperations.DeletePracticePatientMessageRequest,
-                $"Deleting a practice to patient message with id {messageId}");
+            await _auditor.Audit(AuditingOperations.DeletePatientPracticeMessageRequest,
+                $"Deleting a patient to practice message with id {messageId}");
 
             var userSession = HttpContext.GetUserSession();
             var gpUserSession = userSession.GpUserSession;

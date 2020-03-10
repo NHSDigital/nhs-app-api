@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<PatientMessagesController> _logger;
-        private const string AuditType = AuditingOperations.DeletePracticePatientMessageResponse;
+        private const string AuditType = AuditingOperations.DeletePatientPracticeMessageResponse;
 
         public PatientMessageDeleteResultAuditingVisitor(IAuditor auditor, ILogger<PatientMessagesController> logger)
         {
