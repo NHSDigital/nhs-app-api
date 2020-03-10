@@ -48,10 +48,10 @@ stages:
 
       - ${{ if or(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), eq(variables['Build.SourceBranchName'], 'develop')) }}:
         - template: .azuredevops/templates/ios-client-build-job.yml
-          condition: and(succeeded(), ne(variables['ios.target'], 'Preview'))
           parameters:
             name: Preview
             target: Preview
+            condition: and(succeeded(), ne(variables['ios.target'], 'Preview'))
             provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
             provisioningProfileName: 'NHS App Dev Preview'
 
