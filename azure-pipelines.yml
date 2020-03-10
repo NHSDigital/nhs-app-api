@@ -46,7 +46,7 @@ stages:
         parameters:
           name: Client
 
-      - ${{ if or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')) }}:
+      - ${{ if or(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), eq(variables['Build.SourceBranchName'], 'develop')) }}:
         - template: .azuredevops/templates/ios-client-build-job.yml
           condition: and(succeeded(), ne(variables['ios.target'], 'Preview'))
           parameters:
@@ -55,7 +55,7 @@ stages:
             provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
             provisioningProfileName: 'NHS App Dev Preview'
 
-      - ${{ if eq(variables['source.tag'], 'True') }}:
+      - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/tags/') }}:
         - template: .azuredevops/templates/ios-client-build-job.yml
           parameters:
             name: Demo
