@@ -42,8 +42,8 @@ spec:
     - ipBlock:
         cidr: {{ $.Values.emisIPTrust }}
     ports:
-      - protocol: TCP
-        port: {{ $.Values.emisPort }}
+    - protocol: TCP
+      port: {{ $.Values.emisPort }}
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
@@ -64,8 +64,8 @@ spec:
     - ipBlock:
         cidr: {{ $.Values.visionIPTrust }}
     ports:
-      - protocol: TCP
-        port: {{ $.Values.visionPort }}
+    - protocol: TCP
+      port: {{ $.Values.visionPort }}
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
@@ -86,8 +86,8 @@ spec:
     - ipBlock:
         cidr: {{ $.Values.tppIPTrust }}
     ports:
-      - protocol: TCP
-        port: {{ $.Values.tppPort }}
+    - protocol: TCP
+      port: {{ $.Values.tppPort }}
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
@@ -111,8 +111,8 @@ spec:
 {{- end }}
     ports:
 {{- range $.Values.cosmosDBPortRange }}
-      - protocol: TCP
-        port: {{ . }}
+    - protocol: TCP
+      port: {{ . }}
 {{- end }}
 ---
 {{- if $.Values.iproxy_microtest.deployMicrotest -}}
@@ -137,7 +137,7 @@ spec:
           role: iproxy-microtest
           version: {{ .Chart.AppVersion | quote }}
     ports:
-      - protocol: TCP
-        port: {{ $.Values.sidecar_proxy.containerPort }}
+    - protocol: TCP
+      port: {{ $.Values.sidecar_proxy.containerPort }}
 {{- end }}
 {{- end }}

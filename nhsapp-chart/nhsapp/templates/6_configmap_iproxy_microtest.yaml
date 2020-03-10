@@ -77,7 +77,7 @@ data:
                 proxy_ssl_certificate_key /etc/nginx/ssl_microtest/microtest.key;
             }
         }
-        
+
         server {
             listen       8080;
             server_name  localhost;

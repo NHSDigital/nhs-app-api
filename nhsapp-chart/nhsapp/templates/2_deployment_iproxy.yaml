@@ -90,7 +90,7 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 2
       imagePullSecrets:
-        - name: azure-registry-{{ .Chart.AppVersion }}
+      - name: azure-registry-{{ .Chart.AppVersion }}
       dnsConfig:
         options:
-          - name: single-request-reopen
+        - name: single-request-reopen

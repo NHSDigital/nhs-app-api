@@ -165,7 +165,7 @@ spec:
         - "api-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
         - "www-{{ $.Values.global.environment }}-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
       imagePullSecrets:
-        - name: azure-registry-{{ .Chart.AppVersion }}
+      - name: azure-registry-{{ .Chart.AppVersion }}
       dnsConfig:
         options:
-          - name: single-request-reopen
+        - name: single-request-reopen

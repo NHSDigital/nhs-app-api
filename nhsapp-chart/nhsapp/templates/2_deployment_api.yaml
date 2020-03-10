@@ -541,4 +541,4 @@ spec:
       - name: azure-registry-{{ .Chart.AppVersion }}
       dnsConfig:
         options:
-          - name: single-request-reopen
+        - name: single-request-reopen

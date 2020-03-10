@@ -29,6 +29,6 @@ spec:
             path: /
   tls:
     - hosts:
-      - cid-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
+        - cid-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}
       secretName: {{ $.Values.zone }}-{{ $.Values.domain | replace "." "-" }}
 {{- end }}

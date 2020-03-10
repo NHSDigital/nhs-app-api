@@ -30,9 +30,9 @@ spec:
         cidr: 0.0.0.0/0
     ports:
     - protocol: UDP
-      port: 53 # DNS
+      port: 53  # DNS
     - protocol: TCP
-      port: 53 # DNS
+      port: 53  # DNS
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
@@ -47,14 +47,14 @@ spec:
   egress:
   - to:
     - ipBlock:
-        cidr: {{ $.Values.clusterIP }}
+        cidr: {{ $.Values.clusterIP }}  # yamllint disable-line rule:trailing-spaces
 {{- range $.Values.trustedNetworks }}
     - ipBlock:
-        cidr: {{ . }}
+        cidr: {{ . }}  # yamllint disable-line rule:trailing-spaces
 {{- end }}
     ports:
-      - protocol: TCP
-        port: 443
-      - protocol: TCP
-        port: {{ $.Values.iproxy.containerPort }}
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: {{ $.Values.iproxy.containerPort }}
 {{- end }}

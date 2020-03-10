@@ -20,6 +20,8 @@ zone: {}
 domain: ""
 networkPolicyEnabled: true
 
+registry: nhsapp.azurecr.io
+
 clusterDNSNameservers:
   - 10.254.0.10
   - 172.28.160.10
@@ -72,62 +74,62 @@ cidHostname: auth.ext.signin.nhs.uk
 cidProtocol: https
 cidClientID: nhs-online
 cidFidoHostname: uaf.ext.signin.nhs.uk
-cidIPTrust: # Cloudfront IPs
- - "52.124.128.0/17"
- - "54.230.0.0/16"
- - "54.239.128.0/18"
- - "99.84.0.0/16"
- - "205.251.192.0/19"
- - "54.239.192.0/19"
- - "70.132.0.0/18"
- - "13.32.0.0/15"
- - "13.35.0.0/16"
- - "204.246.172.0/23"
- - "204.246.164.0/22"
- - "204.246.168.0/22"
- - "71.152.0.0/17"
- - "216.137.32.0/19"
- - "205.251.249.0/24"
- - "99.86.0.0/16"
- - "52.46.0.0/18"
- - "52.84.0.0/15"
- - "64.252.64.0/18"
- - "204.246.174.0/23"
- - "205.251.254.0/24"
- - "143.204.0.0/16"
- - "205.251.252.0/23"
- - "204.246.176.0/20"
- - "13.249.0.0/16"
- - "54.240.128.0/18"
- - "205.251.250.0/23"
- - "52.222.128.0/17"
- - "54.182.0.0/16"
- - "54.192.0.0/16"
- - "13.124.199.0/24"
- - "34.226.14.0/24"
- - "52.15.127.128/26"
- - "35.158.136.0/24"
- - "52.57.254.0/24"
- - "18.216.170.128/25"
- - "13.54.63.128/26"
- - "13.59.250.0/26"
- - "13.210.67.128/26"
- - "35.167.191.128/26"
- - "52.47.139.0/24"
- - "52.199.127.192/26"
- - "52.212.248.0/26"
- - "52.66.194.128/26"
- - "13.113.203.0/24"
- - "34.195.252.0/24"
- - "35.162.63.192/26"
- - "52.56.127.0/25"
- - "13.228.69.0/24"
- - "34.216.51.0/25"
- - "54.233.255.128/26"
- - "52.52.191.128/26"
- - "52.78.247.128/26"
- - "52.220.191.0/26"
- - "34.232.163.208/29"
+cidIPTrust:   # Cloudfront IPs
+  - "52.124.128.0/17"
+  - "54.230.0.0/16"
+  - "54.239.128.0/18"
+  - "99.84.0.0/16"
+  - "205.251.192.0/19"
+  - "54.239.192.0/19"
+  - "70.132.0.0/18"
+  - "13.32.0.0/15"
+  - "13.35.0.0/16"
+  - "204.246.172.0/23"
+  - "204.246.164.0/22"
+  - "204.246.168.0/22"
+  - "71.152.0.0/17"
+  - "216.137.32.0/19"
+  - "205.251.249.0/24"
+  - "99.86.0.0/16"
+  - "52.46.0.0/18"
+  - "52.84.0.0/15"
+  - "64.252.64.0/18"
+  - "204.246.174.0/23"
+  - "205.251.254.0/24"
+  - "143.204.0.0/16"
+  - "205.251.252.0/23"
+  - "204.246.176.0/20"
+  - "13.249.0.0/16"
+  - "54.240.128.0/18"
+  - "205.251.250.0/23"
+  - "52.222.128.0/17"
+  - "54.182.0.0/16"
+  - "54.192.0.0/16"
+  - "13.124.199.0/24"
+  - "34.226.14.0/24"
+  - "52.15.127.128/26"
+  - "35.158.136.0/24"
+  - "52.57.254.0/24"
+  - "18.216.170.128/25"
+  - "13.54.63.128/26"
+  - "13.59.250.0/26"
+  - "13.210.67.128/26"
+  - "35.167.191.128/26"
+  - "52.47.139.0/24"
+  - "52.199.127.192/26"
+  - "52.212.248.0/26"
+  - "52.66.194.128/26"
+  - "13.113.203.0/24"
+  - "34.195.252.0/24"
+  - "35.162.63.192/26"
+  - "52.56.127.0/25"
+  - "13.228.69.0/24"
+  - "34.216.51.0/25"
+  - "54.233.255.128/26"
+  - "52.52.191.128/26"
+  - "52.78.247.128/26"
+  - "52.220.191.0/26"
+  - "34.232.163.208/29"
 
 trustedNetworks:
   - "172.28.128.0/19"
@@ -154,18 +156,18 @@ cosmosDBPortRange:
   - 10255
   - 10256
 cosmosDBIPTrust:
-  - "51.140.52.73/32"  # CosmosDB UKSouth
-  - "51.140.70.75/32"  # CosmosDB UKSouth
-  - "51.140.75.146/32" # CosmosDB UKSouth
-  - "51.140.83.56/32"  # CosmosDB UKSouth
-  - "51.140.99.233/32" # CosmosDB UKSouth
-  - "51.140.146.0/27"  # CosmosDB UKSouth
-  - "51.143.189.37/32" # CosmosDB UKSouth
-  - "51.140.210.0/27"  # CosmosDB UKWest
-  - "51.141.11.34/32"  # CosmosDB UKWest
-  - "51.141.25.77/32"  # CosmosDB UKWest
-  - "51.141.53.76/32"  # CosmosDB UKWest
-  - "51.141.55.229/32" # CosmosDB UKWest
+  - "51.140.52.73/32"   # CosmosDB UKSouth
+  - "51.140.70.75/32"   # CosmosDB UKSouth
+  - "51.140.75.146/32"  # CosmosDB UKSouth
+  - "51.140.83.56/32"   # CosmosDB UKSouth
+  - "51.140.99.233/32"  # CosmosDB UKSouth
+  - "51.140.146.0/27"   # CosmosDB UKSouth
+  - "51.143.189.37/32"  # CosmosDB UKSouth
+  - "51.140.210.0/27"   # CosmosDB UKWest
+  - "51.141.11.34/32"   # CosmosDB UKWest
+  - "51.141.25.77/32"   # CosmosDB UKWest
+  - "51.141.53.76/32"   # CosmosDB UKWest
+  - "51.141.55.229/32"  # CosmosDB UKWest
 
 microtestHostname: nhsapp-test.microtest.co.uk
 microtestProtocol: https
@@ -181,22 +183,22 @@ ndopEnabled: false
 ndopClaimAudience: https://app.your-data-matters.service.nhs.uk
 ndopClaimIssuer: false
 
-#GP Lookup API
+# GP Lookup API
 gpLookupApiResultsLimit: 20
 postcodeLookupSearchRadiusKm: 10
 
-#Azure Search Endpoint
+# Azure Search Endpoint
 nhsSearchProtocol: https
 nhsSearchHostname: api.nhs.uk
 
-#Brothermailer Endpoint
+# Brothermailer Endpoint
 brotherMailerAddressBookID: 6113
 brotherMailerUserID: 233847
 brotherMailerSIG: "SIG340c7799670a244e283c2d568d8b9031f7cdee374315bb20c1e8c109c535c4c7"
 brotherMailerProtocol: https
 brotherMailerHostname: r1.brothermailer1.com
 
-#eConsult Endpoint
+# eConsult Endpoint
 econsultEnabled: false
 eConsult:
   protocol: https
@@ -237,6 +239,38 @@ spinePdsPort: 443
 # Linked Accounts
 proxyAccessEnabled: true
 
+# Placeholder values
+cosmosdbKey: placeholder
+cosmosdbMongoKey: placeholder
+cosmosdbDevicesKey: placeholder
+dockerRegistrySecret: placeholder
+gpLookupApiKey: placeholder
+organdonation: placeholder
+organdonationCert: placeholder
+organdonationSubscription: placeholder
+microtestPassword: placeholder
+microtestCrt: placeholder
+microtestKey: placeholder
+microtestPfx: placeholder
+microtestClientCrtStubbed: placeholder
+microtestClientCrtPasswordStubbed: placeholder
+ndopCert: placeholder
+ndopCertPassword: placeholder
+nhsloginKey: placeholder
+nhsloginPassword: placeholder
+sessionKey: placeholder
+spinePartyId: placeholder
+spineCrt: placeholder
+spineKey: placeholder
+spinePfx: placeholder
+spinePfxPassword: placeholder
+tppCert: placeholder
+tppCertPassword: placeholder
+visionClientCertPfxStubbed: placeholder
+visionClientCertPfxPasswordStubbed: placeholder
+visionClientCertPfx: placeholder
+visionClientCertPfxPassword: placeholder
+
 sidecar_proxy:
   containerPort: 8443
   memoryRequest: "128Mi"
@@ -246,8 +280,6 @@ sidecar_proxy:
   image: nhsonline-nginx
   image_tag: "v1.16.1"
   imagePullPolicy: IfNotPresent
-
-registry: nhsapp.azurecr.io
 
 web:
   createIngress: true
@@ -300,22 +332,22 @@ api:
   targetMemoryUtilizationPercentage: 80
   emisExtendedTimeout: 10
   environmentVariables:
-  - name: ASPNETCORE_ENVIRONMENT
-    value: "Production"
-  - name: EMIS_VERSION
-    value: "2.1.0.0"
-  - name: AUDIT_COSMOS_COLLECTION_ID
-    value: audit
-  - name: AUDIT_SINK_TYPE
-    value: COSMOS
-  - name: TERMS_CONDITIONS_COSMOS_COLLECTION_NAME
-    value: consent
-  - name: SESSION_MONGO_DATABASE_COLLECTION
-    value: session
-  - name: IM1CACHE_MONGO_DATABASE_COLLECTION
-    value: im1cache
-  - name: USERINFO_API_BASE_URL
-    value: http://api.local.bitraft.io:8091/v1/api/me/info
+    - name: ASPNETCORE_ENVIRONMENT
+      value: "Production"
+    - name: EMIS_VERSION
+      value: "2.1.0.0"
+    - name: AUDIT_COSMOS_COLLECTION_ID
+      value: audit
+    - name: AUDIT_SINK_TYPE
+      value: COSMOS
+    - name: TERMS_CONDITIONS_COSMOS_COLLECTION_NAME
+      value: consent
+    - name: SESSION_MONGO_DATABASE_COLLECTION
+      value: session
+    - name: IM1CACHE_MONGO_DATABASE_COLLECTION
+      value: im1cache
+    - name: USERINFO_API_BASE_URL
+      value: http://api.local.bitraft.io:8091/v1/api/me/info
 
 cid:
   createIngress: true
@@ -337,20 +369,20 @@ cid:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
   environmentVariables:
-  - name: ASPNETCORE_ENVIRONMENT
-    value: "Production"
-  - name: EMIS_VERSION
-    value: "2.1.0.0"
-  - name: AUDIT_COSMOS_COLLECTION_ID
-    value: audit
-  - name: AUDIT_SINK_TYPE
-    value: COSMOS
-  - name: TERMS_CONDITIONS_COSMOS_COLLECTION_NAME
-    value: consent
-  - name: SESSION_MONGO_DATABASE_COLLECTION
-    value: session
-  - name: IM1CACHE_MONGO_DATABASE_COLLECTION
-    value: im1cache
+    - name: ASPNETCORE_ENVIRONMENT
+      value: "Production"
+    - name: EMIS_VERSION
+      value: "2.1.0.0"
+    - name: AUDIT_COSMOS_COLLECTION_ID
+      value: audit
+    - name: AUDIT_SINK_TYPE
+      value: COSMOS
+    - name: TERMS_CONDITIONS_COSMOS_COLLECTION_NAME
+      value: consent
+    - name: SESSION_MONGO_DATABASE_COLLECTION
+      value: session
+    - name: IM1CACHE_MONGO_DATABASE_COLLECTION
+      value: im1cache
 
 logger:
   createIngress: true
@@ -371,8 +403,8 @@ logger:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
   environmentVariables:
-  - name: ASPNETCORE_ENVIRONMENT
-    value: "Production"
+    - name: ASPNETCORE_ENVIRONMENT
+      value: "Production"
 
 cdsswiremock:
   createIngress: true
@@ -393,8 +425,8 @@ cdsswiremock:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
   environmentVariables:
-  - name: ASPNETCORE_ENVIRONMENT
-    value: "Production"
+    - name: ASPNETCORE_ENVIRONMENT
+      value: "Production"
 
 iproxy:
   containerPort: 8443
@@ -451,8 +483,8 @@ wiremock:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
   environmentVariables:
-  - name: WAIT_FOR_TIMEOUT
-    value: "60"
+    - name: WAIT_FOR_TIMEOUT
+      value: "60"
 
 users:
   createIngress: true
@@ -527,7 +559,7 @@ info:
     value: "Production"
 
 global:
-  environment: ""
+  environment: default
 
 knownservices_config: {
   "services": [
@@ -652,7 +684,7 @@ knownservices_config: {
       "validateSession": false
     },
     {
-      "id": "nhs-web-app",     
+      "id": "nhs-web-app",
       "url": "https://WebAppBaseUrl",
       "javaScriptInteractionMode": "NhsApp",
       "menuTab": "None",
