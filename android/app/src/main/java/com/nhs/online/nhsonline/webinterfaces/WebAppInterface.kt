@@ -175,16 +175,4 @@ class WebAppInterface(
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering startDownload")
         activity.runOnUiThread{ uiInteractor.startDownload(base64Data, fileName, mimeType) }
     }
-
-    @JavascriptInterface
-    fun updateHeaderText(text: String) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateHeaderText")
-        activity.runOnUiThread {
-            if (!isConnectedToNetwork) {
-                nhsWeb.showNoConnectionError()
-            } else {
-                uiInteractor.setHeaderText(text)
-            }
-        }
-    }
 }

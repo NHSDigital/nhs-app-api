@@ -1,6 +1,17 @@
 {
   "services": [
     {
+      "id": "stubs-auth",
+      "url": "http://stubs.local.bitraft.io",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
       "id": "111",
       "url": "https://111.nhs.uk",
       "subServices": null,

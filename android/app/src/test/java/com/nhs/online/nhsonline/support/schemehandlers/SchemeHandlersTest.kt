@@ -1,80 +1,86 @@
 package com.nhs.online.nhsonline.support.schemehandlers
 
-import com.nhaarman.mockito_kotlin.*
-import junit.framework.Assert
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.verify
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class SchemeHandlersTests {
+    private lateinit var schemeHandlers: SchemeHandlers
+
+    @Before
+    fun setUp() {
+        schemeHandlers = SchemeHandlers()
+    }
 
     @Test
     fun handle_ReturnsTrue_WhenUrlIsHandled() {
         val url = "AnyThing:"
-        val mockHandler: ISchemeHandler = mock { on { handle(url) } doReturn true
+        val handlerMock: ISchemeHandler = mock { on { handle(url) } doReturn true
         on { scheme } doReturn "AnyThing:"}
 
-        val systemUnderTest = SchemeHandlers()
-        systemUnderTest.registerHandler(mockHandler)
+        schemeHandlers.registerHandler(handlerMock)
 
-        val response = systemUnderTest.handleUrl(url)
+        val response = schemeHandlers.handleUrl(url)
 
-        verify(mockHandler, times(1)).handle(url)
-        verify(mockHandler, times(1)).scheme
-        Assert.assertTrue(response)
+        verify(handlerMock).handle(url)
+        verify(handlerMock).scheme
+        assertTrue(response)
     }
 
     @Test
     fun handle_ReturnsFalse_WhenNoMatchingHandlerIsRegistered() {
         val url = "SomeThing:"
-        val mockHandler: ISchemeHandler = mock { on { handle(url) } doReturn true
+        val handlerMock: ISchemeHandler = mock { on { handle(url) } doReturn true
             on { scheme } doReturn "AnyThing:"}
 
-        val systemUnderTest = SchemeHandlers()
-        systemUnderTest.registerHandler(mockHandler)
+        schemeHandlers.registerHandler(handlerMock)
 
-        val response = systemUnderTest.handleUrl(url)
+        val response = schemeHandlers.handleUrl(url)
 
-        verify(mockHandler, times(1)).scheme
-        verify(mockHandler, times(0)).handle(url)
-        Assert.assertFalse(response)
+        verify(handlerMock).scheme
+        verify(handlerMock, never()).handle(url)
+        assertFalse(response)
     }
 
     @Test
     fun handle_ReturnsTrueAndUsesTheRightHandler_WhenOneOfTheRegisteredHandlersIsValid() {
         val url = "matching:"
-        val mockAnythingHandler: ISchemeHandler = mock { on { handle(url) } doReturn true
+        val anythingHandlerMock: ISchemeHandler = mock { on { handle(url) } doReturn true
             on { scheme } doReturn "AnyThing:"}
-        val mockSomeThingHandler: ISchemeHandler = mock { on { handle(url) } doReturn true
+        val someThingHandlerMock: ISchemeHandler = mock { on { handle(url) } doReturn true
             on { scheme } doReturn "Something:"}
-        val mockMatchingHandler: ISchemeHandler = mock { on { handle(url) } doReturn true
+        val matchingHandlerMock: ISchemeHandler = mock { on { handle(url) } doReturn true
             on { scheme } doReturn "matching:"}
 
-        val systemUnderTest = SchemeHandlers()
-        systemUnderTest.registerHandler(mockAnythingHandler)
-        systemUnderTest.registerHandler(mockSomeThingHandler)
-        systemUnderTest.registerHandler(mockMatchingHandler)
+        schemeHandlers.registerHandler(anythingHandlerMock)
+        schemeHandlers.registerHandler(someThingHandlerMock)
+        schemeHandlers.registerHandler(matchingHandlerMock)
 
-        val response = systemUnderTest.handleUrl(url)
+        val response = schemeHandlers.handleUrl(url)
 
-        verify(mockAnythingHandler, times(0)).handle(url)
-        verify(mockAnythingHandler, times(1)).scheme
-        verify(mockSomeThingHandler, times(0)).handle(url)
-        verify(mockSomeThingHandler, times(1)).scheme
-        verify(mockMatchingHandler, times(1)).handle(url)
-        verify(mockMatchingHandler, times(1)).scheme
-        Assert.assertTrue(response)
+        verify(anythingHandlerMock, never()).handle(url)
+        verify(anythingHandlerMock).scheme
+        verify(someThingHandlerMock, never()).handle(url)
+        verify(someThingHandlerMock).scheme
+        verify(matchingHandlerMock).handle(url)
+        verify(matchingHandlerMock).scheme
+        assertTrue(response)
     }
 
     @Test
     fun handle_ReturnsFalse_WhenNoHandlersAreRegistered() {
         val url = "tel:enquiries@nhsdigital.nhs.uk?subject=111%20online%20enquiry"
 
-        val systemUnderTest = SchemeHandlers()
-        val response = systemUnderTest.handleUrl(url)
+        val response = schemeHandlers.handleUrl(url)
 
-        Assert.assertFalse(response)
+        assertFalse(response)
     }
-
 }

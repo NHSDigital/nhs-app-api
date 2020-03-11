@@ -3,6 +3,6 @@
     <string name="app_name">NHS App Scratch 18</string>
     <string name="baseHost">www-scratch18.dev.nonlive.nhsapp.service.nhs.uk</string>
     <string name="baseURL">https://www-scratch18.dev.nonlive.nhsapp.service.nhs.uk/</string>
-    <string name="baseApiURL">https://api-scratch18.dev.nonlive.nhsapp.service.nhs.uk/v1/</string>
+    <string name="baseApiURL">https://api-scratch18.dev.nonlive.nhsapp.service.nhs.uk/</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
 </resources>

@@ -97,9 +97,9 @@ class FingerprintService(
     companion object {
 
         fun createIfDeviceSupported(
-            biometricsInteractor: IBiometricsInteractor,
-            fidoServerUrl: String,
-            interactor: IInteractor
+                biometricsInteractor: IBiometricsInteractor,
+                fidoServerUrl: String,
+                interactor: IInteractor
         ): FingerprintService? {
             if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.M) || fidoServerUrl.isEmpty())
                 return null

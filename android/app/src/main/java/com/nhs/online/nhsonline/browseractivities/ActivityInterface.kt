@@ -4,6 +4,5 @@ import android.content.Context
 import com.nhs.online.nhsonline.interfaces.IInteractor
 
 interface ActivityInterface {
-    fun canStart(context: Context, url: String): Boolean
     fun start(context: Context, url: String, interactor: IInteractor)
 }

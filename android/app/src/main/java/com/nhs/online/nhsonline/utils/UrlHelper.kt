@@ -29,4 +29,24 @@ class UrlHelper(val context: Context) {
 
         return URL(finalUrl)
     }
+
+    fun getPostRequestReloadUrl(url: String): String? {
+        return when {
+            url.startsWith((fetchStringResource(R.string.dataPreferencesBaseUrl))) -> fetchStringResource(
+                    R.string.dataSharingURL)
+            else -> null
+        }
+    }
+
+    fun isSameHostAndSchemeAsHomeUrl(urlString: String?): Boolean {
+        if (urlString.isNullOrBlank())
+            return false
+        val homeUrl = URL(fetchStringResource(R.string.baseURL))
+        val url = URL(urlString)
+        return homeUrl.host == url.host && homeUrl.protocol == url.protocol
+    }
+
+    private fun fetchStringResource(resourceId: Int): String {
+        return context.resources.getString(resourceId)
+    }
 }

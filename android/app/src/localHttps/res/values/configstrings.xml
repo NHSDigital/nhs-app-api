@@ -3,6 +3,6 @@
     <string name="app_name">NHS App Local HTTPS</string>
     <string name="baseHost">android.local.bitraft.io</string>
     <string name="baseURL">https://android.local.bitraft.io/</string>
-    <string name="baseApiURL">https://android.local.bitraft.io:444/v1/</string>
+    <string name="baseApiURL">https://android.local.bitraft.io:444/</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
 </resources>

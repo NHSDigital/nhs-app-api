@@ -11,10 +11,10 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.validateMockitoUsage
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.android.controller.ActivityController
-import org.mockito.Mockito.validateMockitoUsage
 
 @RunWith(RobolectricTestRunner::class)
 class MenuBarTests  {
@@ -109,8 +109,8 @@ class MenuBarTests  {
             }
         }
 
-        verify(appStateMock, times(1)).isReady()
-        verify(appStateMock, times(1)).block()
+        verify(appStateMock).isReady()
+        verify(appStateMock).block()
 
         for(childIndex: Int in 0.until(menuBar.childCount)) {
             val menuBarItem = menuBar.getChildAt(childIndex) as MenuBarItem

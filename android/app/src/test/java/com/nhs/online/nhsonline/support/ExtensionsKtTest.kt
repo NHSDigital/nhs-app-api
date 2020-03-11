@@ -3,9 +3,7 @@ package com.nhs.online.nhsonline.support
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Typeface.BOLD
 import android.text.SpannableStringBuilder
-import android.text.style.StyleSpan
 import android.widget.TextView
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
@@ -13,7 +11,6 @@ import com.nhs.online.nhsonline.R
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric.buildActivity
 import org.robolectric.RobolectricTestRunner

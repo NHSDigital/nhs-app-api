@@ -78,7 +78,7 @@ class ChromeClientLocationTest {
 
         chromeClient.handleCameraFilePermissionResult(grantResults)
 
-        verify(activity, times(1)).startActivityForResult(any(), eq(UPLOAD_FILE_REQUEST_CODE))
+        verify(activity).startActivityForResult(any(), eq(UPLOAD_FILE_REQUEST_CODE))
     }
 
     @Test

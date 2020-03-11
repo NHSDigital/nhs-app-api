@@ -24,8 +24,6 @@ interface IInteractor {
 
     fun setWebViewVisible()
 
-    fun setHeaderText(text: String, description: String? = null)
-
     fun clearMenuBarItem()
 
     fun showHeader()

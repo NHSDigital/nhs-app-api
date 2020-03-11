@@ -4,7 +4,7 @@
     <string name="appScheme">nhsapp</string>
     <string name="baseHost">www-preview.dev.nonlive.nhsapp.service.nhs.uk</string>
     <string name="baseURL">https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/</string>
-    <string name="baseApiURL">https://api-preview.dev.nonlive.nhsapp.service.nhs.uk/v1/</string>
+    <string name="baseApiURL">https://api-preview.dev.nonlive.nhsapp.service.nhs.uk/</string>
     <string name="cookieDomain">@string/baseURL</string>
     <string name="authRedirectPath">/auth-return</string>
     <string name="gpFinderPath">gp-finder</string>
@@ -40,51 +40,23 @@
     <string name="fidoUsername">fidoUsername</string>
     <string name="logoutPath">logout</string>
     <string name="loginPath">login</string>
+
     <string name="dataSharingURL">https://www.nhs.uk/your-nhs-data-matters/</string>
-    <string name="hotjarLink">https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785</string>
     <string name="helpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/</string>
     <string name="biometricsHelpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/android-fingerprint-ID-help/</string>
     <string name="termsAndConditionsURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/</string>
-    <string name="privacyPolicyURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/</string>
-    <string name="cookiesPolicyURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/</string>
-    <string name="openSourceLicensesURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/</string>
-    <string name="medicalRecordAbbreviationsURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/</string>
+
     <string name="sessionDetailsCookieName">nhso.session</string>
-    <string name="accessibilityStatementURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility/</string>
-    <string name="configurationApiPath">configuration?nativeAppVersion=%1$s&amp;deviceName=Android</string>
-    <string name="isSupportedVersion">isDeviceSupported</string>
+    <string name="configurationApiPath">v2/configuration</string>
+    <string name="minimumSupportedAndroidVersion">minimumSupportedAndroidVersion</string>
     <string name="fidoServerUrlConfigurationKey">fidoServerUrl</string>
     <string name="menuTimeoutSeconds">10</string>
     <string name="secureFlag">enabled</string>
-
-    <string-array name="externalSiteUrls">
-        <item>@string/hotjarLink</item>
-        <item>@string/biometricsHelpURL</item>
-        <item>@string/helpURL</item>
-        <item>@string/termsAndConditionsURL</item>
-        <item>@string/privacyPolicyURL</item>
-        <item>@string/cookiesPolicyURL</item>
-        <item>@string/openSourceLicensesURL</item>
-        <item>@string/medicalRecordAbbreviationsURL</item>
-        <item>@string/accessibilityStatementURL</item>
-        <item>@string/dataSharingURL</item>
-    </string-array>
-
-    <string-array name="nativeAppHosts">
-        <item>@string/nhs111</item>
-        <item>@string/nhs111Location</item>
-        <item>@string/baseURL</item>
-        <item>@string/nhsLoginSuffix</item>
-        <item>@string/conditions</item>
-    </string-array>
 
     <string-array name="nativeReloadOnBackUrls">
         <item>@string/nhsLoginSuffix</item>
     </string-array>
 
-    <string-array name="nhsLoginPrefixList">
-        <item>account</item>
-        <item>auth</item>
-    </string-array>
+    <string name="versionRegex">^([\\d]+)[.](\\d+)([.](\\d+))?$</string>
 
 </resources>

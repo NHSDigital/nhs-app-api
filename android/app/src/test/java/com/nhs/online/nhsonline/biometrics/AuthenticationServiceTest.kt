@@ -18,21 +18,20 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.robolectric.RobolectricTestRunner
-import java.lang.IllegalStateException
 
 @RunWith(RobolectricTestRunner::class)
 
 class AuthenticationServiceTest {
     private lateinit var authenticationService: AuthenticationService
-    private lateinit var mockFragmentActivity: FragmentActivity
-    private lateinit var mockBiometricAsyncHandler: BiometricAsyncHandler
-    private lateinit var mockBiometricsInteractor: IBiometricsInteractor
-    private lateinit var mockBiometricState: BiometricState
-    private lateinit var mockBiometricCleanupHelper: BiometricCleanupHelper
-    private lateinit var mockFingerprintDialog: FingerprintDialog
-    private lateinit var mockFingerprintSystemChecker: FingerprintSystemChecker
-    private lateinit var mockPreferencesService: FingerprintSharedPreferences
-    private lateinit var mockAuthentication: Authentication
+    private lateinit var fragmentActivityMock: FragmentActivity
+    private lateinit var biometricAsyncHandlerMock: BiometricAsyncHandler
+    private lateinit var biometricsInteractorMock: IBiometricsInteractor
+    private lateinit var biometricStateMock: BiometricState
+    private lateinit var biometricCleanupHelperMock: BiometricCleanupHelper
+    private lateinit var fingerprintDialogMock: FingerprintDialog
+    private lateinit var fingerprintSystemCheckerMock: FingerprintSystemChecker
+    private lateinit var preferencesServiceMock: FingerprintSharedPreferences
+    private lateinit var authenticationMock: Authentication
 
     private lateinit var packageManager: PackageManager
     private lateinit var packageInfo: PackageInfo
@@ -41,16 +40,16 @@ class AuthenticationServiceTest {
 
     @Before
     fun setUp() {
-        mockBiometricsInteractor = mock()
+        biometricsInteractorMock = mock()
 
-        mockAuthentication = mock {
+        authenticationMock = mock {
             on {
                 auth(any(), any()
                 )
             } doThrow (FidoInvalidSignatureException::class)
         }
 
-        mockPreferencesService = mock {
+        preferencesServiceMock = mock {
             on { getFidoUsername() } doReturn "username"
             on { readStringFromSharedPref(anyVararg()) } doReturn ""
         }
@@ -66,37 +65,37 @@ class AuthenticationServiceTest {
         }
 
 
-        mockFragmentActivity = mock {
+        fragmentActivityMock = mock {
             on { packageName } doReturn "testPackageName"
             on { packageManager } doReturn packageManager
         }
-        mockBiometricAsyncHandler = mock()
-        mockBiometricState = mock()
-        mockBiometricCleanupHelper = mock()
+        biometricAsyncHandlerMock = mock()
+        biometricStateMock = mock()
+        biometricCleanupHelperMock = mock()
 
-        mockFingerprintDialog = mock()
+        fingerprintDialogMock = mock()
 
-        mockFingerprintSystemChecker = mock {
+        fingerprintSystemCheckerMock = mock {
             on { preLoginCheck() } doReturn true
         }
 
         authenticationService = AuthenticationService(
-            mockFragmentActivity,
-            mockBiometricAsyncHandler,
-            mockBiometricsInteractor,
-            mockBiometricState,
-            mockBiometricCleanupHelper,
-            mockFingerprintDialog,
-            mockFingerprintSystemChecker,
-            mockPreferencesService,
-            mockAuthentication
+            fragmentActivityMock,
+            biometricAsyncHandlerMock,
+            biometricsInteractorMock,
+            biometricStateMock,
+            biometricCleanupHelperMock,
+            fingerprintDialogMock,
+            fingerprintSystemCheckerMock,
+            preferencesServiceMock,
+            authenticationMock
         )
     }
 
     @Test
     fun startFidoSignIn_ReturnsTrueWhenRegisteredAndNotStarted() {
         authenticationService.isFingerprintLoginStarted = false
-        whenever(mockBiometricState.registered).thenReturn(true)
+        whenever(biometricStateMock.registered).thenReturn(true)
 
         val result = authenticationService.showBiometricLoginIfEnabled(false)
 
@@ -121,7 +120,7 @@ class AuthenticationServiceTest {
     @Test
     fun startFidoSignIn_ReturnsFalseWhenAlreadyStarted() {
         authenticationService.isFingerprintLoginStarted = true
-        whenever(mockBiometricState.registered).thenReturn(true)
+        whenever(biometricStateMock.registered).thenReturn(true)
 
         val result = authenticationService.showBiometricLoginIfEnabled(false)
 
@@ -146,7 +145,7 @@ class AuthenticationServiceTest {
         authenticationService.isFingerprintLoginStarted = true
 
         whenever(response.result).thenReturn("Test")
-        whenever(mockFingerprintDialog.showFingerprintAuthDialog(anyVararg(),
+        whenever(fingerprintDialogMock.showFingerprintAuthDialog(anyVararg(),
             anyVararg())).thenThrow(IllegalStateException())
 
         authenticationService.completeSignInStart(response)

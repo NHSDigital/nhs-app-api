@@ -1,108 +1,57 @@
 package com.nhs.online.nhsonline.services
 
-import android.content.Context
 import android.util.Log
-import com.android.volley.*
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import com.nhs.online.nhsonline.Application
-import com.nhs.online.nhsonline.BuildConfig
-import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.clients.HttpClient
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
-import com.nhs.online.nhsonline.interfaces.IVolleyCallback
+import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
-import org.json.JSONException
-import org.json.JSONObject
+import com.nhs.online.nhsonline.services.knownservices.enums.MenuTabAdapter
+import com.nhs.online.nhsonline.services.knownservices.enums.ViewModeAdapter
+import com.squareup.moshi.JsonDataException
+import com.squareup.moshi.Moshi
+import java.io.IOException
+import java.util.concurrent.Callable
 
-class ConfigurationResponse {
-    var isValidConfiguration: Boolean = false
-    var fidoServerUrl: String = ""
-}
+private val TAG = ConfigurationService::class.java.simpleName
 
-class ConfigurationService(private val context: Context) {
-    private val mRequestQueue: RequestQueue = Volley.newRequestQueue(context)
-    var isInProgress = false
-    private val errorMessageHandler = ErrorMessageHandler(context)
-    fun getConfiguration(callback: IVolleyCallback) {
-        isInProgress = true
+class ConfigurationService(
+        private val configurationUrl: String,
+        private val uiInteractor: IInteractor,
+        private val errorMessageHandler: ErrorMessageHandler,
+        private val httpClient: HttpClient
+) : Callable<Configuration?> {
 
-        val configurationUrl = String.format(
-            context.resources.getString(R.string.baseApiURL)
-                    + context.resources.getString(R.string.configurationApiPath),
-            BuildConfig.VERSION_NAME)
-
-        // Request a string response from the provided URL.
-        val stringReq = StringRequest(Request.Method.GET, configurationUrl,
-            Response.Listener<String> { response ->
-                handleGetConfigurationResponse(response, callback)
-                isInProgress = false
-            },
-            Response.ErrorListener { error ->
-                Log.d(Application.TAG,
-                    "${this::class.java.simpleName}: Configuration error: $error")
-
-                if(!isConnectedToNetwork) {
-                    callback.onError(errorMessageHandler.getErrorMessage(ErrorType.NoConnection))
-                } else {
-                    callback.onError(errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure))
-                }
-
-                isInProgress = false
-            })
-
-        mRequestQueue.add(stringReq)
-    }
-
-    fun handleGetConfigurationResponse(response: String, callback: IVolleyCallback) {
+    private fun getConfigurationResponse(): Configuration? {
         try {
-            val isValidConfiguration = parseBoolean(response, R.string.isSupportedVersion)
-            val fidoServerUrl = parseString(response, R.string.fidoServerUrlConfigurationKey)
-
-            val configurationResponse = ConfigurationResponse()
-            configurationResponse.isValidConfiguration = isValidConfiguration
-            configurationResponse.fidoServerUrl = fidoServerUrl
-
-            Log.d(Application.TAG,
-                "${this::class.java.simpleName}: Configuration success: isValidConfiguration " +
-                        "${configurationResponse.isValidConfiguration}.")
-
-            callback.onSuccess(configurationResponse)
-        } catch (error: ClassCastException) {
-            Log.d(Application.TAG,
-                "${this::class.java.simpleName}: Configuration error: failed to parse response")
-
-            callback.onError(errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure))
-        } catch (error: JSONException) {
-            Log.d(Application.TAG,
-                "${this::class.java.simpleName}: Configuration error: failed to parse response")
-
-            callback.onError(errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure))
+            val jsonString = httpClient.readText(configurationUrl)
+            return Moshi.Builder()
+                    .add(MenuTabAdapter())
+                    .add(ViewModeAdapter())
+                    .build()
+                    .adapter(Configuration::class.java)
+                    .fromJson(jsonString)
+        } catch (e: JsonDataException) {
+            Log.e(TAG, "Configuration error: failed to parse response", e)
+        } catch (e: IllegalArgumentException) {
+            Log.e(TAG, "Configuration error: failed to parse response", e)
+        } catch (e: IOException) {
+            Log.e(TAG, "Configuration error: connection error", e)
         }
+        handleError()
+        return null
     }
 
-    private fun parseBoolean(response: String, propertyId: Int): Boolean {
-        val jsonObj = JSONObject(response)
-
-        val propertyName = context.resources.getString(propertyId)
-
-        if (jsonObj.has(propertyName)) {
-            return jsonObj.getBoolean(propertyName)
+    private fun handleError() {
+        val errorMessage = when (isConnectedToNetwork) {
+            true -> errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
+            false -> errorMessageHandler.getErrorMessage(ErrorType.NoConnection)
         }
 
-        return false
+        uiInteractor.showUnavailabilityError(errorMessage)
     }
 
-    private fun parseString(response: String, propertyId: Int): String {
-        val jsonObj = JSONObject(response)
-
-        val propertyName = context.resources.getString(propertyId)
-
-        if (jsonObj.has(propertyName)) {
-            return jsonObj.getString(propertyName)
-        }
-
-        return ""
+    override fun call(): Configuration? {
+        return getConfigurationResponse()
     }
 }

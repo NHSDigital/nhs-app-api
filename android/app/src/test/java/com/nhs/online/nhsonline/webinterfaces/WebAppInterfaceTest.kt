@@ -88,16 +88,6 @@ class WebAppInterfaceTest {
     }
 
     @Test
-    fun changeHeader() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        val testText = "Test"
-        webAppInterface.updateHeaderText("Test")
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).setHeaderText(testText)
-    }
-
-    @Test
     fun clearMenuBar() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.clearMenuBarItem()

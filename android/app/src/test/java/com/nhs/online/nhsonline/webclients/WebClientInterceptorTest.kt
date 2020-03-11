@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.content.res.Resources
 import android.net.Uri
+import android.os.Handler
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
@@ -15,17 +16,21 @@ import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
-import com.nhs.online.nhsonline.services.KnownService
-import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.services.knownservices.KnownServices
+import com.nhs.online.nhsonline.services.knownservices.RootService
+import com.nhs.online.nhsonline.services.knownservices.SubService
+import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
+import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.web.NhsWeb
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Assert.assertEquals
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import java.io.InputStream
+import java.net.URL
 
 @Suppress("DEPRECATION")
 @RunWith(RobolectricTestRunner::class)
@@ -179,12 +184,12 @@ class WebClientInterceptorTest {
     @Test
     fun overrideUrlLoad() {
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
-                KnownServices(resourceMock.mockContext()),
+                knownServicesMock,
                 schemeHandlersMock
         )
 
@@ -205,12 +210,12 @@ class WebClientInterceptorTest {
         val url = "handled:"
         schemeHandlersMock = mock { on { handleUrl(url) } doReturn true }
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
-                KnownServices(resourceMock.mockContext()),
+                knownServicesMock,
                 schemeHandlersMock
         )
 
@@ -220,18 +225,18 @@ class WebClientInterceptorTest {
                 url)) {
             "WebClientInterceptor: Failed to handle url scheme"
         }
-        verify(schemeHandlersMock, times(1)).handleUrl(url)
+        verify(schemeHandlersMock).handleUrl(url)
     }
 
     @Test
     fun overrideUrlLoad_returnsFalseForMalformedURLException() {
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
-                KnownServices(resourceMock.mockContext()),
+                knownServicesMock,
                 schemeHandlersMock
         )
 
@@ -251,14 +256,21 @@ class WebClientInterceptorTest {
                 schemeHandlersMock
         )
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
-        webInterceptor.onPageStarted(webViewMock, "https://111.nhs.uk/", null)
-
-        val errorHeader = resourceMock.mockDisconnectedContext().resources.getString(
-                R.string.connection_error_header
+        val url = "https://111.nhs.uk/"
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.None,
+                        viewMode = ViewMode.WebView,
+                        url = url,
+                        subServices = null
+                )
         )
 
+        webInterceptor.onPageStarted(webViewMock, url, null)
+
         verify(webViewMock).stopLoading()
-        verify(uiInteractorMock).setHeaderText(errorHeader)
 
     }
 
@@ -270,23 +282,27 @@ class WebClientInterceptorTest {
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockConnectedContext(),
-                KnownServices(tmpContext),
+                knownServicesMock,
                 schemeHandlersMock
+        )
+
+        val url = tmpContext.resources.getString(R.string.conditions)
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                SubService(
+                        requiresAssertedLoginIdentity = false,
+                        validateSession = false,
+                        menuTab = MenuTab.None,
+                        viewMode = ViewMode.WebView,
+                        path = "/conditions",
+                        queryString = null
+                )
         )
 
         webInterceptor.onPageStarted(
                 webViewMock,
-                tmpContext.resources.getString(R.string.conditions),
+                url,
                 null
         )
-
-        val serviceInfo = KnownServices(tmpContext).findMatchingServiceInfo(
-                tmpContext.resources.getString(R.string.conditions)
-        )
-
-        val header = serviceInfo?.header
-        val description = serviceInfo?.nativeHeaderDescription
-        verify(uiInteractorMock).setHeaderText(header!!, description)
     }
 
     @Test
@@ -296,17 +312,13 @@ class WebClientInterceptorTest {
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockDisconnectedContext(),
-                KnownServices(resourceMock.mockContext()),
+                knownServicesMock,
                 schemeHandlersMock)
 
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
         webInterceptor.stopLoadingWebviewAndShowNoConnectionError(webViewMock)
 
-        val header = resourceMock.mockDisconnectedContext()
-                .resources.getString(R.string.connection_error_header)
-
         verify(webViewMock).stopLoading()
-        verify(uiInteractorMock).setHeaderText(header)
     }
 
     @Test
@@ -316,7 +328,7 @@ class WebClientInterceptorTest {
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockDisconnectedContext(),
-                KnownServices(resourceMock.mockContext()),
+                knownServicesMock,
                 schemeHandlersMock
         )
 
@@ -335,7 +347,7 @@ class WebClientInterceptorTest {
                 uiInteractorMock,
                 nhsWebMock,
                 contextMock,
-                KnownServices(resourceMock.mockContext()),
+                knownServicesMock,
                 schemeHandlersMock
         )
 
@@ -343,63 +355,23 @@ class WebClientInterceptorTest {
         whenever(contextMock.getString(R.string.baseHost)).thenReturn("111.nhs.uk")
         whenever(webViewMock.url).thenReturn(url)
 
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.None,
+                        viewMode = ViewMode.WebView,
+                        url = url,
+                        subServices = null
+
+                )
+        )
+
         webInterceptor.onReceivedError(webViewMock, 404, "Error", url)
 
         val knownUrlErrorMessage = errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
 
         verify(uiInteractorMock).showUnavailabilityError(knownUrlErrorMessage)
-    }
-
-    @Test
-    fun loadResource_isKnownService_isConnected() {
-        val url = "https://111.nhs.uk/"
-        val expectedKnownService = KnownService(url)
-        val knownServicesMock: KnownServices = mock {
-            on { findMatchingKnownService(url) }.thenReturn(expectedKnownService)
-        }
-        val webViewMock: WebView = mock {
-            on { getUrl() }.thenReturn(url)
-        }
-
-        val webInterceptor = WebClientInterceptor(
-                uiInteractorMock,
-                nhsWebMock,
-                resourceMock.mockConnectedContext(),
-                knownServicesMock,
-                schemeHandlersMock
-        )
-
-        webInterceptor.onLoadResource(webViewMock, url)
-
-        verify(knownServicesMock).findMatchingKnownService(url)
-        verify(webViewMock, never()).stopLoading()
-        verify(nhsWebMock, never()).loadWelcomePage()
-        verify(uiInteractorMock, never()).dismissProgressDialog()
-    }
-
-    @Test
-    fun loadResource_isUnknownService_loadsWelcomePage() {
-        val url = "https://111.nhs.uk/"
-        val knownServicesMock: KnownServices = mock {
-            on { findMatchingKnownService(url) }.thenReturn(null)
-        }
-        val webViewMock: WebView = mock {
-            on { getUrl() }.thenReturn(url)
-        }
-
-        val webInterceptor = WebClientInterceptor(
-                uiInteractorMock,
-                nhsWebMock,
-                resourceMock.mockContext(),
-                knownServicesMock,
-                schemeHandlersMock
-        )
-
-        webInterceptor.onLoadResource(webViewMock, url)
-
-        verify(knownServicesMock).findMatchingKnownService(url)
-        verify(webViewMock).stopLoading()
-        verify(nhsWebMock).loadWelcomePage()
     }
 
     private fun createWebView(): WebView {

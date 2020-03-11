@@ -2,56 +2,31 @@ package com.nhs.online.nhsonline.browseractivities
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ResolveInfo
 import android.graphics.Color
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
-import android.support.v4.content.ContextCompat
-import java.net.URL
 import android.support.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
-import android.content.pm.ResolveInfo
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
-import com.nhs.online.nhsonline.services.KnownServices
 
 private const val CHROME_PACKAGE_NAME = "com.android.chrome"
 
-class OpenUrlInBrowserActivity(private val nativeAppHosts: Array<String>) : ActivityInterface {
-
-    override fun canStart(context: Context, url: String): Boolean {
-        val knownServices = KnownServices(context)
-        if (knownServices.shouldURLOpenExternally(URL(url))) {
-            return true
-        }
-        val currentHost = URL(url).host
-        nativeAppHosts.forEach { nativeAppHost ->
-            if (URL(nativeAppHost).host.equals(currentHost, true) || currentHost.contains(
-                    URL(nativeAppHost).host, true)) {
-                return false
-            }
-        }
-
-        return true
-    }
+class OpenUrlInBrowserActivity : ActivityInterface {
 
     override fun start(context: Context, url: String, interactor: IInteractor) {
-        if (!canStart(context, url)) {
-            throw RuntimeException("Cannot open url in browser")
-        }
-
         val supportedCustomTabsPackages = getCustomTabsPackages(context, url)
 
-        val knownServices = KnownServices(context)
-
-        if (supportedCustomTabsPackages.count() > 0
-            && !knownServices.isHotJar(URL(url))) {
+        if (supportedCustomTabsPackages.count() > 0) {
             val customTabsIntent = CustomTabsIntent.Builder()
                 .setToolbarColor(Color.BLUE)
                 .build()
 
-            customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
             if (supportedCustomTabsPackages.any { it.activityInfo.packageName == CHROME_PACKAGE_NAME }) {
                 customTabsIntent.intent.setPackage(CHROME_PACKAGE_NAME)
@@ -62,11 +37,10 @@ class OpenUrlInBrowserActivity(private val nativeAppHosts: Array<String>) : Acti
         } else {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
-           if(intent.resolveActivity(context.packageManager) != null) {
+           if (intent.resolveActivity(context.packageManager) != null) {
                ContextCompat.startActivity(context, intent, null)
-           }
-            else {
-               var unavailableErrorMessage = ErrorMessage(context, ErrorType.BrowserNotAvailable)
+           } else {
+               val unavailableErrorMessage = ErrorMessage(context, ErrorType.BrowserNotAvailable)
                Log.d(Application.TAG, "Browser is unavailable or disabled")
                interactor.showUnavailabilityError(unavailableErrorMessage)
            }

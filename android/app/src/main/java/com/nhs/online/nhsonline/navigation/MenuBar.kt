@@ -9,7 +9,6 @@ import android.view.View
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.LinearLayout
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.support.Optional
 import com.nhs.online.nhsonline.web.NhsWeb
 

@@ -1,181 +1,178 @@
 package com.nhs.online.nhsonline.services
 
-import android.content.Context
+import com.nhs.online.nhsonline.services.knownservices.KnownServices
+import com.nhs.online.nhsonline.services.knownservices.RootService
+import com.nhs.online.nhsonline.services.knownservices.SubService
+import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
+import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import org.junit.Assert
 import org.junit.Test
-import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.net.URL
 
 @RunWith(RobolectricTestRunner::class)
-class KnownServicesTest : ResourceMockingClass() {
-    private val context: Context = mockContext()
-    private val testKnownServices = KnownServices(context)
+class KnownServicesTest {
+    private val testKnownServices = mockKnownServices()
 
     @Test
-    fun findMatchingKnownService_returnsNull_forNotAUrl() {
-        val result = testKnownServices.findMatchingKnownService("Not A Url")
+    fun findMatchingSubService_ResolveToNull_WhenUrlIsInvalid() {
+        val result = testKnownServices.findMatchingKnownService(URL("https://invalidurl.com"))
 
         Assert.assertNull(result)
     }
 
     @Test
-    fun findMatchingKnownService_returnsService_forValidServiceUrl() {
-        val result = testKnownServices.findMatchingKnownService("https://111.nhs.uk")
+    fun findMatchingSubService_ResolveToRootService_WhenUrlHasNoPathAndQuery() {
+        val url = "https://test.com"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
 
-        Assert.assertEquals(URL("https://111.nhs.uk"), result?.getUrl())
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is RootService)
+        Assert.assertTrue((result as RootService).url == url)
     }
 
     @Test
-    fun findMatchingKnownService_returnsService_forValidServiceUrlDifferentCasing() {
-        val result = testKnownServices.findMatchingKnownService("https://111.NHS.UK")
+    fun findMatchingSubService_ResolveToRootService_WhenUrlHasInvalidPath() {
+        val url = "https://test.com/pathnotvalid/"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
 
-        Assert.assertEquals(URL("https://111.nhs.uk"), result?.getUrl())
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is RootService)
     }
 
     @Test
-    fun findMatchingKnownService_returnsService_forValidServiceUrlWithQueryString() {
-        val result =
-            testKnownServices.findMatchingKnownService("http://10.0.2.2:3000?source=android")
+    fun findMatchingSubService_ResolveToRootService_WhenUrlHasInvalidQueryString() {
+        val url = "https://test.com/?query=invalid"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
 
-        Assert.assertEquals(URL("http://10.0.2.2:3000"), result?.getUrl())
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is RootService)
     }
 
     @Test
-    fun findMatchingServiceInfo_resolveToNull_whenUrlIsUnknownServiceUrl() {
-        val unknownServices = arrayListOf("https://www.google.co.uk",
-            "https://www.yahoo.co.uk", "https://www.jobs.nhs.uk")
-        unknownServices.forEach { unknownService ->
-            val serviceInfo = testKnownServices.findMatchingServiceInfo(unknownService)
-            Assert.assertNull(serviceInfo)
-        }
+    fun findMatchingSubService_ResolveToSubService_WhenUrlHasValidPath() {
+        val url = "https://test.com/path"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
+
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == "/path")
+        Assert.assertTrue(result.queryString == null)
     }
 
     @Test
-    fun findMatchingServiceInfo_resolveToDefault_whenServiceInternalPathLocatorIsUnrelated() {
-        val unrelatedLocators =
-            arrayListOf("${getResourceString(R.string.baseURL)}/unrelatedPath")
-        unrelatedLocators.forEach { locator ->
-            val serviceInfo = testKnownServices.findMatchingServiceInfo(locator)
-            Assert.assertEquals("Home", serviceInfo?.header)
-        }
+    fun findMatchingSubService_ResolveToSubService_WhenUrlHasPartialValidPath() {
+        val url = "https://test.com/path/subpath"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
+
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == "/path")
+        Assert.assertTrue(result.queryString == null)
     }
 
     @Test
-    fun findNHSAppInternalServiceInfoByPath_resolvesToMatchingNHSAppInternalPathOrClosestToThePath() {
-        val nhsAppServices =
-            arrayListOf(getResourceString(R.string.symptomsPath),
-                getResourceString(R.string.appointmentsPath),
-                getResourceString(R.string.appointmentsGpAtHandPath),
-                getResourceString(R.string.informaticaPath),
-                getResourceString(R.string.prescriptionsPath),
-                getResourceString(R.string.prescriptionsGpAtHandPath),
-                getResourceString(R.string.myRecordPath),
-                getResourceString(R.string.myRecordGpAtHandPath),
-                getResourceString(R.string.myAccountPath),
-                getResourceString(R.string.morePath) + "random/path",
-                "${getResourceString(R.string.checkYourSymptoms)}/random-path")
+    fun findMatchingSubService_ResolveToSubService_WhenUrlHasValidQueryString() {
+        val url = "https://test.com/?foo=bar"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
 
-        val equivalentNhsAppHeaders = arrayListOf(getResourceString(R.string.symptoms_header),
-                getResourceString(R.string.appointments_header),
-                getResourceString(R.string.service_unavailable),
-                getResourceString(R.string.service_unavailable),
-                getResourceString(R.string.prescriptions_header),
-                getResourceString(R.string.service_unavailable),
-                getResourceString(R.string.my_record_header),
-                getResourceString(R.string.service_unavailable),
-                getResourceString(R.string.my_account_header),
-                getResourceString(R.string.more_header),
-                getResourceString(R.string.symptoms_header))
-        for (i in 0 until nhsAppServices.size) {
-            val serviceInfo =
-                testKnownServices.findNHSAppInternalServiceInfoByPath(nhsAppServices[i])
-            Assert.assertEquals(equivalentNhsAppHeaders[i], serviceInfo?.header)
-        }
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == null)
+        Assert.assertTrue(result.queryString == "foo=bar")
     }
 
     @Test
-    fun isLoginUrl_ReturnsTrueWhenLoginUrlHasAdditionalQueryParameters() {
-        val loginUrlWithExtraQuery = "http://10.0.2.2:3000/login?responseCode=102"
-        val result = testKnownServices.isLoginUrl(loginUrlWithExtraQuery)
-        Assert.assertTrue("Failed to recognise login url with additional parameters", result)
+    fun findMatchingSubService_ResolveToSubService_WhenUrlHasValidQueryStringUnmatchedPath() {
+        val url = "https://test.com/dave?foo=bar"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
+
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == null)
+        Assert.assertTrue(result.queryString == "foo=bar")
     }
 
     @Test
-    fun isLoginUrl_ReturnsTrueWhenLoginUrlHasNoQuery() {
-        val loginUrl = "http://10.0.2.2:3000/login"
-        val result = testKnownServices.isLoginUrl(loginUrl)
-        Assert.assertTrue(result)
-    }
-    @Test
-    fun findMatchingServiceInfo_resolvesToMatchingInternalPathOrClosestInternalThePath() {
-        val nhsAppServices =
-            arrayListOf(getResourceString(R.string.baseURL) + getResourceString(R.string.symptomsPath),
-                getResourceString(R.string.baseURL) + getResourceString(R.string.appointmentsPath),
-                getResourceString(R.string.baseURL) + getResourceString(R.string.prescriptionsPath),
-                getResourceString(R.string.baseURL) + getResourceString(R.string.myRecordPath),
-                getResourceString(R.string.baseURL) + getResourceString(R.string.myAccountPath),
-                getResourceString(R.string.baseURL) + getResourceString(R.string.organDonationPath),
-                getResourceString(R.string.baseURL) + getResourceString(R.string.morePath) + "random/path",
-                "${getResourceString(R.string.baseURL)}/${getResourceString(R.string.checkYourSymptoms)}/random-path")
+    fun findMatchingSubService_ResolveToSubService_WhenUrlHasValidPathAndQueryString() {
+        val url = "https://test.com/path?foo=bar"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
 
-        val equivalentNhsAppHeaders = arrayListOf(getResourceString(R.string.symptoms_header),
-            getResourceString(R.string.appointments_header),
-            getResourceString(R.string.prescriptions_header),
-            getResourceString(R.string.my_record_header),
-            getResourceString(R.string.my_account_header),
-            getResourceString(R.string.organ_donation_header),
-            getResourceString(R.string.more_header),
-            getResourceString(R.string.symptoms_header))
-        for (i in 0 until nhsAppServices.size) {
-            val serviceInfo = testKnownServices.findMatchingServiceInfo(nhsAppServices[i])
-            Assert.assertEquals(equivalentNhsAppHeaders[i], serviceInfo?.header)
-        }
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == "/path")
+        Assert.assertTrue(result.queryString == "foo=bar")
     }
 
     @Test
-    fun isHotJarService_foundService() {
-        val result =
-            testKnownServices.isHotJar(URL("https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785"))
+    fun findMatchingSubService_ResolveToSubService_WhenUrlHasPartialValidPathAndQueryString() {
+        val url = "https://test.com/path/nestedpath?foo=bar&ram=you"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
 
-        Assert.assertEquals(true, result)
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == "/path")
+        Assert.assertTrue(result.queryString == "foo=bar")
     }
 
     @Test
-    fun isHotJarService_notFoundService() {
-        val result =
-            testKnownServices.isHotJar(URL("https://www.google.co.uk"))
+    fun findMatchingSubService_ResolveToSubService_WhenUrlHasPartialValidPathAndInvalidQueryString() {
+        val url = "https://test.com/path/nestedpath?aaa=bbb"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
 
-        Assert.assertEquals(false, result)
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == "/path")
+        Assert.assertTrue(result.queryString == null)
     }
 
     @Test
-    fun isExternalBrowserService_foundService() {
-        val result =
-            testKnownServices.shouldURLOpenExternally(URL("https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/"))
+    fun findMatchingSubService_ResolveToSubService_WhenUrlHasValidMultipleQueryStringParamaters() {
+        val url = "https://test.com/?foo=bar&bar=ram"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
 
-        Assert.assertEquals(true, result)
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == null)
+        Assert.assertTrue(result.queryString == "foo=bar&bar=ram")
     }
 
     @Test
-    fun isExternalBrowserService_notFoundService() {
-        val result =
-            testKnownServices.shouldURLOpenExternally(URL("https://www.google.co.uk"))
+    fun findMatchingSubService_ResolveToSubService_WhenUrlHasValidMultipleQueryStringParamatersInDifferentOrder() {
+        val url = "https://test.com/?bar=ram&foo=bar"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
 
-        Assert.assertEquals(false, result)
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == null)
+        Assert.assertTrue(result.queryString == "foo=bar&bar=ram")
     }
 
     @Test
-    fun getPostRequestReloadUrl_postRequestDataPreferencesUrl() {
-        val result =
-                testKnownServices.getPostRequestReloadUrl("https://ndopapp-int1.thunderbird.service.nhs.uk/")
+    fun findMatchingSubService_ResolveToSubService_WhenUrlHasValidTwoLevelPath() {
+        val url = "https://test.com/path/valid-subpath"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
 
-        Assert.assertEquals(result, getResourceString(R.string.dataSharingURL))
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == "/path/valid-subpath")
+        Assert.assertTrue(result.queryString == null)
     }
 
-    private fun getResourceString(resourceId: Int): String {
-        return context.resources.getString(resourceId)
+    private fun mockKnownServices(): KnownServices {
+        val testSubServices = listOf(
+                SubService(requiresAssertedLoginIdentity = false, validateSession = false, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, path = null, queryString = "foo=bar"),
+                SubService(requiresAssertedLoginIdentity = false, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, path = "/path", queryString = null),
+                SubService(requiresAssertedLoginIdentity = false, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, path = "/path/valid-subpath", queryString = null),
+                SubService(requiresAssertedLoginIdentity = true, validateSession = false, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, path = "/path", queryString = "foo=bar"),
+                SubService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, path = null, queryString = "foo=bar&bar=ram")
+        )
+
+        val rootServices = listOf(
+                RootService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, url = "https://test.com", subServices = testSubServices)
+        )
+
+        return KnownServices(rootServices)
     }
 }

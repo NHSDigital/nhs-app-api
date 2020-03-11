@@ -1,264 +1,220 @@
 package com.nhs.online.nhsonline.support
 
-import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.activities.MainActivity
-import com.nhs.online.nhsonline.data.ErrorMessageHandler
-import com.nhs.online.nhsonline.data.ErrorType
-import com.nhs.online.nhsonline.interfaces.IVolleyCallback
-import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
-import com.nhs.online.nhsonline.services.ConfigurationResponse
-import com.nhs.online.nhsonline.services.ConfigurationService
-import com.nhs.online.nhsonline.services.KnownService
-import com.nhs.online.nhsonline.services.KnownServices
-import com.nhs.online.nhsonline.web.NhsWeb
+import com.nhs.online.nhsonline.services.knownservices.KnownServices
+import com.nhs.online.nhsonline.services.knownservices.RootService
+import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
+import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
+import com.nhs.online.nhsonline.web.NhsWebView
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import kotlinx.android.synthetic.main.activity_main.*
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.util.ReflectionHelpers
+import java.net.URL
 
 @RunWith(RobolectricTestRunner::class)
-class LifeCycleObserverTest {
+class LifeCycleObserverTest : ResourceMockingClass() {
 
-    private val mainActivity: MainActivity =
-        Robolectric.buildActivity(MainActivity::class.java).create().get()
+    private val mainActivity = Robolectric.buildActivity(MainActivity::class.java).create().get()
+    private lateinit var spyMainActivity: MainActivity
     private lateinit var lifeCycleObserver: LifeCycleObserver
-    private lateinit var contextSpy: MainActivity
+    private lateinit var webViewMock: NhsWebView
     private lateinit var appWebInterfaceMock: AppWebInterface
-    private lateinit var configurationServiceMock: ConfigurationService
+    private lateinit var knownServicesMock: KnownServices
     private lateinit var appDialogsMock: AppDialogs
-    private lateinit var nhsWebMock: NhsWeb
-    private lateinit var errorMessageHandler: ErrorMessageHandler
+    private lateinit var configurationResponseMock: ConfigurationResponse
 
     @Before
     fun setUp() {
-        contextSpy = spy(mainActivity)
-
-        val r = spy(mainActivity.resources)
-        whenever(contextSpy.resources).thenReturn(r)
-        errorMessageHandler = ErrorMessageHandler(contextSpy)
-        appWebInterfaceMock = mock(AppWebInterface::class.java)
-        configurationServiceMock = mock(ConfigurationService::class.java)
+        webViewMock = mock()
         appDialogsMock = mock()
-        val webViewMock: WebView = mock {
-            on { settings }.thenReturn(mock())
-        }
-        val nhsWeb = NhsWeb(contextSpy, contextSpy, webViewMock, mock(), appWebInterfaceMock)
-        nhsWebMock = spy(nhsWeb)
+        configurationResponseMock = mock()
 
-        lifeCycleObserver = LifeCycleObserver(contextSpy, appWebInterfaceMock,
-            nhsWebMock, appDialogsMock)
-        ReflectionHelpers.setField(lifeCycleObserver,
-            "configurationService",
-            configurationServiceMock)
-        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
+        spyMainActivity = spy(mainActivity)
+        whenever(spyMainActivity.configurationResponse).thenReturn(configurationResponseMock)
+        whenever(spyMainActivity.appDialogs).thenReturn(appDialogsMock)
+
+        appWebInterfaceMock = mock()
+        knownServicesMock = mock()
+
+        lifeCycleObserver = LifeCycleObserver(spyMainActivity, appWebInterfaceMock, knownServicesMock)
     }
 
     @Test
-    fun onMoveToForeground_nullUrl_configurationError() {
-        val em = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
-        doAnswer {
-            val callback = it.arguments[0] as IVolleyCallback
-            callback.onError(em)
-        }.whenever(configurationServiceMock).getConfiguration(any())
-
-        lifeCycleObserver.onMoveToForeground()
-
-        verify(contextSpy, times(1)).showUnavailabilityError(em)
-        assertEquals(false, contextSpy.isSuccessfulConfigCheck)
-    }
-
-    @Test
-    fun onMoveToBackground() {
-        doNothing().whenever(contextSpy).showBlankScreen()
+    fun onMoveToBackground_showsBlankScreen() {
+        doNothing().whenever(spyMainActivity).showBlankScreen()
         lifeCycleObserver.onMoveToBackground()
-        verify(contextSpy).showBlankScreen()
+        verify(spyMainActivity).showBlankScreen()
     }
 
     @Test
-    fun onMoveToForeground_withNullUrl_configurationError() {
-        contextSpy.webview.loadUrl(null)
-
-        val em = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
-        doAnswer {
-            val callback = it.arguments[0] as IVolleyCallback
-            callback.onError(em)
-        }.whenever(configurationServiceMock).getConfiguration(any())
+    fun onMoveToForeground_whenThereIsNotKnownServiceAndNotCid_hidesBlankScreen() {
+        val url = "https://www.notcid.com/"
+        spyMainActivity.webview.loadUrl(url)
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(null)
 
         lifeCycleObserver.onMoveToForeground()
-
-        verify(contextSpy).showUnavailabilityError(em)
-        assertEquals(false, contextSpy.isSuccessfulConfigCheck)
+        verify(spyMainActivity).hideBlankScreen()
     }
 
     @Test
-    fun onMoveToForeground_withAUrl_shouldValidateSession_configurationError() {
-        val url = "Bazz"
-        val knownServicesMock: KnownServices = overrideKnownServicesField(url)
-
-        contextSpy.webview.loadUrl(url)
-
-        doNothing().whenever(appWebInterfaceMock).validateSession(any())
-
-        val em = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
-        doAnswer {
-            val callback = it.arguments[0] as IVolleyCallback
-            callback.onError(em)
-        }.whenever(configurationServiceMock).getConfiguration(any())
+    fun onMoveToForeground_whenKnownServiceValidateIsFalseAndNotCid_hidesBlankScreen() {
+        val url = "https://www.notcid.com/"
+        spyMainActivity.webview.loadUrl(url)
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = false,
+                        menuTab = MenuTab.Unknown,
+                        viewMode = ViewMode.Unknown,
+                        url = url,
+                        subServices = null
+                )
+        )
 
         lifeCycleObserver.onMoveToForeground()
-
-        verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
-        verify(appWebInterfaceMock, times(1)).validateSession(any())
-        verify(contextSpy, times(1)).showUnavailabilityError(em)
-        assertEquals(false, contextSpy.isSuccessfulConfigCheck)
+        verify(spyMainActivity).hideBlankScreen()
     }
 
     @Test
-    fun onMoveToForeground_withAUrl_shouldNotValidateSession_configurationError() {
-        val url = "Bazz"
-        val knownServicesMock: KnownServices = overrideKnownServicesField(url)
-
-        contextSpy.webview.loadUrl(url)
-        doNothing().whenever(contextSpy).hideBlankScreen()
-        doAnswer {
-            val callback = it.arguments[0] as () -> Unit
-            callback.invoke()
-        }.whenever(appWebInterfaceMock).validateSession(any())
-
-        val em = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
-        doAnswer {
-            val callback = it.arguments[0] as IVolleyCallback
-            callback.onError(em)
-        }.whenever(configurationServiceMock).getConfiguration(any())
+    fun onMoveToForeground_whenKnownServiceValidateIsTrueAndNotCid_doesNotHideBlankScreen() {
+        val url = "https://www.notcid.com/"
+        spyMainActivity.webview.loadUrl(url)
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.Unknown,
+                        viewMode = ViewMode.Unknown,
+                        url = url,
+                        subServices = null
+                )
+        )
 
         lifeCycleObserver.onMoveToForeground()
-
-        verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
-        verify(contextSpy, times(2)).hideBlankScreen()
-        verify(contextSpy, times(1)).showUnavailabilityError(em)
-        assertEquals(false, contextSpy.isSuccessfulConfigCheck)
+        verify(spyMainActivity, never()).hideBlankScreen()
     }
 
     @Test
-    fun onMoveToForeground_withAUrl_shouldNotValidateSession_configurationSuccessAlreadyChecked() {
-        val url = "Bazz"
-        val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
+    fun onMoveToForeground_whenKnownServiceValidateIsFalseAndIsAuthReturnCid_doesNotHideBlankScreen() {
+        val url = "https://www.iscid.com/auth-return"
+        spyMainActivity.webview.loadUrl(url)
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = false,
+                        menuTab = MenuTab.Unknown,
+                        viewMode = ViewMode.Unknown,
+                        url = url,
+                        subServices = null
+                )
+        )
 
-        contextSpy.webview.loadUrl(url)
-        doNothing().whenever(contextSpy).hideBlankScreen()
+        lifeCycleObserver.onMoveToForeground()
+        verify(spyMainActivity, never()).hideBlankScreen()
+    }
 
-        val cr = ConfigurationResponse()
-        doAnswer {
-            val callback = it.arguments[0] as IVolleyCallback
-            callback.onSuccess(cr)
-        }.whenever(configurationServiceMock).getConfiguration(any())
+    @Test
+    fun onMoveToForeground_whenKnownServiceValidateIsFalseAndIsFidoCid_doesNotHideBlankScreen() {
+        val url = "https://www.iscid.com/?fidoAuthResponse"
+        spyMainActivity.webview.loadUrl(url)
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = false,
+                        menuTab = MenuTab.Unknown,
+                        viewMode = ViewMode.Unknown,
+                        url = url,
+                        subServices = null
+                )
+        )
 
-        contextSpy.isSuccessfulConfigCheck = true
+        lifeCycleObserver.onMoveToForeground()
+        verify(spyMainActivity, never()).hideBlankScreen()
+    }
 
+    @Test
+    fun onMoveToForeground_whenKnownServiceValidateIsTrueAndIsAuthReturnCid_doesNotHideBlankScreen() {
+        val url = "https://www.iscid.com/auth-return"
+        spyMainActivity.webview.loadUrl(url)
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.Unknown,
+                        viewMode = ViewMode.Unknown,
+                        url = url,
+                        subServices = null
+                )
+        )
+
+        lifeCycleObserver.onMoveToForeground()
+        verify(spyMainActivity, never()).hideBlankScreen()
+    }
+
+    @Test
+    fun onMoveToForeground_whenKnownServiceValidateIsTrueAndIsFidoCid_doesNotHideBlankScreen() {
+        val url = "https://www.iscid.com/?fidoAuthResponse"
+        spyMainActivity.webview.loadUrl(url)
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.Unknown,
+                        viewMode = ViewMode.Unknown,
+                        url = url,
+                        subServices = null
+                )
+        )
+
+        lifeCycleObserver.onMoveToForeground()
+        verify(spyMainActivity, never()).hideBlankScreen()
+    }
+
+    @Test
+    fun onMoveToForeground_SupportedVersionFalse_DialogActiveFalse() {
+        whenever(configurationResponseMock.isSupportedVersion).thenReturn(false)
+        whenever(appDialogsMock.isUpgradeDialogActive()).thenReturn(false)
 
         doNothing().whenever(appDialogsMock).showVersionUpgradeDialog()
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
-        verify(contextSpy, times(1)).hideBlankScreen()
-        verify(appDialogsMock, times(0)).showVersionUpgradeDialog()
-        assertEquals(true, contextSpy.isSuccessfulConfigCheck)
+        verify(appDialogsMock).showVersionUpgradeDialog()
     }
 
     @Test
-    fun onMoveToForeground_withAUrl_shouldNotValidateSession_configurationSuccessAlreadyChecked_withValidConfiguration() {
-        val url = "Bazz"
-        val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
-
-        contextSpy.webview.loadUrl(url)
-        doNothing().whenever(contextSpy).hideBlankScreen()
-
-        val cr = ConfigurationResponse()
-        cr.isValidConfiguration = true
-        doAnswer {
-            val callback = it.arguments[0] as IVolleyCallback
-            callback.onSuccess(cr)
-        }.whenever(configurationServiceMock).getConfiguration(any())
-
-        contextSpy.isSuccessfulConfigCheck = true
+    fun onMoveToForeground_SupportedVersionTrue_DialogActiveFalse() {
+        whenever(configurationResponseMock.isSupportedVersion).thenReturn(true)
+        whenever(appDialogsMock.isUpgradeDialogActive()).thenReturn(false)
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
-        verify(contextSpy, times(1)).hideBlankScreen()
-        verify(appDialogsMock, times(0)).showVersionUpgradeDialog()
-        assertEquals(true, contextSpy.isSuccessfulConfigCheck)
+        verify(appDialogsMock, never()).showVersionUpgradeDialog()
     }
 
     @Test
-    fun onMoveToForeground_withAUrl_shouldNotValidateSession_noPreviousConfigurationCheck_withValidConfiguration() {
-        val url = "Bazz"
-        val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
-
-        contextSpy.webview.loadUrl(url)
-        doNothing().whenever(contextSpy).hideBlankScreen()
-
-        val cr = ConfigurationResponse()
-        cr.isValidConfiguration = true
-        doAnswer {
-            val callback = it.arguments[0] as IVolleyCallback
-            callback.onSuccess(cr)
-        }.whenever(configurationServiceMock).getConfiguration(any())
+    fun onMoveToForeground_SupportedVersionFalse_DialogActiveTrue() {
+        whenever(configurationResponseMock.isSupportedVersion).thenReturn(false)
+        whenever(appDialogsMock.isUpgradeDialogActive()).thenReturn(true)
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
-        verify(contextSpy, times(1)).hideBlankScreen()
-        verify(nhsWebMock, times(1)).loadWelcomePage()
-        verify(appDialogsMock, times(0)).showVersionUpgradeDialog()
-        assertEquals(true, contextSpy.isSuccessfulConfigCheck)
+        verify(appDialogsMock, never()).showVersionUpgradeDialog()
     }
 
     @Test
-    fun onMoveToForeground_withAUrl_shouldNotValidateSession_noPreviousConfigurationCheck_withInvalidConfiguration_showVersionUpgradeDialog() {
-        val url = "Bazz"
-        val knownServicesMock: KnownServices = overrideKnownServicesField(url, false)
-
-        contextSpy.webview.loadUrl(url)
-        doNothing().whenever(contextSpy).hideBlankScreen()
-
-        val fidoServerUrl = "https://test@test.com"
-        val cr = ConfigurationResponse()
-        cr.isValidConfiguration = false
-        cr.fidoServerUrl = fidoServerUrl
-        doAnswer {
-            val callback = it.arguments[0] as IVolleyCallback
-            callback.onSuccess(cr)
-        }.whenever(configurationServiceMock).getConfiguration(any())
+    fun onMoveToForeground_SupportedVersionTrue_DialogActiveTrue() {
+        whenever(configurationResponseMock.isSupportedVersion).thenReturn(true)
+        whenever(appDialogsMock.isUpgradeDialogActive()).thenReturn(true)
 
         lifeCycleObserver.onMoveToForeground()
 
-        verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
-        verify(contextSpy, times(1)).hideBlankScreen()
-        verify(contextSpy, times(1)).configBiometricSetup(fidoServerUrl)
-        verify(appDialogsMock, times(1)).showVersionUpgradeDialog()
-        assertEquals(false, contextSpy.isSuccessfulConfigCheck)
-    }
-
-    private fun overrideKnownServicesField(
-        url: String, shouldValidateSession: Boolean = true
-    ): KnownServices {
-        val ksi =
-            KnownService.Info(url, url, shouldValidateSession)
-        val knownServicesMock: KnownServices = mock {
-            on { findMatchingServiceInfo(url) }.thenReturn(ksi)
-        }
-        ReflectionHelpers.setField(lifeCycleObserver, "knownServices", knownServicesMock)
-        return knownServicesMock
+        verify(appDialogsMock, never()).showVersionUpgradeDialog()
     }
 }

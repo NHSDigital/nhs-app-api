@@ -2,27 +2,26 @@ package com.nhs.online.nhsonline.resources
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-import com.nhs.online.nhsonline.R
-import org.mockito.Mockito
-
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.content.res.Resources
+import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.net.NetworkInfo
 import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.eq
+import com.nhaarman.mockito_kotlin.mock
+import com.nhs.online.nhsonline.R
 import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.Mockito
 
 open class ResourceMockingClass {
 
 
     fun mockContext(): Context {
-        val mockresource: Resources = mock {
+        val resourceMock: Resources = mock {
             on { getString(R.string.baseURL) } doReturn "http://10.0.2.2:3000"
             on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
             on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
@@ -39,17 +38,7 @@ open class ResourceMockingClass {
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
             on { getString(R.string.conditions) } doReturn "https://www.nhs.uk/conditions/"
-            on { getString(R.string.hotjarLink) } doReturn "https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785"
             on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
-            on { getStringArray(R.array.externalSiteUrls) } doReturn arrayOf(
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source/",
-                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/",
-                    "https://www.nhs.uk/your-nhs-data-matters/"
-                    )
             on { getString(R.string.nhs_111_header_description) } doReturn "one one one Online"
 
             on { getString(R.string.loginPath) } doReturn "login"
@@ -85,23 +74,13 @@ open class ResourceMockingClass {
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.nhsLoginFidoUrl) } doReturn "https://uaf.ext.signin.nhs.uk/"
             on { getString(R.string.nhsLoginSuffix) } doReturn "https://ext.signin.nhs.uk"
-            on { getStringArray(R.array.nativeAppHosts) } doReturn arrayOf(
-                "https://111.nhs.uk/",
-                "https://111.service.nhs.uk/",
-                "https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/",
-                "https://www.nhs.uk/conditions/"
-            )
-            on { getStringArray(R.array.nhsLoginPrefixList) } doReturn arrayOf(
-                "account",
-                "auth"
-            )
             on { getString(R.string.adminHelpPath) } doReturn "appointments/admin-help"
             on { getString(R.string.admin_help_header) } doReturn "GP help without an appointment"
             on { getString(R.string.browser_unavailable) } doReturn "Browser is disabled"
         }
 
         return mock {
-            on { resources } doReturn mockresource
+            on { resources } doReturn resourceMock
             on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
         }
     }
@@ -147,7 +126,16 @@ open class ResourceMockingClass {
         Mockito.`when`(connectivityManager.activeNetworkInfo).thenReturn(networkInfo)
         Mockito.`when`(networkInfo.isConnected).thenReturn(true)
 
-        val mockresource: Resources = mock {
+        val resourceMock: Resources = mock {
+            on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
+            on { getString(R.string.apiUnavailableErrorMessage) } doReturn "You currently cannot " +
+                    "use this service. \\n\\nIf the problem continues and you need to book an\n " +
+                    "appointment or get a prescription now, contact your GP surgery directly. For " +
+                    "urgent medical advice, call 111."
+            on { getString(R.string.accessible_apiUnavailableErrorMessage) } doReturn "You currently " +
+                    "cannot use this service. If the problem continues and you need to book an " +
+                    "appointment or get a prescription now, contact your GP surgery directly. For " +
+                    "urgent medical advice, call one one one."
             on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
             on { getString(R.string.connection_error_title) } doReturn "\"There's an issue with your internet connection\""
             on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
@@ -157,14 +145,13 @@ open class ResourceMockingClass {
 
         return mock {
             on { getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
-            on { resources } doReturn mockresource
+            on { resources } doReturn resourceMock
         }
 
     }
 
     fun mockNullConnectionContext(): Context {
         val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
-        val networkInfo = Mockito.mock(NetworkInfo::class.java)
 
         //api < 23
         Mockito.`when`(connectivityManager.activeNetworkInfo).thenReturn(null)
@@ -183,8 +170,8 @@ open class ResourceMockingClass {
         return mock {
             on {
                 checkPermission(eq("android.permission.ACCESS_FINE_LOCATION"),
-                    anyInt(),
-                    anyInt())
+                        anyInt(),
+                        anyInt())
             } doReturn PackageManager.PERMISSION_GRANTED
         }
     }
@@ -194,7 +181,7 @@ open class ResourceMockingClass {
         return mock {
             on {
                 checkPermission(eq("android.permission.ACCESS_FINE_LOCATION"),
-                    anyInt(), anyInt())
+                        anyInt(), anyInt())
             } doReturn PackageManager.PERMISSION_DENIED
             on {
                 shouldShowRequestPermissionRationale("android.permission.ACCESS_FINE_LOCATION")
@@ -207,7 +194,7 @@ open class ResourceMockingClass {
         return mock {
             on {
                 checkPermission(eq("android.permission.ACCESS_FINE_LOCATION"),
-                    anyInt(), anyInt())
+                        anyInt(), anyInt())
             } doReturn PackageManager.PERMISSION_DENIED
             on {
                 shouldShowRequestPermissionRationale("android.permission.ACCESS_FINE_LOCATION")
@@ -217,9 +204,9 @@ open class ResourceMockingClass {
 
     fun mockFileUpload(): Activity {
         val resolveInfo: ResolveInfo? = null
-        val mockPackageManger: PackageManager =
-            mock { on { resolveActivity(any(), any()) } doReturn resolveInfo }
+        val packageManagerMock: PackageManager =
+                mock { on { resolveActivity(any(), any()) } doReturn resolveInfo }
 
-        return mock { on { packageManager } doReturn mockPackageManger }
+        return mock { on { packageManager } doReturn packageManagerMock }
     }
 }

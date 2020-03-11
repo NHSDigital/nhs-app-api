@@ -5,6 +5,6 @@
     <string name="appScheme">nhsapp</string>
     <string name="baseHost">www-preview.dev.nonlive.nhsapp.service.nhs.uk</string>
     <string name="baseURL">https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/</string>
-    <string name="baseApiURL">https://api-preview.dev.nonlive.nhsapp.service.nhs.uk/v1/</string>
+    <string name="baseApiURL">https://api-preview.dev.nonlive.nhsapp.service.nhs.uk/</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
 </resources>

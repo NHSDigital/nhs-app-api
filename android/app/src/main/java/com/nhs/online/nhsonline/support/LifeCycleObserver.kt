@@ -3,36 +3,28 @@ package com.nhs.online.nhsonline.support
 import android.util.Log
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.activities.MainActivity
-import com.nhs.online.nhsonline.interfaces.IVolleyCallback
-import com.nhs.online.nhsonline.services.ConfigurationService
 import kotlinx.android.synthetic.main.activity_main.*
-import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.data.ErrorMessage
-import com.nhs.online.nhsonline.services.ConfigurationResponse
-import com.nhs.online.nhsonline.web.NhsWeb
-
+import com.nhs.online.nhsonline.services.knownservices.KnownServices
+import java.net.URL
 
 class LifeCycleObserver(
-    private val context: MainActivity,
-    private val appWebInterface: AppWebInterface,
-    private val nhsWeb: NhsWeb,
-    private val appDialogs: AppDialogs
+        private val context: MainActivity,
+        private val appWebInterface: AppWebInterface,
+        private val knownServices: KnownServices
 ) {
-    private val knownServices = KnownServices(context)
-    private val configurationService = ConfigurationService(context)
-    private val appPersistData = PersistData(context)
 
     fun onMoveToForeground() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onMoveToForeground")
 
-        val validating = validateUserSession()
-        if (!validating && !isCurrentWebViewUrlFromCID())
+        if (!validateUserSession() && !isCurrentWebViewUrlFromCID()) {
             context.hideBlankScreen()
+        }
 
-        if (!context.isSuccessfulConfigCheck)
-            checkAndHandleConfiguration()
+        if (!context.configurationResponse.isSupportedVersion && !context.appDialogs.isUpgradeDialogActive()) {
+            context.appDialogs.showVersionUpgradeDialog()
+        }
     }
 
     fun onMoveToBackground() {
@@ -43,11 +35,11 @@ class LifeCycleObserver(
     private fun validateUserSession(): Boolean {
         val currentUrl: String? = context.webview.url
         currentUrl?.let {
-            val knownServiceInfo = knownServices.findMatchingServiceInfo(it)
+            val matchingKnownService = knownServices.findMatchingKnownService(URL(it))
 
-            if (knownServiceInfo != null && knownServiceInfo.shouldValidateSession) {
+            if (matchingKnownService != null && matchingKnownService.validateSession) {
                 Log.d(Application.TAG,
-                    "${this::class.java.simpleName}: Entering onMoveToForeground > isKnownService > ${knownServiceInfo.baseUrl} and shouldValidateSession")
+                    "${this::class.java.simpleName}: Entering onMoveToForeground > isKnownService > $currentUrl and shouldValidateSession")
                 appWebInterface.validateSession { context.hideBlankScreen() }
                 return true
             }
@@ -61,41 +53,5 @@ class LifeCycleObserver(
                     context.getString(R.string.fidoAuthQueryKey))) return true
         }
         return false
-    }
-
-    fun checkAndHandleConfiguration() {
-        if (configurationService.isInProgress) return
-
-        if (appDialogs.isUpgradeDialogActive()) return
-
-        configurationService.getConfiguration(object : IVolleyCallback {
-            override fun onSuccess(configurationResponse: ConfigurationResponse) {
-                context.dismissProgressDialog()
-                if (configurationResponse.isValidConfiguration) {
-                    context.isSuccessfulConfigCheck = true
-                }
-                else {
-                    appDialogs.showVersionUpgradeDialog()
-                    context.isSuccessfulConfigCheck = false
-                }
-
-                context.configBiometricSetup(configurationResponse.fidoServerUrl)
-                nhsWeb.setHelpLocation()
-                if (!appPersistData.getPersistedLink().isNullOrBlank()) {
-                    nhsWeb.loadPersistedLink()
-                } else {
-                    nhsWeb.loadWelcomePage()
-                }
-            }
-
-            override fun onError(errorMessage: ErrorMessage) {
-                context.dismissProgressDialog()
-
-                context.isSuccessfulConfigCheck = false
-                Log.d(Application.TAG, "Configuration not available")
-                context.showUnavailabilityError(errorMessage)
-
-            }
-        })
     }
 }

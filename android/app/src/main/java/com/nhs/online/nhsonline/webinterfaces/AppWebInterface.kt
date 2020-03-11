@@ -5,12 +5,12 @@ import android.webkit.WebView
 
 private val TAG = AppWebInterface::class.java.simpleName
 
-class AppWebInterface(private val webview: WebView) {
+class AppWebInterface(private val webView: WebView) {
     private val validateSessionString: String = "window.validateSession();"
 
     fun validateSession(callback: () -> Unit) {
         Log.d(TAG, "${this::class.java.simpleName}: Entering validateSession")
-        webview.evaluateJavascript(validateSessionString) {
+        webView.evaluateJavascript(validateSessionString) {
             callback.invoke()
         }
     }
@@ -51,6 +51,6 @@ class AppWebInterface(private val webview: WebView) {
     }
 
     private fun evaluateWebviewJavascript(javascriptText: String) {
-        webview.evaluateJavascript(javascriptText, null)
+        webView.evaluateJavascript(javascriptText, null)
     }
 }

@@ -2,29 +2,28 @@ package com.nhs.online.nhsonline.biometrics
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.app.Application
 import android.os.Build
 import android.support.v4.app.FragmentActivity
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
 import android.util.Log
-import com.google.gson.Gson
 import com.nhs.online.fidoclient.constants.ATTESTATION_STATUS
 import com.nhs.online.fidoclient.constants.ATTESTATION_STATUS_VALID
 import com.nhs.online.fidoclient.constants.REGISTRATION_RESPONSE_ERROR
 import com.nhs.online.fidoclient.constants.REGISTRATION_STATUS
 import com.nhs.online.fidoclient.constants.REGISTRATION_STATUS_SUCCESS
-import com.nhs.online.fidoclient.utils.fidoHelpers
 import com.nhs.online.fidoclient.interfaces.IBiometricsInteractor
 import com.nhs.online.fidoclient.uaf.client.RegAssertionBuilder
 import com.nhs.online.fidoclient.uaf.client.operation.Registration
 import com.nhs.online.fidoclient.uaf.crypto.FidoKeystoreAndroidM
 import com.nhs.online.fidoclient.uaf.message.RegistrationRequest
+import com.nhs.online.fidoclient.utils.fidoHelpers
 import com.nhs.online.nhsonline.biometrics.utils.*
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.json.JSONArray
 import org.json.JSONException
-import java.lang.Exception
-import java.security.Signature
 import java.security.KeyStoreException
+import java.security.Signature
 
 private val TAG = RegistrationService::class.java.simpleName
 private const val KEY_ID_PREFIX = "nhs-app-key"
@@ -42,9 +41,6 @@ class RegistrationService(
         private val preferencesService: FingerprintSharedPreferences,
         private val biometricState: BiometricState
 ) {
-
-    private val gson = Gson()
-
     fun startFidoRegistration() {
         if (!isRegistrationReady()) return
 
@@ -195,7 +191,12 @@ class RegistrationService(
     }
 
     private fun extractUserFromUafRegMessage(uafRegMsg: String): String {
-        val regRequest = gson.fromJson(uafRegMsg, Array<RegistrationRequest>::class.java)[0]
+        val regRequest = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+                .adapter(Array<RegistrationRequest>::class.java)
+                .fromJson(uafRegMsg)!![0]
+
         return regRequest.username
     }
 }

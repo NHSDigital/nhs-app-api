@@ -1,9 +1,5 @@
 package com.nhs.online.nhsonline.activities
 
-import kotlinx.android.synthetic.main.activity_main.*
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import android.app.onResume
 import android.support.v7.app.AlertDialog
 import android.widget.TextView
@@ -15,14 +11,17 @@ import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.support.AppDialogs
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
-import kotlinx.android.synthetic.main.error_layout.retryButton
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.error_layout.*
 import org.junit.Assert
 import org.junit.Assert.assertFalse
 import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.internal.util.reflection.FieldSetter
 import org.robolectric.Robolectric
+import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowDialog
-
 
 @RunWith(RobolectricTestRunner::class)
 class MainActivityTest {
@@ -40,7 +39,7 @@ class MainActivityTest {
     @Test
     fun onResume_nullWebViewUrl_noException_resetUrlToLogin() {
         mainActivity.webview.loadUrl(null)
-        mainActivity.isSuccessfulConfigCheck = true
+        mainActivity.configurationResponse.callSuccessful = true
 
         try {
             mainActivity.onResume()
@@ -56,7 +55,7 @@ class MainActivityTest {
     fun onBackButtonPressed_OnLoginScreen_ClosesApp() {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
             R.string.loginPath))
-        spyActivity.isSuccessfulConfigCheck = true
+        spyActivity.configurationResponse.callSuccessful = true
 
         try {
             spyActivity.onBackPressed()
@@ -64,14 +63,14 @@ class MainActivityTest {
             assert(false)
         }
 
-        verify(spyActivity, times(1)).finishAndRemoveTask()
+        verify(spyActivity).finishAndRemoveTask()
     }
 
     @Test
     fun onBackButtonPressed_OnGpFinderScreen_ClosesApp() {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) +
                 getStringById(R.string.gpFinderPath))
-        spyActivity.isSuccessfulConfigCheck = true
+        spyActivity.configurationResponse.callSuccessful = true
 
         try {
             spyActivity.onBackPressed()
@@ -79,14 +78,14 @@ class MainActivityTest {
             assert(false)
         }
 
-        verify(spyActivity, times(1)).finishAndRemoveTask()
+        verify(spyActivity).finishAndRemoveTask()
     }
 
     @Test
     fun onBackButtonPressed_OnGpFinderOtherScreen_ResetGpFlow() {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) +
                 getStringById(R.string.gpFinderPath) + "/otherPath")
-        spyActivity.isSuccessfulConfigCheck = true
+        spyActivity.configurationResponse.callSuccessful = true
 
         val appWebInterface = AppWebInterface(spyActivity.webview)
         val spyAppWebInterface = spy(appWebInterface)
@@ -100,14 +99,14 @@ class MainActivityTest {
         } catch (e: Exception) {
             assert(false)
         }
-        verify(spyAppWebInterface, times(1)).resetGPFinderFlow(any())
+        verify(spyAppWebInterface).resetGPFinderFlow(any())
     }
 
     @Test
     fun onBackButtonPressed_IsLoggedIn_ShowAlertDialog() {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) +
                 getStringById(R.string.gpFinderPath) + "/otherPath")
-        spyActivity.isSuccessfulConfigCheck = true
+        spyActivity.configurationResponse.callSuccessful = true
 
         val nhsWebMock: NhsWeb = mock {
             on { isUserLoggedIn }.thenReturn(true)
@@ -149,17 +148,16 @@ class MainActivityTest {
         } catch (e: Exception) {
             assert(false)
         }
-        verify(nhsWebMock, times(1)).onbackButtonPressedOnCheckSymptomsUnsecurePage()
+        verify(nhsWebMock).onbackButtonPressedOnCheckSymptomsUnsecurePage()
     }
 
     @Test
     fun onBackButtonPressed_WhenUrlIsUnsecureSymptomsPage_CallsOnbackButtonPressedOnCheckSymptomsUnsecurePage() {
-        val url = "http://some-nhs-service-when-not-logged-in"
+        val url = "http://some-nhs-service-when-not-logged-in/check-your-symptoms"
         spyActivity.webview.loadUrl(url)
 
         val nhsWebMock: NhsWeb = mock {
             on { isUserLoggedIn }.thenReturn(false)
-            on { isCheckSymptomsUnsecureURL(url) }.thenReturn(true)
         }
         FieldSetter.setField(spyActivity,
             spyActivity::class.java.getDeclaredField("nhsWeb"),
@@ -170,7 +168,7 @@ class MainActivityTest {
         } catch (e: Exception) {
             assert(false)
         }
-        verify(nhsWebMock, times(1)).onbackButtonPressedOnCheckSymptomsUnsecurePage()
+        verify(nhsWebMock).onbackButtonPressedOnCheckSymptomsUnsecurePage()
     }
 
     @Test
@@ -193,13 +191,13 @@ class MainActivityTest {
             assert(false)
         }
 
-        verify(nhsWebMock, times(1)).reloadHomepageOnBackReturn()
+        verify(nhsWebMock).reloadHomepageOnBackReturn()
     }
 
     @Test
     fun onBackButtonPressed_MalFormedUrl_ClosesApp() {
         spyActivity.webview.loadUrl("ghghgh:/&/|sdsdsdiuw")
-        spyActivity.isSuccessfulConfigCheck = true
+        spyActivity.configurationResponse.callSuccessful = true
 
         try {
             spyActivity.onBackPressed()
@@ -207,13 +205,13 @@ class MainActivityTest {
             assert(false)
         }
 
-        verify(spyActivity, times(1)).finishAndRemoveTask()
+        verify(spyActivity).finishAndRemoveTask()
     }
 
     @Test
     fun onBackButtonPressed_NullUrl_ClosesApp() {
         spyActivity.webview.loadUrl(null)
-        spyActivity.isSuccessfulConfigCheck = true
+        spyActivity.configurationResponse.callSuccessful = true
 
         try {
             spyActivity.onBackPressed()
@@ -221,7 +219,7 @@ class MainActivityTest {
             assert(false)
         }
 
-        verify(spyActivity, times(1)).finishAndRemoveTask()
+        verify(spyActivity).finishAndRemoveTask()
     }
 
     @Test
@@ -254,7 +252,7 @@ class MainActivityTest {
     fun showBiometricLoginIfEnabled_SuccessfulConfig_StandardLoginUrl_ReturnsTrue() {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
                 R.string.loginPath))
-        spyActivity.isSuccessfulConfigCheck = true
+        spyActivity.configurationResponse.callSuccessful = true
 
         val biometricsInterfaceMock: BiometricsInterface = mock {
             on { showBiometricLoginIfEnabled() }.thenReturn(true)
@@ -266,12 +264,12 @@ class MainActivityTest {
         val result = spyActivity.showBiometricLoginIfEnabled()
 
         Assert.assertTrue(result)
-        verify(biometricsInterfaceMock, times(1)).showBiometricLoginIfEnabled()
+        verify(biometricsInterfaceMock).showBiometricLoginIfEnabled()
     }
 
     @Test
     fun showBiometricLoginIfEnabled_UnsuccessfulConfig_ReturnsFalse() {
-        spyActivity.isSuccessfulConfigCheck = false
+        spyActivity.configurationResponse.callSuccessful = false
 
         val biometricsInterfaceMock: BiometricsInterface = mock {
             on { showBiometricLoginIfEnabled() }.thenReturn(false)
@@ -280,14 +278,14 @@ class MainActivityTest {
         val result = spyActivity.showBiometricLoginIfEnabled()
 
         Assert.assertFalse(result)
-        verify(biometricsInterfaceMock, times(0)).showBiometricLoginIfEnabled()
+        verify(biometricsInterfaceMock, never()).showBiometricLoginIfEnabled()
     }
 
     @Test
     fun showBiometricLoginIfEnabled_SuccessfulConfig_FidoAuthLoginUrl_ReturnsFalse() {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
                 R.string.loginPath) + "?source=android&" + getStringById(R.string.fidoAuthQueryKey))
-        spyActivity.isSuccessfulConfigCheck = true
+        spyActivity.configurationResponse.callSuccessful = true
 
         val biometricsInterfaceMock: BiometricsInterface = mock {
             on { showBiometricLoginIfEnabled() }.thenReturn(true)
@@ -299,13 +297,13 @@ class MainActivityTest {
         val result = spyActivity.showBiometricLoginIfEnabled()
 
         Assert.assertFalse(result)
-        verify(biometricsInterfaceMock, times(0)).showBiometricLoginIfEnabled()
+        verify(biometricsInterfaceMock, never()).showBiometricLoginIfEnabled()
     }
 
     @Test
     fun showBiometricLoginIfEnabled_SuccessfulConfig_NullUrl_ReturnsFalse() {
         spyActivity.webview.loadUrl(null)
-        spyActivity.isSuccessfulConfigCheck = true
+        spyActivity.configurationResponse.callSuccessful = true
 
         val biometricsInterfaceMock: BiometricsInterface = mock {
             on { showBiometricLoginIfEnabled() }.thenReturn(true)
@@ -317,14 +315,14 @@ class MainActivityTest {
         val result = spyActivity.showBiometricLoginIfEnabled()
 
         Assert.assertFalse(result)
-        verify(biometricsInterfaceMock, times(0)).showBiometricLoginIfEnabled()
+        verify(biometricsInterfaceMock, never()).showBiometricLoginIfEnabled()
     }
 
     @Test
     fun showBiometricLoginIfEnabled_SuccessfulConfig_NullQueryUrl_ReturnsTrue() {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
                 R.string.loginPath))
-        spyActivity.isSuccessfulConfigCheck = true
+        spyActivity.configurationResponse.callSuccessful = true
 
         val biometricsInterfaceMock: BiometricsInterface = mock {
             on { showBiometricLoginIfEnabled() }.thenReturn(true)
@@ -336,13 +334,13 @@ class MainActivityTest {
         val result = spyActivity.showBiometricLoginIfEnabled()
 
         Assert.assertTrue(result)
-        verify(biometricsInterfaceMock, times(1)).showBiometricLoginIfEnabled()
+        verify(biometricsInterfaceMock).showBiometricLoginIfEnabled()
     }
 
     @Test
     fun selectingRetryButton_clearsSelectedMenuItem() {
         // arrange
-        mainActivity.isSuccessfulConfigCheck = true
+        mainActivity.configurationResponse.callSuccessful = true
         mainActivity.menuBar.switchActiveMenuItemTo(R.id.symptoms)
 
         // act

@@ -1,14 +1,11 @@
 package com.nhs.online.nhsonline.utils
 
 import android.app.Activity
-import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.services.KnownServices
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.internal.util.reflection.FieldSetter
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
@@ -77,5 +74,16 @@ class UrlHelperTest {
         val result = urlHelper.ensureUrlWithScheme(url)
 
         Assert.assertNull(result)
+    }
+
+    fun getPostRequestReloadUrl_postRequestDataPreferencesUrl() {
+        val result =
+                urlHelper.getPostRequestReloadUrl("https://ndopapp-int1.thunderbird.service.nhs.uk/")
+
+        Assert.assertEquals(result, getResourceString(R.string.dataSharingURL))
+    }
+
+    private fun getResourceString(resourceId: Int): String {
+        return activity.resources.getString(resourceId)
     }
 }

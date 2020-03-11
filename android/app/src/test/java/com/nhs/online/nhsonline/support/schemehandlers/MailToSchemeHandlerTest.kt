@@ -5,7 +5,10 @@ import android.content.pm.ActivityInfo
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import junit.framework.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,38 +20,38 @@ class MailToSchemeHandlerTests {
 
     @Test
     fun handle_returnsTrue_WhenMailToUrl() {
-        val mockApplicationInfo: ApplicationInfo = mock()
-        mockApplicationInfo.packageName = "something"
+        val applicationInfoMock: ApplicationInfo = mock()
+        applicationInfoMock.packageName = "something"
 
-        val mockActivityInfo: ActivityInfo = mock()
-        mockActivityInfo.name = "Something"
-        mockActivityInfo.applicationInfo = mockApplicationInfo
+        val activityInfoMock: ActivityInfo = mock()
+        activityInfoMock.name = "Something"
+        activityInfoMock.applicationInfo = applicationInfoMock
 
-        val mockResolveInfo: ResolveInfo = mock()
-        mockResolveInfo.activityInfo = mockActivityInfo
+        val resolveInfoMock: ResolveInfo = mock()
+        resolveInfoMock.activityInfo = activityInfoMock
 
-        val mockPackageManger: PackageManager = mock { on { resolveActivity(any(), any()) } doReturn mockResolveInfo }
-        val mockContext: Context = mock { on { packageManager } doReturn mockPackageManger }
+        val packageManagerMock: PackageManager = mock { on { resolveActivity(any(), any()) } doReturn resolveInfoMock }
+        val contextMock: Context = mock { on { packageManager } doReturn packageManagerMock }
 
         val url = "mailto:asdfqertasdfertwerfwertwrt"
 
-        val systemUnderTest = MailToSchemeHandler(mockContext)
+        val systemUnderTest = MailToSchemeHandler(contextMock)
 
         val response = systemUnderTest.handle(url)
 
-        verify(mockContext, times(1)).packageManager
-        verify(mockPackageManger, times(1)).resolveActivity(any(), any())
-        verify(mockContext, times(1)).startActivity(any())
+        verify(contextMock).packageManager
+        verify(packageManagerMock).resolveActivity(any(), any())
+        verify(contextMock).startActivity(any())
         Assert.assertTrue(response)
 
     }
 
     @Test
     fun handle_ReturnsFalse_WhenSchemeIsNotHandled() {
-        val mockContext: Context = mock()
+        val contextMock: Context = mock()
         val url = "tel:"
 
-        val systemUnderTest = MailToSchemeHandler(mockContext)
+        val systemUnderTest = MailToSchemeHandler(contextMock)
 
         val response = systemUnderTest.handle(url)
 
@@ -58,17 +61,17 @@ class MailToSchemeHandlerTests {
     @Test
     fun handle_returnsFalse_WhenNoPackageAvailableToHandleScheme() {
         val resolveInfo: ResolveInfo? = null
-        val mockPackageManger: PackageManager = mock { on { resolveActivity(any(), any()) } doReturn resolveInfo }
-        val mockContext: Context = mock { on { packageManager } doReturn mockPackageManger }
+        val packageManagerMock: PackageManager = mock { on { resolveActivity(any(), any()) } doReturn resolveInfo }
+        val contextMock: Context = mock { on { packageManager } doReturn packageManagerMock }
 
         val url = "mailto:enquiries@nhsdigital.nhs.uk?subject=111%20online%20enquiry"
 
-        val systemUnderTest = MailToSchemeHandler(mockContext)
+        val systemUnderTest = MailToSchemeHandler(contextMock)
 
         val response = systemUnderTest.handle(url)
 
-        verify(mockContext, times(1)).packageManager
-        verify(mockPackageManger, times(1)).resolveActivity(any(), any())
+        verify(contextMock).packageManager
+        verify(packageManagerMock).resolveActivity(any(), any())
         Assert.assertFalse(response)
     }
 }

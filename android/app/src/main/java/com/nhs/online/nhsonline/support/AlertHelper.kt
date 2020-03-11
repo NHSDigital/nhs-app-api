@@ -2,11 +2,9 @@ package com.nhs.online.nhsonline.support
 
 import android.app.Activity
 import android.support.v7.app.AlertDialog
-import android.content.Context
 import android.util.Log
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
 
 class AlertHelper(val context: Activity, val interactor: IInteractor) {
@@ -30,9 +28,7 @@ class AlertHelper(val context: Activity, val interactor: IInteractor) {
 
         if (!helpLink.isNullOrEmpty()) {
             builder.setNeutralButton(context.resources.getString(R.string.biometrics_dialog_get_help)) { _, _ ->
-                val biometricHelpBrowserActivity =
-                    OpenUrlInBrowserActivity(context.resources.getStringArray(R.array.nativeAppHosts))
-                biometricHelpBrowserActivity.start(context, helpLink, interactor)
+                interactor.loadPage(helpLink)
             }
         }
 

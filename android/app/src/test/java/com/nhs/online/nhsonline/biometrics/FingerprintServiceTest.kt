@@ -20,16 +20,15 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.util.ReflectionHelpers
 import java.security.Signature
 
-
 @RunWith(RobolectricTestRunner::class)
 
 class FingerprintServiceTest {
     private lateinit var biometricsInteractor: IBiometricsInteractor
     private lateinit var fidoEndpointConfig: FidoEndpointConfig
-    private lateinit var mockSignature: Signature
-    private lateinit var mockAuthentication: Authentication
+    private lateinit var signatureMock: Signature
+    private lateinit var authenticationMock: Authentication
     private lateinit var fingerprintService: FingerprintService
-    private lateinit var mockPreferencesService: FingerprintSharedPreferences
+    private lateinit var preferencesServiceMock: FingerprintSharedPreferences
 
     private val fidoServerUrl = "\"test@test.com\""
 
@@ -44,16 +43,16 @@ class FingerprintServiceTest {
             "/regPost"
         )
 
-        mockSignature = mock()
+        signatureMock = mock()
 
-        mockAuthentication = mock {
+        authenticationMock = mock {
             on {
                 auth(any(), any()
                 )
             } doThrow (FidoInvalidSignatureException::class)
         }
 
-        mockPreferencesService = mock {
+        preferencesServiceMock = mock {
             on { getFidoUsername() } doReturn "username"
             on { readStringFromSharedPref(anyVararg()) } doReturn ""
         }
@@ -64,8 +63,8 @@ class FingerprintServiceTest {
         fingerprintService = FingerprintService(biometricsInteractor, interactor,
             fidoKeystore,
             mock(),
-            mockPreferencesService,
-            fidoEndpointConfig, mockAuthentication)
+            preferencesServiceMock,
+            fidoEndpointConfig, authenticationMock)
     }
 
     @Test
@@ -109,10 +108,10 @@ class FingerprintServiceTest {
     fun returnEmptyStringWhenInvalidFingerprintCaught() {
         val authenticationService = AuthenticationService(mock(), mock(),
             biometricsInteractor, mock(), mock(), mock(), mock(),
-            mockPreferencesService, mockAuthentication)
+            preferencesServiceMock, authenticationMock)
 
         val result = authenticationService.processUafLoginMsg(FingerprintManagerCompat.CryptoObject(
-            mockSignature), "{Error}")
+            signatureMock), "{Error}")
 
         Assert.assertEquals("", result)
     }
@@ -121,5 +120,4 @@ class FingerprintServiceTest {
         ReflectionHelpers.setStaticField(
             Build.VERSION::class.java.getField("SDK_INT"), version)
     }
-
 }

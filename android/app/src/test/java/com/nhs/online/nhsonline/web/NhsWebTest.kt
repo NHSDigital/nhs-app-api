@@ -6,18 +6,19 @@ import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
-import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
+import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.UrlLoader
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import com.nhs.online.nhsonline.support.PersistData
+import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,6 +35,7 @@ class NhsWebTest {
     private lateinit var interactorMock: IInteractor
     private lateinit var webViewMock: WebView
     private lateinit var notificationsServiceMock: NotificationsService
+    private lateinit var knownServicesMock: KnownServices
     private lateinit var nhsWeb: NhsWeb
     private lateinit var urlLoader: UrlLoader
     private lateinit var spyWeb: NhsWeb
@@ -51,7 +53,8 @@ class NhsWebTest {
         urlLoader = mock()
         interactorMock = mock()
         notificationsServiceMock = mock()
-        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock())
+        knownServicesMock = mock()
+        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock)
         spyWeb = spy(nhsWeb)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
@@ -60,7 +63,7 @@ class NhsWebTest {
     @Test
     fun stopLoading_callsNativeAndroidWebViewStopLoadingFunction() {
         spyWeb.stopLoading()
-        verify(webViewMock, times(1)).stopLoading()
+        verify(webViewMock).stopLoading()
     }
 
     @Test
@@ -158,7 +161,7 @@ class NhsWebTest {
         nhsWeb.loadUrl(redirectUrl)
 
         // assert
-        verify(interactorMock, times(1)).displayBiometricLoginErrorOccurrence()
+        verify(interactorMock).displayBiometricLoginErrorOccurrence()
         verify(urlLoader).loadUrl(baseUrl, false)
     }
 
