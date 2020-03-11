@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         {
             return _serviceProvider.GetService<TppCourseService>();
         }
-        
+
         public IDemographicsService GetDemographicsService()
         {
             return _serviceProvider.GetService<TppDemographicsService>();
@@ -114,7 +114,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         {
             throw new NotImplementedException();
         }
-        
+
+        public IRecreateSessionMapperService GetRecreateSessionMapperService()
+        {
+            return _serviceProvider.GetService<TppRecreateSessionMapperService>();
+        }
+
         public bool SupportsLinkedAccounts => false;
     }
 }

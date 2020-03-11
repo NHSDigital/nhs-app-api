@@ -48,6 +48,8 @@ namespace NHSOnline.Backend.GpSystems
 
         IPatientMessagesService GetPatientMessagesService();
 
+        IRecreateSessionMapperService GetRecreateSessionMapperService();
+
         Boolean SupportsLinkedAccounts { get; }
     }
 }

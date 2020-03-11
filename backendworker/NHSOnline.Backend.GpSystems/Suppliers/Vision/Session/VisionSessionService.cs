@@ -81,6 +81,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.Success(gpUserSession));
         }
 
+        public Task<GpSessionRecreateResult> Recreate(string connectionToken, string odsCode, string nhsNumber, string patientId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         private GpSessionCreateResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)

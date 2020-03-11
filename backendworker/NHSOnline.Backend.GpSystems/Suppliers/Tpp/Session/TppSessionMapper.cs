@@ -11,8 +11,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
     {
         Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse,
             string odsCode, string nhsNumber);
+
+        Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse,
+            string odsCode, string nhsNumber, string patientId);
     }
-    
+
     public class TppSessionMapper : ITppSessionMapper
     {
         private readonly ILogger<TppSessionMapper> _logger;
@@ -21,18 +24,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         {
             _logger = logger;
         }
-        
+
         public Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse, string odsCode, string nhsNumber)
         {
             if (!IsResponseValid(authenticateResponse))
             {
                 return Option.None<TppUserSession>();
             }
-            
+
             var suidHeader = GetSuidHeader(authenticateResponse);
 
             var linkedPatients = authenticateResponse.Body.ExtractLinkedPatients();
-            
+
             return Option.Some(new TppUserSession
             {
                 Id = Guid.NewGuid(),
@@ -52,7 +55,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 }).ToList(),
             });
         }
-        
+
+        public Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse, string odsCode, string nhsNumber, string patientId)
+        {
+            var response = Map(authenticateResponse, odsCode, nhsNumber);
+
+            if (response.HasValue)
+            {
+                response.ValueOrFailure().PatientId = patientId;
+            }
+
+            return response;
+        }
+
         private bool IsResponseValid(TppApiObjectResponse<AuthenticateReply> authenticateResponse)
         {
             var suidHeader = GetSuidHeader(authenticateResponse);

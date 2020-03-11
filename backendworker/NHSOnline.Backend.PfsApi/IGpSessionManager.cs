@@ -9,7 +9,9 @@ namespace NHSOnline.Backend.PfsApi
     public interface IGpSessionManager
     {
         Task<CreateSessionResult> CreateSession(IGpSystem gpSystem, CitizenIdSessionResult citizenIdSessionResult);
-        
+
         Task<RetrieveSessionResult> RetrieveSession(string sessionId, StringValues csrfToken);
+
+        Task<RecreateSessionResult> RecreateSession(string patientId);
     }
 }

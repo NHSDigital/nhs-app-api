@@ -89,17 +89,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         {
             return _serviceProvider.GetService<VisionPatientRecordService>();
         }
-        
+
         public ILinkageService GetLinkageService()
         {
             return _serviceProvider.GetService<VisionLinkageService>();
         }
-        
+
         public ILinkageValidationService GetLinkageValidationService()
         {
             return _serviceProvider.GetService<VisionLinkageValidationService>();
         }
-        
+
         public IPrescriptionValidationService GetPrescriptionValidationService()
         {
             return _serviceProvider.GetService<VisionPrescriptionValidationService>();
@@ -114,7 +114,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         {
             throw new NotImplementedException();
         }
-        
+
+        public IRecreateSessionMapperService GetRecreateSessionMapperService()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool SupportsLinkedAccounts => false;
     }
 }

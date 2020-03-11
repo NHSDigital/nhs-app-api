@@ -226,6 +226,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.Success(gpUserSession));
         }
 
+        public Task<GpSessionRecreateResult> Recreate(string connectionToken, string odsCode, string nhsNumber, string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
         private bool IsSessionsPostResponseValid(SessionsPostResponse sessionsPostResponse)
         {
             return new ValidateAndLog(_logger)

@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         {
             return _serviceProvider.GetService<MicrotestLinkageService>();
         }
-        
+
         public IPatientRecordService GetPatientRecordService()
         {
             return _serviceProvider.GetService<MicrotestPatientRecordService>();
@@ -114,7 +114,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         {
             throw new NotImplementedException();
         }
-        
+
+        public IRecreateSessionMapperService GetRecreateSessionMapperService()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool SupportsLinkedAccounts => false;
     }
 }

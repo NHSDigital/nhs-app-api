@@ -42,37 +42,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         {
             try
             {
-                _logger.LogEnter();
-                _logger.LogDebug($"Creating using ODS code: {odsCode}");
+                var authenticateReply = await AuthenticatePost(connectionToken, odsCode);
 
-                var tppToken = connectionToken.DeserializeJson<TppConnectionToken>();
-                var authenticate = new Authenticate
+                if (!authenticateReply.HasSuccessResponse)
                 {
-                    AccountId = tppToken.AccountId,
-                    Passphrase = tppToken.Passphrase,
-                    ProviderId = tppToken.ProviderId,
-                    UnitId = odsCode
-                };
-
-                var reply = await _authenticate.Post(authenticate);
-
-                if (!reply.HasSuccessResponse)
-                {
-                    if (reply.HasErrorWithCode(TppApiErrorCodes.ProblemLoggingOn))
-                    {
-                        _logger.LogError("Failed to authenticate user for TPP - Problem logging on");
-                        return new GpSessionCreateResult.Forbidden();
-                    }
-                    else
-                    {
-                        _logger.LogError("Failed to authenticate user for TPP");
-                        return new GpSessionCreateResult.BadGateway();
-                    }
+                    return CheckFailureTypeForGpSessionCreateResult(authenticateReply);
                 }
 
-                LogProxyInformation(reply.Body);
+                LogProxyInformation(authenticateReply.Body);
 
-                var userSession = _sessionMapper.Map(reply, odsCode, nhsNumber);
+                var userSession = _sessionMapper.Map(authenticateReply, odsCode, nhsNumber);
                 if (!userSession.HasValue)
                 {
                     _logger.LogError("Cannot create a valid session from Tpp response");
@@ -87,7 +66,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 {
                     await _client.PatientSelectedPost(tppUserSession);
                 }
-                
+
                 _logMessagingService.FetchAndLogAccessInformation(tppUserSession);
 
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
@@ -120,7 +99,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 _logger.LogDebug($"TPP user session successfully deleted");
                 return new SessionLogoffResult.Success(gpUserSession);
-
             }
             catch (HttpRequestException e)
             {
@@ -131,6 +109,42 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             {
                 _logger.LogWarning(e, "User does not have a valid session");
                 return new SessionLogoffResult.Forbidden();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public async Task<GpSessionRecreateResult> Recreate(string connectionToken, string odsCode, string nhsNumber, string patientId)
+        {
+            try
+            {
+                var authenticateReply = await AuthenticatePost(connectionToken, odsCode);
+
+                if (!authenticateReply.HasSuccessResponse)
+                {
+                    _logger.LogError("Failed to re-authenticate user for TPP");
+                    return new GpSessionRecreateResult.Failure();
+                }
+
+                var userSession= _sessionMapper.Map(authenticateReply, odsCode, nhsNumber, patientId);
+                if (!userSession.HasValue)
+                {
+                    _logger.LogError("Cannot recreate a valid session from Tpp response");
+                    return new GpSessionRecreateResult.Failure();
+                }
+
+                var tppUserSession = userSession.ValueOrFailure();
+                await _client.PatientSelectedPost(tppUserSession);
+
+                _logger.LogDebug($"TPP user session successfully recreated for patientId {patientId}");
+                return new GpSessionRecreateResult.Success(tppUserSession.Suid);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Failed request to recreate TPP user session, HttpRequestException has been thrown.");
+                return new GpSessionRecreateResult.Failure();
             }
             finally
             {
@@ -183,6 +197,34 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
             _logger.LogInformation(
                 $"User has linked_accounts={linkedPatients.Count}, with different_ods_codes_to_user={differentPracticeAddressCount}");
+        }
+
+        private async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(string connectionToken, string odsCode)
+        {
+            _logger.LogEnter();
+            _logger.LogDebug($"Creating using ODS code: {odsCode}");
+
+            var tppToken = connectionToken.DeserializeJson<TppConnectionToken>();
+            var authenticate = new Authenticate
+            {
+                AccountId = tppToken.AccountId,
+                Passphrase = tppToken.Passphrase,
+                ProviderId = tppToken.ProviderId,
+                UnitId = odsCode
+            };
+
+            return await _authenticate.Post(authenticate);
+        }
+        private GpSessionCreateResult CheckFailureTypeForGpSessionCreateResult(TppApiResponse authenticateReply)
+        {
+            if (authenticateReply.HasErrorWithCode(TppApiErrorCodes.ProblemLoggingOn))
+            {
+                _logger.LogError("Failed to authenticate user for TPP - Problem logging on");
+                return new GpSessionCreateResult.Forbidden();
+            }
+
+            _logger.LogError("Failed to authenticate user for TPP");
+            return new GpSessionCreateResult.BadGateway();
         }
     }
 }

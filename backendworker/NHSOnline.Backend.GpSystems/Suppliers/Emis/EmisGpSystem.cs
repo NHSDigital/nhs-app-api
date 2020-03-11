@@ -23,8 +23,9 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
-    [SuppressMessage("NDepend", "ND1400:AvoidNamespacesMutuallyDependent", 
+    [SuppressMessage("NDepend", "ND1400:AvoidNamespacesMutuallyDependent",
         Justification = "GpSystem responsibility is pointing to concrete classes in child namespaces.")]
+    [SuppressMessage("Microsoft.Naming", "CA1024", Justification = "Methods are needed to match interface definition.")]
     public class EmisGpSystem : IGpSystem
     {
         private readonly IServiceProvider _serviceProvider;
@@ -114,6 +115,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public IPatientMessagesService GetPatientMessagesService()
         {
             return _serviceProvider.GetService<EmisPatientMessagesService>();
+        }
+
+        public IRecreateSessionMapperService GetRecreateSessionMapperService()
+        {
+            throw new NotImplementedException();
         }
 
         public bool SupportsLinkedAccounts => true;

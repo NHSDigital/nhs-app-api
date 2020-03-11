@@ -45,5 +45,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session
         {
             return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.Success(gpUserSession));
         }
+
+        public Task<GpSessionRecreateResult> Recreate(string connectionToken, string odsCode, string nhsNumber, string patientId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
