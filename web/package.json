@@ -73,7 +73,7 @@
     "body-parser": "1.18.3",
     "busboy": "0.3.1",
     "circular-json": "0.5.9",
-    "consola": "2.5.6",
+    "consola": "2.11.3",
     "cookie": "0.3.1",
     "cookie-universal": "2.0.14",
     "cookie-universal-nuxt": "2.0.14",
