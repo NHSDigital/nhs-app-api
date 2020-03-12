@@ -1,4 +1,4 @@
-package features.linkage
+package features
 
 import cucumber.api.CucumberOptions
 import net.serenitybdd.cucumber.CucumberWithSerenity
@@ -7,9 +7,11 @@ import org.junit.runner.RunWith
 import org.openqa.selenium.WebDriver
 
 @RunWith(CucumberWithSerenity::class)
-@CucumberOptions(features = ["src/test/kotlin/features/linkage"], glue = ["features"])
-class LinkageTestRunner {
-
+@CucumberOptions(
+        features = ["src/test/kotlin/features"],
+        glue = ["features"]
+)
+class TestRunner {
     @Managed
     lateinit var driver: WebDriver
 }
