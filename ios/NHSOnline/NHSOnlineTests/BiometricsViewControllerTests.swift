@@ -57,12 +57,31 @@ class BiometricsViewControllerTests : XCTestCase {
 class MockHomeViewController: HomeViewController {
     var showWebViewContainerCalled = false
     var updateHeaderTextCalled = false
+    var startActivityIndicatorWasCalled = false
+    var stopActivityIndicatorWasCalled = false
+    
     override func showWebViewContainer() {
         showWebViewContainerCalled = true
     }
     
     override func updateHeaderText(headerText: String?, accessibilityLabel: String? = nil) {
         updateHeaderTextCalled = true
+    }
+    
+    override func showProgressBar() {
+       startActivityIndicatorWasCalled = true
+   }
+   
+   override func hideProgressBar() {
+       stopActivityIndicatorWasCalled = true
+   }
+    
+    override func viewDidLoad() {
+        return
+    }
+    
+    override func setVisibilityOfHeaderAndMenuBars(headerType: HeaderType) {
+        return
     }
 }
     

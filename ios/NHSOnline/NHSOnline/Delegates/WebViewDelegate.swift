@@ -7,8 +7,6 @@ import iProov
 class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SFSafariViewControllerDelegate {
     let knownServicesProvider: KnownServicesProtocol
     let viewController: HomeViewController
-    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-    let progressSpinner = ProgressSpinner()
     let responseWaitingTime = config().ResponseWaitingTime
     var failedUrl: URL? = nil
     var nativeViewController: PageUnavailabilityViewController?
@@ -24,8 +22,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     init(controller: HomeViewController, knownServiceProvider: KnownServicesProtocol, webAppInterface: WebAppInterface) {
         self.viewController = controller
         self.knownServicesProvider = knownServiceProvider
-        self.activityIndicator.center = viewController.view.center
-        self.viewController.view.addSubview(activityIndicator)
         self.webAppInterface = webAppInterface
         self.schemeHandlers = SchemeHandlers()
         self.schemeHandlers.registerHandler(handler: MailToSchemeHandler())
@@ -92,7 +88,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
             if url.absoluteString.contains(config().FidoLoginErrorPath) {
                 viewController.showBiometricSessionError()
-                stopActivityIndicator()
+                viewController.hideProgressBar()
                 decisionHandler(.cancel)
                 return
             }
@@ -226,13 +222,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
 
         if !webView.url!.absoluteString.contains(config().BiometricAuthResponseParam) {
-            stopActivityIndicator()
+            viewController.hideProgressBar()
         }
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
         if !webView.url!.absoluteString.contains(config().AuthRedirectPath) {
-            stopActivityIndicator()
+            viewController.hideProgressBar()
         }
         if withError._code == NSURLErrorCancelled {
             Logger.logInfo(message: "Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", withError.localizedDescription)
@@ -432,7 +428,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
 
     @objc func pageIsNotResponding() {
-        if (self.viewController.webViewController?.webView.isLoading)! {
+        if self.viewController.webViewController?.webView.isLoading == true {
             Logger.logError(message: "Page is not responding for a long time, loading stopped.")
 
             self.viewController.webViewController?.webView.stopLoading()
@@ -447,7 +443,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 }
             }
         }
-        stopActivityIndicator()
+        viewController.hideProgressBar()
     }
 
     func updateNavigationMenu(knownService: KnownService) {
@@ -463,7 +459,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
     func showNativeViewContainerWithError(_ errorMessage: ErrorMessage) {
         clearTimer()
-        stopActivityIndicator()
+        viewController.hideProgressBar()
         if !Reachability.isConnectedToNetwork() {
             self.viewController.showNativeViewContainer(errorMessage: ErrorMessage(.NoInternetConnection))
         } else {
@@ -484,15 +480,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             self.viewController.goingBack = false
             Logger.logInfo(message: "Page looks like it came from a goBack - not starting native spinner")
         } else {
-            startActivityIndicator()
+            viewController.showProgressBar()
         }
-    }
-
-    func startActivityIndicator() {
-        self.progressSpinner.show(uiView: self.viewController.view)
-    }
-
-    func stopActivityIndicator() {
-        self.progressSpinner.hide(uiView: self.viewController.view)
     }
 }

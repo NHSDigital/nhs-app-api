@@ -6,7 +6,7 @@ class ProgressSpinner {
     var spinnerLayer: CAShapeLayer = CAShapeLayer()
 
     func show(uiView: UIView) {
-        UIApplication.shared.beginIgnoringInteractionEvents()
+        uiView.isUserInteractionEnabled = false
         
         let progressBackgroundHeight = 60
         let progressBackgroundWidth = 60
@@ -55,7 +55,12 @@ class ProgressSpinner {
         spinnerLayer.removeAllAnimations()
         spinnerLayer.removeFromSuperlayer()
         backgroundLayer.removeFromSuperlayer()
-        UIApplication.shared.endIgnoringInteractionEvents()
+        uiView.isUserInteractionEnabled = true
     }
-
+    
+    func resume(uiView: UIView) {
+        if spinnerLayer.superlayer != nil {
+            show(uiView: uiView)
+        }
+    }
 }

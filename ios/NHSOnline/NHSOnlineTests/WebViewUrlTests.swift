@@ -2,7 +2,7 @@ import XCTest
 @testable import NHSOnline
 
 class WebViewUrlTests: XCTestCase {
-    var viewController: HomeViewController?
+    var viewController: MockHomeViewController?
     var webViewDelegate: WebViewDelegate?
     var knownServicesProvider: KnownServicesProtocol?
     
@@ -10,12 +10,12 @@ class WebViewUrlTests: XCTestCase {
         super.setUp()
 
         knownServicesProvider = SuccessKnownServiceProtocolMock()
-        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController {
-            viewController.knownServicesProvider = SuccessKnownServiceProtocolMock()
-            viewController.configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
-            let webAppInterface = WebAppInterface(controller: viewController)
-            webViewDelegate = WebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider!, webAppInterface: webAppInterface)
-        }
+        
+        let viewController = MockHomeViewController()
+        viewController.knownServicesProvider = SuccessKnownServiceProtocolMock()
+        viewController.configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
+        let webAppInterface = WebAppInterface(controller: viewController)
+        webViewDelegate = WebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider!, webAppInterface: webAppInterface)
     }
     
     override func tearDown() {

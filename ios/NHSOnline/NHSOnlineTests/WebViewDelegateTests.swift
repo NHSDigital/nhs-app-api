@@ -11,32 +11,29 @@ class WebViewDelegateTests: XCTestCase {
     var wKNavigation: WKNavigation?
     var error: NSError?
     var nSURLErrorCancelled: NSError?
-    var homeViewController: HomeViewController?
+    var homeViewController: MockHomeViewController?
     
     override func setUp() {
         super.setUp()
         let knownServicesProvider: KnownServicesProtocol = SuccessKnownServiceProtocolMock()
-        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController {
-            viewController.knownServicesProvider = SuccessKnownServiceProtocolMock()
-            viewController.configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
-            let webAppInterface = WebAppInterface(controller: viewController)
-            webViewDelegate = MockWebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider, webAppInterface: webAppInterface)
-            iProovWebViewDelegate = IProovMockWebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider, webAppInterface: webAppInterface)
-            homeViewController = viewController
-        }
-
+        let viewController = MockHomeViewController()
+        viewController.knownServicesProvider = SuccessKnownServiceProtocolMock()
+        viewController.configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
+        let webAppInterface = WebAppInterface(controller: viewController)
+        webViewDelegate = MockWebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider, webAppInterface: webAppInterface)
+        iProovWebViewDelegate = IProovMockWebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider, webAppInterface: webAppInterface)
+        homeViewController = viewController
         wKWebView = WKWebView(frame: .zero)
         mockWKWebView = MockWKWebView()
         wKNavigation = WKNavigation()
         nSURLErrorCancelled = NSError(domain:NSURLErrorDomain,code:-999,userInfo:[NSLocalizedDescriptionKey:""])
         error = NSError(domain:NSURLErrorDomain,code:-1000,userInfo:[NSLocalizedDescriptionKey:""])
-
     }
     
     func test_WhenPageLoadIsNormal_VerifyStartActivityIndicatorIsCalled() {
         webViewDelegate?.checkPageLoadOriginAndStartActivityIndicator()
         
-        assert(webViewDelegate?.startActivityIndicatorWasCalled == true,
+        assert(homeViewController!.startActivityIndicatorWasCalled == true,
                "Expected the startActivityIndicator() Method to be invoked")
     }
     
@@ -45,7 +42,7 @@ class WebViewDelegateTests: XCTestCase {
         
         webViewDelegate?.checkPageLoadOriginAndStartActivityIndicator()
         
-        assert(webViewDelegate?.startActivityIndicatorWasCalled == false,
+        assert(homeViewController!.startActivityIndicatorWasCalled == false,
                "startActivityIndicator() Method should not be invoked")
     }
     
@@ -53,7 +50,7 @@ class WebViewDelegateTests: XCTestCase {
         wKWebView?.loadPage(url: config().HomeUrl)
         webViewDelegate?.webView(wKWebView!, didFailProvisionalNavigation: wKNavigation, withError: nSURLErrorCancelled!)
         
-        assert(webViewDelegate?.stopActivityIndicatorWasCalled == true,
+        assert(homeViewController!.stopActivityIndicatorWasCalled == true,
                "Expected the stopActivityIndicator() Method to be invoked")
         
         assert(homeViewController!.applicationState.isReady() == true)
@@ -63,7 +60,7 @@ class WebViewDelegateTests: XCTestCase {
         wKWebView?.loadPage(url: config().HomeUrl + "auth-return?code=something")
         webViewDelegate?.webView(wKWebView!, didFailProvisionalNavigation: wKNavigation, withError: nSURLErrorCancelled!)
         
-        assert(webViewDelegate?.stopActivityIndicatorWasCalled == false,
+        assert(homeViewController!.stopActivityIndicatorWasCalled == false,
                "Expected the stopActivityIndicator() Method to not have been invoked")
         
         assert(homeViewController!.applicationState.isReady() == true)
@@ -73,7 +70,7 @@ class WebViewDelegateTests: XCTestCase {
         wKWebView?.loadPage(url: config().HomeUrl)
         webViewDelegate?.webView(wKWebView!, didFailProvisionalNavigation: wKNavigation, withError: error!)
         
-        assert(webViewDelegate?.stopActivityIndicatorWasCalled == true,
+        assert(homeViewController!.stopActivityIndicatorWasCalled == true,
                "Expected the stopActivityIndicator() Method to be invoked")
         
         assert(homeViewController!.applicationState.isReady() == true)
@@ -83,7 +80,7 @@ class WebViewDelegateTests: XCTestCase {
         wKWebView?.loadPage(url: config().HomeUrl + "auth-return?code=something")
         webViewDelegate?.webView(wKWebView!, didFailProvisionalNavigation: wKNavigation, withError: error!)
         
-        assert(webViewDelegate?.stopActivityIndicatorWasCalled == false,
+        assert(homeViewController!.stopActivityIndicatorWasCalled == false,
                "Expected the stopActivityIndicator() Method to not have been invoked")
         
         assert(homeViewController!.applicationState.isReady() == true)
@@ -92,7 +89,7 @@ class WebViewDelegateTests: XCTestCase {
     func test_pageIsNotResponding_VerifyStopActivityIndicatorIsCalled(){
         webViewDelegate?.pageIsNotResponding()
         
-        assert(webViewDelegate?.stopActivityIndicatorWasCalled == true,
+        assert(homeViewController!.stopActivityIndicatorWasCalled == true,
                "Expected the stopActivityIndicator() Method to be invoked")
     }
 
@@ -127,22 +124,10 @@ class WebViewDelegateTests: XCTestCase {
 }
 
 class MockWebViewDelegate : WebViewDelegate {
-
-    var startActivityIndicatorWasCalled = false
-    var stopActivityIndicatorWasCalled = false
-    
     var attemptedIProovLaunch = false
 
     override init(controller: HomeViewController, knownServiceProvider: KnownServicesProtocol, webAppInterface: WebAppInterface) {
         super.init(controller: controller,knownServiceProvider: knownServiceProvider, webAppInterface: webAppInterface)
-    }
-
-    override func startActivityIndicator() {
-        startActivityIndicatorWasCalled = true
-    }
-    
-    override func stopActivityIndicator() {
-        stopActivityIndicatorWasCalled = true
     }
 }
 

@@ -7,6 +7,7 @@ import WebKit
 class HomeViewController : UIViewController {
     private let showConstraintPriority = UILayoutPriority.init(rawValue: 900)
     private let hideConstraintPriority = UILayoutPriority.init(rawValue: 850)
+    private let progressSpinner = ProgressSpinner()
     
     var applicationState = ApplicationState()
     var documentInteractionController = UIDocumentInteractionController()
@@ -644,5 +645,17 @@ class HomeViewController : UIViewController {
              self.showDataDownloadAlert(alertType: .OSNotSupported)
              return
          }
+    }
+    
+    func showProgressBar() {
+        self.progressSpinner.show(uiView: self.view)
+    }
+    
+    func hideProgressBar() {
+        self.progressSpinner.hide(uiView: self.view)
+    }
+    
+    func resumeProgressBar() {
+        self.progressSpinner.resume(uiView: self.view)
     }
 }
