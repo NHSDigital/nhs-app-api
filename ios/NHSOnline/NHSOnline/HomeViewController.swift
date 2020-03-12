@@ -41,12 +41,11 @@ class HomeViewController : UIViewController {
     var isPresented: Bool = false
     var goingBack: Bool = false
     var biometricService: BiometricService?
-    var configurationService: ConfigurationServiceProtocol?
     var notificationsService: NotificationsService?
-    var knownServices = KnownServices()
-    var configurationResponse: ConfigurationResponse? = nil
+    var knownServicesProvider: KnownServicesProtocol?
+    var configurationServiceProvider: ConfigurationServiceProtocol?
     public var selectedTab: Int?
-
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
     }
@@ -73,43 +72,31 @@ class HomeViewController : UIViewController {
         self.setNeedsStatusBarAppearanceUpdate()
         super.viewDidLoad()
 
-        self.configurationResponse = ConfigurationServiceManager
-            .shared()
-            .GetConfigurationResponse()
-
         setupNhsLogo()
         setupBackArrow()
         setupMyAccountIcon()
         setupHelpIcon()
 
-        if (self.configurationResponse!.callSuccessful){
-            self.knownServices = configurationResponse!.knownServices
-        }
-
         webAppInterface = WebAppInterface(controller: self)
-        webViewDelegate = WebViewDelegate(controller: self, knownServices: knownServices, webAppInterface: webAppInterface!)
+        webViewDelegate = WebViewDelegate(controller: self, knownServiceProvider: self.knownServicesProvider!, webAppInterface: webAppInterface!)
         tabBarDelegate = TabBarDelegate(controller: self)
         tabBar.delegate = tabBarDelegate
         tabBar.setDefaultTabBarItemsAppearance()
-
+        
         setUpControllers()
-
-        if (!self.configurationResponse!.callSuccessful){
-            apiCallFailure()
-            return
-        }
-
+        
         self.addChildViewController(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
 
         appWebInterface = AppWebInterface(webView: webViewController?.webView)
         notificationsService = NotificationsService(appWebInterface: appWebInterface!)
-        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices,
-                                              webViewController: webViewController!,
-                                              homeViewController: self,
-                                              configurationResponse: configurationResponse!)
-        
-        guard apiConfigCallError else {
+        lifecycleHandlers = LifecycleHandlers(knownServiceProvider: self.knownServicesProvider!,
+                webViewController: webViewController!,
+                homeViewController: self,
+                configurationServiceProvider: self.configurationServiceProvider!)
+
+        switch self.configurationServiceProvider!.getConfigurationResponse() {
+        case .success(_):
             guard let urlToLoad = UserDefaults.standard.url(forKey: config().NotificationLinkPropertyName) else {
                 self.webViewController?.loadPage(url: config().HomeUrl)
                 return
@@ -117,6 +104,9 @@ class HomeViewController : UIViewController {
             
             self.webViewController?.loadPage(url: urlToLoad)
             UserDefaults.standard.removeObject(forKey: config().NotificationLinkPropertyName)
+            return
+        default:
+            apiCallFailure()
             return
         }
     }
@@ -139,8 +129,6 @@ class HomeViewController : UIViewController {
             clearSelectedTab()
             self.showWebViewContainer()
             if #available(iOS 10.0, *) {
-                self.configurationService = ConfigurationService.shared()
-                
                 Timer.scheduledTimer(timeInterval: timer, target: self, selector: #selector(self.attemptBiometricLoginIfAppVersionValid), userInfo: nil, repeats: false)
             }
         }
@@ -160,10 +148,13 @@ class HomeViewController : UIViewController {
     @objc @available(iOS 10.0, *)
     public func attemptBiometricLoginIfAppVersionValid() {
         do {
-            if (configurationResponse!.isSupportedVersion) {
-                self.attemptBiometricLogin()
-                self.biometricsHasBeenAttempted = true
-            } else {
+            switch self.configurationServiceProvider!.getConfigurationResponse() {
+            case .success(let configurationResponse):
+                if (configurationResponse.isSupportedVersion) {
+                    self.attemptBiometricLogin()
+                    self.biometricsHasBeenAttempted = true
+                }
+            default:
                 return
             }
         }
@@ -196,7 +187,8 @@ class HomeViewController : UIViewController {
     
     func setUpControllers() {
         webViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController
-        webViewController?.setKnownServices(knownServices: knownServices)
+        webViewController?.knownServiceProvider = self.knownServicesProvider
+        webViewController?.configurationServiceProvider = self.configurationServiceProvider
         webViewController?.loadViewIfNeeded()
         webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
         webViewController?.view.translatesAutoresizingMaskIntoConstraints = false
@@ -208,7 +200,7 @@ class HomeViewController : UIViewController {
         biometricViewController = self.storyboard?.instantiateViewController(withIdentifier: "BiometricsViewController") as? BiometricsViewController
         biometricViewController?.view.translatesAutoresizingMaskIntoConstraints = false
         biometricViewController?.homeViewController = self
-        biometricService = BiometricService(homeViewController: self, biometricViewController: biometricViewController!)
+        biometricService = BiometricService(homeViewController: self, biometricViewController: biometricViewController!, configurationServiceProvider: self.configurationServiceProvider!)
         biometricViewController?.biometricService = biometricService
         biometricViewController?.loadViewIfNeeded()
         

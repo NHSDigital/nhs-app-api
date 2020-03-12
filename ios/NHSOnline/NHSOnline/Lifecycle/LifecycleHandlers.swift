@@ -3,19 +3,19 @@ import UIKit
 import WebKit
 
 class LifecycleHandlers: NSObject {
-    var knownServices: KnownServices
+    var knownServicesProvider: KnownServicesProtocol
     var webViewController: WebViewController?
     var hasCheckedAppVersionSinceAppOpened = false
     var homeViewController: HomeViewController
-    var configurationResponse: ConfigurationResponse
+    var configurationServiceProvider: ConfigurationServiceProtocol
     let validateSessionString: String = "window.validateSession()"
 
-    init(knownServices: KnownServices, webViewController: WebViewController, homeViewController: HomeViewController,
-         configurationResponse: ConfigurationResponse) {
-        self.knownServices = knownServices
+    init(knownServiceProvider: KnownServicesProtocol, webViewController: WebViewController, homeViewController: HomeViewController,
+         configurationServiceProvider: ConfigurationServiceProtocol) {
+        self.knownServicesProvider = knownServiceProvider
         self.webViewController = webViewController
         self.homeViewController = homeViewController
-        self.configurationResponse = configurationResponse
+        self.configurationServiceProvider = configurationServiceProvider
         super.init()
         createLifecycleObservers()
     }
@@ -39,10 +39,15 @@ class LifecycleHandlers: NSObject {
 
     @objc func performAppVersionCheck(onQueue queue: DispatchQueue = DispatchQueue.main) {
         if (hasCheckedAppVersionSinceAppOpened == false) {
-            if (!configurationResponse.isSupportedVersion) {
-                queue.async {
-                    self.displayAppVersionOutOfDate()
+            switch configurationServiceProvider.getConfigurationResponse() {
+            case .success(let configurationResponse):
+                if (!configurationResponse.isSupportedVersion) {
+                    queue.async {
+                        self.displayAppVersionOutOfDate()
+                    }
                 }
+            default:
+                return
             }
         }
     }
@@ -56,13 +61,18 @@ class LifecycleHandlers: NSObject {
     }
     
     @objc func appEnteredForeground() {
-        if knownServices.findMatchingKnownService(webViewController?.webView.url).validateSession {
-            validateSession(webView: (self.webViewController?.webView)!)
-        } else {
-            hideWhiteScreen()
-        }
+        switch knownServicesProvider.getKnownServices() {
+        case .success(let knownServices):
+            if knownServices.findMatchingKnownService(webViewController?.webView.url).validateSession {
+                validateSession(webView: (self.webViewController?.webView)!)
+            } else {
+                hideWhiteScreen()
+            }
 
-        self.homeViewController.delayedBiometricsStart(0.5)
+            self.homeViewController.delayedBiometricsStart(0.5)
+        default:
+            self.homeViewController.delayedBiometricsStart(0.5)
+        }
     }
 
     func displayAppVersionOutOfDate() {

@@ -13,10 +13,7 @@ class PageUnavailabilityViewController: UIViewController {
         let name = CustomNotifications.pageUnavailabilityOnReloadWebView
         NotificationCenter.default.post(name: name, object: self)
         
-        guard parentVC!.apiConfigCallError else {
-            parentVC?.webViewController?.reloadWebView()
-            return
-        }
+        parentVC?.webViewController?.reloadWebView()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

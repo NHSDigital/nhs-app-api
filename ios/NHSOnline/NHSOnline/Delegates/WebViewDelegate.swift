@@ -5,7 +5,7 @@ import os.log
 import iProov
 
 class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SFSafariViewControllerDelegate {
-    let knownServices: KnownServices
+    let knownServicesProvider: KnownServicesProtocol
     let viewController: HomeViewController
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     let progressSpinner = ProgressSpinner()
@@ -21,9 +21,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     var schemeHandlers: SchemeHandlers
     var badResponse: Bool = false
 
-    init(controller: HomeViewController, knownServices: KnownServices, webAppInterface: WebAppInterface) {
+    init(controller: HomeViewController, knownServiceProvider: KnownServicesProtocol, webAppInterface: WebAppInterface) {
         self.viewController = controller
-        self.knownServices = knownServices
+        self.knownServicesProvider = knownServiceProvider
         self.activityIndicator.center = viewController.view.center
         self.viewController.view.addSubview(activityIndicator)
         self.webAppInterface = webAppInterface
@@ -108,15 +108,23 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 return
             }
 
-            let knownService = knownServices.findMatchingKnownService(url)
+            self.failedUrl = url
+            
+            var knownService: KnownService
+            switch knownServicesProvider.getKnownServices() {
+            case .success(let knownServicesResponse):
+                knownService = knownServicesResponse.findMatchingKnownService(url)
+            default:
+                decisionHandler(.cancel)
+                self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
+                return
+            }
 
             if (knownService.viewMode == .AppTab) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)
                 return
             }
-
-            self.failedUrl = url
 
             self.updateNavigationMenu(knownService: knownService)
         }
@@ -241,11 +249,21 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             if withError._domain == "NSURLErrorDomain" {
                 if let info = withError._userInfo as? [String: Any] {
                     if let url = info["NSErrorFailingURLKey"] as? URL {
-                        self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
+                        switch knownServicesProvider.getKnownServices() {
+                        case .success(let knownServices):
+                            self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
+                        default:
+                            self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
+                        }
                     }
                 }
             } else {
-                self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(webView.url))
+                switch knownServicesProvider.getKnownServices() {
+                case .success(let knownServices):
+                    self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(webView.url))
+                default:
+                    self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
+                }
             }
 
             Logger.logError(message: "Failed to load the page with error: %@", withError.localizedDescription)
@@ -256,8 +274,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
-            let knownService = knownServices.findMatchingKnownService(navigationAction.request.url!)
-            self.updateNavigationMenu(knownService: knownService)
+            switch knownServicesProvider.getKnownServices() {
+            case .success(let knownServices):
+                let knownService = knownServices.findMatchingKnownService(navigationAction.request.url!)
+                self.updateNavigationMenu(knownService: knownService)
+            default:
+                self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
+            }
         }
         return nil
     }
@@ -273,6 +296,15 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        var knownServices: KnownServices
+        switch knownServicesProvider.getKnownServices() {
+        case .success(let knownServicesResponse):
+            knownServices = knownServicesResponse
+        default:
+            self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
+            return
+        }
+        
         guard let rootService = knownServices.getRootServiceByHostAndScheme(
                 host: message.frameInfo.securityOrigin.host, scheme: message.frameInfo.securityOrigin.protocol
         ) else {
@@ -390,9 +422,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func ensureSupportedScheme(_ url: URL) -> URL {
         if (url.scheme == config().AppScheme) {
             self.viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
-            return URL(string: url.absoluteString.replacingOccurrences(of: config().AppScheme + ":", with: config().BaseScheme + ":"))!
         }
-        return url
+        return UrlHelper.ensureUrlWithScheme(url: url.absoluteString)!
     }
 
     func clearMenuBarItem() {
@@ -408,7 +439,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             let url = self.viewController.webViewController?.webView.url
             let baseUrl = URL(string: config().HomeUrl)
             if (url?.host == baseUrl?.host) {
-                self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
+                switch knownServicesProvider.getKnownServices() {
+                case .success(let knownServices):
+                    self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
+                default:
+                    self.showNativeViewContainerWithError(ErrorMessage(.ServiceUnavailable))
+                }
             }
         }
         stopActivityIndicator()

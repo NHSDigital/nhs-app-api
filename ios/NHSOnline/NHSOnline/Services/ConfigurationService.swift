@@ -1,13 +1,7 @@
 import Foundation
 import os.log
 
-class ConfigurationService: ConfigurationServiceProtocol {
-    private static var sharedConfigurationService = ConfigurationService()
-    private var configurationResponse = ConfigurationResponse()
-    
-    private init() {
-    }
-
+class ConfigurationService {    
     func getConfigurationResponse(completion: @escaping (Configuration?) -> ()) {
         let requestUrl = URL(string: config().BaseApiUrl + config().ConfigurationApiPath)!
         let request = URLRequest(url: requestUrl)
@@ -24,14 +18,10 @@ class ConfigurationService: ConfigurationServiceProtocol {
                     completion(nil)
                 }
             } else {
-                Logger.logError(message: "Failure doing native app version http check")
+                Logger.logError(message: "Failure doing native app version http check", "\(String(describing: error))")
                 completion(nil)
             }
         }
         task.resume()
-    }
-
-    class func shared() -> ConfigurationService {
-        sharedConfigurationService
     }
 }

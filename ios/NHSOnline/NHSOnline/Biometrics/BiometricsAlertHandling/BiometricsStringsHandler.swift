@@ -12,7 +12,6 @@ class BiometricStringHandler {
             alertController.dismiss(animated: true, completion: nil)
         }
         
-        
         alertController.addAction(cancel)
         
         return alertController

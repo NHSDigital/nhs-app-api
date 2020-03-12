@@ -6,15 +6,19 @@ import WebKit
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     var window: UIWindow?
     var rootViewController: UINavigationController?
-    var knownServices = KnownServices()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         clearCaches()
-        
+
         application.ignoreSnapshotOnNextApplicationLaunch()
-        let navigationController = UINavigationController(rootViewController: (self.window?.rootViewController as? HomeViewController)!)
-        self.window?.rootViewController = navigationController
-        rootViewController = navigationController
+        if let homeViewController = self.window?.rootViewController as? HomeViewController {
+            homeViewController.knownServicesProvider = ConfigurationServiceManager.getKnownServiceProvider()
+            homeViewController.configurationServiceProvider = ConfigurationServiceManager.getConfigurationServiceProvider()
+            
+            let navigationController = UINavigationController(rootViewController: homeViewController)
+            self.window?.rootViewController = navigationController
+            self.rootViewController = navigationController
+        }
         
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self

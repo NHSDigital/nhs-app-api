@@ -46,7 +46,7 @@ class UrlHelperTests: XCTestCase {
         let result = UrlHelper.ensureUrlWithScheme(url: url)
         
         XCTAssertNotNil(result)
-        XCTAssertEqual(result?.scheme, "https")
+        XCTAssertEqual(result?.scheme, config().BaseScheme)
         XCTAssertEqual(result?.host, "www.bbc.co.uk")
     }
     

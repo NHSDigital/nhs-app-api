@@ -15,29 +15,31 @@ protocol BiometricProtocol {
 class BiometricService: BiometricProtocol {
     let homeViewController: HomeViewController
     let biometricViewController: BiometricsViewController
-    let FidoServerUrl: String = ConfigurationServiceManager.shared().FidoServerUrl()
-    lazy var endpointHelper = FidoEndpointHelper(
-        FidoServerUrl: FidoServerUrl,
-        BiometricsRegistrationRequestEndpoint: config().BiometricsRegistrationRequestEndpoint,
-        BiometricsRegistrationResponseEndpoint: config().BiometricsRegistrationResponseEndpoint,
-        BiometricsAuthenticationRequestEndpoint: config().BiometricsAuthenticationRequestEndpoint,
-        BiometricsDeregistrationRequestEndpoint: config().BiometricsDeregistrationRequestEndpoint)
+    let configurationServiceProvider: ConfigurationServiceProtocol
+    let endpointHelper: FidoEndpointHelper
     let privateKeyLabel: String = config().PrivateKeyLabel
     let BiometricsAssertionScheme: String = config().BiometricsAssertionScheme
     let aaid: String = config().AAID
     let keyIDPrefix = "nhs-app-key-"
 
-    init(homeViewController controller: HomeViewController, biometricViewController biometricController: BiometricsViewController) {
+    init(homeViewController controller: HomeViewController, biometricViewController biometricController: BiometricsViewController,
+         configurationServiceProvider: ConfigurationServiceProtocol) {
         self.homeViewController = controller
         self.biometricViewController = biometricController
+        self.configurationServiceProvider = configurationServiceProvider
+
+        endpointHelper = FidoEndpointHelper(
+                configurationServiceProvider: self.configurationServiceProvider,
+                config: config())
     }
     
     @available(iOS 10.0, *)
     func register() {
         do {
-            let registrationUrl: String = endpointHelper.requestRequestEndpoint
+            try endpointHelper.configure()
+            let registrationUrl: String = endpointHelper.requestRequestEndpoint!
             let accessToken: String = try UserDefaultsManager.getAccessToken()
-            let registrationResponseEndpoint: String = endpointHelper.registrationResponseEndpoint
+            let registrationResponseEndpoint: String = endpointHelper.registrationResponseEndpoint!
             let success = try FidoClient().register(aaid: aaid, BiometricsAssertionScheme: BiometricsAssertionScheme, accessToken: accessToken, registrationUrl: registrationUrl, privateKeyLabel: privateKeyLabel, registrationResponseEndpoint: registrationResponseEndpoint, keyIDPrefix: keyIDPrefix)
             if success {
                 return  biometricViewController.goToResultsPage()
@@ -50,14 +52,16 @@ class BiometricService: BiometricProtocol {
         } catch {
             Logger.logError(message: "An unknown error occurred")
         }
-         biometricViewController.showBiometricRegistrationError()
+        biometricViewController.showBiometricRegistrationError()
     }
     
     @available(iOS 10.0, *)
     func authenticate() {
         do {
             homeViewController.showWebViewContainer()
-            let authenticationUrl: String = endpointHelper.authenticationRequestEndpoint
+
+            try endpointHelper.configure()
+            let authenticationUrl: String = endpointHelper.authenticationRequestEndpoint!
             
             let base64Response = try FidoClient().completeAuthorisationRequestAndRetrieveBase64Response(aaid: aaid, BiometricsAssertionScheme: BiometricsAssertionScheme, privateKeyLabel: privateKeyLabel, authenticationUrl: authenticationUrl)
             
@@ -81,7 +85,9 @@ class BiometricService: BiometricProtocol {
     @available(iOS 10.0, *)
     func deRegister(deregisterFidoCredentials: Bool) {
         do {
-            let deregistrationRequestEndpoint: String = endpointHelper.deregistrationRequestEndpoint
+            try endpointHelper.configure()
+            let deregistrationRequestEndpoint: String = endpointHelper.deregistrationRequestEndpoint!
+
             UserDefaultsManager.setBiometricState(nil)
             if deregisterFidoCredentials {
                 let accessToken: String = try UserDefaultsManager.getAccessToken()

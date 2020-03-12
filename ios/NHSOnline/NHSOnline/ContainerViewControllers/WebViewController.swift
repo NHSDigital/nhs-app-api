@@ -6,11 +6,8 @@ class WebViewController: UIViewController, WKUIDelegate {
     var webViewDelegate: WebViewDelegate?
     public var webView: WKWebView!
     var redirect = false
-    var knownServices = KnownServices()
-
-    func setKnownServices(knownServices: KnownServices) {
-        self.knownServices = knownServices
-    }
+    var knownServiceProvider: KnownServicesProtocol?
+    var configurationServiceProvider: ConfigurationServiceProtocol?
 
     override func loadView() {
         super.loadView()
@@ -112,6 +109,16 @@ class WebViewController: UIViewController, WKUIDelegate {
 
     func loadPage(url: String, isConnectedToNetwork: Bool) {
         self.webViewDelegate?.clearTimer()
+        
+        var knownServices: KnownServices
+        
+        switch self.knownServiceProvider?.getKnownServices() {
+        case .success(let knownServicesResponse):
+            knownServices = knownServicesResponse
+        default:
+            webViewDelegate?.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
+            return
+        }
 
         if (!isConnectedToNetwork) {
             webViewDelegate?.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
