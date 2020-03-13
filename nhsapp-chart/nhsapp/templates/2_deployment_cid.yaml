@@ -257,7 +257,7 @@ spec:
               name: cosmosdbkey-{{ .Chart.AppVersion }}
               key: key
         - name: SERVICE_JOURNEY_RULES_BASE_URL
-          value: "https://nhsonline-sjr.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
+          value: "https://nhsapp-sjr.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
         - name: TERMS_CONDITIONS_COSMOS_DATABASE_ID
           {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}
