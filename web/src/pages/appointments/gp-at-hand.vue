@@ -10,6 +10,7 @@
 import GpAtHandContent from '@/components/GpAtHandContent';
 
 export default {
+  layout: 'nhsuk-layout',
   components: {
     GpAtHandContent,
   },
