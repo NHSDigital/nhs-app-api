@@ -3872,7 +3872,12 @@
                                 documents: 
                                   type: "boolean"
                                 im1Messaging: 
-                                  type: "boolean"
+                                  type: "object"
+                                  properties:
+                                    isEnabled:
+                                      type: "boolean"
+                                    canDeleteMessages:
+                                      type: "boolean"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
             content: 
@@ -4472,7 +4477,12 @@
                         documents: 
                           type: "boolean"
                         im1Messaging: 
-                          type: "boolean"
+                          type: "object"
+                          properties:
+                            isEnabled:
+                              type: "boolean"
+                            canDeleteMessages:
+                              type: "boolean"
           404: 
             description: "Service Journey Rules Configuration not found."
           500: 
@@ -4639,7 +4649,12 @@
                         documents: 
                           type: "boolean"
                         im1Messaging: 
-                          type: "boolean"
+                          type: "object"
+                          properties:
+                            isEnabled:
+                              type: "boolean"
+                            canDeleteMessages:
+                              type: "boolean"
           404: 
             description: "Service Journey Rules Configuration not found."
           500: 
