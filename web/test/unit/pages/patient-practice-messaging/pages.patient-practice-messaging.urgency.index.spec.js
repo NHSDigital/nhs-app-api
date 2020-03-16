@@ -50,7 +50,7 @@ describe('patient practice messaging urgency page', () => {
   });
 
   describe('continue clicked', () => {
-    const messageRecipients = [{ recipientGuid: '1', name: 'Dr. Test' }];
+    const messageRecipients = [{ recipientIdentifier: '1', name: 'Dr. Test' }];
 
     it('will show a validation error when making no choice', async () => {
       mountPage({ messageRecipients });

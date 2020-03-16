@@ -1,4 +1,4 @@
-package mocking.emis.models
+package mocking.sharedModels
 
 import utils.ISerenityHelperEnums
 

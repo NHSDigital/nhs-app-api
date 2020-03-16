@@ -6,6 +6,7 @@ import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.DeletePatientConversationRequest
 import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
+import mocking.sharedModels.ConversationDeletedResponse
 import wiremock.org.apache.http.HttpStatus
 
 class EmisDeleteConversationBuilder(configuration: EmisConfiguration?,

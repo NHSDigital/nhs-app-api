@@ -1,4 +1,4 @@
-package mocking.emis.patientPracticeMessaging
+package mocking.sharedModels
 
 data class MessagesResponseModel(
         var messages: List<PatientMessageSummary> = arrayListOf()
@@ -41,7 +41,7 @@ data class MessageRecipientsResponseModel(
 
 data class Recipient (
         var name: String?,
-        var recipientGuid: String? = null
+        var recipientIdentifier: String? = null
 )
 
 data class MessageReadStatusUpdateResponse (

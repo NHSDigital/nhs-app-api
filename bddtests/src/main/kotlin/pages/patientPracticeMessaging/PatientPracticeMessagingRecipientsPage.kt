@@ -1,6 +1,6 @@
 package pages.patientPracticeMessaging
 
-import mocking.emis.patientPracticeMessaging.Recipient
+import mocking.sharedModels.Recipient
 import org.junit.Assert
 import pages.HybridPageObject
 import pages.HybridPageElement

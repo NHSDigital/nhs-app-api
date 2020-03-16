@@ -1,10 +1,10 @@
 package features.patientPracticeMessaging.factories
 
 import mocking.data.patientPracticeMessaging.EmisMessagingData
-import mocking.emis.models.PatientPracticeMessagingSerenityHelpers
-import mocking.emis.patientPracticeMessaging.MessagesResponseModel
-import mocking.emis.patientPracticeMessaging.PatientMessageSummary
+import mocking.sharedModels.PatientPracticeMessagingSerenityHelpers
 import mocking.emis.practices.SettingsResponseModel
+import mocking.sharedModels.MessagesResponseModel
+import mocking.sharedModels.PatientMessageSummary
 import models.ExpectedMessage
 import models.Patient
 import utils.getOrNull
@@ -103,7 +103,7 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         val recipients = EmisMessagingData.getDefaultMessageRecipients()
         val messageDetails = EmisMessagingData.getDefaultMessageDetailsWithReplies()
         val createMessageRequest = CreateMessageRequest("Test Results",
-                "When will my test results be ready", recipients.MessageRecipients[0].recipientGuid!!)
+                "When will my test results be ready", recipients.MessageRecipients[0].recipientIdentifier!!)
 
         PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES
             .setIfNotAlreadySet(getExpectedMessages(messages.messages))

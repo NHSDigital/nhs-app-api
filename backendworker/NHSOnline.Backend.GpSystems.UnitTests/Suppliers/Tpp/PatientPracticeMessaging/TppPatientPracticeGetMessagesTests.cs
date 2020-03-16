@@ -12,11 +12,11 @@ using NHSOnline.Backend.GpSystems.Messages;
 using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging;
 
-namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Messages
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMessaging
 {
     [TestClass]
     public class TppPatientPracticeGetMessagesTests
@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Messages
         private Mock<ITppClientRequest<TppUserSession, MessagesViewReply>> _messagesViewPost;
         private Mock<ITppPatientMessagesMapper> _mockMessagesMapper;
 
-        private TppPatientMessagesService _systemUnderTest;
+        private PatientPracticeMessagingService _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Messages
             _messagesViewPost = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, MessagesViewReply>>>();
             _mockMessagesMapper = _fixture.Freeze<Mock<ITppPatientMessagesMapper>>();
 
-            _systemUnderTest = _fixture.Create<TppPatientMessagesService>();
+            _systemUnderTest = _fixture.Create<PatientPracticeMessagingService>();
         }
 
         [TestMethod]

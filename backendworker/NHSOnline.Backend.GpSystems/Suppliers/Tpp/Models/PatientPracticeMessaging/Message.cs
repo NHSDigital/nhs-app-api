@@ -1,7 +1,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Messages
+namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging
 {
     [Serializable]
     [XmlRoot(ElementName="Message")]

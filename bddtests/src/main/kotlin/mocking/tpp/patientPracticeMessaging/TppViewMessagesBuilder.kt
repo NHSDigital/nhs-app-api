@@ -1,4 +1,4 @@
-package mocking.tpp.patientpracticemessaging
+package mocking.tpp.patientPracticeMessaging
 
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder

@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         Task<EmisApiObjectResponse<MessageUpdateResponse>> PatientMessageUpdatePut(
             EmisRequestParameters requestParameters, UpdateMessageReadStatusRequest updateMessageReadStatusRequest);
 
-        Task<EmisApiObjectResponse<MessageRecipientsGetResponse>> PatientMessageRecipientsGet(
+        Task<EmisApiObjectResponse<MessageRecipientsResponse>> PatientMessageRecipientsGet(
             EmisRequestParameters requestParameters);
         Task<EmisApiObjectResponse<MessagePostResponse>> PatientMessagePost(
             EmisRequestParameters requestParameters, CreatePatientMessage message);

@@ -8,7 +8,10 @@ import cucumber.api.java.en.When
 import features.patientPracticeMessaging.factories.PracticePatientMessagingFactory
 import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
-import mocking.emis.models.PatientPracticeMessagingSerenityHelpers
+import mocking.sharedModels.MessageReply
+import mocking.sharedModels.MessageResponseModel
+import mocking.sharedModels.PatientPracticeMessagingSerenityHelpers
+import mocking.sharedModels.Recipient
 import models.ExpectedMessage
 import org.junit.Assert.assertNotNull
 import pages.ErrorPage
@@ -18,9 +21,6 @@ import pages.patientPracticeMessaging.PatientPracticeMessagingPage
 import pages.patientPracticeMessaging.PatientPracticeMessagingRecipientsPage
 import pages.patientPracticeMessaging.PatientPracticeMessagingUrgencyPage
 import utils.SerenityHelpers
-import mocking.emis.patientPracticeMessaging.MessageReply
-import mocking.emis.patientPracticeMessaging.MessageResponseModel
-import mocking.emis.patientPracticeMessaging.Recipient
 import net.thucydides.core.annotations.Steps
 import pages.patientPracticeMessaging.PatientPracticeMessagingDeletePage
 import pages.patientPracticeMessaging.PatientPracticeMessagingDeleteSuccessPage

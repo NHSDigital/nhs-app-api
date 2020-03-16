@@ -4,8 +4,8 @@
       <p id="infoRecipients">{{ $t('im04.info') }}</p>
       <menu-item-list id="recipientsMenuList" class="nhsuk-u-margin-bottom-3">
         <menu-item v-for="(recipient, index) in messageRecipients"
-                   :id="`recipient-${recipient.recipientGuid}-${index}`"
-                   :key="`recipient-${recipient.recipientGuid}-${index}`"
+                   :id="`recipient-${recipient.recipientIdentifier}-${index}`"
+                   :key="`recipient-${recipient.recipientIdentifier}-${index}`"
                    :text="recipient.name"
                    :click-func="recipientClicked"
                    :click-param="recipient"
@@ -55,7 +55,7 @@ export default {
     },
     recipientClicked(recipient) {
       this.$store.dispatch('patientPracticeMessaging/setSelectedRecipient',
-        { id: recipient.recipientGuid, name: recipient.name });
+        { id: recipient.recipientIdentifier, name: recipient.name });
       redirectTo(this, PATIENT_PRACTICE_MESSAGING_CREATE.path);
     },
   },

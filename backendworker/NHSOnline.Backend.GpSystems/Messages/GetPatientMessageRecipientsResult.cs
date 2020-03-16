@@ -1,16 +1,16 @@
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 
 namespace NHSOnline.Backend.GpSystems.Messages
 {
     public abstract class GetPatientMessageRecipientsResult
     {
         public abstract T Accept<T>(IPatientMessageRecipientsResultVisitor<T> visitor);
-        
+
         public class Success : GetPatientMessageRecipientsResult
         {
-            public MessageRecipientsGetResponse Response { get; }
+            public MessageRecipientsResponse Response { get; }
 
-            public Success(MessageRecipientsGetResponse response)
+            public Success(MessageRecipientsResponse response)
             {
                 Response = response;
             }
@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.GpSystems.Messages
                 return visitor.Visit(this);
             }
         }
-        
+
         public class Forbidden : GetPatientMessageRecipientsResult
         {
             public override T Accept<T>(IPatientMessageRecipientsResultVisitor<T> visitor)
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.GpSystems.Messages
                 return visitor.Visit(this);
             }
         }
-        
+
         public class BadRequest : GetPatientMessageRecipientsResult
         {
             public override T Accept<T>(IPatientMessageRecipientsResultVisitor<T> visitor)
@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.Messages
                 return visitor.Visit(this);
             }
         }
-        
+
         public class InternalServerError : GetPatientMessageRecipientsResult
         {
             public override T Accept<T>(IPatientMessageRecipientsResultVisitor<T> visitor)

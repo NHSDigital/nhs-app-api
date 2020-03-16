@@ -308,7 +308,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         }
 
         private GetPatientMessageRecipientsResult InterpretPatientMessageRecipientsGetResponse(
-            EmisClient.EmisApiObjectResponse<MessageRecipientsGetResponse> response)
+            EmisClient.EmisApiObjectResponse<MessageRecipientsResponse> response)
         {
             if (response.HasSuccessResponse)
             {

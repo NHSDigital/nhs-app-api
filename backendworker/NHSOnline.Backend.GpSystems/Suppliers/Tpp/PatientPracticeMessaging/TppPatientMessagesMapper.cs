@@ -4,10 +4,10 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages.Models;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
 using NHSOnline.Backend.Support.Logging;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Messages
+namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
 {
 
     public interface ITppPatientMessagesMapper

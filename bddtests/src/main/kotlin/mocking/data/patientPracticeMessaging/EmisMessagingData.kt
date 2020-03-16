@@ -1,16 +1,16 @@
 package mocking.data.patientPracticeMessaging
 
 import constants.DateTimeFormats
-import mocking.emis.models.PatientPracticeMessagingSerenityHelpers
-import mocking.emis.patientPracticeMessaging.ConversationDeletedResponse
-import mocking.emis.patientPracticeMessaging.MessageDetails
-import mocking.emis.patientPracticeMessaging.MessageRecipientsResponseModel
-import mocking.emis.patientPracticeMessaging.MessageReply
-import mocking.emis.patientPracticeMessaging.MessageResponseModel
-import mocking.emis.patientPracticeMessaging.MessagesResponseModel
-import mocking.emis.patientPracticeMessaging.PatientMessageSummary
-import mocking.emis.patientPracticeMessaging.MessageReadStatusUpdateResponse
-import mocking.emis.patientPracticeMessaging.Recipient
+import mocking.sharedModels.PatientPracticeMessagingSerenityHelpers
+import mocking.sharedModels.ConversationDeletedResponse
+import mocking.sharedModels.MessageDetails
+import mocking.sharedModels.MessageReadStatusUpdateResponse
+import mocking.sharedModels.MessageRecipientsResponseModel
+import mocking.sharedModels.MessageReply
+import mocking.sharedModels.MessageResponseModel
+import mocking.sharedModels.MessagesResponseModel
+import mocking.sharedModels.PatientMessageSummary
+import mocking.sharedModels.Recipient
 import utils.setIfNotAlreadySet
 import java.time.ZoneId
 import java.time.ZonedDateTime

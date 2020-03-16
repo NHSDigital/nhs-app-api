@@ -4,7 +4,7 @@ import constants.ErrorResponseCodeTpp
 import constants.TppConstants
 import mocking.data.TppListServiceAccessesData
 import mocking.data.patientPracticeMessaging.TppMessagingData
-import mocking.emis.models.PatientPracticeMessagingSerenityHelpers
+import mocking.sharedModels.PatientPracticeMessagingSerenityHelpers
 import mocking.tpp.models.Error
 import mocking.tpp.models.Message
 import mocking.tpp.models.MessagesViewReply
@@ -41,6 +41,11 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
         mockingClient.forTpp {
             patientPracticeMessaging.viewMessagesRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppMessagingData.getDefaultTppMessages(hasUnread))
+        }
+
+        mockingClient.forTpp {
+            patientPracticeMessaging.requestRecipientsRequest(patient.tppUserSession!!)
+                    .respondWithSuccess(TppMessagingData.getDefaultTppRecipients())
         }
         val expectedMessages = getExpectedMessages(TppMessagingData.getDefaultTppMessages().Message.toList(),
                                                            hasUnread)
@@ -114,7 +119,10 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
     }
 
     override fun noRecipients(patient: Patient) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mockingClient.forTpp {
+            patientPracticeMessaging.requestRecipientsRequest(patient.tppUserSession!!)
+                    .respondWithSuccess(TppMessagingData.getTppEmptyRecipients())
+        }
     }
 
 }

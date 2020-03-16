@@ -297,7 +297,7 @@ components:
     PatientMessageRecipient:
       type: object
       properties:
-        recipientGuid:
+        recipientIdentifier:
           type: string
           description: A unique identifier for this recipient
         name:

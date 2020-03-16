@@ -4,8 +4,8 @@ using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
@@ -37,16 +37,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         [TestMethod]
         public void Map_WhenCalledWithResponseWithDuplicates_RemovesDuplicateRecipientsAndLogsDuplicateIds()
         {
-            
-            var recipientsResponse = new MessageRecipientsGetResponse
+
+            var recipientsResponse = new MessageRecipientsResponse
             {
                 MessageRecipients = new List<MessageRecipient>
                 {
                     _recipientOne, _recipientTwo, _recipientOne, _recipientOne
                 }
             };
-            
-            var expectedResult = new MessageRecipientsGetResponse
+
+            var expectedResult = new MessageRecipientsResponse
             {
                 MessageRecipients = new List<MessageRecipient>
                 {
@@ -55,16 +55,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             };
 
             var result = _mapper.Map(recipientsResponse);
-            
+
             CollectionAssert.AreEqual(expectedResult.MessageRecipients, result.MessageRecipients);
-            _mockLogger.VerifyLogger(LogLevel.Information, $"Duplicate recipient id {_recipientOne.RecipientGuid} removed from response", Times.Exactly(2));
+            _mockLogger.VerifyLogger(LogLevel.Information, $"Duplicate recipient id {_recipientOne.RecipientIdentifier} removed from response", Times.Exactly(2));
             _mockLogger.VerifyLogger(LogLevel.Information, "Number of mapped recipients: 2", Times.Once());
         }
 
         [TestMethod]
         public void Map_WhenResponseHasNoDuplicates_RemovesNoRecipientsAndDoesNotLogIds()
         {
-            var recipientsResponse = new MessageRecipientsGetResponse
+            var recipientsResponse = new MessageRecipientsResponse
             {
                 MessageRecipients = new List<MessageRecipient>
                 {
@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             };
 
             var result = _mapper.Map(recipientsResponse);
-            
+
             CollectionAssert.AreEqual(recipientsResponse.MessageRecipients, result.MessageRecipients);
             _mockLogger.VerifyLogger(LogLevel.Information, Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Information, "Number of mapped recipients: 2", Times.Once());
@@ -82,13 +82,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         [TestMethod]
         public void Map_WhenResponseHasNoRecipients_ReturnsResponseWithNoRecipients()
         {
-            var recipientsResponse = new MessageRecipientsGetResponse
+            var recipientsResponse = new MessageRecipientsResponse
             {
                 MessageRecipients = new List<MessageRecipient>()
             };
 
             var result = _mapper.Map(recipientsResponse);
-            
+
             CollectionAssert.AreEqual(recipientsResponse.MessageRecipients, result.MessageRecipients);
             _mockLogger.VerifyLogger(LogLevel.Information, Times.Once());
             _mockLogger.VerifyLogger(LogLevel.Information, "Number of mapped recipients: 0", Times.Once());
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         public void Map_WhenResponseIsNull_ReturnsResponseWithNullRecipients()
         {
             var result = _mapper.Map(null);
-            
+
             Assert.IsNull(result.MessageRecipients);
             _mockLogger.VerifyLogger(LogLevel.Information, "Number of mapped recipients: 0", Times.Once());
         }
@@ -106,8 +106,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         [TestMethod]
         public void Map_WhenMessageRecipientsAreNull_ReturnsResponseWithNullRecipients()
         {
-            var result = _mapper.Map(new MessageRecipientsGetResponse());
-            
+            var result = _mapper.Map(new MessageRecipientsResponse());
+
             Assert.IsNull(result.MessageRecipients);
             _mockLogger.VerifyLogger(LogLevel.Information, "Number of mapped recipients: 0", Times.Once());
         }

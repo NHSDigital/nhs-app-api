@@ -1,9 +1,9 @@
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
 {
     public interface IEmisPatientMessageRecipientsMapper
     {
-        MessageRecipientsGetResponse Map(MessageRecipientsGetResponse response);
+        MessageRecipientsResponse Map(MessageRecipientsResponse response);
     }
 }

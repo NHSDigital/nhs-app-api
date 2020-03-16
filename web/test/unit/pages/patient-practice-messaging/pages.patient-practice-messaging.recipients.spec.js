@@ -46,7 +46,7 @@ describe('patient practice messaging recipients page', () => {
 
     describe('has message recipients', () => {
       it('will not redirect to home', async () => {
-        const messageRecipients = [{ recipientGuid: '1', name: 'Dr. Test' }];
+        const messageRecipients = [{ recipientIdentifier: '1', name: 'Dr. Test' }];
         isEmptyArray.mockReturnValueOnce(false);
         mountPage({ messageRecipients });
 
@@ -71,7 +71,7 @@ describe('patient practice messaging recipients page', () => {
 
     describe('has message recipients', () => {
       it('will show a list of recipients', () => {
-        const messageRecipients = [{ recipientGuid: '1', name: 'Dr. Test' }];
+        const messageRecipients = [{ recipientIdentifier: '1', name: 'Dr. Test' }];
 
         mountPage({ messageRecipients });
 

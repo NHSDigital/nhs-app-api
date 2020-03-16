@@ -5,10 +5,10 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Messages.Models;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Messages;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging;
 
-namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Messages
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMessaging
 {
     [TestClass]
     public class TppPatientPracticeMessagesMapperTests

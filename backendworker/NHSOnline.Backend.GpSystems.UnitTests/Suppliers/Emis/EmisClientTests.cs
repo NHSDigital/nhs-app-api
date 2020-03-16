@@ -794,7 +794,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             var sessionId = _fixture.Create<string>();
             var endUserSessionId = _fixture.Create<string>();
 
-            var expectedResponse = _fixture.Create<MessageRecipientsGetResponse>();
+            var expectedResponse = _fixture.Create<MessageRecipientsResponse>();
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {

@@ -6,14 +6,14 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
@@ -30,9 +30,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             services.RegisterTppAppointmentsServices();
             services.RegisterTppDemographicsServices();
             services.RegisterTppPatientRecordServices();
+            services.RegisterTppPatientPracticeMessagingServices();
             services.RegisterTppSessionServices();
             services.RegisterTppLinkedAccountsServices();
-            services.RegisterTppPatientMessagesServices();
             return services;
         }
 
@@ -77,7 +77,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 .AddTppClientRequest<(RequestSystmOnlineMessages, string), RequestSystmOnlineMessagesReply, TppClientRequestSystmOnlineMessages>()
                 .AddTppClientRequest<(TppUserSession, string, string), TestResultsViewReply, TppClientTestResultsView>()
                 .AddTppClientRequest<(TppUserSession, string), TestResultsViewReply, TppClientTestResultsViewDetailed>()
-                .AddTppClientRequest<(ViewAppointments, string), ViewAppointmentsReply, TppClientViewAppointmentsPost>();
+                .AddTppClientRequest<(ViewAppointments, string), ViewAppointmentsReply, TppClientViewAppointmentsPost>()
+                .AddTppClientRequest<TppUserSession, MessageRecipientsReply, TppClientMessageRecipientsPost>();
 
             return services;
         }

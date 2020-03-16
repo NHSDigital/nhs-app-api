@@ -3,6 +3,7 @@ package mocking.emis.patientPracticeMessaging
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.models.Mapping
+import mocking.sharedModels.MessageRecipientsResponseModel
 import wiremock.org.apache.http.HttpStatus
 
 class EmisMessagingRecipientsBuilder(configuration: EmisConfiguration?,

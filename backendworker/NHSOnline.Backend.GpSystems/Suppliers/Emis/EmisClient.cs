@@ -348,10 +348,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 customTimeout: _settings.EmisExtendedHttpTimeoutSeconds);
         }
 
-        public async Task<EmisApiObjectResponse<MessageRecipientsGetResponse>> PatientMessageRecipientsGet(
+        public async Task<EmisApiObjectResponse<MessageRecipientsResponse>> PatientMessageRecipientsGet(
             EmisRequestParameters requestParameters)
         {
-            return await Get<MessageRecipientsGetResponse>(
+            return await Get<MessageRecipientsResponse>(
                 string.Format(CultureInfo.InvariantCulture, GetMessageRecipientsPath,
                     requestParameters.UserPatientLinkToken),
                 RequestsForSuccessOutcome.PatientMessageRecipientsGet, GetDefaultSuccessStatusCodeList(),

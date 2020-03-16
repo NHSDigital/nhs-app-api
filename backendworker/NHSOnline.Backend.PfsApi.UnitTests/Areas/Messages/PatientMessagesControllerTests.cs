@@ -156,7 +156,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         public async Task GetMessageRecipients_ReturnsSuccessResult_WhenServiceReturnsSuccessfulResponse()
         {
             // Arrange
-            var successResponse = _fixture.Create<MessageRecipientsGetResponse>();
+            var successResponse = _fixture.Create<MessageRecipientsResponse>();
             var successResult = new GetPatientMessageRecipientsResult.Success(successResponse);
 
             _mockPatientMessagesService

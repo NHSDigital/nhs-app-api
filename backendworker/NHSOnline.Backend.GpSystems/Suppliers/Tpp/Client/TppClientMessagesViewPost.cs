@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {

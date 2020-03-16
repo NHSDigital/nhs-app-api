@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
 {
@@ -14,16 +14,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             _logger = logger;
         }
 
-        public MessageRecipientsGetResponse Map(MessageRecipientsGetResponse response)
+        public MessageRecipientsResponse Map(MessageRecipientsResponse response)
         {
             var existingIds = new HashSet<string>();
 
-            var mappedResponse = new MessageRecipientsGetResponse
+            var mappedResponse = new MessageRecipientsResponse
             {
                 MessageRecipients = response?.MessageRecipients?
                     .Where(r =>
                     {
-                        var recipientGuid = r?.RecipientGuid;
+                        var recipientGuid = r?.RecipientIdentifier;
 
                         if (existingIds.Contains(recipientGuid))
                         {

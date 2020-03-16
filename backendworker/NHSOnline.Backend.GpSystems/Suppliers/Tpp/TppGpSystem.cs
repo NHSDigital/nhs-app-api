@@ -15,7 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
         public IPatientMessagesService GetPatientMessagesService()
         {
-            return _serviceProvider.GetService<TppPatientMessagesService>();
+            return _serviceProvider.GetService<PatientPracticeMessagingService>();
         }
 
         public IRecreateSessionMapperService GetRecreateSessionMapperService()

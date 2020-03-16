@@ -1,7 +1,7 @@
 package pages.patientPracticeMessaging
 
+import mocking.sharedModels.MessageReply
 import org.junit.Assert.assertEquals
-import mocking.emis.patientPracticeMessaging.MessageReply
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.isVisible
