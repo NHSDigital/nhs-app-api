@@ -200,26 +200,27 @@ elif [[ $TARGET_ZONE == "staging" ]] || [[ $TARGET_ZONE == "production" ]]; then
 	info "CosmosDB - Creating im1cache Collection"
 	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "im1cache") ]] || az cosmosdb mongodb collection create --name im1cache --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --throughput 400
 
-	info "CosmosDB - Creating Devices API Database $COSMOS_DB_NAME"
-	[[ $(az cosmosdb mongodb database list --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "$COSMOS_DB_NAME") ]] || az cosmosdb mongodb database create --name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" #--throughput $THROUGHPUT
+# Devices database turned off before feature is enabled on production
+	# info "CosmosDB - Creating Devices API Database $COSMOS_DB_NAME"
+	# [[ $(az cosmosdb mongodb database list --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "$COSMOS_DB_NAME") ]] || az cosmosdb mongodb database create --name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" #--throughput $THROUGHPUT
 
-	info "CosmosDB - Creating Devices container"
-	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "devices") ]] || az cosmosdb mongodb collection create --name devices --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsLoginId"
+	# info "CosmosDB - Creating Devices container"
+	# [[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "devices") ]] || az cosmosdb mongodb collection create --name devices --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsLoginId"
 
-	info "CosmosDB - Creating Audit_devices container"
-	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "audit_devices") ]] || az cosmosdb mongodb collection create --name audit_devices --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsNumber"
+	# info "CosmosDB - Creating Audit_devices container"
+	# [[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "audit_devices") ]] || az cosmosdb mongodb collection create --name audit_devices --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsNumber"
 
-	info "CosmosDB - Creating Messages container"
-	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "messages") ]] || az cosmosdb mongodb collection create --name messages --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsLoginId"
+	# info "CosmosDB - Creating Messages container"
+	# [[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "messages") ]] || az cosmosdb mongodb collection create --name messages --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsLoginId"
 
-	info "CosmosDB - Creating Audit_messages container"
-	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "audit_messages") ]] || az cosmosdb mongodb collection create --name audit_messages --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsNumber"
+	# info "CosmosDB - Creating Audit_messages container"
+	# [[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "audit_messages") ]] || az cosmosdb mongodb collection create --name audit_messages --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsNumber"
 
-	info "CosmosDB - Creating Info container"
-	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "info") ]] || az cosmosdb mongodb collection create --name info --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsLoginId"
+	# info "CosmosDB - Creating Info container"
+	# [[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "info") ]] || az cosmosdb mongodb collection create --name info --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsLoginId"
 
-	info "CosmosDB - Creating Audit_info container"
-	[[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "audit_info") ]] || az cosmosdb mongodb collection create --name audit_info --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsNumber"
+	# info "CosmosDB - Creating Audit_info container"
+	# [[ $(az cosmosdb mongodb collection list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "audit_info") ]] || az cosmosdb mongodb collection create --name audit_info --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-devices" --resource-group "nhsapp-${TARGET_ZONE}"  --throughput 400 --shard "NhsNumber"
 fi
 
 CURRENT_RELEASE=$(helm ls --namespace "$TARGET_ENVIRONMENT" --deployed | grep "$TARGET_ENVIRONMENT" | grep "$CHART" | awk '{print $2}')
