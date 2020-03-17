@@ -94,6 +94,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         urlHelper = UrlHelper(this)
         appPersistData = PersistData(this)
 
+        setTheme(R.style.AppTheme)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.logged_in_header))
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
@@ -500,6 +501,10 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             progressBarLayout.visibility = GONE
         }
+    }
+
+    override fun dismissSplashScreen() {
+        splashLayout.visibility = GONE
     }
 
     override fun selectNavigationMenuActive(navigationMenuId: Int) {

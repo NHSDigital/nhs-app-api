@@ -87,6 +87,26 @@
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/splashLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background = "@drawable/splash">
+        <ProgressBar
+            android:id="@+id/spinnerProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:visibility="visible"
+            android:minHeight="55dip"
+            android:minWidth="55dip"
+            android:interpolator="@android:anim/linear_interpolator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/progressbar_color"
+            android:indeterminateTintMode="src_in"
+            android:background = "@drawable/progress_spinner_icon_background"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/progressBarLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

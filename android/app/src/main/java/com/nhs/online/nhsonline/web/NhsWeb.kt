@@ -228,6 +228,7 @@ class NhsWeb(
         Log.d(TAG, "Entering ShowNoConnectionError")
         webView.stopLoading()
         uiInteractor.showUnavailabilityError(errorMessageHandler.getErrorMessage(ErrorType.NoConnection))
+        uiInteractor.dismissSplashScreen()
         uiInteractor.dismissProgressDialog()
         uiInteractor.dismissBiometricDialog()
         return

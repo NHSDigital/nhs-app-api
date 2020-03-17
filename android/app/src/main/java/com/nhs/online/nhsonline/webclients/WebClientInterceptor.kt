@@ -223,8 +223,11 @@ class WebClientInterceptor(
     private fun loadBundledFont(font: String): WebResourceResponse {
         val woff2MimeType = "application/font-woff2"
 
+        val headers = mutableMapOf<String, String>()
+        headers["Access-Control-Allow-Origin"] = "*"
+
         val inputStream: InputStream = context.assets.open("fonts/$font")
-        return WebResourceResponse(woff2MimeType, WOFF2, inputStream)
+        return WebResourceResponse(woff2MimeType, WOFF2, 200, "OK", headers, inputStream)
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
@@ -240,6 +243,8 @@ class WebClientInterceptor(
         }
 
         super.onPageFinished(view, url)
+        
+        uiInteractor.dismissSplashScreen()
     }
 
     override fun onPageCommitVisible(view: WebView?, url: String?) {

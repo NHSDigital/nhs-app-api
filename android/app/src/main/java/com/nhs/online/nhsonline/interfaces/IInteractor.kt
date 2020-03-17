@@ -66,4 +66,5 @@ interface IInteractor {
 
     fun canDisplayBiometricLogin(): Boolean
 
+    fun dismissSplashScreen()
 }
