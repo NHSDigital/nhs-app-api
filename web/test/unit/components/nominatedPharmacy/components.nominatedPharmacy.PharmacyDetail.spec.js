@@ -184,9 +184,15 @@ describe('pharmacy detail', () => {
 
     describe('change nominated pharmacy link', () => {
       let link;
+      let div;
 
       beforeEach(() => {
         link = wrapper.find('#link-to-change-pharmacy');
+        div = wrapper.find('#internet-pharmacy-div');
+      });
+
+      it('will have bottom padding on the div', () => {
+        expect(div.classes()).toContain('nhsuk-u-padding-bottom-5');
       });
 
       it('will display the link', () => {

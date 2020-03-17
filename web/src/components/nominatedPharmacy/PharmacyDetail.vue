@@ -10,7 +10,8 @@
         <pharmacy-opening-times v-if="!isInternetPharmacy" id="pharmacy-opening-times"
                                 :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
       </div>
-      <div v-else-if="isInternetPharmacy">
+      <div v-else-if="isInternetPharmacy"
+           id="internet-pharmacy-div" class="nhsuk-u-padding-bottom-5">
         <online-only-pharmacy-detail id="online-pharmacy-summary" :pharmacy="pharmacy"/>
       </div>
       <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink &&
@@ -23,14 +24,15 @@
         </generic-button>
       </analytics-tracked-tag>
     </div>
-    <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink &&
-                             !displayChangeMyNominatedPharmacyButton"
-                           id="link-to-change-pharmacy"
-                           :text="$t('nominated_pharmacy.changePharmacyLink')"
-                           :click-func="goToNominatedPharmacyInterruptPage"
-                           tag="a" :href="nominatedPharmacyInterrupt">
-      <p> {{ $t('nominated_pharmacy.changePharmacyLink') }} </p>
-    </analytics-tracked-tag>
+    <p v-if="showChangeNominatedPharmacyLink && !displayChangeMyNominatedPharmacyButton">
+      <analytics-tracked-tag id="link-to-change-pharmacy"
+                             :text="$t('nominated_pharmacy.changePharmacyLink')"
+                             :click-func="goToNominatedPharmacyInterruptPage"
+                             tag="a" :href="nominatedPharmacyInterrupt"
+                             style="vertical-align: baseline; display: inline;">
+        {{ $t('nominated_pharmacy.changePharmacyLink') }}
+      </analytics-tracked-tag>
+    </p>
   </div>
 </template>
 

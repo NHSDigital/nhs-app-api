@@ -77,13 +77,13 @@
           </no-js-form>
         </div>
 
-        <div v-if="showNoRepeatCourses" class="nhsuk-u-padding-bottom-6">
+        <div v-if="showNoRepeatCourses">
           <h3>{{ $t('rp06.empty.subHeader') }}</h3>
           <p>
             {{ $t('rp06.empty.body') }}
           </p>
         </div>
-        <desktopGenericBackLink v-else-if="!$store.state.device.isNativeApp"
+        <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                 :path="getBackPath"
                                 :button-text="'rp03.backButton'"
                                 @clickAndPrevent="backButtonClicked"/>
@@ -94,7 +94,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
