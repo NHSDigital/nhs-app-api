@@ -24,6 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             var logger = _fixture.Create<ILogger<GpSystemFactory>>();
 
             var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton<TppConfigurationSettings>();
             serviceCollection.AddSingleton<IGpSystem, EmisGpSystem>();
             serviceCollection.AddSingleton<IGpSystem, TppGpSystem>();
 

@@ -50,6 +50,6 @@ namespace NHSOnline.Backend.GpSystems
 
         IRecreateSessionMapperService GetRecreateSessionMapperService();
 
-        Boolean SupportsLinkedAccounts { get; }
+        bool SupportsLinkedAccounts { get; }
     }
 }

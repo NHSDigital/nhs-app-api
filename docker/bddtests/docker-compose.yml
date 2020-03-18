@@ -46,6 +46,7 @@ services:
       - ./docker/bddtests/env/spine_connectivity.env
       - ./docker/bddtests/env/tpp_connectivity.env
       - ./docker/bddtests/env/vision_connectivity.env
+      - ./docker/bddtests/env/proxy_access.env
       - ./docker/bddtests/env/pfs.env
     volumes:
       - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
@@ -58,6 +59,7 @@ services:
       - ./docker/bddtests/env/session_database.env
       - ./docker/bddtests/env/tpp_connectivity.env
       - ./docker/bddtests/env/vision_connectivity.env
+      - ./docker/bddtests/env/proxy_access.env
     volumes:
       - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
 

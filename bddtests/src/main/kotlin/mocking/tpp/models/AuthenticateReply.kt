@@ -25,5 +25,18 @@ data class AuthenticateReply(
                             "default name"
                     )
                 )
+        ),
+        @field:XmlElement(name= "Person") var person:  MutableCollection<Person> = mutableListOf(
+                Person("default patientId",
+                        "default dateOfBirth",
+                        "default gender",
+                        NationalId(
+                                "default type",
+                                "default value"
+                        ),
+                        PersonName(
+                                "default name"
+                        )
+                )
         )
 )

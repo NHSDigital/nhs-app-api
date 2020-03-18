@@ -17,11 +17,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp {
         public int? CoursesMaxCoursesLimit { get; set; }
         public string Environment { get; set; }
 
+        public bool SupportsLinkedAccounts { get; set; }
+
         public TppConfigurationSettings() {}
         
         public TppConfigurationSettings(Uri baseUrl, string apiVersion, string applicationName, string applicationVersion, 
             string applicationProviderId, string applicationDeviceType, string certificatePath, string certificatePassphrase,
-            int? prescriptionsMaxCoursesSoftLimit, int? coursesMaxCoursesLimit, string environment)
+            int? prescriptionsMaxCoursesSoftLimit, int? coursesMaxCoursesLimit, string environment, string supportsLinkedAccounts)
         {           
             ApiUrl = baseUrl;
             ApiVersion = apiVersion;
@@ -34,6 +36,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp {
             PrescriptionsMaxCoursesSoftLimit = prescriptionsMaxCoursesSoftLimit;
             CoursesMaxCoursesLimit = coursesMaxCoursesLimit;
             Environment = environment;
+
+            SupportsLinkedAccounts = string.Equals("true", supportsLinkedAccounts, StringComparison.Ordinal);
         }
 
         public void Validate()
@@ -54,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp {
                 throw new ConfigurationNotFoundException("ApiUrl cannot be null or empty");
             }
 
-            if(String.IsNullOrEmpty(CertificatePath))
+            if(string.IsNullOrEmpty(CertificatePath))
             {
                 throw new ConfigurationNotFoundException("CertificatePath cannot be null or empty");
             }

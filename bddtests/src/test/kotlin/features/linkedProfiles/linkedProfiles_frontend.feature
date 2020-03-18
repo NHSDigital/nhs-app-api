@@ -192,3 +192,17 @@ Feature: Login with proxy access
     When I click the Switch to my profile button for the main user
     And I see the home page
     And I do not see the yellow banner
+
+
+  Scenario: An TPP user with proxy accounts can see proxy details and switch back to their own account
+    Given I am logged in as a TPP user with linked profiles and appointments provider IM1
+    When I select the linked profiles link from the home page
+    And I select a linked profile
+    And I click the Switch to this profile button for the proxy user
+    And I see the proxy patient details of age and gp surgery
+    And I click the proxy warning
+    Then the switch profiles page is displayed
+    And the correct proxy user details are displayed
+    Then I click the Switch to my profile button for the main user
+    And I see the home page
+    And I do not see the yellow banner

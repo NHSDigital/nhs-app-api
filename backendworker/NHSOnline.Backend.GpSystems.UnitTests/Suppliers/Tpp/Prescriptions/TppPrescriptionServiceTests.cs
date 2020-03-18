@@ -48,6 +48,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
         private const int CoursesMaxCoursesLimit = 100;
         private const string Environment = "environment";
+        private const string SupportsLinkedAccounts = "true";
 
         [TestInitialize]
         public void TestInitialize()
@@ -66,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             _logger = _fixture.Freeze<Mock<ILogger<TppPrescriptionService>>>();
 
             _settings = new TppConfigurationSettings(ApiUrl, ApiVersion, ApplicationName, ApplicationVersion, ApplicationProviderId, ApplicationDeviceType,
-                CertificatePath, CertificatePassphrase, PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, Environment);
+                CertificatePath, CertificatePassphrase, PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, Environment, SupportsLinkedAccounts);
 
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<TppPrescriptionService>();

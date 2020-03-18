@@ -95,6 +95,7 @@ services:
       - ./docker/tpp_connectivity.env
       - ./docker/userinfo_connectivity.env
       - ./docker/vision_connectivity.env
+      - ./docker/proxy_access.env
       - ./docker/pfs.env
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io
@@ -134,6 +135,7 @@ services:
       - ./docker/sjr_connectivity.env
       - ./docker/tpp_connectivity.env
       - ./docker/vision_connectivity.env
+      - ./docker/proxy_access.env
       - ./docker/cid.env
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io

@@ -26,6 +26,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         internal const string CertificatePath = "CertificatePath";
         internal const string CertificatePassphrase = "CerticiatePassphrase";
         internal const string Environment = "environment";
+        internal const string SupportsLinkedAccounts = "true";
 
         internal const string ResponseSuidHeader = "suid";
         internal const string RequestTypeHeader = "type";
@@ -58,12 +59,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             services.AddSingleton(configuration);
 
             var mockGuidCreator = new Mock<IGuidCreator>();
-            mockGuidCreator.Setup(x => x.CreateGuid()).Returns(TppClientTestsContext.Uuid);
+            mockGuidCreator.Setup(x => x.CreateGuid()).Returns(Uuid);
             services.AddSingleton(mockGuidCreator.Object);
 
             services.AddSingleton(MockLogger.Object);
 
-            var tppConfig = new TppConfigurationSettings(TppClientTestsContext.ApiUrl, TppClientTestsContext.ApiVersion, TppClientTestsContext.ApplicationName, TppClientTestsContext.ApplicationVersion, TppClientTestsContext.ApplicationProviderId, TppClientTestsContext.ApplicationDeviceType, TppClientTestsContext.CertificatePassphrase, TppClientTestsContext.CertificatePath, TppClientTestsContext.PrescriptionsMaxCoursesSoftLimit, TppClientTestsContext.CoursesMaxCoursesLimit, TppClientTestsContext.Environment);
+            var tppConfig = new TppConfigurationSettings(ApiUrl, ApiVersion, ApplicationName, ApplicationVersion, ApplicationProviderId, ApplicationDeviceType,
+                CertificatePassphrase, CertificatePath, PrescriptionsMaxCoursesSoftLimit, CoursesMaxCoursesLimit, Environment, SupportsLinkedAccounts);
             services.AddSingleton(tppConfig);
 
             services.AddSingleton(MockHttpHandler);
@@ -85,17 +87,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         {
             return new Application
             {
-                Name = TppClientTestsContext.ApplicationName,
-                Version = TppClientTestsContext.ApplicationVersion,
-                ProviderId = TppClientTestsContext.ApplicationProviderId,
-                DeviceType = TppClientTestsContext.ApplicationDeviceType
+                Name = ApplicationName,
+                Version = ApplicationVersion,
+                ProviderId = ApplicationProviderId,
+                DeviceType = ApplicationDeviceType
             };
         }
 
         internal void VerifyLogging(ITppRequest requestModel)
         {
             MockLogger.VerifyLogger(LogLevel.Information, string.Format(CultureInfo.InvariantCulture,
-                TppClientTestsContext.LoggingMessageTemplate,
+                LoggingMessageTemplate,
                 requestModel.RequestType,
                 requestModel.Uuid), Times.Once());
         }

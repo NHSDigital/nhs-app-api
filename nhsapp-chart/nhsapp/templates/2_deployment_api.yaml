@@ -268,6 +268,8 @@ spec:
           value: "{{ $.Values.tppApplicationVersion }}"
         - name: TPP_APPLICATION_DEVICE_TYPE
           value: "{{ $.Values.tppApplicationDeviceType }}"
+        - name: TPP_SUPPORTS_LINKED_ACCOUNTS
+          value: "{{ $.Values.tppSupportsLinkedAccounts }}"
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.visionStubbed)) }}
         - name: VISION_BASE_URI
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/vision/"

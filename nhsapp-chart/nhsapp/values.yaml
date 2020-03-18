@@ -238,6 +238,7 @@ spinePdsPort: 443
 
 # Linked Accounts
 proxyAccessEnabled: true
+tppSupportsLinkedAccounts: false
 
 # Placeholder values
 cosmosdbKey: placeholder

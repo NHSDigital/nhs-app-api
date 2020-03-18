@@ -63,7 +63,8 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
                                 ),
                                 personName = PersonName(patient.formattedFullName())
                         )
-                )
+                ),
+                person =  mutableListOf<Person>()
         )
 
         mockingClient.forTpp { authentication.authenticateRequest(authenticateRequest)

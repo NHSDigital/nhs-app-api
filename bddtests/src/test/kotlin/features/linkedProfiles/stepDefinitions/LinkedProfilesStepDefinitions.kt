@@ -77,7 +77,7 @@ class LinkedProfilesStepDefinitions {
     fun iAmLoggedInWithLinkedProfilesAndAppointmentsProvider(gpSystem: String, provider: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = Patient.getPatientWithLinkedProfiles(supplier)
-        Patient.setOdsCodeBasedOnAppointmentsProvider(patient, provider)
+        Patient.setOdsCodeBasedOnAppointmentsProvider(supplier, patient, provider)
         SerenityHelpers.setGpSupplier(supplier)
         setupAndLogIn(patient, supplier)
     }
@@ -156,7 +156,7 @@ class LinkedProfilesStepDefinitions {
         checkDisplayedValuesAreCorrect(displayedLinkedProfiles, userLinkedProfiles)
     }
 
-    private fun iSelectALinkedProfileWithFeatures(featuresEnabled: FeaturesEnabledFacade) {
+    private fun iSelectALinkedProfileWithFeatures(featuresEnabledFacade: FeaturesEnabledFacade) {
         val patient = SerenityHelpers.getPatient()
         val gpSystem = SerenityHelpers.getGpSupplier()
 
@@ -172,14 +172,12 @@ class LinkedProfilesStepDefinitions {
                     .respondWithSuccess(gpPractice)
         }
 
-        GpPracticeAccessSettingsFactory.getForSupplier(gpSystem).enabledViaProxy(
-                callingPatient = patient,
-                actingOnBehalfOf = linkedAccount,
-                featuresEnabled = FeaturesEnabledFacade(
-                        appointmentsEnabled = featuresEnabled.appointmentsEnabled,
-                        prescribingEnabled = featuresEnabled.prescribingEnabled,
-                        medicalRecordEnabled = featuresEnabled.medicalRecordEnabled)
-        )
+        if (gpSystem == Supplier.EMIS) {
+            GpPracticeAccessSettingsFactory.getForSupplier(gpSystem).enabledViaProxy(
+                    callingPatient = patient,
+                    actingOnBehalfOf = linkedAccount,
+                    featuresEnabled = featuresEnabledFacade)
+        }
 
         LinkedProfilesSerenityHelpers.SELECTED_PROFILE.set(
                 LinkedProfileFacade(
@@ -202,6 +200,7 @@ class LinkedProfilesStepDefinitions {
                         medicalRecordEnabled = true)
         )
     }
+
 
     @Then("^I select a linked profile with " +
             "appointments enabled (.*), " +

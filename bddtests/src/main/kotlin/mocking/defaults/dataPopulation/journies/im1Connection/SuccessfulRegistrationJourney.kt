@@ -124,7 +124,8 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                                                                     "${patient.firstName} ${patient.surname}"
                                                     )
                                             )
-                                    )
+                                    ),
+                                    person =  mutableListOf<Person>()
                             )
                     )
         }

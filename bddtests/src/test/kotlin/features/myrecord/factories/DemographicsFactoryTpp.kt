@@ -29,8 +29,15 @@ class DemographicsFactoryTpp: DemographicsFactory() {
         }
     }
 
+    // TODO
+    // not sure at the min what this needs to be it will become clearer when
+    // more tpp proxy functionality is added - but this will do for now
     override fun enabledViaProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
-        throw NotImplementedError()
+        mockingClient.forTpp {
+            myRecord.patientSelectedPost(
+                    callingPatient.tppUserSession!!)
+                    .respondWithSuccess(DemographicsData.getTppDemographicsData(actingOnBehalfOf))
+        }
     }
 
     override fun enabledButTimesOut(patient: Patient) {

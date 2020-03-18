@@ -31,7 +31,8 @@ class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", 
                 authenticateReply.patientId,
                 authenticateReply.onlineUserId,
                 authenticateReply.uuid,
-                authenticateReply.user)
+                authenticateReply.user,
+                authenticateReply.person)
 
         val suidHeader = "suid"
         val suidValue = TppMockDefaults.DEFAULT_TPP_SESSION_ID

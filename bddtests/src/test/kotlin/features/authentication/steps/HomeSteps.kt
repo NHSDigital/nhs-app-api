@@ -38,12 +38,12 @@ open class HomeSteps {
 
     @Step
     fun assertPatientDetailsShownFor(patient:Patient ) {
-        homePage.assertHasPatientDetails(patient,getExpectedDetails(patient))
+        homePage.assertHasPatientDetails(patient, getExpectedDetails(patient))
     }
 
     @Step
     fun assertProxyPatientDetailsShownFor(proxyProfile:LinkedProfileFacade ) {
-        homePage.assertHasProxyPatientDetails(proxyProfile,getExpectedProxyDetails(proxyProfile))
+        homePage.assertHasProxyPatientDetails(proxyProfile, getExpectedProxyDetails(proxyProfile))
     }
 
 

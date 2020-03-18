@@ -30,9 +30,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public TppGpSystem(IServiceProvider serviceProvider)
+        public TppGpSystem(IServiceProvider serviceProvider, TppConfigurationSettings configurationSettings)
         {
             _serviceProvider = serviceProvider;
+            SupportsLinkedAccounts = configurationSettings.SupportsLinkedAccounts;
         }
 
         public Supplier Supplier => Supplier.Tpp;
@@ -122,6 +123,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             return _serviceProvider.GetService<TppRecreateSessionMapperService>();
         }
 
-        public bool SupportsLinkedAccounts => false;
+        public bool SupportsLinkedAccounts { get; }
     }
 }

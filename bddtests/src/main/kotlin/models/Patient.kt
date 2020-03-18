@@ -16,11 +16,14 @@ import utils.DateConverter
 import worker.models.demographics.TppUserSession
 import worker.models.patient.Im1ConnectionToken
 import worker.models.session.UserSessionRequest
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 data class Patient(
         val title: String = "",
-        val ageMonths: Int = 0,
-        val ageYears: Int = 0,
+        var ageMonths: Int = 0,
+        var ageYears: Int = 0,
         val firstName: String = "",
         val surname: String = "",
         val callingName: String = "",
@@ -121,6 +124,7 @@ data class Patient(
         const val defaultTelephoneFirst = "02837483567"
         const val defaultTelephoneSecond = "07737483567"
         const val defaultEmailAddress = "HalleD@fakeemail.com"
+        const val monthsInYear = 12
 
         val defaultAddress = Address(
                 houseNameFlatNumber = "99",
@@ -147,6 +151,7 @@ data class Patient(
         fun getPatientWithLinkedProfiles(gpSystem: Supplier): Patient {
             return when (gpSystem) {
                 Supplier.EMIS -> EmisPatients.getPatientWithLinkedProfiles()
+                Supplier.TPP -> TppPatients.getPatientWithLinkedProfiles()
                 else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
             }
         }
@@ -162,7 +167,15 @@ data class Patient(
             return MicrotestPatients.microtestPostLinkageUserDetails(accountID, linkageKey)
         }
 
-        fun setOdsCodeBasedOnAppointmentsProvider(patient: Patient, provider: String) {
+        fun setOdsCodeBasedOnAppointmentsProvider(supplier: Supplier, patient: Patient, provider: String) {
+            return when (supplier) {
+                Supplier.TPP -> return  //TODO - not sure yet if anything to do...!!
+                Supplier.EMIS -> setEmisOdsCode(patient, provider)
+                else -> throw IllegalArgumentException("$provider not a valid appointment provider name.")
+            }
+        }
+
+        fun setEmisOdsCode(patient: Patient, provider: String) {
             return when (provider.toUpperCase()) {
                 "ECONSULT" -> updateOdsCodes(patient, EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT)
                 "IM1" -> updateOdsCodes(patient, EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_IM1)
@@ -175,6 +188,15 @@ data class Patient(
         fun updateOdsCodes(patient: Patient, odsCode: String) {
             patient.odsCode = odsCode
             patient.linkedAccounts.forEach {e -> e.odsCode = odsCode }
+        }
+
+        fun getAgePart(dob: String, unit: ChronoUnit): Int {
+            val dateOfBirth = LocalDate.parse(dob, DateTimeFormatter.ISO_DATE)
+            return when (unit) {
+                ChronoUnit.YEARS -> unit.between(dateOfBirth, LocalDate.now()).toInt()
+                ChronoUnit.MONTHS -> (unit.between(dateOfBirth, LocalDate.now()) % monthsInYear) .toInt()
+                else -> throw IllegalArgumentException("Only years or months are supported")
+            }
         }
     }
 }

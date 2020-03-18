@@ -30,24 +30,21 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
     }
 
     private fun authenticationReply(patient: Patient): AuthenticateReply {
-        return AuthenticateReply(
+        val person = createPerson(patient)
+
+        val reply =  AuthenticateReply(
                 patientId = patient.patientId,
                 onlineUserId = patient.patientId,
                 uuid = "01068966-0a47-429c-9abd-e5c05736a6f7",
-                user = User(
-                        person = Person(
-                                patientId = patient.patientId,
-                                dateOfBirth = patient.dateOfBirth,
-                                gender = patient.sex.name,
-                                nationalId = NationalId(
-                                        type = TppConstants.NationalIdTypeNhs,
-                                        value = patient.nhsNumbers.firstOrNull() ?: ""
-                                ),
-                                personName = PersonName(
-                                        name = "${patient.title} ${patient.firstName} ${patient.surname}"
-                                )
-                        )
-                ))
+                user = User(person),
+                person = mutableListOf<Person>(person)
+        )
+
+        patient.linkedAccounts.forEach {
+            reply.person.add(createPerson(it))
+        }
+
+        return reply
     }
 
     fun createAuthenticateRequest(patient: Patient) {
@@ -60,5 +57,20 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
     override fun createFor(patient: Patient, defaultPracticeSettings:Boolean) {
         createAuthenticateRequest(patient)
         client.forTpp { authentication.logOffRequest().respondWithSuccess() }
+    }
+
+    private fun createPerson(patient: Patient): Person {
+        return Person(
+                patientId = patient.patientId,
+                dateOfBirth = patient.dateOfBirth,
+                gender = patient.sex.name,
+                nationalId = NationalId(
+                        type = TppConstants.NationalIdTypeNhs,
+                        value = patient.nhsNumbers.firstOrNull() ?: ""
+                ),
+                personName = PersonName(
+                        name = "${patient.title} ${patient.firstName} ${patient.surname}"
+                )
+        )
     }
 }

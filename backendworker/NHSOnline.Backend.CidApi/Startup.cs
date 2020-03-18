@@ -272,6 +272,7 @@ namespace NHSOnline.Backend.CidApi
             var applicationDeviceType = Configuration.GetOrWarn("TPP_APPLICATION_DEVICE_TYPE", _logger);
             var certificatePath = Configuration.GetOrWarn("TPP_CERTIFICATE_PATH", _logger);
             var certificatePassphrase = Configuration.GetOrWarn("TPP_CERTIFICATE_PASSWORD", _logger);
+            var supportsLinkedAccounts = Configuration.GetOrWarn("TPP_SUPPORTS_LINKED_ACCOUNTS", _logger);
 
             var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
             var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
@@ -287,7 +288,8 @@ namespace NHSOnline.Backend.CidApi
                 certificatePassphrase,
                 prescriptionsMaxCoursesSoftLimit,
                 coursesMaxCoursesLimit,
-                environment);
+                environment,
+                supportsLinkedAccounts);
 
             config.Validate();
             return config;

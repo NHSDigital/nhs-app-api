@@ -133,7 +133,8 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
                                                                     "${patient.firstName} ${patient.surname}"
                                                     )
                                             )
-                                    )
+                                    ),
+                                    person =  mutableListOf<Person>()
                             )
                     )
         }
