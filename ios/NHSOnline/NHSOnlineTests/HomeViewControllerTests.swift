@@ -6,6 +6,8 @@ class HomeViewControllerTests: XCTestCase {
     var testWebview: WKWebView!
     var vcHome: HomeViewController!
     var mockApplicationState: MockApplicationState!
+    var mockSplashScreen: MockSplashScreen!
+    var mockProgressSpinner: MockProgressSpinner!
 
     let app = XCUIApplication.self
 
@@ -22,8 +24,14 @@ class HomeViewControllerTests: XCTestCase {
         testWebview = WKWebView()
         _ = vcHome.view
 
-        mockApplicationState = MockApplicationState();
+        mockApplicationState = MockApplicationState()
         vcHome?.applicationState = mockApplicationState
+        
+        mockSplashScreen = MockSplashScreen()
+        vcHome?.splashScreen = mockSplashScreen
+        
+        mockProgressSpinner = MockProgressSpinner()
+        vcHome?.progressSpinner = mockProgressSpinner
     }
 
     func test_hasCidUrlSuffix_nilUrl_Returns_False() {
@@ -144,6 +152,31 @@ class HomeViewControllerTests: XCTestCase {
     func test_showWebViewContainer_isBlockedisFalse() {
         vcHome.showWebViewContainer()
         assert(self.mockApplicationState.isBlocked == false)
+    }
+    
+    func test_showErrorViewContainer_hidesProgressAndSplashScreen() {
+        vcHome.showErrorViewContainer()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+            assert(self.mockProgressSpinner.isVisible == false)
+            assert(self.mockSplashScreen.isVisible == false)
+        })
+    }
+    
+    class MockSplashScreen: SplashScreen {
+        var isVisible = true
+        
+        override func hide() {
+            isVisible = false
+        }
+    }
+    
+    class MockProgressSpinner: ProgressSpinner {
+        var isVisible = true
+        
+        override func hide(uiView: UIView) {
+            isVisible = false
+        }
     }
 
     class MockApplicationState: ApplicationState {

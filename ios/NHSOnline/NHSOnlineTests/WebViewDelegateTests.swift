@@ -32,7 +32,7 @@ class WebViewDelegateTests: XCTestCase {
     }
     
     func test_WhenPageLoadIsNormal_VerifyStartActivityIndicatorIsCalled() {
-        webViewDelegate?.checkPageLoadOriginAndStartActivityIndicator()
+        webViewDelegate?.checkPageLoadOriginAndStartProgressSpinner()
         
         assert(homeViewController!.startActivityIndicatorWasCalled == true,
                "Expected the startActivityIndicator() Method to be invoked")
@@ -41,7 +41,7 @@ class WebViewDelegateTests: XCTestCase {
     func test_WhenPageLoadIsFromBackButton_VerifyStartActivityIndicatorIsNotCalled() {
         webViewDelegate?.viewController.goingBack = true
         
-        webViewDelegate?.checkPageLoadOriginAndStartActivityIndicator()
+        webViewDelegate?.checkPageLoadOriginAndStartProgressSpinner()
         
         assert(homeViewController!.startActivityIndicatorWasCalled == false,
                "startActivityIndicator() Method should not be invoked")
@@ -85,13 +85,6 @@ class WebViewDelegateTests: XCTestCase {
                "Expected the stopActivityIndicator() Method to not have been invoked")
         
         assert(homeViewController!.applicationState.isReady() == true)
-    }
-    
-    func test_pageIsNotResponding_VerifyStopActivityIndicatorIsCalled(){
-        webViewDelegate?.pageIsNotResponding()
-        
-        assert(homeViewController!.stopActivityIndicatorWasCalled == true,
-               "Expected the stopActivityIndicator() Method to be invoked")
     }
 
     func test_launchIproovIsCalled() {

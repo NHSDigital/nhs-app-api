@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fl5-i3-NEv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fl5-i3-NEv">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15508"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,8 +33,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0OU-1V-r5y" userLabel="NavMenu">
                                 <rect key="frame" x="0.0" y="606" width="375" height="61"/>
                                 <subviews>
-                                    <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HpT-Fq-426" userLabel="TabBarSpacer">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HpT-Fq-426" userLabel="TabBarSpacer">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
                                         <color key="backgroundColor" red="0.68235294117647061" green="0.71764705882352942" blue="0.74117647058823533" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="VBg-oh-ZP5"/>
@@ -58,8 +58,8 @@
                                     <constraint firstItem="HpT-Fq-426" firstAttribute="top" secondItem="0OU-1V-r5y" secondAttribute="top" id="pE2-6d-SNE"/>
                                     <constraint firstItem="ZaB-IT-U0z" firstAttribute="top" secondItem="HpT-Fq-426" secondAttribute="bottom" id="pE2-6d-SNF"/>
                                     <constraint firstItem="ZaB-IT-U0z" firstAttribute="leading" secondItem="0OU-1V-r5y" secondAttribute="leading" id="pp9-V8-8hO"/>
-                                    <constraint firstItem="ZaB-IT-U0z" firstAttribute="trailing" secondItem="0OU-1V-r5y" secondAttribute="trailing" id="wrT-J1-CxW"/>
                                     <constraint firstItem="HpT-Fq-426" firstAttribute="leading" secondItem="0OU-1V-r5y" secondAttribute="leading" id="pt9-V8-8hO"/>
+                                    <constraint firstItem="ZaB-IT-U0z" firstAttribute="trailing" secondItem="0OU-1V-r5y" secondAttribute="trailing" id="wrT-J1-CxW"/>
                                     <constraint firstItem="HpT-Fq-426" firstAttribute="trailing" secondItem="0OU-1V-r5y" secondAttribute="trailing" id="wsT-J1-CxW"/>
                                 </constraints>
                             </view>

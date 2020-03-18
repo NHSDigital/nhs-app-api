@@ -14,6 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if let homeViewController = self.window?.rootViewController as? HomeViewController {
             homeViewController.knownServicesProvider = ConfigurationServiceManager.getKnownServiceProvider()
             homeViewController.configurationServiceProvider = ConfigurationServiceManager.getConfigurationServiceProvider()
+            homeViewController.splashScreen = SplashScreen()
+            homeViewController.progressSpinner = ProgressSpinner()
             
             let navigationController = UINavigationController(rootViewController: homeViewController)
             self.window?.rootViewController = navigationController

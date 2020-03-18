@@ -202,7 +202,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
 
         if !webView.url!.absoluteString.contains(config().AuthRedirectPath) && !webView.url!.absoluteString.contains(config().CidUrlSuffix) {
-            checkPageLoadOriginAndStartActivityIndicator()
+            checkPageLoadOriginAndStartProgressSpinner()
         }
     }
 
@@ -227,6 +227,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         if !webView.url!.absoluteString.contains(config().BiometricAuthResponseParam) {
             viewController.hideProgressBar()
         }
+        
+        viewController.hideSplashScreen()
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
@@ -446,7 +448,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 }
             }
         }
-        viewController.hideProgressBar()
     }
 
     func updateNavigationMenu(knownService: KnownService) {
@@ -462,7 +463,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
     func showNativeViewContainerWithError(_ errorMessage: ErrorMessage) {
         clearTimer()
-        viewController.hideProgressBar()
         if !Reachability.isConnectedToNetwork() {
             self.viewController.showNativeViewContainer(errorMessage: ErrorMessage(.NoInternetConnection))
         } else {
@@ -478,12 +478,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
     }
 
-    func checkPageLoadOriginAndStartActivityIndicator() {
+    func checkPageLoadOriginAndStartProgressSpinner() {
         if (self.viewController.goingBack) {
             self.viewController.goingBack = false
             Logger.logInfo(message: "Page looks like it came from a goBack - not starting native spinner")
         } else {
-            viewController.showProgressBar()
+            self.viewController.showProgressBar()
         }
     }
     

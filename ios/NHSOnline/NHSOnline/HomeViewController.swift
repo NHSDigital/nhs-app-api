@@ -7,7 +7,8 @@ import WebKit
 class HomeViewController : UIViewController {
     private let showConstraintPriority = UILayoutPriority.init(rawValue: 900)
     private let hideConstraintPriority = UILayoutPriority.init(rawValue: 850)
-    private let progressSpinner = ProgressSpinner()
+    var progressSpinner: ProgressSpinner?
+    var splashScreen: SplashScreen?
     
     var applicationState = ApplicationState()
     var documentInteractionController = UIDocumentInteractionController()
@@ -70,6 +71,8 @@ class HomeViewController : UIViewController {
     }
     
     override func viewDidLoad() {
+        showSplashScreen()
+        showProgressBar()
         self.setNeedsStatusBarAppearanceUpdate()
         super.viewDidLoad()
 
@@ -96,19 +99,21 @@ class HomeViewController : UIViewController {
                 homeViewController: self,
                 configurationServiceProvider: self.configurationServiceProvider!)
 
-        switch self.configurationServiceProvider!.getConfigurationResponse() {
-        case .success(_):
-            guard let urlToLoad = UserDefaults.standard.url(forKey: config().NotificationLinkPropertyName) else {
-                self.webViewController?.loadPage(url: config().HomeUrl)
+        DispatchQueue.main.async {
+            switch self.configurationServiceProvider!.getConfigurationResponse() {
+            case .success(_):
+                guard let urlToLoad = UserDefaults.standard.url(forKey: config().NotificationLinkPropertyName) else {
+                    self.webViewController?.loadPage(url: config().HomeUrl)
+                    return
+                }
+
+                self.webViewController?.loadPage(url: urlToLoad)
+                UserDefaults.standard.removeObject(forKey: config().NotificationLinkPropertyName)
+                return
+            default:
+                self.apiCallFailure()
                 return
             }
-            
-            self.webViewController?.loadPage(url: urlToLoad)
-            UserDefaults.standard.removeObject(forKey: config().NotificationLinkPropertyName)
-            return
-        default:
-            apiCallFailure()
-            return
         }
     }
 
@@ -369,6 +374,8 @@ class HomeViewController : UIViewController {
     }
     
     func showErrorViewContainer() {
+        hideSplashScreen()
+        hideProgressBar()
         cycleFromViewController(oldViewController: webViewController!, toViewController: errorViewController!)
         currentNativeViewController = errorViewController
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, errorViewController?.errorTextView)
@@ -648,14 +655,24 @@ class HomeViewController : UIViewController {
     }
     
     func showProgressBar() {
-        self.progressSpinner.show(uiView: self.view)
+        self.progressSpinner?.show(uiView: self.view)
     }
     
     func hideProgressBar() {
-        self.progressSpinner.hide(uiView: self.view)
+        self.progressSpinner?.hide(uiView: self.view)
     }
     
     func resumeProgressBar() {
-        self.progressSpinner.resume(uiView: self.view)
+        self.progressSpinner?.resume(uiView: self.view)
+    }
+    
+    func showSplashScreen() {
+        self.splashScreen?.show(uiView: self.view)
+    }
+    
+    func hideSplashScreen() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+            self.splashScreen?.hide()
+        })
     }
 }
