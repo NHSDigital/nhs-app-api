@@ -11,7 +11,9 @@ describe('known serivces actions', () => {
   describe('load', () => {
     const urls = { knownServices:
       [{
+        id: 'pkb',
         requiresAssertedLoginIdentity: true,
+        showThirdPartyWarning: true,
         url: 'test.test.com',
       }],
     };
@@ -36,7 +38,7 @@ describe('known serivces actions', () => {
       });
 
       it('will commit the loaded services mutation with the urls', async () => {
-        expect(commit).toHaveBeenCalledWith(LOADSERVICES, [{ requiresAssertedLoginIdentity: true, url: 'test.test.com' }]);
+        expect(commit).toHaveBeenCalledWith(LOADSERVICES, [{ id: 'pkb', requiresAssertedLoginIdentity: true, showThirdPartyWarning: true, url: 'test.test.com' }]);
       });
     });
   });

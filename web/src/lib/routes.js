@@ -485,12 +485,11 @@ const routes = {
     name: 'redirector',
     path: '/redirector',
     crumb: {
-      nativeDisabled: true,
       get defaultCrumb() {
-        return [];
+        return [this.allRoutes.INDEX];
       },
     },
-    helpUrl: `${baseNhsAppHelpUrl}`,
+    helpUrl: baseNhsAppHelpUrl,
   },
   LOGIN: {
     name: 'Login',

@@ -1,6 +1,8 @@
 <template>
   <nhs-uk-layout>
+    <div slot="header"/>
     <nuxt/>
+    <div slot="footer"/>
   </nhs-uk-layout>
 </template>
 

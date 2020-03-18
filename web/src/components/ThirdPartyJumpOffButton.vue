@@ -1,20 +1,24 @@
 <template>
-  <menu-item id="btn_jumpoff"
+  <menu-item :id="id"
              header-tag="h2"
              data-purpose="text_link"
-             :href="redirectUrl()"
+             :href="path"
+             :target="!isNativeApp? '_blank': undefined"
+             :click-func="isNativeApp? goToUrl : undefined"
+             :click-param="isNativeApp? path : undefined"
              :text="headerText()"
-             :target="target"
              :description="descriptionText()"
-             :aria-label="headerText |
-               join(descriptionText ,'. ')"/>
+             :aria-label="headerText() |
+               join(descriptionText() ,'. ')" />
+
 </template>
 
 <script>
 import MenuItem from '@/components/MenuItem';
-import { redirectTo, getThirdPartyLocaleText } from '@/lib/utils';
+import { getThirdPartyLocaleText } from '@/lib/utils';
 import {
   INTERSTITIAL_REDIRECTOR,
+  REDIRECT_PARAMETER,
 } from '@/lib/routes';
 
 export default {
@@ -23,6 +27,10 @@ export default {
     MenuItem,
   },
   props: {
+    id: {
+      type: String,
+      required: true,
+    },
     jumpOffType: {
       type: String,
       required: true,
@@ -39,23 +47,20 @@ export default {
   data() {
     return {
       redirectorPath: INTERSTITIAL_REDIRECTOR.path,
-      services: [],
       headerTextData: '',
       descriptionTextData: '',
-      target: !this.$store.state.device.isNativeApp ? '_blank' : '',
+      isNativeApp: this.$store.state.device.isNativeApp,
     };
   },
-  methods: {
-    navigate(event) {
-      redirectTo(this, this.redirectUrl());
-      event.preventDefault();
-    },
-    redirectUrl() {
-      this.services = this.$store.state.knownServices.knownServices
+  computed: {
+    path() {
+      const services = this.$store.state.knownServices.knownServices
         .filter(service => this.providerId.includes(service.id));
-      const encodedUri = encodeURIComponent(this.services[0].url);
-      return `${this.redirectorPath}?redirect_to=${encodedUri}${this.redirectPath}`;
+      const encodedUri = encodeURIComponent(services[0].url + this.redirectPath);
+      return `${this.redirectorPath}?${REDIRECT_PARAMETER}=${encodedUri}`;
     },
+  },
+  methods: {
     headerText() {
       return this.getMessage('headerText');
     },

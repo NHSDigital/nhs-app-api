@@ -1,0 +1,12 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A29928"
+journeys:
+  silverIntegrations: 
+    secondaryAppointments:
+      - pkb    
+      - ers
+    messages:
+      - pkb    
+    consultations:
+      - pkb

@@ -260,19 +260,20 @@ describe('util library', () => {
       const $te = create$T(false);
       each([{
         textType: 'headerText',
-        redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages',
+        redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
         feature: 'jumpOffContent',
         expectedText: 'Messages and online consultations',
       }, {
         textType: 'featureName',
-        redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages',
+        redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
         feature: 'thirdPartyWarning',
-        expectedText: 'Third party warning',
+        expectedText: 'Messages and online consultations',
       }]).it('will bring back the correct third party locale text',
         ({ textType, redirectPath, feature, expectedText }) => {
           const thirdPartyLocales = $te('thirdPartyProviders.pkb') ? $t('thirdPartyProviders.pkb') : '';
           const retrievedText =
             getThirdPartyLocaleText(thirdPartyLocales, textType, redirectPath, feature);
+
           expect(retrievedText).toEqual(expectedText);
         });
     });

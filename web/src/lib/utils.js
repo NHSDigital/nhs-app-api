@@ -170,7 +170,7 @@ export const hrefForURL = (originalURL) => {
 
 export const getThirdPartyLocaleText = (thirdPartyLocales, type, redirectPath, feature) => {
   for (let i = 0; i < thirdPartyLocales.jumpOffs.length; i += 1) {
-    if (thirdPartyLocales.jumpOffs[i].path === redirectPath) {
+    if (thirdPartyLocales.jumpOffs[i].path === decodeURIComponent(redirectPath)) {
       return thirdPartyLocales.jumpOffs[i][feature][type];
     }
   }

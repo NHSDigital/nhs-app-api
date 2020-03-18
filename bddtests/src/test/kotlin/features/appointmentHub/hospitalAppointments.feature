@@ -8,7 +8,7 @@ Feature: Hospital Appointments
     Then the Appointments Hub page is displayed
     When I click the 'Hospital and other services' link on the Appointments Hub
     Then the Hospital Appointments page is displayed
-    When I click the link called 'Book or cancel your referral appointment' with a url of 'http://web.local.bitraft.io:3000/redirector?redirect_to=https%3A%2F%2Fpat.rc.refer.nhs.uk/nhslogin'
+    When I click the link called 'Book or cancel your referral appointment' with a url of 'http://web.local.bitraft.io:3000/redirector?redirect_to=https%3A%2F%2Fpat.rc.refer.nhs.uk%2Fnhslogin'
     Then a new tab has been opened by the link
 
   Scenario: A user without the secondary appointments permission will not be able to manage hospital appointments

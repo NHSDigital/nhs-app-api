@@ -1,4 +1,11 @@
-import { create$T, createRouter, createStore, mockCookies, shallowMount } from '../helpers';
+import {
+  create$T,
+  createRouter,
+  createStore,
+  mockCookies,
+  shallowMount,
+} from '../../helpers';
+
 import {
   INDEX,
   LOGIN,
@@ -23,7 +30,7 @@ jest.mock('@/components/widgets/HotJar', () => {
 });
 
 /* eslint-disable import/first */
-import NhsukLayout from '@/layouts/nhsuk-layout';
+import NhsukLayout from '@/components/layout/NhsUkLayout';
 
 const $http = jest.fn();
 const $env = {
