@@ -11,8 +11,5 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         Task<TppApiObjectResponse<ListServiceAccessesReply>> ListServiceAccessesPost(TppUserSession tppUserSession);
 
         Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession);
-
-        Task<TppApiObjectResponse<RequestBinaryDataReply>> RequestBinaryData(string documentIdentifier,
-            TppUserSession tppUserSession);
     }
 }
