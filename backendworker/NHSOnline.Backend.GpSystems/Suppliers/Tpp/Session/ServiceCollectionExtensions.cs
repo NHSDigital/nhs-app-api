@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
             services.AddTransient<ITppLogMessagingService, TppScopedLogMessagingService>();
             services.AddTransient<TppLogMessagingService>();
+            services.AddTransient<TppRecreateSessionMapperService>();
 
             return services;
         }

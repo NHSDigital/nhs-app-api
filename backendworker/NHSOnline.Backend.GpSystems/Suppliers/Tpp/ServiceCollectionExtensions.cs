@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             services.RegisterTppDemographicsServices();
             services.RegisterTppPatientRecordServices();
             services.RegisterTppSessionServices();
-            services.RegisterTppLinkedAccountServices();
+            services.RegisterTppLinkedAccountsServices();
             return services;
         }
 
@@ -83,13 +83,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             services.RegisterTppBaseServices();
             services.RegisterTppLinkageServices();
             services.RegisterTppIm1ConnectionServices();
-
-            return services;
-        }
-
-        public static IServiceCollection RegisterTppLinkedAccountServices(this IServiceCollection services)
-        {
-            services.AddTransient<TppRecreateSessionMapperService>();
 
             return services;
         }
