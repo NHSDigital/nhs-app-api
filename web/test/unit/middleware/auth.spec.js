@@ -16,6 +16,7 @@ describe('middleware/auth', () => {
   let getters;
   let redirect;
   let store;
+  let mockGenerateLoginUrl;
   const generatedLoginUrl = 'test_foo';
 
   const environment = {
@@ -23,6 +24,7 @@ describe('middleware/auth', () => {
     CID_REDIRECT_URI: 'mock cid redirect uri',
     CID_CLIENT_ID: 'mock cid client ID',
     CID_AUTH_ENDPOINT: 'mock cid auth endpoint',
+    SECURE_COOKIES: true,
   };
 
   const callAuth = (route) => {
@@ -30,8 +32,9 @@ describe('middleware/auth', () => {
   };
 
   beforeEach(() => {
+    mockGenerateLoginUrl = jest.fn(() => ({ loginUrl: generatedLoginUrl }));
     AuthorisationService.mockImplementation(() => ({
-      generateLoginUrl: jest.fn(() => ({ loginUrl: generatedLoginUrl })),
+      generateLoginUrl: mockGenerateLoginUrl,
     }));
     getters = [];
     store = {
@@ -128,6 +131,11 @@ describe('middleware/auth', () => {
 
       it('will be redirected to the generated cid url', () => {
         expect(redirect).toBeCalledWith(generatedLoginUrl);
+      });
+
+      it('will pass the secure cookie setting', () => {
+        expect(mockGenerateLoginUrl.mock.calls[0][0].secureCookies)
+          .toBe(true);
       });
     });
   });

@@ -10,8 +10,11 @@ const loginResponse = {
     authoriseUrl: 'bang',
   },
 };
-AuthorisationService.prototype.generateLoginUrl = jest.fn().mockImplementation()
+
+const mockGenerateLoginUrl = jest.fn().mockImplementation()
   .mockReturnValue(loginResponse);
+
+AuthorisationService.prototype.generateLoginUrl = mockGenerateLoginUrl;
 
 const defaultQuery = {
   source: 'android',
@@ -29,6 +32,7 @@ describe('login page', () => {
   const mountWithQueryData = ({ isNativeApp = true, query, source = 'android', data }) => {
     const $env = {
       BIOMETRICS_ENABLED: true,
+      SECURE_COOKIES: true,
     };
 
     const $cookies = {
@@ -82,7 +86,14 @@ describe('login page', () => {
   it('will redirect automatically if FidoAuthResponse exists and is native', () => {
     const fidoQuery = createFidoQueries();
     wrapper = mountWithQueryData({ query: fidoQuery });
-    expect(AuthorisationService.mock.instances[0].generateLoginUrl).toHaveBeenCalledTimes(1);
+    expect(mockGenerateLoginUrl).toHaveBeenCalledTimes(1);
+  });
+
+  it('will set secure cookie setting correctly on redirect', () => {
+    const fidoQuery = createFidoQueries();
+    wrapper = mountWithQueryData({ query: fidoQuery });
+    expect(mockGenerateLoginUrl.mock.calls[0][0].secureCookies)
+      .toBe(true);
   });
 
   it('will not automatically redirect if it is native but no fidoResponse', () => {

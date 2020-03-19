@@ -27,6 +27,7 @@ export default function ({ app, store, redirect, route }) {
       isNativeApp: store.state.device.isNativeApp,
       redirectTo: route.query[REDIRECT_PARAMETER],
       cookies: store.$cookies,
+      secureCookies: app.$env.SECURE_COOKIES,
     });
 
     return redirect(loginUrl);

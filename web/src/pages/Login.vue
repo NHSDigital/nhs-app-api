@@ -78,6 +78,7 @@ export default {
         cookies: this.$cookies,
         redirectTo: this.redirectTo,
         fidoAuthResponse: this.$route.query.fidoAuthResponse,
+        secureCookies: this.$store.app.$env.SECURE_COOKIES,
       });
       return { authoriseUrl: request.authoriseUrl, loginUrl };
     },
