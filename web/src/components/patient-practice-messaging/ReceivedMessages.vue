@@ -11,8 +11,7 @@
         <message-panel :index="readIndex" :id-prefix="'read'" :message="readReply"/>
       </li>
     </ul>
-    <page-divider v-if="hasUnreadMessages" id="receivedMessagesDivider"
-                  class="nhsuk-u-margin-top-6" :text="unreadText" />
+    <page-divider v-if="hasUnreadMessages" id="receivedMessagesDivider" :text="unreadText" />
     <ul :class="[$style['nhsuk-app-chat'],
                  'nhsuk-u-margin-top-2',
                  'nhsuk-u-margin-bottom-4',

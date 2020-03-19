@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style['page-divider']">
+  <div :class="[$style['page-divider'], 'nhsuk-u-margin-top-6']">
     <div :class="$style['page-divider__content']">
       <span :class="[$style['page-divider__inner'], 'nhsuk-u-font-size-19']">{{ text }}</span>
     </div>
