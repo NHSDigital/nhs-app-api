@@ -49,7 +49,7 @@ import MenuItemList from '@/components/MenuItemList';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { DOCUMENT_DETAIL, DOCUMENTS, GP_MEDICAL_RECORD } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
-import { redirectTo, datePart } from '@/lib/utils';
+import { isTruthy, redirectTo, datePart } from '@/lib/utils';
 import NativeCallbacks from '@/services/native-app';
 import Glossary from '@/components/Glossary';
 
@@ -108,14 +108,20 @@ export default {
       }
     },
   },
-  asyncData({ store, redirect }) {
+  async asyncData({ store, redirect, route }) {
     const date = get('state.myRecord.document.date', store);
+    const needMoreInformation = get('state.myRecord.document.needMoreInformation', store);
 
     if (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) {
       redirect(GP_MEDICAL_RECORD.path);
       return {};
     }
 
+    if (isTruthy(needMoreInformation)) {
+      await store.dispatch('myRecord/loadDocument', route.params.id);
+    }
+
+    const size = get('state.myRecord.document.size', store);
     const datePartString = (!date || !date.value) ? 'Unknown Date' : datePart(date.value, 'YearMonthDay');
     const name = get('state.myRecord.document.name', store);
     const type = get('state.myRecord.document.type', store);
@@ -129,7 +135,6 @@ export default {
     const isValidFile = get('state.myRecord.document.isValidFile', store);
     const documentConsultationsWithComments = get('state.myRecord.documentConsultationsWithComments', store);
     const comments = [];
-    const size = get('state.myRecord.document.size', store);
 
     if (get('state.myRecord.document.comments', store) !== null) {
       comments.push(get('state.myRecord.document.comments', store));

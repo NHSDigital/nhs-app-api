@@ -80,6 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         Type = requestPatientRecordReply.Events[0].Items[0].Type,
                         IsValidFile = true,
                         Extension = "jpg",
+                        NeedMoreInformation = true
                     },
                     new DocumentItem
                     {
@@ -93,7 +94,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         Type = "Document",
                         IsValidFile = true,
                         Comments = "with comments",
-                        Extension = "jpg"
+                        Extension = "jpg",
+                        NeedMoreInformation = true
                     }
                 },
                 HasAccess = true,
@@ -167,7 +169,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         IsAvailable = true,
                         Type = requestPatientRecordReply.Events[0].Items[0].Type,
                         IsValidFile = false,
-                        Extension = ""
+                        Extension = "",
+                        NeedMoreInformation = true
                     },
                     new DocumentItem
                     {
@@ -181,7 +184,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         Type = "Document",
                         IsValidFile = true,
                         Comments = "with comments",
-                        Extension = "jpg"
+                        Extension = "jpg",
+                        NeedMoreInformation = true,
                     }
                     ,
                     new DocumentItem
@@ -195,7 +199,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         IsAvailable = true,
                         Type = "Document",
                         IsValidFile = false,
-                        Extension = "rtf"
+                        Extension = "rtf",
+                        NeedMoreInformation = true
                     }
                 },
                 HasAccess = true,

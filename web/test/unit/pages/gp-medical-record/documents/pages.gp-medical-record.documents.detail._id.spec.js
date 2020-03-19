@@ -58,6 +58,14 @@ describe('gp-medical-record documents', () => {
         expect(redirect).not.toHaveBeenCalled();
         expect($store.dispatch).toHaveBeenCalledWith('myRecord/loadDocument', route.params.id);
       });
+
+      it('will not load document if it is already loaded', async () => {
+        $store.state.myRecord.hasAcceptedTerms = true;
+        $store.state.myRecord.document.data = 'testData';
+        await DocumentPage.asyncData({ redirect, route, store: $store });
+        expect(redirect).not.toHaveBeenCalled();
+        expect($store.dispatch).not.toHaveBeenCalled();
+      });
     });
   });
   describe('computed', () => {

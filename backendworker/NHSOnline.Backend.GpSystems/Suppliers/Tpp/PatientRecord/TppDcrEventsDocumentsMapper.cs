@@ -103,7 +103,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 Comments = string.IsNullOrEmpty(comments)
                     ? null
                     : comments,
-                Extension = extension
+                Extension = extension,
+                NeedMoreInformation = true
             };
         }
 

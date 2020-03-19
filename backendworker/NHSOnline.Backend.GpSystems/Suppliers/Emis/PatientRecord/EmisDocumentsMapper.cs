@@ -48,7 +48,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             documentItem.CodeId = document.Observation.CodeId;
             documentItem.DocumentIdentifier = document.DocumentGuid;
 
-            documentItem.IsValidFile = documentItem.Size != null && document.Size < 4000000 &&
+            documentItem.IsValidFile = documentItem.Size != null &&
+                                       document.Size < Constants.FileConstants.EmisSizeLimit &&
                                        Constants.FileConstants.FileTypes.WhiteListTypes.Contains(document.Extension);
             return documentItem;
         }

@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
@@ -31,7 +32,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         private Mock<IGetPatientTestResultsTaskChecker> _patientTestResultsChecker;
         private Mock<IGetPatientDocumentTaskChecker> _patientDocumentTaskChecker;
         private Mock<ITppClientRequest<TppUserSession, ViewPatientOverviewReply>> _patientOverview;
-        private Mock<ITppClientRequest<(RequestBinaryData, TppUserSession), RequestBinaryDataReply>> _requestBinary;
+        private Mock<ITppClientRequest<(TppUserSession, string), RequestBinaryDataReply>> _requestBinary;
         private Mock<ITppClientRequest<TppUserSession, RequestPatientRecordReply>> _requestPatientRecord;
         private Mock<ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply>> _testResultsView;
 
@@ -41,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _gpUserSession = _fixture.Create<TppUserSession>();
             _patientOverview = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, ViewPatientOverviewReply>>>();
-            _requestBinary = _fixture.Freeze<Mock<ITppClientRequest<(RequestBinaryData, TppUserSession), RequestBinaryDataReply>>>();
+            _requestBinary = _fixture.Freeze<Mock<ITppClientRequest<(TppUserSession, string), RequestBinaryDataReply>>>();
             _requestPatientRecord = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, RequestPatientRecordReply>>>();
             _testResultsView = _fixture.Freeze<Mock<ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply>>>();
             _patientDcrEventsChecker = _fixture.Freeze<Mock<IGetPatientDcrEventsTaskChecker>>();
@@ -49,6 +50,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             _patientTestResultsChecker = _fixture.Freeze<Mock<IGetPatientTestResultsTaskChecker>>();
             _patientDocumentTaskChecker = _fixture.Freeze<Mock<IGetPatientDocumentTaskChecker>>();
             _systemUnderTest = _fixture.Create<TppPatientRecordService>();
+
         }
 
         [TestMethod]
@@ -138,6 +140,128 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 .Subject.Response.Should().NotBeNull();
         }
 
+       [TestMethod]
+        public async Task GetPatientDocument_ReturnsSuccessResponse_WhenFileTooLargeErrorResponseFromTpp()
+        {
+
+            // Arrange
+            var tppUserSession = new TppUserSession
+            {
+                PatientId = "1234",
+                OnlineUserId = "12345",
+                OdsCode = "1234"
+            };
+
+            var expectedErrorResponse = new Error
+            {
+                ErrorCode = "24",
+                TechnicalMessage = "File size exceeds 2MB limit"
+            };
+
+            var patientDocument = new PatientDocument
+            {
+                Content = null,
+                HasErrored = true,
+                Type = "Document",
+                IsTooLarge = true
+            };
+
+            var parameters = (tppUserSession, "test");
+            _requestBinary.Setup(x => x.Post(parameters))
+                .Returns(Task.FromResult(
+                    new TppApiObjectResponse<RequestBinaryDataReply>(HttpStatusCode.OK)
+                {
+                    Body = null,
+                    ErrorResponse = expectedErrorResponse
+                }))
+                .Verifiable();
+
+            _patientDocumentTaskChecker.Setup(x =>
+                    x.Check(It.IsAny<TppApiObjectResponse<RequestBinaryDataReply>>()))
+                .Returns(patientDocument)
+                .Verifiable();
+
+            //Act
+            var result = await _systemUnderTest.GetPatientDocument(tppUserSession,
+                "test", null, null);
+
+
+            //Assert
+            _patientTestResultsChecker.Verify();
+
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.IsTooLarge.Should().BeTrue();
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.IsFileUploading.Should().BeFalse();
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.HasErrored.Should().BeTrue();
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.Content.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task GetPatientDocument_ReturnsSuccessResponse_WhenFileStillUploadingErrorResponseFromTpp()
+        {
+
+            // Arrange
+            var tppUserSession = new TppUserSession
+            {
+                PatientId = "1234",
+                OnlineUserId = "12345",
+                OdsCode = "1234"
+            };
+
+            var expectedErrorResponse = new Error
+            {
+                ErrorCode = "45",
+                TechnicalMessage = "File still uploading"
+            };
+
+            var patientDocument = new PatientDocument
+            {
+                Content = null,
+                HasErrored = true,
+                Type = "Document",
+                IsFileUploading = true
+            };
+
+            var parameters = (tppUserSession, "test");
+            _requestBinary.Setup(x => x.Post(parameters))
+                .Returns(Task.FromResult(
+                    new TppApiObjectResponse<RequestBinaryDataReply>(HttpStatusCode.OK)
+                {
+                    Body = null,
+                    ErrorResponse = expectedErrorResponse
+                }))
+                .Verifiable();
+
+            _patientDocumentTaskChecker.Setup(x =>
+                    x.Check(It.IsAny<TppApiObjectResponse<RequestBinaryDataReply>>()))
+                .Returns(patientDocument)
+                .Verifiable();
+
+            //Act
+            var result = await _systemUnderTest.GetPatientDocument(tppUserSession,
+                "test", null, null);
+
+
+            //Assert
+            _patientTestResultsChecker.Verify();
+
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.IsTooLarge.Should().BeFalse();
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.IsFileUploading.Should().BeTrue();
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.HasErrored.Should().BeTrue();
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.Content.Should().BeNull();
+        }
+
         [TestMethod]
         public async Task GetPatientDocument_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromTpp()
         {
@@ -149,16 +273,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 PatientId = "1234",
                 OnlineUserId = "12345",
                 OdsCode = "1234"
-            };
-
-            var binaryDataRequest = new RequestBinaryData
-            {
-                PatientId = tppUserSession.PatientId,
-                OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
-                BinaryDataId = "test",
-                ApiVersion = TppClientTestsContext.ApiVersion,
-                Uuid = TppClientTestsContext.Uuid
             };
 
             var expectedBinaryRequestResponse = new RequestBinaryDataReply
@@ -173,29 +287,36 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 }
             };
 
-            var parameters = (binaryDataRequest, It.IsAny<TppUserSession>());
+            var patientDocument = new PatientDocument
+            {
+                Content = "test",
+                HasErrored = false,
+                Type = "Document",
+                IsTooLarge = false
+            };
 
+            var parameters = (tppUserSession, "test");
             _requestBinary.Setup(x => x.Post(parameters))
-                .Returns(Task.FromResult(
-                    new TppApiObjectResponse<RequestBinaryDataReply>(HttpStatusCode.OK)
-                    {
-                        Body = expectedBinaryRequestResponse,
-                        ErrorResponse = null,
-                    }));
+                .Returns(Task.FromResult(new TppApiObjectResponse<RequestBinaryDataReply>(HttpStatusCode.OK)
+                {
+                    Body = expectedBinaryRequestResponse
+                }))
+                .Verifiable();
 
             _patientDocumentTaskChecker.Setup(x =>
                     x.Check(It.IsAny<TppApiObjectResponse<RequestBinaryDataReply>>()))
-                .Returns(Mock.Of<PatientDocument>())
+                .Returns(patientDocument)
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetPatientDocument(tppUserSession, identifier, null, null);
+            var result = await _systemUnderTest.GetPatientDocument(tppUserSession, identifier,
+                null, null);
 
             // Assert
-            _patientTestResultsChecker.Verify();
-
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
                 .Subject.Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
+                .Subject.Response.Content.Should().NotBeNull();
         }
 
         private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)

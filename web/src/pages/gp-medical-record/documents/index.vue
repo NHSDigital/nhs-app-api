@@ -117,6 +117,7 @@ export default {
         isValidFile: document.isValidFile,
         comments: document.comments,
         documentType: document.type,
+        needMoreInformation: document.needMoreInformation,
       });
       this.$router.push({ name: DOCUMENT.name, params: { id: document.documentIdentifier } });
     },

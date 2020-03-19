@@ -12,14 +12,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelectedPost;
         private readonly ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> _testResultsViewDetailed;
         private readonly
-            ITppClientRequest<(RequestBinaryData requestBinaryData, TppUserSession tppUserSession),
+            ITppClientRequest<(TppUserSession tppUserSession, string documentIdentifier),
                 RequestBinaryDataReply> _requestBinaryData;
 
         public TppClient(
             ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccessesPost,
             ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelectedPost,
             ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> testResultsViewDetailed,
-            ITppClientRequest<(RequestBinaryData requestBinaryData, TppUserSession tppUserSession),
+            ITppClientRequest<(TppUserSession tppUserSession, string documentIdentifier),
             RequestBinaryDataReply> requestBinaryData)
             {
             _listServiceAccessesPost = listServiceAccessesPost;
@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             => await _testResultsViewDetailed.Post((tppUserSession, testResultId));
 
         public async Task<TppApiObjectResponse<RequestBinaryDataReply>> RequestBinaryData(
-            RequestBinaryData requestBinaryData, TppUserSession tppUserSession)
-            => await _requestBinaryData.Post((requestBinaryData, tppUserSession));
+            string documentIdentifier, TppUserSession tppUserSession)
+            => await _requestBinaryData.Post((tppUserSession, documentIdentifier));
     }
 }

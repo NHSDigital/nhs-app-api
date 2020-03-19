@@ -1,8 +1,10 @@
 package features.myrecord.factories
 
+import constants.ErrorResponseCodeTpp
 import features.myrecord.stepDefinitions.V2MedicalRecordDocumentsStepDefinitions
 import mocking.data.myrecord.TppDcrDocumentData
 import mocking.data.myrecord.TppDocumentData
+import mocking.tpp.models.Error
 import mocking.tpp.models.RequestPatientRecordReply
 import models.ExpectedDocument
 import models.Patient
@@ -32,10 +34,28 @@ class DocumentsFactoryTpp: DocumentsFactory() {
     }
 
     override fun enabledWithDocuments(patient: Patient, isLarge: Boolean, mockUnavailableDocument: Boolean,
-                                      hasInvalidType: Boolean) {
+                                      hasInvalidType: Boolean, stillUploading: Boolean) {
+
         setExpectedAndAvailableDocs(
                 patient,
                 TppDcrDocumentData.getMultipleDcrEventsForTppDcrDocuments(hasInvalidType))
+
+        if (isLarge) {
+            mockingClient.forTpp {
+                myRecord.documentRequest(patient.tppUserSession!!)
+                        .respondWithError(Error(ErrorResponseCodeTpp.FILE_SIZE_TOO_LARGE,
+                                                "File exceeds 2MB"))
+            }
+            return
+        }
+        if (stillUploading) {
+            mockingClient.forTpp {
+                myRecord.documentRequest(patient.tppUserSession!!)
+                        .respondWithError(Error(ErrorResponseCodeTpp.FILE_STILL_UPLOADING,
+                                                "File has not finished uploading"))
+            }
+            return
+        }
 
         mockingClient.forTpp {
             myRecord.documentRequest(patient.tppUserSession!!)

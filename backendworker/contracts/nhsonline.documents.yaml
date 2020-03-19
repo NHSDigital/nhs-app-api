@@ -11,7 +11,7 @@ paths:
         - patient document
       summary: Gets a specific document from the user's documents for the logged on user.
       description: Returns only the specified document from the users document list for the
-        logged in user (EMIS only). Requires NHSO-Session-Id cookie (obtained
+        logged in user. Requires NHSO-Session-Id cookie (obtained
         from session endpoint).
       requestBody:
         content:
@@ -52,7 +52,7 @@ paths:
         - patient document
       summary: Gets a specific document and initiates a download of the document.
       description: Returns only the specified document from the users document list for the
-        logged in user (EMIS only). Requires NHSO-Session-Id cookie (obtained
+        logged in user. Requires NHSO-Session-Id cookie (obtained
         from session endpoint).
       requestBody:
         content:
@@ -92,10 +92,16 @@ components:
       properties:
         hasErrored:
           type: boolean
-          description: Shows if error occurred getting document from EMIS
+          description: Shows if error occurred getting an individual document
         content:
           type: string
           description: base64 encoded string of document
         type:
           type: string
           description: type of document
+        isTooLarge: 
+          type: boolean
+          description: Indicates if the document is too large to be loaded
+        isFileUploading:
+          type: boolean
+          description: Indicates if the document is still uploading to the GP system

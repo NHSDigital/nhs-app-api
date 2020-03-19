@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
@@ -27,8 +28,30 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
             if (taskResponse.HasSuccessResponse)
             {
-                _logger.LogExitWith($"{nameof(taskResponse.HasSuccessResponse)}= true");
-                return _documentMapper.Map(taskResponse.Body);
+                _logger.LogExitWith($"{nameof(taskResponse.HasSuccessResponse)}=true");
+                var response = _documentMapper.Map(taskResponse.Body);
+                return response;
+            }
+
+            if (taskResponse.HasErrorWithCode(Constants.TppErrorCodes.FileTooLarge))
+            {
+                _logger.LogExitWith("File is too large setting HasErrored and IsTooLarge to true");
+                return new PatientDocument
+                {
+                    IsTooLarge = true,
+                    HasErrored = true
+                };
+
+            }
+
+            if (taskResponse.HasErrorWithCode(Constants.TppErrorCodes.FileStillUploading))
+            {
+                _logger.LogExitWith("File is still uploading setting HasErrored and IsFileUploading to true");
+                return new PatientDocument
+                {
+                    IsFileUploading = true,
+                    HasErrored = true
+                };
             }
 
             if (taskResponse.HasForbiddenResponse)

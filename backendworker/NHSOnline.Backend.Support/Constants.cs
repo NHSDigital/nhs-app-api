@@ -74,6 +74,8 @@ namespace NHSOnline.Backend.Support
 
         public static class FileConstants
         {
+
+            public const int EmisSizeLimit = 4000000;
             public static class FileTypes
             {
                 public static class ImageType
@@ -208,6 +210,11 @@ namespace NHSOnline.Backend.Support
         {
             public const string DocumentDetailsComments = "comments";
             public const string DocumentDetailsExtension = "extension";
+        }
+        public static class TppErrorCodes
+        {
+            public const string FileTooLarge = "24";
+            public const string FileStillUploading = "45";
         }
 
         public static class OnlineConsultationConstants

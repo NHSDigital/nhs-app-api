@@ -520,17 +520,17 @@ components:
         hasAccess:
           type: boolean
           description: Does the patient have access to this data.
-          hasErrored:
-            type: boolean
-            description: Some error occurred when attempting to retrieve this error.
-          hasUndeterminedAccess:
-            type: boolean
-            description: Set to true if no data is returned and we cant determine why
-          data:
-            type: array
-            description: An array of medical history information objects.
-            items:
-              $ref: "#/components/schemas/MedicalHistoryItem"
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        hasUndeterminedAccess:
+          type: boolean
+          description: Set to true if no data is returned and we cant determine why
+        data:
+          type: array
+          description: An array of medical history information objects.
+          items:
+            $ref: "#/components/schemas/MedicalHistoryItem"
     MedicalHistoryItem:
       type: object
       properties:
@@ -602,6 +602,15 @@ components:
         comments:
           type: string
           description: The comments of the document
+        isValidFile:
+          type: boolean
+          description: Indicates if the file is valid based on its extension and size
+        type:
+          type: string
+          description: The type of document (TPP only)
+        needMoreInformation:
+          type: boolean
+          description: Indicates if a further request is needed for more information regarding the document
     Recalls:
       type: object
       properties:

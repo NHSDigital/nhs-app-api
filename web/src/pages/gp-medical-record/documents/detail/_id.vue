@@ -47,7 +47,10 @@ export default {
       return;
     }
 
-    await store.dispatch('myRecord/loadDocument', route.params.id);
+    // TPP documents would already have been loaded into the store at this point.
+    if (!store.state.myRecord.document.data) {
+      await store.dispatch('myRecord/loadDocument', route.params.id);
+    }
   },
   created() {
     if (this.document && process.client) {

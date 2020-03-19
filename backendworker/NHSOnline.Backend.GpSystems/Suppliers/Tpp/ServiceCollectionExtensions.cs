@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 .AddTppClientRequest<TppUserSession, PatientSelectedReply, TppClientPatientSelectedPost>()
                 .AddTppClientRequest<LinkAccount, LinkAccountReply, TppClientLinkAccountPost>()
                 .AddTppClientRequest<TppUserSession, RequestPatientRecordReply, TppClientRequestPatientRecordPost>()
-                .AddTppClientRequest<(RequestBinaryData, TppUserSession), RequestBinaryDataReply, TppClientRequestBinaryDataPost>()
+                .AddTppClientRequest<(TppUserSession, string), RequestBinaryDataReply, TppClientRequestBinaryDataPost>()
                 .AddTppClientRequest<(RequestSystmOnlineMessages, string), RequestSystmOnlineMessagesReply, TppClientRequestSystmOnlineMessages>()
                 .AddTppClientRequest<(TppUserSession, string, string), TestResultsViewReply, TppClientTestResultsView>()
                 .AddTppClientRequest<(TppUserSession, string), TestResultsViewReply, TppClientTestResultsViewDetailed>()

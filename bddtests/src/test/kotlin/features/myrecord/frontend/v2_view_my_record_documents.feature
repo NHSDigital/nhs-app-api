@@ -81,14 +81,27 @@ Feature: Documents Frontend - Medical Record v2
     When I select an available document
     Then I see the document information page with the letter header
 
-  Scenario: An EMIS user who selects a large document cannot download or view it - Medical Record v2
-    Given I am a EMIS user setup to use medical record version 2
+  Scenario: A TPP user who accesses a file that is still uploading cannot view or download it
+    Given I am a TPP user setup to use medical record version 2
+    And the GP practice has a file that is still uploading
+    And I am on the medical record page
+    When I click the Documents link on my record - Medical Record v2
+    Then I see a list of documents
+    When I select an available document
+    Then I see the document information page without actions
+    
+  Scenario Outline: A <GP System> user who selects a large document cannot download or view it - Medical Record v2
+    Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has multiple large documents
     And I am on the medical record page
     When I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page without actions
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
   Scenario Outline: A <GP System> user who selects a document with an invalid type cannot download or view it - Medical Record v2
     Given I am a <GP System> user setup to use medical record version 2

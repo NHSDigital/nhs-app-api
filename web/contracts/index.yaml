@@ -1431,40 +1431,40 @@
                         hasAccess: 
                           type: "boolean"
                           description: "Does the patient have access to this data."
-                          hasErrored: 
-                            type: "boolean"
-                            description: "Some error occurred when attempting to retrieve this error."
-                          hasUndeterminedAccess: 
-                            type: "boolean"
-                            description: "Set to true if no data is returned and we cant determine why"
-                          data: 
-                            type: "array"
-                            description: "An array of medical history information objects."
-                            items: 
-                              type: "object"
-                              properties: 
-                                date: 
-                                  type: "object"
-                                  properties: 
-                                    value: 
-                                      type: "string"
-                                      format: "date-time"
-                                      description: "date/time value."
-                                    datePart: 
-                                      type: "string"
-                                      description: "date part to display."
-                                      enum: 
-                                        - "Unknown"
-                                        - "Year"
-                                        - "YearMonth"
-                                        - "YearMonthDay"
-                                        - "YearMonthDayTime"
-                                rubric: 
-                                  type: "string"
-                                  description: "The title of the medical history."
-                                description: 
-                                  type: "string"
-                                  description: "Description of the medical history."
+                        hasErrored: 
+                          type: "boolean"
+                          description: "Some error occurred when attempting to retrieve this error."
+                        hasUndeterminedAccess: 
+                          type: "boolean"
+                          description: "Set to true if no data is returned and we cant determine why"
+                        data: 
+                          type: "array"
+                          description: "An array of medical history information objects."
+                          items: 
+                            type: "object"
+                            properties: 
+                              date: 
+                                type: "object"
+                                properties: 
+                                  value: 
+                                    type: "string"
+                                    format: "date-time"
+                                    description: "date/time value."
+                                  datePart: 
+                                    type: "string"
+                                    description: "date part to display."
+                                    enum: 
+                                      - "Unknown"
+                                      - "Year"
+                                      - "YearMonth"
+                                      - "YearMonthDay"
+                                      - "YearMonthDayTime"
+                              rubric: 
+                                type: "string"
+                                description: "The title of the medical history."
+                              description: 
+                                type: "string"
+                                description: "Description of the medical history."
                     documents: 
                       type: "object"
                       properties: 
@@ -1521,6 +1521,15 @@
                                     comments: 
                                       type: "string"
                                       description: "The comments of the document"
+                                    isValidFile: 
+                                      type: "boolean"
+                                      description: "Indicates if the file is valid based on its extension and size"
+                                    type: 
+                                      type: "string"
+                                      description: "The type of document (TPP only)"
+                                    needMoreInformation: 
+                                      type: "boolean"
+                                      description: "Indicates if a further request is needed for more information regarding the document"
                     recalls: 
                       type: "object"
                       properties: 
@@ -5308,7 +5317,7 @@
         tags: 
           - "patient document"
         summary: "Gets a specific document from the user's documents for the logged on user."
-        description: "Returns only the specified document from the users document list for the logged in user (EMIS only). Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns only the specified document from the users document list for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
         requestBody: 
           content: 
             application/json: 
@@ -5341,13 +5350,19 @@
                   properties: 
                     hasErrored: 
                       type: "boolean"
-                      description: "Shows if error occurred getting document from EMIS"
+                      description: "Shows if error occurred getting an individual document"
                     content: 
                       type: "string"
                       description: "base64 encoded string of document"
                     type: 
                       type: "string"
                       description: "type of document"
+                    isTooLarge: 
+                      type: "boolean"
+                      description: "Indicates if the document is too large to be loaded"
+                    isFileUploading: 
+                      type: "boolean"
+                      description: "Indicates if the document is still uploading to the GP system"
           401: 
             description: "User session has expired."
           500: 
@@ -5376,7 +5391,7 @@
         tags: 
           - "patient document"
         summary: "Gets a specific document and initiates a download of the document."
-        description: "Returns only the specified document from the users document list for the logged in user (EMIS only). Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns only the specified document from the users document list for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
         requestBody: 
           content: 
             application/json: 

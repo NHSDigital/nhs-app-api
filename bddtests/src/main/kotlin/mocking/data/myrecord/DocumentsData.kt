@@ -85,7 +85,7 @@ object DocumentsData {
                     "pdf",
                     true,
                     Observation(
-                            null,
+                            String.format("Letter %d", documentNumber),
                             mutableListOf(AssociatedText(String.format("", documentNumber))),
                             EffectiveDate("YearMonthDay", date.plusDays(documentNumber).toString())
                     )))

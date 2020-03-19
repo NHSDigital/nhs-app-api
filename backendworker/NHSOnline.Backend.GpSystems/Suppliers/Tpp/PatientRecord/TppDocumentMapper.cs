@@ -13,15 +13,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
     public class TppDocumentMapper : ITppDocumentMapper
     {
-
         public PatientDocument Map(RequestBinaryDataReply requestBinaryDataReply)
         {
+
             if (requestBinaryDataReply == null)
             {
                 throw new ArgumentNullException(nameof(requestBinaryDataReply));
             }
 
-            var type = MapFileTypeToDownloadType(requestBinaryDataReply.BinaryData.FileType);
+            var binaryData = requestBinaryDataReply.BinaryData.BinaryDataPage.BinaryData;
+            var fileType = requestBinaryDataReply.BinaryData.FileType;
+            var type = MapFileTypeToDownloadType(fileType);
+
             if (!Constants.FileConstants.FileTypes.TppWhiteListTypes.Contains(type))
             {
                 return new PatientDocument
@@ -36,12 +39,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 CultureInfo.InvariantCulture,
                 Constants.FileConstants.ImageHtmlFormat,
                 mimeType,
-                requestBinaryDataReply.BinaryData.BinaryDataPage.BinaryData);
+                binaryData);
 
             return new PatientDocument
             {
                 Content = htmlAddedToBinary,
-                Type = requestBinaryDataReply.BinaryData.FileType,
+                Type = fileType,
                 HasErrored = false,
             };
         }

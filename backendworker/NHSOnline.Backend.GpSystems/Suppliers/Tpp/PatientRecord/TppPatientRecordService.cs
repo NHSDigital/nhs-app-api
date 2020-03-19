@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private readonly ITppMyRecordMapper _tppMyRecordMapper;
         private readonly ITppClientRequest<TppUserSession, ViewPatientOverviewReply> _patientOverview;
         private readonly ITppClientRequest<TppUserSession, RequestPatientRecordReply> _requestPatientRecord;
+        private readonly ITppClientRequest<(TppUserSession tppUserSession, string documentIdentifier), RequestBinaryDataReply> _requestBinaryData;
         private readonly ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> _testResultsView;
 
         public TppPatientRecordService(IGetPatientDcrEventsTaskChecker patientDcrEventsChecker,
@@ -40,6 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             IGetPatientDocumentsFromDcrEventsTaskChecker patientDocumentsFromDcrEventsTaskChecker,
             ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper,
             ITppClientRequest<TppUserSession, RequestPatientRecordReply> requestPatientRecord,
+            ITppClientRequest<(TppUserSession, string documentIdentifier), RequestBinaryDataReply> requestBinaryData,
             ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> testResultsView)
         {
             _patientDcrEventsChecker = patientDcrEventsChecker;
@@ -53,6 +55,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _tppMyRecordMapper = tppMyRecordMapper;
             _requestPatientRecord = requestPatientRecord;
             _testResultsView = testResultsView;
+            _requestBinaryData = requestBinaryData;
             _logger = logger;
         }
 
@@ -320,23 +323,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private async Task<PatientDocument> RetrievePatientDocument(string documentIdentifier, TppUserSession tppUserSession)
         {
             _logger.LogEnter();
-            var binaryDataRequest = new RequestBinaryData
-            {
-                PatientId = tppUserSession.PatientId,
-                OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
-                BinaryDataId = documentIdentifier
-            };
 
             try
             {
-                var patientOverview = await _tppClient.RequestBinaryData(binaryDataRequest, tppUserSession);
+                var patientDocument = await _requestBinaryData.Post((tppUserSession, documentIdentifier));
                 _logger.LogExit();
-                return _patientDocumentTaskChecker.Check(patientOverview);
+                return _patientDocumentTaskChecker.Check(patientDocument);
             }
             catch(Exception e)
             {
-                _logger.LogError(e, "Retrieving patientOverViewItems failed. Returning hasErrored as true");
+                _logger.LogError(e, "Retrieving patientDocument failed. Returning hasErrored as true");
                 var result = new PatientDocument
                 {
                     HasErrored = true

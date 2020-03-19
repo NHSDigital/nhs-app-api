@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithContent(binaryDataRequest.SerializeXml())
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
 
-            var response = await SystemUnderTest.RequestBinaryData(binaryDataRequest, tppUserSession);
+            var response = await SystemUnderTest.RequestBinaryData("test", tppUserSession);
 
             response.Body.Should().BeEquivalentTo(expectedBinaryRequestResponse);
             response.Headers.Should().BeEquivalentTo(responseHeaders);
@@ -129,7 +129,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .Respond(TppClientTestsContext.MediaType, errorResponseBuilder.BuildXml());
 
             // Act
-            var response = await SystemUnderTest.RequestBinaryData(binaryDataRequest, tppUserSession);
+            var response = await SystemUnderTest.RequestBinaryData("test", tppUserSession);
 
             // Assert
             response.ErrorResponse.Should().BeEquivalentTo(errorResponseBuilder.BuildExpected());
@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithHeaders(tppRequestHeaders)
                 .Respond(value);
 
-            var response = await SystemUnderTest.RequestBinaryData(binaryDataRequest, tppUserSession);
+            var response = await SystemUnderTest.RequestBinaryData("test", tppUserSession);
 
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();

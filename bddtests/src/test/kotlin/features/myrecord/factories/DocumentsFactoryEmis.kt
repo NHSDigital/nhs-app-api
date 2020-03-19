@@ -58,10 +58,16 @@ class DocumentsFactoryEmis: DocumentsFactory() {
     }
 
     override fun enabledWithDocuments(patient: Patient, isLarge: Boolean, mockUnavailableDocument: Boolean,
-                                      hasInvalidType: Boolean) {
-        val documents = DocumentsData.getDefaultDocumentsData(hasInvalidType = hasInvalidType)
+                                      hasInvalidType: Boolean, stillUploading: Boolean) {
+        var documents = DocumentsData.getDefaultDocumentsData(hasInvalidType = hasInvalidType)
+        var expectedDocuments = getExpectedDocumentsFromEmisDocuments(
+                isLarge, documents.medicalRecord.documents, true)
 
-        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents, true)
+        if (isLarge) {
+            documents = DocumentsData.getLargeDocumentData()
+            expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents)
+        }
+
         setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, expectedDocuments)
 
         val availableDocument = expectedDocuments[0]
@@ -86,7 +92,7 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         val documents = if (isLarge) DocumentsData.getLargeDocumentData()
             else DocumentsData.getDefaultDocumentsData(false, false)
 
-        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(isLarge, documents.medicalRecord.documents,
+        val expectedDocuments = getExpectedDocumentsFromEmisDocuments(false, documents.medicalRecord.documents,
                 false, false)
 
         setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, expectedDocuments)

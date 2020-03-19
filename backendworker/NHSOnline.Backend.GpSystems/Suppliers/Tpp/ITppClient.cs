@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession);
         Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession, string testResultId);
 
-        Task<TppApiObjectResponse<RequestBinaryDataReply>> RequestBinaryData(RequestBinaryData requestBinaryData,
+        Task<TppApiObjectResponse<RequestBinaryDataReply>> RequestBinaryData(string documentIdentifier,
             TppUserSession tppUserSession);
     }
 }

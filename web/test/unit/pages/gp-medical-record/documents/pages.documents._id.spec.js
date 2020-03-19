@@ -99,10 +99,27 @@ describe('document view', () => {
       const page = mountPage({ $store });
 
       // Act
-      await page.vm.$options.asyncData({ store: $store, redirect });
+      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
 
       // Assert
       expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'Document1');
+    });
+
+    it('will dispatch the load document function if there is no size on the documents list', async () => {
+      // Arrange
+      const document = { name: 'Document1',
+        type: 'jpg',
+        needMoreInformation: true,
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        isValidFile: true };
+      const $store = newStore({ document });
+      const page = mountPage({ $store });
+
+      // Act
+      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
+
+      // Assert
+      expect($store.dispatch).toHaveBeenCalledWith('myRecord/loadDocument', 1);
     });
 
     it('will set the header to the document date if no name exists', async () => {
@@ -114,7 +131,7 @@ describe('document view', () => {
       const dateString = 'translate_my_record.documents.documentPageSubtext 8 August 2019';
 
       // Act
-      await page.vm.$options.asyncData({ store: $store, redirect });
+      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
 
       // Assert
       expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', dateString);
@@ -136,7 +153,7 @@ describe('document view', () => {
       const dateString = 'Letter translate_my_record.documents.docTypePageSubtext 8 August 2019';
 
       // Act
-      await page.vm.$options.asyncData({ store: $store, redirect });
+      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
 
       // Assert
       expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', dateString);
@@ -364,7 +381,7 @@ describe('document view', () => {
       const page = mountPage({ $store });
 
       // Act
-      await page.vm.$options.asyncData({ store: $store, redirect });
+      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
 
       // Assert
       expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_my_record.documents.documentUnavailableHeader');

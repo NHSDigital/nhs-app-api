@@ -13,6 +13,7 @@ import {
   SET_MEDICAL_RECORD_TYPE,
   SET_RELOAD,
   SET_SELECTED_DOCUMENT_INFO,
+  SET_VALID_FILE,
 } from '@/store/modules/myRecord/mutation-types';
 import AnalyticsValues from '@/lib/analytics-values';
 
@@ -82,8 +83,12 @@ export default {
         name: state.document.name,
       },
     }) || {};
-    const { content } = response || {};
+    const { content, isTooLarge, isFileUploading } = response || {};
     commit(LOADED_DOCUMENT, content);
+
+    if (isTooLarge || isFileUploading) {
+      commit(SET_VALID_FILE, false);
+    }
   },
   downloadDocument({ state }, documentIdentifier) {
     return this.app.$http.postV1DocumentsByDocumentidentifierDownload({

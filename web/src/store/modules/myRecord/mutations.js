@@ -14,6 +14,7 @@ import {
   SET_MEDICAL_RECORD_TYPE,
   SET_RELOAD,
   SET_SELECTED_DOCUMENT_INFO,
+  SET_VALID_FILE,
   initialState,
 } from './mutation-types';
 
@@ -104,6 +105,7 @@ export default {
       state.document.isValidFile = documentInfo.isValidFile;
       state.document.comments = documentInfo.comments;
       state.document.documentType = documentInfo.documentType;
+      state.document.needMoreInformation = documentInfo.needMoreInformation;
     }
   },
   [TOGGLE_PATIENT_DETAIL](state) {
@@ -111,5 +113,8 @@ export default {
   },
   [SET_MEDICAL_RECORD_TYPE](state, { medicalRecordType }) {
     state.medicalRecordType = medicalRecordType;
+  },
+  [SET_VALID_FILE](state, isValidFile) {
+    state.document.isValidFile = isValidFile;
   },
 };

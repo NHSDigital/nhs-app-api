@@ -67,7 +67,7 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
     fun theGpPracticeHasMultipleLargeDocuments() {
         DocumentsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabledWithDocumentsWithNoNameOrTerm(SerenityHelpers.getPatient(), true)
+                .enabledWithDocuments(SerenityHelpers.getPatient(), true)
     }
 
     @Given("^the GP Practice has documents with invalid types$")
@@ -82,6 +82,13 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
         DocumentsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .enabledWithDocumentsWithNoNameOrTerm(SerenityHelpers.getPatient())
+    }
+
+    @Given("^the GP practice has a file that is still uploading$")
+    fun theGpPracticeHasAFileThatIsStillUploading() {
+        DocumentsFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithDocuments(SerenityHelpers.getPatient(), stillUploading = true)
     }
 
     @Given("^the GP Practice has multiple letters with no name or term$")

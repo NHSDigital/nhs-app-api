@@ -23,4 +23,8 @@ object ErrorResponseCodeTpp {
     const val INVALID_PROVIDER_ID = "5"
     const val INVALID_LINKAGE_CREDENTIALS = "8"
 
+    //Documents
+    const val FILE_SIZE_TOO_LARGE = "24"
+    const val FILE_STILL_UPLOADING = "45"
+
 }
