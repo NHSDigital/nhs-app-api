@@ -11,7 +11,7 @@
 	<key>AdminHelpUrlPath</key>
 	<string>$(ADMIN_HELP_URL_PATH)</string>
 	<key>ApiCallTimeoutSeconds</key>
-	<integer>10</integer>
+	<integer>5</integer>
 	<key>AppScheme</key>
 	<string>$(APP_SCHEME)</string>
 	<key>AppStoreUrl</key>
