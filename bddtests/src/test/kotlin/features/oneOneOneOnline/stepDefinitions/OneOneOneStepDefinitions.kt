@@ -37,10 +37,17 @@ open class OneOneOneStepDefinitions {
         checkMySymptoms.clickNHS111Header()
     }
 
+    @When("I press the coronavirus header")
+    fun iPressTheCoronaVirusHeader() {
+        browser.storeCurrentTabCount()
+        checkMySymptoms.clickCoronaVirusHeader()
+    }
+
     @Then("^the Check My Symptoms page is displayed")
     fun checkMySymptomsPageIsDisplayed() {
         checkMySymptoms.assertConditionsHeaderVisible()
         checkMySymptoms.assertNhs111HeaderVisible()
+        checkMySymptoms.assertCoronaHeaderVisible()
     }
 
     @Then("^the Check My Symptoms page header and navigation menu are correct$")

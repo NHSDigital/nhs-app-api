@@ -2266,6 +2266,10 @@ export default {
       subheader: 'Check if you need urgent help',
       body: 'Answer online questions to get instant advice or medical help near you',
     },
+    corona: {
+      subheader: 'Get advice about coronavirus',
+      body: 'Find out what to do if you think you have coronavirus',
+    },
   },
   appointmentHubPage: {
     pageHeader: 'Appointments',

@@ -170,6 +170,7 @@ class HomePageStepDefinitions {
         homeSteps.homePage.checkSymptomsLink.click()
         checkMySymptoms.assertConditionsHeaderVisible()
         checkMySymptoms.assertNhs111HeaderVisible()
+        checkMySymptoms.assertCoronaHeaderVisible()
         navBar.isHighlighted(NavBarNative.NavBarType.SYMPTOMS)
     }
 

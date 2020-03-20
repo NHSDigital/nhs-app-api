@@ -1,6 +1,18 @@
 <template>
   <div v-if="showTemplate" data-purpose="">
     <menu-item-list>
+
+      <menu-item id="btn_corona"
+                 header-tag="h2"
+                 role="link"
+                 :href="coronaCheckerUrl"
+                 :description="$t('sy01.corona.body')"
+                 target="_blank"
+                 :text="$t('sy01.corona.subheader')"
+                 :aria-label="ariaLabelCaption(
+                   'sy01.corona.subheader',
+                   'sy01.corona.body')"/>
+
       <menu-item id="btn_choices"
                  header-tag="h2"
                  role="link"
@@ -63,6 +75,7 @@ export default {
       symptomsCheckerUrl,
       conditionsCheckerUrl: this.$store.app.$env.CONDITIONS_CHECKER_URL,
       symptomsPath: SYMPTOMS.path,
+      coronaCheckerUrl: this.$store.app.$env.CORONA_CHECKER_URL,
     };
   },
   computed: {

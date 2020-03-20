@@ -23,6 +23,12 @@ open class CheckMySymptoms {
     }
 
     @Step
+    fun assertCoronaHeaderVisible() {
+        Assert.assertTrue("Corona header not visible, expected to be visible",
+                checkMySymptoms.isCoronaHeaderVisible())
+    }
+
+    @Step
     fun clickConditionsHeader() {
         checkMySymptoms.clickConditionsHeader()
     }
@@ -30,5 +36,10 @@ open class CheckMySymptoms {
     @Step
     fun clickNHS111Header() {
         checkMySymptoms.clickNHS111Header()
+    }
+
+    @Step
+    fun clickCoronaVirusHeader() {
+        checkMySymptoms.clickCoronaVirusHeader()
     }
 }

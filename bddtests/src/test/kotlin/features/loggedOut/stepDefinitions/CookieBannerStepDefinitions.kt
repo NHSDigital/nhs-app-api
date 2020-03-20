@@ -64,6 +64,7 @@ class CookieBannerStepDefinitions {
         loginPage.symptomsButton.click()
         checkMySymptomsPage.isConditionsHeaderVisible()
         checkMySymptomsPage.isNhs111HeaderVisible()
+        checkMySymptomsPage.isCoronaHeaderVisible()
     }
 
     @When("^I close the cookie banner$")

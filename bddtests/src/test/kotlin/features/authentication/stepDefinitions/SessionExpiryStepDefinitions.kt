@@ -61,6 +61,11 @@ class SessionExpiryStepDefinitions  {
         checkMySymptoms.clickNHS111Header()
     }
 
+    @When("^I click Get advice about coronavirus$")
+    fun iClickGetAdviceAboutCoronaVirus() {
+        checkMySymptoms.clickCoronaVirusHeader()
+    }
+
     @When("^I try to extend my session$")
     fun iTryToExtendMySession() {
         try {

@@ -23,6 +23,17 @@
       "validateSession": false
     },
     {
+      "id": "111-corona",
+      "url": "https://111.nhs.uk/service/COVID-19",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
       "id": "111-service",
       "url": "https://111.service.nhs.uk",
       "subServices": null,
