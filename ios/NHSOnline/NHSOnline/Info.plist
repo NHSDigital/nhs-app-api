@@ -145,9 +145,9 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>Use this instead of a password and security code to log in.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string></string>
+	<string>We need to know where you are so we can find services near you to help.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>We need to know where you are so we can find services near you to help.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>So you can record your video</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
