@@ -12,7 +12,7 @@ open class OnlinePharmacyDetailComponent : HybridPageObject() {
     )
 
     val pharmacyUrl = HybridPageElement(
-            webDesktopLocator = "//p[@id='url']",
+            webDesktopLocator = "//a[@id='url']",
             androidLocator = null,
             page = this
     )
