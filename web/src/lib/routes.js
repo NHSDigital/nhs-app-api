@@ -489,7 +489,7 @@ const routes = {
         return [this.allRoutes.INDEX];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}third-party/`,
   },
   LOGIN: {
     name: 'Login',
