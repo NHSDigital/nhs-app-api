@@ -1721,12 +1721,13 @@ export default {
     switchProfileButton: 'Switch to {givenName}\'s profile',
     switchProfileButtonWithoutName: 'Switch to this profile',
     switchToMyProfileButton: 'Switch to my profile',
-    thingsYouCanDoOnBehalfOf: {
-      text: 'Services you can access for ',
+    featuresOnBehalfOf: {
+      text: 'Services you can access for {fullName}',
       bookAnAppointment: 'Book a GP appointment',
       orderRepeatPrescription: 'Order a repeat prescription',
       viewMedicalRecord: 'View their GP medical record',
     },
+    featuresNoSummary: 'To access services in the app for {fullName}, you need to use their profile.',
     shutter: {
       prescriptions: {
         header: 'You do not have access to {name}\'s repeat prescriptions',

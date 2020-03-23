@@ -2,11 +2,12 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <div class="nhsuk-do-dont-list nhsuk-u-margin-top-3">
-          <p :class="[$style['user-info'], 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3']">
-            {{ `${$t('linkedProfiles.thingsYouCanDoOnBehalfOf.text')} ${linkedAccount.fullName}` }}
-          </p>
-          <ul v-for="item in thingsYouCanDoOnBehalfOf"
+        <div v-if="showSummaryDetails" class="nhsuk-do-dont-list nhsuk-u-margin-top-3">
+          <h2 :class="[$style['user-info'], 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3']">
+            {{ $t('linkedProfiles.featuresOnBehalfOf.text')
+              .replace('{fullName}', linkedAccount.fullName ) }}
+          </h2>
+          <ul v-for="item in featuresOnBehalfOf"
               :key="item.text"
               class="nhsuk-list nhsuk-list--cross">
             <li :id="item.id">
@@ -16,6 +17,10 @@
             </li>
           </ul>
         </div>
+        <p v-else :class="[$style['user-info'], 'nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3']">
+          {{ $t('linkedProfiles.featuresNoSummary')
+            .replace('{fullName}', linkedAccount.fullName ) }}
+        </p>
         <generic-button id="btn-switch-profile"
                         :button-classes="['nhsuk-button']"
                         @click.stop.prevent="switchProfileButtonClicked">
@@ -46,18 +51,18 @@ export default {
     };
   },
   computed: {
-    thingsYouCanDoOnBehalfOf() {
+    featuresOnBehalfOf() {
       return [{
         id: 'book-an-appointment',
-        text: 'linkedProfiles.thingsYouCanDoOnBehalfOf.bookAnAppointment',
+        text: 'linkedProfiles.featuresOnBehalfOf.bookAnAppointment',
         canDo: this.linkedAccount.canBookAppointment,
       }, {
         id: 'order-repeat-prescription',
-        text: 'linkedProfiles.thingsYouCanDoOnBehalfOf.orderRepeatPrescription',
+        text: 'linkedProfiles.featuresOnBehalfOf.orderRepeatPrescription',
         canDo: this.linkedAccount.canOrderRepeatPrescription,
       }, {
         id: 'view-medical-record',
-        text: 'linkedProfiles.thingsYouCanDoOnBehalfOf.viewMedicalRecord',
+        text: 'linkedProfiles.featuresOnBehalfOf.viewMedicalRecord',
         canDo: this.linkedAccount.canViewMedicalRecord,
       }];
     },
@@ -68,6 +73,9 @@ export default {
       return this.displayPersonalisedButton
         ? this.$t('linkedProfiles.switchProfileButton', { givenName: this.linkedAccount.givenName })
         : this.$t('linkedProfiles.switchProfileButtonWithoutName');
+    },
+    showSummaryDetails() {
+      return this.linkedAccount.showSummary;
     },
   },
   asyncData({ store, redirect }) {

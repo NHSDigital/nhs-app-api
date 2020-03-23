@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             _systemUnderTest = _fixture.Create<TppLinkedAccountsService>();
 
         }
-        
+
         [TestMethod]
         public void GetOdsCodeForLinkedAccount_ReturnsOdsCodeOfMainUserInSession()
         {
@@ -58,11 +58,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
 
             // Act
             var resultOdsCode = _systemUnderTest.GetOdsCodeForLinkedAccount(_tppUserSession, proxyId);
-            
+
             // Assert
             resultOdsCode.Should().Be(mainUserOdsCode);
         }
-        
+
         [TestMethod]
         public void IsValidAccountOrLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForProxy()
         {
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             // Assert
             result.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public void IsValidAccountOrLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
         {
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             // Assert
             result.Should().BeFalse();
         }
-        
+
          [TestMethod]
         public void GetProxyAuditData_WhenPatientIdFoundInProxyUser()
         {
@@ -244,7 +244,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             result.IsProxyMode.Should().Be(false);
             result.ProxyNhsNumber.Should().Be(null);
         }
-        
+
         [TestMethod]
         public async Task GetLinkedAccounts_ReturnsEmptyResponse_WhenHasLinkedAccountsIsFalse()
         {
@@ -258,7 +258,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             successResult.LinkedAccountsBreakdown.Should().NotBeNull();
             successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(0);
         }
-        
+
         [TestMethod]
         public async Task GetLinkedAccounts_ReturnsSuccessResult_WhenHasLinkedAccountsIsTrueAndAllValidAccounts()
         {
@@ -291,14 +291,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                     },
                 }
             };
-            
+
             //Act
             var result = await _systemUnderTest.GetLinkedAccounts(_tppUserSession);
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
             successResult.LinkedAccountsBreakdown.Should().NotBeNull();
-            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(_tppUserSession.ProxyPatients.Count);
+            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should()
+                .Be(_tppUserSession.ProxyPatients.Count);
             successResult.LinkedAccountsBreakdown.AccountsWithNoNhsNumber.Count().Should().Be(0);
             successResult.LinkedAccountsBreakdown.AccountsWithMismatchingOdsCode.Count().Should().Be(0);
             successResult.HasAnyProxyInfoBeenUpdatedInSession.Should().BeFalse();
@@ -307,16 +308,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             {
                 var tppProxyPatient = _tppUserSession.ProxyPatients.ElementAt(i);
                 var linkedAccountDetail = successResult.LinkedAccountsBreakdown.ValidAccounts.ElementAt(i);
-                
+
                 linkedAccountDetail.Id.Should().Be(tppProxyPatient.Id);
                 linkedAccountDetail.FullName.Should().Be(tppProxyPatient.FullName);
-                linkedAccountDetail.AgeMonths.Should().Be(CalculateAge.CalculateAgeInMonthsAndYears(tppProxyPatient.DateOfBirth).AgeMonths);
-                linkedAccountDetail.AgeYears.Should().Be(CalculateAge.CalculateAgeInMonthsAndYears(tppProxyPatient.DateOfBirth).AgeYears);
+                linkedAccountDetail.AgeMonths.Should()
+                    .Be(CalculateAge.CalculateAgeInMonthsAndYears(tppProxyPatient.DateOfBirth).AgeMonths);
+                linkedAccountDetail.AgeYears.Should()
+                    .Be(CalculateAge.CalculateAgeInMonthsAndYears(tppProxyPatient.DateOfBirth).AgeYears);
             }
-            
         }
-        
-                [TestMethod]
+
+        [TestMethod]
         public async Task GetLinkedAccounts_ReturnsCorrectLinkedAccountsSummary()
         {
             // Arrange
@@ -342,7 +344,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                     },
                 }
             };
-            
+
             //Act
             var result = await _systemUnderTest.GetLinkedAccounts(_tppUserSession);
 
@@ -352,8 +354,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             successResult.LinkedAccountsBreakdown.AccountsWithMismatchingOdsCode.Count().Should().Be(0);
             successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(2);
         }
+
+        [TestMethod]
+        public async Task GetLinkedAccount_returns_InValidData()
+        {
+            var result = await _systemUnderTest.GetLinkedAccount(_tppUserSession, Guid.NewGuid());
+
+            var successResult = result.Should().BeOfType<LinkedAccountAccessSummaryResult.Success>().Subject;
+            successResult.Response.IsValidData.Should().BeFalse();
+            successResult.Response.CanBookAppointment.Should().BeFalse();
+            successResult.Response.CanOrderRepeatPrescription.Should().BeFalse();
+            successResult.Response.CanViewMedicalRecord.Should().BeFalse();
+        }
     }
-    
-    
-    
 }

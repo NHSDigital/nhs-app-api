@@ -8,9 +8,9 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 
         public class Success : LinkedAccountAccessSummaryResult
         {
-            public GetLinkedAccountAccessSummaryResponse Response { get; }
+            public GetAccountAccessSummaryResponse Response { get; }
 
-            public Success(GetLinkedAccountAccessSummaryResponse response)
+            public Success(GetAccountAccessSummaryResponse response)
             {
                 Response = response;
             }

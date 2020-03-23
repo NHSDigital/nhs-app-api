@@ -10,47 +10,30 @@ describe('linked profile is there', () => {
   let wrapper;
   let $state;
 
-  const createState = (state = {
-    device: {
-      source: 'web',
-    },
-    linkedAccounts: {
-      selectedLinkedAccount: {
-        id: 'user-id-0',
-        name: 'mr user 0',
-        dateOfBirth: '2019-07-04T00:00:00.000',
-        gpPracticeName: 'practice x',
-        nhsNumber: 999111222,
-        canBookAppointment: true,
-        canOrderRepeatPrescription: true,
-        canViewMedicalRecord: false,
-        displayPersonalizedContent: false,
+  const createState = (customState = {}) =>
+    Object.assign({
+      device: {
+        source: 'web',
       },
-    },
-  }) => state;
-
-  const createStateWithPersonalizedContentTrue = (state = {
-    device: {
-      source: 'web',
-    },
-    linkedAccounts: {
-      selectedLinkedAccount: {
-        id: 'user-id-0',
-        name: 'mr user 0',
-        dateOfBirth: '2019-07-04T00:00:00.000',
-        gpPracticeName: 'practice x',
-        nhsNumber: 999111222,
-        canBookAppointment: true,
-        canOrderRepeatPrescription: true,
-        canViewMedicalRecord: false,
-        displayPersonalizedContent: true,
+      linkedAccounts: {
+        selectedLinkedAccount: {
+          id: 'user-id-0',
+          name: 'mr user 0',
+          dateOfBirth: '2019-07-04T00:00:00.000',
+          gpPracticeName: 'practice x',
+          nhsNumber: 999111222,
+          canBookAppointment: true,
+          canOrderRepeatPrescription: true,
+          canViewMedicalRecord: false,
+          displayPersonalizedContent: false,
+          showSummary: true,
+        },
       },
-    },
-  }) => state;
+    }, customState);
 
   const mountPage = () => mount(LinkedProfileSummary, { $store, $t, $state });
 
-  describe('show linked profile links', () => {
+  describe('show linked profile links with Access Summary', () => {
     beforeEach(() => {
       $store = createStore({
         dispatch: jest.fn(() => Promise.resolve()),
@@ -89,42 +72,52 @@ describe('linked profile is there', () => {
       const canBookAppointment = wrapper.find('[id="book-an-appointment"]');
       const canOrderRepeatPrescription = wrapper.find('[id="order-repeat-prescription"]');
       const canViewMedicalRecord = wrapper.find('[id="view-medical-record"]');
+      const blurb = wrapper.find('h2');
 
       // assert
       expect(switchButton.exists()).toBe(true);
       expect(canBookAppointment.find('svg[class*="nhsuk-icon__tick"]').exists()).toBe(true);
       expect(canOrderRepeatPrescription.find('svg[class*="nhsuk-icon__tick"]').exists()).toBe(true);
       expect(canViewMedicalRecord.find('svg[class*="nhsuk-icon__tick"]').exists()).toBe(false);
+      expect(blurb.exists()).toBe(true);
 
       expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_pageHeaders.linkedProfilesSummary');
       expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_pageTitles.linkedProfilesSummary');
     });
   });
 
-  describe('icons are not focusable', () => {
+  describe('show linked profile links with No Access Summary', () => {
     beforeEach(() => {
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()),
+        state: createState({
+          linkedAccounts: {
+            selectedLinkedAccount: {
+              showSummary: false,
+            },
+          },
+        }),
+      });
       $store.getters['linkedAccounts/getSelectedLinkedAccount'] = $store.state.linkedAccounts.selectedLinkedAccount;
+      wrapper = mountPage();
     });
 
-    it('focus is disabled on icons of services you can access', () => {
-      const appointmentIconAttributes = wrapper
-        .find('[id="book-an-appointment"]')
-        .find('svg[class*="nhsuk-icon__tick"]').attributes();
+    it('displays the correct text and icons for the selected profile', () => {
+      const switchButton = wrapper.find('#btn-switch-profile');
+      const canBookAppointment = wrapper.find('[id="book-an-appointment"]');
+      const canOrderRepeatPrescription = wrapper.find('[id="order-repeat-prescription"]');
+      const canViewMedicalRecord = wrapper.find('[id="view-medical-record"]');
+      const blurb = wrapper.find('p');
 
-      const prescriptionIconAttributes = wrapper
-        .find('[id="order-repeat-prescription"]')
-        .find('svg[class*="nhsuk-icon__tick"]').attributes();
+      // assert
+      expect(switchButton.exists()).toBe(true);
+      expect(canBookAppointment.exists()).toBe(false);
+      expect(canOrderRepeatPrescription.exists()).toBe(false);
+      expect(canViewMedicalRecord.exists()).toBe(false);
+      expect(blurb.exists()).toBe(true);
 
-      expect(appointmentIconAttributes.focusable).toEqual('false');
-      expect(prescriptionIconAttributes.focusable).toEqual('false');
-    });
-
-    it('focus is disabled on icons of services you cannot access', () => {
-      const medicalRecordIconAttributes = wrapper
-        .find('[id="view-medical-record"]')
-        .find('svg[class*="nhsuk-icon__cross"]').attributes();
-
-      expect(medicalRecordIconAttributes.focusable).toEqual('false');
+      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_pageHeaders.linkedProfilesSummary');
+      expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_pageTitles.linkedProfilesSummary');
     });
   });
 
@@ -144,7 +137,13 @@ describe('linked profile is there', () => {
     it('will display displayPersonalisedButton when displayPersonalizedContent is true', () => {
       $store = createStore({
         dispatch: jest.fn(() => Promise.resolve()),
-        state: createStateWithPersonalizedContentTrue(),
+        state: createState({
+          linkedAccounts: {
+            selectedLinkedAccount: {
+              displayPersonalizedContent: true,
+            },
+          },
+        }),
       });
       $store.getters['linkedAccounts/getSelectedLinkedAccount'] = $store.state.linkedAccounts.selectedLinkedAccount;
       wrapper = mountPage();

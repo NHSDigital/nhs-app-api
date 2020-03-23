@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
         {
             _logger = logger;
         }
-        
+
         public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
             var tppUserSession = (TppUserSession)gpUserSession;
@@ -53,13 +53,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
                         AgeYears = CalculateAge.CalculateAgeInMonthsAndYears(dateOfBirth).AgeYears,
                         DisplayPersonalizedContent = false
                     });
-                } 
+                }
                 summary = GroupLinkedAccounts(tppUserSession, linkedAccounts);
             }
 
             return await Task.FromResult(new LinkedAccountsResult.Success(summary, false));
         }
-        
+
          private LinkedAccountsBreakdownSummary GroupLinkedAccounts(TppUserSession tppUserSession, IEnumerable<LinkedAccount> linkedAccounts)
         {
             var withoutNhsNumbers = new List<LinkedAccount>();
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
                 AccountsWithMismatchingOdsCode = new List<LinkedAccount>(),
             };
         }
-         
+
          private static TppProxyUserSession GetLinkedAccountFromGpUserSession(GpUserSession gpUserSession, Guid linkedAccountId)
          {
              var tppUserSession = (TppUserSession)gpUserSession;
@@ -99,10 +99,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
              return proxy;
          }
 
-        public Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
+        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
-            throw new NotImplementedException();
-            //Not in the scope of this story
+            var response = new GetAccountAccessSummaryResponse
+            {
+                IsValidData = false,
+            };
+            return await Task.FromResult(new LinkedAccountAccessSummaryResult.Success(response));
         }
 
         public LinkedAccountAuditInfo GetProxyAuditData(GpUserSession gpUserSession, Guid id)
@@ -117,10 +120,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
                 linkedAccountAuditResult.ProxyNhsNumber
                     = tppUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id)?.NhsNumber;
             }
-            
+
             return linkedAccountAuditResult;
         }
-        
+
         private bool IsValidLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
             return IsValidAccountOrLinkedAccountId(gpUserSession, id) && (id != gpUserSession.Id);

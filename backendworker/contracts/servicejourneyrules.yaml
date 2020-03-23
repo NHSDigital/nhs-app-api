@@ -146,9 +146,9 @@ components:
       type: object
       properties:
         isEnabled:
-          type: bool
+          type: boolean
         canDeleteMessages:
-          type: bool
+          type: boolean
     LinkedAccountsConfigResponse:
       type: object
       properties:
@@ -156,4 +156,4 @@ components:
           type: string
           description: The guid of the current user
         hasLinkedAccounts:
-          type: bool
+          type: boolean

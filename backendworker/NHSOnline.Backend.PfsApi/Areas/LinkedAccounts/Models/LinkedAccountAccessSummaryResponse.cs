@@ -1,8 +1,10 @@
-﻿namespace NHSOnline.Backend.GpSystems.LinkedAccounts.Models
+﻿namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts.Models
 {
     public class LinkedAccountAccessSummaryResponse
     {
         public string GpPracticeName { get; set; }
+
+        public bool ShowSummary { get; set; }
 
         public bool CanBookAppointment { get; set; }
 

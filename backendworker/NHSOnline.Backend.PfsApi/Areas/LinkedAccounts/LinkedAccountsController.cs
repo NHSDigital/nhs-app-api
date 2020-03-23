@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
-using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
+using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts.Models;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.Support;
@@ -113,12 +113,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                 _logger.LogInformation(
                     $"Has access to GP appointments: {linkedAccountSuccess.Response.CanBookAppointment}, Has access to repeat prescriptions: " +
                     $"{ linkedAccountSuccess.Response.CanOrderRepeatPrescription}, Has access to medical record: {linkedAccountSuccess.Response.CanViewMedicalRecord}");
-                
+
+                var accountSuccessResponse = linkedAccountSuccess.Response;
                 var response = new LinkedAccountAccessSummaryResponse
                 {
-                    CanBookAppointment = linkedAccountSuccess.Response.CanBookAppointment,
-                    CanOrderRepeatPrescription = linkedAccountSuccess.Response.CanOrderRepeatPrescription,
-                    CanViewMedicalRecord = linkedAccountSuccess.Response.CanViewMedicalRecord,
+                    ShowSummary = accountSuccessResponse.IsValidData,
+                    CanBookAppointment = accountSuccessResponse.CanBookAppointment,
+                    CanOrderRepeatPrescription = accountSuccessResponse.CanOrderRepeatPrescription,
+                    CanViewMedicalRecord = accountSuccessResponse.CanViewMedicalRecord,
                     GpPracticeName = gpPracticeName,
                 };
 

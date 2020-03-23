@@ -73,8 +73,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
                 if (settings.HasSuccessResponse)
                 {
-                    var response = new GetLinkedAccountAccessSummaryResponse
+                    var response = new GetAccountAccessSummaryResponse
                     {
+                        IsValidData = true,
                         CanBookAppointment = settings.Body.AssignedServices.AppointmentsEnabled,
                         CanOrderRepeatPrescription = settings.Body.AssignedServices.PrescribingEnabled,
                         CanViewMedicalRecord = settings.Body.AssignedServices.MedicalRecordEnabled,
@@ -207,7 +208,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
         {
             return IsValidAccountOrLinkedAccountId(gpUserSession, id) && (id != gpUserSession.Id);
         }
-        
+
         private static EmisProxyUserSession GetLinkedAccountFromGpUserSession(GpUserSession gpUserSession, Guid linkedAccountId)
         {
             var emisUserSession = (EmisUserSession)gpUserSession;

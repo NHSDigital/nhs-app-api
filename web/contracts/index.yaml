@@ -3882,10 +3882,10 @@
                                   type: "boolean"
                                 im1Messaging: 
                                   type: "object"
-                                  properties:
-                                    isEnabled:
+                                  properties: 
+                                    isEnabled: 
                                       type: "boolean"
-                                    canDeleteMessages:
+                                    canDeleteMessages: 
                                       type: "boolean"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
@@ -4487,10 +4487,10 @@
                           type: "boolean"
                         im1Messaging: 
                           type: "object"
-                          properties:
-                            isEnabled:
+                          properties: 
+                            isEnabled: 
                               type: "boolean"
-                            canDeleteMessages:
+                            canDeleteMessages: 
                               type: "boolean"
           404: 
             description: "Service Journey Rules Configuration not found."
@@ -4514,7 +4514,7 @@
                       type: "string"
                       description: "The guid of the current user"
                     hasLinkedAccounts: 
-                      type: "bool"
+                      type: "boolean"
     /v1/patient/linked-account-journey-configuration: 
       get: 
         tags: 
@@ -4659,10 +4659,10 @@
                           type: "boolean"
                         im1Messaging: 
                           type: "object"
-                          properties:
-                            isEnabled:
+                          properties: 
+                            isEnabled: 
                               type: "boolean"
-                            canDeleteMessages:
+                            canDeleteMessages: 
                               type: "boolean"
           404: 
             description: "Service Journey Rules Configuration not found."
@@ -4750,6 +4750,9 @@
                     gpPracticeName: 
                       type: "string"
                       description: "gp pratice name (defaults to practice ods code if gp practice name cannot be found)"
+                    showSummary: 
+                      type: "boolean"
+                      description: "flag to frontend whether to show the summary data or not.  Certain providers do not provide this data."
                     canBookAppointment: 
                       type: "boolean"
                       description: "can book appointment for linked account"

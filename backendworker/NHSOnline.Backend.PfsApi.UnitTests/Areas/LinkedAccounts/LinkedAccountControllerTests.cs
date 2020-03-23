@@ -13,6 +13,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts;
+using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts.Models;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 using NHSOnline.Backend.PfsApi.GpSearch;
@@ -207,7 +208,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             };
             var gpSearchResult = new GpSearchResult.Success(gpSearchResponse);
 
-            var linkedAccountAccessSummaryResponse = _fixture.Create<GetLinkedAccountAccessSummaryResponse>();
+            var linkedAccountAccessSummaryResponse = _fixture.Create<GetAccountAccessSummaryResponse>();
             LinkedAccountAccessSummaryResult linkedAccountSummaryResult = new LinkedAccountAccessSummaryResult.Success(linkedAccountAccessSummaryResponse);
 
             _linkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, id))
@@ -249,7 +250,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             var gpSearchResponse = new GpSearchResponse();
             var gpSearchResult = new GpSearchResult.Success(gpSearchResponse);
 
-            var linkedAccountAccessSummaryResponse = _fixture.Create<GetLinkedAccountAccessSummaryResponse>();
+            var linkedAccountAccessSummaryResponse = _fixture.Create<GetAccountAccessSummaryResponse>();
             LinkedAccountAccessSummaryResult linkedAccountSummaryResult = new LinkedAccountAccessSummaryResult.Success(linkedAccountAccessSummaryResponse);
 
             _linkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, id))
@@ -290,7 +291,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             var odsCode = _fixture.Create<string>();
             var gpSearchResult = new GpSearchResult.InternalServerError();
 
-            var linkedAccountAccessSummaryResponse = _fixture.Create<GetLinkedAccountAccessSummaryResponse>();
+            var linkedAccountAccessSummaryResponse = _fixture.Create<GetAccountAccessSummaryResponse>();
             LinkedAccountAccessSummaryResult linkedAccountSummaryResult = new LinkedAccountAccessSummaryResult.Success(linkedAccountAccessSummaryResponse);
 
             _linkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, id))

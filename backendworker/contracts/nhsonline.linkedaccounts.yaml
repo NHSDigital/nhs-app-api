@@ -123,6 +123,9 @@ components:
         gpPracticeName:
           type: string
           description: gp pratice name (defaults to practice ods code if gp practice name cannot be found)
+        showSummary:
+            type: boolean
+            description: flag to frontend whether to show the summary data or not.  Certain providers do not provide this data.
         canBookAppointment:
           type: boolean
           description: can book appointment for linked account
