@@ -23,9 +23,6 @@ open class ResourceMockingClass {
     fun mockContext(): Context {
         val resourceMock: Resources = mock {
             on { getString(R.string.baseURL) } doReturn "http://10.0.2.2:3000"
-            on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
-            on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
-            on { getString(R.string.nhs111Location) } doReturn "https://111.service.nhs.uk/"
             on { getString(R.string.dataSharingURL) } doReturn "https://www.nhs.uk/your-nhs-data-matters/"
             on { getString(R.string.connection_error_title) } doReturn "There's an issue with your internet connection"
             on { getString(R.string.connection_error_message) } doReturn "\nCheck your connection and try again." +
@@ -37,23 +34,16 @@ open class ResourceMockingClass {
                     "        contact your GP surgery directly. For immediate medical advice, call one. one. one.."
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.authRedirectPath) } doReturn "/auth-return"
-            on { getString(R.string.conditions) } doReturn "https://www.nhs.uk/conditions/"
             on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
             on { getString(R.string.nhs_111_header_description) } doReturn "one one one Online"
 
             on { getString(R.string.loginPath) } doReturn "login"
             on { getString(R.string.symptomsPath) } doReturn "/symptoms"
             on { getString(R.string.appointmentsPath) } doReturn "/appointments"
-            on { getString(R.string.appointmentsGpAtHandPath) } doReturn "/appointments/gp-at-hand"
-            on { getString(R.string.informaticaPath) } doReturn "/appointments/informatica"
             on { getString(R.string.prescriptionsPath) } doReturn "/prescriptions"
-            on { getString(R.string.prescriptionsGpAtHandPath) } doReturn "/prescriptions/gp-at-hand"
             on { getString(R.string.myRecordPath) } doReturn "/my-record-warning"
-            on { getString(R.string.myRecordGpAtHandPath) } doReturn "/my-record/gp-at-hand"
             on { getString(R.string.myAccountPath) } doReturn "/account"
             on { getString(R.string.morePath) } doReturn "/more"
-            on { getString(R.string.organDonationPath) } doReturn "/organ-donation"
-            on { getString(R.string.dataSharingPath) } doReturn "/data-sharing"
             on { getString(R.string.checkYourSymptoms) } doReturn "check-your-symptoms"
 
             on { getString(R.string.my_account_header) } doReturn "My account"
@@ -72,9 +62,7 @@ open class ResourceMockingClass {
             on { getString(R.string.nhs_login_header) } doReturn "Log in to the NHS App"
             on { getString(R.string.nhs_login_accessibility_label) } doReturn "Log in using Patient ID"
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
-            on { getString(R.string.nhsLoginFidoUrl) } doReturn "https://uaf.ext.signin.nhs.uk/"
-            on { getString(R.string.nhsLoginSuffix) } doReturn "https://signin.nhs.uk"
-            on { getString(R.string.adminHelpPath) } doReturn "appointments/admin-help"
+            on { getString(R.string.nhsLoginSuffix) } doReturn "https://ext.signin.nhs.uk"
             on { getString(R.string.admin_help_header) } doReturn "GP help without an appointment"
             on { getString(R.string.browser_unavailable) } doReturn "Browser is disabled"
         }
@@ -106,8 +94,6 @@ open class ResourceMockingClass {
         val mockResource: Resources = mock {
             on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
-            on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
-            on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
             on { getString(R.string.connection_error_title) } doReturn "There\\'s an issue with your internet connection"
             on { getString(R.string.server_error_title) } doReturn "We're experiencing technical difficulties"
         }
@@ -138,8 +124,6 @@ open class ResourceMockingClass {
                     "urgent medical advice, call one one one."
             on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
             on { getString(R.string.connection_error_title) } doReturn "\"There's an issue with your internet connection\""
-            on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
-            on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
             on { getString(R.string.server_error_title) } doReturn "We're experiencing technical difficulties"
         }
 

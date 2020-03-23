@@ -7,7 +7,6 @@
     <string name="baseApiURL">https://api-preview.dev.nonlive.nhsapp.service.nhs.uk/</string>
     <string name="cookieDomain">@string/baseURL</string>
     <string name="authRedirectPath">/auth-return</string>
-    <string name="gpFinderPath">gp-finder</string>
     <string name="fidoGetAuthRequestPath">/authRequest</string>
     <string name="fidoPostAuthResponsePath">/authResponse</string>
     <string name="fidoPostDeregResponsePath">/deregRequest</string>
@@ -16,24 +15,12 @@
     <string name="morePath">more</string>
     <string name="checkYourSymptoms">check-your-symptoms</string>
     <string name="myRecordPath">my-record</string>
-    <string name="myRecordGpAtHandPath">my-record/gp-at-hand</string>
     <string name="symptomsPath">symptoms</string>
     <string name="appointmentsPath">appointments</string>
-    <string name="appointmentsGpAtHandPath">appointments/gp-at-hand</string>
-    <string name="informaticaPath">appointments/informatica</string>
     <string name="prescriptionsPath">prescriptions</string>
-    <string name="prescriptionsGpAtHandPath">prescriptions/gp-at-hand</string>
     <string name="myAccountPath">account</string>
-    <string name="organDonationPath">organ-donation</string>
-    <string name="dataSharingPath">data-sharing</string>
-    <string name="adminHelpPath">appointments/admin-help</string>
     <string name="fidoAuthQueryKey">fidoAuthResponse</string>
-    <string name="nhs111">https://111.nhs.uk/</string>
-    <string name="nhsUK">https://www.nhs.uk</string>
-    <string name="conditions">https://www.nhs.uk/conditions/</string>
-    <string name="nhs111Location">https://111.service.nhs.uk/</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
-    <string name="nhsLoginFidoUrl">https://uaf.ext.signin.nhs.uk/</string>
     <string name="nhsLoginSuffix">https://signin.nhs.uk</string>
     <string name="redirectorPath">redirector?redirect_to=</string>
 
@@ -41,23 +28,15 @@
     <string name="fidoUsername">fidoUsername</string>
     <string name="logoutPath">logout</string>
     <string name="loginPath">login</string>
-
     <string name="dataSharingURL">https://www.nhs.uk/your-nhs-data-matters/</string>
     <string name="helpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/</string>
     <string name="biometricsHelpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/android-fingerprint-ID-help/</string>
-    <string name="termsAndConditionsURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms/</string>
-
     <string name="sessionDetailsCookieName">nhso.session</string>
     <string name="configurationApiPath">v2/configuration</string>
-    <string name="minimumSupportedAndroidVersion">minimumSupportedAndroidVersion</string>
-    <string name="fidoServerUrlConfigurationKey">fidoServerUrl</string>
     <string name="menuTimeoutSeconds">10</string>
     <string name="secureFlag">enabled</string>
-
     <string-array name="nativeReloadOnBackUrls">
         <item>@string/nhsLoginSuffix</item>
     </string-array>
-
     <string name="versionRegex">^([\\d]+)[.](\\d+)([.](\\d+))?$</string>
-
 </resources>

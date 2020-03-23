@@ -15,11 +15,6 @@ class AppWebInterface(private val webView: WebView) {
         }
     }
 
-    fun resetGPFinderFlow(gpFinderPath: String) {
-        val spaPath = if (gpFinderPath.startsWith("/")) gpFinderPath else "/$gpFinderPath"
-        evaluateWebviewJavascript("window.\$nuxt.\$router.push({path:'$spaPath', query: { reset: true } })")
-    }
-
     fun logout() {
         loadDispatchEvent("auth/logout")
     }

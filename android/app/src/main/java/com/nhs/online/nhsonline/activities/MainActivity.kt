@@ -413,10 +413,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
         when {
             nhsWeb.isUserLoggedIn -> showExitDialog()
-            path == "/" + resources.getString(R.string.gpFinderPath) ->
-                this.finishAndRemoveTask()
-            path.contains(resources.getString(R.string.gpFinderPath), ignoreCase = true) ->
-                appWebInterface.resetGPFinderFlow(getString(R.string.gpFinderPath))
             path == "/" + resources.getString(R.string.checkYourSymptoms) ->
                 nhsWeb.onbackButtonPressedOnCheckSymptomsUnsecurePage()
             nhsWeb.shouldReloadHomepageOnBackReturn(nhsWeb.reloadUrl) -> nhsWeb.reloadHomepageOnBackReturn()

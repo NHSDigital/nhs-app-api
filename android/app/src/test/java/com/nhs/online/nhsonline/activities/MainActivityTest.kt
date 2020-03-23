@@ -67,45 +67,9 @@ class MainActivityTest {
     }
 
     @Test
-    fun onBackButtonPressed_OnGpFinderScreen_ClosesApp() {
-        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) +
-                getStringById(R.string.gpFinderPath))
-        spyActivity.configurationResponse.callSuccessful = true
-
-        try {
-            spyActivity.onBackPressed()
-        } catch (e: Exception) {
-            assert(false)
-        }
-
-        verify(spyActivity).finishAndRemoveTask()
-    }
-
-    @Test
-    fun onBackButtonPressed_OnGpFinderOtherScreen_ResetGpFlow() {
-        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) +
-                getStringById(R.string.gpFinderPath) + "/otherPath")
-        spyActivity.configurationResponse.callSuccessful = true
-
-        val appWebInterface = AppWebInterface(spyActivity.webview)
-        val spyAppWebInterface = spy(appWebInterface)
-
-        FieldSetter.setField(spyActivity,
-            spyActivity::class.java.getDeclaredField("appWebInterface"),
-            spyAppWebInterface)
-
-        try {
-            spyActivity.onBackPressed()
-        } catch (e: Exception) {
-            assert(false)
-        }
-        verify(spyAppWebInterface).resetGPFinderFlow(any())
-    }
-
-    @Test
     fun onBackButtonPressed_IsLoggedIn_ShowAlertDialog() {
         spyActivity.webview.loadUrl(getStringById(R.string.baseURL) +
-                getStringById(R.string.gpFinderPath) + "/otherPath")
+                "check-your-symptoms" + "/otherPath")
         spyActivity.configurationResponse.callSuccessful = true
 
         val nhsWebMock: NhsWeb = mock {

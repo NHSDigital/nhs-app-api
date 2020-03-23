@@ -293,7 +293,7 @@ class WebClientInterceptorTest {
                 nhsLoginLoggedInPaths
         )
 
-        val url = tmpContext.resources.getString(R.string.conditions)
+        val url = "https://test.com"
         whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
                 SubService(
                         requiresAssertedLoginIdentity = false,
