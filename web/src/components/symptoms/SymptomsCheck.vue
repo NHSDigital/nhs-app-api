@@ -75,7 +75,7 @@ export default {
       symptomsCheckerUrl,
       conditionsCheckerUrl: this.$store.app.$env.CONDITIONS_CHECKER_URL,
       symptomsPath: SYMPTOMS.path,
-      coronaCheckerUrl: this.$store.app.$env.CORONA_CHECKER_URL,
+      coronaCheckerUrl: this.$store.app.$env.CORONA_SERVICE_URL,
     };
   },
   computed: {

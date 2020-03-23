@@ -3,20 +3,27 @@
     <a :href="actionUrl"
        :rel="target === '_blank' ? 'noopener noreferrer': undefined"
        :target="target"
-       data-purpose="main-back-button"
+       :aria-label="messageLabel"
+       :data-purpose="dataPurpose"
        @click.stop.prevent="onRetryButtonClicked">
-      {{ $t(from) }}
+      {{ messageText }}
     </a>
   </p>
 </template>
 
 <script>
+import { isObject } from 'lodash/fp';
+
 export default {
   name: 'ErrorLink',
   props: {
     action: {
       type: String,
       default: '',
+    },
+    dataPurpose: {
+      type: String,
+      default: 'main-back-button',
     },
     desktopOnly: {
       type: Boolean,
@@ -48,6 +55,19 @@ export default {
         url += `?${this.queryParam.param}=${this.queryParam.value}`;
       }
       return url;
+    },
+    message() {
+      return this.$t(this.from);
+    },
+    messageLabel() {
+      if (isObject(this.message)) {
+        return this.$t(`${this.from}.label`);
+      }
+      return undefined;
+    },
+    messageText() {
+      const textPath = isObject(this.message) ? `${this.from}.text` : this.from;
+      return this.$t(textPath);
     },
   },
   methods: {

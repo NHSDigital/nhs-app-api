@@ -1,11 +1,17 @@
 import ErrorLink from '@/components/errors/ErrorLink';
-import { mount } from '../../helpers';
+import { locale, mount } from '../../helpers';
 
 describe('ErrorLink', () => {
   let wrapper;
   let goToUrl;
 
-  const mountWrapper = ({ action, desktopOnly, from = 'foo', isNativeApp = true, queryParam, target }) => mount(ErrorLink, {
+  const mountWrapper = ({
+    action,
+    desktopOnly,
+    from,
+    isNativeApp = true,
+    queryParam,
+    target }) => mount(ErrorLink, {
     $store: {
       state: {
         device: {
@@ -29,20 +35,63 @@ describe('ErrorLink', () => {
     goToUrl = jest.fn();
   });
 
-  describe('link', () => {
-    let link;
+  describe('from', () => {
+    describe('translates to text', () => {
+      beforeEach(() => {
+        wrapper = mountWrapper({ from: 'foo.text' });
+      });
 
-    beforeEach(() => {
-      wrapper = mountWrapper({ from: 'from.text' });
-      link = wrapper.find('a');
+      describe('link', () => {
+        let link;
+
+        beforeEach(() => {
+          link = wrapper.find('a');
+        });
+
+        it('will exist', () => {
+          expect(link.exists()).toBe(true);
+        });
+
+        it('will not have aria label', () => {
+          expect(link.attributes('aria-label')).toBeUndefined();
+        });
+
+        it('will translate `from`', () => {
+          expect(link.text()).toBe('translate_foo.text');
+        });
+      });
     });
 
-    it('will exist', () => {
-      expect(link.exists()).toBe(true);
-    });
+    describe('translates to object', () => {
+      beforeEach(() => {
+        locale.foo = {
+          object: {
+            text: 'foo text',
+            label: 'foo label',
+          },
+        };
+        wrapper = mountWrapper({ from: 'foo.object' });
+      });
 
-    it('will translate the `from`', () => {
-      expect(link.text()).toBe('translate_from.text');
+      describe('link', () => {
+        let link;
+
+        beforeEach(() => {
+          link = wrapper.find('a');
+        });
+
+        it('will exist', () => {
+          expect(link.exists()).toBe(true);
+        });
+
+        it('will have aria label', () => {
+          expect(link.attributes('aria-label')).toBe('translate_foo.object.label');
+        });
+
+        it('will display `from` text', () => {
+          expect(link.text()).toBe('translate_foo.object.text');
+        });
+      });
     });
   });
 
@@ -56,7 +105,7 @@ describe('ErrorLink', () => {
 
       describe('is native', () => {
         beforeEach(() => {
-          wrapper = mountWrapper({ desktopOnly, isNativeApp: true });
+          wrapper = mountWrapper({ desktopOnly, from: 'foo', isNativeApp: true });
         });
 
         it('will not display link', () => {
@@ -66,7 +115,7 @@ describe('ErrorLink', () => {
 
       describe('is not native', () => {
         beforeEach(() => {
-          wrapper = mountWrapper({ desktopOnly, isNativeApp: false });
+          wrapper = mountWrapper({ desktopOnly, from: 'foo', isNativeApp: false });
         });
 
         it('will display link', () => {
@@ -77,7 +126,7 @@ describe('ErrorLink', () => {
 
     describe('is false', () => {
       beforeEach(() => {
-        wrapper = mountWrapper({ desktopOnly: false, isNativeApp: true });
+        wrapper = mountWrapper({ desktopOnly: false, from: 'foo', isNativeApp: true });
       });
 
       it('will always display link', () => {
@@ -90,7 +139,7 @@ describe('ErrorLink', () => {
     describe('on link click with `_blank` target', () => {
       beforeEach(() => {
         global.open = jest.fn();
-        wrapper = mountWrapper({ action: '/example', target: '_blank' });
+        wrapper = mountWrapper({ action: '/example', from: 'foo', target: '_blank' });
         wrapper.find('a').trigger('click');
       });
 
@@ -106,7 +155,7 @@ describe('ErrorLink', () => {
     describe('on link click with any other target', () => {
       beforeEach(() => {
         global.open = jest.fn();
-        wrapper = mountWrapper({ action: '/example', target: 'foo' });
+        wrapper = mountWrapper({ action: '/example', from: 'foo', target: 'foo' });
         wrapper.find('a').trigger('click');
       });
 
@@ -122,7 +171,7 @@ describe('ErrorLink', () => {
 
   describe('with query parameter', () => {
     beforeEach(() => {
-      wrapper = mountWrapper({ action: '/example', queryParam: { param: 'param', value: 'value' } });
+      wrapper = mountWrapper({ action: '/example', from: 'foo', queryParam: { param: 'param', value: 'value' } });
     });
 
     describe('on link click', () => {

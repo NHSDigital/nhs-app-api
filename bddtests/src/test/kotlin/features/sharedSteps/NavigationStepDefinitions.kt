@@ -21,7 +21,7 @@ class NavigationStepDefinitions {
 
     @When("^I navigate to the (.*) page$")
     fun iNavigateToThePage(pageName: String) {
-        val url = PageUrl().getPage(pageName)
+        val url = PageUrl.getPage(pageName)
         browser.browseTo(url)
     }
 }

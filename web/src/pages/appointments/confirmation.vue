@@ -8,6 +8,13 @@
         <error-title title="appointments.error.title.unavailable"/>
         <error-paragraph from="appointments.error.403.line1" />
         <error-paragraph from="appointments.error.403.line2" />
+        <error-header from="appointments.error.403.coronaHeader" />
+        <error-paragraph from="appointments.error.403.coronaText" />
+        <error-link :class="$style['inline-link']"
+                    from="appointments.error.403.coronaServiceLink"
+                    :action="coronaServiceUrl"
+                    data-purpose="corona-service"
+                    target="_blank"/>
       </error-container>
       <error-container v-else-if="error.status===400" :id="generateErrorId()">
         <error-title title="appointments.error.title.problem"
@@ -228,6 +235,7 @@ import CardGroup from '@/components/widgets/card/CardGroup';
 import CardGroupItem from '@/components/widgets/card/CardGroupItem';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import ErrorContainer from '@/components/errors/ErrorContainer';
+import ErrorHeader from '@/components/errors/ErrorHeader';
 import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
@@ -260,6 +268,7 @@ export default {
     CardGroupItem,
     DesktopGenericBackLink,
     ErrorContainer,
+    ErrorHeader,
     ErrorLink,
     ErrorMessage,
     ErrorParagraph,
@@ -279,6 +288,7 @@ export default {
       appointmentsPath: GP_APPOINTMENTS.path,
       confirmBookingPath: APPOINTMENT_CONFIRMATIONS.path,
       contactUsUrl: this.$env.CONTACT_US_URL,
+      coronaServiceUrl: this.$env.CORONA_SERVICE_URL,
       isJavascriptOn: false,
       otherTelephoneNumber: '',
       patientTelephoneNumbers: get('availableAppointments.patientTelephoneNumbers')(this.$store.state),
@@ -491,3 +501,9 @@ export default {
   },
 };
 </script>
+
+<style module lang="scss" scoped>
+.inline-link > a {
+  display: inline-block;
+}
+</style>

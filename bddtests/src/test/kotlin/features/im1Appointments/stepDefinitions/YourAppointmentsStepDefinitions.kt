@@ -16,17 +16,16 @@ import mockingFacade.appointments.MyAppointmentsFacade
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.ErrorDialogPage
 import pages.AppointmentHubPage
+import pages.ErrorDialogPage
 import pages.appointments.BookingSuccessPage
 import pages.appointments.CancellingSuccessPage
-import pages.assertSingleElementPresent
 import pages.assertIsVisible
-import pages.waitUntilPresent
-import pages.isDisplayed
+import pages.assertSingleElementPresent
 import pages.isCurrentlyEnabled
-import pages.navigation.HeaderNative
+import pages.isDisplayed
 import pages.navigation.WebHeader
+import pages.waitUntilPresent
 
 private const val ERROR_SCENARIO = "error scenario"
 private const val ERROR_SCENARIO_SECOND = "error scenario second"
@@ -47,16 +46,22 @@ class YourAppointmentsStepDefinitions {
     @Steps
     lateinit var appointmentHubPage: AppointmentHubPage
 
-    lateinit var headerNative: HeaderNative
-    lateinit var webHeader: WebHeader
+    private lateinit var webHeader: WebHeader
     private lateinit var errorDialogPage: ErrorDialogPage
 
     private val appointmentSlotsExample = AppointmentsSlotsExample()
 
-    @Given("^VISION user is not allowed to view appointments")
-    fun visionUserIsNotAllowedToViewAppointments() {
-        Serenity.setSessionVariable(VisionConstants.gpAppointmentsDisabled).to("true")
-        MyAppointmentsFactory.getForSupplier(Supplier.VISION).generateDefaultUserData()
+    @Given("^(.*) user is not allowed to view appointments")
+    fun visionUserIsNotAllowedToViewAppointments(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        if (supplier == Supplier.VISION) {
+            Serenity.setSessionVariable(VisionConstants.gpAppointmentsDisabled).to("true")
+        }
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
+        viewAppointmentFactory.generateDefaultUserData()
+        viewAppointmentFactory.mockMyAppointments(IMyAppointmentsBuilder.AppointmentType.BOTH) {
+            respondWithGPErrorWhenNotEnabled()
+        }
     }
 
     @Given("^(.*) returns corrupted response once when trying to retrieve my appointments$")
@@ -242,10 +247,15 @@ class YourAppointmentsStepDefinitions {
 
     @Then("^I see appropriate error message when appointments are disabled$")
     fun iSeeAppropriateErrorMessageWhenAppointmentsAreDisabled() {
-        errorDialogPage.assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.notAbleToBook)
-                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.contactForMoreInformation)
-                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.unavailableTitle)
+        errorDialogPage
                 .assertPageTitle(yourAppointmentsUISteps.yourAppointmentsPage.unavailableTitle)
+                .assertPageHeader(yourAppointmentsUISteps.yourAppointmentsPage.unavailableTitle)
+                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.notAbleToBook)
+                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.contactForMoreInformation)
+                .assertSubHeader(yourAppointmentsUISteps.yourAppointmentsPage.coronaVirusHeader)
+                .assertParagraphText(yourAppointmentsUISteps.yourAppointmentsPage.coronaVirusText)
+                .assertLink(yourAppointmentsUISteps.yourAppointmentsPage.coronaVirusLink)
+
     }
 
     @Then("^I see appropriate try again error message when there is an error with '(.*)'$")

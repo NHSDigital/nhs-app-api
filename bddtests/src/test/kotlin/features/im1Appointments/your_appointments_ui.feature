@@ -115,11 +115,19 @@ Feature: Your Appointments Frontend
       | MICROTEST |
 
   #403
-  Scenario: VISION user sees appropriate error message when appointments are disabled
-    Given VISION user is not allowed to view appointments
+  Scenario Outline: <GP System> user sees appropriate error message when appointments are disabled
+    Given <GP System> user is not allowed to view appointments
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
     Then I see appropriate error message when appointments are disabled
+    When I click the link called 'Use the 111 coronavirus service to see if you need medical help' with the COVID-19 service url
+    Then a new tab has been opened by the link
+    Examples:
+      | GP System |
+      | TPP       |
+      | EMIS      |
+      | VISION    |
+      | MICROTEST |
 
   #500
   Scenario: TPP user sees appropriate error message when it returns corrupt data

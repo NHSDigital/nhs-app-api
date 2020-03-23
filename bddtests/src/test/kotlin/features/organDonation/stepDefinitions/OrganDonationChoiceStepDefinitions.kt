@@ -23,7 +23,7 @@ open class OrganDonationChoiceStepDefinitions {
     @When("^I navigate to the internal Organ Donation Page")
     fun iNavigateToTheInternalOrganDonationPage() {
         if (!morePage.onMobile()) {
-            val url = PageUrl().getPage("more")
+            val url = PageUrl.getPage("more")
             browser.browseTo(url)
         } else {
             navbarNative.select(NavBarNative.NavBarType.MORE)

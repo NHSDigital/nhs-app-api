@@ -545,10 +545,16 @@ export default {
         },
       },
       403: {
-        line1: 'You are not currently able to book appointments online.',
+        line1: 'You are not currently able to book or view GP appointments with the NHS App.',
         line2: {
           text: 'Contact your GP surgery for more information. For urgent medical advice, visit 111.nhs.uk or call 111.',
           label: 'Contact your GP surgery for more information. For urgent medical advice, visit 111.nhs.uk or call one one one.',
+        },
+        coronaHeader: 'If you think you might have coronavirus',
+        coronaText: 'Stay at home and avoid close contact with other people.',
+        coronaServiceLink: {
+          text: 'Use the 111 coronavirus service to see if you need medical help',
+          label: 'Use the one one one coronavirus service to see if you need medical help',
         },
       },
     },

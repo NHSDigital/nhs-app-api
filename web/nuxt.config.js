@@ -106,7 +106,6 @@ const config = {
     SYMPTOM_CHECKER_URL: 'https://111.nhs.uk',
     SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS: '?referrer=nhsapp&utm_source=%20&utm_medium=NHS%20App&utm_campaign=%20',
     CONDITIONS_CHECKER_URL: 'https://www.nhs.uk/conditions/',
-    CORONA_CHECKER_URL: 'https://111.nhs.uk/service/COVID-19/',
     // Analytics
     ANALYTICS_SCRIPT_URL: '//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js',
     ANALYTICS_ENVIRONMENT: 'development',
@@ -129,6 +128,7 @@ const config = {
     // Appointments
     CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/',
     ONLINE_CONSULTATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
+    CORONA_SERVICE_URL: 'https://111.nhs.uk/service/COVID-19/',
     // App Version
     VERSION_TAG: 'dev_web_npm',
     COMMIT_ID: 'dev',

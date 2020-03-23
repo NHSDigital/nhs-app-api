@@ -19,8 +19,6 @@ import utils.getOrFail
 class MoreStepDefinitions {
 
     @Steps
-    lateinit var pageUrl: PageUrl
-    @Steps
     lateinit var browser: BrowserSteps
     @Steps
     lateinit var nav: NavigationSteps
@@ -54,7 +52,7 @@ class MoreStepDefinitions {
             postTokenToNdop()
                     .respondWithNdopMockPage()
         }
-        val urlForPage = pageUrl.getPage("data sharing")
+        val urlForPage = PageUrl.getPage("data sharing")
         browser.browseTo(urlForPage)
     }
 

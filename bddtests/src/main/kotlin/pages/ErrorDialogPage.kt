@@ -29,6 +29,12 @@ class ErrorDialogPage : HybridPageObject() {
         return this
     }
 
+    fun assertSubHeader(paragraphText: String): ErrorDialogPage {
+        val message = findElementByLocator("//h2[normalize-space()=\"$paragraphText\"]")
+        message.assertIsVisible()
+        return this
+    }
+
     fun assertParagraphText(paragraph: ErrorCodeParagraph): ErrorDialogPage {
         val locator = "$messageTextLocator[starts-with(normalize-space(),'${paragraph.startText}')]"
         val message = findElementByLocator(locator)

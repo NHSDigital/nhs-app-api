@@ -11,9 +11,8 @@ import pages.clickOnActionContainingText
 class GenericPageStepDefinitions {
 
     private lateinit var notFoundErrorPage: NotFoundErrorPage
-    lateinit var genericPage: HybridPageObject
-    @Steps
-    lateinit var pageUrl: PageUrl
+    private lateinit var genericPage: HybridPageObject
+
     @Steps
     lateinit var browser: BrowserSteps
 
@@ -40,12 +39,19 @@ class GenericPageStepDefinitions {
 
     @When("^I retrieve the '(.*)' page directly$")
     fun iretrieveThePageDirectly(pageName:String) {
-        val urlForPage = pageUrl.getPage(pageName)
+        val urlForPage = PageUrl.getPage(pageName)
         browser.browseTo(urlForPage)
     }
 
     @When("I click the link called '(.*)' with a url of '(.*)'")
     fun iClickANamedLinkWithAUrl(linkTitle: String, url: String) {
+        browser.storeCurrentTabCount()
+        genericPage.assertLinkExists(linkTitle, url, internal = false).click()
+    }
+
+    @When("I click the link called '(.*)' with the COVID-19 service url")
+    fun iClickANamedLinkWithTheCovidServiceUrl(linkTitle: String) {
+        val url = "https://111.nhs.uk/service/COVID-19/"
         browser.storeCurrentTabCount()
         genericPage.assertLinkExists(linkTitle, url, internal = false).click()
     }
@@ -57,7 +63,7 @@ class GenericPageStepDefinitions {
 
     @Then("^I am redirected to the '(.*)' page$")
     fun thenIAmRedirectedToThePage(pageName: String) {
-        val redirectUrl = pageUrl.getPage(pageName)
+        val redirectUrl = PageUrl.getPage(pageName)
         browser.shouldHaveUrl(redirectUrl)
     }
 

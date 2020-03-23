@@ -98,14 +98,6 @@ Feature: Your Appointments With Javascript Disabled
 
 # VISION Specific tests
 
-  #403
-  @tech-debt
-  Scenario: A user sees appropriate information message when appointments are disabled on VISION
-    Given VISION user is not allowed to view appointments
-    And I am logged in
-    When I retrieve the 'Your GP Appointments' page directly
-    Then I see appropriate error message when appointments are disabled
-
   Scenario: Cancellation link won't be displayed for VISION appointment before cancellation cut off period without cancellation reason(s) available
     Given I have upcoming appointments before cutoff time for VISION without cancellation reasons
     And I am logged in

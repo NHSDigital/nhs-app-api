@@ -6,8 +6,15 @@
                        override-style="plain"
                        aria-live="polite">
         <error-title title="appointments.error.title.unavailable"/>
-        <error-paragraph from="appointments.error.403.line1"/>
-        <error-paragraph from="appointments.error.403.line2"/>
+        <error-paragraph from="appointments.error.403.line1" />
+        <error-paragraph from="appointments.error.403.line2" />
+        <error-header from="appointments.error.403.coronaHeader" />
+        <error-paragraph from="appointments.error.403.coronaText" />
+        <error-link :class="$style['inline-link']"
+                    from="appointments.error.403.coronaServiceLink"
+                    :action="coronaServiceUrl"
+                    data-purpose="corona-service"
+                    target="_blank"/>
       </error-container>
       <error-container v-else-if="error.status===502 || error.status===500"
                        :id="generateErrorId()">
@@ -122,6 +129,7 @@ import VueScrollTo from 'vue-scrollto';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import ErrorButton from '@/components/errors/ErrorButton';
 import ErrorContainer from '@/components/errors/ErrorContainer';
+import ErrorHeader from '@/components/errors/ErrorHeader';
 import ErrorLink from '@/components/errors/ErrorLink';
 import ErrorPageMixin from '@/components/errors/ErrorPageMixin';
 import ErrorParagraph from '@/components/errors/ErrorParagraph';
@@ -163,6 +171,7 @@ export default {
     DesktopGenericBackLink,
     ErrorButton,
     ErrorContainer,
+    ErrorHeader,
     ErrorLink,
     ErrorParagraph,
     ErrorTitle,
@@ -178,6 +187,7 @@ export default {
       availableAppointmentsScreenReaderMessage: [],
       bookingPath: APPOINTMENT_BOOKING.path,
       contactUsUrl: this.$env.CONTACT_US_URL,
+      coronaServiceUrl: this.$env.CORONA_SERVICE_URL,
       filtered: false,
     };
   },
@@ -305,4 +315,7 @@ div:focus {
   outline: none !important;
 }
 
+.inline-link > a {
+  display: inline-block;
+}
 </style>

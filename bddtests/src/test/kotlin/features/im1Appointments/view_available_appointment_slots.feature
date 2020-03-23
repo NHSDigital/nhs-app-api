@@ -194,11 +194,20 @@ Feature: View Available Appointment Slots Frontend
       | MICROTEST |
 
   #403
-  Scenario: TPP user sees appropriate error message when not allowed to retrieve appointment slots
-    Given TPP user is not allowed to retrieve appointment slots
+  Scenario Outline: <GP System> user sees appropriate error message when not allowed to retrieve appointment slots
+    Given <GP System> user is not allowed to retrieve appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     Then I see appropriate error message when appointments are disabled
+    When I click the link called 'Use the 111 coronavirus service to see if you need medical help' with the COVID-19 service url
+    Then a new tab has been opened by the link
+    Examples:
+    | GP System |
+    | TPP       |
+    | EMIS      |
+    | VISION    |
+    | MICROTEST |
+
 
   #500
   Scenario: TPP user sees appropriate error message when GP system returns corrupt data
