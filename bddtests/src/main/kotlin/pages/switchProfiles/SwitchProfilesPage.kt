@@ -12,7 +12,7 @@ open class SwitchProfilesPage : HybridPageObject() {
     private lateinit var headerNative: HeaderNative
 
     val switchToMyProfileButton = HybridPageElement(
-            webDesktopLocator = "//button[@id='switch-profile-button']",
+            webDesktopLocator = "//button",
             page = this
     ).withText("Switch to my profile", false)
 

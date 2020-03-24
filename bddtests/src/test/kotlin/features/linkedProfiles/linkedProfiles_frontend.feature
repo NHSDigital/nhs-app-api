@@ -181,3 +181,14 @@ Feature: Login with proxy access
     And I select a cancellation reason of No longer required
     When I select "Cancel appointment" button
     Then The appointment cancellation success page is shown
+
+  Scenario: A user proxying on behalf of another will not be able to see any options on the more page
+    Given I am a EMIS user with linked profiles
+    And I am logged in
+    And I have switched to a linked profile
+    When I navigate to More
+    Then I see the more page header
+    And the More page explains that it is not possible to access it while acting on behalf of someone else
+    When I click the Switch to my profile button for the main user
+    And I see the home page
+    And I do not see the yellow banner

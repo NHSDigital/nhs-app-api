@@ -5,5 +5,6 @@ interface ILinksContent{
     val containerXPath: String
     val linkBlockTitle: String
     val hasDescriptionBody: Boolean
+    val linkStyling: String
     fun specificLinkXPath(linkTitle: String) :String
 }

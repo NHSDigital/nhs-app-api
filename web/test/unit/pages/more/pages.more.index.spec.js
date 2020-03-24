@@ -16,6 +16,7 @@ describe('more', () => {
 
   const mountAs = ({
     cdssAdminEnabled = false,
+    isProxying = false,
     sjrMessagingEnabled = false,
     practiceIm1MessagingEnabled = false,
     sjrIm1MessagingEnabled = false,
@@ -27,13 +28,20 @@ describe('more', () => {
     $store = createStore({
       state: {
         device: { isNativeApp },
+        knownServices: {
+          knownServices: [{
+            id: 'pkb',
+            url: 'www.url.com',
+          }],
+        },
         practiceSettings: { im1MessagingEnabled: practiceIm1MessagingEnabled },
       },
       getters: {
-        'serviceJourneyRules/silverIntegrationEnabled': () => (context),
         'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
         'serviceJourneyRules/messagingEnabled': sjrMessagingEnabled,
         'serviceJourneyRules/im1MessagingEnabled': sjrIm1MessagingEnabled,
+        'serviceJourneyRules/silverIntegrationEnabled': () => (context),
+        'session/isProxying': isProxying,
       },
       $env: { YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com' },
     });
@@ -166,6 +174,47 @@ describe('more', () => {
     });
   });
 
+  describe('pkb messages link', () => {
+    const getPkbMessagesAndConsultationsLink = wrapperObj =>
+      wrapperObj.find('#btn_pkb_messages_and_consultations');
+
+    describe('pkb messaging enabled and is native', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: true });
+      });
+
+      it('will show link', () => {
+        expect(getPkbMessagesAndConsultationsLink(wrapper).exists()).toBe(true);
+      });
+    });
+
+    describe('pkb enabled but is desktop', () => {
+      it('will not show link', () => {
+        expect(getPkbMessagesAndConsultationsLink(wrapper).exists()).toBe(false);
+      });
+    });
+
+    describe('pkb messaging is disabled', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ isNativeApp: true });
+      });
+
+      it('will not show link', () => {
+        expect(getPkbMessagesAndConsultationsLink(wrapper).exists()).toBe(false);
+      });
+    });
+
+    describe('is pkb enabled, native and proxying', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
+      });
+
+      it('will not show link', () => {
+        expect(getPkbMessagesAndConsultationsLink(wrapper).exists()).toBe(false);
+      });
+    });
+  });
+
   describe('methods', () => {
     it('will navigate to data preferences when data preferences menu item clicked if native', () => {
       wrapper = mountAs({ isNativeApp: true });
@@ -196,7 +245,7 @@ describe('more', () => {
     });
 
     it('will navigate to /messaging when messaging enabled in SJR ' +
-       'and messaging menu item clicked', () => {
+      'and messaging menu item clicked', () => {
       wrapper = mountAs({ sjrMessagingEnabled: true, isNativeApp: true });
       wrapper.vm.navigate(
         createEvent({ currentTarget: { pathname: MESSAGING.path } }),
@@ -206,7 +255,7 @@ describe('more', () => {
     });
 
     it('will navigate to /patient-practice-messaging when im1Messaging is on in SJR ' +
-       'and messaging menu item clicked', () => {
+      'and messaging menu item clicked', () => {
       wrapper = mountAs({
         practiceIm1MessagingEnabled: true,
         sjrIm1MessagingEnabled: true,

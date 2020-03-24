@@ -1,7 +1,8 @@
 package pages.sharedElements
 
 class LinksContent(override val linkBlockTitle: String,
-                   override val containerXPath: String = "//div[h2[text()='$linkBlockTitle']]")
+                   override val containerXPath: String = "//div[h2[text()='$linkBlockTitle']]",
+                   override val linkStyling: String = "h2")
     : ILinksContent {
 
     private val sections = "$containerXPath//a/span/div/h2"

@@ -1,7 +1,11 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
     <menu-item-list>
-
+      <third-party-jump-off-button v-if="showPkbMessages && isNativeApp && !isProxying"
+                                   id="btn_pkb_messages_and_consultations"
+                                   provider-id="pkb"
+                                   :jump-off-type="thirdPartyProvider.pkb.messages.type"
+                                   :redirect-path="thirdPartyProvider.pkb.messages.redirectPath" />
       <menu-item v-if="messagingEnabled"
                  id="btn_messaging"
                  header-tag="h2"
@@ -48,6 +52,7 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
+import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import {
   APPOINTMENT_ADMIN_HELP,
   DATA_SHARING_PREFERENCES,
@@ -58,6 +63,7 @@ import {
 import sjrIf from '@/lib/sjrIf';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
   layout: 'nhsuk-layout',
@@ -65,15 +71,27 @@ export default {
     MenuItemList,
     MenuItem,
     OrganDonationLink,
+    ThirdPartyJumpOffButton,
   },
   data() {
     return {
       appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
       adminHelpEnabled: sjrIf({ $store: this.$store, journey: 'cdssAdmin' }),
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
+      showPkbMessages: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'messages',
+        },
+      }),
+      isProxying: this.$store.getters['session/isProxying'],
+      isNativeApp: this.$store.state.device.isNativeApp,
       patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
       appMessagingPath: MESSAGING.path,
       morePath: MORE.path,
+      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
       adminHelpPath: createUri({
         path: APPOINTMENT_ADMIN_HELP.path,
         noJs: { onlineConsultations: { previousRoute: MORE.path } },

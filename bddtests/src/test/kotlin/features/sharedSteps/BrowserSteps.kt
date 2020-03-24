@@ -83,6 +83,15 @@ open class BrowserSteps {
     }
 
     @Step
+    open fun shouldNotHaveUrl(url: String) {
+        WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
+                .pollingEvery(Duration.ofMillis(POLLING_DURATION))
+                .until {
+                    !it.currentUrl.startsWith(url)
+                }
+    }
+
+    @Step
     fun changeTab(url: URL) {
         val driver = loginPage.driver
 

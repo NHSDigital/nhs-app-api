@@ -3,9 +3,8 @@ package pages.appointments
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.isDisplayed
-import pages.sharedElements.LinksWithDescriptionsContent
 import pages.sharedElements.LinksElement
+import pages.sharedElements.LinksWithDescriptionsContent
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking-guidance")
 class AppointmentGuidancePage : HybridPageObject() {
@@ -50,9 +49,9 @@ class AppointmentGuidancePage : HybridPageObject() {
             page = this
     )
 
-    fun checkGuidanceBodyForOnlineConsultations(): Boolean {
-        return (menuCheckSymptomsButton.isDisplayed &&
-        gpAdminMenuItem.isDisplayed &&
-        gpAdviceMenuItem.isDisplayed)
+    fun checkGuidanceBodyForOnlineConsultations() {
+        menuCheckSymptomsButton.assertSingleElementPresent()
+        gpAdminMenuItem.assertSingleElementPresent()
+        gpAdviceMenuItem.assertSingleElementPresent()
     }
 }

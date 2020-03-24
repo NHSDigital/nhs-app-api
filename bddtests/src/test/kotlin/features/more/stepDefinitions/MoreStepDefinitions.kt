@@ -2,19 +2,19 @@ package features.more.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.authentication.steps.HomeSteps
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import features.sharedSteps.PageUrl
 import mocking.MockingClient
+import mockingFacade.linkedProfiles.LinkedProfileFacade
 import net.thucydides.core.annotations.Steps
 import pages.MorePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
-import pages.assertElementNotPresent
-import pages.isDisplayed
+import utils.LinkedProfilesSerenityHelpers
+import utils.getOrFail
 
 class MoreStepDefinitions {
 
@@ -26,8 +26,6 @@ class MoreStepDefinitions {
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var organDonationSteps: OrganDonationStepDefinitions
-    @Steps
-    private lateinit var homeSteps: HomeSteps
 
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
@@ -38,6 +36,11 @@ class MoreStepDefinitions {
     @When("^I click the Messages link on the More page")
     fun iClickTheMessagesLinkOnTheMorePage() {
         morePage.btnMessages.click()
+    }
+
+    @When("^I click the Messages and online consultations link on the More page")
+    fun iClickTheMessagesAndOnlineConsultationsLinkOnTheMorePage() {
+        morePage.btnMessagesAndConsultations.click()
     }
 
     @When("^I choose to set my organ donation preferences")
@@ -61,7 +64,6 @@ class MoreStepDefinitions {
         if(headerNative.onMobile()){
             moreButtonOnNavBarIsHighlighted()
         }
-        morePage.assertLinksPresent()
     }
 
     @Then("^I see more button on the nav bar is highlighted$")
@@ -77,6 +79,22 @@ class MoreStepDefinitions {
     @Then("the link to Messages is not available on the More page")
     fun theLinkToMessagesIsNotAvailableOnTheMorePage() {
         morePage.btnMessages.assertElementNotPresent()
+    }
+
+    @Then("the link to Messages and consultations is available on the More page")
+    fun theLinkToMessagesAndConsultationsIsAvailableOnTheMorePage() {
+        morePage.btnMessagesAndConsultations.assertSingleElementPresent()
+    }
+
+    @Then("the link to Messages and consultations is not available on the More page")
+    fun theLinkToMessagesAndConsultationsIsNotAvailableOnTheMorePage() {
+        morePage.btnMessagesAndConsultations.assertElementNotPresent()
+    }
+
+    @Then("the More page explains that it is not possible to access it while acting on behalf of someone else")
+    fun theMorePageExplainsThatItIsNotPossibleToAccessItWhileActingOnBehalfOfSomeoneElse(){
+        val proxy = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>().profile.firstName
+        morePage.assertProxyText(proxy)
     }
 
     @Then("I see and can follow links within the more page body$")
@@ -134,7 +152,7 @@ class MoreStepDefinitions {
     }
 
     private fun followRequestGPHelpLink() {
-        morePage.btnRequestGpHelp.isDisplayed
+        morePage.btnRequestGpHelp.assertSingleElementPresent()
     }
 
     private fun navigateBackToMorePage() {

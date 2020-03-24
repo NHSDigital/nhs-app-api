@@ -26,7 +26,7 @@ class ManageCookiesPage : HybridPageObject() {
     val cookieToggle = ToggleElement(this, "Allow optional analytic cookies", "allow_cookies")
 
     fun assertDisplayed() {
-        cookiesPolicy.cookiePolicy.assertIsVisible()
+        cookiesPolicy.cookiePolicy.assertSingleElementPresent()
         cookieToggle.assertIsVisible()
     }
 

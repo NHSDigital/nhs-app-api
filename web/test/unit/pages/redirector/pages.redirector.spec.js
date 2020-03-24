@@ -203,7 +203,7 @@ describe('redirector page', () => {
     it('will call router push on button click', () => {
       const expectedRequest = { assertedLoginIdentityRequest: {
         IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' } };
-      const continueButton = wrapper.find('button');
+      const continueButton = wrapper.find('a.nhsuk-button');
       continueButton.trigger('click');
 
       expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith(expectedRequest);

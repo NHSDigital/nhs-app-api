@@ -6,6 +6,7 @@ import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.assertIsVisible
 import pages.navigation.WebHeader
+import pages.sharedElements.LinkElement
 import pages.sharedElements.LinksContent
 import pages.sharedElements.LinksElement
 import pages.text
@@ -46,11 +47,11 @@ class PatientPracticeMessagingRecipientsPage: HybridPageObject() {
 
     fun assertRecipients(expectedRecipients: List<Recipient>) {
         expectedRecipients.forEach {
-            recipientLink(it.name!!).waitForElement().assertIsVisible()
+            recipientLink(it.name!!).assertSingleElementPresent()
         }
     }
 
-    private fun recipientLink(recipientName: String): HybridPageElement {
+    private fun recipientLink(recipientName: String): LinkElement {
         val linkContent = LinksContent(
                 linkBlockTitle = "",
                 containerXPath = "//ul[@id='recipientsMenuList']"

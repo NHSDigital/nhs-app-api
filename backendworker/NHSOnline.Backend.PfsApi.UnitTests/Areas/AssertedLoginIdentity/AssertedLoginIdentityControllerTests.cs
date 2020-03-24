@@ -110,8 +110,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 "AssertedLoginIdentity Token creation succeeded."));
 
             _mockLogger.VerifyLogger(LogLevel.Information,
-                $"Created Asserted Login Identity: IntendedReceivingPartyUrl={_request.IntendedRelyingPartyUrl}", Times.Once());
-
+                $"Created Asserted Login Identity: IntendedRelyingPartyUrl={_request.IntendedRelyingPartyUrl}", Times.Once());
         }
     }
 }

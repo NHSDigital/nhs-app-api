@@ -1,17 +1,22 @@
 <template>
   <div v-if="showTemplate">
     <div v-if="shouldShowWarning">
-      <h1>{{ featureName() }}</h1>
       <div :class="$style['app-interruption']" data-purpose="silver-integration-warning">
         <div :class="$style['app-interruption__content']">
           <h2>{{ $t('thirdPartyProviders.warningConjunctions.heading2') }}</h2>
           <p>{{ paragraphText() }}
             <strong>{{ providerName() }}</strong>.
           </p>
-          <button class="nhsuk-button nhsuk-button--reverse"
-                  @click.prevent="getAssertedLoginIdentityAndNavigate">
-            {{ $t('thirdPartyProviders.warningConjunctions.button') }}</button>
-          <p><a :href="linkHref()" target="_blank">{{ linkText() }}</a></p>
+
+          <a :href="formAction" :class="['nhsuk-button', 'nhsuk-button--reverse']">
+            {{ $t('thirdPartyProviders.warningConjunctions.button') }}
+          </a>
+
+          <p>
+            <a :class="$style['inline-link']" :href="linkHref()" target="_blank">
+              {{ linkText() }}
+            </a>
+          </p>
         </div>
       </div>
     </div>
@@ -21,12 +26,20 @@
 
 <script>
 import get from 'lodash/fp/get';
-import { UriBuilder } from 'uribuilder';
 import { REDIRECT_PARAMETER, INDEX, findByName, findByPath } from '@/lib/routes';
 import { getThirdPartyLocaleText } from '@/lib/utils';
 
 export default {
-  layout: 'nhsuk-layout-chromeless',
+  layout(context) {
+    const redirectPath = get(REDIRECT_PARAMETER)(context.route.query);
+    const services = context.store.state.knownServices.knownServices
+      .filter(service => redirectPath.includes(service.url));
+
+    if (services.length > 0 && services[0].showThirdPartyWarning === true) {
+      return 'nhsuk-layout';
+    }
+    return 'nhsuk-layout-chromeless';
+  },
   data() {
     return {
       showWarning: false,
@@ -35,6 +48,7 @@ export default {
       paragraphTextData: '',
       linkTextData: '',
       featureNameData: '',
+      formAction: '',
     };
   },
   computed: {
@@ -71,14 +85,27 @@ export default {
 
       const featureName = this.getMessage('featureName');
       if (featureName !== '') {
+        this.getAssertedLoginIdentityUrl();
         this.showWarning = true;
         this.$store.dispatch('pageTitle/updatePageTitle', featureName);
+        this.$store.dispatch('header/updateHeaderText', featureName);
         return;
       }
     }
     this.$router.push(INDEX.path);
   },
   methods: {
+    async getAssertedLoginIdentityUrl() {
+      await this.$store.app.$http
+        .postV1PatientAssertedLoginIdentity({
+          assertedLoginIdentityRequest: {
+            IntendedRelyingPartyUrl: this.redirectPath,
+          },
+        })
+        .then((response) => {
+          this.formAction = this.appendAssertedLoginIdentity(this.redirectPath, response);
+        });
+    },
     async getAssertedLoginIdentityAndNavigate() {
       await this.$store.app.$http
         .postV1PatientAssertedLoginIdentity({
@@ -94,9 +121,10 @@ export default {
         });
     },
     appendAssertedLoginIdentity(uri, response) {
-      const builder = UriBuilder.parse(uri);
-      builder.query.assertedLoginIdentity = response.token;
-      return builder.toString();
+      if (uri.indexOf('?') !== -1) {
+        return `${uri}&assertedLoginIdentity=${response.token}`;
+      }
+      return `${uri}?assertedLoginIdentity=${response.token}`;
     },
     paragraphText() {
       if (this.paragraphTextData === '') {
@@ -174,6 +202,7 @@ export default {
 }
 
 .app-interruption {
+  @include nhsuk-responsive-margin(4, "top");
   @include nhsuk-responsive-margin(4, "bottom");
   width: 100%;
   color: $color_nhsuk-white;
@@ -182,7 +211,15 @@ export default {
     @include nhsuk-responsive-padding(2);
     @include nhsuk-responsive-padding(4, "left");
     @include nhsuk-responsive-padding(4, "right");
+    strong {
+      display: inline;
+    }
+
     a {
+      color: $nhsuk-text-color;
+    }
+
+    .inline-link {
       color: $color_nhsuk-white;
       text-decoration: underline;
       display: inline;

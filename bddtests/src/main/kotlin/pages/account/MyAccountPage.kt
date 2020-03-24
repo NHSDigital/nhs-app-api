@@ -11,7 +11,7 @@ class MyAccountPage : HybridPageObject() {
 
     private val listMenuPath = "//ul[@data-purpose='settings-menu']//li//a/span/div/h2"
 
-    val     signOutButton = HybridPageElement(
+    val signOutButton = HybridPageElement(
             webDesktopLocator = "//a[@id='account-logout']",
             iOSLocator = "//button[@id='signout-button']",
             androidLocator = "//button[@id='signout-button']",

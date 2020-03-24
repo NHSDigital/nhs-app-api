@@ -284,12 +284,14 @@ describe('getters', () => {
 
     it('will be true if im1Messaging can delete messages is true', () => {
       currentState.rules.im1Messaging.canDeleteMessages = true;
-      expect(deletePatientPracticeMessageEnabled(currentState)).toBe(true);
+      expect(deletePatientPracticeMessageEnabled(currentState))
+        .toBe(true);
     });
 
     it('will be false if im1Messaging can delete messages  is false', () => {
       currentState.rules.im1Messaging.canDeleteMessages = false;
-      expect(deletePatientPracticeMessageEnabled(currentState)).toBe(false);
+      expect(deletePatientPracticeMessageEnabled(currentState))
+        .toBe(false);
     });
   });
 });

@@ -9,7 +9,7 @@ import pages.text
 
 open class LinksElement(private val page : HybridPageObject, val content : ILinksContent) {
 
-    private val sections = "${content.containerXPath}"
+    private val sections = content.containerXPath
     private val sectionsWithList = "${content.containerXPath}//ul/li//a"
 
     private val container by lazy {
@@ -52,14 +52,8 @@ open class LinksElement(private val page : HybridPageObject, val content : ILink
         assertPresentWithLinks(links)
     }
 
-    fun link(linkTitle: String): HybridPageElement {
-        val linkPath = content.specificLinkXPath(linkTitle)
-        return HybridPageElement(
-                webDesktopLocator = linkPath,
-                androidLocator = null,
-                iOSLocator = "//*[contains(text(),'$linkTitle')]",
-                page = page,
-                helpfulName = "$linkTitle Link")
+    fun link(linkTitle: String, description: String? = null): LinkElement {
+        return LinkElement(page, content, linkTitle, description)
     }
 
     fun count(): Int {

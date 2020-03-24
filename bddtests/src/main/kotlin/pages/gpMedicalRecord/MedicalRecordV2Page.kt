@@ -1,10 +1,10 @@
 package pages.gpMedicalRecord
 
-import pages.HybridPageObject
-import pages.sharedElements.LinksElement
 import pages.HybridPageElement
-import pages.assertIsVisible
+import pages.HybridPageObject
+import pages.sharedElements.LinkElement
 import pages.sharedElements.LinksContent
+import pages.sharedElements.LinksElement
 
 class MedicalRecordV2Page : HybridPageObject() {
 
@@ -56,14 +56,14 @@ class MedicalRecordV2Page : HybridPageObject() {
     }
 
     fun assertMedicalRecordSectionLinkExists(linkText: String) {
-        medicalRecordSectionLink(linkText).assertIsVisible()
+        medicalRecordSectionLink(linkText).assertSingleElementPresent()
     }
 
     fun clickMedicalRecordSectionLink(linkText: String) {
         medicalRecordSectionLink(linkText).click()
     }
 
-    private fun medicalRecordSectionLink(linkText: String): HybridPageElement {
+    private fun medicalRecordSectionLink(linkText: String): LinkElement {
         val linkContent = LinksContent(
                 linkBlockTitle = "",
                 containerXPath = "//div[@data-purpose='medical-record-menu']")

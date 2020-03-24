@@ -65,6 +65,14 @@ class LinkedProfilesStepDefinitions {
 
     val mockingClient = MockingClient.instance
 
+    @Given("^I am a (.*) user with linked profiles$")
+    fun iAmAUserWithLinkedProfiles(gpSystem:String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getPatientWithLinkedProfiles(supplier)
+        SerenityHelpers.setGpSupplier(supplier)
+        setup(patient, supplier)
+    }
+
     @Given("^I am logged in as a (.*) user with linked profiles and appointments provider (.*)$")
     fun iAmLoggedInWithLinkedProfilesAndAppointmentsProvider(gpSystem: String, provider: String) {
         val supplier = Supplier.valueOf(gpSystem)
@@ -109,19 +117,19 @@ class LinkedProfilesStepDefinitions {
     }
 
     private fun setupAndLogIn(patient: Patient, gpSystem: Supplier) {
+        setup(patient, gpSystem)
+        browser.goToApp()
+        login.using(patient)
+    }
+    private fun setup(patient: Patient, gpSystem: Supplier) {
         SerenityHelpers.setPatient(patient)
-
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory
                 .getForSupplier(gpSystem, mockingClient)
                 .createFor(patient)
-
         DemographicsFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .getForSupplier(gpSystem)
                 .enableForPatientProxyAccounts(patient)
-
-        browser.goToApp()
-        login.using(patient)
     }
 
     @Then("^I see the linked profiles link$")
