@@ -8,7 +8,7 @@ source 'https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp-fido-client-io
 target 'NHSOnline' do
   pod 'FidoClientIOS'
   pod 'SwiftyJSON', '~> 4.0.0'
-  pod 'iProov', '~> 7.2.2'
+  pod 'iProov', '~> 7.3.0'
 
   target 'NHSOnlineTests' do
     inherit! :search_paths

@@ -3,7 +3,7 @@ PODS:
   - FidoClientIOS (1.0.1):
     - BCryptSwift
     - SwiftyJSON (~> 4.0)
-  - iProov (7.2.2):
+  - iProov (7.3.0):
     - KeychainAccess (~> 4.1.0)
     - Socket.IO-Client-Swift (~> 15.2.0)
     - SwiftyJSON (~> 4.0.0)
@@ -15,7 +15,7 @@ PODS:
 
 DEPENDENCIES:
   - FidoClientIOS
-  - iProov (~> 7.2.2)
+  - iProov (~> 7.3.0)
   - SwiftyJSON (~> 4.0.0)
 
 SPEC REPOS:
@@ -32,12 +32,12 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   BCryptSwift: f69992ea5685f6714260842c2770688043b89ab2
   FidoClientIOS: 96494fe3c9c093113b397eca4f7e194334afefc9
-  iProov: e42cea754898c6ccd3ddd2d586f3763ba4e78e95
+  iProov: 6ff202ee804f1f08b672d81c11bd99cf5a3ebf79
   KeychainAccess: 445e28864fe6d3458b41fa211bcdc39890e8bd5a
   Socket.IO-Client-Swift: 1e3e3a1f09f3312a167f0d781eb2f383d477357c
   Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: c75a714c01188316afb3f032cb93dbee9ca71f9a
+PODFILE CHECKSUM: 5a910299d8a18f8cb451a28c95256f55c243d481
 
 COCOAPODS: 1.8.4
