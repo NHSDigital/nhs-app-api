@@ -1,5 +1,5 @@
 @silverIntegration
-@patientsKnowBest
+@patientsKnowBest 
 Feature: Patients Know Best Messages
 
   Scenario: A user navigates to PKB messages and sees the warning message

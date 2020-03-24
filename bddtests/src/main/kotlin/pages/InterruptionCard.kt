@@ -17,20 +17,13 @@ class InterruptionCard(private val path: String,private val page: HybridPageObje
 
     fun assertContinueAndClick(continueUrl: String) {
         initialiseIfNeeded()
-        assertContinueUrl(continueUrl)
-        element!!.actOnTheElement {
-            it.findElement<WebElement>(By.xpath("//a[normalize-space(text())='Continue']"))
-                    .click()
-        }
-    }
-
-    private fun assertContinueUrl(continueUrl: String){
         element!!.actOnTheElement {
             val continueLinkForm =
-                    it.findElement<WebElement>(By.xpath("//form[button[normalize-space(text())='Continue']]"))
-            val actualUrl = continueLinkForm.getAttribute("action")
+                    it.findElement<WebElement>(By.xpath("//a[normalize-space(text())='Continue']"))
+            val actualUrl = continueLinkForm.getAttribute("href")
             Assert.assertTrue("Interruption Card Continue Url. Expected to start with $continueUrl, but was $actualUrl",
                     actualUrl.startsWith(continueUrl))
+            continueLinkForm.click()
         }
     }
 
