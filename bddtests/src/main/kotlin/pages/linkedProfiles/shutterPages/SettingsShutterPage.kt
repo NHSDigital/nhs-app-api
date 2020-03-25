@@ -1,11 +1,12 @@
 package pages.linkedProfiles.shutterPages
 
 import net.thucydides.core.annotations.DefaultUrl
-import org.junit.Assert
+import pages.HybridPageObject
 import pages.navigation.HeaderNative
+import pages.sharedElements.expectedPage.ExpectedPageStructure
 
 @DefaultUrl("http://web.local.bitraft.io:3000/linked-profiles/shutter/settings")
-class SettingsShutterPage : ShutterComponent() {
+class SettingsShutterPage :  HybridPageObject() {
 
     private lateinit var headerNative: HeaderNative
 
@@ -13,11 +14,10 @@ class SettingsShutterPage : ShutterComponent() {
         headerNative.waitForPageHeaderText("Settings")
     }
 
-    fun assertSwitchText() {
-        Assert.assertEquals(
-                "Switch text does not match",
-                "Switch to your profile to access your settings.",
-                switchText.textValue
-        )
+    fun assertText() {
+        ExpectedPageStructure()
+                .paragraph("Switch to your profile to access your settings.")
+                .button("Switch to my profile")
+                .assert(this)
     }
 }

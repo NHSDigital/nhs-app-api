@@ -50,7 +50,7 @@ describe('shutter component', () => {
       expect(shutterSwitchText.exists()).toBe(true);
       expect(switchBackButton.exists()).toBe(true);
 
-      expect(shutterSummaryText.text()).toBe(`Contact ${mainPatientGivenName}'s GP surgery to request access.`);
+      expect(shutterSummaryText.text()).toBe(`Contact ${mainPatientGivenName}'s GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call 111.`);
       expect(shutterSwitchText.text()).toBe('Switch to your profile to book appointments for yourself.');
     });
 

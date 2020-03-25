@@ -1757,8 +1757,15 @@ export default {
         switch: 'Switch to your profile to order repeat prescriptions for yourself.',
       },
       appointments: {
-        header: 'You do not have access to {name}\'s appointments',
-        summary: 'Contact {name}\'s GP surgery to request access.',
+        header: 'You do not have access to {name}\'s GP appointments',
+        summary: 'Contact {name}\'s GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call 111.',
+        summaryLabel: 'Contact {name}\'s GP surgery for more information. For urgent medical advice, go to one one one.nhs.uk or call one one one.',
+        coronaVirus: {
+          header: 'If you think {name} might have coronavirus',
+          body: 'They must stay at home and avoid close contact with other people.',
+          link: 'Use the 111 coronavirus service to find out what to do',
+          linkLabel: 'Use the one one one coronavirus service to find out what to do',
+        },
         switch: 'Switch to your profile to book appointments for yourself.',
       },
       medicalRecord: {

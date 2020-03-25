@@ -58,6 +58,6 @@ class ExpectedPageStructureAssertor {
             Assert.fail("Html tags must be explicitly excluded. " +
                     "Unexpected tag found: '${element.tag}' containing '${element.content}'")
         }
-        return tagsToAssert.contains(element.tag) && !element.content.isNullOrEmpty()
+        return tagsToAssert.contains(element.tag) && element.content.isNotEmpty()
     }
 }

@@ -106,13 +106,15 @@ Feature: Login with proxy access
     Then the symptoms shutter page is displayed
     When I navigate to Prescriptions
     Then the prescriptions shutter page is displayed
+    When I navigate to My_Record
+    And I click continue
+    Then the medical record shutter page is displayed
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
     Then the appointments shutter page is displayed
-    When I navigate to My_Record
-    And I click continue
-    Then the medical record shutter page is displayed
+    When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'https://111.nhs.uk/service/COVID-19/'
+    Then a new tab has been opened by the link
 
   Scenario: An EMIS user proxying on behalf of another will see the confirmation page after booking a repeat prescription
     Given I am logged in as a EMIS user with linked profiles and appointments provider IM1

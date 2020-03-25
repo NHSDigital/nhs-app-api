@@ -4,7 +4,23 @@
        class="nhsuk-u-margin-bottom-3">
       <b>{{ subHeader }}</b>
     </p>
-    <p v-if="summaryText" id="shutter-summary-text">{{ summaryText }}</p>
+    <p v-if="summaryText"
+       id="shutter-summary-text"
+       :aria-label="summaryLabelText">{{ summaryText }}</p>
+    <h2 v-if="coronaVirusHeaderText">{{ coronaVirusHeaderText }}</h2>
+    <p v-if="coronaVirusBodyText">{{ coronaVirusBodyText }}</p>
+    <p v-if="coronaVirusLinkText">
+      <analytics-tracked-tag
+        :href="coronaServiceUrl"
+        :text="coronaVirusLinkText"
+        :aria-label="coronaVirusLinkLabelText"
+        tag="a" target="_blank">
+        {{ coronaVirusLinkText }}
+      </analytics-tracked-tag>
+    </p>
+    <hr v-if="coronaVirusHeaderText"
+        class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-1"
+        aria-hidden="true">
     <p v-if="switchText"
        id="shutter-switch-text"
        class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
@@ -22,6 +38,7 @@
 <script>
 import { INDEX } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import get from 'lodash/fp/get';
 
@@ -29,6 +46,7 @@ export default {
   name: 'Shutter',
   layout: 'nhsuk-layout',
   components: {
+    AnalyticsTrackedTag,
     GenericButton,
   },
   props: {
@@ -40,10 +58,16 @@ export default {
   },
   data() {
     return {
+      coronaServiceUrl: this.$env.CORONA_SERVICE_URL,
+      coronaVirusBodyText: '',
+      coronaVirusHeaderText: '',
+      coronaVirusLinkLabelText: undefined,
+      coronaVirusLinkText: '',
+      givenName: get('$store.state.linkedAccounts.actingAsUser.givenName')(this),
       subHeader: '',
       summaryText: '',
+      summaryLabelText: undefined,
       switchText: '',
-      givenName: get('$store.state.linkedAccounts.actingAsUser.givenName')(this),
     };
   },
   mounted() {
@@ -59,8 +83,30 @@ export default {
         .replace('{name}', this.givenName);
     }
 
+    if (this.$te(`linkedProfiles.shutter.${featureName}.summaryLabel`)) {
+      this.summaryLabelText = this.$t(`linkedProfiles.shutter.${featureName}.summaryLabel`)
+        .replace('{name}', this.givenName);
+    }
+
     if (this.$te(`linkedProfiles.shutter.${featureName}.switch`)) {
       this.switchText = this.$t(`linkedProfiles.shutter.${featureName}.switch`);
+    }
+
+    if (this.$te(`linkedProfiles.shutter.${featureName}.coronaVirus.header`)) {
+      this.coronaVirusHeaderText = this.$t(`linkedProfiles.shutter.${featureName}.coronaVirus.header`)
+        .replace('{name}', this.givenName);
+    }
+
+    if (this.$te(`linkedProfiles.shutter.${featureName}.coronaVirus.body`)) {
+      this.coronaVirusBodyText = this.$t(`linkedProfiles.shutter.${featureName}.coronaVirus.body`);
+    }
+
+    if (this.$te(`linkedProfiles.shutter.${featureName}.coronaVirus.link`)) {
+      this.coronaVirusLinkText = this.$t(`linkedProfiles.shutter.${featureName}.coronaVirus.link`);
+    }
+
+    if (this.$te(`linkedProfiles.shutter.${featureName}.coronaVirus.linkLabel`)) {
+      this.coronaVirusLinkLabelText = this.$t(`linkedProfiles.shutter.${featureName}.coronaVirus.linkLabel`);
     }
   },
   methods: {

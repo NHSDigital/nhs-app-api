@@ -1,31 +1,27 @@
 package pages.linkedProfiles.shutterPages
 
-import org.junit.Assert
-import pages.text
+import models.Patient
+import pages.HybridPageObject
+import pages.sharedElements.expectedPage.ExpectedPageStructure
+import pages.sharedElements.expectedPage.ParsedPage
+import pages.sharedElements.expectedPage.ExpectedPageStructureAssertor
 
-class MedicalRecordShutterComponent : ShutterComponent() {
+class MedicalRecordShutterComponent :  HybridPageObject() {
 
-    fun assertSubHeaderText(patientName: String) {
-        Assert.assertEquals(
-                "Sub header text does not match",
-                "You do not have access to $patientName's medical record",
-                subHeaderText.text
-        )
-    }
-
-    fun assertSummaryText(patientName: String) {
-        Assert.assertEquals(
-                "Summary text does not match",
-                "Contact $patientName's GP surgery to request access.",
-                summaryText.text
-        )
-    }
-
-    fun assertSwitchText() {
-        Assert.assertEquals(
-                "Switch text does not match",
-                "Switch to your profile to view your GP medical record.",
-                switchText.textValue
-        )
+    fun assertText(patient: Patient) {
+        val patientName = patient.firstName
+        val firstLine = "You do not have access to $patientName's medical record"
+        val expected = ExpectedPageStructure()
+                .paragraph("Name")
+                .paragraph(patient.formattedFullName())
+                .paragraph("Age")
+                .paragraph(patient.formattedAge())
+                .paragraph(firstLine)
+                .paragraph("Contact $patientName's GP surgery to request access.")
+                .paragraph("Switch to your profile to view your GP medical record.")
+                .button("Switch to my profile")
+        val parsedPage = ParsedPage.parse(this,
+                "//div[div/div/div/div/p/b[normalize-space(text())=\"$firstLine\"]]")
+        ExpectedPageStructureAssertor().assert(parsedPage, expected.build())
     }
 }

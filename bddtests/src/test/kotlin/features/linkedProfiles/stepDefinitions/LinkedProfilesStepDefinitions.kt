@@ -9,7 +9,6 @@ import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.GpPracticeAccessSettingsFactory
 import features.myrecord.factories.MyRecordFactory
-import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
@@ -18,6 +17,7 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.nhsAzureSearchService.nhsAzureSearchOrganisationByOdsCodeRequestBody
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mockingFacade.linkedProfiles.FeaturesEnabledFacade
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.Patient
@@ -25,7 +25,6 @@ import models.linkedProfiles.LinkedProfileOption
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
-import pages.isPresent
 import pages.isVisible
 import pages.linkedProfiles.LinkedProfileSummaryPage
 import pages.linkedProfiles.LinkedProfilesPage
@@ -41,7 +40,7 @@ import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
-import java.util.ArrayList
+import java.util.*
 
 class LinkedProfilesStepDefinitions {
 
@@ -264,43 +263,34 @@ class LinkedProfilesStepDefinitions {
     fun theSymptomsShutterPageIsDisplayed() {
         symptomsShutterPage.isLoaded()
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        symptomsShutterPage.assertSummaryText(selectedProfile.profile.firstName)
-        symptomsShutterPage.assertSwitchText()
+        symptomsShutterPage.assertText(selectedProfile.profile.firstName)
     }
 
     @Then("^the settings shutter page is displayed$")
     fun theSettingsShutterPageIsDisplayed() {
         settingsShutterPage.isLoaded()
-
-        Assert.assertFalse(
-                "Summary text should not be visible",
-                settingsShutterPage.summaryText.isPresent)
-
-        settingsShutterPage.assertSwitchText()
+        settingsShutterPage.assertText()
     }
 
     @Then("^the prescriptions shutter page is displayed$")
     fun thePrescriptionsShutterPageIsDisplayed() {
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
         prescriptionsShutterPage.isLoaded(selectedProfile.profile.firstName)
-        prescriptionsShutterPage.assertSummaryText(selectedProfile.profile.firstName)
-        prescriptionsShutterPage.assertSwitchText()
+        prescriptionsShutterPage.assertText(selectedProfile.profile.firstName)
     }
 
     @Then("^the appointments shutter page is displayed$")
     fun theAppointmentsShutterPageIsDisplayed() {
-        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        appointmentsShutterPage.isLoaded(selectedProfile.profile.firstName)
-        appointmentsShutterPage.assertSummaryText(selectedProfile.profile.firstName)
-        appointmentsShutterPage.assertSwitchText()
+        val selectedProfileName = LinkedProfilesSerenityHelpers.SELECTED_PROFILE
+                .getOrFail<LinkedProfileFacade>().profile.firstName
+        appointmentsShutterPage.isLoaded(selectedProfileName)
+        appointmentsShutterPage.assertText(selectedProfileName)
     }
 
     @Then("^the medical record shutter page is displayed$")
     fun theMedicalRecordShutterPageIsDisplayed() {
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        medicalRecordShutterComponent.assertSubHeaderText(selectedProfile.profile.firstName)
-        medicalRecordShutterComponent.assertSummaryText(selectedProfile.profile.firstName)
-        medicalRecordShutterComponent.assertSwitchText()
+        medicalRecordShutterComponent.assertText(selectedProfile.profile)
     }
 
     private fun checkDisplayedValuesAreCorrect(

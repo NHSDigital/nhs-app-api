@@ -1,12 +1,12 @@
 package pages.linkedProfiles.shutterPages
 
 import net.thucydides.core.annotations.DefaultUrl
-import org.junit.Assert
+import pages.HybridPageObject
 import pages.navigation.HeaderNative
-import pages.text
+import pages.sharedElements.expectedPage.ExpectedPageStructure
 
 @DefaultUrl("http://web.local.bitraft.io:3000/linked-profiles/shutter/prescriptions")
-class PrescriptionsShutterPage : ShutterComponent() {
+class PrescriptionsShutterPage :  HybridPageObject() {
 
     private lateinit var headerNative: HeaderNative
 
@@ -15,18 +15,11 @@ class PrescriptionsShutterPage : ShutterComponent() {
                 "You do not have access to $patientName's repeat prescriptions")
     }
 
-    fun assertSummaryText(patientName: String) {
-        Assert.assertEquals(
-                "Failed to match summary text",
-                "Contact $patientName's GP surgery to request access.",
-                summaryText.text)
-    }
-
-    fun assertSwitchText() {
-        Assert.assertEquals(
-                "Switch text does not match",
-                "Switch to your profile to order repeat prescriptions for yourself.",
-                switchText.textValue
-        )
+    fun assertText(patientName: String) {
+        ExpectedPageStructure()
+                .paragraph("Contact $patientName's GP surgery to request access.")
+                .paragraph("Switch to your profile to order repeat prescriptions for yourself.")
+                .button("Switch to my profile")
+                .assert(this)
     }
 }
