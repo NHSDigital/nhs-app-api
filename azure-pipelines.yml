@@ -1,5 +1,64 @@
 name: $[format('{0}-{1}', variables['Build.SourceBranchName'], counter(variables['Build.SourceBranchName']))]
 
+parameters:
+  - name: androidTarget
+    displayName: Android native app target
+    type: string
+    default: browserstack
+    values:
+      - browserstack
+      - scratch1
+      - scratch2
+      - scratch3
+      - scratch4
+      - scratch5
+      - scratch6
+      - scratch7
+      - scratch8
+      - scratch9
+      - scratch10
+      - scratch11
+      - scratch12
+      - scratch13
+      - scratch14
+      - scratch15
+      - scratch16
+      - scratch17
+      - scratch18
+      - scratch19
+      - scratch20
+      - scratch21
+      - previewRelease
+
+  - name: iosTarget
+    displayName: iOS native app target
+    type: string
+    default: BrowserStack
+    values:
+      - BrowserStack
+      - Scratch1
+      - Scratch2
+      - Scratch3
+      - Scratch4
+      - Scratch5
+      - Scratch6
+      - Scratch7
+      - Scratch8
+      - Scratch9
+      - Scratch10
+      - Scratch11
+      - Scratch12
+      - Scratch13
+      - Scratch14
+      - Scratch15
+      - Scratch16
+      - Scratch17
+      - Scratch18
+      - Scratch19
+      - Scratch20
+      - Scratch21
+      - Preview
+
 trigger:
   branches:
     include:
@@ -16,6 +75,8 @@ variables:
   docker.tag: $[variables['Build.SourceVersion']]
   source.develop: $[eq(variables['Build.SourceBranchName'], 'develop')]
   source.tag: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
+  native.android.target: ${{ parameters.androidTarget }}
+  native.ios.target: ${{ parameters.iosTarget }}
 
 stages:
   - stage: backend
@@ -46,12 +107,11 @@ stages:
         parameters:
           name: Client
 
-      - ${{ if or(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), eq(variables['Build.SourceBranchName'], 'develop')) }}:
+      - ${{ if and(or(startsWith(variables['Build.SourceBranch'], 'refs/tags/'), eq(variables['Build.SourceBranchName'], 'develop')), ne(parameters.iosTarget, 'Preview')) }}:
         - template: .azuredevops/templates/ios-client-build-job.yml
           parameters:
             name: Preview
             target: Preview
-            condition: and(succeeded(), ne(variables['ios.target'], 'Preview'))
             provProfileSecureFile: iOSDevelopmentPreview.mobileprovision
             provisioningProfileName: 'NHS App Dev Preview'
 
@@ -122,13 +182,13 @@ stages:
       - web
       - backend
       - android
-    condition: and(succeeded(), eq(variables['android.target'], 'browserstack'), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'), eq(variables['int.tests.run.native.android'], 'True')))
+    condition: and(succeeded(), eq(variables['native.android.target'], 'browserstack'), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'), eq(variables['int.tests.run.native.android'], 'True')))
     jobs:
       - template: .azuredevops/templates/integration-tests-android-job.yml
 
   - stage: ios_integration_tests
     displayName: iOS Integration Tests
-    condition: and(succeeded(), eq(variables['ios.target'], 'BrowserStack'), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'), eq(variables['int.tests.run.native.ios'], 'True')))
+    condition: and(succeeded(), eq(variables['native.ios.target'], 'BrowserStack'), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'), eq(variables['int.tests.run.native.ios'], 'True')))
     dependsOn:
       - web
       - backend

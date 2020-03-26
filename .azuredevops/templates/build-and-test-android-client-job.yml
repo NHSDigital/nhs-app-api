@@ -56,15 +56,15 @@ jobs:
           artifactName: Android Client Code Coverage Report
 
       - task: Bash@3
-        displayName: Build $(android.target)
+        displayName: Build $(native.android.target)
         env:
-          TARGET: $(android.target)
+          TARGET: $(native.android.target)
         inputs:
           filePath: android/buildscripts/02_build.sh
 
       - task: Bash@3
         displayName: Build Preview Release
-        condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), ne(variables['android.target'], 'previewRelease'))
+        condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True')), ne(variables['native.android.target'], 'previewRelease'))
         env:
           TARGET: previewRelease
         inputs:
