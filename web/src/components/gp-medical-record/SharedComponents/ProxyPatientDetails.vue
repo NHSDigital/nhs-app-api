@@ -7,7 +7,7 @@
       {{ $t('my_record.patientInfo.fieldLabelName') }}</p>
     <p v-if="proxyPatientDetails" data-purpose="record-item-detail" data-hj-suppress
        class="nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-0">
-      {{ proxyPatientDetails.name }}</p>
+      {{ proxyPatientDetails.fullName }}</p>
     <hr aria-hidden="true" class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
     <p data-purpose="record-item-header"
        class="nhsuk-label nhsuk-u-margin-top-0

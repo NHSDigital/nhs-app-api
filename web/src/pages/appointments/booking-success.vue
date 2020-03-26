@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       isProxying: this.$store.getters['session/isProxying'],
-      name: get('$store.state.linkedAccounts.actingAsUser.name', this),
+      name: get('$store.state.linkedAccounts.actingAsUser.fullName', this),
       backPath: APPOINTMENTS.path,
     };
   },
