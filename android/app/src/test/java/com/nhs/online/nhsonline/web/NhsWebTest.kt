@@ -40,6 +40,7 @@ class NhsWebTest {
     private lateinit var urlLoader: UrlLoader
     private lateinit var spyWeb: NhsWeb
     private lateinit var webSettings: WebSettings
+    private var nhsLoginLoggedInPaths: List<String> = listOf()
 
     @Before
     fun setUp() {
@@ -54,7 +55,9 @@ class NhsWebTest {
         interactorMock = mock()
         notificationsServiceMock = mock()
         knownServicesMock = mock()
-        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock)
+        nhsLoginLoggedInPaths = mock()
+
+        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock, nhsLoginLoggedInPaths)
         spyWeb = spy(nhsWeb)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())

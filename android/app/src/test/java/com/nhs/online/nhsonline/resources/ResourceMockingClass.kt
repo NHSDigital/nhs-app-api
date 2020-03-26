@@ -73,7 +73,7 @@ open class ResourceMockingClass {
             on { getString(R.string.nhs_login_accessibility_label) } doReturn "Log in using Patient ID"
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.nhsLoginFidoUrl) } doReturn "https://uaf.ext.signin.nhs.uk/"
-            on { getString(R.string.nhsLoginSuffix) } doReturn "https://ext.signin.nhs.uk"
+            on { getString(R.string.nhsLoginSuffix) } doReturn "https://signin.nhs.uk"
             on { getString(R.string.adminHelpPath) } doReturn "appointments/admin-help"
             on { getString(R.string.admin_help_header) } doReturn "GP help without an appointment"
             on { getString(R.string.browser_unavailable) } doReturn "Browser is disabled"

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -25,6 +26,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
 
         private const string MinimumSupportedAndroidVersion = "2.1.0";
         private const string MinimumSupportediOSVersion = "3.5.0";
+        private readonly string _nhsLoginLoggedInPaths = "/path";
         private KnownServices _knownServices;
 
         private readonly Uri _testFidoServerUrl = new Uri("http://test.test.com");
@@ -34,9 +36,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
+
             _settings = new DeviceConfigurationSettings
             {
+                NhsLoginLoggedInPaths = _nhsLoginLoggedInPaths,
                 MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
                 MinimumSupportediOSVersion = MinimumSupportediOSVersion,
                 FidoServerUrl = _testFidoServerUrl,
@@ -58,9 +61,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                         SubServices = null,
                         Url = new Uri("http://test.test.com"),
                         ValidateSession = false,
-                        RequiresAssertedLoginIdentity = false, 
-                        JavaScriptInteractionMode = JavaScriptInteractionMode.NhsApp, 
-                        ShowThirdPartyWarning = false, 
+                        RequiresAssertedLoginIdentity = false,
+                        JavaScriptInteractionMode = JavaScriptInteractionMode.NhsApp,
+                        ShowThirdPartyWarning = false,
                         ViewMode = ViewMode.WebView
                     }
                 }
@@ -70,13 +73,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
             _mockKnownServices.Setup(x => x.Value)
                 .Returns(_knownServices);
         }
-                
+
         [TestMethod]
         public void GetConfiguration_Returns_CorrectResult()
         {
             // Arrange
+            var nhsLoginLoggedInPathsList = _nhsLoginLoggedInPaths.Split('|').ToList();
             var expectedResult = new GetConfigurationResponseV2
             {
+                NhsLoginLoggedInPaths = nhsLoginLoggedInPathsList,
                 MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
                 MinimumSupportediOSVersion = MinimumSupportediOSVersion,
                 FidoServerUrl = _testFidoServerUrl,
@@ -109,7 +114,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
 
             act.Should().Throw<ArgumentNullException>();
         }
-        
+
         [TestMethod]
         public void Constructor_DeviceConfigurationNull_ThrowsException()
         {
@@ -121,9 +126,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
         [DataTestMethod]
         [DataRow("http://www.test.com", null, "1.12.0", "http://www.test.com")]
         [DataRow("http://www.test.com", "   ", "1.12.0", "http://www.test.com")]
-        [DataRow("http://www.test.com", "1.12.0", null, "http://www.test.com")] 
-        [DataRow("http://www.test.com", "1.12.0", "   ", "http://www.test.com")] 
-        [DataRow("http://www.test.com", "1.12.0", "1.12.0", null)] 
+        [DataRow("http://www.test.com", "1.12.0", null, "http://www.test.com")]
+        [DataRow("http://www.test.com", "1.12.0", "   ", "http://www.test.com")]
+        [DataRow("http://www.test.com", "1.12.0", "1.12.0", null)]
         [DataRow(null, "1.12.0", "1.12.0", "http://www.test.com")]
         public void Constructor_DeviceConfigurationMissingParameters_ThrowsException(
             string fidoServerUrl,
@@ -137,10 +142,30 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                 MinimumSupportedAndroidVersion = minimumSupportedAndroidVersion,
                 WebAppBaseUrl = string.IsNullOrWhiteSpace(webAppBaseUrl) ? null : new Uri(webAppBaseUrl),
             };
-            
+
             Action act = () => new ConfigurationService(_logger.Object, _mockKnownServices.Object, settings);
 
             act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void Constructor_DeviceConfigurationMultipleNhsLoginLoggedInPaths_PathsAreSplitAndTrimmed()
+        {
+            var settings = new DeviceConfigurationSettings
+            {
+                NhsLoginLoggedInPaths = "/path1| /path2|/path3 ||",
+                MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
+                MinimumSupportediOSVersion = MinimumSupportediOSVersion,
+                FidoServerUrl = _testFidoServerUrl,
+                WebAppBaseUrl = _testWebAppBaseUrl
+            };
+
+            var sut = new ConfigurationService(_logger.Object, _mockKnownServices.Object, settings);
+
+            var result = sut.GetConfiguration();
+
+            var response = result.Should().BeAssignableTo<GetConfigurationResultV2.Success>().Subject;
+            response.Response.NhsLoginLoggedInPaths.Should().BeEquivalentTo("/path1", "/path2", "/path3");
         }
     }
 }

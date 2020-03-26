@@ -6,6 +6,7 @@ import iProov
 
 class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SFSafariViewControllerDelegate {
     let knownServicesProvider: KnownServicesProtocol
+    let configurationServiceProvider: ConfigurationServiceProtocol
     let viewController: HomeViewController
     let responseWaitingTime = config().ResponseWaitingTime
     var failedUrl: URL? = nil
@@ -19,9 +20,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     var schemeHandlers: SchemeHandlers
     var badResponse: Bool = false
 
-    init(controller: HomeViewController, knownServiceProvider: KnownServicesProtocol, webAppInterface: WebAppInterface) {
+    init(controller: HomeViewController, knownServiceProvider: KnownServicesProtocol,
+         configurationServiceProvider: ConfigurationServiceProtocol, webAppInterface: WebAppInterface) {
         self.viewController = controller
         self.knownServicesProvider = knownServiceProvider
+        self.configurationServiceProvider = configurationServiceProvider
         self.webAppInterface = webAppInterface
         self.schemeHandlers = SchemeHandlers()
         self.schemeHandlers.registerHandler(handler: MailToSchemeHandler())
@@ -210,7 +213,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Full)
         }
 
-        if (webView.url!.absoluteString.contains(config().CidUrlSuffix)) {
+        if (urlRequiresSlimHeader(webView.url!.absoluteString)) {
             viewController.updateHeaderText(headerText: "Log in to the NHS App", accessibilityLabel: "Login using Patient ID")
             viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Slim)
         }
@@ -482,5 +485,27 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         } else {
             viewController.showProgressBar()
         }
+    }
+    
+    func urlRequiresSlimHeader(_ url: String?) -> Bool{
+        if url == nil { return false }
+        
+        switch configurationServiceProvider.getConfigurationResponse() {
+        case .success(let configurationResponse):
+            for path in configurationResponse.nhsLoginLoggedInPaths {
+               if( url!.contains(path)) {
+                   return false
+               }
+           }
+        default:
+            break
+        }
+        
+        if (url!.contains(config().CidUrlSuffix)) {
+            return true
+        }
+   
+
+        return false
     }
 }

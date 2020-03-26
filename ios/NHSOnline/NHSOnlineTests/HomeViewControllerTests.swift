@@ -193,7 +193,7 @@ class HomeViewControllerTests: XCTestCase {
             mockRootServices.append(RootService.init(url: "https://test.com", javaScriptInteractionMode: .NhsApp,
                     menuTab: .Symptoms, viewMode: .AppTab, validateSession: false, subServices: nil))
 
-            let response = Configuration(fidoServerUrl: "", minimumSupportediOSVersion: "", knownServices: mockRootServices)
+            let response = Configuration(fidoServerUrl: "", minimumSupportediOSVersion: "", knownServices: mockRootServices, nhsLoginLoggedInPaths: [String]())
             completion(response)
         }
     }

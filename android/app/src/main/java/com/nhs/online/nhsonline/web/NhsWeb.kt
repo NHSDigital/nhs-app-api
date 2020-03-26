@@ -39,7 +39,8 @@ class NhsWeb(
         private val webView: WebView,
         private val notificationsService: NotificationsService,
         appWebInterface: AppWebInterface,
-        private val knownServices: KnownServices
+        private val knownServices: KnownServices,
+        private val nhsLoginLoggedInPaths: List<String>
 ) {
     private val openBrowserActivity = OpenUrlInBrowserActivity()
     private val urlLoader =
@@ -70,7 +71,7 @@ class NhsWeb(
         schemeHandlers.registerHandler(TelSchemeHandler(activity))
 
         val webInterceptor =
-            WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers)
+            WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths)
         webView.webViewClient = webInterceptor
 
         val webInterface = WebAppInterface(activity, uiInteractor, this, settingsService)

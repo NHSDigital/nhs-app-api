@@ -34,7 +34,7 @@
     <string name="nhs111Location">https://111.service.nhs.uk/</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
     <string name="nhsLoginFidoUrl">https://uaf.ext.signin.nhs.uk/</string>
-    <string name="nhsLoginSuffix">https://ext.signin.nhs.uk</string>
+    <string name="nhsLoginSuffix">https://signin.nhs.uk</string>
 
     <string name="accessToken">accessToken</string>
     <string name="fidoUsername">fidoUsername</string>

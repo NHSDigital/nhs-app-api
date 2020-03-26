@@ -78,6 +78,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
 
     private var knownServices = KnownServices()
+    private var nhsLoginLoggedInPaths: List<String> = listOf()
     private lateinit var configServiceManager: ConfigurationServiceManager
     private lateinit var configService: ConfigurationService
     var configurationResponse: ConfigurationResponse = ConfigurationResponse()
@@ -141,11 +142,12 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     private fun initialiseActivityElements() {
         knownServices = configurationResponse.knownServices!!
+        nhsLoginLoggedInPaths = configurationResponse.nhsLoginLoggedInPaths!!
         configBiometricSetup(configurationResponse.fidoServerUrl)
     }
 
     private fun initialiseNhsWeb() {
-        nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface, knownServices)
+        nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface, knownServices, nhsLoginLoggedInPaths)
         menuBar.nhsWeb = nhsWeb
         setHelpUrl(resources.getString(R.string.helpURL))
         if (!appPersistData.getPersistedLink().isNullOrBlank()) {
@@ -305,8 +307,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     private fun handleNotificationIntent(intent: Intent?, isAppClosed: Boolean) {
-        intent?.extras?.get("url")?.let {url ->
-            val url = UrlHelper(this).ensureUrlWithScheme(url.toString())
+        intent?.extras?.get("url")?.let {intentUrl ->
+            val url = UrlHelper(this).ensureUrlWithScheme(intentUrl.toString())
             if (urlHelper.isSameHostAndSchemeAsHomeUrl(url.toString())) {
                 if (isAppClosed) {
                     url?.let { appPersistData.storePersistedLink(it.toString()) }

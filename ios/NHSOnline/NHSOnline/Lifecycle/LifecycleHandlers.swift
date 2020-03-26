@@ -71,6 +71,7 @@ class LifecycleHandlers: NSObject {
 
             self.homeViewController.delayedBiometricsStart(0.5)
         default:
+            hideWhiteScreen()
             self.homeViewController.delayedBiometricsStart(0.5)
         }
     }

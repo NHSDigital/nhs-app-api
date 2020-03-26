@@ -7,4 +7,5 @@ class ConfigurationResponse {
     var fidoServerUrl: String = ""
     var knownServices: KnownServices? = null
     var callSuccessful: Boolean = false
+    var nhsLoginLoggedInPaths: List<String>? = null
 }

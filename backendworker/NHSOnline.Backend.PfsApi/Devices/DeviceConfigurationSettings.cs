@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Settings;
 
@@ -6,6 +7,8 @@ namespace NHSOnline.Backend.PfsApi.Devices
 {
     public class DeviceConfigurationSettings : IValidatable
     {
+        public string NhsLoginLoggedInPaths { get; set; }
+
         public string MinimumSupportedAndroidVersion { get; set; }
         
         public string MinimumSupportediOSVersion { get; set; }
@@ -15,18 +18,25 @@ namespace NHSOnline.Backend.PfsApi.Devices
         public Uri WebAppBaseUrl { get; set; }
 
         public DeviceConfigurationSettings() {}
-        
-        public DeviceConfigurationSettings(string minimumSupportedAndroidVersion,
-            string minimumSupportediOSVersion, Uri fidoServerUrl, Uri webAppBaseUrl)
+
+        public DeviceConfigurationSettings(string nhsLoginLoggedInPaths,
+            string minimumSupportedAndroidVersion, string minimumSupportediOSVersion,
+            Uri fidoServerUrl, Uri webAppBaseUrl)
         {
             MinimumSupportedAndroidVersion = minimumSupportedAndroidVersion;
-            MinimumSupportediOSVersion  = minimumSupportediOSVersion;
+            MinimumSupportediOSVersion = minimumSupportediOSVersion;
+            NhsLoginLoggedInPaths = nhsLoginLoggedInPaths;
             FidoServerUrl = fidoServerUrl;
             WebAppBaseUrl = webAppBaseUrl;
         }
         
         public void Validate()
         {
+            if (NhsLoginLoggedInPaths == null)
+            {
+                throw new ConfigurationNotFoundException(nameof(NhsLoginLoggedInPaths));
+            }
+            
             if (MinimumSupportedAndroidVersion == null)
             {
                 throw new ConfigurationNotFoundException(nameof(MinimumSupportedAndroidVersion));

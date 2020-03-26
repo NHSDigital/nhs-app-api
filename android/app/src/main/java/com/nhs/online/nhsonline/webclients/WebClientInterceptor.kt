@@ -35,7 +35,8 @@ class WebClientInterceptor(
         private val nhsWeb: NhsWeb,
         private val context: Context,
         private val knownServices: KnownServices,
-        private val schemeHandlers: SchemeHandlers
+        private val schemeHandlers: SchemeHandlers,
+        private val nhsLoginLoggedInPaths: List<String>
 ) : WebViewClient() {
 
     companion object {
@@ -251,7 +252,7 @@ class WebClientInterceptor(
                         "${this::class.java.simpleName}: Entering onPageCommitVisible > is Home page")
                 uiInteractor.showHeader()
                 uiInteractor.showMenuBar()
-            } else if (urlHasRequiresSlimHeader(url)) {
+            } else if (urlRequiresSlimHeader(url)) {
                 uiInteractor.showHeaderSlim()
             }
 
@@ -369,8 +370,13 @@ class WebClientInterceptor(
         return url?.startsWith("$appScheme://") ?: false
     }
 
-    private fun urlHasRequiresSlimHeader(url: String?): Boolean {
+    private fun urlRequiresSlimHeader(url: String?): Boolean {
         if (url == null) return false
+
+        nhsLoginLoggedInPaths.forEach { path ->
+            if (url.contains(path))
+                return false;
+        }
 
         return try {
             url.contains(URL(context.resources.getString(R.string.nhsLoginSuffix)).host)

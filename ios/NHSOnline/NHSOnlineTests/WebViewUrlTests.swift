@@ -5,17 +5,21 @@ class WebViewUrlTests: XCTestCase {
     var viewController: MockHomeViewController?
     var webViewDelegate: WebViewDelegate?
     var knownServicesProvider: KnownServicesProtocol?
+    var configurationServiceProvider: ConfigurationServiceProtocol?
     
     override func setUp() {
         super.setUp()
 
         knownServicesProvider = SuccessKnownServiceProtocolMock()
+        configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
         
         let viewController = MockHomeViewController()
         viewController.knownServicesProvider = SuccessKnownServiceProtocolMock()
         viewController.configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
         let webAppInterface = WebAppInterface(controller: viewController)
-        webViewDelegate = WebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider!, webAppInterface: webAppInterface)
+        webViewDelegate = WebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider!,
+                                          configurationServiceProvider: configurationServiceProvider!,
+                                          webAppInterface: webAppInterface)
     }
     
     override func tearDown() {

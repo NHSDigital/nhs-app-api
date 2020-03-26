@@ -16,12 +16,13 @@ class WebViewDelegateTests: XCTestCase {
     override func setUp() {
         super.setUp()
         let knownServicesProvider: KnownServicesProtocol = SuccessKnownServiceProtocolMock()
+        let configurationServiceProvider: ConfigurationServiceProtocol = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
         let viewController = MockHomeViewController()
         viewController.knownServicesProvider = SuccessKnownServiceProtocolMock()
-        viewController.configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
+        viewController.configurationServiceProvider = configurationServiceProvider
         let webAppInterface = WebAppInterface(controller: viewController)
-        webViewDelegate = MockWebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider, webAppInterface: webAppInterface)
-        iProovWebViewDelegate = IProovMockWebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider, webAppInterface: webAppInterface)
+        webViewDelegate = MockWebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface)
+        iProovWebViewDelegate = IProovMockWebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface)
         homeViewController = viewController
         wKWebView = WKWebView(frame: .zero)
         mockWKWebView = MockWKWebView()
@@ -126,8 +127,9 @@ class WebViewDelegateTests: XCTestCase {
 class MockWebViewDelegate : WebViewDelegate {
     var attemptedIProovLaunch = false
 
-    override init(controller: HomeViewController, knownServiceProvider: KnownServicesProtocol, webAppInterface: WebAppInterface) {
-        super.init(controller: controller,knownServiceProvider: knownServiceProvider, webAppInterface: webAppInterface)
+    override init(controller: HomeViewController, knownServiceProvider: KnownServicesProtocol,
+    configurationServiceProvider: ConfigurationServiceProtocol, webAppInterface: WebAppInterface) {
+        super.init(controller: controller,knownServiceProvider: knownServiceProvider, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface)
     }
 }
 

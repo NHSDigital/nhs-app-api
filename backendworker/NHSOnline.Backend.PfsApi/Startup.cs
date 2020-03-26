@@ -378,11 +378,12 @@ namespace NHSOnline.Backend.PfsApi
         {
             var webAppBaseUrl = new Uri(Configuration.GetOrWarn("NHS_WEB_APP_BASE_URL", _logger), UriKind.Absolute);
 
+            var nhsLoginLoggedInPaths = Configuration["ConfigurationSettings:NhsLoginLoggedInPaths"];
             var minimumSupportedAndroidVersion = Configuration["ConfigurationSettings:MinimumSupportedAndroidVersion"];
             var minimumSupportediOSVersion = Configuration["ConfigurationSettings:MinimumSupportediOSVersion"];
             var fidoServerUrl = new Uri(Configuration["ConfigurationSettings:FidoServerUrl"], UriKind.Absolute);
             
-            var config = new DeviceConfigurationSettings(minimumSupportedAndroidVersion, minimumSupportediOSVersion, fidoServerUrl, webAppBaseUrl);
+            var config = new DeviceConfigurationSettings(nhsLoginLoggedInPaths, minimumSupportedAndroidVersion, minimumSupportediOSVersion, fidoServerUrl, webAppBaseUrl);
             config.Validate();
 
             return config;

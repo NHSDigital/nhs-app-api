@@ -79,7 +79,7 @@ class HomeViewController : UIViewController {
         setupHelpIcon()
 
         webAppInterface = WebAppInterface(controller: self)
-        webViewDelegate = WebViewDelegate(controller: self, knownServiceProvider: self.knownServicesProvider!, webAppInterface: webAppInterface!)
+        webViewDelegate = WebViewDelegate(controller: self, knownServiceProvider: self.knownServicesProvider!, configurationServiceProvider: self.configurationServiceProvider!, webAppInterface: webAppInterface!)
         tabBarDelegate = TabBarDelegate(controller: self)
         tabBar.delegate = tabBarDelegate
         tabBar.setDefaultTabBarItemsAppearance()

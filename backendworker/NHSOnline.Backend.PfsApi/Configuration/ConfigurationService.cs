@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.PfsApi.Areas.Configuration;
@@ -12,6 +13,7 @@ namespace NHSOnline.Backend.PfsApi.Configuration
     public class ConfigurationService: IConfigurationService
     {
         private readonly GetConfigurationResultV2 _result;
+        private const char Separator = '|';
 
         public ConfigurationService(
             ILogger<ConfigurationService> logger,
@@ -19,12 +21,16 @@ namespace NHSOnline.Backend.PfsApi.Configuration
             DeviceConfigurationSettings settings)
         {
             new ValidateAndLog(logger)
-                .IsNotNull(knownServicesOptions, nameof(knownServicesOptions), ValidateAndLog.ValidationOptions.ThrowError)
-                .IsNotNull(knownServicesOptions?.Value, nameof(knownServicesOptions.Value), ValidateAndLog.ValidationOptions.ThrowError)
+                .IsNotNull(knownServicesOptions, nameof(knownServicesOptions), 
+                    ValidateAndLog.ValidationOptions.ThrowError)
+                .IsNotNull(knownServicesOptions?.Value, nameof(knownServicesOptions.Value), 
+                    ValidateAndLog.ValidationOptions.ThrowError)
                 .IsValid();
 
             new ValidateAndLog(logger)
                 .IsNotNull(settings, nameof(settings), ValidateAndLog.ValidationOptions.ThrowError)
+                .IsNotNullOrWhitespace(settings?.NhsLoginLoggedInPaths, nameof(settings.NhsLoginLoggedInPaths),
+                    ValidateAndLog.ValidationOptions.ThrowError)
                 .IsNotNull(settings?.FidoServerUrl, nameof(settings.FidoServerUrl),
                     ValidateAndLog.ValidationOptions.ThrowError)
                 .IsNotNullOrWhitespace(settings?.MinimumSupportediOSVersion, nameof(settings.MinimumSupportediOSVersion),
@@ -35,6 +41,8 @@ namespace NHSOnline.Backend.PfsApi.Configuration
                     ValidateAndLog.ValidationOptions.ThrowError)
                 .IsValid();
 
+            var nhsLoginLoggedInPaths = settings.NhsLoginLoggedInPaths
+                .Split(Separator, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList();
             var knownServices = knownServicesOptions.Value.Services;
 
             foreach (var service in knownServices)
@@ -46,6 +54,7 @@ namespace NHSOnline.Backend.PfsApi.Configuration
             }
             
             _result = new GetConfigurationResultV2.Success(
+                nhsLoginLoggedInPaths,
                 settings.FidoServerUrl,
                 settings.MinimumSupportedAndroidVersion,
                 settings.MinimumSupportediOSVersion,

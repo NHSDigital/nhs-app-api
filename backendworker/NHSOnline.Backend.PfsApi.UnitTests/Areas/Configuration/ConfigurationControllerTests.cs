@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -95,6 +96,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
             // Arrange
             var knownServices = _fixture.Create<KnownServices>();
             var response = new GetConfigurationResultV2.Success(
+                _fixture.Create<List<string>>(),
                 _fixture.Create<Uri>(),
                 _fixture.Create<string>(),
                 _fixture.Create<string>(),

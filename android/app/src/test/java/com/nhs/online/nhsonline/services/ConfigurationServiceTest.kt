@@ -74,6 +74,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
         whenever(httpClientMock.readText(any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
+                "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
                 "\"knownServices\": []" +
                 "}")
 
@@ -84,6 +85,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 Configuration(
                         minimumSupportedAndroidVersion = "v1.27.0",
                         fidoServerUrl = "www.fidoserver.com",
+                        nhsLoginLoggedInPaths = listOf("/path"),
                         knownServices = emptyList()
                 )
         )
@@ -94,6 +96,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
         whenever(httpClientMock.readText(any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
+                "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
                 "\"knownServices\": [{" +
                 "\"requiresAssertedLoginIdentity\":false," +
                 "\"validateSession\":true," +
@@ -111,6 +114,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 Configuration(
                         minimumSupportedAndroidVersion = "v1.27.0",
                         fidoServerUrl = "www.fidoserver.com",
+                        nhsLoginLoggedInPaths = listOf("/path"),
                         knownServices = listOf(
                                 RootService(
                                         requiresAssertedLoginIdentity = false,
@@ -130,6 +134,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
         whenever(httpClientMock.readText(any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
+                "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
                 "\"knownServices\": [{" +
                 "\"requiresAssertedLoginIdentity\":false," +
                 "\"validateSession\":true," +
@@ -147,6 +152,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 Configuration(
                         minimumSupportedAndroidVersion = "v1.27.0",
                         fidoServerUrl = "www.fidoserver.com",
+                        nhsLoginLoggedInPaths = listOf("/path"),
                         knownServices = listOf(
                                 RootService(
                                         requiresAssertedLoginIdentity = false,
@@ -166,6 +172,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
         whenever(httpClientMock.readText(any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
+                "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
                 "\"knownServices\": [{" +
                 "\"requiresAssertedLoginIdentity\":false," +
                 "\"validateSession\":true," +
@@ -190,6 +197,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 Configuration(
                         minimumSupportedAndroidVersion = "v1.27.0",
                         fidoServerUrl = "www.fidoserver.com",
+                        nhsLoginLoggedInPaths = listOf("/path"),
                         knownServices = listOf(
                                 RootService(
                                         requiresAssertedLoginIdentity = false,
