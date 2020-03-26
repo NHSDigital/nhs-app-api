@@ -11,6 +11,7 @@ using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents.SystemFunctions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -24,6 +25,8 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
@@ -79,6 +82,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private string _serviceDeskReference;
         private SessionConfigurationSettings _sessionConfigSettings;
         private CitizenIdSessionResult _citizenIdSessionResult;
+        private GpSessionManagerCitizenIdSessionResult _gpSessMgrCitizenIdSessionResult;
         private string _im1ConnectionToken;
 
         [TestInitialize]
@@ -122,6 +126,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 NhsNumber = _userProfile.NhsNumber,
                 OdsCode = _userProfile.OdsCode,
                 Session = _citizenIdUserSession
+            };
+
+            _gpSessMgrCitizenIdSessionResult = new GpSessionManagerCitizenIdSessionResult
+            {
+                Im1ConnectionToken = _citizenIdSessionResult.Im1ConnectionToken,
+                NhsNumber = _citizenIdSessionResult.NhsNumber,
+                OdsCode = _citizenIdSessionResult.OdsCode,
+                Session = new GpSessionManagerCitizenIdUserSession
+                {
+                    AccessToken = _citizenIdUserSession.AccessToken,
+                    DateOfBirth = _citizenIdUserSession.DateOfBirth,
+                    FamilyName = _citizenIdUserSession.FamilyName,
+                    IdTokenJti = _citizenIdUserSession.IdTokenJti
+                }
             };
 
             _mockCitizenIdSessionService = _fixture.Freeze<Mock<ICitizenIdSessionService>>();
@@ -195,7 +213,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockSessionMapper = _fixture.Freeze<Mock<ISessionMapper>>();
             _mockSessionMapper.Setup(x => x.Map(It.IsAny<HttpContext>(),
-                    _emisUserSession, _citizenIdUserSession, _im1ConnectionToken))
+                    _emisUserSession, _gpSessMgrCitizenIdSessionResult.Session, _im1ConnectionToken))
                 .Returns(_userSession);
 
             serviceProviderMock
@@ -401,7 +419,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_Im1ConnectionTokenFailsAuthenticationWithGpSupplier_ReturnsForbidden()
+        public async Task ML_Post_Im1ConnectionTokenFailsAuthenticationWithGpSupplier_ReturnsForbidden()
         {
             // Arrange
             _mockServiceDeskErrorReferenceGenerator
@@ -439,7 +457,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Setup(
                     x => x.CreateSession(
                         _mockGpSystem.Object,
-                        _citizenIdSessionResult))
+                        It.Is<GpSessionManagerCitizenIdSessionResult>(p
+                            => p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal)
+                               && p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal)
+                               && p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal)
+                               && p.Session.AccessToken.Equals(_citizenIdUserSession.AccessToken, StringComparison.Ordinal)
+                               && p.Session.DateOfBirth.Equals(_citizenIdUserSession.DateOfBirth))))
                 .ReturnsAsync(returnResult);
 
             // Act
@@ -457,7 +480,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_GpSupplierSessionCreateFails_Returns502BadGateway()
+        public async Task ML_Post_GpSupplierSessionCreateFails_Returns502BadGateway()
         {
             // Arrange
             _mockServiceDeskErrorReferenceGenerator
@@ -497,7 +520,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Setup(
                     x => x.CreateSession(
                         _mockGpSystem.Object,
-                        _citizenIdSessionResult))
+                        It.Is<GpSessionManagerCitizenIdSessionResult>(p
+                            => p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal)
+                            && p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal)
+                            && p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal)
+                            && p.Session.AccessToken.Equals(_citizenIdUserSession.AccessToken, StringComparison.Ordinal)
+                            && p.Session.DateOfBirth.Equals(_citizenIdUserSession.DateOfBirth))))
                 .ReturnsAsync(returnResult);
 
             // Act
@@ -624,7 +652,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
 
       [TestMethod]
-      public async Task Post_HappyPath_ReturnsUsersSessionResponse()
+      public async Task ML_Post_HappyPath_ReturnsUsersSessionResponse()
         {
             _sessionConfigSettings.ProxyEnabled = true;
 
@@ -641,7 +669,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Setup(
                     x => x.CreateSession(
                         _mockGpSystem.Object,
-                        _citizenIdSessionResult))
+                        It.Is<GpSessionManagerCitizenIdSessionResult>(p
+                            => p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal)
+                               && p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal)
+                               && p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal)
+                               && p.Session.AccessToken.Equals(_citizenIdUserSession.AccessToken, StringComparison.Ordinal)
+                               && p.Session.DateOfBirth.Equals(_citizenIdUserSession.DateOfBirth))))
                 .ReturnsAsync(returnResult);
 
             // Act
@@ -695,7 +728,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Setup(
                     x => x.CreateSession(
                         _mockGpSystem.Object,
-                        _citizenIdSessionResult))
+                        _gpSessMgrCitizenIdSessionResult))
                 .ReturnsAsync(returnResult);
             // Act
             await _systemUnderTest.Post(_userSessionRequest);

@@ -38,6 +38,7 @@ using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.PfsApi.SpineSearch;
 using Microsoft.Extensions.Options;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using Wkhtmltopdf.NetCore;
 using ConfigurationSettings = NHSOnline.Backend.Support.Settings.ConfigurationSettings;
@@ -382,7 +383,7 @@ namespace NHSOnline.Backend.PfsApi
             var minimumSupportedAndroidVersion = Configuration["ConfigurationSettings:MinimumSupportedAndroidVersion"];
             var minimumSupportediOSVersion = Configuration["ConfigurationSettings:MinimumSupportediOSVersion"];
             var fidoServerUrl = new Uri(Configuration["ConfigurationSettings:FidoServerUrl"], UriKind.Absolute);
-            
+
             var config = new DeviceConfigurationSettings(nhsLoginLoggedInPaths, minimumSupportedAndroidVersion, minimumSupportediOSVersion, fidoServerUrl, webAppBaseUrl);
             config.Validate();
 

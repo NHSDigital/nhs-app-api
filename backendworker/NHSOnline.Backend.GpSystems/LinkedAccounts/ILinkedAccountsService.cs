@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
     {
         string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id);
 
-        bool IsValidAccountOrLinkedAccountId(GpUserSession gpUserSession, Guid id);
+        Task<SwitchAccountResult> SwitchAccount(GpUserSession gpUserSession, Guid id);
 
         Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession);
 

@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             // Assert
             resultOdsCode.Should().Be(proxyOdsCode);
         }
-        
+
         [TestMethod]
         public void GetOdsCodeForLinkedAccount_ReturnsNull_WhenLinkedAccountWithMatchingIdFoundInUserSession()
         {
@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         }
 
         [TestMethod]
-        public void IsValidAccountOrLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForProxy()
+        public async void SwitchAccount_ReturnsSuccess_WhenLinkedAccountWithMatchingIdFoundInUserSessionForProxy()
         {
             // Arrange
             var proxyId = Guid.NewGuid();
@@ -151,15 +151,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             // Act
-            var result = _systemUnderTest.IsValidAccountOrLinkedAccountId(_emisUserSession, proxyId);
+            var result = await _systemUnderTest.SwitchAccount(_emisUserSession, proxyId);
 
             // Assert
-            result.Should().BeTrue();
+            result.Should().BeOfType<SwitchAccountResult.Success>();
         }
 
 
         [TestMethod]
-        public void IsValidAccountOrLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
+        public async void SwitchAccount_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
         {
             // Arrange
             var mainUserGuid = Guid.NewGuid();
@@ -180,14 +180,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             // Act
-            var result = _systemUnderTest.IsValidAccountOrLinkedAccountId(_emisUserSession, mainUserGuid);
+            var result = await _systemUnderTest.SwitchAccount(_emisUserSession, mainUserGuid);
 
             // Assert
-            result.Should().BeTrue();
+            result.Should().BeOfType<SwitchAccountResult.Success>();
         }
 
         [TestMethod]
-        public void IsValidAccountOrLinkedAccountId_ReturnsFalse_WhenLinkedAccountWithMatchingIdIsNotFoundInUserSession()
+        public async void SwitchAccount_ReturnsFalse_WhenLinkedAccountWithMatchingIdIsNotFoundInUserSession()
         {
             // Arrange
             var randomGuidWhichWontBeFound = Guid.NewGuid();
@@ -208,10 +208,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             // Act
-            var result = _systemUnderTest.IsValidAccountOrLinkedAccountId(_emisUserSession, randomGuidWhichWontBeFound);
+            var result = await _systemUnderTest.SwitchAccount(_emisUserSession, randomGuidWhichWontBeFound);
 
             // Assert
-            result.Should().BeFalse();
+            result.Should().BeOfType<SwitchAccountResult.Failure>();
         }
 
         [TestMethod]
@@ -337,7 +337,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         {
             var proxyPatients = _fixture.Create<List<EmisProxyUserSession>>(); // will auto set all NHS numbers
             proxyPatients.ForEach(x => x.OdsCode = _emisUserSession.OdsCode); // set all to have same Ods code
-            
+
             _emisUserSession.ProxyPatients = proxyPatients;
 
             var demographicsResponses = new Dictionary<Guid, DemographicsResponse>();

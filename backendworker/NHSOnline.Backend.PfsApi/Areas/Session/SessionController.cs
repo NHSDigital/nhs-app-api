@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
@@ -220,7 +222,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             CitizenIdSessionResult citizenIdSessionResult,
             ServiceJourneyRulesVisitorOutput serviceJourneyRulesResultVisited)
         {
-            var result = await _gpSessionManager.CreateSession(gpSystem, citizenIdSessionResult);
+            var gpSessionMgrCitizenIdSessionResult = new GpSessionManagerCitizenIdSessionResult
+            {
+                OdsCode = citizenIdSessionResult.OdsCode,
+                NhsNumber = citizenIdSessionResult.NhsNumber,
+                Im1ConnectionToken = citizenIdSessionResult.Im1ConnectionToken,
+                Session = new GpSessionManagerCitizenIdUserSession
+                {
+                    AccessToken = citizenIdSessionResult.Session.AccessToken,
+                    FamilyName = citizenIdSessionResult.Session.FamilyName,
+                    DateOfBirth = citizenIdSessionResult.Session.DateOfBirth,
+                    IdTokenJti =  citizenIdSessionResult.Session.IdTokenJti
+                }
+            };
+
+            var result = await _gpSessionManager.CreateSession(gpSystem, gpSessionMgrCitizenIdSessionResult);
 
             if (!(result is CreateSessionResult.Success))
             {
@@ -245,7 +261,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             }
 
             var successResult = result as CreateSessionResult.Success;
-            
+
             return await CreateSession(successResult?.UserSession, serviceJourneyRulesResultVisited, citizenIdSessionResult);
         }
 
@@ -272,7 +288,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             return await Task.FromResult(CreateCreatedResult(userSession, serviceJourneyRulesVisitorOutput.Response));
         }
-        
+
         [HttpDelete]
         public async Task<IActionResult> Delete()
         {
@@ -351,7 +367,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 _logger.LogExit();
             }
         }
-        
+
         private CreatedResult CreateCreatedResult(UserSession userSession,
             ServiceJourneyRulesResponse serviceJourneyRules)
         {
@@ -390,7 +406,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             return BuildErrorResult(serviceDeskReference, statusCode);
         }
-        
+
         private ObjectResult BuildErrorResult(ErrorCategory errorCategory, int statusCode, Supplier supplier)
         {
             var serviceDeskReference =
@@ -409,19 +425,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 StatusCode = statusCode
             };
         }
-        
+
         private Option<IGpSystem> GetGpSystem(Supplier supplier)
         {
             return supplier == Supplier.Unknown ? Option.None<IGpSystem>() :
                 Option.Some(_gpSystemFactory.CreateGpSystem(supplier));
         }
-        
+
         private async Task<ServiceJourneyRulesVisitorOutput> GetServiceJourneyRulesVisitorOutput(string odsCode)
         {
             var serviceJourneyRulesConfig = await _serviceJourneyRules.GetServiceJourneyRulesForOdsCode(odsCode);
             return serviceJourneyRulesConfig.Accept(new ServiceJourneyRulesConfigResultVisitor());
         }
-        
+
         private async Task AppendCookieToResponse(string sessionId)
         {
             var claims = new List<Claim>
@@ -436,7 +452,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 new ClaimsPrincipal(claimsIdentity)
             );
         }
-        
+
         private async Task DeleteConnectionTokenFromCache(string im1ConnectionToken)
         {
             if (Guid.TryParse(im1ConnectionToken, out _))
@@ -456,7 +472,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 }
             }
         }
-        
+
         private void PopulateUserSessionResponse(UserSessionResponse response, UserSession userSession)
         {
             response.Name = userSession.GpUserSession.Name;

@@ -12,6 +12,7 @@ using Moq;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts;
 using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts.Models;
 using NHSOnline.Backend.Support;
@@ -81,8 +82,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
 
             var id = Guid.NewGuid();
 
-            _linkedAccountService.Setup(x => x.IsValidAccountOrLinkedAccountId(_userSession.GpUserSession, id))
-                .Returns(true)
+            _linkedAccountService.Setup(x => x.SwitchAccount(_userSession.GpUserSession, id))
+                .ReturnsAsync(new SwitchAccountResult.Success())
                 .Verifiable();
 
             // Act
@@ -104,8 +105,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
 
             var id = Guid.NewGuid();
 
-            _linkedAccountService.Setup(x => x.IsValidAccountOrLinkedAccountId(_userSession.GpUserSession, id))
-                .Returns(true)
+            _linkedAccountService.Setup(x => x.SwitchAccount(_userSession.GpUserSession, id))
+                .ReturnsAsync(new SwitchAccountResult.Success())
                 .Verifiable();
 
 
@@ -128,8 +129,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             // Arrange
             var id = Guid.NewGuid();
 
-            _linkedAccountService.Setup(x => x.IsValidAccountOrLinkedAccountId(_userSession.GpUserSession, id))
-                .Returns(false)
+            _linkedAccountService.Setup(x => x.SwitchAccount(_userSession.GpUserSession, id))
+                .ReturnsAsync(new SwitchAccountResult.Failure())
                 .Verifiable();
 
             // Act

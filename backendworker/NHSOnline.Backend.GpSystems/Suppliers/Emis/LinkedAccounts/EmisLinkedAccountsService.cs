@@ -31,17 +31,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
         public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
-            var emisUserSession = (EmisUserSession)gpUserSession;
+            var emisUserSession = (EmisUserSession) gpUserSession;
             var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
 
             return proxy?.OdsCode;
         }
 
-        public bool IsValidAccountOrLinkedAccountId(GpUserSession gpUserSession, Guid id)
+        public async Task<SwitchAccountResult> SwitchAccount(GpUserSession gpUserSession, Guid id)
         {
-            var emisUserSession = (EmisUserSession)gpUserSession;
-            var proxy = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
-            return proxy != null || emisUserSession.Id == id;
+            if (IsValidLinkedAccount(gpUserSession, id) || gpUserSession.Id == id)
+            {
+                return await Task.FromResult(new SwitchAccountResult.Success());
+            }
+            return await Task.FromResult(new SwitchAccountResult.Failure());
         }
 
         public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
@@ -206,7 +208,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
         }
         private bool IsValidLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
-            return IsValidAccountOrLinkedAccountId(gpUserSession, id) && (id != gpUserSession.Id);
+            var emisUserSession = (EmisUserSession)gpUserSession;
+            return  emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id) != null;
         }
 
         private static EmisProxyUserSession GetLinkedAccountFromGpUserSession(GpUserSession gpUserSession, Guid linkedAccountId)

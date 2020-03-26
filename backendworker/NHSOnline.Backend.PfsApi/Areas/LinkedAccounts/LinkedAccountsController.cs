@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts.Models;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
@@ -148,42 +149,51 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetLinkedAccountsService();
 
-            var IsValidAccountOrLinkedAccountId = linkedAccountsService.IsValidAccountOrLinkedAccountId(userSession.GpUserSession, id);
+            var switchResult = await linkedAccountsService.SwitchAccount(userSession.GpUserSession, id);
 
-            if (IsValidAccountOrLinkedAccountId)
+            if (switchResult is SwitchAccountResult.Success)
             {
                 var linkedAccountAuditInfo = HttpContext.GetLinkedAccountAuditInfo();
 
-                var fromNhsNumber = "";
-                var toNhsNumber = "";
-                if (linkedAccountAuditInfo.IsProxyMode)
-                {
-                    //switching from proxy to main account
-                    fromNhsNumber = linkedAccountAuditInfo.ProxyNhsNumber;
-                    toNhsNumber = userSession.GpUserSession.NhsNumber;
-                }
-                else
-                {
-                    //switching from main a/c
-                    fromNhsNumber = userSession.GpUserSession.NhsNumber;
-                    toNhsNumber = linkedAccountsService.GetNhsNumberForProxyUser(userSession.GpUserSession, id);
-                }
-
-                fromNhsNumber = fromNhsNumber.RemoveWhiteSpace();
-                toNhsNumber = toNhsNumber.RemoveWhiteSpace();
+                var (fromNhsNumber, toNhsNumber) = GetNhsNumbers(id, linkedAccountAuditInfo, userSession, linkedAccountsService);
 
                 _logger.LogInformation($"Switching profile from nhsnumber={fromNhsNumber} to nhsnumber={toNhsNumber}");
 
                 await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchResponse,
                     $"Successfully switched profile to NhsNumber {toNhsNumber}");
+            }
+            else
+            {
+                _logger.LogInformation($"Couldn't find profile with id {id} to switch to");
 
-                return Ok();
+                await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchResponse,
+                    $"Couldn't find profile with id {id} to switch to");
+            }
+            return await switchResult.Accept(new SwitchAccountResultVisitor());
+        }
+
+        private static (string fromNhsNumber, string toNhsNumber) GetNhsNumbers(Guid id,
+            LinkedAccountAuditInfo linkedAccountAuditInfo, UserSession userSession,
+            ILinkedAccountsService linkedAccountsService)
+        {
+            var fromNhsNumber = "";
+            var toNhsNumber = "";
+            if (linkedAccountAuditInfo.IsProxyMode)
+            {
+                //switching from proxy to main account
+                fromNhsNumber = linkedAccountAuditInfo.ProxyNhsNumber;
+                toNhsNumber = userSession.GpUserSession.NhsNumber;
+            }
+            else
+            {
+                //switching from main a/c
+                fromNhsNumber = userSession.GpUserSession.NhsNumber;
+                toNhsNumber = linkedAccountsService.GetNhsNumberForProxyUser(userSession.GpUserSession, id);
             }
 
-            _logger.LogInformation($"Couldn't find profile with id {id} to switch to");
-            await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchResponse,
-                $"Couldn't find profile with id {id} to switch to");
-            return new NotFoundResult();
+            fromNhsNumber = fromNhsNumber.RemoveWhiteSpace();
+            toNhsNumber = toNhsNumber.RemoveWhiteSpace();
+            return (fromNhsNumber, toNhsNumber);
         }
 
         private string GetPracticeNameToDisplay(Task<GpSearchResult> gpSearchTask, string odsCodeSearched)

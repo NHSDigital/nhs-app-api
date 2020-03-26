@@ -8,6 +8,7 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -42,14 +43,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId)
         {
             var userSession = HttpContext.GetUserSession();
-            
+
             var gpLinkedAccountUserSession = new GpLinkedAccountModel(
                 userSession.GpUserSession, patientId
             );
 
             await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
             _logger.LogInformation($"Fetching courses interface for supplier {userSession.GpUserSession.Supplier}");
-            
+
             var courseService = _gpSystemFactory
                 .CreateGpSystem(gpLinkedAccountUserSession.GpUserSession.Supplier)
                 .GetCourseService();
@@ -66,23 +67,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             await result.Accept(new CourseResultAuditingVisitor(_auditor, _logger, coursesCount));
             return await result.Accept(new CourseResultVisitor(_sessionCacheService, _errorReferenceGenerator, userSession));
         }
-        
-        private void LogCourseInformation(FilteringCounts result) 
+
+        private void LogCourseInformation(FilteringCounts result)
         {
             try
             {
                 var kvp = new Dictionary<string, string>
                 {
-                    { "Courses Received", 
+                    { "Courses Received",
                         result.ReceivedCount.ToString(CultureInfo.InvariantCulture) },
-                    { "Courses remaining after filtering out non-repeats", 
+                    { "Courses remaining after filtering out non-repeats",
                         result.FilteredRemainingRepeatsCount.ToString(CultureInfo.InvariantCulture) },
-                    { "Courses filtered out for exceeding maximum allowance", 
+                    { "Courses filtered out for exceeding maximum allowance",
                         result.FilteredMaxAllowanceDiscardedCount.ToString(CultureInfo.InvariantCulture) },
-                    { "Courses Returned", 
+                    { "Courses Returned",
                         result.ReturnedCount.ToString(CultureInfo.InvariantCulture) }
                 };
-                
+
                 _logger.LogInformationKeyValuePairs("Courses Count", kvp);
             }
             catch (Exception e)

@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -11,18 +10,16 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Session;
+using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
-using NHSOnline.Backend.PfsApi.Areas.Session;
-using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests
+namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
 {
     [TestClass]
     public class GpSessionManagerTests
@@ -37,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
         private string _sessionId;
         private string _patientId;
         private UserProfile _userProfile;
-        private CitizenIdSessionResult _citizenIdSessionResult;
+        private GpSessionManagerCitizenIdSessionResult _gpSessMgrCitizenIdSessionResult;
 
         private Mock<ISessionCacheService> _mockSessionCacheService;
         private Mock<ISessionService> _mockSessionService;
@@ -66,15 +63,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
             emisUserSession.Name = _fixture.Create<string>();
 
             var citizenIdUserSession = new CitizenIdUserSession { AccessToken = _userProfile.AccessToken };
+            var gpSessMgrCitizenIdUserSession = new GpSessionManagerCitizenIdUserSession { AccessToken = _userProfile.AccessToken };
 
-            _citizenIdSessionResult = new CitizenIdSessionResult
+            _gpSessMgrCitizenIdSessionResult = new GpSessionManagerCitizenIdSessionResult
             {
-                StatusCode = (int) HttpStatusCode.OK,
-                DateOfBirth = DateTime.ParseExact(_userProfile.DateOfBirth, DateFormat, CultureInfo.InvariantCulture),
                 Im1ConnectionToken = _userProfile.Im1ConnectionToken,
                 NhsNumber = _userProfile.NhsNumber,
                 OdsCode = _userProfile.OdsCode,
-                Session = citizenIdUserSession
+                Session = gpSessMgrCitizenIdUserSession
             };
 
             _userSession = new UserSession
@@ -121,7 +117,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
                 .Setup(x => x.Map(
                     _mockHttpContextAccessor.Object.HttpContext,
                     emisUserSession,
-                    citizenIdUserSession,
+                    gpSessMgrCitizenIdUserSession,
                     _userProfile.Im1ConnectionToken))
                 .Returns(_userSession)
                 .Verifiable();
@@ -150,7 +146,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
                 .Verifiable();
 
             // Act
-            var result = await _gpSessionManager.CreateSession(_mockGpSystem.Object, _citizenIdSessionResult);
+            var result = await _gpSessionManager.CreateSession(_mockGpSystem.Object, _gpSessMgrCitizenIdSessionResult);
 
             // Assert
             var failureResult = result.Should().BeOfType<CreateSessionResult.Failure>().Subject;
@@ -165,7 +161,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
         public async Task CreateSession_ReturnsCreateSessionResult_Success()
         {
             // Act
-            var result = await _gpSessionManager.CreateSession(_mockGpSystem.Object, _citizenIdSessionResult);
+            var result = await _gpSessionManager.CreateSession(_mockGpSystem.Object, _gpSessMgrCitizenIdSessionResult);
 
             // Assert
             var successResult = result.Should().BeOfType<CreateSessionResult.Success>().Subject;

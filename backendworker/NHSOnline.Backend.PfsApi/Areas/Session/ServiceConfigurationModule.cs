@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.GpSystems.SessionManager;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session
 {

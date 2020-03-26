@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
@@ -11,14 +13,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly ISessionCacheService _sessionCacheService;
 
         public AppointmentsResultVisitor(
-            ISessionCacheService sessionCacheService, 
+            ISessionCacheService sessionCacheService,
             IErrorReferenceGenerator errorReferenceGenerator,
             UserSession userSession)
         : base (errorReferenceGenerator, userSession)
         {
             _sessionCacheService = sessionCacheService;
         }
-        
+
         protected override ErrorCategory ErrorCategory => ErrorCategory.Appointments;
 
         public async Task<IActionResult> Visit(AppointmentsResult.Success result)
@@ -27,7 +29,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 await _sessionCacheService.UpdateUserSession(UserSession);
             }
-            
+
             return new OkObjectResult(result.Response);
         }
 

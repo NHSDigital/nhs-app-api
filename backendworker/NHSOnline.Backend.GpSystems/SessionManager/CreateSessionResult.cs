@@ -1,6 +1,6 @@
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.Areas.Session
+namespace NHSOnline.Backend.GpSystems.SessionManager
 {
     public abstract class CreateSessionResult
     {
@@ -14,13 +14,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 UserSession = userSession;
             }
         }
-        
+
         public class Failure : CreateSessionResult
         {
             public Failure(int statusCode)
             {
                 StatusCode = statusCode;
             }
-        }   
+        }
     }
 }

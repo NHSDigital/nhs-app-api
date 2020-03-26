@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts;
 using NHSOnline.Backend.Support;
@@ -22,7 +21,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         private TppLinkedAccountsService _systemUnderTest;
         private TppUserSession _tppUserSession;
         private IFixture _fixture;
-        private Mock<ILogger<TppLinkedAccountsService>> _logger;
+        private Mock<IGpSessionManager> _gpSessionManager;
 
         [TestInitialize]
         public void TestInitialize()
@@ -30,11 +29,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _tppUserSession = _fixture.Create<TppUserSession>();
-
-            _logger = _fixture.Freeze<Mock<ILogger<TppLinkedAccountsService>>>();
+            _gpSessionManager = _fixture.Freeze<Mock<IGpSessionManager>>();
 
             _systemUnderTest = _fixture.Create<TppLinkedAccountsService>();
-
         }
 
         [TestMethod]
@@ -64,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         }
 
         [TestMethod]
-        public void IsValidAccountOrLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForProxy()
+        public async void SwitchAccount_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForProxy()
         {
             // Arrange
             var proxyId = Guid.NewGuid();
@@ -85,14 +82,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             };
 
             // Act
-            var result = _systemUnderTest.IsValidAccountOrLinkedAccountId(_tppUserSession, proxyId);
+            var result = await _systemUnderTest.SwitchAccount(_tppUserSession, proxyId);
 
             // Assert
-            result.Should().BeTrue();
+            result.Should().BeOfType<SwitchAccountResult.Success>();
+            _gpSessionManager.Verify(x => x.LogoffSession(_tppUserSession), Times.Once);
         }
 
         [TestMethod]
-        public void IsValidAccountOrLinkedAccountId_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
+        public async void SwitchAccount_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
         {
             // Arrange
             var mainUserGuid = Guid.NewGuid();
@@ -113,14 +111,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             };
 
             // Act
-            var result = _systemUnderTest.IsValidAccountOrLinkedAccountId(_tppUserSession, mainUserGuid);
+            var result = await _systemUnderTest.SwitchAccount(_tppUserSession, mainUserGuid);
 
             // Assert
-            result.Should().BeTrue();
+            result.Should().BeOfType<SwitchAccountResult.Success>();
+            _gpSessionManager.Verify(x => x.LogoffSession(_tppUserSession), Times.Once);
         }
 
         [TestMethod]
-        public void IsValidAccountOrLinkedAccountId_ReturnsFalse_WhenLinkedAccountWithMatchingIdIsNotFoundInUserSession()
+        public async void SwitchAccount_ReturnsFalse_WhenLinkedAccountWithMatchingIdIsNotFoundInUserSession()
         {
             // Arrange
             var randomGuidWhichWontBeFound = Guid.NewGuid();
@@ -141,13 +140,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             };
 
             // Act
-            var result = _systemUnderTest.IsValidAccountOrLinkedAccountId(_tppUserSession, randomGuidWhichWontBeFound);
+            var result = await _systemUnderTest.SwitchAccount(_tppUserSession, randomGuidWhichWontBeFound);
 
             // Assert
-            result.Should().BeFalse();
+            result.Should().BeOfType<SwitchAccountResult.Failure>();
+            _gpSessionManager.Verify(x => x.LogoffSession(_tppUserSession), Times.Never);
         }
 
-         [TestMethod]
+        [TestMethod]
         public void GetProxyAuditData_WhenPatientIdFoundInProxyUser()
         {
             //Arrange

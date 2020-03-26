@@ -9,7 +9,7 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Cipher;
 using NHSOnline.Backend.Support.Logging;
 
-namespace NHSOnline.Backend.PfsApi
+namespace NHSOnline.Backend.GpSystems.SessionManager
 {
     public interface IMongoSessionCacheServiceConfig
     {
@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi
             MongoDatabaseIm1CollectionName = configuration.GetOrThrow("SESSION_MONGO_DATABASE_COLLECTION", logger);
         }
     }
-    
+
     public interface ISessionCacheService
     {
         Task<string> CreateUserSession(UserSession userSession);
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi
         private readonly ICipherService _cipherService;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly ILogger<MongoSessionCacheService> _logger;
-        
+
         public MongoSessionCacheService(
             ICipherService cipherService,
             ILogger<MongoSessionCacheService> logger,
@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.PfsApi
             )
         {
             _mongoClient = mongoClient;
-            
+
             _cipherService = cipherService;
             _serializerSettings = new JsonSerializerSettings
             {
@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.PfsApi
                 var sessionObject = JsonConvert.SerializeObject(userSession, _serializerSettings);
                 sessionObject = _cipherService.Encrypt(sessionObject);
                 var sessionKey = Guid.NewGuid().ToString();
-                var update = 
+                var update =
                     new BsonDocument{GetId(sessionKey), GetSession(sessionObject), GetCurrentTimestamp()};
 
                 using (_logger.WithTimer("Add session to Mongo"))
@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.PfsApi
                     _logger.LogDebug("No Mongo value Found");
                     return Option.None<UserSession>();
                 }
-                
+
                 var userSession = JsonConvert
                     .DeserializeObject<UserSession>(_cipherService.Decrypt(sessionValue["session"].ToString()), _serializerSettings);
 
@@ -178,12 +178,12 @@ namespace NHSOnline.Backend.PfsApi
         {
             return new BsonElement("_id", id);
         }
-        
+
         private static BsonElement GetSession(string sessionObject)
         {
             return new BsonElement("session", sessionObject);
         }
-        
+
         private static BsonElement GetCurrentTimestamp()
         {
             return new BsonElement("_ts", new BsonDateTime(DateTime.UtcNow));

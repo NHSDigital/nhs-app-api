@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
@@ -23,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi
             _logger = logger;
             _gpSessionManager = gpSessionManager;
         }
-        
+
         public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
         {
             using (_logger.BeginScope(context.HttpContext))
@@ -33,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi
                 {
                     return;
                 }
-                
+
                 var retrieveSessionResult = await RetrieveSession(context);
 
                 if (retrieveSessionResult is RetrieveSessionResult.Success success)

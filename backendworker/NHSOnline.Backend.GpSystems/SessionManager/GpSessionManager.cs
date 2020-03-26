@@ -2,13 +2,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Session;
-using NHSOnline.Backend.PfsApi.Areas.Session;
-using NHSOnline.Backend.PfsApi.CitizenId;
+using NHSOnline.Backend.GpSystems.SessionManager.Model;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 
-namespace NHSOnline.Backend.PfsApi
+namespace NHSOnline.Backend.GpSystems.SessionManager
 {
     public class GpSessionManager : IGpSessionManager
     {
@@ -32,7 +31,7 @@ namespace NHSOnline.Backend.PfsApi
         }
 
         public async Task<CreateSessionResult> CreateSession(
-            IGpSystem gpSystem, CitizenIdSessionResult citizenIdSessionResult)
+            IGpSystem gpSystem, GpSessionManagerCitizenIdSessionResult citizenIdSessionResult)
         {
             // Create a session with the GP system, using the IM1 connection token.
             var gpSessionCreateResult = await GetGpSessionCreateResult(
@@ -110,6 +109,11 @@ namespace NHSOnline.Backend.PfsApi
                 return new RecreateSessionResult.Success(userSession);
             }
             return new RecreateSessionResult.Failure();
+        }
+
+        public void LogoffSession(GpUserSession gpUserSession)
+        {
+            //TODO - next story....
         }
 
         private static async Task<GpSessionCreateResult> GetGpSessionCreateResult(

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
@@ -13,10 +13,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
     public class TppLinkedAccountsService : ILinkedAccountsService
     {
         private readonly ILogger<TppLinkedAccountsService> _logger;
+        private readonly IGpSessionManager _gpSessionManager;
 
-        public TppLinkedAccountsService(ILogger<TppLinkedAccountsService> logger)
+        public TppLinkedAccountsService(ILogger<TppLinkedAccountsService> logger, IGpSessionManager gpSessionManager)
         {
             _logger = logger;
+            _gpSessionManager = gpSessionManager;
         }
 
         public string GetOdsCodeForLinkedAccount(GpUserSession gpUserSession, Guid id)
@@ -25,11 +27,30 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             return tppUserSession.OdsCode;
         }
 
-        public bool IsValidAccountOrLinkedAccountId(GpUserSession gpUserSession, Guid id)
+        public async Task<SwitchAccountResult> SwitchAccount(GpUserSession gpUserSession, Guid id)
         {
-            var tppUserSession = (TppUserSession)gpUserSession;
-            var proxy = tppUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
-            return proxy != null || tppUserSession.Id == id;
+            var proxy = GetProxyPatient(gpUserSession, id);
+            var validId = proxy != null || gpUserSession.Id == id;
+
+            if (!validId)
+            {
+                _logger.LogInformation("Unknown patient guid - could not find match on TppUserSession");
+                return new SwitchAccountResult.Failure();
+            }
+
+            var patientId = proxy != null ? proxy.PatientId : ((TppUserSession)gpUserSession).PatientId;
+
+            var result = await _gpSessionManager.RecreateSession(patientId);
+
+            if (result is RecreateSessionResult.Failure)
+            {
+                _logger.LogInformation("Recreate TPP User Session failed");
+                return new SwitchAccountResult.Failure();
+            }
+
+            _logger.LogInformation("Successfully Recreated TPP User Session - account switched");
+            _gpSessionManager.LogoffSession(gpUserSession);
+            return new SwitchAccountResult.Success();
         }
 
         public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession)
@@ -126,7 +147,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
 
         private bool IsValidLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
-            return IsValidAccountOrLinkedAccountId(gpUserSession, id) && (id != gpUserSession.Id);
+            return GetProxyPatient(gpUserSession, id) != null;
+        }
+
+        private TppProxyUserSession GetProxyPatient(GpUserSession gpUserSession, Guid id)
+        {
+            var tppUserSession = (TppUserSession) gpUserSession;
+            return tppUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id);
         }
 
         public string GetNhsNumberForProxyUser(GpUserSession gpUserSession, Guid id)
