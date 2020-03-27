@@ -8,5 +8,5 @@ data class Configuration (
     var minimumSupportedAndroidVersion: String,
     var fidoServerUrl: String,
     var knownServices: List<RootService>,
-    var nhsLoginLoggedInPaths: List<String>
+    var nhsLoginLoggedInPaths: List<String>?
 )

@@ -21,7 +21,7 @@ class ConfigurationServiceManager: ConfigurationServiceProtocol, KnownServicesPr
             if let config = configResponse {
                 let validVersion = self.isSupportedVersion(minimumSupportediOSVersion: config.minimumSupportediOSVersion);
                 self.configurationResponse = ConfigurationResponse(
-                    true, config.fidoServerUrl, validVersion, config.nhsLoginLoggedInPaths, KnownServices(config.knownServices)
+                    true, config.fidoServerUrl, validVersion, config.nhsLoginLoggedInPaths ?? [String](), KnownServices(config.knownServices)
                 )
             }
         }
