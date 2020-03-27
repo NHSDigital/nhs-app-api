@@ -82,7 +82,4 @@ export default {
     margin-left: 0-$three;
   }
 }
-
-
-
 </style>

@@ -95,6 +95,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments( SecondaryAppointmentProvider.pkb )
                                 .Messages( MessagesProvider.pkb )
                                 .Consultations(ConsultationsProvider.pkb))
+                            .HomeScreen(_ => _.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(true, true)
                             .WithSupplier(Supplier.Emis)
@@ -217,6 +218,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments()
                                 .Messages()
                                 .Consultations())
+                            .HomeScreen(_ => _.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(true, true)
                             .WithSupplier(Supplier.Tpp)
@@ -325,6 +327,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     "A14",
                     ValidJourneys()
+                        .HomeScreen(_ => _.PublicHealthNotifications())
+                        .Build()
+                },
+                {
+                    "A15",
+                    ValidJourneys()
                         .WithSupplier(Supplier.Unknown)
                         .Build()
                 }
@@ -347,7 +355,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             AssertError("A11", "journeys.SilverIntegrations.SecondaryAppointments");
             AssertError("A12", "journeys.SilverIntegrations.Messages");
             AssertError("A13", "journeys.SilverIntegrations.Consultations");
-            AssertError("A14", "journeys.Supplier");
+            AssertError("A14", "journeys.HomeScreen.PublicHealthNotifications");
+            AssertError("A15", "journeys.Supplier");
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
@@ -371,6 +380,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .NotificationsEnabled(true)
                 .MessagingEnabled(true)
                 .UserInfoEnabled(true)
+                .HomeScreen(_ => _.PublicHealthNotifications(CreatePublicHealthNotification()))
                 .SilverIntegrations(_ => _
                     .SecondaryAppointments()
                     .Messages()
@@ -379,5 +389,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .Im1MessagingEnabled(true, true)
                 .WithSupplier(Supplier.Emis);
         }
+
+        private static PublicHealthNotification CreatePublicHealthNotification() =>
+            new PublicHealthNotification
+            {
+                Id = "HealthNotification1",
+                Type = NotificationType.callout,
+                Urgency = NotificationUrgency.warning,
+                Title = "Health Notification 1 Title",
+                Body = "Health Notification 1 Body"
+            };
     }
 }

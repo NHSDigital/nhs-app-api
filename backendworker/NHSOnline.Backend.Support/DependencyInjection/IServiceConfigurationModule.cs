@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.Support.DependencyInjection
         void ConfigureServices(
             IServiceCollection services,
             IConfiguration configuration);
-
+        
         void Configure(IApplicationBuilder app, IHostingEnvironment env);
     }
 }

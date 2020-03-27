@@ -88,6 +88,14 @@ Feature: Service Journey Rules Frontend
     When I retrieve the 'Your Prescriptions' page directly
     Then I am redirected to the 'GP at Hand Prescriptions' page
 
+  Scenario: A user with home screen configured with public health notifications sees the notifications on the home screen
+    Given I am a EMIS user where the expected journey configurations are:
+      | Journey            | Value                       |
+      | home screen        | public health notifications |
+    And I am logged in
+    And I see the home page
+    Then I see the home screen public health notifications
+
   Scenario Outline: A user with documents disabled navigates directly to any documents page is redirected to the home page
     Given I am a EMIS user where the journey configurations are:
       | Journey            | Value     |

@@ -4,6 +4,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
     {
         LoadRequiredFiles = 0,
         LoadConfigurationFiles,
+        SanitizeOdsJourneys,
         ValidateUniqueOdsConfiguration,
         MergeOdsJourneys,
         ValidateOdsJourneys,

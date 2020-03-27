@@ -75,6 +75,28 @@
         }
       ]
     },
+    "homeScreen": {
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "publicHealthNotifications": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/publicHealthNotificationCallout"
+              }
+            ]
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [ "publicHealthNotifications" ]
+        }
+      ]
+    },
     "medicalRecordJourney": {
       "properties": {
         "provider": {
@@ -95,6 +117,25 @@
       },
       "required": [ "provider" ],
       "additionalProperties": false
+    },
+    "publicHealthNotificationCallout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "[A-Za-z0-9_]+"
+        },
+        "type": {
+          "enum": [ "callout" ]
+        },
+        "urgency": {
+          "enum": [ "warning" ]
+        },
+        "title": { "type": "string" },
+        "body": { "type": "string" }
+      },
+      "required": [ "id", "type", "urgency", "title", "body" ]
     },
     "silverIntegrations": {
       "properties": {
@@ -207,13 +248,14 @@
         "appointments": { "$ref": "#/definitions/appointmentsJourney" },
         "cdssAdvice": { "$ref": "#/definitions/cdssAdviceJourney" },
         "cdssAdmin": { "$ref": "#/definitions/cdssAdminJourney" },
+        "homeScreen": { "$ref": "#/definitions/homeScreen" },
         "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" },
-        "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
+        "messaging": { "enum": [ "true", "false" ] },
         "nominatedPharmacy": { "enum": [ "true", "false" ] },
         "notifications": { "enum": [ "true", "false" ] },
-        "messaging": { "enum": [ "true", "false" ] },
-        "supplier": { "enum": [ "Emis", "Tpp", "Vision", "Microtest" ] },
+        "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
         "silverIntegrations": { "$ref": "#/definitions/silverIntegrations" },
+        "supplier": { "enum": [ "Emis", "Tpp", "Vision", "Microtest" ] },
         "userInfo": { "enum": ["true", "false"]  },
         "documents": { "enum": ["true", "false"]  },
         "im1Messaging": { "$ref": "#/definitions/im1MessagingJourney" }
@@ -229,10 +271,13 @@
           "required": [ "cdssAdmin" ]
         },
         {
+          "required": [ "homeScreen" ]
+        },
+        {
           "required": [ "medicalRecord" ]
         },
         {
-          "required": [ "prescriptions" ]
+          "required": [ "messaging" ]
         },
         {
           "required": [ "nominatedPharmacy" ]
@@ -241,13 +286,13 @@
           "required": [ "notifications" ]
         },
         {
-          "required": [ "messaging" ]
-        },
-        {
-          "required": [ "supplier" ]
+          "required": [ "prescriptions" ]
         },
         {
           "required": [ "silverIntegrations" ]
+        },
+        {
+          "required": [ "supplier" ]
         },
         {
           "required": [ "userInfo" ]

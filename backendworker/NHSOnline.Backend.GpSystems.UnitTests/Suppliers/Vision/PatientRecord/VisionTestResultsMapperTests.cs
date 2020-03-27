@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
 
             // Assert
             mappedResponse.Should().NotBeNull();
-            _htmlSanitizer.Verify(mock => mock.SanitizeHtml(testResultsHtml, null));
+            _htmlSanitizer.Verify(mock => mock.SanitizeHtml(testResultsHtml));
         }
         
         [TestMethod]
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
             var sanitizedHtml =
                 await EmbeddedResourceFileHelper.ReadEmbeddedResource(
                     "NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord.TestData.TestResults.VariousTestResults.html");                              
-            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>(), null)).Returns(sanitizedHtml);
+            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>())).Returns(sanitizedHtml);
             
             // Act
             var mappedResponse = _mapper.Map(new VisionPatientDataResponse()
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
             var noTestResultsHtml =
                 await EmbeddedResourceFileHelper.ReadEmbeddedResource(
                     "NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord.TestData.TestResults.NoTestResults.html");          
-            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>(), null)).Returns(noTestResultsHtml);
+            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>())).Returns(noTestResultsHtml);
         
             // Act
             var mappedResponse = _mapper.Map(new VisionPatientDataResponse

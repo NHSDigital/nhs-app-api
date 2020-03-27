@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper
             {
                 if (response != null && !string.IsNullOrEmpty(response.Record))
                 {
-                    var sanitizedHtml = _htmlSanitizer.SanitizeHtml(response.Record, null);
+                    var sanitizedHtml = _htmlSanitizer.SanitizeHtml(response.Record);
 
                     var splitByNoDataFound = sanitizedHtml.Split("class=\"inps_class_no_data_found\"");
 

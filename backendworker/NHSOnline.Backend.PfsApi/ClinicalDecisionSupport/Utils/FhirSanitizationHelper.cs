@@ -9,18 +9,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 {
     public class FhirSanitizationHelper : IFhirSanitizationHelper
     {
-        private static readonly HashSet<string> Whitelist = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            "em",
-            "br",
-            "b",
-            "a",
-            "strong",
-            "ul",
-            "li",
-            "span"
-        };
-        
         public void SanitizeGuidanceResponse(GuidanceResponse guidanceResponse, IHtmlSanitizer htmlSanitizer)
         {
             if (guidanceResponse == null) return;
@@ -92,13 +80,13 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
         {
             if (referralRequest == null) return;
 
-            referralRequest.Description = SanitizeAndDecodeHtml(referralRequest.Description, htmlSanitizer, null);
+            referralRequest.Description = SanitizeAndDecodeHtml(referralRequest.Description, htmlSanitizer);
         }
 
         private static void SanitizeCarePlan(CarePlan carePlan, IHtmlSanitizer htmlSanitizer)
         {
             if (carePlan == null) return;
-            carePlan.Title = SanitizeAndDecodeHtml(carePlan.Title, htmlSanitizer, null);
+            carePlan.Title = SanitizeAndDecodeHtml(carePlan.Title, htmlSanitizer);
             SanitizeCarePlanActivities(carePlan.Activity, htmlSanitizer);
         }
 
@@ -108,7 +96,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 
             foreach (var activityComponent in activityComponents)
             {
-                activityComponent.Detail.Description = SanitizeAndDecodeHtml(activityComponent.Detail?.Description, htmlSanitizer, null);
+                activityComponent.Detail.Description = SanitizeAndDecodeHtml(activityComponent.Detail?.Description, htmlSanitizer);
             }
         }
         
@@ -159,7 +147,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
 
             items.ForEach(item =>
             {
-                item.Text = SanitizeAndDecodeHtml(item.Text, htmlSanitizer, null);
+                item.Text = SanitizeAndDecodeHtml(item.Text, htmlSanitizer);
 
                 if (item.Option == null || item.Option.Count == 0)
                 {
@@ -175,15 +163,15 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
                 item.Option.ForEach(option =>
                 {
                     var optionValue = (Coding) option.Value;
-                    optionValue.Display = SanitizeAndDecodeHtml(optionValue.Display, htmlSanitizer, Whitelist);
+                    optionValue.Display = SanitizeAndDecodeHtml(optionValue.Display, htmlSanitizer);
                     option.Value = optionValue;
                 });
             });
         }
         
-        private static string SanitizeAndDecodeHtml(string html, IHtmlSanitizer htmlSanitizer, HashSet<string> whitelist)
+        private static string SanitizeAndDecodeHtml(string html, IHtmlSanitizer htmlSanitizer)
         {
-            html = htmlSanitizer.SanitizeHtml(html, whitelist);
+            html = htmlSanitizer.SanitizeHtml(html);
             return WebUtility.HtmlDecode(html);
         }
     }

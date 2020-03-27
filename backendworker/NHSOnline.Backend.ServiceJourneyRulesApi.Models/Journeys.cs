@@ -4,6 +4,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 {
     public class Journeys : ICloneable<Journeys>
     {
+        public HomeScreen HomeScreen { get; set; }
+        
         public Appointments Appointments { get; set; }
 
         public Cdss CdssAdvice { get; set; }
@@ -32,6 +34,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public Journeys Clone() => new Journeys
         {
+            HomeScreen = HomeScreen?.Clone(),
             Appointments = Appointments?.Clone(),
             CdssAdvice = CdssAdvice?.Clone(),
             CdssAdmin = CdssAdmin?.Clone(),

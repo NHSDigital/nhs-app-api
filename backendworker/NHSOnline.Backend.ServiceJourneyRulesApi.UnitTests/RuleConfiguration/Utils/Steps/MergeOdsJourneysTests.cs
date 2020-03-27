@@ -75,6 +75,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .CdssAdminProvider(CdssProvider.none)
                     .MedicalRecord(MedicalRecordProvider.im1, 1)
                     .SilverIntegrations(_ => _.SecondaryAppointments(new[] { SecondaryAppointmentProvider.ers }))
+                    .HomeScreen(_ => _.PublicHealthNotifications(new[]{ CreatePublicHealthNotification("1") }))
                     .Build(),
                 new JourneysBuilder()
                     .AppointmentProvider(AppointmentsProvider.informatica, "www.example.com")
@@ -121,6 +122,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(true)
                     .UserInfoEnabled(true)
                     .SilverIntegrations(_ => _.SecondaryAppointments())
+                    .HomeScreen(_ => _.PublicHealthNotifications(new[]{ CreatePublicHealthNotification("2") }))
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, false)
                     .Build(),
@@ -159,6 +161,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .SecondaryAppointments(SecondaryAppointmentProvider.pkb)
                         .Messages(MessagesProvider.pkb)
                         .Consultations(ConsultationsProvider.pkb))
+                    .HomeScreen(_ => _.PublicHealthNotifications(new[]{ CreatePublicHealthNotification("1") }))
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, true)
                     .Build(),
@@ -175,6 +178,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .SecondaryAppointments()
                         .Messages()
                         .Consultations())
+                    .HomeScreen(_ => _.PublicHealthNotifications(new[]{ CreatePublicHealthNotification("2") }))
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, false)
                     .Build(),
@@ -227,5 +231,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 { "A4", fourthJourney }
             };
         }
+
+        private static PublicHealthNotification CreatePublicHealthNotification(string id) =>
+            new PublicHealthNotification
+            {
+                Id = $"HealthNotification{id}",
+                Type = NotificationType.callout,
+                Urgency = NotificationUrgency.warning,
+                Title = $"Health Notification {id} Title",
+                Body = $"Health Notification {id} Body"
+            };
     }
 }

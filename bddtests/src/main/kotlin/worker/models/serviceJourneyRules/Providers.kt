@@ -29,6 +29,15 @@ enum class SecondaryAppointmentsProvider {
 enum class MessagesProvider {
     pkb
 }
+
 enum class ConsultationsProvider {
     pkb
+}
+
+enum class PublicHealthNotificationType {
+    callout
+}
+
+enum class PublicHealthNotificationUrgency {
+    warning
 }

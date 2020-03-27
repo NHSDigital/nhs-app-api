@@ -10,6 +10,7 @@ import features.authentication.steps.LoginSteps
 import features.myrecord.stepDefinitions.MedicalRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
+import features.serviceJourneyRules.stepDefinitions.ServiceJourneyRulesSerenityHelpers
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mockingFacade.linkedProfiles.LinkedProfileFacade
@@ -23,6 +24,7 @@ import pages.prescription.PrescriptionsPage
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
+import worker.models.serviceJourneyRules.PublicHealthNotification
 import java.net.URL
 
 private const val SURVEY_URL = "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
@@ -159,6 +161,13 @@ class HomePageStepDefinitions {
     @And("I do not see the home page links")
     fun iDoNotSeeTheHomePageLinks() {
         homeSteps.homePage.assertHomePageLinksNotPresent()
+    }
+
+    @Then("^I see the home screen public health notifications$")
+    fun iSeeTheHomeScreenPublicHealthNotifications() {
+        val publicHealthNotifications = ServiceJourneyRulesSerenityHelpers
+            .HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS.getOrFail<List<PublicHealthNotification>>()
+        homeSteps.homePage.assertHasPublicHealthNotifications(publicHealthNotifications)
     }
 
     private fun navigateBackToHomePage(){

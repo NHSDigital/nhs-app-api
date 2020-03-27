@@ -3878,6 +3878,38 @@
                                   type: "boolean"
                                 userInfo: 
                                   type: "boolean"
+                                homeScreen: 
+                                  type: "object"
+                                  nullable: true
+                                  properties: 
+                                    publicHealthNotifications: 
+                                      type: "array"
+                                      description: "A list of public health notifications"
+                                      items: 
+                                        anyOf: 
+                                          - 
+                                            type: "object"
+                                            description: "A notification message to be displayed as a Callout component"
+                                            properties: 
+                                              id: 
+                                                type: "string"
+                                                description: "The notification id"
+                                              type: 
+                                                type: "string"
+                                                description: "The type of notification layout to use"
+                                                enum: 
+                                                  - "callout"
+                                              urgency: 
+                                                type: "string"
+                                                description: "THe urgency style to use for the notification"
+                                                enum: 
+                                                  - "warning"
+                                              title: 
+                                                type: "string"
+                                                description: "The notification title"
+                                              body: 
+                                                type: "string"
+                                                description: "A html representation of the content to render within the notification component"
                                 documents: 
                                   type: "boolean"
                                 im1Messaging: 
@@ -4483,6 +4515,38 @@
                           type: "boolean"
                         userInfo: 
                           type: "boolean"
+                        homeScreen: 
+                          type: "object"
+                          nullable: true
+                          properties: 
+                            publicHealthNotifications: 
+                              type: "array"
+                              description: "A list of public health notifications"
+                              items: 
+                                anyOf: 
+                                  - 
+                                    type: "object"
+                                    description: "A notification message to be displayed as a Callout component"
+                                    properties: 
+                                      id: 
+                                        type: "string"
+                                        description: "The notification id"
+                                      type: 
+                                        type: "string"
+                                        description: "The type of notification layout to use"
+                                        enum: 
+                                          - "callout"
+                                      urgency: 
+                                        type: "string"
+                                        description: "THe urgency style to use for the notification"
+                                        enum: 
+                                          - "warning"
+                                      title: 
+                                        type: "string"
+                                        description: "The notification title"
+                                      body: 
+                                        type: "string"
+                                        description: "A html representation of the content to render within the notification component"
                         documents: 
                           type: "boolean"
                         im1Messaging: 
@@ -4655,6 +4719,38 @@
                           type: "boolean"
                         userInfo: 
                           type: "boolean"
+                        homeScreen: 
+                          type: "object"
+                          nullable: true
+                          properties: 
+                            publicHealthNotifications: 
+                              type: "array"
+                              description: "A list of public health notifications"
+                              items: 
+                                anyOf: 
+                                  - 
+                                    type: "object"
+                                    description: "A notification message to be displayed as a Callout component"
+                                    properties: 
+                                      id: 
+                                        type: "string"
+                                        description: "The notification id"
+                                      type: 
+                                        type: "string"
+                                        description: "The type of notification layout to use"
+                                        enum: 
+                                          - "callout"
+                                      urgency: 
+                                        type: "string"
+                                        description: "THe urgency style to use for the notification"
+                                        enum: 
+                                          - "warning"
+                                      title: 
+                                        type: "string"
+                                        description: "The notification title"
+                                      body: 
+                                        type: "string"
+                                        description: "A html representation of the content to render within the notification component"
                         documents: 
                           type: "boolean"
                         im1Messaging: 

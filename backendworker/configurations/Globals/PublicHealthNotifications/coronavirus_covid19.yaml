@@ -1,0 +1,6 @@
+id: coronavirus_covid19
+type: callout
+urgency: warning
+title: Coronavirus (COVID-19)
+body: |
+  <p class="nhsuk-u-margin-bottom-2"><a href="https://nhs.uk/conditions/coronavirus-covid-19/" target="_blank">Get information about coronavirus on NHS.UK</a></p>

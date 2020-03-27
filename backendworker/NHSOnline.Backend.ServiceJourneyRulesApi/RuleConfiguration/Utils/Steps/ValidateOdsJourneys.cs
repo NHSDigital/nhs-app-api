@@ -36,7 +36,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 .Add(journeys => journeys.Documents.HasValue, "journeys.Documents")
                 .Add(journeys => journeys.Im1Messaging?.IsEnabled != null, "journeys.im1Messaging.isEnabled")
                 .Add(journeys => journeys.Im1Messaging?.CanDeleteMessages != null, "journeys.im1Messaging.canDeleteMessages")
-                .Add(journeys => journeys.Supplier != Supplier.Unknown, "journeys.Supplier");
+                .Add(journeys => journeys.Supplier != Supplier.Unknown, "journeys.Supplier")
+                .Add(journeys =>
+                {
+                    var homeScreen = journeys.HomeScreen;
+
+                    if (homeScreen == null) return true;
+
+                    return homeScreen.PublicHealthNotifications?.Any() ?? false;
+                }, "journeys.HomeScreen.PublicHealthNotifications");
 
         public ValidateOdsJourneys(ILogger<ValidateOdsJourneys> logger)
         {

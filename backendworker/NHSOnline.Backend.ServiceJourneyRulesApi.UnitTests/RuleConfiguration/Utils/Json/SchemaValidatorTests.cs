@@ -301,6 +301,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         [TestMethod]
+        [DataRow("\"homeScreen\": { \"publicHealthNotifications\": [{ \"id\": \"1\", \"type\": \"callout\", \"urgency\": \"warning\", \"title\": \"foo\", \"body\": \"bar\" }] }")]
         [DataRow("\"appointments\": { \"provider\": \"im1\" }")]
         [DataRow("\"appointments\": { \"provider\": \"informatica\", \"informaticaUrl\": \"http://example.com\" }")]
         [DataRow("\"appointments\": { \"provider\": \"gpAtHand\" }")]
@@ -349,6 +350,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         [TestMethod]
+        [DataRow("homeScreen", "{}", "PropertyRequired: #/journeys.homeScreen.publicHealthNotifications", false)]
         [DataRow("cdssAdvice", "{}", "PropertyRequired: #/journeys.cdssAdvice.provider", true)]
         [DataRow("cdssAdvice", "{\"provider\": \"foo\"}", "NotInEnumeration: #/journeys.cdssAdvice.provider", true)]
         [DataRow("cdssAdvice", "{\"provider\": \"eConsult\"}","PropertyRequired: #/journeys.cdssAdvice.serviceDefinition", true)]
@@ -404,6 +406,45 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             {
                 _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());
             }
+
+            result.Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow("undefined", "\"callout\"", "\"warning\"", "\"title\"", "\"body\"", "StringExpected: #/journeys.homeScreen.publicHealthNotifications[0].id")]
+        [DataRow("1", "\"testType\"", "\"warning\"", "\"title\"", "\"body\"", "NotInEnumeration: #/journeys.homeScreen.publicHealthNotifications[0].type")]
+        [DataRow("1", "\"callout\"", "\"testUrgency\"", "\"title\"", "\"body\"", "NotInEnumeration: #/journeys.homeScreen.publicHealthNotifications[0].urgency")]
+        [DataRow("1", "\"callout\"", "\"warning\"", "undefined", "\"body\"", "StringExpected: #/journeys.homeScreen.publicHealthNotifications[0].title")]
+        [DataRow("1", "\"callout\"", "\"warning\"", "\"title\"", "undefined", "StringExpected: #/journeys.homeScreen.publicHealthNotifications[0].body")]
+        public async Task
+            ValidateJsonAgainstSchema_JourneyConfigurationHomeScreen_WhenCalledWithInvalidJourney_ReturnsFalse(
+                string id, string type, string urgency, string title, string body, string expectedError)
+        {
+            // Arrange
+            var fileContent = "{" +
+                              "  \"$schema\": \"Schemas/Journeys/configuration_schema.json\"," +
+                              "  \"target\": {" +
+                              "    \"odsCode\":\"FOO\"" +
+                              "  }," +
+                              "  \"journeys\": {" +
+                              "    \"homeScreen\": {" +
+                              "      \"publicHealthNotifications\": [{" +
+                              "        \"id\": " + id + "," +
+                              "        \"type\": " + type + "," +
+                              "        \"urgency\": " + urgency + "," +
+                              "        \"title\": " + title + "," +
+                              "        \"body\": " + body +
+                              "      }]" +
+                              "    }" +
+                              "  }" +
+                              "}";
+            var jsonFile = new FileData(string.Empty, fileContent);
+
+            // Act
+            var result = await _validator.ValidateJsonAgainstSchema(_journeyConfigurationSchema, jsonFile);
+
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Error, expectedError, Times.Once());
 
             result.Should().BeFalse();
         }

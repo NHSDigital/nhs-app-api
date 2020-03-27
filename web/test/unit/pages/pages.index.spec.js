@@ -6,7 +6,15 @@ describe('index', () => {
   let $store;
   let $router;
 
-  const mountAs = ({ isProxying = false } = {}) => {
+  const createPublicHealthNotification = id => ({
+    id,
+    type: 'callout',
+    urgency: 'warning',
+    title: `Health notification ${id}`,
+    body: `Health notification body ${id}`,
+  });
+
+  const mountAs = ({ isProxying = false, homeScreen = {}, isNativeApp = false } = {}) => {
     $router = createRouter();
     $store = createStore({
       state: {
@@ -25,8 +33,9 @@ describe('index', () => {
             patientId: '1234-abc-dddd',
           },
         },
+        serviceJourneyRules: { rules: { homeScreen } },
         device: {
-          isNativeApp: false,
+          isNativeApp,
         },
       },
     });
@@ -58,5 +67,29 @@ describe('index', () => {
     expect(proxyWelcomeSection.exists()).toBe(true);
     expect(proxyAge.exists()).toBe(true);
     expect(proxyGpSurgery.exists()).toBe(true);
+  });
+
+  it('will not show any public health notifications if none are configured', () => {
+    wrapper = mountAs();
+    expect(wrapper.findAll('.public-health-notification').length).toBe(0);
+  });
+
+  it('will display a public health notification for each in the home screen rules', () => {
+    const notification1 = createPublicHealthNotification(1);
+    const notification2 = createPublicHealthNotification(2);
+
+    wrapper = mountAs({
+      homeScreen: {
+        publicHealthNotifications: [notification1, notification2],
+      },
+    });
+
+    const publicHealthNotification1 = wrapper.find('#public-health-notification-1');
+    const publicHealthNotification2 = wrapper.find('#public-health-notification-2');
+
+    expect(publicHealthNotification1.find('[data-purpose="warning-callout-title"]').text()).toEqual(notification1.title);
+    expect(publicHealthNotification2.find('[data-purpose="warning-callout-title"]').text()).toEqual(notification2.title);
+    expect(publicHealthNotification1.find('[data-purpose="warning-callout-body"]').text()).toEqual(notification1.body);
+    expect(publicHealthNotification2.find('[data-purpose="warning-callout-body"]').text()).toEqual(notification2.body);
   });
 });

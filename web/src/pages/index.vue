@@ -6,27 +6,43 @@
     <welcome-section v-if="!isProxying" :date-of-birth="currentProfile.dateOfBirth"
                      :nhs-number="currentProfile.nhsNumber" />
     <proxy-welcome-section v-else :proxy-age="proxyAge" :proxy-details="currentProfile"/>
+    <public-health-notification
+      v-for="publicHealthNotification in publicHealthNotifications"
+      :id="`public-health-notification-${publicHealthNotification.id}`"
+      :key="`public-health-notification-${publicHealthNotification.id}`"
+      :type="publicHealthNotification.type"
+      :urgency="publicHealthNotification.urgency"
+      :title="publicHealthNotification.title"
+      :body="publicHealthNotification.body"/>
     <biometric-banner v-if="!isProxying" />
     <navigation-list-menu v-if="!isProxying" />
   </div>
 </template>
 
 <script>
-import BiometricBanner from '../components/widgets/BiometricBanner';
-import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
+import get from 'lodash/fp/get';
 import NavigationListMenu from '../components/NavigationListMenu';
 import ProxyWelcomeSection from '../components/ProxyWelcomeSection';
 import WelcomeSection from '../components/WelcomeSection';
+import BiometricBanner from '../components/widgets/BiometricBanner';
+import PublicHealthNotification from '../components/widgets/PublicHealthNotification';
+import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
+    PublicHealthNotification,
     BiometricBanner,
     WelcomeSection,
     NavigationListMenu,
     ProxyWelcomeSection,
   },
   mixins: [CalculateAgeInMonthsAndYears],
+  data() {
+    return {
+      publicHealthNotifications: get('publicHealthNotifications', this.$store.state.serviceJourneyRules.rules.homeScreen),
+    };
+  },
   computed: {
     currentProfile() {
       if (this.isProxying) {

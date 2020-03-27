@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             {
                 var testResultHtml = testResultsViewReply.Items?.FirstOrDefault()?.Value;
                 
-                var sanitizedHtml = _htmlSanitizer.SanitizeHtml(testResultHtml, null);
+                var sanitizedHtml = _htmlSanitizer.SanitizeHtml(testResultHtml);
 
                 return new TestResultResponse
                 {

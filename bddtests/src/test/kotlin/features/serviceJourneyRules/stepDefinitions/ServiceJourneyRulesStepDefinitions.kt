@@ -9,6 +9,7 @@ import mocking.defaults.TppMockDefaults.Companion.TPP_ODS_CODE_NO_SJR_CONFIGURAT
 import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
 import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
+import features.serviceJourneyRules.mappers.PublicHealthNotificationsMapper
 import features.sharedSteps.backend.SharedStepDefinitionsBackend
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -29,7 +30,6 @@ import worker.models.serviceJourneyRules.SecondaryAppointmentsProvider
 import worker.models.serviceJourneyRules.ServiceJourneyRulesResponse
 
 class ServiceJourneyRulesStepDefinitions {
-
     @Given("^I am a user whose ODS Code does not have specific journey configuration set up$")
     fun iAmAUserWhoseODSCodeDoesNotHaveASpecificJourneyConfigurationSetUp() {
         SerenityHelpers.setGpSupplier(Supplier.TPP)
@@ -45,6 +45,15 @@ class ServiceJourneyRulesStepDefinitions {
                                                          configurations: List<ServiceJourneyRulesConfiguration>) {
         val supplier = Supplier.valueOf(gpSystem)
         createUser(supplier, configurations)
+    }
+
+    @Given("^I am a (.*) user where the expected journey configurations are:$")
+    fun iAmAGPSystemUserWhereTheExpectedJourneyConfigurationsAre(gpSystem: String,
+                                                         configurations: List<ServiceJourneyRulesConfiguration>) {
+        iAmAGPSystemUserWhereTheJourneyConfigurationsAre(gpSystem, configurations)
+        PublicHealthNotificationsMapper.setSerenityVariablesForJourneys(
+                SerenityHelpers.getPatient().odsCode,
+                configurations)
     }
 
     @Given("^I am a user where the journey configurations are:$")

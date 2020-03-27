@@ -6,7 +6,9 @@ import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import org.openqa.selenium.WebElement
+import pages.sharedElements.PublicHealthNotificationElement
 import utils.SerenityHelpers
+import worker.models.serviceJourneyRules.PublicHealthNotification
 
 @DefaultUrl("http://web.local.bitraft.io:3000/")
 open class HomePage : HybridPageObject() {
@@ -147,6 +149,12 @@ open class HomePage : HybridPageObject() {
         assertCollection("ProxyPatientDetails", expectedDetails, actualDetails)
     }
 
+    fun assertHasPublicHealthNotifications(publicHealthNotifications: List<PublicHealthNotification>) {
+        publicHealthNotifications.forEach {
+            PublicHealthNotificationElement(this, it).assertIsVisible()
+        }
+    }
+
     fun isWelcomeHeaderVisible(): Boolean {
         return greeting.isVisible
     }
@@ -176,10 +184,6 @@ open class HomePage : HybridPageObject() {
 
     fun assertHomePageLinksNotPresent() {
         listOfLinks().assertElementNotPresent()
-    }
-
-    fun isLinkedProfileVisible(): Boolean {
-        return linkedProfilesLink.isVisible
     }
 
     fun assertVersionNumberVisible() {

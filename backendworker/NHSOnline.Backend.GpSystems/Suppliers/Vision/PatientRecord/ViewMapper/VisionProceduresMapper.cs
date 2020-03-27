@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper
             {
                 if (response != null && !string.IsNullOrEmpty(response.Record))
                 {
-                    var sanitizedHtml = _htmlSanitizer.SanitizeHtml(response.Record, null);
+                    var sanitizedHtml = _htmlSanitizer.SanitizeHtml(response.Record);
                     
                     sanitizedHtml = Regex.Replace(sanitizedHtml, @"((font-size:).*(!important;))", string.Empty);
 

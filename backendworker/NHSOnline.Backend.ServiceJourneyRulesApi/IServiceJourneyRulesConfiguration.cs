@@ -11,5 +11,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         string JourneysFolderPath { get; }
         
         string InputFolderPath { get; }
+        
+        string GlobalsFolderPath { get; }
     }
 }

@@ -67,6 +67,16 @@ components:
               type: boolean
             userInfo:
               type: boolean
+            homeScreen:
+              type: object
+              nullable: true
+              properties:
+                publicHealthNotifications:
+                  type: array
+                  description: A list of public health notifications
+                  items:
+                    anyOf:
+                      - $ref: "#/components/schemas/PublicHealthNotificationCallout"
             documents:
               type: boolean
             im1Messaging:
@@ -157,3 +167,26 @@ components:
           description: The guid of the current user
         hasLinkedAccounts:
           type: boolean
+    PublicHealthNotificationCallout:
+      type: object
+      description: A notification message to be displayed as a Callout component
+      properties:
+        id:
+          type: string
+          description: The notification id
+        type:
+          type: string
+          description: The type of notification layout to use
+          enum:
+          - callout
+        urgency:
+          type: string
+          description: THe urgency style to use for the notification
+          enum:
+          - warning
+        title:
+          type: string
+          description: The notification title
+        body:
+          type: string
+          description: A html representation of the content to render within the notification component

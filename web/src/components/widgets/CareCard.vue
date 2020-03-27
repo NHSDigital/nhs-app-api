@@ -9,7 +9,6 @@
       </p>
       <span class="nhsuk-care-card__arrow" aria-hidden="true"/>
     </div>
-
     <div class="nhsuk-care-card__content">
       <slot/>
     </div>

@@ -57,6 +57,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 }
 
                 // Update existing ODS journeys
+                if (journeys.HomeScreen != null)
+                {
+                    currentJourneys.HomeScreen = journeys.HomeScreen;
+                }
+                
                 if (journeys.Appointments?.Provider != null)
                 {
                     currentJourneys.Appointments = journeys.Appointments;

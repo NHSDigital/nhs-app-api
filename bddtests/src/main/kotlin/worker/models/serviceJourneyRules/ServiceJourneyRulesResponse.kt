@@ -10,7 +10,8 @@ data class Journey(var appointments: AppointmentsJourneyRules,
                    var nominatedPharmacy: Boolean,
                    var silverIntegrations: SilverIntegrationJourneyRules,
                    var documents: Boolean,
-                   var im1Messaging: Im1MesagingJourneyRules)
+                   var im1Messaging: Im1MesagingJourneyRules,
+                   var homeScreen: HomeScreen)
 
 data class AppointmentsJourneyRules(var informaticaUrl:String, var provider:AppointmentsProvider)
 
@@ -24,5 +25,14 @@ data class SilverIntegrationJourneyRules(var secondaryAppointments:ArrayList<Sec
                                          var messages: ArrayList<MessagesProvider>,
                                          var consultations: ArrayList<ConsultationsProvider>)
 
-data class Im1MesagingJourneyRules(var isEnabled: Boolean,
-                                   var canDeleteMessages: Boolean)
+data class PublicHealthNotification(
+        var id: String,
+        var type: PublicHealthNotificationType,
+        var urgency: PublicHealthNotificationUrgency,
+        var title: String,
+        var body: String
+)
+
+data class HomeScreen(var publicHealthNotifications: ArrayList<PublicHealthNotification>)
+
+data class Im1MesagingJourneyRules(var isEnabled: Boolean, var canDeleteMessages: Boolean)

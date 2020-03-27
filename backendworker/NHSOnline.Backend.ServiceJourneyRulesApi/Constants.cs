@@ -17,5 +17,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         {
             public const string All = "*";
         }
+
+        public static class CustomYamlNodeTags
+        {
+            public const string Include = "!include";
+        }
     }
 }

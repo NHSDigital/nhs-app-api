@@ -14,18 +14,11 @@ namespace NHSOnline.Backend.Support.UnitTests.Sanitization
     public class HtmlSanitizerTests
     {
         private IHtmlSanitizer _htmlSanitizer;
-        private HashSet<string> _whitelist;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _htmlSanitizer = new HtmlSanitizer();
-            
-            _whitelist = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-            {
-                "em",
-                "span"
-            };
         }
 
         [TestMethod]
@@ -36,27 +29,13 @@ namespace NHSOnline.Backend.Support.UnitTests.Sanitization
             const string expectedHtml = "Test <span>1111</span>";
 
             // Act
-            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(testHtml, null);
-
-            // Assert
-            sanitizedHtml.Should().Be(expectedHtml);
-        }
-
-        [TestMethod]
-        public void SanitizeHtmlWhitelistSuccess()
-        {
-            // Arrange
-            const string testHtml = "Test <span>1111</span><script>onLoad='test'</script>";
-            const string expectedHtml = "Test <span>1111</span>";
-
-            // Act
-            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(testHtml, _whitelist);
+            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(testHtml);
 
             // Assert
             sanitizedHtml.Should().Be(expectedHtml);
         }
         
-                [TestMethod]
+        [TestMethod]
         public async Task HtmlSanitizer_RemovesRestrictedHtml_WhenSanitizingHtmlFile()
         {
             // Arrange
@@ -65,7 +44,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Sanitization
                     "NHSOnline.Backend.Support.UnitTests.Sanitization.HtmlDataToSanitize.html");
            
             // Act
-            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(htmlToSanitize, null);
+            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(htmlToSanitize);
 
             // Assert
             sanitizedHtml.Should().NotBeNullOrEmpty();
@@ -81,7 +60,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Sanitization
                      "NHSOnline.Backend.Support.UnitTests.Sanitization.HtmlDataToSanitize.html");
 
             // Act
-            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(htmlToSanitize, null);
+            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(htmlToSanitize);
 
             // Assert
             sanitizedHtml.Should().NotBeNullOrEmpty();
@@ -95,7 +74,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Sanitization
             const string testHtml = "<span>Here is a gt symbol &gt; &amp; here is a forward slash &#47;</span>";
 
             // Act
-            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(testHtml, _whitelist);
+            var sanitizedHtml = _htmlSanitizer.SanitizeHtml(testHtml);
 
             // Assert
             sanitizedHtml.Should().Be(testHtml);

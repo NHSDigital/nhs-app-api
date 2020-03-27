@@ -141,6 +141,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
+        public JourneysBuilder HomeScreen(Action<HomeScreenBuilder> actions)
+        {
+            var homeScreenBuilder = new HomeScreenBuilder();
+            actions.Invoke(homeScreenBuilder);
+            _journeys.HomeScreen = homeScreenBuilder.Build();
+
+            return this;
+        }
+
         public JourneysBuilder DocumentsEnabled(bool? enabled)
         {
             _journeys.Documents = enabled;

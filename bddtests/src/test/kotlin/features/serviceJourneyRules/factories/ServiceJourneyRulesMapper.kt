@@ -19,8 +19,9 @@ private const val VISION_GP_MEDICAL_RECORD_V1 = "A80003"
 private const val MICROTEST_GP_MEDICAL_RECORD_V1 = "A80004"
 
 class ServiceJourneyRulesMapper {
-
     companion object {
+        public val ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION = "A10006"
+
         private val journeysToGpInformationMap = mapOf(
                 GpInformation(Supplier.EMIS, ODSCODE_IM1_ECONSULT_OLC_DISABLED_NOMINATED_PHARMACY_ENABLED) to
                         EnumSet.of(JourneyType.APPOINTMENTS_IM1,
@@ -46,36 +47,48 @@ class ServiceJourneyRulesMapper {
                                 JourneyType.SILVER_INTEGRATION_CONSULTATIONS_NONE,
                                 JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE,
                                 JourneyType.SILVER_INTEGRATION_MESSAGES_NONE),
-
                 GpInformation(Supplier.TPP, TPP_ONLINE_CONSULTATIONS_DISABLED) to
                         EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED,
                                 JourneyType.NOTIFICATIONS_ENABLED,
                                 JourneyType.MESSAGES_ENABLED,
                                 JourneyType.USER_INFO_ENABLED),
 
-                // Medical Record V1
-                GpInformation(Supplier.VISION, VISION_ONLINE_CONSULTATIONS_DISABLED) to
-                        EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED),
+            // Medical Record V1
+            GpInformation(Supplier.VISION, VISION_ONLINE_CONSULTATIONS_DISABLED)
+                to EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED),
 
-                // Medical Record V1
-                GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-                GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-                GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-                GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+            // Medical Record V1
+            GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V1) to
+                EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+            GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V1) to
+                EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+            GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
+                EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+            GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
+                EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
 
-                // Gp Medical Record Documents / Im1 Messaging
-                GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_ENABLED) to
-                        EnumSet.of(JourneyType.DOCUMENTS_ENABLED,
-                                JourneyType.IM1_MESSAGING_ENABLED,
-                               JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_ENABLED),
-                GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_DISABLED) to
-                        EnumSet.of(JourneyType.DOCUMENTS_DISABLED,
-                                JourneyType.IM1_MESSAGING_DISABLED,
-                               JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED)
+            // Home Screen Public Health Notifications
+            GpInformation(Supplier.EMIS, ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION) to
+                EnumSet.of(JourneyType.HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS),
+            // Medical Record V1
+            GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V1) to
+                    EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+            GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V1) to
+                    EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+            GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
+                    EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+            GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
+                    EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+
+            // Gp Medical Record Documents / Im1 Messaging
+            GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_ENABLED) to
+                    EnumSet.of(JourneyType.DOCUMENTS_ENABLED,
+                            JourneyType.IM1_MESSAGING_ENABLED,
+                            JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_ENABLED),
+            GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_DISABLED) to
+                    EnumSet.of(JourneyType.DOCUMENTS_DISABLED,
+                            JourneyType.IM1_MESSAGING_DISABLED,
+                            JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED)
         )
 
         fun findPatientForConfiguration(gpSystem: Supplier?, journeyType:JourneyType): Patient {
@@ -141,6 +154,7 @@ class ServiceJourneyRulesMapper {
             SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE,
             USER_INFO_DISABLED,
             USER_INFO_ENABLED,
+            HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS,
             DOCUMENTS_ENABLED,
             DOCUMENTS_DISABLED,
             IM1_MESSAGING_ENABLED,
