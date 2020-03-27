@@ -1273,8 +1273,10 @@ export default {
     sendMessageButtonText: 'Send a message',
     subheader: 'Your messages',
     noMessages: 'You have no messages.',
+    lastMessageRecieved: 'Last message received at {date}',
     summary: {
-      hidden: 'Conversation with {recipient}. {subject}. The last message in this conversation was sent on {date}.',
+      hiddenWithSubject: 'Conversation with {recipient}. Subject: {subject}. The last message in this conversation was sent on {date}.',
+      hiddenWithoutSubject: 'Conversation with {recipient}. The last message in this conversation was sent on {date}.',
     },
   },
   im02: {

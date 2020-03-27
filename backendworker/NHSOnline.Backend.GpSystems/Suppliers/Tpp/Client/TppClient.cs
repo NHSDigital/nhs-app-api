@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 
@@ -10,6 +11,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
     {
         private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccessesPost;
         private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelectedPost;
+
 
         public TppClient(
             ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccessesPost,

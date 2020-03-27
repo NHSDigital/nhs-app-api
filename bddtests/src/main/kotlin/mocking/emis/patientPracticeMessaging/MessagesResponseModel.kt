@@ -5,9 +5,9 @@ data class MessagesResponseModel(
 )
 
 data class PatientMessageSummary (
-        var messageId: Int,
+        var messageId: String,
         var subject: String,
-        var sentDateTime: String,
+        var sentDateTime: String?,
         var recipients: List<Recipient>,
         var replyCount: Int,
         var hasUnreadReplies: Boolean

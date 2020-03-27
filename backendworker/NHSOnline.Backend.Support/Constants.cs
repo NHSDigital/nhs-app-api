@@ -211,6 +211,13 @@ namespace NHSOnline.Backend.Support
             public const string DocumentDetailsComments = "comments";
             public const string DocumentDetailsExtension = "extension";
         }
+
+        public static class TppLinkServicesAccessConstants
+        {
+            public const string Im1MessagingService = "Messaging";
+            public const string AvailableCode = "A";
+        }
+
         public static class TppErrorCodes
         {
             public const string FileTooLarge = "24";

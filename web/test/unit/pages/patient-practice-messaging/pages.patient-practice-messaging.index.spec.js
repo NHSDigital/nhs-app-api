@@ -82,8 +82,24 @@ describe('practice patient messaging inbox', () => {
       const messageLabel = wrapper.vm.getMessageLabel(summaries[0]);
 
       // Assert
-      expect($t).toHaveBeenCalledWith('im01.summary.hidden', { recipient: 'Dr NHS Online', subject: 'This is the message subject', date: 'mock formatted date' });
-      expect(messageLabel).toEqual('translate_im01.summary.hidden');
+      expect($t).toHaveBeenCalledWith('im01.summary.hiddenWithSubject', { recipient: 'Dr NHS Online', subject: 'This is the message subject', date: 'mock formatted date' });
+      expect(messageLabel).toEqual('translate_im01.summary.hiddenWithSubject');
+    });
+
+    it('will return a descriptive sentence without the subject about that message', () => {
+      // Act
+      const summariesNoSubject = [{
+        id: 'message-1',
+        recipient: 'Dr NHS Online',
+        lastMessageDateTime: '2020-01-01T13:37:00.137Z',
+        hasUnreadReplies: true,
+      }];
+      mountPage({ messagesSummaries: summariesNoSubject });
+      const messageLabel = wrapper.vm.getMessageLabel(summariesNoSubject[0]);
+
+      // Assert
+      expect($t).toHaveBeenCalledWith('im01.summary.hiddenWithoutSubject', { recipient: 'Dr NHS Online', date: 'mock formatted date' });
+      expect(messageLabel).toEqual('translate_im01.summary.hiddenWithoutSubject');
     });
   });
 
@@ -113,7 +129,7 @@ describe('practice patient messaging inbox', () => {
       expect(summaryMessage.vm.$props.subTitle).toEqual('This is the message subject');
       expect(summaryMessage.vm.$props.dateTime).toEqual('2020-01-01T13:37:00.137Z');
       expect(summaryMessage.vm.$props.dateFormat).toBeUndefined();
-      expect(summaryMessage.vm.$props.ariaLabel).toEqual('translate_im01.summary.hidden');
+      expect(summaryMessage.vm.$props.ariaLabel).toEqual('translate_im01.summary.hiddenWithSubject');
       expect(summaryMessage.vm.$props.hasUnreadMessages).toBe(true);
     });
   });

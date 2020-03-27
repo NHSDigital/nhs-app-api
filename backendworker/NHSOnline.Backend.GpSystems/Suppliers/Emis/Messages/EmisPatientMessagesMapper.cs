@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages.Models;
@@ -10,12 +11,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
     public class EmisPatientMessagesMapper : IEmisPatientMessagesMapper
     {
         private readonly ILogger<EmisPatientMessagesMapper> _logger;
-        
+
         public EmisPatientMessagesMapper(ILogger<EmisPatientMessagesMapper> logger)
         {
             _logger = logger;
         }
-        
+
         public GetPatientMessagesResponse Map(MessagesGetResponse response)
         {
             try
@@ -25,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                     MessageSummaries = response.Messages
                         .Select(m => new PatientMessageSummary
                         {
-                            Id = m.MessageId,
+                            Id = m.MessageId.ToString(CultureInfo.InvariantCulture),
                             Subject = m.Subject,
                             LastMessageDateTime = m.LastReplyDateTime ?? m.SentDateTime,
                             Recipient = GetRecipientFromMessageMetaData(m),
@@ -54,7 +55,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                 {
                     return currentOwner;
                 }
-                
+
                 _logger.LogError(
                     $"Unable to retrieve name from first recipient for message summary with id: {messageSummary.MessageId}");
                 return null;

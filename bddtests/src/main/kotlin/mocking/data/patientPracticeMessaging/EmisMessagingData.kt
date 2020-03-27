@@ -17,67 +17,11 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-private enum class MessageDateFormat {
-    INBOX_MIDDAY,
-    INBOX_MIDNIGHT,
-    INBOX_YESTERDAY,
-    INBOX_TIME_12_HR,
-    INBOX_LAST_WEEK,
-    INBOX_BEFORE_LAST_WEEK,
-    DETAILS_TODAY,
-    DETAILS_TODAY_AT_MIDDAY,
-    DETAILS_TODAY_AT_MIDNIGHT,
-    DETAILS_YESTERDAY,
-    DETAILS_YESTERDAY_AT_MIDDAY,
-    DETAILS_YESTERDAY_AT_MIDNIGHT,
-    DETAILS_BEFORE_YESTERDAY
-}
-
-object MessagingData {
-
-    private const val ZERO = 0
-    private const val TWELVE = 12
-    private const val THIRTEEN = 13
-    private const val ONE = 1L
-    private const val TWO = 2L
-    private const val THREE = 3L
-    private const val SEVEN = 7L
+object EmisMessagingData {
 
     private val RECIPIENT_1 = Recipient("Dr. Dolittle", "1234-12345678-1234-1234-1")
     private val RECIPIENT_2 = Recipient("Dr. NHS Online", "1234-12345678-1234-1234-2")
 
-    private fun getExpectedFormattedInboxMessageDate(date: ZonedDateTime, format: MessageDateFormat): String {
-        val formattedDate: String
-
-        when (format) {
-            MessageDateFormat.INBOX_TIME_12_HR -> {
-                formattedDate = DateTimeFormatter
-                        .ofPattern(DateTimeFormats.frontendTimeFormat, Locale.UK)
-                        .format(date)
-            }
-            MessageDateFormat.INBOX_MIDDAY -> { formattedDate = "Midday" }
-            MessageDateFormat.INBOX_MIDNIGHT -> { formattedDate = "Midnight" }
-            MessageDateFormat.INBOX_YESTERDAY -> { formattedDate = "Yesterday" }
-            MessageDateFormat.INBOX_LAST_WEEK -> {
-                formattedDate = DateTimeFormatter
-                        .ofPattern(DateTimeFormats.fullDayOfWeek, Locale.UK)
-                        .format(date)
-            }
-            MessageDateFormat.INBOX_BEFORE_LAST_WEEK -> {
-                formattedDate = DateTimeFormatter
-                        .ofPattern(DateTimeFormats.frontendBasicDateFormat, Locale.UK)
-                        .format(date)
-            }
-            else -> {
-                formattedDate = DateTimeFormatter
-                        .ofPattern("'Sent '${DateTimeFormats.frontendBasicDateFormat}'" +
-                                " at '${DateTimeFormats.frontendTimeFormat}", Locale.UK)
-                        .format(date)
-            }
-        }
-
-        return formattedDate.replace("AM", "am").replace("PM", "pm")
-    }
 
     private fun getExpectedFormattedIndividualMessageDate(date: ZonedDateTime, format: MessageDateFormat): String {
         val formattedDate: String
@@ -114,12 +58,12 @@ object MessagingData {
         val todaysDate = ZonedDateTime.now(ZoneId.of("Europe/London")).withMinute(TWELVE)
 
         val inboxDates = mutableListOf(
-            todaysDate,
-            todaysDate.withHour(TWELVE).withMinute(ZERO),
-            todaysDate.withHour(ZERO).withMinute(ZERO),
-            todaysDate.minusDays(ONE),
-            todaysDate.minusDays(TWO),
-            todaysDate.minusDays(SEVEN)
+                todaysDate,
+                todaysDate.withHour(TWELVE).withMinute(ZERO),
+                todaysDate.withHour(ZERO).withMinute(ZERO),
+                todaysDate.minusDays(ONE),
+                todaysDate.minusDays(TWO),
+                todaysDate.minusDays(SEVEN)
         )
         val inboxDateFormats = mutableListOf(
             MessageDateFormat.INBOX_TIME_12_HR,
@@ -131,9 +75,9 @@ object MessagingData {
         )
 
         inboxDates.forEachIndexed(fun (index, date) {
-            expectedDates.add(getExpectedFormattedInboxMessageDate(date, inboxDateFormats[index]))
+            expectedDates.add(DateHelpers().getExpectedFormattedInboxMessageDate(date, inboxDateFormats[index]))
             messages.add(PatientMessageSummary(
-                index,
+                index.toString(),
                 "GP Practice information $index",
                 date.format(DateTimeFormatter.ofPattern(DateTimeFormats.emisMessageDateTimeFormat)),
                 mutableListOf(RECIPIENT_1),

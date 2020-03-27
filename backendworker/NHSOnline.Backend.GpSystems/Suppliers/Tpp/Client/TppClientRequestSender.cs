@@ -30,13 +30,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
                 var response = new TppApiObjectResponse<TResponse>(responseMessage.StatusCode);
                 await response.Parse(responseMessage, _responseParser, _logger);
 
-                if (response.IsUnauthorisedResponse)
+                if (!response.IsUnauthorisedResponse)
                 {
-                    _logger.LogInformation("Unauthorised TPP response");
-                    throw new UnauthorisedGpSystemHttpRequestException();
+                    return response;
                 }
 
-                return response;
+                _logger.LogInformation("Unauthorised TPP response");
+                throw new UnauthorisedGpSystemHttpRequestException();
+
             }
         }
     }

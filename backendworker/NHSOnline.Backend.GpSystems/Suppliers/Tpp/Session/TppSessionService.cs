@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
@@ -18,9 +19,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         private readonly ITppClient _client;
         private readonly ITppClientRequest<TppUserSession, LogoffReply> _logoff;
         private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
+        private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccesses;
         private readonly ILogger<TppSessionService> _logger;
         private readonly ITppSessionMapper _sessionMapper;
-        private readonly ITppLogMessagingService _logMessagingService;
 
         public TppSessionService(
             ITppClient client,
@@ -28,14 +29,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
             ILogger<TppSessionService> logger,
             ITppSessionMapper sessionMapper,
-            ITppLogMessagingService logMessagingService)
+            ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccesses)
         {
             _client = client;
             _logoff = logoff;
             _authenticate = authenticate;
             _logger = logger;
             _sessionMapper = sessionMapper;
-            _logMessagingService = logMessagingService;
+            _listServiceAccesses = listServiceAccesses;
         }
 
         public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
@@ -67,7 +68,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                     await _client.PatientSelectedPost(tppUserSession);
                 }
 
-                _logMessagingService.FetchAndLogAccessInformation(tppUserSession);
+                var serviceAccess = await _listServiceAccesses.Post(tppUserSession);
+
+                serviceAccess.Body?.ServiceAccess?.ForEach(s => {
+                    if (string.Equals(s.Description,
+                            Constants.TppLinkServicesAccessConstants.Im1MessagingService,
+                            StringComparison.Ordinal)
+                        && s.Status == Constants.TppLinkServicesAccessConstants.AvailableCode )
+                    {
+                        tppUserSession.Im1MessagingEnabled = true;
+                        _logger.LogInformation("PFS messaging is enabled");
+                    }
+                });
 
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
                 return new GpSessionCreateResult.Success(tppUserSession);

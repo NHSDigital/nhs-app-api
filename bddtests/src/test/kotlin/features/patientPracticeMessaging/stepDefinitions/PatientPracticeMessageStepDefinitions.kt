@@ -9,7 +9,6 @@ import features.patientPracticeMessaging.factories.PracticePatientMessagingFacto
 import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
 import mocking.emis.models.PatientPracticeMessagingSerenityHelpers
-import mocking.emis.practices.SettingsResponseModel
 import models.ExpectedMessage
 import org.junit.Assert.assertNotNull
 import pages.ErrorPage
@@ -63,14 +62,9 @@ open class PatientPracticeMessageStepDefinitions {
 
     @Given("^I am a user who can access patient practice messaging$")
     fun iAmAUserWishingToViewTheirMessages() {
-        val response = SettingsResponseModel()
-        response.services.practicePatientCommunicationSupported = true
-
-        val currentPatient = SerenityHelpers.getPatient()
-        mockingClient.forEmis {
-            practiceSettingsRequest(currentPatient)
-                    .respondWithSuccess(response)
-        }
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabled(SerenityHelpers.getPatient())
     }
 
     @Given("^the Patient has no access to patient practice messaging$")
@@ -265,6 +259,22 @@ open class PatientPracticeMessageStepDefinitions {
         patientPracticeMessagingPage
             .assertCorrectMessagesDisplayed(
                 PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES.getOrNull<List<ExpectedMessage>>()!!)
+    }
+
+    @Then("^I see a list of patient practice messages without the subject and with the unread count$")
+    fun iSeeAListOfPatientPracticeMessagesWithNoSubjectWithUnreadCount() {
+        patientPracticeMessagingPage
+                .assertCorrectMessagesDisplayed(
+                        PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES.getOrNull<List<ExpectedMessage>>()
+                        !!, hasSubject = false, hasUnreadCount = true)
+    }
+
+    @Then("^I see a list of patient practice messages without the subject and without the unread count$")
+    fun iSeeAListOfPatientPracticeMessagesWithNoSubjectNoUnreadCount() {
+        patientPracticeMessagingPage
+                .assertCorrectMessagesDisplayed(
+                        PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES.getOrNull<List<ExpectedMessage>>()
+                        !!, hasSubject = false, hasUnreadCount = false)
     }
 
     @Then("^I see a message indicating that I have no patient practice messages$")

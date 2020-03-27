@@ -6,9 +6,11 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
@@ -30,6 +32,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             services.RegisterTppPatientRecordServices();
             services.RegisterTppSessionServices();
             services.RegisterTppLinkedAccountsServices();
+            services.RegisterTppPatientMessagesServices();
             return services;
         }
 
@@ -67,6 +70,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 .AddTppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply, TppClientOrderPrescriptionsPost>()
                 .AddTppClientRequest<TppUserSession, ViewPatientOverviewReply, TppClientPatientOverviewPost>()
                 .AddTppClientRequest<TppUserSession, PatientSelectedReply, TppClientPatientSelectedPost>()
+                .AddTppClientRequest<TppUserSession, MessagesViewReply, TppClientMessagesViewPost>()
                 .AddTppClientRequest<LinkAccount, LinkAccountReply, TppClientLinkAccountPost>()
                 .AddTppClientRequest<TppUserSession, RequestPatientRecordReply, TppClientRequestPatientRecordPost>()
                 .AddTppClientRequest<(TppUserSession, string), RequestBinaryDataReply, TppClientRequestBinaryDataPost>()

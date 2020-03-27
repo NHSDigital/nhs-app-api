@@ -1,7 +1,7 @@
 package mocking.stubs.patientPracticeMessaging
 
 import mocking.MockingClient
-import mocking.data.patientPracticeMessaging.MessagingData
+import mocking.data.patientPracticeMessaging.EmisMessagingData
 import mocking.emis.patientPracticeMessaging.EmisMessagingRecipientsBuilder
 import mocking.stubs.EmisStubsPatientFactory
 import mocking.stubs.InputResponse
@@ -9,7 +9,7 @@ import models.Patient
 
 class PatientPracticeMessagingRecipientsStubs(private val mockingClient: MockingClient) {
     fun generateEMISStubs() {
-        val recipientsData = MessagingData.getDefaultMessageRecipients()
+        val recipientsData = EmisMessagingData.getDefaultMessageRecipients()
         val stubs = InputResponse<Patient, EmisMessagingRecipientsBuilder>()
         stubs.addResponse(EmisStubsPatientFactory.goodPatientEMIS) {
             builder -> builder.respondWithSuccess(recipientsData)

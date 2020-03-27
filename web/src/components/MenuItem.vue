@@ -108,7 +108,7 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-  @import '../style/arrow';  ;
+  @import '../style/arrow';
   @import '~nhsuk-frontend/packages/core/settings/colours';
 
   @mixin outlineStyle {

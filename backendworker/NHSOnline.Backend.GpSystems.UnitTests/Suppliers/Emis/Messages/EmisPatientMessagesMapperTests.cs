@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -30,16 +31,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         {
             // Arrange
             var messagesGetResponse = _fixture.Create<MessagesGetResponse>();
-            
+
             // Act
             var result = _systemUnderTest.Map(messagesGetResponse);
-            
+
             // Assert
             result.Should().BeEquivalentTo(new GetPatientMessagesResponse
             {
                 MessageSummaries = messagesGetResponse.Messages.Select(m => new PatientMessageSummary
                 {
-                    Id = m.MessageId,
+                    Id = m.MessageId.ToString(CultureInfo.InvariantCulture),
                     Recipient = m.Recipients.Select(r => r.Name).ToList().First(),
                     LastMessageDateTime = m.LastReplyDateTime,
                     Subject = m.Subject,
@@ -67,10 +68,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
                     Subject = _fixture.Create<string>()
                 }).ToList()
             };
-            
+
             // Act
             var result = _systemUnderTest.Map(messagesGetResponse);
-            
+
             // Assert
             result.MessageSummaries.Select(m => m.LastMessageDateTime).ToList().Should().BeEquivalentTo(new List<string>{"3", "2", "1"});
         }
@@ -81,18 +82,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             // Arrange
             var messageMetaData = _fixture.Create<MessageSummary>();
             var sentDateTime = _fixture.Create<string>();
-            
+
             messageMetaData.SentDateTime = sentDateTime;
             messageMetaData.LastReplyDateTime = null;
-            
+
             var messagesGetResponse = new MessagesGetResponse
             {
                 Messages = new List<MessageSummary>{ messageMetaData }
             };
-            
+
             // Act
             var result = _systemUnderTest.Map(messagesGetResponse);
-            
+
             // Assert
             result.MessageSummaries.First().LastMessageDateTime.Should().Be(sentDateTime);
         }
@@ -102,7 +103,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         {
             // Act
             var result = _systemUnderTest.Map(new MessagesGetResponse());
-            
+
             // Assert
             result.Should().Be(null);
         }

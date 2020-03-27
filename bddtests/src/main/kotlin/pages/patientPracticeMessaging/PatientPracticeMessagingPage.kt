@@ -15,7 +15,7 @@ class PatientPracticeMessagingPage: HybridPageObject() {
 
     fun clickSendAMessageButton() {
          HybridPageElement(
-                 "//button[@id='sendMessageButton']",
+                 "//a[@id='sendMessageButton']",
                  page = this,
                  helpfulName = "Send a message button")
              .waitForElement()
@@ -34,14 +34,24 @@ class PatientPracticeMessagingPage: HybridPageObject() {
         header.waitForElement()
     }
 
-    fun assertCorrectMessagesDisplayed(expectedMessages: List<ExpectedMessage>){
+    fun assertCorrectMessagesDisplayed(expectedMessages: List<ExpectedMessage>,
+                                       hasSubject: Boolean = true, hasUnreadCount: Boolean = false){
         for (expectedMessage in expectedMessages) {
             baseMessagePath = "//a[@id='${expectedMessage.id}']"
 
             assertEquals(getMessageTitle().text, expectedMessage.recipient)
             assertEquals(getMessageDate().text, expectedMessage.lastMessageDateTime)
-            assertEquals(getMessageSubject().text, expectedMessage.subject)
-            if (expectedMessage.hasUnreadReplies) {
+
+            if(hasSubject){
+                assertEquals(getMessageSubject().text, expectedMessage.subject)
+            }
+
+            if(hasUnreadCount){
+                assertEquals(getUnreadIndicator(expectedMessage.id).textValue,
+                             expectedMessage.unreadCount.toString())
+            }
+
+            if (expectedMessage.hasUnreadReplies!!) {
                 assert(getUnreadIndicator(expectedMessage.id).isVisible)
             }
         }
@@ -82,14 +92,7 @@ class PatientPracticeMessagingPage: HybridPageObject() {
                 page = this)
     }
 
-    private fun getUnreadCount(): HybridPageElement{
-        return HybridPageElement(
-                webDesktopLocator = "$baseMessagePath//p",
-                androidLocator = null,
-                page = this)
-    }
-
-    private fun getUnreadIndicator(id: Int): HybridPageElement{
+    private fun getUnreadIndicator(id: String): HybridPageElement{
         return HybridPageElement(
                 webDesktopLocator = "//*[@id='unreadIndicator$id']",
                 androidLocator = null,

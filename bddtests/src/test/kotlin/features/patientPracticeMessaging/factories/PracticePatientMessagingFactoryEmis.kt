@@ -1,9 +1,10 @@
 package features.patientPracticeMessaging.factories
 
-import mocking.data.patientPracticeMessaging.MessagingData
+import mocking.data.patientPracticeMessaging.EmisMessagingData
 import mocking.emis.models.PatientPracticeMessagingSerenityHelpers
 import mocking.emis.patientPracticeMessaging.MessagesResponseModel
 import mocking.emis.patientPracticeMessaging.PatientMessageSummary
+import mocking.emis.practices.SettingsResponseModel
 import models.ExpectedMessage
 import models.Patient
 import utils.getOrNull
@@ -11,6 +12,16 @@ import utils.setIfNotAlreadySet
 import worker.models.patientPracticeMessaging.CreateMessageRequest
 
 class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
+
+    override fun enabled(patient: Patient){
+        val response = SettingsResponseModel()
+        response.services.practicePatientCommunicationSupported = true
+
+        mockingClient.forEmis {
+            practiceSettingsRequest(patient)
+                    .respondWithSuccess(response)
+        }
+    }
 
     override fun disabled(patient: Patient) {
         mockingClient.forEmis {
@@ -47,7 +58,7 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
     override fun noRecipients(patient: Patient) {
         mockingClient.forEmis {
             messaging.getRecipientsRequest(patient)
-                    .respondWithSuccess(MessagingData.getEmptyRecipients())
+                    .respondWithSuccess(EmisMessagingData.getEmptyRecipients())
         }
     }
 
@@ -73,24 +84,24 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         }
     }
 
-    override fun getExpectedMessages(expectedMessages: List<PatientMessageSummary>): List<ExpectedMessage>{
+    private fun getExpectedMessages(expectedMessages: List<PatientMessageSummary>): List<ExpectedMessage>{
         val expectedInboxMessageDates = PatientPracticeMessagingSerenityHelpers
             .EXPECTED_INBOX_MESSAGE_DATES
             .getOrNull<List<String>>()
         return expectedMessages.mapIndexed(fun(index, message): ExpectedMessage {
             return ExpectedMessage(
-                    message.messageId,
-                    message.subject,
-                    expectedInboxMessageDates!![index],
-                    message.recipients.first().name!!,
-                    message.hasUnreadReplies)
+                    id = message.messageId,
+                    subject = message.subject,
+                    lastMessageDateTime = expectedInboxMessageDates!![index],
+                    recipient = message.recipients.first().name!!,
+                    hasUnreadReplies = message.hasUnreadReplies)
         })
     }
 
     private fun setUpMessageDataAndStubs(patient: Patient, hasUnread: Boolean) {
-        val messages = MessagingData.getDefaultMessagesData(REPLY_COUNT, hasUnread)
-        val recipients = MessagingData.getDefaultMessageRecipients()
-        val messageDetails = MessagingData.getDefaultMessageDetailsWithReplies()
+        val messages = EmisMessagingData.getDefaultMessagesData(REPLY_COUNT, hasUnread)
+        val recipients = EmisMessagingData.getDefaultMessageRecipients()
+        val messageDetails = EmisMessagingData.getDefaultMessageDetailsWithReplies()
         val createMessageRequest = CreateMessageRequest("Test Results",
                 "When will my test results be ready", recipients.MessageRecipients[0].recipientGuid!!)
 
@@ -112,7 +123,7 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         }
         mockingClient.forEmis {
             messaging.updateReadStatusRequest(patient)
-                    .respondWithSuccess(MessagingData.getUpdatedResponse())
+                    .respondWithSuccess(EmisMessagingData.getUpdatedResponse())
         }
         mockingClient.forEmis{
             messaging.getRecipientsRequest(patient)
@@ -124,7 +135,7 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         }
         mockingClient.forEmis {
             messaging.deleteConversationRequest(patient)
-                    .respondWithSuccess(MessagingData.getDeleteResponse())
+                    .respondWithSuccess(EmisMessagingData.getDeleteResponse())
         }
     }
 

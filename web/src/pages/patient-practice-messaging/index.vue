@@ -1,25 +1,31 @@
 <template>
   <div v-if="showTemplate && summariesLoaded" id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <generic-button id="sendMessageButton"
-                      :button-classes="['nhsuk-button']"
-                      @click="sendMessage">
-        {{ $t('im01.sendMessageButtonText') }}
-      </generic-button>
+      <menu-item-list class="nhsuk-u-margin-bottom-3">
+        <menu-item id="sendMessageButton"
+                   :text="$t('im01.sendMessageButtonText')"
+                   :click-func="sendMessage"
+                   header-tag="h2"
+                   href="#"/>
+      </menu-item-list>
       <p v-if="hasNoSummaries">{{ $t('im01.noMessages') }}</p>
       <template v-else>
-        <h2>{{ $t('im01.subheader') }}</h2>
+        <menu-item-list-header id="messages_list_header"
+                               header-tag="h2"
+                               :text="$t('im01.subheader')"/>
+        <p v-if="hasNoSummaries">{{ $t('im01.noMessages') }}</p>
         <ul id="patientPracticeInboxMessages" :class="$style['nhs-app-message']">
           <li v-for="(summary, index) in summaries"
               :key="`summary-${index}`"
               :class="$style['nhs-app-message__item']">
             <summary-message :id="summary.id"
                              :title="summary.recipient"
-                             :sub-title="summary.subject"
+                             :sub-title="getSubtitle(summary)"
                              :date-time="summary.lastMessageDateTime"
                              :aria-label="getMessageLabel(summary)"
                              :has-unread-messages="summary.hasUnreadReplies"
                              :list-index="index"
+                             :unread-count="getUnreadCount(summary.unreadCount)"
                              @click="goToMessageDetails(summary.id, summary.recipient)"/>
           </li>
         </ul>
@@ -29,21 +35,25 @@
 </template>
 
 <script>
-import GenericButton from '@/components/widgets/GenericButton';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
+import MenuItemListHeader from '@/components/MenuItemListHeader';
+import MenuItemList from '@/components/MenuItemList';
+import MenuItem from '@/components/MenuItem';
 import {
   PATIENT_PRACTICE_MESSAGING_URGENCY,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   INDEX,
 } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, datePart } from '@/lib/utils';
 import { formatDate } from '@/plugins/filters';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    GenericButton,
     SummaryMessage,
+    MenuItemListHeader,
+    MenuItemList,
+    MenuItem,
   },
   data() {
     return {
@@ -69,15 +79,28 @@ export default {
     this.$store.dispatch('patientPracticeMessaging/setUrgencyChoice', undefined);
   },
   methods: {
+    getUnreadCount(unreadCount) {
+      return (unreadCount > 0) ? unreadCount : undefined;
+    },
     sendMessage() {
       redirectTo(this, PATIENT_PRACTICE_MESSAGING_URGENCY.path);
     },
+    getSubtitle(summary) {
+      return (summary.subject) ? summary.subject : this.$t('im01.lastMessageRecieved',
+        { date: datePart(summary.lastMessageDateTime, 'YearMonthDayTime') });
+    },
     getMessageLabel(summary) {
-      return this.$t('im01.summary.hidden', {
-        recipient: summary.recipient,
-        subject: summary.subject,
-        date: formatDate(summary.lastMessageDateTime, 'D MMMM YYYY'),
-      });
+      const { subject, recipient, lastMessageDateTime } = summary;
+      return (subject) ?
+        this.$t('im01.summary.hiddenWithSubject', {
+          recipient,
+          subject,
+          date: formatDate(lastMessageDateTime, 'D MMMM YYYY'),
+        }) :
+        this.$t('im01.summary.hiddenWithoutSubject', {
+          recipient,
+          date: formatDate(lastMessageDateTime, 'D MMMM YYYY'),
+        });
     },
     goToMessageDetails(id, recipient) {
       this.$store.dispatch('patientPracticeMessaging/setSelectedMessageID', id);
