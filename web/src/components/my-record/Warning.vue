@@ -70,7 +70,7 @@ export default {
   methods: {
     onContinueButtonClicked(event) {
       event.preventDefault();
-      sessionStorage.setItem('hasAgreedToMedicalWarning', true);
+      sessionStorage.setItem('agreedToMedicalWarning', true);
       this.$store.dispatch('myRecord/acceptTerms');
       this.$store.dispatch('myRecord/load');
       EventBus.$emit(FOCUS_NHSAPP_ROOT);

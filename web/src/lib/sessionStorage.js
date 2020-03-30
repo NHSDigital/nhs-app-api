@@ -1,6 +1,6 @@
-export default () => {
+export default (storageKey) => {
   try {
-    return !!sessionStorage.getItem('hasAgreedToMedicalWarning');
+    return !!sessionStorage.getItem(storageKey);
   } catch (e) {
     return false;
   }

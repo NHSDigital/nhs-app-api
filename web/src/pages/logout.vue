@@ -17,7 +17,7 @@ export default {
     this.$store.dispatch('auth/logoutNoJs');
   },
   mounted() {
-    sessionStorage.removeItem('hasAgreedToMedicalWarning');
+    sessionStorage.clear();
     this.$store.dispatch('auth/logout');
   },
 };

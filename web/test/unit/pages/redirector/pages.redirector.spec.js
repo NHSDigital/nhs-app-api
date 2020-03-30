@@ -1,6 +1,9 @@
 import Redirector from '@/pages/redirector/index';
 import { APPOINTMENTS, INDEX, INTERSTITIAL_REDIRECTOR, REDIRECT_PARAMETER } from '@/lib/routes';
 import { createRouter, createStore, mount } from '../../helpers';
+import hasAgreedToThirdPartyWarning from '@/lib/sessionStorage';
+
+jest.mock('@/lib/sessionStorage');
 
 describe('redirector page', () => {
   let $route;
@@ -187,6 +190,8 @@ describe('redirector page', () => {
           }],
         },
       };
+      hasAgreedToThirdPartyWarning.mockClear();
+      hasAgreedToThirdPartyWarning.mockReturnValue(false);
       const $store = createStore({ $http, state: $state });
       $route = {
         ...INTERSTITIAL_REDIRECTOR,
@@ -231,6 +236,8 @@ describe('redirector page', () => {
           }],
         },
       };
+      hasAgreedToThirdPartyWarning.mockClear();
+      hasAgreedToThirdPartyWarning.mockReturnValue(false);
       const $store = createStore({ $http, state: $state });
       $route = {
         ...INTERSTITIAL_REDIRECTOR,
@@ -263,6 +270,59 @@ describe('redirector page', () => {
 
     it('will call router push with INDEX path', () => {
       expect($router.push).toHaveBeenCalledWith(INDEX.path);
+    });
+  });
+
+  describe('has redirect param external site on knownServices for pkb and path included in third-party-provider locale and thirdparty warning has been accepted', () => {
+    let $http;
+    let wrapper;
+    beforeEach(() => {
+      $http = createHttp();
+      const $state = {
+        knownServices: {
+          knownServices: [{
+            id: 'pkb',
+            requiresAssertedLoginIdentity: true,
+            showThirdPartyWarning: true,
+            url: 'http://www.url.com',
+          }],
+        },
+      };
+      hasAgreedToThirdPartyWarning.mockClear();
+      hasAgreedToThirdPartyWarning.mockReturnValue(true);
+      const $store = createStore({ $http, state: $state });
+      $route = {
+        ...INTERSTITIAL_REDIRECTOR,
+        query: { [REDIRECT_PARAMETER]: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' },
+      };
+
+      wrapper = mountRedirector($http, $store);
+    });
+
+    it('warning section should be shown', () => {
+      expect(wrapper.vm.shouldShowWarning).toEqual(false);
+    });
+
+    it('session storage should be correctly named', () => {
+      expect(wrapper.vm.sessionStorageName).toEqual('agreedThirdPartyWarning_pkb');
+    });
+
+    it('will call router push', () => {
+      const expectedRequest = { assertedLoginIdentityRequest: {
+        IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' } };
+
+      expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith(expectedRequest);
+    });
+
+    it('does not display the continue button', () => {
+      const continueButton = wrapper.contains('a.nhsuk-button');
+      expect(continueButton).toEqual(false);
+    });
+
+    it('text computed properties should not be empty strings', () => {
+      expect(wrapper.vm.paragraphText()).toEqual('');
+      expect(wrapper.vm.linkText()).toEqual('');
+      expect(wrapper.vm.providerName()).toEqual('');
     });
   });
 });

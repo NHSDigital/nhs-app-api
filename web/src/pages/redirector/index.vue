@@ -8,7 +8,8 @@
             <strong>{{ providerName() }}</strong>.
           </p>
 
-          <a :href="formAction" :class="['nhsuk-button', 'nhsuk-button--reverse']">
+          <a :href="formAction" :class="['nhsuk-button', 'nhsuk-button--reverse']"
+             @click="addSessionStorage">
             {{ $t('thirdPartyProviders.warningConjunctions.button') }}
           </a>
 
@@ -27,6 +28,7 @@
 
 <script>
 import get from 'lodash/fp/get';
+import agreedToThirdPartyWarning from '@/lib/sessionStorage';
 import { REDIRECT_PARAMETER, INDEX, findByName, findByPath } from '@/lib/routes';
 import { getThirdPartyLocaleText } from '@/lib/utils';
 
@@ -50,11 +52,12 @@ export default {
       linkTextData: '',
       featureNameData: '',
       formAction: '',
+      sessionStorageName: '',
     };
   },
   computed: {
     shouldShowWarning() {
-      return this.showWarning;
+      return this.showWarning && !agreedToThirdPartyWarning(this.sessionStorageName);
     },
   },
   async mounted() {
@@ -79,7 +82,9 @@ export default {
       .filter(service => this.redirectPath.includes(service.url));
     if (this.services.length > 0 &&
       (this.services[0].requiresAssertedLoginIdentity || {}) === true) {
-      if (this.services[0].showThirdPartyWarning === false) {
+      this.sessionStorageName = `agreedThirdPartyWarning_${this.services[0].id}`;
+      if (this.services[0].showThirdPartyWarning === false ||
+          agreedToThirdPartyWarning(this.sessionStorageName)) {
         this.getAssertedLoginIdentityAndNavigate();
         return;
       }
@@ -120,6 +125,9 @@ export default {
         .catch(() => {
           this.$router.push(INDEX.path);
         });
+    },
+    addSessionStorage() {
+      sessionStorage.setItem(this.sessionStorageName, true);
     },
     appendAssertedLoginIdentity(uri, response) {
       if (uri.indexOf('?') !== -1) {

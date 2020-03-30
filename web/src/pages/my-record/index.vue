@@ -180,7 +180,7 @@ export default {
       return this.hasSummaryRecordAccess || this.hasDetailedRecordAccess;
     },
     hasAgreedToMedicalWarning() {
-      this.hasAgreed = agreedToMedicalWarning();
+      this.hasAgreed = agreedToMedicalWarning('agreedToMedicalWarning');
       return this.hasAgreed;
     },
   },
