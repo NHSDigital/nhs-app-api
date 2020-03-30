@@ -1,4 +1,9 @@
-package pages
+package pages.ndop
+
+import pages.HybridPageObject
+import pages. HybridPageElement
+import pages.isDisplayed
+import pages.isPresent
 
 class NdopPage : HybridPageObject() {
 
@@ -16,5 +21,4 @@ class NdopPage : HybridPageObject() {
             return pageTitle.isDisplayed
         }
     }
-
 }

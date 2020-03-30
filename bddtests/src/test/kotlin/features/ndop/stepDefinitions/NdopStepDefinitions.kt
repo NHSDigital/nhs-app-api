@@ -31,7 +31,7 @@ open class NdopStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("I receive a signed JWT Token")
     fun thenIReceiveASignedJwtToken() {
         val result = Serenity.sessionVariableCalled<NdopResponse>(NdopResponse::class)
-        Assert.assertTrue(result.response.token.isNotEmpty())
+        Assert.assertTrue(result.token.isNotEmpty())
     }
 
 }

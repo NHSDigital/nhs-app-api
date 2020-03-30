@@ -59,10 +59,6 @@ class TextBlockElement {
         return assertInternal(".//p", expectedTexts)
     }
 
-    fun assertList(vararg expectedValues: String): TextBlockElement {
-        return assertInternal("./ul/li", expectedValues)
-    }
-
     private fun assertInternal(locator: String, expectedText: Array<out String>): TextBlockElement {
         container.actOnTheElement {
             val actualText = it.findElements<WebElement>(By.xpath(locator))
@@ -77,10 +73,6 @@ class TextBlockElement {
     }
 
     companion object {
-
-        fun withH1Header(title: String, page: HybridPageObject): TextBlockElement {
-            return TextBlockElement(title, page, "h1")
-        }
 
         fun withH2Header(title: String, page: HybridPageObject): TextBlockElement {
             return TextBlockElement(title, page, "h2")

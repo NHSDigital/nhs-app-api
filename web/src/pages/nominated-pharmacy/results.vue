@@ -30,8 +30,7 @@
           </menu-item>
         </menu-item-list>
       </div>
-      <analytics-tracked-tag :text="$t('nominatedPharmacySearchResults.backButton')"
-                             :tabindex="-1">
+      <analytics-tracked-tag :text="$t('nominatedPharmacySearchResults.backButton')">
         <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                 :path="previousPagePath"
                                 :button-text="'nominatedPharmacySearchResults.backButton'"

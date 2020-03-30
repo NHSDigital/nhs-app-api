@@ -5,7 +5,6 @@ import cucumber.api.java.en.When
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import features.sharedSteps.PageUrl
 import mocking.MockingClient
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import net.thucydides.core.annotations.Steps
@@ -41,19 +40,14 @@ class MoreStepDefinitions {
         morePage.btnMessagesAndConsultations.click()
     }
 
+    @When("^I click the Data Sharing link on the More page")
+    fun iClickTheDataSharingLinkOnTheMorePage() {
+        morePage.btnDataSharing.click()
+    }
+
     @When("^I choose to set my organ donation preferences")
     fun setOrganDonationPreferences() {
         morePage.btnOrganDonation.click()
-    }
-
-    @When("^I choose to set my data sharing preferences")
-    fun setDataSharingPreferences() {
-        mockingClient.forNdop {
-            postTokenToNdop()
-                    .respondWithNdopMockPage()
-        }
-        val urlForPage = PageUrl.getPage("data sharing")
-        browser.browseTo(urlForPage)
     }
 
     @Then("^I am on the More Page$")

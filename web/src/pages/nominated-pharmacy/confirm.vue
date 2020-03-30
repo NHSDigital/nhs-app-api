@@ -17,8 +17,7 @@
                         @click.stop.prevent="submitNominatedPharmacy">
           {{ $t('nominated_pharmacy.confirm.confirmButton') }}
         </generic-button>
-        <analytics-tracked-tag :text="$t('generic.backButton.text')"
-                               :tabindex="-1">
+        <analytics-tracked-tag :text="$t('generic.backButton.text')">
           <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                   id="back-link"
                                   :path="nominatedPharmacySearchResultsPath"

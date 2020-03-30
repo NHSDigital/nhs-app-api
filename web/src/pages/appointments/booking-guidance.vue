@@ -16,7 +16,6 @@
           </div>
           <analytics-tracked-tag :text="$t('appointments.guidance.symptomButtonText')"
                                  :destination="symptomsPath"
-                                 :tabindex="-1"
                                  data-purpose="generic-button">
             <no-js-form :action="symptomsPath" :value="formData">
               <generic-button id="btn_check_symptoms"

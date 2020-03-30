@@ -1,3 +1,4 @@
+import components from './components';
 import thirdPartyProviders from './third-party-providers';
 
 export default {
@@ -85,9 +86,6 @@ export default {
       errors: {
         noData: 'Error loading table data',
       },
-    },
-    insetContent: {
-      heading: 'Information: ',
     },
   },
   auth_return: {
@@ -1535,7 +1533,10 @@ export default {
     organDonation: 'Your organ donation decision',
     symptoms: 'Check your symptoms',
     /* Data sharing header should be updated in Android, iOS, and Web if changed */
-    dataSharing: 'Find out why your data matters',
+    dataSharingOverview: 'Overview',
+    dataSharingWhereUsed: 'How confidential patient information is used',
+    dataSharingDoesNotApply: 'When your choice does not apply',
+    dataSharingMakeYourChoice: 'Make your choice',
     more: 'More',
     linkedProfiles: 'Linked profiles',
     switchProfile: 'You are acting on behalf of {fullName}',
@@ -1620,7 +1621,10 @@ export default {
     organDonation: 'Your organ donation decision',
     organDonationWithdraw: 'Withdraw your organ donation decision',
     symptoms: 'Check your symptoms',
-    dataSharing: 'Find out why your data matters',
+    dataSharingOverview: 'Overview',
+    dataSharingWhereUsed: 'How confidential patient information is used',
+    dataSharingDoesNotApply: 'When your choice does not apply',
+    dataSharingMakeYourChoice: 'Make your choice',
     more: 'More',
     login: 'Login',
     linkedProfiles: 'Linked profiles',
@@ -2312,8 +2316,8 @@ export default {
     mainHeader: 'Choose if data from your health records is shared for research and planning',
     titles: {
       p1: 'Overview',
-      p2: 'Where confidential patient information is used',
-      p3: 'Where your choice does not apply',
+      p2: 'How confidential patient information is used',
+      p3: 'When your choice does not apply',
       p4: 'Make your choice',
     },
     subtitle: 'Manage your data choice',
@@ -2323,47 +2327,54 @@ export default {
     pages: {
       p1: {
         intro: {
-          paragraph: 'Your health records contain confidential patient information, which can be used to help with research and planning. If you would like this to stop, you can opt out of this. Your choice will only apply to the health and care system in England. This does not apply to health or care services accessed in Scotland, Wales or Northern Ireland.',
+          paragraph1: 'Your health records contain a type of data called confidential patient information. This data can be used to help with research and planning. You can choose to stop your confidential patient information being used for research and planning.',
+          paragraph2: 'Your choice will only apply to the health and care system in England. This does not apply to health or care services accessed in Scotland, Wales or Northern Ireland.',
         },
         confidential: {
-          title: 'What confidential patient information is',
-          paragraph1: 'Two types of information join together to become confidential patient information. This is information that:',
+          title: 'What is confidential patient information',
+          paragraph1: 'Confidential patient information is when 2 types of information from your health records are joined together.',
+          paragraph2: 'The 2 types of information are:',
           listItems: [
-            'can identify you',
-            'says something about your health care or treatment',
+            'something that can identify you',
+            'something about your health care or treatment',
           ],
-          paragraph2: 'One example can include your name and address (identifies you) along with what medicine you take (health care or treatment). Identifiable information on its own is used by health and care services to contact patients and this is not confidential patient information.',
+          paragraph3: 'For example, your name joined with what medicine you take.',
+          paragraph4: 'Identifiable information on its own is used by health and care services to contact patients and this is not confidential patient information.',
         },
         patientInformation: {
           title: 'How we use your confidential patient information',
           yourIndividualCareSubtitle: 'Your individual care',
           yourIndividualCareParagraph: 'Health and care staff may use your confidential patient information to help with your treatment and care. For example, when you visit your GP, they may look at your records for important information about your health.',
           researchAndPlanningSubtitle: 'Research and planning',
-          researchAndPlanningParagraph: 'Confidential patient information is also used to:',
+          researchAndPlanningParagraph: 'Confidential patient information might also be used to:',
           researchAndPlanningListItems: [
             'plan and improve health and care services',
             'research and develop cures for serious illnesses',
           ],
         },
         yourChoice: {
-          title: 'Where you have a choice',
-          paragraph: 'You can stop your confidential patient information being used for research and planning. Your confidential patient information will still be used for your individual care. Any choice you make will not change this.',
+          title: 'Your choice',
+          paragraph1: 'You can stop your confidential patient information being used for research and planning.',
+          paragraph2: 'If you’re happy with your confidential patient information being used for research and planning you do not need to do anything.',
+          paragraph3: 'Any choice you make will not impact your individual care.',
         },
         moreOptions: {
           title: 'More options',
           paragraph: {
-            nhsWebsiteLink: 'Visit the NHS.UK website',
-            part2: ' for more information or to read our privacy notice. You can also find out how to manage a choice on behalf of another person. For example, if you are a parent or guardian of a child under the age of 13.',
+            nhsWebsiteLink: 'Visit the NHS website',
+            part2: ' for more information or to read our privacy notice. You can also find out how to make a choice for someone else. For example, if you’re a parent or guardian of a child under the age of 13.',
           },
         },
       },
       p2: {
         intro: {
-          paragraphs: [
-            'The NHS collects confidential patient information from all NHS organisations, trusts and local authorities. Confidential patient information is also collected from private organisations, such as private hospitals providing NHS funded care. Research bodies and organisations can request access to this information.',
-            'Research bodies and organisations include:',
+          paragraph1: 'The NHS collects confidential patient information from:',
+          listItems1: [
+            'all NHS organisations, trusts and local authorities',
+            'private organisations, such as private hospitals providing NHS funded care',
           ],
-          listItems: [
+          paragraph2: 'Research bodies and organisations can request access to this information. This includes:',
+          listItems2: [
             'university researchers',
             'hospital researchers',
             'medical royal colleges',
@@ -2372,70 +2383,68 @@ export default {
         },
         thoseWhoCant: {
           title: 'Who cannot use confidential patient information',
-          paragraphs: [
-            {
-              part1: 'Access to confidential patient information will ',
-              emphasised: 'not',
-              part3: ' be given for:',
-            },
-          ],
+          paragraph1: 'Access to confidential patient information will not be given for:',
           listItems: [
             'marketing purposes',
             'insurance purposes',
           ],
-          paragraph: '(unless you specifically request this)',
+          paragraph2: '(unless you request this)',
         },
         dataProtection: {
           title: 'How confidential patient information is protected',
-          paragraphs: [
-            'Protection of your confidential patient information is taken very seriously and it is looked after in accordance with good practice and the law. There are very strict rules on how any of your data can and cannot be used, and you have clear legal rights.',
-            'Every organisation that provides health and care services must take every step to:',
-          ],
+          paragraph1: 'Your confidential patient information is looked after in accordance with good practice and the law.',
+          paragraph2: 'Every organisation that provides health and care services will take every step to:',
           listItems: [
-            'ensure all data remains secure',
-            'use data that does not identify you whenever possible',
-            'use confidential patient information to benefit health and care only',
-            'not use confidential patient information for marketing or insurance purposes (unless you specifically request this)',
+            'keep data secure',
+            'use data that cannot identify you whenever possible',
+            'use data to benefit health and care',
+            'not use data for marketing or insurance purposes (unless you request this)',
             'make it clear why and how data is being used',
-            'respect your decision if you decide to opt out',
-            'only use information about you where allowed by the law',
           ],
-          paragraph: 'All NHS organisations must provide information on the type of data they collect and how it is used. Data release registers are published by NHS Digital and Public Health England, showing records of the data they have shared with other organisations.',
+          paragraph3: 'All NHS organisations must provide information on the type of data they collect and how it\'s used. Data release registers are published by NHS Digital and Public Health England, showing records of the data they have shared with other organisations.',
         },
       },
       p3: {
-        paragraphs: [
-          'If you choose not to allow your confidential patient information to be used for research and planning, your data may still be used in some situations.',
-        ],
-        listItems: [
-          {
-            title: 'When required by law',
-            text: 'Your confidential patient information may still be used when there is a legal requirement to provide it, such as a court order.',
-          },
-          {
-            title: 'When you have given consent',
-            text: 'Your confidential patient information may still be used when you have given your consent. Such as, for a medical research study.',
-          },
-          {
-            title: 'Where there is overriding public interest',
-            text: 'Your confidential patient information may still be used in an emergency or in situations where there is an overriding benefit to others. For example, to help manage contagious diseases and stop them spreading, like meningitis. In these situations, the safety of others is most important.',
-          },
-          {
-            title: 'When information that can identify you is removed',
-            text: 'Information about your health care or treatment may still be used in research and planning if the information that can identify you is removed first.',
-          },
-          {
-            title: 'Where there is a specific exclusion',
-            text: 'Your choice does not apply to a small number of specific exclusions. In these cases, your confidential patient information may still be used at any time. For example, when information is used to collect official national statistics, like the Population Census.',
-          },
-        ],
+        intro: {
+          paragraph: 'If you choose to stop your confidential patient information being used for research and planning, your data might still be used in some situations.',
+        },
+        requiredByLaw: {
+          title: 'When required by law',
+          paragraph: 'If there’s a legal requirement to provide it, such as a court order.',
+        },
+        givenConsent: {
+          title: 'When you have given consent',
+          paragraph: 'If you have given your consent, such as for a medical research study.',
+        },
+        publicInterest: {
+          title: 'When there is an overriding public interest',
+          paragraph: 'In an emergency or in a situation when the safety of others is most important. For example, to help manage contagious diseases like meningitis and stop them spreading.',
+        },
+        informationRemoved: {
+          title: 'When information that can identify you is removed',
+          paragraph: 'Information about your health care or treatment might still be used in research and planning if the information that can identify you is removed first.',
+        },
+        specificExclusion: {
+          title: 'When there is a specific exclusion',
+          paragraph: 'Your confidential patient information can still be used in a small number of situations. For example, for official national statistics like a population census.',
+        },
       },
       p4: {
-        paragraphs: [
-          'If you decide to opt out, this will be respected and applied by NHS Digital and Public Health England. These organisations collect, process and release health and adult social care data on a national basis. Your decision will also be respected and applied by all other organisations that are responsible for health and care information by March 2020.',
-          'An opt-out will only apply to the health and care system in England. This does not apply to your health data where you have accessed health or care services outside of England, such as in Scotland and Wales.',
-          'If you choose to opt out, your data may still be used during some specific situations. For example, during an epidemic where there might be a risk to other people\'s health.',
+        paragraph1: 'Use this service to:',
+        listItems1: [
+          'choose if your confidential patient information is used for research and planning',
+          'change or check your current choice',
         ],
+        paragraph2: {
+          text: 'If you want to make a choice for someone else, find out how to on the ',
+          nhsWebsiteLink: 'NHS website',
+        },
+        paragraph3: 'Your choice will be applied by:',
+        listItems2: [
+          'NHS Digital and Public Health England',
+          'all other health and care organisations by March 2020',
+        ],
+        paragraph4: 'Any choice you make will not impact your individual care.',
       },
       ndop: {
         paragraphs: [
@@ -2491,5 +2500,6 @@ export default {
     sentAtTimeTodayFormat: '[Sent today at ]{timeFormat}',
     sentAtTimeYesterdayFormat: '[Sent yesterday at ]{timeFormat}',
   },
+  components,
   thirdPartyProviders,
 };

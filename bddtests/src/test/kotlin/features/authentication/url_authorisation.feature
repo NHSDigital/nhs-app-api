@@ -12,7 +12,6 @@ Feature: Authorisation occurs during each URL visit
       | /appointments/cancelling                    |
       | /appointments/booking                       |
       | /appointments/confirmation                  |
-      | /data-sharing                               |
       | /                                           |
       | /logout                                     |
       | /more                                       |
@@ -83,7 +82,6 @@ Scenario: User browses to url when logged in
     | /appointments                               | /appointments                  |
     | /appointments/booking-guidance              | /appointments/booking-guidance |
     | /appointments/booking                       | /appointments/booking          |
-    | /data-sharing                               | /data-sharing                  |
     | /                                           | /                              |
     | /my-record                                  | /gp-medical-record             |
     | /prescriptions                              | /prescriptions                 |
@@ -113,7 +111,6 @@ Scenario: User browses to url when logged in
     Examples:
       | Url                                         | Page                           |
       | /appointments                               | /appointments                  |
-      | /data-sharing                               | /data-sharing                  |
       | /                                           | /                              |
       | /my-record                                  | /gp-medical-record             |
       | /prescriptions                              | /prescriptions                 |

@@ -48,22 +48,21 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
+import sjrIf from '@/lib/sjrIf';
 import {
   APPOINTMENT_ADMIN_HELP,
-  DATA_SHARING_PREFERENCES,
+  DATA_SHARING_OVERVIEW,
   MESSAGING,
   MORE,
   PATIENT_PRACTICE_MESSAGING,
 } from '@/lib/routes';
-import sjrIf from '@/lib/sjrIf';
 import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
-import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 
 export default {
   layout: 'nhsuk-layout',
@@ -75,9 +74,18 @@ export default {
   },
   data() {
     return {
-      appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
       adminHelpEnabled: sjrIf({ $store: this.$store, journey: 'cdssAdmin' }),
+      adminHelpPath: createUri({
+        path: APPOINTMENT_ADMIN_HELP.path,
+        noJs: { onlineConsultations: { previousRoute: MORE.path } },
+      }),
+      appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
+      appMessagingPath: MESSAGING.path,
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
+      isNativeApp: this.$store.state.device.isNativeApp,
+      isProxying: this.$store.getters['session/isProxying'],
+      morePath: MORE.path,
+      patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
       showPkbMessages: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -86,26 +94,14 @@ export default {
           serviceType: 'messages',
         },
       }),
-      isProxying: this.$store.getters['session/isProxying'],
-      isNativeApp: this.$store.state.device.isNativeApp,
-      patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
-      appMessagingPath: MESSAGING.path,
-      morePath: MORE.path,
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
-      adminHelpPath: createUri({
-        path: APPOINTMENT_ADMIN_HELP.path,
-        noJs: { onlineConsultations: { previousRoute: MORE.path } },
-      }),
     };
   },
   computed: {
     dataSharingPath() {
       return this.$store.state.device.isNativeApp
-        ? DATA_SHARING_PREFERENCES.path
+        ? DATA_SHARING_OVERVIEW.path
         : this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL;
-    },
-    patientPracticeMessagingEnabled() {
-      return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
     // patientpracticemessaging should be shown on desktop & native if enabled
     // appMessaging should only be shown on native devices if enabled
@@ -118,21 +114,24 @@ export default {
         ? this.patientPracticeMessagingPath
         : this.appMessagingPath;
     },
+    patientPracticeMessagingEnabled() {
+      return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
+    },
   },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');
   },
   methods: {
+    navigate(event) {
+      redirectTo(this, event.currentTarget.pathname);
+      event.preventDefault();
+    },
     navigateToAdminHelp(event) {
       this.navigate(event);
       this.$store.dispatch('navigation/setNewMenuItem', 4);
       this.$store.dispatch('onlineConsultations/setPreviousRoute', this.morePath);
       this.$store.dispatch('navigation/setBackLinkOverride', this.morePath);
       this.$store.dispatch('navigation/setRouteCrumb', 'moreCrumb');
-    },
-    navigateToMessaging(event) {
-      this.$store.dispatch('navigation/setBackLinkOverride', this.morePath);
-      this.navigate(event);
     },
     navigateToDataSharing(event) {
       if (this.$store.state.device.isNativeApp) {
@@ -141,9 +140,9 @@ export default {
         window.open(this.dataSharingPath, '_blank');
       }
     },
-    navigate(event) {
-      redirectTo(this, event.currentTarget.pathname);
-      event.preventDefault();
+    navigateToMessaging(event) {
+      this.$store.dispatch('navigation/setBackLinkOverride', this.morePath);
+      this.navigate(event);
     },
   },
 };

@@ -1,16 +1,16 @@
-import InsetContent from '@/components/data-sharing/InsetContent';
-import { createStore, mount } from '../../helpers';
+import InsetText from '@/components/InsetText';
+import { createStore, mount } from '../helpers';
 
 const paragraphs = ['para1', 'para2'];
 
-const createInsetContentComponent = $store => mount(InsetContent, {
+const createInsetTextComponent = $store => mount(InsetText, {
   $store,
   propsData: {
     paragraphs,
   },
 });
 
-describe('InsetContent', () => {
+describe('InsetText', () => {
   let wrapper;
   let $store;
 
@@ -18,12 +18,11 @@ describe('InsetContent', () => {
     $store = createStore({
     });
 
-    wrapper = createInsetContentComponent($store);
+    wrapper = createInsetTextComponent($store);
   });
 
   it('includes the hidden span', () => {
     expect(wrapper.find('.nhsuk-u-visually-hidden').exists()).toBe(true);
-    expect(wrapper.text()).toContain('generic.insetConent.heading');
   });
 
   it('includes all paragraphs', () => {

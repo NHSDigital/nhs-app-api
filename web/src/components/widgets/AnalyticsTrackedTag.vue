@@ -7,7 +7,6 @@
              :rel="tag === 'a' && target === '_blank' ? 'noopener noreferrer': undefined"
              :role="tag === 'a' && !href ? 'link': undefined"
              :target="tag === 'a' ? target : undefined"
-             :tabindex="tabindex"
              @click="trackClick"
              @keypress.enter="trackClick">
     <slot/>
@@ -18,26 +17,6 @@
 export default {
   name: 'AnalyticsTrackedTag',
   props: {
-    id: {
-      type: String,
-      default: undefined,
-    },
-    tag: {
-      type: String,
-      default: 'DIV',
-    },
-    text: {
-      type: String,
-      default: undefined,
-    },
-    target: {
-      type: String,
-      default: undefined,
-    },
-    preventDefault: {
-      type: Boolean,
-      default: true,
-    },
     clickFunc: {
       type: Function,
       default: undefined,
@@ -46,20 +25,46 @@ export default {
       type: [String, Object],
       default: undefined,
     },
-    href: {
-      type: String,
-      default: undefined,
-    },
     destination: {
       type: String,
       default: undefined,
     },
-    tabindex: {
-      type: Number,
-      default: 0,
+    href: {
+      type: String,
+      default: undefined,
+    },
+    id: {
+      type: String,
+      default: undefined,
+    },
+    preventDefault: {
+      type: Boolean,
+      default: true,
+    },
+    tag: {
+      type: String,
+      default: 'DIV',
+    },
+    target: {
+      type: String,
+      default: undefined,
+    },
+    text: {
+      type: String,
+      default: undefined,
     },
   },
   methods: {
+    getType(tagName) {
+      switch (tagName) {
+        case 'A':
+          return 'text_link';
+        case 'H2':
+          return 'accordion';
+        default:
+          return `unhandled_tag:${tagName}`;
+      }
+    },
     trackClick(evt) {
       if (global.digitalData) {
         const el = evt.currentTarget;
@@ -93,16 +98,6 @@ export default {
           }
           this.clickFunc(this.clickParam || evt);
         }
-      }
-    },
-    getType(tagName) {
-      switch (tagName) {
-        case 'A':
-          return 'text_link';
-        case 'H2':
-          return 'accordion';
-        default:
-          return `unhandled_tag:${tagName}`;
       }
     },
   },

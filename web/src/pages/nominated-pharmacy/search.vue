@@ -47,8 +47,7 @@
             {{ $t('nominated_pharmacy.search.searchButton') }}
           </generic-button>
           <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
-                                 :text="$t('generic.backButton.text')"
-                                 :tabindex="-1">
+                                 :text="$t('generic.backButton.text')">
             <desktopGenericBackLink id="back-link"
                                     :path="backButtonPath"
                                     :button-text="'generic.backButton.text'"

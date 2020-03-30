@@ -15,6 +15,7 @@ open class PageUrl {
                         "informatica appointments" to "/appointments/informatica",
                         "gp at hand appointments" to "/appointments/gp-at-hand",
                         "data sharing" to "/data-sharing",
+                        "data sharing make your choice" to "/data-sharing/make-your-choice",
                         "your prescriptions" to "/prescriptions",
                         "prescription repeat courses" to "/prescriptions/repeat-courses",
                         "gp at hand prescriptions" to "/prescriptions/gp-at-hand",

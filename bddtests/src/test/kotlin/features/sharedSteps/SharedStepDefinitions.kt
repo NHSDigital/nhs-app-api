@@ -47,8 +47,7 @@ open class SharedStepDefinitions {
     }
 
     @Given("^I am an? (.*) patient$")
-    fun initialisePatientAndGpSystem(gpSystem: String)
-    {
+    fun initialisePatientAndGpSystem(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         mockingClient.clearWiremock()
         mockingClient.favicon()

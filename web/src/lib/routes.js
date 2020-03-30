@@ -438,15 +438,69 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
-  DATA_SHARING_PREFERENCES: {
+  DATA_SHARING_OVERVIEW: {
     name: 'data-sharing',
     path: '/data-sharing',
     crumb: {
+      i18nKey: 'dataSharingOverview',
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.MORE];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}ndop/`,
+    redirectRules: [{
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/',
+    }],
+  },
+  DATA_SHARING_WHERE_USED: {
+    name: 'data-sharing-where-used',
+    path: '/data-sharing/where-used',
+    crumb: {
+      i18nKey: 'dataSharingWhereUsed',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}ndop/`,
+    redirectRules: [{
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/',
+    }],
+  },
+  DATA_SHARING_DOES_NOT_APPLY: {
+    name: 'data-sharing-does-not-apply',
+    path: '/data-sharing/does-not-apply',
+    crumb: {
+      i18nKey: 'dataSharingDoesNotApply',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}ndop/`,
+    redirectRules: [{
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/',
+    }],
+  },
+  DATA_SHARING_MAKE_YOUR_CHOICE: {
+    name: 'data-sharing-make-your-choice',
+    path: '/data-sharing/make-your-choice',
+    crumb: {
+      i18nKey: 'dataSharingMakeYourChoice',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}ndop/`,
+    redirectRules: [{
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/',
+    }],
   },
   EVENTS: {
     name: 'gp-medical-record-events',
@@ -1546,7 +1600,10 @@ export const {
   CONSULTATIONS,
   EVENTS,
   CURRENT_MEDICINES,
-  DATA_SHARING_PREFERENCES,
+  DATA_SHARING_OVERVIEW,
+  DATA_SHARING_WHERE_USED,
+  DATA_SHARING_DOES_NOT_APPLY,
+  DATA_SHARING_MAKE_YOUR_CHOICE,
   DIAGNOSIS_V2,
   DISCONTINUED_MEDICINES,
   ENCOUNTERS,

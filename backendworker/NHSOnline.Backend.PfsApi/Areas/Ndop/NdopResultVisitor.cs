@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
     {
         public IActionResult Visit(GetNdopResult.Success result)
         {
-            return new OkObjectResult(result);
+            return new OkObjectResult(result.Response);
         }
 
         public IActionResult Visit(GetNdopResult.InternalServerError result)

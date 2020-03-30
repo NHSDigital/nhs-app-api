@@ -22,8 +22,7 @@
 
     <template v-if="$store.state.device.isNativeApp">
       <analytics-tracked-tag :text="$t('signOutButton.signOut')"
-                             data-purpose="button"
-                             :tabindex="-1">
+                             data-purpose="button">
         <generic-button id="signout-button"
                         data-purpose="logout-button"
                         class="nhsuk-button nhsuk-button--secondary"

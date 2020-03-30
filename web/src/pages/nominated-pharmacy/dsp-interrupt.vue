@@ -12,7 +12,7 @@
         <p>
           <analytics-tracked-tag id="dsp-link"
                                  :text="$t('nominated_pharmacy.dspInterrupt.visitOnlineListText')"
-                                 :tabindex="-1"
+                                 tabindex="-1"
                                  target="_blank"
                                  tag="a"
                                  :href="visitOnlinePharmacyListPath"
@@ -25,8 +25,7 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <analytics-tracked-tag
-          :text="$t('nominated_pharmacy.dspInterrupt.returnToPrescriptionsText')"
-          :tabindex="-1">
+          :text="$t('nominated_pharmacy.dspInterrupt.returnToPrescriptionsText')">
           <desktopGenericBackLink
             id="prescriptions-home-link"
             :path="returnToPrescriptionsPath"

@@ -4,44 +4,79 @@
 Feature: Data Sharing Frontend
   A user can access Data Sharing
 
-  Background:
-    Given I am a EMIS patient
+  Scenario: A user can navigate through the Data Sharing Preferences pages via the Next/Previous buttons
+    Given I am using the native app user agent
+    And I am a user who wishes to manage their Data Sharing Preferences
     And I am logged in
     And I retrieve the 'More' page directly
-    When I choose to set my data sharing preferences
+    When I click the Data Sharing link on the More page
+    Then the Data Sharing 'Overview' page is displayed
+    Then the content on the Data Sharing 'Overview' page is correct
+    When I click the Next button on the Data Sharing page
+    Then the content on the Data Sharing 'How confidential patient information is used' page is correct
+    When I click the Next button on the Data Sharing page
+    Then the content on the Data Sharing 'When your choice does not apply' page is correct
+    When I click the Next button on the Data Sharing page
+    Then the content on the Data Sharing 'Make your choice' page is correct
+    When I click the Previous button on the Data Sharing page
+    Then the Data Sharing 'When your choice does not apply' page is displayed
+    When I click the Previous button on the Data Sharing page
+    Then the Data Sharing 'How confidential patient information is used' page is displayed
+    When I click the Previous button on the Data Sharing page
+    Then the Data Sharing 'Overview' page is displayed
 
-  Scenario Outline: A user navigates through Data Sharing Preferences pages via the Next/Previous buttons to page with heading <TargetPage>
-    Given I am on the Data Sharing <StartingPage> page
-    When I click the Next button <Clicks> times
-    Then I am on the Data Sharing <TargetPage> page
-    When I click the Previous button <Clicks> times
-    Then I am on the Data Sharing <StartingPage> page
-  Examples:
-  |StartingPage|Clicks|TargetPage                                     |
-  |Overview    |1     |Where confidential patient information is used |
-  |Overview    |2     |Where your choice does not apply               |
-  |Overview    |3     |Make your choice                               |
+  Scenario: A user can navigate through the Data Sharing Preferences pages via the Contents links
+    Given I am using the native app user agent
+    And I am a user who wishes to manage their Data Sharing Preferences
+    And I am logged in
+    And I retrieve the 'Data Sharing' page directly
+    Then the Data Sharing 'Overview' page is displayed
+    When I click the 'Make your choice' contents link on the Data Sharing page
+    Then the Data Sharing 'Make your choice' page is displayed
+    When I click the 'How confidential patient information is used' contents link on the Data Sharing page
+    Then the Data Sharing 'How confidential patient information is used' page is displayed
+    When I click the 'Overview' contents link on the Data Sharing page
+    Then the Data Sharing 'Overview' page is displayed
+    When I click the 'When your choice does not apply' contents link on the Data Sharing page
+    Then the Data Sharing 'When your choice does not apply' page is displayed
 
-  Scenario Outline: A use navigates through the Data Sharing Preferences pages via the Contents links to page with heading <TargetPage>
-    Given I am on the Data Sharing <StartingPage> page
-    When I click the <ContentsLink> contents link
-    Then I am on the Data Sharing <TargetPage> page
-  Examples:
-  |StartingPage|ContentsLink                                   |TargetPage                                     |
-  |Overview    |Overview                                       |Overview                                       |
-  |Overview    |Where confidential patient information is used |Where confidential patient information is used |
-  |Overview    |Where your choice does not apply               |Where your choice does not apply               |
-  |Overview    |Make your choice                               |Make your choice                               |
-
-  @android
   Scenario: A user can navigate to the NHS website to find out more information on Data Sharing
-    Given I am on the Data Sharing Overview page
-    When I click the link called 'Visit the NHS.UK website' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
+    Given I am using the native app user agent
+    And I am a user who wishes to manage their Data Sharing Preferences
+    And I am logged in
+    And I retrieve the 'Data Sharing' page directly
+    Then the Data Sharing 'Overview' page is displayed
+    When I click the link called 'Visit the NHS website' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
+    Then a new tab has been opened by the link
+
+  Scenario: A user can navigate to the NHS website to find out more information on Managing their Choice
+    Given I am using the native app user agent
+    And I am a user who wishes to manage their Data Sharing Preferences
+    And I am logged in
+    And I retrieve the 'Data Sharing Make Your Choice' page directly
+    Then the Data Sharing 'Make your choice' page is displayed
+    When I click the link called 'NHS website' with a url of 'https://www.nhs.uk/your-nhs-data-matters/manage-your-choice/other-ways-to-manage-your-choice/'
     Then a new tab has been opened by the link
 
   Scenario: A user chooses to manage their Data Sharing preferences
-    Given I am on the Data Sharing Overview page
-    And I click the Next button 3 times
-    And I am on the Data Sharing Make your choice page
-    When I click the Start Now button
-    Then I am on the Ndop website
+    Given I am using the native app user agent
+    And I am a user who wishes to manage their Data Sharing Preferences
+    And I am logged in
+    And I retrieve the 'Data Sharing' page directly
+    Then the Data Sharing 'Overview' page is displayed
+    When I click the 'Make your choice' contents link on the Data Sharing page
+    And the Data Sharing 'Make your choice' page is displayed
+    When I click the Start Now button on the Data Sharing page
+    Then the NDOP website is displayed
+
+  Scenario: A desktop user is directed to the NHS website to find out more information on Data Sharing
+    Given I am a user who wishes to manage their Data Sharing Preferences
+    And I am logged in
+    And I retrieve the 'More' page directly
+    When I click the link called 'Find out why your data matters' with a url of 'https://www.nhs.uk/your-nhs-data-matters/'
+    Then a new tab has been opened by the link
+    When I browse to the pages at the following urls I see the home page
+      | /data-sharing                   |
+      | /data-sharing/where-used        |
+      | /data-sharing/does-not-apply    |
+      | /data-sharing/make-your-choice  |

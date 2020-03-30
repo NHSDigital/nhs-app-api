@@ -28,8 +28,7 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
-                               :text="$t('generic.backButton.text')"
-                               :tabindex="-1">
+                               :text="$t('generic.backButton.text')">
           <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                                   id="back-link"
                                   :path="dspInterrupt"

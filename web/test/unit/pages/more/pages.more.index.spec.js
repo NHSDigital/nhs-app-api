@@ -4,7 +4,7 @@ import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { createEvent, createStore, mount, createRouter } from '../../helpers';
 import {
   PATIENT_PRACTICE_MESSAGING,
-  DATA_SHARING_PREFERENCES,
+  DATA_SHARING_OVERVIEW,
   APPOINTMENT_ADMIN_HELP,
   MESSAGING,
 } from '@/lib/routes';
@@ -218,10 +218,10 @@ describe('more', () => {
   describe('methods', () => {
     it('will navigate to data preferences when data preferences menu item clicked if native', () => {
       wrapper = mountAs({ isNativeApp: true });
-      const event = createEvent({ currentTarget: { pathname: DATA_SHARING_PREFERENCES.path } });
+      const event = createEvent({ currentTarget: { pathname: DATA_SHARING_OVERVIEW.path } });
       wrapper.vm.navigateToDataSharing(event);
 
-      expect($router.push).toHaveBeenCalledWith(DATA_SHARING_PREFERENCES.path);
+      expect($router.push).toHaveBeenCalledWith(DATA_SHARING_OVERVIEW.path);
       expect(event.preventDefault).toHaveBeenCalled();
     });
 
