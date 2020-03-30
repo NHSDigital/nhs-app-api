@@ -6,7 +6,7 @@ using NHSOnline.Backend.Support.Logging;
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
     internal sealed class TppClientRequestBinaryDataPost :
-        ITppClientRequest<(TppUserSession userSession, string documentIdentifier), RequestBinaryDataReply>
+        ITppClientRequest<(TppRequestParameters tppRequestParameters, string documentIdentifier), RequestBinaryDataReply>
     {
         private readonly TppClientRequestExecutor _requestExecutor;
 
@@ -16,19 +16,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         }
 
         public async Task<TppApiObjectResponse<RequestBinaryDataReply>> Post(
-            ( TppUserSession userSession, string documentIdentifier) parameters)
+            (TppRequestParameters tppRequestParameters, string documentIdentifier) parameters)
         {
-            var (userSession, documentIdentifier) = parameters;
+            var (tppRequestParameters, documentIdentifier) = parameters;
             var binaryDataRequest = new RequestBinaryData
             {
-                PatientId = userSession.PatientId,
-                OnlineUserId = userSession.OnlineUserId,
-                UnitId = userSession.UnitId,
+                PatientId = tppRequestParameters.PatientId,
+                OnlineUserId = tppRequestParameters.OnlineUserId,
+                UnitId = tppRequestParameters.OdsCode,
                 BinaryDataId = documentIdentifier
             };
 
             return await _requestExecutor.Post<RequestBinaryDataReply>(
-                requestBuilder => requestBuilder.Model(binaryDataRequest).Suid(userSession.Suid));
+                requestBuilder => requestBuilder.Model(binaryDataRequest).Suid(tppRequestParameters.Suid));
         }
     }
 }

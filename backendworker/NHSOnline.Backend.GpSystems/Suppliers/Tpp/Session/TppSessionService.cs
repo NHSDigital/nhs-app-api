@@ -19,14 +19,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         private readonly ITppClientRequest<TppUserSession, LogoffReply> _logoff;
         private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
         private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccesses;
-        private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelected;
+        private readonly ITppClientRequest<TppRequestParameters, PatientSelectedReply> _patientSelected;
         private readonly ILogger<TppSessionService> _logger;
         private readonly ITppSessionMapper _sessionMapper;
 
         public TppSessionService(
             ITppClientRequest<TppUserSession, LogoffReply> logoff,
             ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
-            ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelected,
+            ITppClientRequest<TppRequestParameters, PatientSelectedReply> patientSelected,
             ILogger<TppSessionService> logger,
             ITppSessionMapper sessionMapper,
             ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccesses)
@@ -65,7 +65,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 // more than 1 person is found in the response.
                 if (tppUserSession.ProxyPatients.Any())
                 {
-                    await _patientSelected.Post(tppUserSession);
+                    var tppRequestParameters = new GpLinkedAccountModel(tppUserSession)
+                        .BuildTppRequestParameters(_logger);
+
+                    await _patientSelected.Post(tppRequestParameters);
                 }
 
                 var serviceAccess = await _listServiceAccesses.Post(tppUserSession);
@@ -148,7 +151,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 }
 
                 var tppUserSession = userSession.ValueOrFailure();
-                await _patientSelected.Post(tppUserSession);
+
+                var tppRequestParameters = new GpLinkedAccountModel(tppUserSession)
+                    .BuildTppRequestParameters(_logger);
+
+                await _patientSelected.Post(tppRequestParameters);
 
                 _logger.LogDebug($"TPP user session successfully recreated for patientId {patientId}");
                 return new GpSessionRecreateResult.Success(tppUserSession.Suid);

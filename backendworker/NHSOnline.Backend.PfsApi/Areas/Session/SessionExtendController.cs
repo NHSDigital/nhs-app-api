@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
+using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session
 {
@@ -26,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post()
+        public async Task<IActionResult> Post([FromHeader(Name=PatientId)] Guid patientId)
         {
             try
             {
@@ -34,7 +36,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
                 var userSession = HttpContext.GetUserSession();
 
-                var sessionExtendedResultVisited = await GetSessionExtendResultVisitorOutput(userSession);
+                var sessionExtendedResultVisited = await GetSessionExtendResultVisitorOutput(userSession, patientId);
+
                 if (!sessionExtendedResultVisited.SessionWasExtended)
                 {
                     _logger.LogError(
@@ -56,12 +59,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         private async Task<SessionExtendResultVisitorOutput> GetSessionExtendResultVisitorOutput(
-            UserSession userSession)
+            UserSession userSession, Guid patientId)
         {
             _logger.LogDebug($"Fetch session extend Service for GP System: '{userSession.GpUserSession.Supplier}'.");
-            var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
-            var sessionService = gpSystem.GetSessionExtendService();
-            var extendResult = await sessionService.Extend(userSession.GpUserSession);
+            var sessionService = _gpSystemFactory
+                .CreateGpSystem(userSession.GpUserSession.Supplier)
+                .GetSessionExtendService();
+            
+            var gpLinkedAccountModel = new GpLinkedAccountModel(
+                userSession.GpUserSession, patientId);
+
+            var extendResult = await sessionService.Extend(gpLinkedAccountModel);
+
             return extendResult.Accept(new SessionExtendResultVisitor());
         }
     }

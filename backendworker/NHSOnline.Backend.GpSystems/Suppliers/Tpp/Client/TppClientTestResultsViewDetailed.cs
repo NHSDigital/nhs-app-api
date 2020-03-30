@@ -6,7 +6,7 @@ using NHSOnline.Backend.Support.Logging;
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
     internal sealed class TppClientTestResultsViewDetailed
-        : ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply>
+        : ITppClientRequest<(TppRequestParameters tppRequestParameters, string testResultId), TestResultsViewReply>
     {
         private readonly ILogger<TppClientTestResultsViewDetailed> _logger;
         private readonly TppClientRequestExecutor _requestExecutor;
@@ -20,24 +20,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         }
 
         public async Task<TppApiObjectResponse<TestResultsViewReply>> Post(
-            (TppUserSession tppUserSession, string testResultId) parameters)
+            (TppRequestParameters tppRequestParameters, string testResultId) parameters)
         {
             _logger.LogEnter();
 
-            var (tppUserSession, testResultId) = parameters;
+            var (tppRequestParameters, testResultId) = parameters;
 
             try
             {
                 var request = new TestResultsViewDetailed
                 {
-                    PatientId = tppUserSession.PatientId,
-                    OnlineUserId = tppUserSession.OnlineUserId,
-                    UnitId = tppUserSession.OdsCode,
+                    PatientId = tppRequestParameters.PatientId,
+                    OnlineUserId = tppRequestParameters.OnlineUserId,
+                    UnitId = tppRequestParameters.OdsCode,
                     TestResultId = testResultId,
                 };
 
                 return await _requestExecutor.Post<TestResultsViewReply>(
-                    requestBuilder => requestBuilder.Model(request).Suid(tppUserSession.Suid));
+                    requestBuilder => requestBuilder.Model(request).Suid(tppRequestParameters.Suid));
             }
             finally
             {

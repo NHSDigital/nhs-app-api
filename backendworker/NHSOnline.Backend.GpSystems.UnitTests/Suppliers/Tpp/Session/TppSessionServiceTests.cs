@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
         private Mock<ITppClientRequest<Authenticate, AuthenticateReply>> _mockAuthenticate;
         private Mock<ITppClientRequest<TppUserSession, LogoffReply>> _mockLogOff;
-        private Mock<ITppClientRequest<TppUserSession, PatientSelectedReply>> _mockPatientSelected;
+        private Mock<ITppClientRequest<TppRequestParameters, PatientSelectedReply>> _mockPatientSelected;
         private Mock<IConfigurationSettings> _mockConfigurationSettings;
         private Mock<ITppSessionMapper> _mockTppSessionMapper;
         private Mock<ITppClientRequest<TppUserSession, ListServiceAccessesReply>> _mockListServicesAccessesPost;
@@ -66,9 +66,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                     _actual = x;
                 });
 
-            _mockPatientSelected = services.AddMock<ITppClientRequest<TppUserSession, PatientSelectedReply>>();
+            _mockPatientSelected = services.AddMock<ITppClientRequest<TppRequestParameters, PatientSelectedReply>>();
             _mockPatientSelected
-                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
+                .Setup(x => x.Post(It.IsAny<TppRequestParameters>()))
                 .ReturnsAsync(() => null);
 
             _mockLogOff = services.AddMock<ITppClientRequest<TppUserSession, LogoffReply>>();
@@ -252,8 +252,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             created.UserSession.Name.Should().Be(expectedName);
 
             _mockListServicesAccessesPost.Verify();
-            _mockPatientSelected.Verify(x => x.Post(It.IsAny<TppUserSession>()), Times.Once);
-
+            _mockPatientSelected.Verify(x => x.Post(It.IsAny<TppRequestParameters>()), Times.Once);
         }
 
         [TestMethod]
@@ -277,7 +276,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             _mockListServicesAccessesPost.Verify();
             var created = (GpSessionCreateResult.Success) result;
             created.UserSession.Name.Should().Be(expectedName);
-            _mockPatientSelected.Verify(x => x.Post(It.IsAny<TppUserSession>()), Times.Never);
+            _mockPatientSelected.Verify(x => x.Post(It.IsAny<TppRequestParameters>()), Times.Never);
         }
 
         [TestMethod]

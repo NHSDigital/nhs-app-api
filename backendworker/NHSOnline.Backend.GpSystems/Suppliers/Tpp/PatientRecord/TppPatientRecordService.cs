@@ -26,24 +26,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         private readonly IGetPatientTestResultsTaskChecker _patientTestResultsChecker;
         private readonly IGetTppDetailedTestResultChecker _patientDetailedTestResultChecker;
         private readonly ITppMyRecordMapper _tppMyRecordMapper;
-        private readonly ITppClientRequest<TppUserSession, ViewPatientOverviewReply> _patientOverview;
-        private readonly ITppClientRequest<TppUserSession, RequestPatientRecordReply> _requestPatientRecord;
-        private readonly ITppClientRequest<(TppUserSession tppUserSession, string documentIdentifier), RequestBinaryDataReply> _requestBinaryData;
-        private readonly ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> _testResultsView;
-        private readonly ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> _testResultsViewDetailed;
+        private readonly ITppClientRequest<TppRequestParameters, ViewPatientOverviewReply> _patientOverview;
+        private readonly ITppClientRequest<TppRequestParameters, RequestPatientRecordReply> _requestPatientRecord;
+        private readonly ITppClientRequest<(TppRequestParameters tppRequestParameters, string startDate, string endDate), TestResultsViewReply> _testResultsView;
+        private readonly ITppClientRequest<(TppRequestParameters tppRequestParameters, string documentIdentifier), RequestBinaryDataReply> _requestBinaryData;
+        private readonly ITppClientRequest<(TppRequestParameters tppRequestParameters, string testResultId), TestResultsViewReply> _testResultsViewDetailed;
 
         public TppPatientRecordService(IGetPatientDcrEventsTaskChecker patientDcrEventsChecker,
             IGetPatientOverviewTaskChecker patientOverviewTaskChecker,
             IGetPatientDocumentTaskChecker patientDocumentTaskChecker,
             IGetPatientTestResultsTaskChecker patientTestResultsChecker,
             IGetTppDetailedTestResultChecker patientDetailedTestResultChecker,
-            ITppClientRequest<TppUserSession, ViewPatientOverviewReply> patientOverview,
+            ITppClientRequest<TppRequestParameters, ViewPatientOverviewReply> patientOverview,
+            ITppClientRequest<TppRequestParameters, RequestPatientRecordReply> requestPatientRecord,
+            ITppClientRequest<(TppRequestParameters tppRequestParameters, string startDate, string endDate), TestResultsViewReply> testResultsView,
+            ITppClientRequest<(TppRequestParameters tppRequestParameters, string documentIdentifier), RequestBinaryDataReply> requestBinaryData,
+            ITppClientRequest<(TppRequestParameters tppRequestParameters, string testResultId), TestResultsViewReply> testResultsViewDetailed,
             IGetPatientDocumentsFromDcrEventsTaskChecker patientDocumentsFromDcrEventsTaskChecker,
-            ILogger<TppPatientRecordService> logger, ITppMyRecordMapper tppMyRecordMapper,
-            ITppClientRequest<TppUserSession, RequestPatientRecordReply> requestPatientRecord,
-            ITppClientRequest<(TppUserSession, string documentIdentifier), RequestBinaryDataReply> requestBinaryData,
-            ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply> testResultsView,
-            ITppClientRequest<(TppUserSession tppUserSession, string testResultId), TestResultsViewReply> testResultsViewDetailed)
+            ILogger<TppPatientRecordService> logger, ITppMyRecordMapper tppMyRecordMapper)
         {
             _patientDcrEventsChecker = patientDcrEventsChecker;
             _patientOverviewTaskChecker = patientOverviewTaskChecker;
@@ -64,19 +64,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         {
             _logger.LogEnter();
 
-            var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
-
             try
             {
+                var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+
                 // TPP does not yet handle concurrent requests
-                var patientOverviewItems = await RetrievePatientOverviewItems(tppUserSession);
-                var dcrItems = await RetrievePatientRecordDcrItems(tppUserSession);
+                var patientOverviewItems = await RetrievePatientOverviewItems(tppRequestParameters);
+                var dcrItems = await RetrievePatientRecordDcrItems(tppRequestParameters);
+                var testResults = await RetrieveTestResults(tppRequestParameters);
+
                 var documentItems = dcrItems.PatientDocuments;
                 var dcrEvents = dcrItems.TppDcrEvents;
-                var testResults = await RetrieveTestResults(tppUserSession);
 
                 _logger.LogInformation($"Number of documents for user " +
-                                       $"at ODSCode {tppUserSession.OdsCode} is " +
+                                       $"at ODSCode {tppRequestParameters.OdsCode} is " +
                                        $"{documentItems.Data.Count()}");
 
                 var allergies = patientOverviewItems.Item1;
@@ -87,7 +88,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                     dcrEvents,
                     testResults,
                     documentItems);
-                myRecordResponse.Supplier = tppUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+
+                myRecordResponse.Supplier = Supplier.Tpp.ToString().ToUpper(CultureInfo.InvariantCulture);
 
                 return new GetMyRecordResult.Success(myRecordResponse);
             }
@@ -107,19 +109,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        public async Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier,
-            string documentType, string documentName)
+        public async Task<GetPatientDocumentResult> GetPatientDocument(
+            GpLinkedAccountModel gpLinkedAccountModel, string documentIdentifier, string documentType, string documentName)
         {
             _logger.LogEnter();
 
-            var tppUserSession = (TppUserSession) gpUserSession;
-
             try
             {
-                var patientOverviewItems = await RetrievePatientDocument(documentIdentifier, tppUserSession);
+                var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+
+                var patientOverviewItems = await RetrievePatientDocument(documentIdentifier, tppRequestParameters);
 
                 _logger.LogInformation($"Document type for user document " +
-                                       $"at ODSCode {tppUserSession.OdsCode} is " +
+                                       $"at ODSCode {tppRequestParameters.OdsCode} is " +
                                        $"{patientOverviewItems.Type}");
 
                 return new GetPatientDocumentResult.Success(patientOverviewItems);
@@ -140,8 +142,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentIdentifier, string documentType,
-            string documentName)
+        public Task<PatientDocument> GetPatientDocumentForDownload(
+            GpLinkedAccountModel gpLinkedAccountModel, string documentIdentifier, string documentType, string documentName)
         {
             throw new NotImplementedException();
         }
@@ -151,16 +153,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             throw new NotImplementedException();
         }
 
-        public async Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
+        public async Task<GetDetailedTestResult> GetDetailedTestResult(GpLinkedAccountModel gpLinkedAccountModel, string testResultId)
         {
             _logger.LogEnter();
 
-            var tppUserSession = (TppUserSession)gpUserSession;
-
             try
             {
+                var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+
                 _logger.LogDebug("Fetching TPP detailed test results");
-                var detailedTestResult = await _testResultsViewDetailed.Post((tppUserSession, testResultId));
+                var detailedTestResult = await _testResultsViewDetailed.Post((tppRequestParameters, testResultId));
 
                 _logger.LogDebug($"Mapping TPP detailed test results to instance of {nameof(TestResultResponse)} class");
                 var tppTestResultResponse = _patientDetailedTestResultChecker.Check(detailedTestResult);
@@ -189,7 +191,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        private async Task<TestResults> GetLast180DaysTestResults(TppUserSession tppUserSession)
+        private async Task<TestResults> GetLast180DaysTestResults(TppRequestParameters tppRequestParameters)
         {
             _logger.LogEnter();
 
@@ -199,7 +201,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _logger.LogDebug("Grouping test results by date");
             foreach (var testResultDates in tppTestResultDates)
             {
-                var testResultsView = await _testResultsView.Post((tppUserSession,
+                var testResultsView = await _testResultsView.Post((tppRequestParameters,
                     testResultDates.StartDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture),
                     testResultDates.EndDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture)));
 
@@ -244,13 +246,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             };
         }
 
-        private async Task<TppDcrItems> RetrievePatientRecordDcrItems(TppUserSession tppUserSession)
+        private async Task<TppDcrItems> RetrievePatientRecordDcrItems(TppRequestParameters tppRequestParameters)
         {
             try
             {
 
                 _logger.LogInformation("Retrieving PatientDocuments from DCR Events.");
-                var patientRecord = await _requestPatientRecord.Post(tppUserSession);
+                var patientRecord = await _requestPatientRecord.Post(tppRequestParameters);
 
                 _logger.LogDebug($"Mapping TPP DCR responses to instance of {nameof(DocumentItem)} class");
                 var dcrItems = new TppDcrItems
@@ -282,13 +284,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        private async Task<TestResults> RetrieveTestResults(TppUserSession tppUserSession)
+        private async Task<TestResults> RetrieveTestResults(TppRequestParameters tppRequestParameters)
         {
             try
             {
 
                 _logger.LogInformation("Retrieving Test Results.");
-                return await GetLast180DaysTestResults(tppUserSession);
+                return await GetLast180DaysTestResults(tppRequestParameters);
 
             }
             catch (Exception e)
@@ -302,11 +304,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        private async Task<Tuple<Allergies, Medications>> RetrievePatientOverviewItems(TppUserSession tppUserSession)
+        private async Task<Tuple<Allergies, Medications>> RetrievePatientOverviewItems(TppRequestParameters tppRequestParameters)
         {
             try
             {
-                var patientOverview = await _patientOverview.Post(tppUserSession);
+                var patientOverview = await _patientOverview.Post(tppRequestParameters);
                 _logger.LogDebug($"Mapping TPP Patient Overview responses to lists of {nameof(Allergies)} and {nameof(Medications)} classes");
                 return _patientOverviewTaskChecker.Check(patientOverview);
             }
@@ -321,13 +323,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        private async Task<PatientDocument> RetrievePatientDocument(string documentIdentifier, TppUserSession tppUserSession)
+        private async Task<PatientDocument> RetrievePatientDocument(string documentIdentifier, TppRequestParameters tppRequestParameters)
         {
             _logger.LogEnter();
 
             try
             {
-                var patientDocument = await _requestBinaryData.Post((tppUserSession, documentIdentifier));
+                var patientDocument = await _requestBinaryData.Post((tppRequestParameters, documentIdentifier));
                 _logger.LogExit();
                 return _patientDocumentTaskChecker.Check(patientDocument);
             }

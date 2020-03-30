@@ -140,8 +140,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return await Get<IndividualDocument>(
                 path,
                 RequestsForSuccessOutcome.MedicalDocumentGet, GetDefaultSuccessStatusCodeList(),
-                endUserSessionId: endUserSessionId,
-                sessionId: responseSessionId);
+                endUserSessionId,
+                responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId,

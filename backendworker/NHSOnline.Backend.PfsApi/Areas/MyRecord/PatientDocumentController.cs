@@ -1,12 +1,15 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 using FileTypes = NHSOnline.Backend.Support.Constants.FileConstants.FileTypes;
+using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
@@ -30,7 +33,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         [HttpPost]
         [ApiVersionRoute("documents/{documentIdentifier}")]
         public async Task<IActionResult> GetPatientDocument(
-            [FromRoute(Name = "documentIdentifier")] string documentIdentifier,
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [FromRoute(Name="documentIdentifier")] string documentIdentifier,
             [FromBody] DocumentInfo documentInfo)
         {
             try
@@ -52,9 +56,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                     .CreateGpSystem(userSession.GpUserSession.Supplier)
                     .GetPatientRecordService();
 
+                var gpLinkedAccountModel = new GpLinkedAccountModel(
+                    userSession.GpUserSession, patientId
+                );
+
                 _logger.LogInformation("Fetching patient document");
                 var result = await patientRecordService.GetPatientDocument(
-                    userSession.GpUserSession,
+                    gpLinkedAccountModel,
                     documentIdentifier,
                     documentInfo.Type,
                     documentInfo.Name);
@@ -71,6 +79,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         [HttpPost]
         [ApiVersionRoute("documents/{documentIdentifier}/download")]
         public async Task<IActionResult> GetPatientDocumentForDownload(
+            [FromHeader(Name=PatientId)] Guid patientId,
             [FromRoute(Name = "documentIdentifier")] string documentIdentifier,
             [FromBody] DocumentInfo documentInfo)
         {
@@ -86,12 +95,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                     .CreateGpSystem(userSession.GpUserSession.Supplier)
                     .GetPatientRecordService();
 
+                var gpLinkedAccountModel = new GpLinkedAccountModel(
+                    userSession.GpUserSession, patientId
+                );
+
                 var type = documentInfo.Type;
                 var name = documentInfo.Name;
 
                 var result = await patientRecordService.GetPatientDocumentForDownload(
-                    userSession.GpUserSession,
-                    documentIdentifier, documentInfo.Type, documentInfo.Name);
+                    gpLinkedAccountModel, documentIdentifier, documentInfo.Type, documentInfo.Name);
 
                 var data = patientRecordService.ConvertDocumentToCorrectFormat(type, result.Content);
 

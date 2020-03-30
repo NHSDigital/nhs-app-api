@@ -7,8 +7,9 @@ import org.apache.http.client.methods.HttpPost
 
 class WorkerClientSession(val config: Config, val sender: WorkerClientSender, val gson: Gson){
 
-    fun postSessionConnection(): HttpResponse {
+    fun postSessionConnection(patientId: String): HttpResponse {
         val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.sessionConnectionExtend)
+        httpPost.addHeader("NHSO-Patient-Id", patientId)
 
         val response = sender.sendAsync(httpPost)
         httpPost.releaseConnection()

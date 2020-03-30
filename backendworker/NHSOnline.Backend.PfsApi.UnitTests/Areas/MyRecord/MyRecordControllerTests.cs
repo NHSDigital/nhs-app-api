@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private UserSession _userSession;
-        private  Guid _patientGuid;
+        private Guid _patientGuid;
 
         [TestInitialize]
         public void TestInitialize()

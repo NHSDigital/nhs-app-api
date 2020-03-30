@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -19,39 +21,41 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
     [TestClass]
     public sealed class TppClientRequestBinaryDataPostTests : IDisposable
     {
+        private IFixture _fixture;
+
         private TppClientTestsContext Context { get; set; }
-        private ITppClientRequest<(TppUserSession tppUserSession, string documentIdentifier),
-                RequestBinaryDataReply> SystemUnderTest { get; set; }
+
+        private ITppClientRequest<(TppRequestParameters tppRequestParameters, string documentIdentifier),
+            RequestBinaryDataReply> SystemUnderTest { get; set; }
 
         private MockHttpMessageHandler MockHttpHandler => Context.MockHttpHandler;
-        private Mock<ILogger<TppClientRequestExecutor>> MockLogger => Context.MockLogger;
+
+        private TppRequestParameters _tppRequestParameters;
+
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
             Context = new TppClientTestsContext();
             Context.Initialise();
+
+            _tppRequestParameters = _fixture.Create<TppRequestParameters>();
+
             SystemUnderTest = Context.ServiceProvider.GetRequiredService<
-                ITppClientRequest<(TppUserSession tppUserSession, string documentIdentifier),
+                ITppClientRequest<(TppRequestParameters tppUserSession, string documentIdentifier),
                 RequestBinaryDataReply>>();
         }
 
         [TestMethod]
         public async Task RequestBinaryDataPostRequest_ReturnsBinaryDataReply_WhenValidlyRequested()
         {
-
-            var tppUserSession = new TppUserSession
-            {
-                PatientId = "1234",
-                OnlineUserId = "12345",
-                OdsCode = "1234"
-            };
-
             var binaryDataRequest = new RequestBinaryData
             {
-                PatientId = tppUserSession.PatientId,
-                OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
+                PatientId = _tppRequestParameters.PatientId,
+                OnlineUserId = _tppRequestParameters.OnlineUserId,
+                UnitId = _tppRequestParameters.OdsCode,
                 BinaryDataId = "test",
                 ApiVersion = TppClientTestsContext.ApiVersion,
                 Uuid = TppClientTestsContext.Uuid
@@ -87,7 +91,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithContent(binaryDataRequest.SerializeXml())
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
 
-            var response = await SystemUnderTest.Post((tppUserSession, "test"));
+            var response = await SystemUnderTest.Post((_tppRequestParameters, "test"));
 
             response.Body.Should().BeEquivalentTo(expectedBinaryRequestResponse);
             response.Headers.Should().BeEquivalentTo(responseHeaders);
@@ -99,18 +103,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task RequestBinaryDataPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
         {
             // Arrange
-            var tppUserSession = new TppUserSession
-            {
-                PatientId = "1234",
-                OnlineUserId = "12345",
-                OdsCode = "1234"
-            };
-
             var binaryDataRequest = new RequestBinaryData
             {
-                PatientId = tppUserSession.PatientId,
-                OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
+                PatientId = _tppRequestParameters.PatientId,
+                OnlineUserId = _tppRequestParameters.OnlineUserId,
+                UnitId = _tppRequestParameters.OdsCode,
                 BinaryDataId = "test",
                 ApiVersion = TppClientTestsContext.ApiVersion,
                 Uuid = TppClientTestsContext.Uuid
@@ -131,7 +128,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .Respond(TppClientTestsContext.MediaType, errorResponseBuilder.BuildXml());
 
             // Act
-            var response = await SystemUnderTest.Post((tppUserSession, "test"));
+            var response = await SystemUnderTest.Post((_tppRequestParameters, "test"));
 
             // Assert
             response.ErrorResponse.Should().BeEquivalentTo(errorResponseBuilder.BuildExpected());
@@ -149,18 +146,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             HttpStatusCode value)
         {
             // Arrange
-            var tppUserSession = new TppUserSession
-            {
-                PatientId = "1234",
-                OnlineUserId = "12345",
-                OdsCode = "1234"
-            };
-
             var binaryDataRequest = new RequestBinaryData
             {
-                PatientId = tppUserSession.PatientId,
-                OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
+                PatientId = _tppRequestParameters.PatientId,
+                OnlineUserId = _tppRequestParameters.OnlineUserId,
+                UnitId = _tppRequestParameters.OdsCode,
                 BinaryDataId = "test",
                 ApiVersion = TppClientTestsContext.ApiVersion,
                 Uuid = TppClientTestsContext.Uuid
@@ -177,7 +167,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
                 .WithHeaders(tppRequestHeaders)
                 .Respond(value);
 
-            var response = await SystemUnderTest.Post((tppUserSession, "test"));
+            var response = await SystemUnderTest.Post((_tppRequestParameters, "test"));
 
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();

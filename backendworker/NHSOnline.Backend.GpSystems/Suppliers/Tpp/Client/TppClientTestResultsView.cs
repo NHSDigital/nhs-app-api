@@ -6,7 +6,7 @@ using NHSOnline.Backend.Support.Logging;
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
     internal sealed class TppClientTestResultsView
-        : ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply>
+        : ITppClientRequest<(TppRequestParameters tppRequestParameters, string startDate, string endDate), TestResultsViewReply>
     {
         private readonly ILogger<TppClientTestResultsView> _logger;
         private readonly TppClientRequestExecutor _requestExecutor;
@@ -18,9 +18,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         }
 
         public async Task<TppApiObjectResponse<TestResultsViewReply>> Post(
-            (TppUserSession tppUserSession, string startDate, string endDate) parameters)
+            (TppRequestParameters tppRequestParameters, string startDate, string endDate) parameters)
         {
-            var (tppUserSession, startDate, endDate) = parameters;
+            var (tppRequestParameters, startDate, endDate) = parameters;
 
             _logger.LogDebug($"Entered: {nameof(TestResultsView)} with { nameof(startDate)}:{startDate} and {nameof(endDate)}:{endDate}");
 
@@ -28,15 +28,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             {
                 var request = new TestResultsView
                 {
-                    PatientId = tppUserSession.PatientId,
-                    OnlineUserId = tppUserSession.OnlineUserId,
-                    UnitId = tppUserSession.OdsCode,
+                    PatientId = tppRequestParameters.PatientId,
+                    OnlineUserId = tppRequestParameters.OnlineUserId,
+                    UnitId = tppRequestParameters.OdsCode,
                     StartDate = startDate,
-                    EndDate = endDate,
+                    EndDate = endDate
                 };
 
                 return await _requestExecutor.Post<TestResultsViewReply>(
-                    requestBuilder => requestBuilder.Model(request).Suid(tppUserSession.Suid));
+                    requestBuilder => requestBuilder.Model(request).Suid(tppRequestParameters.Suid));
             }
             finally
             {

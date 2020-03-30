@@ -5,7 +5,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
-    internal sealed class TppClientPatientOverviewPost : ITppClientRequest<TppUserSession, ViewPatientOverviewReply>
+    internal sealed class TppClientPatientOverviewPost : ITppClientRequest<TppRequestParameters, ViewPatientOverviewReply>
     {
         private readonly ILogger<TppClientPatientOverviewPost> _logger;
         private readonly TppClientRequestExecutor _requestExecutor;
@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             _requestExecutor = requestExecutor;
         }
 
-        public async Task<TppApiObjectResponse<ViewPatientOverviewReply>> Post(TppUserSession tppUserSession)
+        public async Task<TppApiObjectResponse<ViewPatientOverviewReply>> Post(TppRequestParameters tppRequestParameters)
         {
             _logger.LogEnter();
 
@@ -24,13 +24,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             {
                 var request = new ViewPatientOverview
                 {
-                    PatientId = tppUserSession.PatientId,
-                    OnlineUserId = tppUserSession.OnlineUserId,
-                    UnitId = tppUserSession.OdsCode,
+                    PatientId = tppRequestParameters.PatientId,
+                    OnlineUserId = tppRequestParameters.OnlineUserId,
+                    UnitId = tppRequestParameters.OdsCode
                 };
 
                 return await _requestExecutor.Post<ViewPatientOverviewReply>(
-                    requestBuilder => requestBuilder.Model(request).Suid(tppUserSession.Suid));
+                    requestBuilder => requestBuilder.Model(request).Suid(tppRequestParameters.Suid));
             }
             finally
             {

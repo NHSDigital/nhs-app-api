@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.GpSystems.Session
 {
     public interface ISessionExtendService
     {
-        Task<SessionExtendResult> Extend(GpUserSession gpUserSession);
+        Task<SessionExtendResult> Extend(GpLinkedAccountModel gpLinkedAccountModel);
     }
 }

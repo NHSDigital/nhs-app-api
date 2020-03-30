@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -25,32 +26,46 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
     {
         private TppPatientRecordService _systemUnderTest;
 
-        private GpUserSession _gpUserSession;
         private IFixture _fixture;
+
+        private GpLinkedAccountModel _gpLinkedAccountModel;
+        private TppUserSession _tppUserSession;
+        private TppRequestParameters _tppRequestParameters;
+
         private Mock<IGetPatientDcrEventsTaskChecker> _patientDcrEventsChecker;
         private Mock<IGetPatientOverviewTaskChecker> _patientOverviewTaskChecker;
         private Mock<IGetPatientTestResultsTaskChecker> _patientTestResultsChecker;
+        private Mock<IGetTppDetailedTestResultChecker> _patientDetailedTestResultsChecker;
         private Mock<IGetPatientDocumentTaskChecker> _patientDocumentTaskChecker;
-        private Mock<ITppClientRequest<TppUserSession, ViewPatientOverviewReply>> _patientOverview;
-        private Mock<ITppClientRequest<(TppUserSession, string), RequestBinaryDataReply>> _requestBinary;
-        private Mock<ITppClientRequest<TppUserSession, RequestPatientRecordReply>> _requestPatientRecord;
-        private Mock<ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply>> _testResultsView;
 
+        private Mock<ITppClientRequest<TppRequestParameters, ViewPatientOverviewReply>> _patientOverview;
+        private Mock<ITppClientRequest<TppRequestParameters, RequestPatientRecordReply>> _requestPatientRecord;
+        private Mock<ITppClientRequest<(TppRequestParameters tppRequestParameters, string startDate, string endDate), TestResultsViewReply>> _testResultsView;
+        private Mock<ITppClientRequest<(TppRequestParameters tppRequestParameters, string documentIdentifier), RequestBinaryDataReply>> _requestBinary;
+        private Mock<ITppClientRequest<(TppRequestParameters tppRequestParameters, string testResultId), TestResultsViewReply>> _testResultsViewDetailed;
+        
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _gpUserSession = _fixture.Create<TppUserSession>();
-            _patientOverview = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, ViewPatientOverviewReply>>>();
-            _requestBinary = _fixture.Freeze<Mock<ITppClientRequest<(TppUserSession, string), RequestBinaryDataReply>>>();
-            _requestPatientRecord = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, RequestPatientRecordReply>>>();
-            _testResultsView = _fixture.Freeze<Mock<ITppClientRequest<(TppUserSession tppUserSession, string startDate, string endDate), TestResultsViewReply>>>();
+
+            _tppUserSession = _fixture.Create<TppUserSession>();
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _tppUserSession.Id);
+            _tppRequestParameters = new TppRequestParameters(_tppUserSession);
+
+            _patientOverview = _fixture.Freeze<Mock<ITppClientRequest<TppRequestParameters, ViewPatientOverviewReply>>>();
+            _requestBinary = _fixture.Freeze<Mock<ITppClientRequest<(TppRequestParameters, string), RequestBinaryDataReply>>>();
+            _requestPatientRecord = _fixture.Freeze<Mock<ITppClientRequest<TppRequestParameters, RequestPatientRecordReply>>>();
+            _testResultsView = _fixture.Freeze<Mock<ITppClientRequest<(TppRequestParameters, string, string), TestResultsViewReply>>>();
+            _testResultsViewDetailed = _fixture.Freeze<Mock<ITppClientRequest<(TppRequestParameters, string), TestResultsViewReply>>>();
+
             _patientDcrEventsChecker = _fixture.Freeze<Mock<IGetPatientDcrEventsTaskChecker>>();
             _patientOverviewTaskChecker = _fixture.Freeze<Mock<IGetPatientOverviewTaskChecker>>();
             _patientTestResultsChecker = _fixture.Freeze<Mock<IGetPatientTestResultsTaskChecker>>();
             _patientDocumentTaskChecker = _fixture.Freeze<Mock<IGetPatientDocumentTaskChecker>>();
-            _systemUnderTest = _fixture.Create<TppPatientRecordService>();
+            _patientDetailedTestResultsChecker = _fixture.Freeze<Mock<IGetTppDetailedTestResultChecker>>();
 
+            _systemUnderTest = _fixture.Create<TppPatientRecordService>();
         }
 
         [TestMethod]
@@ -88,7 +103,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 }
             };
 
-            _patientOverview.Setup(x => x.Post(It.IsAny<TppUserSession>()))
+            _patientOverview.Setup(x => x.Post(It.Is<TppRequestParameters>(p => MatchTppRequestParameters(p))))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<ViewPatientOverviewReply>(HttpStatusCode.OK)
                     {
@@ -96,7 +111,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         ErrorResponse = null,
                     }));
 
-            _requestPatientRecord.Setup(x => x.Post(It.IsAny<TppUserSession>()))
+            _requestPatientRecord.Setup(x => x.Post(It.Is<TppRequestParameters>(p => MatchTppRequestParameters(p))))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<RequestPatientRecordReply>(HttpStatusCode.OK)
                     {
@@ -104,12 +119,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         ErrorResponse = null,
                     }));
 
-            _testResultsView.Setup(x => x.Post(It.IsAny<(TppUserSession, string, string)>()))
+            _testResultsView.Setup(x => x.Post(TestResultsViewMatchParameters()))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<TestResultsViewReply>(HttpStatusCode.OK)
                     {
                         Body = testResultsResponse,
-                        ErrorResponse = null,
+                        ErrorResponse = null
                     }));
 
             _patientDcrEventsChecker.Setup(x =>
@@ -128,10 +143,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetMyRecord(new GpLinkedAccountModel(_gpUserSession));
+            var result = await _systemUnderTest.GetMyRecord(_gpLinkedAccountModel);
 
             // Assert
-            _patientOverview.Verify(x => x.Post(It.IsAny<TppUserSession>()));
+            _patientOverview.Verify();
+            _requestPatientRecord.Verify();
+            _testResultsView.Verify();
             _patientDcrEventsChecker.Verify();
             _patientOverviewTaskChecker.Verify();
             _patientTestResultsChecker.Verify();
@@ -143,15 +160,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
        [TestMethod]
         public async Task GetPatientDocument_ReturnsSuccessResponse_WhenFileTooLargeErrorResponseFromTpp()
         {
-
             // Arrange
-            var tppUserSession = new TppUserSession
-            {
-                PatientId = "1234",
-                OnlineUserId = "12345",
-                OdsCode = "1234"
-            };
-
             var expectedErrorResponse = new Error
             {
                 ErrorCode = "24",
@@ -166,8 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 IsTooLarge = true
             };
 
-            var parameters = (tppUserSession, "test");
-            _requestBinary.Setup(x => x.Post(parameters))
+            _requestBinary.Setup(x => x.Post(RequestBinaryMatchParameters()))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<RequestBinaryDataReply>(HttpStatusCode.OK)
                 {
@@ -182,7 +190,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 .Verifiable();
 
             //Act
-            var result = await _systemUnderTest.GetPatientDocument(tppUserSession,
+            var result = await _systemUnderTest.GetPatientDocument(_gpLinkedAccountModel,
                 "test", null, null);
 
 
@@ -206,13 +214,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         {
 
             // Arrange
-            var tppUserSession = new TppUserSession
-            {
-                PatientId = "1234",
-                OnlineUserId = "12345",
-                OdsCode = "1234"
-            };
-
             var expectedErrorResponse = new Error
             {
                 ErrorCode = "45",
@@ -227,8 +228,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 IsFileUploading = true
             };
 
-            var parameters = (tppUserSession, "test");
-            _requestBinary.Setup(x => x.Post(parameters))
+            _requestBinary.Setup(x => x.Post(RequestBinaryMatchParameters()))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<RequestBinaryDataReply>(HttpStatusCode.OK)
                 {
@@ -243,7 +243,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 .Verifiable();
 
             //Act
-            var result = await _systemUnderTest.GetPatientDocument(tppUserSession,
+            var result = await _systemUnderTest.GetPatientDocument(_gpLinkedAccountModel,
                 "test", null, null);
 
 
@@ -266,15 +266,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         public async Task GetPatientDocument_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromTpp()
         {
             // Arrange
-            const string identifier = "test";
-
-            var tppUserSession = new TppUserSession
-            {
-                PatientId = "1234",
-                OnlineUserId = "12345",
-                OdsCode = "1234"
-            };
-
             var expectedBinaryRequestResponse = new RequestBinaryDataReply
             {
                 BinaryData = new BinaryDataElement
@@ -282,7 +273,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                     FileType = "jpg",
                     BinaryDataPage = new BinaryDataPage
                     {
-                        BinaryData = "test",
+                        BinaryData = "test"
                     }
                 }
             };
@@ -295,8 +286,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 IsTooLarge = false
             };
 
-            var parameters = (tppUserSession, "test");
-            _requestBinary.Setup(x => x.Post(parameters))
+            _requestBinary.Setup(x => x.Post(RequestBinaryMatchParameters()))
                 .Returns(Task.FromResult(new TppApiObjectResponse<RequestBinaryDataReply>(HttpStatusCode.OK)
                 {
                     Body = expectedBinaryRequestResponse
@@ -309,8 +299,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetPatientDocument(tppUserSession, identifier,
-                null, null);
+            var result = await _systemUnderTest.GetPatientDocument(_gpLinkedAccountModel,
+                "test", null, null);
 
             // Assert
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
@@ -318,6 +308,94 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
                 .Subject.Response.Content.Should().NotBeNull();
         }
+        
+        [TestMethod]
+        public async Task GetDetailedTestResult_WhenResponseMappedSuccessfully_ReturnsSuccess()
+        {
+            var testResultId = _fixture.Create<string>();
+            var testResultViewReplyResponse = new TppApiObjectResponse<TestResultsViewReply>(HttpStatusCode.OK)
+            {
+                Body = _fixture.Create<TestResultsViewReply>()
+            };
+            var testResultResponse = _fixture.Create<TestResultResponse>();
+
+            _testResultsViewDetailed
+                .Setup(x => x.Post(TestResultsViewDetailedMatchParameters(testResultId)))
+                .ReturnsAsync(testResultViewReplyResponse);
+
+            _patientDetailedTestResultsChecker
+                .Setup(x => x.Check(testResultViewReplyResponse))
+                .Returns(testResultResponse);
+
+            var result = await _systemUnderTest.GetDetailedTestResult(_gpLinkedAccountModel, testResultId);
+
+            result.Should().BeAssignableTo<GetDetailedTestResult.Success>()
+                .Subject.Response.Should().Be(testResultResponse);
+        }
+
+        [TestMethod]
+        public async Task GetDetailedTestResult_WhenResponseMappedUnsuccessfully_ReturnsBadGateway()
+        {
+            var testResultId = _fixture.Create<string>();
+            var testResultViewReplyResponse = new TppApiObjectResponse<TestResultsViewReply>(HttpStatusCode.OK)
+            {
+                Body = _fixture.Create<TestResultsViewReply>()
+            };
+            var testResultResponse = _fixture.Create<TestResultResponse>();
+            testResultResponse.HasErrored = true;
+
+            _testResultsViewDetailed
+                .Setup(x => x.Post(TestResultsViewDetailedMatchParameters(testResultId)))
+                .ReturnsAsync(testResultViewReplyResponse);
+
+            _patientDetailedTestResultsChecker
+                .Setup(x => x.Check(testResultViewReplyResponse))
+                .Returns(testResultResponse);
+
+            var result = await _systemUnderTest.GetDetailedTestResult(_gpLinkedAccountModel, testResultId);
+
+            result.Should().BeAssignableTo<GetDetailedTestResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task GetDetailedTestResult_WhenPostThrowsHttpException_ReturnsBadGateway()
+        {
+            var testResultId = _fixture.Create<string>();
+
+            _testResultsViewDetailed
+                .Setup(x => x.Post(TestResultsViewDetailedMatchParameters(testResultId)))
+                .Throws<HttpRequestException>();
+
+            var result = await _systemUnderTest.GetDetailedTestResult(_gpLinkedAccountModel, testResultId);
+
+            result.Should().BeAssignableTo<GetDetailedTestResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task GetDetailedTestResult_WhenPostCheckThrowsNullException_ReturnsBadGateway()
+        {
+            var testResultId = _fixture.Create<string>();
+            var testResultViewReplyResponse = new TppApiObjectResponse<TestResultsViewReply>(HttpStatusCode.OK)
+            {
+                Body = _fixture.Create<TestResultsViewReply>()
+            };
+
+            _testResultsViewDetailed
+                .Setup(x => x.Post(TestResultsViewDetailedMatchParameters(testResultId)))
+                .ReturnsAsync(testResultViewReplyResponse);
+
+            _patientDetailedTestResultsChecker
+                .Setup(x => x.Check(testResultViewReplyResponse))
+                .Throws<NullReferenceException>();
+
+            var result = await _systemUnderTest.GetDetailedTestResult(_gpLinkedAccountModel, testResultId);
+            
+            result.Should().BeAssignableTo<GetDetailedTestResult.BadGateway>();
+        }
+        
+        
+        
+        
 
         private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)
         {
@@ -365,5 +443,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 Description = _fixture.Create<string>()
             };
         }
+
+        private bool MatchTppRequestParameters(TppRequestParameters p) =>
+            p.OnlineUserId.Equals(_tppRequestParameters.OnlineUserId, StringComparison.Ordinal) &&
+            p.Suid.Equals(_tppRequestParameters.Suid, StringComparison.Ordinal) &&
+            p.PatientId.Equals(_tppRequestParameters.PatientId, StringComparison.Ordinal) &&
+            p.OdsCode.Equals(_tppRequestParameters.OdsCode, StringComparison.Ordinal);
+
+        private (TppRequestParameters, string) RequestBinaryMatchParameters()
+            => It.Is<(TppRequestParameters, string)>(tuple =>
+                MatchTppRequestParameters(tuple.Item1) &&
+                !string.IsNullOrEmpty(tuple.Item2));
+
+        private (TppRequestParameters, string, string) TestResultsViewMatchParameters()
+            => It.Is<(TppRequestParameters, string, string)>(tuple =>
+                MatchTppRequestParameters(tuple.Item1) &&
+                !string.IsNullOrEmpty(tuple.Item2) &&
+                !string.IsNullOrEmpty(tuple.Item3));
+
+        private (TppRequestParameters, string) TestResultsViewDetailedMatchParameters(string testResultId)
+            => It.Is<(TppRequestParameters, string)>(tuple =>
+                MatchTppRequestParameters(tuple.Item1) &&
+                string.Equals(testResultId, tuple.Item2, StringComparison.Ordinal));
     }
 }

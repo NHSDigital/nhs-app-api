@@ -16,7 +16,6 @@ class TppPatients{
         }
 
         fun getPatientWithLinkedProfiles(): Patient {
-            // TODO - see if anythine else needs to be done as the tpp proxy functionality grows
             lisaHankey.linkedAccounts.forEach {
                 linkedAccount ->
                 linkedAccount.tppUserSession!!.onlineUserId = lisaHankey.onlineUserId
@@ -24,7 +23,6 @@ class TppPatients{
             }
             return lisaHankey
         }
-
 
         private val kevinBarryIm1ConnectionToken = Im1ConnectionToken(
                 "6pqW/zJEGD5kZ7Zo9J8z1qeIi8LgU7kibAU40CtvjIjWcmQlELqVGhrDZBiAmogsR6LAy9CM4rKVn9nxWrCYmw==",

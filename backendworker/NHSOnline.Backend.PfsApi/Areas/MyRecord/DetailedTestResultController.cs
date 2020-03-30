@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
+using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
@@ -26,7 +29,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTestResult([FromQuery] string testResultId)
+        public async Task<IActionResult> GetTestResult(
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [FromQuery] string testResultId)
         {
             try
             {
@@ -42,8 +47,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                     .CreateGpSystem(userSession.GpUserSession.Supplier)
                     .GetPatientRecordService();
 
+                var gpLinkedAccountUserSession = new GpLinkedAccountModel(
+                    userSession.GpUserSession, patientId
+                );
+
                 _logger.LogInformation("Fetching detailed test result");
-                var result = await patientRecordService.GetDetailedTestResult(userSession.GpUserSession, testResultId);
+                var result = await patientRecordService.GetDetailedTestResult(gpLinkedAccountUserSession, testResultId);
 
                 await result.Accept(new DetailedTestResultAuditingVisitor(_auditor, _logger));
                 return result.Accept(new DetailedTestResultVisitor());

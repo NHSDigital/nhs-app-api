@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         }
 
         [TestMethod]
-        public async void SwitchAccount_ReturnsSuccess_WhenLinkedAccountWithMatchingIdFoundInUserSessionForProxy()
+        public async Task SwitchAccount_ReturnsSuccess_WhenLinkedAccountWithMatchingIdFoundInUserSessionForProxy()
         {
             // Arrange
             var proxyId = Guid.NewGuid();
@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
 
         [TestMethod]
-        public async void SwitchAccount_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
+        public async Task SwitchAccount_ReturnsTrue_WhenLinkedAccountWithMatchingIdFoundInUserSessionForMainUser()
         {
             // Arrange
             var mainUserGuid = Guid.NewGuid();
@@ -187,7 +187,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
         }
 
         [TestMethod]
-        public async void SwitchAccount_ReturnsFalse_WhenLinkedAccountWithMatchingIdIsNotFoundInUserSession()
+        public async Task SwitchAccount_ReturnsFalse_WhenLinkedAccountWithMatchingIdIsNotFoundInUserSession()
         {
             // Arrange
             var randomGuidWhichWontBeFound = Guid.NewGuid();

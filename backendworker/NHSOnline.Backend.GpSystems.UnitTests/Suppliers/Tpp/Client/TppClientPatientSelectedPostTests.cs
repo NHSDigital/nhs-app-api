@@ -14,36 +14,35 @@ using RichardSzalay.MockHttp;
 using NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client;
 using System.Xml.Linq;
 
-namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
 {
     [TestClass]
     public sealed class TppClientPatientSelectedPostTests : IDisposable
     {
         private TppClientTestsContext Context { get; set; }
-        private ITppClientRequest<TppUserSession, PatientSelectedReply> SystemUnderTest { get; set; }
+        private ITppClientRequest<TppRequestParameters, PatientSelectedReply> SystemUnderTest { get; set; }
 
         private MockHttpMessageHandler MockHttpHandler => Context.MockHttpHandler;
-        private Mock<ILogger<TppClientRequestExecutor>> MockLogger => Context.MockLogger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             Context = new TppClientTestsContext();
             Context.Initialise();
-            SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClientRequest<TppUserSession, PatientSelectedReply>>();
+            SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClientRequest<TppRequestParameters, PatientSelectedReply>>();
         }
 
         [TestMethod]
         public async Task PatientSelectedPostRequest_SendsPostRequest_WhenCalled()
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             HttpRequestMessage requestMessage = null;
             CaptureHttpRequestMessage(req => requestMessage = req);
 
             //Act
-            await SystemUnderTest.Post(tppUserSession);
+            await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             requestMessage.Method.Should().Be(HttpMethod.Post);
@@ -53,13 +52,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostRequest_UsesTppApiUrl_WhenCalled()
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             HttpRequestMessage requestMessage = null;
             CaptureHttpRequestMessage(req => requestMessage = req);
 
             //Act
-            await SystemUnderTest.Post(tppUserSession);
+            await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             requestMessage.RequestUri.Should().Be(TppClientTestsContext.ApiUrl);
@@ -69,13 +68,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostRequest_ContainsPatientSelectedRequestTypeHeader_WhenCalled()
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             HttpRequestMessage requestMessage = null;
             CaptureHttpRequestMessage(req => requestMessage = req);
 
             //Act
-            await SystemUnderTest.Post(tppUserSession);
+            await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             requestMessage.Headers.Should().ContainHeader("type", "PatientSelected");
@@ -87,13 +86,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostRequest_ContainsPatientSelectedRequestSuidHeader_WhenCalled(string suidHeaderName)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession(suid: suidHeaderName);
+            var tppRequestParameters = CreateTppRequestParameters(suid: suidHeaderName);
 
             HttpRequestMessage requestMessage = null;
             CaptureHttpRequestMessage(req => requestMessage = req);
 
             //Act
-            await SystemUnderTest.Post(tppUserSession);
+            await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             requestMessage.Headers.Should().ContainHeader("suid", suidHeaderName);
@@ -105,13 +104,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostRequest_ContainsPatientSelectedContentPatientIdAttribute_WhenCalled(string patientId)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession(patientId: patientId);
+            var tppRequestParameters = CreateTppRequestParameters(patientId: patientId);
 
             string requestContent = null;
             CaptureHttpRequestMessageContent(reqContent => requestContent = reqContent);
 
             //Act
-            await SystemUnderTest.Post(tppUserSession);
+            await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             var xmlDocument = XDocument.Parse(requestContent);
@@ -124,13 +123,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostRequest_ContainsPatientSelectedContentOnlineUserIdAttribute_WhenCalled(string onlineUserId)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession(onlineUserId: onlineUserId);
+            var tppRequestParameters = CreateTppRequestParameters(onlineUserId: onlineUserId);
 
             string requestContent = null;
             CaptureHttpRequestMessageContent(reqContent => requestContent = reqContent);
 
             //Act
-            await SystemUnderTest.Post(tppUserSession);
+            await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             var xmlDocument = XDocument.Parse(requestContent);
@@ -141,12 +140,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceivesOkResponse_WhenCalled()
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage();
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -159,12 +158,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceivesSuidResponseHeader_WhenCalled(string name, string value)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage(httpResponseMessage: message => message.AddHeader(name, value));
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.Headers.Should().Contain(name, value);
@@ -176,12 +175,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceivesPatientIdResponseContent_WhenCalled(string patientId)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage(reply => reply.PatientId(patientId));
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.Body.Person.PatientId.Should().Be(patientId);
@@ -193,12 +192,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceivesDateOfBirthResponseContent_WhenCalled(string dateOfBirth, int year, int month, int day)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage(reply => reply.DateOfBirth(dateOfBirth));
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.Body.Person.DateOfBirth.Should().Be(new DateTime(year, month, day));
@@ -210,12 +209,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceiveGenderResponseContent_WhenCalled(string gender)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage(reply => reply.Gender(gender));
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.Body.Person.Gender.Should().Be(gender);
@@ -227,12 +226,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceiveNationalIdTypeResponseContent_WhenCalled(string nationIdType)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage(reply => reply.NationalIdType(nationIdType));
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.Body.Person.NationalId.Type.Should().Be(nationIdType);
@@ -244,12 +243,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceiveNationalIdValueResponseContent_WhenCalled(string nationIdValue)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage(reply => reply.NationalIdValue(nationIdValue));
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.Body.Person.NationalId.Value.Should().Be(nationIdValue);
@@ -261,12 +260,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceivePersonNameResponseContent_WhenCalled(string personName)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage(reply => reply.PersonName(personName));
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.Body.Person.PersonName.Name.Should().Be(personName);
@@ -278,12 +277,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceiveTppAddressResponseContent_WhenCalled(string tppAddress)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage(reply => reply.TppAddress(tppAddress));
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.Body.Person.Address.Address.Should().Be(tppAddress);
@@ -295,12 +294,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceiveTppAddressTypeResponseContent_WhenCalled(string tppAddressType)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage(reply => reply.TppAddressType(tppAddressType));
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.Body.Person.Address.AddressType.Should().Be(tppAddressType);
@@ -314,12 +313,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public async Task PatientSelectedPostResponse_ReceiveErrorStatusCode_WhenCalled(HttpStatusCode statusCode)
         {
             //Arrange
-            var tppUserSession = CreateTppUserSession();
+            var tppRequestParameters = CreateTppRequestParameters();
 
             ArrangeHttpResponseMessage(httpResponseMessage: message => message.SetStatusCode(statusCode));
 
             //Act
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             //Assert
             response.StatusCode.Should().Be(statusCode);
@@ -331,11 +330,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             Context.Dispose();
         }
 
-        private TppUserSession CreateTppUserSession(
+        private static TppRequestParameters CreateTppRequestParameters(
             string suid = "suid",
             string patientId = "patient id",
             string onlineUserId = "online user id")
-            => new TppUserSession
+            => new TppRequestParameters
             {
                 Suid = suid,
                 PatientId = patientId,

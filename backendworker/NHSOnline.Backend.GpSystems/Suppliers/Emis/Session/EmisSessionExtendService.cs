@@ -21,21 +21,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             _logger = logger;
         }
 
-        public async Task<SessionExtendResult> Extend(GpUserSession gpUserSession)
+        public async Task<SessionExtendResult> Extend(GpLinkedAccountModel gpLinkedAccountModel)
         {
             try
             {
                 _logger.LogEnter();
 
-                var emisUserSession = (EmisUserSession)gpUserSession;
-                var response = await _emisClient.DemographicsGet(
-                    new EmisRequestParameters
-                    {
-                        UserPatientLinkToken = emisUserSession.UserPatientLinkToken,
-                        SessionId = emisUserSession.SessionId,
-                        EndUserSessionId = emisUserSession.EndUserSessionId,
-                        
-                    });
+                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
+                
+                var response = await _emisClient.DemographicsGet(emisRequestParameters);
 
                 if (response.HasSuccessResponse)
                 {

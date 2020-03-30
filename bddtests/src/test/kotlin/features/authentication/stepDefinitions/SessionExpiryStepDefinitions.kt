@@ -5,6 +5,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.factories.PatientVerificationFactory
 import features.authentication.steps.LoginSteps
+import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -15,8 +16,10 @@ import org.junit.Assert
 import pages.CheckMySymptomsPage
 import pages.SessionExpiryNative
 import utils.GlobalSerenityHelpers
+import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
+import utils.set
 import worker.NhsoHttpException
 import worker.WorkerClient
 
@@ -39,14 +42,21 @@ class SessionExpiryStepDefinitions  {
     @Given("^I am logged in as a (.*) user expecting a \"(.*)\"\\ response when extending their session$")
     fun iClickToExtendSessionExpectingResponse(gpSystem: String, expectedResponse: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getDefault(supplier)
+        val patient = Patient.getDefault(supplier).copy()
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
+        patient.linkedAccounts = setOf()
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        DemographicsFactory.getForSupplier(supplier).enabled(patient)
 
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .postSessionConnection(patient.generateUserSessionRequest(redirectUri))
+
+        val patientConfig = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
+                .getPatientLinkedAccountsConfiguration()
+
+        LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.set(patientConfig.id)
 
         PatientVerificationFactory.getForSupplier(supplier)
                 .setSessionExtendMockResponse(patient, expectedResponse)
@@ -65,7 +75,7 @@ class SessionExpiryStepDefinitions  {
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .session.postSessionConnection()
+                    .session.postSessionConnection(LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail())
             SerenityHelpers.setHttpResponse(response)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)

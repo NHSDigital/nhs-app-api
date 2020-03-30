@@ -14,13 +14,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
     {
         private IFixture _fixture;        
         private VisionSessionExtendService _systemUnderTest;
-        private GpUserSession _visionUserSession;
+        private GpLinkedAccountModel _visionGpLinkedAccountModel;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _visionUserSession = _fixture.Create<VisionUserSession>();
+            _visionGpLinkedAccountModel = _fixture.Create<GpLinkedAccountModel>();
 
             _systemUnderTest = _fixture.Create<VisionSessionExtendService>();
         }
@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
         [TestMethod]
         public async Task Extend_ReturnsSuccess()
         {
-            var result = await _systemUnderTest.Extend(_visionUserSession);
+            var result = await _systemUnderTest.Extend(_visionGpLinkedAccountModel);
 
             result.Should().BeAssignableTo<SessionExtendResult.Success>();
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -20,18 +21,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
     public class EmisSessionExtendServiceTests
     {
         private IFixture _fixture;
-        private EmisSessionExtendService _systemUnderTest;
+        private EmisUserSession _emisUserSession;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
+        private EmisRequestParameters _emisRequestParameters;
         private Mock<IEmisClient> _mockEmisClient;
-        private GpUserSession _gpUserSession;
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
+
+        private EmisSessionExtendService _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _gpUserSession = _fixture.Create<EmisUserSession>();
+
+            _emisUserSession = _fixture.Create<EmisUserSession>();
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession);
+            _emisRequestParameters = new EmisRequestParameters(_emisUserSession);
+            
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
-            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>
             {
                 HttpStatusCode.OK
             };
@@ -45,12 +53,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes);
 
-            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
+            _mockEmisClient
+                .Setup(x => x.DemographicsGet(
+                    It.Is<EmisRequestParameters>(p => MatchTppRequestParameters(p))))
                 .ReturnsAsync(response)
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Extend(_gpUserSession);
+            var result = await _systemUnderTest.Extend(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.Success>();
@@ -63,12 +73,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.BadRequest, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes);
 
-            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
+            _mockEmisClient
+                .Setup(x => x.DemographicsGet(
+                    It.Is<EmisRequestParameters>(p => MatchTppRequestParameters(p))))
                 .ReturnsAsync(response)
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Extend(_gpUserSession);
+            var result = await _systemUnderTest.Extend(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.BadGateway>();
@@ -79,17 +91,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         public async Task Extend_WhenClientThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
-            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<EmisRequestParameters>()))
+            _mockEmisClient
+                .Setup(x => x.DemographicsGet(
+                    It.Is<EmisRequestParameters>(p => MatchTppRequestParameters(p))))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Extend(_gpUserSession);
+            var result = await _systemUnderTest.Extend(_gpLinkedAccountModel);
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.BadGateway>();
             _mockEmisClient.Verify();
         }
+
+        private bool MatchTppRequestParameters(EmisRequestParameters p) =>
+            p.SessionId.Equals(_emisRequestParameters.SessionId, StringComparison.Ordinal) &&
+            p.EndUserSessionId.Equals(_emisRequestParameters.EndUserSessionId, StringComparison.Ordinal) &&
+            p.UserPatientLinkToken.Equals(_emisRequestParameters.UserPatientLinkToken, StringComparison.Ordinal);
     }
 }
 

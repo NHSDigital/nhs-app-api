@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -24,6 +25,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private UserSession _userSession;
+        private Guid _patientId;
 
         [TestInitialize]
         public void TestInitialize()
@@ -34,11 +36,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _userSession = _fixture.Create<UserSession>();
+            _patientId = _userSession.GpUserSession.Id;
             var httpContextItems = new Dictionary<object, object>
             {
                 { Constants.HttpContextItems.UserSession, _userSession }
             };
-
+            
             var httpContextResponse = new DefaultHttpResponse(new DefaultHttpContext());
 
             var httpContextMock = new Mock<HttpContext>();
@@ -72,7 +75,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             mockGpSystem.Setup(x => x.GetPatientRecordService())
                 .Returns(patientRecordService.Object);
 
-            patientRecordService.Setup(x => x.GetPatientDocument(_userSession.GpUserSession, 
+            patientRecordService.Setup(x => x.GetPatientDocument(It.Is<GpLinkedAccountModel>(
+                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId), 
                 "1", "jpg", "example"))
                 .Returns(Task.FromResult((GetPatientDocumentResult)getDocumentResponse));
 
@@ -82,12 +86,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 Type = "jpg",
                 Name = "example"
             };
-            var result = await _systemUnderTest.GetPatientDocument("1", documentInfo);
+            var result = await _systemUnderTest.GetPatientDocument(_patientId, "1", documentInfo);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
-            patientRecordService.Verify(x => x.GetPatientDocument(_userSession.GpUserSession, 
+            patientRecordService.Verify(x => x.GetPatientDocument(It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId), 
                 "1", "jpg", "example"));
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<GetPatientDocumentResult.Success>();
@@ -115,13 +120,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             mockGpSystem.Setup(x => x.GetPatientRecordService())
                 .Returns(patientRecordService.Object);
             
-            patientRecordService.Setup(x => x.GetPatientDocumentForDownload(_userSession.GpUserSession, 
+            patientRecordService.Setup(x => x.GetPatientDocumentForDownload(It.Is<GpLinkedAccountModel>(
+                        d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId), 
                     "1", "jpg", "example"))
                 .Returns(Task.FromResult(patientDocument));
-            var result = await _systemUnderTest.GetPatientDocumentForDownload("1", documentInfo);
+            var result = await _systemUnderTest.GetPatientDocumentForDownload(_patientId, "1", documentInfo);
             
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
-            patientRecordService.Verify(x => x.GetPatientDocumentForDownload(_userSession.GpUserSession, 
+            patientRecordService.Verify(x => x.GetPatientDocumentForDownload(It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId), 
                 "1", "jpg", "example"));
             result.Should().BeAssignableTo<FileContentResult>();
         }

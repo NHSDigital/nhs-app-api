@@ -5,7 +5,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
-    internal sealed class TppClientPatientSelectedPost : ITppClientRequest<TppUserSession, PatientSelectedReply>
+    internal sealed class TppClientPatientSelectedPost : ITppClientRequest<TppRequestParameters, PatientSelectedReply>
     {
         private readonly ILogger<TppClientPatientSelectedPost> _logger;
         private readonly TppClientRequestExecutor _requestExecutor;
@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             _requestExecutor = requestExecutor;
         }
 
-        public async Task<TppApiObjectResponse<PatientSelectedReply>> Post(TppUserSession tppUserSession)
+        public async Task<TppApiObjectResponse<PatientSelectedReply>> Post(TppRequestParameters tppRequestParameters)
         {
             _logger.LogEnter();
 
@@ -24,13 +24,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             {
                 var patientSelected = new PatientSelected
                 {
-                    OnlineUserId = tppUserSession.OnlineUserId,
-                    PatientId = tppUserSession.PatientId,
-                    UnitId = tppUserSession.OdsCode,
+                    OnlineUserId = tppRequestParameters.OnlineUserId,
+                    PatientId = tppRequestParameters.PatientId,
+                    UnitId = tppRequestParameters.OdsCode
                 };
 
                 return await _requestExecutor.Post<PatientSelectedReply>(
-                    requestBuilder => requestBuilder.Model(patientSelected).Suid(tppUserSession.Suid));
+                    requestBuilder => requestBuilder.Model(patientSelected).Suid(tppRequestParameters.Suid));
             }
             finally
             {

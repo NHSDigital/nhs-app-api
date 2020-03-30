@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -22,6 +23,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private IFixture _fixture;
         private Mock<IGpSystem> _mockGpSystem;
         private UserSession _userSession;
+        private Guid _patientGuid;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<ISessionExtendService> _mockSessionExtendService;
 
@@ -34,8 +36,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             
             _fixture.Customize<UserSession>(c => c
                 .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-
+            
             _userSession = _fixture.Create<UserSession>();
+            _patientGuid = _fixture.Create<Guid>();
 
             _mockSessionExtendService = _fixture.Freeze<Mock<ISessionExtendService>>();
 
@@ -67,12 +70,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var extendedResult = (SessionExtendResult)new SessionExtendResult.Success();
 
             _mockSessionExtendService
-                .Setup(x => x.Extend(_userSession.GpUserSession))
+                .Setup(x => x.Extend(It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
                 .Returns(Task.FromResult(extendedResult))
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post();
+            var result = await _systemUnderTest.Post(_patientGuid);
 
             // Assert
             result.Should().BeEquivalentTo(new StatusCodeResult(StatusCodes.Status200OK));
@@ -86,12 +90,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             var extendedResult = (SessionExtendResult)new SessionExtendResult.BadGateway();
 
             _mockSessionExtendService
-                .Setup(x => x.Extend(_userSession.GpUserSession))
+                .Setup(x => x.Extend(It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid)))
                 .Returns(Task.FromResult(extendedResult))
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post();
+            var result = await _systemUnderTest.Post(_patientGuid);
 
             // Arrange
             result.Should().BeAssignableTo<StatusCodeResult>()

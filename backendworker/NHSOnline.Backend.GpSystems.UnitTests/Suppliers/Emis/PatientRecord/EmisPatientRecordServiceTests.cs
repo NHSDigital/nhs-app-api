@@ -22,6 +22,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         private EmisPatientRecordService _systemUnderTest;
         private Mock<IEmisClient> _emisClient;
         private EmisUserSession _emisUserSession;
+        private Guid _patientId;
+        private GpLinkedAccountModel _gpLinkedAccountModel;
         private IFixture _fixture;
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
@@ -30,8 +32,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _emisUserSession = _fixture.Create<EmisUserSession>();
+            _patientId = _emisUserSession.Id;
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _patientId);
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
-            _sampleSuccessStatusCodes = new List<HttpStatusCode>()
+            _sampleSuccessStatusCodes = new List<HttpStatusCode>
             {
                 HttpStatusCode.OK
             };
@@ -174,7 +178,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ErrorResponseBadRequest = null
                     }));
             
-            var result = await _systemUnderTest.GetPatientDocument(_emisUserSession, "1", "img/jpeg", "example");
+            var result = await _systemUnderTest.GetPatientDocument(_gpLinkedAccountModel, "1", "img/jpeg", "example");
             
             _emisClient.Verify(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, "1", _emisUserSession.EndUserSessionId));
             
@@ -201,7 +205,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ErrorResponseBadRequest = null
                     }));
             
-            var result = await _systemUnderTest.GetPatientDocument(_emisUserSession, "1", "img/jpeg", "example");
+            var result = await _systemUnderTest.GetPatientDocument(_gpLinkedAccountModel, "1", "img/jpeg", "example");
             
             _emisClient.Verify(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, "1", _emisUserSession.EndUserSessionId));
             

@@ -11,27 +11,28 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 {
     internal class TppSessionExtendService : ISessionExtendService
     {
-        private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelected;
+        private readonly ITppClientRequest<TppRequestParameters, PatientSelectedReply> _patientSelected;
         private readonly ILogger<TppSessionExtendService> _logger;
 
         private const string StandardErrorMessage = "Failed request retrieving patient selected information for Tpp, while attempting to extend session.";
 
         public TppSessionExtendService(
-            ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelected,
+            ITppClientRequest<TppRequestParameters, PatientSelectedReply> patientSelected,
             ILogger<TppSessionExtendService> logger)
         {
             _patientSelected = patientSelected;
             _logger = logger;
         }
 
-        public async Task<SessionExtendResult> Extend(GpUserSession gpUserSession)
+        public async Task<SessionExtendResult> Extend(GpLinkedAccountModel gpLinkedAccountModel)
         {
             try
             {
                 _logger.LogEnter();
 
-                var tppUserSession = (TppUserSession)gpUserSession;
-                var patientSelectedResponse = await _patientSelected.Post(tppUserSession);
+                var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+
+                var patientSelectedResponse = await _patientSelected.Post(tppRequestParameters);
 
                 if (patientSelectedResponse.HasSuccessResponse)
                 {

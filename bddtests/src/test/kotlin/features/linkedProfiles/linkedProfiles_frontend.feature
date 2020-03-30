@@ -195,8 +195,7 @@ Feature: Login with proxy access
     And I see the home page
     And I do not see the yellow banner
 
-
-  Scenario: An TPP user with proxy accounts can see proxy details and switch back to their own account
+  Scenario: A TPP user with proxy accounts can see proxy details and switch back to their own account
     Given I am logged in as a TPP user with linked profiles and appointments provider IM1
     When I select the linked profiles link from the home page
     And I select a linked profile
@@ -208,3 +207,26 @@ Feature: Login with proxy access
     Then I click the Switch to my profile button for the main user
     And I see the home page
     And I do not see the yellow banner
+
+  Scenario Outline: A <GP System> user proxying on behalf of another will be able to see their medical record
+    Given I am a <GP System> user with linked profiles
+    And I am logged in
+    And I have switched to a linked profile
+    And the GP Practice has enabled all medical records for the proxy patient
+    When I click on the My Record link on the header
+    When I click continue
+    Then I see the medical record v2 page
+    When I click the Medicines link on my record - Medical Record v2
+    And I click the Acute medicines link - Medical Record v2
+    Then I see the expected acute medicines - Medical Record v2
+    When I click the Back link
+    When I click the Back link
+    And I click the Consultations and events link on my record - Medical Record v2
+    Then I see the expected consultations and events - Medical Record v2
+    When I click the Back link
+    And I click the Test results link on my record - Medical Record v2
+    Then I see the correct number of test results for current the supplier - Medical Record v2
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |  

@@ -338,23 +338,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
           }
         }
 
-        public Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
+        public Task<GetDetailedTestResult> GetDetailedTestResult(GpLinkedAccountModel gpLinkedAccountModel, string testResultId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier,
-            string documentType, string documentName)
+        public Task<GetPatientDocumentResult> GetPatientDocument(
+            GpLinkedAccountModel gpLinkedAccountModel, string documentIdentifier, string documentType, string documentName)
         {
             throw new NotImplementedException();
         }
+
+        public Task<PatientDocument> GetPatientDocumentForDownload(
+            GpLinkedAccountModel gpLinkedAccountModel, string documentIdentifier, string documentType, string documentName)
+        {
+            throw new NotImplementedException();
+        }
+
         public byte[] ConvertDocumentToCorrectFormat(string type, string content)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentIdentifier, string documentType,
-            string documentName)
         {
             throw new NotImplementedException();
         }

@@ -12,12 +12,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics
     internal class TppDemographicsService : IDemographicsService
     {
         private readonly ILogger<TppDemographicsService> _logger;
-        private readonly ITppClientRequest<TppUserSession, PatientSelectedReply> _patientSelected;
+        private readonly ITppClientRequest<TppRequestParameters, PatientSelectedReply> _patientSelected;
         private readonly ITppDemographicsMapper _tppDemographicsMapper;
 
         public TppDemographicsService(
             ILoggerFactory loggerFactory,
-            ITppClientRequest<TppUserSession, PatientSelectedReply> patientSelected,
+            ITppClientRequest<TppRequestParameters, PatientSelectedReply> patientSelected,
             ITppDemographicsMapper tppDemographicsMapper)
         {
             _logger = loggerFactory.CreateLogger<TppDemographicsService>();
@@ -27,12 +27,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics
 
         public async Task<DemographicsResult> GetDemographics(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
-
             try
             {
                 _logger.LogEnter();
-                var demographicsResponse = await _patientSelected.Post(tppUserSession);
+
+                var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+
+                var demographicsResponse = await _patientSelected.Post(tppRequestParameters);
 
                 if (!demographicsResponse.HasSuccessResponse)
                 {

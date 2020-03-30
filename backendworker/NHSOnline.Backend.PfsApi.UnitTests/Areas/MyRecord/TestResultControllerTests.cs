@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -32,6 +33,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         private const string ResponseAuditType = "TestResult_Get_Response";
         private const string RequestAuditMessage = "Attempting to view test result";
         private const string TestResultId = "testId";
+        private readonly Guid _patientGuid = Guid.NewGuid();
         
         [TestInitialize]
         public void TestInitialize()
@@ -79,11 +81,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var testResultResponse = _fixture.Create<TestResultResponse>();
             var testResult = new GetDetailedTestResult.Success(testResultResponse);
             
-            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession.GpUserSession, TestResultId))
+            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid), TestResultId))
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
 
             // Act
-            var result = await _systemUnderTest.GetTestResult(TestResultId);
+            var result = await _systemUnderTest.GetTestResult(_patientGuid, TestResultId);
 
             // Assert
             _mockPatientRecordService.Verify();
@@ -100,11 +103,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             // Arrange
             var testResult = new GetDetailedTestResult.BadGateway();
 
-            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession.GpUserSession, TestResultId))
+            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(It.Is<GpLinkedAccountModel>(
+                    d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientGuid), TestResultId))
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
 
             // Act
-            var result = await _systemUnderTest.GetTestResult(TestResultId);
+            var result = await _systemUnderTest.GetTestResult(_patientGuid, TestResultId);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()

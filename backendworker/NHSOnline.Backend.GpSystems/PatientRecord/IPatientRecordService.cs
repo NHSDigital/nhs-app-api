@@ -7,12 +7,9 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
     public interface IPatientRecordService
     {
         Task<GetMyRecordResult> GetMyRecord(GpLinkedAccountModel gpLinkedAccountModel);
-
-        Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId);
-
-        Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier, string documentType, string documentName);
-        Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentIdentifier, string documentType, string documentName);
-
+        Task<GetDetailedTestResult> GetDetailedTestResult(GpLinkedAccountModel gpLinkedAccountModel, string testResultId);
+        Task<GetPatientDocumentResult> GetPatientDocument(GpLinkedAccountModel gpLinkedAccountModel, string documentIdentifier, string documentType, string documentName);
+        Task<PatientDocument> GetPatientDocumentForDownload(GpLinkedAccountModel gpLinkedAccountModel, string documentIdentifier, string documentType, string documentName);
         byte[] ConvertDocumentToCorrectFormat(string type, string content);
     }
 }

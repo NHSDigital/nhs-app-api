@@ -69,8 +69,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         {
             _logger.LogEnter();
 
-            var emisUserSession = (EmisUserSession)gpLinkedAccountModel.GpUserSession;
-
             try
             {
                 var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
@@ -92,7 +90,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 var myRecordResponse = _emisMyRecordMapper.Map(allergiesTask.Result, medicationsTask.Result, immunisationsTask.Result,
                     testResultsTask.Result, problemsTask.Result, consultationsTask.Result, documentsTask.Result);
 
-                myRecordResponse.Supplier = emisUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+                myRecordResponse.Supplier = Supplier.Emis.ToString().ToUpper(CultureInfo.InvariantCulture);
                 return new GetMyRecordResult.Success(myRecordResponse);
             }
             catch (HttpRequestException e)
@@ -111,17 +109,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             }
         }
 
-        public async Task<GetPatientDocumentResult> GetPatientDocument(GpUserSession gpUserSession, string documentIdentifier,
-            string documentType, string documentName)
+        public async Task<GetPatientDocumentResult> GetPatientDocument(
+            GpLinkedAccountModel gpLinkedAccountModel, string documentIdentifier, string documentType, string documentName)
         {
             _logger.LogEnter();
 
-            var emisUserSession = (EmisUserSession)gpUserSession;
-
             try
             {
-                var getDocumentsTask = _emisClient.MedicalDocumentGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, documentIdentifier, emisUserSession.EndUserSessionId);
+                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
+
+                var getDocumentsTask = _emisClient.MedicalDocumentGet(
+                    emisRequestParameters.UserPatientLinkToken,
+                    emisRequestParameters.SessionId,
+                    documentIdentifier,
+                    emisRequestParameters.EndUserSessionId);
 
                 await Task.WhenAll(getDocumentsTask);
 
@@ -151,17 +152,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             }
         }
 
-        public async Task<PatientDocument> GetPatientDocumentForDownload(GpUserSession gpUserSession, string documentIdentifier,
-            string documentType, string documentName)
+        public async Task<PatientDocument> GetPatientDocumentForDownload(
+            GpLinkedAccountModel gpLinkedAccountModel, string documentIdentifier, string documentType, string documentName)
         {
             _logger.LogEnter();
 
-            var emisUserSession = (EmisUserSession)gpUserSession;
-
             try
             {
-                var getDocumentsTask = _emisClient.MedicalDocumentGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, documentIdentifier, emisUserSession.EndUserSessionId);
+                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
+
+                var getDocumentsTask = _emisClient.MedicalDocumentGet(
+                    emisRequestParameters.UserPatientLinkToken,
+                    emisRequestParameters.SessionId,
+                    documentIdentifier,
+                    emisRequestParameters.EndUserSessionId);
 
                 await Task.WhenAll(getDocumentsTask);
 
@@ -202,7 +206,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             }
         }
 
-        public Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
+        public Task<GetDetailedTestResult> GetDetailedTestResult(GpLinkedAccountModel gpLinkedAccountModel, string testResultId)
         {
             throw new NotImplementedException();
         }

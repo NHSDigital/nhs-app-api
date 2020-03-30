@@ -37,6 +37,7 @@ import pages.navigation.WebHeader
 import pages.text
 import utils.GlobalSerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
+import utils.ProxySerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
@@ -107,7 +108,6 @@ class LinkedProfilesStepDefinitions {
         iSelectTheLinkedProfilesLink()
         iSelectALinkedProfile()
         iClickTheSwitchToThisProfileButtonForTheProxyUser()
-        home.actingAsOtherUserWarning.click()
     }
 
     @Given("^I click on the Appointments link on the header$")
@@ -115,11 +115,17 @@ class LinkedProfilesStepDefinitions {
         webHeader.clickAppointmentsPageLink()
     }
 
+    @When("^I click on the My Record link on the header$")
+    fun iClickOnMyRecordLinkInHeader() {
+        webHeader.clickMyRecordPageLink()
+    }
+
     private fun setupAndLogIn(patient: Patient, gpSystem: Supplier) {
         setup(patient, gpSystem)
         browser.goToApp()
         login.using(patient)
     }
+
     private fun setup(patient: Patient, gpSystem: Supplier) {
         SerenityHelpers.setPatient(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
@@ -129,6 +135,13 @@ class LinkedProfilesStepDefinitions {
         DemographicsFactory
                 .getForSupplier(gpSystem)
                 .enableForPatientProxyAccounts(patient)
+    }
+
+    @Given("^the GP Practice has enabled all medical records for the proxy patient$")
+    fun theGpPracticeHasEnabledAllMedicalRecordsForTheProxyPatient() {
+        MyRecordFactory
+            .getForSupplier(SerenityHelpers.getGpSupplier())
+            .enabledWithAllRecords(ProxySerenityHelpers.getPatientOrProxy())
     }
 
     @Then("^I see the linked profiles link$")
