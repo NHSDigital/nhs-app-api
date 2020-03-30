@@ -39,7 +39,7 @@ class CompleteKnownServicesMock: KnownServices {
                 url: url,
                 javaScriptInteractionMode: javaScriptInteractionMode,
                 menuTab: MenuTab.None,
-                viewMode: ViewMode.WebView,
+                integrationLevel: .Bronze,
                 validateSession: false,
                 subServices: [])])
     }

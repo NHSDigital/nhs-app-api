@@ -26,6 +26,9 @@ import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.support.schemehandlers.TelSchemeHandler
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterfacePrivate
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterfaceThirdParty
+import com.nhs.online.nhsonline.support.uiinteraction.IHeaderStrategy
+import com.nhs.online.nhsonline.support.uiinteraction.LoggedInHeaderStrategy
+import com.nhs.online.nhsonline.support.uiinteraction.LoggedOutHeaderStrategy
 import com.nhs.online.nhsonline.utils.UrlHelper
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
@@ -47,7 +50,6 @@ class NhsWeb(
         private val notificationsService: NotificationsService,
         appWebInterface: AppWebInterface,
         private val knownServices: KnownServices,
-        private val nhsLoginLoggedInPaths: List<String>,
         private val loggingService: ILoggingService
 ) {
     private val openBrowserActivity = OpenUrlInBrowserActivity()
@@ -59,10 +61,15 @@ class NhsWeb(
     private val settingsService = SettingsService(activity)
     private val cacheDir = File(activity.filesDir.parent + "/cache")
     private val appWebViewDir = File(activity.filesDir.parent + "/app_webview")
+    var headerStrategy: IHeaderStrategy = LoggedOutHeaderStrategy(uiInteractor)
 
     var applicationState =
             ApplicationState(readResourceString(R.string.menuTimeoutSeconds).toLong())
     var isUserLoggedIn = false
+    set(value) {
+        field = value
+        headerStrategy = if (field) LoggedInHeaderStrategy(uiInteractor) else LoggedOutHeaderStrategy(uiInteractor)
+    }
     var requiresFullPageLoad = true
     var javaScriptInteractionMode = JavaScriptInteractionMode.None
     var reloadUrl: String? = null
@@ -81,7 +88,7 @@ class NhsWeb(
         schemeHandlers.registerHandler(TelSchemeHandler(activity))
 
         val webInterceptor =
-                WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths, loggingService)
+                WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, loggingService)
 
         val addToCalendarHandler = AddToCalendarHandler(activity)
 
@@ -199,6 +206,7 @@ class NhsWeb(
         Log.d(TAG, "Entering loggedOut")
         requiresFullPageLoad = true
         isUserLoggedIn = false
+
 
         webView.settings.builtInZoomControls = false
 

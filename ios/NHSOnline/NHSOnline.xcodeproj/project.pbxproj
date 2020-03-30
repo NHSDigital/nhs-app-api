@@ -83,7 +83,14 @@
 		C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */; };
 		C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */; };
 		C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2ED05D521427E950036189C /* TabBar_Extension.swift */; };
-		F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */; };
+		DB4B658222FAD9E100C8EE99 /* BiometricBreadcrumb.xib in Resources */ = {isa = PBXBuildFile; fileRef = DB4B658122FAD9E100C8EE99 /* BiometricBreadcrumb.xib */; };
+		DB4B658722FADDB300C8EE99 /* BiometricBreadcrumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */; };
+		DB4B658D22FB1A3E00C8EE99 /* UnderlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B658C22FB1A3E00C8EE99 /* UnderlinedLabel.swift */; };
+		DB75990E22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB75990D22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift */; };
+		ED6A4515244D9AD9005BA1E9 /* HeaderStrategyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6A4514244D9AD9005BA1E9 /* HeaderStrategyProtocol.swift */; };
+		ED6A4517244D9D02005BA1E9 /* LoggedInHeaderStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6A4516244D9D02005BA1E9 /* LoggedInHeaderStrategy.swift */; };
+		ED6A4519244D9D16005BA1E9 /* LoggedOutHeaderStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6A4518244D9D16005BA1E9 /* LoggedOutHeaderStrategy.swift */; };
+		ED884970244733AA0068EA36 /* IntegrationLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED88496F244733AA0068EA36 /* IntegrationLevel.swift */; };
 		F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026199A2050AFE100EDDFE0 /* WebViewController.swift */; };
 		F057336920A72F040059032D /* HeaderBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = F057336B20A72F040059032D /* HeaderBar.xib */; };
 		F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F065B3D7205FCFFE004EF388 /* HomeViewController.swift */; };
@@ -346,8 +353,11 @@
 		E6A814743967DAFCCAEADEDE /* Pods-NHSOnline.scratch20.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch20.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch20.xcconfig"; sourceTree = "<group>"; };
 		E9DA6764D81081DCB709C7C8 /* Pods-NHSOnline.scratch9.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.scratch9.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.scratch9.xcconfig"; sourceTree = "<group>"; };
 		EBF1471FC84716B6FD4EBDC4 /* Pods-NHSOnlineTests.demo.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.demo.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.demo.xcconfig"; sourceTree = "<group>"; };
+		ED6A4514244D9AD9005BA1E9 /* HeaderStrategyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderStrategyProtocol.swift; sourceTree = "<group>"; };
+		ED6A4516244D9D02005BA1E9 /* LoggedInHeaderStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInHeaderStrategy.swift; sourceTree = "<group>"; };
+		ED6A4518244D9D16005BA1E9 /* LoggedOutHeaderStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedOutHeaderStrategy.swift; sourceTree = "<group>"; };
+		ED88496F244733AA0068EA36 /* IntegrationLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationLevel.swift; sourceTree = "<group>"; };
 		F01745A6207B700700877E4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewUrlTests.swift; sourceTree = "<group>"; };
 		F026199A2050AFE100EDDFE0 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		F057336A20A72F040059032D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HeaderBar.xib; sourceTree = "<group>"; };
 		F065B3D7205FCFFE004EF388 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -553,6 +563,7 @@
 		64C1C76723E2E0C400FCBA57 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				ED6A4513244D99EA005BA1E9 /* UiInteraction */,
 				64C1C76823E2E0E000FCBA57 /* SchemeHandlers */,
 				64C1C76E23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift */,
 			);
@@ -803,6 +814,16 @@
 			path = HeaderBar;
 			sourceTree = "<group>";
 		};
+		ED6A4513244D99EA005BA1E9 /* UiInteraction */ = {
+			isa = PBXGroup;
+			children = (
+				ED6A4514244D9AD9005BA1E9 /* HeaderStrategyProtocol.swift */,
+				ED6A4516244D9D02005BA1E9 /* LoggedInHeaderStrategy.swift */,
+				ED6A4518244D9D16005BA1E9 /* LoggedOutHeaderStrategy.swift */,
+			);
+			path = UiInteraction;
+			sourceTree = "<group>";
+		};
 		C2D9864320C8003800F19792 /* ErrorTextView */ = {
 			isa = PBXGroup;
 			children = (
@@ -871,6 +892,7 @@
 				F381CB87FC6B3F0BDA06A19A /* MenuTab.swift */,
 				640585E9249237EA009784D5 /* UserContent.swift */,
 				F381C8D1CE9594F361298C57 /* ViewMode.swift */,
+				ED88496F244733AA0068EA36 /* IntegrationLevel.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -1378,6 +1400,8 @@
 				14FD70C32282E02B0072B280 /* ApplicationState.swift in Sources */,
 				F91E21782486666D0067A1C5 /* BiometricTypeWebReferences.swift in Sources */,
 				C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */,
+				ED6A4517244D9D02005BA1E9 /* LoggedInHeaderStrategy.swift in Sources */,
+				ED884970244733AA0068EA36 /* IntegrationLevel.swift in Sources */,
 				47D88A4621998CBD004771B5 /* Configuration.swift in Sources */,
 				F9EBD652237C3C5F006FFA8C /* DataDownloadAlertType.swift in Sources */,
 				1381D48E21BFFFD300B54300 /* Policy.swift in Sources */,
@@ -1388,6 +1412,7 @@
 				64C1C76F23E2E6AE00FCBA57 /* ConfigurationServiceManager.swift in Sources */,
 				1381D48621BFFFD300B54300 /* AAID.swift in Sources */,
 				F91E2174248662FD0067A1C5 /* BiometricOutcomes.swift in Sources */,
+				ED6A4515244D9AD9005BA1E9 /* HeaderStrategyProtocol.swift in Sources */,
 				2EF7D81C23C76377005C03ED /* HeaderEnum.swift in Sources */,
 				13730A22220454FF00437FC1 /* BiometricType.swift in Sources */,
 				F9EBD654237C3CE1006FFA8C /* DataDownloadAlertStringHandler.swift in Sources */,
@@ -1404,6 +1429,7 @@
 				981E9E32214E5FB300DA80EB /* Config.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
 				14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */,
+				ED6A4519244D9D16005BA1E9 /* LoggedOutHeaderStrategy.swift in Sources */,
 				8A78F38222F9B58A00BB161F /* BiometricState.swift in Sources */,
 				8A78F38022F9B52200BB161F /* UserDefaultsManager.swift in Sources */,
 				135171A721C9EF78001EC74B /* CookieHandler.swift in Sources */,

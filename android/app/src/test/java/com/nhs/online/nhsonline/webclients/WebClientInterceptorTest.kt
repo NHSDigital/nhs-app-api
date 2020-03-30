@@ -22,8 +22,8 @@ import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.RootService
 import com.nhs.online.nhsonline.services.knownservices.SubService
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
+import com.nhs.online.nhsonline.services.knownservices.enums.IntegrationLevel
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
-import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.web.NhsWeb
 import org.junit.Assert.assertEquals
@@ -50,21 +50,19 @@ class WebClientInterceptorTest {
     private lateinit var schemeHandlersMock: SchemeHandlers
     private lateinit var loggingServiceMock: LoggingService
     private lateinit var errorMessageHandler: ErrorMessageHandler
-    private var nhsLoginLoggedInPaths: List<String> = listOf()
     private val resourceMock = ResourceMockingClass()
 
     @Before
     fun setUp() {
         uiInteractorMock = mock()
         knownServicesMock = mock()
-        nhsLoginLoggedInPaths = mock()
         contextMock = ResourceMockingClass().mockContext()
         errorMessageHandler = ErrorMessageHandler(contextMock.resources)
         nhsWebMock = mock()
         schemeHandlersMock = mock { on { handleUrl(any()) } doReturn false }
         loggingServiceMock = mock()
         webClientInterceptor = WebClientInterceptor(uiInteractorMock,
-                nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, nhsLoginLoggedInPaths, loggingServiceMock)
+                nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock, loggingServiceMock)
 
         webViewMock = mock()
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
@@ -188,14 +186,13 @@ class WebClientInterceptorTest {
     @Ignore("Create MainActivity is too slow")
     fun overrideUrlLoad() {
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -217,14 +214,13 @@ class WebClientInterceptorTest {
         val url = "handled:"
         schemeHandlersMock = mock { on { handleUrl(url) } doReturn true }
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -241,14 +237,13 @@ class WebClientInterceptorTest {
     @Ignore("Create MainActivity is too slow")
     fun overrideUrlLoad_returnsFalseForMalformedURLException() {
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -266,7 +261,7 @@ class WebClientInterceptorTest {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.None,
-                        viewMode = ViewMode.WebView,
+                        integrationLevel = IntegrationLevel.Gold,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
                         showSpinner = true,
@@ -275,14 +270,13 @@ class WebClientInterceptorTest {
         )
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -301,7 +295,7 @@ class WebClientInterceptorTest {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.None,
-                        viewMode = ViewMode.WebView,
+                        integrationLevel = IntegrationLevel.Gold,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
                         showSpinner = true,
@@ -310,14 +304,13 @@ class WebClientInterceptorTest {
         )
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -336,7 +329,7 @@ class WebClientInterceptorTest {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.None,
-                        viewMode = ViewMode.WebView,
+                        integrationLevel = IntegrationLevel.Gold,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
                         showSpinner = false,
@@ -345,14 +338,13 @@ class WebClientInterceptorTest {
         )
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -371,7 +363,7 @@ class WebClientInterceptorTest {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.None,
-                        viewMode = ViewMode.WebView,
+                        integrationLevel = IntegrationLevel.Gold,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
                         showSpinner = true,
@@ -380,14 +372,13 @@ class WebClientInterceptorTest {
         )
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -406,7 +397,7 @@ class WebClientInterceptorTest {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.None,
-                        viewMode = ViewMode.WebView,
+                        integrationLevel = IntegrationLevel.Gold,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
                         showSpinner = true,
@@ -415,14 +406,13 @@ class WebClientInterceptorTest {
         )
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -441,7 +431,6 @@ class WebClientInterceptorTest {
                 resourceMock.mockDisconnectedContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
@@ -451,8 +440,8 @@ class WebClientInterceptorTest {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.None,
-                        viewMode = ViewMode.WebView,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                        integrationLevel = IntegrationLevel.SilverWithWebNavigation,
                         url = url,
                         showSpinner = false,
                         subServices = null
@@ -473,7 +462,6 @@ class WebClientInterceptorTest {
                 resourceMock.mockConnectedContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -483,8 +471,8 @@ class WebClientInterceptorTest {
                         requiresAssertedLoginIdentity = false,
                         validateSession = false,
                         menuTab = MenuTab.None,
-                        viewMode = ViewMode.WebView,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                        integrationLevel = IntegrationLevel.SilverWithoutWebNavigation,
                         path = "/conditions",
                         showSpinner = false,
                         queryString = null
@@ -506,7 +494,7 @@ class WebClientInterceptorTest {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.None,
-                        viewMode = ViewMode.WebView,
+                        integrationLevel = IntegrationLevel.Gold,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
                         showSpinner = true,
@@ -515,14 +503,13 @@ class WebClientInterceptorTest {
         )
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -540,7 +527,7 @@ class WebClientInterceptorTest {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.None,
-                        viewMode = ViewMode.WebView,
+                        integrationLevel = IntegrationLevel.Gold,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
                         showSpinner = false,
@@ -549,14 +536,13 @@ class WebClientInterceptorTest {
         )
 
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
-        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock(), mock())
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
                 nhsWebMock,
                 resourceMock.mockContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -574,7 +560,6 @@ class WebClientInterceptorTest {
                 resourceMock.mockDisconnectedContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -592,7 +577,6 @@ class WebClientInterceptorTest {
                 resourceMock.mockDisconnectedContext(),
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -612,7 +596,6 @@ class WebClientInterceptorTest {
                 contextMock,
                 knownServicesMock,
                 schemeHandlersMock,
-                nhsLoginLoggedInPaths,
                 loggingServiceMock
         )
 
@@ -625,8 +608,8 @@ class WebClientInterceptorTest {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.None,
-                        viewMode = ViewMode.WebView,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                        integrationLevel = IntegrationLevel.SilverWithWebNavigation,
                         url = url,
                         showSpinner = false,
                         subServices = null

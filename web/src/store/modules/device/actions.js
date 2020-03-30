@@ -1,5 +1,5 @@
 import Sources from '@/lib/sources';
-import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE, GO_TO_CHECK_SYMPTOMS } from './mutation-types';
+import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE } from './mutation-types';
 import NativeCallbacks from '@/services/native-app';
 
 export default {
@@ -8,9 +8,6 @@ export default {
   },
   updateIsNativeApp({ commit }, isNativeApp) {
     commit(UPDATE_IS_NATIVE_APP, isNativeApp);
-  },
-  goToCheckSymptoms({ commit }) {
-    commit(GO_TO_CHECK_SYMPTOMS);
   },
   setSourceDevice({ commit }, source = Sources.Web) {
     commit(SET_SOURCE_DEVICE, source);

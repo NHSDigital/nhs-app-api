@@ -345,7 +345,7 @@ class HomeViewControllerTests: XCTestCase {
         XCTAssert(appWebInterface?.biometricEnabled == true)
         XCTAssert(appWebInterface?.biometricTypeRef == "face")
     }
-    
+
     func test_whenHandleBiometricSpecRequestIsCalled_AndBiometricStateIsNotRegistered_AndBiometricTypeIsTouch_willReturnBiometricSpecWithTouchAndNotEnabled() {
         let configurationServiceProvider = SuccessConfigurationProtocolMock(configurationResponse: SuccessConfigurationResponseMock().instance)
         laContextMock?.biometricsCapable = true

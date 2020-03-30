@@ -17,12 +17,11 @@ describe('ContentHeader.vue', () => {
     let wrapper;
     let $router;
 
-    const mountAs = ({ native = true, linkedAccountsState = {} }) => {
-      getter['appVersion/isNativeVersionAfter'] = jest.fn();
+    const mountAs = ({ linkedAccountsState = {} } = {}) => {
       $store = createStore({
         state: {
           device: {
-            isNativeApp: native,
+            isNativeApp: true,
           },
           header: {
             headerText: 'Test',
@@ -62,19 +61,19 @@ describe('ContentHeader.vue', () => {
     };
 
     it('currentBreadCrumbs will return nothing when in Login page', () => {
-      wrapper = mountAs({ native: true });
+      wrapper = mountAs();
       expect(wrapper.vm.currentBreadCrumbs()).toEqual([]);
     });
 
     it('showYellowBanner will return undefined', () => {
-      wrapper = mountAs({ native: true });
+      wrapper = mountAs();
       expect(wrapper.vm.showYellowBanner).toBeUndefined();
     });
 
     describe('when no warning banner for route', () => {
       it('will not show yellow banner when not proxying', () => {
         getter['session/isProxying'] = false;
-        wrapper = mountAs({ native: true });
+        wrapper = mountAs();
 
         expect(wrapper.vm.showYellowBanner).toEqual(false);
       });
@@ -82,7 +81,6 @@ describe('ContentHeader.vue', () => {
       it('will show yellow banner when proxying', () => {
         getter['session/isProxying'] = true;
         wrapper = mountAs({
-          native: true,
           linkedAccountsState: {
             actingAsUser: {
               name: 'david',
@@ -106,12 +104,11 @@ describe('ContentHeader.vue', () => {
     let wrapper;
     let coronaVirusBanner;
 
-    const mountAs = ({ native = true, linkedAccountsState = {} }) => {
-      getter['appVersion/isNativeVersionAfter'] = jest.fn();
+    const mountAs = ({ linkedAccountsState = {} } = {}) => {
       $store = createStore({
         state: {
           device: {
-            isNativeApp: native,
+            isNativeApp: true,
           },
           navigation: {
             crumbSetName: 'testCrumb',
@@ -133,7 +130,7 @@ describe('ContentHeader.vue', () => {
     };
 
     it('will show Corona Virus Banner when on home page and proxying is false', () => {
-      wrapper = mountAs({ native: true });
+      wrapper = mountAs();
       coronaVirusBanner = wrapper.find('#corona-virus-banner');
       getter['session/isProxying'] = false;
       expect(wrapper.vm.showCoronaVirusBanner).toEqual(true);
@@ -141,7 +138,7 @@ describe('ContentHeader.vue', () => {
     });
 
     it('will not show Corona Virus Banner when not on the home page and proxying is false', () => {
-      wrapper = mountAs({ native: true });
+      wrapper = mountAs();
       coronaVirusBanner = wrapper.find('#corona-virus-banner');
       $route.name = LINKED_PROFILES.name;
       getter['session/isProxying'] = false;
@@ -152,7 +149,6 @@ describe('ContentHeader.vue', () => {
     it('will not show Corona Virus Banner when on home page and proxying is true', () => {
       getter['session/isProxying'] = true;
       wrapper = mountAs({
-        native: true,
         linkedAccountsState: {
           actingAsUser: {
             name: 'david',
@@ -170,16 +166,14 @@ describe('ContentHeader.vue', () => {
     let wrapper;
 
     const mountAs = ({
-      native = true,
       demographicsQuestionAnswered = false,
       linkedAccountsState = {},
       route,
-    }) => {
-      getter['appVersion/isNativeVersionAfter'] = jest.fn();
+    } = {}) => {
       $store = createStore({
         state: {
           device: {
-            isNativeApp: native,
+            isNativeApp: true,
           },
           header: {
             headerText: 'Test',
@@ -216,7 +210,7 @@ describe('ContentHeader.vue', () => {
     };
 
     it('will pass store header caption to PageTitle', () => {
-      wrapper = mountAs({});
+      wrapper = mountAs();
 
       const caption = wrapper.find('span[data-purpose=header-caption]');
 
@@ -227,7 +221,6 @@ describe('ContentHeader.vue', () => {
     it('with demographics question not answered but proxying will display appropriate warning', () => {
       getter['session/isProxying'] = true;
       wrapper = mountAs({
-        native: true,
         demographicsQuestionAnswered: false,
         route: {
           name: 'appointments-admin-help',
@@ -253,7 +246,6 @@ describe('ContentHeader.vue', () => {
     ]).it('showYellowBanner will return true when demographics answered', (routeName) => {
       getter['session/isProxying'] = false;
       wrapper = mountAs({
-        native: true,
         demographicsQuestionAnswered: true,
         route: {
           name: routeName,
@@ -267,7 +259,6 @@ describe('ContentHeader.vue', () => {
       .it('showYellowBanner will return false when demographics not answered', (routeName) => {
         getter['session/isProxying'] = false;
         wrapper = mountAs({
-          native: true,
           demographicsQuestionAnswered: false,
           route: {
             name: routeName,

@@ -14,7 +14,6 @@ class FingerprintCookieService(val activity: Activity) {
         private val TAG = FingerprintService::class.java.simpleName
     }
 
-
     fun getAccessTokenFromCookie(): String? {
         val cookies = CookieManager.getInstance()
             .getCookie(activity.resources.getString(R.string.baseURL))
@@ -22,7 +21,11 @@ class FingerprintCookieService(val activity: Activity) {
 
         return if (cookies != null) {
             val cookieValueDecoded = URLDecoder.decode(getCookieValue(cookies), "UTF-8")
-            JSONObject(cookieValueDecoded).getString(activity.resources.getString(R.string.accessToken))
+            if (cookieValueDecoded != null) {
+                JSONObject(cookieValueDecoded).getString(activity.resources.getString(R.string.accessToken))
+            } else {
+                null
+            }
         } else {
             null
         }

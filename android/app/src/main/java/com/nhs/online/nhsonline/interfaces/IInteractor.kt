@@ -1,6 +1,7 @@
 package com.nhs.online.nhsonline.interfaces
 
 import android.support.v4.app.FragmentActivity
+import com.nhs.online.nhsonline.activities.HeaderIcon
 import com.nhs.online.nhsonline.data.ErrorMessage
 
 interface IInteractor {
@@ -29,7 +30,7 @@ interface IInteractor {
 
     fun showHeader()
 
-    fun showHeaderSlim()
+    fun showHeaderSlim(headerIcon: HeaderIcon)
 
     fun showMenuBar()
 
@@ -46,6 +47,8 @@ interface IInteractor {
     fun hideHeaderSlim()
 
     fun hideMenuBar()
+
+    fun hideHeaderAndMenu()
 
     fun startDownload(base64Data: String, fileName: String, mimeType: String)
 

@@ -8,7 +8,8 @@ class WebViewController: UIViewController, WKUIDelegate {
     var redirect = false
     var knownServiceProvider: KnownServicesProtocol?
     var configurationServiceProvider: ConfigurationServiceProtocol?
-
+    public var headerStrategy: HeaderStrategyProtocol?
+    
     override func loadView() {
         super.loadView()
         
@@ -34,6 +35,9 @@ class WebViewController: UIViewController, WKUIDelegate {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if !Reachability.isConnectedToNetwork() {
             webViewDelegate?.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
+        }
+        if keyPath == "URL" {
+            applyHeaderStrategy()
         }
     }
 
@@ -69,6 +73,24 @@ class WebViewController: UIViewController, WKUIDelegate {
         UserContent.allCases.forEach { value in
             webView.configuration.userContentController.add(delegate, name: "\(value.rawValue)")
         }
+
+        webView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
+    }
+    
+    deinit {
+        webView.removeObserver(self, forKeyPath: "URL")
+    }
+    
+    func applyHeaderStrategy() {
+        var knownService: KnownService
+        switch knownServiceProvider!.getKnownServices() {
+        case .success(let knownServicesResponse):
+            knownService = knownServicesResponse.findMatchingKnownService(webView.url)
+        default:
+            return
+        }
+        
+        self.headerStrategy!.apply(integrationLevel: knownService.integrationLevel)
     }
 
     private func loadSpaPage(path: String) {
@@ -129,7 +151,7 @@ class WebViewController: UIViewController, WKUIDelegate {
 
         self.webViewDelegate?.updateNavigationMenu(knownService: knownService)
 
-        if knownService.viewMode == .AppTab || shouldOpenInWebView(resolvedUrl.absoluteString) {
+        if knownService.integrationLevel == .Bronze || shouldOpenInWebView(resolvedUrl.absoluteString) {
             webView.loadPage(url: resolvedUrl.absoluteString)
         } else {
             self.loadSpaPage(path: resolvedUrl.absoluteString)

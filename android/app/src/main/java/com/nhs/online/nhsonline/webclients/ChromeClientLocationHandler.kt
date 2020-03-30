@@ -21,7 +21,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 internal const val LOCATION_REQUEST_CODE = 101
 internal const val CAMERA_STORAGE_REQUEST_CODE = 102
 internal const val UPLOAD_FILE_REQUEST_CODE = 103

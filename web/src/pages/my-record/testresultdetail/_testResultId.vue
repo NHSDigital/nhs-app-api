@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
     <div v-if="showTemplate" :class="[$style.content,
@@ -13,6 +12,7 @@
             </div>
             <div v-else id="resultDetails">
               <p>
+                <!-- eslint-disable-next-line vue/no-v-html -->
                 <span v-html="$store.state.myRecord.detailedTestResult.data.testResult"/>
               </p>
             </div>

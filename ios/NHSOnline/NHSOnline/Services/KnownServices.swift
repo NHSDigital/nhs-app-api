@@ -6,6 +6,7 @@ import Foundation
 
 class KnownServices {
     let rootServices: [RootService]?
+    let wildCard = "*"
 
     init() {
         self.rootServices = nil
@@ -17,7 +18,7 @@ class KnownServices {
 
     public func findMatchingKnownService(_ url: URL?) -> KnownService {
         guard let theUrl = url, let rootService = getRootServiceByHostAndScheme(host: (theUrl.host)!, scheme: (theUrl.scheme)!) else {
-            return RootService(url: "", javaScriptInteractionMode: .None, menuTab: .None, viewMode: .AppTab, validateSession: false, subServices: nil)
+            return RootService(url: "", javaScriptInteractionMode: .None, menuTab: .None, integrationLevel: .Bronze, validateSession: false, subServices: nil)
         }
         guard let subService = findMatchingSubService(rootService: rootService, path: theUrl.path, query: theUrl.query) else {
             return rootService
@@ -47,7 +48,7 @@ class KnownServices {
         let thePath = makePathSafe(path: path)
         let subServicePath = makePathSafe(path: subService.path)
 
-        let pathMatch = subServicePath != "/" ? thePath.hasPrefix(subServicePath) : subServicePath == thePath
+        let pathMatch = subServicePath != "/" ? isPathMatch(subServicePath: subServicePath, path: thePath) : subServicePath == thePath
         let subServiceQueryItems = queryStringToArray(subService.queryString)
 
         if subServiceQueryItems.isEmpty {
@@ -66,6 +67,22 @@ class KnownServices {
                 queryMatch: Set(subServiceQueryItems).isSubset(of: Set(queryItems)),
                 queryMatchCount: Set(subServiceQueryItems).intersection(Set(queryItems)).count
         )
+    }
+    
+    private func isPathMatch(subServicePath: String, path: String) -> Bool {
+        let pathComponents = path.split(separator: "/", omittingEmptySubsequences: true)
+        let subServicePathComponents = subServicePath.split(separator: "/", omittingEmptySubsequences: true)
+        
+        if (pathComponents.count < subServicePathComponents.count) { return false }
+        
+        for i in 0 ..< subServicePathComponents.count {
+            if((subServicePathComponents[i] != wildCard && subServicePathComponents[i] != pathComponents[i]) ||
+                subServicePathComponents[i] == wildCard && pathComponents[i].isEmpty) {
+            return false
+            }
+        }
+        
+        return true
     }
 
     private func makePathSafe(path: String?) -> String {

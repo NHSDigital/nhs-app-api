@@ -1,10 +1,12 @@
 package com.nhs.online.nhsonline.services.knownservices
 
 import java.net.URL
+private const val WILDCARD = "*"
 
 data class KnownServices(
     var knownServices: List<RootService>? = null
 ) {
+
     fun findMatchingKnownService(url: URL?): KnownService? {
         var rootService: RootService?
         var subService: SubService?
@@ -127,7 +129,7 @@ data class KnownServices(
         }
 
         val pathMatch = when(subServicePath != "/") {
-            true -> thePath.startsWith(subServicePath)
+            true -> isPathMatch(subServicePath, thePath)
             false -> subServicePath == thePath
         }
 
@@ -150,5 +152,25 @@ data class KnownServices(
                 queryItems.containsAll(subServiceQueryItems),
                 queryItems.intersect(subServiceQueryItems).size
         )
+    }
+
+    private fun isPathMatch(subServicePath: String, path: String): Boolean {
+
+        var pathComponents = path.split("/").filter {
+            it.isNotEmpty()
+        }
+        var subServicePathComponents = subServicePath.split("/").filter {
+            it.isNotEmpty()
+        }
+
+        if (pathComponents.size < subServicePathComponents.size)
+            return false
+
+        for (i in subServicePathComponents.indices) {
+            if((subServicePathComponents[i] != WILDCARD && subServicePathComponents[i] != pathComponents[i]) ||
+                    subServicePathComponents[i] == WILDCARD && pathComponents[i].isNullOrEmpty())
+                return false
+        }
+        return true
     }
 }

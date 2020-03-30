@@ -39,8 +39,5 @@ class PageUnavailabilityViewController: UIViewController {
         }
         errorTextView.accessibilityValue = accessibilityText
     }
-    
-    func setTryAgainButtonText(text: String) {
-        self.tryAgainButton.setTitle(text, for: .normal)
-    }
+
 }

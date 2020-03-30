@@ -23,7 +23,6 @@ class ConfigurationServiceManager(private val activity: MainActivity, private va
             configurationResponse.isSupportedVersion = isSupportedVersion
             configurationResponse.fidoServerUrl = fidoServerUrl
             configurationResponse.knownServices = knownServices
-            configurationResponse.nhsLoginLoggedInPaths = config.nhsLoginLoggedInPaths ?: listOf<String>()
             configurationResponse.callSuccessful = true
         }
 

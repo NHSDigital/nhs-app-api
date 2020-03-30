@@ -61,24 +61,6 @@ class WebAppInterfacePrivate(
     }
 
     @JavascriptInterface
-    fun hideHeader() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeader")
-        runAction { uiInteractor.hideHeader() }
-    }
-
-    @JavascriptInterface
-    fun hideHeaderSlim() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeaderSlim")
-        runAction { uiInteractor.hideHeaderSlim() }
-    }
-
-    @JavascriptInterface
-    fun hideMenuBar() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideMenuBar")
-        runAction { uiInteractor.hideMenuBar() }
-    }
-
-    @JavascriptInterface
     fun hideWhiteScreen() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideWhiteScreen")
         runAction { uiInteractor.hideBlankScreen() }
@@ -155,24 +137,6 @@ class WebAppInterfacePrivate(
     fun setZoomable(canZoom: Boolean) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering setZoomable")
         runAction{ uiInteractor.setZoomable(canZoom) }
-    }
-
-    @JavascriptInterface
-    fun showHeader() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
-        runAction { uiInteractor.showHeader() }
-    }
-
-    @JavascriptInterface
-    fun showHeaderSlim() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
-        runAction { uiInteractor.showHeaderSlim() }
-    }
-
-    @JavascriptInterface
-    fun showMenuBar() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showMenuBar")
-        runAction { uiInteractor.showMenuBar() }
     }
 
     @JavascriptInterface

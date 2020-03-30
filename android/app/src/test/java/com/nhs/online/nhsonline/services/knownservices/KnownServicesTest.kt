@@ -1,6 +1,7 @@
 package com.nhs.online.nhsonline.services.knownservices
 
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
+import com.nhs.online.nhsonline.services.knownservices.enums.IntegrationLevel
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import org.junit.Assert
@@ -158,17 +159,52 @@ class KnownServicesTest {
         Assert.assertTrue(result.queryString == null)
     }
 
+    @Test
+    fun findMatchingSubService_ResolveToSubService_WhenSubServicePathEndsWithWildcard() {
+        val url = "https://test.com/path/valid-subpath/123"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
+
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == "/path/valid-subpath/*")
+        Assert.assertTrue(result.queryString == null)
+    }
+
+    @Test
+    fun findMatchingSubService_ResolveToSubService_WhenSubServicePathEndsWithWildcardButPathContainsAdditionalLevels() {
+        val url = "https://test.com/path/valid-subpath/123/other-path"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
+
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == "/path/valid-subpath/*")
+        Assert.assertTrue(result.queryString == null)
+    }
+
+    @Test
+    fun findMatchingSubService_ResolveToSubService_WhenSubServicePathContainsWildcard() {
+        val url = "https://test.com/path/valid-subpath/123/extended-path"
+        val result = testKnownServices.findMatchingKnownService(URL(url))
+
+        Assert.assertNotNull(result)
+        Assert.assertTrue(result is SubService)
+        Assert.assertTrue((result as SubService).path == "/path/valid-subpath/*/extended-path")
+        Assert.assertTrue(result.queryString == null)
+    }
+
     private fun mockKnownServices(): KnownServices {
         val testSubServices = listOf(
-                SubService(requiresAssertedLoginIdentity = false, validateSession = false, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, showSpinner = false, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, path = null, queryString = "foo=bar"),
-                SubService(requiresAssertedLoginIdentity = false, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, showSpinner = false, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, path = "/path", queryString = null),
-                SubService(requiresAssertedLoginIdentity = false, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, showSpinner = false, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, path = "/path/valid-subpath", queryString = null),
-                SubService(requiresAssertedLoginIdentity = true, validateSession = false, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, showSpinner = false, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, path = "/path", queryString = "foo=bar"),
-                SubService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, showSpinner = false, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, path = null, queryString = "foo=bar&bar=ram")
+                SubService(requiresAssertedLoginIdentity = false, validateSession = false, menuTab = MenuTab.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, integrationLevel = IntegrationLevel.Unknown, showSpinner = false, path = null, queryString = "foo=bar"),
+                SubService(requiresAssertedLoginIdentity = false, validateSession = true, menuTab = MenuTab.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, integrationLevel = IntegrationLevel.Unknown, showSpinner = false, path = "/path", queryString = null),
+                SubService(requiresAssertedLoginIdentity = false, validateSession = true, menuTab = MenuTab.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, integrationLevel = IntegrationLevel.Unknown, showSpinner = false, path = "/path/valid-subpath", queryString = null),
+                SubService(requiresAssertedLoginIdentity = true, validateSession = false, menuTab = MenuTab.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, integrationLevel = IntegrationLevel.Unknown, showSpinner = false, path = "/path", queryString = "foo=bar"),
+                SubService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, integrationLevel = IntegrationLevel.Unknown, showSpinner = false, path = null, queryString = "foo=bar&bar=ram"),
+                SubService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, integrationLevel = IntegrationLevel.Unknown, showSpinner = false, path = "/path/valid-subpath/*", queryString = null),
+                SubService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, integrationLevel = IntegrationLevel.Unknown, showSpinner = false, path = "/path/valid-subpath/*/extended-path", queryString = null)
         )
 
         val rootServices = listOf(
-                RootService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, showSpinner = false, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, url = "https://test.com", subServices = testSubServices)
+                RootService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, showSpinner = false, integrationLevel = IntegrationLevel.Unknown, url = "https://test.com", subServices = testSubServices)
         )
 
         return KnownServices(rootServices)

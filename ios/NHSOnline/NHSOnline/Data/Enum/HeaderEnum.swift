@@ -1,5 +1,6 @@
 enum HeaderType {
-    case Slim
+    case SlimBack
+    case SlimClose
     case Full
     case None
 }

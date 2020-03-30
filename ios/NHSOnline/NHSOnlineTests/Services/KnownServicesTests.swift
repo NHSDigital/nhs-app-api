@@ -11,18 +11,21 @@ class KnownServicesTests: XCTestCase {
         super.setUp()
 
         testSubServices.append(SubService.init(path: "/path", queryString: nil, javaScriptInteractionMode: .Unknown,
-                menuTab: .Unknown, viewMode: .Unknown, validateSession: false))
+                menuTab: .Unknown, integrationLevel: .Unknown, validateSession: false))
         testSubServices.append(SubService.init(path: "/path/valid-subpath", queryString: nil, javaScriptInteractionMode: .Unknown,
-                menuTab: .Unknown, viewMode: .Unknown, validateSession: false))
+                menuTab: .Unknown, integrationLevel: .Unknown, validateSession: false))
         testSubServices.append(SubService.init(path: nil, queryString: "foo=bar", javaScriptInteractionMode: .Unknown,
-                menuTab: .Unknown, viewMode: .Unknown, validateSession: false))
+                menuTab: .Unknown, integrationLevel: .Unknown, validateSession: false))
         testSubServices.append(SubService.init(path: "/path", queryString: "foo=bar", javaScriptInteractionMode: .Unknown,
-                menuTab: .Unknown, viewMode: .Unknown, validateSession: false))
+                menuTab: .Unknown, integrationLevel: .Unknown, validateSession: false))
         testSubServices.append(SubService.init(path: nil, queryString: "foo=bar&bar=ram", javaScriptInteractionMode: .Unknown, 
-                menuTab: .Unknown, viewMode: .Unknown, validateSession: false))
-
+                menuTab: .Unknown, integrationLevel: .Unknown, validateSession: false))
+        testSubServices.append(SubService.init(path: "/path/valid-subpath/*", queryString: nil, javaScriptInteractionMode: .Unknown,
+                menuTab: .Unknown, integrationLevel: .Unknown, validateSession: false))
+        testSubServices.append(SubService.init(path: "/path/valid-subpath/*/extended-path", queryString: nil, javaScriptInteractionMode: .Unknown,
+        menuTab: .Unknown, integrationLevel: .Unknown, validateSession: false))
         testRootServices.append(RootService.init(url: "https://test.com", javaScriptInteractionMode: .NhsApp, 
-                menuTab: .Symptoms, viewMode: .AppTab, validateSession: false, subServices: testSubServices))
+                menuTab: .Symptoms, integrationLevel: .Bronze, validateSession: false, subServices: testSubServices))
 
         testKnownServices = KnownServices.init(testRootServices)
     }
@@ -153,7 +156,34 @@ class KnownServicesTests: XCTestCase {
         XCTAssert((result as! SubService).path == nil)
         XCTAssert((result as! SubService).queryString == "foo=bar&bar=ram")
     }
+    
+    func test_findMatchingSubService_ResolveToSubService_WhenSubServicePathEndsWithWildcard(){
+        let result = testKnownServices!.findMatchingKnownService(URL(string: "https://test.com/path/valid-subpath/123"))
 
+        XCTAssertNotNil(result)
+        XCTAssert(result is SubService)
+        XCTAssert((result as! SubService).path == "/path/valid-subpath/*")
+        XCTAssert((result as! SubService).queryString == nil)
+    }
+
+    func test_findMatchingSubService_ResolveToSubService_WhenSubServicePathEndsWithWildcardButPathContainsAdditionalLevels(){
+        let result = testKnownServices!.findMatchingKnownService(URL(string: "https://test.com/path/valid-subpath/123/other-path"))
+
+        XCTAssertNotNil(result)
+        XCTAssert(result is SubService)
+        XCTAssert((result as! SubService).path == "/path/valid-subpath/*")
+        XCTAssert((result as! SubService).queryString == nil)
+    }
+    
+    func test_findMatchingSubService_ResolveToSubService_WhenSubServicePathContainsWildcard(){
+        let result = testKnownServices!.findMatchingKnownService(URL(string: "https://test.com/path/valid-subpath/123/extended-path"))
+
+        XCTAssertNotNil(result)
+        XCTAssert(result is SubService)
+        XCTAssert((result as! SubService).path == "/path/valid-subpath/*/extended-path")
+        XCTAssert((result as! SubService).queryString == nil)
+    }
+    
     func test_getRootServiceByHostAndScheme_ResolveToRootService_WhenUrlIsValid(){
         let result = testKnownServices!.getRootServiceByHostAndScheme(host: "test.com", scheme: "https")
 
@@ -166,4 +196,5 @@ class KnownServicesTests: XCTestCase {
 
         XCTAssertNil(result)
     }
+
 }

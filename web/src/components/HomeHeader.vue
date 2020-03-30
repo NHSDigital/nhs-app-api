@@ -25,7 +25,8 @@
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
 import NhsLogo from '@/components/icons/NhsLogo';
-import HelpIcon from '../components/icons/HelpIcon';
+import HelpIcon from '@/components/icons/HelpIcon';
+import { CHECKYOURSYMPTOMS } from '@/lib/routes';
 
 export default {
   name: 'HomeHeader',
@@ -41,12 +42,12 @@ export default {
   },
   computed: {
     symptomsUrl() {
-      return '/check-your-symptoms';
+      return CHECKYOURSYMPTOMS.path;
     },
   },
   methods: {
     checkSymptomsButtonClicked() {
-      this.$store.dispatch('device/goToCheckSymptoms');
+      this.$router.push(CHECKYOURSYMPTOMS.path);
     },
   },
 };

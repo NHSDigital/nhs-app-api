@@ -13,8 +13,8 @@ import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.knownservices.RootService
 import com.nhs.online.nhsonline.services.knownservices.SubService
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
+import com.nhs.online.nhsonline.services.knownservices.enums.IntegrationLevel
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
-import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -22,6 +22,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 @RunWith(RobolectricTestRunner::class)
 class ConfigurationServiceTest {
@@ -48,7 +49,21 @@ class ConfigurationServiceTest {
 
     @Test
     fun getConfigurationResponse_WhenThereIsNoConnection_ItShowsNoConnectionErrorAndReturnsNull() {
-        whenever(httpClientMock.readText(any())).thenAnswer { throw IOException() }
+        whenever(httpClientMock.readText(any(), any())).thenAnswer { throw IOException() }
+        MockConnectionStateMonitor().mockNetworkCallback(resourceMockingClass.mockDisconnectedContext())
+
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        val configuration = configurationService.call()
+
+        verify(activity).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(uiIInteractor).showUnavailabilityError(errorMessageHandler.getErrorMessage(ErrorType.NoConnection))
+        assertNull(configuration)
+    }
+
+    @Test
+    fun getConfigurationResponse_WhenThereIsAConnectionTimeout_ItShowsNoConnectionErrorAndReturnsNull() {
+        whenever(httpClientMock.readText(any(), any())).thenAnswer { throw SocketTimeoutException() }
         MockConnectionStateMonitor().mockNetworkCallback(resourceMockingClass.mockDisconnectedContext())
 
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
@@ -62,7 +77,7 @@ class ConfigurationServiceTest {
 
     @Test
     fun getConfigurationResponse_WhenResponseIsEmpty_ItShowsApiCallErrorAndReturnsNull() {
-        whenever(httpClientMock.readText(any())).thenReturn("")
+        whenever(httpClientMock.readText(any(), any())).thenReturn("")
 
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         val configuration = configurationService.call()
@@ -75,7 +90,7 @@ class ConfigurationServiceTest {
 
     @Test
     fun getConfigurationResponse_WhenResponseIsEmptyObject_ItShowsApiCallErrorAndReturnsNull() {
-        whenever(httpClientMock.readText(any())).thenReturn("{}")
+        whenever(httpClientMock.readText(any(), any())).thenReturn("{}")
 
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         val configuration = configurationService.call()
@@ -88,7 +103,7 @@ class ConfigurationServiceTest {
 
     @Test
     fun getConfigurationResponse_WhenEmptyKnownServices_ReturnsMappedResponse() {
-        whenever(httpClientMock.readText(any())).thenReturn("{ " +
+        whenever(httpClientMock.readText(any(), any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
                 "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
@@ -102,7 +117,6 @@ class ConfigurationServiceTest {
                 Configuration(
                         minimumSupportedAndroidVersion = "v1.27.0",
                         fidoServerUrl = "www.fidoserver.com",
-                        nhsLoginLoggedInPaths = listOf("/path"),
                         knownServices = emptyList()
                 )
         )
@@ -110,7 +124,7 @@ class ConfigurationServiceTest {
 
     @Test
     fun getConfigurationResponse_WhenHasUnknownEnums_ReturnsMappedResponseWithUnknowns() {
-        whenever(httpClientMock.readText(any())).thenReturn("{ " +
+        whenever(httpClientMock.readText(any(), any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
                 "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
@@ -120,6 +134,7 @@ class ConfigurationServiceTest {
                 "\"menuTab\":\"NotValidValue\"," +
                 "\"viewMode\":\"NotValidValue\"," +
                 "\"javaScriptInteractionMode\":\"NotValidValue\"," +
+                "\"integrationLevel\":\"Unknown\"," +
                 "\"url\":\"www.example.com\"," +
                 "\"showSpinner\":false," +
                 "\"subServices\":null" +
@@ -133,14 +148,13 @@ class ConfigurationServiceTest {
                 Configuration(
                         minimumSupportedAndroidVersion = "v1.27.0",
                         fidoServerUrl = "www.fidoserver.com",
-                        nhsLoginLoggedInPaths = listOf("/path"),
                         knownServices = listOf(
                                 RootService(
                                         requiresAssertedLoginIdentity = false,
                                         validateSession = true,
                                         menuTab = MenuTab.Unknown,
-                                        viewMode = ViewMode.Unknown,
                                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
+                                        integrationLevel = IntegrationLevel.Unknown,
                                         url = "www.example.com",
                                         showSpinner = false,
                                         subServices = null
@@ -152,7 +166,7 @@ class ConfigurationServiceTest {
 
     @Test
     fun getConfigurationResponse_WhenHasRootServiceWithNoSubServices_ReturnsMappedResponse() {
-        whenever(httpClientMock.readText(any())).thenReturn("{ " +
+        whenever(httpClientMock.readText(any(), any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
                 "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
@@ -160,8 +174,8 @@ class ConfigurationServiceTest {
                 "\"requiresAssertedLoginIdentity\":false," +
                 "\"validateSession\":true," +
                 "\"menuTab\":\"None\"," +
-                "\"viewMode\":\"AppTab\"," +
                 "\"javaScriptInteractionMode\":\"NhsApp\"," +
+                "\"integrationLevel\":\"Bronze\"," +
                 "\"url\":\"www.example.com\"," +
                 "\"showSpinner\":false," +
                 "\"subServices\":null" +
@@ -175,14 +189,13 @@ class ConfigurationServiceTest {
                 Configuration(
                         minimumSupportedAndroidVersion = "v1.27.0",
                         fidoServerUrl = "www.fidoserver.com",
-                        nhsLoginLoggedInPaths = listOf("/path"),
                         knownServices = listOf(
                                 RootService(
                                         requiresAssertedLoginIdentity = false,
                                         validateSession = true,
                                         menuTab = MenuTab.None,
-                                        viewMode = ViewMode.AppTab,
                                         javaScriptInteractionMode = JavaScriptInteractionMode.NhsApp,
+                                        integrationLevel = IntegrationLevel.Bronze,
                                         url = "www.example.com",
                                         showSpinner = false,
                                         subServices = null
@@ -194,7 +207,7 @@ class ConfigurationServiceTest {
 
     @Test
     fun getConfigurationResponse_WhenHasRootServiceWitSubServices_ReturnsMappedResponse() {
-        whenever(httpClientMock.readText(any())).thenReturn("{ " +
+        whenever(httpClientMock.readText(any(), any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
                 "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
@@ -202,16 +215,16 @@ class ConfigurationServiceTest {
                 "\"requiresAssertedLoginIdentity\":false," +
                 "\"validateSession\":true," +
                 "\"menuTab\":\"None\"," +
-                "\"viewMode\":\"AppTab\"," +
                 "\"javaScriptInteractionMode\":\"NhsApp\"," +
+                "\"integrationLevel\":\"Gold\"," +
                 "\"url\":\"www.example.com\"," +
                 "\"showSpinner\":false," +
                 "\"subServices\": [{" +
                 "\"requiresAssertedLoginIdentity\":true," +
                 "\"validateSession\":false," +
                 "\"menuTab\":\"Appointments\"," +
-                "\"viewMode\":\"WebView\"," +
                 "\"javaScriptInteractionMode\":\"None\"," +
+                "\"integrationLevel\":\"SilverWithWebNavigation\"," +
                 "\"path\":\"/path\"," +
                 "\"showSpinner\":false," +
                 "\"queryString\":null" +
@@ -226,14 +239,13 @@ class ConfigurationServiceTest {
                 Configuration(
                         minimumSupportedAndroidVersion = "v1.27.0",
                         fidoServerUrl = "www.fidoserver.com",
-                        nhsLoginLoggedInPaths = listOf("/path"),
                         knownServices = listOf(
                                 RootService(
                                         requiresAssertedLoginIdentity = false,
                                         validateSession = true,
                                         menuTab = MenuTab.None,
-                                        viewMode = ViewMode.AppTab,
                                         javaScriptInteractionMode = JavaScriptInteractionMode.NhsApp,
+                                        integrationLevel = IntegrationLevel.Gold,
                                         url = "www.example.com",
                                         showSpinner = false,
                                         subServices = listOf(
@@ -241,8 +253,8 @@ class ConfigurationServiceTest {
                                                         requiresAssertedLoginIdentity = true,
                                                         validateSession = false,
                                                         menuTab = MenuTab.Appointments,
-                                                        viewMode = ViewMode.WebView,
                                                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                                                        integrationLevel = IntegrationLevel.SilverWithWebNavigation,
                                                         path = "/path",
                                                         queryString = null,
                                                         showSpinner = false

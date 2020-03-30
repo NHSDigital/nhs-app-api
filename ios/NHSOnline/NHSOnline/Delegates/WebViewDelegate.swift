@@ -87,7 +87,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
         if let initialUrl = navigationAction.request.url {
 
-            let url = ensureSupportedScheme(initialUrl)
+            let url = UrlHelper.ensureUrlWithScheme(url: initialUrl.absoluteString)!
             
             if url != initialUrl {
                 decisionHandler(.cancel)
@@ -124,7 +124,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 return
             }
 
-            if (knownService.viewMode == .AppTab) {
+            if (knownService.integrationLevel == .Bronze) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)
                 return
@@ -150,15 +150,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
 
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
         self.showWebViewContainer()
-
-        if (UrlHelper.isValidHomeUrl(url: webView.url)) {
-            viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Full)
-        }
-
-        if (urlRequiresSlimHeader(webView.url!.absoluteString)) {
-            viewController.updateHeaderText(headerText: "Log in to the NHS App", accessibilityLabel: "Login using Patient ID")
-            viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.Slim)
-        }
 
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
 
@@ -281,23 +272,18 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case UserContent.fetchNativeAppVersion.rawValue:
                 self.viewController.setupAppVersion()
                 break
-            case UserContent.hideHeader.rawValue:
-                viewController.setVisibilityOfHeaderAndMenuBars(headerType: .None)
-                break
             case UserContent.hideWhiteScreen.rawValue:
                 UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
                 break
-            case UserContent.hideHeaderSlim.rawValue:
-                viewController.setVisibilityOfHeaderAndMenuBars(headerType: .None)
-                break
-            case UserContent.hideMenuBar.rawValue:
-                viewController.setVisibilityOfHeaderAndMenuBars(headerType: .None)
-                break
             case UserContent.onLogin.rawValue:
                 WebViewController.Properties.usingAbsoluteUri = false
+                viewController.webViewController!.headerStrategy = LoggedInHeaderStrategy(controller: viewController)
+                viewController.webViewController!.applyHeaderStrategy()
                 break
             case UserContent.onLogout.rawValue:
                 WebViewController.Properties.usingAbsoluteUri = true
+                viewController.webViewController!.headerStrategy = LoggedOutHeaderStrategy(controller: viewController)
+                viewController.webViewController!.applyHeaderStrategy()
                 webAppInterface.onLogout()
                 break
             case UserContent.onSessionExpiring.rawValue:
@@ -329,12 +315,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 break;
             case UserContent.setMenuBarItem.rawValue:
                 setMenuBarItem(index: message.body as? Int ?? 0)
-                break
-            case UserContent.showHeader.rawValue:
-                viewController.setVisibilityOfHeaderAndMenuBars(headerType: .Full)
-                break
-            case UserContent.showHeaderSlim.rawValue:
-                viewController.setVisibilityOfHeaderAndMenuBars(headerType: .Slim)
                 break
             case UserContent.startDownload.rawValue:
                 viewController.downloadFile(messageBody: String(describing: message.body))
@@ -378,13 +358,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             suffix.remove(at: suffix.startIndex)
             failedUrl = URL(string: config().HomeUrl + suffix)
         }
-    }
-
-    func ensureSupportedScheme(_ url: URL) -> URL {
-        if (url.scheme == config().AppScheme) {
-            self.viewController.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
-        }
-        return UrlHelper.ensureUrlWithScheme(url: url.absoluteString)!
     }
 
     func clearMenuBarItem() {

@@ -19,7 +19,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,7 +41,6 @@ class NhsWebTest {
     private lateinit var urlLoader: UrlLoader
     private lateinit var spyWeb: NhsWeb
     private lateinit var webSettings: WebSettings
-    private var nhsLoginLoggedInPaths: List<String> = listOf()
     private lateinit var tempAppWebViewDir: File
     private lateinit var tempCacheDir: File
 
@@ -60,12 +58,10 @@ class NhsWebTest {
         notificationsServiceMock = mock()
         knownServicesMock = mock()
 
-        nhsLoginLoggedInPaths = mock()
-
         tempCacheDir = mock()
         tempAppWebViewDir = mock()
 
-        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock, nhsLoginLoggedInPaths, mock())
+        nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock, mock())
         spyWeb = spy(nhsWeb)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
         ReflectionHelpers.setField(nhsWeb, "cacheDir", tempCacheDir)

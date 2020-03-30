@@ -1,7 +1,7 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <div id="document" class="documentContainer nhsuk-u-margin-top-5" v-html="document"/>
       <glossary/>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"

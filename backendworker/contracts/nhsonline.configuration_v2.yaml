@@ -52,8 +52,8 @@ components:
           $ref: '#/components/schemas/JavaScriptInteractionMode'
         menuTab:
           $ref: '#/components/schemas/MenuTab'
-        viewMode:
-          $ref: '#/components/schemas/ViewMode'
+        integrationLevel:
+          $ref: '#/components/schemas/IntegrationLevel'
         showSpinner:
           type: boolean
         showThirdPartyWarning:
@@ -77,8 +77,8 @@ components:
           $ref: '#/components/schemas/JavaScriptInteractionMode'
         menuTab:
           $ref: '#/components/schemas/MenuTab'
-        viewMode:
-          $ref: '#/components/schemas/ViewMode'
+        integrationLevel:
+          $ref: '#/components/schemas/IntegrationLevel'
         showSpinner:
           type: boolean
         showThirdPartyWarning:
@@ -96,11 +96,15 @@ components:
         - Prescriptions
         - MyRecord
         - More
-    ViewMode:
+    IntegrationLevel:
       type: string
       enum:
-        - AppTab
-        - WebView
+        - Gold
+        - GoldOverlay
+        - GoldWithNoHeaders
+        - SilverWithoutWebNavigation
+        - SilverWithWebNavigation
+        - Bronze
     JavaScriptInteractionMode:
       type: string
       enum:

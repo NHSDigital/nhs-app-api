@@ -107,23 +107,6 @@ class WebAppInterfacePrivateTest {
         verify(contextMock).showLeavingPageWarningDialogue()
     }
 
-    @Test
-    fun hideHeaderTest() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.hideHeader()
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).hideHeader()
-    }
-
-    @Test
-    fun hideHeaderSlimTest() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.hideHeaderSlim()
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).hideHeaderSlim()
-    }
 
     @Test
     fun setMenuBarItemTest() {
@@ -132,42 +115,6 @@ class WebAppInterfacePrivateTest {
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).setMenuBarItem(0)
-    }
-
-    @Test
-    fun showHeaderTest() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.showHeader()
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).showHeader()
-    }
-
-    @Test
-    fun showHeaderSlimTest() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.showHeaderSlim()
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).showHeaderSlim()
-    }
-
-    @Test
-    fun hideMenuBarTest() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.hideMenuBar()
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).hideMenuBar()
-    }
-
-    @Test
-    fun showMenuBarTest() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterfacePrivate.showMenuBar()
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).showMenuBar()
     }
 
     @Test

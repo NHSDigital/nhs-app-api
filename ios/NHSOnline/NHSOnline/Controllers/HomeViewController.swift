@@ -81,6 +81,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
 
         setupNhsLogo()
         setupBackArrow()
+        setupCloseIcon()
         setupMyAccountIcon()
         setupHelpIcon()
     
@@ -218,6 +219,7 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
 
         webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
         webViewController?.view.translatesAutoresizingMaskIntoConstraints = false
+        webViewController?.headerStrategy = LoggedOutHeaderStrategy(controller: self)
         
         errorViewController = self.storyboard?.instantiateViewController(withIdentifier: "PageUnavailabilityViewController") as? PageUnavailabilityViewController
         errorViewController?.view.translatesAutoresizingMaskIntoConstraints = false
@@ -252,6 +254,12 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.loggedOutPagesAndCIDBack))
         self.headerBarSlim.backButtonArrow.isUserInteractionEnabled = true
         self.headerBarSlim.backButtonArrow.addGestureRecognizer(tapGesture)
+    }
+    
+    func setupCloseIcon(){
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.loggedOutPagesAndCIDBack))
+        self.headerBarSlim.closeIcon.isUserInteractionEnabled = true
+        self.headerBarSlim.closeIcon.addGestureRecognizer(tapGesture)
     }
     
     func setupMyAccountIcon() {
@@ -295,7 +303,14 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
             case HeaderType.Full:
                 self.setHeaderVisibility(visible: true)
                 self.setSlimHeaderVisibility(visible: false)
-            case HeaderType.Slim:
+            case HeaderType.SlimBack:
+                self.headerBarSlim.backButtonArrow.isHidden = false
+                self.headerBarSlim.closeIcon.isHidden = true
+                self.setHeaderVisibility(visible: false)
+                self.setSlimHeaderVisibility(visible: true)
+            case HeaderType.SlimClose:
+                self.headerBarSlim.backButtonArrow.isHidden = true
+                self.headerBarSlim.closeIcon.isHidden = false
                 self.setHeaderVisibility(visible: false)
                 self.setSlimHeaderVisibility(visible: true)
             default:
@@ -365,7 +380,6 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
     func showBiometricSessionError () {
         self.webViewDelegate?.failedUrl = URL(string: config().HomeUrl + "login")
         self.errorViewController?.setUnavailabilityError(errorMessage: ErrorMessage(.BiometricLoginSessionError))
-        self.errorViewController?.setTryAgainButtonText(text: NSLocalizedString("BiometricSessionTimeoutButtonText", comment: ""))
         self.updateHeaderText(headerText: NSLocalizedString("BiometricSessionTimeoutHeader", comment: ""))
         showErrorViewContainer()
         self.webViewController?.dismissSafariViewController()
@@ -466,7 +480,6 @@ class HomeViewController : UIViewController, EKEventEditViewDelegate {
                 || hasCidUrlSuffix(webview: webview)
                 || checkCurrentUrlForPath(webview: webview, urlPath: config().PreRegistrationInstructionsPath)
                 || checkCurrentUrlForPath(webview: webview, urlPath: config().BiometricLoginErrorPath)){
-                self.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
                 self.showWhiteScreen()
                 self.webViewController?.loadPage(url: config().HomeUrl)
                 self.clearSelectedTab()

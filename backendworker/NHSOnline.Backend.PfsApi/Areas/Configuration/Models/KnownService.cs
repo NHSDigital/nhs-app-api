@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -7,19 +8,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration.Models
     {
         [JsonConverter(typeof(StringEnumConverter), false)]
         public JavaScriptInteractionMode JavaScriptInteractionMode { get; set; }
-        
+
         [JsonConverter(typeof(StringEnumConverter), false)]
         public MenuTab MenuTab { get; set; }
 
+        [Obsolete("Behaviour replaced by IntegrationLevel")]
         [JsonConverter(typeof(StringEnumConverter), false)]
         public ViewMode ViewMode { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter), false)]
+        public IntegrationLevel IntegrationLevel { get; set; }
 
         public bool ShowSpinner { get; set; }
 
         public bool ShowThirdPartyWarning{ get; set; }
-        
+
         public bool RequiresAssertedLoginIdentity { get; set; }
-        
+
         public bool ValidateSession { get; set; }
     }
 }

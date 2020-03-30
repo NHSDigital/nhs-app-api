@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.util.Log
@@ -71,7 +72,7 @@ class MainActivity :
     private lateinit var biometricsInterface: BiometricsInterface
     private lateinit var biometricsInteractor: BiometricsInteractor
     private lateinit var connectionStateMonitor: ConnectionStateMonitor
-    private lateinit var nhsWeb: NhsWeb
+    private var nhsWeb: NhsWeb? = null
     lateinit var appDialogs: AppDialogs
     private lateinit var appWebInterface: AppWebInterface
     private var lifeCycleObserver: LifeCycleObserver? = null
@@ -87,7 +88,6 @@ class MainActivity :
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
 
     private var knownServices = KnownServices()
-    private var nhsLoginLoggedInPaths: List<String> = listOf()
     private lateinit var configServiceManager: ConfigurationServiceManager
     private lateinit var configService: ConfigurationService
     var configurationResponse: ConfigurationResponse = ConfigurationResponse()
@@ -139,13 +139,13 @@ class MainActivity :
         configServiceManager = ConfigurationServiceManager(this, configService)
         configurationResponse = configServiceManager.getConfigurationResponse()
         if (configurationResponse.callSuccessful) {
-            initialiseActivityElements()
+            knownServices = configurationResponse.knownServices!!
         }
 
         initialiseNhsWeb()
         initialiseBiometrics()
 
-        intentHandlers.handleIntent(intent, true, nhsWeb)
+        intentHandlers.handleIntent(intent, true, nhsWeb!!)
 
         if (configurationResponse.callSuccessful) {
             loadWelcomePage()
@@ -162,27 +162,23 @@ class MainActivity :
         helpIcon.setOnClickListener { onHelpIconSelected() }
     }
 
-    private fun initialiseActivityElements() {
-        knownServices = configurationResponse.knownServices!!
-        nhsLoginLoggedInPaths = configurationResponse.nhsLoginLoggedInPaths!!
-    }
-
     private fun initialiseNhsWeb() {
         val loggingService = LoggingService(this, VolleyQueueProvider())
-        nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface, knownServices, nhsLoginLoggedInPaths, loggingService)
+        nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface, knownServices, loggingService)
+
         menuBar.nhsWeb = nhsWeb
 
         setHelpUrl(resources.getString(R.string.helpURL))
     }
 
     private fun initialiseBiometrics() {
-        biometricsInteractor = BiometricsInteractor(this, nhsWeb, this)
+        biometricsInteractor = BiometricsInteractor(this, nhsWeb!!, this)
         biometricsInterface = BiometricsInterface(biometricsInteractor, this, appWebInterface)
         configBiometricSetup(configurationResponse.fidoServerUrl)
     }
 
     private fun loadWelcomePage() {
-        nhsWeb.loadWelcomePage()
+        nhsWeb?.loadWelcomePage()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -212,7 +208,7 @@ class MainActivity :
         if (!configurationResponse.callSuccessful) {
             configurationResponse = configServiceManager.getConfigurationResponse()
             if (configurationResponse.callSuccessful) {
-                initialiseActivityElements()
+                knownServices = configurationResponse.knownServices!!
                 initialiseNhsWeb()
                 initialiseBiometrics()
                 loadWelcomePage()
@@ -225,7 +221,7 @@ class MainActivity :
 
         clearMenuBarItem()
         showProgressDialog()
-        nhsWeb.reloadCurrentUrl()
+        nhsWeb?.reloadCurrentUrl()
         dismissProgressDialog()
     }
 
@@ -239,9 +235,8 @@ class MainActivity :
                         appWebInterface, knownServices)
             }
             lifeCycleObserver?.onMoveToForeground()
+            intentHandlers.handleIntent(intent, true, nhsWeb!!)
         }
-
-        lifeCycleObserver?.onMoveToForeground()
     }
 
     override fun onStop() {
@@ -261,7 +256,7 @@ class MainActivity :
         super.onActivityResult(requestCode, resultCode, intent)
 
         var results: Array<Uri>? = null
-        val fileUploadCallback = nhsWeb.getFileUploadCallback()
+        val fileUploadCallback = nhsWeb?.getFileUploadCallback()
 
         logger.log(Level.WARNING,
                 "${this::class.java.simpleName}: Entering onActivityResult with request code: $requestCode")
@@ -270,7 +265,7 @@ class MainActivity :
             if (resultCode == Activity.RESULT_OK) {
                 if (requestCode == UPLOAD_FILE_REQUEST_CODE) {
 
-                    val uploadedFileLocation = nhsWeb.getUploadedFileLocation()
+                    val uploadedFileLocation = nhsWeb?.getUploadedFileLocation()
 
                     if (fileUploadCallback == null) {
                         return
@@ -288,14 +283,14 @@ class MainActivity :
                     }
 
                     fileUploadCallback.onReceiveValue(results)
-                    nhsWeb.resetFileUploadCallback()
+                    nhsWeb?.resetFileUploadCallback()
                 }
             } else {
                 if (requestCode == UPLOAD_FILE_REQUEST_CODE) {
                     if (fileUploadCallback == null) return
 
                     fileUploadCallback.onReceiveValue(null)
-                    nhsWeb.resetFileUploadCallback()
+                    nhsWeb?.resetFileUploadCallback()
                 }
             }
         } catch (exception: Exception) {
@@ -306,7 +301,7 @@ class MainActivity :
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intent?.let {
-            intentHandlers.handleIntent(intent, false, nhsWeb)
+            intentHandlers.handleIntent(intent, false, nhsWeb!!)
         }
     }
 
@@ -317,7 +312,7 @@ class MainActivity :
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
-        return nhsWeb.onSlimHeaderBackButtonPressed()
+        return nhsWeb!!.onSlimHeaderBackButtonPressed()
     }
 
     private fun onMenuSelected(menuBarItem: MenuBarItem) {
@@ -344,8 +339,8 @@ class MainActivity :
                 path = resources.getString(R.string.baseURL)
             }
         }
-        nhsWeb.stopLoading()
-        nhsWeb.loadUrl(path)
+        nhsWeb?.stopLoading()
+        nhsWeb?.loadUrl(path)
     }
 
     override fun startDownload(base64Data: String, fileName: String, mimeType: String) {
@@ -369,33 +364,33 @@ class MainActivity :
     }
 
     override fun loadPage(url: String) {
-        nhsWeb.loadUrl(url)
+        nhsWeb?.loadUrl(url)
     }
 
     private fun onNhsOnlineLogoIconSelected() {
-        nhsWeb.loadWelcomePage()
+        nhsWeb?.loadWelcomePage()
         menuBar.deselectActiveItem()
     }
 
     private fun onMyAccountIconSelected() {
-        nhsWeb.loadUrl(resources.getString(R.string.myAccountPath))
+        nhsWeb?.loadUrl(resources.getString(R.string.myAccountPath))
         menuBar.deselectActiveItem()
     }
 
     private fun onHelpIconSelected() {
-        nhsWeb.loadUrlInChromeTab(nhsWeb.getHelpLocation())
+        nhsWeb?.loadUrlInChromeTab(nhsWeb!!.getHelpLocation())
     }
 
     override fun setHelpUrl(url: String) {
         logger.info("Entering setHelpUrl")
-        nhsWeb.setHelpLocation(url)
+        nhsWeb?.setHelpLocation(url)
     }
 
     override fun setRetryPath(url: String) {
         logger.info("Entering setRetryUrl")
-        nhsWeb.setReloadPath(url)
+        nhsWeb?.setReloadPath(url)
 
-        logger.info("New retry URL: ${nhsWeb.reloadUrl}")
+        logger.info("New retry URL: ${nhsWeb?.reloadUrl}")
     }
 
     override fun onBackPressed() {
@@ -403,16 +398,20 @@ class MainActivity :
 
         val path = getCurrentPath(webview.url)
 
-        when {
-            nhsWeb.isUserLoggedIn -> showExitDialog()
-            path == "/" + resources.getString(R.string.checkYourSymptoms) ->
-                nhsWeb.onbackButtonPressedOnLoggedOutUnsecurePage()
-            path == "/" + resources.getString(R.string.loginBiometricsError) ->
-                nhsWeb.onbackButtonPressedOnLoggedOutUnsecurePage()
-            nhsWeb.shouldReloadHomepageOnBackReturn(nhsWeb.reloadUrl) ->
-                nhsWeb.reloadHomepageOnBackReturn()
-            else -> this.finishAndRemoveTask()
+        nhsWeb?.let {
+            when {
+                it.isUserLoggedIn -> showExitDialog()
+                path == "/" + resources.getString(R.string.checkYourSymptoms) ->
+                    it.onbackButtonPressedOnLoggedOutUnsecurePage()
+                path == "/" + resources.getString(R.string.loginBiometricsError) ->
+                    it.onbackButtonPressedOnLoggedOutUnsecurePage()
+                it.shouldReloadHomepageOnBackReturn(it.reloadUrl) ->
+                    it.reloadHomepageOnBackReturn()
+                else -> this.finishAndRemoveTask()
+            }
+            return
         }
+        this.finishAndRemoveTask()
     }
 
     override fun onPause() {
@@ -430,7 +429,7 @@ class MainActivity :
         }
 
         if (configurationResponse.callSuccessful) {
-            nhsWeb.reloadLoginUrl()
+            nhsWeb?.reloadLoginUrl()
         }
     }
 
@@ -442,7 +441,7 @@ class MainActivity :
 
     private fun showExitDialog() {
         appDialogs.showExitDialog {
-            nhsWeb.loadUrl(resources.getString(R.string.baseURL) + resources.getString(R.string.logoutPath))
+            nhsWeb?.loadUrl(resources.getString(R.string.baseURL) + resources.getString(R.string.logoutPath))
         }
     }
 
@@ -515,20 +514,20 @@ class MainActivity :
     private fun showErrorScreen() {
         hideBlankScreen()
         activityViewSwitcher.switchTo(ActivityView.ERROR)
-        nhsWeb.requiresFullPageLoad = true
+        nhsWeb?.requiresFullPageLoad = true
     }
 
     override fun showWebviewScreen() {
         logger.info("Entering showWebViewScreen")
 
-        nhsWeb.applicationState.unBlock()
+        nhsWeb?.applicationState?.unBlock()
 
         if (configurationResponse.callSuccessful) {
             activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
             hideBlankScreen()
 
-            if (nhsWeb.isUserLoggedIn) {
-                nhsWeb.requiresFullPageLoad = false
+            if (nhsWeb!!.isUserLoggedIn) {
+                nhsWeb!!.requiresFullPageLoad = false
             }
         }
     }
@@ -540,10 +539,10 @@ class MainActivity :
             permissions: Array<out String>, grantResults: IntArray
     ) {
         when (requestCode) {
-            LOCATION_REQUEST_CODE -> nhsWeb.handleWebClientLocationResult(grantResults)
+            LOCATION_REQUEST_CODE -> nhsWeb?.handleWebClientLocationResult(grantResults)
             CAMERA_STORAGE_REQUEST_CODE -> {
                 logger.info("Checking Camera Storage Request Code: $CAMERA_STORAGE_REQUEST_CODE")
-                nhsWeb.handleCameraFilePermissionResult(grantResults)
+                nhsWeb?.handleCameraFilePermissionResult(grantResults)
             }
             STORAGE_REQUEST_CODE -> {
                 logger.info("Storage permission granted, starting download")
@@ -568,11 +567,11 @@ class MainActivity :
     }
 
     fun enableMenuBar() {
-        nhsWeb.applicationState.unBlock()
+        nhsWeb?.applicationState?.unBlock()
     }
 
     override fun announcePageTitle(title: String?) {
-        title?.let { nhsWeb.announceForAccessibility(it) }
+        title?.let { nhsWeb?.announceForAccessibility(it) }
     }
 
     override fun hideMenuBar() {
@@ -590,6 +589,12 @@ class MainActivity :
         header_view_switcher.visibility = GONE
     }
 
+    override fun hideHeaderAndMenu() {
+        logger.info("Entering hideHeaderAndMenu")
+        header_view_switcher.visibility = GONE
+        menuBar.visibility = GONE
+    }
+
     override fun showMenuBar() {
         logger.info("Entering showMenuBar")
         menuBar.visibility = VISIBLE
@@ -602,12 +607,17 @@ class MainActivity :
         setupToolbar(R.id.logged_in_header, false)
     }
 
-    override fun showHeaderSlim() {
+    override fun showHeaderSlim(headerIcon: HeaderIcon) {
         logger.info("Entering showHeaderSlim")
         header_view_switcher.visibility = VISIBLE
         header_view_switcher.displayedChild = headerViewSwitcherLoggedOutSymptomsHeaderIndex
 
-        setupToolbar(R.id.symptoms_toolbar, true)
+        setupToolbar(R.id.symptoms_toolbar, true)?.apply {
+            when (headerIcon) {
+                HeaderIcon.Back -> setHomeAsUpIndicator(R.drawable.back_arrow)
+                HeaderIcon.Close -> setHomeAsUpIndicator(R.drawable.ic_close)
+            }
+        }
     }
 
     override fun showBlankScreen() {
@@ -637,7 +647,7 @@ class MainActivity :
 
     override fun pageLoadComplete() {
         logger.info("Entering pageLoadComplete")
-        nhsWeb.applicationState.unBlock()
+        nhsWeb?.applicationState?.unBlock()
     }
 
     override fun dismissSessionExtensionDialog() {
@@ -685,7 +695,7 @@ class MainActivity :
 
     private fun onSuccessButton() {
         activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
-        nhsWeb.reloadCurrentUrl()
+        nhsWeb?.reloadCurrentUrl()
     }
 
     private fun getCurrentPath(currentUrl: String?): String {
@@ -706,9 +716,9 @@ class MainActivity :
         return path
     }
 
-    private fun setupToolbar(id: Int, isHomeEnabled: Boolean) {
+    private fun setupToolbar(id: Int, isHomeEnabled: Boolean): ActionBar? {
         setSupportActionBar(findViewById(id))
-        supportActionBar?.apply {
+        return supportActionBar?.apply {
             title = null
             setHomeButtonEnabled(isHomeEnabled)
             setDisplayHomeAsUpEnabled(isHomeEnabled)

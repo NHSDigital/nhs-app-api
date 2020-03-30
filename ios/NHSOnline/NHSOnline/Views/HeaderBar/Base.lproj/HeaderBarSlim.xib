@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_0" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HeaderBarSlim" customModule="NHSOnline" customModuleProvider="target">
             <connections>
                 <outlet property="backButtonArrow" destination="2ci-pA-TO0" id="hQE-aZ-55v"/>
+                <outlet property="closeIcon" destination="FST-Xt-lGV" id="X1q-rV-38V"/>
                 <outlet property="headerBarView" destination="iN0-l3-epB" id="QfN-bN-4Ni"/>
             </connections>
         </placeholder>
@@ -29,12 +28,23 @@
                     <inset key="imageEdgeInsets" minX="0.0" minY="4" maxX="0.0" maxY="0.0"/>
                     <state key="normal" image="backArrow"/>
                 </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FST-Xt-lGV" userLabel="Close Icon">
+                    <rect key="frame" x="15" y="12" width="20" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="651-0W-WS7"/>
+                        <constraint firstAttribute="height" constant="24" id="aN1-yL-6cg"/>
+                    </constraints>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="4" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" image="closeIcon"/>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="2ci-pA-TO0" secondAttribute="bottom" id="1dt-od-J5p"/>
                 <constraint firstItem="2ci-pA-TO0" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="8gM-kx-er6"/>
+                <constraint firstItem="FST-Xt-lGV" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="15" id="C0N-MP-3Hi"/>
+                <constraint firstItem="FST-Xt-lGV" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-1" id="dB2-rw-v6k"/>
                 <constraint firstItem="2ci-pA-TO0" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="zwB-Wp-7dk"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
@@ -46,5 +56,6 @@
     </objects>
     <resources>
         <image name="backArrow" width="11" height="20"/>
+        <image name="closeIcon" width="40" height="40"/>
     </resources>
 </document>

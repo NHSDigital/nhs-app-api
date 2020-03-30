@@ -6,6 +6,7 @@ import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.RootService
 import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
+import com.nhs.online.nhsonline.services.knownservices.enums.IntegrationLevel
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
@@ -61,8 +62,8 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         requiresAssertedLoginIdentity = true,
                         validateSession = false,
                         menuTab = MenuTab.Unknown,
-                        viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
+                        integrationLevel = IntegrationLevel.Unknown,
                         url = url,
                         showSpinner = false,
                         subServices = null
@@ -82,8 +83,8 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.Unknown,
-                        viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
+                        integrationLevel = IntegrationLevel.Unknown,
                         url = url,
                         showSpinner = false,
                         subServices = null
@@ -103,8 +104,8 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         requiresAssertedLoginIdentity = true,
                         validateSession = false,
                         menuTab = MenuTab.Unknown,
-                        viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
+                        integrationLevel = IntegrationLevel.Unknown,
                         url = url,
                         showSpinner = false,
                         subServices = null
@@ -124,8 +125,8 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         requiresAssertedLoginIdentity = true,
                         validateSession = false,
                         menuTab = MenuTab.Unknown,
-                        viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
+                        integrationLevel = IntegrationLevel.Unknown,
                         url = url,
                         showSpinner = false,
                         subServices = null
@@ -145,8 +146,8 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.Unknown,
-                        viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
+                        integrationLevel = IntegrationLevel.Unknown,
                         url = url,
                         showSpinner = false,
                         subServices = null
@@ -166,8 +167,8 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         requiresAssertedLoginIdentity = true,
                         validateSession = true,
                         menuTab = MenuTab.Unknown,
-                        viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
+                        integrationLevel = IntegrationLevel.Unknown,
                         url = url,
                         showSpinner = false,
                         subServices = null

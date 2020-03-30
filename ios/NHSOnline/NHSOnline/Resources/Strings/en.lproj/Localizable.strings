@@ -4,6 +4,7 @@
 "HelpTitle" = "Help and support";
 "ServiceUnavailableTitle" = "Service unavailable";
 "BackArrowTitle" = "Back button";
+"CloseIconTitle" = "Close button";
 "LoginAndPasswordOptions" = "Login & password options";
 "NHSLoginTitle" = "NHS Login";
 
@@ -19,6 +20,7 @@
 /*Accessibility*/
 "MyAccountHint" = "Navigates to my account page";
 "BackArrowHint" = "Navigates back a page";
+"CloseIconHint" = "Closes the page";
 "HelpHint" = "Navigates to help page";
 "NHSAppHomeTitle" = "NHS App Home";
 "NHSAppHomeHint" = "Takes you to NHS App home page";

@@ -38,8 +38,7 @@
           <div id="page-title-container" class="nhsuk-grid-column-two-thirds">
             <page-title v-if="showContentHeader"
                         :caption="$store.state.header.headerCaption"
-                        :title-key="$store.state.header.headerText"
-                        :should-show-desktop-version="showHeader">
+                        :title-key="$store.state.header.headerText">
               {{ $store.state.header.headerText }}
             </page-title>
           </div>
@@ -87,11 +86,6 @@ export default {
     },
     isNative() {
       return this.$store.state.device.isNativeApp;
-    },
-    showHeader() {
-      const store = this.$store;
-      const isNativeVersionAfter = store.getters['appVersion/isNativeVersionAfter'];
-      return !store.state.device.isNativeApp || isNativeVersionAfter('1.17.0');
     },
     showCoronaVirusBanner() {
       return !this.isProxying && this.$route.name === INDEX.name;

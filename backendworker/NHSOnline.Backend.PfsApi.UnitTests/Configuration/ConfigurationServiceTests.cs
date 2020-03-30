@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                         JavaScriptInteractionMode = JavaScriptInteractionMode.NhsApp,
                         ShowSpinner = false,
                         ShowThirdPartyWarning = false,
-                        ViewMode = ViewMode.WebView
+                        IntegrationLevel = IntegrationLevel.Bronze
                     }
                 }
             };
@@ -300,10 +300,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
         [DataRow("http://www.test.com", "1.12.0", "   ", "http://www.test.com")]
         [DataRow("http://www.test.com", "1.12.0", "1.12.0", null)]
         [DataRow(null, "1.12.0", "1.12.0", "http://www.test.com")]
-        public void Constructor_DeviceConfigurationMissingParameters_ThrowsException(
+        public void Constructor_DeviceConfigurationMissingParameters_ThrowsException
+        (
             string fidoServerUrl,
             string minimumSupportediOSVersion,
-            string minimumSupportedAndroidVersion, string webAppBaseUrl)
+            string minimumSupportedAndroidVersion,
+            string webAppBaseUrl
+        )
         {
             var settings = new DeviceConfigurationSettings()
             {

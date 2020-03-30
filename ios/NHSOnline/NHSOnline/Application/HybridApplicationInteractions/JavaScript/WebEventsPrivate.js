@@ -20,18 +20,6 @@ window.nativeApp.fetchNativeAppVersion = function() {
     window.webkit.messageHandlers.fetchNativeAppVersion.postMessage(null);
 };
 
-window.nativeApp.hideHeader = function() {
-    window.webkit.messageHandlers.hideHeader.postMessage(null);
-};
-
-window.nativeApp.hideHeaderSlim = function() {
-    window.webkit.messageHandlers.hideHeaderSlim.postMessage(null);
-};
-
-window.nativeApp.hideMenuBar = function() {
-    window.webkit.messageHandlers.hideMenuBar.postMessage(null);
-};
-
 window.nativeApp.hideWhiteScreen = function() {
     window.webkit.messageHandlers.hideWhiteScreen.postMessage(null);
 };
@@ -76,14 +64,6 @@ window.nativeApp.configureWebContext = function(helpUrl, retryPath) {
     window.webkit.messageHandlers.setHelpUrl.postMessage(helpUrl)
     window.webkit.messageHandlers.setRetryPath.postMessage(retryPath)
 }
-
-window.nativeApp.showHeader = function() {
-    window.webkit.messageHandlers.showHeader.postMessage(null);
-};
-
-window.nativeApp.showHeaderSlim = function() {
-    window.webkit.messageHandlers.showHeaderSlim.postMessage(null);
-};
 
 window.nativeApp.updateHeaderText = function(header) {
     window.webkit.messageHandlers.updateHeaderText.postMessage(header);
