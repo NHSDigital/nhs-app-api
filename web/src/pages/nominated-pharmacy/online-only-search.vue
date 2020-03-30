@@ -75,7 +75,11 @@
 </template>
 
 <script>
-import { NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
+import {
+  NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES,
+  NOMINATED_PHARMACY_SEARCH_RESULTS,
+  PRESCRIPTIONS,
+} from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
@@ -115,6 +119,9 @@ export default {
     showErrors() {
       return this.showErrorMessage;
     },
+  },
+  created() {
+    redirectTo(this, PRESCRIPTIONS.path);
   },
   methods: {
     generateNoResultsMessage() {

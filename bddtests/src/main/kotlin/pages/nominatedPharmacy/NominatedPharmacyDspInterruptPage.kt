@@ -10,13 +10,13 @@ open class NominatedPharmacyDspInterruptPage : HybridPageObject() {
 
     private lateinit var headerNative: HeaderNative
 
-    val continueButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(), 'Continue')]",
+    val prescriptionsHomeLink = HybridPageElement(
+            webDesktopLocator = "//*[@id='prescriptions-home-link']/a",
             page = this
     )
 
     fun isLoaded() {
         headerNative.waitForPageHeaderText(
-                "If you nominate an online-only pharmacy, you may still need to register with that pharmacy separately")
+                "Register with the online-only pharmacy directly")
     }
 }

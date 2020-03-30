@@ -129,6 +129,8 @@ const config = {
     CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/',
     ONLINE_CONSULTATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/online-consultations/',
     CORONA_SERVICE_URL: 'https://111.nhs.uk/service/COVID-19/',
+    // Nominated Pharmacy
+    NOM_PHARMA_DSP_LINK: 'https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies',
     // App Version
     VERSION_TAG: 'dev_web_npm',
     COMMIT_ID: 'dev',

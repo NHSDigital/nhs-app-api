@@ -99,9 +99,7 @@ export default {
     },
   },
   created() {
-    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
-      redirectTo(this, PRESCRIPTIONS.path);
-    }
+    redirectTo(this, PRESCRIPTIONS.path);
   },
   methods: {
     async continueClicked() {

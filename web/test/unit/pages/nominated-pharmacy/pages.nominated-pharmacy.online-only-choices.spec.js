@@ -107,7 +107,6 @@ describe('nominated pharmacy online only choices page', () => {
         errorMessage = wrapper.find('#error-message');
         expect(errorMessage.exists()).toBe(true);
         expect($store.dispatch).not.toHaveBeenCalled();
-        expect(dependency.redirectTo).not.toHaveBeenCalled();
       });
     });
 

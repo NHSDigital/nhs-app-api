@@ -1,5 +1,6 @@
 package features.nominatedPharmacy.stepDefinitions
 
+import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -225,9 +226,9 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
         nominatedPharmacyDspInterruptPage.isLoaded()
     }
 
-    @Then("^I click on the DSP Interrupt continue button$")
-    fun iClickTheDspInterruptContinueButton() {
-        nominatedPharmacyDspInterruptPage.continueButton.click()
+    @And("^I click on the DSP Interrupt Prescription Home link$")
+    fun iClickTheDspInterruptPrescriptionHomeLink() {
+        nominatedPharmacyDspInterruptPage.prescriptionsHomeLink.click()
     }
 
     @When("^I click on item (\\d+) pharmacy from the list of online pharmacies$")

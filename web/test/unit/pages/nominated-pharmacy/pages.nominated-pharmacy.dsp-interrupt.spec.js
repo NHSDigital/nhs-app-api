@@ -1,6 +1,6 @@
 import { create$T, createStore, mount } from '../../helpers';
 import DspInterrupt from '@/pages/nominated-pharmacy/dsp-interrupt';
-import { NOMINATED_PHARMACY_CHOOSE_TYPE, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES } from '@/lib/routes';
+import { PRESCRIPTIONS } from '@/lib/routes';
 import * as dependency from '@/lib/utils';
 
 const $t = create$T();
@@ -9,8 +9,9 @@ describe('nominated pharmacy not found', () => {
   let $store;
   let $router;
   let wrapper;
-  let continueButton;
-  let backLink;
+  let dspLink;
+  let prescriptionHomeLink;
+  const NOM_PHARMA_DSP_LINK = 'bazz';
 
   const createState = (state = {
     device: {
@@ -18,40 +19,52 @@ describe('nominated pharmacy not found', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(DspInterrupt, { $store, $t, $router });
+  const mountPage = () => mount(DspInterrupt, {
+    $store,
+    $t,
+    $router,
+  });
 
   describe('dsp interrupt page', () => {
     beforeEach(() => {
-      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      $store = createStore({
+        dispatch: jest.fn(() => Promise.resolve()),
+        state: createState(),
+        $env: {
+          NOM_PHARMA_DSP_LINK,
+        },
+      });
       dependency.redirectTo = jest.fn();
       wrapper = mountPage();
-      continueButton = wrapper.find('#continue-button');
-      backLink = wrapper.find('#back-link').find('a');
+      dspLink = wrapper.find('#dsp-link').find('a');
+      prescriptionHomeLink = wrapper.find('#prescriptions-home-link').find('a');
     });
 
     describe('continue-button', () => {
       it('will exist', () => {
-        expect(continueButton.exists()).toBe(true);
+        expect(dspLink.exists()).toBe(true);
       });
-      it('will use "nominated_pharmacy.interrupt.continueButton" for text', () => {
-        expect(continueButton.text())
-          .toEqual('translate_nominated_pharmacy.dspInterrupt.continueButton');
+      it('will use "nominated_pharmacy.dspInterrupt.visitOnlineListText" for text', () => {
+        expect(dspLink.text())
+          .toEqual('translate_nominated_pharmacy.dspInterrupt.visitOnlineListText');
       });
       it('will navigate to online only choices page when clicked ', () => {
-        continueButton.trigger('click');
-        expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path);
+        expect(dspLink.attributes().href).toEqual(NOM_PHARMA_DSP_LINK);
       });
     });
 
-    describe('back link', () => {
+    describe('prescriptions home link', () => {
       it('will exist', () => {
-        expect(backLink.exists()).toBe(true);
+        expect(prescriptionHomeLink.exists()).toBe(true);
       });
-      it('will navigate to choose type page when clicked ', () => {
-        backLink.trigger('click');
+      it('will use "nominated_pharmacy.dspInterrupt.returnToPrescriptionsText" for text', () => {
+        expect(prescriptionHomeLink.text())
+          .toEqual('translate_nominated_pharmacy.dspInterrupt.returnToPrescriptionsText');
+      });
+      it('will navigate to prescriptions home page when clicked ', () => {
+        prescriptionHomeLink.trigger('click');
         expect(dependency.redirectTo)
-          .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_CHOOSE_TYPE.path);
+          .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
       });
     });
   });

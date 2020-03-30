@@ -2,22 +2,36 @@
   <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <generic-button id="continue-button"
-                        :button-classes="['nhsuk-button', 'nhsuk-button--primary']"
-                        @click.stop.prevent="continueButtonClicked">
-          {{ $t('nominated_pharmacy.dspInterrupt.continueButton') }}
-        </generic-button>
+        <p>
+          {{ $t('nominated_pharmacy.dspInterrupt.paragraph') }}
+        </p>
       </div>
     </div>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
-                               :text="$t('generic.backButton.text')"
-                               :tabindex="-1">
-          <desktopGenericBackLink id="back-link"
-                                  :path="nominatedPharmacyChooseType"
-                                  :button-text="'generic.backButton.text'"
-                                  @clickAndPrevent="backButtonClicked"/>
+        <p>
+          <analytics-tracked-tag id="dsp-link"
+                                 :text="$t('nominated_pharmacy.dspInterrupt.visitOnlineListText')"
+                                 :tabindex="-1"
+                                 target="_blank"
+                                 tag="a"
+                                 :href="visitOnlinePharmacyListPath"
+                                 style="vertical-align: baseline; display: inline;">
+            {{ $t('nominated_pharmacy.dspInterrupt.visitOnlineListText') }}
+          </analytics-tracked-tag>
+        </p>
+      </div>
+    </div>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <analytics-tracked-tag
+          :text="$t('nominated_pharmacy.dspInterrupt.returnToPrescriptionsText')"
+          :tabindex="-1">
+          <desktopGenericBackLink
+            id="prescriptions-home-link"
+            :path="returnToPrescriptionsPath"
+            :button-text="'nominated_pharmacy.dspInterrupt.returnToPrescriptionsText'"
+            @clickAndPrevent="gotoPrescriptionsClicked"/>
         </analytics-tracked-tag>
       </div>
     </div>
@@ -25,35 +39,30 @@
 </template>
 
 <script>
-import GenericButton from '@/components/widgets/GenericButton';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY_CHOOSE_TYPE, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES } from '@/lib/routes';
+import { PRESCRIPTIONS } from '@/lib/routes';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    GenericButton,
     DesktopGenericBackLink,
     AnalyticsTrackedTag,
   },
   data() {
     return {
-      nominatedPharmacyChooseType: NOMINATED_PHARMACY_CHOOSE_TYPE.path,
+      visitOnlinePharmacyListPath: this.$store.app.$env.NOM_PHARMA_DSP_LINK,
+      returnToPrescriptionsPath: PRESCRIPTIONS.path,
     };
   },
   methods: {
-    continueButtonClicked() {
-      redirectTo(this, NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES.path);
-    },
-    backButtonClicked() {
-      redirectTo(this, this.nominatedPharmacyChooseType);
+    gotoPrescriptionsClicked() {
+      redirectTo(this, this.returnToPrescriptionsPath);
     },
   },
 };
 </script>
 
 <style scoped>
-
 </style>

@@ -30,7 +30,7 @@ open class NominatedPharmacyChooseTypePage : HybridPageObject() {
     )
 
     fun isLoaded() {
-        headerNative.waitForPageHeaderText("Choose a type of pharmacy to search for")
+        headerNative.waitForPageHeaderText("Choose a type of pharmacy")
     }
 
 }
