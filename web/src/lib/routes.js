@@ -1088,7 +1088,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.MORE];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DELETE: {
@@ -1103,7 +1103,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.MORE];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [im1MessagingDisabledRedirect, deleteMessageRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY: {
@@ -1118,7 +1118,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.MORE];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP: {
@@ -1133,7 +1133,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.MORE];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS: {
@@ -1148,7 +1148,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.MORE];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}messaging`,
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE: {
@@ -1163,7 +1163,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.MORE];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_CREATE: {
@@ -1178,7 +1178,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.MORE];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS: {
@@ -1194,7 +1194,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.MORE];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [im1MessagingDisabledRedirect, deleteMessageRedirect],
   },
   PRESCRIPTIONS: {
