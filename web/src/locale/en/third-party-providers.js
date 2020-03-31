@@ -37,7 +37,7 @@ export default {
           servicePurchaser: 'Your GP surgery or hospital',
           serviceType: 'personal health record service',
           serviceTypePlural: 'personal health record services',
-          linkHref: 'https://www.nhs.uk/privacy/personal-health-records',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
         },
       },
     ],
