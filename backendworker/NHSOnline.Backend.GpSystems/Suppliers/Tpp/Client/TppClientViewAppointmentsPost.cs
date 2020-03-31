@@ -4,7 +4,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
     internal sealed class TppClientViewAppointmentsPost
-        : ITppClientRequest<(ViewAppointments viewAppointments, string suid), ViewAppointmentsReply>
+        : ITppClientRequest<(TppRequestParameters tppRequestParameters, AppointmentViewType viewType), ViewAppointmentsReply>
     {
         private readonly TppClientRequestExecutor _requestExecutor;
 
@@ -12,12 +12,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             => _requestExecutor = requestExecutor;
 
         public async Task<TppApiObjectResponse<ViewAppointmentsReply>> Post(
-            (ViewAppointments viewAppointments, string suid) parameters)
+            (TppRequestParameters tppRequestParameters, AppointmentViewType viewType) parameters)
         {
-            var (viewAppointments, suid) = parameters;
+            var (tppRequestParameters, viewType) = parameters;
+            var viewAppointments = new ViewAppointments(tppRequestParameters, viewType);
 
             return await _requestExecutor.Post<ViewAppointmentsReply>(
-                requestBuilder => requestBuilder.Model(viewAppointments).Suid(suid));
+                requestBuilder => requestBuilder.Model(viewAppointments).Suid(tppRequestParameters.Suid));
         }
     }
 }

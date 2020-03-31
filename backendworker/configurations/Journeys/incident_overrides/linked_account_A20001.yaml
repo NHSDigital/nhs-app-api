@@ -1,0 +1,9 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A20001"
+journeys:
+  appointments:
+    provider: eConsult
+  nominatedPharmacy: true
+  notifications: true
+  messaging: true

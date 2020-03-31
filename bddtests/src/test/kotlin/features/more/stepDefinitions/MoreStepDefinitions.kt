@@ -6,7 +6,6 @@ import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
-import mockingFacade.linkedProfiles.LinkedProfileFacade
 import net.thucydides.core.annotations.Steps
 import pages.MorePage
 import pages.navigation.HeaderNative
@@ -85,8 +84,7 @@ class MoreStepDefinitions {
 
     @Then("the More page explains that it is not possible to access it while acting on behalf of someone else")
     fun theMorePageExplainsThatItIsNotPossibleToAccessItWhileActingOnBehalfOfSomeoneElse(){
-        val proxy = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>().profile.firstName
-        morePage.assertProxyText(proxy)
+        morePage.assertProxyText(LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.getOrFail())
     }
 
     @Then("I see and can follow links within the more page body$")

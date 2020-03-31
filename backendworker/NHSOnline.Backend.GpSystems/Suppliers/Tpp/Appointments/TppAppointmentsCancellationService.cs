@@ -13,11 +13,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
     internal class TppAppointmentsCancellationService
     {
         private readonly ILogger<TppAppointmentsCancellationService> _logger;
-        private readonly ITppClientRequest<(CancelAppointment cancelAppointment, string suid), CancelAppointmentReply> _cancelAppointment;
+        private readonly ITppClientRequest<(TppRequestParameters, AppointmentCancelRequest), CancelAppointmentReply> _cancelAppointment;
 
         public TppAppointmentsCancellationService(
             ILogger<TppAppointmentsCancellationService> logger,
-            ITppClientRequest<(CancelAppointment cancelAppointment, string suid), CancelAppointmentReply> cancelAppointment)
+            ITppClientRequest<(TppRequestParameters, AppointmentCancelRequest), CancelAppointmentReply> cancelAppointment)
         {
             _logger = logger;
             _cancelAppointment = cancelAppointment;
@@ -28,11 +28,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             try
             {
                 _logger.LogEnter();
-                var userSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
+                var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
 
-                var postRequest = new CancelAppointment(userSession, request);
-                
-                var response = await _cancelAppointment.Post((postRequest, userSession.Suid));
+                var response = await _cancelAppointment.Post((tppRequestParameters, request));
                 return InterpretCancelAppointmentReply(response);
             }
             catch (HttpRequestException exception)
@@ -68,7 +66,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                         return new AppointmentCancelResult.Forbidden();
                 }
             }
-            
+
             _logger.LogTppUnknownError(response);
             return new AppointmentCancelResult.BadGateway();
         }

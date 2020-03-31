@@ -72,6 +72,9 @@ namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules
             journeys.Messaging = false;
             journeys.Notifications = false;
 
+            journeys.CdssAdmin = new Cdss{ Provider = CdssProvider.none };
+            journeys.CdssAdvice = new Cdss{ Provider = CdssProvider.none };
+
             // Set Appointment journey provider
             switch (journeys.Appointments.Provider)
             {

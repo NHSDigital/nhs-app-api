@@ -2,7 +2,8 @@ package features.im1Appointments.stepDefinitions
 
 import cucumber.api.java.en.Then
 import pages.appointments.AppointmentBookingSuccessPage
-import utils.ProxySerenityHelpers
+import utils.LinkedProfilesSerenityHelpers
+import utils.getOrFail
 
 open class AppointmentBookingSuccessStepDefinitions {
 
@@ -10,6 +11,7 @@ open class AppointmentBookingSuccessStepDefinitions {
 
     @Then("^The appointment booking success page is shown$")
     fun theBookingSuccessPageIsShown() {
-        appointmentBookingSuccessPage.isLoaded(ProxySerenityHelpers.getPatientOrProxy().firstName)
+        appointmentBookingSuccessPage
+                .isLoaded(LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.getOrFail())
     }
 }

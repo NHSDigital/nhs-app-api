@@ -33,19 +33,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private TppUserSession _tppUserSession;
         private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
-        private Mock<ITppClientRequest<(TppUserSession, BookAppointment), BookAppointmentReply>> _mockBookAppointmentSlot;
+        private Mock<ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply>> _mockBookAppointmentSlot;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _patientId = Guid.NewGuid();
-                
+
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _mockBookAppointmentSlot = _fixture
-                .Freeze<Mock<ITppClientRequest<(TppUserSession, BookAppointment ), BookAppointmentReply>>>(); 
+                .Freeze<Mock<ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply>>>();
 
             _tppUserSession = _fixture.Create<TppUserSession>();
+            _tppUserSession.Id = _patientId;
 
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
             _systemUnderTest = _fixture.Create<TppAppointmentsService>();
@@ -71,7 +72,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             MockTppClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -83,11 +84,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public async Task Book_TppClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGateway()
         {
             // Arrange
-            _mockBookAppointmentSlot.Setup(x => x.Post(It.IsAny<(TppUserSession, BookAppointment)>())).
+            _mockBookAppointmentSlot.Setup(x
+                    => x.Post(It.IsAny<(TppRequestParameters, BookingDates, AppointmentBookRequest)>())).
                 Throws<HttpRequestException>()
                 .Verifiable();
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -107,7 +109,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             MockTppClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -127,7 +129,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             MockTppClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -147,7 +149,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             MockTppClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -167,7 +169,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             MockTppClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -187,7 +189,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             MockTppClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -204,14 +206,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             MockTppClientAppointmentPostMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
             // Assert
             _mockBookAppointmentSlot.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
         }
-        
+
         [TestMethod]
         public async Task Booking_StartDateIsNull_ReturnsBadRequest()
         {
@@ -242,9 +244,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private void MockTppClientAppointmentPostMethod(TppApiObjectResponse<BookAppointmentReply> response)
         {
             _mockBookAppointmentSlot.Setup(x => x.Post(
-                    It.Is<(TppUserSession, BookAppointment )>(tuple =>
-                        tuple.Item2.Notes.Equals(BookingReason, StringComparison.Ordinal)
-                        && tuple.Item2.SessionId.Equals(SlotId, StringComparison.Ordinal))
+                    It.Is<(TppRequestParameters, BookingDates, AppointmentBookRequest)>(tuple =>
+                        tuple.Item3.BookingReason.Equals(BookingReason, StringComparison.Ordinal)
+                        && tuple.Item3.SlotId.Equals(SlotId, StringComparison.Ordinal))
                 )
             ).Returns(
                 Task.FromResult(

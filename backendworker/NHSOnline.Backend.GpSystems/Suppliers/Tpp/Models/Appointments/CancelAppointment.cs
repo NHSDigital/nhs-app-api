@@ -11,12 +11,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments
         {
         }
 
-        public CancelAppointment(ITppUserSession userSession, AppointmentCancelRequest request)
+        public CancelAppointment(TppRequestParameters tppRequestParameters, AppointmentCancelRequest request)
         {
-            PatientId = userSession.PatientId;
-            OnlineUserId = userSession.OnlineUserId;
-            UnitId = userSession.UnitId;
-            
+            PatientId = tppRequestParameters.PatientId;
+            OnlineUserId = tppRequestParameters.OnlineUserId;
+            UnitId = tppRequestParameters.OdsCode;
+
             ApptId = request.AppointmentId;
         }
 
@@ -25,10 +25,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments
 
         [XmlAttribute("onlineUserId")]
         public string OnlineUserId { get; set; }
-        
+
         [XmlAttribute("apptId")]
         public string ApptId { get; set; }
-        
+
         [XmlIgnore]
         public override string RequestType => "CancelAppointment";
     }

@@ -2,7 +2,6 @@ package mocking.tpp.appointments
 
 import constants.DateTimeFormats
 import mocking.JSonXmlConverter
-import mocking.defaults.TppMockDefaults
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
@@ -35,7 +34,7 @@ class MyAppointmentsBuilderTpp(
                 .andBodyMatchingXpath(
                         xpath = "//ViewAppointments[" +
                                 "@apiVersion='${TppConfig.apiVersion}' and " +
-                                "@unitId='${TppMockDefaults.DEFAULT_ODS_CODE_TPP}' and " +
+                                "@unitId='${patient.tppUserSession!!.unitId}' and " +
                                 "@patientId='${patient.patientId}' and " +
                                 "@onlineUserId='${patient.onlineUserId}' and " +
                                 "@futureAppointments='${tppAppointmentType.isFuture}']")

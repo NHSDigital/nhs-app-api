@@ -7,10 +7,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
     {
         [XmlAttribute("apiVersion")]
         public string ApiVersion { get; set; }
-        
+
         [XmlAttribute("uuid")]
         public Guid Uuid { get; set; }
-        
+
         [XmlAttribute("unitId")]
         public string UnitId { get; set; }
 

@@ -175,6 +175,18 @@ class LinkedProfilesStepDefinitions {
         // just select the first one
         val linkedAccount = patient.linkedAccounts.toList()[0]
 
+        when (gpSystem) {
+            Supplier.TPP -> LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.set(linkedAccount.formattedFullName())
+            Supplier.EMIS -> {
+                LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.set(linkedAccount.firstName)
+                GpPracticeAccessSettingsFactory.getForSupplier(gpSystem).enabledViaProxy(
+                        callingPatient = patient,
+                        actingOnBehalfOf = linkedAccount,
+                        featuresEnabled = featuresEnabledFacade)
+            }
+            else -> throw IllegalArgumentException("$gpSystem not supported in Proxy mode")
+        }
+
         val gpPractice = NhsAzureSearchData.generateOrganisationData(1)
         mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(
@@ -182,13 +194,6 @@ class LinkedProfilesStepDefinitions {
                             odsCode = "${linkedAccount.odsCode}")
             )
                     .respondWithSuccess(gpPractice)
-        }
-
-        if (gpSystem == Supplier.EMIS) {
-            GpPracticeAccessSettingsFactory.getForSupplier(gpSystem).enabledViaProxy(
-                    callingPatient = patient,
-                    actingOnBehalfOf = linkedAccount,
-                    featuresEnabled = featuresEnabledFacade)
         }
 
         LinkedProfilesSerenityHelpers.SELECTED_PROFILE.set(
@@ -294,10 +299,9 @@ class LinkedProfilesStepDefinitions {
 
     @Then("^the appointments shutter page is displayed$")
     fun theAppointmentsShutterPageIsDisplayed() {
-        val selectedProfileName = LinkedProfilesSerenityHelpers.SELECTED_PROFILE
-                .getOrFail<LinkedProfileFacade>().profile.firstName
-        appointmentsShutterPage.isLoaded(selectedProfileName)
-        appointmentsShutterPage.assertText(selectedProfileName)
+        val displayName = LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.getOrFail<String>()
+        appointmentsShutterPage.isLoaded(displayName)
+        appointmentsShutterPage.assertText(displayName)
     }
 
     @Then("^the medical record shutter page is displayed$")

@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models.Appointment
 
         protected override ListSlots CreateModel()
         {
-            var userSession = new TppUserSession
+            var tppRequestParameters = new TppRequestParameters
             {
                 PatientId = PatientId,
                 OnlineUserId = OnlineUserId
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models.Appointment
 
             var dateRange = new AppointmentSlotsDateRange(fromDateTime, toDateTime);
 
-            return new ListSlots(userSession, dateRange);
+            return new ListSlots(tppRequestParameters, dateRange);
         }
 
         [TestMethod]

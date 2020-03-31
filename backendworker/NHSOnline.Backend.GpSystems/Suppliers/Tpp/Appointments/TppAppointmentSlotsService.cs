@@ -14,12 +14,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
     internal class TppAppointmentSlotsService : IAppointmentSlotsService
     {
         private readonly ILogger<TppAppointmentSlotsService> _logger;
-        private readonly ITppClientRequest<(ListSlots listSlots, string suid), ListSlotsReply> _listSlots;
+        private readonly ITppClientRequest<(TppRequestParameters, AppointmentSlotsDateRange), ListSlotsReply> _listSlots;
         private readonly ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply> _requestSystmOnlineMessages;
         private readonly IAppointmentSlotsMapper _appointmentSlotsMapper;
 
         public TppAppointmentSlotsService(ILogger<TppAppointmentSlotsService> logger,
-            ITppClientRequest<(ListSlots listSlots, string suid), ListSlotsReply> listSlots,
+            ITppClientRequest<(TppRequestParameters, AppointmentSlotsDateRange), ListSlotsReply> listSlots,
             ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply> requestSystmOnlineMessages,
             IAppointmentSlotsMapper appointmentSlotsMapper)
         {
@@ -35,15 +35,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             try
             {
                 _logger.LogEnter();
-            
-                var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
-                TppRequestParameters tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
-                var listSlotsRequest = new ListSlots(tppUserSession, dateRange);
-                var listSlotsTask = _listSlots.Post((listSlotsRequest, tppUserSession.Suid));
+
+                var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+                var listSlotsTask = _listSlots.Post((tppRequestParameters, dateRange));
                 await listSlotsTask;
 
                 var messagesTask = _requestSystmOnlineMessages.Post(tppRequestParameters);
-                
+
                 try
                 {
                     await messagesTask;

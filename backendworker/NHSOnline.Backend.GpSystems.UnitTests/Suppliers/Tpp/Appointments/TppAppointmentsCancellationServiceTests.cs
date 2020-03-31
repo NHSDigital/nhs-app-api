@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private AppointmentCancelRequest _request;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private Guid _patientId;
-        private Mock<ITppClientRequest<(CancelAppointment, string), CancelAppointmentReply>> _cancelAppointment;
+        private Mock<ITppClientRequest<(TppRequestParameters, AppointmentCancelRequest), CancelAppointmentReply>> _cancelAppointment;
 
         [TestInitialize]
         public void TestInitialize()
@@ -35,10 +35,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             _patientId = Guid.NewGuid();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _tppUserSession = _fixture.Create<TppUserSession>();
+            _tppUserSession.Id = _patientId;
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
 
             _cancelAppointment =
-                _fixture.Freeze<Mock<ITppClientRequest<(CancelAppointment, string ), CancelAppointmentReply>>>();
+                _fixture.Freeze<Mock<ITppClientRequest<(TppRequestParameters, AppointmentCancelRequest), CancelAppointmentReply>>>();
 
             _systemUnderTest = _fixture.Create<TppAppointmentsService>();
 
@@ -68,23 +69,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             _cancelAppointment.Verify();
             result.Should().BeAssignableTo<AppointmentCancelResult.Success>();
         }
-        
+
         [TestMethod]
         public async Task Cancel_TppClientThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
-            _cancelAppointment.Setup(x => x.Post(It.IsAny<(CancelAppointment, string)>())).
+            _cancelAppointment.Setup(x
+                    => x.Post(It.IsAny<(TppRequestParameters, AppointmentCancelRequest)>())).
                 Throws<HttpRequestException>()
                 .Verifiable();
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _cancelAppointment.Verify();
             result.Should().BeAssignableTo<AppointmentCancelResult.BadGateway>();
         }
-        
+
         [DataTestMethod]
         [DataRow(TppApiErrorCodes.StartDateInPast)]
         public async Task Cancel_TppClientReturnsNotCancellableErrorCode_ReturnsAppointmentNotCancellable(string tppErrorCode)
@@ -95,17 +97,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Body = null,
                 ErrorResponse = new Error{ErrorCode = tppErrorCode}
             };
-            
+
             MockTppClientAppointmentCancelMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _cancelAppointment.Verify();
             result.Should().BeAssignableTo<AppointmentCancelResult.AppointmentNotCancellable>();
         }
-        
+
         [DataTestMethod]
         [DataRow(TppApiErrorCodes.AppointmentWithinOneHour)]
         public async Task Cancel_TppClientReturnsTooLateToCancelErrorCode_ReturnsTooLateToCancel(string tppErrorCode)
@@ -116,17 +118,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Body = null,
                 ErrorResponse = new Error{ErrorCode = tppErrorCode}
             };
-            
+
             MockTppClientAppointmentCancelMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _cancelAppointment.Verify();
             result.Should().BeAssignableTo<AppointmentCancelResult.TooLateToCancel>();
         }
-        
+
         [DataTestMethod]
         [DataRow(TppApiErrorCodes.NoAccess)]
         public async Task Cancel_TppClientReturnsInsufficientPermissionsErrorCode_ReturnsForbidden(string tppErrorCode)
@@ -137,17 +139,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Body = null,
                 ErrorResponse = new Error{ErrorCode = tppErrorCode}
             };
-            
+
             MockTppClientAppointmentCancelMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
             _cancelAppointment.Verify();
             result.Should().BeAssignableTo<AppointmentCancelResult.Forbidden>();
         }
-        
+
         [DataTestMethod]
         [DataRow("40376")]
         [DataRow("230405")]
@@ -159,10 +161,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Body = null,
                 ErrorResponse = new Error{ErrorCode = tppErrorCode}
             };
-            
+
             MockTppClientAppointmentCancelMethod(response);
 
-            // Act            
+            // Act
             var result = await _systemUnderTest.Cancel(_gpLinkedAccountModel, _request);
 
             // Assert
@@ -175,9 +177,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         {
             _cancelAppointment
                 .Setup(
-                    x => x.Post(It.Is<(CancelAppointment, string)>(
-                            tuple =>
-                         tuple.Item1.ApptId.Equals(_request.AppointmentId, StringComparison.Ordinal))))
+                    x
+                        => x.Post(It.Is<(TppRequestParameters, AppointmentCancelRequest)>(tuple =>
+                         tuple.Item2.AppointmentId.Equals(_request.AppointmentId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(response))
                 .Verifiable();
         }

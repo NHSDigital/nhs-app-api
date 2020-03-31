@@ -42,5 +42,10 @@ class TppMockDefaults {
                 uuid = DEFAULT_TPP_UUID,
                 application = DEFAULT_TPP_APPLICATION
         )
+
+        const val ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT: String = "A20001"
+        const val ODS_CODE_SJR_LINKED_ACCOUNT_IM1: String  = "A20002"
+        const val ODS_CODE_SJR_LINKED_ACCOUNT_INFORMATICA: String  = "A20003"
+        const val ODS_CODE_SJR_LINKED_ACCOUNT_GP_AT_HAND: String  = "A20004"
     }
 }

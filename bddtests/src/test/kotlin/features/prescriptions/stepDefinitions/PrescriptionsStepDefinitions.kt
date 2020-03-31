@@ -30,7 +30,7 @@ import org.junit.Assert.assertTrue
 import pages.prescription.PrescriptionsPage
 import pages.prescription.RepeatPrescriptionConfirmationPage
 import pages.prescription.RepeatPrescriptionsPage
-import utils.ProxySerenityHelpers
+import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.getOrNull
@@ -329,12 +329,7 @@ open class PrescriptionsStepDefinitions {
 
     @Then("^I see repeat prescription confirmation page loaded")
     fun iSeeRepeatPrescriptionConfirmationPageLoaded() {
-        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
-        if (currentProvider === Supplier.TPP) {
-            repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().formattedFullName())
-        } else {
-            repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().firstName)
-        }
+        repeatPrescriptionConfirmation.isLoaded(LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.getOrFail())
     }
 
     @Then("^I see no prescriptions$")

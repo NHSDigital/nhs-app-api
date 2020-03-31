@@ -12,12 +12,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
     internal class TppAppointmentsRetrievalService
     {
         private readonly ILogger<TppAppointmentsRetrievalService> _logger;
-        private readonly ITppClientRequest<(ViewAppointments viewAppointments, string suid), ViewAppointmentsReply> _viewAppointments;
+        private readonly ITppClientRequest<(TppRequestParameters, AppointmentViewType), ViewAppointmentsReply> _viewAppointments;
         private readonly IAppointmentsResultBuilder _appointmentResultBuilder;
 
         public TppAppointmentsRetrievalService(
             ILogger<TppAppointmentsRetrievalService> logger,
-            ITppClientRequest<(ViewAppointments viewAppointments, string suid), ViewAppointmentsReply> viewAppointments,
+            ITppClientRequest<(TppRequestParameters, AppointmentViewType), ViewAppointmentsReply> viewAppointments,
             IAppointmentsResultBuilder appointmentResultBuilder)
         {
             _logger = logger;
@@ -30,17 +30,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             try
             {
                 _logger.LogEnter();
+                var tppRequestParams = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
 
-                var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
-                var requestPast = new ViewAppointments(tppUserSession, false);
-                var requestUpcoming = new ViewAppointments(tppUserSession, true);
-
-                var viewPastAppointmentsTask = _viewAppointments.Post((requestPast, tppUserSession.Suid));
+                var viewPastAppointmentsTask = _viewAppointments.Post((tppRequestParams, AppointmentViewType.Past));
                 await viewPastAppointmentsTask;
-                
-                var viewUpcomingAppointmentsTask = _viewAppointments.Post((requestUpcoming, tppUserSession.Suid));
+
+                var viewUpcomingAppointmentsTask = _viewAppointments.Post((tppRequestParams, AppointmentViewType.Future));
                 await viewUpcomingAppointmentsTask;
-                
+
                 var viewPastAppointments = _appointmentResultBuilder.Build(viewPastAppointmentsTask, viewUpcomingAppointmentsTask);
                 return viewPastAppointments.ValueOrFailure();
             }

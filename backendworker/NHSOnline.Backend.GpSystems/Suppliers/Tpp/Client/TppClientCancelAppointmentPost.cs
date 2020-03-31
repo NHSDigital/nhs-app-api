@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
+using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
-    internal sealed class TppClientCancelAppointmentPost
-        : ITppClientRequest<(CancelAppointment cancelAppointment, string suid), CancelAppointmentReply>
+    internal sealed class TppClientCancelAppointmentPost : ITppClientRequest
+            <(TppRequestParameters tppRequestParameters, AppointmentCancelRequest cancelRequest), CancelAppointmentReply>
     {
         private readonly TppClientRequestExecutor _requestExecutor;
 
@@ -12,12 +13,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             => _requestExecutor = requestExecutor;
 
         public async Task<TppApiObjectResponse<CancelAppointmentReply>> Post(
-            (CancelAppointment cancelAppointment, string suid) parameters)
+            (TppRequestParameters tppRequestParameters, AppointmentCancelRequest cancelRequest) parameters)
         {
-            var (cancelAppointment, suid) = parameters;
+            var (tppRequestParameters, cancelRequest) = parameters;
+            var cancelAppointment = new CancelAppointment(tppRequestParameters, cancelRequest);
 
             return await _requestExecutor.Post<CancelAppointmentReply>(
-                requestBuilder => requestBuilder.Model(cancelAppointment).Suid(suid));
+                requestBuilder => requestBuilder.Model(cancelAppointment).Suid(tppRequestParameters.Suid));
         }
     }
 }

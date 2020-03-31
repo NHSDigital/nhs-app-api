@@ -170,8 +170,30 @@ data class Patient(
 
         fun setOdsCodeBasedOnAppointmentsProvider(supplier: Supplier, patient: Patient, provider: String) {
             return when (supplier) {
-                Supplier.TPP -> return  //TODO - not sure yet if anything to do...!!
+                Supplier.TPP -> setTppOdsCode(patient, provider)
                 Supplier.EMIS -> setEmisOdsCode(patient, provider)
+                else -> throw IllegalArgumentException("$provider not a valid appointment provider name.")
+            }
+        }
+
+        fun setTppOdsCode(patient: Patient, provider: String) {
+            return when (provider.toUpperCase()) {
+                "ECONSULT" ->  {
+                    updateOdsCodes(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT)
+                    updateUnitId(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT)
+                }
+                "IM1" -> {
+                    updateOdsCodes(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_IM1)
+                    updateUnitId(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_IM1)
+                }
+                "INFORMATICA" -> {
+                    updateOdsCodes(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_INFORMATICA)
+                    updateUnitId(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_INFORMATICA)
+                }
+                "GPATHAND" -> {
+                    updateOdsCodes(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_GP_AT_HAND)
+                    updateUnitId(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_GP_AT_HAND)
+                }
                 else -> throw IllegalArgumentException("$provider not a valid appointment provider name.")
             }
         }
@@ -189,6 +211,11 @@ data class Patient(
         fun updateOdsCodes(patient: Patient, odsCode: String) {
             patient.odsCode = odsCode
             patient.linkedAccounts.forEach {e -> e.odsCode = odsCode }
+        }
+
+        private fun updateUnitId(patient: Patient, odsCode: String) {
+            patient.tppUserSession!!.unitId = odsCode
+            patient.linkedAccounts.forEach {e -> e.tppUserSession!!.unitId = odsCode }
         }
 
         fun getAgePart(dob: String, unit: ChronoUnit): Int {

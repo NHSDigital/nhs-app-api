@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments
 {
@@ -8,12 +9,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments
     {
         private ViewAppointments() { }
 
-        public ViewAppointments(ITppUserSession tppUserSession, bool futureAppointments)
+        public ViewAppointments(TppRequestParameters tppRequestParameters, AppointmentViewType viewType)
         {
-            UnitId = tppUserSession.UnitId;
-            PatientId = tppUserSession.PatientId;
-            OnlineUserId = tppUserSession.OnlineUserId;
-            FutureAppointments = futureAppointments ? "Y" : "N";
+            UnitId = tppRequestParameters.OdsCode;
+            PatientId = tppRequestParameters.PatientId;
+            OnlineUserId = tppRequestParameters.OnlineUserId;
+            FutureAppointments = viewType == AppointmentViewType.Future ? "Y" : "N";
         }
 
         [XmlAttribute("patientId")]

@@ -32,11 +32,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
         private TppUserSession _tppUserSession;
         private DateTimeOffset _fromDateTimeOffset;
-        private Guid _patientId;
         private DateTimeOffset _toDateTimeOffset;
         private AppointmentSlotsDateRange _dateRange;
         private GpLinkedAccountModel _gpLinkedAccountModel;
-        private Mock<ITppClientRequest<(ListSlots, string), ListSlotsReply>> _listSlots;
+        private Mock<ITppClientRequest<(TppRequestParameters, AppointmentSlotsDateRange), ListSlotsReply>> _listSlots;
         private Mock<ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply>> _requestSystmOnlineMessages;
 
 
@@ -44,24 +43,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _patientId = new Guid();
+
             _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
             _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
                 .Returns(DateTime.UtcNow);
-            
+
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
-            
-            _listSlots = _fixture.Freeze<Mock<ITppClientRequest<(ListSlots, string), ListSlotsReply>>>();
-            _requestSystmOnlineMessages = _fixture.Freeze<Mock<ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply>>>();
 
-            
+            _listSlots = _fixture.Freeze<Mock<ITppClientRequest<(TppRequestParameters, AppointmentSlotsDateRange), ListSlotsReply>>>();
+            _requestSystmOnlineMessages = _fixture.Freeze<Mock<ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply>>>();
             _mockSlotsMapper = _fixture.Freeze<Mock<IAppointmentSlotsMapper>>();
 
-            _tppUserSession = _fixture.Freeze<TppUserSession>();
-            _tppUserSession.Id = _patientId;
+            _tppUserSession = _fixture.Create<TppUserSession>();
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _tppUserSession.Id);
 
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
@@ -77,13 +73,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         {
             // Arrange
             _listSlots
-                .Setup(x => x.Post(It.IsAny<(ListSlots, string)>()))
+                .Setup(x
+                    => x.Post(It.IsAny<(TppRequestParameters, AppointmentSlotsDateRange)>()))
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
-            
+
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
-            
+
             // Assert
             _requestSystmOnlineMessages.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
@@ -98,11 +95,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, () => null)
                 .Create();
-            
+
             MockTppClientListSlotsPost(unsuccessfulResponse);
-            
+
             MockTppClientRequestSystmOnlineMessagesPost(new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK));
-            
+
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
@@ -119,9 +116,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .Setup(x => x.Post(It.IsAny<TppRequestParameters>()))
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
-            
+
             MockTppClientListSlotsPost(new TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK));
-            
+
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
@@ -139,11 +136,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, () => null)
                 .Create();
-            
+
             MockTppClientRequestSystmOnlineMessagesPost(unsuccessfulResponse);
-            
+
             MockTppClientListSlotsPost(new TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK));
-            
+
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
@@ -162,11 +159,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .With(x => x.Body, () => null)
                 .With(x => x.ErrorResponse, new Error { ErrorCode = TppApiErrorCodes.NoAccess })
                 .Create();
-            
+
             MockTppClientListSlotsPost(forbiddenResponse);
-            
+
             MockTppClientRequestSystmOnlineMessagesPost(new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK));
-            
+
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
@@ -181,13 +178,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             // Arrange
             var listSlotsReply = new TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK);
             var messagesReply = new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK);
-            
+
             MockTppClientListSlotsPost(listSlotsReply);
             MockTppClientRequestSystmOnlineMessagesPost(messagesReply);
 
             _mockSlotsMapper.Setup(x => x.Map(listSlotsReply.Body, messagesReply.Body))
                 .Throws<Exception>();
-            
+
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
@@ -202,7 +199,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             // Arrange
             var listSlotsReply = new TppApiObjectResponse<ListSlotsReply>(HttpStatusCode.OK);
             var messagesReply = new TppApiObjectResponse<RequestSystmOnlineMessagesReply>(HttpStatusCode.OK);
-            
+
             MockTppClientListSlotsPost(listSlotsReply);
             MockTppClientRequestSystmOnlineMessagesPost(messagesReply);
 
@@ -210,7 +207,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             _mockSlotsMapper.Setup(x => x.Map(listSlotsReply.Body, messagesReply.Body))
                 .Returns(expectedResponse);
-            
+
             // Act
             var result = await _systemUnderTest.GetSlots(_gpLinkedAccountModel, _dateRange);
 
@@ -221,16 +218,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
         private void MockTppClientListSlotsPost(TppApiObjectResponse<ListSlotsReply> response)
         {
-            var expectedRequest = new ListSlots(_tppUserSession, _dateRange);
+            var expectedRequest = new ListSlots(new TppRequestParameters
+            {
+                PatientId = _tppUserSession.PatientId,
+                OnlineUserId = _tppUserSession.OnlineUserId,
+            }, _dateRange);
 
             _listSlots
                 .Setup(x => x.Post(
-                    It.Is<(ListSlots, string)>(tuple => 
+                    It.Is<(TppRequestParameters, AppointmentSlotsDateRange)>(tuple =>
                         tuple.Item1.PatientId.Equals(expectedRequest.PatientId, StringComparison.Ordinal)
                         && tuple.Item1.OnlineUserId.Equals(expectedRequest.OnlineUserId, StringComparison.Ordinal)
-                        && tuple.Item1.StartDate.Equals(expectedRequest.StartDate, StringComparison.Ordinal)
-                        && tuple.Item1.NumberOfDays.Equals(expectedRequest.NumberOfDays)
-                        && tuple.Item2.Equals( _tppUserSession.Suid, StringComparison.Ordinal)
+                        && tuple.Item1.Suid.Equals( _tppUserSession.Suid, StringComparison.Ordinal)
                         )
                     ))
                 .ReturnsAsync(response)
@@ -245,14 +244,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 OnlineUserId = _tppUserSession.OnlineUserId,
                 Suid = _tppUserSession.Suid,
             });
-            
+
             _requestSystmOnlineMessages
                 .Setup(x => x.Post(
                     It.Is<TppRequestParameters>(p =>
                         p.PatientId.Equals(expectedRequest.PatientId, StringComparison.Ordinal)
                         && p.OnlineUserId.Equals(expectedRequest.OnlineUserId, StringComparison.Ordinal)
                         && p.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal)
-                    )))
+                        )))
                 .ReturnsAsync(response)
                 .Verifiable();
         }

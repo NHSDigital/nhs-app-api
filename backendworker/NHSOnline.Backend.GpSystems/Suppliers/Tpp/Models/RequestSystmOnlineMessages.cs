@@ -16,10 +16,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
             PatientId = tppRequestParameters.PatientId;
             OnlineUserId = tppRequestParameters.OnlineUserId;
         }
-        
+
         [XmlAttribute("patientId")]
         public string PatientId { get; set; }
-        
+
         [XmlAttribute("onlineUserId")]
         public string OnlineUserId { get; set; }
 

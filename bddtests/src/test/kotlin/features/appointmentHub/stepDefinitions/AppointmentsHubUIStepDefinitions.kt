@@ -11,8 +11,7 @@ class AppointmentsHubUIStepDefinitions {
 
     @When("^I click the GP Appointments link$")
     fun clickOnGPAppointmentsButton() {
-        appointmentHubPage.btnGPAppointmentsLinksWithDescriptionsContent
-                .click()
+        appointmentHubPage.btnGPAppointmentsLinksWithDescriptionsContent.click()
     }
 
     @When("^I click the 'Hospital and other services' link on the Appointments Hub$")

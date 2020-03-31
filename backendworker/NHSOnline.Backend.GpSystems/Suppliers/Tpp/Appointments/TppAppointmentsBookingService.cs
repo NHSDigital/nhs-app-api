@@ -14,12 +14,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
     internal class TppAppointmentsBookingService
     {
         private readonly ILogger<TppAppointmentsBookingService> _logger;
-        private readonly ITppClientRequest<(TppUserSession userSession, BookAppointment bookAppointment), BookAppointmentReply> _bookAppointmentSlot;
+        private readonly ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply> _bookAppointmentSlot;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
 
         public TppAppointmentsBookingService(
             ILogger<TppAppointmentsBookingService> logger,
-            ITppClientRequest<(TppUserSession userSession, BookAppointment bookAppointment), BookAppointmentReply> bookAppointmentSlot,
+            ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply> bookAppointmentSlot,
             IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
             _logger = logger;
@@ -32,17 +32,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             try
             {
                 _logger.LogEnter();
-                var userSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
 
                 if (!request.StartTime.HasValue || !request.EndTime.HasValue)
                 {
                     _logger.LogError("Appointment book request was missing dates", request);
                     return new AppointmentBookResult.BadRequest();
                 }
-                
-                var bookAppointment = new BookAppointment(userSession, request, _dateTimeOffsetProvider);
 
-                var response = await _bookAppointmentSlot.Post((userSession, bookAppointment));
+                var bookingDates = new BookingDates(request.StartTime, request.EndTime, _dateTimeOffsetProvider);
+                var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+
+                var response = await _bookAppointmentSlot.Post((tppRequestParameters, bookingDates, request));
                 return InterpretAppointmentsPostResponse(response);
             }
             catch (HttpRequestException exception)

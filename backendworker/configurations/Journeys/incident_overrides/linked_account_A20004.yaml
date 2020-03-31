@@ -1,0 +1,9 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A20004"
+journeys:
+  appointments:
+    provider: gpAtHand
+  nominatedPharmacy: true
+  notifications: true
+  messaging: true

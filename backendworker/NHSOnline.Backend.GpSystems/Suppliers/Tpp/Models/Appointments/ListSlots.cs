@@ -12,14 +12,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments
 
         private ListSlots() { }
 
-        public ListSlots(ITppUserSession userSession, AppointmentSlotsDateRange dateRange)
+        public ListSlots(TppRequestParameters tppRequestParameters, AppointmentSlotsDateRange dateRange)
         {
             StartDate = dateRange.FromDate.DateTime.ToString(ExpectedDateFormat, CultureInfo.InvariantCulture);
             NumberOfDays = dateRange.DayRange + 1;
 
-            UnitId = userSession.UnitId;
-            PatientId = userSession.PatientId;
-            OnlineUserId = userSession.OnlineUserId;
+            UnitId = tppRequestParameters.OdsCode;
+            PatientId = tppRequestParameters.PatientId;
+            OnlineUserId = tppRequestParameters.OnlineUserId;
         }
 
         [XmlAttribute("patientId")]

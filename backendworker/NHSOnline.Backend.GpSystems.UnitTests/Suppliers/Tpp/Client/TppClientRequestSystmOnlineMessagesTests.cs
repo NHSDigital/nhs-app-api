@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
             var requestModel = new RequestSystmOnlineMessages(new TppRequestParameters() { OdsCode = TppClientTestsContext.UnitId })
             {
                 Uuid = TppClientTestsContext.Uuid,
-                ApiVersion = TppClientTestsContext.ApiVersion
+                ApiVersion = TppClientTestsContext.ApiVersion,
             };
 
             var tppRequestParameters = new TppRequestParameters
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
             var requestModel = new RequestSystmOnlineMessages(new TppRequestParameters { OdsCode = TppClientTestsContext.UnitId })
             {
                 Uuid = TppClientTestsContext.Uuid,
-                ApiVersion = TppClientTestsContext.ApiVersion
+                ApiVersion = TppClientTestsContext.ApiVersion,
             };
 
             var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)

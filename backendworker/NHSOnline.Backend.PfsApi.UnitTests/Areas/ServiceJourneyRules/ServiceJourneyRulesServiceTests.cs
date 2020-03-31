@@ -1,3 +1,4 @@
+using System.Configuration.Provider;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -47,9 +48,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
 
            // Assert
            result.Should().BeAssignableTo<ServiceJourneyRulesConfigResult.Success>();
-
        }
-       
+
        [DataTestMethod]
        [DataRow(AppointmentsProvider.informatica, AppointmentsProvider.linkedAccount)]
        [DataRow(AppointmentsProvider.gpAtHand, AppointmentsProvider.linkedAccount)]
@@ -66,6 +66,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                    {
                        Journeys = new Journeys
                        {
+                           CdssAdmin = new Cdss
+                           {
+                               ConditionsServiceDefinition = "conditionsServiceDefinition",
+                               Provider = CdssProvider.eConsult,
+                               ServiceDefinition = "serviceDefinition"
+                           },
+                           CdssAdvice = new Cdss
+                           {
+                               ConditionsServiceDefinition = "conditionsServiceDefinition",
+                               Provider = CdssProvider.eConsult,
+                               ServiceDefinition = "serviceDefinition"
+                           },
                            Appointments = new ServiceJourneyRulesApi.Models.Appointments
                            {
                                Provider = originalProvider
@@ -88,6 +100,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
            Assert.AreEqual(false, response.Journeys.NominatedPharmacy);
            Assert.AreEqual(false, response.Journeys.Notifications);
            Assert.AreEqual(expectedProvider, response.Journeys.Appointments.Provider);
+           Assert.AreEqual(CdssProvider.none, response.Journeys.CdssAdmin.Provider);
+           Assert.AreEqual(CdssProvider.none, response.Journeys.CdssAdvice.Provider);
+           Assert.IsNull(response.Journeys.CdssAdmin.ServiceDefinition);
+           Assert.IsNull(response.Journeys.CdssAdmin.ConditionsServiceDefinition);
+           Assert.IsNull(response.Journeys.CdssAdvice.ServiceDefinition);
+           Assert.IsNull(response.Journeys.CdssAdvice.ConditionsServiceDefinition);
        }
 
        [TestMethod]
