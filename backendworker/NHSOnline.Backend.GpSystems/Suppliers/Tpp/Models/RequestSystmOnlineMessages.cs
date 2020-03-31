@@ -10,11 +10,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
         {
         }
 
-        public RequestSystmOnlineMessages(ITppUserSession userSession)
+        public RequestSystmOnlineMessages(TppRequestParameters tppRequestParameters)
         {
-            UnitId = userSession.UnitId;
-            PatientId = userSession.PatientId;
-            OnlineUserId = userSession.OnlineUserId;
+            UnitId = tppRequestParameters.OdsCode;
+            PatientId = tppRequestParameters.PatientId;
+            OnlineUserId = tppRequestParameters.OnlineUserId;
         }
         
         [XmlAttribute("patientId")]

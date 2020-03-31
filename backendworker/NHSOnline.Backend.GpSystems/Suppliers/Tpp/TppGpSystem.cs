@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         {
             return _serviceProvider.GetService<TppRecreateSessionMapperService>();
         }
-
+        
         public bool SupportsLinkedAccounts { get; }
     }
 }

@@ -15,12 +15,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
     {
         private readonly ILogger<TppAppointmentSlotsService> _logger;
         private readonly ITppClientRequest<(ListSlots listSlots, string suid), ListSlotsReply> _listSlots;
-        private readonly ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> _requestSystmOnlineMessages;
+        private readonly ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply> _requestSystmOnlineMessages;
         private readonly IAppointmentSlotsMapper _appointmentSlotsMapper;
 
         public TppAppointmentSlotsService(ILogger<TppAppointmentSlotsService> logger,
             ITppClientRequest<(ListSlots listSlots, string suid), ListSlotsReply> listSlots,
-            ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> requestSystmOnlineMessages,
+            ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply> requestSystmOnlineMessages,
             IAppointmentSlotsMapper appointmentSlotsMapper)
         {
             _logger = logger;
@@ -37,12 +37,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                 _logger.LogEnter();
             
                 var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
+                TppRequestParameters tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
                 var listSlotsRequest = new ListSlots(tppUserSession, dateRange);
                 var listSlotsTask = _listSlots.Post((listSlotsRequest, tppUserSession.Suid));
                 await listSlotsTask;
 
-                var messagesRequest = new RequestSystmOnlineMessages(tppUserSession);
-                var messagesTask = _requestSystmOnlineMessages.Post((messagesRequest, tppUserSession.Suid));
+                var messagesTask = _requestSystmOnlineMessages.Post(tppRequestParameters);
                 
                 try
                 {

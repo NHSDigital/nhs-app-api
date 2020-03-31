@@ -32,18 +32,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
         private TppUserSession _tppUserSession;
         private DateTimeOffset _fromDateTimeOffset;
+        private Guid _patientId;
         private DateTimeOffset _toDateTimeOffset;
         private AppointmentSlotsDateRange _dateRange;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private Mock<ITppClientRequest<(ListSlots, string), ListSlotsReply>> _listSlots;
-        private Mock<ITppClientRequest<(RequestSystmOnlineMessages, string), RequestSystmOnlineMessagesReply>> _requestSystmOnlineMessages;
+        private Mock<ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply>> _requestSystmOnlineMessages;
 
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
+            _patientId = new Guid();
             _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
             _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
                 .Returns(DateTime.UtcNow);
@@ -54,13 +55,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
             
             _listSlots = _fixture.Freeze<Mock<ITppClientRequest<(ListSlots, string), ListSlotsReply>>>();
-            _requestSystmOnlineMessages = _fixture.Freeze<Mock<ITppClientRequest<(RequestSystmOnlineMessages , string ), RequestSystmOnlineMessagesReply>>>();
+            _requestSystmOnlineMessages = _fixture.Freeze<Mock<ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply>>>();
+
+            
             _mockSlotsMapper = _fixture.Freeze<Mock<IAppointmentSlotsMapper>>();
 
-            _tppUserSession = _fixture.Create<TppUserSession>();
-            
-            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, Guid.NewGuid());
-                
+            _tppUserSession = _fixture.Freeze<TppUserSession>();
+            _tppUserSession.Id = _patientId;
+            _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _tppUserSession.Id);
+
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
 
@@ -113,7 +116,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         {
             // Arrange
             _requestSystmOnlineMessages
-                .Setup(x => x.Post(It.IsAny<(RequestSystmOnlineMessages, string)>()))
+                .Setup(x => x.Post(It.IsAny<TppRequestParameters>()))
                 .ThrowsAsync(new HttpRequestException())
                 .Verifiable();
             
@@ -236,15 +239,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
         private void MockTppClientRequestSystmOnlineMessagesPost(TppApiObjectResponse<RequestSystmOnlineMessagesReply> response)
         {
-            var expectedRequest = new RequestSystmOnlineMessages(_tppUserSession);
+            var expectedRequest = new RequestSystmOnlineMessages(new TppRequestParameters
+            {
+                PatientId = _tppUserSession.PatientId,
+                OnlineUserId = _tppUserSession.OnlineUserId,
+                Suid = _tppUserSession.Suid,
+            });
             
             _requestSystmOnlineMessages
                 .Setup(x => x.Post(
-                    It.Is<(RequestSystmOnlineMessages, string)>(p => 
-                        p.Item1.PatientId.Equals(expectedRequest.PatientId, StringComparison.Ordinal)
-                        && p.Item1.OnlineUserId.Equals(expectedRequest.OnlineUserId, StringComparison.Ordinal)
-                        && p.Item2.Equals(_tppUserSession.Suid, StringComparison.Ordinal)
-                        )))
+                    It.Is<TppRequestParameters>(p =>
+                        p.PatientId.Equals(expectedRequest.PatientId, StringComparison.Ordinal)
+                        && p.OnlineUserId.Equals(expectedRequest.OnlineUserId, StringComparison.Ordinal)
+                        && p.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal)
+                    )))
                 .ReturnsAsync(response)
                 .Verifiable();
         }

@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
     public sealed class TppClientRequestSystmOnlineMessagesTests :IDisposable
     {
         private TppClientTestsContext Context { get; set; }
-        private ITppClientRequest<(RequestSystmOnlineMessages, string), RequestSystmOnlineMessagesReply> SystemUnderTest { get; set; }
+        private ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply> SystemUnderTest { get; set; }
 
         private MockHttpMessageHandler MockHttpHandler => Context.MockHttpHandler;
         private Mock<ILogger<TppClientRequestExecutor>> MockLogger => Context.MockLogger;
@@ -30,17 +30,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
         {
             Context = new TppClientTestsContext();
             Context.Initialise();
-            SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClientRequest<(RequestSystmOnlineMessages, string), RequestSystmOnlineMessagesReply>>();
+            SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply>>();
         }
 
         [TestMethod]
         public async Task RequestSystmOnlineMessagesPost_ReturnsRequestSystmOnlineMessagesReply_WhenValidlyRequested()
         {
             // Arrange
-            var requestModel = new RequestSystmOnlineMessages(new TppUserSession { OdsCode = TppClientTestsContext.UnitId })
+            var requestModel = new RequestSystmOnlineMessages(new TppRequestParameters() { OdsCode = TppClientTestsContext.UnitId })
             {
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion
+            };
+
+            var tppRequestParameters = new TppRequestParameters
+            {
+                OdsCode = TppClientTestsContext.UnitId,
+                Suid = TppClientTestsContext.Suid
             };
 
             var requestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -64,7 +70,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
                 .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
 
             // Act
-            var response = await SystemUnderTest.Post((requestModel, TppClientTestsContext.Suid));
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
@@ -79,7 +85,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
         public async Task RequestSystmOnlineMessagesPost_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
         {
             // Arrange
-            var requestModel = new RequestSystmOnlineMessages(new TppUserSession { OdsCode = TppClientTestsContext.UnitId })
+            var tppRequestParameters = new TppRequestParameters
+            {
+                OdsCode = TppClientTestsContext.UnitId,
+                Suid = TppClientTestsContext.Suid
+            };
+
+            var requestModel = new RequestSystmOnlineMessages(new TppRequestParameters { OdsCode = TppClientTestsContext.UnitId })
             {
                 Uuid = TppClientTestsContext.Uuid,
                 ApiVersion = TppClientTestsContext.ApiVersion
@@ -100,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
                 .Respond(TppClientTestsContext.MediaType, errorResponseBuilder.BuildXml());
 
             // Act
-            var response = await SystemUnderTest.Post((requestModel, TppClientTestsContext.Suid));
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             // Assert
             response.ErrorResponse.Should().BeEquivalentTo(errorResponseBuilder.BuildExpected());
@@ -119,11 +131,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
         public async Task RequestSystmOnlineMessagesPost_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
             HttpStatusCode value)
         {
+            var tppRequestParameters = new TppRequestParameters
+            {
+                OdsCode = TppClientTestsContext.UnitId,
+                Suid = TppClientTestsContext.Suid
+            };
+
             // Act
-            var requestModel = new RequestSystmOnlineMessages(new TppUserSession { OdsCode = TppClientTestsContext.UnitId })
+            var requestModel = new RequestSystmOnlineMessages(new TppRequestParameters { OdsCode = TppClientTestsContext.UnitId })
             {
                 Uuid = TppClientTestsContext.Uuid,
-                ApiVersion = TppClientTestsContext.ApiVersion
+                ApiVersion = TppClientTestsContext.ApiVersion,
             };
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -138,7 +156,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
                 .Respond(value);
 
             // Act
-            var response = await SystemUnderTest.Post((requestModel, TppClientTestsContext.Suid));
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             // Assert
             response.StatusCode.Should().Be(value);
@@ -146,7 +164,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
 
             Context.VerifyLogging(requestModel);
         }
-        
+
         [TestCleanup]
         public void Dispose()
         {

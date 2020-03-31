@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Demographics;
@@ -61,15 +62,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 .AddTppClientRequest<Authenticate, AuthenticateReply, TppClientAuthenticatePost>()
                 .AddTppClientRequest<(TppUserSession, BookAppointment), BookAppointmentReply, TppClientBookAppointmentSlotPost>()
                 .AddTppClientRequest<(CancelAppointment, string), CancelAppointmentReply, TppClientCancelAppointmentPost>()
-                .AddTppClientRequest<TppUserSession, ListRepeatMedicationReply, TppClientListRepeatMedicationPost>()
+                .AddTppClientRequest<TppRequestParameters, ListRepeatMedicationReply, TppClientListRepeatMedicationPost>()
                 .AddTppClientRequest<TppUserSession, ListServiceAccessesReply, TppClientListServiceAccessesPost>()
                 .AddTppClientRequest<(ListSlots, string), ListSlotsReply, TppClientListSlotsPost>()
                 .AddTppClientRequest<TppUserSession, LogoffReply, TppClientLogoffPost>()
                 .AddTppClientRequest<AddNhsUserRequest, AddNhsUserResponse, TppClientNhsUserPost>()
-                .AddTppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply, TppClientOrderPrescriptionsPost>()
+                .AddTppClientRequest<(TppRequestParameters, RepeatPrescriptionRequest), RequestMedicationReply, TppClientOrderPrescriptionsPost>()
+                .AddTppClientRequest<TppRequestParameters, ViewPatientOverviewReply, TppClientPatientOverviewPost>()
+                .AddTppClientRequest<TppRequestParameters, PatientSelectedReply, TppClientPatientSelectedPost>()
                 .AddTppClientRequest<TppUserSession, MessagesViewReply, TppClientMessagesViewPost>()
                 .AddTppClientRequest<LinkAccount, LinkAccountReply, TppClientLinkAccountPost>()
-                .AddTppClientRequest<(RequestSystmOnlineMessages, string), RequestSystmOnlineMessagesReply, TppClientRequestSystmOnlineMessages>()
+                .AddTppClientRequest<TppRequestParameters, RequestPatientRecordReply, TppClientRequestPatientRecordPost>()
+                .AddTppClientRequest<(TppRequestParameters, string), RequestBinaryDataReply, TppClientRequestBinaryDataPost>()
+                .AddTppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply, TppClientRequestSystmOnlineMessages>()
+                .AddTppClientRequest<(TppRequestParameters, string, string), TestResultsViewReply, TppClientTestResultsView>()
+                .AddTppClientRequest<(TppRequestParameters, string), TestResultsViewReply, TppClientTestResultsViewDetailed>()
                 .AddTppClientRequest<(ViewAppointments, string), ViewAppointmentsReply, TppClientViewAppointmentsPost>()
                 .AddTppClientRequest<TppUserSession, MessageRecipientsReply, TppClientMessageRecipientsPost>()
                 .AddTppClientRequest<TppRequestParameters, ViewPatientOverviewReply, TppClientPatientOverviewPost>()

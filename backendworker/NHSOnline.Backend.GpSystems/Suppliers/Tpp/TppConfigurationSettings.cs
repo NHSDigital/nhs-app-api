@@ -16,7 +16,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp {
         public int? PrescriptionsMaxCoursesSoftLimit { get; set; }
         public int? CoursesMaxCoursesLimit { get; set; }
         public string Environment { get; set; }
-
         public bool SupportsLinkedAccounts { get; set; }
 
         public TppConfigurationSettings() {}

@@ -327,9 +327,14 @@ open class PrescriptionsStepDefinitions {
         prescriptions.isLoaded()
     }
 
-    @Then("^I see repeat prescription confirmation page loaded$")
+    @Then("^I see repeat prescription confirmation page loaded")
     fun iSeeRepeatPrescriptionConfirmationPageLoaded() {
-        repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().firstName)
+        val currentProvider = PrescriptionsSerenityHelpers.PROVIDER.getOrNull<Supplier>()
+        if (currentProvider === Supplier.TPP) {
+            repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().formattedFullName())
+        } else {
+            repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().firstName)
+        }
     }
 
     @Then("^I see no prescriptions$")

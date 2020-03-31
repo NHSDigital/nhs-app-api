@@ -115,9 +115,9 @@ Feature: Login with proxy access
     Then the appointments shutter page is displayed
     When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'https://111.nhs.uk/service/COVID-19/'
     Then a new tab has been opened by the link
-
-  Scenario: An EMIS user proxying on behalf of another will see the confirmation page after booking a repeat prescription
-    Given I am logged in as a EMIS user with linked profiles and appointments provider IM1
+    
+  Scenario Outline: A <GP System> user proxying on behalf of another will see the confirmation page after booking a repeat prescription
+    Given I am logged in as a <GP System> user with linked profiles and appointments provider IM1
     Given the scenario is submit prescription
     Then I see the home page
     And I see the linked profiles link
@@ -128,7 +128,7 @@ Feature: Login with proxy access
     Then details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
     Then I see the home page
-    And I am using EMIS GP System to submit my prescription
+    And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I navigate to prescriptions
     Then I see prescriptions page loaded
@@ -136,6 +136,11 @@ Feature: Login with proxy access
     And I click Continue on the Order a repeat prescription page
     When I click Confirm and order repeat prescription
     Then I see repeat prescription confirmation page loaded
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
 
   Scenario: An EMIS user proxying on behalf of another will see the confirmation page after booking an appointment
     Given I am logged in as a EMIS user with linked profiles and appointments provider IM1

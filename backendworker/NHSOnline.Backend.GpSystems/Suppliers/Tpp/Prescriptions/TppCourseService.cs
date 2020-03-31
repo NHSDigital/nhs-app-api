@@ -14,13 +14,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 {
     internal class TppCourseService : ICourseService
     {
-        private readonly ITppClientRequest<TppUserSession, ListRepeatMedicationReply> _listRepeatMedication;
+        private readonly ITppClientRequest<TppRequestParameters, ListRepeatMedicationReply> _listRepeatMedication;
         private readonly ILogger<TppCourseService> _logger;
         private readonly TppConfigurationSettings _settings;
         private readonly ITppCourseMapper _tppCourseMapper;
 
         public TppCourseService(
-            ITppClientRequest<TppUserSession, ListRepeatMedicationReply> listRepeatMedication,
+            ITppClientRequest<TppRequestParameters, ListRepeatMedicationReply> listRepeatMedication,
             ILogger<TppCourseService> logger, 
             TppConfigurationSettings settings,
             ITppCourseMapper tppCourseMapper)
@@ -35,13 +35,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 
         public async Task<GetCoursesResult> GetCourses(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
+            TppRequestParameters tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+
 
             try
             {
                 _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Courses for user");
-                var response = await _listRepeatMedication.Post(tppUserSession);
+                var response = await _listRepeatMedication.Post(tppRequestParameters);
                 _logger.LogDebug("Fetch Courses for user complete");
                 
                 if (response.HasSuccessResponse)

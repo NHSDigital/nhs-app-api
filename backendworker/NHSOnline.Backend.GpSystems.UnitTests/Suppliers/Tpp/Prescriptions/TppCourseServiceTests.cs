@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
     public class TppCourseServiceTests
     {
         private TppCourseService _systemUnderTest;
-        private Mock<ITppClientRequest<TppUserSession, ListRepeatMedicationReply>> _listRepeatMedication;
+        private Mock<ITppClientRequest<TppRequestParameters, ListRepeatMedicationReply>> _listRepeatMedication;
         private Mock<ITppCourseMapper> _tppCourseMapper;
         private TppConfigurationSettings _settings;
         private TppUserSession _tppUserSession;
@@ -51,8 +51,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _tppUserSession = _fixture.Create<TppUserSession>();
+            _tppUserSession.Id = _patientId;
 
-            _listRepeatMedication = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, ListRepeatMedicationReply>>>();
+            _listRepeatMedication = _fixture.Freeze<Mock<ITppClientRequest<TppRequestParameters, ListRepeatMedicationReply>>>();
             
             _tppCourseMapper = _fixture.Freeze<Mock<ITppCourseMapper>>();
             
@@ -72,7 +73,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             var listRepeatMedicationReply = _fixture.Create<ListRepeatMedicationReply>();
 
-            _listRepeatMedication.Setup(x => x.Post(_tppUserSession))
+            _listRepeatMedication.Setup(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                     && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
@@ -83,7 +85,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_tppUserSession, _patientId));
 
             // Assert
-            _listRepeatMedication.Verify(x => x.Post(_tppUserSession));
+            _listRepeatMedication.Verify(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                      && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))));
             result.Should().BeAssignableTo<GetCoursesResult.Success>()
                 .Subject.Response.Should().NotBeNull();
         }
@@ -96,7 +99,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             var listRepeatMedicationReply = _fixture.Create<ListRepeatMedicationReply>();
 
-            _listRepeatMedication.Setup(x => x.Post(_tppUserSession))
+            _listRepeatMedication.Setup(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                     && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
@@ -107,7 +111,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_tppUserSession, _patientId));
 
             // Assert
-            _listRepeatMedication.Verify(x => x.Post(_tppUserSession));
+            _listRepeatMedication.Verify(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                      && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))));
             result.Should().BeAssignableTo<GetCoursesResult.Success>()
                 .Subject.Response.Should().NotBeNull();
         }
@@ -120,7 +125,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             var listRepeatMedicationReply = _fixture.Create<ListRepeatMedicationReply>();
 
-            _listRepeatMedication.Setup(x => x.Post(_tppUserSession))
+            _listRepeatMedication.Setup(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                     && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
@@ -131,7 +137,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_tppUserSession, _patientId));
 
             // Assert
-            _listRepeatMedication.Verify(x => x.Post(_tppUserSession));
+            _listRepeatMedication.Verify(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                      && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))));
             result.Should().BeAssignableTo<GetCoursesResult.Success>()
                 .Subject.Response.Should().NotBeNull();
         }
@@ -163,7 +170,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                 Medications = medications
             };
 
-            _listRepeatMedication.Setup(x => x.Post(_tppUserSession)).Returns(
+            _listRepeatMedication.Setup(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                     && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal)))).Returns(
                 Task.FromResult(
                     new TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
@@ -179,7 +187,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_tppUserSession, _patientId));
 
             // Assert
-            _listRepeatMedication.Verify(x => x.Post(_tppUserSession));
+            _listRepeatMedication.Verify(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                      && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))));
             result.Should().BeAssignableTo<GetCoursesResult.Success>()
                 .Subject.Response.Should().Be(response);
 
@@ -190,7 +199,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         public async Task Get_ReturnsSupplierSystemUnavailable_WhenErrorReceivedFromTpp()
         {
             // Arrange
-            _listRepeatMedication.Setup(x => x.Post(_tppUserSession))
+            _listRepeatMedication.Setup(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                     && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(
                     Task.FromResult(
                         new TppApiObjectResponse<ListRepeatMedicationReply>
@@ -209,7 +219,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingTpp()
         {
             // Arrange
-            _listRepeatMedication.Setup(x => x.Post(_tppUserSession))
+            _listRepeatMedication.Setup(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                     && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -253,7 +264,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                 Uuid = new Guid()
             };
 
-            _listRepeatMedication.Setup(x => x.Post(_tppUserSession))
+            _listRepeatMedication.Setup(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                     && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
@@ -270,7 +282,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_tppUserSession, _patientId));
 
             // Assert
-            _listRepeatMedication.Verify(x => x.Post(_tppUserSession));
+            _listRepeatMedication.Verify(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                      && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))));
             result.Should().BeAssignableTo<GetCoursesResult.Success>()
                 .Subject.Response.Should().NotBeNull();
             capturedItemToMap.Count.Should().Be(expectedNumberOfPrescriptions);
@@ -284,7 +297,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                 .With(x => x.ErrorCode, TppApiErrorCodes.NoAccess)
                 .Create();
             
-            _listRepeatMedication.Setup(x => x.Post(_tppUserSession))
+            _listRepeatMedication.Setup(x => x.Post(It.Is<TppRequestParameters>(e => e.Suid.Equals(_tppUserSession.Suid, StringComparison.Ordinal) 
+                                                                                     && e.PatientId.Equals(_tppUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(
                     Task.FromResult(
                         new TppApiObjectResponse<ListRepeatMedicationReply>

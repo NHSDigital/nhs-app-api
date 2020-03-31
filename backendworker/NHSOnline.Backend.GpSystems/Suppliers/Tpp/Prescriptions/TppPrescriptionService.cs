@@ -19,15 +19,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
     {
         private readonly ILogger<TppPrescriptionService> _logger;
         private readonly TppConfigurationSettings _settings;
-        private readonly ITppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply> _orderPrescriptions;
-        private readonly ITppClientRequest<TppUserSession, ListRepeatMedicationReply> _listRepeatMedication;
-        private readonly ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> _requestSystmOnlineMessages;
+        private readonly ITppClientRequest<(TppRequestParameters, RepeatPrescriptionRequest), RequestMedicationReply> _orderPrescriptions;
+        private readonly ITppClientRequest<TppRequestParameters, ListRepeatMedicationReply> _listRepeatMedication;
+        private readonly ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply> _requestSystmOnlineMessages;
         private readonly ITppPrescriptionMapper _tppPrescriptionMapper;
 
         public TppPrescriptionService(
-            ITppClientRequest<(TppUserSession, RequestMedication), RequestMedicationReply> orderPrescriptions,
-            ITppClientRequest<TppUserSession, ListRepeatMedicationReply> listRepeatMedication,
-            ITppClientRequest<(RequestSystmOnlineMessages requestModel, string suid), RequestSystmOnlineMessagesReply> requestSystmOnlineMessages,
+            ITppClientRequest<(TppRequestParameters, RepeatPrescriptionRequest), RequestMedicationReply> orderPrescriptions,
+            ITppClientRequest<TppRequestParameters, ListRepeatMedicationReply> listRepeatMedication,
+            ITppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply> requestSystmOnlineMessages,
             ILogger<TppPrescriptionService> logger,
             TppConfigurationSettings settings,
             ITppPrescriptionMapper tppPrescriptionMapper)
@@ -47,13 +47,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             DateTimeOffset? fromDate = null,
             DateTimeOffset? toDate = null)
         {
-            var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
+            var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
 
             try
             {
                 _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Prescriptions For User");
-                var response = await _listRepeatMedication.Post(tppUserSession);
+                var response = await _listRepeatMedication.Post(tppRequestParameters);
                 _logger.LogDebug("Fetch Prescriptions For User Complete");
 
                 if (!response.HasSuccessResponse)
@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                         $"Mapping successful response from {nameof(ListRepeatMedicationReply)} to {nameof(PrescriptionListResponse)}");
                     var mappedPrescriptionList = _tppPrescriptionMapper.Map(medicationListFiltered);
 
-                    await LogPrescriptionMessaging(tppUserSession);
+                    await LogPrescriptionMessaging(gpLinkedAccountModel);
                     return new GetPrescriptionsResult.Success(mappedPrescriptionList, prescriptionsCount);
                 }
                 catch (Exception e)
@@ -101,26 +101,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
         public async Task<OrderPrescriptionResult> OrderPrescription(GpLinkedAccountModel gpLinkedAccountModel, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             _logger.LogEnter();
-
-            var tppUserSession = (TppUserSession)gpLinkedAccountModel.GpUserSession;
-
-            var postRequest = new RequestMedication
-            {
-                PatientId = tppUserSession.PatientId,
-                OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.OdsCode,
-                Notes = repeatPrescriptionRequest.SpecialRequest,
-                Medications = repeatPrescriptionRequest.CourseIds.Select(x => new MedicationRequest
-                {
-                    DrugId = x,
-                    Type = TppApiConstants.MedicationType.Repeat,
-                }).ToList(),
-            };
-
+            
+            TppRequestParameters tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+            
             try
             {
                 _logger.LogInformation("Beginning Place Prescription Request");
-                var response = await _orderPrescriptions.Post((tppUserSession, postRequest));
+                var response = await _orderPrescriptions.Post((tppRequestParameters, repeatPrescriptionRequest));
 
                 if (!response.HasSuccessResponse)
                 {
@@ -142,13 +129,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             }
         }
 
-        private async Task LogPrescriptionMessaging(TppUserSession tppUserSession)
+        private async Task LogPrescriptionMessaging(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var messagesRequest = new RequestSystmOnlineMessages(tppUserSession);
+            var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
 
             try
             {
-                var messages = await _requestSystmOnlineMessages.Post((messagesRequest, tppUserSession.Suid));
+                var messages = await _requestSystmOnlineMessages.Post(tppRequestParameters);
 
                 const string intro = "Prescription Messaging from practice:";
                 var confirmation = messages?.Body?.RequestMedicationConfirmation?.Trim() ?? string.Empty;
