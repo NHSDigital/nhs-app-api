@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
@@ -16,6 +17,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
 {
@@ -27,6 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         private Mock<IEmisPrescriptionMapper> _emisPrescriptionMapper;
         private EmisConfigurationSettings _settings;
         private EmisUserSession _emisUserSession;
+        private Mock<ILogger<EmisPrescriptionService>> _mockLogger;
         private IFixture _fixture;
         private RepeatPrescriptionRequest _repeatPrescriptionRequest;
         private Guid _patientId;
@@ -59,6 +62,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             {
                 HttpStatusCode.OK
             };
+            
+            
+            _mockLogger = _fixture.Freeze<Mock<ILogger<EmisPrescriptionService>>>();
 
             _emisUserSession = new EmisUserSession
             {
@@ -79,8 +85,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisPrescriptionMapper = _fixture.Freeze<Mock<IEmisPrescriptionMapper>>();
 
-            _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath,
-                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit,
+            _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion,
+                CertificatePath,
+                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds,
+                CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit,
                 Environment);
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<EmisPrescriptionService>();
@@ -431,6 +439,145 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 .Subject.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(expectedNumberOfPrescriptions);
+        }
+
+
+        [TestMethod]
+        public async Task Get_PrescriptionsCorrectlyLogsTheStatusData()
+        {
+            // Arrange
+            var date = DateTimeOffset.Now;
+            var toDate = DateTimeOffset.Now;
+
+            var prescriptionRequests = new List<PrescriptionRequest>();
+            var medicationCourses = new List<MedicationCourse>();
+
+            for (var i = 0; i < 3; i++)
+            {
+                var courseGuid = Guid.NewGuid().ToString();
+
+                prescriptionRequests.Add(new PrescriptionRequest
+                {
+                    DateRequested = new DateTimeOffset(new DateTime(2000, 1, 2)),
+                    RequestedMedicationCourses = new List<RequestedMedicationCourse>
+                    {
+                        new RequestedMedicationCourse
+                        {
+                            RequestedMedicationCourseGuid = courseGuid
+                        }
+                    }
+                });
+
+                medicationCourses.Add(new MedicationCourse
+                {
+                    MedicationCourseGuid = courseGuid,
+                    PrescriptionType = PrescriptionType.Repeat,
+                });
+            }
+
+            var prescriptionsResponse = new PrescriptionRequestsGetResponse
+            {
+                PrescriptionRequests = prescriptionRequests,
+                MedicationCourses = medicationCourses,
+            };
+
+            _emisClient.Setup(x => x.PrescriptionsGet(It.Is<EmisRequestParameters>(
+                        e => e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                             e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
+                             e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken,
+                                 StringComparison.Ordinal)),
+                    date, toDate))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK,
+                        RequestsForSuccessOutcome.PrescriptionsGet, _sampleSuccessStatusCodes)
+                    {
+                        Body = prescriptionsResponse,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null,
+                    }));
+
+            var response = new PrescriptionListResponse
+            {
+                Prescriptions = new List<PrescriptionItem>
+                {
+                    new PrescriptionItem
+                    {
+                        OrderDate = new DateTimeOffset(new DateTime(2000, 1, 2)),
+                        Status = Status.Approved,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = Guid.NewGuid().ToString(),
+                            }
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderDate = new DateTimeOffset(new DateTime(2000, 1, 2)),
+                        Status = Status.Rejected,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = Guid.NewGuid().ToString(),
+                            }
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderDate = new DateTimeOffset(new DateTime(2000, 1, 2)),
+                        Status = Status.Requested,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = Guid.NewGuid().ToString(),
+                            }
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderDate = new DateTimeOffset(new DateTime(2000, 1, 2)),
+                        Status = Status.Approved,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = Guid.NewGuid().ToString(),
+                            }
+                        }
+                    }
+                },
+                Courses = new List<Course>(),
+            };
+            
+
+            PrescriptionRequestsGetResponse capturedItemToMap = null;
+            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<PrescriptionRequestsGetResponse>())).Returns(response)
+                .Callback<PrescriptionRequestsGetResponse>((x) => { capturedItemToMap = x; });
+
+            // Act
+            var result = await _systemUnderTest.GetPrescriptions(
+                new GpLinkedAccountModel(_emisUserSession, _patientId), date, toDate);
+
+            // Assert
+            _emisClient.Verify(x => x.PrescriptionsGet(It.Is<EmisRequestParameters>(
+                    e => e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
+                         e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)),
+                date, toDate));
+            
+              
+            var expectedLogMessage =
+                $"Prescriptions Status Data: Approved Status Prescriptions = 2 / 4 " + 
+                $"Rejected Status Prescriptions = 1 / 4 " +
+                $"Requested Status Prescriptions = 1 / 4";
+            
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
+
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()
+                .Subject.Response.Should().Be(response);
         }
 
         [TestMethod]

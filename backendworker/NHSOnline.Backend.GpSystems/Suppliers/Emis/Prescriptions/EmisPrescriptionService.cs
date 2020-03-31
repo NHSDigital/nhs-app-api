@@ -65,8 +65,26 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                             var allowedStatuses = new List<Status> { Status.Approved, Status.Rejected, Status.Requested };
                             mappedPrescriptionList.Prescriptions = mappedPrescriptionList.Prescriptions
                                 .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
-                        }
 
+                            if (mappedPrescriptionList.Prescriptions.Any())
+                            {
+                                int totalPrescriptions = mappedPrescriptionList.Prescriptions.Count();
+                                
+                                var countOfApprovedPrescriptions = mappedPrescriptionList.Prescriptions.Count(prescription => prescription.Status.Value == Status.Approved);
+                                var countOfRejectedPrescriptions = mappedPrescriptionList.Prescriptions.Count(prescription => prescription.Status.Value == Status.Rejected);
+                                var countOfRequestedPrescriptions = mappedPrescriptionList.Prescriptions.Count(prescription => prescription.Status.Value == Status.Requested);
+                              
+                                var kvp = new Dictionary<string, string>
+                                {
+                                    { "Approved Status Prescriptions ", $" {countOfApprovedPrescriptions} / {totalPrescriptions}" },
+                                    { "Rejected Status Prescriptions ", $" {countOfRejectedPrescriptions} / {totalPrescriptions}" },
+                                    { "Requested Status Prescriptions ", $" {countOfRequestedPrescriptions} / {totalPrescriptions}" }
+                                };
+                                
+                                _logger.LogInformationKeyValuePairs("Prescriptions Status Data", kvp);
+                            }
+                        }
+                        
                         return new GetPrescriptionsResult.Success(mappedPrescriptionList, prescriptionsCount);
                     }
                     catch (Exception e)

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Office2013.Excel;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
@@ -51,7 +53,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 {
                     try
                     {
+                        var courses = coursesResponse.Body.Courses;
                         var totalCourses = coursesResponse.Body.Courses.Count();
+
+                        if (totalCourses != 0)
+                        {
+                            var mostRecentIssueCount = courses.Count(c => c.MostRecentIssueDate.HasValue);
+                            var nextIssueDateCount = courses.Count(c => c.NextIssueDate.HasValue);
+                            var reviewDateCount = courses.Count(c => c.ReviewDate.HasValue);
+                        
+                            var kvp = new Dictionary<string, string>
+                            {
+                                { "MostRecentIssueDate populated ", $" {mostRecentIssueCount} / {totalCourses}" },
+                                { "NextIssueDate populated ",  $" {nextIssueDateCount} / {totalCourses}" },
+                                { "ReviewDate populated ", $" {reviewDateCount} / {totalCourses}" }
+                            };
+
+                            _logger.LogInformationKeyValuePairs("Prescription date data logging", kvp); 
+                        }
 
                         _logger
                             .LogDebug("Filtering courses from successful emis response so we are left with only repeat courses which can be requested");

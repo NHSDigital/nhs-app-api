@@ -17,6 +17,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
 {
@@ -30,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         private EmisUserSession _emisUserSession;
         private IFixture _fixture;
         private Guid _patientId;
-        private ILogger<EmisCourseService> _logger;
+        private Mock<ILogger<EmisCourseService>> _mockLogger;
         private const string DefaultEmisVersion = "2.1.0.0";
         private static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
         private static readonly Uri BaseUri = new Uri("http://emis_base_url/");
@@ -53,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 .With(x => x.Id, _patientId)
                 .Create();
 
-            _logger = Mock.Of<ILogger<EmisCourseService>>();
+            _mockLogger = _fixture.Freeze<Mock<ILogger<EmisCourseService>>>();
 
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             
@@ -62,7 +63,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, 
                 Environment);
             _fixture.Inject(_settings);
-            _fixture.Inject(_logger);
             _systemUnderTest = _fixture.Create<EmisCourseService>();
             _sampleSuccessStatusCodes = new List<HttpStatusCode>()
             {
@@ -311,6 +311,93 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             capturedItemToMap.Courses.ElementAt(1).Name.Should().Be("b");
             capturedItemToMap.Courses.ElementAt(2).Name.Should().Be("c");
             capturedItemToMap.Courses.ElementAt(3).Name.Should().Be("d");
+        }
+        
+        [TestMethod] 
+        public async Task Get_CoursesSuccessfullyLogsOutWhetherCertainDatesArePopulated()
+        {
+            // Arrange
+            var coursesResponse = new CoursesGetResponse
+            {
+                Courses = new List<MedicationCourse>
+                {
+                    new MedicationCourse
+                    {
+                        MostRecentIssueDate = new DateTimeOffset(new DateTime(2000, 1, 2)),
+                        ReviewDate = new DateTimeOffset(new DateTime(2022, 1, 20)),
+                        NextIssueDate = new DateTimeOffset(new DateTime(2021, 5, 2)),
+                        CanBeRequested = true,
+                        PrescriptionType = PrescriptionType.Repeat,
+                        MedicationCourseGuid = Guid.NewGuid().ToString(),
+                        Name = "Course 1"
+                    },
+                    new MedicationCourse
+                    {
+                        MostRecentIssueDate = new DateTimeOffset(new DateTime(2000, 1, 2)),
+                        ReviewDate = null,
+                        NextIssueDate = new DateTimeOffset(new DateTime(2021, 5, 2)),
+                        CanBeRequested = true,
+                        PrescriptionType = PrescriptionType.Repeat,
+                        MedicationCourseGuid = Guid.NewGuid().ToString(),
+                        Name = "Course 2"
+                    },
+                    new MedicationCourse
+                    {
+                        MostRecentIssueDate = null,
+                        ReviewDate = new DateTimeOffset(new DateTime(2022, 1, 20)),
+                        NextIssueDate = new DateTimeOffset(new DateTime(2021, 5, 2)),
+                        CanBeRequested = true,
+                        PrescriptionType = PrescriptionType.Repeat,
+                        MedicationCourseGuid = Guid.NewGuid().ToString(),
+                        Name = "Course 3"
+                    },
+                    new MedicationCourse
+                    {                        
+                        MostRecentIssueDate = new DateTimeOffset(new DateTime(2000, 1, 2)),
+                        ReviewDate = new DateTimeOffset(new DateTime(2022, 1, 20)),
+                        NextIssueDate = null,
+                        CanBeRequested = true,
+                        PrescriptionType = PrescriptionType.Repeat,
+                        MedicationCourseGuid = Guid.NewGuid().ToString(),
+                        Name = "Course 4"
+                    },
+                }
+            };
+
+            _emisClient.Setup(x => x.CoursesGet(
+                    It.Is<EmisRequestParameters>(
+                        e => e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
+                             e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
+                             e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.CoursesGet, _sampleSuccessStatusCodes)
+                    {
+                        Body = coursesResponse,
+                        ExceptionErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+
+            var response = new CourseListResponse();
+            CoursesGetResponse capturedItemToMap = null;
+            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<CoursesGetResponse>())).Returns(response)
+                .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
+
+            // Act
+            var result = await _systemUnderTest.GetCourses(new GpLinkedAccountModel(_emisUserSession, _patientId));
+
+            // Assert
+
+            var getCoursesResult = (GetCoursesResult.Success) result;
+            getCoursesResult.Response.Should().Be(response);
+
+            capturedItemToMap.Courses.Should().HaveCount(4);
+            
+            var expectedLogMessage =
+                $"Prescription date data logging: MostRecentIssueDate populated = 3 / 4 " + 
+                $"NextIssueDate populated = 3 / 4 " +
+                $"ReviewDate populated = 3 / 4";
+            
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
 
         [TestMethod]

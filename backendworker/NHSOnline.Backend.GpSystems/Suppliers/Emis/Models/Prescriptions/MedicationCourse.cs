@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions
 {
@@ -17,5 +18,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions
         public IEnumerable<string> Constituents { get; set; }
 
         public bool CanBeRequested { get; set; }
+        
+        public DateTimeOffset? MostRecentIssueDate { get; set; }
+
+        public DateTimeOffset? NextIssueDate { get; set; }
+        
+        public DateTimeOffset? ReviewDate { get; set; }
     }
 }
