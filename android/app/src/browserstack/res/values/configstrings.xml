@@ -7,6 +7,9 @@
     <string name="baseApiURL">http://api.local.bitraft.io:8089/</string>
     <string name="secureFlag">disabled</string>
     <string name="nhsLoginSuffix">http://local.bitraft.io</string>
+    <string name="ersUrl">pat.dev.refer.nhs.uk</string>
+    <string name="ersUrlScheme">https</string>
+    <string name="ersUrlPath">/nhslogin</string>
     <string-array name="nhsLoginPrefixList">
         <item>stubs</item>
     </string-array>

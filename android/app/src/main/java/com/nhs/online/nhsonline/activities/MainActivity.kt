@@ -45,6 +45,10 @@ import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
 import com.nhs.online.nhsonline.utils.UrlHelper
+import com.nhs.online.nhsonline.support.intentHandlers.FirebaseMessagingIntentHandler
+import com.nhs.online.nhsonline.support.intentHandlers.IntentHandlers
+import com.nhs.online.nhsonline.support.intentHandlers.ViewIntentHandler
+import com.nhs.online.nhsonline.support.intentHandlers.FidoIntentHandler
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.biometric_layout_content.*
@@ -73,6 +77,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private lateinit var notificationsService: NotificationsService
     private lateinit var urlHelper: UrlHelper
     private lateinit var appPersistData: PersistData
+    private lateinit var intentHandlers: IntentHandlers
 
     private val headerViewSwitcherLoggedInHeaderIndex = 0
     private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
@@ -85,6 +90,12 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        intentHandlers = IntentHandlers()
+        intentHandlers.registerHandler(FirebaseMessagingIntentHandler(this))
+        intentHandlers.registerHandler(ViewIntentHandler(this))
+        intentHandlers.registerHandler(FidoIntentHandler(this))
+
 
         if (resources.getString(R.string.secureFlag) != "disabled" &&
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -150,12 +161,10 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private fun initialiseNhsWeb() {
         nhsWeb = NhsWeb(this, this, webview, notificationsService, appWebInterface, knownServices, nhsLoginLoggedInPaths)
         menuBar.nhsWeb = nhsWeb
+
         setHelpUrl(resources.getString(R.string.helpURL))
-        if (!appPersistData.getPersistedLink().isNullOrBlank()) {
-            nhsWeb.loadPersistedLink()
-        } else {
-            nhsWeb.loadWelcomePage()
-        }
+
+        nhsWeb.loadWelcomePage()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -208,7 +217,10 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             }
             lifeCycleObserver?.onMoveToForeground()
         }
-        handleNotificationIntent(intent, true)
+
+        intentHandlers.handleIntent(intent,true, nhsWeb);
+
+        lifeCycleObserver?.onMoveToForeground()
     }
 
     override fun onStop() {
@@ -273,50 +285,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intent?.let {
-            if (intent.extras?.isEmpty == false) {
-                handleNotificationIntent(intent, false)
-            } else {
-                handleNewIntentData(intent)
-            }
-        }
-    }
-
-    private fun handleNewIntentData(intent: Intent?) {
-        intent?.data?.let { uri ->
-            val uriPath = uri.path ?: ""
-
-            val hasFidoLoginError = uriPath.contains(getString(R.string.authRedirectPath)) &&
-                    biometricsInterface.isFingerprintRegistered &&
-                    uri.queryParameterNames.contains(getString(R.string.redirectErrorQueryParam))
-            if (hasFidoLoginError) {
-                Log.d(TAG, "Fido login error response url: $uri")
-                biometricsInterface.notifyLoginErrorOccurrence()
-                nhsWeb.loadWelcomePage()
-                return
-            }
-
-            val hasAppScheme = uri.scheme == getString(R.string.appScheme)
-            val url = if (hasAppScheme) uri.buildUpon()
-                    .scheme(getString(R.string.baseScheme)).toString()
-            else uri.toString()
-
-            if (hasAppScheme)
-                showBlankScreen()
-
-            nhsWeb.loadUrl(url)
-        }
-    }
-
-    private fun handleNotificationIntent(intent: Intent?, isAppClosed: Boolean) {
-        intent?.extras?.get("url")?.let {intentUrl ->
-            val url = UrlHelper(this).ensureUrlWithScheme(intentUrl.toString())
-            if (urlHelper.isSameHostAndSchemeAsHomeUrl(url.toString())) {
-                if (isAppClosed) {
-                    url?.let { appPersistData.storePersistedLink(it.toString()) }
-                } else {
-                    url?.let { nhsWeb.loadUrl(it.toString()) }
-                }
-            }
+            intentHandlers.handleIntent(intent,false, nhsWeb);
         }
     }
 

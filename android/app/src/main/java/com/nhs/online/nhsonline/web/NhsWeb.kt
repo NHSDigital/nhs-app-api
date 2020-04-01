@@ -101,7 +101,13 @@ class NhsWeb(
             showNoConnectionError()
             return
         }
-        val url = urlLoader.produceValidUrl(path)
+        var url:String
+        if (!appPersistData.getPersistedLink().isNullOrBlank()) {
+            url = loadPersistedLink()!!
+        }else{
+            url = urlLoader.produceValidUrl(path)
+        }
+
         reloadUrl = url
 
         val loginUrl = readResourceString(R.string.baseURL) + readResourceString(R.string.loginPath)
@@ -112,12 +118,14 @@ class NhsWeb(
         urlLoader.loadUrl(url, requiresFullPageLoad)
     }
 
-    fun loadPersistedLink() {
+    fun loadPersistedLink(): String? {
         val url = appPersistData.getPersistedLink().toString()
         if (!url.isNullOrBlank() && URLUtil.isValidUrl(url)) {
             appPersistData.storePersistedLink("")
-            loadUrl(url)
+            // loadUrl(url)
+            return url
         }
+        return null
     }
 
     fun setReloadPath(path: String) {
@@ -278,6 +286,10 @@ class NhsWeb(
 
     fun reloadHomepageOnBackReturn() {
         loadWelcomePage()
+        showBlankScreen()
+    }
+
+    fun showBlankScreen() {
         uiInteractor.showBlankScreen()
     }
 

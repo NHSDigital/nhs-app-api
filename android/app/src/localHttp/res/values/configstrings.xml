@@ -6,4 +6,7 @@
     <string name="baseURL">http://android.local.bitraft.io:3000/</string>
     <string name="baseApiURL">http://android.local.bitraft.io:8089/v1/</string>
     <string name="dataPreferencesBaseUrl">http://ndopapp-int1.thunderbird.service.nhs.uk/</string>
+    <string name="ersUrl">pat.dev.refer.nhs.uk</string>
+    <string name="ersUrlScheme">https</string>
+    <string name="ersUrlPath">/nhslogin</string>
 </resources>

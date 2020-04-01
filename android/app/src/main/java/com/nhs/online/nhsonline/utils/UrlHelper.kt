@@ -11,6 +11,8 @@ class UrlHelper(val context: Context) {
     private val appScheme = context.getString(R.string.appScheme)
     private val appSchemePattern = "^$appScheme://".toRegex()
     private val baseScheme = context.getString(R.string.baseScheme)
+    private val redirector =
+            context.getString(R.string.baseURL).plus(context.getString(R.string.redirectorPath))
 
     fun ensureUrlWithScheme(url: String?): URL? {
         if (url.isNullOrEmpty()) {
@@ -29,7 +31,6 @@ class UrlHelper(val context: Context) {
 
         return URL(finalUrl)
     }
-
     fun getPostRequestReloadUrl(url: String): String? {
         return when {
             url.startsWith((fetchStringResource(R.string.dataPreferencesBaseUrl))) -> fetchStringResource(
@@ -48,5 +49,13 @@ class UrlHelper(val context: Context) {
 
     private fun fetchStringResource(resourceId: Int): String {
         return context.resources.getString(resourceId)
+    }
+
+    fun ensureSchemeAndBuildRedirectorUrl(url: String?) : URL? {
+        if (ensureUrlWithScheme(url).toString() == context.getString(R.string.baseURL)) {
+           return ensureUrlWithScheme(url)
+        }
+        return URL(
+                redirector.plus(ensureUrlWithScheme(url).toString()))
     }
 }

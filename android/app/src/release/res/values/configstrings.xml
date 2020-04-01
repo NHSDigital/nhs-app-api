@@ -6,4 +6,12 @@
     <string name="nhsLoginSuffix">https://login.nhs.uk</string>
     <string name="baseApiURL">https://api.nhsapp.service.nhs.uk/</string>
     <string name="dataPreferencesBaseUrl">https://app.your-data-matters.service.nhs.uk/</string>
+    <!--
+
+        NHSO-9029 - change the claimed URL below to refer.nhs.uk
+
+    -->
+    <string name="ersUrl">pat.sa.refer.nhs.uk</string>
+    <string name="ersUrlScheme">https</string>
+    <string name="ersUrlPath">/nhslogin</string>
 </resources>

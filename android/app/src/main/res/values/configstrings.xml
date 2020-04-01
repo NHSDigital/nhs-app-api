@@ -35,6 +35,7 @@
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
     <string name="nhsLoginFidoUrl">https://uaf.ext.signin.nhs.uk/</string>
     <string name="nhsLoginSuffix">https://signin.nhs.uk</string>
+    <string name="redirectorPath">redirector?redirect_to=</string>
 
     <string name="accessToken">accessToken</string>
     <string name="fidoUsername">fidoUsername</string>
