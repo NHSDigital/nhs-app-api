@@ -18,10 +18,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
         public ServiceDefinitionController(
             IServiceDefinitionService service,
-            ILoggerFactory loggerFactory)
+            ILogger<ServiceDefinitionController> logger)
         {
             _service = service;
-            _logger = loggerFactory.CreateLogger<ServiceDefinitionController>();
+            _logger = logger;
         }
 
         [HttpGet]
@@ -103,6 +103,28 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             {
                 var visitor = new ServiceDefinitionResultVisitor();
                 var result = _service.GetProviderName(provider);
+
+                return result.Accept(visitor);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpGet]
+        [ApiVersionRoute("service-definition/{provider}/$isValid")]
+        public async Task<IActionResult> GetServiceDefinitionIsValid([FromRoute(Name = "provider")] string provider)
+        {
+            try
+            {
+                _logger.LogEnter();
+                
+                var userSession = HttpContext.GetUserSession();
+
+                var visitor = new ServiceDefinitionIsValidResultVisitor();
+                
+                var result = await _service.GetServiceDefinitionIsValid(provider, userSession);
 
                 return result.Accept(visitor);
             }

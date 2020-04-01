@@ -61,7 +61,6 @@ describe('native app', () => {
   callNative('setHelpUrl', 'helpUrl');
   callNative('showHeader');
   callNative('showHeaderSlim');
-  callNative('updateHeaderText', 'new header');
 
   describe('configureWebContext', () => {
     let result;

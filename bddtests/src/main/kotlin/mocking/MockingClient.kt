@@ -3,7 +3,7 @@ package mocking
 import config.Config
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.defaults.EmisMockDefaults
-import mocking.emis.OnlineConsultationsMappingBuilder
+import mocking.onlineConsultations.OnlineConsultationsMappingBuilder
 import mocking.emis.EmisMappingRouter
 import mocking.favicon.FaviconMappingBuilder
 import mocking.microtest.MicrotestMappingRouter

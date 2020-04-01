@@ -69,7 +69,4 @@ class OnlineConsultationsPage: HybridPageObject() {
                 "[@id='${OnlineConsultationConstants.DATE_OF_BIRTH_INPUT}-$id']", page = this).value
         Assert.assertEquals(actualText, expectedValue)
     }
-
-
-
 }

@@ -58,10 +58,10 @@ export default {
     return get('rules.prescriptions.provider')(state) === IM1_PROVIDER;
   },
   [`${GP_MEDICAL_RECORD}V1Enabled`](state) {
-    return get('rules.medicalRecord.version')(state) === 1;
+    return get('rules.medicalRecord.version')(state) === '1';
   },
   [`${GP_MEDICAL_RECORD}V2Enabled`](state) {
-    return get('rules.medicalRecord.version')(state) === 2;
+    return get('rules.medicalRecord.version')(state) === '2';
   },
   [`${GP_AT_HAND}GpMedicalRecordV2Enabled`](_, getters) {
     return getters[`${GP_MEDICAL_RECORD}V2Enabled`] && getters[`${GP_AT_HAND}MyRecordEnabled`];

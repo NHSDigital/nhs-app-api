@@ -253,13 +253,4 @@ export default {
     }
     return false;
   },
-
-  updateHeaderText(header) {
-    const app = window.nativeApp;
-    if (app && app.updateHeaderText) {
-      app.updateHeaderText(header);
-      return true;
-    }
-    return false;
-  },
 };

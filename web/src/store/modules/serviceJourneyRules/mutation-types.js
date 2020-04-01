@@ -29,7 +29,7 @@ export const initialState = () => ({
       provider: 'none',
     },
     medicalRecord: {
-      version: 1,
+      version: '1',
     },
     messaging: false,
     nominatedPharmacy: false,

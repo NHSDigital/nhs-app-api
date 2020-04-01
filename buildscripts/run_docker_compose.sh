@@ -30,6 +30,6 @@ fi
 
 generate_host_settings
 
-docker-compose "${DOCKER_COMPOSE_FILES_ARGS[@]}" down
+docker-compose "${DOCKER_COMPOSE_FILES_ARGS[@]}" down --volumes --remove-orphans
 docker-compose "${DOCKER_COMPOSE_FILES_ARGS[@]}" up
 docker-compose "${DOCKER_COMPOSE_FILES_ARGS[@]}" down

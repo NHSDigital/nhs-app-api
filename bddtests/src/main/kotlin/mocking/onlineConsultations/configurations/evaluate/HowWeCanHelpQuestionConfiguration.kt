@@ -1,6 +1,8 @@
-package mocking.onlineConsultations.configurations
+package mocking.onlineConsultations.configurations.evaluate
 
-class EmergencyConfiguration: IQuestionConfiguration {
+import mocking.onlineConsultations.configurations.IQuestionConfiguration
+
+class HowWeCanHelpQuestionConfiguration: IQuestionConfiguration {
     override val request: String = """{
        "resourceType":"Parameters",
        "parameter":[
@@ -12,6 +14,9 @@ class EmergencyConfiguration: IQuestionConfiguration {
              "name":"inputData",
              "resource":{
                 "resourceType":"QuestionnaireResponse",
+                "questionnaire":{
+                   "reference":"Questionnaire/PRE_STD_AD_EMERGENCY"
+                },
                 "status":"completed",
                 "item":[
                    {
@@ -19,19 +24,17 @@ class EmergencyConfiguration: IQuestionConfiguration {
                       "answer":[
                          {
                             "valueCoding":{
-                               "code":"PRE_STD_EMERGENCY_YES"
+                               "code":"PRE_STD_EMERGENCY_NO"
                             }
                          }
                       ]
                    }
-                ],
-                "questionnaire":{
-                   "reference":"Questionnaire/PRE_STD_AD_EMERGENCY"
-                }
+                ]
              }
           }
        ]
     }"""
+
 
     override val response: String = """{
        "resourceType":"GuidanceResponse",
@@ -42,17 +45,17 @@ class EmergencyConfiguration: IQuestionConfiguration {
              "parameter":[
                 {
                    "name":"sessionId",
-                   "valueString":"05fc67a8-3192-4e27-9ef2-850b07add991"
+                   "valueString":"f8f2c2a2-acd9-425a-b93e-cf9c21bbd512"
                 }
              ]
           },
           {
              "resourceType":"Questionnaire",
-             "id":"ADVICE_EMERGENCY",
+             "id":"Q_BRP_BRP_AD_1",
              "status":"active",
              "item":[
                 {
-                   "linkId":"ADVICE_EMERGENCY_GROUP",
+                   "linkId":"Q_BRP_BRP_AD_1_GROUP",
                    "text":"",
                    "type":"group",
                    "item":[
@@ -73,31 +76,22 @@ class EmergencyConfiguration: IQuestionConfiguration {
                                }
                             }
                          ],
-                         "linkId":"ADVICE_EMERGENCY_PREV",
+                         "linkId":"Q_BRP_BRP_AD_1_PREV",
                          "text":"",
                          "type":"boolean",
                          "required":false
                       },
                       {
-                         "linkId":"ADVICE_EMERGENCY",
-                         "text":"<div class='nhsuk-care-card nhsuk-care-card--immediate'> 
-                <div class='nhsuk-care-card__heading-container'> <h3 class='nhsuk-carecard__heading'>
-                <span role='text'> <span class='nhsuk-u-visually-hidden'>Emergency advice:</span>
-                You need medical help now. Call 999 or go to your local A&E.</span></h3> 
-                <span class='nhsuk-care-card__arrow' aria-hidden='true'></span> 
-                </div><div class='nhsuk-care-card__content'><p>If you decide to seek medical advice, 
-                <strong>your GP will not be notified and your practice will not contact you about this consultation.
-                </strong></p></div></div>",
-                         "type":"group",
-                         "required":true,
-                         "item":[
+                         "extension":[
                             {
-                               "linkId":"ADVICE_EMERGENCY_CONFIRM",
-                               "text":"End my consultation, I will seek medical advice myself instead",
-                               "type":"boolean",
-                               "required":true
+                               "url":"http://hl7.org/fhir/StructureDefinition/maxLength",
+                               "valueInteger":500
                             }
-                         ]
+                         ],
+                         "linkId":"Q_BRP_BRP_AD_1",
+                         "text":"Please tell us in a few words how we can help.",
+                         "type":"text",
+                         "required":true
                       }
                    ]
                 }
@@ -108,18 +102,18 @@ class EmergencyConfiguration: IQuestionConfiguration {
           "reference":"https://stubs.onlineconsultations/fhir/ServiceDefinition/BRP_BRP"
        },
        "status":"data-required",
-       "occurrenceDateTime":"2020-02-25T08:45:21.976",
+       "occurrenceDateTime":"2020-02-25T11:32:01.729",
        "outputParameters":{
           "reference":"#outputParams"
        },
        "dataRequirement":[
           {
-             "id":"ADVICE_EMERGENCY",
+             "id":"Q_BRP_BRP_AD_1",
              "extension":[
                 {
                    "url":"https://www.hl7.org/fhir/questionnaire.html",
                    "valueReference":{
-                      "reference":"#ADVICE_EMERGENCY"
+                      "reference":"#Q_BRP_BRP_AD_1"
                    }
                 }
              ],

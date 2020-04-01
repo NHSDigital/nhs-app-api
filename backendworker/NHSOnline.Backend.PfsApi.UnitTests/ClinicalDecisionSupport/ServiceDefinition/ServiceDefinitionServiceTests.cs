@@ -1,8 +1,10 @@
  using System;
  using System.Collections.Generic;
+ using System.Linq.Expressions;
  using System.Net;
  using System.Net.Http;
  using System.Text;
+ using System.Threading.Tasks;
  using AutoFixture;
  using AutoFixture.AutoMoq;
  using FluentAssertions;
@@ -45,6 +47,8 @@
          private Mock<IDemographicsService> _mockDemographicsService;
          private Mock<ICreateFhirParameter> _mockCreateFhirParam;
          private Mock<IEvaluateServiceDefinitionQuery> _mockEvaluateServiceDefinitionQuery;
+         private Mock<IServiceDefinitionIsValidQuery> _mockServiceDefinitionIsValidQuery;
+         private Mock<IGuidCreator> _mockGuidCreator;
 
          private const string Provider = "stubs";
          private const string ProviderName = "OLC Stubs";
@@ -54,16 +58,21 @@
          private const string ParamString =
              "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"organization\",\"resource\":{\"resourceType\":\"Organization\",\"identifier\":{\"value\":\"111111\"}}},{\"name\":\"sessionId\",\"valueString\":\"9102fb79-bc0e-465d-b2de-2a724ec876dc\"},{\"name\":\"inputData\",\"resource\":{\"resourceType\":\"QuestionnaireResponse\",\"status\":\"completed\",\"item\":[{\"linkId\":\"GLO_PRE_DISCLAIMERS\",\"answer\":[{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_1\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_2\"}},{\"valueCoding\":{\"code\":\"GLO_PRE_DISCLAIMERS_DEMOGRAPHIC\"}}]}],\"questionnaire\":{\"reference\":\"Questionnaire/GLO_PRE_DISCLAIMERS\"}}}]}";
          private const string SessionEndGuidanceResponse = "{ \"resourceType\": \"GuidanceResponse\", \"contained\": [ { \"resourceType\": \"Parameters\", \"id\": \"outputParams\", \"parameter\": [ { \"name\": \"sessionId\", \"valueString\": \"test\" } ] }, { \"resourceType\": \"OperationOutcome\", \"id\": \"outcome1\", \"issue\": [ { \"severity\": \"error\", \"code\": \"not-found\", \"details\": { \"coding\": [ { \"system\": \"https://test\", \"code\": \"SESSION_ENDED\", \"display\": \"sessionId test has already ended\" } ] } } ] } ], \"module\": { \"reference\": \"https://test/ServiceDefinition/GEC_ADM\" }, \"status\": \"failure\", \"occurrenceDateTime\": \"2019-12-02T13:38:09.403\", \"evaluationMessage\": [ { \"reference\": \"#outcome1\" } ], \"outputParameters\": { \"reference\": \"#outputParams\" } }";
+         private const string ServiceDefinitionIsValidParametersFormat = "{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"ODSCode\",\"valueString\":\"{{odsCode}}\"},{\"name\":\"requestId\",\"valueString\":\"{{requestId}}\"}]}";
+         private const string IsValidResponseFormat ="{\"resourceType\":\"Parameters\",\"parameter\":[{\"name\":\"{{name}}\",\"{{fhirType}}\":{{value}}}]}";
+         private const string InvalidIsValidResponse ="{invalid: format}";
          
-         private ServiceDefinitionService _service;
+         private readonly Guid _requestId = Guid.NewGuid();
          private DemographicsResult _demographicsResult;
+         private string _serviceDefinitionIsValidParameters;
+
+         private ServiceDefinitionService _service;
         
          [TestInitialize]
          public void TestInitialize()
          {
              _fixture = new Fixture()
-                 .Customize(new AutoMoqCustomization())
-                 .Customize(new ApiControllerAutoFixtureCustomization());
+                 .Customize(new AutoMoqCustomization());
              _mockHtmlSanitizer = new Mock<IHtmlSanitizer>();
              _mockFhirSanitizationHelper = new Mock<IFhirSanitizationHelper>();
              _mockLogger = new Mock<ILogger<ServiceDefinitionService>>();
@@ -71,12 +80,19 @@
              _mockAuditor = new Mock<IAuditor>();
              _mockCreateFhirParam = new Mock<ICreateFhirParameter>();
              _mockEvaluateServiceDefinitionQuery = new Mock<IEvaluateServiceDefinitionQuery>();
+             _mockServiceDefinitionIsValidQuery = new Mock<IServiceDefinitionIsValidQuery>();
+             _mockGuidCreator = new Mock<IGuidCreator>();
             
              _demographicsResult = new DemographicsResult.Success(_fixture.Create<DemographicsResponse>());
             
              _fixture.Customize<UserSession>(c => c
                  .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+             
              _userSession = _fixture.Create<UserSession>();
+             _mockGuidCreator.Setup(c => c.CreateGuid()).Returns(_requestId);
+             _serviceDefinitionIsValidParameters = ServiceDefinitionIsValidParametersFormat
+                 .Replace("{{odsCode}}", _userSession.GpUserSession.OdsCode, StringComparison.Ordinal)
+                 .Replace("{{requestId}}", _requestId.ToString(), StringComparison.Ordinal);
 
              _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
 
@@ -115,7 +131,9 @@
                  _mockGpSystemFactory.Object,
                  _mockCreateFhirParam.Object,
                  providersSettings,
-                 _mockEvaluateServiceDefinitionQuery.Object
+                 _mockEvaluateServiceDefinitionQuery.Object,
+                 _mockServiceDefinitionIsValidQuery.Object,
+                 _mockGuidCreator.Object
              );
          }
         
@@ -549,5 +567,187 @@
              // Assert
              _mockLogger.VerifyLogger(LogLevel.Information, $"Ending consultation with ServiceDefinition: {ServiceDefinitionId}. ODSCode: {_userSession.GpUserSession.OdsCode}", Times.Once());
          }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_WhenProviderReturnsSuccessfulResultWithValidTrue_ReturnsValidResult()
+         {
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(GetIsValidResponseContent(), Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
+
+             Expression<Func<IServiceDefinitionIsValidQuery, Task<HttpResponseMessage>>> serviceDefinitionIsValidMatch =
+                 q => q.ServiceDefinitionIsValid(Provider, _serviceDefinitionIsValidParameters);
+             
+             _mockServiceDefinitionIsValidQuery
+                 .Setup(serviceDefinitionIsValidMatch)
+                 .ReturnsAsync(httpResponse);
+
+             var response = await _service.GetServiceDefinitionIsValid(Provider, _userSession);
+             
+             response.Should().BeAssignableTo<ServiceDefinitionIsValidResult.Valid>();
+             _mockServiceDefinitionIsValidQuery.Verify(serviceDefinitionIsValidMatch, Times.Once);
+             _mockLogger.VerifyLogger(LogLevel.Information, $"$isValid requestId: {_requestId}", Times.Once());
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_WhenProviderReturnsSuccessfulResultWithValidFalse_ReturnsInvalidResult()
+         {
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(GetIsValidResponseContent(value: "false"), Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
+
+             Expression<Func<IServiceDefinitionIsValidQuery, Task<HttpResponseMessage>>> serviceDefinitionIsValidMatch =
+                 q => q.ServiceDefinitionIsValid(Provider, _serviceDefinitionIsValidParameters);
+             
+             _mockServiceDefinitionIsValidQuery
+                 .Setup(serviceDefinitionIsValidMatch)
+                 .ReturnsAsync(httpResponse);
+
+             var response = await _service.GetServiceDefinitionIsValid(Provider, _userSession);
+             
+             response.Should().BeAssignableTo<ServiceDefinitionIsValidResult.Invalid>();
+             _mockServiceDefinitionIsValidQuery.Verify(serviceDefinitionIsValidMatch, Times.Once);
+             _mockLogger.VerifyLogger(LogLevel.Information, $"$isValid requestId: {_requestId}", Times.Once());
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_WhenResponseReturnTypeIsNotBoolean_ReturnsBadGateway()
+         {
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(GetIsValidResponseContent(fhirType: "valueInteger", value: "1"), Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
+
+             Expression<Func<IServiceDefinitionIsValidQuery, Task<HttpResponseMessage>>> serviceDefinitionIsValidMatch =
+                 q => q.ServiceDefinitionIsValid(Provider, _serviceDefinitionIsValidParameters);
+             
+             _mockServiceDefinitionIsValidQuery
+                 .Setup(serviceDefinitionIsValidMatch)
+                 .ReturnsAsync(httpResponse);
+
+             var response = await _service.GetServiceDefinitionIsValid(Provider, _userSession);
+             
+             response.Should().BeAssignableTo<ServiceDefinitionIsValidResult.BadGateway>();
+             _mockServiceDefinitionIsValidQuery.Verify(serviceDefinitionIsValidMatch, Times.Once);
+             _mockLogger.VerifyLogger(LogLevel.Information, $"$isValid requestId: {_requestId}", Times.Once());
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_WhenResponseDoesNotContainReturnParameter_ReturnsBadGateway()
+         {
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(GetIsValidResponseContent("somethingElse"), Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
+
+             Expression<Func<IServiceDefinitionIsValidQuery, Task<HttpResponseMessage>>> serviceDefinitionIsValidMatch =
+                 q => q.ServiceDefinitionIsValid(Provider, _serviceDefinitionIsValidParameters);
+             
+             _mockServiceDefinitionIsValidQuery
+                 .Setup(serviceDefinitionIsValidMatch)
+                 .ReturnsAsync(httpResponse);
+
+             var response = await _service.GetServiceDefinitionIsValid(Provider, _userSession);
+             
+             response.Should().BeAssignableTo<ServiceDefinitionIsValidResult.BadGateway>();
+             _mockServiceDefinitionIsValidQuery.Verify(serviceDefinitionIsValidMatch, Times.Once);
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_WhenResponseIsNotValidParametersFormat_ReturnsBadGateway()
+         {
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = new StringContent(InvalidIsValidResponse, Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
+
+             Expression<Func<IServiceDefinitionIsValidQuery, Task<HttpResponseMessage>>> serviceDefinitionIsValidMatch =
+                 q => q.ServiceDefinitionIsValid(Provider, _serviceDefinitionIsValidParameters);
+             
+             _mockServiceDefinitionIsValidQuery
+                 .Setup(serviceDefinitionIsValidMatch)
+                 .ReturnsAsync(httpResponse);
+
+             var response = await _service.GetServiceDefinitionIsValid(Provider, _userSession);
+             
+             response.Should().BeAssignableTo<ServiceDefinitionIsValidResult.BadGateway>();
+             _mockServiceDefinitionIsValidQuery.Verify(serviceDefinitionIsValidMatch, Times.Once);
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_WhenResponseContentIsNull_ReturnsBadGateway()
+         {
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.OK,
+                 Content = null
+             };
+
+             Expression<Func<IServiceDefinitionIsValidQuery, Task<HttpResponseMessage>>> serviceDefinitionIsValidMatch =
+                 q => q.ServiceDefinitionIsValid(Provider, _serviceDefinitionIsValidParameters);
+             
+             _mockServiceDefinitionIsValidQuery
+                 .Setup(serviceDefinitionIsValidMatch)
+                 .ReturnsAsync(httpResponse);
+
+             var response = await _service.GetServiceDefinitionIsValid(Provider, _userSession);
+             
+             response.Should().BeAssignableTo<ServiceDefinitionIsValidResult.BadGateway>();
+             _mockServiceDefinitionIsValidQuery.Verify(serviceDefinitionIsValidMatch, Times.Once);
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_WhenResponseHasUnsuccessfulStatusCode_ReturnsBadGateway()
+         {
+             var httpResponse = new HttpResponseMessage
+             {
+                 StatusCode = HttpStatusCode.InternalServerError,
+                 Content = new StringContent(GetIsValidResponseContent(), Encoding.UTF8, Constants.ContentTypes.ApplicationJsonFhir)
+             };
+
+             Expression<Func<IServiceDefinitionIsValidQuery, Task<HttpResponseMessage>>> serviceDefinitionIsValidMatch =
+                 q => q.ServiceDefinitionIsValid(Provider, _serviceDefinitionIsValidParameters);
+             
+             _mockServiceDefinitionIsValidQuery
+                 .Setup(serviceDefinitionIsValidMatch)
+                 .ReturnsAsync(httpResponse);
+
+             var response = await _service.GetServiceDefinitionIsValid(Provider, _userSession);
+             
+             response.Should().BeAssignableTo<ServiceDefinitionIsValidResult.BadGateway>();
+             _mockServiceDefinitionIsValidQuery.Verify(serviceDefinitionIsValidMatch, Times.Once);
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_WhenQueryThrowsHttpRequestException_ReturnsBadRequest()
+         {
+             Expression<Func<IServiceDefinitionIsValidQuery, Task<HttpResponseMessage>>> serviceDefinitionIsValidMatch =
+                 q => q.ServiceDefinitionIsValid(Provider, _serviceDefinitionIsValidParameters);
+             
+             _mockServiceDefinitionIsValidQuery
+                 .Setup(serviceDefinitionIsValidMatch)
+                 .Throws(new HttpRequestException());
+
+             var response = await _service.GetServiceDefinitionIsValid(Provider, _userSession);
+             
+             response.Should().BeAssignableTo<ServiceDefinitionIsValidResult.BadRequest>();
+             _mockServiceDefinitionIsValidQuery.Verify(serviceDefinitionIsValidMatch, Times.Once);
+         }
+
+         private static string GetIsValidResponseContent(
+             string name = "return",
+             string fhirType = "valueBoolean",
+             string value = "true") =>
+             IsValidResponseFormat
+                 .Replace("{{name}}", name, StringComparison.Ordinal)
+                 .Replace("{{fhirType}}", fhirType, StringComparison.Ordinal)
+                 .Replace("{{value}}", value, StringComparison.Ordinal);
      }
  }

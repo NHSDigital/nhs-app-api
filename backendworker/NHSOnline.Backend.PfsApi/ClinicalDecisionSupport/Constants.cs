@@ -5,6 +5,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport
         public static class CdsApiEndpoints
         {
             public const string EvaluateServiceDefinitionPathFormat = "fhir/ServiceDefinition/{0}/$evaluate";
+            public const string ServiceDefinitionIsValidPath = "fhir/ServiceDefinition/$isValid";
         }
 
         public static class ContentTypes

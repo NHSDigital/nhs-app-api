@@ -25,10 +25,11 @@ import {
   SET_ADVICE_PROVIDER_NAME,
   SET_CONDITIONS_LIST,
   SET_JOURNEY_INFO,
+  SET_IS_AVAILABLE,
 } from './mutation-types';
 
 export default {
-  [CLEAR](state, clearDemographicsConsent) {
+  [CLEAR](state, clearAll) {
     state.sessionId = undefined;
     state.status = undefined;
     state.dataRequirements = undefined;
@@ -52,10 +53,11 @@ export default {
     state.additionalValue = undefined;
     state.latestAdditionalValue = undefined;
     state.conditionsList = undefined;
-    if (clearDemographicsConsent) {
+    if (clearAll) {
       state.gpAdviceServiceDefinitionId = undefined;
       state.demographicsConsentGiven = false;
       state.demographicsQuestionAnswered = false;
+      state.available = undefined;
     }
   },
   [SET_SESSION_ID](state, sessionId) {
@@ -139,5 +141,8 @@ export default {
   },
   [SET_JOURNEY_INFO](state, journeyInfo) {
     state.journeyInfo = journeyInfo;
+  },
+  [SET_IS_AVAILABLE](state, available) {
+    state.available = available;
   },
 };

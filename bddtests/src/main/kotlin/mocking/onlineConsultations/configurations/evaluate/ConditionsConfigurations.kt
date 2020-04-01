@@ -1,4 +1,6 @@
-package mocking.onlineConsultations.configurations
+package mocking.onlineConsultations.configurations.evaluate
+
+import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
 class ConditionsConfigurations: IQuestionConfiguration {
 

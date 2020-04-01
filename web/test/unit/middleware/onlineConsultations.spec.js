@@ -28,7 +28,7 @@ describe('middleware/onlineConsultations', () => {
               provider: 'none',
             },
             medicalRecord: {
-              version: 1,
+              version: '1',
             },
             messaging: false,
             nominatedPharmacy: false,

@@ -51,3 +51,19 @@ Scenario: A user can end their online consultation journey and go back to the ho
   And I click the end my consultation button
   Then I see the home page
 
+Scenario: A user sees an appropriate error when the online consultation provider is switched off
+  Given I am logged in as a EMIS user with no linked profiles
+  And I have access to online consultations gp advice journey and it is switched off
+  And I have no booked appointments for EMIS
+  And I click on the Appointments link on the header
+  And I click the GP Appointments link
+  When I select "Book an appointment" button
+  Then I am on the Appointments Guidance page
+  When I select the GP Advice menu item on the guidance page
+  Then I see the online consultations unavailable message for gp advice
+  And I click on the Appointments link on the header
+  And I click the GP Appointments link
+  When I select "Book an appointment" button
+  Then I am on the Appointments Guidance page
+  When I select the GP Admin menu item on the guidance page
+  Then I see the online consultations unavailable message for admin help

@@ -121,6 +121,7 @@ function setPageTitle(route, store, app) {
     title = app.i18n.tc(route.meta.pageTitleKey, null, route.meta.formatArguments);
   }
 
+  store.dispatch('header/updateHeaderCaption', '');
   store.dispatch('header/updateHeaderText', header);
   store.dispatch('pageTitle/updatePageTitle', title);
 }

@@ -37,6 +37,7 @@
         <div class="nhsuk-grid-row">
           <div id="page-title-container" class="nhsuk-grid-column-two-thirds">
             <page-title v-if="showContentHeader"
+                        :caption="$store.state.header.headerCaption"
                         :title-key="$store.state.header.headerText"
                         :should-show-desktop-version="showHeader">
               {{ $store.state.header.headerText }}

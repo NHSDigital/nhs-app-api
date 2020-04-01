@@ -1,30 +1,29 @@
-package mocking.onlineConsultations.configurations
+package mocking.onlineConsultations.configurations.evaluate
 
-import utils.SerenityHelpers
+import mocking.onlineConsultations.configurations.IQuestionConfiguration
 
-class DOBQuestionConfiguration: IQuestionConfiguration {
-    private val patientDateOfBirth = SerenityHelpers.getPatient().dateOfBirth
+class QuantityQuestionConfiguration: IQuestionConfiguration {
     override val request: String = """{
        "resourceType":"Parameters",
        "parameter":[
           {
              "name":"sessionId",
-             "valueString":"f8f2c2a2-acd9-425a-b93e-cf9c21bbd512"
+             "valueString":"1"
           },
           {
              "name":"inputData",
              "resource":{
                 "resourceType":"QuestionnaireResponse",
                 "questionnaire":{
-                   "reference":"Questionnaire/Q_BRP_BRP_AD_1"
+                   "reference":"Questionnaire/NHS_ADMIN_AD_REFERRALPAINORIGIN"
                 },
                 "status":"completed",
                 "item":[
                    {
-                      "linkId":"Q_BRP_BRP_AD_1",
+                      "linkId":"NHS_ADMIN_AD_REFERRALPAINORIGIN",
                       "answer":[
                          {
-                            "valueString":"I need medication for my sore throat"
+                            "valueString":"Point:155,80"
                          }
                       ]
                    }
@@ -43,18 +42,17 @@ class DOBQuestionConfiguration: IQuestionConfiguration {
              "parameter":[
                 {
                    "name":"sessionId",
-                   "valueString":"4ea9390f-f6f2-410b-8d46-39b37a6a1753"
+                   "valueString":"1"
                 }
              ]
           },
           {
              "resourceType":"Questionnaire",
-             "id":"PRE_STD_AD_DOB",
+             "id":"NHS_ADMIN_AD_REFERRALPAINDURATION",
              "status":"active",
              "item":[
                 {
-                   "linkId":"PRE_STD_AD_DOB_GROUP",
-                   "text":"",
+                   "linkId":"NHS_ADMIN_AD_REFERRALPAINDURATION_GROUP",
                    "type":"group",
                    "item":[
                       {
@@ -62,7 +60,7 @@ class DOBQuestionConfiguration: IQuestionConfiguration {
                             {
                                "url":"http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
                                "valueCodeableConcept":{
-                                  "id":"backButton",
+                                  "id":"codeableConcept",
                                   "coding":[
                                      {
                                         "system":"http://hl7.org/fhir/ValueSet/questionnaire-item-control",
@@ -74,70 +72,49 @@ class DOBQuestionConfiguration: IQuestionConfiguration {
                                }
                             }
                          ],
-                         "linkId":"PRE_STD_AD_DOB_PREV",
-                         "text":"",
+                         "linkId":"NHS_ADMIN_AD_REFERRALPAINDURATION_PREV",
                          "type":"boolean",
                          "required":false
                       },
                       {
+                         "linkId":"NHS_ADMIN_AD_REFERRALPAINDURATION",
+                         "text":"How long does the pain persist for once felt?",
+                         "type":"quantity",
+                         "required":false,
+                         "repeats":false,
                          "extension":[
                             {
-                               "url":"http://hl7.org/fhir/StructureDefinition/minValue",
-                               "valueDate":"1894-02-26"
-                            },
-                            {
-                               "url":"http://hl7.org/fhir/StructureDefinition/maxValue",
-                               "valueDate":"2002-02-25"
-                            },
-                            {
-                               "url":"http://hl7.org/fhir/StructureDefinition/entryFormat",
-                               "valueString":"You must be between 18 and 125 years old in order to 
-                                    complete this request"
+                               "url":"http://hl7.org/fhir/StructureDefinition/questionnaire-unit",
+                               "valueCoding":{
+                                  "system":"http://unitsofmeasure.org",
+                                  "code":"m",
+                                  "display":"mins"
+                               }
                             }
-                         ],
-                         "linkId":"PRE_STD_AD_DOB",
-                         "text":"Tell us your date of birth",
-                         "type":"date",
-                         "required":true
-                      }
-                   ]
-                }
-             ]
-          },
-          {
-             "resourceType":"QuestionnaireResponse",
-             "questionnaire":{
-                "reference":"Questionnaire/PRE_STD_AD_DOB"
-             },
-             "status":"completed",
-             "item":[
-                {
-                   "linkId":"PRE_STD_AD_DOB",
-                   "answer":[
-                      {
-                         "valueDate":"$patientDateOfBirth"
+                         ]
                       }
                    ]
                 }
              ]
           }
        ],
+       "requestId":"1",
        "module":{
           "reference":"https://stubs.onlineconsultations/fhir/ServiceDefinition/BRP_BRP"
        },
        "status":"data-required",
-       "occurrenceDateTime":"2020-02-25T12:38:00.885",
+       "occurrenceDateTime":"2019-05-23T11:18:04.864",
        "outputParameters":{
           "reference":"#outputParams"
        },
        "dataRequirement":[
           {
-             "id":"PRE_STD_AD_DOB",
+             "id":"NHS_ADMIN_AD_REFERRALPAINDURATION",
              "extension":[
                 {
                    "url":"https://www.hl7.org/fhir/questionnaire.html",
                    "valueReference":{
-                      "reference":"#PRE_STD_AD_DOB"
+                      "reference":"#NHS_ADMIN_AD_REFERRALPAINDURATION"
                    }
                 }
              ],

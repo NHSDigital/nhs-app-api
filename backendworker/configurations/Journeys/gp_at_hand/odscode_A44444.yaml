@@ -6,6 +6,6 @@ journeys:
     provider: gpAtHand
   medicalRecord:
     provider: gpAtHand
-    version: 1
+    version: "1"
   prescriptions:
     provider: gpAtHand

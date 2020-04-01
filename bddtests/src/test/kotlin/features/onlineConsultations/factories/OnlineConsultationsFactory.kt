@@ -1,13 +1,16 @@
 package features.onlineConsultations.factories
 
 import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
-import mocking.emis.OnlineConsultationsMappingBuilder
+import mocking.onlineConsultations.OnlineConsultationsMappingBuilder
 
 class OnlineConsultationsFactory {
 
    private val onlineConsultationsMappingBuilder = OnlineConsultationsMappingBuilder()
 
     fun setupOnlineConsultationsData() {
+        mockingClient.forOnlineConsultations {
+            onlineConsultationsMappingBuilder.isValidRequest().respondWithSuccess()
+        }
         mockingClient.forOnlineConsultations {
             onlineConsultationsMappingBuilder.termsAndConditionsRequest().respondWithSuccess()
         }
@@ -32,6 +35,9 @@ class OnlineConsultationsFactory {
     }
 
     fun setupOnlineConsultationsDataNonEmergency() {
+        mockingClient.forOnlineConsultations {
+            onlineConsultationsMappingBuilder.isValidRequest().respondWithSuccess()
+        }
         mockingClient.forOnlineConsultations {
             onlineConsultationsMappingBuilder.termsAndConditionsRequest().respondWithSuccess()
         }
@@ -64,6 +70,12 @@ class OnlineConsultationsFactory {
         }
         mockingClient.forOnlineConsultations {
             onlineConsultationsMappingBuilder.carePlan().respondWithSuccess()
+        }
+    }
+
+    fun setupOnlineConsultationsDataIsNotValid() {
+        mockingClient.forOnlineConsultations {
+            onlineConsultationsMappingBuilder.isValidRequest(false).respondWithSuccess()
         }
     }
 }

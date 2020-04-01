@@ -13,12 +13,17 @@ describe('Admin Help page', () => {
   let getters;
   const dispatch = jest.fn(() => Promise.resolve());
   const redirect = jest.fn();
+  const tc = jest.fn();
 
   const $store = {
-    app: { $env: { PRIVACY_POLICY_URL: 'www.google.co.uk' } },
+    app: {
+      $env: { PRIVACY_POLICY_URL: 'www.google.co.uk' },
+      i18n: { tc },
+    },
     state: {
       device: { isNativeApp: true },
       onlineConsultations: {
+        available: true,
         adminProviderName: 'eConsult Health Ltd',
       },
       serviceJourneyRules: {
@@ -36,9 +41,10 @@ describe('Admin Help page', () => {
     desktopWeb: 'desktopWeb',
   };
 
-  const mountPage = ({ stubDemographicsQuestion = true } = {}) => {
+  const mountPage = ({ stubDemographicsQuestion = true, available = true } = {}) => {
     const stubs = {
       orchestrator: '<div class="orchestrator"></div>',
+      'online-consultations-unavailable': '<div class="online-consultations-unavailable"></div>',
       'page-title': '<div></div>',
     };
 
@@ -50,6 +56,7 @@ describe('Admin Help page', () => {
       data: () => ({
         provider: 'stubs',
         serviceDefinitionId: 'NHS_ADMIN',
+        available,
       }),
       $store,
       $style,
@@ -63,6 +70,7 @@ describe('Admin Help page', () => {
   beforeEach(() => {
     dispatch.mockClear();
     redirect.mockClear();
+    tc.mockClear();
   });
 
   describe('computed properties', () => {
@@ -109,27 +117,64 @@ describe('Admin Help page', () => {
 
   describe('asyncData', () => {
     let req = {};
-    describe('with online consultations enabled', () => {
-      each([
-        'stubs',
-      ]).it('should not redirect to logged in home page', async (provider) => {
-        $store.state.serviceJourneyRules.rules.cdssAdmin.provider = provider;
+    mountPage();
+
+    describe('state onlineConsultations.available is false', () => {
+      it('will update header text/caption and return available false', async () => {
         // Arrange
-        mountPage();
+        const expectedResult = { available: false };
+        $store.state.onlineConsultations.available = false;
+
+        tc.mockImplementation((key) => {
+          switch (key) {
+            case 'appointments.admin_help.unavailable.header':
+              return 'admin help unavailable header';
+            case 'appointments.admin_help.unavailable.headerCaption':
+              return 'admin help unavailable header caption';
+            default:
+              return undefined;
+          }
+        });
 
         // Act
-        await page.vm.$options.asyncData({ store: $store, redirect });
+        const result = await page.vm.$options.asyncData({ store: $store, req });
 
         // Assert
-        expect(redirect).toHaveBeenCalledTimes(0);
+        expect(result).toEqual(expectedResult);
+        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/serviceDefinitionIsValid', 'stubs');
+        expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'admin help unavailable header');
+        expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderCaption', 'admin help unavailable header caption');
       });
     });
+
+    describe('state onlineConsultations.available is true', () => {
+      it('will not update header text/caption and return available true', async () => {
+        // Arrange
+        const expectedResult = {
+          provider: 'stubs',
+          serviceDefinitionId: 'NHS_ADMIN',
+          addJavascriptDisabledHeader: false,
+          available: true,
+        };
+        $store.state.onlineConsultations.available = true;
+
+        // Act
+        const result = await page.vm.$options.asyncData({ store: $store, req });
+
+        // Assert
+        expect(result).toEqual(expectedResult);
+        expect($store.dispatch).toHaveBeenCalledWith('onlineConsultations/serviceDefinitionIsValid', 'stubs');
+        expect($store.app.i18n.tc).not.toHaveBeenCalled();
+      });
+    });
+
     it('should return provider and serviceDefinitionId from SJR rules store', async () => {
       // Arrange
       const expectedResult = {
         provider: 'stubs',
         serviceDefinitionId: 'NHS_ADMIN',
         addJavascriptDisabledHeader: false,
+        available: true,
       };
 
       // Act
@@ -285,9 +330,26 @@ describe('Admin Help page', () => {
     });
   });
   describe('template', () => {
+    describe('online consultations unavailable message', () => {
+      each([true, false]).it('should appear only if available is false', (available) => {
+        // Act
+        mountPage({ available });
+
+        // Assert
+        expect(page.find('div.online-consultations-unavailable').exists()).toBe(!available);
+      });
+    });
     describe('error dialog', () => {
       afterAll(() => {
         $store.state.onlineConsultations.error = false;
+      });
+      it('should not appear is available is false', () => {
+        // Act
+        mountPage({ available: false });
+
+        // Assert
+        expect(page.find('[data-purpose=error-heading]').exists()).toBe(false);
+        expect(page.find('[data-purpose=reason-error]').exists()).toBe(false);
       });
       it('should not appear if onlineConsultations error state is false', () => {
         // Arrange
@@ -327,6 +389,13 @@ describe('Admin Help page', () => {
       });
     });
     describe('demographicsQuestion', () => {
+      it('should not appear is available is false', () => {
+        // Act
+        mountPage({ available: false });
+
+        // Assert
+        expect(page.find('div.demographicsQuestion').exists()).toBe(false);
+      });
       each([
         true,
         false,
@@ -367,7 +436,14 @@ describe('Admin Help page', () => {
       });
     });
     describe('orchestrator', () => {
-      it('should appear if onlineConsultations errori state is false and demographics question answered', () => {
+      it('should not appear is available is false', () => {
+        // Act
+        mountPage({ available: false });
+
+        // Assert
+        expect(page.find('div.orchestrator').exists()).toBe(false);
+      });
+      it('should appear if onlineConsultations error state is false and demographics question answered', () => {
         // Arrange
         $store.state.onlineConsultations.error = false;
         $store.state.onlineConsultations.demographicsQuestionAnswered = true;

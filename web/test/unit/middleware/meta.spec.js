@@ -103,4 +103,8 @@ describe('tests for meta.js', () => {
   it('will dispatch `availableAppointments/clearError`', () => {
     expect(store.dispatch).toBeCalledWith('availableAppointments/clearError');
   });
+
+  it('will clear header caption', () => {
+    expect(store.dispatch).toHaveBeenCalledWith('header/updateHeaderCaption', '');
+  });
 });

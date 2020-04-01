@@ -26,6 +26,7 @@ import {
   SET_ADVICE_PROVIDER_NAME,
   SET_CONDITIONS_LIST,
   SET_JOURNEY_INFO,
+  SET_IS_AVAILABLE,
 } from './mutation-types';
 import {
   getDataRequirements,
@@ -48,8 +49,8 @@ const showError = (store) => {
 };
 
 export default {
-  clear({ commit }, clearDemographicsConsent) {
-    commit(CLEAR, clearDemographicsConsent);
+  clear({ commit }, clearAll) {
+    commit(CLEAR, clearAll);
   },
   async setProviderNames({ commit }, { adminProviderName, adviceProviderName }) {
     if (adminProviderName !== 'none') {
@@ -206,6 +207,31 @@ export default {
         showError(store);
       }
     });
+  },
+  /* eslint-disable prefer-destructuring */
+  async serviceDefinitionIsValid({ commit }, provider) {
+    let response;
+    let isAvailable;
+
+    try {
+      response = await this.app.$http.getV1ServiceDefinitionByProviderIsValid({
+        provider,
+        returnResponse: true,
+      });
+    } catch (error) {
+      // client side throws error instead of returning response with non 200 status code
+      response = error.response;
+    }
+
+    if (response) {
+      if (response.status === 580) {
+        isAvailable = false;
+      } else if (response.status === 204) {
+        isAvailable = true;
+      }
+    }
+
+    commit(SET_IS_AVAILABLE, isAvailable);
   },
   setAnswer({ commit }, answer) {
     commit(SET_ANSWER, answer);

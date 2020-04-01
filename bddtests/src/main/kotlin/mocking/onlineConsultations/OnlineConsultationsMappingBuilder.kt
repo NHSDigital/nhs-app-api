@@ -1,26 +1,26 @@
-package mocking.emis
-
+package mocking.onlineConsultations
 
 import mocking.MappingBuilder
-import mocking.onlineConsultations.EvaluateServiceDefinitionBuilder
-import mocking.onlineConsultations.configurations.ConditionsConfigurations
-import mocking.onlineConsultations.configurations.DOBQuestionConfiguration
-import mocking.onlineConsultations.configurations.EmergencyConfiguration
-import mocking.onlineConsultations.configurations.EmergencyCarePlanConfiguration
-import mocking.onlineConsultations.configurations.HowWeCanHelpQuestionConfiguration
-import mocking.onlineConsultations.configurations.PainOriginQuestionConfiguration
-import mocking.onlineConsultations.configurations.GenderQuestionConfiguration
-import mocking.onlineConsultations.configurations.SelfOrChildConfiguration
-import mocking.onlineConsultations.configurations.AlcoholQuestionConfiguration
-import mocking.onlineConsultations.configurations.CarePlanConfiguration
+import mocking.onlineConsultations.configurations.evaluate.ConditionsConfigurations
+import mocking.onlineConsultations.configurations.evaluate.DOBQuestionConfiguration
+import mocking.onlineConsultations.configurations.evaluate.EmergencyConfiguration
+import mocking.onlineConsultations.configurations.evaluate.EmergencyCarePlanConfiguration
+import mocking.onlineConsultations.configurations.evaluate.HowWeCanHelpQuestionConfiguration
+import mocking.onlineConsultations.configurations.evaluate.PainOriginQuestionConfiguration
+import mocking.onlineConsultations.configurations.evaluate.GenderQuestionConfiguration
+import mocking.onlineConsultations.configurations.evaluate.SelfOrChildConfiguration
+import mocking.onlineConsultations.configurations.evaluate.AlcoholQuestionConfiguration
+import mocking.onlineConsultations.configurations.evaluate.CarePlanConfiguration
 import mocking.onlineConsultations.configurations.IQuestionConfiguration
-import mocking.onlineConsultations.configurations.QuantityQuestionConfiguration
-import mocking.onlineConsultations.configurations.TermsAndConditionsQuestionConfigurationI
-import mocking.onlineConsultations.configurations.UrgencyQuestionConfiguration
+import mocking.onlineConsultations.configurations.evaluate.QuantityQuestionConfiguration
+import mocking.onlineConsultations.configurations.evaluate.TermsAndConditionsQuestionConfigurationI
+import mocking.onlineConsultations.configurations.evaluate.UrgencyQuestionConfiguration
 import mocking.onlineConsultations.constants.OnlineConsultationConstants
 
 open class OnlineConsultationsMappingBuilder(method: String = "POST", relativePath: String = "")
     : MappingBuilder(method, relativePath) {
+
+    fun isValidRequest(isValid: Boolean = true) = IsValidServiceDefinitionBuilder(isValid)
 
     fun termsAndConditionsRequest() = setUpRequest(
             serviceDefinitionId = OnlineConsultationConstants.CONDITION_LIST,
@@ -48,7 +48,7 @@ open class OnlineConsultationsMappingBuilder(method: String = "POST", relativePa
 
     fun imageQuestion() = setUpRequest(configuration = PainOriginQuestionConfiguration())
 
-    fun quantityQuestion() = setUpRequest( configuration = QuantityQuestionConfiguration())
+    fun quantityQuestion() = setUpRequest(configuration = QuantityQuestionConfiguration())
 
     fun carePlan() = setUpRequest(configuration = CarePlanConfiguration())
 

@@ -6158,12 +6158,55 @@
               type: "string"
         responses: 
           200: 
-            description: "successful return of the conditions list"
+            description: "successful return of the provider name"
             content: 
-              application/json: 
+              text/plain: 
                 schema: 
                   type: "string"
                   description: "provider name"
           404: 
             description: "provider name was not found in the configuration"
+    /v1/service-definition/{provider}/$isValid: 
+      get: 
+        x-area: "olc"
+        summary: "Indicates whether online consultations are available for the user with this provider"
+        description: "Indicates whether online consultations are available for the user with this provider"
+        parameters: 
+          - 
+            in: "path"
+            name: "provider"
+            description: "online consultations provider"
+            required: true
+            schema: 
+              type: "string"
+          - 
+            in: "header"
+            name: "Accept"
+            required: true
+            description: "must be application/json"
+            schema: 
+              type: "string"
+          - 
+            in: "header"
+            name: "NHSO-Native-Version-Tag"
+            required: true
+            description: "Version tag."
+            schema: 
+              type: "string"
+          - 
+            in: "header"
+            name: "X-CSRF-TOKEN"
+            required: true
+            description: "token sent with the request"
+            schema: 
+              type: "string"
+        responses: 
+          204: 
+            description: "Service definitions for the given provider are available"
+          400: 
+            description: "There was an error sending the request to the upstream system"
+          502: 
+            description: "Invalid or unsuccessful response received from upstream system"
+          580: 
+            description: "Service definitions for the given provider are unavailable"
 

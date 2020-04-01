@@ -33,6 +33,10 @@ class RequestBuilder internal constructor(private val method: String, private va
         return this
     }
 
+    fun andBodyMatchingJsonPath(jsonPath: String): RequestBuilder {
+        return andBody(jsonPath, "matchesJsonPath")
+    }
+
     fun andQueryParameter(name: String, value: String, condition: String = "equalTo"): RequestBuilder {
         queryParameters[name] = mapOf(Pair(condition, value))
         return this

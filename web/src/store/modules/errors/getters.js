@@ -10,7 +10,7 @@ export default {
 
     const { status } = state.apiErrors[0];
 
-    return status >= 500 || state.pageSettings.ignoredErrors.indexOf(status) === -1;
+    return state.pageSettings.ignoredErrors.indexOf(status) === -1;
   },
   isStandardError(state) {
     return state.apiErrors.length > 0 &&

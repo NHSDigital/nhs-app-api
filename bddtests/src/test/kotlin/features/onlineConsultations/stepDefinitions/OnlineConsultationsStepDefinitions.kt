@@ -4,17 +4,16 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.onlineConsultations.factories.OnlineConsultationsFactory
 import mocking.onlineConsultations.constants.OnlineConsultationConstants
-import net.thucydides.core.annotations.Steps
 import pages.onlineConsultations.OnlineConsultationsPage
+import pages.onlineConsultations.OnlineConsultationsUnavailablePage
 import utils.SerenityHelpers
 
 
 open class OnlineConsultationsStepDefinitions {
 
-    @Steps
-    private val onlineConsultationsPage = OnlineConsultationsPage()
+    private lateinit var onlineConsultationsPage: OnlineConsultationsPage
+    private lateinit var onlineConsultationsUnavailablePage: OnlineConsultationsUnavailablePage
 
-    @Steps
     private val onlineConsultationsFactory = OnlineConsultationsFactory()
 
     @Given("^I have access to online consultations gp advice journey and it is an emergency$")
@@ -25,6 +24,11 @@ open class OnlineConsultationsStepDefinitions {
     @Given("^I have access to online consultations gp advice journey and it is not an emergency$")
     fun iHaveAccessToOnlineConsultationsNonEmergency() {
         onlineConsultationsFactory.setupOnlineConsultationsDataNonEmergency()
+    }
+
+    @Given("^I have access to online consultations gp advice journey and it is switched off$")
+    fun iHaveAccessToOnlineConsultationsAndItIsSwitchedOff() {
+        onlineConsultationsFactory.setupOnlineConsultationsDataIsNotValid()
     }
 
     @When("^I accept demographics and terms and conditions question$")
@@ -109,6 +113,11 @@ open class OnlineConsultationsStepDefinitions {
         onlineConsultationsPage.iSeeACarePlan()
     }
 
+    @Then("^I see the online consultations unavailable message for (gp advice|admin help)$")
+    fun iSeeTheOnlineConsultationsSwitchedOffErrorMessages(journey: String) {
+        onlineConsultationsUnavailablePage.assertIsVisible(journey == "gp advice")
+    }
+
     private fun answerQuestionAndContinue(elementType: String = "input", elementId: String){
         onlineConsultationsPage.clickFormElement(elementType, elementId)
         continueClicked()
@@ -117,5 +126,4 @@ open class OnlineConsultationsStepDefinitions {
     private fun continueClicked() {
         onlineConsultationsPage.clickFormElement("button", OnlineConsultationConstants.CONTINUE_BUTTON)
     }
-
 }

@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .AppointmentProvider(AppointmentsProvider.gpAtHand)
                             .CdssAdviceProvider(CdssProvider.eConsult, "adviceDefinition")
                             .CdssAdminProvider(CdssProvider.none)
-                            .MedicalRecord(MedicalRecordProvider.gpAtHand, 2)
+                            .MedicalRecord(MedicalRecordProvider.gpAtHand, "2")
                             .Prescriptions(PrescriptionsProvider.im1)
                             .NominatedPharmacyEnabled(false)
                             .NotificationsEnabled(false)

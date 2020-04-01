@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -35,6 +36,8 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private readonly ICreateFhirParameter _createFhirParameter;
         private readonly OnlineConsultationsProvidersSettings _olcProvidersSettings;
         private readonly IEvaluateServiceDefinitionQuery _evaluateServiceDefinitionQuery;
+        private readonly IServiceDefinitionIsValidQuery _serviceDefinitionIsValidQuery;
+        private readonly IGuidCreator _guidCreator;
 
         public ServiceDefinitionService(
             ILogger<ServiceDefinitionService> logger,
@@ -45,11 +48,14 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             IGpSystemFactory gpSystemFactory,
             ICreateFhirParameter createFhirParameter,
             OnlineConsultationsProvidersSettings olcProvidersSettings,
-            IEvaluateServiceDefinitionQuery evaluateServiceDefinitionQuery)
+            IEvaluateServiceDefinitionQuery evaluateServiceDefinitionQuery,
+            IServiceDefinitionIsValidQuery serviceDefinitionIsValidQuery,
+            IGuidCreator guidCreator)
         {
             _logger = logger;
             _htmlSanitizer = htmlSanitizer;
             _fhirSanitizationHelper = fhirSanitizationHelper;
+            _guidCreator = guidCreator;
 
             _serializer = new FhirJsonSerializer();
             _parser = new FhirJsonParser();
@@ -63,6 +69,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
             _olcProvidersSettings = olcProvidersSettings;
             _evaluateServiceDefinitionQuery = evaluateServiceDefinitionQuery;
+            _serviceDefinitionIsValidQuery = serviceDefinitionIsValidQuery;
         }
 
         public async Task<ServiceDefinitionResult> GetServiceDefinitionById(string providerKey,
@@ -170,6 +177,109 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             }
         }
 
+        public async Task<ServiceDefinitionIsValidResult> GetServiceDefinitionIsValid(string providerKey, UserSession userSession)
+        {
+            try
+            {
+                _logger.LogEnter();
+                
+                var odsCode = userSession.GpUserSession.OdsCode;
+                
+                _logger.LogInformation($"Checking if online consultations are enabled for practice: {odsCode}");
+
+                var requestId = _guidCreator.CreateGuid().ToString();
+                
+                _logger.LogInformation($"$isValid requestId: {requestId}");
+                
+                var parameters = new Parameters
+                {
+                    Parameter = new List<Parameters.ParameterComponent>
+                    {
+                        new Parameters.ParameterComponent
+                        {
+                            Name = "ODSCode",
+                            Value = new FhirString(odsCode)
+                        },
+                        new Parameters.ParameterComponent
+                        {
+                            Name = "requestId",
+                            Value = new FhirString(requestId)
+                        }
+                    }
+                };
+                
+                return await SendIsValidQueryAndHandleResponse(
+                    providerKey,
+                    _serializer.SerializeToString(parameters));
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private async Task<ServiceDefinitionIsValidResult> SendIsValidQueryAndHandleResponse(
+            string providerKey,
+            string requestBody)
+        {
+            HttpResponseMessage responseMessage;
+            Parameters parameters;
+
+            try
+            {
+                responseMessage = await _serviceDefinitionIsValidQuery.ServiceDefinitionIsValid(
+                    providerKey,
+                    requestBody);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Error sending request to provider");
+
+                return new ServiceDefinitionIsValidResult.BadRequest();
+            }
+
+            if (!responseMessage.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Provider responded with status code: {responseMessage.StatusCode}");
+                
+                return new ServiceDefinitionIsValidResult.BadGateway();
+            }
+
+            var stringResponse = responseMessage.Content?.ReadAsStringAsync().Result;
+
+            try
+            {
+                parameters = _parser.Parse<Parameters>(stringResponse);
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(e, "Received null content from provider");
+
+                return new ServiceDefinitionIsValidResult.BadGateway();
+            }
+            catch (FormatException e)
+            {
+                _logger.LogError(e, "Failed to parse parameters response");
+
+                return new ServiceDefinitionIsValidResult.BadGateway();
+            }
+
+            var isValid = GetReturnBooleanFromParameters(parameters);
+
+            if (isValid.HasValue)
+            {
+                if (isValid.Value)
+                {
+                    return new ServiceDefinitionIsValidResult.Valid();
+                }
+                return new ServiceDefinitionIsValidResult.Invalid();
+            }
+
+            _logger.LogInformation("Unable to retrieve validity from provider response");
+                
+            return new ServiceDefinitionIsValidResult.BadGateway();
+        }
+
         private async Task<ServiceDefinitionResult> SendEvaluateQueryAndHandleResponse(
             string providerKey,
             string serviceDefinitionId,
@@ -218,9 +328,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 return new ServiceDefinitionResult.BadGateway();
             }
 
-            var stringResponse = responseMessage.Content != null
-                ? await responseMessage.Content.ReadAsStringAsync()
-                : null;
+            var stringResponse = responseMessage.Content?.ReadAsStringAsync().Result;
 
             try
             {
@@ -279,17 +387,34 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         {
             try
             {
-                return parameters?.Parameter?.Where(p => "sessionId".Equals(p.Name, StringComparison.Ordinal))
-                    .Select(p => ((FhirString) p.Value).Value).First();
+                return parameters?.Parameter?
+                    .Where(p => "sessionId".Equals(p?.Name, StringComparison.Ordinal))
+                    .Select(p => p?.Value)
+                    .Cast<FhirString>()
+                    .Select(p => p?.Value)
+                    .FirstOrDefault();
             }
-            catch (ArgumentNullException e)
+            catch (InvalidCastException e)
             {
-                _logger.LogError(e, "Could not retrieve sessionId from parameters - Parameter list is null");
+                _logger.LogError(e, $"Parameter sessionId was not of expected type: {nameof(FhirString)}");
                 return null;
             }
-            catch (InvalidOperationException e)
+        }
+
+        private bool? GetReturnBooleanFromParameters(Parameters parameters)
+        {
+            try
             {
-                _logger.LogError(e, "Could not retrieve sessionId from parameters - Parameter list is empty");
+                return parameters?.Parameter?
+                    .Where(p => "return".Equals(p?.Name, StringComparison.Ordinal))
+                    .Select(p => p?.Value)
+                    .Cast<FhirBoolean>()
+                    .Select(p => p?.Value)
+                    .FirstOrDefault();
+            }
+            catch (InvalidCastException e)
+            {
+                _logger.LogError(e, $"Parameter return was not of expected type: {nameof(FhirBoolean)}");
                 return null;
             }
         }

@@ -43,4 +43,8 @@ class AppointmentGuidanceStepDefinitions {
         appointmentGuidanceSteps.appointmentGuidancePage.gpAdviceMenuItem.click()
     }
 
+    @When("^I select the GP Admin menu item on the guidance page$")
+    fun whenISelectTheGPAdminMenuItem() {
+        appointmentGuidanceSteps.appointmentGuidancePage.gpAdminMenuItem.click()
+    }
 }

@@ -1,72 +1,41 @@
-package mocking.onlineConsultations.configurations
+package mocking.onlineConsultations.configurations.evaluate
 
-class GenderQuestionConfiguration: IQuestionConfiguration {
-    override val request = """{
+import mocking.onlineConsultations.configurations.IQuestionConfiguration
+
+class EmergencyConfiguration: IQuestionConfiguration {
+    override val request: String = """{
        "resourceType":"Parameters",
        "parameter":[
           {
-             "name":"organization",
-             "resource":{
-                "resourceType":"Organization",
-                "identifier":[
-                   {
-                      "value":"A29928"
-                   }
-                ]
-             }
+             "name":"sessionId",
+             "valueString":"05fc67a8-3192-4e27-9ef2-850b07add991"
           },
           {
              "name":"inputData",
              "resource":{
                 "resourceType":"QuestionnaireResponse",
-                "questionnaire":{
-                   "reference":"Questionnaire/GLO_PRE_DISCLAIMERS"
-                },
                 "status":"completed",
                 "item":[
                    {
-                      "linkId":"GLO_PRE_DISCLAIMERS",
+                      "linkId":"PRE_STD_AD_EMERGENCY",
                       "answer":[
                          {
                             "valueCoding":{
-                               "code":"GLO_PRE_DISCLAIMERS_1"
+                               "code":"PRE_STD_EMERGENCY_YES"
                             }
                          }
                       ]
                    }
-                ]
-             }
-          },
-          {
-             "name":"patient",
-             "resource":{
-                "resourceType":"Patient",
-                "identifier":[
-                   {
-                      "system":"https://fhir.nhs.uk/Id/nhs-number",
-                      "value":"{{nhsNumber}}"
-                   }
                 ],
-                "name":[
-                   {
-                      "family":"{{familyName}}",
-                      "given":[
-                         "{{name}}"
-                      ]
-                   }
-                ],
-                "birthDate":"{{dob}}",
-                "address":[
-                   {
-                      "text":"{{address}}"
-                   }
-                ]
+                "questionnaire":{
+                   "reference":"Questionnaire/PRE_STD_AD_EMERGENCY"
+                }
              }
           }
        ]
     }"""
 
-    override val response = """{
+    override val response: String = """{
        "resourceType":"GuidanceResponse",
        "contained":[
           {
@@ -75,17 +44,18 @@ class GenderQuestionConfiguration: IQuestionConfiguration {
              "parameter":[
                 {
                    "name":"sessionId",
-                   "valueString":"1"
+                   "valueString":"05fc67a8-3192-4e27-9ef2-850b07add991"
                 }
              ]
           },
           {
              "resourceType":"Questionnaire",
-             "id":"PRE_STD_AD_SEX",
+             "id":"ADVICE_EMERGENCY",
              "status":"active",
              "item":[
                 {
-                   "linkId":"PRE_STD_AD_SEX_GROUP",
+                   "linkId":"ADVICE_EMERGENCY_GROUP",
+                   "text":"",
                    "type":"group",
                    "item":[
                       {
@@ -93,7 +63,7 @@ class GenderQuestionConfiguration: IQuestionConfiguration {
                             {
                                "url":"http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
                                "valueCodeableConcept":{
-                                  "id":"codeableConcept",
+                                  "id":"backButton",
                                   "coding":[
                                      {
                                         "system":"http://hl7.org/fhir/ValueSet/questionnaire-item-control",
@@ -105,28 +75,29 @@ class GenderQuestionConfiguration: IQuestionConfiguration {
                                }
                             }
                          ],
-                         "linkId":"PRE_STD_AD_SEX_PREV",
-                         "type":"choice",
+                         "linkId":"ADVICE_EMERGENCY_PREV",
+                         "text":"",
+                         "type":"boolean",
                          "required":false
                       },
                       {
-                         "linkId":"PRE_STD_AD_SEX",
-                         "text":"Tell us your sex",
-                         "type":"choice",
+                         "linkId":"ADVICE_EMERGENCY",
+                         "text":"<div class='nhsuk-care-card nhsuk-care-card--immediate'> 
+                <div class='nhsuk-care-card__heading-container'> <h3 class='nhsuk-carecard__heading'>
+                <span role='text'> <span class='nhsuk-u-visually-hidden'>Emergency advice:</span>
+                You need medical help now. Call 999 or go to your local A&E.</span></h3> 
+                <span class='nhsuk-care-card__arrow' aria-hidden='true'></span> 
+                </div><div class='nhsuk-care-card__content'><p>If you decide to seek medical advice, 
+                <strong>your GP will not be notified and your practice will not contact you about this consultation.
+                </strong></p></div></div>",
+                         "type":"group",
                          "required":true,
-                         "repeats":false,
-                         "option":[
+                         "item":[
                             {
-                               "valueCoding":{
-                                  "code":"PRE_STD_AD_SEX_F",
-                                  "display":"Female"
-                               }
-                            },
-                            {
-                               "valueCoding":{
-                                  "code":"PRE_STD_AD_SEX_M",
-                                  "display":"Male"
-                               }
+                               "linkId":"ADVICE_EMERGENCY_CONFIRM",
+                               "text":"End my consultation, I will seek medical advice myself instead",
+                               "type":"boolean",
+                               "required":true
                             }
                          ]
                       }
@@ -135,23 +106,22 @@ class GenderQuestionConfiguration: IQuestionConfiguration {
              ]
           }
        ],
-       "requestId":"1",
        "module":{
           "reference":"https://stubs.onlineconsultations/fhir/ServiceDefinition/BRP_BRP"
        },
        "status":"data-required",
-       "occurrenceDateTime":"2019-05-23T11:06:54.969",
+       "occurrenceDateTime":"2020-02-25T08:45:21.976",
        "outputParameters":{
           "reference":"#outputParams"
        },
        "dataRequirement":[
           {
-             "id":"PRE_STD_AD_SEX",
+             "id":"ADVICE_EMERGENCY",
              "extension":[
                 {
                    "url":"https://www.hl7.org/fhir/questionnaire.html",
                    "valueReference":{
-                      "reference":"#PRE_STD_AD_SEX"
+                      "reference":"#ADVICE_EMERGENCY"
                    }
                 }
              ],

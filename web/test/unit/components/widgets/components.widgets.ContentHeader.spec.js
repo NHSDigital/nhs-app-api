@@ -183,6 +183,7 @@ describe('ContentHeader.vue', () => {
           },
           header: {
             headerText: 'Test',
+            headerCaption: 'Test Caption',
           },
           navigation: {
             crumbSetName: 'testCrumb',
@@ -213,6 +214,15 @@ describe('ContentHeader.vue', () => {
         },
       });
     };
+
+    it('will pass store header caption to PageTitle', () => {
+      wrapper = mountAs({});
+
+      const caption = wrapper.find('span[data-purpose=header-caption]');
+
+      expect(caption.exists()).toBe(true);
+      expect(caption.text()).toBe('Test Caption');
+    });
 
     it('with demographics question not answered but proxying will display appropriate warning', () => {
       getter['session/isProxying'] = true;

@@ -1,4 +1,6 @@
  using System;
+ using System.Linq.Expressions;
+ using System.Threading.Tasks;
  using AutoFixture;
  using AutoFixture.AutoMoq;
  using FluentAssertions;
@@ -25,10 +27,8 @@
          private ServiceDefinitionController _serviceDefinitionController;
          private Mock<IServiceDefinitionService> _mockServiceDefinitionService;
          private Mock<HttpContext> _mockHttpContext;
-         private Mock<ILoggerFactory> _mockLoggerFactory;
          private Mock<ILogger<ServiceDefinitionController>> _mockLogger;
 
-         private ServiceDefinitionResult _successResult;
          private Parameters _evaluateParameters;
          private UserSession _userSession;
 
@@ -38,7 +38,6 @@
          [TestInitialize]
          public void TestInitialize()
          {
-             _successResult = new ServiceDefinitionResult.Success("");
              _evaluateParameters = new Parameters();
 
              _fixture = new Fixture()
@@ -56,10 +55,6 @@
              _mockHttpContext.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
 
              _mockLogger = _fixture.Freeze<Mock<ILogger<ServiceDefinitionController>>>();
-             _mockLoggerFactory = _fixture.Freeze<Mock<ILoggerFactory>>();
-             _mockLoggerFactory
-                 .Setup(x => x.CreateLogger(It.IsAny<string>()))
-                 .Returns(_mockLogger.Object);
 
              _serviceDefinitionController = _fixture.Create<ServiceDefinitionController>();
              _serviceDefinitionController.ControllerContext = new ControllerContext
@@ -72,27 +67,27 @@
          public async Task GetServiceDefinitionsById_WhenCalled_LogsStartingConsultation()
          {
              // Arrange
+             Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionResult>>> expectedGetByIdMatch =
+                 s => s.GetServiceDefinitionById(Provider, ServiceDefinitionId, _userSession);
+             
              _mockServiceDefinitionService
-                 .Setup(s => s.GetServiceDefinitionById(Provider,
-                     It.Is<string>(id => ServiceDefinitionId.Equals(id, StringComparison.Ordinal)),
-                     It.IsAny<UserSession>()))
-                 .Returns(Task.FromResult(_successResult));
+                 .Setup(expectedGetByIdMatch)
+                 .ReturnsAsync(new ServiceDefinitionResult.Success(""));
 
              // Act
-             var actualResponse =
+             var response =
                  await _serviceDefinitionController.GetServiceDefinitionsById(ServiceDefinitionId, Provider);
 
              // Assert
-             actualResponse.Should().BeAssignableTo<OkObjectResult>()
-                 .Subject.StatusCode.Should().Be(200);
-             _mockLogger.VerifyLogger(LogLevel.Information,
+             var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
+             result.StatusCode.Should().Be(200);
+             result.Value.Should().Be("");
+
+             _mockServiceDefinitionService.Verify(expectedGetByIdMatch, Times.Once);
+             _mockLogger.VerifyLogger(
+                 LogLevel.Information,
                  $"Starting consultation with ServiceDefinition: {ServiceDefinitionId}. ODSCode: {_userSession.GpUserSession.OdsCode}",
                  Times.Once());
-             _mockServiceDefinitionService.Verify(
-                 s => s.GetServiceDefinitionById(Provider,
-                     It.Is<string>(sdId => ServiceDefinitionId.Equals(sdId, StringComparison.Ordinal)),
-                     It.IsAny<UserSession>()),
-                 Times.Once);
          }
 
          [TestMethod]
@@ -100,22 +95,25 @@
          public async Task EvaluateServiceDefinition_WhenCalledWithoutParametersBody_ReturnsBadRequest(
              Parameters evaluateParameters)
          {
-             // Act
-             var actualResponse =
-                 await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
-                     evaluateParameters, false);
-
-             // Assert
-             actualResponse.Should().BeAssignableTo<BadRequestResult>()
-                 .Subject.StatusCode.Should().Be(400);
-             _mockServiceDefinitionService.Verify(
-                 s => s.EvaluateServiceDefinition(Provider,
+             // Arrange
+             Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionResult>>> expectedEvaluateMatch =
+                 s => s.EvaluateServiceDefinition(
+                     It.IsAny<string>(),
                      It.IsAny<string>(),
                      It.IsAny<Parameters>(),
                      It.IsAny<bool>(),
                      It.IsAny<bool>(),
-                     _userSession),
-                 Times.Never);
+                     It.IsAny<UserSession>());
+
+             // Act
+             var response =
+                 await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
+                     evaluateParameters, false);
+
+             // Assert
+             response.Should().BeAssignableTo<BadRequestResult>()
+                 .Subject.StatusCode.Should().Be(400);
+             _mockServiceDefinitionService.Verify(expectedEvaluateMatch, Times.Never);
          }
 
          [TestMethod]
@@ -123,32 +121,31 @@
              EvaluateServiceDefinition_WhenCalledWithIdParametersAndClientFound_ServiceEvaluateServiceDefinition()
          {
              // Arrange
+             Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionResult>>> expectedEvaluateMatch =
+                 s => s.EvaluateServiceDefinition(
+                     Provider,
+                     ServiceDefinitionId,
+                     _evaluateParameters ,
+                     false,
+                     false,
+                     _userSession);
+             
              _mockServiceDefinitionService
-                 .Setup(s => s.EvaluateServiceDefinition(Provider,
-                     It.Is<string>(id => ServiceDefinitionId.Equals(id, StringComparison.Ordinal)),
-                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
-                     It.IsAny<bool>(),
-                     It.IsAny<bool>(),
-                     It.IsAny<UserSession>()))
-                 .Returns(Task.FromResult(_successResult));
+                 .Setup(expectedEvaluateMatch)
+                 .ReturnsAsync(new ServiceDefinitionResult.Success(""));
 
              // Act
-             var actualResponse =
+             var response =
                  await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
                      _evaluateParameters, false);
 
              // Assert
+             var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
+             result.StatusCode.Should().Be(200);
+             result.Value.Should().Be("");
+
+             _mockServiceDefinitionService.Verify(expectedEvaluateMatch, Times.Once);
              ShouldLogEvaluationWithOdsCode();
-             actualResponse.Should().BeAssignableTo<OkObjectResult>()
-                 .Subject.StatusCode.Should().Be(200);
-             _mockServiceDefinitionService.Verify(
-                 s => s.EvaluateServiceDefinition(Provider,
-                     It.Is<string>(sdId => ServiceDefinitionId.Equals(sdId, StringComparison.Ordinal)),
-                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
-                     It.IsAny<bool>(),
-                     It.IsAny<bool>(),
-                     It.IsAny<UserSession>()),
-                 Times.Once);
          }
 
          [TestMethod]
@@ -156,29 +153,30 @@
              EvaluateServiceDefinition_WhenRequestHasJSDisabledHeader_EvaluateCalledWithAddJSDisabledHeaderTrue()
          {
              // Arrange
-             _mockServiceDefinitionService
-                 .Setup(s => s.EvaluateServiceDefinition(Provider,
-                     It.Is<string>(id => ServiceDefinitionId.Equals(id, StringComparison.Ordinal)),
-                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
-                     It.IsAny<bool>(),
-                     It.IsAny<bool>(),
-                     It.IsAny<UserSession>()))
-                 .Returns(Task.FromResult(_successResult));
+             Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionResult>>> expectedEvaluateMatch =
+                 s => s.EvaluateServiceDefinition(
+                     Provider,
+                     ServiceDefinitionId,
+                     _evaluateParameters,
+                     true,
+                     false,
+                     _userSession);
 
+             _mockServiceDefinitionService
+                 .Setup(expectedEvaluateMatch)
+                 .ReturnsAsync(new ServiceDefinitionResult.Success(""));
+
+             _mockHttpContext
+                 .Setup(x => x.Request.Headers[Constants.HttpHeaders.JavascriptDisabled])
+                 .Returns("true");
+             
              // Act
              await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
                  _evaluateParameters, false);
 
              // Assert
+             _mockServiceDefinitionService.Verify(expectedEvaluateMatch, Times.Once);
              ShouldLogEvaluationWithOdsCode();
-             _mockServiceDefinitionService.Verify(
-                 s => s.EvaluateServiceDefinition(Provider,
-                     It.Is<string>(sdId => ServiceDefinitionId.Equals(sdId, StringComparison.Ordinal)),
-                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
-                     It.IsAny<bool>(),
-                     It.IsAny<bool>(),
-                     It.IsAny<UserSession>()),
-                 Times.Once);
          }
 
          [TestMethod]
@@ -188,31 +186,115 @@
              bool demographicsConsentGiven)
          {
              // Arrange
+             Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionResult>>> expectedEvaluateMatch =
+                 s => s.EvaluateServiceDefinition(Provider,
+                     ServiceDefinitionId,
+                     _evaluateParameters,
+                     false,
+                     demographicsConsentGiven,
+                     _userSession);
+
              _mockServiceDefinitionService
-                 .Setup(s => s.EvaluateServiceDefinition(Provider,
-                     It.Is<string>(id => ServiceDefinitionId.Equals(id, StringComparison.Ordinal)),
-                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
-                     It.IsAny<bool>(),
-                     It.Is<bool>(consent => consent == demographicsConsentGiven),
-                     It.IsAny<UserSession>()))
-                 .Returns(Task.FromResult(_successResult));
+                 .Setup(expectedEvaluateMatch)
+                 .ReturnsAsync(new ServiceDefinitionResult.Success(""));
 
              // Act
              await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
                  _evaluateParameters, demographicsConsentGiven);
 
              // Assert
+             _mockServiceDefinitionService.Verify(expectedEvaluateMatch, Times.Once);
              ShouldLogEvaluationWithOdsCode();
-             _mockServiceDefinitionService.Verify(
-                 s => s.EvaluateServiceDefinition(Provider,
-                     It.Is<string>(sdId => ServiceDefinitionId.Equals(sdId, StringComparison.Ordinal)),
-                     It.Is<Parameters>(parameters => _evaluateParameters == parameters),
-                     It.IsAny<bool>(),
-                     It.Is<bool>(consent => consent == demographicsConsentGiven),
-                     It.IsAny<UserSession>()),
-                 Times.Once);
          }
 
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_ReturnsNoContent_WhenServiceReturnsSuccessWithValidTrue()
+         {
+             // Arrange
+             var expectedIsValidResult = new ServiceDefinitionIsValidResult.Valid();
+             
+             Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionIsValidResult>>> expectedEvaluateMatch =
+                 s => s.GetServiceDefinitionIsValid(Provider, _userSession);
+
+             _mockServiceDefinitionService
+                 .Setup(expectedEvaluateMatch)
+                 .ReturnsAsync(expectedIsValidResult);
+
+             // Act
+             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider);
+
+             // Assert
+             response.Should().BeAssignableTo<StatusCodeResult>().Subject
+                 .StatusCode.Should().Be(204);
+
+             _mockServiceDefinitionService.Verify(expectedEvaluateMatch, Times.Once);
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_ReturnsCustom580_WhenServiceReturnsSuccessWithValidFalse()
+         {
+             // Arrange
+             var expectedIsValidResult = new ServiceDefinitionIsValidResult.Invalid();
+             
+             Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionIsValidResult>>> expectedEvaluateMatch =
+                 s => s.GetServiceDefinitionIsValid(Provider, _userSession);
+
+             _mockServiceDefinitionService
+                 .Setup(expectedEvaluateMatch)
+                 .ReturnsAsync(expectedIsValidResult);
+
+             // Act
+             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider);
+
+             // Assert
+             response.Should().BeAssignableTo<StatusCodeResult>().Subject
+                 .StatusCode.Should().Be(580);
+
+             _mockServiceDefinitionService.Verify(expectedEvaluateMatch, Times.Once);
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_ReturnsBadRequest_WhenServiceReturnsBadRequest()
+         {
+             // Arrange
+             Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionIsValidResult>>> expectedEvaluateMatch =
+                 s => s.GetServiceDefinitionIsValid(Provider, _userSession);
+
+             _mockServiceDefinitionService
+                 .Setup(expectedEvaluateMatch)
+                 .ReturnsAsync(new ServiceDefinitionIsValidResult.BadRequest());
+
+             // Act
+             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider);
+
+             // Assert
+             var result = response.Should().BeAssignableTo<StatusCodeResult>().Subject;
+             result.StatusCode.Should().Be(400);
+
+             _mockServiceDefinitionService.Verify(expectedEvaluateMatch, Times.Once);
+         }
+
+         [TestMethod]
+         public async Task GetServiceDefinitionIsValid_ReturnsBadGateway_WhenServiceReturnsBadGateway()
+         {
+             // Arrange
+             Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionIsValidResult>>> expectedEvaluateMatch =
+                 s => s.GetServiceDefinitionIsValid(Provider, _userSession);
+
+             _mockServiceDefinitionService
+                 .Setup(expectedEvaluateMatch)
+                 .ReturnsAsync(new ServiceDefinitionIsValidResult.BadGateway());
+
+             // Act
+             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider);
+
+             // Assert
+             var result = response.Should().BeAssignableTo<StatusCodeResult>().Subject;
+             result.StatusCode.Should().Be(502);
+
+             _mockServiceDefinitionService.Verify(expectedEvaluateMatch, Times.Once);
+         }
+         
          private void ShouldLogEvaluationWithOdsCode()
          {
              _mockLogger.VerifyLogger(LogLevel.Information,

@@ -46,6 +46,10 @@ describe('online consultations store mutations', () => {
       mutation: 'SET_ANSWER_IS_EMPTY',
       stateProp: 'answerIsEmpty',
       parameter: false,
+    }, {
+      mutation: 'SET_IS_AVAILABLE',
+      stateProp: 'available',
+      parameter: true,
     }]).it('will assign parameter to appropriate store value', ({ mutation, stateProp, parameter }) => {
       // Act
       mutations[mutation](state, parameter);
@@ -56,8 +60,8 @@ describe('online consultations store mutations', () => {
   });
 
   describe('CLEAR', () => {
-    describe('clearDemographicsConsent parameter is true', () => {
-      it('will reset state to initialState', () => {
+    describe('clearAll parameter is true', () => {
+      it('will reset entire state to initialState', () => {
         // Arrange
         const expectedState = initialState();
 
@@ -80,6 +84,7 @@ describe('online consultations store mutations', () => {
           journeyInfo: {},
           demographicsConsentGiven: true,
           demographicsQuestionAnswered: true,
+          available: true,
         };
 
         // Act
@@ -90,12 +95,13 @@ describe('online consultations store mutations', () => {
       });
     });
 
-    describe('clearDemographicsConsent parameter is false', () => {
-      it('will reset state to initialState except demographics properties', () => {
+    describe('clearAll parameter is false', () => {
+      it('will reset state to initialState except demographics, availability, and service definition id', () => {
         // Arrange
         const expectedState = initialState();
         expectedState.demographicsConsentGiven = true;
         expectedState.demographicsQuestionAnswered = true;
+        expectedState.available = true;
 
         state = {
           sessionId: 1,
@@ -116,6 +122,7 @@ describe('online consultations store mutations', () => {
           isLoadingFile: true,
           demographicsConsentGiven: true,
           demographicsQuestionAnswered: true,
+          available: true,
         };
 
         // Act

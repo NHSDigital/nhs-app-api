@@ -66,11 +66,11 @@ export default {
     },
     {
       route: APPOINTMENT_ADMIN_HELP.path,
-      ignoredErrors: [480],
+      ignoredErrors: [480, 580],
     },
     {
       route: APPOINTMENT_GP_ADVICE.path,
-      ignoredErrors: [480],
+      ignoredErrors: [480, 580],
     },
     {
       route: AUTH_RETURN.path,

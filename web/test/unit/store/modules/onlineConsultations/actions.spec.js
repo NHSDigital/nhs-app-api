@@ -10,6 +10,7 @@ import {
   SET_ADMIN_PROVIDER_NAME,
   SET_ADVICE_PROVIDER_NAME,
   SET_CONDITIONS_LIST,
+  SET_IS_AVAILABLE,
 } from '@/store/modules/onlineConsultations/mutation-types';
 import getParameters from '@/lib/online-consultations/mappers/parameters';
 import { getDataRequirements, getSessionId, getQuestionnaire, getQuestionnaireId, getQuestionnaireItem, getCarePlansAndReferralRequests } from '@/lib/online-consultations/mappers/response';
@@ -22,7 +23,12 @@ jest.mock('@/lib/online-consultations/mappers/response');
 jest.mock('@/lib/online-consultations/mappers/item');
 jest.mock('@/lib/online-consultations/constants/termsConditionsAnswers');
 
-const { getServiceDefinition, evaluateServiceDefinition, setProviderNames } = actions;
+const {
+  getServiceDefinition,
+  evaluateServiceDefinition,
+  setProviderNames,
+  serviceDefinitionIsValid,
+} = actions;
 
 const commit = jest.fn();
 const store = {
@@ -31,6 +37,7 @@ const store = {
       postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate: jest.fn(),
       getV1ServiceDefinitionByProviderByServicedefinitionid: jest.fn(),
       getV1ServiceDefinitionProviderNameByProvider: jest.fn(),
+      getV1ServiceDefinitionByProviderIsValid: jest.fn(),
     },
   },
   dispatch: jest.fn(),
@@ -80,6 +87,7 @@ describe('online consultations store actions', () => {
     store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate.mockClear();
     store.app.$http.getV1ServiceDefinitionByProviderByServicedefinitionid.mockClear();
     store.app.$http.getV1ServiceDefinitionProviderNameByProvider.mockClear();
+    store.app.$http.getV1ServiceDefinitionByProviderIsValid.mockClear();
     store.dispatch.mockClear();
     error.response.status = 400;
   });
@@ -656,6 +664,64 @@ describe('online consultations store actions', () => {
               .toHaveBeenCalledTimes(0);
           });
       });
+    });
+  });
+  describe('serviceDefinitionIsValid', () => {
+    it('will commit isValid true to store when successful', () => {
+      store.app.$http.getV1ServiceDefinitionByProviderIsValid
+        .mockImplementation((params) => {
+          switch (params.provider) {
+            case 'test-provider':
+              return Promise.resolve({
+                status: 204,
+              });
+            default:
+              return undefined;
+          }
+        });
+      serviceDefinitionIsValid.call(store, { commit }, 'test-provider')
+        .then(() => {
+          // Assert
+          expect(store.app.$http.getV1ServiceDefinitionByProviderIsValid)
+            .toHaveBeenCalledWith({
+              provider: 'test-provider',
+              returnResponse: true,
+            });
+          expect(commit)
+            .toHaveBeenCalledWith(SET_IS_AVAILABLE, true);
+        });
+    });
+
+    it('will not set isValid when api call throws non 580 error', () => {
+      store.app.$http.getV1ServiceDefinitionByProviderIsValid
+        .mockImplementation(() => Promise.reject(error));
+      serviceDefinitionIsValid.call(store, { commit }, 'test-provider')
+        .then(() => {
+          // Assert
+          expect(store.app.$http.getV1ServiceDefinitionByProviderIsValid)
+            .toHaveBeenCalledWith({
+              provider: 'test-provider',
+              returnResponse: true,
+            });
+          expect(commit).not.toHaveBeenCalledWith(SET_IS_AVAILABLE);
+        });
+    });
+
+    it('will set isValid to false when api call throws custom 580 error', () => {
+      error.response.status = 580;
+      store.app.$http.getV1ServiceDefinitionByProviderIsValid
+        .mockImplementation(() => Promise.reject(error));
+      serviceDefinitionIsValid.call(store, { commit }, 'test-provider')
+        .then(() => {
+          // Assert
+          expect(store.app.$http.getV1ServiceDefinitionByProviderIsValid)
+            .toHaveBeenCalledWith({
+              provider: 'test-provider',
+              returnResponse: true,
+            });
+          expect(commit)
+            .toHaveBeenCalledWith(SET_IS_AVAILABLE, false);
+        });
     });
   });
 });

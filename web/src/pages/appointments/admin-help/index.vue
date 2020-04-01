@@ -1,7 +1,8 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <message-dialog v-if="isError" role="alert">
+      <online-consultations-unavailable v-if="!available"/>
+      <message-dialog v-else-if="isError" role="alert">
         <message-text data-purpose="error-heading"
                       :is-header="true">
           {{ $t('appointments.admin_help.errors.header') }}
@@ -29,6 +30,7 @@
 
 <script>
 import get from 'lodash/fp/get';
+import OnlineConsultationsUnavailable from '@/components/online-consultations/OnlineConsultationsUnavailable';
 import Orchestrator from '@/components/online-consultations/Orchestrator';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
@@ -47,6 +49,7 @@ export default {
   components: {
     MessageDialog,
     MessageText,
+    OnlineConsultationsUnavailable,
     Orchestrator,
     DemographicsQuestion,
   },
@@ -65,6 +68,24 @@ export default {
     },
   },
   async asyncData({ store, req }) {
+    const { provider } = store.state.serviceJourneyRules.rules.cdssAdmin;
+
+    await store.dispatch('onlineConsultations/serviceDefinitionIsValid', provider);
+
+    if (store.state.onlineConsultations.available === undefined) {
+      // unable to get available status due to API error
+      return {};
+    }
+
+    if (store.state.onlineConsultations.available === false) {
+      store.dispatch('header/updateHeaderText', store.app.i18n.tc('appointments.admin_help.unavailable.header'));
+      store.dispatch('header/updateHeaderCaption', store.app.i18n.tc('appointments.admin_help.unavailable.headerCaption'));
+
+      store.dispatch('pageTitle/updatePageTitle', store.app.i18n.tc('appointments.admin_help.unavailable.header'));
+
+      return { available: false };
+    }
+
     const requestBody = get('body', req);
     const handlingNoJS = get(noJsParameterName, requestBody) !== undefined;
     const { question } = store.state.onlineConsultations;
@@ -75,7 +96,7 @@ export default {
       get(DEMOGRAPHICS_QUESTION_NAME, requestBody) === DEMOGRAPHICS_QUESTION_OPTION;
 
     const journeyInfo = {
-      provider: store.state.serviceJourneyRules.rules.cdssAdmin.provider,
+      provider,
       serviceDefinitionId: store.state.serviceJourneyRules.rules.cdssAdmin.serviceDefinition,
       addJavascriptDisabledHeader: false,
     };
@@ -108,7 +129,10 @@ export default {
       await store.dispatch('onlineConsultations/evaluateServiceDefinition', journeyInfo);
     }
 
-    return journeyInfo;
+    return {
+      ...journeyInfo,
+      available: true,
+    };
   },
   beforeDestroy() {
     this.$store.dispatch('onlineConsultations/clear', true);

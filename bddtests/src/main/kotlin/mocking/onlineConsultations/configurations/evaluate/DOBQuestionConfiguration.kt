@@ -1,30 +1,31 @@
-package mocking.onlineConsultations.configurations
+package mocking.onlineConsultations.configurations.evaluate
 
-class UrgencyQuestionConfiguration : IQuestionConfiguration {
+import mocking.onlineConsultations.configurations.IQuestionConfiguration
+import utils.SerenityHelpers
 
+class DOBQuestionConfiguration: IQuestionConfiguration {
+    private val patientDateOfBirth = SerenityHelpers.getPatient().dateOfBirth
     override val request: String = """{
        "resourceType":"Parameters",
        "parameter":[
           {
              "name":"sessionId",
-             "valueString":"f59d8846-2968-45f7-8ab9-8acc57ebd858"
+             "valueString":"f8f2c2a2-acd9-425a-b93e-cf9c21bbd512"
           },
           {
              "name":"inputData",
              "resource":{
                 "resourceType":"QuestionnaireResponse",
                 "questionnaire":{
-                   "reference":"Questionnaire/PRE_STD_AD_SELFONLY"
+                   "reference":"Questionnaire/Q_BRP_BRP_AD_1"
                 },
                 "status":"completed",
                 "item":[
                    {
-                      "linkId":"PRE_STD_AD_SELFONLY",
+                      "linkId":"Q_BRP_BRP_AD_1",
                       "answer":[
                          {
-                            "valueCoding":{
-                               "code":"PRE_STD_AD_SELFONLY_SELF"
-                            }
+                            "valueString":"I need medication for my sore throat"
                          }
                       ]
                    }
@@ -33,7 +34,6 @@ class UrgencyQuestionConfiguration : IQuestionConfiguration {
           }
        ]
     }"""
-
 
     override val response: String = """{
        "resourceType":"GuidanceResponse",
@@ -44,17 +44,17 @@ class UrgencyQuestionConfiguration : IQuestionConfiguration {
              "parameter":[
                 {
                    "name":"sessionId",
-                   "valueString":"05fc67a8-3192-4e27-9ef2-850b07add991"
+                   "valueString":"4ea9390f-f6f2-410b-8d46-39b37a6a1753"
                 }
              ]
           },
           {
              "resourceType":"Questionnaire",
-             "id":"PRE_STD_AD_EMERGENCY",
+             "id":"PRE_STD_AD_DOB",
              "status":"active",
              "item":[
                 {
-                   "linkId":"PRE_STD_AD_EMERGENCY_GROUP",
+                   "linkId":"PRE_STD_AD_DOB_GROUP",
                    "text":"",
                    "type":"group",
                    "item":[
@@ -75,44 +75,48 @@ class UrgencyQuestionConfiguration : IQuestionConfiguration {
                                }
                             }
                          ],
-                         "linkId":"PRE_STD_AD_EMERGENCY_PREV",
+                         "linkId":"PRE_STD_AD_DOB_PREV",
                          "text":"",
                          "type":"boolean",
                          "required":false
                       },
                       {
-                         "linkId":"PRE_STD_AD_EMERGENCY",
-                         "text":"<div>
-                <p><b>Next, let's make sure this isn't an emergency.
-                Are you currently experiencing any of the following?</b></p><ul><li> 
-                <span>
-                Signs of a heart attack</span> - pain like a very tight band, heavy weight or squeezing 
-                in the centre of your chest or any pain that moves into your jaw or neck</li><li>
-                <span>Signs of a stroke</span> -
-                face drooping on one side, can't hold both arms up, difficulty speaking, or weakness or numbness 
-                on one side of your body</li><li><span>Severe difficulty breathing</span> - 
-                gasping, not being able to get words out, choking or lips turning blue</li> 
-                <li><span>
-                Heavy bleeding that won't stop</span> - uncontrollable bleeding from any part of your body</li>
-                <li><span>Severe injuries</span> - 
-                including deep cuts after a serious accident</li></ul></div>",
-                         "type":"choice",
-                         "required":true,
-                         "repeats":false,
-                         "option":[
+                         "extension":[
                             {
-                               "valueCoding":{
-                                  "code":"PRE_STD_EMERGENCY_NO",
-                                  "display":"I'm NOT experiencing any of these"
-                               }
+                               "url":"http://hl7.org/fhir/StructureDefinition/minValue",
+                               "valueDate":"1894-02-26"
                             },
                             {
-                               "valueCoding":{
-                                  "code":"PRE_STD_EMERGENCY_YES",
-                                  "display":"I am experiencing some of these"
-                               }
+                               "url":"http://hl7.org/fhir/StructureDefinition/maxValue",
+                               "valueDate":"2002-02-25"
+                            },
+                            {
+                               "url":"http://hl7.org/fhir/StructureDefinition/entryFormat",
+                               "valueString":"You must be between 18 and 125 years old in order to 
+                                    complete this request"
                             }
-                         ]
+                         ],
+                         "linkId":"PRE_STD_AD_DOB",
+                         "text":"Tell us your date of birth",
+                         "type":"date",
+                         "required":true
+                      }
+                   ]
+                }
+             ]
+          },
+          {
+             "resourceType":"QuestionnaireResponse",
+             "questionnaire":{
+                "reference":"Questionnaire/PRE_STD_AD_DOB"
+             },
+             "status":"completed",
+             "item":[
+                {
+                   "linkId":"PRE_STD_AD_DOB",
+                   "answer":[
+                      {
+                         "valueDate":"$patientDateOfBirth"
                       }
                    ]
                 }
@@ -123,18 +127,18 @@ class UrgencyQuestionConfiguration : IQuestionConfiguration {
           "reference":"https://stubs.onlineconsultations/fhir/ServiceDefinition/BRP_BRP"
        },
        "status":"data-required",
-       "occurrenceDateTime":"2020-02-25T08:31:00.851",
+       "occurrenceDateTime":"2020-02-25T12:38:00.885",
        "outputParameters":{
           "reference":"#outputParams"
        },
        "dataRequirement":[
           {
-             "id":"PRE_STD_AD_EMERGENCY",
+             "id":"PRE_STD_AD_DOB",
              "extension":[
                 {
                    "url":"https://www.hl7.org/fhir/questionnaire.html",
                    "valueReference":{
-                      "reference":"#PRE_STD_AD_EMERGENCY"
+                      "reference":"#PRE_STD_AD_DOB"
                    }
                 }
              ],

@@ -115,6 +115,7 @@ class NHSOnlineApi {
         ignoreError,
         ignoreLoading,
         useAccessToken,
+        returnResponse,
       }) {
         const queryParams = queryParameters && Object.keys(queryParameters).length ? this.serializeQueryParams(queryParameters) : null;
         const urlWithParams = url + (queryParams ? '?' + queryParams : '');
@@ -243,7 +244,11 @@ class NHSOnlineApi {
             }
           }
 
-          return response.data
+          if (returnResponse) {
+            return response;
+          }
+
+          return response.data;
         }).then((body) => {
           if (!ignoreLoading){
             this.store.dispatch('http/loadingCompleted', url);
@@ -332,6 +337,7 @@ class NHSOnlineApi {
     }
     let ignoreError = parameters.ignoreError || false;
     let ignoreLoading = parameters.ignoreLoading || false;
+    let returnResponse = parameters.returnResponse || false;
     let deferred = {{#isNode}}Q{{/isNode}}{{^isNode}}$q{{/isNode}}.defer();
     let domain = this.domain;
     let path = '{{versioning ../operationId}}{{../../subresource}}';
@@ -448,7 +454,8 @@ class NHSOnlineApi {
     responseType: 'arraybuffer',
     deferred,
     ignoreError,
-    useAccessToken
+    useAccessToken,
+    returnResponse
   });
   {{else}}
   this.request({
@@ -462,7 +469,8 @@ class NHSOnlineApi {
     deferred,
     ignoreError,
     ignoreLoading,
-    useAccessToken
+    useAccessToken,
+    returnResponse
   });
   {{/ifEquals}}
 

@@ -35,6 +35,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             }
 
             services.AddSingleton<IEvaluateServiceDefinitionQuery, EvaluateServiceDefinitionQuery>();
+            services.AddSingleton<IServiceDefinitionIsValidQuery, ServiceDefinitionIsValidQuery>();
 
             services.AddTransient<IServiceDefinitionService, ServiceDefinitionService>();
             services.AddSingleton<IMapper<DemographicsResponse, OlcDemographics>,

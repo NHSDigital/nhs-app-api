@@ -23,6 +23,7 @@ namespace NHSOnline.Backend.Support
             public const int Status466MedicationAlreadyOrderedWithinLast30Days = 466;
             public const int Status467InvalidPatientId = 467;
             public const int Status550SupplierDoesNotSupportLinkageKeys = 550;
+            public const int Status580ServiceDefinitionUnavailable = 580;
         }
 
         public static class AppConfig

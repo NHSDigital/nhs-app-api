@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
         }
 
         public JourneysBuilder MedicalRecord(MedicalRecordProvider? provider,
-            int version = 1)
+            string version = "1")
         {
 
             if (provider != null)

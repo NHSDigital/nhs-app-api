@@ -406,6 +406,12 @@ export default {
     btnAccept: 'Continue',
   },
   onlineConsultations: {
+    unavailable: {
+      paragraph: 'This service is normally available during your GP surgery\'s opening hours.',
+      coronavirusHeading: 'If you think you might have coronavirus',
+      coronavirusParagraph: 'Stay at home and avoid close contact with other people.',
+      coronavirusLink: 'Use the 111 coronavirus service to see if you need medical help',
+    },
     demographics: {
       checkboxLabel: 'Use my name, date of birth, NHS number and postal address with the online consultation service as described in the',
       checkboxLink: 'NHS App privacy policy',
@@ -683,6 +689,10 @@ export default {
       },
     },
     gp_advice: {
+      unavailable: {
+        headerCaption: 'Ask your GP for advice',
+        header: 'Online consultations are currently unavailable',
+      },
       demographicsQuestion: {
         p1: 'It takes around 5 minutes to answer a few questions about your condition.',
         p2: 'To save you typing in personal information the online consultation service needs, you can use the personal information we already hold.',
@@ -703,6 +713,10 @@ export default {
       },
     },
     admin_help: {
+      unavailable: {
+        headerCaption: 'Additional GP services',
+        header: 'Online consultations are currently unavailable',
+      },
       demographicsQuestion: {
         p1: 'Use this service to contact your GP surgery for things like test results, sick notes, GP letters and medical reports.',
         p2: 'It takes around 5 minutes to answer a few questions.',

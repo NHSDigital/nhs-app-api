@@ -1,7 +1,8 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <message-dialog v-if="isError" role="alert">
+      <online-consultations-unavailable v-if="!available"/>
+      <message-dialog v-else-if="isError" role="alert">
         <message-text data-purpose="error-heading"
                       :is-header="true">
           {{ $t('appointments.gp_advice.errors.header') }}
@@ -30,6 +31,7 @@
 
 <script>
 import get from 'lodash/fp/get';
+import OnlineConsultationsUnavailable from '@/components/online-consultations/OnlineConsultationsUnavailable';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import Orchestrator from '@/components/online-consultations/Orchestrator';
@@ -57,6 +59,7 @@ export default {
     MessageDialog,
     MessageText,
     Orchestrator,
+    OnlineConsultationsUnavailable,
     DemographicsQuestion,
     ConditionList,
   },
@@ -81,11 +84,23 @@ export default {
     },
   },
   async asyncData({ store, req }) {
+    const { provider } = store.state.serviceJourneyRules.rules.cdssAdvice;
+
+    await store.dispatch('onlineConsultations/serviceDefinitionIsValid', provider);
+
+    if (!store.state.onlineConsultations.available) {
+      store.dispatch('header/updateHeaderText', store.app.i18n.tc('appointments.admin_help.unavailable.header'));
+      store.dispatch('header/updateHeaderCaption', store.app.i18n.tc('appointments.admin_help.unavailable.headerCaption'));
+
+      store.dispatch('pageTitle/updatePageTitle', store.app.i18n.tc('appointments.admin_help.unavailable.header'));
+
+      return { available: false };
+    }
+
     const requestBody = get('body', req);
     let serviceDefinitionId = getServiceDefinitionId({ requestBody, store });
     let consentGiven =
       get(DEMOGRAPHICS_QUESTION_NAME, requestBody) === DEMOGRAPHICS_QUESTION_OPTION;
-    const { provider } = store.state.serviceJourneyRules.rules.cdssAdvice;
     const handlingNoJS = get(noJsParameterName, requestBody) !== undefined;
     const { question } = store.state.onlineConsultations;
     const answeringConsultationQuestion = question !== undefined;
@@ -94,6 +109,7 @@ export default {
     const selectedCondition = get(NHSAPP_SELECTED_CONDITION, requestBody);
 
     const data = {
+      available: true,
       provider,
       addJavascriptDisabledHeader: false,
     };

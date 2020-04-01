@@ -97,3 +97,5 @@ paths:
     $ref: ./nhsonline.cds.yaml#/paths/~1service-definition~1{provider}
   /v1/service-definition/provider-name/{provider}:
     $ref: ./nhsonline.cds.yaml#/paths/~1service-definition~1provider-name~1{provider}
+  /v1/service-definition/{provider}/$isValid:
+    $ref: ./nhsonline.cds.yaml#/paths/~1service-definition~1{provider}~1$isValid
