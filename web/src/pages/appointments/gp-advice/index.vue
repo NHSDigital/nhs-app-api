@@ -89,10 +89,10 @@ export default {
     await store.dispatch('onlineConsultations/serviceDefinitionIsValid', provider);
 
     if (!store.state.onlineConsultations.available) {
-      store.dispatch('header/updateHeaderText', store.app.i18n.tc('appointments.admin_help.unavailable.header'));
-      store.dispatch('header/updateHeaderCaption', store.app.i18n.tc('appointments.admin_help.unavailable.headerCaption'));
+      store.dispatch('header/updateHeaderText', store.app.i18n.tc('appointments.gp_advice.unavailable.header'));
+      store.dispatch('header/updateHeaderCaption', store.app.i18n.tc('appointments.gp_advice.unavailable.headerCaption'));
 
-      store.dispatch('pageTitle/updatePageTitle', store.app.i18n.tc('appointments.admin_help.unavailable.header'));
+      store.dispatch('pageTitle/updatePageTitle', store.app.i18n.tc('appointments.gp_advice.unavailable.header'));
 
       return { available: false };
     }
