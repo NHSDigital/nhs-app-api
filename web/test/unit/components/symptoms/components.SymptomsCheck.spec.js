@@ -48,10 +48,10 @@ describe('GP Guidence button tests', () => {
       expect(coronaCheckerButtonHeader.text()).toContain('translate_sy01.corona.subheader');
 
       const conditionsCheckerButtonHeader = tagArray.at(1).find('li a span h2');
-      expect(conditionsCheckerButtonHeader.text()).toContain('translate_sy01.a_z.subheader');
+      expect(conditionsCheckerButtonHeader.text()).toContain('translate_sy01.conditionsTreatments.subheader');
 
       const conditionsCheckerButtonText = tagArray.at(1).find('li a span p');
-      expect(conditionsCheckerButtonText.text()).toContain('translate_sy01.a_z.body');
+      expect(conditionsCheckerButtonText.text()).toContain('translate_sy01.conditionsTreatments.body');
 
       const symptomsCheckerButtonHeader = tagArray.at(2).find('li a span h2');
       expect(symptomsCheckerButtonHeader.text()).toContain('translate_sy01.111.subheader');

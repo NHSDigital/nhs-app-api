@@ -19,11 +19,11 @@
                  data-purpose="text_link"
                  target="_blank"
                  :href="conditionsCheckerUrl"
-                 :description="$t('sy01.a_z.body')"
-                 :text="$t('sy01.a_z.subheader')"
+                 :description="$t('sy01.conditionsTreatments.body')"
+                 :text="$t('sy01.conditionsTreatments.subheader')"
                  :aria-label="ariaLabelCaption(
-                   'sy01.a_z.subheaderAriaLabel',
-                   'sy01.a_z.body')"/>
+                   'sy01.conditionsTreatments.subheader',
+                   'sy01.conditionsTreatments.body')"/>
 
       <menu-item id="btn_111"
                  header-tag="h2"
@@ -33,7 +33,7 @@
                  target="_blank"
                  :text="$t('sy01.111.subheader')"
                  :aria-label="ariaLabelCaption(
-                   'sy01.111.subheader',
+                   'sy01.111.subheaderAriaLabel',
                    'sy01.111.body')"/>
 
       <menu-item v-if="loggedIn && isCdssAdvice"

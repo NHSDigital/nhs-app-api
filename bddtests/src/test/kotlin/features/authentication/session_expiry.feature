@@ -124,7 +124,7 @@ Feature: Session Expiry and Extend Frontend
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     When I navigate to Symptoms
-    And I click Check if you need urgent help
+    And I click Use NHS 111 online
     And I am idle long enough for the session expiry dialog box to appear
     And I navigate to Appointments
     Then the dialog box is not visible on the screen
@@ -140,7 +140,7 @@ Feature: Session Expiry and Extend Frontend
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     When I navigate to Symptoms
-    And I click Check if you need urgent help
+    And I click Use NHS 111 online
     And I am idle long enough for the session expiry dialog box to appear
     And I am idle for a short time
     And I navigate to Appointments
@@ -157,7 +157,7 @@ Feature: Session Expiry and Extend Frontend
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     When I navigate to Symptoms
-    And I click Check if you need urgent help
+    And I click Use NHS 111 online
     And I scroll the device
     And I am idle long enough for the session expiry dialog box to appear
     And I am idle for a short time
@@ -175,7 +175,7 @@ Feature: Session Expiry and Extend Frontend
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     When I navigate to Symptoms
-    And I click Check if you need urgent help
+    And I click Use NHS 111 online
     And I am idle long enough for the session to expire
     And I am idle for a short time
     And I navigate to Appointments

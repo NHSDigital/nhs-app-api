@@ -9,7 +9,7 @@ Feature: Access 111 Online with no javascript
     And I am a EMIS patient
     And I am logged in
     When I navigate to Symptoms
-    Then the Check My Symptoms page is displayed
+    Then the Symptoms page is displayed
     When I press the A-Z symptoms header
     Then a new tab has been opened by the link
 
@@ -18,7 +18,7 @@ Feature: Access 111 Online with no javascript
     And I am a EMIS patient
     And I am logged in
     When I navigate to Symptoms
-    Then the Check My Symptoms page is displayed
+    Then the Symptoms page is displayed
     When I press the urgent help header
     Then a new tab has been opened by the link
 
@@ -27,6 +27,6 @@ Feature: Access 111 Online with no javascript
     And I am a EMIS patient
     And I am logged in
     When I navigate to Symptoms
-    Then the Check My Symptoms page is displayed
+    Then the Symptoms page is displayed
     When I press the coronavirus header
     Then a new tab has been opened by the link

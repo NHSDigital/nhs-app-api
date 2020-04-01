@@ -6,7 +6,7 @@ import pages.HybridPageObject
 open class WebHeader : HybridPageObject() {
 
     var pageHeaders: Map<String, String> = mapOf(
-            Pair("Symptoms", "Check your symptoms"),
+            Pair("Symptoms", "Symptoms"),
             Pair("Appointments", "Your appointments"),
             Pair("Repeat prescriptions", "Your repeat prescriptions"),
             Pair("Your medical record", "Your medical record"),

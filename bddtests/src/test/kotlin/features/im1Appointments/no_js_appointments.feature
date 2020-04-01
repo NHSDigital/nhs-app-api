@@ -49,8 +49,8 @@ Feature: Appointments Service With Javascript Disabled
     And I am logged in
     When I retrieve the 'Appointment Guidance' page directly
     And I select Appointment Guidance Page Check symptoms button
-    Then the Check My Symptoms page is displayed
-    And the Check My Symptoms page header and navigation menu are correct
+    Then the Symptoms page is displayed
+    And the Symptoms page header and navigation menu are correct
 
   # Only EMIS has appointment slot guidance available
   # The guidance should always be visible with no javascript, in comparison to an expandable/collapsible box

@@ -43,16 +43,16 @@ open class OneOneOneStepDefinitions {
         checkMySymptoms.clickCoronaVirusHeader()
     }
 
-    @Then("^the Check My Symptoms page is displayed")
+    @Then("^the Symptoms page is displayed")
     fun checkMySymptomsPageIsDisplayed() {
         checkMySymptoms.assertConditionsHeaderVisible()
         checkMySymptoms.assertNhs111HeaderVisible()
         checkMySymptoms.assertCoronaHeaderVisible()
     }
 
-    @Then("^the Check My Symptoms page header and navigation menu are correct$")
+    @Then("^the Symptoms page header and navigation menu are correct$")
     fun checkMySymptomsPageHeaderAndNavigationMenuAreCorrect() {
-        navBar.headerNative.assertIsVisible("Check your symptoms")
+        navBar.headerNative.assertIsVisible("Symptoms")
         navBar.assertSelectedTab(NavBarNative.NavBarType.SYMPTOMS)
     }
 }

@@ -1531,7 +1531,7 @@ export default {
     myRecordDocuments: 'Documents',
     notifications: 'Manage notifications',
     organDonation: 'Your organ donation decision',
-    symptoms: 'Check your symptoms',
+    symptoms: 'Symptoms',
     /* Data sharing header should be updated in Android, iOS, and Web if changed */
     dataSharingOverview: 'Overview',
     dataSharingWhereUsed: 'How confidential patient information is used',
@@ -1620,7 +1620,7 @@ export default {
     notifications: 'Manage notifications',
     organDonation: 'Your organ donation decision',
     organDonationWithdraw: 'Withdraw your organ donation decision',
-    symptoms: 'Check your symptoms',
+    symptoms: 'Symptoms',
     dataSharingOverview: 'Overview',
     dataSharingWhereUsed: 'How confidential patient information is used',
     dataSharingDoesNotApply: 'When your choice does not apply',
@@ -2297,19 +2297,19 @@ export default {
     },
   },
   sy01: {
-    pageHeader: 'Check your symptoms',
-    a_z: {
-      subheader: 'A to Z of conditions and treatments',
-      subheaderAriaLabel: 'A to Z of conditions and treatments',
-      body: 'Search trusted information and advice on hundreds of conditions',
-    },
-    111: {
-      subheader: 'Check if you need urgent help',
-      body: 'Answer online questions to get instant advice or medical help near you',
-    },
+    pageHeader: 'Symptoms',
     corona: {
       subheader: 'Get advice about coronavirus',
       body: 'Find out what to do if you think you have coronavirus',
+    },
+    conditionsTreatments: {
+      subheader: 'Search conditions and treatments',
+      body: 'Find trusted NHS information on hundreds of conditions',
+    },
+    111: {
+      subheader: 'Use NHS 111 online',
+      subheaderAriaLabel: 'Use NHS one one one online',
+      body: 'Check if you need urgent help and find out what to do next',
     },
   },
   appointmentHubPage: {

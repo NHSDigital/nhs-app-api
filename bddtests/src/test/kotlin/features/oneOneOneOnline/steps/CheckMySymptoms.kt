@@ -4,7 +4,6 @@ import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import pages.CheckMySymptomsPage
 
-
 open class CheckMySymptoms {
 
     lateinit var checkMySymptoms: CheckMySymptomsPage

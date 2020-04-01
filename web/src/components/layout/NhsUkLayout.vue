@@ -189,11 +189,9 @@ export default {
         || carePlans !== undefined);
     },
     shouldShowContentHeader() {
-      // the shouldShowContentHeader field is only
-      // defined if we do not need to show it
-      const route = findByName(this.$route.name);
-      return this.loggedIn && route !== undefined &&
-      route.shouldShowContentHeader === undefined;
+      const route = this.currentRoute;
+      return route !== undefined &&
+        (route.shouldShowContentHeader === undefined || route.shouldShowContentHeader === true);
     },
     shouldShowFullDesktopHeader() {
       return (

@@ -52,7 +52,7 @@ class SessionExpiryStepDefinitions  {
                 .setSessionExtendMockResponse(patient, expectedResponse)
     }
 
-    @When("^I click Check if you need urgent help$")
+    @When("^I click Use NHS 111 online$")
     fun iClickCheckIfYouNeedUrgentHelp() = checkMySymptoms.clickNHS111Header()
 
     @When("^I click Get advice about coronavirus$")
