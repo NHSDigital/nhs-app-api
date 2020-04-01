@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
                 }
             };
 
-            var expectedResult = new MessageRecipientsResponse
+            var expectedResult = new PatientPracticeMessageRecipients
             {
                 MessageRecipients = new List<MessageRecipient>
                 {

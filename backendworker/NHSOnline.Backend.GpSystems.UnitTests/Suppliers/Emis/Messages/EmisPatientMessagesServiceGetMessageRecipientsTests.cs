@@ -13,6 +13,7 @@ using NHSOnline.Backend.GpSystems.Messages;
 using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
@@ -54,6 +55,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             // Arrange
             var messageRecipientsGetResponse = _fixture.Create<MessageRecipientsResponse>();
 
+            var messageRecipients = new List<MessageRecipient>();
+
+            foreach (var recipient in messageRecipientsGetResponse.MessageRecipients)
+            {
+                messageRecipients.Add(new MessageRecipient
+                {
+                    RecipientIdentifier = recipient.RecipientGuid,
+                    Name = recipient.Name
+                });
+            }
+
+            var mappedMessageResponse = new PatientPracticeMessageRecipients
+            {
+                MessageRecipients = messageRecipients
+            };
+
             _mockClient
                 .Setup(c => c.PatientMessageRecipientsGet(GetMatchingEmisRequestParameters()))
                 .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<MessageRecipientsResponse>(
@@ -65,7 +82,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
                 .Verifiable();
             _mockMapper
                 .Setup(m => m.Map(It.Is<MessageRecipientsResponse>(r => r.Equals(messageRecipientsGetResponse))))
-                .Returns(messageRecipientsGetResponse)
+                .Returns(mappedMessageResponse)
                 .Verifiable();
 
             // Act
@@ -76,7 +93,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockMapper.Verify();
 
             result.Should().BeAssignableTo<GetPatientMessageRecipientsResult.Success>()
-                .Subject.Response.Should().BeEquivalentTo(messageRecipientsGetResponse);
+                .Subject.Response.Should().BeEquivalentTo(mappedMessageResponse);
         }
 
         [TestMethod]

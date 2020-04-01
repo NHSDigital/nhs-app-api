@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
             throw new System.NotImplementedException();
         }
 
-        private async Task<MessageRecipientsResponse> RetrieveMessageRecipients(TppUserSession tppUserSession)
+        private async Task<PatientPracticeMessageRecipients> RetrieveMessageRecipients(TppUserSession tppUserSession)
         {
             try
             {
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
             catch (Exception e)
             {
                 _logger.LogError(e, "Retrieving message recipients has failed. Returning HasErrored as true");
-                return new MessageRecipientsResponse
+                return new PatientPracticeMessageRecipients
                 {
                     HasErrored = true
                 };

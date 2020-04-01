@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
 {
     public interface IGetPatientPracticeMessagingRecipientsTaskChecker
     {
-        MessageRecipientsResponse Check(TppApiObjectResponse<MessageRecipientsReply> taskResponse);
+        PatientPracticeMessageRecipients Check(TppApiObjectResponse<MessageRecipientsReply> taskResponse);
     }
 
     public class GetPatientPracticeMessagingRecipientsTaskChecker : IGetPatientPracticeMessagingRecipientsTaskChecker
@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
         }
 
 
-        public MessageRecipientsResponse Check(TppApiObjectResponse<MessageRecipientsReply> taskResponse)
+        public PatientPracticeMessageRecipients Check(TppApiObjectResponse<MessageRecipientsReply> taskResponse)
         {
             _logger.LogEnter();
 
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
             }
 
             _logger.LogExit();
-            return new MessageRecipientsResponse
+            return new PatientPracticeMessageRecipients
             {
                 HasErrored = true
             };

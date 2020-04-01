@@ -103,7 +103,7 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         val recipients = EmisMessagingData.getDefaultMessageRecipients()
         val messageDetails = EmisMessagingData.getDefaultMessageDetailsWithReplies()
         val createMessageRequest = CreateMessageRequest("Test Results",
-                "When will my test results be ready", recipients.MessageRecipients[0].recipientIdentifier!!)
+                "When will my test results be ready", recipients.MessageRecipients[0].recipientGuid!!)
 
         PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES
             .setIfNotAlreadySet(getExpectedMessages(messages.messages))

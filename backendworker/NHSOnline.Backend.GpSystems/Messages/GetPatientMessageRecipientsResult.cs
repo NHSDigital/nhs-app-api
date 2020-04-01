@@ -8,9 +8,9 @@ namespace NHSOnline.Backend.GpSystems.Messages
 
         public class Success : GetPatientMessageRecipientsResult
         {
-            public MessageRecipientsResponse Response { get; }
+            public PatientPracticeMessageRecipients Response { get; }
 
-            public Success(MessageRecipientsResponse response)
+            public Success(PatientPracticeMessageRecipients response)
             {
                 Response = response;
             }

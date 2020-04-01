@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
 {
@@ -14,27 +15,33 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             _logger = logger;
         }
 
-        public MessageRecipientsResponse Map(MessageRecipientsResponse response)
+        public PatientPracticeMessageRecipients Map(MessageRecipientsResponse response)
         {
             var existingIds = new HashSet<string>();
 
-            var mappedResponse = new MessageRecipientsResponse
-            {
-                MessageRecipients = response?.MessageRecipients?
-                    .Where(r =>
+            var recipients = response?.MessageRecipients?
+                .Where(r =>
+                {
+                    var recipientGuid = r?.RecipientGuid;
+
+                    if (existingIds.Contains(recipientGuid))
                     {
-                        var recipientGuid = r?.RecipientIdentifier;
+                        _logger.LogInformation($"Duplicate recipient id {recipientGuid} removed from response");
+                        return false;
+                    }
 
-                        if (existingIds.Contains(recipientGuid))
-                        {
-                            _logger.LogInformation($"Duplicate recipient id {recipientGuid} removed from response");
-                            return false;
-                        }
+                    existingIds.Add(recipientGuid);
+                    return true;
+                }).Select(
+                    messageRecipient => new MessageRecipient
+                    {
+                        RecipientIdentifier = messageRecipient.RecipientGuid,
+                        Name = messageRecipient.Name
+                    }).ToList();
 
-                        existingIds.Add(recipientGuid);
-                        return true;
-                    })
-                    .ToList()
+            var mappedResponse = new PatientPracticeMessageRecipients
+            {
+                MessageRecipients = recipients
             };
 
             _logger.LogInformation($"Number of mapped recipients: {existingIds.Count}");

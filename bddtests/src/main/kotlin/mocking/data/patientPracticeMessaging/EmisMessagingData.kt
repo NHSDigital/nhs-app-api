@@ -11,6 +11,7 @@ import mocking.sharedModels.MessageResponseModel
 import mocking.sharedModels.MessagesResponseModel
 import mocking.sharedModels.PatientMessageSummary
 import mocking.sharedModels.Recipient
+import mocking.sharedModels.RecipientResponse
 import utils.setIfNotAlreadySet
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -19,6 +20,8 @@ import java.util.*
 
 object EmisMessagingData {
 
+    private val RECIPIENT_RESPONSE_1 = RecipientResponse("Dr. Dolittle", "1234-12345678-1234-1234-1")
+    private val RECIPIENT_RESPONSE_2 = RecipientResponse("Dr. NHS Online", "1234-12345678-1234-1234-2")
     private val RECIPIENT_1 = Recipient("Dr. Dolittle", "1234-12345678-1234-1234-1")
     private val RECIPIENT_2 = Recipient("Dr. NHS Online", "1234-12345678-1234-1234-2")
 
@@ -172,7 +175,7 @@ object EmisMessagingData {
             .setIfNotAlreadySet(arrayListOf(RECIPIENT_1, RECIPIENT_2))
 
         return MessageRecipientsResponseModel(
-            arrayListOf(RECIPIENT_1, RECIPIENT_2, RECIPIENT_1)
+            arrayListOf(RECIPIENT_RESPONSE_1, RECIPIENT_RESPONSE_2, RECIPIENT_RESPONSE_1)
         )
     }
 

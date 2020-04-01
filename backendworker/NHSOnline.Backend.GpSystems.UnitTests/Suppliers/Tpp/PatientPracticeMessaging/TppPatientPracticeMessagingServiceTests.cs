@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
 
             _messageRecipientsTaskChecker.Setup(x =>
                     x.Check(It.IsAny<TppApiObjectResponse<MessageRecipientsReply>>()))
-                .Returns(new MessageRecipientsResponse
+                .Returns(new PatientPracticeMessageRecipients
                 {
                     MessageRecipients = new List<MessageRecipient>
                     {
@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
 
             _messageRecipientsTaskChecker.Setup(x =>
                     x.Check(It.IsAny<TppApiObjectResponse<MessageRecipientsReply>>()))
-                .Returns(new MessageRecipientsResponse
+                .Returns(new PatientPracticeMessageRecipients
                 {
                     MessageRecipients = new List<MessageRecipient>(),
                     HasErrored = false

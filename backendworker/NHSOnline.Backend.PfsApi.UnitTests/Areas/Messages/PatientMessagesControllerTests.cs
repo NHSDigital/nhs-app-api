@@ -37,26 +37,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         private PatientMessagesController _systemUnderTest;
 
         private UserSession _userSession;
-        
+
         private const string GetMessagesRequestAuditType = "PatientPracticeMessages_View_Request";
         private const string GetMessagesResponseAuditType = "PatientPracticeMessages_View_Response";
         private const string GetMessagesRequestAuditMessage = "Viewing Patient to Practice Messages";
-        
+
         private const string GetMessageRequestAuditType = "PatientPracticeMessageDetails_Get_Request";
         private const string GetMessageResponseAuditType = "PatientPracticeMessageDetails_Get_Response";
         private const string GetMessageRequestAuditMessage = "Getting Patient to Practice Message Details";
-        
+
         private const string GetMessageRecipientsRequestAuditType = "PatientPracticeMessageRecipients_Get_Request";
         private const string GetMessageRecipientsResponseAuditType = "PatientPracticeMessageRecipients_Get_Response";
         private const string GetMessageRecipientsRequestAuditMessage = "Getting Patient to Practice Message Recipients";
-        
+
         private const string UpdateMessageUnreadStatusRequestAuditType = "PatientPracticeMessageUnreadStatus_Update_Request";
         private const string UpdateMessageUnreadStatusResponseAuditType = "PatientPracticeMessageUnreadStatus_Update_Response";
-        
+
         private const string CreateMessageRequestAuditType = "PatientPracticeMessage_Create_Request";
         private const string CreateMessageResponseAuditType = "PatientPracticeMessage_Create_Response";
         private const string CreateMessageRequestAuditMessage = "Creating a patient to practice message";
-        
+
         private const string DeletePatientPracticeMessageRequest = "PatientPracticeMessage_Delete_Request";
         private const string DeletePatientPracticeMessageResponse = "PatientPracticeMessage_Delete_Response";
 
@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             // Assert
             _mockPatientMessagesService.Verify();
             VerifyMockAuditor();
-            
+
             result
                 .Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().Be(successResponse);
@@ -145,7 +145,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             // Assert
             _mockPatientMessagesService.Verify();
             VerifyMockAuditor();
-            
+
             result
                 .Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().Be(successResponse);
@@ -156,15 +156,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         public async Task GetMessageRecipients_ReturnsSuccessResult_WhenServiceReturnsSuccessfulResponse()
         {
             // Arrange
-            var successResponse = _fixture.Create<MessageRecipientsResponse>();
+            var successResponse = _fixture.Create<PatientPracticeMessageRecipients>();
             var successResult = new GetPatientMessageRecipientsResult.Success(successResponse);
 
             _mockPatientMessagesService
                 .Setup(s => s.GetMessageRecipients(
                     It.Is<GpUserSession>(g => g == _userSession.GpUserSession)))
                 .Returns(Task.FromResult((GetPatientMessageRecipientsResult) successResult));
-            MockAuditor(GetMessageRecipientsRequestAuditType, GetMessageRecipientsRequestAuditMessage); 
-            MockAuditor(GetMessageRecipientsResponseAuditType, "Patient message recipients successfully retrieved"); 
+            MockAuditor(GetMessageRecipientsRequestAuditType, GetMessageRecipientsRequestAuditMessage);
+            MockAuditor(GetMessageRecipientsResponseAuditType, "Patient message recipients successfully retrieved");
 
             // Act
             var result = await _systemUnderTest.GetMessageRecipients();
@@ -172,7 +172,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             // Assert
             _mockPatientMessagesService.Verify();
             VerifyMockAuditor();
-            
+
             result
                 .Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().Be(successResponse);
@@ -206,7 +206,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             // Assert
             _mockPatientMessagesService.Verify();
             VerifyMockAuditor();
-            
+
             result
                 .Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().Be(successResponse);
@@ -231,7 +231,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             // Assert
             _mockPatientMessagesService.Verify();
             VerifyMockAuditor();
-            
+
             result.Should().BeAssignableTo<NoContentResult>();
         }
 
@@ -430,7 +430,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             MockErrorReferenceGenerator(expectedStatusCode);
             MockAuditor(GetMessageRecipientsRequestAuditType, GetMessageRecipientsRequestAuditMessage);
             MockAuditor(GetMessageRecipientsResponseAuditType, expectedAuditResponseMessage);
-            
+
             var expectedValue = new PfsErrorResponse
             {
                 ServiceDeskReference = _serviceDeskReference
@@ -479,7 +479,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                              p.MessageReadState.Equals(requestBody.MessageReadState, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(serviceResult))
                 .Verifiable();
-            
+
             MockErrorReferenceGenerator(expectedStatusCode);
             MockAuditor(UpdateMessageUnreadStatusRequestAuditType,
                 "Updating unread status for message with id 1 to Read");
@@ -551,7 +551,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             _mockPatientMessagesService.Verify();
             _mockErrorReferenceGenerator.Verify();
             VerifyMockAuditor();
-            
+
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             objectResult.StatusCode.Should().Be(expectedStatusCode);
             objectResult.Value.Should().BeEquivalentTo(expectedValue);

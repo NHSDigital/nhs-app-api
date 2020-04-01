@@ -7,13 +7,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
 {
     public interface IMessageRecipientsMapper
     {
-        MessageRecipientsResponse Map(MessageRecipientsReply messageRecipientsReply);
+        PatientPracticeMessageRecipients Map(MessageRecipientsReply messageRecipientsReply);
     }
 
     public class MessageRecipientsMapper : IMessageRecipientsMapper
     {
 
-        public MessageRecipientsResponse Map(MessageRecipientsReply messageRecipientsReply)
+        public PatientPracticeMessageRecipients Map(MessageRecipientsReply messageRecipientsReply)
         {
             if (messageRecipientsReply == null)
             {
@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
             var recipientList = messageRecipientsReply.Items.Select(
                 item => new MessageRecipient { Name = item.ItemText, RecipientIdentifier = item.Id, }).ToList();
 
-            return new MessageRecipientsResponse
+            return new PatientPracticeMessageRecipients
             {
                 MessageRecipients = recipientList,
                 HasErrored = false

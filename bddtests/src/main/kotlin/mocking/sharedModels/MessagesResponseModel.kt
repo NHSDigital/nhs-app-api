@@ -36,12 +36,17 @@ data class MessageReply(
 )
 
 data class MessageRecipientsResponseModel(
-        var MessageRecipients: List<Recipient> = arrayListOf()
+        var MessageRecipients: List<RecipientResponse> = arrayListOf()
 )
 
 data class Recipient (
         var name: String?,
         var recipientIdentifier: String? = null
+)
+
+data class RecipientResponse (
+        var name: String?,
+        var recipientGuid: String? = null
 )
 
 data class MessageReadStatusUpdateResponse (
