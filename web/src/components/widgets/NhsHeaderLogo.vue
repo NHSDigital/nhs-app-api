@@ -3,7 +3,7 @@
     <nuxt-link id="nhs_logo" ref="homeLogoEl"
                :class="'nhsuk-header__link'"
                :to="indexPath"
-               aria-label="NHS homepage">
+               :aria-label="$t('webHeader.nhsLogoAriaLabel')">
       <svg class="nhsuk-logo nhsuk-logo--white"
            xmlns="http://www.w3.org/2000/svg"
            focusable="false"

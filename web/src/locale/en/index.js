@@ -1847,9 +1847,14 @@ export default {
   },
   webHeader: {
     title: '{pageTitle} - NHS App',
+    nhsLogoAriaLabel: 'Access your NHS services homepage',
     links: {
       account: 'Settings',
       logout: 'Log out',
+    },
+    toggleMenu: {
+      ariaLabel: 'Open menu',
+      buttonText: 'Menu',
     },
   },
   skipLink: {
@@ -2463,7 +2468,7 @@ export default {
   },
   web: {
     home: {
-      title: 'NHS App',
+      title: 'Access your NHS services',
       bullets: {
         one: 'Book and manage your appointments at any time',
         two: 'Order repeat prescriptions from wherever you are',

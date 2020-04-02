@@ -52,36 +52,37 @@
 </template>
 
 <script>
-/* eslint-disable no-underscore-dangle */
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
+import CoronaVirusBanner from '@/components/widgets/CoronaVirusBanner';
 import FlashMessage from '@/components/widgets/FlashMessage';
-import SessionExpiredBanner from '@/components/SessionExpiredBanner';
 import HomeHeader from '@/components/HomeHeader';
 import NativeCallbacks from '@/services/native-app';
-import { getDynamicStyle } from '@/lib/desktop-experience';
-import WebHeader from '@/components/widgets/WebHeader';
-import WebFooter from '@/components/widgets/WebFooter';
+import NativeVersionSetup from '@/services/nativeVersionSetup';
 import NhsArrowBanner from '@/components/widgets/NhsArrowBanner';
-import NativeVersionSetup from '../services/nativeVersionSetup';
-import { findByName } from '@/lib/routes';
-import CoronaVirusBanner from '@/components/widgets/CoronaVirusBanner';
+import SessionExpiredBanner from '@/components/SessionExpiredBanner';
+import WebFooter from '@/components/widgets/WebFooter';
+import WebHeader from '@/components/widgets/WebHeader';
+import { CHECKYOURSYMPTOMS, findByName } from '@/lib/routes';
+import { getDynamicStyle } from '@/lib/desktop-experience';
 
 export default {
   components: {
-    HomeHeader,
-    NhsArrowBanner,
-    WebHeader,
-    WebFooter,
     ApiError,
     ConnectionError,
-    FlashMessage,
-    SessionExpiredBanner,
     CoronaVirusBanner,
+    FlashMessage,
+    HomeHeader,
+    NhsArrowBanner,
+    SessionExpiredBanner,
+    WebFooter,
+    WebHeader,
   },
   data() {
     return {
+      currentHelpUrl: findByName(this.$route.name).helpUrl,
       symptomButtonId: 'btn_home_symptoms',
+      symptomsUrl: CHECKYOURSYMPTOMS.path,
     };
   },
   computed: {
@@ -90,12 +91,6 @@ export default {
     },
     isErrorVisible() {
       return this.$store.getters['errors/showApiError'] || this.$store.state.errors.hasConnectionProblem;
-    },
-    currentHelpUrl() {
-      return findByName(this.$route.name).helpUrl;
-    },
-    symptomsUrl() {
-      return '/check-your-symptoms';
     },
   },
   head() {
