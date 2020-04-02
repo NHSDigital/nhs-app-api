@@ -1,25 +1,29 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 {
     internal sealed class TppLogMessagingService
     {
         private readonly ILogger _logger;
-        private readonly ITppClient _client;
+        private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccesses;
 
-        public TppLogMessagingService(ILogger<TppLogMessagingService> logger, ITppClient client)
+        public TppLogMessagingService(
+          ILogger<TppLogMessagingService> logger,
+          ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccesses)
         {
             _logger = logger;
-            _client = client;
+            _listServiceAccesses = listServiceAccesses;
         }
 
         public async Task FetchAndLogAccessInformation(TppUserSession userSession)
         {
             try
             {
-                var response = await _client.ListServiceAccessesPost(userSession);
+                var response = await _listServiceAccesses.Post(userSession);
                 response.Body?.ServiceAccess?.ForEach(x =>
                 {
                     if (string.Equals(x.Description, "Messaging", StringComparison.Ordinal))

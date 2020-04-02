@@ -8,24 +8,25 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
-{
-    [TestClass]
+{    
+  [TestClass]
     public class TppLogMessagingTests
     {
         private const string ResponseSuidHeader = "suid";
-
-        private Mock<ITppClient> _mockTppClient;
 
         private ServiceProvider _serviceProvider;
 
         private TppLogMessagingService _systemUnderTest;
 
         private Mock<ILogger<TppLogMessagingService>> TppMessagingLoggerServiceLogger => _serviceProvider.MockLogger<TppLogMessagingService>();
+        private Mock<ITppClientRequest<TppUserSession, ListServiceAccessesReply>> _mockListServiceAccesses;
+
 
         [TestInitialize]
         public void TestInitialize()
@@ -33,8 +34,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var services = new ServiceCollection();
             services.RegisterTppSessionServices();
             services.AddMockLoggers();
-            _mockTppClient = services.AddMock<ITppClient>();
-
+            _mockListServiceAccesses = services.AddMock<ITppClientRequest<TppUserSession, ListServiceAccessesReply>>();
             _serviceProvider = services.BuildServiceProvider();
             _systemUnderTest = _serviceProvider.GetRequiredService<TppLogMessagingService>();
         }
@@ -47,15 +47,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             var listServicesAccessesResponse = ListServiceAccessesReply();
 
-            _mockTppClient
-                .Setup(x => x.ListServiceAccessesPost(It.IsAny<TppUserSession>()))
+            _mockListServiceAccesses
+                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => listServicesAccessesResponse);
 
             // Act
             await _systemUnderTest.FetchAndLogAccessInformation(userSession);
 
             // Assert
-            _mockTppClient.Verify(x => x.ListServiceAccessesPost(userSession));
+            _mockListServiceAccesses.Verify(x => x.Post(userSession));
         }
 
         [TestMethod]
@@ -67,8 +67,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var listServicesAccessesResponse = ListServiceAccessesReply(
                 new ServiceAccess { Description = "Messaging", Status = "A", StatusDesc = "Enabled" });
 
-            _mockTppClient
-                .Setup(x => x.ListServiceAccessesPost(It.IsAny<TppUserSession>()))
+            _mockListServiceAccesses
+                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => listServicesAccessesResponse);
 
             // Act
@@ -92,8 +92,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var listServicesAccessesResponse = ListServiceAccessesReply(
                 new ServiceAccess { Description = "Messaging", Status = "A", StatusDesc = "Enabled" });
 
-            _mockTppClient
-                .Setup(x => x.ListServiceAccessesPost(It.IsAny<TppUserSession>()))
+            _mockListServiceAccesses
+                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => listServicesAccessesResponse);
 
             // Act
@@ -117,8 +117,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var listServicesAccessesResponse = ListServiceAccessesReply(
                 new ServiceAccess { Description = "Messaging", Status = status, StatusDesc = "Enabled" });
 
-            _mockTppClient
-                .Setup(x => x.ListServiceAccessesPost(It.IsAny<TppUserSession>()))
+            _mockListServiceAccesses
+                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => listServicesAccessesResponse);
 
             // Act
@@ -142,8 +142,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var listServicesAccessesResponse = ListServiceAccessesReply(
                 new ServiceAccess { Description = "Messaging", Status = "A", StatusDesc = statusDesc });
 
-            _mockTppClient
-                .Setup(x => x.ListServiceAccessesPost(It.IsAny<TppUserSession>()))
+            _mockListServiceAccesses
+                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => listServicesAccessesResponse);
 
             // Act
@@ -168,8 +168,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 new ServiceAccess { Description = description, Status = "A", StatusDesc = "Not Enabled" }
             );
 
-            _mockTppClient
-                .Setup(x => x.ListServiceAccessesPost(It.IsAny<TppUserSession>()))
+            _mockListServiceAccesses
+                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
                 .ReturnsAsync(() => listServicesAccessesResponse);
 
             // Act
