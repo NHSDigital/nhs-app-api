@@ -20,6 +20,8 @@
 	<string>$(APPOINTMENTS_URL_PATH)</string>
 	<key>AppontmentsGpAtHandUrlPath</key>
 	<string>$(APPOINTMENTS_GP_AT_HAND_URL_PATH)</string>
+	<key>DeepLinkAppClosed</key>
+	<string></string>
 	<key>AuthRedirectPath</key>
 	<string>$(AUTH_REDIRECT_PATH)</string>
 	<key>BaseApiUrl</key>
@@ -156,7 +158,7 @@
 	<string>https://$(NHS_111_LOCATION_URL)</string>
 	<key>Nhs111Url</key>
 	<string>https://$(NHS_111_URL)</string>
-	<key>NotificationLinkPropertyName</key>
+	<key>LinkPropertyName</key>
 	<string>url</string>
 	<key>OpenSourceLicencesURL</key>
 	<string>https://$(OPEN_SOURCE_LICENCE_URL)</string>
@@ -176,6 +178,8 @@
 	<string>https://$(PRIVACY_POLICY_OLD)</string>
 	<key>PrivateKeyLabel</key>
 	<string>nhs-biometrics-key</string>
+	<key>RedirectorUrl</key>
+	<string>$(HOME_URL)redirector?redirect_to=</string>
 	<key>ResponseWaitingTime</key>
 	<integer>20</integer>
 	<key>SessionCookieName</key>

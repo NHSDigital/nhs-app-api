@@ -68,4 +68,17 @@ class UrlHelper {
         }
         return UIApplication.shared.canOpenURL(url)
     }
+    
+    static func createRedirectToUrl(url : String) -> URL? {
+        let resolvedUrl = UrlHelper.ensureUrlWithScheme(url: "\(config().RedirectorUrl)\(url)")
+        return resolvedUrl
+    }
+    
+    static func checkForUrlOverride(url : String) -> String {
+        guard let urlToLoad = UserDefaults.standard.url(forKey: config().LinkPropertyName) else {
+            return url
+        }
+        UserDefaults.standard.removeObject(forKey: config().LinkPropertyName)
+        return urlToLoad.absoluteString
+    }    
 }

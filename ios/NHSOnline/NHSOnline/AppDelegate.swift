@@ -25,6 +25,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self
         }
+        
+        let userActivities = launchOptions?[.userActivityDictionary] as? [String: AnyObject]
+
+        let activity = userActivities?["UIApplicationLaunchOptionsUserActivityTypeKey"] as? String
+        
+        if (activity == "NSUserActivityTypeBrowsingWeb"){
+            UserDefaults.standard.set(true, forKey: config().DeepLinkAppClosed)
+        }
+        
         setLocale()
         handleNotifications(launchOptions: launchOptions)
         return true
@@ -34,8 +43,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         clearCaches()
         
         let webPageUrl = userActivity.webpageURL?.absoluteString
-        self.finishLoginToApp(webPageUrl!)
-        return true
+        let convertedUrl = UrlHelper.createRedirectToUrl(url: webPageUrl!)
+        if UrlHelper.isSameSchemeAndHostAsHomeUrl(url: convertedUrl)
+        {
+            UserDefaults.standard.set(convertedUrl, forKey: config().LinkPropertyName)
+        }
+
+        if #available(iOS 12.0, *) {
+            self.finishLoginToApp(convertedUrl!.absoluteString)
+            return true
+        } else {
+            let appClosed = UserDefaults.standard.bool(forKey: config().DeepLinkAppClosed)
+            if (appClosed) {
+                UserDefaults.standard.removeObject(forKey: config().DeepLinkAppClosed)
+                return false;
+            }
+            self.finishLoginToApp(convertedUrl!.absoluteString)
+            return true
+        }
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -105,7 +130,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             return
         }
         
-        guard let url = aps[config().NotificationLinkPropertyName] as? String else {
+        guard let url = aps[config().LinkPropertyName] as? String else {
             return
         }
         
@@ -129,14 +154,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             return
         }
         
-        guard let url = aps[config().NotificationLinkPropertyName] as? String else {
+        guard let url = aps[config().LinkPropertyName] as? String else {
             return
         }
         
         let convertedUrl = UrlHelper.ensureUrlWithScheme(url: url)
         if UrlHelper.isSameSchemeAndHostAsHomeUrl(url: convertedUrl)
         {
-            UserDefaults.standard.set(convertedUrl, forKey: config().NotificationLinkPropertyName)
+            UserDefaults.standard.set(convertedUrl, forKey: config().LinkPropertyName)
         }
     }
 }

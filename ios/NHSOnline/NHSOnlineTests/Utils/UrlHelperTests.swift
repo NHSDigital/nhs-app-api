@@ -125,4 +125,20 @@ class UrlHelperTests: XCTestCase {
 
         XCTAssertTrue(result.absoluteString == expectedResult, "unexpected URL: " + result.absoluteString)
     }
+    
+    func test_checkForUrlOverride_ReturnsUrlWhenUserDefaultsStandardUrlIsNil(){
+        let url = "https://www.test.com"
+        let result = UrlHelper.checkForUrlOverride(url: url)
+        
+        XCTAssertTrue(result == url, "unexpected URL: " + result)
+    }
+    
+    func test_checkForUrlOverride_ReturnsUrlWhenUserDefaultsStandardUrlIsNotNil(){
+        let url = "https://www.test.com"
+        let overrideUrl = URL(string: "https://www.overrideurl.com")
+        UserDefaults.standard.set(overrideUrl, forKey: config().LinkPropertyName)
+        let result = UrlHelper.checkForUrlOverride(url: url)
+        
+        XCTAssertTrue(result == overrideUrl?.absoluteString, "unexpected URL: " + result)
+    }
 }

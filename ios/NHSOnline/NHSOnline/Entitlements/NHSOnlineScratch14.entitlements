@@ -7,6 +7,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:www-scratch14.dev.nonlive.nhsapp.service.nhs.uk</string>
+		<string>applinks:pat.dev.refer.nhs.uk</string>
 	</array>
 </dict>
 </plist>

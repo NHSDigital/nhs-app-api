@@ -2,13 +2,13 @@ import Foundation
 
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
-        case HomeUrl, Nhs111Url, Nhs111LocationUrl, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost
+        case HomeUrl, Nhs111Url, Nhs111LocationUrl, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost, RedirectorUrl
         case AppointmentsUrlPath, AppontmentsGpAtHandUrlPath, InformaticaUrlPath,  AdminHelpUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, PrescriptionsGpAtHandUrlPath, MyAccountUrlPath, MyRecordGpAtHandUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath
         case ResponseWaitingTime, SessionTimeout, ApiCallTimeoutSeconds
         case HelpURL, HelpAccountURL, HelpAppointmentsURL, HelpLoginURL, HelpPrescriptionsURL, HelpRecordURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld, ConditionsUrlPath, DataSharingUrl
         case BaseApiUrl, ConfigurationApiPath, AppStoreUrl, SessionCookieName, AAID, PrivateKeyLabel
         case BiometricHelpURL, FidoLoginErrorPath, BiometricAuthResponseParam, BiometricsRegistrationResponseEndpoint, BiometricsAuthenticationRequestEndpoint, BiometricsRegistrationRequestEndpoint, BiometricsDeregistrationRequestEndpoint, BiometricsAssertionScheme, CidUrlSuffix
-        case MenuTimeoutSeconds, NotificationLinkPropertyName
+        case MenuTimeoutSeconds, LinkPropertyName, DeepLinkAppClosed
     }
     
     let HomeUrl: String
@@ -19,6 +19,7 @@ struct Config: Decodable {
     let BaseScheme: String
     let HotJarLinkUrl: String
     let DataPreferencesURL: String
+    let RedirectorUrl: String
 
     let MyRecordUrlPath: String
     let MyRecordGpAtHandUrlPath: String
@@ -78,7 +79,8 @@ struct Config: Decodable {
     let MenuTimeoutSeconds: Double
     let HomeHost: String
     let ApiCallTimeoutSeconds: Int
-    let NotificationLinkPropertyName: String
+    let LinkPropertyName: String
+    let DeepLinkAppClosed: String
 }
 
 private var instance: Config! = nil

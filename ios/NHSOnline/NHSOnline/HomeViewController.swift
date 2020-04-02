@@ -102,13 +102,8 @@ class HomeViewController : UIViewController {
         DispatchQueue.main.async {
             switch self.configurationServiceProvider!.getConfigurationResponse() {
             case .success(_):
-                guard let urlToLoad = UserDefaults.standard.url(forKey: config().NotificationLinkPropertyName) else {
-                    self.webViewController?.loadPage(url: config().HomeUrl)
-                    return
-                }
-
+                let urlToLoad = UrlHelper.checkForUrlOverride(url: config().HomeUrl)
                 self.webViewController?.loadPage(url: urlToLoad)
-                UserDefaults.standard.removeObject(forKey: config().NotificationLinkPropertyName)
                 return
             default:
                 self.apiCallFailure()
