@@ -2,7 +2,6 @@ import SwitchProfile from '@/pages/switch-profile/index';
 import { create$T, createStore, mount } from '../../helpers';
 import * as dependency from '@/lib/utils';
 import '@/plugins/filters';
-import { INDEX } from '../../../../src/lib/routes';
 
 const $t = create$T();
 
@@ -71,18 +70,9 @@ describe('switch profile page is there', () => {
       expect(gpPracticeName.exists()).toBe(true);
     });
 
-    it('should navigate when switch to my profile button is clicked', async () => {
-      // arrange
+    it('should have a switch profile button', async () => {
       switchToMyProfileButton = wrapper.find('[id="switch-profile-button"]');
       expect(switchToMyProfileButton.exists()).toBe(true);
-
-      // act
-      await switchToMyProfileButton.trigger('click');
-
-      // assert
-      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchToMainUserProfile', { id: mainUserGuid });
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm.$children[0], INDEX.path);
     });
   });
 });

@@ -56,9 +56,10 @@ describe('shutter component', () => {
 
     it('will call switch and redirect to index when switch back button is clicked', async () => {
       dependency.redirectTo = jest.fn();
-      await switchBackButton.trigger('click');
+      await wrapper.vm.switchProfileButtonClicked();
 
       expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchToMainUserProfile', { id: mainPatientId });
+      expect($store.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, INDEX.path);
     });

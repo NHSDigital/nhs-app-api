@@ -116,6 +116,7 @@ export default {
         id: mainPatientId,
       };
       await this.$store.dispatch('linkedAccounts/switchToMainUserProfile', mainUserObject);
+      await this.$store.dispatch('serviceJourneyRules/init');
       redirectTo(this, INDEX.path);
     },
   },

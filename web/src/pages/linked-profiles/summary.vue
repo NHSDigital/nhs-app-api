@@ -98,7 +98,7 @@ export default {
   methods: {
     async switchProfileButtonClicked() {
       await this.$store.dispatch('linkedAccounts/switchProfile', this.linkedAccount);
-      await this.$store.dispatch('serviceJourneyRules/loadLinkedAccount');
+      await this.$store.dispatch('serviceJourneyRules/init');
       redirectTo(this, INDEX.path);
     },
   },
