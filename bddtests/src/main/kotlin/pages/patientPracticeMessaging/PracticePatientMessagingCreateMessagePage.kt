@@ -15,7 +15,7 @@ class PracticePatientMessagingCreateMessagePage: HybridPageObject() {
         messageSubHeader().isDisplayed
         sendMessageButton().isDisplayed
 
-        assertEquals("For advice now, phone or visit your GP surgery, visit 111.nhs.uk or call 111.",
+        assertEquals("For advice now, contact your GP surgery directly, go to 111.nhs.uk or call 111.",
                 messageSubHeader().text)
     }
 

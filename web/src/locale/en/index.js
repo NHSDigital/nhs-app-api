@@ -141,10 +141,10 @@ export default {
         },
       },
       465: {
-        title: 'You are too young to use the NHS App',
+        title: 'Login failed',
         message: {
-          text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, visit 111.nhs.uk or call 111.',
-          label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, visit 111.nhs.uk or call one one one.',
+          text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to 111.nhs.uk or call 111.',
+          label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still contact your GP surgery to access your NHS services. For urgent medical advice, go to 111.nhs.uk or call one one one.',
         },
       },
       500: {
@@ -1310,11 +1310,11 @@ export default {
     info: {
       paragraph1: 'Messaging is for non-urgent advice.',
       paragraph2: {
-        part1: 'For advice now, phone or visit your GP surgery, go to ',
+        part1: 'For advice now, contact your GP surgery directly, go to ',
         part2: '111.nhs.uk',
         part3: ' or ',
         part4: 'call 111',
-        ariaLabel: 'For advice now, phone or visit your GP surgery, go to 111.nhs.uk or call one one one.',
+        ariaLabel: 'For advice now, contact your GP surgery directly, go to 111.nhs.uk or call one one one.',
       },
     },
     careCard: {
@@ -1388,7 +1388,7 @@ export default {
       subjectLabelText: 'Subject',
       subjectTextError: 'Enter a subject',
       subjectHintText: 'Text must be shorter than 64 characters (about 10 words).',
-      subHeader: 'For advice now, phone or visit your GP surgery, visit',
+      subHeader: 'For advice now, contact your GP surgery directly, go to ',
       nhs111Link: '111.nhs.uk',
       or: 'or',
       call111Link: 'call 111',
@@ -1566,7 +1566,7 @@ export default {
     messageDetails: 'Messages',
     patientPracticeMessaging: 'Messages',
     patientPracticeMessagingUrgency: 'Do you need urgent advice?',
-    patientPracticeMessagingUrgencyContactYourGp: 'Phone or visit your GP or NHS 111',
+    patientPracticeMessagingUrgencyContactYourGp: 'Call your GP or use NHS 111',
     patientPracticeMessagingRecipients: 'Select who to message',
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
   },
@@ -1650,7 +1650,7 @@ export default {
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
     messaging: 'Messages',
     patientPracticeMessagingUrgency: 'Do you need urgent advice?',
-    patientPracticeMessagingUrgencyContactYourGp: 'Phone or visit your GP or NHS 111',
+    patientPracticeMessagingUrgencyContactYourGp: 'Call your GP or use NHS 111',
     patientPracticeMessagingRecipients: 'Select who to message',
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
   },
