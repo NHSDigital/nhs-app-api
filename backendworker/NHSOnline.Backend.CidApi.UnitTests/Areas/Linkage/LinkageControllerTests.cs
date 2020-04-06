@@ -37,13 +37,12 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
         private ConfigurationSettings _settings;
         private Mock<IOdsCodeMassager> _odsCodeMassager;
         private const int MinimumLinkageAge = 16;
-        
+
         private const string CookieDomain = "CookieDomain";
-        private const int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;   
+        private const int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;
         private const int DefaultSessionExpiryMinutes  = 10;
         private const int DefaultHttpTimeoutSeconds = 6;
         private const int MinimumAppAge = 16;
-        private readonly DateTimeOffset? _currentTermsConditionsEffectiveDate = DateTimeOffset.Now;
         private const string GetRequestAuditType = "Linkage_GetDetails_Request";
         private const string GetResponseAuditType = "Linkage_GetDetails_Response";
         private const string PostRequestAuditType = "Linkage_CreateKey_Request";
@@ -56,15 +55,15 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            _settings = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultSessionExpiryMinutes, 
-            DefaultHttpTimeoutSeconds, MinimumAppAge, MinimumLinkageAge, _currentTermsConditionsEffectiveDate);
+            _settings = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultSessionExpiryMinutes,
+                DefaultHttpTimeoutSeconds, MinimumAppAge, MinimumLinkageAge);
 
             _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
             _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(true);
             _odsCodeMassager = _fixture.Freeze<Mock<IOdsCodeMassager>>();
             _odsCodeMassager.Setup(x => x.CheckOdsCode(DefaultOdsCode)).Returns(DefaultOdsCode);
         }
-        
+
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]
@@ -73,7 +72,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
         {
             // Arrange
             var linkageController = CreateLinkageController();
-            
+
             // Act
             var result = await linkageController.Get(DefaultNhsNumber, DefaultSurname, DefaultDateOfBirth.Value, odsCode, DefaultIdentityToken);
 
@@ -152,7 +151,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                                                  req.IdentityToken.Equals(DefaultIdentityToken, StringComparison.Ordinal))), Times.Once);
 
             logger.VerifyLogger(LogLevel.Information, $"Retrieve LinkageKey for NhsNumber={DefaultNhsNumberWithoutWhitespace}", Times.Once());
-            
+
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<LinkageResponse>()
                 .Subject.Should().BeEquivalentTo(expectedResponse);
@@ -215,14 +214,14 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             };
 
             var linkageController = CreateLinkageController();
-            
+
             // Act
             var result = await linkageController.Post(request);
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();
         }
-        
+
         [TestMethod]
         public async Task Post_ReturnsABadRequestResult_WhenRequestValidationFails()
         {
@@ -289,7 +288,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var expectedResponse = _fixture.Create<LinkageResponse>();
             var mockResult = new LinkageResult.SuccessfullyCreated(expectedResponse);
             var mockLinkageService = new Mock<ILinkageService>();
-            
+
             mockLinkageService.Setup(x => x.CreateLinkageKey(
                 It.Is<CreateLinkageRequest>(req => req.NhsNumber.Equals(DefaultNhsNumber, StringComparison.Ordinal) &&
                                                    req.Surname.Equals(DefaultSurname, StringComparison.Ordinal) &&
@@ -333,14 +332,14 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                                                    req.EmailAddress.Equals(DefaultEmailAddress, StringComparison.Ordinal))), Times.Once);
 
             logger.VerifyLogger(LogLevel.Information, $"Create LinkageKey for NhsNumber={DefaultNhsNumberWithoutWhitespace}", Times.Once());
-            
+
             result.Should().BeAssignableTo<CreatedResult>()
                 .Subject.Value.Should().BeAssignableTo<LinkageResponse>()
                 .Subject.Should().BeEquivalentTo(expectedResponse);
             _mockAuditor.Verify(x => x.AuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), PostRequestAuditType, It.IsAny<string>()));
             _mockAuditor.Verify(x => x.AuditRegistrationEvent(It.IsAny<string>(), It.IsAny<Supplier>(), PostResponseAuditType, It.IsAny<string>()));
         }
-        
+
         [TestMethod]
         public async Task Post_Returns403FailedAgeCheck_WhenDateOfBirthIsUnderTheMinimumLinkageAge()
         {
@@ -350,7 +349,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             var mockResult = new LinkageResult.SuccessfullyRetrieved(expectedResponse);
 
             var mockLinkageService = new Mock<ILinkageService>();
-            
+
             mockLinkageService.Setup(x => x.CreateLinkageKey(
                 It.Is<CreateLinkageRequest>(req => req.NhsNumber.Equals(DefaultNhsNumber, StringComparison.Ordinal) &&
                                                    req.Surname.Equals(DefaultSurname, StringComparison.Ordinal) &&
@@ -359,11 +358,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                                                    req.IdentityToken.Equals(DefaultIdentityToken, StringComparison.Ordinal) &&
                                                    req.EmailAddress.Equals(DefaultEmailAddress, StringComparison.Ordinal)))
             ).ReturnsAsync(mockResult);
-            
+
             var request = BuildCreateLinkageRequest();
-            
+
             _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), MinimumLinkageAge)).Returns(false);
-            
+
             var linkageController = CreateLinkageController();
 
             // Act
@@ -414,11 +413,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
                 _settings,
                 _odsCodeMassager.Object,
                 mockGpSystemResolver.Object);
-       
+
            // Act
            var actionResult = await linkageController.Post(request);
-       
-           // Assert                 
+
+           // Assert
            actionResult.Should().BeAssignableTo<StatusCodeResult>()
                .Subject.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
        }
@@ -439,19 +438,19 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
 
             return new LinkageController(
                 logger.Object,
-                _mockAuditor.Object, 
-                _mockMinimumAgeValidator.Object, 
+                _mockAuditor.Object,
+                _mockMinimumAgeValidator.Object,
                 _settings,
                 _odsCodeMassager.Object,
                 odsCodeLookup.Object);
         }
-        
+
         private static Mock<ILinkageValidationService> MockLinkageValidationService(bool validationResult = false)
         {
             var mockLinkageValidationService = new Mock<ILinkageValidationService>();
 
             mockLinkageValidationService.Setup(x => x.IsGetValid(It.IsAny<GetLinkageRequest>())).Returns(validationResult);
-            
+
             mockLinkageValidationService.Setup(x => x.IsPostValid(It.IsAny<CreateLinkageRequest>())).Returns(validationResult);
 
             return mockLinkageValidationService;

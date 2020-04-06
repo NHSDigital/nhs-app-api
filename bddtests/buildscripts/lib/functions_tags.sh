@@ -2,7 +2,7 @@
 
 TAGS_NEVER_RUN=(bug pending manual tech-debt)
 TAGS_TRANCHE_RUN=(organ-donation prescription appointments my-record)
-TAGS_CUSTOM_RUN=(native cosmos accessibility onlineconsultations long-running appointments-book)
+TAGS_CUSTOM_RUN=(native accessibility onlineconsultations long-running appointments-book)
 
 TAGS_NATIVE_CUSTOM_RUN=(long-running)
 TAGS_NATIVE_NEVER_RUN=(nativepending nativebug)

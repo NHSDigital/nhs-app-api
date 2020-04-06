@@ -15,7 +15,5 @@ namespace NHSOnline.Backend.Support.Settings
         int MinimumAppAge { get; set; }
 
         int MinimumLinkageAge { get; set; }
-
-        DateTimeOffset? CurrentTermsConditionsEffectiveDate { get; set; }
     }
 }

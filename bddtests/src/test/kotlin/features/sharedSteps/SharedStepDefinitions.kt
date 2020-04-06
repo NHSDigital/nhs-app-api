@@ -15,6 +15,7 @@ import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
@@ -62,6 +63,8 @@ open class SharedStepDefinitions {
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+
+        TermsAndConditionsJourneyFactory.consent(patient)
     }
 
     @Given("^I am logged in$")
@@ -72,6 +75,8 @@ open class SharedStepDefinitions {
         DemographicsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .enableForPatientProxyAccounts(patient)
+
+        TermsAndConditionsJourneyFactory.consent(patient)
 
         login.using(patient)
         home.waitForLoginToCompleteSuccessfully()

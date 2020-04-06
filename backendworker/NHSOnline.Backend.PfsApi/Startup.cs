@@ -40,6 +40,8 @@ using NHSOnline.Backend.PfsApi.SpineSearch;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
+using NHSOnline.Backend.PfsApi.TermsAndConditions;
+using NHSOnline.Backend.Support.Repository;
 using Wkhtmltopdf.NetCore;
 using ConfigurationSettings = NHSOnline.Backend.Support.Settings.ConfigurationSettings;
 
@@ -225,18 +227,43 @@ namespace NHSOnline.Backend.PfsApi
             var proxyConfig = CreateAndValidateProxyEnvironmentVariables();
             services.AddSingleton(proxyConfig);
 
-            var isSpineLdapLookupEnabled = bool.TrueString.Equals(Configuration.GetOrWarn("SPINE_LDAP_LOOKUP_ENABLED", _logger), StringComparison.OrdinalIgnoreCase);
-
-            var spineLdapConfigurationSettings = CreateAndValidateSpineLdapConfig(isSpineLdapLookupEnabled);
+            var spineLdapConfigurationSettings = CreateAndValidateSpineLdapConfig();
             services.AddSingleton(spineLdapConfigurationSettings);
 
             var nominatedPharmacyConfig = new NominatedPharmacyConfigurationSettings(false, null, null, 0, null, null);
             services.AddSingleton<INominatedPharmacyConfigurationSettings>(nominatedPharmacyConfig);
+
+            var mongoConfiguration = CreateMongoConfiguration();
+            services.AddSingleton(mongoConfiguration);
+
+            var termsAndConditionsConfiguration = CreateTermsAndConditionsConfiguration();
+            services.AddSingleton(termsAndConditionsConfiguration);
+        }
+
+        private ITermsAndConditionsConfiguration CreateTermsAndConditionsConfiguration()
+        {
+            var effectiveDate =
+                Configuration.GetOrThrow("ConfigurationSettings:CurrentTermsConditionsEffectiveDate", _logger);
+            return new TermsAndConditionsConfiguration(effectiveDate);
+        }
+
+        private IMongoConfiguration CreateMongoConfiguration()
+        {
+            var databaseName = Configuration.GetOrThrow("CONSENT_MONGO_DATABASE_NAME", _logger);
+            var userDeviceCollectionName =
+                Configuration.GetOrThrow("CONSENT_MONGO_DATABASE_COLLECTION", _logger);
+            var host = Configuration.GetOrThrow("CONSENT_MONGO_DATABASE_HOST", _logger);
+            var port = Configuration.GetIntOrThrow("CONSENT_MONGO_DATABASE_PORT", _logger);
+            var username = Configuration.GetOrNull("CONSENT_MONGO_DATABASE_USERNAME");
+            var password = Configuration.GetOrNull("CONSENT_MONGO_DATABASE_PASSWORD");
+
+            return new MongoConfiguration(host, port, databaseName, username, password, userDeviceCollectionName);
         }
 
         private SessionConfigurationSettings CreateAndValidateProxyEnvironmentVariables()
         {
-            var proxyEnabled = bool.TrueString.Equals(Configuration.GetOrThrow("PROXY_ACCESS_ENABLED", _logger), StringComparison.OrdinalIgnoreCase);
+            var proxyEnabled = bool.TrueString.Equals(Configuration.GetOrThrow("PROXY_ACCESS_ENABLED", _logger),
+                StringComparison.OrdinalIgnoreCase);
             return new SessionConfigurationSettings(proxyEnabled);
         }
 
@@ -300,25 +327,25 @@ namespace NHSOnline.Backend.PfsApi
             var prescriptionsDefaultLastNumberMonthsToDisplay = Configuration.GetIntOrThrow(
                 "ConfigurationSettings:PrescriptionsDefaultLastNumberMonthsToDisplay", _logger
             );
-            var defaultSessionExpiryMinutes = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultSessionExpiryMinutes", _logger);
-            var defaultHttpTimeoutSeconds = Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
+            var defaultSessionExpiryMinutes =
+                Configuration.GetIntOrThrow("ConfigurationSettings:DefaultSessionExpiryMinutes", _logger);
+            var defaultHttpTimeoutSeconds =
+                Configuration.GetIntOrThrow("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
             var minimumAppAge = Configuration.GetIntOrThrow("ConfigurationSettings:MinimumAppAge", _logger);
             var minimumLinkageAge = Configuration.GetIntOrThrow("ConfigurationSettings:MinimumLinkageAge", _logger);
-            var currentTermsConditionsEffectiveDate = DateTimeOffset.Parse(
-                Configuration.GetOrWarn("ConfigurationSettings:CurrentTermsConditionsEffectiveDate", _logger),
-                CultureInfo.InvariantCulture
-            );
 
             var config = new ConfigurationSettings(cookieDomain, prescriptionsDefaultLastNumberMonthsToDisplay,
-            defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds, minimumAppAge, minimumLinkageAge, currentTermsConditionsEffectiveDate);
+                defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds, minimumAppAge, minimumLinkageAge);
 
             config.Validate();
             return config;
         }
 
-        private SpineLdapConfigurationSettings CreateAndValidateSpineLdapConfig(bool isLDAPEnabled)
+        private SpineLdapConfigurationSettings CreateAndValidateSpineLdapConfig()
         {
             SpineLdapConfigurationSettings config;
+            var isLDAPEnabled = bool.TrueString.Equals(
+                Configuration.GetOrWarn("SPINE_LDAP_LOOKUP_ENABLED", _logger), StringComparison.OrdinalIgnoreCase);
 
             if (isLDAPEnabled)
             {
@@ -329,7 +356,8 @@ namespace NHSOnline.Backend.PfsApi
                 var certPassword = Configuration.GetOrThrow("SPINE_CERT_PASSWORD", _logger);
                 var nhsAppPartyId = Configuration.GetOrThrow("NHS_APP_PARTY_ID_FOR_SPINE", _logger);
 
-                config = new SpineLdapConfigurationSettings(ldapHost, ldapPort, loginDn, certPath, certPassword, nhsAppPartyId);
+                config = new SpineLdapConfigurationSettings(ldapHost, ldapPort, loginDn, certPath, certPassword,
+                    nhsAppPartyId);
             }
             else
             {
@@ -349,13 +377,19 @@ namespace NHSOnline.Backend.PfsApi
             var certificatePath = Configuration.GetOrWarn("EMIS_CERTIFICATE_PATH", _logger);
             var certificatePassphrase = Configuration.GetOrWarn("EMIS_CERTIFICATE_PASSWORD", _logger);
 
-            var emisExtendedHttpTimeoutSeconds = Configuration.GetIntOrWarn("ConfigurationSettings:EmisExtendedHttpTimeoutSeconds", _logger);
-            var defaultHttpTimeoutSeconds = Configuration.GetIntOrWarn("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
-            var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
-            var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
+            var emisExtendedHttpTimeoutSeconds =
+                Configuration.GetIntOrWarn("ConfigurationSettings:EmisExtendedHttpTimeoutSeconds", _logger);
+            var defaultHttpTimeoutSeconds =
+                Configuration.GetIntOrWarn("ConfigurationSettings:DefaultHttpTimeoutSeconds", _logger);
+            var coursesMaxCoursesLimit =
+                Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
+            var prescriptionsMaxCoursesSoftLimit =
+                Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
 
-            var config = new EmisConfigurationSettings(new Uri(emisBaseUrl, UriKind.Absolute), applicationId, version, certificatePath, certificatePassphrase,
-             emisExtendedHttpTimeoutSeconds, defaultHttpTimeoutSeconds, coursesMaxCoursesLimit, prescriptionsMaxCoursesSoftLimit, environment);
+            var config = new EmisConfigurationSettings(new Uri(emisBaseUrl, UriKind.Absolute), applicationId, version,
+                certificatePath, certificatePassphrase,
+                emisExtendedHttpTimeoutSeconds, defaultHttpTimeoutSeconds, coursesMaxCoursesLimit,
+                prescriptionsMaxCoursesSoftLimit, environment);
             config.Validate();
 
             return config;
@@ -367,10 +401,13 @@ namespace NHSOnline.Backend.PfsApi
             var certificatePath = Configuration.GetOrWarn("MICROTEST_CERT_PATH", _logger);
             var certificatePassphrase = Configuration.GetOrWarn("MICROTEST_CERT_PASSPHRASE", _logger);
 
-            var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
-            var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
+            var prescriptionsMaxCoursesSoftLimit =
+                Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
+            var coursesMaxCoursesLimit =
+                Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
 
-            var config = new MicrotestConfigurationSettings(new Uri(baseUrlstring), certificatePath, certificatePassphrase, environment, prescriptionsMaxCoursesSoftLimit, coursesMaxCoursesLimit);
+            var config = new MicrotestConfigurationSettings(new Uri(baseUrlstring), certificatePath,
+                certificatePassphrase, environment, prescriptionsMaxCoursesSoftLimit, coursesMaxCoursesLimit);
             config.Validate();
 
             return config;
@@ -385,7 +422,8 @@ namespace NHSOnline.Backend.PfsApi
             var minimumSupportediOSVersion = Configuration["ConfigurationSettings:MinimumSupportediOSVersion"];
             var fidoServerUrl = new Uri(Configuration["ConfigurationSettings:FidoServerUrl"], UriKind.Absolute);
 
-            var config = new DeviceConfigurationSettings(nhsLoginLoggedInPaths, minimumSupportedAndroidVersion, minimumSupportediOSVersion, fidoServerUrl, webAppBaseUrl);
+            var config = new DeviceConfigurationSettings(nhsLoginLoggedInPaths, minimumSupportedAndroidVersion,
+                minimumSupportediOSVersion, fidoServerUrl, webAppBaseUrl);
             config.Validate();
 
             return config;
@@ -403,8 +441,10 @@ namespace NHSOnline.Backend.PfsApi
             var certificatePassphrase = Configuration.GetOrWarn("TPP_CERTIFICATE_PASSWORD", _logger);
             var supportsLinkedAccounts = Configuration.GetOrWarn("TPP_SUPPORTS_LINKED_ACCOUNTS", _logger);
 
-            var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
-            var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
+            var prescriptionsMaxCoursesSoftLimit =
+                Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
+            var coursesMaxCoursesLimit =
+                Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
 
             var config = new TppConfigurationSettings(
                 new Uri(tppBaseUrl, UriKind.Absolute),
@@ -438,9 +478,12 @@ namespace NHSOnline.Backend.PfsApi
             var visionSenderUserIdentity = Configuration.GetOrWarn("VISION_SENDER_USERIDENTITY", _logger);
             var visionSenderUserRole = Configuration.GetOrWarn("VISION_SENDER_USERROLE", _logger);
 
-            var prescriptionsMaxCoursesSoftLimit = Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
-            var coursesMaxCoursesLimit = Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
-            var visionAppointmentSlotsRequestCount = Configuration.GetIntOrWarn("ConfigurationSettings:VisionAppointmentSlotsRequestCount", _logger);
+            var prescriptionsMaxCoursesSoftLimit =
+                Configuration.GetIntOrWarn("ConfigurationSettings:PrescriptionsMaxCoursesSoftLimit", _logger);
+            var coursesMaxCoursesLimit =
+                Configuration.GetIntOrWarn("ConfigurationSettings:CoursesMaxCoursesLimit", _logger);
+            var visionAppointmentSlotsRequestCount =
+                Configuration.GetIntOrWarn("ConfigurationSettings:VisionAppointmentSlotsRequestCount", _logger);
 
             var config = new VisionConfigurationSettings(
                 applicationProviderId,
@@ -481,7 +524,8 @@ namespace NHSOnline.Backend.PfsApi
         /// <param name="services">The <see cref="IServiceCollection "/> to add the services</param>
         /// <param name="configuration">The configuration being bound.</param>
         /// <returns></returns>
-        public static IServiceCollection ConfigureValidatableSetting<TOptions>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureValidatableSetting<TOptions>
+            (this IServiceCollection services, IConfiguration configuration)
             where TOptions : class, IValidatable, new()
         {
             services.Configure<TOptions>(configuration);

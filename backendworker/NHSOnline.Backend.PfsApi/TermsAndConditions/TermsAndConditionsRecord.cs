@@ -1,28 +1,24 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using NHSOnline.Backend.Support.Repository;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
-    [Serializable]
-    public class TermsAndConditionsRecord
+    [BsonIgnoreExtraElements]
+    public class TermsAndConditionsRecord: MongoRecord
     {
-        public TermsAndConditionsRecord(string nhsNumber, bool consentGiven, bool analyticsCookieAccepted, 
-            DateTimeOffset dateOfConsent, DateTimeOffset? dateAnalyticsCookieAccepted)
-        {
-            Id = Guid.NewGuid().ToString();
-            NhsNumber = nhsNumber;
-            ConsentGiven = consentGiven;
-            DateOfConsent = dateOfConsent;
-            AnalyticsCookieAccepted = analyticsCookieAccepted;
-            DateAnalyticsCookieAccepted = dateAnalyticsCookieAccepted;
-        }
-        
-        [JsonProperty(PropertyName="id")]
-        public string Id { get; private set; }
-        public string NhsNumber { get; }
+        [BsonElement]
+        public string NhsLoginId { get; set; }
+
+        [BsonElement]
         public bool ConsentGiven { get; set; }
+
+        [BsonElement]
         public bool AnalyticsCookieAccepted { get; set; }
-        public DateTimeOffset DateOfConsent { get; set; }
-        public DateTimeOffset? DateAnalyticsCookieAccepted { get; set; }   
+
+        [BsonElement]
+        public string DateOfConsent { get; set; }
+
+        [BsonElement]
+        public string DateOfAnalyticsCookieToggle { get; set; }
     }
 }

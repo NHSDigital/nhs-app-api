@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             try
             {
                 await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceResponse,
-                    "Analytics Cookie Consent toggled Successfully DateAnalyticsCookieAccepted: {0:O}" +
+                    "Analytics Cookie Consent toggled Successfully DateOfAnalyticsCookieToggle: {0:O}" +
                     " analytics cookie acceptance - AnalyticsCookieAccepted: {1}",
                     _dateOfConsent, _analyticsCookieAccepted);
             }
@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             try
             {
                 await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceResponse,
-                    "Failed to toggle analytics cookie DateAnalyticsCookieAccepted: {0:O}" +
+                    "Failed to toggle analytics cookie DateOfAnalyticsCookieToggle: {0:O}" +
                     " analytics cookie acceptance - AnalyticsCookieAccepted: {1}",
                     _dateOfConsent, _analyticsCookieAccepted);
             }

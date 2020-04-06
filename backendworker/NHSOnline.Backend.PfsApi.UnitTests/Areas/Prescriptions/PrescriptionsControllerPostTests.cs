@@ -33,19 +33,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private Mock<IAuditor> _mockAuditor;
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private ConfigurationSettings _options;
-        
+
         private P9UserSession _userSession;
         private Guid _patientId;
         private RepeatPrescriptionRequest _repeatPrescriptionRequest;
 
         private const string CookieDomain = "CookieDomain";
-        private int PrescriptionsDefaultLastNumberMonthsToDisplay;   
+        private int PrescriptionsDefaultLastNumberMonthsToDisplay;
         private const int DefaultSessionExpiryMinutes  = 10;
         private const int DefaultHttpTimeoutSeconds = 6;
         private const int MinimumAppAge = 16;
         private const int MinimumLinkageAge = 16;
 
-        private readonly DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
         private string _serviceDeskReference;
 
         private const string PostRequestAuditType = "RepeatPrescriptions_OrderRepeatMedications_Request";
@@ -72,16 +71,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _mockPrescriptionsService = _fixture.Freeze<Mock<IPrescriptionService>>();
             _mockPrescriptionValidationService = _fixture.Freeze<Mock<IPrescriptionValidationService>>();
-            
+
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             PrescriptionsDefaultLastNumberMonthsToDisplay  = _fixture.Create<int>();
 
-            _options = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds, DefaultSessionExpiryMinutes, 
-            MinimumAppAge, MinimumLinkageAge, CurrentTermsConditionsEffectiveDate);
+            _options = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds, DefaultSessionExpiryMinutes,
+                MinimumAppAge, MinimumLinkageAge);
 
             _fixture.Inject(_options);
-            
+
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
             _mockGpSystem
                 .Setup(x => x.GetPrescriptionService())
@@ -89,12 +88,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockGpSystem
                 .Setup(x => x.GetPrescriptionValidationService())
                 .Returns(_mockPrescriptionValidationService.Object);
-            
+
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
-            
+
             _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
             _serviceDeskReference = _fixture.Create<string>();
 
@@ -110,7 +109,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
                 _repeatPrescriptionRequest))
                 .Returns(Task.FromResult((OrderPrescriptionResult)new OrderPrescriptionResult.Success()));
-            
+
             _mockPrescriptionValidationService
                 .Setup(x => x.IsPostValid(_repeatPrescriptionRequest))
                 .Returns(true);
@@ -140,14 +139,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                         d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId),
                     _repeatPrescriptionRequest))
                 .Returns(Task.FromResult((OrderPrescriptionResult)new OrderPrescriptionResult.PartialSuccess(response)));
-            
+
             _mockPrescriptionValidationService
                 .Setup(x => x.IsPostValid(_repeatPrescriptionRequest))
                 .Returns(true);
-            
+
             // Act
             var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession);
-            
+
             // Assert
             _mockGpSystem.VerifyAll();
             _mockPrescriptionsService.VerifyAll();
@@ -166,7 +165,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, RequestAuditMessageFormat, courseIds));
             _mockAuditor.Verify(x => x.Audit(PostResponseAuditType, "Partial Success ordering prescription: Attempted to order course ids: {0}, Successful course ids: {1}, Unsuccessful course ids: {2}", courseIds, successfulCourseIds, unsuccessfulCourseIds));
         }
-        
+
         [TestMethod]
         public async Task Post_ModelValidationFails_ReturnsBadRequest()
         {
@@ -177,7 +176,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Prescriptions,
                     StatusCodes.Status400BadRequest, _userSession.GpUserSession.Supplier))
                 .Returns(_serviceDeskReference);
-            
+
             var expectedValue = new PfsErrorResponse
             {
                 ServiceDeskReference = _serviceDeskReference
@@ -193,7 +192,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 objectResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
-            
+
             var courseIds = string.Join(",", _repeatPrescriptionRequest.CourseIds);
             _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, RequestAuditMessageFormat, courseIds));
             _mockAuditor.Verify(x => x.Audit(PostResponseAuditType, "Error creating prescription request: Bad Request with course ids: {0}", courseIds));
@@ -230,7 +229,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockErrorReferenceGenerator.Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Prescriptions,
                     expectedStatusCode, _userSession.GpUserSession.Supplier))
                 .Returns(_serviceDeskReference);
-            
+
             var expectedValue = new PfsErrorResponse
             {
                 ServiceDeskReference = _serviceDeskReference

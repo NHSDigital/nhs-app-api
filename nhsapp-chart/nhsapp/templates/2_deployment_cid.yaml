@@ -251,31 +251,14 @@ spec:
             secretKeyRef:
               name: cosmosdbkey-{{ .Chart.AppVersion }}
               key: key
-        - name: TERMS_CONDITIONS_COSMOS_ENDPOINT_URI
-          value: https://nhsapp-{{ $.Values.zone }}.documents.azure.com:{{ $.Values.cosmosDBDefaultPort }}
-        - name: TERMS_CONDITIONS_COSMOS_AUTH_KEY
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdbkey-{{ .Chart.AppVersion }}
-              key: key
         - name: SERVICE_JOURNEY_RULES_BASE_URL
           value: "https://nhsapp-sjr.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
-        - name: TERMS_CONDITIONS_COSMOS_DATABASE_ID
-          {{- if $.Values.cosmosDBName }}
-          value: {{ $.Values.cosmosDBName }}
-          {{- else }}
-          value: {{ $.Values.global.environment }}
-          {{- end }}
         - name: AUDIT_COSMOS_DATABASE_ID
           {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}
           {{- else }}
           value: {{ $.Values.global.environment }}
           {{- end }}
-        {{- if $.Values.environmentStubbed.tsandcsStubbed }}
-        - name: STUB_TERMS_AND_CONDITIONS
-          value: "true"
-        {{- end }}
         - name: SESSION_MONGO_DATABASE_HOST
           value: "nhsapp-{{ $.Values.zone }}-mongo.documents.azure.com"
         - name: SESSION_MONGO_DATABASE_PORT

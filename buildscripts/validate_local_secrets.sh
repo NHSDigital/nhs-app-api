@@ -53,7 +53,6 @@ validate_secret organ_donation_cert.pfx
 validate_secret session_encryption_key
 validate_secret spine_client_cert.password
 validate_secret spine_client_cert.pfx
-validate_secret terms_conditions_cosmos_auth_key
 validate_secret tpp_client_cert.password
 validate_secret tpp_client_cert.pfx
 

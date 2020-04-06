@@ -1,99 +1,63 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.Documents.Linq;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
-    [SuppressMessage("Microsoft.Globalization", "CA1309", Justification = "Method ‘Equals’ is not supported., Linux/9 documentdb-netcore-sdk/1.9.1")]
-    public class TermsAndConditionsService : ITermsAndConditionsService, IDisposable
+    public class TermsAndConditionsService : ITermsAndConditionsService
     {
-        private const string DateFormat = "yyyy-MM-ddTHH:mm:ss.f'Z'";
         private readonly ILogger<TermsAndConditionsService> _logger;
-        private readonly DocumentClient _client;
-        private readonly Uri _collectionUri;
-        private bool _disposed;
-        private readonly ITermsAndConditionsConfig _termsConfig;
-        private readonly DateTimeOffset _latestEffectiveDate;
-        public TermsAndConditionsService(ITermsAndConditionsConfig termsConfig,
-            IConfiguration appConfig, ILogger<TermsAndConditionsService> logger)
+        private readonly ITermsAndConditionsRepository _repository;
+        private readonly ITermsAndConditionsConfiguration _configuration;
+
+        public TermsAndConditionsService
+        (
+            ILogger<TermsAndConditionsService> logger,
+            ITermsAndConditionsRepository repository,
+            ITermsAndConditionsConfiguration configuration
+        )
         {
             _logger = logger;
-            _termsConfig = termsConfig;
-
-            var latestEffectiveDateStr = appConfig.ConfigurationSettings().GetOrWarn(
-                "CurrentTermsConditionsEffectiveDate",
-                _logger);
-
-            _latestEffectiveDate = DateTimeOffset.Parse(latestEffectiveDateStr, CultureInfo.InvariantCulture);
-
-            _logger.LogDebug("Effective date {0}", _latestEffectiveDate.ToString(DateFormat, CultureInfo.InvariantCulture));
-
-            if (!_termsConfig.Stubbed)
-            {
-                _client = new DocumentClient(_termsConfig.EndpointUri, _termsConfig.AuthKey);
-                _collectionUri = UriFactory.CreateDocumentCollectionUri(_termsConfig.DatabaseId, _termsConfig.CollectionName);
-            }
+            _repository = repository;
+            _configuration = configuration;
         }
 
-        public async Task<TermsAndConditionsFetchConsentResult> FetchConsent(string nhsNumber)
+        public async Task<TermsAndConditionsFetchConsentResult> FetchConsent(string nhsLoginId)
         {
             _logger.LogEnter();
 
-            if (_termsConfig.Stubbed)
-            {
-                var response = new ConsentResponse
-                {
-                    ConsentGiven = true,
-                    AnalyticsCookieAccepted = true,
-                    UpdatedConsentRequired = false,
-                };
-
-                _logger.LogExitWith("patient consent found");
-                return new TermsAndConditionsFetchConsentResult.Success(response);
-            }
-
             try
             {
-                if (_disposed)
+                var termsAndConditions = await _repository.Find(nhsLoginId);
+
+                if (termsAndConditions == null)
                 {
-                    throw new ObjectDisposedException(GetType().FullName);
+                    _logger.LogInformation("No patient consent exists for terms and conditions");
+                    return new TermsAndConditionsFetchConsentResult.NoConsentFound(new ConsentResponse());
                 }
 
-                var termsAndConditions = await GetTermsAndConditionsConsent(nhsNumber);
+                _logger.LogInformation("Patient consent found for terms and conditions");
 
-                if (termsAndConditions != null)
+                //Updated consent required if date of last consent is prior to date of updated terms
+                var updatedConsentRequired = _configuration.EffectiveDate <= DateTimeOffset.Now
+                                             && _configuration.EffectiveDate > DateTimeOffset.Parse(
+                                                 termsAndConditions.DateOfConsent, CultureInfo.InvariantCulture);
+
+                var response = new ConsentResponse
                 {
-                    _logger.LogInformation("Patient consent found for terms and conditions");
+                    ConsentGiven = termsAndConditions.ConsentGiven,
+                    UpdatedConsentRequired = updatedConsentRequired,
+                    AnalyticsCookieAccepted = termsAndConditions.AnalyticsCookieAccepted,
+                };
 
-                    //Updated consent required if date of last consent is prior to date of updated terms
-                    var updatedConsentRequired = _latestEffectiveDate <= DateTimeOffset.Now
-                                                 && _latestEffectiveDate > termsAndConditions.DateOfConsent;
+                _logger.LogDebug($"{nameof(termsAndConditions.ConsentGiven)}: {termsAndConditions.ConsentGiven}, " +
+                                 $"{nameof(response.UpdatedConsentRequired)}: {updatedConsentRequired}, " +
+                                 $"{nameof(termsAndConditions.AnalyticsCookieAccepted)}: {termsAndConditions.AnalyticsCookieAccepted}");
 
-                    var response = new ConsentResponse
-                    {
-                        ConsentGiven = termsAndConditions.ConsentGiven,
-                        UpdatedConsentRequired = updatedConsentRequired,
-                        AnalyticsCookieAccepted = termsAndConditions.AnalyticsCookieAccepted,
-                    };
-
-                    _logger.LogDebug($"{nameof(termsAndConditions.ConsentGiven)}: {termsAndConditions.ConsentGiven}, " +
-                                     $"{nameof(response.UpdatedConsentRequired)}: {updatedConsentRequired}, " +
-                                     $"{nameof(termsAndConditions.AnalyticsCookieAccepted)}: {termsAndConditions.AnalyticsCookieAccepted}");
-
-                    return new TermsAndConditionsFetchConsentResult.Success(response);
-                }
-
-                _logger.LogInformation("No patient consent exists for terms and conditions");
-                return new TermsAndConditionsFetchConsentResult.NoConsentFound(new ConsentResponse());
+                return new TermsAndConditionsFetchConsentResult.Success(response);
             }
             catch (Exception e)
             {
@@ -106,40 +70,40 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             }
         }
 
-        public async Task<TermsAndConditionsRecordConsentResult> RecordConsent(string nhsNumber, string odsCode, ConsentRequest request, DateTimeOffset termsAndConditionsAcceptanceDate)
+        public async Task<TermsAndConditionsRecordConsentResult> RecordConsent
+        (
+            string nhsLoginId,
+            ConsentRequest request,
+            DateTimeOffset consentTime
+        )
         {
             return request.UpdatingConsent
-                ? await UpdateConsent(nhsNumber, request, termsAndConditionsAcceptanceDate)
-                : await RecordInitialConsent(nhsNumber, odsCode, request, termsAndConditionsAcceptanceDate);
+                ? await UpdateConsent(nhsLoginId, request, consentTime)
+                : await RecordInitialConsent(nhsLoginId, request, consentTime);
         }
 
-        private async Task<TermsAndConditionsRecordConsentResult> RecordInitialConsent(string nhsNumber, string odsCode, ConsentRequest request,
-            DateTimeOffset termsAndConditionsAcceptanceDate)
+        private async Task<TermsAndConditionsRecordConsentResult> RecordInitialConsent
+        (
+            string nhsLoginId,
+            ConsentRequest request,
+            DateTimeOffset consentTime
+        )
         {
             _logger.LogEnter();
             try
             {
-                if (_termsConfig.Stubbed)
+                var consentTimeString = consentTime.ToString("s", CultureInfo.InvariantCulture);
+
+                var termsAndConditions = new TermsAndConditionsRecord
                 {
-                    return new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
-                }
+                    NhsLoginId = nhsLoginId,
+                    ConsentGiven = request.ConsentGiven,
+                    AnalyticsCookieAccepted = request.AnalyticsCookieAccepted,
+                    DateOfConsent = consentTimeString,
+                    DateOfAnalyticsCookieToggle = consentTimeString
+                };
 
-                if (!request.AnalyticsCookieAccepted)
-                {
-                    _logger.LogInformation("Recording user did not accept optional analytics cookies. OdsCode: {0}",
-                        odsCode);
-                }
-
-                if (_disposed)
-                {
-                    throw new ObjectDisposedException(GetType().FullName);
-                }
-
-                var termsAndConditions = new TermsAndConditionsRecord(nhsNumber,
-                    request.ConsentGiven, request.AnalyticsCookieAccepted, termsAndConditionsAcceptanceDate,
-                            request.AnalyticsCookieAccepted ? termsAndConditionsAcceptanceDate : (DateTimeOffset?)null);
-
-                await _client.CreateDocumentAsync(_collectionUri, termsAndConditions);
+                await _repository.Create(termsAndConditions);
 
                 return new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
             }
@@ -154,35 +118,30 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             }
         }
 
-        private async Task<TermsAndConditionsRecordConsentResult> UpdateConsent(string nhsNumber, ConsentRequest request, DateTimeOffset termsAndConditionsConsentDate)
+        private async Task<TermsAndConditionsRecordConsentResult> UpdateConsent
+        (
+            string nhsLoginId,
+            ConsentRequest request,
+            DateTimeOffset consentTime
+        )
         {
             _logger.LogEnter();
 
             try
             {
-                if (_termsConfig.Stubbed)
+                var termsAndConditions = await _repository.Find(nhsLoginId);
+
+                if (termsAndConditions == null)
                 {
-                    return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
+                    return new TermsAndConditionsRecordConsentResult.InternalServerError();
                 }
 
-                if (_disposed)
-                {
-                    throw new ObjectDisposedException(GetType().FullName);
-                }
+                termsAndConditions.ConsentGiven = request.ConsentGiven;
+                termsAndConditions.DateOfConsent = consentTime.ToString("s", CultureInfo.InvariantCulture);
 
-                var termsAndConditions = await GetTermsAndConditionsConsent(nhsNumber);
+                await _repository.Update(termsAndConditions);
 
-                if (termsAndConditions != null)
-                {
-                    termsAndConditions.ConsentGiven = request.ConsentGiven;
-                    termsAndConditions.DateOfConsent = termsAndConditionsConsentDate;
-
-                    await ReplaceDocument(termsAndConditions);
-
-                    return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
-                }
-
-                return new TermsAndConditionsRecordConsentResult.InternalServerError();
+                return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
             }
             catch (Exception e)
             {
@@ -194,35 +153,33 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
                 _logger.LogExit();
             }
         }
-        public async Task<ToggleAnalyticsCookieAcceptanceResult> ToggleAnalyticsCookieAcceptance(string nhsNumber, AnalyticsCookieAcceptance analyticsCookieConsent, DateTimeOffset dateAnalyticsCookieAccepted)
+
+        public async Task<ToggleAnalyticsCookieAcceptanceResult> ToggleAnalyticsCookieAcceptance
+        (
+            string nhsLoginId,
+            AnalyticsCookieAcceptance analyticsCookieConsent,
+            DateTimeOffset consentTime
+        )
         {
             _logger.LogEnter();
 
             try
             {
-                if (_termsConfig.Stubbed)
+                var termsAndConditions = await _repository.Find(nhsLoginId);
+
+                if (termsAndConditions == null)
                 {
-                    return new ToggleAnalyticsCookieAcceptanceResult.Success();
+                    _logger.LogError("Cannot find terms and conditions consent");
+                    return new ToggleAnalyticsCookieAcceptanceResult.Failure();
                 }
 
-                if (_disposed)
-                {
-                    throw new ObjectDisposedException(GetType().FullName);
-                }
+                termsAndConditions.AnalyticsCookieAccepted = analyticsCookieConsent.AnalyticsCookieAccepted;
+                termsAndConditions.DateOfAnalyticsCookieToggle =
+                    consentTime.ToString("s", CultureInfo.InvariantCulture);
 
-                var termsAndConditions = await GetTermsAndConditionsConsent(nhsNumber);
+                await _repository.Update(termsAndConditions);
 
-                if (termsAndConditions != null)
-                {
-                    termsAndConditions.AnalyticsCookieAccepted = analyticsCookieConsent.AnalyticsCookieAccepted;
-                    termsAndConditions.DateAnalyticsCookieAccepted = dateAnalyticsCookieAccepted;
-
-                    await ReplaceDocument(termsAndConditions);
-
-                    return new ToggleAnalyticsCookieAcceptanceResult.Success();
-                }
-
-                return new ToggleAnalyticsCookieAcceptanceResult.Failure();
+                return new ToggleAnalyticsCookieAcceptanceResult.Success();
             }
             catch (Exception e)
             {
@@ -233,54 +190,6 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
             {
                 _logger.LogExit();
             }
-        }
-
-        private async Task ReplaceDocument(TermsAndConditionsRecord termsAndConditionsRecord)
-        {
-            var docLink = string.Format(CultureInfo.InvariantCulture, "dbs/{0}/colls/{1}/docs/{2}",
-                _termsConfig.DatabaseId, _termsConfig.CollectionName, termsAndConditionsRecord.Id);
-
-            await _client.ReplaceDocumentAsync(docLink, termsAndConditionsRecord);
-        }
-
-        private async Task<TermsAndConditionsRecord> GetTermsAndConditionsConsent(string nhsNumber)
-        {
-            var termsAndConditionsQuery =
-                _client.CreateDocumentQuery<TermsAndConditionsRecord>(_collectionUri,
-                        new FeedOptions { MaxItemCount = 1 })
-                    .Where(x => x.NhsNumber == nhsNumber)
-                    .OrderByDescending(x => x.DateOfConsent).AsDocumentQuery();
-
-            return
-                (await termsAndConditionsQuery.ExecuteNextAsync<TermsAndConditionsRecord>()).FirstOrDefault();
-        }
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~TermsAndConditionsService()
-        {
-            Dispose(false);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                if (!_termsConfig.Stubbed)
-                {
-                    _client?.Dispose();
-                }
-            }
-
-            _disposed = true;
         }
     }
 }

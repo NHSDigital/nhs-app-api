@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.Session;
@@ -21,10 +22,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         private readonly ILogger<TermsAndConditionsController> _logger;
         private readonly IAuditor _auditor;
 
-        public TermsAndConditionsController(
+        public TermsAndConditionsController
+        (
             ITermsAndConditionsService termsAndConditionsService,
             ILogger<TermsAndConditionsController> logger,
-            IAuditor auditor)
+            IAuditor auditor
+        )
         {
             _termsAndConditionsService = termsAndConditionsService;
             _logger = logger;
@@ -37,8 +40,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         {
             _logger.LogEnter();
 
+            var nhsLoginId = GetNhsLoginId(userSession);
+
             _logger.LogDebug("Fetching user consent");
-            var fetchConsentResult = await _termsAndConditionsService.FetchConsent(userSession.GpUserSession.NhsNumber);
+            var fetchConsentResult = await _termsAndConditionsService.FetchConsent(nhsLoginId);
 
             _logger.LogExit();
             return fetchConsentResult.Accept(new TermsAndConditionsFetchConsentResultVisitor());
@@ -57,6 +62,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
                 return new BadRequestObjectResult(ModelState);
             }
 
+            var nhsLoginId = GetNhsLoginId(userSession);
             var termsAndConditionsAcceptanceDate = DateTimeOffset.Now;
 
             await _auditor.Audit(AuditingOperations.TermsAndConditionsRecordConsentAuditTypeRequest,
@@ -74,8 +80,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             _logger.LogDebug("Recording user consent");
 
             var recordConsentResult = await _termsAndConditionsService.RecordConsent(
-                userSession.GpUserSession.NhsNumber, userSession.GpUserSession.OdsCode,
-                model, termsAndConditionsAcceptanceDate);
+                nhsLoginId,
+                model,
+                termsAndConditionsAcceptanceDate
+            );
 
             await recordConsentResult.Accept(new TermsAndConditionsRecordConsentAuditingVisitor(
                 _auditor, _logger, model, termsAndConditionsAcceptanceDate));
@@ -97,16 +105,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
                 return new BadRequestObjectResult(ModelState);
             }
 
+            var nhsLoginId = GetNhsLoginId(userSession);
             var dateTimeOffset = DateTimeOffset.Now;
 
             await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceRequest,
                 $"Attempting to toggle analytics cookie acceptance - " +
                 $"AnalyticsCookieAccepted={analyticsCookieAcceptance.AnalyticsCookieAccepted} " +
-                $"at DateAnalyticsCookieAccepted={dateTimeOffset.ToString(CultureInfo.InvariantCulture)}");
+                $"at DateOfAnalyticsCookieToggle={dateTimeOffset.ToString(CultureInfo.InvariantCulture)}");
 
             var result = await _termsAndConditionsService.ToggleAnalyticsCookieAcceptance(
-                userSession.GpUserSession.NhsNumber,
-                analyticsCookieAcceptance, dateTimeOffset);
+                nhsLoginId,
+                analyticsCookieAcceptance,
+                dateTimeOffset
+            );
 
             await result.Accept(new ToggleAnalyticsCookieAcceptanceAuditingVisitor(_auditor, _logger,
                 dateTimeOffset, analyticsCookieAcceptance.AnalyticsCookieAccepted));
@@ -115,5 +126,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 
             return result.Accept(new ToggleAnalyticsCookieAcceptanceResultVisitor());
         }
+
+        private string GetNhsLoginId(P9UserSession userSession)
+            => AccessToken.Parse(_logger, userSession.CitizenIdUserSession.AccessToken).Subject;
     }
 }

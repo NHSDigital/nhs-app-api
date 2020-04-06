@@ -4,16 +4,16 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.CosmosDb
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
+import org.joda.time.DateTime
 import utils.SerenityHelpers
 import pages.TermsAndConditionsPage
 import pages.UpdatedTermsAndConditionsPage
 import pages.assertIsVisible
-import java.time.OffsetDateTime
 import java.util.*
 
 class TermsAndConditionsStepDefinitions {
@@ -26,19 +26,19 @@ class TermsAndConditionsStepDefinitions {
     @Given("^I am an? (.*) patient who has not already accepted terms and conditions$")
     fun iHaveNotAcceptedTermsAndConditions(gpSystem: String) {
         initialisePatientAndGpSystem(gpSystem)
-        CosmosDb.clearTermsAndConditionsAcceptance()
+        TermsAndConditionsJourneyFactory.removeConsents()
     }
 
     @Given("^I am an? (.*) patient who has already accepted terms and conditions$")
     fun iHaveAlreadyAcceptedTermsAndConditions(gpSystem: String) {
-        initialisePatientAndGpSystem(gpSystem)
-        CosmosDb.addTermsAndConditionsAcceptance(OffsetDateTime.now())
+        val patient = initialisePatientAndGpSystem(gpSystem)
+        TermsAndConditionsJourneyFactory.consent(patient)
     }
 
     @Given("^I am an? (.*) patient who has accepted terms and conditions but updated terms and conditions exist$")
     fun iHavePreviouslyAcceptedTermsAndConditionsAndUpdatedAcceptanceIsRequired(gpSystem: String) {
-        initialisePatientAndGpSystem(gpSystem)
-        CosmosDb.addTermsAndConditionsAcceptance(OffsetDateTime.parse("2018-11-11T00:00:00+00:00"))
+        val patient = initialisePatientAndGpSystem(gpSystem)
+        TermsAndConditionsJourneyFactory.consent(patient, DateTime.parse("2018-11-11T00:00:00+00:00"))
     }
 
     @When("^I click the continue button on Terms and Conditions$")
@@ -93,7 +93,7 @@ class TermsAndConditionsStepDefinitions {
         updatedTermsAndConditionsPage.mainErrorMessage.assertIsVisible()
     }
 
-    private fun initialisePatientAndGpSystem(gpSystem: String) {
+    private fun initialisePatientAndGpSystem(gpSystem: String): Patient {
         val supplier = Supplier.valueOf(gpSystem)
 
         // The integration tests use a single 'real' Cosmos collection so a unique id must be used to avoid
@@ -105,5 +105,7 @@ class TermsAndConditionsStepDefinitions {
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+
+        return patient
     }
 }

@@ -7,7 +7,6 @@ environmentStubbed: {}
 #   cidStubbed: false
 #   visionStubbed: false
 #   tppStubbed: false
-#   tsandcsStubbed: false
 #   deployWiremock: false
 #   cdssStubbed: false
 
@@ -341,10 +340,10 @@ api:
       value: audit
     - name: AUDIT_SINK_TYPE
       value: COSMOS
-    - name: TERMS_CONDITIONS_COSMOS_COLLECTION_NAME
-      value: consent
     - name: SESSION_MONGO_DATABASE_COLLECTION
       value: session
+    - name: CONSENT_MONGO_DATABASE_COLLECTION
+      value: consent
     - name: IM1CACHE_MONGO_DATABASE_COLLECTION
       value: im1cache
     - name: USERINFO_API_BASE_URL
@@ -378,8 +377,6 @@ cid:
       value: audit
     - name: AUDIT_SINK_TYPE
       value: COSMOS
-    - name: TERMS_CONDITIONS_COSMOS_COLLECTION_NAME
-      value: consent
     - name: SESSION_MONGO_DATABASE_COLLECTION
       value: session
     - name: IM1CACHE_MONGO_DATABASE_COLLECTION

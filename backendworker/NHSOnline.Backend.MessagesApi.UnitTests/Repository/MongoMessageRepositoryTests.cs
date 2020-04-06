@@ -137,12 +137,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
             result.Should().NotBeNull();
             result.Should().BeEmpty();
         }
-        
+
         [TestMethod]
         public void FindOne_WhenMessageIdIsNull_ThrowsException()
         {
             // Act
-            Func<Task> act = async () => await _systemUnderTest.FindOne(_fixture.Create<string>(),null);
+            Func<Task> act = async () => await _systemUnderTest.FindOne(_fixture.Create<string>(), null);
 
             // Assert
             act.Should().Throw<AggregateException>()
@@ -151,12 +151,12 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
                 .And.Contain(x =>
                     ((ArgumentNullException) x).ParamName.Equals("messageId", StringComparison.Ordinal));
         }
-        
+
         [TestMethod]
         public void FindOne_WhenNhsLoginidIsNull_ThrowsException()
         {
             // Act
-            Func<Task> act = async () => await _systemUnderTest.FindOne(null,_fixture.Create<string>());
+            Func<Task> act = async () => await _systemUnderTest.FindOne(null, _fixture.Create<string>());
 
             // Assert
             act.Should().Throw<AggregateException>()
@@ -223,51 +223,24 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
         }
 
         [TestMethod]
-        public async Task UpdateOne_UpdateMessage()
+        public async Task UpdateOne_WithMessage_ShouldUpdateRecord()
         {
             // Arrange
-            var nhsLoginId = _fixture.Create<string>();
             var userMessage = _fixture.Create<UserMessage>();
-            userMessage.ReadTime = null;
-            var cursorMock = MongoHelper.CreateCursorMockFind(_fixture, new[] { userMessage });
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserMessage>>(),
-                    It.IsAny<FindOptions<UserMessage, UserMessage>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
-
-            Assert.AreEqual(null, userMessage.ReadTime);
-            
-            // Act
-            userMessage.ReadTime = DateTime.UtcNow;
-            await _systemUnderTest.UpdateOne(userMessage);
-            var result = await _systemUnderTest.FindOne(nhsLoginId, userMessage.Id.ToString());
-
-            // Assert
-            _mongoCollectionMock.VerifyAll();
-            Assert.AreEqual(userMessage.ReadTime, result.ReadTime);
-        }
-
-        [TestMethod]
-        public async Task UpdateOne_WhenRecordDoesNotExist_ShouldNotUpdateRecord()
-        {
-            // Arrange
-            var nhsLoginId = _fixture.Create<string>();
-            var cursorMock = MongoHelper.CreateCursorMockFindNone<UserMessage>(_fixture);
-            var userMessage = _fixture.Create<UserMessage>();
-
-            _mongoCollectionMock
-                .Setup(x => x.FindAsync(It.IsAny<FilterDefinition<UserMessage>>(),
-                    It.IsAny<FindOptions<UserMessage, UserMessage>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(cursorMock.Object);
 
             // Act
             await _systemUnderTest.UpdateOne(userMessage);
-            var result = await _systemUnderTest.FindOne(nhsLoginId, userMessage.Id.ToString());
 
             // Assert
-            _mongoCollectionMock.VerifyAll();
-            result.Should().BeNull();           
+            _mongoCollectionMock.Verify(x
+                => x.ReplaceOneAsync(
+                    It.IsAny<FilterDefinition<UserMessage>>(),
+                    userMessage,
+                    It.IsAny<UpdateOptions>(),
+                    It.IsAny<CancellationToken>()
+                )
+            );
+            _mongoCollectionMock.VerifyNoOtherCalls();
         }
 
         [TestMethod]

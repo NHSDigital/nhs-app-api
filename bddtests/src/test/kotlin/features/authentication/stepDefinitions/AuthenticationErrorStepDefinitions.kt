@@ -11,12 +11,12 @@ import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.joda.time.DateTime
 import pages.navigation.WebHeader
 import utils.SerenityHelpers
-
 
 class AuthenticationErrorStepDefinitions {
 
@@ -111,6 +111,8 @@ class AuthenticationErrorStepDefinitions {
         DemographicsFactory
                 .getForSupplier(gpSystem)
                 .enableForPatientProxyAccounts(patient)
+
+        TermsAndConditionsJourneyFactory.consent(patient)
 
         browser.goToApp()
         login.using(patient)

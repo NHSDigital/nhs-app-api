@@ -77,7 +77,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private const int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;
         private const int SessionTimeoutMinutes = 10;
         private const int MinimumLinkageAge = 16;
-        private readonly DateTimeOffset? _currentTermsConditionsEffectiveDate = DateTimeOffset.Now;
         private string _serviceDeskReference;
         private SessionConfigurationSettings _sessionConfigSettings;
         private CitizenIdSessionResult _citizenIdSessionResult;
@@ -243,7 +242,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _configurationSettings.DefaultHttpTimeoutSeconds = _sessionTimeoutSeconds;
             _configurationSettings.MinimumAppAge = MinimumAppAge;
             _configurationSettings.MinimumLinkageAge = MinimumLinkageAge;
-            _configurationSettings.CurrentTermsConditionsEffectiveDate = _currentTermsConditionsEffectiveDate;
 
             _systemUnderTest = _fixture.Create<SessionController>();
 

@@ -39,8 +39,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         private const int MinimumAppAge = 16;
         private const int MinimumLinkageAge = 16;
 
-        private readonly DateTimeOffset? CurrentTermsConditionsEffectiveDate = DateTimeOffset.Now;
-
         [TestInitialize]
         public void TestInitialize()
         {
@@ -50,8 +48,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _mockLinkageMapper = _fixture.Freeze<Mock<ITppLinkageMapper>>();
 
-            _settings = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds, 
-            DefaultSessionExpiryMinutes, MinimumAppAge, MinimumLinkageAge, CurrentTermsConditionsEffectiveDate);
+            _settings = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds,
+                DefaultSessionExpiryMinutes, MinimumAppAge, MinimumLinkageAge);
 
             _fixture.Inject(_settings);
 
@@ -74,7 +72,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             // Assert
             response.Should().BeAssignableTo<LinkageResult.NotFound>();
         }
-        
+
         [TestMethod]
         public async Task GetLinkageKey_ReturnsNotFound_ForNullRequest()
         {
@@ -186,14 +184,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             // Assert
             result.GetType().Should().Be(typeof(LinkageResult.SupplierSystemUnavailable));
         }
-        
+
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsUnknownError_WhenNotAuthenticated()
         {
             // Arrange, Act, Assert (via private helper)
             var result = await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.NotAuthenticated,
                 typeof(LinkageResult.UnmappedErrorWithStatusCode));
-            
+
             // Assert
             result.Should().BeAssignableTo<LinkageResult.UnmappedErrorWithStatusCode>()
                 .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnknownError);
@@ -207,7 +205,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             var result = await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(
                 "8",
                 typeof(LinkageResult.ErrorCase));
-            
+
             // Assert
             result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
                 .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.ProblemLinkingAccount);
@@ -222,7 +220,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
            var result = await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(
                "8",
                 typeof(LinkageResult.ErrorCase));
-           
+
            // Assert
            result.Should().BeAssignableTo<LinkageResult.ErrorCase>()
                .Subject.ErrorCode.Should().Be(Im1ConnectionErrorCodes.InternalCode.UnderMinimumAgeOrNonCompetent);

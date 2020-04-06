@@ -47,12 +47,14 @@ class Config private constructor() {
     val gpLookupApiKey: String
     var isDockerised: Boolean
 
-    val mongoDbHost: String
-    val mongoDbPort: Long
+    val sessionMongoDbHost: String
+    val sessionMongoDbPort: Long
     val usersMongoDbHost: String
     val usersMongoDbPort: Long
     val messagesMongoDbHost: String
     val messagesMongoDbPort: Long
+    val consentMongoDbHost: String
+    val consentMongoDbPort: Long
 
     val accessibilityOutputFolder: String
 
@@ -107,14 +109,17 @@ class Config private constructor() {
         dataPreferencesPath = "/ndop/createsession"
         dataPreferencesUrl = envOrDefault("DATA_PREFERENCES_URL", dataPreferencesHost + dataPreferencesPath)
 
-        mongoDbHost = envOrDefault("SESSION_MONGO_DATABASE_HOST", "127.0.0.1")
-        mongoDbPort = envOrDefault("SESSION_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
+        sessionMongoDbHost = envOrDefault("SESSION_MONGO_DATABASE_HOST", "127.0.0.1")
+        sessionMongoDbPort = envOrDefault("SESSION_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
 
         usersMongoDbHost = envOrDefault("USERS_MONGO_DATABASE_HOST", "127.0.0.1")
         usersMongoDbPort = envOrDefault("USERS_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
 
         messagesMongoDbHost = envOrDefault("MESSAGES_MONGO_DATABASE_HOST", "127.0.0.1")
         messagesMongoDbPort = envOrDefault("MESSAGES_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
+
+        consentMongoDbHost = envOrDefault("CONSENT_MONGO_DATABASE_HOST", "127.0.0.1")
+        consentMongoDbPort = envOrDefault("CONSENT_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
 
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
 

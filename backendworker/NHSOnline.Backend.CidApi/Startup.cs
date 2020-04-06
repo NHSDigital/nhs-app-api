@@ -216,13 +216,8 @@ namespace NHSOnline.Backend.CidApi
             var minimumAppAge = Configuration.GetIntOrWarn("ConfigurationSettings:MinimumAppAge", _logger);
             var minimumLinkageAge = Configuration.GetIntOrWarn("ConfigurationSettings:MinimumLinkageAge", _logger);
 
-            var currentTermsConditionsEffectiveDate = DateTimeOffset.Parse(
-                Configuration.GetOrWarn("ConfigurationSettings:CurrentTermsConditionsEffectiveDate", _logger),
-                CultureInfo.InvariantCulture
-            );
-
             var config = new ConfigurationSettings(cookieDomain, prescriptionsDefaultLastNumberMonthsToDisplay,
-            defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds, minimumAppAge, minimumLinkageAge, currentTermsConditionsEffectiveDate);
+                defaultSessionExpiryMinutes, defaultHttpTimeoutSeconds, minimumAppAge, minimumLinkageAge);
 
             config.Validate();
             return config;

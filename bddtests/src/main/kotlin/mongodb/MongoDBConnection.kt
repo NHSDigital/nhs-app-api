@@ -101,12 +101,13 @@ class MongoDBConnection(private val collectionName: String, private val host: St
         private const val userInfoCollectionName = "info"
         private const val messagesCollectionName = "messages"
         private const val developmentDatabaseName = "development"
+        private const val termsAndConditionsCollectionName = "consent"
         val mongoDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssz")
 
         val Im1CacheCollection = MongoDBConnection(
                 im1CacheCollectionName,
-                Config.instance.mongoDbHost,
-                Config.instance.mongoDbPort.toInt())
+                Config.instance.sessionMongoDbHost,
+                Config.instance.sessionMongoDbPort.toInt())
         val UserDevicesCollection = MongoDBConnection(
                 userDevicesCollectionName,
                 Config.instance.usersMongoDbHost,
@@ -119,5 +120,9 @@ class MongoDBConnection(private val collectionName: String, private val host: St
                 userInfoCollectionName,
                 Config.instance.usersMongoDbHost,
                 Config.instance.usersMongoDbPort.toInt())
+        val TermsAndconditionsCollection = MongoDBConnection(
+                termsAndConditionsCollectionName,
+                Config.instance.consentMongoDbHost,
+                Config.instance.consentMongoDbPort.toInt())
     }
 }

@@ -49,7 +49,6 @@ To get a list of the available configurations run `make`:
 $ make
 run                            Run the integration tests
 run-accessibility              Run the accessibility integration tests
-run-cosmos                     Run the cosmos integration tests
 run-onlineconsultations        Run the online consultations integration tests
 run-others                     Run the other integration tests
 run-throttling                 Run the throttling integration tests

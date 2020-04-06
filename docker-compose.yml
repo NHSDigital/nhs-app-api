@@ -73,9 +73,6 @@ services:
           if [ -f "$$GP_LOOKUP_API_KEY" ]; then
             export GP_LOOKUP_API_KEY=$$(<$$GP_LOOKUP_API_KEY)
           fi
-          if [ -f "$$TERMS_CONDITIONS_COSMOS_AUTH_KEY" ]; then
-            export TERMS_CONDITIONS_COSMOS_AUTH_KEY=$$(<$$TERMS_CONDITIONS_COSMOS_AUTH_KEY)
-          fi
           if [ -f "$$NHSLOGIN_KEY_PASSWORD" ]; then
             export NHSLOGIN_KEY_PASSWORD=$$(<$$NHSLOGIN_KEY_PASSWORD)
           fi

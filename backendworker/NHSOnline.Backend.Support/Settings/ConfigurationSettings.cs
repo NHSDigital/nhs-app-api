@@ -5,23 +5,21 @@ namespace NHSOnline.Backend.Support.Settings
     public class ConfigurationSettings: IConfigurationSettings, IHttpTimeoutConfigurationSettings
     {
         public string CookieDomain { get; set; }
-        
+
         public int? PrescriptionsDefaultLastNumberMonthsToDisplay { get; set; }
 
         public int DefaultSessionExpiryMinutes { get; set; }
 
         public int DefaultHttpTimeoutSeconds { get; set; }
-        
+
         public int MinimumAppAge { get; set; }
-        
+
         public int MinimumLinkageAge { get; set; }
-        
-        public DateTimeOffset? CurrentTermsConditionsEffectiveDate { get; set; }
 
         public ConfigurationSettings() {}
-        
+
         public ConfigurationSettings(string cookieDomain, int? prescriptionsDefaultLastNumberMonthsToDisplay,
-            int defaultSessionExpiryMinutes, int defaultHttpTimeoutSeconds, int minimumAppAge, int minimumLinkageAge, DateTimeOffset? currentTermsConditionsEffectiveDate)
+            int defaultSessionExpiryMinutes, int defaultHttpTimeoutSeconds, int minimumAppAge, int minimumLinkageAge)
             {
                 CookieDomain = cookieDomain;
                 PrescriptionsDefaultLastNumberMonthsToDisplay = prescriptionsDefaultLastNumberMonthsToDisplay;
@@ -29,8 +27,6 @@ namespace NHSOnline.Backend.Support.Settings
                 DefaultSessionExpiryMinutes = defaultSessionExpiryMinutes;
                 MinimumAppAge = minimumAppAge;
                 MinimumLinkageAge = minimumLinkageAge;
-                CurrentTermsConditionsEffectiveDate = currentTermsConditionsEffectiveDate;
-
             }
 
         public void Validate()
@@ -49,20 +45,15 @@ namespace NHSOnline.Backend.Support.Settings
             {
                 throw new ConfigurationNotFoundException(nameof(DefaultHttpTimeoutSeconds));
             }
-            
+
             if (MinimumAppAge == default(int))
             {
                 throw new ConfigurationNotFoundException(nameof(MinimumAppAge));
             }
-            
+
             if (MinimumLinkageAge == default(int))
             {
                 throw new ConfigurationNotFoundException(nameof(MinimumLinkageAge));
-            }
-            
-            if (CurrentTermsConditionsEffectiveDate == null)
-            {
-                throw new ConfigurationNotFoundException(nameof(CurrentTermsConditionsEffectiveDate));
             }
         }
     }

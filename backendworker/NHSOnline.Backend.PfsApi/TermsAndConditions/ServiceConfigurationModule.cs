@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.Support.Repository;
 
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
@@ -8,7 +9,8 @@ namespace NHSOnline.Backend.PfsApi.TermsAndConditions
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<ITermsAndConditionsService, TermsAndConditionsService>();
-            services.AddSingleton<ITermsAndConditionsConfig, TermsAndConditionsConfig>();
+            services.AddSingleton<ITermsAndConditionsRepository, TermsAndConditionsRepository>();
+            services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
 
             base.ConfigureServices(services, configuration);
         }

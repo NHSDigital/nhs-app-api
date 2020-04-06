@@ -1,4 +1,3 @@
-@cosmos
 @terms
 Feature: Use Terms and conditions page
 
