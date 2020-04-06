@@ -15,11 +15,17 @@ describe('practice patient messaging inbox', () => {
   const redirect = jest.fn();
 
   const summaries = [{
-    id: 'message-1',
+    messageId: 'message-1',
     recipient: 'Dr NHS Online',
     subject: 'This is the message subject',
     lastMessageDateTime: '2020-01-01T13:37:00.137Z',
     hasUnreadReplies: true,
+    content: 'test',
+    sentDateTime: '2020-01-01T13:37:00.137Z',
+    sender: 'Dr Nhs Online',
+    replies: [],
+    outboundMessage: true,
+    requiresDetailsRequest: false,
   }];
 
   const mountPage = ({
@@ -131,6 +137,24 @@ describe('practice patient messaging inbox', () => {
       expect(summaryMessage.vm.$props.dateFormat).toBeUndefined();
       expect(summaryMessage.vm.$props.ariaLabel).toEqual('translate_im01.summary.hiddenWithSubject');
       expect(summaryMessage.vm.$props.hasUnreadMessages).toBe(true);
+    });
+  });
+
+  describe('methods', () => {
+    it('will set message details if required', async () => {
+      mountPage();
+      await wrapper.vm.goToMessageDetails(summaries[0]);
+      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/setSelectedMessageID', summaries[0].messageId);
+      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/setSelectedRecipient', { name: summaries[0].recipient });
+      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/setMessageDetails', {
+        messageDetails: {
+          content: 'test',
+          sentDateTime: '2020-01-01T13:37:00.137Z',
+          sender: 'Dr Nhs Online',
+          messageReplies: [],
+          outboundMessage: true,
+        },
+      });
     });
   });
 });

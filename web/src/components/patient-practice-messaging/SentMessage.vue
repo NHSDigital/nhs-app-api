@@ -1,23 +1,23 @@
 <template>
-  <ul v-if="getSentMessage !== undefined"
-      :class="[$style['nhsuk-app-chat'], 'nhsuk-u-margin-bottom-0', 'nhsuk-u-padding-left-0']">
-    <li id="sentMessage" :class="$style['nhsuk-panel-group__item']">
+  <div>
+    <li :id="sentPrefixIdentifier+`SentMessage`+sentIndex"
+        :class="$style['nhsuk-panel-group__item']">
       <div :class="$style['nhsuk-panel-sender-container']">
         <div :class="$style['nhsuk-panel-sender']">
           <span class="nhsuk-u-font-size-16">
             {{ $t('patient_practice_messaging.view_details.you') }}
           </span>
         </div>
-        <div id="messageSentPanel"
+        <div :id="sentPrefixIdentifier+`MessageSentPanel`+sentIndex"
              :class="[$style['nhsuk-panel'], 'nhsuk-u-margin-top-0', 'nhsuk-u-padding-2']">
-          <h2 id="messageSubject"
+          <h2 v-if="hasSubject" :id="sentPrefixIdentifier+`MessageSubject`+sentIndex"
               class="nhsuk-heading-s nhsuk-u-font-size-19 nhsuk-u-margin-bottom-0">
-            {{ getSentMessage.subject }}</h2>
+            {{ message.subject }}</h2>
           <linkify-content class="panel-content nhsuk-u-font-size-19"
-                           :content="getSentMessage.content" tag="p"/>
+                           :content="getContent" tag="p"/>
         </div>
         <div>
-          <p id="messageSentDateTime"
+          <p :id="sentPrefixIdentifier+`MessageSentDateTime`+sentIndex"
              :class="[$style.messageSentDateTime,
                       'nhsuk-u-font-size-16',
                       'nhsuk-u-margin-bottom-0']">
@@ -26,7 +26,7 @@
         </div>
       </div>
     </li>
-  </ul>
+  </div>
 </template>
 <script>
 import LinkifyContent from '@/components/widgets/LinkifyContent';
@@ -35,13 +35,41 @@ import { formatIndividualMessageTime } from '@/lib/utils';
 export default {
   name: 'SentMessage',
   components: { LinkifyContent },
+  props: {
+    message: {
+      type: Object,
+      required: true,
+    },
+    sentIndex: {
+      type: Number,
+      required: true,
+    },
+    sentPrefixIdentifier: {
+      type: String,
+      required: true,
+    },
+    messageContent: {
+      type: String,
+      default: '',
+    },
+  },
   computed: {
     getSentMessage() {
+      if (this.$store.state.patientPracticeMessaging
+        .selectedMessageDetails.messageDetails.messageFromPatient === false) {
+        return undefined;
+      }
       return this.$store.state.patientPracticeMessaging
         .selectedMessageDetails.messageDetails;
     },
+    hasSubject() {
+      return this.message.subject !== undefined;
+    },
     formattedTime() {
-      return formatIndividualMessageTime(this.getSentMessage.sentDateTime, this.$t.bind(this));
+      return formatIndividualMessageTime(this.message.sentDateTime, this.$t.bind(this));
+    },
+    getContent() {
+      return this.messageContent || '';
     },
   },
 };
@@ -74,12 +102,8 @@ export default {
     }
   }
 
-  .nhsuk-app-chat {
-    list-style-type: none;
-
-    .nhsuk-panel-sender {
-      text-align: right;
-    }
+  .nhsuk-panel-sender {
+    text-align: right;
   }
 
   .messageSentDateTime {

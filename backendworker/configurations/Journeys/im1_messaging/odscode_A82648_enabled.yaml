@@ -5,3 +5,5 @@ journeys:
   im1Messaging:
     isEnabled: true
     canDeleteMessages: false
+    canUpdateReadStatus: false
+    requiresDetailsRequest: false

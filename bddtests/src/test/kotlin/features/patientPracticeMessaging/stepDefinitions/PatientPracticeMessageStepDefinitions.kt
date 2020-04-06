@@ -8,10 +8,10 @@ import cucumber.api.java.en.When
 import features.patientPracticeMessaging.factories.PracticePatientMessagingFactory
 import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
-import mocking.sharedModels.MessageReply
-import mocking.sharedModels.MessageResponseModel
-import mocking.sharedModels.PatientPracticeMessagingSerenityHelpers
-import mocking.sharedModels.Recipient
+import mocking.patientPracticeMessaging.MessageReply
+import mocking.patientPracticeMessaging.MessageResponseModel
+import mocking.patientPracticeMessaging.Recipient
+import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
 import models.ExpectedMessage
 import org.junit.Assert.assertNotNull
 import pages.ErrorPage
@@ -100,6 +100,13 @@ open class PatientPracticeMessageStepDefinitions {
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(), false)
+    }
+
+    @Given("^I have patient practice messages in my inbox, one of which came from the GP$")
+    fun thePatientHasPatientPracticeMessagesInTheirInboxWithMessageFromGp() {
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithPatientPracticeMessagingFromGP(SerenityHelpers.getPatient(), false)
     }
 
     @Given("^The patient can successfully send a message to their practice")
@@ -266,7 +273,7 @@ open class PatientPracticeMessageStepDefinitions {
         patientPracticeMessagingPage
                 .assertCorrectMessagesDisplayed(
                         PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES.getOrNull<List<ExpectedMessage>>()
-                        !!, hasSubject = false, hasUnreadCount = true)
+                        !!, hasSubject = false, hasUnreadCount = true, fromGP = false)
     }
 
     @Then("^I see a list of patient practice messages without the subject and without the unread count$")
@@ -274,7 +281,15 @@ open class PatientPracticeMessageStepDefinitions {
         patientPracticeMessagingPage
                 .assertCorrectMessagesDisplayed(
                         PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES.getOrNull<List<ExpectedMessage>>()
-                        !!, hasSubject = false, hasUnreadCount = false)
+                        !!, hasSubject = false, hasUnreadCount = false, fromGP = false)
+    }
+
+    @Then("^I see a list of patient practice messages from the GP$")
+    fun iSeeAListOfPatientPracticeMessagesWithNoSubjectFromTheGp() {
+        patientPracticeMessagingPage
+                .assertCorrectMessagesDisplayed(
+                        PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES.getOrNull<List<ExpectedMessage>>()
+                        !!, hasSubject = false, hasUnreadCount = false, fromGP = true)
     }
 
     @Then("^I see a message indicating that I have no patient practice messages$")
@@ -318,55 +333,72 @@ open class PatientPracticeMessageStepDefinitions {
                 errorPage.assertHasButton("Try again")
             }
         }
-
-
     }
 
     @Then("^I see my new message after it has been sent")
     fun iSeeMyNewMessageAfterItHasBeenSent(){
         val messageDetails = PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE.getOrNull<CreateMessageRequest>()!!
         patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(messageDetails.subject)
-        patientPracticeMessagingDetailsPage.assertSentMessageCorrect(messageDetails.messageBody)
+        patientPracticeMessagingDetailsPage.assertMessageCorrect(messageDetails.messageBody, "initialMessageSentPanel0")
     }
 
     @Then("^I see my patient practice message along with the replies from the GP")
     fun iSeeMyPatientPracticeMessageAlongWithTheReplies() {
         val message = PatientPracticeMessagingSerenityHelpers
             .SELECTED_MESSAGE
-            .getOrNull<MessageResponseModel>()!!
-            .Message
-        val replies = message.messageReplies
+                .getOrNull<MessageResponseModel>()!!
+        val replies = message.Message.messageReplies
         val expectedSentMessageDate = PatientPracticeMessagingSerenityHelpers
             .EXPECTED_MESSAGE_SENT_DATE
-            .getOrNull<String>()!!
+                .getOrNull<String>()!!
         val expectedReadMessageReplyDates = PatientPracticeMessagingSerenityHelpers
             .EXPECTED_READ_MESSAGE_REPLY_DATES
-            .getOrNull<List<String>>()
+                .getOrNull<List<String>>()
         val expectedUnreadMessageReplyDates = PatientPracticeMessagingSerenityHelpers
             .EXPECTED_UNREAD_MESSAGE_REPLY_DATES
-            .getOrNull<List<String>>()
+                .getOrNull<List<String>>()
 
         val unreadReplies = mutableListOf<MessageReply>()
         val readReplies = mutableListOf<MessageReply>()
-        replies.filterTo(unreadReplies, {reply: MessageReply -> reply.isUnread})
-        replies.filterTo(readReplies, {reply: MessageReply -> !reply.isUnread})
+
+        replies.filterTo(unreadReplies, {reply: MessageReply -> reply.isUnread!!})
+        replies.filterTo(readReplies, {reply: MessageReply -> !reply.isUnread!!})
+
         patientPracticeMessagingDetailsPage.assertReadRepliesCorrect(readReplies)
         patientPracticeMessagingDetailsPage.assertUnreadRepliesCorrect(unreadReplies)
-        patientPracticeMessagingDetailsPage.assertSentMessageCorrect(message.content)
-        patientPracticeMessagingDetailsPage.assertSentDateTimeCorrect(expectedSentMessageDate)
-        patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(message.subject)
-        if (unreadReplies.count() > 1) {
-            patientPracticeMessagingDetailsPage.assertReceivedDateTimesCorrect(expectedUnreadMessageReplyDates!!, false)
-            patientPracticeMessagingDetailsPage.assertUnreadDividerIsOnSceen()
+
+        if (!PatientPracticeMessagingSerenityHelpers.INITIAL_FROM_GP.getOrNull<Boolean>()!!) {
+            patientPracticeMessagingDetailsPage.assertMessageCorrect(
+                    message.Message.content,
+                    "initialMessageSentPanel0")
+            patientPracticeMessagingDetailsPage.assertDateTimeCorrect(
+                    expectedSentMessageDate,
+                    "initialMessageSentDateTime0")
         } else {
-            patientPracticeMessagingDetailsPage.assertReceivedDateTimesCorrect(expectedReadMessageReplyDates!!, true)
+            patientPracticeMessagingDetailsPage.assertMessageCorrect(
+                    message.Message.content,
+                    "initialMessageReplyPanel0")
+            patientPracticeMessagingDetailsPage.assertDateTimeCorrect(
+                    expectedSentMessageDate,
+                    "initialMessageReplyDateTime0")
+        }
+        if (message.Message.subject !== null) {
+            patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(message.Message.subject!!)
+        }
+
+        if (unreadReplies.count() > 1) {
+            patientPracticeMessagingDetailsPage.assertReceivedDateTimesCorrect(
+                    expectedUnreadMessageReplyDates!!, false)
+            patientPracticeMessagingDetailsPage.assertUnreadDividerIsOnSceen()
+        } else if (readReplies.count() >= 1) {
+            patientPracticeMessagingDetailsPage.assertReceivedDateTimesCorrect(
+                    expectedReadMessageReplyDates!!, true)
         }
     }
 
     @Then("^I see a list of patient practice messaging recipients$")
     fun iSeeAListOfPatientPracticeMessagingRecipients() {
-        val expectedRecipients = PatientPracticeMessagingSerenityHelpers
-            .AVAILABLE_RECIPIENTS
+        val expectedRecipients = PatientPracticeMessagingSerenityHelpers.AVAILABLE_RECIPIENTS
             .getOrNull<List<Recipient>>()!!
         patientPracticeMessagingRecipientsPage.assertInfoText()
         patientPracticeMessagingRecipientsPage.assertRecipients(expectedRecipients)
@@ -389,7 +421,6 @@ open class PatientPracticeMessageStepDefinitions {
 
     @Then("^I see a page indicating my patient practice message has been deleted$")
     fun iSeeTheDeleteSuccessPage(){
-        //This wait has been added to ensure race condition does not occur
         Thread.sleep(RACE_CONDITION_WAIT)
         patientPracticeMessagingDeleteSuccessPage.assertDisplayed()
     }

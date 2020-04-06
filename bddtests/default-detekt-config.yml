@@ -73,19 +73,19 @@ complexity:
     includeStaticDeclarations: false
   ComplexMethod:
     active: true
-    threshold: 10
+    threshold: 15
     ignoreSingleWhenExpression: false
   LabeledExpression:
     active: false
   LargeClass:
     active: true
-    threshold: 150
+    threshold: 160
   LongMethod:
     active: true
     threshold: 20
   LongParameterList:
     active: true
-    threshold: 6
+    threshold: 8
     ignoreDefaultParameters: false
   MethodOverloading:
     active: false
@@ -101,10 +101,10 @@ complexity:
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    thresholdInFiles: 16
-    thresholdInClasses: 16
+    thresholdInFiles: 20
+    thresholdInClasses: 20
     thresholdInInterfaces: 16
-    thresholdInObjects: 16
+    thresholdInObjects: 20
     thresholdInEnums: 16
     ignoreDeprecated: false
     ignorePrivate: false

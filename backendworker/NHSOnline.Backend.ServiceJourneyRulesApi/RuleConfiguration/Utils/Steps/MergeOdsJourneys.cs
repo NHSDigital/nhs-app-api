@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 {
                     currentJourneys.HomeScreen = journeys.HomeScreen;
                 }
-                
+
                 if (journeys.Appointments?.Provider != null)
                 {
                     currentJourneys.Appointments = journeys.Appointments;
@@ -135,6 +135,16 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             if (merge?.CanDeleteMessages != null)
             {
                 current.CanDeleteMessages = merge.CanDeleteMessages;
+            }
+
+            if (merge?.CanUpdateReadStatus != null)
+            {
+                current.CanUpdateReadStatus = merge.CanUpdateReadStatus;
+            }
+
+            if (merge?.RequiresDetailsRequest != null)
+            {
+                current.RequiresDetailsRequest = merge.RequiresDetailsRequest;
             }
 
             return current;

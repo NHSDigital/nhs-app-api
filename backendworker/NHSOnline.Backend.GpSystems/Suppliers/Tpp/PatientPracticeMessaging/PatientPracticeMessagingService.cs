@@ -19,19 +19,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
         private readonly ITppClientRequest<TppUserSession, MessageRecipientsReply> _messageRecipients;
         private readonly IGetPatientPracticeMessagingRecipientsTaskChecker _messageRecipientsTaskChecker;
         private readonly ITppClientRequest<TppUserSession, MessagesViewReply> _messagesViewPost;
-        private readonly ITppPatientMessagesMapper _mapper;
+        private readonly ITppPatientMessagesMapper _messagesViewMapper;
 
         public PatientPracticeMessagingService(
             ILogger<TppPatientRecordService> logger,
             ITppClientRequest<TppUserSession, MessageRecipientsReply> messageRecipients,
             IGetPatientPracticeMessagingRecipientsTaskChecker messageRecipientsTaskChecker,
-            ITppPatientMessagesMapper mapper,
+            ITppPatientMessagesMapper messagesViewMapper,
             ITppClientRequest<TppUserSession, MessagesViewReply> messagesViewPost)
         {
             _logger = logger;
             _messageRecipients = messageRecipients;
             _messageRecipientsTaskChecker = messageRecipientsTaskChecker;
-            _mapper = mapper;
+            _messagesViewMapper = messagesViewMapper;
             _messagesViewPost = messagesViewPost;
         }
 
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
                 if (response.HasSuccessResponse)
                 {
                     _logger.LogInformation("Mapping TPP patient messages");
-                    var mapped = _mapper.Map(response.Body);
+                    var mapped = _messagesViewMapper.Map(response.Body);
 
                     if (mapped == null)
                     {

@@ -121,13 +121,16 @@ Feature: Service Journey Rules Backend
       | Journey                                    | Value     |
       | im1 messaging                               | <IsEnabledToggle>      |
       | im1 messaging canDeleteMessages             | <CanDeleteToggle>      |
+      | im1 messaging canUpdateReadStatus           | <CanUpdateToggle>      |
+      | im1 messaging requiresDetailsRequest        | <RequiresDetailsToggle>      |
     And I have logged in and have a valid session cookie
     When I request the service journey rules for my ODS Code
     Then I receive an "Ok" success code
     And the service journey rules response will have im1Messaging is enabled set to <IsEnabledToggle>
     And the service journey rules response will have im1Messaging can delete messages set to <CanDeleteToggle>
+    And the service journey rules response will have im1Messaging can update messages set to <CanUpdateToggle>
     Examples:
-      | IsEnabledToggle   | CanDeleteToggle |
-      | enabled           | enabled            |
-      | disabled          | disabled           |
+      | IsEnabledToggle   | CanDeleteToggle    |  CanUpdateToggle |  RequiresDetailsToggle |
+      | enabled           | disabled           |  disabled        |  disabled        |
+      | disabled          | disabled           |  disabled        |  disabled        |
 

@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Messages.Models
         public string Content { get; set; }
         public string SentDateTime { get; set; }
         public string Recipient { get; set; }
+        public bool? OutboundMessage { get; set; }
         public List<MessageReply> MessageReplies { get; set; }
     }
 }

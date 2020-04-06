@@ -1,6 +1,6 @@
 package pages.patientPracticeMessaging
 
-import mocking.sharedModels.MessageReply
+import mocking.patientPracticeMessaging.MessageReply
 import org.junit.Assert.assertEquals
 import pages.HybridPageElement
 import pages.HybridPageObject
@@ -25,7 +25,7 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
 
     fun assertReadRepliesCorrect(expectedReplies: List<MessageReply>){
         for (expectedReply in expectedReplies) {
-            if (!expectedReply.isUnread) {
+            if (!expectedReply.isUnread!!) {
                 setReadMessageReplyId(expectedReplies.indexOf(expectedReply))
                 assertEquals(assertReplyTextCorrect().text, expectedReply.replyContent)
             }
@@ -34,16 +34,16 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
 
     fun assertUnreadRepliesCorrect(expectedReplies: List<MessageReply>){
         for (expectedReply in expectedReplies) {
-            if (expectedReply.isUnread) {
+            if (expectedReply.isUnread!!) {
                 setUnreadMessageReplyId(expectedReplies.indexOf(expectedReply))
                 assertEquals(assertReplyTextCorrect().text, expectedReply.replyContent)
             }
         }
     }
 
-    fun assertSentMessageCorrect(content: String){
+    fun assertMessageCorrect(content: String, id: String){
         val sentMessage =  HybridPageElement(
-                webDesktopLocator = "//*[@id='messageSentPanel']//p",
+                webDesktopLocator = "//*[@id='${id}']//p",
                 androidLocator = null,
                 page = this)
 
@@ -52,7 +52,7 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
 
     fun assertSentSubjectCorrect(subject: String){
         val sentMessage =  HybridPageElement(
-                webDesktopLocator = "//*[@id='messageSubject']",
+                webDesktopLocator = "//*[@id='initialMessageSubject0']",
                 androidLocator = null,
                 page = this)
 
@@ -68,9 +68,9 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
         return assert(pageDivider.isVisible)
     }
 
-    fun assertSentDateTimeCorrect(expectedSentMessageDate: String){
+    fun assertDateTimeCorrect(expectedSentMessageDate: String, id: String){
         val sentDateTimeMessage =  HybridPageElement(
-                webDesktopLocator = "//*[@id='messageSentDateTime']",
+                webDesktopLocator = "//*[@id='${id}']",
                 androidLocator = null,
                 page = this)
 

@@ -1,18 +1,25 @@
+using System.Collections.Generic;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
+
 namespace NHSOnline.Backend.GpSystems.Messages.Models
 {
     public class PatientMessageSummary
     {
-        public string Id { get; set; }
+        public string MessageId { get; set; }
 
         public string ConversationId { get; set; }
         public string Subject { get; set; }
-        public string MessageText { get; set; }
+        public string Content { get; set; }
         public string LastMessageDateTime { get; set; }
+        public string SentDateTime { get; set; }
         public string Recipient { get; set; }
         public int? ReplyCount { get; set; }
         public string Sender { get; set; }
         public int UnreadCount { get; set; }
         public string AttachmentId { get; set; }
         public bool? HasUnreadReplies { get; set; }
+        public List<MessageReply> Replies { get; set; }
+        public bool? OutboundMessage { get; set; }
     }
 }

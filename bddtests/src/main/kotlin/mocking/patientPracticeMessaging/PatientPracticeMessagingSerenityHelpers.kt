@@ -1,4 +1,4 @@
-package mocking.sharedModels
+package mocking.patientPracticeMessaging
 
 import utils.ISerenityHelperEnums
 
@@ -11,5 +11,8 @@ enum class PatientPracticeMessagingSerenityHelpers: ISerenityHelperEnums {
     SELECTED_MESSAGE,
     AVAILABLE_MESSAGE,
     AVAILABLE_RECIPIENTS,
-    SENT_MESSAGE
+    SENT_MESSAGE,
+    INITIAL_FROM_GP,
+    INITIAL_MESSAGE_ID,
+    EXPECTED_REPLY_MESSAGE_DATES,
 }

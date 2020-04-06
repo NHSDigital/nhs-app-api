@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils
             DemographicsResult.Success demographicsResult)
         {
             var response = demographicsOlcMapper.Map(demographicsResult.Response);
-           
+
             var identifierList = new List<Identifier>();
             var identifier = new Identifier
             {

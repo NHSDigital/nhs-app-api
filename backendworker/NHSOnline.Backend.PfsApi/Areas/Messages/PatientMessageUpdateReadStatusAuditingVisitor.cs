@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Messages;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
+using NHSOnline.Backend.GpSystems.Messages.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Messages
 {

@@ -6,7 +6,7 @@ import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.ExceptionResponse
 import wiremock.org.apache.http.HttpStatus
 import mocking.models.Mapping
-import mocking.sharedModels.MessagesResponseModel
+import mocking.patientPracticeMessaging.MessagesResponseModel
 
 class EmisMessagingBuilder(configuration: EmisConfiguration?,
                            linkToken: String,

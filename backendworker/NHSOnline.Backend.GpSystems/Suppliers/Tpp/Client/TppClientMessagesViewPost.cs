@@ -6,14 +6,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
     internal sealed class TppClientMessagesViewPost : ITppClientRequest<TppUserSession, MessagesViewReply>
     {
-        private readonly ILogger<TppClientMessagesViewPost> _logger;
         private readonly TppClientRequestExecutor _requestExecutor;
 
         public TppClientMessagesViewPost(
-            ILogger<TppClientMessagesViewPost> logger,
             TppClientRequestExecutor requestExecutor)
         {
-            _logger = logger;
             _requestExecutor = requestExecutor;
         }
 

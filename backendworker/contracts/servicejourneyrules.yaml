@@ -159,6 +159,10 @@ components:
           type: boolean
         canDeleteMessages:
           type: boolean
+        canUpdateReadStatus:
+          type: boolean
+        requiresDetailsRequest:
+          type: boolean
     LinkedAccountsConfigResponse:
       type: object
       properties:

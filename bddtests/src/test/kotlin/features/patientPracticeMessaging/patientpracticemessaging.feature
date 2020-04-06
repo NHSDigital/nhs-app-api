@@ -41,7 +41,6 @@ Feature: Patient to practice messaging
     And I click send message
     Then I see validation errors for subject and message
 
-
   Scenario Outline: A user sees a message indicating that they have no recipients for patient practice messaging
     Given I am an <GP System> patient
     And I am a user who can access patient practice messaging
@@ -93,6 +92,28 @@ Feature: Patient to practice messaging
     When I follow the Messages link from the home page
     Then the patient to practice inbox page is displayed
     And I see a list of patient practice messages without the subject and with the unread count
+
+  Scenario: A TPP patient can view a patient message they started
+    Given I am a TPP patient
+    And I am a user who can access patient practice messaging
+    And I am logged in
+    And I have patient practice messages in my inbox, all of which are read
+    When I follow the Messages link from the home page
+    Then the patient to practice inbox page is displayed
+    And I see a list of patient practice messages without the subject and without the unread count
+    When I select a patient practice message in my inbox
+    Then I see my patient practice message along with the replies from the GP
+
+  Scenario: A TPP patient can view a patient message the gp sent
+    Given I am a TPP patient
+    And I am a user who can access patient practice messaging
+    And I am logged in
+    And I have patient practice messages in my inbox, one of which came from the GP
+    When I follow the Messages link from the home page
+    Then the patient to practice inbox page is displayed
+    And I see a list of patient practice messages from the GP
+    When I select a patient practice message in my inbox
+    Then I see my patient practice message along with the replies from the GP
 
   Scenario: A TPP patient can view their patient messaging inbox and the unread count is not displayed
     Given I am a TPP patient

@@ -158,6 +158,7 @@ export default {
             subject: subjectText,
             content: messageText,
             sentDateTime: new Date(),
+            outboundMessage: true,
             messageReplies: [] },
           });
         redirectTo(this, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path);

@@ -1,5 +1,6 @@
 package pages.patientPracticeMessaging
 
+import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
 import org.junit.Assert.assertEquals
 import models.ExpectedMessage
 import org.junit.Assert.assertTrue
@@ -8,6 +9,7 @@ import pages.HybridPageObject
 import pages.isDisplayed
 import pages.isVisible
 import pages.text
+import utils.getOrNull
 
 class PatientPracticeMessagingPage: HybridPageObject() {
 
@@ -35,31 +37,44 @@ class PatientPracticeMessagingPage: HybridPageObject() {
     }
 
     fun assertCorrectMessagesDisplayed(expectedMessages: List<ExpectedMessage>,
-                                       hasSubject: Boolean = true, hasUnreadCount: Boolean = false){
+                                       hasSubject: Boolean = true, hasUnreadCount: Boolean = false, fromGP: Boolean =
+                                               false) {
+
         for (expectedMessage in expectedMessages) {
+
+            if (expectedMessage.conversationId !== expectedMessage.id) {
+                continue;
+            }
+
             baseMessagePath = "//a[@id='${expectedMessage.id}']"
 
-            assertEquals(getMessageTitle().text, expectedMessage.recipient)
+            if (!fromGP) {
+                assertEquals(getMessageTitle().text, expectedMessage.recipient)
+            } else {
+                assertEquals(getMessageTitle().text, expectedMessage.sender)
+            }
             assertEquals(getMessageDate().text, expectedMessage.lastMessageDateTime)
 
-            if(hasSubject){
+            if (hasSubject) {
                 assertEquals(getMessageSubject().text, expectedMessage.subject)
             }
 
-            if(hasUnreadCount){
-                assertEquals(getUnreadIndicator(expectedMessage.id).textValue,
-                             expectedMessage.unreadCount.toString())
+            if (hasUnreadCount) {
+                assertEquals(getUnreadIndicator()
+                        .textValue,
+                        expectedMessage.unreadCount.toString())
             }
 
             if (expectedMessage.hasUnreadReplies!!) {
-                assert(getUnreadIndicator(expectedMessage.id).isVisible)
+                assert(getUnreadIndicator().isVisible)
             }
         }
     }
 
     fun clickFirstMessage() {
         HybridPageElement(
-                webDesktopLocator = "//a[@id='1']",
+                webDesktopLocator = "//a[@id='${PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID
+                        .getOrNull<String>()}']",
                 androidLocator = null,
                 page= this
         ).click()
@@ -92,9 +107,9 @@ class PatientPracticeMessagingPage: HybridPageObject() {
                 page = this)
     }
 
-    private fun getUnreadIndicator(id: String): HybridPageElement{
+    private fun getUnreadIndicator(): HybridPageElement{
         return HybridPageElement(
-                webDesktopLocator = "//*[@id='unreadIndicator$id']",
+                webDesktopLocator = "//*[@id='unreadIndicator0']",
                 androidLocator = null,
                 page = this)
     }

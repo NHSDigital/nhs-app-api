@@ -15,6 +15,8 @@ export const SILVER_INTEGRATION = 'silverIntegration';
 export const DOCUMENTS = 'documents';
 export const IM1MESSAGING = 'im1Messaging';
 export const DELETE_PATIENT_PRACTICE_MESSAGING = 'deletePatientPracticeMessage';
+export const UPDATE_STATUS_PATIENT_PRACTICE_MESSAGING = 'updateStatusPatientPracticeMessage';
+export const REQUIRED_DETAILS_CALL_PATIENT_PRACTICE_MESSAGING = 'requiredDetailsCallPatientPracticeMessage';
 
 export const initialState = () => ({
   isLoaded: false,
@@ -46,6 +48,8 @@ export const initialState = () => ({
     im1Messaging: {
       isEnabled: false,
       canDeleteMessages: false,
+      canUpdateReadStatus: false,
+      requiresDetailsRequest: false,
     },
   },
 });

@@ -174,9 +174,15 @@
             },
             "canDeleteMessages": {
               "enum": ["true", "false"]
-            }
+            },
+            "canUpdateReadStatus": {
+              "enum": ["true", "false"]
+            },
+            "requiresDetailsRequest": {
+              "enum": ["true", "false"]
+            },
           },
-          "required": [ "isEnabled", "canDeleteMessages"]
+          "required": [ "isEnabled", "canDeleteMessages", "canUpdateReadStatus", "requiresDetailsRequest"]
         },
         {
           "additionalProperties": false,
@@ -185,6 +191,12 @@
               "enum": ["false"]
             },
             "canDeleteMessages": {
+              "enum": ["false"]
+            },
+            "canUpdateReadStatus": {
+              "enum": ["false"]
+            },
+            "requiresDetailsRequest": {
               "enum": ["false"]
             }
           },

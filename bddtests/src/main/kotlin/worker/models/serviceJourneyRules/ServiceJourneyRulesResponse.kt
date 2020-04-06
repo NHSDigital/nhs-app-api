@@ -35,4 +35,7 @@ data class PublicHealthNotification(
 
 data class HomeScreen(var publicHealthNotifications: ArrayList<PublicHealthNotification>)
 
-data class Im1MesagingJourneyRules(var isEnabled: Boolean, var canDeleteMessages: Boolean)
+data class Im1MesagingJourneyRules(var isEnabled: Boolean,
+                                   var canDeleteMessages: Boolean,
+                                   var canUpdateReadStatus: Boolean,
+                                   val requiresDetailsRequest: Boolean)

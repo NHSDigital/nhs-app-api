@@ -10,7 +10,7 @@
                   'nhsuk-u-margin-bottom-0',
                   'nhsuk-u-padding-2']">
       <linkify-content class="panel-content nhsuk-u-font-size-19"
-                       :content="message.replyContent" tag="p"/>
+                       :content="getContent" tag="p"/>
     </div>
     <p :id="idPrefix+`MessageReplyDateTime`+index"
        class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-0">
@@ -38,10 +38,17 @@ export default {
       type: Object,
       required: true,
     },
+    messageContent: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     formattedTime() {
       return formatIndividualMessageTime(this.message.sentDateTime, this.$t.bind(this));
+    },
+    getContent() {
+      return this.messageContent || '';
     },
   },
 };

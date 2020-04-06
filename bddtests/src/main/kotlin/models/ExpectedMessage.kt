@@ -10,5 +10,6 @@ data class ExpectedMessage(
         var sender: String? = null,
         var attachmentId: String? = null,
         var hasUnreadReplies: Boolean? = null,
-        var unreadCount: Int? = null
+        var unreadCount: Int? = null,
+        var incoming: String? = null
 )

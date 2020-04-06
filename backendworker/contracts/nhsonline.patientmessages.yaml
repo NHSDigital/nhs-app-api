@@ -306,16 +306,26 @@ components:
     PatientMessageSummary:
       type: object
       properties:
-        id:
-          type: integer
+        messageId:
+          type: string
+          description: A unique indentifier for this message
+        conversationId:
+          type: string
           description: A unique indentifier for this conversation
         subject:
           type: string
           description: A message summary provided by the patient when initiating the conversation
+        content:
+          type: string
+          description: content of the message
         lastMessageDateTime:
           type: string
           format: date-time
           description: The datetime the last message in the conversation was sent
+        sentDateTime:
+          type: string
+          format: date-time
+          description: The datetime of when the message was sent
         recipient:
           type: string
           description: The current owner of the conversation according to the GPSS
@@ -323,14 +333,31 @@ components:
           type: integer
           nullable: true
           description: The number of replies to the initial message sent by the patient  -  NHSO-6530 confirm this is not just unread messages
+        sender:
+          type: string
+          description: This field contains the string for the sender of the message
+        unreadCount:
+          type: integer
+          description: Count which will represent the number of unread messages in the conversation
+        attachmentId:
+          type: string
+          description: Identifier for the attachment which has been sent in a message, which can be used to obtain the file.
         hasUnreadReplies:
           type: boolean
           nullable: true
           description: Indicates whether there are messages the patient has not read
+        replies:
+          type: array
+          description: array of message replies
+          items:
+            $ref: "#/components/schemas/MessageReplies"
+        outboundMessage:
+          type: boolean
+          description: Indicates whether the message is from the patient to the practice
     PatientMessageDetails:
       type: object
       properties:
-        MessageId:
+        messageId:
           type: integer
           nullable: true
           description: A unique indentifier for this conversation
@@ -365,6 +392,9 @@ components:
         replyContent:
           type: string
           description: Content of the reply to the user
+        outboundMessage:
+          type: boolean
+          description: Indicates whether the message is from the patient to the practice
     UpdateMessageReadStatusRequestBody:
       type: object
       properties:

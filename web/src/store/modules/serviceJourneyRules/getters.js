@@ -15,6 +15,8 @@ import {
   DOCUMENTS,
   IM1MESSAGING,
   DELETE_PATIENT_PRACTICE_MESSAGING,
+  UPDATE_STATUS_PATIENT_PRACTICE_MESSAGING,
+  REQUIRED_DETAILS_CALL_PATIENT_PRACTICE_MESSAGING,
 } from './mutation-types';
 
 export default {
@@ -89,5 +91,11 @@ export default {
   },
   [`${DELETE_PATIENT_PRACTICE_MESSAGING}Enabled`](state) {
     return get('rules.im1Messaging.canDeleteMessages')(state);
+  },
+  [`${UPDATE_STATUS_PATIENT_PRACTICE_MESSAGING}Enabled`](state) {
+    return get('rules.im1Messaging.canUpdateReadStatus')(state);
+  },
+  [`${REQUIRED_DETAILS_CALL_PATIENT_PRACTICE_MESSAGING}Enabled`](state) {
+    return get('rules.im1Messaging.requiresDetailsRequest')(state);
   },
 };

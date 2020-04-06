@@ -1,10 +1,10 @@
 package features.patientPracticeMessaging.factories
 
 import mocking.data.patientPracticeMessaging.EmisMessagingData
-import mocking.sharedModels.PatientPracticeMessagingSerenityHelpers
 import mocking.emis.practices.SettingsResponseModel
-import mocking.sharedModels.MessagesResponseModel
-import mocking.sharedModels.PatientMessageSummary
+import mocking.patientPracticeMessaging.MessagesResponseModel
+import mocking.patientPracticeMessaging.PatientMessageSummary
+import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
 import models.ExpectedMessage
 import models.Patient
 import utils.getOrNull
@@ -70,6 +70,10 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
 
     override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean){
         setUpMessageDataAndStubs(patient, hasUnread)
+    }
+
+    override fun enabledWithPatientPracticeMessagingFromGP(patient: Patient, hasUnread: Boolean) {
+        throw NotImplementedError("Not implemented")
     }
 
     override fun patientSuccessfullySendsAMessage(patient: Patient, createMessageRequest: CreateMessageRequest) {

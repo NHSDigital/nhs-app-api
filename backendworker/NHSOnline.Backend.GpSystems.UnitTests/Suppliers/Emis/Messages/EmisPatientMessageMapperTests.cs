@@ -22,27 +22,28 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             _systemUnderTest = _fixture.Create<EmisPatientMessageMapper>();
         }
-        
+
         [TestMethod]
         public void Map_WhenCalledHappyPath_ReturnsMappedGetPatientMessageResponse()
         {
             // Arrange
             var messageGetResponse = _fixture.Create<MessageGetResponse>();
-            
+
             // Act
             var result = _systemUnderTest.Map(messageGetResponse);
-            
+
             // Assert
             result.Should().BeEquivalentTo(new GetPatientMessageResponse
             {
-                MessageDetails = 
+                MessageDetails =
                 {
                     MessageId = messageGetResponse.Message.MessageId,
                     Subject = messageGetResponse.Message.Subject,
                     Recipient = messageGetResponse.Message.Recipients[0].Name,
                     MessageReplies = messageGetResponse.Message.MessageReplies,
                     Content = messageGetResponse.Message.Content,
-                    SentDateTime = messageGetResponse.Message.SentDateTime
+                    SentDateTime = messageGetResponse.Message.SentDateTime,
+                    OutboundMessage = true
                 }
             });
         }

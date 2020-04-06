@@ -11,6 +11,7 @@ abstract class PracticePatientMessagingFactory {
     abstract fun enabled(patient: Patient)
     abstract fun disabled(patient: Patient)
     abstract fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean)
+    abstract fun enabledWithPatientPracticeMessagingFromGP(patient: Patient, hasUnread: Boolean)
     abstract fun forbiddenErrorWithPatientPracticeMessaging(patient: Patient)
     abstract fun unknownErrorWithPatientPracticeMessaging(patient: Patient)
     abstract fun errorWithPatientPracticeMessagingMessageDetails(patient: Patient)

@@ -33,7 +33,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _rulesSchema = GetEmbeddedResource(Constants.FileNames.RulesSchema);
             _journeyConfigurationSchema = GetEmbeddedResource(Constants.FileNames.JourneyConfigurationSchema);
             _mockLogger = fixture.Freeze<Mock<ILogger<SchemaValidator>>>();
-
             _validator = fixture.Create<SchemaValidator>();
         }
 
@@ -323,10 +322,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("\"userInfo\": \"false\"")]
         [DataRow("\"documents\": \"true\"")]
         [DataRow("\"documents\": \"false\"")]
-        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"true\" }")]
-        [DataRow("\"im1Messaging\": { \"isEnabled\": \"false\", \"canDeleteMessages\": \"false\" }")]
-        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"false\" }")]
-
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"true\", \"canUpdateReadStatus\": \"true\", \"requiresDetailsRequest\": \"true\" }")]
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"false\", \"canDeleteMessages\": \"false\", \"canUpdateReadStatus\": \"false\", \"requiresDetailsRequest\": \"false\" }")]
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"false\", \"canUpdateReadStatus\": \"false\", \"requiresDetailsRequest\": \"false\" }")]
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"false\", \"canUpdateReadStatus\": \"true\", \"requiresDetailsRequest\": \"true\" }")]
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"true\", \"canUpdateReadStatus\": \"false\", \"requiresDetailsRequest\": \"false\" }")]
         public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidJourneys_ReturnsTrue(
             string journeys)
         {
@@ -377,6 +377,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("documents", "\"test\"", "NotInEnumeration: #/journeys.documents", false)]
         [DataRow("im1Messaging", "{\"isEnabled\": \"true\"}", "PropertyRequired: #/journeys.im1Messaging.canDeleteMessages", true)]
         [DataRow("im1Messaging", "{\"isEnabled\": \"yes\", \"canDeleteMessages\" : \"true\"}", "NotInEnumeration: #/journeys.im1Messaging.isEnabled", false)]
+        [DataRow("im1Messaging", "{\"isEnabled\": \"true\"}", "PropertyRequired: #/journeys.im1Messaging.canUpdateReadStatus", true)]
+        [DataRow("im1Messaging", "{\"isEnabled\": \"yes\", \"canUpdateReadStatus\" : \"true\"}", "NotInEnumeration: #/journeys.im1Messaging.isEnabled", false)]
+        [DataRow("im1Messaging", "{\"isEnabled\": \"true\"}", "PropertyRequired: #/journeys.im1Messaging.requiresDetailsRequest", true)]
+        [DataRow("im1Messaging", "{\"isEnabled\": \"yes\", \"requiresDetailsRequest\" : \"true\"}", "NotInEnumeration: #/journeys.im1Messaging.isEnabled", false)]
         public async Task
             ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidJourney_ReturnsFalse(
                 string journeyType, string value, string expectedError, bool oneOfMultipleOptions)

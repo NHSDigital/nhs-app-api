@@ -50,9 +50,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 
             _mockGpSystem.Setup(x => x.GetLinkedAccountsService())
                 .Returns(_mockLinkedAccountService.Object);
-            
+
             _mockGpSystem.Setup(x => x.SupportsLinkedAccounts).Returns(true);
-            
+
             _context.SetUserSession(_mockUserSession);
         }
 
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _mockLinkedAccountService.Setup(
                     x => x.GetProxyAuditData(_mockUserSession.GpUserSession, _patientId))
                 .Returns(result).Verifiable();
-                 
+
             var subject = new ProxyAuditingMiddleware(_next, _mockGpSystemFactory.Object, _mockLogger.Object);
 
             // Act
@@ -77,13 +77,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _mockLinkedAccountService.Verify();
             _context.GetLinkedAccountAuditInfo().Should().Be(result);
         }
-        
+
         [TestMethod]
         public async Task LinkedAccountAuditInfo_NotStoredInContext_WhenUserSessionNotAvailable()
         {
             // Arrange
             _context.Items.Remove(Constants.HttpContextItems.UserSession);
-            
+
             var subject = new ProxyAuditingMiddleware(_next, _mockGpSystemFactory.Object, _mockLogger.Object);
 
             // Act
@@ -92,13 +92,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             // Assert
             _context.GetLinkedAccountAuditInfo().Should().BeNull();
         }
-        
+
         [TestMethod]
         public async Task LinkedAccountAuditInfo_NotStoredInContext_WhenGpSystemDoesNotSupportLinkedAccounts()
         {
             // Arrange
             _mockGpSystem.Setup(x => x.SupportsLinkedAccounts).Returns(false);
-                 
+
             var subject = new ProxyAuditingMiddleware(_next, _mockGpSystemFactory.Object, _mockLogger.Object);
 
             // Act
@@ -111,7 +111,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         [TestMethod]
         public async Task LinkedAccountAuditInfo_NotStoredInContext_WhenPatientIdHeaderNotFound()
         {
-            // Arrange                 
+            // Arrange
             var subject = new ProxyAuditingMiddleware(_next, _mockGpSystemFactory.Object, _mockLogger.Object);
 
             // Act
@@ -120,7 +120,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             // Assert
             _context.GetLinkedAccountAuditInfo().Should().BeNull();
         }
-        
+
         [DataTestMethod]
         [DataRow(null, "/v1/patient/configuration")]
         [DataRow(null, "/v1/patient/journey-configuration")]
@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _context.Request.Headers.Add(Constants.HttpHeaders.PatientId, patientId);
             _context.Request.Path = requestPath;
             var expectedLogMessage = "NHSO-Patient-Id Header not found";
-                 
+
             var subject = new ProxyAuditingMiddleware(_next, _mockGpSystemFactory.Object, _mockLogger.Object);
 
             // Act
@@ -140,8 +140,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _context.GetLinkedAccountAuditInfo().Should().BeNull();
             _mockLogger.VerifyLogger(LogLevel.Warning, expectedLogMessage, Times.Never());
         }
-        
-                
+
+
         [DataTestMethod]
         [DataRow(null, "/v1/patient/configuration1234")]
         public async Task LogsPatientHeaderNotFoundWarning_WhenRequestPathIsValid(string patientId, string requestPath)
@@ -150,7 +150,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _context.Request.Headers.Add(Constants.HttpHeaders.PatientId, patientId);
             _context.Request.Path = requestPath;
             var expectedLogMessage = "NHSO-Patient-Id Header not found";
-                 
+
             var subject = new ProxyAuditingMiddleware(_next, _mockGpSystemFactory.Object, _mockLogger.Object);
 
             // Act
@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Warning, expectedLogMessage, Times.Once());
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("1234")]
@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         {
             // Arrange
             _context.Request.Headers.Add(Constants.HttpHeaders.PatientId, patientId);
-                 
+
             var subject = new ProxyAuditingMiddleware(_next, _mockGpSystemFactory.Object, _mockLogger.Object);
 
             // Act

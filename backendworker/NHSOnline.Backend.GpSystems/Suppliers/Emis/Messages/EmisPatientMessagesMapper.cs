@@ -26,12 +26,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                     MessageSummaries = response.Messages
                         .Select(m => new PatientMessageSummary
                         {
-                            Id = m.MessageId.ToString(CultureInfo.InvariantCulture),
+                            MessageId = m.MessageId.ToString(CultureInfo.InvariantCulture),
                             Subject = m.Subject,
                             LastMessageDateTime = m.LastReplyDateTime ?? m.SentDateTime,
                             Recipient = GetRecipientFromMessageMetaData(m),
                             ReplyCount = m.ReplyCount,
-                            HasUnreadReplies = m.HasUnreadReplies
+                            HasUnreadReplies = m.HasUnreadReplies,
+                            OutboundMessage = true
                         })
                         .OrderByDescending(pm => pm.LastMessageDateTime)
                         .ToList()

@@ -1,4 +1,4 @@
-namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages
+namespace NHSOnline.Backend.GpSystems.Messages.Models
 {
     public class MessageReply
     {
@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages
         public string SentDateTime { get; set;}
         public bool IsUnread { get; set; }
         public string ReplyContent { get; set;}
-        public bool? isLegacy { get; set; }
-        
+        public bool? OutboundMessage { get; set; }
+
     }
 }

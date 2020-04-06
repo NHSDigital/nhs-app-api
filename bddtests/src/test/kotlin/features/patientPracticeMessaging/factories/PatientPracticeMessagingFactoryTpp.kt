@@ -3,18 +3,24 @@ package features.patientPracticeMessaging.factories
 import constants.ErrorResponseCodeTpp
 import constants.TppConstants
 import mocking.data.TppListServiceAccessesData
+import mocking.data.patientPracticeMessaging.DateHelpers
+import mocking.data.patientPracticeMessaging.MessageDateFormat
 import mocking.data.patientPracticeMessaging.TppMessagingData
-import mocking.sharedModels.PatientPracticeMessagingSerenityHelpers
+import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
 import mocking.tpp.models.Error
 import mocking.tpp.models.Message
 import mocking.tpp.models.MessagesViewReply
+import mocking.patientPracticeMessaging.DateAndFormat
 import models.ExpectedMessage
 import models.Patient
 import utils.SerenityHelpers
 import utils.getOrNull
+import utils.setIfNotAlreadySet
 import worker.models.patientPracticeMessaging.CreateMessageRequest
 
+const val UNREAD_COUNT = 4
 class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
+
     override fun disabled(patient: Patient) {
         mockingClient.forTpp {
             patientPracticeMessaging.viewMessagesRequest(patient.tppUserSession!!)
@@ -38,20 +44,80 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
 
     override fun enabledWithPatientPracticeMessaging(patient: Patient,
                                                      hasUnread: Boolean) {
+
+        val messagesFromData = TppMessagingData.getDefaultTppMessages(hasUnread)
+
         mockingClient.forTpp {
             patientPracticeMessaging.viewMessagesRequest(patient.tppUserSession!!)
-                    .respondWithSuccess(TppMessagingData.getDefaultTppMessages(hasUnread))
+                    .respondWithSuccess(messagesFromData)
         }
 
         mockingClient.forTpp {
             patientPracticeMessaging.requestRecipientsRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppMessagingData.getDefaultTppRecipients())
         }
-        val expectedMessages = getExpectedMessages(TppMessagingData.getDefaultTppMessages().Message.toList(),
+
+        val expectedMessages = getExpectedMessages(messagesFromData.Message.toList(),
                                                            hasUnread)
+
+        val firstMessage = messagesFromData.Message.toList()[1]
+        val replyList = mutableListOf<Message>()
+
+        messagesFromData.Message.toList().forEachIndexed(fun (_, messageObject) {
+            if (messageObject.conversationId == firstMessage.conversationId) {
+                replyList.add(messageObject)
+            }
+        })
+        val messageDetails = TppMessagingData.getDefaultSelected(
+                firstMessage,
+                replyList
+        )
+
         SerenityHelpers.setSerenityVariableIfNotAlreadySet(
                 PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES,
                 expectedMessages)
+
+        PatientPracticeMessagingSerenityHelpers.AVAILABLE_MESSAGE
+                .setIfNotAlreadySet(messageDetails)
+    }
+
+    override fun enabledWithPatientPracticeMessagingFromGP(patient: Patient, hasUnread: Boolean) {
+
+        val messagesFromData = TppMessagingData.getTppMessagesInitialFromGp()
+
+        mockingClient.forTpp {
+            patientPracticeMessaging
+                    .viewMessagesRequest(patient.tppUserSession!!)
+                    .respondWithSuccess(messagesFromData)
+        }
+        val expectedMessages = getExpectedMessages(
+                messagesFromData
+                .Message.toList(),
+                hasUnread)
+
+        val firstMessage = messagesFromData
+                .Message
+                .toList()[0]
+        val replyList = mutableListOf<Message>()
+
+        messagesFromData
+                .Message.toList()
+                .forEachIndexed(fun (_, messageObject) {
+            if (messageObject.conversationId != firstMessage.conversationId) {
+                replyList.add(messageObject)
+            }
+        })
+        val messageDetails = TppMessagingData.getDefaultSelected(
+                firstMessage,
+                replyList
+        )
+
+        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
+                PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES,
+                expectedMessages)
+
+        PatientPracticeMessagingSerenityHelpers.AVAILABLE_MESSAGE
+                .setIfNotAlreadySet(messageDetails)
     }
 
     override fun unknownErrorWithPatientPracticeMessaging(patient: Patient) {
@@ -72,17 +138,19 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
             List<ExpectedMessage> {
         var unreadCount = 0
         if (hasUnread) {
-            unreadCount = 1
+            unreadCount = UNREAD_COUNT
         }
         val expectedInboxMessageDates = PatientPracticeMessagingSerenityHelpers
-                .EXPECTED_INBOX_MESSAGE_DATES
-                .getOrNull<List<String>>()
-        return messages.mapIndexed(fun(index, message): ExpectedMessage {
+                .EXPECTED_REPLY_MESSAGE_DATES
+                .getOrNull<List<DateAndFormat>>()!!.sortedByDescending { it.date }
+        return messages.mapIndexed(fun(_, message): ExpectedMessage {
             return ExpectedMessage(
                     message.messageId,
                     message.conversationId,
                     messageText = message.messageText,
-                    lastMessageDateTime = expectedInboxMessageDates!![index],
+                    lastMessageDateTime = DateHelpers().getExpectedFormattedMessageDate(
+                            expectedInboxMessageDates[0].date, getInboxDateFormatFromReply(
+                            expectedInboxMessageDates[0].format)),
                     sender = message.sender,
                     recipient = message.recipient,
                     hasUnreadReplies = hasUnread,
@@ -123,6 +191,27 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
             patientPracticeMessaging.requestRecipientsRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppMessagingData.getTppEmptyRecipients())
         }
+    }
+
+    private fun getInboxDateFormatFromReply(format: MessageDateFormat) : MessageDateFormat {
+        return when(format) {
+            MessageDateFormat.DETAILS_TODAY -> {
+                MessageDateFormat.INBOX_TIME_12_HR
+            }
+            MessageDateFormat.DETAILS_TODAY_AT_MIDDAY -> {
+                MessageDateFormat.INBOX_MIDDAY
+            }
+            MessageDateFormat.DETAILS_TODAY_AT_MIDNIGHT-> {
+                MessageDateFormat.INBOX_MIDNIGHT
+            }
+            MessageDateFormat.DETAILS_YESTERDAY -> {
+                MessageDateFormat.INBOX_YESTERDAY
+            }
+            else -> {
+                format
+            }
+        }
+
     }
 
 }

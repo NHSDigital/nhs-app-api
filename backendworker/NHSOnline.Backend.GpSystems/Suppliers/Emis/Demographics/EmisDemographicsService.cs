@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics
         private readonly IEmisDemographicsMapper _emisDemographicsMapper;
 
         public EmisDemographicsService(
-            ILoggerFactory loggerFactory, 
+            ILoggerFactory loggerFactory,
             IEmisClient emisClient,
             IEmisDemographicsMapper emisDemographicsMapper)
         {
@@ -29,9 +29,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics
 
             try
             {
-                _logger.LogInformation($"Trying to find UserPatientLinkToken using Id {gpLinkedAccountModel.PatientId}");        
+                _logger.LogInformation($"Trying to find UserPatientLinkToken using Id {gpLinkedAccountModel.PatientId}");
                 var emisHttpRequestData = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
-                
+
                 var demographicsResponse = await _emisClient.DemographicsGet(emisHttpRequestData);
 
                 if (!demographicsResponse.HasSuccessResponse)

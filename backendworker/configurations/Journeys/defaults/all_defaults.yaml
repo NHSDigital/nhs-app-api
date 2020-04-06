@@ -26,3 +26,5 @@ journeys:
   im1Messaging: 
     isEnabled: false
     canDeleteMessages: false
+    canUpdateReadStatus: false
+    requiresDetailsRequest: false

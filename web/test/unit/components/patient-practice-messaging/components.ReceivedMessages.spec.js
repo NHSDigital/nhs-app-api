@@ -1,4 +1,4 @@
-import ReceivedMessages from '@/components/patient-practice-messaging/ReceivedMessages';
+import ReceivedMessage from '@/components/patient-practice-messaging/ReceivedMessage';
 import { mount, createStore, create$T } from '../../helpers';
 
 const $store = () => (
@@ -33,46 +33,42 @@ const $store = () => (
     },
   }));
 
-describe('Received Messages', () => {
+describe('Received Message', () => {
   let wrapper;
 
   describe('Message with replies', () => {
     beforeEach(() => {
-      wrapper = mount(ReceivedMessages, {
+      const propsData = {
+        message: {
+          sender: 'Test',
+          content: 'This is a test',
+          sentDateTime: '2019-12-09T13:56:50.377',
+          isUnread: false,
+        },
+        replyIndex: 0,
+        replyPrefixIdentifier: 'initial',
+        messageContent: 'This is a test',
+      };
+      wrapper = mount(ReceivedMessage, {
+        propsData,
         $store: $store(),
         $t: create$T(false),
       });
     });
 
     it('will display read sender', () => {
-      const sender = wrapper.find('#readMessageReplySender0').element.firstChild.data;
-      expect(sender).toBe('Test');
-    });
-
-    it('will display unread sender', () => {
-      const sender = wrapper.find('#unreadMessageReplySender0').element.firstChild.data;
+      const sender = wrapper.find('#initialMessageReplySender0').element.firstChild.data;
       expect(sender).toBe('Test');
     });
 
     it('will display read message time', () => {
-      const dateTime = wrapper.find('#readMessageReplyDateTime0').element.firstChild.data;
-      const dateTimeSingleLine = dateTime.replace(/\n|\r/g, '').replace(/  +/g, ' ');
-      expect(dateTimeSingleLine.trim()).toBe('Sent 9 December 2019 at 1:56pm');
-    });
-
-    it('will display unread message time', () => {
-      const dateTime = wrapper.find('#unreadMessageReplyDateTime0').element.firstChild.data;
+      const dateTime = wrapper.find('#initialMessageReplyDateTime0').element.firstChild.data;
       const dateTimeSingleLine = dateTime.replace(/\n|\r/g, '').replace(/  +/g, ' ');
       expect(dateTimeSingleLine.trim()).toBe('Sent 9 December 2019 at 1:56pm');
     });
 
     it('will display read message content', () => {
-      const content = wrapper.find('#readMessageReplyPanel0>p').element.firstChild.data;
-      expect(content).toBe('This is a test');
-    });
-
-    it('will display unread message content', () => {
-      const content = wrapper.find('#unreadMessageReplyPanel0>p').element.firstChild.data;
+      const content = wrapper.find('#initialMessageReplyPanel0>p').element.firstChild.data;
       expect(content).toBe('This is a test');
     });
   });
@@ -81,63 +77,6 @@ describe('Received Messages', () => {
     beforeEach(() => {
       wrapper = mount(ReceivedMessages, {
         $store: $store(),
-      });
-    });
-
-    describe('getReplies', () => {
-      it('should return the list of replies', () => {
-        const replies = [{
-          sender: 'Test',
-          replyContent: 'This is a test',
-          sentDateTime: '2019-12-09T13:56:50.377',
-          isUnread: false,
-        },
-        {
-          sender: 'Test',
-          replyContent: 'This is a test',
-          sentDateTime: '2019-12-09T13:56:50.377',
-          isUnread: true,
-        },
-        {
-          sender: 'Test',
-          replyContent: 'This is a test',
-          sentDateTime: '2019-12-09T13:56:50.377',
-          isUnread: true,
-        }];
-
-        expect(wrapper.vm.getReplies).toEqual(replies);
-      });
-    });
-
-    describe('unReadReplies', () => {
-      it('should return the list of unread replies', () => {
-        const unReadReplies = [{
-          sender: 'Test',
-          replyContent: 'This is a test',
-          sentDateTime: '2019-12-09T13:56:50.377',
-          isUnread: true,
-        },
-        {
-          sender: 'Test',
-          replyContent: 'This is a test',
-          sentDateTime: '2019-12-09T13:56:50.377',
-          isUnread: true,
-        }];
-
-        expect(wrapper.vm.unreadMessages).toEqual(unReadReplies);
-      });
-    });
-
-    describe('readReplies', () => {
-      it('should return the list of read replies', () => {
-        const readReplies = [{
-          sender: 'Test',
-          replyContent: 'This is a test',
-          sentDateTime: '2019-12-09T13:56:50.377',
-          isUnread: false,
-        }];
-
-        expect(wrapper.vm.readMessages).toEqual(readReplies);
       });
     });
   });

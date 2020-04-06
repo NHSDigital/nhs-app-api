@@ -1,4 +1,4 @@
-package mocking.sharedModels
+package mocking.patientPracticeMessaging
 
 data class MessagesResponseModel(
         var messages: List<PatientMessageSummary> = arrayListOf()
@@ -19,20 +19,21 @@ data class MessageResponseModel(
 
 data class MessageDetails (
         var messageId: String,
-        var subject: String,
+        var subject: String?,
         var recipients: List<Recipient>,
         var messageReplies: List<MessageReply> = arrayListOf(),
         var content: String,
         var sentDateTime: String,
-        var clientApplicationName: String
+        var clientApplicationName: String?
 )
 
 data class MessageReply(
-        var isLegacy: Boolean,
-        var isUnread: Boolean,
+        var isLegacy: Boolean?,
+        var isUnread: Boolean?,
         var replyContent: String,
         var sender: String,
-        var sentDateTime: String
+        var sentDateTime: String,
+        var outboundMessage: Boolean
 )
 
 data class MessageRecipientsResponseModel(

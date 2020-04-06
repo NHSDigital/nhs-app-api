@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             result.NhsNumber.Should().Be(registration.NhsNumber);
             result.Identifier.Should().Be($"https://fhir.nhs.uk/Id/nhs-number|{registration.NhsNumber}");
         }
-        
+
         [TestMethod]
         public void MapOrganDonationRegistrationToLookupRequest_WithNoName_MapsCorrectly()
         {
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             result.Given.Should().Be(string.Empty);
             result.Family.Should().Be(string.Empty);
         }
-        
+
         [TestMethod]
         public void MapOrganDonationRegistrationToLookupRequest_WithSpacesOnNhsNumber_MapsCorrectly()
         {

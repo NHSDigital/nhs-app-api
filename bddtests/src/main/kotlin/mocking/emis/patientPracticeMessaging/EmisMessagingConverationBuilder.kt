@@ -6,13 +6,13 @@ import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.ExceptionResponse
 import wiremock.org.apache.http.HttpStatus
 import mocking.models.Mapping
-import mocking.sharedModels.MessageResponseModel
+import mocking.patientPracticeMessaging.MessageResponseModel
 
 class EmisMessagingConverationBuilder(configuration: EmisConfiguration?,
                            linkToken: String,
                            apiEndUserSessionId: String,
                            apiSessionId: String) : EmisMappingBuilder(
-        configuration, "GET", "/messages/1/") {
+        configuration, "GET", "/messages/0/") {
     init {
         requestBuilder
                 .andHeader(mocking.emis.HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)

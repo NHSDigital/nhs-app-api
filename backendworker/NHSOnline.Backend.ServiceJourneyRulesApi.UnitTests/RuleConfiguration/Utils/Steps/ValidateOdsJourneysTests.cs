@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Consultations(ConsultationsProvider.pkb))
                             .HomeScreen(_ => _.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
-                            .Im1MessagingEnabled(true, true)
+                            .Im1MessagingEnabled(true, true, true, true)
                             .WithSupplier(Supplier.Emis)
                             .Build()
                     },
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Messages()
                                 .Consultations())
                             .DocumentsEnabled(false)
-                            .Im1MessagingEnabled(false, false)
+                            .Im1MessagingEnabled(false, false, false, false)
                             .WithSupplier(Supplier.Tpp)
                             .Build()
                     },
@@ -139,7 +139,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Messages()
                                 .Consultations())
                             .DocumentsEnabled(true)
-                            .Im1MessagingEnabled(true, false)
+                            .Im1MessagingEnabled(true, false, false, false)
                             .WithSupplier(Supplier.Vision)
                             .Build()
                     }
@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Messages()
                                 .Consultations())
                             .DocumentsEnabled(true)
-                            .Im1MessagingEnabled(true, false)
+                            .Im1MessagingEnabled(true, false, false, false)
                             .WithSupplier(Supplier.Microtest)
                             .Build()
                     },
@@ -198,7 +198,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Messages()
                                 .Consultations())
                             .DocumentsEnabled(false)
-                            .Im1MessagingEnabled(false, false)
+                            .Im1MessagingEnabled(false, false, false, false)
                             .WithSupplier(Supplier.Emis)
                             .Build()
                     },
@@ -220,7 +220,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Consultations())
                             .HomeScreen(_ => _.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
-                            .Im1MessagingEnabled(true, true)
+                            .Im1MessagingEnabled(true, true, true, true)
                             .WithSupplier(Supplier.Tpp)
                             .Build()
                     }
@@ -386,7 +386,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .Messages()
                     .Consultations())
                 .DocumentsEnabled(true)
-                .Im1MessagingEnabled(true, true)
+                .Im1MessagingEnabled(true, true, true, true)
                 .WithSupplier(Supplier.Emis);
         }
 

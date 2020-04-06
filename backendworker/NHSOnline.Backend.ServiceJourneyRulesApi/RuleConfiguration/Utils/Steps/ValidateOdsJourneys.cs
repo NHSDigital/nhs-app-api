@@ -35,7 +35,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     "journeys.SilverIntegrations.Consultations")
                 .Add(journeys => journeys.Documents.HasValue, "journeys.Documents")
                 .Add(journeys => journeys.Im1Messaging?.IsEnabled != null, "journeys.im1Messaging.isEnabled")
-                .Add(journeys => journeys.Im1Messaging?.CanDeleteMessages != null, "journeys.im1Messaging.canDeleteMessages")
+                .Add(journeys => journeys.Im1Messaging?.CanDeleteMessages != null,
+                    "journeys.im1Messaging.canDeleteMessages")
+                .Add(journeys => journeys.Im1Messaging?.CanUpdateReadStatus != null,
+                    "journeys.im1Messaging.canUpdateReadStatus")
+                .Add(journeys => journeys.Im1Messaging?.RequiresDetailsRequest != null,
+        "journeys.im1Messaging.requiresDetailsRequest")
                 .Add(journeys => journeys.Supplier != Supplier.Unknown, "journeys.Supplier")
                 .Add(journeys =>
                 {

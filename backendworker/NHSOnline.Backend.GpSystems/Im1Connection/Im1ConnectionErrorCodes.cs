@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
 
         public Dictionary<int, Im1ErrorResponse> ExternalErrorResponses { get; } = new ErrorCodes<ExternalCode, Im1ErrorResponse>().GetAllErrorResponses();
         public Dictionary<int, Im1ErrorResponse> InternalErrorResponses { get; } = new ErrorCodes<InternalCode, Im1ErrorResponse>().GetAllErrorResponses();
-        
+
         public enum InternalCode
         {
             [Description("Unknown Error")]
@@ -195,7 +195,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
 
                 { InternalCode.NoMatchFoundForGivenDemographics,ExternalCode.PatientNotFound  },
                 { InternalCode.ErrorRetrievingGivenDemographics,ExternalCode.PatientNotFound  },
-                
+
                 { InternalCode.NoUserFoundForLinkageDetails, ExternalCode.PatientNotFound },
 
                 { InternalCode.InvalidLinkageDetails,ExternalCode.InvalidDetails },

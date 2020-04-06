@@ -18,7 +18,7 @@
           <li v-for="(summary, index) in summaries"
               :key="`summary-${index}`"
               :class="$style['nhs-app-message__item']">
-            <summary-message :id="summary.id"
+            <summary-message :id="summary.messageId"
                              :title="summary.recipient"
                              :sub-title="getSubtitle(summary)"
                              :date-time="summary.lastMessageDateTime"
@@ -26,7 +26,7 @@
                              :has-unread-messages="summary.hasUnreadReplies"
                              :list-index="index"
                              :unread-count="getUnreadCount(summary.unreadCount)"
-                             @click="goToMessageDetails(summary.id, summary.recipient)"/>
+                             @click="goToMessageDetails(summary)"/>
           </li>
         </ul>
       </template>
@@ -46,6 +46,7 @@ import {
 } from '@/lib/routes';
 import { redirectTo, datePart } from '@/lib/utils';
 import { formatDate } from '@/plugins/filters';
+import srjIf from '@/lib/sjrIf';
 
 export default {
   layout: 'nhsuk-layout',
@@ -66,6 +67,9 @@ export default {
     },
     hasNoSummaries() {
       return !(this.summaries && this.summaries.length > 0);
+    },
+    additionalDetailsCallRequired() {
+      return srjIf({ $store: this.$store, journey: 'requiredDetailsCallPatientPracticeMessage' });
     },
   },
   async asyncData({ store, redirect }) {
@@ -102,9 +106,21 @@ export default {
           date: formatDate(lastMessageDateTime, 'D MMMM YYYY'),
         });
     },
-    goToMessageDetails(id, recipient) {
-      this.$store.dispatch('patientPracticeMessaging/setSelectedMessageID', id);
-      this.$store.dispatch('patientPracticeMessaging/setSelectedRecipient', { name: recipient });
+    goToMessageDetails(message) {
+      this.$store.dispatch('patientPracticeMessaging/setSelectedMessageID', message.messageId);
+      this.$store.dispatch('patientPracticeMessaging/setSelectedRecipient', { name: message.recipient });
+
+      if (!this.additionalDetailsCallRequired) {
+        this.$store.dispatch('patientPracticeMessaging/setMessageDetails',
+          { messageDetails: {
+            content: message.content,
+            sentDateTime: message.sentDateTime,
+            sender: message.sender,
+            messageReplies: message.replies,
+            outboundMessage: message.outboundMessage },
+          });
+      }
+
       redirectTo(this, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path);
     },
   },

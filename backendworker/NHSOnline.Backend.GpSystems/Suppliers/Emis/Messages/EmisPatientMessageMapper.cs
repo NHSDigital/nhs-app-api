@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages.Models;
@@ -10,12 +11,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
     public class EmisPatientMessageMapper : IEmisPatientMessageMapper
     {
         private readonly ILogger<EmisPatientMessageMapper> _logger;
-        
+
         public EmisPatientMessageMapper(ILogger<EmisPatientMessageMapper> logger)
         {
             _logger = logger;
         }
-        
+
         public GetPatientMessageResponse Map(MessageGetResponse response)
         {
             try
@@ -26,9 +27,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                         MessageId = response.Message.MessageId,
                         Subject = response.Message.Subject,
                         Recipient = GetRecipientFromMessageMetaData(response),
-                        MessageReplies = response.Message.MessageReplies,
+                        MessageReplies = RetrieveReplies(response.Message.MessageReplies),
                         Content = response.Message.Content,
                         SentDateTime = response.Message.SentDateTime,
+                        OutboundMessage = true
                     }
                 };
             }
@@ -38,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                 return null;
             }
         }
-        
+
         private string GetRecipientFromMessageMetaData(MessageGetResponse messageResponse)
         {
             _logger.LogEnter();
@@ -50,7 +52,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                 {
                     return currentOwner;
                 }
-                
+
                 _logger.LogError(
                     $"Unable to retrieve name from first recipient for message response with id: " +
                     $"{messageResponse.Message.MessageId}");
@@ -65,6 +67,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             {
                 _logger.LogExit();
             }
+        }
+
+        private List<MessageReply> RetrieveReplies(List<MessageReply> mappedMessage)
+        {
+            return mappedMessage.Select(reply => new MessageReply
+                {
+                    Sender = reply.Sender,
+                    SentDateTime = reply.SentDateTime,
+                    IsUnread = reply.IsUnread,
+                    ReplyContent = reply.ReplyContent,
+                    OutboundMessage = false
+                })
+                .ToList();
         }
     }
 }

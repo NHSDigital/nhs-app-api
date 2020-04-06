@@ -40,12 +40,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             {
                 MessageSummaries = messagesGetResponse.Messages.Select(m => new PatientMessageSummary
                 {
-                    Id = m.MessageId.ToString(CultureInfo.InvariantCulture),
+                    MessageId = m.MessageId.ToString(CultureInfo.InvariantCulture),
                     Recipient = m.Recipients.Select(r => r.Name).ToList().First(),
                     LastMessageDateTime = m.LastReplyDateTime,
                     Subject = m.Subject,
                     ReplyCount = m.ReplyCount,
-                    HasUnreadReplies = m.HasUnreadReplies
+                    HasUnreadReplies = m.HasUnreadReplies,
+                    OutboundMessage = true
                 }).ToList()
             });
         }

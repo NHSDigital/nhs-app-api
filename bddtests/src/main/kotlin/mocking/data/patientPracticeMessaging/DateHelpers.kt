@@ -31,7 +31,7 @@ const val SEVEN = 7L
 
 class DateHelpers {
 
-    fun getExpectedFormattedInboxMessageDate(date: ZonedDateTime, format: MessageDateFormat): String {
+    fun getExpectedFormattedMessageDate(date: ZonedDateTime, format: MessageDateFormat): String {
         val formattedDate: String
 
         when (format) {
@@ -40,9 +40,22 @@ class DateHelpers {
                         .ofPattern(DateTimeFormats.frontendTimeFormat, Locale.UK)
                         .format(date)
             }
+            MessageDateFormat.DETAILS_TODAY -> {
+                formattedDate = DateTimeFormatter
+                        .ofPattern("'Sent today at '${DateTimeFormats.frontendTimeFormat}", Locale.UK)
+                        .format(date)
+
+            }
             MessageDateFormat.INBOX_MIDDAY -> { formattedDate = "Midday" }
+            MessageDateFormat.DETAILS_TODAY_AT_MIDDAY -> { formattedDate = "Sent today at midday" }
             MessageDateFormat.INBOX_MIDNIGHT -> { formattedDate = "Midnight" }
+            MessageDateFormat.DETAILS_TODAY_AT_MIDNIGHT -> { formattedDate = "Sent today at midnight" }
             MessageDateFormat.INBOX_YESTERDAY -> { formattedDate = "Yesterday" }
+            MessageDateFormat.DETAILS_YESTERDAY -> {
+                formattedDate = DateTimeFormatter
+                        .ofPattern("'Sent yesterday at '${DateTimeFormats.frontendTimeFormat}", Locale.UK)
+                        .format(date)
+            }
             MessageDateFormat.INBOX_LAST_WEEK -> {
                 formattedDate = DateTimeFormatter
                         .ofPattern(DateTimeFormats.fullDayOfWeek, Locale.UK)
@@ -53,6 +66,8 @@ class DateHelpers {
                         .ofPattern(DateTimeFormats.frontendBasicDateFormat, Locale.UK)
                         .format(date)
             }
+            MessageDateFormat.DETAILS_YESTERDAY_AT_MIDDAY -> { formattedDate = "Sent yesterday at midday" }
+            MessageDateFormat.DETAILS_YESTERDAY_AT_MIDNIGHT -> { formattedDate = "Sent yesterday at midnight" }
             else -> {
                 formattedDate = DateTimeFormatter
                         .ofPattern("'Sent '${DateTimeFormats.frontendBasicDateFormat}'" +

@@ -8,6 +8,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public bool? CanDeleteMessages { set; get; }
 
+        public bool? CanUpdateReadStatus { set; get; }
+
+        public bool? RequiresDetailsRequest { set; get; }
+
         public Im1Messaging Clone() => MemberwiseClone() as Im1Messaging;
     }
 }
