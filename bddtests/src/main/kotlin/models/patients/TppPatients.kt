@@ -17,16 +17,11 @@ class TppPatients{
 
         fun getPatientWithLinkedProfiles(): Patient {
             // TODO - see if anythine else needs to be done as the tpp proxy functionality grows
-
-            lisaHankey.tppUserSession!!.onlineUserId = lisaHankey.onlineUserId
-            lisaHankey.tppUserSession!!.patientId = lisaHankey.patientId
-
             lisaHankey.linkedAccounts.forEach {
                 linkedAccount ->
-                linkedAccount.tppUserSession!!.patientId = linkedAccount.patientId
-                linkedAccount.tppUserSession!!.onlineUserId = linkedAccount.onlineUserId
+                linkedAccount.tppUserSession!!.onlineUserId = lisaHankey.onlineUserId
+                linkedAccount.onlineUserId = lisaHankey.onlineUserId
             }
-
             return lisaHankey
         }
 
@@ -159,7 +154,7 @@ class TppPatients{
                 connectionToken = TppMockDefaults.DEFAULT_TPP_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 im1ConnectionToken = lisaHankeyIm1ConnectionToken,
-                linkedAccounts = setOf(joeWicks, kevinBarry)
+                linkedAccounts = setOf(joeWicks.copy(), kevinBarry.copy())
         )
     }
 }

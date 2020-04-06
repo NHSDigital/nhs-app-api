@@ -43,7 +43,7 @@ data class Patient(
         val nhsNumbers: List<String> = emptyList(),
         val patientId: String = "",
         val passphrase: String = "",
-        val onlineUserId: String = "",
+        var onlineUserId: String = "",
         val rosuAccountId: String = "",
         val apiKey: String = "",
         val authCode: String = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPS" +
@@ -66,9 +66,9 @@ data class Patient(
                 "W5IdGtaWtahGkv" +
                 "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD" +
                 "4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
-                "84df400000000000",
+                patientId,
                 if (odsCode == "") TppMockDefaults.DEFAULT_ODS_CODE_TPP else odsCode,
-                "84df400000000000")
+                onlineUserId)
     }
 
     fun generateUserSessionRequest(redirectUrl: String): UserSessionRequest {
