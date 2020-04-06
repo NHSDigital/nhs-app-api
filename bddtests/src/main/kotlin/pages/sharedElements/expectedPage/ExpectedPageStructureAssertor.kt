@@ -8,12 +8,13 @@ import kotlin.streams.toList
 
 class ExpectedPageStructureAssertor {
     private val tagsToAssert  = arrayListOf("h1", "h2", "h3", "h4", "li", "p", "span", "button")
-    private val tagsToExclude = arrayListOf("div", "br", "ul", "ol", "a", "nav", "svg", "path", "form", "input")
+    private val tagsToExclude = arrayListOf(
+            "div", "br", "ul", "ol", "a", "nav", "svg", "path", "form", "input", "hr", "b")
     private val knownTags = tagsToAssert  + tagsToExclude
 
     fun assert(page: HybridPageObject, expectedPage: MutableList<ExpectedPageStructureElement>) {
         val firstElement = expectedPage[0]
-        val containerPath = "//div[${firstElement.tag}[normalize-space(text())='${firstElement.content}']]"
+        val containerPath = "//div[${firstElement.tag}[normalize-space(text())=\"${firstElement.content}\"]]"
         val parsedPage = ParsedPage.parse(page, containerPath)
         assert(parsedPage, expectedPage)
     }
