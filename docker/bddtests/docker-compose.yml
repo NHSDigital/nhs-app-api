@@ -85,8 +85,6 @@ services:
   stubs.local.bitraft.io:
     image: ${WIREMOCK_DOCKER_REGISTRY:-nhsapp.azurecr.io}/wiremock:${WIREMOCK_DOCKER_TAG:-2.22.0-alpine}
     command: --local-response-templating
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
     tty: true
 
 volumes:

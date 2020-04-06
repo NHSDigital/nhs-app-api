@@ -12,6 +12,7 @@ SSH_CERT := ~/.nhsonline/local-development-certificate/local-development-https.c
 build:	## Build everything (run make from a subdirectory for more granularity)
 	$(MAKE) -C backendworker build
 	$(MAKE) -C web build
+	$(MAKE) -C bddtests build
 
 test:	## Unit test everything
 	$(MAKE) -C backendworker test
@@ -32,6 +33,9 @@ twistlock:	# Run twistlock security scan
 $(eval $(call expand_run_options_docker_images,run))
 run: run-deps	## Run in docker
 	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml
+
+run-dev-stubs:	## Run in docker with dev stubs
+	$(MAKE) -C bddtests run-dev-stubs
 
 $(eval $(call expand_run_options_docker_images,run-https))
 run-https: $(SSH_CERT)	## Run in docker with https
@@ -63,6 +67,6 @@ validate_local_images:
 $(SSH_CERT):
 	./buildscripts/create-certificate.sh
 
-.PHONY: run run-https run-android run-android-https run-localbdd run-bdd run-deps validate_local_secrets validate_local_images
+.PHONY: run run-dev-stubs run-https run-android run-android-https run-localbdd run-bdd run-deps validate_local_secrets validate_local_images
 
 -include buildscripts/util.make
