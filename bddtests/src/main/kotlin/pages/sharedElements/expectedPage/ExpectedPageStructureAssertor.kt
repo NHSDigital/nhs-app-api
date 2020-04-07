@@ -1,30 +1,29 @@
 package pages.sharedElements.expectedPage
 
-import ExpectedPageStructureElement
-import ParsedPageElement
 import org.junit.Assert
+import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.avoidChromeWebDriverServiceCrash
+import pages.assertElementNotPresent
 import kotlin.streams.toList
 
 class ExpectedPageStructureAssertor {
-    private val tagsToAssert  = arrayListOf("h1", "h2", "h3", "h4", "li", "p", "span", "button")
+    private val tagsToAssert = listOf("h1", "h2", "h3", "h4", "li", "p", "span", "button",
+            "details", "summary", "label", "select", "option", "strong")
     private val tagsToExclude = arrayListOf(
             "div", "br", "ul", "ol", "a", "nav", "svg", "path", "form", "input", "hr", "b")
-    private val knownTags = tagsToAssert  + tagsToExclude
+    private val knownTags = tagsToAssert + tagsToExclude
 
     fun assert(page: HybridPageObject, expectedPage: MutableList<ExpectedPageStructureElement>) {
         //Please do not delete until NHSO-8407 and NHSO-8408 are completed
         page.avoidChromeWebDriverServiceCrash()
-        val firstElement = expectedPage[0]
-        val containerPath = "//div[${firstElement.tag}[normalize-space(text())=\"${firstElement.content}\"]]"
+        val containerPath = pathToElementContainer(expectedPage[0])
         val parsedPage = ParsedPage.parse(page, containerPath)
         assert(parsedPage, expectedPage)
     }
 
     fun assert(parsedPage: ParsedPage, expectedPage: MutableList<ExpectedPageStructureElement>) {
-        val actualElementsToAssert =
-                parsedPage.parsedElements.stream().filter { element -> isTagToAssert(element) }.toList()
+        val actualElementsToAssert = getTagsToAssert(parsedPage.parsedElements)
         val expectedVersusActual = expectedPage.zip(actualElementsToAssert)
         for (pair in expectedVersusActual) {
             pair.first.assert(pair.second)
@@ -34,15 +33,20 @@ class ExpectedPageStructureAssertor {
         }
     }
 
+    fun assertElementNotPresent(page: HybridPageObject, expectedPage: MutableList<ExpectedPageStructureElement>) {
+        val containerPath = pathToElementContainer(expectedPage[0])
+        HybridPageElement(containerPath, page = page).assertElementNotPresent()
+    }
+
     private fun assertSize(zipped: List<Pair<ExpectedPageStructureElement, ParsedPageElement>>,
                            expectedPage: MutableList<ExpectedPageStructureElement>,
                            actualElementsToAssert: List<ParsedPageElement>) {
         if (zipped.size < expectedPage.size) {
-            val spare = expectedPage.elementAt(expectedPage.size)
+            val spare = expectedPage.elementAt(zipped.size)
             assertIncorrectNumber(expectedPage.size, actualElementsToAssert.size, spare.tag, spare.content)
         }
         if (zipped.size < actualElementsToAssert.size) {
-            val spare = actualElementsToAssert.elementAt(expectedPage.size)
+            val spare = actualElementsToAssert.elementAt(zipped.size)
             assertIncorrectNumber(expectedPage.size, actualElementsToAssert.size, spare.tag, spare.content)
         }
     }
@@ -57,11 +61,18 @@ class ExpectedPageStructureAssertor {
                         "First unaccounted element '$unexpectedTag', '$unexpectedContent'")
     }
 
-    private fun isTagToAssert(element: ParsedPageElement): Boolean {
-        if (!knownTags.contains(element.tag)) {
-            Assert.fail("Html tags must be explicitly excluded. " +
-                    "Unexpected tag found: '${element.tag}' containing '${element.content}'")
+    private fun getTagsToAssert(elements: List<ParsedPageElement>): List<ParsedPageElement> {
+        if (elements.any { element -> !knownTags.contains(element.tag) }) {
+            val notExpected = elements.stream().filter { element -> !knownTags.contains(element.tag) }
+                    .map { element -> "'${element.tag}' containing '${element.content}'" }.toList()
+                    .joinToString { "\n" }
+            Assert.fail("Html tags must be explicitly excluded. Unexpected tags found: $notExpected")
         }
-        return tagsToAssert.contains(element.tag) && element.content.isNotEmpty()
+        return elements.stream()
+                .filter { element -> tagsToAssert.contains(element.tag) && element.content.isNotEmpty() }.toList()
+    }
+
+    private fun pathToElementContainer(element: ExpectedPageStructureElement): String {
+        return "//div[${element.tag}[normalize-space(text())=\"${element.content}\"]]"
     }
 }

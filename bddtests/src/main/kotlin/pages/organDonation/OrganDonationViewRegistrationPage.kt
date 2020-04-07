@@ -8,7 +8,9 @@ import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.avoidChromeWebDriverServiceCrash
 import pages.sharedElements.BannerObject
-import pages.sharedElements.TextBlockElement
+import pages.sharedElements.expectedPage.ExpectedPageStructure
+import pages.sharedElements.expectedPage.ExpectedPageStructureAssertor
+import pages.sharedElements.expectedPage.ParsedPage
 import pages.text
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
@@ -41,21 +43,32 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
     }
 
     fun assertDecisionSubmitted() {
-        BannerObject.success(this, "Decision submitted")
-                .assertVisible("We have successfully received your organ donation decision.")
-
-        TextBlockElement.withH2Header("What happens next", this)
-                .assert("We will process your registration and you will then be able to view and amend this " +
+        val expected = ExpectedPageStructure()
+                .h2("Decision submitted")
+                .paragraph("We have successfully received your organ donation decision.")
+                .h2("What happens next")
+                .paragraph("We will process your registration and you will then be able to view and amend this " +
                         "via the NHS App. This may take up to 2 working days.")
+        val actual = ParsedPage.parse(this,
+                "//div[h2[normalize-space()='What happens next']]")
+        ExpectedPageStructureAssertor().assert(actual, expected.build())
     }
 
     fun assertDecisionFound() {
         BannerObject.success(this, "Decision found")
                 .assertVisible("Your registration is currently being processed.")
 
-        TextBlockElement.withH2Header("We are still processing your registration", this)
-                .assert("Please check back in 2 working days. " +
+        val expected = ExpectedPageStructure()
+                .h2("Decision found")
+                .paragraph("Your registration is currently being processed.")
+                .h2("We are still processing your registration")
+                .paragraph("Please check back in 2 working days. " +
                                 "You’ll then be able to view and amend your decision via the NHS App.")
+
+        val actual = ParsedPage.parse(this,
+                "//div[h2[normalize-space()='We are still processing your registration']]")
+
+        ExpectedPageStructureAssertor().assert(actual, expected.build())
     }
 
     private val faithYesText = "When I die, I would like NHS staff to speak with my family " +

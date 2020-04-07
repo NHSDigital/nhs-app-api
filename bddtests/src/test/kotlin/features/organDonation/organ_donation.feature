@@ -1,6 +1,7 @@
 @organ-donation
 Feature: Organ Donation Frontend
 
+
 #  This test covers navigation via buttons/links
   Scenario Outline: A <GP System> user can opt to donate all their organs
     Given I am using the native app user agent
@@ -35,7 +36,6 @@ Feature: Organ Donation Frontend
       | MICROTEST |
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
-
   Scenario Outline: A user can select '<Option>' for faith and belief sharing when opting to donate all their organs
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to opt in with '<Option>' faith decision
@@ -128,6 +128,7 @@ Feature: Organ Donation Frontend
     When I choose to not donate my organs
     Then the Organ Donation Decision Additional Details page is displayed
     When I select an ethnicity to record for organ donation
+    And I select a religion to record for organ donation
     And I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page

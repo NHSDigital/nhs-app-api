@@ -1,7 +1,5 @@
 package pages.sharedElements.expectedPage
 
-import ExpectedPageStructureElement
-import add
 import pages.HybridPageObject
 
 abstract class ExpectedPageStructureBase<T> {
@@ -23,6 +21,11 @@ abstract class ExpectedPageStructureBase<T> {
         return superType()
     }
 
+    fun h4(content: String): T {
+        expectedElements.add(content, "h4")
+        return superType()
+    }
+
     fun listItem(content: String): T {
         expectedElements.add(content, "li")
         return superType()
@@ -35,6 +38,16 @@ abstract class ExpectedPageStructureBase<T> {
 
     fun build(): MutableList<ExpectedPageStructureElement> {
         return expectedElements
+    }
+
+    fun span(content: String): T {
+        expectedElements.add(content, "span")
+        return superType()
+    }
+
+    fun label(content: String): T {
+        expectedElements.add(content, "label")
+        return superType()
     }
 
     fun assert(page: HybridPageObject) {

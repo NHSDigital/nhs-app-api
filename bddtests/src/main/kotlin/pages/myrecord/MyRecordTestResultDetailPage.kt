@@ -3,8 +3,9 @@ package pages.myrecord
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.sharedElements.TextBlockElement
+import pages.assertSingleElementPresent
 import pages.text
+import pages.withNormalisedText
 
 class MyRecordTestResultDetailPage: HybridPageObject() {
 
@@ -21,7 +22,12 @@ class MyRecordTestResultDetailPage: HybridPageObject() {
     ).withText("Back", false)
 
     fun assertContent(){
-        TextBlockElement.withH2Header("Test result", this).assert("Test Result Detail")
+        val title = "Test result"
+        val body = "Test Result Detail"
+        HybridPageElement(
+                webDesktopLocator = "//div[h2[normalize-space(text())='$title']]//p[normalize-space(text())='$body']",
+                page = this
+        ).assertSingleElementPresent()
     }
 
     fun assertContentWithNoWronglyDisplayedHTMLEntities(){
@@ -37,6 +43,9 @@ class MyRecordTestResultDetailPage: HybridPageObject() {
     }
 
     fun assertContentMedicalRecordV2(){
-        TextBlockElement.withoutHeader(this).assert("Test Result Detail")
+        HybridPageElement(
+                webDesktopLocator = "//div/span/p",
+                androidLocator = "//div/span/p",
+                page = this).withNormalisedText("Test Result Detail").assertSingleElementPresent()
     }
 }

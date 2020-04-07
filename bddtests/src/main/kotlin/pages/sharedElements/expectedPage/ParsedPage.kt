@@ -1,6 +1,5 @@
 package pages.sharedElements.expectedPage
 
-import ParsedPageElement
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import pages.HybridPageElement

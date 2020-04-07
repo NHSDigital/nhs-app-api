@@ -1,10 +1,10 @@
 package pages.account
 
 import net.thucydides.core.annotations.DefaultUrl
-import pages.HybridPageObject
-import pages.sharedElements.TextBlockElement
-import pages.sharedElements.ToggleElement
 import pages.HybridPageElement
+import pages.HybridPageObject
+import pages.sharedElements.expectedPage.ExpectedPageStructure
+import pages.sharedElements.ToggleElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/account/notifications")
 class NotificationsSettingsPage : HybridPageObject() {
@@ -13,11 +13,13 @@ class NotificationsSettingsPage : HybridPageObject() {
 
     fun assertDisplayed() {
         title.waitForElement()
-        notificationsToggle.assertIsVisible()
-        TextBlockElement.withoutHeader(this)
-                .assert(
-                        "You can choose whether to allow notifications on your device.",
+        val expected = ExpectedPageStructure()
+                .paragraph("You can choose whether to allow notifications on your device.")
+                .paragraph(
                         "If you share this device with other people, they may be able to see your notifications.")
+                .toggle("Allow notifications")
+                .span("Manage how notifications appear on your device")
+        expected.assert(this)
     }
 
     private val title by lazy {

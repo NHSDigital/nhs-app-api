@@ -1,10 +1,9 @@
 package pages.organDonation
 
-import mocking.organDonation.models.KeyValuePair
 import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
 import pages.sharedElements.CheckBoxElement
-import pages.sharedElements.TextBlockElement
+import pages.sharedElements.expectedPage.ExpectedPageStructure
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
@@ -20,22 +19,23 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
 
     fun assertPersonalDetailsSection(patient: Patient) {
         val bodyText = "Contact your GP surgery to amend your personal details."
-        TextBlockElement.withH3Header("Personal details", this)
-                .assertPair(arrayOf(
-                        KeyValuePair("Name", patient.formattedFullName()),
-                        KeyValuePair("Date of birth", patient.formattedDateOfBirth()),
-                        KeyValuePair("Gender", patient.sex.toString()),
-                        KeyValuePair("NHS number", patient.formattedNHSNumber())))
-                .assert(bodyText)
+        val expected = ExpectedPageStructure()
+                .h3("Personal details")
+                .h4("Name").paragraph(patient.formattedFullName())
+                .h4("Date of birth").paragraph(patient.formattedDateOfBirth())
+                .h4("Gender").paragraph(patient.sex.toString())
+                .h4("NHS number").paragraph(patient.formattedNHSNumber())
+                .paragraph(bodyText)
+        expected.assert(this)
     }
 
     fun assertContactDetailsSection(patient: Patient) {
-        val bodyText1 = "We will only contact you about your organ donation registration."
-        val bodyText2 = "Contact your GP surgery to amend your postal address."
-        TextBlockElement.withH3Header("Contact details", this)
-                .assert(bodyText1, bodyText2)
-                .assertPair(arrayOf(
-                        KeyValuePair("Postal address", patient.address.full())))
+        ExpectedPageStructure()
+                .h3("Contact details")
+                .paragraph( "We will only contact you about your organ donation registration.")
+                .h4("Postal address").paragraph(patient.address.full())
+                .paragraph( "Contact your GP surgery to amend your postal address.")
+                .assert(this)
     }
 
     val yourDecisionModule by lazy { OrganDonationYourDecisionModule(this) }

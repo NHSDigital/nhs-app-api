@@ -3,10 +3,9 @@ package pages.organDonation
 import mocking.organDonation.models.FaithDeclaration
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
-import pages.assertSingleElementPresent
 import pages.sharedElements.ExpandElement
+import pages.sharedElements.expectedPage.ExpectedPageStructure
 import pages.sharedElements.RadioButtons
-import pages.sharedElements.TextBlockElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationFaithAndBeliefsPage : OrganDonationBasePage() {
@@ -38,14 +37,22 @@ open class OrganDonationFaithAndBeliefsPage : OrganDonationBasePage() {
     }
 
     private fun assertInformation() {
-        TextBlockElement.withH2Header("Faith / beliefs", this)
-                .assert("When you die, NHS staff can ask your family (and anyone else appropriate) about your " +
+        val expected = ExpectedPageStructure()
+                .h2("Faith / beliefs")
+                .paragraph("When you die, NHS staff can ask your family (and anyone else appropriate) about your " +
                          "faith and beliefs. This is how NHS staff will find out about any end of life wishes you " +
                         "might have.")
-                .assert("Record here whether you want our specialist nurses to discuss your faith or " +
+                .details("Examples of end of life wishes ", listOf())
+                .paragraph("Record here whether you want our specialist nurses to discuss your faith or " +
                         "beliefs with your family when you die, at the same time they approach them about " +
                         "organ donation.")
-        question.assertSingleElementPresent()
+                .paragraph("I would like NHS staff to speak to my family and anyone else appropriate " +
+                        "about how organ donation can go ahead in line with my faith or beliefs.")
+                .label("Yes - this is applicable to me")
+                .label("No - this is not applicable to me")
+                .label("Prefer not to say")
+                .button("Continue")
+        expected.assert(this)
     }
 
     private var questionContent =

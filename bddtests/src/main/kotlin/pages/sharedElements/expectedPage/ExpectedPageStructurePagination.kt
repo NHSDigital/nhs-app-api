@@ -1,8 +1,5 @@
 package pages.sharedElements.expectedPage
 
-import ExpectedPageStructureElement
-import add
-
 class ExpectedPageStructurePagination {
 
     private val expectedElements = mutableListOf<ExpectedPageStructureElement>()

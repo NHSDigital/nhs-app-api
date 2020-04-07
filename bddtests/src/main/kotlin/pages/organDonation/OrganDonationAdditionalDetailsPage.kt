@@ -1,8 +1,10 @@
 package pages.organDonation
 
+import mocking.data.organDonation.OrganDonationSerenityHelpers
 import net.thucydides.core.annotations.DefaultUrl
 import pages.sharedElements.DropdownElement
-import pages.sharedElements.TextBlockElement
+import pages.sharedElements.expectedPage.ExpectedPageStructure
+import utils.getOrFail
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationAdditionalDetailsPage : OrganDonationBasePage() {
@@ -25,11 +27,19 @@ open class OrganDonationAdditionalDetailsPage : OrganDonationBasePage() {
 
     override fun assertDisplayed() {
         assertPageFullyLoaded()
-        TextBlockElement.withH2Header("Additional details", this)
-                .assert("This optional information is only used by the NHS to understand the make up of the " +
+        val expectedReligions = arrayListOf("Please select").plus(
+                OrganDonationSerenityHelpers.REFERENCE_RELIGIONS.getOrFail<ArrayList<String>>())
+        val expectedEthnicities = arrayListOf("Please select").plus(
+                OrganDonationSerenityHelpers.REFERENCE_ETHNICITIES.getOrFail<ArrayList<String>>())
+        val contents = ExpectedPageStructure()
+                .h2("Additional details")
+                .paragraph("This optional information is only used by the NHS to understand the make up of the " +
                         "NHS Organ Donor Register and is not stored against your registration.")
-        ethnicitySelector.assertIsVisible()
+                .dropdown("Ethnicity (optional)", expectedEthnicities)
+                .dropdown("Religion (optional)",expectedReligions)
+                .button("Continue")
+        contents.assert(this)
         ethnicitySelector.assertSelected(defaultDropDownValue)
-        ethnicitySelector.assertSelected(defaultDropDownValue)
+        religionSelector.assertSelected(defaultDropDownValue)
     }
 }

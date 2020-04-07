@@ -1,3 +1,5 @@
+package pages.sharedElements.expectedPage
+
 import org.openqa.selenium.WebElement
 
 class ParsedPageElement(val element: WebElement)

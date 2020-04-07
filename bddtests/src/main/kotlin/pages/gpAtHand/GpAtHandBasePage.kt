@@ -2,7 +2,7 @@ package pages.gpAtHand
 
 import pages.HybridPageObject
 import pages.navigation.HeaderNative
-import pages.sharedElements.TextBlockElement
+import pages.sharedElements.expectedPage.ExpectedPageStructure
 
 abstract class GpAtHandBasePage: HybridPageObject() {
 
@@ -16,9 +16,11 @@ abstract class GpAtHandBasePage: HybridPageObject() {
     }
 
     fun assertGpAtHandPageVisible() {
-        TextBlockElement.withH2Header("Sorry, you cannot $headerContext through the NHS App", this)
-                .assert("To $paragraphContext with Babylon GP at Hand, please use the Babylon app.")
-                .assert("Please contact Babylon GP at Hand on 0330 808 2217 or gpathand@nhs.net " +
+        val expected = ExpectedPageStructure()
+                .h2("Sorry, you cannot $headerContext through the NHS App")
+                .paragraph("To $paragraphContext with Babylon GP at Hand, please use the Babylon app.")
+                .paragraph("Please contact Babylon GP at Hand on 0330 808 2217 or gpathand@nhs.net " +
                         "if you have any problems.")
+        expected.assert(this)
     }
 }
