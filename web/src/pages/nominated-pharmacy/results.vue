@@ -17,7 +17,7 @@
                      :id="'pharmacy-menu-item-' + index"
                      :key="`pharmacy-${pharmacy.odsCode}`"
                      header-tag="h2"
-                     :target="'_blank'"
+                     href="#"
                      :text="pharmacy.pharmacyName"
                      :click-func="pharmacyPracticeClicked"
                      :click-param="pharmacy"

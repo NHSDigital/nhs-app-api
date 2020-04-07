@@ -12,7 +12,6 @@
         <p>
           <analytics-tracked-tag id="dsp-link"
                                  :text="$t('nominated_pharmacy.dspInterrupt.visitOnlineListText')"
-                                 tabindex="-1"
                                  target="_blank"
                                  tag="a"
                                  :href="visitOnlinePharmacyListPath"

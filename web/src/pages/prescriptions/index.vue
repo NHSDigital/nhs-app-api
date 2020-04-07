@@ -18,6 +18,7 @@
           <menu-item id="nominated-pharmacy"
                      header-tag="h2"
                      data-purpose="text_link"
+                     href="#"
                      :text="pharmacyWidgetText"
                      :description="pharmacyName"
                      :click-func="onNominatedPharmacyDetailClicked"
