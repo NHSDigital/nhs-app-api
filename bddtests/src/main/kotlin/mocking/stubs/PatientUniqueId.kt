@@ -6,5 +6,6 @@ enum class PatientUniqueId(val Id: String) {
         ServiceNotEnabledPatientEMIS("3"),
         SessionErrorPatientEMIS("4"),
         ServerErrorPatientEMIS("5"),
-        GoodPatientTPP("6")
+        GoodPatientTPP("6"),
+        P5PatientEMIS("7")
 }

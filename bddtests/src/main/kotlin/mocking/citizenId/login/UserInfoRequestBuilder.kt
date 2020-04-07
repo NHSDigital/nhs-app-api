@@ -5,6 +5,7 @@ import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.citizenId.models.UserInfo
 import mocking.citizenId.models.GpIntegrationCredentials
 import mocking.models.Mapping
+import models.IdentityProofingLevel
 import models.Patient
 import org.apache.http.HttpStatus
 
@@ -31,7 +32,8 @@ class UserInfoRequestBuilder(
                 GpIntegrationCredentials = GpIntegrationCredentials(patient.odsCode),
                 GivenName = patient.firstName,
                 FamilyName = patient.surname,
-                Subject = patient.subject
+                Subject = patient.subject,
+                IdentityProofingLevel = patient.identityProofingLevel.UserInfoValue
         )
 
         return respondWith(HttpStatus.SC_OK) {

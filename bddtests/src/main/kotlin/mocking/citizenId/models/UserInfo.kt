@@ -22,5 +22,8 @@ data class UserInfo (
         var Subject: String,
 
         @SerializedName("birthdate")
-        var Birthdate: String
+        var Birthdate: String,
+
+        @SerializedName("identity_proofing_level")
+        var IdentityProofingLevel: String?
 )

@@ -20,6 +20,7 @@ class TppStubsPatientFactory {
             val pad = uniqueId.Id.padStart(length, '0')
             //do not add end user session id here
             return TppPatients.kevinBarry.copy(
+                    subject = "subject-${uniqueId.name}",
                     firstName = "You are logged in as",
                     surname = loginID,
                     connectionToken = "00000000-0000-0000-0000-$pad"
