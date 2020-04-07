@@ -43,6 +43,7 @@ fi
 DOCKER_ARGS+=(-v "${WORKING_DIR}:${DOCKER_ROOT}data/repo")
 DOCKER_ARGS+=(-w "${DOCKER_ROOT}data/repo")
 DOCKER_ARGS+=(-e "GRADLE_USER_HOME=${DOCKER_ROOT}data/.gradle")
+DOCKER_ARGS+=('--shm-size=256m')
 
 export DOCKER_ARGS
 
