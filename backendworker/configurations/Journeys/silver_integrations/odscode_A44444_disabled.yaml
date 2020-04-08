@@ -2,7 +2,11 @@ $schema: "Schemas/Journeys/configuration_schema.json"
 target:
   odsCode: "A44444"
 journeys:
-  silverIntegrations: 
-    secondaryAppointments: []
-    messages: []
+  silverIntegrations:
+    carePlans: []
     consultations: []
+    healthTrackers: []
+    libraries: []
+    medicines: []
+    messages: []
+    secondaryAppointments: []

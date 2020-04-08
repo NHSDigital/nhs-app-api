@@ -139,11 +139,39 @@
     },
     "silverIntegrations": {
       "properties": {
-        "secondaryAppointments": {
+        "carePlans": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "ers", "pkb" ]
+            "enum": ["pkb"]
+          }
+        },
+        "consultations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [ "pkb" ]
+          }
+        },
+        "healthTrackers": {
+          "type":"array",
+          "items": {
+            "type": "string",
+            "enum": ["pkb"]
+          }
+        },
+        "libraries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["pkb"]
+          }
+        },
+        "medicines": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["pkb"]
           }
         },
         "messages": {
@@ -153,11 +181,11 @@
             "enum": [ "pkb" ]
           }
         },
-        "consultations": {
+        "secondaryAppointments": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb" ]
+            "enum": [ "ers", "pkb" ]
           }
         }
       },

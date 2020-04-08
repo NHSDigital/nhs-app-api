@@ -39,10 +39,28 @@ export const initialState = () => ({
     prescriptions: {
       provider: IM1_PROVIDER,
     },
-    silverIntegrations: {
-      consultations: [],
-      messages: [],
-      secondaryAppointments: [],
+    silverIntegration: {
+      carePlans: {
+        items: [],
+      },
+      consultations: {
+        items: [],
+      },
+      healthTrackers: {
+        items: [],
+      },
+      libraries: {
+        items: [],
+      },
+      medicines: {
+        items: [],
+      },
+      messages: {
+        items: [],
+      },
+      secondaryAppointments: {
+        items: [],
+      },
     },
     documents: false,
     im1Messaging: {

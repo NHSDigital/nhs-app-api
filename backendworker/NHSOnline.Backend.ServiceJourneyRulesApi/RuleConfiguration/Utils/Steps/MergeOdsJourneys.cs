@@ -44,6 +44,86 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             return mergedOdsJourneys;
         }
 
+        private static SilverIntegrations MergeSilverIntegrations(SilverIntegrations current, SilverIntegrations merge)
+        {
+            if (current == null)
+            {
+                current = new SilverIntegrations();
+            }
+
+            if (current.CarePlans == null)
+            {
+                current.CarePlans = new List<CarePlansProvider>();
+            }
+            
+            if (current.Consultations == null)
+            {
+                current.Consultations = new List<ConsultationsProvider>();
+            }
+            
+            if (current.HealthTrackers == null)
+            {
+                current.HealthTrackers = new List<HealthTrackersProvider>();
+            }
+
+            if (current.Libraries == null)
+            {
+                current.Libraries = new List<LibrariesProvider>();
+            }
+
+            if (current.Medicines == null)
+            {
+                current.Medicines = new List<MedicinesProvider>();
+            }
+            
+            if (current.Messages == null)
+            {
+                current.Messages = new List<MessagesProvider>();
+            }
+
+            if (current.SecondaryAppointments == null)
+            {
+                current.SecondaryAppointments = new List<SecondaryAppointmentProvider>();
+            }
+
+            if (merge?.CarePlans != null)
+            {
+                current.CarePlans = merge.CarePlans;
+            }
+            
+            if (merge?.Consultations != null)
+            {
+                current.Consultations = merge.Consultations;
+            }
+            
+            if (merge?.HealthTrackers != null)
+            {
+                current.HealthTrackers = merge.HealthTrackers;
+            }
+
+            if (merge?.Libraries != null)
+            {
+                current.Libraries = merge.Libraries;
+            }
+
+            if (merge?.Medicines != null)
+            {
+                current.Medicines = merge.Medicines;
+            }
+
+            if (merge?.Messages != null)
+            {
+                current.Messages = merge.Messages;
+            }
+            
+            if (merge?.SecondaryAppointments != null)
+            {
+                current.SecondaryAppointments = merge.SecondaryAppointments;
+            }
+
+            return current;
+        }
+
         private static void MergeFolderJourneys(
             IDictionary<string, Journeys> odsJourneys,
             IDictionary<string, Journeys> mergedOdsJourneys)
@@ -145,46 +225,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             if (merge?.RequiresDetailsRequest != null)
             {
                 current.RequiresDetailsRequest = merge.RequiresDetailsRequest;
-            }
-
-            return current;
-        }
-
-        private static SilverIntegrations MergeSilverIntegrations(SilverIntegrations current, SilverIntegrations merge)
-        {
-            if (current == null)
-            {
-                current = new SilverIntegrations();
-            }
-
-            if (current.SecondaryAppointments == null)
-            {
-                current.SecondaryAppointments = new List<SecondaryAppointmentProvider>();
-            }
-
-            if (current.Messages == null)
-            {
-                current.Messages = new List<MessagesProvider>();
-            }
-
-            if (current.Consultations == null)
-            {
-                current.Consultations = new List<ConsultationsProvider>();
-            }
-
-            if (merge?.SecondaryAppointments != null)
-            {
-                current.SecondaryAppointments = merge.SecondaryAppointments;
-            }
-
-            if (merge?.Messages != null)
-            {
-                current.Messages = merge.Messages;
-            }
-
-            if (merge?.Consultations != null)
-            {
-                current.Consultations = merge.Consultations;
             }
 
             return current;

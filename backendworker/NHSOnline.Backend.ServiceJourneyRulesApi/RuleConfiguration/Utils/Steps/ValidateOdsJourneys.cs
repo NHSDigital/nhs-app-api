@@ -27,12 +27,20 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 .Add(journeys => journeys.Notifications.HasValue, "journeys.Notifications")
                 .Add(journeys => journeys.Messaging.HasValue, "journeys.Messaging")
                 .Add(journeys => journeys.UserInfo.HasValue, "journeys.UserInfo")
-                .Add(journeys => journeys.SilverIntegrations?.SecondaryAppointments != null,
-                    "journeys.SilverIntegrations.SecondaryAppointments")
-                .Add(journeys => journeys.SilverIntegrations?.Messages != null,
-                    "journeys.SilverIntegrations.Messages")
+                .Add(journeys => journeys.SilverIntegrations?.CarePlans != null,
+                    "journeys.SilverIntegrations.CarePlans")
                 .Add(journeys => journeys.SilverIntegrations?.Consultations != null,
                     "journeys.SilverIntegrations.Consultations")
+                .Add(journeys => journeys.SilverIntegrations?.HealthTrackers != null,
+                    "journeys.SilverIntegrations.HealthTrackers")
+                .Add(journeys => journeys.SilverIntegrations?.Libraries != null,
+                    "journeys.SilverIntegrations.Libraries")
+                .Add(journeys => journeys.SilverIntegrations?.Medicines != null,
+                    "journeys.SilverIntegrations.Medicines")
+                .Add(journeys => journeys.SilverIntegrations?.Messages != null,
+                    "journeys.SilverIntegrations.Messages")
+                .Add(journeys => journeys.SilverIntegrations?.SecondaryAppointments != null,
+                    "journeys.SilverIntegrations.SecondaryAppointments")
                 .Add(journeys => journeys.Documents.HasValue, "journeys.Documents")
                 .Add(journeys => journeys.Im1Messaging?.IsEnabled != null, "journeys.im1Messaging.isEnabled")
                 .Add(journeys => journeys.Im1Messaging?.CanDeleteMessages != null,

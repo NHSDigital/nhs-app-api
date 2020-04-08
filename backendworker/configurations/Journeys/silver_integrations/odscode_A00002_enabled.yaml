@@ -1,6 +1,6 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  odsCode: "A29928"
+  odsCode: "A00002"
 journeys:
   silverIntegrations:
     carePlans:

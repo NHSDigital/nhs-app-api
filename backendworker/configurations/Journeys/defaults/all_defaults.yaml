@@ -17,11 +17,15 @@ journeys:
   notifications: true
   messaging: true
   userInfo: true
-  silverIntegrations: 
-    secondaryAppointments: 
-      - ers
-    messages: []
+  silverIntegrations:
+    carePlans: []
     consultations: []
+    healthTrackers: []
+    libraries: []
+    medicines: []
+    messages: []
+    secondaryAppointments:
+      - ers
   documents: false
   im1Messaging: 
     isEnabled: false

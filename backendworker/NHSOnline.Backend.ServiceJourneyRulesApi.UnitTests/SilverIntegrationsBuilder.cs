@@ -7,9 +7,32 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
     {
         private readonly SilverIntegrations _silverIntegrations = new SilverIntegrations();
 
-        public SilverIntegrationsBuilder SecondaryAppointments(params SecondaryAppointmentProvider[] providers)
+        public SilverIntegrationsBuilder CarePlans(params CarePlansProvider[] providers)
         {
-            _silverIntegrations.SecondaryAppointments = providers.ToList();
+            _silverIntegrations.CarePlans = providers.ToList();
+            return this;
+        }
+        public SilverIntegrationsBuilder Consultations(params ConsultationsProvider[] providers)
+        {
+            _silverIntegrations.Consultations = providers.ToList();
+            return this;
+        }
+        
+        public SilverIntegrationsBuilder HealthTrackers(params HealthTrackersProvider[] providers)
+        {
+            _silverIntegrations.HealthTrackers = providers.ToList();
+            return this;
+        }
+        
+        public SilverIntegrationsBuilder Libraries(params LibrariesProvider[] providers)
+        {
+            _silverIntegrations.Libraries = providers.ToList();
+            return this;
+        }
+
+        public SilverIntegrationsBuilder Medicines(params MedicinesProvider[] providers)
+        {
+            _silverIntegrations.Medicines = providers.ToList();
             return this;
         }
 
@@ -19,9 +42,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
-        public SilverIntegrationsBuilder Consultations(params ConsultationsProvider[] providers)
+        public SilverIntegrationsBuilder SecondaryAppointments(params SecondaryAppointmentProvider[] providers)
         {
-            _silverIntegrations.Consultations = providers.ToList();
+            _silverIntegrations.SecondaryAppointments = providers.ToList();
             return this;
         }
 

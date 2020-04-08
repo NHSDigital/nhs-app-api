@@ -91,11 +91,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(true)
                             .MessagingEnabled(true)
                             .UserInfoEnabled(true)
-                            .SilverIntegrations(_ => _
-                                .SecondaryAppointments( SecondaryAppointmentProvider.pkb )
+                            .SilverIntegrations(x => x
+                                .CarePlans(CarePlansProvider.pkb)
+                                .Consultations(ConsultationsProvider.pkb)
+                                .HealthTrackers(HealthTrackersProvider.pkb)
+                                .Libraries(LibrariesProvider.pkb)
+                                .Medicines(MedicinesProvider.pkb)
                                 .Messages( MessagesProvider.pkb )
-                                .Consultations(ConsultationsProvider.pkb))
-                            .HomeScreen(_ => _.PublicHealthNotifications(CreatePublicHealthNotification()))
+                                .SecondaryAppointments( SecondaryAppointmentProvider.pkb ))
+                            .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(true, true, true, true)
                             .WithSupplier(Supplier.Emis)
@@ -113,10 +117,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(false)
                             .MessagingEnabled(false)
                             .UserInfoEnabled(false)
-                            .SilverIntegrations(_ => _
-                                .SecondaryAppointments()
+                            .SilverIntegrations(x => x
+                                .CarePlans()
+                                .Consultations()
+                                .HealthTrackers()
+                                .Libraries()
+                                .Medicines()
                                 .Messages()
-                                .Consultations())
+                                .SecondaryAppointments())
                             .DocumentsEnabled(false)
                             .Im1MessagingEnabled(false, false, false, false)
                             .WithSupplier(Supplier.Tpp)
@@ -134,10 +142,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(true)
                             .MessagingEnabled(true)
                             .UserInfoEnabled(true)
-                            .SilverIntegrations(_ => _
-                                .SecondaryAppointments()
+                            .SilverIntegrations(x => x
+                                .CarePlans()
+                                .Consultations()
+                                .HealthTrackers()
+                                .Libraries()
+                                .Medicines()
                                 .Messages()
-                                .Consultations())
+                                .SecondaryAppointments())
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(true, false, false, false)
                             .WithSupplier(Supplier.Vision)
@@ -173,9 +185,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(true)
                             .MessagingEnabled(true)
                             .UserInfoEnabled(true)
-                            .SilverIntegrations(_ => _.SecondaryAppointments()
+                            .SilverIntegrations(x => x
+                                .CarePlans()
+                                .Consultations()
+                                .HealthTrackers()
+                                .Libraries()
+                                .Medicines()
                                 .Messages()
-                                .Consultations())
+                                .SecondaryAppointments())
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(true, false, false, false)
                             .WithSupplier(Supplier.Microtest)
@@ -193,10 +210,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(false)
                             .MessagingEnabled(false)
                             .UserInfoEnabled(false)
-                            .SilverIntegrations(_ => _
-                                .SecondaryAppointments()
+                            .SilverIntegrations(x => x
+                                .CarePlans()
+                                .Consultations()
+                                .HealthTrackers()
+                                .Libraries()
+                                .Medicines()
                                 .Messages()
-                                .Consultations())
+                                .SecondaryAppointments())
                             .DocumentsEnabled(false)
                             .Im1MessagingEnabled(false, false, false, false)
                             .WithSupplier(Supplier.Emis)
@@ -214,11 +235,15 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                             .NotificationsEnabled(true)
                             .MessagingEnabled(true)
                             .UserInfoEnabled(true)
-                            .SilverIntegrations(_ => _
-                                .SecondaryAppointments()
+                            .SilverIntegrations(x => x
+                                .CarePlans()
+                                .Consultations()
+                                .HealthTrackers()
+                                .Libraries()
+                                .Medicines()
                                 .Messages()
-                                .Consultations())
-                            .HomeScreen(_ => _.PublicHealthNotifications(CreatePublicHealthNotification()))
+                                .SecondaryAppointments())
+                            .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(true, true, true, true)
                             .WithSupplier(Supplier.Tpp)
@@ -273,65 +298,96 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 {
                     "A5",
                     ValidJourneys()
-                        .MedicalRecord(null, "1")
+                        .HomeScreen(x => x.PublicHealthNotifications())
                         .Build()
                 },
                 {
                     "A6",
                     ValidJourneys()
-                        .Prescriptions(null)
+                        .MedicalRecord(null, "1")
                         .Build()
                 },
                 {
                     "A7",
                     ValidJourneys()
-                        .NominatedPharmacyEnabled(null)
+                        .Prescriptions(null)
                         .Build()
                 },
                 {
                     "A8",
                     ValidJourneys()
-                        .NotificationsEnabled(null)
+                        .NominatedPharmacyEnabled(null)
                         .Build()
                 },
                 {
                     "A9",
                     ValidJourneys()
-                        .MessagingEnabled(null)
+                        .NotificationsEnabled(null)
                         .Build()
                 },
                 {
                     "A10",
                     ValidJourneys()
-                        .UserInfoEnabled(null)
+                        .MessagingEnabled(null)
                         .Build()
                 },
                 {
                     "A11",
                     ValidJourneys()
-                        .SilverIntegrations(_ => _.Consultations().Messages())
+                        .UserInfoEnabled(null)
                         .Build()
                 },
                 {
                     "A12",
                     ValidJourneys()
-                        .SilverIntegrations(_ => _.Consultations().SecondaryAppointments())
+                        .SilverIntegrations(x => x.Consultations().HealthTrackers().Libraries()
+                            .Medicines().Messages().SecondaryAppointments())
                         .Build()
                 },
                 {
                     "A13",
                     ValidJourneys()
-                        .SilverIntegrations(_ => _.SecondaryAppointments().Messages())
+                        .SilverIntegrations(x => x.CarePlans().HealthTrackers().Libraries()
+                            .Medicines().Messages().SecondaryAppointments())
                         .Build()
                 },
                 {
                     "A14",
                     ValidJourneys()
-                        .HomeScreen(_ => _.PublicHealthNotifications())
+                        .SilverIntegrations(x => x.CarePlans().Consultations().Libraries()
+                            .Medicines().Messages().SecondaryAppointments())
                         .Build()
                 },
                 {
                     "A15",
+                    ValidJourneys()
+                        .SilverIntegrations(x => x.CarePlans().Consultations().HealthTrackers()
+                            .Medicines().Messages().SecondaryAppointments())
+                        .Build()
+                },
+                {
+                    "A16",
+                    ValidJourneys()
+                        .SilverIntegrations(x => x.CarePlans().Consultations().HealthTrackers()
+                            .Libraries().Messages().SecondaryAppointments())
+                        .Build()
+                },
+                {
+                    "A17",
+                    ValidJourneys()
+                        .SilverIntegrations(x => x.CarePlans().Consultations().HealthTrackers()
+                            .Libraries().Medicines().SecondaryAppointments())
+                        .Build()
+                },
+                {
+                    "A18",
+                    ValidJourneys()
+                        .SilverIntegrations(x => x.CarePlans().Consultations().HealthTrackers()
+                            .Libraries().Medicines().Messages())
+                        .Build()
+                },
+                {
+                    "A19",
                     ValidJourneys()
                         .WithSupplier(Supplier.Unknown)
                         .Build()
@@ -346,17 +402,21 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             AssertError("A2", "journeys.Appointments.Provider");
             AssertError("A3", "journeys.CdssAdvice.Provider");
             AssertError("A4", "journeys.CdssAdmin.Provider");
-            AssertError("A5", "journeys.MedicalRecord.Provider");
-            AssertError("A6", "journeys.Prescriptions.Provider");
-            AssertError("A7", "journeys.NominatedPharmacy");
-            AssertError("A8", "journeys.Notifications");
-            AssertError("A9", "journeys.Messaging");
-            AssertError("A10", "journeys.UserInfo");
-            AssertError("A11", "journeys.SilverIntegrations.SecondaryAppointments");
-            AssertError("A12", "journeys.SilverIntegrations.Messages");
+            AssertError("A5", "journeys.HomeScreen.PublicHealthNotifications");
+            AssertError("A6", "journeys.MedicalRecord.Provider");
+            AssertError("A7", "journeys.Prescriptions.Provider");
+            AssertError("A8", "journeys.NominatedPharmacy");
+            AssertError("A9", "journeys.Notifications");
+            AssertError("A10", "journeys.Messaging");
+            AssertError("A11", "journeys.UserInfo");
+            AssertError("A12", "journeys.SilverIntegrations.CarePlans");
             AssertError("A13", "journeys.SilverIntegrations.Consultations");
-            AssertError("A14", "journeys.HomeScreen.PublicHealthNotifications");
-            AssertError("A15", "journeys.Supplier");
+            AssertError("A14", "journeys.SilverIntegrations.HealthTrackers");
+            AssertError("A15", "journeys.SilverIntegrations.Libraries");
+            AssertError("A16", "journeys.SilverIntegrations.Medicines");
+            AssertError("A17", "journeys.SilverIntegrations.Messages");
+            AssertError("A18", "journeys.SilverIntegrations.SecondaryAppointments");
+            AssertError("A19", "journeys.Supplier");
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating merged journeys.", Times.Once());
 
             result.Should().BeFalse();
@@ -380,11 +440,16 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .NotificationsEnabled(true)
                 .MessagingEnabled(true)
                 .UserInfoEnabled(true)
-                .HomeScreen(_ => _.PublicHealthNotifications(CreatePublicHealthNotification()))
-                .SilverIntegrations(_ => _
-                    .SecondaryAppointments()
+                .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
+                .SilverIntegrations(x => x
+                    .CarePlans()
+                    .Consultations()
+                    .HealthTrackers()
+                    .Libraries()
+                    .Medicines()
                     .Messages()
-                    .Consultations())
+                    .SecondaryAppointments()
+                    )
                 .DocumentsEnabled(true)
                 .Im1MessagingEnabled(true, true, true, true)
                 .WithSupplier(Supplier.Emis);
