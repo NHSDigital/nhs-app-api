@@ -15,6 +15,7 @@ import {
   MESSAGE_SENT,
   SET_DELETED,
   CLEAR_SELECTED_MESSAGE_DETAILS,
+  CLEAR_SELECTED_RECIPIENT,
   initialState,
 } from './mutation-types';
 
@@ -42,6 +43,9 @@ export default {
   },
   [CLEAR_SELECTED_MESSAGE_DETAILS](state) {
     clearSelectedMessageDetails(state);
+  },
+  [CLEAR_SELECTED_RECIPIENT](state) {
+    state.selectedMessageRecipient = undefined;
   },
   [LOADED_MESSAGES](state, loaded) {
     state.loadedMessages = !!loaded;

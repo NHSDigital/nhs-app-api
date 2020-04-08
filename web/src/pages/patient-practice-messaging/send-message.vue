@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate">
+  <div v-if="showTemplate && selectedMessageRecipient">
     <div class="nhsuk-grid-row nhsuk-grid-column-full">
       <div v-if="showError" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
@@ -86,7 +86,11 @@
 
 <script>
 import { redirectTo } from '@/lib/utils';
-import { INDEX, PATIENT_PRACTICE_MESSAGING_RECIPIENTS, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE } from '@/lib/routes';
+import { INDEX,
+  PATIENT_PRACTICE_MESSAGING,
+  PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
+  PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+} from '@/lib/routes';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import GenericButton from '@/components/widgets/GenericButton';
@@ -124,10 +128,18 @@ export default {
     getErrorClass() {
       return this.showError ? 'nhsuk-form-group--error' : '';
     },
+    selectedMessageRecipient() {
+      return this.$store.state.patientPracticeMessaging.selectedMessageRecipient;
+    },
   },
   fetch({ store, redirect }) {
     if (store.state.patientPracticeMessaging.selectedMessageRecipient === undefined) {
       redirect(INDEX.path);
+    }
+  },
+  created() {
+    if (this.selectedMessageRecipient === undefined) {
+      redirectTo(this, PATIENT_PRACTICE_MESSAGING.path);
     }
   },
   methods: {

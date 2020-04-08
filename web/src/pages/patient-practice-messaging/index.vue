@@ -29,6 +29,12 @@
                              @click="goToMessageDetails(summary)"/>
           </li>
         </ul>
+        <desktopGenericBackLink
+          v-if="!$store.state.device.isNativeApp"
+          id="desktopBackLink"
+          :path="morePath"
+          :button-text="'patient_practice_messaging.view_details.backButtonText.text'"
+          @clickAndPrevent="backLinkClicked"/>
       </template>
     </div>
   </div>
@@ -39,7 +45,9 @@ import SummaryMessage from '@/components/messaging/SummaryMessage';
 import MenuItemListHeader from '@/components/MenuItemListHeader';
 import MenuItemList from '@/components/MenuItemList';
 import MenuItem from '@/components/MenuItem';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import {
+  MORE,
   PATIENT_PRACTICE_MESSAGING_URGENCY,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   INDEX,
@@ -55,6 +63,7 @@ export default {
     MenuItemListHeader,
     MenuItemList,
     MenuItem,
+    DesktopGenericBackLink,
   },
   data() {
     return {
@@ -64,6 +73,9 @@ export default {
   computed: {
     summariesLoaded() {
       return this.$store.state.patientPracticeMessaging.loadedMessages;
+    },
+    morePath() {
+      return MORE.path;
     },
     hasNoSummaries() {
       return !(this.summaries && this.summaries.length > 0);
@@ -106,6 +118,9 @@ export default {
           date: formatDate(lastMessageDateTime, 'D MMMM YYYY'),
         });
     },
+    backLinkClicked() {
+      redirectTo(this, this.morePath);
+    },
     goToMessageDetails(message) {
       this.$store.dispatch('patientPracticeMessaging/setSelectedMessageID', message.messageId);
       this.$store.dispatch('patientPracticeMessaging/setSelectedRecipient', { name: message.recipient });
@@ -120,7 +135,6 @@ export default {
             outboundMessage: message.outboundMessage },
           });
       }
-
       redirectTo(this, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path);
     },
   },

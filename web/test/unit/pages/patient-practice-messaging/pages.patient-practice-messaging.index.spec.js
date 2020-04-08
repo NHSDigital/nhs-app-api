@@ -3,7 +3,9 @@ import SummaryMessage from '@/components/messaging/SummaryMessage';
 import { createStore, create$T, mount } from '../../helpers';
 import { formatDate } from '@/plugins/filters';
 import { INDEX } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
+jest.mock('@/lib/utils');
 jest.mock('@/plugins/filters');
 
 describe('practice patient messaging inbox', () => {
@@ -42,6 +44,9 @@ describe('practice patient messaging inbox', () => {
         },
         practiceSettings: {
           im1MessagingEnabled,
+        },
+        device: {
+          isNativeApp: false,
         },
       },
     });
@@ -106,6 +111,14 @@ describe('practice patient messaging inbox', () => {
       // Assert
       expect($t).toHaveBeenCalledWith('im01.summary.hiddenWithoutSubject', { recipient: 'Dr NHS Online', date: 'mock formatted date' });
       expect(messageLabel).toEqual('translate_im01.summary.hiddenWithoutSubject');
+    });
+  });
+
+  describe('back link', () => {
+    it('will go back to the more screen', () => {
+      mountPage();
+      wrapper.vm.backLinkClicked();
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/more');
     });
   });
 

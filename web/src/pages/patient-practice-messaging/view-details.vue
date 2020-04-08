@@ -160,6 +160,7 @@ export default {
   },
   beforeDestroy() {
     this.$store.dispatch('patientPracticeMessaging/clearSelectedRetainingId');
+    this.$store.dispatch('patientPracticeMessaging/clearSelectedRecipient');
   },
   methods: {
     backButtonClicked() {

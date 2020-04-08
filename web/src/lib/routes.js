@@ -1136,9 +1136,6 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessaging',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX];
-      },
-      get moreCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.MORE];
       },
     },
@@ -1525,13 +1522,13 @@ export const backLinkOverrides = {
   [routes.ORGAN_DONATION_VIEW_DECISION.name]: {
     defaultPath: routes.MORE.path,
   },
-  [routes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.name]: {
-    ignoreStore: true,
-    defaultPath: routes.PATIENT_PRACTICE_MESSAGING.path,
-  },
   [routes.SWITCH_PROFILE.name]: {
     ignoreStore: true,
     defaultPath: routes.INDEX.path,
+  },
+  [routes.PATIENT_PRACTICE_MESSAGING.name]: {
+    ignoreStore: true,
+    defaultPath: routes.MORE.path,
   },
 };
 

@@ -10,12 +10,14 @@ describe('patient messaging messages', () => {
 
   const mountPage = ({
     toggle = true,
+    selectedMessageRecipient = undefined,
     selectedId = undefined } = {}) => {
     store = createStore({
       state: {
         patientPracticeMessaging: {
           selectedMessageId: selectedId,
           messageSent: true,
+          selectedMessageRecipient,
         },
         device: { isNativeApp: false } },
       $env: { PATIENT_PRACTICE_MESSAGING_ENABLED: toggle },
@@ -34,7 +36,7 @@ describe('patient messaging messages', () => {
 
   describe('template', () => {
     it('will contain a subject field, a message field and a button', () => {
-      mountPage();
+      mountPage({ selectedMessageRecipient: 'Recipient' });
       const subjectField = wrapper.find('#subjectText');
       const messageField = wrapper.find('#messageText');
 
@@ -43,7 +45,7 @@ describe('patient messaging messages', () => {
     });
 
     it('will show information with links', () => {
-      mountPage();
+      mountPage({ selectedMessageRecipient: 'Recipient' });
 
       const subHeader = wrapper.find('#subHeader');
       expect(subHeader.exists()).toBe(true);
@@ -93,7 +95,7 @@ describe('patient messaging messages', () => {
 
   describe('methods', () => {
     it('will send the message if the inputs are valid', async () => {
-      mountPage();
+      mountPage({ selectedMessageRecipient: 'Recipient' });
       dependency.redirectTo = jest.fn();
 
       wrapper.vm.messageText = 'Test message';
@@ -113,7 +115,7 @@ describe('patient messaging messages', () => {
     });
 
     it('will not send the message if the inputs are invalid', async () => {
-      mountPage();
+      mountPage({ selectedMessageRecipient: 'Recipient' });
       dependency.redirectTo = jest.fn();
 
       wrapper.vm.messageText = '';

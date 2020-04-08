@@ -13,6 +13,7 @@ export const SET_STATUS_STATE = 'SET_STATUS_STATE';
 export const MESSAGE_SENT = 'MESSAGE_SENT';
 export const SET_DELETED = 'SET_DELETED';
 export const CLEAR_SELECTED_MESSAGE_DETAILS = 'CLEAR_SELECTED_MESSAGE_DETAILS';
+export const CLEAR_SELECTED_RECIPIENT = 'CLEAR_SELECTED_RECIPIENT';
 
 export const initialState = () => ({
   loadedMessages: false,

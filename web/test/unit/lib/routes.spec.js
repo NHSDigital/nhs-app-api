@@ -45,7 +45,7 @@ describe('routes', () => {
     each([
       ['organ-donation', '/more', undefined],
       ['organ-donation-view-decision', '/more', undefined],
-      ['patient-practice-messaging-view-details', '/patient-practice-messaging', true],
+      ['patient-practice-messaging', '/more', true],
       ['switch-profile', '/', true]])
       .it('will go to $path from $name by default', (name, path, ignoreStore) => {
         const override = backLinkOverrides[name];

@@ -15,6 +15,7 @@ import {
   MESSAGE_SENT,
   SET_DELETED,
   CLEAR_SELECTED_MESSAGE_DETAILS,
+  CLEAR_SELECTED_RECIPIENT,
 } from './mutation-types';
 
 export default {
@@ -126,5 +127,8 @@ export default {
   },
   clearSelectedRetainingId({ commit }) {
     commit(CLEAR_SELECTED_MESSAGE_DETAILS);
+  },
+  clearSelectedRecipient({ commit }) {
+    commit(CLEAR_SELECTED_RECIPIENT);
   },
 };
