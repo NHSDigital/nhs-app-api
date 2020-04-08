@@ -1,6 +1,6 @@
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.Areas.Session
+namespace NHSOnline.Backend.GpSystems.SessionManager
 {
     public class SessionLogoffResultVisitorOutput
     {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using NHSOnline.Backend.GpSystems.Session;
 
-namespace NHSOnline.Backend.PfsApi.Areas.Session
+namespace NHSOnline.Backend.GpSystems.SessionManager
 {
     public class SessionLogoffResultVisitor : ISessionLogoffResultVisitor<SessionLogoffResultVisitorOutput>
     {
@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 SessionWasDeleted = true,
                 GpUserSession = result.GpUserSession,
             };
-        } 
+        }
 
         public SessionLogoffResultVisitorOutput Visit(SessionLogoffResult.Forbidden result)
         {

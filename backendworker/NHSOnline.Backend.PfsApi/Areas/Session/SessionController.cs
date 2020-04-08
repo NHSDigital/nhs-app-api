@@ -302,18 +302,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 var gpUserSession = userSession.GpUserSession;
                 var citizenIdUserSession = userSession.CitizenIdUserSession;
 
-                try
+                var closeSessionResult = await _gpSessionManager.CloseAndDeleteSession(userSession);
+
+                if (closeSessionResult is CloseSessionResult.Failure)
                 {
-                    var supplierSessionDeletedResultVisited = await GetSessionLogoffResultVisitorOutput(userSession);
-                    if (!supplierSessionDeletedResultVisited.SessionWasDeleted)
-                    {
-                        _logger.LogError(
-                            $"Deleting the GP Supplier session failed with status code: '{supplierSessionDeletedResultVisited.StatusCode}'");
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError($"Deleting the GP supplier failed with error: {e.Message}");
                     await _auditor.AuditSessionEvent(
                         citizenIdUserSession.AccessToken,
                         gpUserSession.NhsNumber,
@@ -322,30 +314,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                         "Delete session failed");
 
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-                }
-
-                // Delete key and session
-                bool sessionDeleted;
-                try
-                {
-                    sessionDeleted = await _sessionCacheService.DeleteUserSession(userSession.Key);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"Delete session failed with error: {e.Message}");
-                    await _auditor.AuditSessionEvent(
-                        citizenIdUserSession.AccessToken,
-                        gpUserSession.NhsNumber,
-                        gpUserSession.Supplier,
-                        AuditingOperations.SessionDeleteResponse,
-                        "Delete session failed");
-
-                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-                }
-
-                if (!sessionDeleted)
-                {
-                    _logger.LogError("No active session was found");
                 }
 
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -379,16 +347,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             PopulateUserSessionResponse(responseBody, userSession);
 
             return new CreatedResult(string.Empty, responseBody);
-        }
-
-        private async Task<SessionLogoffResultVisitorOutput> GetSessionLogoffResultVisitorOutput(
-            UserSession userSession)
-        {
-            var sessionService =
-                _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier).GetSessionService();
-            var sessionLogoffResult = await sessionService.Logoff(userSession.GpUserSession);
-
-            return sessionLogoffResult.Accept(new SessionLogoffResultVisitor());
         }
 
         private ObjectResult BuildErrorResult(ErrorTypes errorTypes)

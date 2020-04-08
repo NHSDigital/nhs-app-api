@@ -49,7 +49,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             }
 
             _logger.LogInformation("Successfully Recreated TPP User Session - account switched");
-            _gpSessionManager.LogoffSession(gpUserSession);
+
+            //TODO - next story...
+            //await _gpSessionManager.LogoffSession(gpUserSession);
+
             return new SwitchAccountResult.Success();
         }
 

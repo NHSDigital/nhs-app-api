@@ -46,10 +46,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { TppClientTestsContext.RequestTypeHeader, logoffRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, logoffRequestModel.RequestType },
+                { TppClientTestsContext.RequestSuidHeader, TppClientTestsContext.Suid }
             };
 
-            var tppUserSession = new TppUserSession();
+            var tppUserSession = new TppUserSession
+            {
+                Suid = TppClientTestsContext.Suid
+            };
 
             MockHttpHandler
                 .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
@@ -79,11 +83,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
 
             var expectedLogoffResponse = new LogoffReply();
             var responseContent = new StringContent(expectedLogoffResponse.SerializeXml());
-            var tppUserSession = new TppUserSession();
+            var tppUserSession = new TppUserSession
+            {
+                Suid = TppClientTestsContext.Suid
+            };
 
             var tppRequestHeaders = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                { TppClientTestsContext.RequestTypeHeader, logoffRequestModel.RequestType }
+                { TppClientTestsContext.RequestTypeHeader, logoffRequestModel.RequestType },
+                { TppClientTestsContext.RequestSuidHeader, TppClientTestsContext.Suid }
             };
 
             MockHttpHandler

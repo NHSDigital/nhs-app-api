@@ -299,6 +299,158 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 x.UpdateUserSession(It.IsAny<UserSession>()), Times.Never());
         }
 
+        [TestMethod]
+        public async Task CloseSession_ReturnsSuccess_AndSessionWasDeleted()
+        {
+            //Arrange
+            var tppUserSession = BuildTppUserSession();
+
+            _mockSessionService
+                .Setup(x => x.Logoff(tppUserSession))
+                .ReturnsAsync(new SessionLogoffResult.Success(tppUserSession));
+
+            //Act
+            var logoffSessionResult = await _gpSessionManager.CloseSession(tppUserSession);
+
+            //Assert
+            var result = logoffSessionResult.Should().BeOfType<CloseSessionResult.Success>();
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, Times.Never());
+        }
+
+
+        [DataRow(typeof(SessionLogoffResult.BadGateway), StatusCodes.Status502BadGateway)]
+        [DataRow(typeof(SessionLogoffResult.Forbidden), StatusCodes.Status403Forbidden)]
+        [DataTestMethod]
+        public async Task CloseSession_ReturnsSuccess_WhenSessionServiceDoesNotReturnSuccess(Type resultType, int statusCode)
+        {
+            //Arrange
+            var logoffResult = (SessionLogoffResult) Activator.CreateInstance(resultType);
+            var tppUserSession = BuildTppUserSession();
+
+            _mockSessionService
+                .Setup(x => x.Logoff(tppUserSession))
+                .ReturnsAsync(logoffResult);
+
+            //Act
+            var logoffSessionResult = await _gpSessionManager.CloseSession(tppUserSession);
+
+            //Assert
+            logoffSessionResult.Should().BeOfType<CloseSessionResult.Success>();
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Never());
+            _mockLogger.VerifyLogger(LogLevel.Error, $"Deleting the GP Supplier session failed with status code: '{statusCode}'", Times.Once());
+        }
+
+        [DataTestMethod]
+        public async Task CloseSession_ReturnsFailure_WhenSessionServiceThrowsException()
+        {
+            //Arrange
+            var tppUserSession = BuildTppUserSession();
+
+            _mockSessionService
+                .Setup(x => x.Logoff(tppUserSession))
+                .Throws<Exception>();
+
+            //Act
+            var logoffSessionResult = await _gpSessionManager.CloseSession(tppUserSession);
+
+            //Assert
+            logoffSessionResult.Should().BeOfType<CloseSessionResult.Failure>();
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Never());
+            _mockLogger.VerifyLogger(LogLevel.Error, Times.Once());
+        }
+
+
+        [TestMethod]
+        public async Task CloseAndDeleteSession_ReturnsSuccess_WhenSessionCacheWasDeleted()
+        {
+            //Arrange
+            _userSession.GpUserSession = BuildTppUserSession();
+
+            _mockSessionService
+                .Setup(x => x.Logoff(_userSession.GpUserSession))
+                .ReturnsAsync(new SessionLogoffResult.Success(_userSession.GpUserSession));
+
+            _mockSessionCacheService
+                .Setup(x => x.DeleteUserSession(_userSession.Key))
+                .ReturnsAsync(true);
+
+            //Act
+            var logoffSessionResult = await _gpSessionManager.CloseAndDeleteSession(_userSession);
+
+            //Assert
+            logoffSessionResult.Should().BeOfType<CloseSessionResult.Success>();
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Exactly(2));
+            _mockLogger.VerifyLogger(LogLevel.Error, Times.Never());
+        }
+
+        [TestMethod]
+        public async Task CloseAndDeleteSessionAndDelete_ReturnsSuccess_WhenSessionCachesWasNotDeleted()
+        {
+            //Arrange
+            _userSession.GpUserSession = BuildTppUserSession();
+
+            _mockSessionService
+                .Setup(x => x.Logoff(_userSession.GpUserSession))
+                .ReturnsAsync(new SessionLogoffResult.Success(_userSession.GpUserSession));
+
+            _mockSessionCacheService
+                .Setup(x => x.DeleteUserSession(_userSession.Key))
+                .ReturnsAsync(false);
+
+            //Act
+            var logoffSessionResult = await _gpSessionManager.CloseAndDeleteSession(_userSession);
+
+            //Assert
+            logoffSessionResult.Should().BeOfType<CloseSessionResult.Success>();
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, "No active session was found", Times.Once());
+        }
+
+
+        [TestMethod]
+        public async Task CloseAndDeleteSession_ReturnsFailure_WhenSessionCachesServiceThrowsException()
+        {
+            //Arrange
+            _userSession.GpUserSession = BuildTppUserSession();
+
+            _mockSessionService
+                .Setup(x => x.Logoff(_userSession.GpUserSession))
+                .ReturnsAsync(new SessionLogoffResult.Success(_userSession.GpUserSession));
+
+            _mockSessionCacheService
+                .Setup(x => x.DeleteUserSession(_userSession.Key))
+                .Throws<Exception>();
+
+            //Act
+            var logoffSessionResult = await _gpSessionManager.CloseAndDeleteSession(_userSession);
+
+            //Assert
+            logoffSessionResult.Should().BeOfType<CloseSessionResult.Failure>();
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Error, Times.Once());
+        }
+
+        [TestMethod]
+        public async Task CloseAndDeleteSession_ReturnsFailure_WhenSessionServiceThrowsException()
+        {
+            //Arrange
+            _userSession.GpUserSession = BuildTppUserSession();
+
+            _mockSessionService
+                .Setup(x => x.Logoff(_userSession.GpUserSession))
+                .Throws<Exception>();
+
+            //Act
+            var logoffSessionResult = await _gpSessionManager.CloseAndDeleteSession(_userSession);
+
+            //Assert
+            logoffSessionResult.Should().BeOfType<CloseSessionResult.Failure>();
+            _mockLogger.VerifyLogger(LogLevel.Information, Times.Never());
+            _mockLogger.VerifyLogger(LogLevel.Error, Times.Once());
+            _mockSessionCacheService.VerifyNoOtherCalls();
+        }
+
         private TppUserSession BuildTppUserSession()
         {
             var tppUserSession = _fixture.Create<TppUserSession>();

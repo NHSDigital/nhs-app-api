@@ -14,6 +14,9 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
         Task<RecreateSessionResult> RecreateSession(string patientId);
 
-        void LogoffSession(GpUserSession gpUserSession);
+        Task<CloseSessionResult> CloseAndDeleteSession(UserSession userSession);
+
+        Task<CloseSessionResult> CloseSession(GpUserSession gpUserSession);
+
     }
 }

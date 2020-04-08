@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
                 var request = new Logoff();
 
                 return await _requestExecutor.Post<LogoffReply>(
-                    requestBuilder => requestBuilder.Model(request));
+                    requestBuilder => requestBuilder.Model(request).Suid(tppUserSession.Suid));
             }
             finally
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -111,9 +112,78 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             return new RecreateSessionResult.Failure();
         }
 
-        public void LogoffSession(GpUserSession gpUserSession)
+        public async Task<CloseSessionResult> CloseAndDeleteSession(UserSession userSession)
         {
-            //TODO - next story....
+            var logoffSessionResult = await CloseSession(userSession.GpUserSession);
+
+            if (logoffSessionResult is CloseSessionResult.Success)
+            {
+                return await DeleteSession(userSession.Key);
+            }
+            return new CloseSessionResult.Failure();
+        }
+
+        public async Task<CloseSessionResult> CloseSession(GpUserSession gpUserSession)
+        {
+            try
+            {
+                var sessionService = _gpSystemFactory.CreateGpSystem(gpUserSession.Supplier).GetSessionService();
+                var logoffResult = await sessionService.Logoff(gpUserSession);
+
+                var visitorResult  = logoffResult.Accept(new SessionLogoffResultVisitor());
+
+                LogCloseSessionResult(gpUserSession, visitorResult);
+
+                return new CloseSessionResult.Success();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,$"Deleting the GP supplier failed with error: {e.Message}");
+                return new CloseSessionResult.Failure();
+            }
+        }
+
+        private async Task<CloseSessionResult> DeleteSession(string key)
+        {
+            try
+            {
+                var sessionDeleted = await _sessionCacheService.DeleteUserSession(key);
+
+                LogDeleteSessionResult(sessionDeleted, key);
+
+                return new CloseSessionResult.Success();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Delete session failed with error: {e.Message}");
+                return new CloseSessionResult.Failure();
+            }
+        }
+
+        private void LogDeleteSessionResult(bool sessionDeleted, string key)
+        {
+            if (sessionDeleted)
+            {
+                _logger.LogInformation("Successfully deleted the session from the cache.");
+            }
+            else
+            {
+                _logger.LogError($"No active session was found for {key} in session cache");
+            }
+        }
+
+        private void LogCloseSessionResult(GpUserSession gpUserSession, SessionLogoffResultVisitorOutput visitorResult)
+        {
+            if (visitorResult.SessionWasDeleted)
+            {
+                _logger.LogInformation(
+                    $"Successfully closed the {gpUserSession.Supplier.ToString()} GP Supplier session'");
+            }
+            else
+            {
+                _logger.LogError(
+                    $"Deleting the GP Supplier session failed with status code: '{visitorResult.StatusCode}'");
+            }
         }
 
         private static async Task<GpSessionCreateResult> GetGpSessionCreateResult(
