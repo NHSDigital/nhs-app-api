@@ -9,6 +9,7 @@ import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.GpPracticeAccessSettingsFactory
 import features.myrecord.factories.MyRecordFactory
+import features.prescriptions.stepDefinitions.PrescriptionsDataSetup
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
@@ -79,6 +80,19 @@ class LinkedProfilesStepDefinitions {
         val patient = Patient.getPatientWithLinkedProfiles(supplier)
         Patient.setOdsCodeBasedOnAppointmentsProvider(supplier, patient, provider)
         SerenityHelpers.setGpSupplier(supplier)
+        setupAndLogIn(patient, supplier)
+    }
+
+    @Given("^I am logged in as a TPP user with linked profiles but no access to " +
+            "core services and appointments provider (.*)$")
+    fun iAmLoggedInWithLinkedProfilesButNoAccessToCoreServicesAndAppointmentsProvider
+            (provider: String) {
+        val supplier = Supplier.TPP
+        val patient = Patient.getPatientWithLinkedProfiles(supplier)
+        Patient.setOdsCodeBasedOnAppointmentsProvider(supplier, patient, provider)
+        SerenityHelpers.setGpSupplier(supplier)
+        PrescriptionsDataSetup.disabled(patient.linkedAccounts.toList()[0], Supplier.TPP)
+        PrescriptionsDataSetup.disabled(patient, Supplier.TPP)
         setupAndLogIn(patient, supplier)
     }
 
@@ -281,7 +295,12 @@ class LinkedProfilesStepDefinitions {
     fun theSymptomsShutterPageIsDisplayed() {
         symptomsShutterPage.isLoaded()
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        symptomsShutterPage.assertText(selectedProfile.profile.firstName)
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        if (gpSystem === Supplier.TPP) {
+            symptomsShutterPage.assertText(selectedProfile.profile.formattedFullName())
+        } else {
+            symptomsShutterPage.assertText(selectedProfile.profile.firstName)
+        }
     }
 
     @Then("^the settings shutter page is displayed$")
@@ -293,21 +312,42 @@ class LinkedProfilesStepDefinitions {
     @Then("^the prescriptions shutter page is displayed$")
     fun thePrescriptionsShutterPageIsDisplayed() {
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        prescriptionsShutterPage.isLoaded(selectedProfile.profile.firstName)
-        prescriptionsShutterPage.assertText(selectedProfile.profile.firstName)
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        if (gpSystem === Supplier.TPP) {
+            prescriptionsShutterPage.isLoaded(selectedProfile.profile.formattedFullName())
+            prescriptionsShutterPage.assertText(selectedProfile.profile.formattedFullName())
+        } else {
+            prescriptionsShutterPage.isLoaded(selectedProfile.profile.firstName)
+            prescriptionsShutterPage.assertText(selectedProfile.profile.firstName)
+        }
     }
 
     @Then("^the appointments shutter page is displayed$")
     fun theAppointmentsShutterPageIsDisplayed() {
-        val displayName = LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.getOrFail<String>()
-        appointmentsShutterPage.isLoaded(displayName)
-        appointmentsShutterPage.assertText(displayName)
+
+        val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE
+                .getOrFail<LinkedProfileFacade>()
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        if (gpSystem === Supplier.TPP) {
+            appointmentsShutterPage.isLoaded(selectedProfile.profile.formattedFullName())
+            appointmentsShutterPage.assertText(selectedProfile.profile.formattedFullName())
+        } else {
+            appointmentsShutterPage.isLoaded(selectedProfile.profile.firstName)
+            appointmentsShutterPage.assertText(selectedProfile.profile.firstName)
+        }
     }
 
     @Then("^the medical record shutter page is displayed$")
     fun theMedicalRecordShutterPageIsDisplayed() {
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
-        medicalRecordShutterComponent.assertText(selectedProfile.profile)
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        if (gpSystem === Supplier.TPP) {
+            medicalRecordShutterComponent.assertText(selectedProfile.profile,
+                    selectedProfile.profile.formattedFullName())
+        } else {
+            medicalRecordShutterComponent.assertText(selectedProfile.profile,
+                    selectedProfile.profile.firstName)
+        }
     }
 
     private fun checkDisplayedValuesAreCorrect(

@@ -22,6 +22,7 @@ import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import utils.SerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
+import utils.ProxySerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -48,6 +49,12 @@ open class MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() 
     fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionality() {
         val gpSystem = SerenityHelpers.getGpSupplier()
         MyRecordFactory.getForSupplier(gpSystem).disabled(SerenityHelpers.getPatient())
+    }
+
+    @Given("^the GP Practice has disabled proxy access to summary care record functionality$")
+    fun givenTheGPPracticeHasDisabledProxyAccessToSummaryCareRecordFunctionality() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        MyRecordFactory.getForSupplier(gpSystem).disabled(ProxySerenityHelpers.getPatientOrProxy())
     }
 
     @Given("^I am on the medical record page$")

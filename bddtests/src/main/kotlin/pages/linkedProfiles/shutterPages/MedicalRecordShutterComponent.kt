@@ -8,16 +8,15 @@ import pages.sharedElements.expectedPage.ExpectedPageStructureAssertor
 
 class MedicalRecordShutterComponent :  HybridPageObject() {
 
-    fun assertText(patient: Patient) {
-        val patientName = patient.firstName
-        val firstLine = "You do not have access to $patientName's medical record"
+    fun assertText(patient: Patient, patientDisplayName: String) {
+        val firstLine = "You do not have access to $patientDisplayName's medical record"
         val expected = ExpectedPageStructure()
                 .paragraph("Name")
                 .paragraph(patient.formattedFullName())
                 .paragraph("Age")
                 .paragraph(patient.formattedAge())
                 .paragraph(firstLine)
-                .paragraph("Contact $patientName's GP surgery to request access.")
+                .paragraph("Contact $patientDisplayName's GP surgery to request access.")
                 .paragraph("Switch to your profile to view your GP medical record.")
                 .button("Switch to my profile")
         val parsedPage = ParsedPage.parse(this,

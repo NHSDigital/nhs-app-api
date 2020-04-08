@@ -10,6 +10,7 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import utils.SerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
+import utils.ProxySerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -29,6 +30,18 @@ open class V1MedicalRecordTppDcrEventStepDefinitions : AbstractDemographicsStepD
     fun givenThePatientDoesNotHaveAccessToDcrEventsForTPP() {
         mockingClient.forTpp {
             myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
+                    .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                            "You don&apos;t have access to this online service. " +
+                                    "You can request access to this service at Kainos GP Demo Unit by " +
+                                    "clicking Manage Online Services in the Account section.",
+                            "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+        }
+    }
+
+    @Given("^the GP Practice has disabled proxy access to dcr events functionality for TPP$")
+    fun givenTheProxyPatientDoesNotHaveAccessToDcrEventsForTPP() {
+        mockingClient.forTpp {
+            myRecord.patientRecordRequest(ProxySerenityHelpers.getPatientOrProxy().tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                             "You don&apos;t have access to this online service. " +
                                     "You can request access to this service at Kainos GP Demo Unit by " +

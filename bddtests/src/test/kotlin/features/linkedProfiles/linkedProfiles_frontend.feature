@@ -267,3 +267,32 @@ Feature: Login with proxy access
       | GP System |
       | EMIS      |
       | TPP       |
+
+  Scenario: An TPP user sees shutter pages when proxying and trying to access services without permissions
+    Given I am logged in as a TPP user with linked profiles but no access to core services and appointments provider IM1
+    Given the scenario is submit prescription
+    Then I see the home page
+    And I see the linked profiles link
+    When I select the linked profiles link from the home page
+    When I select a linked profile
+    When I click the Switch to this profile button for the proxy user
+    And prescriptions is disabled for the proxy account at a GP Practice level
+    And the GP Practice has disabled proxy access to summary care record functionality
+    And the GP Practice has disabled proxy access to dcr events functionality for TPP
+    And TPP user is not allowed to view appointments
+    Then I see the home page
+    When I click the settings icon
+    Then the settings shutter page is displayed
+    When I navigate to Symptoms
+    Then the symptoms shutter page is displayed
+    When I navigate to Prescriptions
+    Then the prescriptions shutter page is displayed
+    When I navigate to My_Record
+    And I click continue
+    Then the medical record shutter page is displayed
+    When I navigate to Appointments
+    Then the Appointments Hub page is displayed
+    And I click the GP Appointments link
+    Then the appointments shutter page is displayed
+    When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'https://111.nhs.uk/service/COVID-19/'
+    Then a new tab has been opened by the link
