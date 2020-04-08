@@ -1,6 +1,6 @@
 <template>
-  <p :class="[$style.msgText,
-              'nhsuk-u-margin-left-2',
+  <p :class="[messageTextStyle,
+              marginStyle,
               extendedStyle,
               !$store.state.device.isNativeApp && $style.desktopWeb]"
      :aria-label="ariaLabel"
@@ -35,6 +35,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isApiError: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     extendedStyle() {
@@ -49,6 +53,14 @@ export default {
         style = this.$style.footerMargin;
       }
       return `${style} nhsuk-u-margin-bottom-2`;
+    },
+    marginStyle() {
+      if (this.isApiError) return '';
+      return 'nhsuk-u-margin-left-2';
+    },
+    messageTextStyle() {
+      if (this.isApiError) return '';
+      return this.$style.msgText;
     },
   },
 };

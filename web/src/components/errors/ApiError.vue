@@ -3,6 +3,7 @@
     <div v-if="isStandardError" :id="$style.serverError" class="pull-content">
       <message-dialog :override-style="overrideStyle" message-type="error" aria-live="polite">
         <message-text :is-header="true"
+                      :is-api-error="true"
                       :override-style="overrideStyle"
                       data-purpose="msg-header">
           {{ header }}
@@ -10,11 +11,15 @@
         <message-text v-if="subheader!==''" data-purpose="msg-subheader">
           {{ subheader }}
         </message-text>
-        <message-text :is-before-footer="true" :aria-label="messageLabel"
+        <message-text :is-before-footer="true"
+                      :is-api-error="true"
+                      :aria-label="messageLabel"
                       data-purpose="msg-text">
           {{ messageText }}
         </message-text>
-        <message-text v-if="hasAdditionalInfo" :aria-label="additionalInfoLabel"
+        <message-text v-if="hasAdditionalInfo"
+                      :is-api-error="true"
+                      :aria-label="additionalInfoLabel"
                       :class="$style.additionalInformation"
                       data-purpose="msg-extratext">
           {{ additionalInfoText }}
