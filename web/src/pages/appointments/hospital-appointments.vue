@@ -10,6 +10,13 @@
                                          manageYourReferral.type"
                                        :redirect-path="thirdPartyProvider.ers.
                                          manageYourReferral.redirectPath" />
+          <third-party-jump-off-button v-if="showPkbAppointments"
+                                       id="btn_pkb_appointments"
+                                       provider-id="pkb"
+                                       :jump-off-type="thirdPartyProvider.pkb.
+                                         appointments.type"
+                                       :redirect-path="thirdPartyProvider.pkb.
+                                         appointments.redirectPath" />
         </menu-item-list>
       </div>
     </div>
@@ -32,12 +39,13 @@ export default {
   },
   data() {
     return {
+      isNativeApp: this.$store.state.device.isNativeApp,
       isProxying: this.$store.getters['session/isProxying'],
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
   },
   computed: {
-    hasSecondaryAppointments() {
+    hasErsAppointments() {
       return sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -47,8 +55,21 @@ export default {
         },
       });
     },
+    hasPkbAppointments() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'secondaryAppointments',
+        },
+      });
+    },
     showManageYourReferral() {
-      return this.hasSecondaryAppointments && !this.isProxying;
+      return this.hasErsAppointments && !this.isProxying;
+    },
+    showPkbAppointments() {
+      return this.hasPkbAppointments && this.isNativeApp && !this.isProxying;
     },
   },
   mounted() {

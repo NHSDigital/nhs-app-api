@@ -37,6 +37,7 @@ class ServiceJourneyRulesMapper {
                                 JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB),
                 GpInformation(Supplier.EMIS, ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED) to
                         EnumSet.of(JourneyType.APPOINTMENTS_INFORMATICA,
+                                JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS,
                                 JourneyType.MEDICAL_RECORD_IM1,
                                 JourneyType.PRESCRIPTIONS_IM1,
                                 JourneyType.NOMINATED_PHARMACY_DISABLED),
@@ -45,8 +46,8 @@ class ServiceJourneyRulesMapper {
                                 JourneyType.MEDICAL_RECORD_GPATHAND,
                                 JourneyType.PRESCRIPTIONS_GPATHAND,
                                 JourneyType.SILVER_INTEGRATION_CONSULTATIONS_NONE,
-                                JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE,
-                                JourneyType.SILVER_INTEGRATION_MESSAGES_NONE),
+                                JourneyType.SILVER_INTEGRATION_MESSAGES_NONE,
+                                JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE),
                 GpInformation(Supplier.TPP, TPP_ONLINE_CONSULTATIONS_DISABLED) to
                         EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED,
                                 JourneyType.NOTIFICATIONS_ENABLED,
@@ -155,6 +156,7 @@ class ServiceJourneyRulesMapper {
             SILVER_INTEGRATION_MESSAGES_PKB,
             SILVER_INTEGRATION_MESSAGES_NONE,
             SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB,
+            SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS,
             SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE,
             USER_INFO_DISABLED,
             USER_INFO_ENABLED,

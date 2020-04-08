@@ -9,15 +9,27 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import pages.HybridPageObject
 import pages.RedirectorPage
+import pages.appointments.HospitalAppointmentsPage
 import utils.SerenityHelpers
 
 class PatientsKnowBestStepDefinitions : HybridPageObject() {
 
     private val mockingClient = MockingClient.instance
     private lateinit var redirector: RedirectorPage
+    private lateinit var hospitalAppointmentsPage: HospitalAppointmentsPage
 
-    @Given("^I am a user who can view their Messages and Online Consultations from Patients Know Best$")
-    fun iAmAUserWhoCanViewTheirMessagesAndOnlineConsultationsFromPatientsKnowBest(){
+    @Given("^I am a user who can view Appointments from Patients Know Best$")
+    fun iAmAUserWhoCanViewAppointmentsFromPatientsKnowBest(){
+        setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB)
+    }
+
+    @Given("^I am a user who cannot view Appointments from Patients Know Best$")
+    fun iAmAUserWhoCannotViewAppointmentsFromPatientsKnowBest(){
+        setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
+    }
+
+    @Given("^I am a user who can view Messages and Online Consultations from Patients Know Best$")
+    fun iAmAUserWhoCanViewMessagesAndOnlineConsultationsFromPatientsKnowBest(){
         setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_MESSAGES_PKB)
     }
 
@@ -29,6 +41,11 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @When("^I click the 'Continue' button on the redirector page with a url starting with '(.*)'$")
     fun iClickTheContinueButtonOnTheRedirectorPageWithAUrlOf(continueUrl: String) {
         redirector.interruptionCard.assertContinueAndClick(continueUrl)
+    }
+
+    @When("^I click the PKB View Appointments link on the Appointments page")
+    fun iClickThePkbViewAppointmentsLinkOnTheAppointmentsPage() {
+        hospitalAppointmentsPage.btnPkbAppointments.click()
     }
 
     @Then("I am redirected to the redirector page with the header '(.*)'$")
@@ -43,6 +60,16 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
                 "Your GP surgery or hospital has chosen this personal health record " +
                         "service provided by Patients Know Best.",
                 "Find out more about personal health record services.")
+    }
+
+    @Then("the link to PKB View Appointments is not available on the Appointments page")
+    fun theLinkToPkbViewAppointmentsIsNotAvailableOnTheAppointmentsPage() {
+        hospitalAppointmentsPage.btnPkbAppointments.assertElementNotPresent()
+    }
+
+    @Then("^I can see the PKB View Appointments link on the Appointments page$")
+    fun iCanSeeThePkbViewAppointmentsLinkOnTheAppointmentsPage(){
+        hospitalAppointmentsPage.assertPkbViewAppointmentsIsDisplayed()
     }
 
     private fun setupPatient(configuration: ServiceJourneyRulesMapper.Companion.JourneyType) {

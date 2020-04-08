@@ -1,0 +1,13 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A22222"
+journeys:
+  silverIntegrations:
+    carePlans: []
+    consultations: []
+    healthTrackers: []
+    libraries: []
+    medicines: []
+    messages: []
+    secondaryAppointments:
+      - ers

@@ -20,6 +20,8 @@ open class HospitalAppointmentsPage : HybridPageObject() {
     private val hospitalAppointmentsTitle = "Book or cancel your referral appointment"
     private val hospitalAppointmentsDescription =
             "If you've had a referral, you can book or cancel your first appointment here"
+    private val viewPkbAppointmentsTitle = "View appointments"
+    private val viewPkbAppointmentsDescription = "See your upcoming and past hospital or other appointments"
 
     private val content = LinksWithDescriptionsContent(
             linkBlockTitle = "Appointments",
@@ -28,9 +30,18 @@ open class HospitalAppointmentsPage : HybridPageObject() {
             .addLink(hospitalAppointmentsTitle, hospitalAppointmentsDescription)
 
     private val links by lazy { LinksElement(this, content) }
+    val btnPkbAppointments by lazy { links.link(viewPkbAppointmentsTitle,
+            viewPkbAppointmentsDescription) }
 
-    fun assertIsDisplayed() {
+    fun assertPageTitleIsDisplayed() {
         pageTitle.assertIsVisible()
+    }
+
+    fun assertLinksDisplayed() {
         links.assertLinksPresent(true)
+    }
+
+    fun assertPkbViewAppointmentsIsDisplayed() {
+        btnPkbAppointments.assertSingleElementPresent()
     }
 }

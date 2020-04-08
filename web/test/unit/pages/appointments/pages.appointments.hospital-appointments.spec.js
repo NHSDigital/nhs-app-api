@@ -30,6 +30,10 @@ describe('hospital appointments hub', () => {
           knownServices: [{
             id: 'ers',
             url: 'www.url.com',
+          },
+          {
+            id: 'pkb',
+            url: 'www.url.com',
           }],
         },
       },
@@ -50,34 +54,76 @@ describe('hospital appointments hub', () => {
   });
 
   describe('manage your referrals link', () => {
-    const getHospitalLink = wrapperObj => wrapperObj.find('#btn_manage_your_referral');
+    const getMyrLink = wrapperObj => wrapperObj.find('#btn_manage_your_referral');
 
-    describe('sjr secondary appointments disabled but proxy false', () => {
+    describe('sjr ers secondary appointments disabled but proxy false', () => {
       beforeEach(() => {
         wrapper = mountAs({ apptsProviders: [], isProxy: false });
       });
 
       it('will not show link', () => {
-        expect(getHospitalLink(wrapper).exists()).toBe(false);
+        expect(getMyrLink(wrapper).exists()).toBe(false);
       });
     });
 
-    describe('sjr secondary appointments enabled but proxy true', () => {
+    describe('sjr ers secondary appointments enabled but proxy true', () => {
       beforeEach(() => {
         wrapper = mountAs({ apptsProviders: [], isProxy: true });
       });
 
       it('will not show link', () => {
-        expect(getHospitalLink(wrapper).exists()).toBe(false);
+        expect(getMyrLink(wrapper).exists()).toBe(false);
       });
     });
 
-    describe('sjr secondary appointments enabled and proxy false', () => {
-      let hospitalAppointmentsLink;
+    describe('sjr ers secondary appointments enabled and proxy false', () => {
+      let myrAppointmentsLink;
       it('will show link', () => {
         wrapper = mountAs({ apptsProviders: ['ers'], context: true, isProxy: false });
-        hospitalAppointmentsLink = getHospitalLink(wrapper);
-        expect(hospitalAppointmentsLink.exists()).toBe(true);
+        myrAppointmentsLink = getMyrLink(wrapper);
+        expect(myrAppointmentsLink.exists()).toBe(true);
+      });
+    });
+  });
+  describe('view pkb appointments', () => {
+    const getPkbAppointmentsLink = wrapperObj => wrapperObj.find('#btn_pkb_appointments');
+
+    describe('sjr pkb secondary appointments disabled but proxy false and isNative true', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ apptsProviders: [], isProxy: false, isNativeApp: true });
+      });
+
+      it('will not show link', () => {
+        expect(getPkbAppointmentsLink(wrapper).exists()).toBe(false);
+      });
+    });
+
+    describe('sjr pkb secondary appointments enabled but proxy true and is native app true', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ apptsProviders: ['pkb'], isProxy: true, isNativeApp: true });
+      });
+
+      it('will not show link', () => {
+        expect(getPkbAppointmentsLink(wrapper).exists()).toBe(false);
+      });
+    });
+
+    describe('sjr pkb secondary appointments enabled and proxy false but native app false', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ apptsProviders: ['pkb'], isProxy: false, isNativeApp: false });
+      });
+
+      it('will not show link', () => {
+        expect(getPkbAppointmentsLink(wrapper).exists()).toBe(false);
+      });
+    });
+
+    describe('sjr pkb secondary appointments enabled and proxy false', () => {
+      let pkbAppointmentsLink;
+      it('will show link', () => {
+        wrapper = mountAs({ apptsProviders: ['pkb'], context: true, isProxy: false, isNativeApp: true });
+        pkbAppointmentsLink = getPkbAppointmentsLink(wrapper);
+        expect(pkbAppointmentsLink.exists()).toBe(true);
       });
     });
   });

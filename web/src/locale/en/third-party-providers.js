@@ -25,6 +25,21 @@ export default {
     providerName: 'Patients Know Best',
     jumpOffs: [
       {
+        id: 'appointments',
+        path: '/nhs-login/login?phrPath=/diary/listAppointments.action',
+        jumpOffContent: {
+          headerText: 'View appointments',
+          descriptionText: 'See your upcoming and past hospital or other appointments',
+        },
+        thirdPartyWarning: {
+          featureName: 'View appointments',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
         id: 'messages',
         path: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
         jumpOffContent: {

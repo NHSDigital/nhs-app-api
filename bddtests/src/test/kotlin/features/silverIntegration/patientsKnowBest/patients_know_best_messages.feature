@@ -4,7 +4,7 @@ Feature: Patients Know Best Messages
 
   Scenario: A user navigates to PKB messages and sees the warning message
     Given I am using the native app user agent
-    And I am a user who can view their Messages and Online Consultations from Patients Know Best
+    And I am a user who can view Messages and Online Consultations from Patients Know Best
     And I am logged in
     When I navigate to the More page
     And I click the Messages and online consultations link on the More page
@@ -19,13 +19,13 @@ Feature: Patients Know Best Messages
     Then the link to Messages and consultations is not available on the More page
 
   Scenario: The menu item 'Messages and online consultations' is not visible on desktop
-    Given I am a user who can view their Messages and Online Consultations from Patients Know Best
+    Given I am a user who can view Messages and Online Consultations from Patients Know Best
     And I am logged in
     When I navigate to the More page
     Then the link to Messages and consultations is not available on the More page
 
   Scenario: A user can follow the link to Find out more about personal health records
-    Given I am a user who can view their Messages and Online Consultations from Patients Know Best
+    Given I am a user who can view Messages and Online Consultations from Patients Know Best
     And I am logged in
     When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Fauth%252FgetInbox.action%253Ftab%253Dmessages'
     Then I am redirected to the redirector page with the header 'Messages and online consultations'

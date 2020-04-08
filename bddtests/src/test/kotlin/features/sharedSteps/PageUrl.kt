@@ -12,6 +12,7 @@ open class PageUrl {
                         "appointment guidance" to "/appointments/booking-guidance",
                         "appointment hub" to "/appointments",
                         "your gp appointments" to "/appointments/gp-appointments",
+                        "hospital and other appointments" to "/appointments/hospital-appointments",
                         "informatica appointments" to "/appointments/informatica",
                         "gp at hand appointments" to "/appointments/gp-at-hand",
                         "data sharing" to "/data-sharing",

@@ -60,6 +60,11 @@ class HospitalAppointmentStepDefinitions {
 
     @Then("^the Hospital Appointments page is displayed$")
     fun assertIsDisplayed() {
-        hospitalAppointmentsPage.assertIsDisplayed()
+        hospitalAppointmentsPage.assertPageTitleIsDisplayed()
+    }
+
+    @Then("^the Hospital Appointments links are displayed$")
+    fun theHospitalAppointmentsPageLinksAreDisplayed() {
+        hospitalAppointmentsPage.assertPageTitleIsDisplayed()
     }
 }
