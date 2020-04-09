@@ -5,8 +5,7 @@ Feature: Login frontend
   A user will be shown personalised welcome messages upon successful login.
 
   Scenario Outline: A <GP System> user sees the home page after logging in
-    Given I have no booked appointments for <GP System>
-    And I have no repeat prescriptions
+    Given I am a <GP System> patient
     And I am logged in
     Then I see a welcome message
     And I see the patient details of name, date of birth and NHS number
