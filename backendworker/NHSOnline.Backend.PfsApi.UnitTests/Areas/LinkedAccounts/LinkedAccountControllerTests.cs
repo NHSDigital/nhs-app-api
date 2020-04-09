@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
@@ -34,6 +35,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         private P9UserSession _userSession;
         private LinkedAccountAuditInfo _linkedAccountAuditInfo;
         private Mock<ISessionCacheService> _mockSessionCacheService;
+        private Mock<IAuditor> _auditor;
 
         [TestInitialize]
         public void TestInitialize()
@@ -45,6 +47,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _gpSearchService = _fixture.Freeze<Mock<IGpSearchService>>();
             _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
+            _auditor = _fixture.Freeze<Mock<IAuditor>>();
             _linkedAccountService = new Mock<ILinkedAccountsService>();
             _userSession = _fixture.Create<P9UserSession>();
             _linkedAccountAuditInfo = _fixture.Create<LinkedAccountAuditInfo>();
@@ -92,6 +95,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             _linkedAccountService.Verify();
             result.Should().BeAssignableTo<OkResult>();
+            _auditor.Verify(x => x.Audit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
         }
 
 
@@ -120,6 +124,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             _linkedAccountService.Verify();
             result.Should().BeAssignableTo<OkResult>();
+            _auditor.Verify(x => x.Audit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -129,7 +134,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             var id = Guid.NewGuid();
 
             _linkedAccountService.Setup(x => x.SwitchAccount(_userSession.GpUserSession, id))
-                .ReturnsAsync(new SwitchAccountResult.Failure())
+                .ReturnsAsync(new SwitchAccountResult.Failure(id))
                 .Verifiable();
 
             // Act
@@ -138,7 +143,29 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             _linkedAccountService.Verify();
-            result.Should().BeAssignableTo<NotFoundResult>();
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            _auditor.Verify(x => x.Audit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
+        }
+
+        [TestMethod]
+        public async Task Switch_Returns200_WhenLinkedAccountIdAlreadyAuthenticated()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+
+            _linkedAccountService.Setup(x => x.SwitchAccount(_userSession.GpUserSession, id))
+                .ReturnsAsync(new SwitchAccountResult.AlreadyAuthenticated(id))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Switch(id, _userSession);
+
+            // Assert
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
+            _linkedAccountService.Verify();
+            result.Should().BeAssignableTo<OkResult>();
+            _auditor.Verify(x => x.Audit(AuditingOperations.LinkedAccountsSwitchResponse, It.IsAny<string>()));
         }
 
         [TestMethod]

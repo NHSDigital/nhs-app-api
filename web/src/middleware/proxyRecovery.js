@@ -1,7 +1,8 @@
 import { INDEX } from '@/lib/routes';
 
-export default ({ route, store, app }) => {
+export default async ({ route, store, app }) => {
   if (store.getters['linkedAccounts/isRecoveringFromProxyLoss']) {
+    await store.dispatch('linkedAccounts/switchToMainUserProfile');
     store.dispatch('flashMessage/addError', app.i18n.tc('linkedProfiles.lossProxyError'));
     store.dispatch('flashMessage/show');
   }

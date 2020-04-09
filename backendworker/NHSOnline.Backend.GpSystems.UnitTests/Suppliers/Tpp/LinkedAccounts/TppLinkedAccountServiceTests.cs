@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             var result = await _systemUnderTest.SwitchAccount(_tppUserSession, randomGuidWhichWontBeFound);
 
             // Assert
-            result.Should().BeOfType<SwitchAccountResult.Failure>();
+            result.Should().BeOfType<SwitchAccountResult.NotFound>();
             _gpSessionManager.Verify(x => x.CloseSession(_tppUserSession), Times.Never);
         }
 

@@ -26,6 +26,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             _logger =  _fixture.Freeze<Mock<ILogger>>();
 
             _tppUserSession = _fixture.Freeze<TppUserSession>();
+
+            // clear suid for each user so each test must define who is authenticated
+            _tppUserSession.Suid = null;
+            foreach (var tppProxyUserSession in _tppUserSession.ProxyPatients)
+            {
+                tppProxyUserSession.Suid = null;
+            }
             _linkedAccountModel = new GpLinkedAccountModel(_tppUserSession);
         }
 
@@ -33,6 +40,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         public void BuildTppRequestParameters_IdMatchedAgainstMainUser()
         {
             // Act
+            _tppUserSession.Suid = _fixture.Create<string>();
             var tppRequestParameters = TppLinkedAccountModelExtensions.BuildTppRequestParameters(_linkedAccountModel, _logger.Object);
 
             // Assert
@@ -43,20 +51,41 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         }
 
         [TestMethod]
+        public void BuildTppRequestParameters_IdMatchedAgainstMainUserButUserNotAuthenticated_ThrowsInvalidPatientIdException()
+        {
+            // Assert
+            Assert.ThrowsException<InvalidPatientIdException>(() =>
+                TppLinkedAccountModelExtensions.BuildTppRequestParameters(_linkedAccountModel, _logger.Object));
+        }
+
+        [TestMethod]
         public void BuildTppRequestParameters_IdMatchedAgainstProxyPatient()
         {
             // Arrange
-            TppProxyUserSession user = ((IList<TppProxyUserSession>)_tppUserSession.ProxyPatients).ElementAt(0);
-            _linkedAccountModel.PatientId = user.Id;
+            var proxyPatient = _tppUserSession.ProxyPatients.ElementAt(0);
+            proxyPatient.Suid = _fixture.Create<string>();
+            _linkedAccountModel.PatientId = proxyPatient.Id;
 
             // Act
             var tppRequestParameters = TppLinkedAccountModelExtensions.BuildTppRequestParameters(_linkedAccountModel, _logger.Object);
 
             // Assert
-            Assert.AreEqual(tppRequestParameters.PatientId, user.PatientId);
+            Assert.AreEqual(tppRequestParameters.PatientId, proxyPatient.PatientId);
             Assert.AreEqual(tppRequestParameters.OdsCode, _tppUserSession.OdsCode);
             Assert.AreEqual(tppRequestParameters.OnlineUserId, _tppUserSession.OnlineUserId);
-            Assert.AreEqual(tppRequestParameters.Suid, user.Suid);
+            Assert.AreEqual(tppRequestParameters.Suid, proxyPatient.Suid);
+        }
+
+        [TestMethod]
+        public void BuildTppRequestParameters_IdMatchedAgainstProxyPatientButProxyPatientNotAuthenticated_ThrowsInvalidPatientIdException()
+        {
+            // Arrange
+            var proxyPatient = _tppUserSession.ProxyPatients.ElementAt(0);
+            _linkedAccountModel.PatientId = proxyPatient.Id;
+
+            // Act
+            Assert.ThrowsException<InvalidPatientIdException>(() =>
+                TppLinkedAccountModelExtensions.BuildTppRequestParameters(_linkedAccountModel, _logger.Object));
         }
 
         [TestMethod, ExpectedException(typeof(InvalidPatientIdException))]

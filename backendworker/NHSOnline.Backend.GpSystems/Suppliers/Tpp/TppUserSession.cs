@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support;
@@ -14,7 +15,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         public string OnlineUserId { get; set; }
 
         public string UnitId => OdsCode;
-        
+
         public ICollection<TppProxyUserSession> ProxyPatients { get; set; }
+
+        public Guid? GetCurrentlyAuthenticatedId()
+        {
+            if (Suid != null)
+            {
+                return Id;
+            }
+
+            return ProxyPatients.FirstOrDefault(x => x.Suid != null)?.Id;
+        }
     }
 }

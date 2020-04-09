@@ -4,6 +4,10 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
     {
         T Visit(SwitchAccountResult.Success result);
 
+        T Visit(SwitchAccountResult.AlreadyAuthenticated result);
+
+        T Visit(SwitchAccountResult.NotFound result);
+
         T Visit(SwitchAccountResult.Failure result);
     }
 }

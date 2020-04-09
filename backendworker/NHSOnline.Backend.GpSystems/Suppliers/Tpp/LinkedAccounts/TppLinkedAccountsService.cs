@@ -35,17 +35,25 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             if (!validId)
             {
                 _logger.LogInformation("Unknown patient guid - could not find match on TppUserSession");
-                return new SwitchAccountResult.Failure();
+                return new SwitchAccountResult.NotFound(id);
             }
 
-            var patientId = proxy != null ? proxy.PatientId : ((TppUserSession)gpUserSession).PatientId;
+            var tppUserSession = (TppUserSession) gpUserSession;
+
+            if (tppUserSession.GetCurrentlyAuthenticatedId() == id)
+            {
+                _logger.LogInformation("TPP user already authenticated");
+                return new SwitchAccountResult.AlreadyAuthenticated(id);
+            }
+
+            var patientId = proxy != null ? proxy.PatientId : tppUserSession.PatientId;
 
             var result = await _gpSessionManager.RecreateSession(patientId);
 
             if (result is RecreateSessionResult.Failure)
             {
                 _logger.LogInformation("Recreate TPP User Session failed");
-                return new SwitchAccountResult.Failure();
+                return new SwitchAccountResult.Failure(id);
             }
 
             _logger.LogInformation("Successfully Recreated TPP User Session - account switched");

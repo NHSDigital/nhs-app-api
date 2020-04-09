@@ -9,7 +9,6 @@ const engLocale = locale.en;
 const $t = key => get(key, engLocale);
 const $te = key => has(key)(engLocale);
 
-const mainPatientId = 'a1b2c3d4e5';
 const mainPatientGivenName = 'main_patient_given_name';
 
 describe('shutter component', () => {
@@ -35,7 +34,6 @@ describe('shutter component', () => {
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
       $store.getters = {};
-      $store.getters['linkedAccounts/mainPatientId'] = mainPatientId;
       wrapper = mountPage({ feature: 'appointments' });
     });
 
@@ -58,7 +56,7 @@ describe('shutter component', () => {
       dependency.redirectTo = jest.fn();
       await wrapper.vm.switchProfileButtonClicked();
 
-      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchToMainUserProfile', { id: mainPatientId });
+      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchToMainUserProfile');
       expect($store.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, INDEX.path);

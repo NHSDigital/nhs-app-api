@@ -11,6 +11,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             TppRequestParameters tppRequestParameters = null;
             var tppUserSession = (TppUserSession) gpLinkedAccountModel.GpUserSession;
 
+            if (tppUserSession.GetCurrentlyAuthenticatedId() != gpLinkedAccountModel.PatientId)
+            {
+                throw new InvalidPatientIdException(
+                    $"Request for patient id {gpLinkedAccountModel.PatientId} rejected as user currently not authenticated with TPP");
+            }
+
             if (gpLinkedAccountModel.PatientId == tppUserSession.Id)
             {
                 tppRequestParameters = new TppRequestParameters(tppUserSession);

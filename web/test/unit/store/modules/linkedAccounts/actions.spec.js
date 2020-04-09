@@ -3,12 +3,14 @@ import {
   LOADED,
   SWITCH_TO_LINKED_ACCOUNT,
   LOADED_LINKED_ACCOUNT_ACCESS_SUMMARY,
+  SWITCH_TO_MAIN_USER_ACCOUNT,
 } from '@/store/modules/linkedAccounts/mutation-types';
 
 const {
   load,
   loadAccountAccessSummary,
   switchProfile,
+  switchToMainUserProfile,
 } = actions;
 
 describe('load', () => {
@@ -72,8 +74,14 @@ describe('loadAccountAccessSummary', () => {
 
 describe('switchProfile', () => {
   it('will call the API and then call commit with the passed in profile on success', () => {
+    const patientIdToSwitchTo = 'id-value';
+
     const profile = {
-      id: 'id-value',
+      id: patientIdToSwitchTo,
+    };
+
+    const expectedRequest = {
+      id: patientIdToSwitchTo,
     };
 
     const that = {
@@ -91,8 +99,43 @@ describe('switchProfile', () => {
     return switchProfile
       .call(that, { commit }, profile)
       .then(() => {
-        expect(that.app.$http.postV1PatientLinkedAccountsSwitchById).toHaveBeenCalled();
+        expect(that.app.$http.postV1PatientLinkedAccountsSwitchById)
+          .toHaveBeenCalledWith(expectedRequest);
         expect(commit).toHaveBeenCalledWith(SWITCH_TO_LINKED_ACCOUNT, profile);
+      });
+  });
+});
+
+describe('switchToMainUserProfile', () => {
+  it('will call the API with the main user profile id', () => {
+    const mainPatientId = 'main-patient-id-value';
+
+    const expectedRequest = {
+      id: mainPatientId,
+    };
+
+    const getters = {
+      mainPatientId,
+    };
+
+    const that = {
+      app: {
+        $http: {
+          postV1PatientLinkedAccountsSwitchById: jest.fn().mockImplementation(
+            () => Promise.resolve(),
+          ),
+        },
+      },
+    };
+
+    const commit = jest.fn();
+
+    return switchToMainUserProfile
+      .call(that, { commit, getters })
+      .then(() => {
+        expect(that.app.$http.postV1PatientLinkedAccountsSwitchById)
+          .toHaveBeenCalledWith(expectedRequest);
+        expect(commit).toHaveBeenCalledWith(SWITCH_TO_MAIN_USER_ACCOUNT);
       });
   });
 });

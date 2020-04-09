@@ -6,7 +6,9 @@ describe('middleware/proxyRecovery', () => {
   let store;
   let app;
 
-  const callProxyRecovery = routeName => proxyRecovery({ route: { name: routeName }, store, app });
+  const callProxyRecovery = async (routeName) => {
+    proxyRecovery({ route: { name: routeName }, store, app });
+  };
 
   beforeEach(() => {
     store = createStore();
@@ -17,28 +19,30 @@ describe('middleware/proxyRecovery', () => {
     };
   });
 
-  it('will add proxy error is recovering from proxy loss', () => {
+  it('will add proxy error is recovering from proxy loss', async () => {
     // arrange
     store.getters['linkedAccounts/isRecoveringFromProxyLoss'] = true;
 
     // act
-    callProxyRecovery('index');
+    await callProxyRecovery('index');
 
     // assert
     expect(app.i18n.tc).toHaveBeenCalledWith('linkedProfiles.lossProxyError');
+    expect(store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchToMainUserProfile');
     expect(store.dispatch).toHaveBeenCalledWith('flashMessage/addError', errorText);
     expect(store.dispatch).toHaveBeenCalledWith('flashMessage/show');
     expect(store.dispatch).toHaveBeenCalledWith('linkedAccounts/proxyRecoveryComplete');
   });
 
-  it('will not add proxy error when not recovering from proxy loss', () => {
+  it('will not add proxy error when not recovering from proxy loss', async () => {
     // arrange
     store.getters['linkedAccounts/isRecoveringFromProxyLoss'] = false;
 
     // act
-    callProxyRecovery('test-route-name');
+    await callProxyRecovery('test-route-name');
 
     // assert
+    expect(store.dispatch).not.toHaveBeenCalledWith('linkedAccounts/switchToMainUserProfile');
     expect(store.dispatch).not.toHaveBeenCalledWith('flashMessage/addError', errorText);
     expect(store.dispatch).not.toHaveBeenCalledWith('flashMessage/show');
     expect(store.dispatch).not.toHaveBeenCalledWith('linkedAccounts/proxyRecoveryComplete');

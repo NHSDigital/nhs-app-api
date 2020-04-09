@@ -8,16 +8,10 @@ describe('switch profile button component', () => {
   let $store;
   let wrapper;
 
-  const mainUserGuid = '1234-abc-dddd';
 
   const createState = (state = {
     device: {
       source: 'web',
-    },
-    linkedAccounts: {
-      config: {
-        patientId: mainUserGuid,
-      },
     },
   }) => state;
 
@@ -31,7 +25,6 @@ describe('switch profile button component', () => {
         dispatch: jest.fn(() => Promise.resolve()),
         state: createState(),
       });
-      $store.getters['linkedAccounts/mainPatientId'] = mainUserGuid;
       wrapper = mountComponent();
     });
 
@@ -40,7 +33,7 @@ describe('switch profile button component', () => {
       await wrapper.vm.switchProfileButtonClicked();
 
       // assert
-      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchToMainUserProfile', { id: mainUserGuid });
+      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchToMainUserProfile');
       expect($store.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, INDEX.path);

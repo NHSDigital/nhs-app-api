@@ -69,9 +69,10 @@ export default {
         commit(SWITCH_TO_LINKED_ACCOUNT, profile);
       });
   },
-  switchToMainUserProfile({ commit }, profile) {
+  switchToMainUserProfile({ commit, getters }) {
+    const { mainPatientId } = getters;
     const params = {
-      id: profile.id,
+      id: mainPatientId,
     };
     return this.app.$http
       .postV1PatientLinkedAccountsSwitchById(params)

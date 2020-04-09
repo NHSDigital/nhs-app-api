@@ -18,8 +18,7 @@ export default {
   },
   methods: {
     async switchProfileButtonClicked() {
-      const mainPatientId = this.$store.getters['linkedAccounts/mainPatientId'];
-      await this.$store.dispatch('linkedAccounts/switchToMainUserProfile', { id: mainPatientId });
+      await this.$store.dispatch('linkedAccounts/switchToMainUserProfile');
       await this.$store.dispatch('serviceJourneyRules/init');
       redirectTo(this, INDEX.path);
     },

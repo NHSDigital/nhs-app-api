@@ -147,24 +147,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
 
             var switchResult = await linkedAccountsService.SwitchAccount(userSession.GpUserSession, id);
 
-            if (switchResult is SwitchAccountResult.Success)
+            if (switchResult is SwitchAccountResult.Success success)
             {
                 var linkedAccountAuditInfo = HttpContext.GetLinkedAccountAuditInfo();
 
                 var (fromNhsNumber, toNhsNumber) = GetNhsNumbers(id, linkedAccountAuditInfo, userSession, linkedAccountsService);
+                success.ToNhsNumber = toNhsNumber;
 
                 _logger.LogInformation($"Switching profile from nhsnumber={fromNhsNumber} to nhsnumber={toNhsNumber}");
-
-                await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchResponse,
-                    $"Successfully switched profile to NhsNumber {toNhsNumber}");
             }
-            else
-            {
-                _logger.LogInformation($"Couldn't find profile with id {id} to switch to");
 
-                await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchResponse,
-                    $"Couldn't find profile with id {id} to switch to");
-            }
+            await switchResult.Accept(new SwitchAccountResultAuditingVisitor(_auditor, _logger));
             return await switchResult.Accept(new SwitchAccountResultVisitor());
         }
 

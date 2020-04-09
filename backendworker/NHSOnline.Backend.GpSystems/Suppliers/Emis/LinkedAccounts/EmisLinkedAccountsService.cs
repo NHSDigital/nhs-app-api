@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             {
                 return await Task.FromResult(new SwitchAccountResult.Success());
             }
-            return await Task.FromResult(new SwitchAccountResult.Failure());
+            return await Task.FromResult(new SwitchAccountResult.NotFound(id));
         }
 
         public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)

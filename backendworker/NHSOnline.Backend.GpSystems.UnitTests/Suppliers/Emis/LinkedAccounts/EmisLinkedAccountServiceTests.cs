@@ -211,7 +211,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             var result = await _systemUnderTest.SwitchAccount(_emisUserSession, randomGuidWhichWontBeFound);
 
             // Assert
-            result.Should().BeOfType<SwitchAccountResult.Failure>();
+            result.Should().BeOfType<SwitchAccountResult.NotFound>();
         }
 
         [TestMethod]
