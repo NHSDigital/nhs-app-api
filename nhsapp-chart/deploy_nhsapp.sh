@@ -151,6 +151,9 @@ if [[ $TARGET_ZONE == "sandbox" ]] || [[ $TARGET_ZONE == "dev" ]]; then
 	info "CosmosDB - Create Terms & Conditions container"
 	[[ $(az cosmosdb sql container list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "consent") ]] || az cosmosdb sql container create --name consent --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}" --resource-group "nhsapp-${TARGET_ZONE}" --partition-key-path "/NhsNumber" --throughput 400
 
+	info "CosmosDB - Create Terms & Conditions lease container"
+	[[ $(az cosmosdb sql container list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "lease") ]] || az cosmosdb sql container create --name lease --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}" --resource-group "nhsapp-${TARGET_ZONE}" --partition-key-path "/id" --throughput 400
+
 	info "CosmosDB - Creating Mongo API Database $COSMOS_DB_NAME"
 	[[ $(az cosmosdb mongodb database list --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "$COSMOS_DB_NAME") ]] || az cosmosdb mongodb database create --name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}"
 
@@ -190,6 +193,9 @@ elif [[ $TARGET_ZONE == "staging" ]] || [[ $TARGET_ZONE == "production" ]]; then
 
 	info "CosmosDB - Create Terms & Conditions container"
 	[[ $(az cosmosdb sql container list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "consent") ]] || az cosmosdb sql container create --name consent --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}" --resource-group "nhsapp-${TARGET_ZONE}" --throughput 400 --partition-key-path "/NhsNumber"
+
+	info "CosmosDB - Create Terms & Conditions lease container"
+	[[ $(az cosmosdb sql container list --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "lease") ]] || az cosmosdb sql container create --name lease --database-name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}" --resource-group "nhsapp-${TARGET_ZONE}" --throughput 400 --partition-key-path "/id"
 
 	info "CosmosDB - Creating Mongo API Database $COSMOS_DB_NAME"
 	[[ $(az cosmosdb mongodb database list --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}" --query '[].name' -o tsv | grep -w "$COSMOS_DB_NAME") ]] || az cosmosdb mongodb database create --name "$COSMOS_DB_NAME" --account-name "nhsapp-${TARGET_ZONE}-mongo" --resource-group "nhsapp-${TARGET_ZONE}"
