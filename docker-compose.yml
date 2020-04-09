@@ -27,6 +27,8 @@ secrets:
     file: "~/.nhsonline/secrets/spine_client_cert.password"
   gp_lookup_api_key:
     file: "~/.nhsonline/secrets/gp_lookup_api_key"
+  nhsapp_api_key:
+    file: "~/.nhsonline/secrets/nhsapp_api_key"
 
 
 services:
@@ -179,20 +181,46 @@ services:
 
   userinfo.local.bitraft.io:
     image: ${USERINFOAPI_DOCKER_REGISTRY:-local}/nhsonline-backenduserinfoapi:${USERINFOAPI_DOCKER_TAG:-latest}
+    entrypoint:
+      - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
+      - -c        # Therefore we run a script before starting the service to read the file into an env var
+      - |
+          if [ -f "$$NHSAPP_API_KEY" ]; then
+            export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
+          fi
+          exec $$*
+      - "--"
+    command: dotnet NHSOnline.Backend.UserInfoApi.dll    
     env_file:
       - ./docker/nhslogin_connectivity_ext.env
       - ./docker/userinfo.env
+    secrets:
+      - nhsapp_api_key
 
   messages.local.bitraft.io:
     image: ${MESSAGESAPI_DOCKER_REGISTRY:-local}/nhsonline-backendmessagesapi:${MESSAGESAPI_DOCKER_TAG:-latest}
+    entrypoint:
+      - /bin/bash # The service currently expects secrets as env vars but docker-compose only supports files
+      - -c        # Therefore we run a script before starting the service to read the file into an env var
+      - |
+          if [ -f "$$NHSAPP_API_KEY" ]; then
+            export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
+          fi
+          exec $$*
+      - "--"
+    command: dotnet NHSOnline.Backend.MessagesApi.dll      
     env_file:
       - ./docker/nhslogin_connectivity_ext.env
       - ./docker/messages.env
+    secrets:
+      - nhsapp_api_key
 
   log.local.bitraft.io:
     image: ${LOGAPI_DOCKER_REGISTRY:-local}/nhsonline-clientloggerapi:${LOGAPI_DOCKER_TAG:-latest}
     env_file:
       - ./docker/logger.env
+    secrets:
+      - nhsapp_api_key
 
   mongo_seed:
     image: mongo:latest

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using CorrelationId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -63,6 +65,9 @@ namespace NHSOnline.Backend.UserInfoApi
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
 
+
+            SetupApiKeys(services);
+
             _modularStartup.ConfigureServices(services);
 
             ConfigureAuth(services);
@@ -73,12 +78,10 @@ namespace NHSOnline.Backend.UserInfoApi
             var mongoConfiguration = CreateMongoConfiguration();
             services.AddSingleton(mongoConfiguration);
 
-
             var configurationSettings = CreateAndValidateEnvironmentVariables();
             services.AddSingleton(configurationSettings);
             services.AddSingleton<IHttpTimeoutConfigurationSettings>(configurationSettings);
         }
-
 
         private HttpTimeoutConfigurationSettings CreateAndValidateEnvironmentVariables()
         {
@@ -95,6 +98,14 @@ namespace NHSOnline.Backend.UserInfoApi
                 Configuration.GetOrThrow("USERINFO_MONGO_DATABASE_COLLECTION", _logger);
 
             return new MongoConfiguration(connectionString, databaseName, userInfoCollectionName);
+        }
+
+        private void SetupApiKeys(IServiceCollection services)
+        {
+            var secureKeyValue = Configuration.GetOrThrow("NHSAPP_API_KEY", _logger);
+            var apiKeyConfig = new ApiKeyConfig(new[] { new SecureApiKey("ExternalService", secureKeyValue) });
+            services.AddSingleton<IApiKeyConfig>(apiKeyConfig);
+            services.AddSingleton<IGetApiKeyQuery, InMemoryGetApiKeyQuery>();
         }
 
         private static void ConfigureMvcOptions(MvcOptions options)
@@ -177,6 +188,9 @@ namespace NHSOnline.Backend.UserInfoApi
                         RequireExpirationTime = true,
                         ValidateLifetime = true
                     };
+                })
+                .AddApiKeySupport(options =>
+                {
                 });
         }
 

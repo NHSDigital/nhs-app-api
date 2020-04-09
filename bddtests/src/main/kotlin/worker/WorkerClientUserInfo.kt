@@ -34,7 +34,7 @@ class WorkerClientUserInfo(val config: Config, val sender: WorkerClientSender, v
         return gson.fromJson(response, UserAndInfoResponse::class.java)
     }
 
-    fun getUserInfo(odsCode: String?, nhsNumber: String?): Array<String> {
+    fun getUserInfo(odsCode: String?, nhsNumber: String?, includeApiKey: Boolean): Array<String> {
         val uriBuilder = URIBuilder(config.apiBackendUrl + WorkerPaths.userInfo)
         if (odsCode != null) {
             uriBuilder.setParameter("odsCode", odsCode)
@@ -44,6 +44,8 @@ class WorkerClientUserInfo(val config: Config, val sender: WorkerClientSender, v
         }
         val path = uriBuilder.build()
         val httpGet = HttpGet(path)
+        httpGet.addExternalSystemApiKey(includeApiKey)
+
 
         val response = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()

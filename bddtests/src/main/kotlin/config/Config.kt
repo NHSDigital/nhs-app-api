@@ -58,6 +58,8 @@ class Config private constructor() {
 
     val accessibilityOutputFolder: String
 
+    val nhsAppApiKey:String
+
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
         wiremockUrl = envOrDefault("wiremockUrl", "http://stubs.local.bitraft.io:8080")
@@ -122,6 +124,7 @@ class Config private constructor() {
         consentMongoDbPort = envOrDefault("CONSENT_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
 
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
+        nhsAppApiKey = envOrDefault("NHSAPP_API_KEY", "testnhssearchservicekey")
 
         accessibilityOutputFolder = envOrDefault("ACCESSIBILITY_OUTPUT_FOLDER", "accessibilityoutput")
     }

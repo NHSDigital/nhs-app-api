@@ -13,9 +13,11 @@ import worker.models.messages.MessagesResponse
 
 class WorkerClientMessages(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
-    fun post(message: MessageRequest, nhsLoginId: String): HttpResponse {
+    fun post(message: MessageRequest, nhsLoginId: String, includeApiKey:Boolean)
+            : HttpResponse {
         val httpPost = HttpPost(uri(nhsLoginId))
 
+        httpPost.addExternalSystemApiKey(includeApiKey)
         val jsonRequest = gson.toJson(message)
         val entity = StringEntity(jsonRequest, "UTF-8")
         entity.setContentType("application/json")

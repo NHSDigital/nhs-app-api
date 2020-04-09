@@ -76,9 +76,9 @@ spec:
               key: key
         - name: USERINFO_MONGO_DATABASE_NAME
         {{- if $.Values.cosmosDBName }}
-          value: {{ $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}-mongo
         {{- else }}
-          value: {{ $.Values.global.environment }}
+          value: {{ $.Values.global.environment }}-mongo
         {{- end }}
         - name: USERINFO_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.info.mongoDatabaseInfoCollection }}
@@ -107,6 +107,11 @@ spec:
             secretKeyRef:
               name: {{ $.Values.nhsLoginKeyName }}-password-{{ .Chart.AppVersion }}
               key: password
+        - name: NHSAPP_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nhsapp-api-key-{{ .Chart.AppVersion }}
+              key: apikey
         volumeMounts:
         - name: nhslogin-key
           mountPath: "/secrets/nhslogin-key"

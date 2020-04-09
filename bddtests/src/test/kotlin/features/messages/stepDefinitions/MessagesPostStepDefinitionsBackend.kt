@@ -32,6 +32,13 @@ class MessagesPostStepDefinitionsBackend {
         MessagesApi.post(request, nhsLoginId)
     }
 
+    @When("^I post a message to the api without the api key$")
+    fun iPostAMessageToTheApiWithoutTheApiKey() {
+        val request = MessagesSerenityHelpers.EXPECTED_MESSAGE.getOrFail<MessageRequest>()
+        val nhsLoginId = MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.getOrFail<String>()
+        MessagesApi.post(request, nhsLoginId, includeApiKey = false)
+    }
+
     @Then("^the message is available in the database$")
     fun theMessageIsAvailableInTheDatabase() {
         val expectedMessage = MessagesSerenityHelpers.EXPECTED_MESSAGE.getOrFail<MessageRequest>()

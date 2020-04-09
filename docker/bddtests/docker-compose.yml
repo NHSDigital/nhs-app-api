@@ -11,6 +11,8 @@ secrets:
     file: "./bddtests/dummysecrets/microtest_client_cert.pfx"
   microtest_cert_password:
     file: "./bddtests/dummysecrets/microtest_client_cert.password"
+  nhsapp_api_key:
+    file: "./bddtests/dummysecrets/nhsapp_api_key"
   nhslogin_private_key:
     file: "./bddtests/dummysecrets/nhslogin_ext_private_key.pem"
   nhslogin_rsapass:
@@ -77,6 +79,8 @@ services:
   messages.local.bitraft.io:
     env_file:
       - ./docker/bddtests/env/nhslogin_connectivity.env
+    volumes:
+      - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
 
   mongo_seed:
     env_file:

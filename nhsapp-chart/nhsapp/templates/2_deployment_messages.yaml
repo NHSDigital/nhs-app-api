@@ -73,9 +73,9 @@ spec:
               key: key
         - name: MESSAGES_MONGO_DATABASE_NAME
         {{- if $.Values.cosmosDBName }}
-          value: {{ $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}-mongo
         {{- else }}
-          value: {{ $.Values.global.environment }}
+          value: {{ $.Values.global.environment }}-mongo
         {{- end }}
         - name: MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION
           value: {{ $.Values.messages.mongoDatabaseMessagesCollection }}
@@ -97,6 +97,11 @@ spec:
         - name: CITIZEN_ID_CLIENT_ID
           value: "{{ $.Values.cidClientID }}"
         {{- end }}
+        - name: NHSAPP_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nhsapp-api-key-{{ .Chart.AppVersion }}
+              key: apikey
         volumeMounts:
         - name: session-key
           mountPath: "/secrets/session-key"

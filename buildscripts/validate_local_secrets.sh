@@ -46,6 +46,7 @@ validate_secret browserstack_accesskey
 validate_secret gp_lookup_api_key
 validate_secret microtest_client_cert.password
 validate_secret microtest_client_cert.pfx
+validate_secret nhsapp_api_key
 validate_secret nhslogin_dev_private_key.pem
 validate_secret nhslogin_dev_rsapass.password
 validate_secret nhslogin_ext_private_key.pem

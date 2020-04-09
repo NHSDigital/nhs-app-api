@@ -30,11 +30,11 @@ class UserInfoApi {
             }
         }
 
-        fun getUserInfo(odsCode: String?, nhsNumber:String?) {
+        fun getUserInfo(odsCode: String?, nhsNumber:String?, includeApiKey:Boolean = true) {
             try {
                 val response = Serenity
                         .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                        .userInfo.getUserInfo(odsCode, nhsNumber)
+                        .userInfo.getUserInfo(odsCode, nhsNumber, includeApiKey)
                 UserInfoSerenityHelpers.GET_USER_INFO_NHSLOGINIDS_RESPONSE.set(response)
             } catch (httpException: NhsoHttpException) {
                 SerenityHelpers.setHttpException(httpException)

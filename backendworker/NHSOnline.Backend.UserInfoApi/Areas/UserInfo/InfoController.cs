@@ -1,10 +1,12 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.AspNet;
+using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
@@ -28,6 +30,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("api/me/info")]
         public async Task<IActionResult> Post()
         {
@@ -59,6 +62,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         }
         
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("api/me/info")]
         public async Task<IActionResult> Get()
         {
@@ -84,7 +88,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = ApiKeyAuthenticationOptions.DefaultScheme)]
         [Route("api/info")]
         public async Task<IActionResult> Get([FromQuery] string odsCode, [FromQuery] string nhsNumber)
         {

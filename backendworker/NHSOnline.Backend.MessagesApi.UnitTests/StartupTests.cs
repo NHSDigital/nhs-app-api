@@ -122,6 +122,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AUDIT_SINK_TYPE"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns(_fixture.Create<string>());
 
             var mockServiceCollection = _fixture.Create<Mock<IServiceCollection>>();
             var serviceDescriptors = ServiceCollectionHelper.SetupServiceDescriptor(mockServiceCollection);
@@ -144,6 +145,28 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
                 mongoConfiguration.CollectionName.Should().Be(messagesCollection);
             }
         }
+
+        [TestMethod]
+        public void ConfigureServices_WhenNhsAppApiKeyIsNotProvided_ThrowsException()
+        {
+            // Arrange
+            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["MESSAGES_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION"])
+                .Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["AUDIT_SINK_TYPE"]).Returns(_fixture.Create<string>());
+
+            // Act
+            Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
+
+            // Assert
+            act.Should().Throw<ConfigurationNotValidException>()
+                .Which.Message.Should().Contain("NHSAPP_API_KEY");
+        }
+
 
         [TestMethod]
         public void ConfigureServices_ConfigureAuth_WhenInProduction_ShouldRequireHttpsMetadata()
@@ -215,6 +238,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AUDIT_SINK_TYPE"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns(_fixture.Create<string>());
         }
     }
 }

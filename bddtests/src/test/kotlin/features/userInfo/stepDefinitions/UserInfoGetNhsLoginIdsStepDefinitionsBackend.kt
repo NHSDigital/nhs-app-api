@@ -63,10 +63,16 @@ class UserInfoGetNhsLoginIdsStepDefinitionsBackend {
         UserInfoApi.getUserInfo(odsCode = odsCode, nhsNumber = nhsNumber)
     }
 
-    @When("^I get user info details based on an nhs number")
+    @When("^I get user info details based on an nhs number$")
     fun iGetUserInfoDetailsBasedOnAnNhsNumber() {
         val nhsNumber = UserInfoSerenityHelpers.TARGET_NHSNUMBER.getOrFail<String>()
         UserInfoApi.getUserInfo(odsCode = null, nhsNumber = nhsNumber)
+    }
+
+    @When("^I get user info details based on an nhs number without the api key$")
+    fun iGetUserInfoDetailsBasedOnAnNhsNumberWithoutTheApiKey() {
+        val nhsNumber = UserInfoSerenityHelpers.TARGET_NHSNUMBER.getOrFail<String>()
+        UserInfoApi.getUserInfo(odsCode = null, nhsNumber = nhsNumber, includeApiKey = false)
     }
 
     @Then("^I receive a list of NhsLoginIds from user info endpoint$")

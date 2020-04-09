@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -51,6 +52,8 @@ namespace NHSOnline.Backend.MessagesApi
                         new CamelCasePropertyNamesContractResolver()
                 ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            SetupApiKeys(services);
+
             services.AddOptions();
             services.AddCorrelationId();
 
@@ -77,6 +80,14 @@ namespace NHSOnline.Backend.MessagesApi
                 Configuration.GetOrThrow("MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION", _logger);
 
             return new MongoConfiguration(connectionString, databaseName,  messagesCollectionName);
+        }
+
+        private void SetupApiKeys(IServiceCollection services)
+        {
+            var secureKeyValue = Configuration.GetOrThrow("NHSAPP_API_KEY", _logger);
+            var apiKeyConfig = new ApiKeyConfig(new[] { new SecureApiKey("ExternalService", secureKeyValue) });
+            services.AddSingleton<IApiKeyConfig>(apiKeyConfig);
+            services.AddSingleton<IGetApiKeyQuery, InMemoryGetApiKeyQuery>();
         }
 
         private static void ConfigureMvcOptions(MvcOptions options)
@@ -159,6 +170,9 @@ namespace NHSOnline.Backend.MessagesApi
                         RequireExpirationTime = true,
                         ValidateLifetime = true
                     };
+                })
+                .AddApiKeySupport(options =>
+                {
                 });
         }
 

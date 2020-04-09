@@ -1,11 +1,13 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.AspNet;
+using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.Support.Logging;
@@ -27,7 +29,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = ApiKeyAuthenticationOptions.DefaultScheme)]
         [Route("api/{nhsLoginId}/messages")]
         public async Task<IActionResult> Post
         (
@@ -56,6 +58,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("api/me/messages")]
         public async Task<IActionResult> Get([FromQuery] string sender = null, [FromQuery] bool summary = false)
         {
@@ -81,6 +84,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         }
 
         [HttpPatch]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("api/me/messages/{messageId}")]
         public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<Message> patchDocument, string messageId)
         {

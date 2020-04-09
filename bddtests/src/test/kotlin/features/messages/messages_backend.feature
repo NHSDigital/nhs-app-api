@@ -70,8 +70,12 @@ Feature: Messages Backend
 
   Scenario: An api user posting incomplete messages will receive a 400
     Given I am an api user wishing to post a message
-    When I post a message to the api
     Then an attempt to post incomplete messages will return a Bad Request error
+
+  Scenario: An api user posting messages without the api key will receive a 401
+    Given I am an api user wishing to post a message
+    When I post a message to the api without the api key
+    Then I receive a "Unauthorized" error
 
   Scenario: An api user can mark a message as read
     Given I am an api user wishing to mark a message as read

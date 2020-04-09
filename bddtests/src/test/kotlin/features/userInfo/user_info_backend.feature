@@ -77,3 +77,8 @@ Feature: User Info Backend
     Given I am an api user wishing to get a list of NhsLoginIds
     When I get user info details with ods code and nhs number
     Then I receive a "Bad Request" error
+
+  Scenario: An api user getting NhsLoginIds on the user info endpoint without the api key will receive a 401
+    Given I am an api user wishing to get a list of NhsLoginIds that are linked to a given nhs number
+    When I get user info details based on an nhs number without the api key
+    Then I receive a "Unauthorized" error

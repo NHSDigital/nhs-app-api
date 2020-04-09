@@ -80,6 +80,28 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             act.Should().Throw<ConfigurationNotValidException>()
                 .Which.Message.Should().Contain("USERINFO_MONGO_DATABASE_NAME");
         }
+        [TestMethod]
+        public void ConfigureServices_WhenNhsAppApiKeyIsNotProvided_ThrowsException()
+        {
+            // Arrange
+            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_COLLECTION"])
+                .Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_NAME"])
+                .Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");
+
+            // Act
+            Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
+
+            // Assert
+            act.Should().Throw<ConfigurationNotValidException>()
+                .Which.Message.Should().Contain("NHSAPP_API_KEY");
+        }
 
         [TestMethod]
         [DataRow(null)]
@@ -122,6 +144,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AUDIT_SINK_TYPE"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");
 
             var mockServiceCollection = _fixture.Create<Mock<IServiceCollection>>();
@@ -216,6 +239,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["AUDIT_SINK_TYPE"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");
         }
     }
