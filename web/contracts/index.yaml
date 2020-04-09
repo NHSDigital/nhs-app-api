@@ -3732,6 +3732,12 @@
                     im1MessagingEnabled: 
                       type: "boolean"
                       description: "Patient to Practice Messaging has been enabled at the practice level for the current user"
+                    proofLevel: 
+                      type: "string"
+                      description: "User's proof level"
+                      enum: 
+                        - "P5"
+                        - "P9"
           401: 
             description: "User session has expired."
           500: 
@@ -3794,6 +3800,12 @@
                         im1MessagingEnabled: 
                           type: "boolean"
                           description: "Patient to Practice Messaging has been enabled at the practice level for the current user"
+                        proofLevel: 
+                          type: "string"
+                          description: "User's proof level"
+                          enum: 
+                            - "P5"
+                            - "P9"
                     - 
                       type: "object"
                       properties: 

@@ -170,6 +170,12 @@ components:
         im1MessagingEnabled:
           type: boolean
           description: Patient to Practice Messaging has been enabled at the practice level for the current user
+        proofLevel:
+          type: string
+          description: User's proof level
+          enum:
+            - "P5"
+            - "P9"
     PostUserSessionResponse:
       allOf:
         - $ref: "#/components/schemas/UserSessionResponse"
