@@ -94,8 +94,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                         var coursesCount = new FilteringCounts
                         {
                             ReceivedCount = totalCourses,
-                            FilteredRemainingRepeatsCount = numberOfRepeatCourses,
-                            FilteredMaxAllowanceDiscardedCount = numberOfCoursesDiscarded,
+                            ReceivedRepeatsCount = numberOfRepeatCourses,
+                            ExcessRepeatsCount = numberOfCoursesDiscarded,
                             ReturnedCount = numberOfCoursesAfterFiltering
                         };
 

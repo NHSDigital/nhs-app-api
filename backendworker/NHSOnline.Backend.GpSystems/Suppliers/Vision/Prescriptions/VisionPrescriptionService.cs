@@ -215,8 +215,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             prescriptionHistory.Requests = prescriptionHistory.Requests.Take(prescriptionsToTake).ToList();
 
             prescriptionsCount.ReceivedCount = initialPrescriptionCount;
-            prescriptionsCount.FilteredRemainingRepeatsCount = numberOfPrescriptionsWithinDate;
-            prescriptionsCount.FilteredMaxAllowanceDiscardedCount = numberOfPrescriptionsDiscarded;
+            prescriptionsCount.ReceivedRepeatsCount = numberOfPrescriptionsWithinDate;
+            prescriptionsCount.ExcessRepeatsCount = numberOfPrescriptionsDiscarded;
             prescriptionsCount.ReturnedCount = prescriptionHistory.Requests.Count;
         }
     }

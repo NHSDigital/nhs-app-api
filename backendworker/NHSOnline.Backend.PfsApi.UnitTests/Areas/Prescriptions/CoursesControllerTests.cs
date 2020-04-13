@@ -56,8 +56,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var result = new GetCoursesResult.Success(_courseListResponse, new FilteringCounts
             {
                 ReceivedCount = MockNumberOfCourses,
-                FilteredRemainingRepeatsCount = MockNumberOfCourses,
-                FilteredMaxAllowanceDiscardedCount = MockNumberOfCourses,
+                ReceivedRepeatsCount = MockNumberOfCourses,
+                ExcessRepeatsCount = MockNumberOfCourses,
                 ReturnedCount = MockNumberOfCourses
             });
 
@@ -171,8 +171,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var result = new GetCoursesResult.Success(_courseListResponse, new FilteringCounts
             {
                 ReceivedCount = MockNumberOfCourses,
-                FilteredRemainingRepeatsCount = MockNumberOfCourses,
-                FilteredMaxAllowanceDiscardedCount = MockNumberOfCourses,
+                ReceivedRepeatsCount = MockNumberOfCourses,
+                ExcessRepeatsCount = MockNumberOfCourses,
                 ReturnedCount = MockNumberOfCourses
             });
             _mockCourseService.Setup(x => x.GetCourses(

@@ -4,9 +4,9 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions.Models
     {
         public int ReceivedCount { get; set; }
             
-        public int FilteredRemainingRepeatsCount { get; set; }
+        public int ReceivedRepeatsCount { get; set; }
             
-        public int FilteredMaxAllowanceDiscardedCount { get; set; }
+        public int ExcessRepeatsCount { get; set; }
 
         public int ReturnedCount { get; set; }
     }

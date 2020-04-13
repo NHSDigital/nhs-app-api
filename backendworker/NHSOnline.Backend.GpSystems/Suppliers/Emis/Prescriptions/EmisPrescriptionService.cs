@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Prescriptions For User");
 
-                EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
+                var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
 
                 var prescriptionsResponse = await _emisClient.PrescriptionsGet(emisRequestParameters, fromDate, toDate);
 
@@ -53,8 +53,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 {
                     try
                     {
-                        var (prescriptionListResponseFiltered, prescriptionsCount) =
-                            GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
+
+                        var (prescriptionListResponseFiltered, prescriptionsCount) = 
+                            GetPrescriptionsWithRepeatCourses(prescriptionsResponse.Body);
 
 
                         _logger.LogDebug($"Mapping successful response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
@@ -107,12 +108,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             }
         }
 
-        private (PrescriptionRequestsGetResponse prescriptionListResponseFiltered, FilteringCounts prescriptionsCount)
-            GetPrescriptionsWithoutRepeatCourses(PrescriptionRequestsGetResponse prescriptionsResponse)
+        private (PrescriptionRequestsGetResponse prescriptionListResponseFiltered, FilteringCounts prescriptionsCount) 
+            GetPrescriptionsWithRepeatCourses(PrescriptionRequestsGetResponse prescriptionsResponse)
         {
             var prescriptionsReceivedCount = prescriptionsResponse.PrescriptionRequests.Count();
             var totalCoursesRunningTotal = 0;
-            var numberOfPrescriptionsDiscarded = 0;
+            var discardedPrescriptionsWithRepeatsCount = 0;
+            var prescriptionsWithoutRepeatsCount = 0;
 
             var repeatCourses = prescriptionsResponse.MedicationCourses
                                                      .Where(x => x.PrescriptionType == PrescriptionType.Repeat)
@@ -122,19 +124,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                                                     .Distinct()
                                                     .ToDictionary(x => x);
 
-            var filteredPrescriptionsCount = 0;
-
-            var prescriptionsWithRepeatCourses = new List<PrescriptionRequest>();
+            var prescriptionsToReturn = new List<PrescriptionRequest>();
 
             foreach (var prescription in prescriptionsResponse.PrescriptionRequests.OrderByDescending(x =>
                 x.DateRequested))
             {
-                if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit)
-                {
-                    numberOfPrescriptionsDiscarded = prescriptionsReceivedCount - totalCoursesRunningTotal;
-                    break;
-                }
-
                 var requestedMedicationCourses = prescription.RequestedMedicationCourses.ToList();
 
                 var repeatCoursesInPrescription =
@@ -144,31 +138,34 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
                 if (repeatCoursesInPrescription.Count != 0)
                 {
-                    prescription.RequestedMedicationCourses = repeatCoursesInPrescription;
-                    prescriptionsWithRepeatCourses.Add(prescription);
+                    if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit)
+                    {
+                        discardedPrescriptionsWithRepeatsCount++;
+                    }
+                    else
+                    {
+                        prescription.RequestedMedicationCourses = repeatCoursesInPrescription;
+                        prescriptionsToReturn.Add(prescription);
+                        totalCoursesRunningTotal += repeatCoursesInPrescription.Count;
+                    }
                 }
                 else
                 {
-                    filteredPrescriptionsCount += 1;
+                    prescriptionsWithoutRepeatsCount++;
                 }
-
-                totalCoursesRunningTotal += repeatCoursesInPrescription.Count;
             }
-
-            var prescriptionsWithRepeatableCourses = prescriptionsReceivedCount - filteredPrescriptionsCount;
-            var prescriptionsReturnedToUserCount = prescriptionsWithRepeatCourses.Count;
 
             var prescriptionsCount = new FilteringCounts
             {
                 ReceivedCount = prescriptionsReceivedCount,
-                FilteredRemainingRepeatsCount = prescriptionsWithRepeatableCourses,
-                FilteredMaxAllowanceDiscardedCount = numberOfPrescriptionsDiscarded,
-                ReturnedCount = prescriptionsReturnedToUserCount
+                ReceivedRepeatsCount = prescriptionsReceivedCount - prescriptionsWithoutRepeatsCount,
+                ExcessRepeatsCount = discardedPrescriptionsWithRepeatsCount,
+                ReturnedCount = prescriptionsToReturn.Count
             };
 
             var prescriptionListResponseFiltered = new PrescriptionRequestsGetResponse
             {
-                PrescriptionRequests = prescriptionsWithRepeatCourses,
+                PrescriptionRequests = prescriptionsToReturn,
                 MedicationCourses = repeatCourses,
             };
 
@@ -177,7 +174,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
         public async Task<OrderPrescriptionResult> OrderPrescription(GpLinkedAccountModel gpLinkedAccountModel, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
+            var emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
 
             var postRequest = new PrescriptionRequestsPost
             {

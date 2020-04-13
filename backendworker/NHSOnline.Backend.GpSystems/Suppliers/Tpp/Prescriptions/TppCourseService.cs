@@ -74,8 +74,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                         var coursesCount = new FilteringCounts
                         {
                             ReceivedCount = totalCourses,
-                            FilteredRemainingRepeatsCount = numberOfRequestableRepeatCourses,
-                            FilteredMaxAllowanceDiscardedCount = numberOfCoursesDiscarded,
+                            ReceivedRepeatsCount = numberOfRequestableRepeatCourses,
+                            ExcessRepeatsCount = numberOfCoursesDiscarded,
                             ReturnedCount = numberOfCoursesAfterFiltering
                         };
 

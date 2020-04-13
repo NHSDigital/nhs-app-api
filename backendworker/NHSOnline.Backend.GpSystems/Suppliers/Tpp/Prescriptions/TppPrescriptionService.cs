@@ -69,8 +69,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                     var prescriptionsCount = new FilteringCounts
                     {
                         ReceivedCount = medicationsToBeFiltered.Count,
-                        FilteredRemainingRepeatsCount = medicationsToBeFiltered.Count,
-                        FilteredMaxAllowanceDiscardedCount = numberOfPrescriptionsDiscarded,
+                        ReceivedRepeatsCount = medicationsToBeFiltered.Count,
+                        ExcessRepeatsCount = numberOfPrescriptionsDiscarded,
                         ReturnedCount = medicationListFiltered.Count
                     };
 

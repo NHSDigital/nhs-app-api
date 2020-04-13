@@ -228,8 +228,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(Task.FromResult((GetPrescriptionsResult) new GetPrescriptionsResult.Success(response, new FilteringCounts
                 {
                     ReceivedCount = MockNumberOfCourses,
-                    FilteredRemainingRepeatsCount = MockNumberOfCourses,
-                    FilteredMaxAllowanceDiscardedCount = MockNumberOfCourses,
+                    ReceivedRepeatsCount = MockNumberOfCourses,
+                    ExcessRepeatsCount = MockNumberOfCourses,
                     ReturnedCount = MockNumberOfCourses
                 })));
             _mockPrescriptionValidationService.Setup(x =>

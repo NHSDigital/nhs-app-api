@@ -182,9 +182,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
                     { "Prescriptions Received", 
                         result.ReceivedCount.ToString(CultureInfo.InvariantCulture) },
                     { "Prescriptions remaining after filtering out non-repeats", 
-                        result.FilteredRemainingRepeatsCount.ToString(CultureInfo.InvariantCulture) },
+                        result.ReceivedRepeatsCount.ToString(CultureInfo.InvariantCulture) },
                     { "Prescriptions filtered out for exceeding maximum allowance", 
-                        result.FilteredMaxAllowanceDiscardedCount.ToString(CultureInfo.InvariantCulture) },
+                        result.ExcessRepeatsCount.ToString(CultureInfo.InvariantCulture) },
                     { "Prescriptions Returned to user", 
                         result.ReturnedCount.ToString(CultureInfo.InvariantCulture) }
                 };

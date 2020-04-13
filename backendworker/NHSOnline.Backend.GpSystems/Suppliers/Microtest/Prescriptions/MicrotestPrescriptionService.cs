@@ -172,8 +172,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions
             var prescriptionsCount = new FilteringCounts
             {
                 ReceivedCount = prescriptionsResponse.Courses.Count(),
-                FilteredRemainingRepeatsCount = repeatCourses.Count,
-                FilteredMaxAllowanceDiscardedCount = numberOfPrescriptionsDiscarded,
+                ReceivedRepeatsCount = repeatCourses.Count,
+                ExcessRepeatsCount = numberOfPrescriptionsDiscarded,
                 ReturnedCount = prescriptionsReturnedToUserCount
             };
 
