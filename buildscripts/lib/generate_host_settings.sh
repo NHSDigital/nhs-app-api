@@ -51,7 +51,7 @@ function generate_launch_settings() {
     # Add quotes around key and value
     echo 's/^[[:space:]]*\(.*\): \(.*\)$/        "\1": "\2"/'
 
-    echo "s#/app/bddcerts/#$REPO_ROOT/bddtests/src/main/kotlin/mocking/dummycerts#"
+    echo "s#/app/bddcerts#$REPO_ROOT/bddtests/src/main/kotlin/mocking/dummycerts#"
   } >> "$SED_SCRIPT"
 
   local IFS=$'\n'

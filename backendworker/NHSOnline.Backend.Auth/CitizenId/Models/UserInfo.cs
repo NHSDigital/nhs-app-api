@@ -27,5 +27,8 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
 
         [JsonProperty(JwtRegisteredClaimNames.Birthdate)]
         public string Birthdate { get; set; }
+
+        [JsonProperty("identity_proofing_level")]
+        public string IdentityProofingLevel { get; set; }
     }
 }

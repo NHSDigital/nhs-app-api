@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages.Models;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
 {

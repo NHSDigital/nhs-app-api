@@ -1,8 +1,6 @@
 using System;
-using System.Globalization;
 using System.Xml.Serialization;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
-using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments
 {

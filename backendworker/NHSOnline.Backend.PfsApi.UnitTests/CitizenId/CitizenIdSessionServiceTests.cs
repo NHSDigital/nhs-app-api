@@ -67,15 +67,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
             var dateTimeNow = DateTime.Now;
 
-            var userProfile = new UserProfile
+            var userInfo = new Auth.CitizenId.Models.UserInfo
             {
-                AccessToken = _accessToken,
-                DateOfBirth = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
+                Birthdate = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
                 Im1ConnectionToken = _im1Token,
                 NhsNumber = NhsNumber,
-                OdsCode = _odsCode,
-                FamilyName = _familyName
+                GpIntegrationCredentials = new GpIntegrationCredentials { OdsCode = _odsCode },
+                FamilyName = _familyName,
+                IdentityProofingLevel = "P9"
+
             };
+            var userProfile = new UserProfile(userInfo,  _accessToken);
 
             _mockCitizenIdService
                 .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -98,7 +100,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     AccessToken = _accessToken,
                     DateOfBirth = dateTimeNow.Date,
                     FamilyName = _familyName,
-                    IdTokenJti = _idTokenJti
+                    IdTokenJti = _idTokenJti,
+                    ProofLevel = ProofLevel.P9
                 },
                 StatusCode = 200
             };
@@ -148,14 +151,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
             var dateTimeNow = DateTime.Now;
 
-            var userProfile = new UserProfile
+            var userInfo = new Auth.CitizenId.Models.UserInfo
             {
-                AccessToken = _accessToken,
-                DateOfBirth = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
+                Birthdate = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
                 Im1ConnectionToken = _im1Token,
                 NhsNumber = NhsNumber,
-                OdsCode = _odsCode
+                GpIntegrationCredentials = new GpIntegrationCredentials { OdsCode = _odsCode },
+                FamilyName = _familyName
+
             };
+            var userProfile = new UserProfile(userInfo, _accessToken);
 
             _mockCitizenIdService
                 .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -183,15 +188,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         [TestMethod]
         public async Task Create_UserProfileHasNoDateOfBirth_ReturnsStatus465FailedAgeRequirement()
         {
-            // Arrange
-            var userProfile = new UserProfile
+            var userInfo = new Auth.CitizenId.Models.UserInfo
             {
-                AccessToken = _accessToken,
-                DateOfBirth = null,
+                Birthdate = null,
                 Im1ConnectionToken = _im1Token,
                 NhsNumber = NhsNumber,
-                OdsCode = _odsCode
+                GpIntegrationCredentials = new GpIntegrationCredentials { OdsCode = _odsCode },
+                FamilyName = _familyName
             };
+            var userProfile = new UserProfile(userInfo, _accessToken);
 
             _mockCitizenIdService
                 .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -226,14 +231,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
             var dateTimeNow = DateTime.Now;
 
-            var userProfile = new UserProfile
+            var userInfo = new Auth.CitizenId.Models.UserInfo
             {
-                AccessToken = _accessToken,
-                DateOfBirth = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
+                Birthdate = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
                 Im1ConnectionToken = _im1Token,
                 NhsNumber = null,
-                OdsCode = _odsCode
+                GpIntegrationCredentials = new GpIntegrationCredentials { OdsCode = _odsCode },
+                FamilyName = _familyName
+
             };
+            var userProfile = new UserProfile(userInfo, _accessToken);
 
             _mockCitizenIdService
                 .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))

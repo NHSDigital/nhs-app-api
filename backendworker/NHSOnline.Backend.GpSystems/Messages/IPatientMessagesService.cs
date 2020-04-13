@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.Support;
 

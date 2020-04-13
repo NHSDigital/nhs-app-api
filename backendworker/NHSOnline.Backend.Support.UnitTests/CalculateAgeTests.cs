@@ -1,7 +1,6 @@
 using System;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 
 namespace NHSOnline.Backend.Support.UnitTests
 {

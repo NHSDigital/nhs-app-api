@@ -10,7 +10,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Service;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi
 {

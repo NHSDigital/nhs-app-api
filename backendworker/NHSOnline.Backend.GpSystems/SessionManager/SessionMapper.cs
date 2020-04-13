@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
         public UserSession Map(HttpContext context,  GpUserSession gpUserSession, GpSessionManagerCitizenIdUserSession citizenIdUserSession, string im1ConnectionToken)
         {
-            return new UserSession()
+            return new UserSession
             {
                 CsrfToken = _antiforgery.GetTokens(context).RequestToken,
                 GpUserSession = gpUserSession,
@@ -31,7 +31,8 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                     AccessToken = citizenIdUserSession.AccessToken,
                     DateOfBirth = citizenIdUserSession.DateOfBirth,
                     FamilyName = citizenIdUserSession.FamilyName,
-                    IdTokenJti = citizenIdUserSession.IdTokenJti
+                    IdTokenJti = citizenIdUserSession.IdTokenJti,
+                    ProofLevel = citizenIdUserSession.ProofLevel
                 },
                 OrganDonationSessionId = Guid.NewGuid(),
                 Im1ConnectionToken = im1ConnectionToken

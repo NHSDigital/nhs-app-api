@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
-using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {

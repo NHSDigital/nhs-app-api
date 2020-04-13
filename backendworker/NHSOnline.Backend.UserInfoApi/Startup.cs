@@ -1,4 +1,3 @@
-using System;
 using System.Security.Cryptography;
 using CorrelationId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

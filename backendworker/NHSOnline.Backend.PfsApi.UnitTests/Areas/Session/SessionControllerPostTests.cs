@@ -11,7 +11,6 @@ using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents.SystemFunctions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -92,14 +91,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
-            _userProfile = _fixture.Freeze<UserProfile>();
-            _userProfile.DateOfBirth = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture);
+            _im1ConnectionToken = _fixture.Create<string>();
             _connectionToken = _fixture.Create<EmisConnectionToken>();
-            _userProfile.Im1ConnectionToken = _connectionToken.SerializeJson();
             _name = _fixture.Create<string>();
             _sessionTimeoutSeconds = SessionTimeoutMinutes * 60;
-            _im1ConnectionToken = _fixture.Create<string>();
+
+            _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
+            var userInfo = _fixture.Freeze<Auth.CitizenId.Models.UserInfo>();
+            userInfo.Birthdate = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture);
+            userInfo.Im1ConnectionToken = _connectionToken.SerializeJson();
+            _userProfile = _fixture.Freeze<UserProfile>();
 
             _apiSessionId = _fixture.Create<string>();
 
@@ -651,8 +652,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
 
-      [TestMethod]
-      public async Task ML_Post_HappyPath_ReturnsUsersSessionResponse()
+        [TestMethod]
+        public async Task ML_Post_HappyPath_ReturnsUsersSessionResponse()
         {
             _sessionConfigSettings.ProxyEnabled = true;
 
@@ -741,8 +742,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_Im1ConnectionTokenIsAGuid_DoesNotAttemptToDeleteFromCache()
         {
             // Arrange
-            _userProfile.Im1ConnectionToken = _fixture.Create<Guid>().ToString();
-
+            _fixture.Create<Auth.CitizenId.Models.UserInfo>().Im1ConnectionToken = _fixture.Create<Guid>().ToString();
 
             _mockCitizenIdSessionService
                 .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier,

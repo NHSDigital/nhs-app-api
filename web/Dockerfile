@@ -29,7 +29,7 @@ RUN sed -i "s/.*COMMIT_ID:.*/    COMMIT_ID: '$COMMIT_ID',/" nuxt.config.js && \
     sed -i "s/.*const APP_VERSION_TAG.*/const APP_VERSION_TAG = '$APP_VERSION_TAG';/" nuxt.config.js; \
   fi
 
-RUN npm run build && ls -la
+RUN npm run build
 
 # Tests
 FROM build_dependencies AS test

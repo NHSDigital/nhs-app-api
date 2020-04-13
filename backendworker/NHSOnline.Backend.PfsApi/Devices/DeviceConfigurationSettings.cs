@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Settings;
 

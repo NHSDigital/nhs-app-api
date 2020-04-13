@@ -1,6 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System;
 
 namespace NHSOnline.Backend.Support
 {
@@ -18,8 +16,5 @@ namespace NHSOnline.Backend.Support
         public Guid OrganDonationSessionId { get; set; }
 
         public string Im1ConnectionToken { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter), false)]
-        public ProofLevel ProofLevel { get; set; } = ProofLevel.P9;
     }
 }

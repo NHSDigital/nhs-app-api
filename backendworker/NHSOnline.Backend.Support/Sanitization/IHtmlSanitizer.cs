@@ -1,5 +1,3 @@
-﻿using System.Collections.Generic;
-
 namespace NHSOnline.Backend.Support.Sanitization
 {
     public interface IHtmlSanitizer

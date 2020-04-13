@@ -4,14 +4,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using RichardSzalay.MockHttp;
-using NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client;
 using System.Xml.Linq;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client

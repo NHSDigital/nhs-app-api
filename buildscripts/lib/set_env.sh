@@ -25,4 +25,8 @@ export MESSAGESAPI_LAUNCH_SETTINGS=backendworker/NHSOnline.Backend.MessagesApi/P
 export MESSAGESAPI_SERVICE_NAME=messages.local.bitraft.io
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1; pwd)"
+if [[ $(uname -s) =~ ^MING.* ]]; then
+  REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1; pwd -W)"
+fi
+
 export REPO_ROOT

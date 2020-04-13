@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
 
 namespace NHSOnline.Backend.GpSystems.Messages.Models
 {

@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
-using Org.BouncyCastle.Asn1.X509;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments
 {

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;

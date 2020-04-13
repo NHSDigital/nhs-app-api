@@ -3,7 +3,7 @@ using System;
 
 namespace NHSOnline.Backend.PfsApi.CitizenId
 {
-    public class CitizenIdSessionResult
+    public sealed class CitizenIdSessionResult
     {
         public int StatusCode { get; set; }
         public string OdsCode { get; set; }

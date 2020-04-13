@@ -147,15 +147,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
                 };
             }
 
-            var userProfile = new UserProfile
-            {
-                NhsNumber = userInfo.Body.NhsNumber,
-                OdsCode = userInfo.Body.GpIntegrationCredentials.OdsCode,
-                Im1ConnectionToken = userInfo.Body.Im1ConnectionToken,
-                FamilyName = userInfo.Body.FamilyName,
-                DateOfBirth = userInfo.Body.Birthdate,
-                AccessToken = accessToken
-            };
+            var userProfile = new UserProfile(userInfo.Body, accessToken);
 
             return new GetUserProfileResult
             {

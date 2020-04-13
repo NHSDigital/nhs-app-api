@@ -208,7 +208,7 @@
             },
             "requiresDetailsRequest": {
               "enum": ["true", "false"]
-            },
+            }
           },
           "required": [ "isEnabled", "canDeleteMessages", "canUpdateReadStatus", "requiresDetailsRequest"]
         },

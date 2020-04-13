@@ -1,9 +1,9 @@
 using System;
+using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.Support
+namespace NHSOnline.Backend.GpSystems.SessionManager.Model
 {
-    [Serializable]
-    public class CitizenIdUserSession
+    public class GpSessionManagerCitizenIdUserSession
     {
         public string AccessToken { get; set; }
         public string FamilyName { get; set; }

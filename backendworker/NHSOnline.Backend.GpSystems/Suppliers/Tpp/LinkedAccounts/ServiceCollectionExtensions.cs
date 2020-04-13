@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
 {

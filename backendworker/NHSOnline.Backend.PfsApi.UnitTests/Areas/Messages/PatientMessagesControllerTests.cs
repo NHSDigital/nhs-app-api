@@ -13,7 +13,6 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Messages;
 using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Messages;
 using NHSOnline.Backend.PfsApi.Areas.Messages;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;

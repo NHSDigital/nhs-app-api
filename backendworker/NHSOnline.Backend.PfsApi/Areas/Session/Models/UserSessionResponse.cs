@@ -1,4 +1,7 @@
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
 {
@@ -19,5 +22,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session.Models
         public string AccessToken { get; set; }
         
         public bool Im1MessagingEnabled { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter), false)]
+        public ProofLevel ProofLevel { get; set; }
     }
 }

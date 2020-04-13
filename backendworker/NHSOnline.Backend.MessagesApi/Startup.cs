@@ -1,4 +1,3 @@
-using System;
 using System.Security.Cryptography;
 using CorrelationId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,7 +20,6 @@ using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.Support.Repository;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.MessagesApi
 {

@@ -1,13 +1,11 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.SessionManager;
-using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 

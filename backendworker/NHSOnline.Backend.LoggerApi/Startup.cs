@@ -1,4 +1,3 @@
-using System;
 using CorrelationId;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -16,7 +15,6 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Middleware;
-using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.LoggerApi
 {

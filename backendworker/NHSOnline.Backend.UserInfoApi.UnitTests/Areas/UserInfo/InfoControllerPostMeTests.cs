@@ -139,15 +139,16 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
 
         private void MockUserProfileWithOdsCode(string odsCode)
         {
-            var userProfile = _fixture.Freeze<Mock<UserProfile>>();
-            userProfile.Object.OdsCode = odsCode;
+            var userInfo = _fixture.Freeze<Auth.CitizenId.Models.UserInfo>();
+            userInfo.GpIntegrationCredentials.OdsCode = odsCode;
+            var userProfile = new UserProfile(userInfo, _fixture.Create<string>());
 
             _mockCitizenIdService
                 .Setup(x => x.GetUserProfile(It.IsAny<string>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = HttpStatusCode.OK,
-                    UserProfile = Option.Some(userProfile.Object)
+                    UserProfile = Option.Some(userProfile)
                 });
 
         }

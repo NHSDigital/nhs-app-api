@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
@@ -63,11 +64,17 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                 var nhsNumberFormatted = cidUserProfile.NhsNumber.FormatToNhsNumber();
                 if (string.IsNullOrEmpty(nhsNumberFormatted))
                 {
-                    _logger.LogError($"No NHS number was found");
+                    _logger.LogError("No NHS number was found");
                     return new CitizenIdSessionResult
                     {
                         StatusCode = Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber
                     };
+                }
+
+                var proofLevel = TryParseIdentityProofingLevel(cidUserProfile.IdentityProofingLevel);
+                if (!proofLevel.HasValue)
+                {
+                    return new CitizenIdSessionResult { StatusCode = (int)HttpStatusCode.InternalServerError };
                 }
 
                 return new CitizenIdSessionResult
@@ -82,7 +89,8 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                         AccessToken = cidUserProfile.AccessToken,
                         FamilyName = cidUserProfile.FamilyName,
                         DateOfBirth = dateOfBirthParsed.Value,
-                        IdTokenJti = userProfileResult.IdTokenJti
+                        IdTokenJti = userProfileResult.IdTokenJti,
+                        ProofLevel = proofLevel.Value
                     }
                 };
             }
@@ -90,6 +98,23 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
             {
                 _logger.LogExit();
             }
+        }
+
+        private ProofLevel? TryParseIdentityProofingLevel(string identityProofingLevel)
+        {
+            // NHSO-9061: Remove once supported by Login
+            if (string.IsNullOrWhiteSpace(identityProofingLevel))
+            {
+                return ProofLevel.P9;
+            }
+
+            if (Enum.TryParse(typeof(ProofLevel), identityProofingLevel, true, out var proofLevel))
+            {
+                return (ProofLevel)proofLevel;
+            }
+
+            _logger.LogError($"Unsupported identity proofing level returned by Login: {identityProofingLevel}");
+            return null;
         }
 
         private DateTime? ValidateAndParseDateOfBirth(string dateOfBirth)

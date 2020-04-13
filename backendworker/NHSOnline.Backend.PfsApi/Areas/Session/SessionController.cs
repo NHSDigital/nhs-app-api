@@ -16,7 +16,6 @@ using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
-using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
@@ -232,13 +231,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     AccessToken = citizenIdSessionResult.Session.AccessToken,
                     FamilyName = citizenIdSessionResult.Session.FamilyName,
                     DateOfBirth = citizenIdSessionResult.Session.DateOfBirth,
-                    IdTokenJti =  citizenIdSessionResult.Session.IdTokenJti
+                    IdTokenJti =  citizenIdSessionResult.Session.IdTokenJti,
+                    ProofLevel = citizenIdSessionResult.Session.ProofLevel
                 }
             };
 
             var result = await _gpSessionManager.CreateSession(gpSystem, gpSessionMgrCitizenIdSessionResult);
 
-            if (!(result is CreateSessionResult.Success))
+            if (!(result is CreateSessionResult.Success successResult))
             {
                 var failureStatusCode = result.StatusCode;
 
@@ -260,9 +260,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 return objectResult;
             }
 
-            var successResult = result as CreateSessionResult.Success;
-
-            return await CreateSession(successResult?.UserSession, serviceJourneyRulesResultVisited, citizenIdSessionResult);
+            return await CreateSession(successResult.UserSession, serviceJourneyRulesResultVisited, citizenIdSessionResult);
         }
 
         private async Task<IActionResult> CreateSession(UserSession userSession,
@@ -441,6 +439,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             response.NhsNumber = userSession.GpUserSession.NhsNumber;
             response.AccessToken = userSession.CitizenIdUserSession.AccessToken;
             response.Im1MessagingEnabled = userSession.GpUserSession.Im1MessagingEnabled;
+            response.ProofLevel = userSession.CitizenIdUserSession.ProofLevel;
         }
     }
 }

@@ -9,7 +9,7 @@ using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
+namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
 {
     [TestClass]
     public class SessionMapperTests
@@ -54,6 +54,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 FamilyName = gpSessionManagerCitizenIdUserSession.FamilyName,
                 IdTokenJti = gpSessionManagerCitizenIdUserSession.IdTokenJti,
                 DateOfBirth = gpSessionManagerCitizenIdUserSession.DateOfBirth,
+                ProofLevel = gpSessionManagerCitizenIdUserSession.ProofLevel
             };
 
             var gpUserSession = _fixture.Create<GpUserSession>();
