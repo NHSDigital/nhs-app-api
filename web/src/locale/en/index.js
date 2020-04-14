@@ -2481,15 +2481,31 @@ export default {
   web: {
     home: {
       title: 'Access your NHS services',
+      bulletListDescription: 'Use this service to:',
       bullets: {
-        one: 'Book and manage your appointments at any time',
-        two: 'Order repeat prescriptions from wherever you are',
-        three: 'Check your symptoms and get instant advice on what to do',
-        four: 'Track your medication history, with secure access to your medical record',
+        one: 'book and manage appointments at your GP surgery',
+        two: 'order repeat prescriptions',
+        three: 'check symptoms and get instant advice',
+        four: 'view your medical record securely',
       },
       checkSymptoms: {
         title: 'How are you feeling right now?',
       },
+      beforeYouStartTitle: 'Before you start',
+      beforeYouStartBulletListDescription: 'To use this service you must be:',
+      beforeYouStartBullets: {
+        one: 'registered with a GP surgery in England',
+        two: 'aged 13 or over',
+      },
+      aged13To15InformationTitle: 'What to do if you\'re aged 13 to 15',
+      aged13To15Description: 'You\'ll need to contact your GP surgery first and request access to GP online services.',
+      otherServicesTitle: 'Other services you can use without logging in',
+      otherServicesBullets: {
+        one: 'Check if you have coronavirus symptoms',
+        two: 'Search conditions and treatments',
+        three: 'Use NHS 111 online to check if you need urgent help',
+      },
+      appStorePanelTitle: 'Get the NHS App on your smartphone or tablet',
     },
     sessionExpiry: {
       warningDurationInformation:

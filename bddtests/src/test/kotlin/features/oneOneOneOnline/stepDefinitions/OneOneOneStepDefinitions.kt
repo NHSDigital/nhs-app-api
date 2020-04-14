@@ -20,11 +20,6 @@ open class OneOneOneStepDefinitions {
     @Steps
     lateinit var navBar: NavigationSteps
 
-    @When("^I Check My Symptoms$")
-    open fun iCheckMySymptoms() {
-        login.loginPage.symptomsButton.click()
-    }
-
     @When("I press the A-Z symptoms header")
     fun iPressTheAtoZHelpHeader() {
         browser.storeCurrentTabCount()

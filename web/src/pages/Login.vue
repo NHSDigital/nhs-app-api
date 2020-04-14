@@ -1,13 +1,13 @@
 <template>
   <div id="maincontent" :class="dynamicStyle('loginMain')">
     <div>
-      <h2 class="nhsuk-u-margin-bottom-2">{{ $t('login.desc') }}</h2>
       <form ref="loginForm"
             :action="authoriseUrl"
             method="get">
         <input :value="redirectTo" type="hidden" :name="redirectName">
         <generic-button
           id="login-button"
+          class="nhsuk-u-margin-bottom-3"
           :button-classes="['nhsuk-login', 'nhsuk-body', 'nhsuk-button',
                             $store.state.device.isNativeApp
                               ?'button':'']"

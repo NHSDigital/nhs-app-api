@@ -3,42 +3,32 @@ Feature: Cookie Banner
 
   Cookie Banner displayed when logged-out, until the user has explicitly dismissed it
 
-  Scenario Outline: Cookie banner appears on the "non logged in" <target page> page, on the web with Javascript <js enabled?>, if not yet acknowledged
+  Scenario Outline: Cookie banner appears on the "non logged in" login page, on the web with Javascript <js enabled?>, if not yet acknowledged
     Given I have <js enabled?> javascript
-    When I am on the <target page> logged-out page
+    When I am on the login logged-out page
     Then I see the cookie banner
     When I click the link called 'cookies policy' with a url of 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy#manage'
     Then a new tab has been opened by the link
     Examples:
-      | target page         | js enabled? |
-      | login               | enabled     |
-      | check your symptoms | enabled     |
-      | login               | disabled    |
-      | check your symptoms | disabled    |
+      | js enabled? |
+      | enabled     |
+      | disabled    |
 
   @native
   @nativesmoketest
-  Scenario Outline: Cookie banner doesn't appear on the "non logged in" <target page> page, on the native app
-    When I am on the <target page> logged-out page
+  Scenario: Cookie banner doesn't appear on the "non logged in" login page, on the native app
+    Given I am using the native app user agent
+    When I am on the login logged-out page
     Then I do not see the cookie banner
-    Examples:
-      | target page         |
-      | login               |
-      | check your symptoms |
 
-  Scenario Outline: When the Cookie Banner is acknowledged on the <target page> web page with Javascript enabled, the banner no longer appears with a refresh but cookies will reappear when swapping page
+  Scenario: When the Cookie Banner is acknowledged on the login web page with Javascript enabled, the banner no longer appears with a refresh but cookies will reappear when swapping page
     Given I have enabled javascript
-    And I am on the <target page> logged-out page
+    And I am on the login logged-out page
     When I close the cookie banner
     And I refresh the page
     Then I do not see the cookie banner
     And pages will display the cookie banner
       | /login               |
-      | /check-your-symptoms |
-    Examples:
-      | target page         |
-      | login               |
-      | check your symptoms |
 
   Scenario Outline: Cookie Banner doesn't appear when logged in on web, when Javascript <js enabled?>
     Given I have <js enabled?> javascript

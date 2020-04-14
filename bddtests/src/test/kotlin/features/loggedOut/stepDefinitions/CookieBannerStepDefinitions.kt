@@ -58,15 +58,6 @@ class CookieBannerStepDefinitions {
         browserSteps.refreshPage()
     }
 
-    @When("^I am on the check your symptoms logged-out page$")
-    fun iAmOnTheCheckYourSymptomsLoggedOutPage(){
-        browserSteps.goToApp()
-        loginPage.symptomsButton.click()
-        checkMySymptomsPage.isConditionsHeaderVisible()
-        checkMySymptomsPage.isNhs111HeaderVisible()
-        checkMySymptomsPage.isCoronaHeaderVisible()
-    }
-
     @When("^I close the cookie banner$")
     fun iCloseTheCookieBanner() {
         cookieBanner.cookieBannerClose.click()

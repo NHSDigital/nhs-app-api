@@ -12,24 +12,23 @@ import pages.isVisible
 @DefaultUrl("http://web.local.bitraft.io:3000/login")
 class LoginPage : HybridPageObject() {
 
-    private val symptomsButtonHeading = HybridPageElement(
-            webDesktopLocator = "//h3[contains(text(), 'How are you feeling today?')]",
-            webMobileLocator = "//h3[contains(text(), 'How are you feeling today?')]",
-            androidLocator = "//h2[contains(text(), 'How are you feeling today?')]",
-            iOSLocator = "//h2[contains(text(), 'How are you feeling today?')]",
-            page = this
-    )
-
-    val symptomsButton = HybridPageElement(
-            webDesktopLocator = "//*[@id='btn_home_symptoms']",
-            webMobileLocator = "//*[@id='btn_home_symptoms']",
+    val downloadAppPanel = HybridPageElement(
+             webDesktopLocator = "//div[@data-id='app-panel']",
+            webMobileLocator = "//div[@data-id='app-panel']",
             androidLocator = null,
             page = this
     )
 
-    private val loginOrCreateAccountButtonHeading = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(), 'To access your NHS services')]",
-            webMobileLocator = "//h2[contains(text(), 'To access your NHS services')]",
+    val beforeYouStartDiv = HybridPageElement(
+            webDesktopLocator = "//div[@id='before-you-start']",
+            webMobileLocator = "//div@id='before-you-start']",
+            androidLocator = null,
+            page = this
+    )
+
+    val otherServicesDiv = HybridPageElement(
+            webDesktopLocator = "//div[@id='other-services']",
+            webMobileLocator = "//div@id='other-services']",
             androidLocator = null,
             page = this
     )
@@ -72,23 +71,23 @@ class LoginPage : HybridPageObject() {
     override fun shouldBeDisplayed() {
         super.shouldBeDisplayed()
 
-        assertTrue("Symptoms button header is not displayed correctly.",
-                symptomsButtonHeaderIsDisplayed())
-        assertTrue("Symptoms button is not displayed correctly.",
-                symptomsButtonIsDisplayed())
-        assertTrue("'Continue with NHS login' button header is not displayed correctly.",
-                loginOrCreateAccountButtonHeaderIsDisplayed())
+        assertTrue("Other Services information is not displayed correctly.",
+                otherServicesDivIsDisplayed())
+        assertTrue("Before you start information is not displayed correctly.",
+                beforeYouStartDivIsDisplayed())
+        assertTrue("Download app panel is not displayed correctly.",
+                downloadAppPanelIsDisplayed())
         assertTrue("'Continue with NHS login' button is not displayed correctly.",
                 loginOrCreateAccountButtonIsDisplayed())
     }
 
-    private fun symptomsButtonHeaderIsDisplayed() = symptomsButtonHeading.isDisplayed
-
-    private fun symptomsButtonIsDisplayed() = symptomsButton.isDisplayed
-
-    private fun loginOrCreateAccountButtonHeaderIsDisplayed() = loginOrCreateAccountButtonHeading.isDisplayed
-
     private fun loginOrCreateAccountButtonIsDisplayed() = loginOrCreateAccountButton.isDisplayed
+
+    private fun otherServicesDivIsDisplayed() = otherServicesDiv.isDisplayed
+
+    private fun beforeYouStartDivIsDisplayed() = beforeYouStartDiv.isDisplayed
+
+    private fun downloadAppPanelIsDisplayed() = downloadAppPanel.isDisplayed
 
     fun helpIconIsVisible() = helpIcon.isVisible
 
