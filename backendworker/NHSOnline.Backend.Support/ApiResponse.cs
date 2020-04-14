@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace NHSOnline.Backend.Support
         {
             if (!HasSuccessResponse)
             {
-                logger.LogWarning($"Request failed with status code {responseMessage.StatusCode}");
+                logger.LogWarning($"Request failed with status code {(int) responseMessage?.StatusCode}");
 
                 if (!FormatResponseIfUnsuccessful)
                 {

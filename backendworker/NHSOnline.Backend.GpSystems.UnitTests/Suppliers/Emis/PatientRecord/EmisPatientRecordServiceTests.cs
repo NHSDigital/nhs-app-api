@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using Moq;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
@@ -21,11 +24,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
     {
         private EmisPatientRecordService _systemUnderTest;
         private Mock<IEmisClient> _emisClient;
+        private Mock<IGetPatientDocumentTaskChecker> _getPatientDocumentTaskChecker;
         private EmisUserSession _emisUserSession;
         private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private IFixture _fixture;
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
+
+        private const string DocumentId = "1";
+        private const string DocumentType = "image/jpeg";
+        private const string DocumentName = "document";
 
         [TestInitialize]
         public void TestInitialize()
@@ -35,14 +43,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             _patientId = _emisUserSession.Id;
             _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _patientId);
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
+            _getPatientDocumentTaskChecker = _fixture.Freeze<Mock<IGetPatientDocumentTaskChecker>>();
             _sampleSuccessStatusCodes = new List<HttpStatusCode>
             {
                 HttpStatusCode.OK
             };
-            
+
             _systemUnderTest = _fixture.Create<EmisPatientRecordService>();
         }
-        
+
         [TestMethod]
         public async Task GetMyRecord_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromEmis()
         {
@@ -53,12 +62,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             var problemsResponse = _fixture.Create<MedicationRootObject>();
             var consultationsResponse = _fixture.Create<MedicationRootObject>();
             var documentsResponse = _fixture.Create<MedicationRootObject>();
-            
+
             _emisClient.Setup(x => x.MedicalRecordGet(
                     It.Is<EmisRequestParameters>(
                         e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
                              e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
-                             e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                             e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.Medication))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
@@ -67,7 +76,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
-            
+
             _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
                     e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
                          e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
@@ -80,11 +89,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
-            
+
             _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
                     e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
                          e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
-                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.Immunisations))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
@@ -93,11 +102,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
-            
+
             _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
                     e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
                          e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
-                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.TestResults))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
@@ -106,7 +115,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
-            
+
             _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
                     e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
                          e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
@@ -119,11 +128,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
-            
+
             _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
                     e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
                          e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
-                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.Consultations))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
@@ -136,7 +145,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             _emisClient.Setup(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
                     e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
                          e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
-                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                         e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                     RecordType.Documents))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalRecordGet, _sampleSuccessStatusCodes)
@@ -153,7 +162,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             _emisClient.Verify(x => x.MedicalRecordGet(It.Is<EmisRequestParameters>(
                 e => e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal) &&
                      e.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal) &&
-                     e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)), 
+                     e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)),
                 RecordType.Allergies));
 
             result.Should().BeAssignableTo<GetMyRecordResult.Success>()
@@ -161,56 +170,138 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         }
 
         [TestMethod]
-        public async Task GetPatientDocument_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromEmis()
+        public async Task GetPatientDocument_WhenMappedPatientDocumentIsValid_ReturnsSuccessful()
         {
+            var mappedPatientDocument = _fixture.Create<PatientDocument>();
 
-            var patientDocumentResponse = new IndividualDocument
-            {
-                CompressedEncodedDocumentContent =
-                    "H4sIAAAAAAAA/y1PX2+DIBz8QHtBsi7zFYtUWhGx/Eh5U1hqg6NN2mj1089ue7o/ucvlJOtRZ6Y3yfhod2HF4WFnsrjvMuVY9Z7Rj9YkvcV6dGwTK8x7hzUW2fMGgUsd3dQgHzuUk1rnlU7gqgDiykkN8PKICoKYl9aiOsXh0tHfbKHMM9dgVXOks97W42E5j34p3xUaiKGK1+GRl1QVX8zf27DJ1o6sQJ2OW2IFTQv/t5k1AwehYW7RLVrsUtm4zwP+/5OlV8+Su7xM+x9Ry9YU7AAAAA=="
-            };
-            _emisClient.Setup(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, "1", _emisUserSession.EndUserSessionId))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<IndividualDocument>(HttpStatusCode.OK, RequestsForSuccessOutcome.MedicalDocumentGet, _sampleSuccessStatusCodes)
-                    {
-                        Body = patientDocumentResponse,
-                        ExceptionErrorResponse = null,
-                        ErrorResponseBadRequest = null
-                    }));
-            
-            var result = await _systemUnderTest.GetPatientDocument(_gpLinkedAccountModel, "1", "img/jpeg", "example");
-            
-            _emisClient.Verify(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, "1", _emisUserSession.EndUserSessionId));
-            
-            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
-                .Subject.Response.Should().NotBeNull();
+            SetupGetDocumentForViewing(mappedPatientDocument);
 
+            var result = await _systemUnderTest.GetPatientDocument(_gpLinkedAccountModel, DocumentId, DocumentType, DocumentName);
+
+            _emisClient.Verify();
+            _getPatientDocumentTaskChecker.Verify();
+
+            var value = result.Should().BeAssignableTo<GetPatientDocumentResult.Success>();
+            value.Subject.Response.Should().NotBeNull();
+            value.Subject.Response.Should().Be(mappedPatientDocument);
         }
-        
+
         [TestMethod]
-        public async Task GetPatientDocument_ReturnsBadGateway_WhenUnsuccessfulResponseFromEmis()
+        public async Task GetPatientDocument_WhenMappedPatientDocumentHasErrored_ReturnsBadGateway()
         {
+            var mappedPatientDocument = _fixture.Create<PatientDocument>();
+            mappedPatientDocument.HasErrored = true;
 
-            var patientDocumentResponse = new IndividualDocument
-            {
-                CompressedEncodedDocumentContent =
-                    "H4sIAAAAAAAA/y1PX2+DIBz8QHtBsi7zFYtUWhGx/Eh5U1hqg6NN2mj1089ue7o/ucvlJOtRZ6Y3yfhod2HF4WFnsrjvMuVY9Z7Rj9YkvcV6dGwTK8x7hzUW2fMGgUsd3dQgHzuUk1rnlU7gqgDiykkN8PKICoKYl9aiOsXh0tHfbKHMM9dgVXOks97W42E5j34p3xUaiKGK1+GRl1QVX8zf27DJ1o6sQJ2OW2IFTQv/t5k1AwehYW7RLVrsUtm4zwP+/5OlV8+Su7xM+x9Ry9YU7AAAAA=="
-            };
-            _emisClient.Setup(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, "1", _emisUserSession.EndUserSessionId))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<IndividualDocument>(HttpStatusCode.BadRequest, RequestsForSuccessOutcome.MedicalDocumentGet, _sampleSuccessStatusCodes)
-                    {
-                        Body = patientDocumentResponse,
-                        ExceptionErrorResponse = null,
-                        ErrorResponseBadRequest = null
-                    }));
-            
-            var result = await _systemUnderTest.GetPatientDocument(_gpLinkedAccountModel, "1", "img/jpeg", "example");
-            
-            _emisClient.Verify(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, "1", _emisUserSession.EndUserSessionId));
-            
+            SetupGetDocumentForViewing(mappedPatientDocument);
+
+            var result = await _systemUnderTest.GetPatientDocument(_gpLinkedAccountModel, DocumentId, DocumentType, DocumentName);
+
+            _emisClient.Verify();
+            _getPatientDocumentTaskChecker.Verify();
+
             result.Should().BeAssignableTo<GetPatientDocumentResult.BadGateway>();
+        }
 
+        [TestMethod]
+        public async Task GetPatientDocumentForDownload_WhenMappedFileContentResultIsValid_ReturnsSuccessful()
+        {
+            var mappedFileContentResult = new FileContentResult(_fixture.Create<byte[]>(), "img/jpeg");
+
+            SetupGetDocumentForDownload(mappedFileContentResult);
+
+            var result = await _systemUnderTest.GetPatientDocumentForDownload(_gpLinkedAccountModel, DocumentId, DocumentType, DocumentName);
+
+            _emisClient.Verify();
+            _getPatientDocumentTaskChecker.Verify();
+
+            var value = result.Should().BeAssignableTo<GetPatientDocumentDownloadResult.Success>();
+            value.Subject.Response.Should().NotBeNull();
+            value.Subject.Response.Should().Be(mappedFileContentResult);
+        }
+
+        [TestMethod]
+        public async Task GetPatientDocumentForDownload_WhenMappedFileContentResultIsNull_ReturnsBadGateway()
+        {
+            SetupGetDocumentForDownload(null);
+
+            var result = await _systemUnderTest.GetPatientDocumentForDownload(_gpLinkedAccountModel, DocumentId, DocumentType, DocumentName);
+
+            _emisClient.Verify();
+            _getPatientDocumentTaskChecker.Verify();
+
+            result.Should().BeAssignableTo<GetPatientDocumentDownloadResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task GetPatientDocument_ForViewOrDownload_WhenMedicalDocumentGetThrowsHttpException_ReturnsBadGateway()
+        {
+            SetupEmisClientMedicalDocumentGetWithException(new HttpRequestException());
+
+            var viewResult = await _systemUnderTest.GetPatientDocument(_gpLinkedAccountModel, DocumentId, DocumentType, DocumentName);
+            var downloadResult = await _systemUnderTest.GetPatientDocumentForDownload(_gpLinkedAccountModel, DocumentId, DocumentType, DocumentName);
+
+            _emisClient.Verify();
+
+            viewResult.Should().BeAssignableTo<GetPatientDocumentResult.BadGateway>();
+            downloadResult.Should().BeAssignableTo<GetPatientDocumentDownloadResult.BadGateway>();
+        }
+
+        private void SetupGetDocumentForViewing(PatientDocument mappedPatientDocument)
+        {
+            var individualDocumentResponse =
+                new EmisClient.EmisApiObjectResponse<IndividualDocument>(
+                    HttpStatusCode.OK,
+                    RequestsForSuccessOutcome.MedicalDocumentGet,
+                    _sampleSuccessStatusCodes)
+                {
+                    Body = _fixture.Create<IndividualDocument>(),
+                    ExceptionErrorResponse = null,
+                    ErrorResponseBadRequest = null
+                };
+
+            SetupEmisClientMedicalDocumentGetWithResponse(individualDocumentResponse);
+
+            _getPatientDocumentTaskChecker
+                .Setup(c => c.CheckForViewing(individualDocumentResponse, DocumentType, DocumentName))
+                .Returns(mappedPatientDocument)
+                .Verifiable();
+        }
+
+        private void SetupGetDocumentForDownload(FileContentResult mappedFileContentResult)
+        {
+            var individualDocumentResponse =
+                new EmisClient.EmisApiObjectResponse<IndividualDocument>(
+                    HttpStatusCode.OK,
+                    RequestsForSuccessOutcome.MedicalDocumentGet,
+                    _sampleSuccessStatusCodes)
+                {
+                    Body = _fixture.Create<IndividualDocument>(),
+                    ExceptionErrorResponse = null,
+                    ErrorResponseBadRequest = null
+                };
+
+            SetupEmisClientMedicalDocumentGetWithResponse(individualDocumentResponse);
+
+            _getPatientDocumentTaskChecker
+                .Setup(c => c.CheckForDownload(individualDocumentResponse, DocumentType, DocumentName))
+                .Returns(mappedFileContentResult)
+                .Verifiable();
+        }
+
+        private void SetupEmisClientMedicalDocumentGetWithResponse(EmisClient.EmisApiObjectResponse<IndividualDocument> response)
+        {
+            _emisClient
+                .Setup(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, DocumentId, _emisUserSession.EndUserSessionId))
+                .ReturnsAsync(response)
+                .Verifiable();
+        }
+
+        private void SetupEmisClientMedicalDocumentGetWithException<T>(T e) where T: Exception
+        {
+            _emisClient
+                .Setup(x => x.MedicalDocumentGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, DocumentId, _emisUserSession.EndUserSessionId))
+                .Throws(e)
+                .Verifiable();
         }
     }
 }

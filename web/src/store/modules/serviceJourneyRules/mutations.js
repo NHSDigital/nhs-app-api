@@ -1,8 +1,8 @@
 import mapKeys from 'lodash/fp/mapKeys';
-import { initialState,
-  INIT,
-  SET_RULES,
-} from './mutation-types';
+import { mutationNames } from './constants';
+import { initialState } from './mutation-types';
+
+const { INIT, SET_RULES } = mutationNames;
 
 export default {
   [INIT](state) {

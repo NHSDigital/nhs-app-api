@@ -3,8 +3,13 @@ package mocking.data.myrecord
 import mocking.tpp.models.RequestBinaryDataReply
 
 object TppDocumentData {
+    fun getDocumentData(documentType: String? = null): RequestBinaryDataReply {
+        val dataReply = RequestBinaryDataReply()
 
-    fun getDefaultDocumentData(): RequestBinaryDataReply {
-        return RequestBinaryDataReply()
+        if (documentType != null) {
+            dataReply.event.fileType = documentType
+        }
+
+        return dataReply
     }
 }

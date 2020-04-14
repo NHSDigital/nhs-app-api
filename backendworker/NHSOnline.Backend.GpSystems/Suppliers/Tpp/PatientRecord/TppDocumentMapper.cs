@@ -1,5 +1,8 @@
 using System;
 using System.Globalization;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
 using NHSOnline.Backend.Support;
@@ -9,55 +12,111 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
     public interface ITppDocumentMapper
     {
         PatientDocument Map(RequestBinaryDataReply requestBinaryDataReply);
+        FileContentResult MapForDownload(RequestBinaryDataReply requestBinaryDataReply, string documentName);
     }
 
     public class TppDocumentMapper : ITppDocumentMapper
     {
+        private readonly ILogger<ITppDocumentMapper> _logger;
+
+        public TppDocumentMapper(ILogger<ITppDocumentMapper> logger)
+        {
+            _logger = logger;
+        }
+
         public PatientDocument Map(RequestBinaryDataReply requestBinaryDataReply)
         {
-
-            if (requestBinaryDataReply == null)
+            if (requestBinaryDataReply is null)
             {
                 throw new ArgumentNullException(nameof(requestBinaryDataReply));
             }
 
-            var binaryData = requestBinaryDataReply.BinaryData.BinaryDataPage.BinaryData;
-            var fileType = requestBinaryDataReply.BinaryData.FileType;
-            var type = MapFileTypeToDownloadType(fileType);
+            var type = MapFileTypeToDownloadType(requestBinaryDataReply.BinaryData.FileType);
 
-            if (!Constants.FileConstants.FileTypes.TppWhiteListTypes.Contains(type))
+            var isViewable = Constants.FileConstants.FileTypes.TppViewableWhiteListTypes.Contains(
+                type, StringComparer.OrdinalIgnoreCase);
+            var isDownloadable = Constants.FileConstants.FileTypes.WhiteListTypes.Contains(
+                type, StringComparer.OrdinalIgnoreCase);
+
+            if (!isViewable && !isDownloadable)
             {
-                return new PatientDocument
-                {
-                    HasErrored = true,
-                };
+                _logger.LogWarning($"Unsupported file type: {type}");
             }
 
-            var mimeType = Constants.FileConstants.FileTypes.DocumentMimeTypes[type];
+            string content = null;
 
-            var htmlAddedToBinary = string.Format(
-                CultureInfo.InvariantCulture,
-                Constants.FileConstants.ImageHtmlFormat,
-                mimeType,
-                binaryData);
+            if (isViewable)
+            {
+                content = string.Format(
+                    CultureInfo.InvariantCulture,
+                    Constants.FileConstants.ImageHtmlFormat,
+                    Constants.FileConstants.FileTypes.DocumentMimeTypes[type],
+                    requestBinaryDataReply.BinaryData.BinaryDataPage.BinaryData);
+            }
 
             return new PatientDocument
             {
-                Content = htmlAddedToBinary,
-                Type = fileType,
+                Content = content,
+                Type = requestBinaryDataReply.BinaryData.FileType,
                 HasErrored = false,
+                IsViewable = isViewable,
+                IsDownloadable = isDownloadable
             };
         }
 
-        private static string MapFileTypeToDownloadType(string fileType)
+        public FileContentResult MapForDownload(RequestBinaryDataReply requestBinaryDataReply, string documentName)
         {
+            if (requestBinaryDataReply is null)
+            {
+                throw new ArgumentNullException(nameof(requestBinaryDataReply));
+            }
+
+            var type = MapFileTypeToDownloadType(requestBinaryDataReply.BinaryData.FileType);
+            var documentAsBase64 = requestBinaryDataReply.BinaryData.BinaryDataPage.BinaryData;
+
+            if (!Constants.FileConstants.FileTypes.WhiteListTypes.Contains(type, StringComparer.OrdinalIgnoreCase))
+            {
+                _logger.LogError($"Unsupported file type: {type}");
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(documentAsBase64))
+            {
+                _logger.LogError("Null or blank base64 binary data returned in response");
+                return null;
+            }
+
+            var documentAsBytes = Convert.FromBase64String(documentAsBase64);
+            var mimeType = Constants.FileConstants.FileTypes.DocumentMimeTypes[type];
+            var fileName = $"{documentName}.{type}";
+
+            return new FileContentResult(documentAsBytes, mimeType)
+            {
+                FileDownloadName = fileName
+            };
+        }
+
+        private string MapFileTypeToDownloadType(string fileType)
+        {
+            if (String.IsNullOrWhiteSpace(fileType))
+            {
+                throw new ArgumentException("Must not be null or blank", nameof(fileType));
+            }
+
+            string mappedFileType;
+
             switch (fileType)
             {
                 case Constants.FileConstants.FileTypes.ImageType.Jfif:
-                    return Constants.FileConstants.FileTypes.ImageType.Jpg;
+                    mappedFileType = Constants.FileConstants.FileTypes.ImageType.Jpg;
+                    break;
                 default:
-                    return fileType;
+                    mappedFileType = fileType;
+                    break;
             }
+
+            _logger.LogInformation($"Mapped actual document type {fileType} to {mappedFileType} for download");
+            return mappedFileType;
         }
     }
 }

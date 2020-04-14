@@ -29,33 +29,44 @@ namespace NHSOnline.Backend.Support
             }
         }
 
-        private static void LogDuplicates<TSource, TKey, TElement>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector,
+        private static void LogDuplicates<TSource, TKey, TElement>(
+            IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            Func<TSource, TElement> elementSelector,
             ILogger logger)
         {
             try
             {
-                if (source == null)
-                {
-                    return;
-                }
-
-                var duplicates = source
+                var duplicates = source?
                     .Select(x => new { Key = keySelector(x), Element = elementSelector(x) })
                     .GroupBy(x => x.Key)
                     .Where(g => g.Count() > 1)
                     .SelectMany(g => g)
                     .ToArray();
 
-                if (duplicates.Any())
+                if (duplicates?.Any() ?? false)
                 {
                     var duplicateJson = JsonConvert.SerializeObject(duplicates);
-                    logger.LogInformation("Duplicate keys found when building dictionary: " + duplicateJson);
+
+                    logger.LogInformation($"Duplicate keys found when building dictionary: {duplicateJson}");
                 }
             }
             catch (Exception e)
             {
                 logger.LogError(e, "Unhandled exception occurred when logging duplicate dictionary entries");
             }
+        }
+
+        public static void ForEachWithIndex<T>(
+            this IEnumerable<T> self,
+            Action<T, int> handler)
+        {
+            self?.Select((i, idx) =>
+            {
+                handler(i, idx);
+
+                return i;
+            }).ToList();
         }
     }
 }

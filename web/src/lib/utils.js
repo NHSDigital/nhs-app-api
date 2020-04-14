@@ -28,6 +28,10 @@ export const isFalsy = value => !(value && value !== 'false');
 
 export const isTruthy = value => !isFalsy(value);
 
+export const isBlankString = value => typeof value !== 'string' || value.trim() === '';
+
+export const isNumber = value => typeof value === 'number';
+
 const get12HourTimeFormat = (dateTime, $t, capitaliseOutput = false) => {
   let localeValue;
 

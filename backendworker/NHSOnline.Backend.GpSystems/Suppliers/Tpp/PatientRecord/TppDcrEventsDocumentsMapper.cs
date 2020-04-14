@@ -20,7 +20,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
         private static ILogger<TppDcrEventsDocumentsMapper> _logger;
 
-        private static List<string> _tppDocumentTypeWhiteList;
         private static string _documentDetailsComments;
         private static string _tppDocumentDetailsRegexWithoutComments;
         private static string _tppDocumentDetailsRegexWithComments;
@@ -29,7 +28,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         public TppDcrEventsDocumentsMapper(ILogger<TppDcrEventsDocumentsMapper> logger)
         {
             _logger = logger;
-            _tppDocumentTypeWhiteList = Constants.FileConstants.FileTypes.TppWhiteListTypes;
             _documentDetailsComments = Constants.TppDocumentConstants.DocumentDetailsComments;
             _tppDocumentDetailsRegexWithoutComments = Constants.Regex.TppDocumentDetailsRegexWithoutComments;
             _tppDocumentDetailsRegexWithComments = Constants.Regex.TppDocumentDetailsRegexWithComments;
@@ -67,8 +65,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             return events.ToDictionary(
                     dcrEvent => dcrEvent,
                     dcrEvent => dcrEvent.Items.Where(eventItem =>
-                        eventItem.Type.Equals("Letter", StringComparison.Ordinal)
-                        || eventItem.Type.Equals("Attachment", StringComparison.Ordinal)))
+                        "Letter".Equals(eventItem.Type, StringComparison.Ordinal)
+                        || "Attachment".Equals(eventItem.Type, StringComparison.Ordinal)))
                 .SelectMany(eventItemPair =>
                     eventItemPair.Value.Select(item =>
                         MapDocument(
@@ -90,6 +88,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
             var extension = match.Groups[_documentDetailsExtensionConstants].ToString();
             var comments = match.Groups[_documentDetailsComments].ToString();
+            var type = "Attachment".Equals(inputEventItem.Type, StringComparison.Ordinal) ? "Document" : "Letter";
+
+            extension = string.IsNullOrEmpty(extension) && string.Equals("Letter", type, StringComparison.Ordinal)
+                ? Constants.FileConstants.FileTypes.TextType.Rtf
+                : extension;
 
             _logger.LogExit();
             return new DocumentItem
@@ -97,12 +100,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 EffectiveDate = date,
                 DocumentIdentifier = inputEventItem.BinaryDataId,
                 IsAvailable = true,
-                Type = inputEventItem.Type.Equals("Attachment", StringComparison.Ordinal) ? "Document" : "Letter",
-                IsValidFile =
-                    _tppDocumentTypeWhiteList.Contains(extension),
-                Comments = string.IsNullOrEmpty(comments)
-                    ? null
-                    : comments,
+                Type = type,
+                IsValidFile = Constants.FileConstants.FileTypes.WhiteListTypes.Contains(extension),
+                Comments = string.IsNullOrEmpty(comments) ? null : comments,
                 Extension = extension,
                 NeedMoreInformation = true
             };
@@ -113,15 +113,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             var pattern = new Regex(_tppDocumentDetailsRegexWithComments);
             var match = pattern.Match(inputEventItemDetails);
 
-            if (string.IsNullOrEmpty(match.Groups[_documentDetailsComments].ToString()))
+            if (!string.IsNullOrEmpty(match.Groups[_documentDetailsComments].ToString()))
             {
-                _logger.LogInformation("Regex failed to match with comments, using regex without comments");
-                var patternNoComments = new Regex(_tppDocumentDetailsRegexWithoutComments);
-                return patternNoComments.Match(inputEventItemDetails);
+                return match;
             }
 
-            return match;
-
+            _logger.LogInformation("Regex failed to match with comments, using regex without comments");
+            var patternNoComments = new Regex(_tppDocumentDetailsRegexWithoutComments);
+            return patternNoComments.Match(inputEventItemDetails);
         }
     }
 }

@@ -1,5 +1,13 @@
+import { mutationNames } from '@/store/modules/serviceJourneyRules/constants';
 import getters from '@/store/modules/serviceJourneyRules/getters';
-import { initialState, GP_AT_HAND, IM1_PROVIDER, INFORMATICA, LINKED_ACCOUNT } from '@/store/modules/serviceJourneyRules/mutation-types';
+import { initialState } from '@/store/modules/serviceJourneyRules/mutation-types';
+
+const {
+  GP_AT_HAND,
+  IM1_PROVIDER,
+  INFORMATICA,
+  LINKED_ACCOUNT,
+} = mutationNames;
 
 describe('getters', () => {
   let currentState;

@@ -14,6 +14,8 @@ import {
   SET_RELOAD,
   SET_SELECTED_DOCUMENT_INFO,
   SET_VALID_FILE,
+  SET_IS_VIEWABLE,
+  SET_IS_DOWNLOADABLE,
 } from '@/store/modules/myRecord/mutation-types';
 import AnalyticsValues from '@/lib/analytics-values';
 
@@ -76,26 +78,30 @@ export default {
     commit(LOADED_DETAILED_TEST_RESULT, { data });
   },
   async loadDocument({ commit, state }, documentIdentifier) {
-    const { response } = await this.app.$http.postV1DocumentsByDocumentidentifier({
+    const response = await this.app.$http.postV1DocumentsByDocumentidentifier({
       documentIdentifier,
       getPatientDocumentRequest: {
         type: state.document.type,
         name: state.document.name,
       },
     }) || {};
-    const { content, isTooLarge, isFileUploading } = response || {};
+    const { content, isViewable, isDownloadable } = response || {};
+
     commit(LOADED_DOCUMENT, content);
 
-    if (isTooLarge || isFileUploading) {
-      commit(SET_VALID_FILE, false);
+    commit(SET_VALID_FILE, isViewable || isDownloadable);
+
+    if (state.document.needMoreInformation) {
+      commit(SET_IS_VIEWABLE, isViewable);
+      commit(SET_IS_DOWNLOADABLE, isDownloadable);
     }
   },
-  downloadDocument({ state }, documentIdentifier) {
+  downloadDocument({ state }, { documentIdentifier, fileName }) {
     return this.app.$http.postV1DocumentsByDocumentidentifierDownload({
       documentIdentifier,
       getPatientDocumentRequest: {
         type: state.document.type,
-        name: state.document.name,
+        name: fileName,
       },
     });
   },

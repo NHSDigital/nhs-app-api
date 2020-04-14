@@ -11,7 +11,7 @@ abstract class DocumentsFactory {
     abstract fun enabledWithNoDocuments(patient: Patient)
     abstract fun enabledWithDocuments(patient: Patient, isLarge: Boolean = false,
                                       mockUnavailableDocument: Boolean = false, hasInvalidType: Boolean = false,
-                                      stillUploading: Boolean = false)
+                                      stillUploading: Boolean = false, hasNonViewableType: Boolean = false)
     abstract fun enabledWithDocumentsWithNoNameOrTerm(patient: Patient, isLarge: Boolean = false)
     abstract fun enabledWithLettersWithNoNameOrTerm(patient: Patient, isLarge: Boolean = false)
     abstract fun enabledWithNullPageCount()

@@ -13,6 +13,8 @@ export const SET_RELOAD = 'SET_RELOAD';
 export const SET_SELECTED_DOCUMENT_INFO = 'SET_SELECTED_DOCUMENT_INFO';
 export const TOGGLE_PATIENT_DETAIL = 'TOGGLE_PATIENT_DETAIL';
 export const SET_VALID_FILE = 'SET_VALID_FILE';
+export const SET_IS_VIEWABLE = 'SET_IS_VIEWABLE';
+export const SET_IS_DOWNLOADABLE = 'SET_IS_DOWNLOADABLE';
 export const initialState = () => ({
   hasAcceptedTerms: false,
   nojsData: JSON.stringify({ myRecord: { hasAcceptedTerms: false } }),
@@ -29,6 +31,9 @@ export const initialState = () => ({
   examinations: '',
   procedures: '',
   medicalRecordType: undefined,
-  document: {},
+  document: {
+    isViewable: true,
+    isDownloadable: true,
+  },
   documentConsultationsWithComments: [],
 });

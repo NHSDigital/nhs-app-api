@@ -8,11 +8,13 @@ import features.myrecord.factories.DocumentsFactory
 import models.ExpectedDocument
 import org.junit.Assert
 import pages.ErrorPage
+import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.myrecord.MyRecordDocumentInformationPage
 import pages.myrecord.MyRecordDocumentPage
 import pages.myrecord.MyRecordDocumentsPage
 import utils.SerenityHelpers
+import java.lang.IllegalStateException
 
 open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -84,6 +86,13 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
                 .enabledWithDocumentsWithNoNameOrTerm(SerenityHelpers.getPatient())
     }
 
+    @Given("^the GP Practice has multiple non-viewable documents$")
+    fun theGpPracticeHasMultipleNoViewableDocuments() {
+        DocumentsFactory
+            .getForSupplier(SerenityHelpers.getGpSupplier())
+            .enabledWithDocuments(SerenityHelpers.getPatient(), hasNonViewableType = true)
+    }
+
     @Given("^the GP practice has a file that is still uploading$")
     fun theGpPracticeHasAFileThatIsStillUploading() {
         DocumentsFactory
@@ -151,6 +160,27 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
         }
     }
 
+    @Then("^I see the document information page with download action only$")
+    fun iSeeTheDocumentInformationPageWithDownloadActionOnly() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
+
+        myRecordDocumentInformationPage.viewActionLink.assertElementNotPresent()
+        myRecordDocumentInformationPage.downloadActionLink.assertIsVisible()
+
+        when (gpSystem) {
+            Supplier.EMIS -> {
+                throw IllegalStateException("This step has not been implemented for EMIS")
+            }
+            Supplier.TPP -> {
+                myRecordDocumentInformationPage.headerContainsText(selectedDocument.date)
+            }
+            else -> {
+                throw IllegalArgumentException("${gpSystem.supplierName} not implemented for Medical Record Documents")
+            }
+        }
+    }
+
     @Then("^I see the document information page without actions")
     fun iSeeTheDocumentInformationPageWithNoActions() {
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
@@ -162,7 +192,12 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
     @Then("^The file has been downloaded")
     fun theFileHasBeenDownloaded() {
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
-        val fileName = selectedDocument.name + ".pdf"
+        val supplier = SerenityHelpers.getGpSupplier()
+        val fileName = if (supplier == Supplier.EMIS) {
+            "${selectedDocument.name}.pdf"
+        } else {
+            "${selectedDocument.term} added on ${selectedDocument.date}.jpeg"
+        }
         Assert.assertTrue(myRecordDocumentInformationPage.hasFileDownloaded(fileName))
     }
 
@@ -202,7 +237,7 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
     fun thenISeeTheDocumentInformationPageWithTheLetterHeader() {
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
         myRecordDocumentInformationPage.headerContainsText(
-                "The letter added on ${selectedDocument.date} is not available through the NHS App")
+                "Letter added on ${selectedDocument.date}")
     }
 
     @Then("^I see the document information page with comments$")

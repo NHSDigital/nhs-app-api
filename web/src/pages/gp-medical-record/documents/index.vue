@@ -4,6 +4,7 @@
       v-if="showError"
       :has-errored="documents.hasErrored"
       :has-access="documents.hasAccess"/>
+
     <div v-if="showTemplate" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <menu-item-list>
@@ -24,6 +25,7 @@
         </menu-item-list>
       </div>
     </div>
+
     <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
                             :path="backPath"
                             :button-text="'rp03.backButton'"
@@ -39,7 +41,39 @@ import MenuItem from '@/components/MenuItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import MenuItemList from '@/components/MenuItemList';
 import { GP_MEDICAL_RECORD, DOCUMENT } from '@/lib/routes';
-import { redirectTo, readableBytes, datePart } from '@/lib/utils';
+import { isBlankString, isNumber, redirectTo, readableBytes, datePart } from '@/lib/utils';
+
+function mapDocumentInfo(document) {
+  const {
+    name,
+    codeId,
+    extension,
+    effectiveDate,
+    term,
+    type,
+    eventGuid,
+    size,
+    isValidFile,
+    comments,
+    needMoreInformation,
+  } = document;
+
+  return {
+    type: extension,
+    name,
+    date: effectiveDate,
+    codeId,
+    term,
+    eventGuid,
+    size,
+    isValidFile,
+    comments,
+    documentType: type,
+    needMoreInformation,
+    isViewable: true,
+    isDownloadable: true,
+  };
+}
 
 export default {
   layout: 'nhsuk-layout',
@@ -80,46 +114,42 @@ export default {
       redirectTo(this, this.backPath);
     },
     documentDescription(extension, size) {
-      if (extension) {
-        if (size) {
-          return `(${extension.toUpperCase()}, ${readableBytes(size)})`;
-        }
+      if (isBlankString(extension)) {
+        return '';
+      }
+
+      if (!isNumber(size) || size < 1) {
         return `(${extension.toUpperCase()})`;
       }
-      return '';
+
+      return `(${extension.toUpperCase()}, ${readableBytes(size)})`;
     },
     documentTitle(title, date, type) {
       let dateString;
+
       if (date && date.value) {
         dateString = datePart(date.value, 'YearMonthDay');
       } else {
         dateString = this.$t('my_record.noStartDate');
       }
 
-      if (title) {
+      if (!isBlankString(title)) {
         return `${title} ${this.$t('my_record.documents.documentMenuItemTitle', { date: dateString })}`;
       }
 
-      if (type) {
+      if (!isBlankString(type)) {
         return `${type} ${this.$t('my_record.documents.documentMenuItemTitle', { date: dateString })}`;
       }
+
       return dateString;
     },
     documentClicked(document) {
-      this.$store.dispatch('myRecord/setSelectedDocumentInfo', {
-        type: document.extension,
-        name: document.name,
-        date: document.effectiveDate,
-        codeId: document.codeId,
-        term: document.term,
-        eventGuid: document.eventGuid,
-        size: document.size,
-        isValidFile: document.isValidFile,
-        comments: document.comments,
-        documentType: document.type,
-        needMoreInformation: document.needMoreInformation,
+      this.$store.dispatch('myRecord/setSelectedDocumentInfo', mapDocumentInfo(document));
+
+      this.$router.push({
+        name: DOCUMENT.name,
+        params: { id: document.documentIdentifier },
       });
-      this.$router.push({ name: DOCUMENT.name, params: { id: document.documentIdentifier } });
     },
     getEffectiveDate(effectiveDate, defaultValue) {
       return effectiveDate && effectiveDate.value ? effectiveDate.value : defaultValue;

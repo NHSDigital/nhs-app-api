@@ -117,23 +117,29 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             try
             {
                 var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+                var documentBinaryData = await RetrievePatientDocument(documentIdentifier, tppRequestParameters);
 
-                var patientOverviewItems = await RetrievePatientDocument(documentIdentifier, tppRequestParameters);
+                var patientDocument = _patientDocumentTaskChecker.CheckForViewing(documentBinaryData);
 
-                _logger.LogInformation($"Document type for user document " +
-                                       $"at ODSCode {tppRequestParameters.OdsCode} is " +
-                                       $"{patientOverviewItems.Type}");
+                _logger.LogInformation(
+                    $"Document type for user document at ODSCode " +
+                    $"{gpLinkedAccountModel.GpUserSession.OdsCode} is {patientDocument.Type}");
 
-                return new GetPatientDocumentResult.Success(patientOverviewItems);
+                return new GetPatientDocumentResult.Success(patientDocument);
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError(e, "Unsuccessful request retrieving my record");
+                _logger.LogError(e, "Unsuccessful request retrieving patient document");
                 return new GetPatientDocumentResult.BadGateway();
             }
-            catch (NullReferenceException e)
+            catch (ArgumentNullException e)
             {
-                _logger.LogError(e, "My record retrieval return null body");
+                _logger.LogError(e, "Request for patient document returned null body");
+                return new GetPatientDocumentResult.BadGateway();
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Exception thrown when retrieving patient document");
                 return new GetPatientDocumentResult.BadGateway();
             }
             finally
@@ -142,15 +148,44 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        public Task<PatientDocument> GetPatientDocumentForDownload(
+        public async Task<GetPatientDocumentDownloadResult> GetPatientDocumentForDownload(
             GpLinkedAccountModel gpLinkedAccountModel, string documentIdentifier, string documentType, string documentName)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                _logger.LogEnter();
 
-        public byte[] ConvertDocumentToCorrectFormat(string type, string content)
-        {
-            throw new NotImplementedException();
+                var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
+                var documentBinaryData = await RetrievePatientDocument(documentIdentifier, tppRequestParameters);
+
+                var fileContentResult = _patientDocumentTaskChecker.CheckForDownload(documentBinaryData, documentName);
+
+                if (fileContentResult is null)
+                {
+                    return new GetPatientDocumentDownloadResult.BadGateway();
+                }
+
+                return new GetPatientDocumentDownloadResult.Success(fileContentResult);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Unsuccessful request retrieving patient document for download");
+                return new GetPatientDocumentDownloadResult.BadGateway();
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError(e, "Request for patient document for download returned null body");
+                return new GetPatientDocumentDownloadResult.BadGateway();
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Exception thrown when retrieving patient document for download");
+                return new GetPatientDocumentDownloadResult.BadGateway();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
 
         public async Task<GetDetailedTestResult> GetDetailedTestResult(GpLinkedAccountModel gpLinkedAccountModel, string testResultId)
@@ -211,6 +246,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 if (!testResults.HasAccess || testResults.HasErrored)
                 {
                     _logger.LogExitWith($"{nameof(testResults.HasAccess)}={testResults.HasAccess}, {nameof(testResults.HasErrored)}={testResults.HasErrored}");
+
                     return testResults;
                 }
 
@@ -218,12 +254,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
 
             _logger.LogExit();
+
             return new TestResults { Data = combinedTestResults };
         }
 
         private static List<TppTestResultDates> GetTestResultDateParams()
         {
-
             var today = DateTime.Now.Date;
 
             return new List<TppTestResultDates>
@@ -250,7 +286,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         {
             try
             {
-
                 _logger.LogInformation("Retrieving PatientDocuments from DCR Events.");
                 var patientRecord = await _requestPatientRecord.Post(tppRequestParameters);
 
@@ -262,14 +297,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 };
 
                 return dcrItems;
-
-
             }
             catch (Exception e)
             {
-
                 _logger.LogError(e, "Retrieving dcr events failed. Returning hasErrored as true" +
                                     " for Documents and DCR events");
+
                 return new TppDcrItems
                 {
                     PatientDocuments = new PatientDocuments()
@@ -288,10 +321,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         {
             try
             {
-
                 _logger.LogInformation("Retrieving Test Results.");
-                return await GetLast180DaysTestResults(tppRequestParameters);
 
+                return await GetLast180DaysTestResults(tppRequestParameters);
             }
             catch (Exception e)
             {
@@ -315,7 +347,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             catch (Exception e)
             {
                 _logger.LogError(e, "Retrieving patientOverViewItems failed. Returning HasErrored as true");
+
                 var result = new Tuple<Allergies, Medications>(new Allergies(), new Medications());
+
                 result.Item1.HasErrored = true;
                 result.Item2.HasErrored = true;
 
@@ -323,26 +357,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        private async Task<PatientDocument> RetrievePatientDocument(string documentIdentifier, TppRequestParameters tppRequestParameters)
+
+        private async Task<TppApiObjectResponse<RequestBinaryDataReply>> RetrievePatientDocument(
+            string documentIdentifier, TppRequestParameters tppRequestParameters)
         {
             _logger.LogEnter();
 
             try
             {
-                var patientDocument = await _requestBinaryData.Post((tppRequestParameters, documentIdentifier));
-                _logger.LogExit();
-                return _patientDocumentTaskChecker.Check(patientDocument);
+                return await _requestBinaryData.Post((tppRequestParameters, documentIdentifier));
             }
-            catch(Exception e)
+            finally
             {
-                _logger.LogError(e, "Retrieving patientDocument failed. Returning hasErrored as true");
-                var result = new PatientDocument
-                {
-                    HasErrored = true
-                };
                 _logger.LogExit();
-                return result;
             }
         }
+
     }
 }

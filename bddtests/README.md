@@ -37,7 +37,7 @@ make run TRANCHE_TAG=organ-donation
 
 Some integration tests require specific configuration which would conflicit with the sucessful execution of other tests. For these there are separate make targets.
 
-e.g. to run the accessibility tests (and generate the pa11y report:
+e.g. to run the accessibility tests (and generate the pa11y report):
 
 ```bash
 make run-accessibility

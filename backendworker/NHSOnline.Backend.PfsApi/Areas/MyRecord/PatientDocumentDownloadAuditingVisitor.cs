@@ -6,23 +6,23 @@ using NHSOnline.Backend.GpSystems.PatientRecord;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
-    public class PatientDocumentAuditingVisitor : IPatientDocumentResultVisitor<Task>
+    public class PatientDocumentDownloadAuditingVisitor : IPatientDocumentDownloadResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<PatientDocumentController> _logger;
-        private const string AuditType = AuditingOperations.ViewDocumentAuditTypeResponse;
+        private const string AuditType = AuditingOperations.DownloadDocumentAuditTypeResponse;
         
-        public PatientDocumentAuditingVisitor(IAuditor auditor, ILogger<PatientDocumentController> logger)
+        public PatientDocumentDownloadAuditingVisitor(IAuditor auditor, ILogger<PatientDocumentController> logger)
         {
             _auditor = auditor;
             _logger = logger;
         }
 
-        public async Task Visit(GetPatientDocumentResult.Success result)
+        public async Task Visit(GetPatientDocumentDownloadResult.Success result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Successfully retrieved patient document for viewing");
+                await _auditor.Audit(AuditType, "Successfully retrieved patient document for downloading");
             }
             catch (Exception e)
             {
@@ -30,11 +30,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             }
         }
 
-        public async Task Visit(GetPatientDocumentResult.BadGateway result)
+        public async Task Visit(GetPatientDocumentDownloadResult.BadGateway result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving patient document for viewing: Bad Gateway");
+                await _auditor.Audit(AuditType, "Error retrieving patient document for downloading: Bad Gateway");
             }
             catch (Exception e)
             {

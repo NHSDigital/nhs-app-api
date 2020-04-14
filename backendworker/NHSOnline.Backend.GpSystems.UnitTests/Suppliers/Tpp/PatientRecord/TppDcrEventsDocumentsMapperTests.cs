@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             };
 
             // Act
-            var tppDcrEvents = new TppDcrEventsDocumentsMapper(_logger).Map(requestPatientRecordReply);
+            var tppDcrEvents = _mapper.Map(requestPatientRecordReply);
 
             // Assert
             tppDcrEvents.Should().NotBeNull();
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         }
 
         [TestMethod]
-        public void MapRequestPatientRecordReplyTppDcrEventsResponse_WithRtfType_ReturnsResultWithInvalidFile()
+        public void MapRequestPatientRecordReplyTppDcrEventsResponse_WithSupportedFileTypes_ReturnsMappedDocumentWithIsValidFileTrue()
         {
             // Arrange
             var requestPatientRecordReply = new RequestPatientRecordReply
@@ -125,12 +125,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         DoneBy = "Mr General NhsApp",
                         Items = new List<RequestPatientRecordItem>
                         {
-                            new RequestPatientRecordItem
-                            {
-                                Details = "test: test",
-                                Type = "Letter",
-                                BinaryDataId = "123454"
-                            },
                             new RequestPatientRecordItem
                             {
                                 Details = "test: test1.jpg - with comments",
@@ -154,6 +148,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
 
                 }
             };
+            var expectedDate = DateTimeOffset.Parse("2018-07-03T11:16:02.0Z", CultureInfo.InvariantCulture);
             var expectedDocument = new PatientDocuments
             {
                 Data = new List<DocumentItem>
@@ -162,43 +157,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                     {
                         EffectiveDate = new MyRecordDate
                         {
-                            Value = DateTimeOffset.Parse(requestPatientRecordReply.Events[0].Date,
-                                CultureInfo.InvariantCulture)
+                            Value = expectedDate,
                         },
-                        DocumentIdentifier = requestPatientRecordReply.Events[0].Items[0].BinaryDataId,
-                        IsAvailable = true,
-                        Type = requestPatientRecordReply.Events[0].Items[0].Type,
-                        IsValidFile = false,
-                        Extension = "",
-                        NeedMoreInformation = true
-                    },
-                    new DocumentItem
-                    {
-                        EffectiveDate = new MyRecordDate
-                        {
-                            Value = DateTimeOffset.Parse(requestPatientRecordReply.Events[0].Date,
-                                CultureInfo.InvariantCulture)
-                        },
-                        DocumentIdentifier = requestPatientRecordReply.Events[0].Items[1].BinaryDataId,
+                        DocumentIdentifier = "123454",
                         IsAvailable = true,
                         Type = "Document",
                         IsValidFile = true,
                         Comments = "with comments",
                         Extension = "jpg",
                         NeedMoreInformation = true,
-                    }
-                    ,
+                    },
                     new DocumentItem
                     {
                         EffectiveDate = new MyRecordDate
                         {
-                            Value = DateTimeOffset.Parse(requestPatientRecordReply.Events[0].Date,
-                                CultureInfo.InvariantCulture)
+                            Value = expectedDate
                         },
-                        DocumentIdentifier = requestPatientRecordReply.Events[0].Items[2].BinaryDataId,
+                        DocumentIdentifier = "123454",
                         IsAvailable = true,
                         Type = "Document",
-                        IsValidFile = false,
+                        IsValidFile = true,
                         Extension = "rtf",
                         NeedMoreInformation = true
                     }
@@ -208,7 +186,126 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             };
 
             // Act
-            var tppDcrEvents = new TppDcrEventsDocumentsMapper(_logger).Map(requestPatientRecordReply);
+            var tppDcrEvents = _mapper.Map(requestPatientRecordReply);
+
+            // Assert
+            tppDcrEvents.Should().NotBeNull();
+            tppDcrEvents.Should().BeEquivalentTo(expectedDocument);
+
+        }
+
+        [TestMethod]
+        public void MapRequestPatientRecordReplyTppDcrEventsResponse_WithUnsupportedFileType_ReturnsMappedDocumentWithIsValidFileFalse()
+        {
+            // Arrange
+            var requestPatientRecordReply = new RequestPatientRecordReply
+            {
+                Events = new List<Event>
+                {
+                    new Event
+                    {
+                        Date = "2018-07-03T11:16:02.0Z",
+                        DoneBy = "Mr General NhsApp",
+                        Items = new List<RequestPatientRecordItem>
+                        {
+                            new RequestPatientRecordItem
+                            {
+                                Details = "test: test1.invalid - with comments",
+                                Type = "Attachment",
+                                BinaryDataId = "123454"
+                            }
+                        },
+                        Location = "Kainos GP Demo Unit (General Practice)"
+                    }
+
+                }
+            };
+            var expectedDate = DateTimeOffset.Parse("2018-07-03T11:16:02.0Z", CultureInfo.InvariantCulture);
+            var expectedDocument = new PatientDocuments
+            {
+                Data = new List<DocumentItem>
+                {
+                    new DocumentItem
+                    {
+                        EffectiveDate = new MyRecordDate
+                        {
+                            Value = expectedDate
+                        },
+                        DocumentIdentifier = "123454",
+                        IsAvailable = true,
+                        Type = "Document",
+                        IsValidFile = false,
+                        Comments = "with comments",
+                        Extension = "invalid",
+                        NeedMoreInformation = true
+                    }
+                },
+                HasAccess = true,
+                HasErrored = false
+            };
+
+            // Act
+            var tppDcrEvents = _mapper.Map(requestPatientRecordReply);
+
+            // Assert
+            tppDcrEvents.Should().NotBeNull();
+            tppDcrEvents.Should().BeEquivalentTo(expectedDocument);
+
+        }
+
+        [DataTestMethod]
+        [DataRow("test: test", "rtf")]
+        [DataRow("test: test.jpg", "jpg")]
+        public void MapRequestPatientRecordReplyTppDcrEventsResponse_WithLetterFileType_ReturnsMappedDocumentWithTypeTxtIfNoTypeFoundAndIsValidTrue(string details, string expectedType)
+        {
+            // Arrange
+            var requestPatientRecordReply = new RequestPatientRecordReply
+            {
+                Events = new List<Event>
+                {
+                    new Event
+                    {
+                        Date = "2018-07-03T11:16:02.0Z",
+                        DoneBy = "Mr General NhsApp",
+                        Items = new List<RequestPatientRecordItem>
+                        {
+                            new RequestPatientRecordItem
+                            {
+                                Details = details,
+                                Type = "Letter",
+                                BinaryDataId = "123454"
+                            }
+                        },
+                        Location = "Kainos GP Demo Unit (General Practice)"
+                    }
+
+                }
+            };
+            var expectedDate = DateTimeOffset.Parse("2018-07-03T11:16:02.0Z", CultureInfo.InvariantCulture);
+            var expectedDocument = new PatientDocuments
+            {
+                Data = new List<DocumentItem>
+                {
+                    new DocumentItem
+                    {
+                        EffectiveDate = new MyRecordDate
+                        {
+                            Value = expectedDate
+                        },
+                        DocumentIdentifier = "123454",
+                        IsAvailable = true,
+                        Type = "Letter",
+                        IsValidFile = true,
+                        Extension = expectedType,
+                        NeedMoreInformation = true
+                    }
+                },
+                HasAccess = true,
+                HasErrored = false
+            };
+
+            // Act
+            var tppDcrEvents = _mapper.Map(requestPatientRecordReply);
 
             // Assert
             tppDcrEvents.Should().NotBeNull();

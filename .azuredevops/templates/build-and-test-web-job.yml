@@ -11,14 +11,14 @@ jobs:
           scriptPath: web/buildscripts/01_restore_dependencies.sh
 
       - task: ShellScript@2
-        displayName: Build web
-        inputs:
-          scriptPath: web/buildscripts/02_build.sh
-
-      - task: ShellScript@2
         displayName: Run web linting
         inputs:
-          scriptPath: web/buildscripts/03_run_lint.sh
+          scriptPath: web/buildscripts/02_run_lint.sh
+
+      - task: ShellScript@2
+        displayName: Build web
+        inputs:
+          scriptPath: web/buildscripts/03_build.sh
 
       - task: ShellScript@2
         displayName: Run web unit tests

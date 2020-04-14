@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+import { isBlankString, isEmptyArray } from '@/lib/utils';
 import mapKeys from 'lodash/fp/mapKeys';
 import {
   INIT,
@@ -15,6 +17,8 @@ import {
   SET_RELOAD,
   SET_SELECTED_DOCUMENT_INFO,
   SET_VALID_FILE,
+  SET_IS_VIEWABLE,
+  SET_IS_DOWNLOADABLE,
   initialState,
 } from './mutation-types';
 
@@ -36,6 +40,49 @@ const clearState = (state) => {
   state.medicalRecordType = undefined;
   state.documentConsultationsWithComments = [];
 };
+
+function parseCommentsFromDocConsultations(doc) {
+  let comments = [];
+
+  doc.consultations.filter(ch => Array.isArray(ch.comments))
+    .forEach((ch) => { comments = comments.concat(ch.comments); });
+
+  doc.comments = comments;
+
+  delete doc.consultations;
+}
+
+function getConsultationsForDocument(doc, docConsultationsWithComments) {
+  const { codeId, term, eventGuid } = doc;
+
+  const docConsultations = docConsultationsWithComments.filter(ch =>
+    ch.observationsWithTerm.codeId === codeId &&
+    ch.observationsWithTerm.term === term &&
+    ch.observationsWithTerm.eventGuid === eventGuid);
+
+  if (!isEmptyArray(docConsultations)) {
+    doc.consultations = docConsultations;
+  }
+
+  return doc;
+}
+
+function parseDocCommentsFromConsultations(state, consultations) {
+  let docConsultationsWithComments = [];
+
+  consultations
+    .filter(c => !isEmptyArray(c.consultationHeaders))
+    .map(c => c.consultationHeaders.filter(ch => ch.header === 'Document'))
+    .forEach((c) => { docConsultationsWithComments = docConsultationsWithComments.concat(c); });
+
+  state.record
+    .documents
+    .data
+    .filter(d => isBlankString(d.comments))
+    .map(d => getConsultationsForDocument(d, docConsultationsWithComments))
+    .filter(d => d.consultations)
+    .forEach(d => parseCommentsFromDocConsultations(d));
+}
 
 export default {
   [INIT](state) {
@@ -64,9 +111,19 @@ export default {
       state.record.medications.data.discontinuedRepeatMedications.hasErrored = true;
     }
 
-    state.documentConsultationsWithComments = (record.consultations.data || [])
-      .filter(d => d.consultationHeaders.filter(p => p.header === 'Document' || p.header === 'Comment').length > 0)
-      .filter(x => x.consultationHeaders.length > 1);
+    const consultations = record.consultations.data;
+
+    if (Array.isArray(consultations) && !isEmptyArray(consultations)) {
+      parseDocCommentsFromConsultations(state, consultations);
+    }
+
+    // ensure document comments are always
+    // presented as an array in the store
+    state.record
+      .documents
+      .data
+      .filter(d => !isBlankString(d.comments))
+      .forEach((d) => { d.comments = [d.comments]; });
 
     state.hasLoaded = true;
   },
@@ -91,22 +148,8 @@ export default {
   [SET_RELOAD](state, value) {
     state.reload = value;
   },
-  [SET_SELECTED_DOCUMENT_INFO](state, documentInfo) {
-    if (!state.document) {
-      state.document = documentInfo;
-    } else {
-      state.document.name = documentInfo.name;
-      state.document.type = documentInfo.type;
-      state.document.date = documentInfo.date;
-      state.document.term = documentInfo.term;
-      state.document.eventGuid = documentInfo.eventGuid;
-      state.document.codeId = documentInfo.codeId;
-      state.document.size = documentInfo.size;
-      state.document.isValidFile = documentInfo.isValidFile;
-      state.document.comments = documentInfo.comments;
-      state.document.documentType = documentInfo.documentType;
-      state.document.needMoreInformation = documentInfo.needMoreInformation;
-    }
+  [SET_SELECTED_DOCUMENT_INFO](state, document) {
+    state.document = document;
   },
   [TOGGLE_PATIENT_DETAIL](state) {
     state.isPatientDetailsCollapsed = !state.isPatientDetailsCollapsed;
@@ -116,5 +159,11 @@ export default {
   },
   [SET_VALID_FILE](state, isValidFile) {
     state.document.isValidFile = isValidFile;
+  },
+  [SET_IS_VIEWABLE](state, isViewable) {
+    state.document.isViewable = isViewable;
+  },
+  [SET_IS_DOWNLOADABLE](state, isDownloadable) {
+    state.document.isDownloadable = isDownloadable;
   },
 };

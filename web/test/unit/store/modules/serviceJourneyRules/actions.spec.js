@@ -1,5 +1,10 @@
+import { mutationNames } from '@/store/modules/serviceJourneyRules/constants';
 import actions from '@/store/modules/serviceJourneyRules/actions';
-import { INIT, SET_RULES } from '@/store/modules/serviceJourneyRules/mutation-types';
+
+const {
+  INIT,
+  SET_RULES,
+} = mutationNames;
 
 const createHttp = ({ patientJourneyConfigResult = {} } = {}) => ({
   getV1PatientJourneyConfiguration: jest.fn().mockImplementation(

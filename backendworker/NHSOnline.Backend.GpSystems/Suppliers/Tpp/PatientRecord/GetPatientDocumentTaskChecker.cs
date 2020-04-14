@@ -1,3 +1,5 @@
+using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.BinaryData;
@@ -8,7 +10,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {
     public interface IGetPatientDocumentTaskChecker
     {
-        PatientDocument Check(TppApiObjectResponse<RequestBinaryDataReply> taskResponse);
+        PatientDocument CheckForViewing(TppApiObjectResponse<RequestBinaryDataReply> task);
+        FileContentResult CheckForDownload(TppApiObjectResponse<RequestBinaryDataReply> response, string documentName);
     }
 
     public class GetPatientDocumentTaskChecker : IGetPatientDocumentTaskChecker
@@ -22,52 +25,100 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             _logger = logger;
         }
 
-        public PatientDocument Check(TppApiObjectResponse<RequestBinaryDataReply> taskResponse)
+        public PatientDocument CheckForViewing(TppApiObjectResponse<RequestBinaryDataReply> task)
         {
-            _logger.LogEnter();
-
-            if (taskResponse.HasSuccessResponse)
+            try
             {
-                _logger.LogExitWith($"{nameof(taskResponse.HasSuccessResponse)}=true");
-                var response = _documentMapper.Map(taskResponse.Body);
-                return response;
-            }
+                _logger.LogEnter();
 
-            if (taskResponse.HasErrorWithCode(Constants.TppErrorCodes.FileTooLarge))
-            {
-                _logger.LogExitWith("File is too large setting HasErrored and IsTooLarge to true");
-                return new PatientDocument
+                var defaultResult = new PatientDocument
                 {
-                    IsTooLarge = true,
                     HasErrored = true
                 };
 
-            }
-
-            if (taskResponse.HasErrorWithCode(Constants.TppErrorCodes.FileStillUploading))
-            {
-                _logger.LogExitWith("File is still uploading setting HasErrored and IsFileUploading to true");
-                return new PatientDocument
+                if (task is null)
                 {
-                    IsFileUploading = true,
-                    HasErrored = true
-                };
-            }
+                    return defaultResult;
+                }
 
-            if (taskResponse.HasForbiddenResponse)
-            {
-                _logger.LogWarning("User does not have access to request binary data");
-            }
-            else
-            {
-                _logger.LogError($"Unsuccessful request retrieving binary data. Status code: {(int)taskResponse.StatusCode}");
-            }
+                if (task.HasSuccessResponse)
+                {
+                    return _documentMapper.Map(task.Body);
+                }
 
-            _logger.LogExit();
-            return new PatientDocument
+                if (task.HasErrorWithCode(Constants.TppErrorCodes.FileTooLarge))
+                {
+                    _logger.LogError("File is too large, setting IsViewable and IsDownloadable to false");
+                    return new PatientDocument
+                    {
+                        IsViewable = false,
+                        IsDownloadable = false
+                    };
+
+                }
+
+                if (task.HasErrorWithCode(Constants.TppErrorCodes.FileStillUploading))
+                {
+                    _logger.LogError("File is still uploading, setting IsViewable and IsDownloadable to false");
+                    return new PatientDocument
+                    {
+                        IsViewable = false,
+                        IsDownloadable = false
+                    };
+                }
+
+                _logger.LogError(task.HasForbiddenResponse
+                    ? "User does not have access to request binary data"
+                    : $"Unsuccessful request retrieving binary data. Status code: {(int) task.StatusCode}");
+
+                return defaultResult;
+            }
+            finally
             {
-                HasErrored = true
-            };
+                _logger.LogExit();
+            }
+        }
+
+        public FileContentResult CheckForDownload(
+            TppApiObjectResponse<RequestBinaryDataReply> response,
+            string documentName)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                if (response is null)
+                {
+                    throw new ArgumentNullException(nameof(response));
+                }
+
+                if (response.HasSuccessResponse)
+                {
+                    return _documentMapper.MapForDownload(response.Body, documentName);
+                }
+
+                if (response.HasErrorWithCode(Constants.TppErrorCodes.FileTooLarge))
+                {
+                    _logger.LogError("File is too large");
+
+                }
+                else if (response.HasErrorWithCode(Constants.TppErrorCodes.FileStillUploading))
+                {
+                    _logger.LogError("File is still uploading");
+                }
+                else
+                {
+                    _logger.LogError(response.HasForbiddenResponse
+                        ? "User does not have access to request binary data"
+                        : $"Unsuccessful request retrieving binary data. Status code: {(int) response.StatusCode}");
+                }
+
+                return null;
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
     }
 }

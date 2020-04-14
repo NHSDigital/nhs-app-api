@@ -58,7 +58,7 @@ class DocumentsFactoryEmis: DocumentsFactory() {
     }
 
     override fun enabledWithDocuments(patient: Patient, isLarge: Boolean, mockUnavailableDocument: Boolean,
-                                      hasInvalidType: Boolean, stillUploading: Boolean) {
+                                      hasInvalidType: Boolean, stillUploading: Boolean, hasNonViewableType: Boolean) {
         var documents = DocumentsData.getDefaultDocumentsData(hasInvalidType = hasInvalidType)
         var expectedDocuments = getExpectedDocumentsFromEmisDocuments(
                 isLarge, documents.medicalRecord.documents, true)

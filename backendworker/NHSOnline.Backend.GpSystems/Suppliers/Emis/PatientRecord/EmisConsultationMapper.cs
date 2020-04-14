@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                     if (string.Equals(section.Header, "Document", StringComparison.Ordinal))
                     {
-                        var documentComments = retrieveAllComments(response);
+                        var documentComments = RetrieveAllComments(response);
 
                         consultationHeaders.Add(new ConsultationHeaderItem
                         {
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             return consultationHeaders;
         }
 
-        private static List<string> retrieveAllComments(Consultation response)
+        private static List<string> RetrieveAllComments(Consultation response)
         {
             var associatedTexts = new List<string>();
             if (response?.Sections != null)

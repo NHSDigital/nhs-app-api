@@ -134,8 +134,8 @@ Feature: Documents Frontend - Medical Record v2
       | TPP       |
 
   #This test only works on Chrome
-  Scenario: An EMIS user can download a document from their record - Medical Record v2
-    Given I am a EMIS user setup to use medical record version 2
+  Scenario Outline: A <GP System> user can download a document from their record - Medical Record v2
+    Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has multiple documents
     And I am on the medical record page
     When I click the Documents link on my record - Medical Record v2
@@ -144,6 +144,22 @@ Feature: Documents Frontend - Medical Record v2
     Then I see the document information page with actions
     When I click the Download action link on the document information page
     Then The file has been downloaded
+  Examples:
+    | GP System |
+    | EMIS      |
+    | TPP       |
+
+  Scenario Outline: A <GP System> user can download a non-viewable document from their record - Medical Record v2
+    Given I am a <GP System> user setup to use medical record version 2
+    And the GP Practice has multiple non-viewable documents
+    And I am on the medical record page
+    When I click the Documents link on my record - Medical Record v2
+    Then I see a list of documents
+    When I select an available document
+    Then I see the document information page with download action only
+  Examples:
+    | GP System |
+    | TPP       |
 
   Scenario: An EMIS user selecting an unavailable or invalid document will see an error page - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2

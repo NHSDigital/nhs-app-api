@@ -4,11 +4,11 @@ using NHSOnline.Backend.GpSystems.PatientRecord;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
-    internal class PatientDocumentVisitor : IPatientDocumentResultVisitor<IActionResult>
+    internal class PatientDocumentResultVisitor : IPatientDocumentResultVisitor<IActionResult>
     {
         public IActionResult Visit(GetPatientDocumentResult.Success result)
         {
-            return new OkObjectResult(result);
+            return new OkObjectResult(result.Response);
         }
 
         public IActionResult Visit(GetPatientDocumentResult.BadGateway result)

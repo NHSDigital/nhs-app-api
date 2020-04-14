@@ -44,28 +44,6 @@ describe('document view', () => {
     hasAgreedToMedicalWarning.mockReturnValue(true);
   });
 
-  describe('methods', () => {
-    it('will navigate to the view document page with the correct id in the path', () => {
-      // Arrange
-      const route = { name: DOCUMENT_DETAIL.name, params: { id: 1 } };
-      const page = mountPage();
-
-      // Act
-      page.vm.navigateToView();
-
-      // Assert
-      expect($router.push).toHaveBeenCalledWith(route);
-    });
-    it('will convert map the download type correctly', async () => {
-      // Arrange
-      const page = mountPage();
-
-      // Act & Assert
-      expect(page.vm.mapFileTypeToDownloadType('docm')).toEqual('doc');
-      expect(page.vm.mapFileTypeToDownloadType('jpeg')).toEqual('jpeg');
-    });
-  });
-
   describe('template', () => {
     it('will display Unknown Date if there is no document date', async () => {
       // Arrange
@@ -88,79 +66,6 @@ describe('document view', () => {
       expect(documentInfo.text()).toEqual(dateString);
     });
 
-    it('will set the header and page title to the document name', async () => {
-      // Arrange
-      const document = { name: 'Document1',
-        type: 'jpg',
-        size: 1000000,
-        date: { value: '2019-08-08T12:03:44+00:00' },
-        isValidFile: true };
-      const $store = newStore({ document });
-      const page = mountPage({ $store });
-
-      // Act
-      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
-
-      // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'Document1');
-    });
-
-    it('will dispatch the load document function if there is no size on the documents list', async () => {
-      // Arrange
-      const document = { name: 'Document1',
-        type: 'jpg',
-        needMoreInformation: true,
-        date: { value: '2019-08-08T12:03:44+00:00' },
-        isValidFile: true };
-      const $store = newStore({ document });
-      const page = mountPage({ $store });
-
-      // Act
-      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
-
-      // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('myRecord/loadDocument', 1);
-    });
-
-    it('will set the header to the document date if no name exists', async () => {
-      // Arrange
-      const document = { name: undefined, type: 'jpg', size: 1000000, date: { value: '2019-08-08T12:03:44+00:00' }, isValidFile: true, documentType: null };
-      const $store = newStore({ document });
-      const page = mountPage({ $store });
-
-      const dateString = 'translate_my_record.documents.documentPageSubtext 8 August 2019';
-
-      // Act
-      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
-
-      // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', dateString);
-    });
-
-    it('will set the header to the letter date if documentType exists and is letter', async () => {
-      // Arrange
-      const document = {
-        name: undefined,
-        type: 'jpg',
-        size: 1000000,
-        date: { value: '2019-08-08T12:03:44+00:00' },
-        isValidFile: true,
-        documentType: 'Letter',
-      };
-      const $store = newStore({ document });
-      const page = mountPage({ $store });
-
-      const dateString = 'Letter translate_my_record.documents.docTypePageSubtext 8 August 2019';
-
-      // Act
-      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
-
-      // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', dateString);
-    });
-  });
-
-  describe('methods', () => {
     it('will display the date subtext if there is a name', () => {
       // Arrange
       const data = () => ({
@@ -319,13 +224,21 @@ describe('document view', () => {
       expect(documentInfo.exists()).toBe(false);
     });
 
-    it('will display the actions for the document', () => {
+    each([
+      ['valid, viewable and downloadable', true, true, true],
+      ['valid, not viewable but downloadable', true, false, true],
+      ['valid, viewable but not downloadable', true, true, false],
+      ['invalid, not viewable and not downloadable', false, false, false],
+      ['invalid, viewable and downloadable', false, true, true],
+    ]).it('will display the correct actions for the document when file is %s', (_, isValidFile, isViewable, isDownloadable) => {
       const data = () => ({
         name: undefined,
         comments: [],
         size: 1000000,
         type: 'jpg',
-        isValidFile: true,
+        isValidFile,
+        isViewable,
+        isDownloadable,
       });
       // Arrange
       const page = mountPage({ data });
@@ -335,57 +248,16 @@ describe('document view', () => {
       const downloadItem = page.find('#btn_downloadDocument');
 
       // Assert
-      expect(viewItem.text()).toEqual('translate_my_record.documents.actions.view');
-      expect(downloadItem.text()).toEqual('translate_my_record.documents.actions.download');
-      expect(viewItem.exists()).toBe(true);
-      expect(downloadItem.exists()).toBe(true);
-    });
+      if (isValidFile && isViewable) {
+        expect(viewItem.text()).toEqual('translate_my_record.documents.actions.view');
+      }
 
-    it('will not display the actions for the document if the document is too large', () => {
-      const data = () => ({
-        name: undefined,
-        comments: [],
-        size: 4000000,
-        type: 'jpg',
-        isValidFile: false,
-      });
+      if (isValidFile && isDownloadable) {
+        expect(downloadItem.text()).toEqual('translate_my_record.documents.actions.download');
+      }
 
-      // Arrange
-      const page = mountPage({ data });
-
-      // Act
-      const viewItem = page.find('#btn_viewDocument');
-      const downloadItem = page.find('#btn_downloadDocument');
-
-      // Assert
-      expect(viewItem.exists()).toBe(false);
-      expect(downloadItem.exists()).toBe(false);
-    });
-
-    it('will display a different header if the document is too large', async () => {
-      // Arrange
-      const document = { name: undefined,
-        type: 'jpg',
-        size: 4000000,
-        date: { value: '2019-08-08T12:03:44+00:00' },
-        documentType: null };
-      const documentComments = [{
-        documentKey: {
-          eventGuid: 'test',
-          term: 'test',
-          codeId: 1234,
-        },
-        comments: ['this is a test', 'this is a second test', 'this is a third test'],
-      }];
-      const $store = newStore({ document, documentComments });
-      const page = mountPage({ $store });
-
-      // Act
-      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
-
-      // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_my_record.documents.documentUnavailableHeader');
-      expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_my_record.documents.documentUnavailablePageTitle');
+      expect(viewItem.exists()).toBe(isValidFile && isViewable);
+      expect(downloadItem.exists()).toBe(isValidFile && isDownloadable);
     });
 
     each([{
@@ -398,12 +270,7 @@ describe('document view', () => {
       size: 1000000,
       comments: [],
       isValidFile: true,
-    }, {
-      type: 'jpg',
-      size: 4000000,
-      comments: [],
-      isValidFile: true,
-    }]).it('will display a different subtext if the document is too large or if the file type is TGA or TPIC', (testData) => {
+    }]).it('will display a different subtext if the document file type is TGA or TPIC', (testData) => {
       // Arrange
       const { size, comments, type } = testData;
       const data = () => ({ type, size, comments });
@@ -427,12 +294,7 @@ describe('document view', () => {
       size: 1000000,
       comments: [],
       isValidFile: true,
-    }, {
-      type: 'jpg',
-      size: 4000000,
-      comments: [],
-      isValidFile: true,
-    }]).it('will not display the glossary or the warning if the document is too large or if the file type is TGA or TPIC', (testData) => {
+    }]).it('will not display the glossary or the warning if the document file type is TGA or TPIC', (testData) => {
       // Arrange
       const { size, comments, type } = testData;
       const data = () => ({ size, comments, type });
@@ -445,6 +307,158 @@ describe('document view', () => {
       // Assert
       expect(glossary.exists()).toBe(false);
       expect(downloadWarning.exists()).toBe(false);
+    });
+  });
+
+  describe('methods', () => {
+    it('will navigate to the view document page with the correct id in the path', () => {
+      // Arrange
+      const route = { name: DOCUMENT_DETAIL.name, params: { id: 1 } };
+      const page = mountPage();
+
+      // Act
+      page.vm.navigateToView();
+
+      // Assert
+      expect($router.push).toHaveBeenCalledWith(route);
+    });
+
+    it('will map the download type correctly', async () => {
+      // Arrange
+      const page = mountPage();
+
+      // Act & Assert
+      expect(page.vm.mapFileTypeToDownloadType('docm')).toEqual('doc');
+      expect(page.vm.mapFileTypeToDownloadType('jpeg')).toEqual('jpeg');
+    });
+
+    each([
+      ['jpg', 'image/jpeg'],
+      ['dib', 'image/bmp'],
+      ['pdf', 'application/pdf'],
+      ['spooby', 'application/octet-stream'],
+    ]).it('will parse the %s file mime type correctly', async (type, expectedMimeType) => {
+      const page = mountPage();
+      // eslint-disable-next-line no-underscore-dangle
+      const mimeTypeProperty = page.vm._computedWatchers.mimeType.getter;
+
+      expect(mimeTypeProperty.call({ type })).toEqual(expectedMimeType);
+    });
+
+    it('will display a different header if the file is invalid', async () => {
+      // Arrange
+      const document = {
+        name: undefined,
+        type: 'jpg',
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        documentType: 'Letter',
+        isValidFile: false,
+      };
+      const documentComments = [{
+        documentKey: {
+          eventGuid: 'test',
+          term: 'test',
+          codeId: 1234,
+        },
+        comments: ['this is a test', 'this is a second test', 'this is a third test'],
+      }];
+      const $store = newStore({ document, documentComments });
+      const page = mountPage({ $store });
+
+      // Act
+      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
+
+      // Assert
+      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_my_record.documents.documentTypeUnavailableHeader');
+      expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_my_record.documents.documentTypeUnavailablePageTitle');
+    });
+
+    it('will set the header and page title to the document name', async () => {
+      // Arrange
+      const document = {
+        name: 'Document1',
+        type: 'jpg',
+        size: 1000000,
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        isValidFile: true,
+        isViewable: true,
+        isDownloadable: true,
+      };
+      const $store = newStore({ document });
+      const page = mountPage({ $store });
+
+      // Act
+      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
+
+      // Assert
+      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'Document1');
+    });
+
+    it('will dispatch the load document function if needMoreInformation is true', async () => {
+      // Arrange
+      const document = {
+        name: 'Document1',
+        type: 'jpg',
+        needMoreInformation: true,
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        isValidFile: true,
+      };
+      const $store = newStore({ document });
+      const page = mountPage({ $store });
+
+      // Act
+      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
+
+      // Assert
+      expect($store.dispatch).toHaveBeenCalledWith('myRecord/loadDocument', 1);
+    });
+
+    it('will set the header to the document date if no name exists', async () => {
+      // Arrange
+      const document = {
+        name: undefined,
+        type: 'jpg',
+        size: 1000000,
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        isValidFile: true,
+        isViewable: true,
+        isDownloadable: true,
+        documentType: null,
+      };
+      const $store = newStore({ document });
+      const page = mountPage({ $store });
+
+      const dateString = 'translate_my_record.documents.documentPageSubtext 8 August 2019';
+
+      // Act
+      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
+
+      // Assert
+      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', dateString);
+    });
+
+    it('will set the header to the letter date if documentType exists and is letter', async () => {
+      // Arrange
+      const document = {
+        name: undefined,
+        type: 'jpg',
+        size: 1000000,
+        date: { value: '2019-08-08T12:03:44+00:00' },
+        isValidFile: true,
+        isViewable: true,
+        isDownloadable: true,
+        documentType: 'Letter',
+      };
+      const $store = newStore({ document });
+      const page = mountPage({ $store });
+
+      const dateString = 'Letter translate_my_record.documents.docTypePageSubtext 8 August 2019';
+
+      // Act
+      await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
+
+      // Assert
+      expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', dateString);
     });
   });
 });

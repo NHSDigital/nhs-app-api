@@ -133,7 +133,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             // Arrange
             var today = DateTime.Now;
             var twoDaysAgo = today.AddDays(-2);
-            var yesterday = today.AddDays(-1);
             var item = new MedicationRootObject {
                 MedicalRecord = new MedicalRecord
                 {
@@ -182,7 +181,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             // Arrange
             var today = DateTime.Now;
             var twoDaysAgo = today.AddDays(-2);
-            var yesterday = today.AddDays(-1);
             var item = new MedicationRootObject {
                 MedicalRecord = new MedicalRecord
                 {
@@ -231,7 +229,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             // Arrange
             var today = DateTime.Now;
             var twoDaysAgo = today.AddDays(-2);
-            var yesterday = today.AddDays(-1);
             var item = new MedicationRootObject {
                 MedicalRecord = new MedicalRecord
                 {

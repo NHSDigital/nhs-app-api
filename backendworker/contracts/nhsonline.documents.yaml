@@ -99,9 +99,9 @@ components:
         type:
           type: string
           description: type of document
-        isTooLarge: 
+        isViewable:
           type: boolean
-          description: Indicates if the document is too large to be loaded
-        isFileUploading:
+          description: Indicates if the file is viewable
+        isDownloadable:
           type: boolean
-          description: Indicates if the document is still uploading to the GP system
+          description: Indicates if the file is downloadable

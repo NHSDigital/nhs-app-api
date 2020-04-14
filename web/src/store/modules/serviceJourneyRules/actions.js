@@ -1,4 +1,6 @@
-import { INIT, SET_RULES } from './mutation-types';
+import { mutationNames } from './constants';
+
+const { INIT, SET_RULES } = mutationNames;
 
 export default {
   init({ commit }) {

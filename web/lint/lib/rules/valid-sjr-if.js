@@ -1,8 +1,8 @@
 const utils = require('eslint-plugin-vue/lib/utils');
-const { has } = require('lodash/fp');
-const getters = require('../../../src/.transpiled/store/modules/serviceJourneyRules/getters');
+const { getterNames } = require('../../.transpiled/constants');
 
 const name = 'sjr-if';
+const getterNameValues = Object.values(getterNames);
 
 module.exports = {
   meta: {
@@ -25,7 +25,7 @@ module.exports = {
 
           if (value === null) {
             message = `'<${name}>' missing 'journey' value.`;
-          } else if (!has(`${value.value}Enabled`)(getters.default)) {
+          } else if (!getterNameValues.includes(`${value.value}Enabled`)) {
             message = `'${value.value}' journey does not have a corresponding getter.`;
           }
         }

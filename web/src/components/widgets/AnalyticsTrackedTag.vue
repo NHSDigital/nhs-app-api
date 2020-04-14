@@ -7,6 +7,7 @@
              :rel="tag === 'a' && target === '_blank' ? 'noopener noreferrer': undefined"
              :role="tag === 'a' && !href ? 'link': undefined"
              :target="tag === 'a' ? target : undefined"
+             :tabindex="!href ? '0' : undefined"
              @click="trackClick"
              @keypress.enter="trackClick">
     <slot/>

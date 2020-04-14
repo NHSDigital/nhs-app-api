@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         private Mock<ITppClientRequest<(TppRequestParameters tppRequestParameters, string startDate, string endDate), TestResultsViewReply>> _testResultsView;
         private Mock<ITppClientRequest<(TppRequestParameters tppRequestParameters, string documentIdentifier), RequestBinaryDataReply>> _requestBinary;
         private Mock<ITppClientRequest<(TppRequestParameters tppRequestParameters, string testResultId), TestResultsViewReply>> _testResultsViewDetailed;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -172,7 +172,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 Content = null,
                 HasErrored = true,
                 Type = "Document",
-                IsTooLarge = true
+                IsViewable = false,
+                IsDownloadable = false
             };
 
             _requestBinary.Setup(x => x.Post(RequestBinaryMatchParameters()))
@@ -185,7 +186,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 .Verifiable();
 
             _patientDocumentTaskChecker.Setup(x =>
-                    x.Check(It.IsAny<TppApiObjectResponse<RequestBinaryDataReply>>()))
+                    x.CheckForViewing(It.IsAny<TppApiObjectResponse<RequestBinaryDataReply>>()))
                 .Returns(patientDocument)
                 .Verifiable();
 
@@ -200,11 +201,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
                 .Subject.Response.Should().NotBeNull();
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
-                .Subject.Response.IsTooLarge.Should().BeTrue();
+                .Subject.Response.IsViewable.Should().BeFalse();
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
-                .Subject.Response.IsFileUploading.Should().BeFalse();
-            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
-                .Subject.Response.HasErrored.Should().BeTrue();
+                .Subject.Response.IsDownloadable.Should().BeFalse();
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
                 .Subject.Response.Content.Should().BeNull();
         }
@@ -212,7 +211,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         [TestMethod]
         public async Task GetPatientDocument_ReturnsSuccessResponse_WhenFileStillUploadingErrorResponseFromTpp()
         {
-
             // Arrange
             var expectedErrorResponse = new Error
             {
@@ -225,7 +223,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 Content = null,
                 HasErrored = true,
                 Type = "Document",
-                IsFileUploading = true
+                IsViewable = false,
+                IsDownloadable = false
             };
 
             _requestBinary.Setup(x => x.Post(RequestBinaryMatchParameters()))
@@ -238,7 +237,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 .Verifiable();
 
             _patientDocumentTaskChecker.Setup(x =>
-                    x.Check(It.IsAny<TppApiObjectResponse<RequestBinaryDataReply>>()))
+                    x.CheckForViewing(It.IsAny<TppApiObjectResponse<RequestBinaryDataReply>>()))
                 .Returns(patientDocument)
                 .Verifiable();
 
@@ -253,11 +252,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
                 .Subject.Response.Should().NotBeNull();
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
-                .Subject.Response.IsTooLarge.Should().BeFalse();
+                .Subject.Response.IsViewable.Should().BeFalse();
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
-                .Subject.Response.IsFileUploading.Should().BeTrue();
-            result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
-                .Subject.Response.HasErrored.Should().BeTrue();
+                .Subject.Response.IsDownloadable.Should().BeFalse();
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
                 .Subject.Response.Content.Should().BeNull();
         }
@@ -283,7 +280,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 Content = "test",
                 HasErrored = false,
                 Type = "Document",
-                IsTooLarge = false
+                IsViewable = false,
+                IsDownloadable = false
             };
 
             _requestBinary.Setup(x => x.Post(RequestBinaryMatchParameters()))
@@ -294,7 +292,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 .Verifiable();
 
             _patientDocumentTaskChecker.Setup(x =>
-                    x.Check(It.IsAny<TppApiObjectResponse<RequestBinaryDataReply>>()))
+                    x.CheckForViewing(It.IsAny<TppApiObjectResponse<RequestBinaryDataReply>>()))
                 .Returns(patientDocument)
                 .Verifiable();
 
@@ -308,7 +306,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             result.Should().BeAssignableTo<GetPatientDocumentResult.Success>()
                 .Subject.Response.Content.Should().NotBeNull();
         }
-        
+
         [TestMethod]
         public async Task GetDetailedTestResult_WhenResponseMappedSuccessfully_ReturnsSuccess()
         {
@@ -389,13 +387,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                 .Throws<NullReferenceException>();
 
             var result = await _systemUnderTest.GetDetailedTestResult(_gpLinkedAccountModel, testResultId);
-            
+
             result.Should().BeAssignableTo<GetDetailedTestResult.BadGateway>();
         }
-        
-        
-        
-        
+
+
+
+
 
         private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)
         {

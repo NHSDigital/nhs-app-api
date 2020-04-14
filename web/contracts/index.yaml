@@ -1019,7 +1019,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve allergy data."
                         hasUndeterminedAccess: 
                           type: "boolean"
                           description: "Set to true if no data is returned and we cant determine why"
@@ -1062,7 +1062,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve medication data."
                         hasUndeterminedAccess: 
                           type: "boolean"
                           description: "Set to true if no data is returned and we cant determine why"
@@ -1149,7 +1149,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve immunisation data."
                         hasUndeterminedAccess: 
                           type: "boolean"
                           description: "Set to true if no data is returned and we cant determine why"
@@ -1189,7 +1189,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve test result data."
                         rawHtml: 
                           type: "string"
                           description: "When working with Vision, raw HTML is returned instead of XML data"
@@ -1251,7 +1251,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve diagnosis data."
                         rawHtml: 
                           type: "string"
                           description: "This is for Vision Only, contains Raw HTML to be rendered on the web"
@@ -1263,7 +1263,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve problem data."
                         hasUndeterminedAccess: 
                           type: "boolean"
                           description: "Set to true if no data is returned and we cant determine why"
@@ -1314,7 +1314,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve event data."
                         data: 
                           type: "object"
                           properties: 
@@ -1344,7 +1344,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve consultation data."
                         data: 
                           type: "object"
                           properties: 
@@ -1409,7 +1409,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve examination data."
                         rawHtml: 
                           type: "string"
                           description: "When working with Vision, raw HTML is returned instead of XML data"
@@ -1421,7 +1421,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve procedure data"
                         rawHtml: 
                           type: "string"
                           description: "When working with Vision, raw HTML is returned instead of XML data"
@@ -1433,7 +1433,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve medical history data"
                         hasUndeterminedAccess: 
                           type: "boolean"
                           description: "Set to true if no data is returned and we cant determine why"
@@ -1473,7 +1473,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve patient document data."
                         data: 
                           type: "array"
                           items: 
@@ -1538,7 +1538,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve recall data."
                         hasUndeterminedAccess: 
                           type: "boolean"
                           description: "Set to true if no data is returned and we cant determine why"
@@ -1587,7 +1587,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve encounter data."
                         hasUndeterminedAccess: 
                           type: "boolean"
                           description: "Set to true if no data is returned and we cant determine why"
@@ -1630,7 +1630,7 @@
                           description: "Does the patient have access to this data."
                         hasErrored: 
                           type: "boolean"
-                          description: "Some error occurred when attempting to retrieve this error."
+                          description: "Some error occurred when attempting to retrieve referral data."
                         hasUndeterminedAccess: 
                           type: "boolean"
                           description: "Set to true if no data is returned and we cant determine why"
@@ -5528,12 +5528,12 @@
                     type: 
                       type: "string"
                       description: "type of document"
-                    isTooLarge: 
+                    isViewable: 
                       type: "boolean"
-                      description: "Indicates if the document is too large to be loaded"
-                    isFileUploading: 
+                      description: "Indicates if the file is viewable"
+                    isDownloadable: 
                       type: "boolean"
-                      description: "Indicates if the document is still uploading to the GP system"
+                      description: "Indicates if the file is downloadable"
           401: 
             description: "User session has expired."
           500: 

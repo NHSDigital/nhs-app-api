@@ -6,14 +6,19 @@ import mocking.tpp.models.RequestPatientRecordReply
 
 object TppDcrDocumentData {
 
-    fun getMultipleDcrEventsForTppDcrDocuments(hasInvalidType: Boolean = false): RequestPatientRecordReply {
-
+    fun getMultipleDcrEventsForTppDcrDocuments(
+        hasInvalidType: Boolean = false,
+        hasNonViewableType: Boolean = false): RequestPatientRecordReply {
         val tppDcrEvents = mutableListOf<Event>()
 
         var details = "JPEG: Blood-tests.jpeg - some comments"
 
         if (hasInvalidType) {
             details = "TGA: Blood-tests.tga - some comments"
+        }
+
+        if (hasNonViewableType) {
+            details = "PDF: Blood-tests.pdf - some comments"
         }
 
         tppDcrEvents.add(Event("2018-02-18T11:12:55.0Z", "Mr General NhsApp",

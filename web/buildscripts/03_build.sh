@@ -9,7 +9,7 @@ source "../buildscripts/lib/functions_logging.sh"
 
 docker build \
   --target=build \
-  --cache-from=local/nhsonline-web-build-dependencies \
+  --cache-from=local/nhsonline-web-lint \
   --tag local/nhsonline-web-build \
   --build-arg COMMIT_ID="$(git rev-parse --short HEAD)" \
   --build-arg APP_VERSION_TAG="$BRANCH_TAG" \

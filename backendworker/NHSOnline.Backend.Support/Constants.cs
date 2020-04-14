@@ -118,7 +118,6 @@ namespace NHSOnline.Backend.Support
                     public const string Docx = "docx";
                     public const string Docm = "docm";
                     public const string Dot = "dot";
-                    public const string Rtf = "rtf";
                 }
 
                 public static readonly List<string> DocumentTypes = new List<string>
@@ -185,7 +184,7 @@ namespace NHSOnline.Backend.Support
                     TextType.Rtf
                 };
 
-                public static readonly List<string> TppWhiteListTypes = new List<string>
+                public static readonly List<string> TppViewableWhiteListTypes = new List<string>
                 {
                     ImageType.Bmp,
                     ImageType.Dib,

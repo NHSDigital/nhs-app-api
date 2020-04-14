@@ -15,13 +15,18 @@ COPY lint/package.json lint/package.json
 
 RUN npm install
 
+# Lint
+FROM build_dependencies as lint
+
+COPY . .
+
+RUN npm run lint
+
 # Build
-FROM build_dependencies as build
+FROM lint as build
 
 ARG COMMIT_ID
 ARG APP_VERSION_TAG
-
-COPY . .
 
 ## add version info to config
 RUN sed -i "s/.*COMMIT_ID:.*/    COMMIT_ID: '$COMMIT_ID',/" nuxt.config.js && \

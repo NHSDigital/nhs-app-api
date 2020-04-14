@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
@@ -9,49 +11,45 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
     {
         internal PatientDocuments Map(MedicationRootObject documentsGetResponse)
         {
-            var documents = new PatientDocuments();
-
-            var medicalRecord = documentsGetResponse.MedicalRecord;
-
-            if (medicalRecord?.Documents != null)
+            return new PatientDocuments()
             {
-                documents.Data = medicalRecord.Documents.Select(Map).ToList();
-            }
-
-            return documents;
+                Data = documentsGetResponse?.MedicalRecord
+                    ?.Documents
+                    ?.Select(Map)
+                    .ToList() ?? new List<DocumentItem>()
+            };
         }
 
         private static DocumentItem Map(Document document)
         {
-            var documentItem = new DocumentItem
+            var name = document.Observation
+                .AssociatedText
+                ?.Select(x => x.Text)
+                .FirstOrDefault();
+
+            var effectiveDate = new MyRecordDate
             {
-                EffectiveDate = document.Observation.EffectiveDate != null
-                    ? new MyRecordDate
-                    {
-                        Value = document.Observation.EffectiveDate.Value,
-                        DatePart = document.Observation.EffectiveDate.DatePart
-                    }
-                    : new MyRecordDate()
+                Value = document.Observation.EffectiveDate?.Value,
+                DatePart = document.Observation.EffectiveDate?.DatePart
             };
 
-            if (document.Observation.AssociatedText != null)
+            var isValid = document.Size < Constants.FileConstants.EmisSizeLimit &&
+                          Constants.FileConstants.FileTypes.WhiteListTypes.Contains(
+                              document.Extension, StringComparer.OrdinalIgnoreCase);
+
+            return new DocumentItem
             {
-                documentItem.Name = document.Observation.AssociatedText.Select(x => x.Text).FirstOrDefault();
-            }
-
-            documentItem.IsAvailable = document.Available;
-            documentItem.Size = document.Size;
-            documentItem.Extension = document.Extension;
-
-            documentItem.Term = document.Observation.Term;
-            documentItem.EventGuid = document.Observation.EventGuid;
-            documentItem.CodeId = document.Observation.CodeId;
-            documentItem.DocumentIdentifier = document.DocumentGuid;
-
-            documentItem.IsValidFile = documentItem.Size != null &&
-                                       document.Size < Constants.FileConstants.EmisSizeLimit &&
-                                       Constants.FileConstants.FileTypes.WhiteListTypes.Contains(document.Extension);
-            return documentItem;
+                DocumentIdentifier = document.DocumentGuid,
+                EventGuid = document.Observation.EventGuid,
+                Name = name,
+                Term = document.Observation.Term,
+                Extension = document.Extension,
+                Size = document.Size,
+                EffectiveDate = effectiveDate,
+                CodeId = document.Observation.CodeId,
+                IsAvailable = document.Available,
+                IsValidFile = isValid
+            };
         }
     }
 }

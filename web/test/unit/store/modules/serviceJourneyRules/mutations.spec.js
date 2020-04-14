@@ -1,5 +1,11 @@
+import { mutationNames } from '@/store/modules/serviceJourneyRules/constants';
 import mutations from '@/store/modules/serviceJourneyRules/mutations';
-import { initialState, INIT, SET_RULES } from '@/store/modules/serviceJourneyRules/mutation-types';
+import { initialState } from '@/store/modules/serviceJourneyRules/mutation-types';
+
+const {
+  INIT,
+  SET_RULES,
+} = mutationNames;
 
 describe('service journey rules mutations', () => {
   let state;

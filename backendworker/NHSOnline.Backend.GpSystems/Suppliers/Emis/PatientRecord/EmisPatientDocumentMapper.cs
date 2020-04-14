@@ -1,57 +1,114 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using HtmlAgilityPack;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Sanitization;
-using Constants = NHSOnline.Backend.Support.Constants;
+using FileTypes = NHSOnline.Backend.Support.Constants.FileConstants.FileTypes;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
-    public class EmisPatientDocumentMapper
+    public interface IEmisPatientDocumentMapper
     {
-        private readonly ILogger<EmisPatientDocumentMapper> _logger;
-        private readonly IHtmlSanitizer _htmlSanitizer;
+        PatientDocument Map(IndividualDocument documentGetResponse, string documentType, string documentName);
+        FileContentResult MapForDownload(IndividualDocument documentGetResponse, string documentType, string documentName);
+    }
 
-        public EmisPatientDocumentMapper(ILogger<EmisPatientDocumentMapper> logger, IHtmlSanitizer htmlSanitizer)
+    public class EmisPatientDocumentMapper: IEmisPatientDocumentMapper
+    {
+        private readonly ILogger<IEmisPatientDocumentMapper> _logger;
+        private readonly IHtmlSanitizer _htmlSanitizer;
+        private readonly IEmisDocumentDownloadConverter _emisDocumentDownloadConverter;
+
+        public EmisPatientDocumentMapper(
+            ILogger<IEmisPatientDocumentMapper> logger,
+            IHtmlSanitizer htmlSanitizer,
+            IEmisDocumentDownloadConverter emisDocumentDownloadConverter)
         {
             _logger = logger;
             _htmlSanitizer = htmlSanitizer;
+            _emisDocumentDownloadConverter = emisDocumentDownloadConverter;
         }
 
         public PatientDocument Map(IndividualDocument documentGetResponse, string documentType, string documentName)
         {
-            _logger.LogInformation("Mapping document response");
-            if (documentGetResponse == null)
+            try
             {
-                throw new ArgumentNullException(nameof(documentGetResponse));
-            }
+                _logger.LogEnter();
 
-            var document = new PatientDocument();
+                if (documentGetResponse?.CompressedEncodedDocumentContent == null)
+                {
+                    _logger.LogError("Response contained no content");
+                    return new PatientDocument
+                    {
+                        HasErrored = true
+                    };
+                }
 
-            if (documentGetResponse.CompressedEncodedDocumentContent != null)
-            {
                 _logger.LogInformation("Decompressing retrieved document content");
 
                 var documentContent = DecompressGzip(documentGetResponse.CompressedEncodedDocumentContent);
 
-                if (!string.IsNullOrEmpty(documentType)
-                    && !string.IsNullOrEmpty(documentName)
-                    && (Constants.FileConstants.FileTypes.ImageTypes.Contains(documentType) || 
-                    documentType.Equals(Constants.FileConstants.FileTypes.DocumentType.Pdf, StringComparison.Ordinal)))
+                if (ShouldAddAltTextToImage(documentType, documentName))
                 {
                     documentContent = AddAltTextToImage(documentContent, documentName);
                 }
-                
-                
-                document.Content = _htmlSanitizer.GetBodyContent(documentContent);
-            }
 
-            return document;
+                return new PatientDocument
+                {
+                    Content = _htmlSanitizer.GetBodyContent(documentContent),
+                    IsViewable = true,
+                    IsDownloadable = true
+                };
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        public FileContentResult MapForDownload(IndividualDocument documentGetResponse, string documentType, string documentName)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var patientDocument = Map(documentGetResponse, documentType, documentName);
+
+                if (patientDocument?.HasErrored ?? true)
+                {
+                    _logger.LogError("Mapped patient document is null or has errored. Returning null FileContentResult");
+                    return null;
+                }
+
+                var documentAsBytes = ConvertHtmlDocumentToBytes(documentType, patientDocument.Content);
+
+                if (documentAsBytes == null)
+                {
+                    _logger.LogError($"{nameof(ConvertHtmlDocumentToBytes)} returned null. Returning null FileContentResult");
+                    return null;
+                }
+
+                var mappedType = MapFileTypeToDownloadType(documentType);
+                var mimeType = FileTypes.DocumentMimeTypes[mappedType];
+                var fileName = $"{documentName}.{mappedType}";
+
+                return new FileContentResult(documentAsBytes, mimeType)
+                {
+                    FileDownloadName = fileName
+                };
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
 
         private static string DecompressGzip(string str)
@@ -72,6 +129,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         private string AddAltTextToImage(string content, string altText)
         {
             _logger.LogEnter();
+
             try
             {
                 if (string.IsNullOrEmpty(content))
@@ -86,43 +144,72 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                 doc.LoadHtml(content);
 
-                var imgNodes = doc.DocumentNode.SelectNodes(".//img");
+                _logger.LogInformation("Adding alt text to images in document");
 
-                if (imgNodes == null)
-                {
-                    _logger.LogInformation("Document contains no img tag");
-                    return content;
-                }
+                doc.DocumentNode
+                    .SelectNodes(".//img")
+                    ?.Where(n => !n.Attributes.Contains("alt"))
+                    .ForEachWithIndex((node, idx) =>
+                        node.SetAttributeValue("alt", $"{altText} page {idx + 1}"));
 
-                if (imgNodes.Count > 1)
-                {
-                    // if a pdf has multiple images we want to
-                    // set the alt text to distinguish pages
-                    //eg altText="test.pdf page 1"
-                    foreach (var imgNode in imgNodes)
-                    {
-                        if (!imgNode.Attributes.Contains("alt"))
-                        {
-                            imgNode.SetAttributeValue("alt", altText + " page " 
-                                                                     + (imgNodes.IndexOf(imgNode) + 1));
-                        }
-                    }
-                }
-                else
-                {
-                    if (!imgNodes[0].Attributes.Contains("alt"))
-                    {
-                        _logger.LogInformation("Setting alt text on img tag");
-                        imgNodes[0].SetAttributeValue("alt", altText);
-                    }    
-                }
-                
                 return doc.DocumentNode.InnerHtml;
             }
             finally
             {
                 _logger.LogExit();
             }
+        }
+
+        private byte[] ConvertHtmlDocumentToBytes(string type, string content)
+        {
+            if (FileTypes.TextTypes.Contains(type))
+            {
+                return _emisDocumentDownloadConverter.ConvertToText(content);
+            }
+
+            if (FileTypes.ImageTypes.Contains(type))
+            {
+                return _emisDocumentDownloadConverter.ConvertToImage(content);
+            }
+
+            if (FileTypes.DocumentTypes.Contains(type))
+            {
+                return _emisDocumentDownloadConverter.ConvertToWordDocument(content);
+            }
+
+            return type.Equals(FileTypes.DocumentType.Pdf, StringComparison.Ordinal)
+                ? _emisDocumentDownloadConverter.ConvertToPdf(content)
+                : null;
+        }
+
+        private static bool ShouldAddAltTextToImage(string documentType, string documentName) =>
+            !string.IsNullOrEmpty(documentType) &&
+            !string.IsNullOrEmpty(documentName) &&
+            (FileTypes.ImageTypes.Contains(documentType) ||
+             FileTypes.DocumentType.Pdf.Equals(documentType, StringComparison.Ordinal));
+
+        private string MapFileTypeToDownloadType(string fileType)
+        {
+            string mappedFileType;
+
+            switch (fileType)
+            {
+                case FileTypes.DocumentType.Docm:
+                    mappedFileType = FileTypes.DocumentType.Doc;
+                    break;
+                case FileTypes.TextType.Rtf:
+                    mappedFileType = FileTypes.TextType.Txt;
+                    break;
+                case FileTypes.ImageType.Jfif:
+                    mappedFileType = FileTypes.ImageType.Jpg;
+                    break;
+                default:
+                    mappedFileType = fileType;
+                    break;
+            }
+
+            _logger.LogInformation($"Mapped actual document type {fileType} to {mappedFileType} for download");
+            return mappedFileType;
         }
     }
 }

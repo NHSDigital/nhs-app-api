@@ -7,13 +7,10 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 # shellcheck source=../../buildscripts/lib/functions_logging.sh
 source "../buildscripts/lib/functions_logging.sh"
 
-if [ 1 -eq "$(docker ps -a | grep -c nhsonline-web-lint)" ]
-then
-  docker rm nhsonline-web-lint
-fi
-
-docker run \
-  --rm \
-  --name nhsonline-web-lint \
-  local/nhsonline-web-build \
-  npm run lint-raw || die "Web linting failed"
+docker build \
+  --target=lint \
+  --cache-from=local/nhsonline-web-build-dependencies \
+  --tag local/nhsonline-web-lint \
+  --build-arg COMMIT_ID="$(git rev-parse --short HEAD)" \
+  --build-arg APP_VERSION_TAG="${BRANCH_TAG}" \
+  . || die "Web linting failed"

@@ -1,7 +1,9 @@
 import onlineConsultations from '@/middleware/onlineConsultations';
 import { initialState } from '@/store/modules/onlineConsultations/mutation-types';
 import { APPOINTMENT_ADMIN_HELP, APPOINTMENT_GP_ADVICE, APPOINTMENTS, AUTH_RETURN } from '@/lib/routes';
-import { IM1_PROVIDER } from '../../../src/store/modules/serviceJourneyRules/mutation-types';
+import { mutationNames } from '../../../src/store/modules/serviceJourneyRules/constants';
+
+const { IM1_PROVIDER } = mutationNames;
 
 describe('middleware/onlineConsultations', () => {
   let store;

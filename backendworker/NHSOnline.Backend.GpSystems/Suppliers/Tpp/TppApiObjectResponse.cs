@@ -23,6 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             ILogger logger)
         {
             var stringResponse = await GetStringResponse(responseMessage, logger);
+
             if (!string.IsNullOrEmpty(stringResponse))
             {
                 ParseResponse(responseParser, logger, stringResponse, responseMessage);

@@ -349,13 +349,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             throw new NotImplementedException();
         }
 
-        public Task<PatientDocument> GetPatientDocumentForDownload(
+        public Task<GetPatientDocumentDownloadResult> GetPatientDocumentForDownload(
             GpLinkedAccountModel gpLinkedAccountModel, string documentIdentifier, string documentType, string documentName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public byte[] ConvertDocumentToCorrectFormat(string type, string content)
         {
             throw new NotImplementedException();
         }
