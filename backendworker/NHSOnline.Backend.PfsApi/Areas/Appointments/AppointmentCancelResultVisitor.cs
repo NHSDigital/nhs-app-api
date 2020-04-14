@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
     public class AppointmentCancelResultVisitor : ResultVisitorBase, IAppointmentCancelResultVisitor<IActionResult>
     {
-        public AppointmentCancelResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, UserSession userSession) 
+        public AppointmentCancelResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, P9UserSession userSession) 
             : base(errorReferenceGenerator, userSession)
         {
         }

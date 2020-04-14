@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         private MyRecordController _systemUnderTest;
         private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private Guid _patientGuid;
 
         [TestInitialize]
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             var httpContextItems = new Dictionary<object, object>
             {
                 { Constants.HttpContextItems.UserSession, _userSession }

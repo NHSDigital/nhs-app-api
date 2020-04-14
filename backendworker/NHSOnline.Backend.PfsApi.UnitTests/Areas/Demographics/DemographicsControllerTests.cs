@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
         private DemographicsController _systemUnderTest;
         private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private IDemographicsResultVisitor<IActionResult> _visitor;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IGpSystem> _mockGpSystem;
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             
             _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
                 

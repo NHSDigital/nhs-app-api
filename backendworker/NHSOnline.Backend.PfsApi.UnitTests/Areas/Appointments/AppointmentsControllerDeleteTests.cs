@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
     {
         private IFixture _fixture;
         private AppointmentCancelRequest _appointmentCancelRequest;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private Mock<IAppointmentsService> _mockAppointmentsService;
         private Mock<IAppointmentsValidationService> _mockAppointmentsValidationService;
         private Mock<IGpSystem> _mockGpSystem;
@@ -49,12 +49,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
             
-            _fixture.Customize<UserSession>(c => c
+            _fixture.Customize<P9UserSession>(c => c
                 .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
 
             _appointmentCancelRequest = _fixture.Freeze<AppointmentCancelRequest>();
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
 
             _mockAppointmentsService = _fixture.Freeze<Mock<IAppointmentsService>>();
 

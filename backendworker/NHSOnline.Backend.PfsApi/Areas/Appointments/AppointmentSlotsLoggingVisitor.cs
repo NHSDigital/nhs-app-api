@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             public int? FurthestSlotDays { get; }
 
             public AppointmentSlotsInformation(
-                UserSession userSession,
+                P9UserSession userSession,
                 ICollection<Slot> slots)
             {
                 Supplier = userSession.GpUserSession.Supplier.ToString();
@@ -39,12 +39,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
         private readonly ILogger<AppointmentSlotsController> _logger;
         private readonly IAppointmentSlotMetadataLogger _appointmentSlotMetadataLogger;
-        private readonly UserSession _userSession;
+        private readonly P9UserSession _userSession;
 
         public AppointmentSlotsLoggingVisitor(
             ILogger<AppointmentSlotsController> logger,
             IAppointmentSlotMetadataLogger appointmentSlotMetadataLogger,
-            UserSession userSession)
+            P9UserSession userSession)
         {
             _logger = logger;
             _appointmentSlotMetadataLogger = appointmentSlotMetadataLogger;

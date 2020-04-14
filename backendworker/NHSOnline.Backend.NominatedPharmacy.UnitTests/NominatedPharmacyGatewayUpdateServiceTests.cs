@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -25,7 +25,7 @@ using NHSOnline.Backend.Support;
 
         private NominatedPharmacyGatewayUpdateService _systemUnderTest;
         private IFixture _fixture;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
 
 
         private Mock<INominatedPharmacyService> _mockNominatedPharmacyService;
@@ -39,7 +39,7 @@ using NHSOnline.Backend.Support;
 
             _mockNominatedPharmacyService = _fixture.Freeze<Mock<INominatedPharmacyService>>();
             
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
 
             _systemUnderTest = _fixture.Create<NominatedPharmacyGatewayUpdateService>();
         }

@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
         private Mock<IAssertedLoginIdentityService> _mockAssertedLoginIdentityService;
         private Mock<IAuditor> _mockAuditor;
         private Mock<ILogger<AssertedLoginIdentityController>> _mockLogger;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private CreateJwtRequest _request;
 
         private const string RequestAuditType = "AssertedLoginIdentity_CreateJwt_Request";
@@ -39,10 +39,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _fixture.Customize<UserSession>(c =>
+            _fixture.Customize<P9UserSession>(c =>
                 c.With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             _request = _fixture.Create<CreateJwtRequest>();
 
             _mockAssertedLoginIdentityService = _fixture.Freeze<Mock<IAssertedLoginIdentityService>>();

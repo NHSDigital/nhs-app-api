@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             _organDonationClient = organDonationClient;
         }
 
-        public async Task<OrganDonationResult> GetOrganDonation(DemographicsResult myRecord, UserSession userSession)
+        public async Task<OrganDonationResult> GetOrganDonation(DemographicsResult myRecord, P9UserSession userSession)
         {
             if (!(myRecord is DemographicsResult.Success demographicsResult))
             {

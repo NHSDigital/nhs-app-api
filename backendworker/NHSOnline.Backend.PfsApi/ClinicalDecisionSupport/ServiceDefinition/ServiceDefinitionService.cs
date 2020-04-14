@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         }
 
         public async Task<ServiceDefinitionResult> GetServiceDefinitionById(string providerKey,
-            string serviceDefinitionId, UserSession userSession)
+            string serviceDefinitionId, P9UserSession userSession)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             Parameters parameters,
             bool addJavascriptDisabledHeader,
             bool demographicsConsentGiven,
-            UserSession userSession)
+            P9UserSession userSession)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             }
         }
 
-        public async Task<ServiceDefinitionIsValidResult> GetServiceDefinitionIsValid(string providerKey, UserSession userSession)
+        public async Task<ServiceDefinitionIsValidResult> GetServiceDefinitionIsValid(string providerKey, P9UserSession userSession)
         {
             try
             {

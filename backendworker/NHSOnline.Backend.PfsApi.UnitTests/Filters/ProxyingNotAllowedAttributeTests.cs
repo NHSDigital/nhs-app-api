@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
     {
         private ProxyingNotAllowedAttribute _systemUnderTest;
         private AuthorizationFilterContext _context;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private HttpContext _httpContext;
 
         [TestInitialize]
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         {
             _systemUnderTest = new ProxyingNotAllowedAttribute();
 
-            _userSession = new UserSession()
+            _userSession = new P9UserSession()
             {
                 GpUserSession = new EmisUserSession()
                 {

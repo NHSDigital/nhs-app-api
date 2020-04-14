@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
         private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
         private SessionConfigurationSettings _sessionConfigSettings;
         private Mock<GpUserSession> _gpUserSession;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Guid _patientId;
         private Mock<ILinkedAccountsService> _mockLinkedAccountService;
@@ -55,8 +55,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
             _sessionConfigSettings = _fixture.Freeze<SessionConfigurationSettings>();
             _gpUserSession = _fixture.Create<Mock<GpUserSession>>();
-            _fixture.Customize<UserSession>(x => x.With(y => y.GpUserSession, _gpUserSession.Object));
-            _userSession = _fixture.Create<UserSession>();
+            _fixture.Customize<P9UserSession>(x => x.With(y => y.GpUserSession, _gpUserSession.Object));
+            _userSession = _fixture.Create<P9UserSession>();
             _userSession.GpUserSession.NhsNumber = _fixture.Create<string>();
             _userSession.GpUserSession.OdsCode = _fixture.Create<string>();
 

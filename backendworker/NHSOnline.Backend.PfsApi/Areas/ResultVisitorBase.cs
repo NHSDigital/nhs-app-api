@@ -7,13 +7,13 @@ namespace NHSOnline.Backend.PfsApi.Areas
     {
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
 
-        protected UserSession UserSession { get; }
+        protected P9UserSession UserSession { get; }
 
         protected abstract ErrorCategory ErrorCategory { get; }
 
         protected ResultVisitorBase(
             IErrorReferenceGenerator errorReferenceGenerator,
-            UserSession userSession)
+            P9UserSession userSession)
         {
             _errorReferenceGenerator = errorReferenceGenerator;
             UserSession = userSession;

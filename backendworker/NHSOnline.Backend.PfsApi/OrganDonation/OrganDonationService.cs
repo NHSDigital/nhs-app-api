@@ -27,17 +27,17 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             _withdrawService = withdrawService;
         }
 
-        public async Task<OrganDonationResult> GetOrganDonation(DemographicsResult myRecord, UserSession userSession)
+        public async Task<OrganDonationResult> GetOrganDonation(DemographicsResult myRecord, P9UserSession userSession)
             => await _lookupService.GetOrganDonation(myRecord, userSession);
 
         public async Task<OrganDonationRegistrationResult> Register(
             OrganDonationRegistrationRequest request,
-            UserSession userSession)
+            P9UserSession userSession)
             => await _registrationService.Register(request, userSession);
 
         public async Task<OrganDonationRegistrationResult> Update(
             OrganDonationRegistrationRequest request,
-            UserSession userSession)
+            P9UserSession userSession)
             => await _updateService.Update(request, userSession);
 
         public async Task<OrganDonationReferenceDataResult> GetReferenceData()
@@ -45,6 +45,6 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public async Task<OrganDonationWithdrawResult> Withdraw(
             OrganDonationWithdrawRequest request,
-            UserSession userSession) => await _withdrawService.Withdraw(request, userSession);
+            P9UserSession userSession) => await _withdrawService.Withdraw(request, userSession);
     }
 }

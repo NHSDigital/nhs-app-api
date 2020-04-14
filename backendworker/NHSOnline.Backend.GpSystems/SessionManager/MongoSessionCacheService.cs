@@ -1,42 +1,16 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Cipher;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.SessionManager
 {
-    public interface IMongoSessionCacheServiceConfig
-    {
-        string MongoDatabaseName { get; }
-        string MongoDatabaseIm1CollectionName { get; }
-    }
-
-    public class MongoSessionCacheServiceConfig : IMongoSessionCacheServiceConfig
-    {
-        public string MongoDatabaseName { get; }
-        public string MongoDatabaseIm1CollectionName { get; }
-
-        public MongoSessionCacheServiceConfig(IConfiguration configuration, ILogger<MongoSessionCacheServiceConfig> logger)
-        {
-            MongoDatabaseName = configuration.GetOrThrow("SESSION_MONGO_DATABASE_NAME", logger);
-            MongoDatabaseIm1CollectionName = configuration.GetOrThrow("SESSION_MONGO_DATABASE_COLLECTION", logger);
-        }
-    }
-
-    public interface ISessionCacheService
-    {
-        Task<string> CreateUserSession(UserSession userSession);
-        Task<Option<UserSession>> GetUserSession(string sessionId);
-        Task<bool> DeleteUserSession(string sessionId);
-        Task UpdateUserSession(UserSession userSession);
-    }
-
     public class MongoSessionCacheService : ISessionCacheService
     {
         private readonly string _databaseName;
@@ -59,7 +33,8 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             _cipherService = cipherService;
             _serializerSettings = new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.All
+                TypeNameHandling = TypeNameHandling.All,
+                SerializationBinder = new RenameUserSessionSerializationBinder()
             };
 
             _logger = logger;
@@ -68,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             _collectionName = config.MongoDatabaseIm1CollectionName;
         }
 
-        public async Task<string> CreateUserSession(UserSession userSession)
+        public async Task<string> CreateUserSession(P9UserSession userSession)
         {
             try
             {
@@ -94,7 +69,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             }
         }
 
-        public async Task<Option<UserSession>> GetUserSession(string sessionId)
+        public async Task<Option<P9UserSession>> GetUserSession(string sessionId)
         {
             try
             {
@@ -111,11 +86,11 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 if (sessionValue == null)
                 {
                     _logger.LogDebug("No Mongo value Found");
-                    return Option.None<UserSession>();
+                    return Option.None<P9UserSession>();
                 }
 
-                var userSession = JsonConvert
-                    .DeserializeObject<UserSession>(_cipherService.Decrypt(sessionValue["session"].ToString()), _serializerSettings);
+                var sessionJson = _cipherService.Decrypt(sessionValue["session"].ToString());
+                var userSession = JsonConvert.DeserializeObject<P9UserSession>(sessionJson, _serializerSettings);
 
                 userSession.Key = sessionId;
 
@@ -147,7 +122,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             }
         }
 
-        public async Task UpdateUserSession(UserSession userSession)
+        public async Task UpdateUserSession(P9UserSession userSession)
         {
             try
             {
@@ -187,6 +162,24 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
         private static BsonElement GetCurrentTimestamp()
         {
             return new BsonElement("_ts", new BsonDateTime(DateTime.UtcNow));
+        }
+
+        private sealed class RenameUserSessionSerializationBinder : ISerializationBinder
+        {
+            private readonly DefaultSerializationBinder _defaultBinder = new DefaultSerializationBinder();
+
+            public Type BindToType(string assemblyName, string typeName)
+            {
+                if (typeName == "NHSOnline.Backend.Support.UserSession")
+                {
+                    return typeof(P9UserSession);
+                }
+
+                return _defaultBinder.BindToType(assemblyName, typeName);
+            }
+
+            public void BindToName(Type serializedType, out string assemblyName, out string typeName)
+                => _defaultBinder.BindToName(serializedType, out assemblyName, out typeName);
         }
     }
 }

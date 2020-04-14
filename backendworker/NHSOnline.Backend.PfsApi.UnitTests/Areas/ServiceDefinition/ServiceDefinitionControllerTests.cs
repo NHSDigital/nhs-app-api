@@ -30,7 +30,7 @@
          private Mock<ILogger<ServiceDefinitionController>> _mockLogger;
 
          private Parameters _evaluateParameters;
-         private UserSession _userSession;
+         private P9UserSession _userSession;
 
          private const string Provider = "OLC Stubs";
          private const string ServiceDefinitionId = "NHS_ADMIN";
@@ -44,9 +44,9 @@
                  .Customize(new AutoMoqCustomization())
                  .Customize(new ApiControllerAutoFixtureCustomization());
 
-             _fixture.Customize<UserSession>(c => c
+             _fixture.Customize<P9UserSession>(c => c
                  .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-             _userSession = _fixture.Create<UserSession>();
+             _userSession = _fixture.Create<P9UserSession>();
 
              _mockServiceDefinitionService = _fixture
                  .Freeze<Mock<IServiceDefinitionService>>();
@@ -103,7 +103,7 @@
                      It.IsAny<Parameters>(),
                      It.IsAny<bool>(),
                      It.IsAny<bool>(),
-                     It.IsAny<UserSession>());
+                     It.IsAny<P9UserSession>());
 
              // Act
              var response =

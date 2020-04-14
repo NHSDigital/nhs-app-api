@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
         private NominatedPharmacyController _systemUnderTest;
         private IFixture _fixture;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
 
         private Mock<INominatedPharmacyService> _mockNominatedPharmacyService;
         private Mock<IPharmacySearchService> _mockPharmacySearchService;
@@ -53,10 +53,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _fixture.Customize<UserSession>(c => c
+            _fixture.Customize<P9UserSession>(c => c
                 .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
 
             _mockNominatedPharmacyService = _fixture.Freeze<Mock<INominatedPharmacyService>>();
             _mockPharmacyService = _fixture.Freeze<Mock<IPharmacyService>>();

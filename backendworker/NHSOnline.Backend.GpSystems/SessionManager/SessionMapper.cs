@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 {
     public interface ISessionMapper
     {
-        UserSession Map(HttpContext context, GpUserSession gpUserSession, GpSessionManagerCitizenIdUserSession citizenIdUserSession, string im1ConnectionToken);
+        P9UserSession Map(HttpContext context, GpUserSession gpUserSession, GpSessionManagerCitizenIdUserSession citizenIdUserSession, string im1ConnectionToken);
     }
 
     public class SessionMapper : ISessionMapper
@@ -20,9 +20,9 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             _antiforgery = antiforgery;
         }
 
-        public UserSession Map(HttpContext context,  GpUserSession gpUserSession, GpSessionManagerCitizenIdUserSession citizenIdUserSession, string im1ConnectionToken)
+        public P9UserSession Map(HttpContext context,  GpUserSession gpUserSession, GpSessionManagerCitizenIdUserSession citizenIdUserSession, string im1ConnectionToken)
         {
-            return new UserSession
+            return new P9UserSession
             {
                 CsrfToken = _antiforgery.GetTokens(context).RequestToken,
                 GpUserSession = gpUserSession,

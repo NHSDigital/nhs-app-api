@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         private OrganDonationController _systemUnderTest;
         private IFixture _fixture;
         private Mock<IOrganDonationService> _mockOrganDonationService;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IOrganDonationValidationService> _mockValidator;
 
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Setup(x => x.IsPutValid(It.IsAny<OrganDonationRegistrationRequest>()))
                 .Returns(true);
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             _mockOrganDonationService = _fixture.Freeze<Mock<IOrganDonationService>>();
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 

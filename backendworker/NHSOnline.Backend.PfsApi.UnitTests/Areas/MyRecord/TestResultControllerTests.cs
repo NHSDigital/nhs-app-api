@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         private DetailedTestResultController _systemUnderTest;
         private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IPatientRecordService> _mockPatientRecordService;
@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             
             _mockPatientRecordService = new Mock<IPatientRecordService>();
                 

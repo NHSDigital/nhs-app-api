@@ -14,11 +14,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
     public class AppointmentsLoggingVisitor : IAppointmentsResultVisitor<Task>
     {
         private readonly ILogger<AppointmentsController> _logger;
-        private readonly UserSession _userSession;
+        private readonly P9UserSession _userSession;
 
         public AppointmentsLoggingVisitor(
             ILogger<AppointmentsController> logger,
-            UserSession userSession
+            P9UserSession userSession
         )
         {
             _logger = logger;

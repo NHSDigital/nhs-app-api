@@ -3,7 +3,7 @@ using System;
 namespace NHSOnline.Backend.Support
 {
     [Serializable]
-    public class UserSession
+    public class P9UserSession
     {
         public string Key { get; set; }
 

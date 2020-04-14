@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             return new RecreateSessionResult.Failure();
         }
 
-        public async Task<CloseSessionResult> CloseAndDeleteSession(UserSession userSession)
+        public async Task<CloseSessionResult> CloseAndDeleteSession(P9UserSession userSession)
         {
             var logoffSessionResult = await CloseSession(userSession.GpUserSession);
 

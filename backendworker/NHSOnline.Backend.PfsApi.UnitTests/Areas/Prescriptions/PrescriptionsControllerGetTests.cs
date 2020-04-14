@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private ConfigurationSettings _options;
 
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         
         private const string CookieDomain = "CookieDomain";
         private int PrescriptionsDefaultLastNumberMonthsToDisplay;   
@@ -61,12 +61,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _fixture.Customize<UserSession>(c => c
+            _fixture.Customize<P9UserSession>(c => c
                 .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
             
             _patientId = Guid.NewGuid();
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             _mockPrescriptionsService = _fixture.Freeze<Mock<IPrescriptionService>>();
             _mockPrescriptionValidationService = _fixture.Freeze<Mock<IPrescriptionValidationService>>();
             

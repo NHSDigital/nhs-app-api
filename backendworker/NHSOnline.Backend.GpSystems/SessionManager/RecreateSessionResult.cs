@@ -6,9 +6,9 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
     {
         public class Success : RecreateSessionResult
         {
-            public  UserSession UserSession { get; }
+            public  P9UserSession UserSession { get; }
 
-            public Success(UserSession userSession)
+            public Success(P9UserSession userSession)
             {
                 UserSession = userSession;
             }

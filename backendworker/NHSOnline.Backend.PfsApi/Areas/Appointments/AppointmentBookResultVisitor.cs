@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
     public class AppointmentBookResultVisitor : ResultVisitorBase, IAppointmentBookResultVisitor<IActionResult>
     {
-        public AppointmentBookResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, UserSession userSession) 
+        public AppointmentBookResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, P9UserSession userSession) 
             : base(errorReferenceGenerator, userSession)
         {
         }

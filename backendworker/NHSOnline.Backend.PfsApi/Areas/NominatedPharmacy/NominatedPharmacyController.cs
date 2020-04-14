@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             await _auditor.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest,
                 $"Attempting to update Nominated Pharmacy for OdsCode { model.OdsCode }");
 
-            UserSession userSession = HttpContext.GetUserSession();
+            P9UserSession userSession = HttpContext.GetUserSession();
 
             var result = await UpdateNominatedPharmacy(model, userSession);
 
@@ -165,7 +165,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         }
 
 
-        private async Task<UpdateNominatedPharmacyResponse> UpdateNominatedPharmacy(UpdateNominatedPharmacyRequest model, UserSession userSession)
+        private async Task<UpdateNominatedPharmacyResponse> UpdateNominatedPharmacy(UpdateNominatedPharmacyRequest model, P9UserSession userSession)
         {
             if (!_config.IsNominatedPharmacyEnabled)
             {
@@ -199,7 +199,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 return new GetNominatedPharmacyResult.ConfigNotEnabled();
             }
 
-            UserSession userSession = HttpContext.GetUserSession();
+            P9UserSession userSession = HttpContext.GetUserSession();
 
             var isGpPracticeEpsEnabledResult =
                 await _gpSearchService.IsGpPracticeEPSEnabled(userSession.GpUserSession.OdsCode);

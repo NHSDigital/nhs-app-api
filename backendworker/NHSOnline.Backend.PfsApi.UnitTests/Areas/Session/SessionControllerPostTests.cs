@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private UserProfile _userProfile;
         private EmisUserSession _emisUserSession;
         private CitizenIdUserSession _citizenIdUserSession;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private EmisConnectionToken _connectionToken;
         private string _apiSessionId;
         private string _name;
@@ -165,7 +165,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult));
 
-            _userSession = new UserSession
+            _userSession = new P9UserSession
             {
                 CsrfToken = CsrfRequestToken,
                 GpUserSession = _emisUserSession,
@@ -196,7 +196,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
             _mockSessionCacheService
-                .Setup(x => x.CreateUserSession(It.IsAny<UserSession>()))
+                .Setup(x => x.CreateUserSession(It.IsAny<P9UserSession>()))
                 .Returns(Task.FromResult(_apiSessionId));
 
             _authenticationServiceMock = new Mock<IAuthenticationService>();

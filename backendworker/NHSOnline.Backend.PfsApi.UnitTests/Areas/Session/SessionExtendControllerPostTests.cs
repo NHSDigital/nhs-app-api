@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private SessionExtendController _systemUnderTest;
         private IFixture _fixture;
         private Mock<IGpSystem> _mockGpSystem;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private Guid _patientGuid;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<ISessionExtendService> _mockSessionExtendService;
@@ -34,10 +34,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
             
-            _fixture.Customize<UserSession>(c => c
+            _fixture.Customize<P9UserSession>(c => c
                 .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
             
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             _patientGuid = _fixture.Create<Guid>();
 
             _mockSessionExtendService = _fixture.Freeze<Mock<ISessionExtendService>>();

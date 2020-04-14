@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescription
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _microtestUserSession = _fixture.Create<MicrotestUserSession>();
-            _fixture.Customize<UserSession>(c => c
+            _fixture.Customize<P9UserSession>(c => c
                 .With(u => u.GpUserSession, _microtestUserSession));
 
             _logger = Mock.Of<ILogger<MicrotestCourseService>>();

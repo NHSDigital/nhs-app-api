@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         private OrganDonationController _systemUnderTest;
         private IFixture _fixture;
         private Mock<IOrganDonationService> _mockOrganDonationService;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             _mockOrganDonationService = _fixture.Freeze<Mock<IOrganDonationService>>();
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 

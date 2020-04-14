@@ -7,9 +7,9 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 {
     public interface IServiceDefinitionService
     {
-        Task<ServiceDefinitionResult> GetServiceDefinitionById(string providerKey, string serviceDefinitionId, UserSession userSession);
-        Task<ServiceDefinitionResult> EvaluateServiceDefinition(string providerKey, string serviceDefinitionId, Parameters parameters, bool addJavascriptDisabledHeader, bool demographicsConsentGiven, UserSession userSession);
-        Task<ServiceDefinitionIsValidResult> GetServiceDefinitionIsValid(string providerKey, UserSession userSession);
+        Task<ServiceDefinitionResult> GetServiceDefinitionById(string providerKey, string serviceDefinitionId, P9UserSession userSession);
+        Task<ServiceDefinitionResult> EvaluateServiceDefinition(string providerKey, string serviceDefinitionId, Parameters parameters, bool addJavascriptDisabledHeader, bool demographicsConsentGiven, P9UserSession userSession);
+        Task<ServiceDefinitionIsValidResult> GetServiceDefinitionIsValid(string providerKey, P9UserSession userSession);
         ServiceDefinitionResult GetProviderName(string providerKey);
     }
 }

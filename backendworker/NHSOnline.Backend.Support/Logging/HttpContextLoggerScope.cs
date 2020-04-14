@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Support.Logging
             object value = null;
             items?.TryGetValue(Constants.HttpContextItems.UserSession, out value);
 
-            var userSession = value as UserSession ?? new UserSession { Key = "{No Session yet}" };
+            var userSession = value as P9UserSession ?? new P9UserSession { Key = "{No Session yet}" };
 
             if (userSession.GpUserSession != null) //valid session has been retrieved
             {

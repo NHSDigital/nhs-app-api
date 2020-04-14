@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             // set up http contexts for both controller and calling attribute overloads..
             var actionContext = new ActionContext(new DefaultHttpContext(),
                 new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
-            actionContext.HttpContext.Items.Add("UserSession", new UserSession { Key = SessionId });
+            actionContext.HttpContext.Items.Add("UserSession", new P9UserSession { Key = SessionId });
             _systemUnderTest.ControllerContext = new ControllerContext(actionContext);
             _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(),
                 new Dictionary<string, object>(), _systemUnderTest);

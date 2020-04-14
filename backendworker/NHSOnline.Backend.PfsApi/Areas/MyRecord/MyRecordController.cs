@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             return result.Accept(new MyRecordResultVisitor());
         }
 
-        private void LogMetadata(UserSession userSession, GetMyRecordResult result)
+        private void LogMetadata(P9UserSession userSession, GetMyRecordResult result)
         {
             try
             {

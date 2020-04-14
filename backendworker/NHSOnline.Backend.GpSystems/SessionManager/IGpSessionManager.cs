@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
         Task<RecreateSessionResult> RecreateSession(string patientId);
 
-        Task<CloseSessionResult> CloseAndDeleteSession(UserSession userSession);
+        Task<CloseSessionResult> CloseAndDeleteSession(P9UserSession userSession);
 
         Task<CloseSessionResult> CloseSession(GpUserSession gpUserSession);
 

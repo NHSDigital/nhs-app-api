@@ -263,7 +263,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             return await CreateSession(successResult.UserSession, serviceJourneyRulesResultVisited, citizenIdSessionResult);
         }
 
-        private async Task<IActionResult> CreateSession(UserSession userSession,
+        private async Task<IActionResult> CreateSession(P9UserSession userSession,
             ServiceJourneyRulesVisitorOutput serviceJourneyRulesVisitorOutput,
             CitizenIdSessionResult citizenIdSessionResult)
         {
@@ -334,7 +334,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             }
         }
 
-        private CreatedResult CreateCreatedResult(UserSession userSession,
+        private CreatedResult CreateCreatedResult(P9UserSession userSession,
             ServiceJourneyRulesResponse serviceJourneyRules)
         {
             var responseBody = new PostUserSessionResponse
@@ -429,7 +429,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             }
         }
 
-        private void PopulateUserSessionResponse(UserSessionResponse response, UserSession userSession)
+        private void PopulateUserSessionResponse(UserSessionResponse response, P9UserSession userSession)
         {
             response.Name = userSession.GpUserSession.Name;
             response.SessionTimeout = _settings.DefaultSessionExpiryMinutes * 60;

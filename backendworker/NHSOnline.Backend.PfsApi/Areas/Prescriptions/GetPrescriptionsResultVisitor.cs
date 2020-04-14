@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
     internal class GetPrescriptionsResultVisitor : ResultVisitorBase, IGetPrescriptionsResultVisitor<IActionResult>
     {
-        public GetPrescriptionsResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, UserSession userSession) 
+        public GetPrescriptionsResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, P9UserSession userSession) 
             : base(errorReferenceGenerator, userSession)
         {
         }

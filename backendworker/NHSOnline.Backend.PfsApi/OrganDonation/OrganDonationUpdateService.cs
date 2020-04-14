@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public async Task<OrganDonationRegistrationResult> Update(
             OrganDonationRegistrationRequest request,
-            UserSession userSession)
+            P9UserSession userSession)
         {
             try
             {

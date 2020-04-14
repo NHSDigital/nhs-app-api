@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             public async Task Audit(
-                UserSession userSessionInContext,
+                P9UserSession userSessionInContext,
                 string operation, 
                 string details,
                 params object[] parameters
@@ -186,9 +186,9 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
         }
 
-        private static UserSession CreateUserSession(string nhsNumber, string accessToken)
+        private static P9UserSession CreateUserSession(string nhsNumber, string accessToken)
         {
-            return new UserSession
+            return new P9UserSession
             {
                 GpUserSession = new EmisUserSession
                 {

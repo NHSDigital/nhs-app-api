@@ -8,8 +8,8 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
         public class Success : CreateSessionResult
         {
-            public UserSession UserSession { get; }
-            public Success(UserSession userSession)
+            public P9UserSession UserSession { get; }
+            public Success(P9UserSession userSession)
             {
                 UserSession = userSession;
             }

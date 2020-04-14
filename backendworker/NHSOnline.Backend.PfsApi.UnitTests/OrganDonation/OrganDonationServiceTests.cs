@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         private const string ReferenceDataCacheKey = "_organDonationReferenceData";
         private const int ReferenceDataExpirySeconds = 21600;
         private OrganDonationService _organDonationService;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private Mock<IMemoryCache> _mockMemoryCache;
         private Mock<IOrganDonationClient> _mockOrganDonationClient;
         private Mock<IOrganDonationConfig> _mockOrganDonationConfig;
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _mockRegistrationWithdrawMapper =
                 fixture.Freeze<Mock<IMapper<OrganDonationWithdrawRequest, WithdrawRequest>>>();
 
-            _userSession = fixture.Create<UserSession>();
+            _userSession = fixture.Create<P9UserSession>();
             _mockResultErrorMapper =
                 fixture.Freeze<Mock<IMapper<HttpStatusCode, OrganDonationResult>>>();
             _mockRegistrationResultErrorMapper =
@@ -528,7 +528,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         {
             public GetOrganDonationTestContext(
                 Mock<IOrganDonationClient> mockClient,
-                UserSession userSession,
+                P9UserSession userSession,
                 bool throwException,
                 HttpStatusCode httpStatus,
                 Mock<IMapper<OrganDonationRegistration, RegistrationLookupRequest>> mockLookupRegistrationRequestMapper)
@@ -555,7 +555,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         {
             public UpdateTestContext(
                 Mock<IOrganDonationClient> mockClient,
-                UserSession userSession,
+                P9UserSession userSession,
                 bool throwException,
                 HttpStatusCode httpStatus,
                 Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>> mockRegistrationRequestMapper
@@ -569,7 +569,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         {
             public RegistrationTestContext(
                 Mock<IOrganDonationClient> mockClient,
-                UserSession userSession,
+                P9UserSession userSession,
                 bool throwException,
                 HttpStatusCode httpStatus,
                 Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>> mockRegistrationRequestMapper

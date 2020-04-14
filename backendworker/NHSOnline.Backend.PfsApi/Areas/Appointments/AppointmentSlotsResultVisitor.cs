@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
     {
         public AppointmentSlotsResultVisitor(
             IErrorReferenceGenerator errorReferenceGenerator,
-            UserSession userSession) : 
+            P9UserSession userSession) : 
             base(errorReferenceGenerator, userSession)
         {
         }

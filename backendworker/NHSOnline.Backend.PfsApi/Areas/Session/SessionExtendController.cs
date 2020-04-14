@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         private async Task<SessionExtendResultVisitorOutput> GetSessionExtendResultVisitorOutput(
-            UserSession userSession, Guid patientId)
+            P9UserSession userSession, Guid patientId)
         {
             _logger.LogDebug($"Fetch session extend Service for GP System: '{userSession.GpUserSession.Supplier}'.");
             var sessionService = _gpSystemFactory

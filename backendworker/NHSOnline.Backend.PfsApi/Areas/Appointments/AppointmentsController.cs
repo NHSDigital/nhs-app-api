@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        private async Task<AppointmentCancelResult> Cancel(AppointmentCancelRequest request, UserSession userSession, Guid patientId)
+        private async Task<AppointmentCancelResult> Cancel(AppointmentCancelRequest request, P9UserSession userSession, Guid patientId)
         {
             var appointmentValidator = GetAppointmentsValidationService(userSession);
             if (!appointmentValidator.IsDeleteValid(request))
@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             return await appointmentsService.Cancel(gpLinkedAccountsModel, request);
         }
 
-        private async Task<AppointmentBookResult> Book(AppointmentBookRequest request, UserSession userSession, Guid patientId)
+        private async Task<AppointmentBookResult> Book(AppointmentBookRequest request, P9UserSession userSession, Guid patientId)
         {
             var appointmentValidator = GetAppointmentsValidationService(userSession);
             if (!appointmentValidator.IsPostValid(request))
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             return await appointmentsService.Book(gpLinkedAccountModel, request);
         }
 
-        private IAppointmentsService GetAppointmentsService(UserSession userSession)
+        private IAppointmentsService GetAppointmentsService(P9UserSession userSession)
         {
             _logger.LogDebug($"Fetch Appointments Service for GP System: '{userSession.GpUserSession.Supplier}'.");
 
@@ -155,7 +155,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 .GetAppointmentsService();
         }
 
-        private IAppointmentsValidationService GetAppointmentsValidationService(UserSession userSession)
+        private IAppointmentsValidationService GetAppointmentsValidationService(P9UserSession userSession)
         {
             _logger.LogDebug($"Fetch Appointments Service for GP System: '{userSession.GpUserSession.Supplier}'.");
 

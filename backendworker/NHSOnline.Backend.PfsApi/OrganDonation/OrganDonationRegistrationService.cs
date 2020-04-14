@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public async Task<OrganDonationRegistrationResult> Register(
             OrganDonationRegistrationRequest request,
-            UserSession userSession)
+            P9UserSession userSession)
         {
             try
             {

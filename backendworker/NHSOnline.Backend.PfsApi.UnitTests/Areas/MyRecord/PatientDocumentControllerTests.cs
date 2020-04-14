@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         private Mock<IPatientRecordService> _mockPatientRecordService;
         private Mock<IAuditor> _mockAuditor;
 
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private Guid _patientId;
 
         private const string DocumentId = "1";
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
             var mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             _patientId = Guid.NewGuid();
 
             var httpContextItems = new Dictionary<object, object>

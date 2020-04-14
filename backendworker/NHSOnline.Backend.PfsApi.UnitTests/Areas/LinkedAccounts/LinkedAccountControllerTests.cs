@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<ILinkedAccountsService> _linkedAccountService;
         private Mock<IGpSearchService> _gpSearchService;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private LinkedAccountAuditInfo _linkedAccountAuditInfo;
         private Mock<ISessionCacheService> _mockSessionCacheService;
 
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             _gpSearchService = _fixture.Freeze<Mock<IGpSearchService>>();
             _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
             _linkedAccountService = new Mock<ILinkedAccountsService>();
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             _linkedAccountAuditInfo = _fixture.Create<LinkedAccountAuditInfo>();
 
             var mockGpSystem = new Mock<IGpSystem>();
@@ -183,7 +183,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
-            _mockSessionCacheService.Verify(x => x.UpdateUserSession(It.IsAny<UserSession>()), Times.Never());
+            _mockSessionCacheService.Verify(x => x.UpdateUserSession(It.IsAny<P9UserSession>()), Times.Never());
 
             var subject = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             subject.StatusCode.Value.Should().Equals(HttpStatusCode.OK);

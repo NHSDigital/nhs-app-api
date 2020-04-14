@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         private Mock<IOrganDonationConfig> _configMock;
         private OrganDonationHttpClient _httpClient;
         private IFixture _fixture;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
 
         [TestInitialize]
         public void TestInitialize()
@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _fixture.Inject(_configMock);
             _fixture.Inject(_httpClient);
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
 
             _systemUnderTest = _fixture.Create<OrganDonationClient>();
         }

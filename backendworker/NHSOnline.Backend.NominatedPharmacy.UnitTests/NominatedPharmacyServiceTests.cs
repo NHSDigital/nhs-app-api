@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         private Mock<INominatedPharmacyClient> _nominatedPharmacyClient;
         private Mock<INominatedPharmacyConfigurationSettings> _configMock;
         private IFixture _fixture;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
 
         private const string SpineAccreditedSystemIdFrom = "0001";
         private const string SpineAccreditedSystemIdTo = "0002";
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             };
             _configMock.SetupGet(x => x.PdsTraceConfigurationSettings).Returns(pdsTraceConfigurationSettings);
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
 
             _systemUnderTest = _fixture.Create<NominatedPharmacyService>();
         }

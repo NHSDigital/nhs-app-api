@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
     public class ProxyAuditingMiddlewareTests
     {
         private IFixture _fixture;
-        private UserSession _mockUserSession;
+        private P9UserSession _mockUserSession;
         private Guid _patientId;
         private RequestDelegate _next;
         private DefaultHttpContext _context;
@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _mockLogger = _fixture.Freeze<Mock<ILogger<ProxyAuditingMiddleware>>>();
-            _mockUserSession = _fixture.Create<UserSession>();
+            _mockUserSession = _fixture.Create<P9UserSession>();
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
             _mockLinkedAccountService = _fixture.Freeze<Mock<ILinkedAccountsService>>();

@@ -41,7 +41,7 @@
          private Mock<ILogger<ServiceDefinitionService>> _mockLogger;
          private Mock<IMapper<DemographicsResponse, OlcDemographics>> _mockDemographicsOlcMapper;
          private Mock<IAuditor> _mockAuditor;
-         private UserSession _userSession;
+         private P9UserSession _userSession;
          private Mock<IGpSystem> _mockGpSystem;
          private Mock<IGpSystemFactory> _mockGpSystemFactory;
          private Mock<IDemographicsService> _mockDemographicsService;
@@ -85,10 +85,10 @@
             
              _demographicsResult = new DemographicsResult.Success(_fixture.Create<DemographicsResponse>());
             
-             _fixture.Customize<UserSession>(c => c
+             _fixture.Customize<P9UserSession>(c => c
                  .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
              
-             _userSession = _fixture.Create<UserSession>();
+             _userSession = _fixture.Create<P9UserSession>();
              _mockGuidCreator.Setup(c => c.CreateGuid()).Returns(_requestId);
              _serviceDefinitionIsValidParameters = ServiceDefinitionIsValidParametersFormat
                  .Replace("{{odsCode}}", _userSession.GpUserSession.OdsCode, StringComparison.Ordinal)

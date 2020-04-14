@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
     {
         private JourneyFeatureFilterAttribute _systemUnderTest;
         private AuthorizationFilterContext _context;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private ServiceJourneyRulesResponse _sjrResponse;
 
         private Mock<HttpContext> _mockHttpContext;
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         {
             _systemUnderTest = new JourneyFeatureFilterAttribute(JourneyFeature.NominatedPharmacy);
 
-            _userSession = new UserSession()
+            _userSession = new P9UserSession()
             {
                 GpUserSession = new EmisUserSession()
                 {

@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         private Mock<HttpContext> _mockHttpContext;
         private PatientMessagesController _systemUnderTest;
 
-        private UserSession _userSession;
+        private P9UserSession _userSession;
 
         private const string GetMessagesRequestAuditType = "PatientPracticeMessages_View_Request";
         private const string GetMessagesResponseAuditType = "PatientPracticeMessages_View_Response";
@@ -82,9 +82,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             _serviceDeskReference = _fixture.Create<string>();
 
             _fixture
-                .Customize<UserSession>(c => c
+                .Customize<P9UserSession>(c => c
                     .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
 
             _mockHttpContext = new Mock<HttpContext>();
             _mockHttpContext

@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         public void ToString_UserSessionPresent_ReturnsSessionIDMessage()
         {
             var httpContext = new DefaultHttpContext();
-            httpContext.Items.Add("UserSession", new UserSession { Key = SessionId });
+            httpContext.Items.Add("UserSession", new P9UserSession { Key = SessionId });
 
             var systemUnderTest = new HttpContextLoggerScope(httpContext);
             var result = systemUnderTest.ToString();
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         public void ToString_UserSessionPresent_ProxyModeTrue_ReturnsSessionIDMessageAndProxyMessage()
         {
             var httpContext = new DefaultHttpContext();
-            httpContext.Items.Add("UserSession", new UserSession
+            httpContext.Items.Add("UserSession", new P9UserSession
             {
                 Key = SessionId,
                 GpUserSession = new EmisUserSession
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         public void ToString_UserSessionPresent_NoLinkedAccountAuditInfo_ReturnsSessionIDMessage()
         {
             var httpContext = new DefaultHttpContext();
-            httpContext.Items.Add("UserSession", new UserSession
+            httpContext.Items.Add("UserSession", new P9UserSession
             {
                 Key = SessionId,
                 GpUserSession = new EmisUserSession
@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         public void ToString_UserSessionPresent_ProxyModeFalse_ReturnsSessionIDMessage()
         {
             var httpContext = new DefaultHttpContext();
-            httpContext.Items.Add("UserSession", new UserSession
+            httpContext.Items.Add("UserSession", new P9UserSession
             {
                 Key = SessionId,
                 GpUserSession = new EmisUserSession

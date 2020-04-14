@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         public AppointmentsResultVisitor(
             ISessionCacheService sessionCacheService,
             IErrorReferenceGenerator errorReferenceGenerator,
-            UserSession userSession)
+            P9UserSession userSession)
         : base (errorReferenceGenerator, userSession)
         {
             _sessionCacheService = sessionCacheService;

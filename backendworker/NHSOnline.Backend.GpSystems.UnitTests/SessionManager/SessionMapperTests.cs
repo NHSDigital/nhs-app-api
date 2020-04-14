@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
 
             var gpUserSession = _fixture.Create<GpUserSession>();
 
-            var expectedResult = new UserSession
+            var expectedResult = new P9UserSession
             {
                 CsrfToken = _csrfToken,
                 GpUserSession = gpUserSession,

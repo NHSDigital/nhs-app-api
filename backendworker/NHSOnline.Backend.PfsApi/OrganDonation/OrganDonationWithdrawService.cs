@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             _organDonationWithdrawResultErrorMapper = organDonationWithdrawResultErrorMapper;
         }
 
-        public async Task<OrganDonationWithdrawResult> Withdraw(OrganDonationWithdrawRequest request, UserSession userSession)
+        public async Task<OrganDonationWithdrawResult> Withdraw(OrganDonationWithdrawRequest request, P9UserSession userSession)
         {
             try
             {

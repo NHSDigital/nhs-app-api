@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         public CourseResultVisitor(
             ISessionCacheService sessionCacheService,
             IErrorReferenceGenerator errorReferenceGenerator,
-            UserSession userSession) :
+            P9UserSession userSession) :
             base(errorReferenceGenerator, userSession)
         {
             _sessionCacheService = sessionCacheService;

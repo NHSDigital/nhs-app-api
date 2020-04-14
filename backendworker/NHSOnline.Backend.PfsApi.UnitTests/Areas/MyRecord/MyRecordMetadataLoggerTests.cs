@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         public void LogMyRecordMetadata_LogsForEmis()
         {
             // Arrange
-            var userSession = _fixture.Build<UserSession>()
+            var userSession = _fixture.Build<P9UserSession>()
                 .With(x => x.GpUserSession, _fixture.Create<EmisUserSession>())
                 .Create();
             
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         public void LogMyRecordMetadata_LogsForTpp()
         {
             // Arrange
-            var userSession = _fixture.Build<UserSession>()
+            var userSession = _fixture.Build<P9UserSession>()
                 .With(x => x.GpUserSession, _fixture.Create<TppUserSession>())
                 .Create();
             
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         public void LogMyRecordMetadata_DoesNotLogForVision()
         {
             // Arrange
-            var userSession = _fixture.Build<UserSession>()
+            var userSession = _fixture.Build<P9UserSession>()
                 .With(x => x.GpUserSession, _fixture.Create<VisionUserSession>())
                 .Create();
             
@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         public void LogMyRecordMetadata_DoesNotLogForMicrotest()
         {
             // Arrange
-            var userSession = _fixture.Build<UserSession>()
+            var userSession = _fixture.Build<P9UserSession>()
                 .With(x => x.GpUserSession, _fixture.Create<MicrotestUserSession>())
                 .Create();
             
@@ -144,7 +144,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             // Arrange
             var myRequestResponse = new MyRecordResponse();
             var getMyRecordResponse = new GetMyRecordResult.Success(myRequestResponse);
-            var userSession = _fixture.Build<UserSession>()
+            var userSession = _fixture.Build<P9UserSession>()
                 .With(x => x.GpUserSession, _fixture.Create<EmisUserSession>())
                 .Create();
 
@@ -173,7 +173,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 allergyCount, medicationCount,immunisationCount,
                 problemCount,tppDcrEventCount,consultationCount, testResultCount);
             var getMyRecordResponse = new GetMyRecordResult.Success(myRequestResponse);
-            var userSession = _fixture.Build<UserSession>()
+            var userSession = _fixture.Build<P9UserSession>()
                 .With(x => x.GpUserSession, _fixture.Create<EmisUserSession>())
                 .Create();
 
@@ -216,7 +216,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             // Arrange
             var myRequestResponse = new MyRecordResponse();
             var getMyRecordResponse = new GetMyRecordResult.Success(myRequestResponse);
-            var userSession = _fixture.Build<UserSession>()
+            var userSession = _fixture.Build<P9UserSession>()
                 .With(x => x.GpUserSession, _fixture.Create<TppUserSession>())
                 .Create();
 
@@ -247,7 +247,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 allergyCount, medicationCount,immunisationCount,
                 problemCount,tppDcrEventCount,consultationCount, testResultCount);
             var getMyRecordResponse = new GetMyRecordResult.Success(myRequestResponse);
-            var userSession = _fixture.Build<UserSession>()
+            var userSession = _fixture.Build<P9UserSession>()
                 .With(x => x.GpUserSession, _fixture.Create<TppUserSession>())
                 .Create();
 

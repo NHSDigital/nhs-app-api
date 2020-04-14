@@ -173,7 +173,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         }
 
         private static (string fromNhsNumber, string toNhsNumber) GetNhsNumbers(Guid id,
-            LinkedAccountAuditInfo linkedAccountAuditInfo, UserSession userSession,
+            LinkedAccountAuditInfo linkedAccountAuditInfo, P9UserSession userSession,
             ILinkedAccountsService linkedAccountsService)
         {
             var fromNhsNumber = "";

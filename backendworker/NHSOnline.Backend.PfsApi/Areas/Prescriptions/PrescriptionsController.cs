@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
         }
 
-        private async Task<GetPrescriptionsResult> GetPrescriptions(DateTimeOffset? fromDate, UserSession userSession, Guid patientId)
+        private async Task<GetPrescriptionsResult> GetPrescriptions(DateTimeOffset? fromDate, P9UserSession userSession, Guid patientId)
         {
             var gpSystem = _gpSystemFactory
                 .CreateGpSystem(userSession.GpUserSession.Supplier);
@@ -127,7 +127,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         }
 
         private async Task<OrderPrescriptionResult> OrderPrescription(
-            RepeatPrescriptionRequest repeatPrescriptionRequest, UserSession userSession, Guid patientId)
+            RepeatPrescriptionRequest repeatPrescriptionRequest, P9UserSession userSession, Guid patientId)
         {
             var gpSystem = _gpSystemFactory
                 .CreateGpSystem(userSession.GpUserSession.Supplier);

@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
     public interface IMyRecordMetadataLogger
     {
-        void LogMyRecordMetadata(UserSession userSession, GetMyRecordResult result);
+        void LogMyRecordMetadata(P9UserSession userSession, GetMyRecordResult result);
     }
 
     public class MyRecordMetadataLogger : IMyRecordMetadataLogger
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             _logger = logger;
         }
 
-        public void LogMyRecordMetadata(UserSession userSession, GetMyRecordResult result)
+        public void LogMyRecordMetadata(P9UserSession userSession, GetMyRecordResult result)
         {
             if (userSession?.GpUserSession == null)
             {
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             LogInformation(myRecordMetadata);
         }
 
-        internal static MedicalRecordMetadata BuildMyRecordMetadata(UserSession userSession, 
+        internal static MedicalRecordMetadata BuildMyRecordMetadata(P9UserSession userSession, 
             GetMyRecordResult.Success successfulResult)
         {
             Debug.Assert(successfulResult != null);
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         
         private static RecordDetailMetaData BuildRecordDetailMetadata(
             IPatientDataModel patientDataModel,
-            UserSession userSession,
+            P9UserSession userSession,
             string detailName,
             params Supplier[] applicableSuppliers
         )

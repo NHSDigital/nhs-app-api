@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         private TermsAndConditionsController _systemUnderTest;
         private IFixture _fixture;
         private Mock<ITermsAndConditionsService> _termsAndConditionsService;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
 
         [TestInitialize]
         public void TestInitialize()
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
 
             _termsAndConditionsService = _fixture.Freeze<Mock<ITermsAndConditionsService>>();
 
-            _userSession = _fixture.Create<UserSession>();
+            _userSession = _fixture.Create<P9UserSession>();
             _userSession.GpUserSession.NhsNumber = _fixture.Create<string>();
             _userSession.GpUserSession.OdsCode = _fixture.Create<string>();
             var httpContextItems = new Dictionary<object, object>

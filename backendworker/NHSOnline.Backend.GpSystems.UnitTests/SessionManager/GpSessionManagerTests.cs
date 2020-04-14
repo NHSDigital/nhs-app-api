@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         private IFixture _fixture;
 
         private StringValues _csrfToken;
-        private UserSession _userSession;
+        private P9UserSession _userSession;
         private string _sessionId;
         private string _patientId;
         private UserProfile _userProfile;
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 Session = gpSessMgrCitizenIdUserSession
             };
 
-            _userSession = new UserSession
+            _userSession = new P9UserSession
             {
                 CsrfToken = _csrfToken,
                 GpUserSession = emisUserSession,
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var failureResult = result.Should().BeOfType<CreateSessionResult.Failure>().Subject;
             failureResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
 
-            _mockSessionCacheService.Verify(x => x.CreateUserSession(It.IsAny<UserSession>()), Times.Never());
+            _mockSessionCacheService.Verify(x => x.CreateUserSession(It.IsAny<P9UserSession>()), Times.Never());
             _mockSessionService.Verify();
             _mockLogger.VerifyLogger(LogLevel.Debug,$"Fetched Session Id: sessionId", Times.Never());
         }
@@ -209,7 +209,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             //Arrange
             _mockSessionCacheService
                 .Setup(x => x.GetUserSession(_sessionId))
-                .Returns(Task.FromResult(Option.None<UserSession>()))
+                .Returns(Task.FromResult(Option.None<P9UserSession>()))
                 .Verifiable();
 
             //Act
@@ -298,7 +298,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 x.Map(It.IsAny<GpUserSession>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never());
 
             _mockSessionCacheService.Verify(x =>
-                x.UpdateUserSession(It.IsAny<UserSession>()), Times.Never());
+                x.UpdateUserSession(It.IsAny<P9UserSession>()), Times.Never());
         }
 
         [TestMethod]
