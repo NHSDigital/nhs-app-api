@@ -67,6 +67,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
         }
 
         [DataTestMethod]
+        [DataRow(HttpStatusCode.GatewayTimeout)]
         [DataRow(HttpStatusCode.BadGateway)]
         [DataRow(HttpStatusCode.BadRequest)]
         [DataRow(HttpStatusCode.Unauthorized)]

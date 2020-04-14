@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -108,24 +107,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.PatientRecord
             }
 
             _logger.LogError("Microtest system is currently unavailable");
-            return HandleSuccess(microtestUserSession, GetEmptyMicrotestMedicalRecordResponse());
+            return new GetMyRecordResult.BadGateway();
         }
-
-        private static MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse> GetEmptyMicrotestMedicalRecordResponse() =>
-            new MicrotestClient.MicrotestApiObjectResponse<PatientRecordGetResponse>(HttpStatusCode.OK)
-            {
-                Body = new PatientRecordGetResponse
-                {
-                    AllergyData = { HasErrored = true },
-                    MedicationData = { HasErrored = true },
-                    ImmunisationData = { HasErrored = true },
-                    ProblemData = { HasErrored = true },
-                    TestResultData = { HasErrored = true },
-                    RecallData = { HasErrored = true },
-                    EncounterData = { HasErrored = true },
-                    ReferralData = { HasErrored = true },
-                    MedicalHistoryData = { HasErrored = true }
-                }
-            };
     }
 }
