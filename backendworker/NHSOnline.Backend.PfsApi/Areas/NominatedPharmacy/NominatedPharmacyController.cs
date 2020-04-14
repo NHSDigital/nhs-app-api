@@ -14,12 +14,13 @@ using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
-    [JourneyFeatureFilterAttribute(JourneyFeature.NominatedPharmacy)]
+    [JourneyFeatureFilter(JourneyFeature.NominatedPharmacy)]
     public class NominatedPharmacyController : Controller
     {
         private readonly ILogger<NominatedPharmacyController> _logger;
@@ -57,13 +58,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 
         [HttpGet]
         [ApiVersionRoute("patient/nominated-pharmacy")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
         {
             _logger.LogEnter();
 
             await _auditor.Audit(AuditingOperations.GetNominatedPharmacyRequest, "Attempting to get Nominated Pharmacy");
 
-            var getNominatedPharmacyResult = await GetNominatedPharmacy();
+            var getNominatedPharmacyResult = await GetNominatedPharmacy(userSession);
 
             _logger.LogExit();
 
@@ -73,14 +74,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 
         [HttpPost]
         [ApiVersionRoute("patient/nominated-pharmacy")]
-        public async Task<IActionResult> Update([FromBody] UpdateNominatedPharmacyRequest model)
+        public async Task<IActionResult> Update(
+            [FromBody] UpdateNominatedPharmacyRequest model,
+            [UserSession] P9UserSession userSession)
         {
             _logger.LogEnter();
 
             await _auditor.Audit(AuditingOperations.UpdatedNominatedPharmacyRequest,
                 $"Attempting to update Nominated Pharmacy for OdsCode { model.OdsCode }");
-
-            P9UserSession userSession = HttpContext.GetUserSession();
 
             var result = await UpdateNominatedPharmacy(model, userSession);
 
@@ -191,7 +192,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             }
         }
 
-        private async Task<GetNominatedPharmacyResult> GetNominatedPharmacy()
+        private async Task<GetNominatedPharmacyResult> GetNominatedPharmacy(P9UserSession userSession)
         {
             if (!_config.IsNominatedPharmacyEnabled)
             {
@@ -199,12 +200,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 return new GetNominatedPharmacyResult.ConfigNotEnabled();
             }
 
-            P9UserSession userSession = HttpContext.GetUserSession();
-
             var isGpPracticeEpsEnabledResult =
                 await _gpSearchService.IsGpPracticeEPSEnabled(userSession.GpUserSession.OdsCode);
 
-            if (!HttpStatusCodeExtensions.IsSuccessStatusCode(isGpPracticeEpsEnabledResult.HttpStatusCode))
+            if (!isGpPracticeEpsEnabledResult.HttpStatusCode.IsSuccessStatusCode())
             {
                 return new GetNominatedPharmacyResult.GpPracticeFailure(
                     userSession.GpUserSession.OdsCode, isGpPracticeEpsEnabledResult.HttpStatusCode);

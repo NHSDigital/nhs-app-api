@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
 using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
+using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 using Constants = NHSOnline.Backend.Support.Constants;
@@ -27,8 +29,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         [HttpGet]
         [Route("fhir/ServiceDefinition/{provider}/{id}")]
         [ApiVersionRoute("service-definition/{provider}/{id}")]
-        public async Task<IActionResult> GetServiceDefinitionsById([FromRoute(Name = "id")] string serviceDefinitionId, 
-          [FromRoute(Name = "provider")] string provider)
+        public async Task<IActionResult> GetServiceDefinitionsById(
+            [FromRoute(Name = "id")] string serviceDefinitionId,
+            [FromRoute(Name = "provider")] string provider,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -36,9 +40,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                 var visitor = new ServiceDefinitionResultVisitor();
 
-                var userSession = HttpContext.GetUserSession();
-
-                _logger.LogInformation($"Starting consultation with ServiceDefinition: {serviceDefinitionId}. ODSCode: {userSession.GpUserSession.OdsCode}");
+                _logger.LogInformation(
+                    $"Starting consultation with ServiceDefinition: {serviceDefinitionId}. ODSCode: {userSession.GpUserSession.OdsCode}");
 
                 var result = await _service.GetServiceDefinitionById(provider, serviceDefinitionId, userSession);
 
@@ -57,8 +60,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             [FromRoute(Name = "provider")] string provider,
             [FromRoute(Name = "id")] string serviceDefinitionId,
             [FromBody] Parameters parameters,
-            [FromQuery] bool demographicsConsentGiven
-        )
+            [FromQuery] bool demographicsConsentGiven,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -73,8 +76,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
                     return new ServiceDefinitionResult.BadRequest().Accept(visitor);
                 }
                 
-                var userSession = HttpContext.GetUserSession();
-            
                 _logger.LogInformation($"Evaluating ServiceDefinition: {serviceDefinitionId}. ODSCode: {userSession.GpUserSession.OdsCode}");
 
                 return (await _service.EvaluateServiceDefinition(
@@ -114,14 +115,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
         [HttpGet]
         [ApiVersionRoute("service-definition/{provider}/$isValid")]
-        public async Task<IActionResult> GetServiceDefinitionIsValid([FromRoute(Name = "provider")] string provider)
+        public async Task<IActionResult> GetServiceDefinitionIsValid(
+            [FromRoute(Name = "provider")] string provider,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
                 
-                var userSession = HttpContext.GetUserSession();
-
                 var visitor = new ServiceDefinitionIsValidResultVisitor();
                 
                 var result = await _service.GetServiceDefinitionIsValid(provider, userSession);

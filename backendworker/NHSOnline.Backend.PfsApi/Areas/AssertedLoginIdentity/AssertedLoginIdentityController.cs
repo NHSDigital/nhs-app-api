@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity.Models;
+using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
@@ -25,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateJwtRequest model)
+        public async Task<IActionResult> Post([FromBody] CreateJwtRequest model, [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -35,8 +37,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
                 {
                     return new BadRequestObjectResult(ModelState);
                 }
-
-                var userSession = HttpContext.GetUserSession();
 
                 await _auditor.Audit(AuditingOperations.CreateAssertedLoginIdentityTokenRequest,
                     "Creating Asserted login Identity JWT for intended relying party URL: " + model.IntendedRelyingPartyUrl);

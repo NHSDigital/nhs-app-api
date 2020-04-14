@@ -102,21 +102,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
             _serviceDeskReference = _fixture.Create<string>();
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-
             _systemUnderTest = _fixture.Create<AppointmentSlotsController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             // Act
-            var result = await _systemUnderTest.Get(_patientId);
+            var result = await _systemUnderTest.Get(_patientId, _userSession);
 
             // Assert
             _mockAppointmentSlotsService.Verify(x => x.GetSlots(
@@ -133,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_ServiceReturnsResult_SlotTypesAreTransformed()
         {
             // Act
-            await _systemUnderTest.Get(_patientId);
+            await _systemUnderTest.Get(_patientId, _userSession);
 
             // Assert
             _mockAppointmentTypeTransformingVisitor.Verify(x => x.Visit(_serviceResult));
@@ -143,7 +136,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_ReturnsSuccessfulResult_LogsAppointmentSlotCount()
         {
             // Act
-            await _systemUnderTest.Get(_patientId);
+            await _systemUnderTest.Get(_patientId, _userSession);
 
             // Assert
             var expectedLogMessage =
@@ -167,7 +160,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 .Returns(Task.CompletedTask);
 
             // Act
-            await _systemUnderTest.Get(_patientId);
+            await _systemUnderTest.Get(_patientId, _userSession);
 
             // Assert
             var slots = _slotsResponse.Slots;
@@ -217,7 +210,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Get(_patientId);
+            var result = await _systemUnderTest.Get(_patientId, _userSession);
 
             // Assert
             _mockAppointmentSlotsService.Verify(x => x.GetSlots(

@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
@@ -72,14 +73,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
                 await _auditor.Audit(AuditingOperations.SessionGetRequest, "Session Get called.");
-
-                var userSession = HttpContext.GetUserSession();
 
                 var responseBody = new UserSessionResponse();
 
@@ -288,7 +287,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> Delete([UserSession] P9UserSession userSession)
         {
             try
             {
@@ -296,7 +295,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 await _auditor.Audit(AuditingOperations.SessionDeleteRequest, "Session delete called.");
 
                 // Delete GP supplier session
-                var userSession = HttpContext.GetUserSession();
                 var gpUserSession = userSession.GpUserSession;
                 var citizenIdUserSession = userSession.CitizenIdUserSession;
 

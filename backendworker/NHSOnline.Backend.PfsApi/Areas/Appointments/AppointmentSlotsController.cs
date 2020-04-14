@@ -6,6 +6,7 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support.AspNet;
@@ -43,7 +44,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId, [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -52,7 +53,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
                 await _auditor.Audit(AuditingOperations.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
-                var userSession = HttpContext.GetUserSession();
                 _logger.LogDebug($"Fetch Appointment Slots Service for GP System: '{userSession.GpUserSession.Supplier}'.");
                 var appointmentService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier)
                     .GetAppointmentSlotsService();

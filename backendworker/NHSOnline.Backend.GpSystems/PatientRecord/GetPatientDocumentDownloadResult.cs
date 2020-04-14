@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 
 namespace NHSOnline.Backend.GpSystems.PatientRecord
 {

@@ -58,7 +58,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
 
             var httpContextItems = new Dictionary<object, object>
             {
-                { Constants.HttpContextItems.UserSession, _userSession },
                 { Constants.HttpContextItems.LinkedAccountAuditInfo, _linkedAccountAuditInfo }
             };
 
@@ -87,7 +86,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Switch(id);
+            var result = await _systemUnderTest.Switch(id, _userSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
@@ -115,7 +114,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Switch(id);
+            var result = await _systemUnderTest.Switch(id, _userSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
@@ -134,7 +133,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Switch(id);
+            var result = await _systemUnderTest.Switch(id, _userSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
@@ -154,7 +153,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockSessionCacheService.Verify(x => x.UpdateUserSession(_userSession));
@@ -179,7 +178,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
@@ -225,7 +224,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetAccessSummaryOfLinkedAccount(id);
+            var result = await _systemUnderTest.GetAccessSummaryOfLinkedAccount(id, _userSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
@@ -267,7 +266,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetAccessSummaryOfLinkedAccount(id);
+            var result = await _systemUnderTest.GetAccessSummaryOfLinkedAccount(id, _userSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
@@ -308,7 +307,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetAccessSummaryOfLinkedAccount(id);
+            var result = await _systemUnderTest.GetAccessSummaryOfLinkedAccount(id, _userSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
@@ -349,7 +348,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetAccessSummaryOfLinkedAccount(id);
+            var result = await _systemUnderTest.GetAccessSummaryOfLinkedAccount(id, _userSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));

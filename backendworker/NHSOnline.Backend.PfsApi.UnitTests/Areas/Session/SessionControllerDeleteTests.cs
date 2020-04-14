@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -46,10 +46,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _httpContextMock = new Mock<HttpContext>();
             _httpContextMock
-                .Setup(x => x.Items[Constants.HttpContextItems.UserSession])
-                .Returns(_userSession);
-
-            _httpContextMock
                 .SetupGet(h => h.RequestServices)
                 .Returns(serviceProviderMock.Object);
 
@@ -77,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             };
 
             // Act
-            var result = await _systemUnderTest.Delete();
+            var result = await _systemUnderTest.Delete(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -93,7 +89,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .ReturnsAsync(new CloseSessionResult.Success());
 
             // Act
-            var result = await _systemUnderTest.Delete();
+            var result = await _systemUnderTest.Delete(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()

@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Filters;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
@@ -31,11 +33,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 
         [HttpGet]
         [ApiVersionRoute("patient/terms-and-conditions/consent")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
         {
             _logger.LogEnter();
-
-            var userSession = HttpContext.GetUserSession();
 
             _logger.LogDebug("Fetching user consent");
             var fetchConsentResult = await _termsAndConditionsService.FetchConsent(userSession.GpUserSession.NhsNumber);
@@ -46,7 +46,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 
         [HttpPost]
         [ApiVersionRoute("patient/terms-and-conditions/consent")]
-        public async Task<IActionResult> Post([FromBody] ConsentRequest model)
+        public async Task<IActionResult> Post(
+            [FromBody] ConsentRequest model,
+            [UserSession] P9UserSession userSession)
         {
             _logger.LogEnter();
 
@@ -54,8 +56,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             {
                 return new BadRequestObjectResult(ModelState);
             }
-
-            var userSession = HttpContext.GetUserSession();
 
             var termsAndConditionsAcceptanceDate = DateTimeOffset.Now;
 
@@ -87,7 +87,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         [HttpPost]
         [ApiVersionRoute("patient/terms-and-conditions/toggle-analytics-cookie-acceptance")]
         public async Task<IActionResult> ToggleAnalyticsCookieAcceptance(
-            [FromBody] AnalyticsCookieAcceptance analyticsCookieAcceptance)
+            [FromBody] AnalyticsCookieAcceptance analyticsCookieAcceptance,
+            [UserSession] P9UserSession userSession)
         {
             _logger.LogEnter();
 
@@ -96,7 +97,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
                 return new BadRequestObjectResult(ModelState);
             }
 
-            var userSession = HttpContext.GetUserSession();
             var dateTimeOffset = DateTimeOffset.Now;
 
             await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceRequest,

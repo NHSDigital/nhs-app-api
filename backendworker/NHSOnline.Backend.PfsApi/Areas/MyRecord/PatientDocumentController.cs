@@ -6,10 +6,10 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
-using FileTypes = NHSOnline.Backend.Support.Constants.FileConstants.FileTypes;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
@@ -36,7 +36,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         public async Task<IActionResult> GetPatientDocument(
             [FromHeader(Name=PatientId)] Guid patientId,
             [FromRoute(Name="documentIdentifier")] string documentIdentifier,
-            [FromBody] DocumentInfo documentInfo)
+            [FromBody] DocumentInfo documentInfo,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -49,8 +50,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 
                 await _auditor.Audit(AuditingOperations.ViewDocumentAuditTypeRequest,
                     "Viewing patient document");
-
-                var userSession = HttpContext.GetUserSession();
 
                 _logger.LogInformation($"Fetching PatientRecordService for supplier: {userSession.GpUserSession}");
                 var patientRecordService = _gpSystemFactory
@@ -82,7 +81,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         public async Task<IActionResult> GetPatientDocumentForDownload(
             [FromHeader(Name=PatientId)] Guid patientId,
             [FromRoute(Name = "documentIdentifier")] string documentIdentifier,
-            [FromBody] DocumentInfo documentInfo)
+            [FromBody] DocumentInfo documentInfo,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -96,10 +96,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                 await _auditor.Audit(AuditingOperations.DownloadDocumentAuditTypeRequest,
                     "Downloading patient document");
 
-                var userSession = HttpContext.GetUserSession();
-                var gpLinkedAccountModel = new GpLinkedAccountModel(
-                    userSession.GpUserSession, patientId
-                );
+                var gpLinkedAccountModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
 
                 _logger.LogInformation("Fetching PatientRecordService for supplier");
 

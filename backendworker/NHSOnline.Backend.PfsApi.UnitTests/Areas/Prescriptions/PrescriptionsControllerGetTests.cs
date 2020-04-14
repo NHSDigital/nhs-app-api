@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -96,14 +96,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
             _serviceDeskReference = _fixture.Create<string>();
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-            
             _systemUnderTest = _fixture.Create<PrescriptionsController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
@@ -125,7 +118,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 x.IsGetValid(fromDate, It.IsAny<DateTimeOffset>())).Returns(true);
 
             // Act
-            var result = await _systemUnderTest.Get(fromDate, _patientId);
+            var result = await _systemUnderTest.Get(fromDate, _patientId, _userSession);
 
             // Assert
             _mockGpSystem.VerifyAll();
@@ -162,7 +155,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 x.IsGetValid(It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset>())).Returns(false);
 
             // Act
-            var result = await _systemUnderTest.Get(null, _patientId);
+            var result = await _systemUnderTest.Get(null, _patientId, _userSession);
 
             // Assert
             _mockGpSystem.VerifyAll();
@@ -217,7 +210,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
             
             // Act
-            var result = await _systemUnderTest.Get(fromDate, _patientId);
+            var result = await _systemUnderTest.Get(fromDate, _patientId, _userSession);
 
             // Assert
             _mockPrescriptionsService.Verify();
@@ -252,7 +245,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 x.IsGetValid(fromDate, It.IsAny<DateTimeOffset>())).Returns(true);
 
             // Act
-            await _systemUnderTest.Get(fromDate, _patientId);
+            await _systemUnderTest.Get(fromDate, _patientId, _userSession);
 
             // Assert
             var expectedLogMessage =

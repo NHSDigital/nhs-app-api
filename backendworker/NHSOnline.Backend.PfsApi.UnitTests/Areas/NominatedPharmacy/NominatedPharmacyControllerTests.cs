@@ -68,20 +68,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _configMock.SetupGet(x => x.IsNominatedPharmacyEnabled).Returns(true);
             _mockGpSearchService = _fixture.Freeze<Mock<IGpSearchService>>();
 
-            var httpContextItems = new Dictionary<object, object>
-            {
-                { Support.Constants.HttpContextItems.UserSession, _userSession }
-            };
-
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
-
             _systemUnderTest = _fixture.Create<NominatedPharmacyController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
@@ -125,7 +112,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockNominatedPharmacyService.Verify();
@@ -151,7 +138,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _configMock.SetupGet(x => x.IsNominatedPharmacyEnabled).Returns(false);
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockGpSearchService.Verify(x => x.IsGpPracticeEPSEnabled(It.IsAny<string>()), Times.Never);
@@ -182,7 +169,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockGpSearchService.Verify();
@@ -207,7 +194,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockGpSearchService.Verify();
@@ -234,7 +221,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockGpSearchService.Verify();
@@ -280,7 +267,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockNominatedPharmacyService.Verify();
@@ -320,7 +307,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockGpSearchService.Verify();
@@ -354,7 +341,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockGpSearchService.Verify();
@@ -395,7 +382,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockGpSearchService.Verify();
@@ -425,7 +412,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             };
 
             // Act
-            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
+            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest, _userSession);
 
             // Assert
             _mockNominatedPharmacyGatewayUpdateService.Verify();
@@ -455,7 +442,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             };
 
             // Act
-            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
+            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest, _userSession);
 
             // Assert
             _mockNominatedPharmacyGatewayUpdateService.Verify();
@@ -484,7 +471,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             };
 
             // Act
-            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
+            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest, _userSession);
 
             // Assert
             _mockNominatedPharmacyGatewayUpdateService.Verify();
@@ -513,7 +500,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             };
 
             // Act
-            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
+            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest, _userSession);
 
             // Assert
             _mockNominatedPharmacyGatewayUpdateService.Verify();
@@ -545,7 +532,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             };
 
             // Act
-            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
+            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest, _userSession);
 
             // Assert
             _mockNominatedPharmacyGatewayUpdateService.Verify();
@@ -573,7 +560,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             };
 
             // Act
-            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
+            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest, _userSession);
 
             // Assert
             _mockNominatedPharmacyGatewayUpdateService.Verify();
@@ -593,7 +580,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             };
 
             // Act
-            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
+            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest, _userSession);
 
             // Assert
             _mockNominatedPharmacyGatewayUpdateService.Verify(x => x.UpdateNominatedPharmacy(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CitizenIdUserSession>()), Times.Never);

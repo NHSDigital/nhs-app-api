@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -31,7 +32,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         [HttpGet]
         public async Task<IActionResult> GetTestResult(
             [FromHeader(Name=PatientId)] Guid patientId,
-            [FromQuery] string testResultId)
+            [FromQuery] string testResultId,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -39,8 +41,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
                 
                 await _auditor.Audit(AuditingOperations.GetTestResultAuditTypeRequest,
                     "Attempting to view test result");
-
-                var userSession = HttpContext.GetUserSession();
 
                 _logger.LogInformation($"Fetching PatientRecordService for supplier: {userSession.GpUserSession}");
                 var patientRecordService = _gpSystemFactory

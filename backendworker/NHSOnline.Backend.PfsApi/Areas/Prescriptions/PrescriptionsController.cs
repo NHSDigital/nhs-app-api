@@ -9,6 +9,7 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -41,14 +42,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] DateTimeOffset? fromDate, [FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> Get(
+            [FromQuery] DateTimeOffset? fromDate,
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
                 
-                var userSession = HttpContext.GetUserSession();
-
                 await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
 
                 var result = await GetPrescriptions(fromDate, userSession, patientId);
@@ -70,14 +72,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RepeatPrescriptionRequest repeatPrescriptionRequest, [FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> Post(
+            [FromBody] RepeatPrescriptionRequest repeatPrescriptionRequest,
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
                 
-                var userSession = HttpContext.GetUserSession();
-
                 var courseIds = FormatCourseIds(repeatPrescriptionRequest?.CourseIds ?? new List<string>());
             
                 await _auditor.Audit(AuditingOperations.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);

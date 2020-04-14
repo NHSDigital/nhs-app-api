@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -9,6 +9,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -40,13 +41,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> Get(
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [UserSession] P9UserSession userSession)
         {
-            var userSession = HttpContext.GetUserSession();
-
-            var gpLinkedAccountUserSession = new GpLinkedAccountModel(
-                userSession.GpUserSession, patientId
-            );
+            var gpLinkedAccountUserSession = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
 
             await _auditor.Audit(AuditingOperations.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
             _logger.LogInformation($"Fetching courses interface for supplier {userSession.GpUserSession.Supplier}");

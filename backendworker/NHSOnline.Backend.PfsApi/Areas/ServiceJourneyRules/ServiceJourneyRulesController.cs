@@ -9,6 +9,8 @@ using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -44,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
         [HttpGet]
         [ApiVersionRoute("patient/journey-configuration")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
         {
             try
             {
@@ -53,7 +55,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
                 await _auditor.Audit(AuditingOperations.GetServiceJourneyRulesAuditTypeRequest,
                     "Attempting to get service journey rules");
 
-                var odsCode = HttpContext.GetUserSession().GpUserSession.OdsCode;
+                var odsCode = userSession.GpUserSession.OdsCode;
 
                 _logger.LogInformation($"Fetching Service Journey Rules for {odsCode}");
 
@@ -69,11 +71,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
         [HttpGet]
         [ApiVersionRoute("patient/configuration")]
-        public async Task<IActionResult> GetLinkedAccountPatientConfig()
+        public async Task<IActionResult> GetLinkedAccountPatientConfig([UserSession] P9UserSession userSession)
         {
             await _auditor.Audit(AuditingOperations.GetPatientConfigRequest,"Attempting to get config for patient");
 
-            var userSession = HttpContext.GetUserSession();
             var linkedAccountsBreakdown = new LinkedAccountsBreakdownSummary();
 
             var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
@@ -107,7 +108,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
         [HttpGet]
         [ApiVersionRoute("patient/linked-account-journey-configuration")]
-        public async Task<IActionResult> GetLinkedAccountConfiguration([FromHeader(Name = PatientId)] Guid patientId)
+        public async Task<IActionResult> GetLinkedAccountConfiguration(
+            [FromHeader(Name = PatientId)] Guid patientId,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -116,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
                 await _auditor.Audit(AuditingOperations.GetServiceJourneyRulesAuditForLinkedAccountRequest,
                     "Attempting to get service journey rules for linked account");
 
-                var gpUserSession = HttpContext.GetUserSession().GpUserSession;
+                var gpUserSession = userSession.GpUserSession;
 
                 var linkedAccountsService =
                     _gpSystemFactory.CreateGpSystem(gpUserSession.Supplier).GetLinkedAccountsService();

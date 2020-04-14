@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +11,7 @@ using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts.Models;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 
@@ -40,10 +41,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
 
         [ApiVersionRoute("patient/linked-accounts")]
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
         {
-            var userSession = HttpContext.GetUserSession();
-
             await _auditor.Audit(AuditingOperations.GetLinkedAccountsRequest, "Retrieving linked accounts");
             _logger.LogInformation($"Fetching linked accounts supplier {userSession.GpUserSession.Supplier}");
 
@@ -66,7 +65,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
 
         [ApiVersionRoute("patient/linked-accounts/access-summary")]
         [HttpGet]
-        public async Task<IActionResult> GetAccessSummaryOfLinkedAccount([FromQuery] Guid id)
+        public async Task<IActionResult> GetAccessSummaryOfLinkedAccount([FromQuery] Guid id, [UserSession] P9UserSession userSession)
         {
             await _auditor.Audit(AuditingOperations.LinkedAccountsAccessSummaryRequest,
                 $"Retrieving linked account summary detail for Id {id}");
@@ -78,8 +77,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                 await _auditor.Audit(auditResponse, "ModelState is not valid.");
                 return new BadRequestObjectResult(ModelState);
             }
-
-            var userSession = HttpContext.GetUserSession();
 
             var linkedAccountsService = _gpSystemFactory
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
@@ -137,10 +134,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
 
         [ApiVersionRoute("patient/linked-accounts/switch/{id:guid}")]
         [HttpPost]
-        public async Task<IActionResult> Switch(Guid id)
+        public async Task<IActionResult> Switch(Guid id, [UserSession] P9UserSession userSession)
         {
             _logger.LogInformation($"Attempt to switch to profile id {id}");
-            var userSession = HttpContext.GetUserSession();
 
             await _auditor.Audit(AuditingOperations.LinkedAccountsSwitchRequest,
                 $"Request to switch to linked account {id}");

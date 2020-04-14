@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,6 +7,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -42,7 +43,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] AppointmentCancelRequest request, [FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> Delete(
+            [FromBody] AppointmentCancelRequest request,
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -50,8 +54,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogDebug($"{nameof(Delete)} with patientId {patientId}");
 
                 await _auditor.Audit(AuditingOperations.CancelAppointmentAuditTypeRequest, $"Attempting to cancel appointment with id: {request.AppointmentId}");
-
-                var userSession = HttpContext.GetUserSession();
 
                 var result = await Cancel(request, userSession, patientId);
 
@@ -65,7 +67,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> Get([FromHeader(Name=PatientId)] Guid patientId, [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -74,11 +76,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
                 await _auditor.Audit(AuditingOperations.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
 
-                var userSession = HttpContext.GetUserSession();
-
-                var gpLinkedAccountModel = new GpLinkedAccountModel(
-                    userSession.GpUserSession, patientId
-                );
+                var gpLinkedAccountModel = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
 
                 var result = await GetAppointmentsService(userSession).GetAppointments(gpLinkedAccountModel);
 
@@ -94,7 +92,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] AppointmentBookRequest request, [FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> Post(
+            [FromBody] AppointmentBookRequest request,
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -104,7 +105,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 await _auditor.Audit(AuditingOperations.BookAppointmentAuditTypeRequest,
                     $"Attempting to book appointment with id: {request.SlotId} and startTime: {request.StartTime:O}");
 
-                var userSession = HttpContext.GetUserSession();
                 var result = await Book(request, userSession, patientId);
 
                 await result.Accept(new AppointmentBookAuditingVisitor(_auditor, _logger, request.SlotId, request.StartTime));

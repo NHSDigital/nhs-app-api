@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -28,7 +29,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSection([FromQuery] VisionMapperType section)
+        public async Task<IActionResult> GetSection(
+            [FromQuery] VisionMapperType section,
+            [UserSession] P9UserSession userSession)
         {
             _logger.LogEnter();
             
@@ -36,8 +39,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             {
                 return new BadRequestObjectResult(ModelState);
             }
-
-            var userSession = HttpContext.GetUserSession();
 
             var gpSystem = userSession.GpUserSession.Supplier;
 

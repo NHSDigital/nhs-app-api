@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -88,15 +88,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
             _serviceDeskReference = _fixture.Create<string>();
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-
             _systemUnderTest = _fixture.Create<AppointmentsController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
 
             RequestAuditMessage = $"Attempting to cancel appointment with id: {_appointmentCancelRequest.AppointmentId}";
         }
@@ -105,7 +97,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Delete_AppointmentsServiceCancelReturnsSuccess_ReturnsNoContent()
         {
             // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId);
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _userSession);
 
             // Assert
             result.Should().BeAssignableTo<NoContentResult>();
@@ -127,7 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId);
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _userSession);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -178,7 +170,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId);
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _userSession);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -197,7 +189,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Delete_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Act
-            await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId);
+            await _systemUnderTest.Delete(_appointmentCancelRequest, _patientId, _userSession);
 
             // Assert
             _mockGpSystem.VerifyAll();

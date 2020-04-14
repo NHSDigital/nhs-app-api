@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -33,7 +34,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMyRecord([FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> GetMyRecord(
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [UserSession] P9UserSession userSession)
         {   
             _logger.LogEnter();
             
@@ -44,8 +47,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             
             _logger.LogDebug($"{nameof(GetMyRecord)} with patientId {patientId}");
    
-            var userSession = HttpContext.GetUserSession();
-
             // Audit attempt made to view patient record
             await _auditor.Audit(AuditingOperations.ViewPatientRecordAuditTypeRequest, "Viewing Patient Record");
  

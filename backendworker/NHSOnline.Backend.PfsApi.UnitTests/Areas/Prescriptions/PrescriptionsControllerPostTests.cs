@@ -98,14 +98,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
             _serviceDeskReference = _fixture.Create<string>();
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-            
             _systemUnderTest = _fixture.Create<PrescriptionsController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
@@ -123,7 +116,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(true);
 
             // Act
-            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId);
+            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession);
 
             // Assert
             _mockGpSystem.VerifyAll();
@@ -153,7 +146,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(true);
             
             // Act
-            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId);
+            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession);
             
             // Assert
             _mockGpSystem.VerifyAll();
@@ -191,7 +184,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
 
             // Act
-            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId);
+            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession);
 
             // Assert
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -244,7 +237,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
 
             // Act
-            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId);
+            var result = await _systemUnderTest.Post(_repeatPrescriptionRequest, _patientId, _userSession);
 
             // Assert
             _mockPrescriptionsService.Verify();

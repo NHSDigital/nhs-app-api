@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -38,20 +36,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _userSession = _fixture.Create<P9UserSession>();
-            var httpContextItems = new Dictionary<object, object>
-            {
-                { Constants.HttpContextItems.UserSession, _userSession }
-            };
-
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
-
+            
             _systemUnderTest = _fixture.Create<MyRecordController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
         
         [TestMethod]
@@ -74,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(Task.FromResult((GetMyRecordResult)getAllergiesResponse));
 
             // Act
-            var result = await _systemUnderTest.GetMyRecord(_patientGuid);
+            var result = await _systemUnderTest.GetMyRecord(_patientGuid, _userSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
@@ -106,7 +92,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(Task.FromResult((GetMyRecordResult)getMedicationsResponse));
 
             // Act
-            var result = await _systemUnderTest.GetMyRecord(_patientGuid);
+            var result = await _systemUnderTest.GetMyRecord(_patientGuid, _userSession);
             
 
             // Assert
@@ -138,7 +124,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(Task.FromResult((GetMyRecordResult)getProblemsRequestResponse));
 
             // Act
-            var result = await _systemUnderTest.GetMyRecord(_patientGuid);
+            var result = await _systemUnderTest.GetMyRecord(_patientGuid, _userSession);
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));

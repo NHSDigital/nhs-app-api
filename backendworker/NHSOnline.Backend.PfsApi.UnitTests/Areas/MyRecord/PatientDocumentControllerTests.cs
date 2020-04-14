@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -59,15 +58,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             _userSession = _fixture.Create<P9UserSession>();
             _patientId = Guid.NewGuid();
 
-            var httpContextItems = new Dictionary<object, object>
-            {
-                { Constants.HttpContextItems.UserSession, _userSession }
-            };
-
             var httpContextResponse = new DefaultHttpResponse(new DefaultHttpContext());
 
             var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
             httpContextMock.SetupGet(x => x.Response).Returns(httpContextResponse);
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
@@ -113,7 +106,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             };
 
             // Act
-            var result = await _systemUnderTest.GetPatientDocument(_patientId, DocumentId, documentInfo);
+            var result = await _systemUnderTest.GetPatientDocument(_patientId, DocumentId, documentInfo, _userSession);
 
             // Assert
             _mockPatientRecordService.Verify();
@@ -146,7 +139,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             };
 
             // Act
-            var result = await _systemUnderTest.GetPatientDocument(_patientId, DocumentId, documentInfo);
+            var result = await _systemUnderTest.GetPatientDocument(_patientId, DocumentId, documentInfo, _userSession);
 
             // Assert
             _mockPatientRecordService.Verify();
@@ -186,7 +179,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             };
 
             // Act
-            var result = await _systemUnderTest.GetPatientDocumentForDownload(_patientId, DocumentId, documentInfo);
+            var result = await _systemUnderTest.GetPatientDocumentForDownload(_patientId, DocumentId, documentInfo, _userSession);
 
             // Assert
             _mockPatientRecordService.Verify();
@@ -219,7 +212,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             };
 
             // Act
-            var result = await _systemUnderTest.GetPatientDocumentForDownload(_patientId, DocumentId, documentInfo);
+            var result = await _systemUnderTest.GetPatientDocumentForDownload(_patientId, DocumentId, documentInfo, _userSession);
 
             // Assert
             _mockPatientRecordService.Verify();

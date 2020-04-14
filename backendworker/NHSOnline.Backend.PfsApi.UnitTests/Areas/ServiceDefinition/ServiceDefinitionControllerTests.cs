@@ -52,7 +52,6 @@
                  .Freeze<Mock<IServiceDefinitionService>>();
 
              _mockHttpContext = _fixture.Create<Mock<HttpContext>>();
-             _mockHttpContext.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
 
              _mockLogger = _fixture.Freeze<Mock<ILogger<ServiceDefinitionController>>>();
 
@@ -76,7 +75,7 @@
 
              // Act
              var response =
-                 await _serviceDefinitionController.GetServiceDefinitionsById(ServiceDefinitionId, Provider);
+                 await _serviceDefinitionController.GetServiceDefinitionsById(ServiceDefinitionId, Provider, _userSession);
 
              // Assert
              var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
@@ -106,9 +105,12 @@
                      It.IsAny<P9UserSession>());
 
              // Act
-             var response =
-                 await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
-                     evaluateParameters, false);
+             var response = await _serviceDefinitionController.EvaluateServiceDefinition(
+                 Provider,
+                 ServiceDefinitionId,
+                 evaluateParameters,
+                 false,
+                 _userSession);
 
              // Assert
              response.Should().BeAssignableTo<BadRequestResult>()
@@ -135,9 +137,12 @@
                  .ReturnsAsync(new ServiceDefinitionResult.Success(""));
 
              // Act
-             var response =
-                 await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
-                     _evaluateParameters, false);
+             var response = await _serviceDefinitionController.EvaluateServiceDefinition(
+                 Provider,
+                 ServiceDefinitionId,
+                 _evaluateParameters,
+                 false,
+                 _userSession);
 
              // Assert
              var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
@@ -171,8 +176,12 @@
                  .Returns("true");
              
              // Act
-             await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
-                 _evaluateParameters, false);
+             await _serviceDefinitionController.EvaluateServiceDefinition(
+                 Provider,
+                 ServiceDefinitionId,
+                 _evaluateParameters,
+                 false,
+                 _userSession);
 
              // Assert
              _mockServiceDefinitionService.Verify(expectedEvaluateMatch, Times.Once);
@@ -199,8 +208,12 @@
                  .ReturnsAsync(new ServiceDefinitionResult.Success(""));
 
              // Act
-             await _serviceDefinitionController.EvaluateServiceDefinition(Provider, ServiceDefinitionId,
-                 _evaluateParameters, demographicsConsentGiven);
+             await _serviceDefinitionController.EvaluateServiceDefinition(
+                 Provider,
+                 ServiceDefinitionId,
+                 _evaluateParameters,
+                 demographicsConsentGiven,
+                 _userSession);
 
              // Assert
              _mockServiceDefinitionService.Verify(expectedEvaluateMatch, Times.Once);
@@ -221,7 +234,7 @@
                  .ReturnsAsync(expectedIsValidResult);
 
              // Act
-             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider);
+             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<StatusCodeResult>().Subject
@@ -244,7 +257,7 @@
                  .ReturnsAsync(expectedIsValidResult);
 
              // Act
-             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider);
+             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<StatusCodeResult>().Subject
@@ -265,7 +278,7 @@
                  .ReturnsAsync(new ServiceDefinitionIsValidResult.BadRequest());
 
              // Act
-             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider);
+             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider, _userSession);
 
              // Assert
              var result = response.Should().BeAssignableTo<StatusCodeResult>().Subject;
@@ -286,7 +299,7 @@
                  .ReturnsAsync(new ServiceDefinitionIsValidResult.BadGateway());
 
              // Act
-             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider);
+             var response = await _serviceDefinitionController.GetServiceDefinitionIsValid(Provider, _userSession);
 
              // Assert
              var result = response.Should().BeAssignableTo<StatusCodeResult>().Subject;

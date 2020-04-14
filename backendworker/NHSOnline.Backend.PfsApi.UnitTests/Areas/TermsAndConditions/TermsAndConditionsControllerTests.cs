@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -38,19 +37,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             _userSession = _fixture.Create<P9UserSession>();
             _userSession.GpUserSession.NhsNumber = _fixture.Create<string>();
             _userSession.GpUserSession.OdsCode = _fixture.Create<string>();
-            var httpContextItems = new Dictionary<object, object>
-            {
-                { Constants.HttpContextItems.UserSession, _userSession }
-            };
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
-
+            
             _systemUnderTest = _fixture.Create<TermsAndConditionsController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
@@ -67,7 +55,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(request);
+            var result = await _systemUnderTest.Post(request, _userSession);
 
             // Assert
             _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber,
@@ -93,7 +81,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(request);
+            var result = await _systemUnderTest.Post(request, _userSession);
 
             // Assert
             _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber,
@@ -115,7 +103,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(request);
+            var result = await _systemUnderTest.Post(request, _userSession);
 
             // Assert
             _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber,
@@ -134,7 +122,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
                 .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber));
@@ -158,7 +146,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
                 .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber));
@@ -182,7 +170,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
                 .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber));
@@ -204,7 +192,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request);
+            var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request, _userSession);
 
             // Assert
             _termsAndConditionsService.Verify(x =>
@@ -227,7 +215,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request);
+            var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request, _userSession);
 
             // Assert
             _termsAndConditionsService.Verify(x =>

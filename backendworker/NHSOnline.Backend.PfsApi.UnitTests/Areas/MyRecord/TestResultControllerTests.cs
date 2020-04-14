@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -56,22 +55,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(_mockGpSystem.Object);
             
-            var httpContextItems = new Dictionary<object, object>
-            {
-                { Constants.HttpContextItems.UserSession, _userSession }
-            };
-
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
-
             _fixture.Freeze<IDetailedTestResultVisitor<IActionResult>>();
 
             _systemUnderTest = _fixture.Create<DetailedTestResultController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
         
         [TestMethod]
@@ -86,7 +72,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
 
             // Act
-            var result = await _systemUnderTest.GetTestResult(_patientGuid, TestResultId);
+            var result = await _systemUnderTest.GetTestResult(_patientGuid, TestResultId, _userSession);
 
             // Assert
             _mockPatientRecordService.Verify();
@@ -108,7 +94,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
 
             // Act
-            var result = await _systemUnderTest.GetTestResult(_patientGuid, TestResultId);
+            var result = await _systemUnderTest.GetTestResult(_patientGuid, TestResultId, _userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()

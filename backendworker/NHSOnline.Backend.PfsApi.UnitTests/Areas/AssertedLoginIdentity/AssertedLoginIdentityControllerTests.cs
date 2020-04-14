@@ -49,15 +49,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
             _mockLogger = _fixture.Freeze<Mock<ILogger<AssertedLoginIdentityController>>>();
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-
             _systemUnderTest = _fixture.Create<AssertedLoginIdentityController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
@@ -69,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 .Returns(new CreateJwtResult.InternalServerError());
 
             // Act
-            var result = await _systemUnderTest.Post(_request);
+            var result = await _systemUnderTest.Post(_request, _userSession);
 
             // Assert
             _mockAssertedLoginIdentityService.Verify();
@@ -95,7 +87,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 .Returns(new CreateJwtResult.Success(expectedResponse));
 
             // Act
-            var result = await _systemUnderTest.Post(_request);
+            var result = await _systemUnderTest.Post(_request, _userSession);
 
             // Assert
             _mockAssertedLoginIdentityService.Verify();

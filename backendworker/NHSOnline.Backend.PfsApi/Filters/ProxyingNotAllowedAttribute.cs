@@ -28,7 +28,6 @@ namespace NHSOnline.Backend.PfsApi.Filters
             {
                 logger.LogWarning($"action requires header {nameof(Constants.HttpHeaders.PatientId)} to match id of session user");
                 context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
-                return;
             }
         }
     }

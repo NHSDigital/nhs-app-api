@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.Ndop;
+using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 
@@ -28,13 +30,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetToken()
+        public async Task<IActionResult> GetToken([UserSession] P9UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
-
-                var userSession = HttpContext.GetUserSession();
 
                 await _auditor.Audit(AuditingOperations.GetNdopTokenAuditTypeRequest, "Getting Ndop JWT Token");
 

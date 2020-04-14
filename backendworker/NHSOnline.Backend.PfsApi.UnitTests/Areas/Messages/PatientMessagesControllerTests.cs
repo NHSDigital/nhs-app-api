@@ -32,7 +32,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private string _serviceDeskReference;
 
-        private Mock<HttpContext> _mockHttpContext;
         private PatientMessagesController _systemUnderTest;
 
         private P9UserSession _userSession;
@@ -86,16 +85,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                     .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
             _userSession = _fixture.Create<P9UserSession>();
 
-            _mockHttpContext = new Mock<HttpContext>();
-            _mockHttpContext
-                .Setup(x => x.Items[Constants.HttpContextItems.UserSession])
-                .Returns(_userSession);
-
             _systemUnderTest = _fixture.Create<PatientMessagesController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = _mockHttpContext.Object
-            };
         }
 
         [TestMethod]
@@ -113,7 +103,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             MockAuditor(GetMessagesResponseAuditType, "Patient messages successfully retrieved");
 
             // Act
-            var result = await _systemUnderTest.GetMessages();
+            var result = await _systemUnderTest.GetMessages(_userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -139,7 +129,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             MockAuditor(GetMessageResponseAuditType, "Patient message details successfully retrieved");
 
             // Act
-            var result = await _systemUnderTest.GetMessageDetails("1");
+            var result = await _systemUnderTest.GetMessageDetails("1", _userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -166,7 +156,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             MockAuditor(GetMessageRecipientsResponseAuditType, "Patient message recipients successfully retrieved");
 
             // Act
-            var result = await _systemUnderTest.GetMessageRecipients();
+            var result = await _systemUnderTest.GetMessageRecipients(_userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -200,7 +190,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             MockAuditor(UpdateMessageUnreadStatusResponseAuditType, "Patient message read status successfully updated");
 
             // Act
-            var result = await _systemUnderTest.PostUpdateMessageReadStatus(requestBody);
+            var result = await _systemUnderTest.PostUpdateMessageReadStatus(requestBody, _userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -225,7 +215,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             MockAuditor(DeletePatientPracticeMessageResponse, "Patient message successfully deleted");
 
             // Act
-            var result = await _systemUnderTest.DeleteMessage("1");
+            var result = await _systemUnderTest.DeleteMessage("1", _userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -257,7 +247,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             MockAuditor(CreateMessageResponseAuditType, "Patient practice message successfully sent");
 
             // Act
-            var result = await _systemUnderTest.SendMessage(message);
+            var result = await _systemUnderTest.SendMessage(message, _userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -301,7 +291,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             };
 
             // Act
-            var result = await _systemUnderTest.DeleteMessage("1");
+            var result = await _systemUnderTest.DeleteMessage("1", _userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -346,7 +336,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             };
 
             // Act
-            var result = await _systemUnderTest.GetMessages();
+            var result = await _systemUnderTest.GetMessages(_userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -391,7 +381,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             };
 
             // Act
-            var result = await _systemUnderTest.GetMessageDetails("1");
+            var result = await _systemUnderTest.GetMessageDetails("1", _userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -436,7 +426,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             };
 
             // Act
-            var result = await _systemUnderTest.GetMessageRecipients();
+            var result = await _systemUnderTest.GetMessageRecipients(_userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -493,7 +483,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             };
 
             // Act
-            var result = await _systemUnderTest.PostUpdateMessageReadStatus(requestBody);
+            var result = await _systemUnderTest.PostUpdateMessageReadStatus(requestBody, _userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();
@@ -544,7 +534,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             };
 
             // Act
-            var result = await _systemUnderTest.SendMessage(message);
+            var result = await _systemUnderTest.SendMessage(message, _userSession);
 
             // Assert
             _mockPatientMessagesService.Verify();

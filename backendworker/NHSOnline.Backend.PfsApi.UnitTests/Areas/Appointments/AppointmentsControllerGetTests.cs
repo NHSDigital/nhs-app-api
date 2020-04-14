@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -88,21 +88,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
             _serviceDeskReference = _fixture.Create<string>();
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-            
             _systemUnderTest = _fixture.Create<AppointmentsController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfulResult()
         {
             // Act
-            var result = await _systemUnderTest.Get(_patientGuid);
+            var result = await _systemUnderTest.Get(_patientGuid, _userSession);
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
@@ -119,7 +112,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_ServiceReturnsResult_SlotTypesAreTransformed()
         {
             // Act
-            await _systemUnderTest.Get(_patientGuid);
+            await _systemUnderTest.Get(_patientGuid, _userSession);
             
             // Assert
             _mockAppointmentTypeTransformingVisitor.Verify(x => x.Visit(_serviceResult));
@@ -129,7 +122,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_ReturnsSuccessfulResult_LogsAppointmentCount()
         {
             // Act
-            await _systemUnderTest.Get(_patientGuid);
+            await _systemUnderTest.Get(_patientGuid, _userSession);
 
             // Assert
             var expectedLogMessage =
@@ -171,7 +164,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             };
 
             // Act
-            var result = await _systemUnderTest.Get(_patientGuid);
+            var result = await _systemUnderTest.Get(_patientGuid, _userSession);
 
             // Assert
             _mockAppointmentsService.Verify();
@@ -189,7 +182,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Get_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Act
-            await _systemUnderTest.Get(_patientGuid);
+            await _systemUnderTest.Get(_patientGuid, _userSession);
 
             // Assert
             _mockGpSystem.VerifyAll();

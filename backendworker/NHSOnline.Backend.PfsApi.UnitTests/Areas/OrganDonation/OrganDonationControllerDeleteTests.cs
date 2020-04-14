@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -46,15 +46,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Setup(x => x.IsDeleteValid(It.IsAny<OrganDonationWithdrawRequest>()))
                 .Returns(true);
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-
             _systemUnderTest = _fixture.Create<OrganDonationController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
@@ -68,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationWithdrawResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest());
+            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest(), _userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -88,7 +80,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(false);
             
             // Act
-            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest());
+            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest(), _userSession);
             
             // Assert
             result.Should().BeOfType<BadRequestResult>();
@@ -108,7 +100,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationWithdrawResult) timeoutResult));
 
             // Act
-            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest());
+            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest(), _userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -131,7 +123,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationWithdrawResult) upstreamErrorResult));
 
             // Act
-            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest());
+            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest(), _userSession);
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -155,7 +147,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationWithdrawResult) systemErrorResult));
 
             // Act
-            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest());
+            var result = await _systemUnderTest.Delete(new OrganDonationWithdrawRequest(), _userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()

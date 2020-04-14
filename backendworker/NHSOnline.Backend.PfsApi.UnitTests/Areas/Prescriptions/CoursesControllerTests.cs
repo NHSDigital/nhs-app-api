@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -86,21 +86,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
             _serviceDeskReference = _fixture.Create<string>();
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-
             _systemUnderTest = _fixture.Create<CoursesController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             // Act
-            var result = await _systemUnderTest.Get(_patientId);
+            var result = await _systemUnderTest.Get(_patientId, _userSession);
 
             // Assert
             _mockCourseService.VerifyAll();
@@ -143,7 +136,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             };
 
             // Act
-            var result = await _systemUnderTest.Get(_patientId);
+            var result = await _systemUnderTest.Get(_patientId, _userSession);
 
             // Assert
             _mockCourseService.Verify();
@@ -162,7 +155,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         public async Task Get_ReturnsSuccessfulResult_LogsCoursesCountWithMaximumAllowanceDiscarded()
         {
             // Act
-            await _systemUnderTest.Get(_patientId);
+            await _systemUnderTest.Get(_patientId, _userSession);
 
             // Assert
             var expectedLogMessage =
@@ -190,7 +183,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(Task.FromResult((GetCoursesResult) result));
             
             // Act
-            await _systemUnderTest.Get(_patientId);
+            await _systemUnderTest.Get(_patientId, _userSession);
 
             // Assert
             var expectedLogMessage =

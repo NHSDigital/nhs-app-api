@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -60,13 +59,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _userSession.GpUserSession.NhsNumber = _fixture.Create<string>();
             _userSession.GpUserSession.OdsCode = _fixture.Create<string>();
 
-            var httpContextItems = new Dictionary<object, object>
-            {
-                { Constants.HttpContextItems.UserSession, _userSession }
-            };
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
-
             _mockLogger = _fixture.Freeze<Mock<ILogger<ServiceJourneyRulesController>>>();
             _mockLogger.SetupLogger(LogLevel.Information, $"Fetching Service Journey Rules for {_userSession.GpUserSession.OdsCode}", null);
 
@@ -81,11 +73,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                 .Returns(_mockLinkedAccountService.Object);
 
             _systemUnderTest = _fixture.Create<ServiceJourneyRulesController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
@@ -98,7 +85,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockServiceJourneyRulesService.Verify();
@@ -118,7 +105,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.NotFound());
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockServiceJourneyRulesService.Verify();
@@ -136,7 +123,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.InternalServerError());
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _mockServiceJourneyRulesService.Verify();
@@ -162,7 +149,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             };
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountPatientConfig();
+            var result = await _systemUnderTest.GetLinkedAccountPatientConfig(_userSession);
 
             // Assert
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -187,7 +174,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             };
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountPatientConfig();
+            var result = await _systemUnderTest.GetLinkedAccountPatientConfig(_userSession);
 
             // Assert
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -218,7 +205,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             };
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountPatientConfig();
+            var result = await _systemUnderTest.GetLinkedAccountPatientConfig(_userSession);
 
             // Assert
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -249,7 +236,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             };
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountPatientConfig();
+            var result = await _systemUnderTest.GetLinkedAccountPatientConfig(_userSession);
 
             // Assert
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -280,7 +267,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             };
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountPatientConfig();
+            var result = await _systemUnderTest.GetLinkedAccountPatientConfig(_userSession);
 
             // Assert
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -314,7 +301,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             };
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountPatientConfig();
+            var result = await _systemUnderTest.GetLinkedAccountPatientConfig(_userSession);
 
             // Assert
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -349,7 +336,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             };
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountPatientConfig();
+            var result = await _systemUnderTest.GetLinkedAccountPatientConfig(_userSession);
 
             // Assert
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -375,7 +362,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountConfiguration(_patientId);
+            var result = await _systemUnderTest.GetLinkedAccountConfiguration(_patientId, _userSession);
 
             // Assert
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -397,7 +384,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.NotFound());
 
             // Act
-            var result = await _systemUnderTest.GetLinkedAccountConfiguration(_patientId);
+            var result = await _systemUnderTest.GetLinkedAccountConfiguration(_patientId, _userSession);
 
             // Assert
             _mockGpSystemFactory.Verify();

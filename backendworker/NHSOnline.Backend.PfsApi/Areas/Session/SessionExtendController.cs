@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -28,13 +29,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromHeader(Name=PatientId)] Guid patientId)
+        public async Task<IActionResult> Post(
+            [FromHeader(Name=PatientId)] Guid patientId,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
-
-                var userSession = HttpContext.GetUserSession();
 
                 var sessionExtendedResultVisited = await GetSessionExtendResultVisitorOutput(userSession, patientId);
 

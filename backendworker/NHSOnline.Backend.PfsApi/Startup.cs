@@ -169,6 +169,7 @@ namespace NHSOnline.Backend.PfsApi
             options.Filters.Add(typeof(UnparsableExceptionFilterAttribute));
             options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttribute));
             options.Filters.Add(typeof(InvalidPatientIdExceptionFilterAttribute));
+            options.Filters.Add<UserSessionFilter>();
 
             options.InputFormatters.Insert(0, new FhirParametersInputFormatter());
         }

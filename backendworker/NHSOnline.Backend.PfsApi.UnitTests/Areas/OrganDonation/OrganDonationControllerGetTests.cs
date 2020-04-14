@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -48,9 +48,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockOrganDonationService = _fixture.Freeze<Mock<IOrganDonationService>>();
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-
             var demographicsResult = new DemographicsResult.Success(new DemographicsResponse());
 
             _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
@@ -71,11 +68,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(_mockGpSystem.Object);
 
             _systemUnderTest = _fixture.Create<OrganDonationController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
@@ -90,7 +82,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
@@ -113,7 +105,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<OkObjectResult>()
@@ -134,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -158,7 +150,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -184,7 +176,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -206,7 +198,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -229,7 +221,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
@@ -252,7 +244,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -275,7 +267,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
-            var result = await _systemUnderTest.Get();
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()

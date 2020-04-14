@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -61,23 +60,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(_mockGpSystem.Object);
             
-            var httpContextItems = new Dictionary<object, object>
-            {
-                { Constants.HttpContextItems.UserSession, _userSession }
-            };
-
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
-
             _visitor = new DemographicsResultVisitor(new SuccessfulDemographicsResultMapper());
             _fixture.Inject(_visitor);
 
             _systemUnderTest = _fixture.Create<DemographicsController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
         
         [TestMethod]
@@ -93,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get(_patientGuid);
+            var result = await _systemUnderTest.Get(_patientGuid, _userSession);
 
             // Assert
             _mockDemographicsService.Verify();
@@ -117,7 +103,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get(_patientGuid);
+            var result = await _systemUnderTest.Get(_patientGuid, _userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -139,7 +125,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get(_patientGuid);
+            var result = await _systemUnderTest.Get(_patientGuid, _userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()
@@ -162,7 +148,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
-            var result = await _systemUnderTest.Get(_patientGuid);
+            var result = await _systemUnderTest.Get(_patientGuid, _userSession);
 
             // Assert
             result.Should().BeAssignableTo<StatusCodeResult>()

@@ -52,15 +52,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-
             _systemUnderTest = _fixture.Create<SessionExtendController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]
@@ -76,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(_patientGuid);
+            var result = await _systemUnderTest.Post(_patientGuid, _userSession);
 
             // Assert
             result.Should().BeEquivalentTo(new StatusCodeResult(StatusCodes.Status200OK));
@@ -96,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(_patientGuid);
+            var result = await _systemUnderTest.Post(_patientGuid, _userSession);
 
             // Arrange
             result.Should().BeAssignableTo<StatusCodeResult>()

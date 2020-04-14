@@ -6,6 +6,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -38,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
         {
             try
             {
@@ -46,8 +47,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
                 await _auditor.Audit(AuditingOperations.GetOrganDonationAuditTypeRequest,
                     "Attempting to get organ donation record");
-
-                var userSession = HttpContext.GetUserSession();
 
                 _logger.LogInformation($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier.ToString()}");
 
@@ -70,7 +69,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         }
         
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]OrganDonationRegistrationRequest model)
+        public async Task<IActionResult> Post(
+            [FromBody]OrganDonationRegistrationRequest model,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -83,7 +84,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
                 await _auditor.Audit(AuditingOperations.OrganDonationRegistrationAuditTypeRequest, "Attempting to register organ donation decision");
 
-                var result = await Register(model);
+                var result = await Register(model, userSession);
 
                 await result.Accept(new OrganDonationRegistrationAuditingVisitor(_auditor, _logger));
                 return result.Accept(new OrganDonationRegistrationVisitor());
@@ -95,7 +96,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] OrganDonationRegistrationRequest model)
+        public async Task<IActionResult> Put(
+            [FromBody] OrganDonationRegistrationRequest model,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -108,7 +111,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
                 await _auditor.Audit(AuditingOperations.OrganDonationUpdateAuditTypeRequest, "Attempting to update organ donation decision");
                 
-                var result = await Update(model);
+                var result = await Update(model, userSession);
 
                 result.Accept(new OrganDonationRegistrationUpdateAuditingVisitor(_auditor));
                 return result.Accept(new OrganDonationRegistrationUpdateVisitor());
@@ -120,7 +123,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] OrganDonationWithdrawRequest model)
+        public async Task<IActionResult> Delete(
+            [FromBody] OrganDonationWithdrawRequest model,
+            [UserSession] P9UserSession userSession)
         {
             try
             {
@@ -128,7 +133,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
                 await _auditor.Audit(AuditingOperations.OrganDonationWithdrawAuditTypeRequest, "Attempting to withdraw organ donation decision");
                 
-                var result = await Withdraw(model);
+                var result = await Withdraw(model, userSession);
 
                 result.Accept(new OrganDonationWithdrawAuditingVisitor(_auditor));
 
@@ -140,10 +145,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             }
         }
         
-        private async Task<OrganDonationRegistrationResult> Update(OrganDonationRegistrationRequest model)
+        private async Task<OrganDonationRegistrationResult> Update(
+            OrganDonationRegistrationRequest model,
+            P9UserSession userSession)
         {
-            var userSession = HttpContext.GetUserSession();
-
             if (!_validator.IsPutValid(model))
             {
                 _logger.LogError("Invalid request body supplied to registration update request");
@@ -153,10 +158,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             return await _organDonationService.Update(model, userSession);
         }
         
-        private async Task<OrganDonationRegistrationResult> Register(OrganDonationRegistrationRequest model)
+        private async Task<OrganDonationRegistrationResult> Register(
+            OrganDonationRegistrationRequest model,
+            P9UserSession userSession)
         {
-            var userSession = HttpContext.GetUserSession();
-
             if (!_validator.IsPostValid(model))
             {
                 _logger.LogError("Invalid request body supplied to registration request");
@@ -166,10 +171,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             return await _organDonationService.Register(model, userSession);
         }
 
-        private async Task<OrganDonationWithdrawResult> Withdraw(OrganDonationWithdrawRequest model)
+        private async Task<OrganDonationWithdrawResult> Withdraw(
+            OrganDonationWithdrawRequest model,
+            P9UserSession userSession)
         {
-            var userSession = HttpContext.GetUserSession();
-
             if (!ModelState.IsValid)
             {
                 _logger.LogModelStateValidationFailure(ModelState);
