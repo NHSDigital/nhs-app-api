@@ -27,8 +27,18 @@ export default {
   async getSession({ commit }) {
     await this.app.$http.getV1Session()
       .then((session) => {
-        const { name, odsCode, sessionTimeout, token,
-          nhsNumber, dateOfBirth, accessToken, im1MessagingEnabled } = (session || {});
+        const {
+          name,
+          odsCode,
+          sessionTimeout,
+          token,
+          nhsNumber,
+          dateOfBirth,
+          accessToken,
+          im1MessagingEnabled,
+          proofLevel,
+        } = (session || {});
+
         commit(SET_INFO, {
           name,
           durationSeconds: sessionTimeout,
@@ -37,6 +47,7 @@ export default {
           nhsNumber,
           dateOfBirth,
           accessToken,
+          proofLevel,
         });
         commit(LOADED);
         this.dispatch('practiceSettings/setIm1MessagingEnabled', im1MessagingEnabled);
@@ -81,6 +92,7 @@ export default {
         nhsNumber: info.nhsNumber,
         dateOfBirth: info.dateOfBirth,
         accessToken: info.accessToken,
+        proofLevel: info.proofLevel,
       });
 
     setCookie({

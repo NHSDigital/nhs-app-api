@@ -1,19 +1,30 @@
-import getOr from 'lodash/fp/getOr';
+import { getOr, isArray } from 'lodash/fp';
 import { findByName } from '@/lib/routes';
 
-export default ({ redirect, route, store }) => {
-  const routeDetail = findByName(route.name);
-
-  if (routeDetail && routeDetail.redirectRules) {
-    /* eslint-disable no-restricted-syntax */
-    for (const rule of routeDetail.redirectRules) {
+export const conditionalRedirector = ({ redirect, path, redirectRules, store }) => {
+  if (isArray(redirectRules)) {
+    for (let i = 0; i < redirectRules.length; i += 1) {
+      const rule = redirectRules[i];
       if (getOr(true, 'value', rule) === store.getters[rule.condition]) {
-        if (routeDetail.path === rule.url) {
+        if (path === rule.url) {
           break;
         }
         redirect('302', rule.url);
         break;
       }
     }
+  }
+};
+
+export default ({ redirect, route, store }) => {
+  const routeDetail = findByName(route.name);
+
+  if (routeDetail) {
+    conditionalRedirector({
+      redirect,
+      path: routeDetail.path,
+      redirectRules: routeDetail.redirectRules,
+      store,
+    });
   }
 };

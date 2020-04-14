@@ -3,6 +3,11 @@ export default {
     description: 'Pages in this guide',
     header: 'Contents',
   },
+  proofLevelUpliftBanner: {
+    heading: 'Finish setting up your NHS Login',
+    description: 'You\'ll need to connect to your GP surgery before you can book appointments, order prescriptions and view your health records',
+    buttonText: 'Connect to my GP surgery',
+  },
   insetText: {
     heading: 'Information: ',
   },

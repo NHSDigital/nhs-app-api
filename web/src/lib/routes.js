@@ -71,10 +71,10 @@ const linkedAccountAppointmentRedirect = {
   url: '/linked-profiles/shutter/appointments',
 };
 
-const silverIntegrationsSecondaryAppointmentsRedirect = {
-  journey: 'silverIntegration',
+const silverIntegrationsSecondaryAppointmentsDisabledRedirect = {
+  journey_disabled: 'silverIntegration',
   url: '/appointments',
-  rule_context: {
+  context: {
     provider: 'ers',
     serviceType: 'secondaryAppointments',
   },
@@ -172,6 +172,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   APPOINTMENTS: {
     name: 'appointments',
@@ -184,6 +185,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
   },
   GP_APPOINTMENTS: {
     name: 'appointments-gp-appointments',
@@ -195,13 +197,14 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.APPOINTMENTS];
       },
     },
+    proxyShutterPath: '/linked-profiles/shutter/appointments',
+    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [
       linkedAccountAppointmentRedirect,
       gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
     ],
-    proxyShutterPath: '/linked-profiles/shutter/appointments',
-    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   HOSPITAL_APPOINTMENTS: {
     name: 'appointments-hospital-appointments',
@@ -216,10 +219,9 @@ const routes = {
         return this.allRoutes.APPOINTMENTS;
       },
     },
-    sjrRedirectRules: [
-      silverIntegrationsSecondaryAppointmentsRedirect,
-    ],
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
+    sjrRedirectRules: [silverIntegrationsSecondaryAppointmentsDisabledRedirect],
   },
   APPOINTMENT_ADMIN_HELP: {
     name: 'appointments-admin-help',
@@ -235,9 +237,8 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}online-consultations/`,
-    sjrRedirectRules: [
-      adminHelpDisabledRedirect,
-    ],
+    upliftPath: '/uplift/appointments',
+    sjrRedirectRules: [adminHelpDisabledRedirect],
   },
   APPOINTMENT_GP_ADVICE: {
     name: 'appointments-gp-advice',
@@ -253,9 +254,8 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}online-consultations/`,
-    sjrRedirectRules: [
-      gpAdviceDisabledRedirect,
-    ],
+    upliftPath: '/uplift/appointments',
+    sjrRedirectRules: [gpAdviceDisabledRedirect],
   },
   APPOINTMENT_BOOKING: {
     name: 'appointments-booking',
@@ -267,6 +267,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
   },
   APPOINTMENT_BOOKING_GUIDANCE: {
     name: 'appointments-booking-guidance',
@@ -278,6 +279,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [
       gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
@@ -293,6 +295,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
   },
   APPOINTMENT_CANCELLING: {
     name: 'appointments-cancelling',
@@ -304,6 +307,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
   },
   APPOINTMENT_CANCELLING_SUCCESS: {
     name: 'appointments-cancelling-success',
@@ -315,6 +319,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.APPOINTMENTS, this.allRoutes.GP_APPOINTMENTS];
       },
     },
+    upliftPath: '/uplift/appointments',
     redirectRules: [{
       condition: 'myAppointments/isCancellingAppointmentInProgress',
       value: false,
@@ -332,6 +337,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
   },
   APPOINTMENT_BOOKING_SUCCESS: {
     name: 'appointments-booking-success',
@@ -343,12 +349,13 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.APPOINTMENTS, this.allRoutes.GP_APPOINTMENTS];
       },
     },
+    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
     redirectRules: [{
       condition: 'availableAppointments/isBookingAppointmentInProgress',
       value: false,
       url: '/appointments/gp-appointments',
     }],
-    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   APPOINTMENT_GP_AT_HAND: {
     name: 'appointments-gp-at-hand',
@@ -360,6 +367,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [
       im1AppointmentRedirect,
       informaticaAppointmentRedirect,
@@ -375,6 +383,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [
       gpAtHandAppointmentRedirect,
       im1AppointmentRedirect,
@@ -414,6 +423,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   CHECKYOURSYMPTOMS: {
     name: 'check-your-symptoms',
@@ -437,6 +447,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   DATA_SHARING_OVERVIEW: {
     name: 'data-sharing',
@@ -448,6 +459,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}ndop/`,
+    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -464,6 +476,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}ndop/`,
+    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -480,6 +493,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}ndop/`,
+    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -496,6 +510,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}ndop/`,
+    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -512,6 +527,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   DISCONTINUED_MEDICINES: {
     name: 'gp-medical-record-medicines-discontinued-medicines',
@@ -523,6 +539,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   INDEX: {
     name: 'index',
@@ -577,15 +594,14 @@ const routes = {
         return [this.allRoutes.INDEX];
       },
     },
-    sjrRedirectRules: [
-      messagingDisabledRedirect,
-    ],
+    helpUrl: baseNhsAppHelpUrl,
+    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
       url: '/',
     }],
-    helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [messagingDisabledRedirect],
   },
   MESSAGING_MESSAGES: {
     name: 'messaging-messages',
@@ -596,15 +612,14 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.MESSAGING];
       },
     },
-    sjrRedirectRules: [
-      messagingDisabledRedirect,
-    ],
+    helpUrl: baseNhsAppHelpUrl,
+    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
       url: '/',
     }],
-    helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [messagingDisabledRedirect],
   },
   MORE: {
     name: 'more',
@@ -617,6 +632,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
+    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'session/isProxying',
       value: true,
@@ -634,6 +650,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
     sjrRedirectRules: [
       gpAtHandMedicalRecordRedirectV2,
       gpAtHandMyRecordRedirect,
@@ -651,6 +668,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   MYRECORD_GP_AT_HAND: {
     name: 'my-record-gp-at-hand',
@@ -662,9 +680,8 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    sjrRedirectRules: [
-      im1MyRecordRedirect,
-    ],
+    upliftPath: '/uplift/gp-medical-record',
+    sjrRedirectRules: [im1MyRecordRedirect],
   },
   GP_MEDICAL_RECORD_GP_AT_HAND: {
     name: 'gp-medical-record-gp-at-hand',
@@ -676,9 +693,8 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    sjrRedirectRules: [
-      im1GpMedicalRecordRedirectV2,
-    ],
+    upliftPath: '/uplift/gp-medical-record',
+    sjrRedirectRules: [im1GpMedicalRecordRedirectV2],
   },
   MYRECORDNOACCESS: {
     name: 'my-record-noaccess',
@@ -690,6 +706,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   ALLERGIESANDREACTIONS: {
     name: 'gp-medical-record-allergies-and-reactions',
@@ -701,6 +718,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   ENCOUNTERS: {
     name: 'gp-medical-record-encounters',
@@ -712,6 +730,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   TESTRESULTS: {
     name: 'gp-medical-record-test-results',
@@ -723,6 +742,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   TESTRESULTSDETAIL: {
     name: 'gp-medical-record-test-results-detail',
@@ -734,6 +754,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   TESTRESULTID: {
     name: 'gp-medical-record-testresultdetail-testResultId',
@@ -745,6 +766,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   IMMUNISATIONS: {
     name: 'gp-medical-record-immunisations',
@@ -756,6 +778,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   DIAGNOSIS_V2: {
     name: 'gp-medical-record-diagnosis',
@@ -767,6 +790,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   EXAMINATIONS_V2: {
     name: 'gp-medical-record-examinations',
@@ -778,6 +802,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   PROCEDURES_V2: {
     name: 'gp-medical-record-procedures',
@@ -789,6 +814,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   MEDICINES: {
     name: 'gp-medical-record-medicines',
@@ -800,6 +826,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   MEDICAL_HISTORY: {
     name: 'gp-medical-record-medical-history',
@@ -811,6 +838,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   MYRECORDTESTRESULT: {
     name: 'my-record-testresultdetail-testResultId',
@@ -822,6 +850,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   MY_RECORD_VISION_DIAGNOSIS_DETAIL: {
     name: 'my-record-diagnosis-detail',
@@ -833,6 +862,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   MY_RECORD_VISION_EXAMINATIONS_DETAIL: {
     name: 'my-record-examinations-detail',
@@ -844,6 +874,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   MY_RECORD_VISION_PROCEDURES_DETAIL: {
     name: 'my-record-procedures-detail',
@@ -855,6 +886,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   MY_RECORD_VISION_TEST_RESULTS_DETAIL: {
     name: 'my-record-test-results-detail',
@@ -866,6 +898,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   DOCUMENTS: {
     name: 'gp-medical-record-documents',
@@ -877,6 +910,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
     sjrRedirectRules: [documentsDisabledRedirect],
   },
   DOCUMENT: {
@@ -888,6 +922,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
     sjrRedirectRules: [documentsDisabledRedirect],
   },
   DOCUMENT_DETAIL: {
@@ -900,6 +935,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
     sjrRedirectRules: [documentsDisabledRedirect],
   },
   NOMINATED_PHARMACY: {
@@ -911,6 +947,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_SEARCH: {
     name: 'nominated-pharmacy-search',
@@ -921,6 +958,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_CONFIRM: {
     name: 'nominated-pharmacy-confirm',
@@ -931,12 +969,14 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_CHANGE_SUCCESS: {
     name: 'nominated-pharmacy-change-success',
     path: '/nominated-pharmacy/change-success',
     crumb: {},
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_INTERRUPT: {
     name: 'nominated-pharmacy-interrupt',
@@ -947,6 +987,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_DSP_INTERRUPT: {
     name: 'nominated-pharmacy-dsp-interrupt',
@@ -957,6 +998,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_SEARCH_RESULTS: {
     name: 'nominated-pharmacy-results',
@@ -967,6 +1009,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_CHECK: {
     name: 'nominated-pharmacy-check',
@@ -977,6 +1020,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_CHOOSE_TYPE: {
     name: 'nominated-pharmacy-choose-type',
@@ -987,6 +1031,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES: {
     name: 'nominated-pharmacy-online-only-choices',
@@ -997,6 +1042,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH: {
     name: 'nominated-pharmacy-online-only-search',
@@ -1008,6 +1054,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
+    upliftPath: '/uplift/prescriptions',
   },
   ORGAN_DONATION: {
     name: 'organ-donation',
@@ -1019,6 +1066,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_ADDITIONAL_DETAILS: {
     name: 'organ-donation-additional-details',
@@ -1030,6 +1078,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_AMEND: {
     name: 'organ-donation-amend',
@@ -1041,6 +1090,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_FAITH: {
     name: 'organ-donation-faith',
@@ -1052,6 +1102,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_MORE_ABOUT_ORGANS: {
     name: 'organ-donation-more-about-organs',
@@ -1063,6 +1114,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_SOME_ORGANS: {
     name: 'organ-donation-some-organs',
@@ -1074,6 +1126,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_REVIEW_YOUR_DECISION: {
     name: 'organ-donation-review-your-decision',
@@ -1085,6 +1138,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_VIEW_DECISION: {
     name: 'organ-donation-view-decision',
@@ -1096,6 +1150,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_WITHDRAW_REASON: {
     name: 'organ-donation-withdraw-reason',
@@ -1107,6 +1162,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_WITHDRAWN: {
     name: 'organ-donation-withdrawn',
@@ -1118,6 +1174,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_YOUR_CHOICE: {
     name: 'organ-donation-your-choice',
@@ -1129,6 +1186,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
+    upliftPath: '/uplift/more',
   },
   PATIENT_PRACTICE_MESSAGING: {
     name: 'patient-practice-messaging',
@@ -1140,6 +1198,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
+    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DELETE: {
@@ -1155,6 +1214,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
+    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect, deleteMessageRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY: {
@@ -1170,6 +1230,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
+    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP: {
@@ -1185,6 +1246,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
+    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS: {
@@ -1200,6 +1262,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging`,
+    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE: {
@@ -1215,6 +1278,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
+    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_CREATE: {
@@ -1230,6 +1294,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
+    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS: {
@@ -1246,6 +1311,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
+    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect, deleteMessageRedirect],
   },
   PRESCRIPTIONS: {
@@ -1259,10 +1325,9 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
-    sjrRedirectRules: [
-      gpAtHandPrescriptionsRedirect,
-    ],
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
+    upliftPath: '/uplift/prescriptions',
+    sjrRedirectRules: [gpAtHandPrescriptionsRedirect],
   },
   PRESCRIPTION_CONFIRM_COURSES: {
     name: 'prescriptions-confirm-prescription-details',
@@ -1274,6 +1339,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
+    upliftPath: '/uplift/prescriptions',
   },
   PRESCRIPTIONS_GP_AT_HAND: {
     name: 'prescriptions-gp-at-hand',
@@ -1285,9 +1351,8 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
-    sjrRedirectRules: [
-      im1PrescriptionsRedirect,
-    ],
+    upliftPath: '/uplift/prescriptions',
+    sjrRedirectRules: [im1PrescriptionsRedirect],
   },
   PRESCRIPTION_REPEAT_COURSES: {
     name: 'prescriptions-repeat-courses',
@@ -1299,6 +1364,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
+    upliftPath: '/uplift/prescriptions',
   },
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS: {
     name: 'prescriptions-repeat-partial-success',
@@ -1310,12 +1376,13 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
+    helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
+    upliftPath: '/uplift/prescriptions',
     redirectRules: [{
       condition: 'repeatPrescriptionCourses/isOrderPrescriptionInProgress',
       value: false,
       url: '/prescriptions',
     }],
-    helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
   },
   PRESCRIPTIONS_ORDER_SUCCESS: {
     name: 'prescriptions-order-success',
@@ -1327,12 +1394,13 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
+    helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
+    upliftPath: '/uplift/prescriptions',
     redirectRules: [{
       condition: 'repeatPrescriptionCourses/isOrderPrescriptionInProgress',
       value: false,
       url: '/prescriptions',
     }],
-    helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
   },
   RECALLS: {
     name: 'gp-medical-record-recalls',
@@ -1344,6 +1412,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   REFERRALS: {
     name: 'gp-medical-record-referrals',
@@ -1355,6 +1424,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   HEALTH_CONDITIONS: {
     name: 'gp-medical-record-health-conditions',
@@ -1366,6 +1436,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
+    upliftPath: '/uplift/gp-medical-record',
   },
   SYMPTOMS: {
     name: 'symptoms',
@@ -1494,9 +1565,55 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    sjrRedirectRules: [
-      gpAtHandMyRecordRedirect,
-    ],
+    sjrRedirectRules: [gpAtHandMyRecordRedirect],
+  },
+  UPLIFT_APPOINTMENTS: {
+    name: 'uplift-appointments',
+    path: '/uplift/appointments',
+    crumb: {
+      nativeDisabled: true,
+      i18nKey: 'appointments',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}appointments/`,
+  },
+  UPLIFT_GP_MEDICAL_RECORD: {
+    name: 'uplift-gp-medical-record',
+    path: '/uplift/gp-medical-record',
+    crumb: {
+      nativeDisabled: true,
+      i18nKey: 'myRecord',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}record/`,
+  },
+  UPLIFT_MORE: {
+    name: 'uplift-more',
+    path: '/uplift-more',
+    crumb: {
+      nativeDisabled: true,
+      i18nKey: 'more',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX];
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+  },
+  UPLIFT_PRESCRIPTIONS: {
+    name: 'uplift-prescriptions',
+    path: '/uplift/prescriptions',
+    crumb: {
+      nativeDisabled: true,
+      i18nKey: 'prescriptions',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
   },
 };
 
@@ -1684,4 +1801,8 @@ export const {
   LINKED_PROFILES_SHUTTER_APPOINTMENTS,
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS,
   SWITCH_PROFILE,
+  UPLIFT_APPOINTMENTS,
+  UPLIFT_GP_MEDICAL_RECORD,
+  UPLIFT_MORE,
+  UPLIFT_PRESCRIPTIONS,
 } = routes;

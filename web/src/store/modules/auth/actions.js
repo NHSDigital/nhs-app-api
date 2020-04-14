@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 import NativeCallbacks from '@/services/native-app';
 import consola from 'consola';
 import { LOGIN } from '@/lib/routes';
@@ -69,9 +68,17 @@ export default {
         },
       })
       .then((response) => {
-        // eslint-disable-next-line object-curly-newline
-        const { name, odsCode, sessionTimeout, token, nhsNumber, dateOfBirth, accessToken } =
-          (response || {});
+        const {
+          name,
+          odsCode,
+          sessionTimeout,
+          token,
+          nhsNumber,
+          dateOfBirth,
+          accessToken,
+          proofLevel,
+        } = (response || {});
+
         this.dispatch('session/hideExpiryMessage');
         this.dispatch('session/setInfo', {
           name,
@@ -81,6 +88,7 @@ export default {
           nhsNumber,
           dateOfBirth,
           accessToken,
+          proofLevel,
         });
 
         commit(AUTH_RESPONSE, response);

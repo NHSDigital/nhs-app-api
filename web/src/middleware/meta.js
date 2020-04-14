@@ -107,6 +107,10 @@ import {
   TESTRESULTID,
   TESTRESULTS,
   TESTRESULTSDETAIL,
+  UPLIFT_APPOINTMENTS,
+  UPLIFT_GP_MEDICAL_RECORD,
+  UPLIFT_MORE,
+  UPLIFT_PRESCRIPTIONS,
 } from '@/lib/routes';
 
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
@@ -214,6 +218,7 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.serviceUnavailable';
       break;
     case APPOINTMENTS.name:
+    case UPLIFT_APPOINTMENTS.name:
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.appointments';
       route.meta.pageTitleKey = 'pageTitles.appointments';
@@ -293,6 +298,7 @@ export default function ({ route, store, app }) {
     case MYRECORD.name:
     case MYRECORDNOACCESS.name:
     case MYRECORDTESTRESULT.name:
+    case UPLIFT_GP_MEDICAL_RECORD.name:
       store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaders.myRecord';
       route.meta.pageTitleKey = 'pageTitles.myRecord';
@@ -388,6 +394,7 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.messaging';
       break;
     case MORE.name:
+    case UPLIFT_MORE.name:
       store.dispatch('navigation/setNewMenuItem', 4);
       route.meta.headerKey = 'pageHeaders.more';
       route.meta.pageTitleKey = 'pageTitles.more';
@@ -552,6 +559,7 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.repeatPrescriptionCourses';
       break;
     case PRESCRIPTIONS.name:
+    case UPLIFT_PRESCRIPTIONS.name:
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.prescriptions';
       route.meta.pageTitleKey = 'pageTitles.prescriptions';

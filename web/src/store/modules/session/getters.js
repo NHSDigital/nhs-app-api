@@ -34,7 +34,7 @@ export default {
     const state = input.session || input;
     return () => !!state.csrfToken;
   },
-  isNotP9User: state => state.proofLevel !== P9_PROOF_LEVEL,
+  isP9User: state => state.proofLevel === P9_PROOF_LEVEL,
   isProxying(state, getters, rootState) {
     return !!(rootState.linkedAccounts && rootState.linkedAccounts.actingAsUser);
   },

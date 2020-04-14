@@ -59,6 +59,7 @@ const config = {
       'auth',
       'serviceJourneyRules',
       'session',
+      'upliftRedirect',
       'conditionalRedirect',
       'sjrRedirect',
       'meta',

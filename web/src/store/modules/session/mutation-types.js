@@ -11,10 +11,18 @@ export const SHOW_SESSION_EXPIRING = 'SHOW_SESSION_EXPIRING';
 export const HIDE_SESSION_EXPIRING = 'HIDE_SESSION_EXPIRING';
 export const P9_PROOF_LEVEL = 'P9';
 export const initialState = () => ({
-  hasLoaded: false,
+  accessToken: undefined,
+  csrfToken: undefined,
+  dateOfBirth: undefined,
   durationSeconds: undefined,
   gpOdsCode: undefined,
+  hasLoaded: false,
   lastCalledAt: undefined,
-  validationInterval: undefined,
+  nhsNumber: undefined,
   proofLevel: undefined,
+  sessionTimeout: undefined,
+  showExpiryMessage: false,
+  showSessionExpiring: false,
+  user: undefined,
+  validationInterval: undefined,
 });

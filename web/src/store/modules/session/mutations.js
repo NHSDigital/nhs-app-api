@@ -45,6 +45,7 @@ export default {
     nhsNumber,
     dateOfBirth,
     accessToken,
+    proofLevel,
   } = {}) {
     state.user = name;
     state.durationSeconds = durationSeconds;
@@ -55,6 +56,7 @@ export default {
     state.nhsNumber = nhsNumber;
     state.dateOfBirth = dateOfBirth;
     state.accessToken = accessToken;
+    state.proofLevel = proofLevel;
   },
   [SET_LAST_CALLED_AT](state, date) {
     state.lastCalledAt = date;
