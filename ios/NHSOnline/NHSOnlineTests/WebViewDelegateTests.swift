@@ -4,7 +4,6 @@ import WebKit
 
 class WebViewDelegateTests: XCTestCase {
     var webViewDelegate: MockWebViewDelegate?
-    var iProovWebViewDelegate : IProovMockWebViewDelegate?
     
     var wKWebView: WKWebView?
     var mockWKWebView: MockWKWebView?
@@ -22,7 +21,6 @@ class WebViewDelegateTests: XCTestCase {
         viewController.configurationServiceProvider = configurationServiceProvider
         let webAppInterface = WebAppInterface(controller: viewController)
         webViewDelegate = MockWebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface)
-        iProovWebViewDelegate = IProovMockWebViewDelegate(controller: viewController, knownServiceProvider: knownServicesProvider, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface)
         homeViewController = viewController
         wKWebView = WKWebView(frame: .zero)
         mockWKWebView = MockWKWebView()
@@ -86,51 +84,12 @@ class WebViewDelegateTests: XCTestCase {
         
         assert(homeViewController!.applicationState.isReady() == true)
     }
-
-    func test_launchIproovIsCalled() {
-        let url = URL(string: "https://iproov.app/testtoken")!
-        let iProovUrlRequest = URLRequest(url: url)
-        let iProovAction = iProovNavigationAction(testRequest: iProovUrlRequest)
-
-        // act
-        iProovWebViewDelegate?.webView(wKWebView!, decidePolicyFor: iProovAction, decisionHandler: { _ in })
-
-        // assert
-        assert(iProovWebViewDelegate?.attemptedIProovLaunch == true,
-                      "Expected the launchIproov() method to be invoked")
-    }
-
-    func test_evaluateJavascriptIsCalled() {
-        let url = URL(string: "https://iproov.app/testtoken")
-        webViewDelegate?.launchIproov(url: url!, webView: mockWKWebView!)
-
-        assert(mockWKWebView?.attemptedEvaluateJavaScript == true,
-               "Expected the evaluateJavaScript() method to be invoked")
-    }
-
-    func test_evaluateJavascriptIsNotReachedIfTooFewPathComponents() {
-        let url = URL(string: "https://iproov.app")
-        webViewDelegate?.launchIproov(url: url!, webView: mockWKWebView!)
-
-        assert(iProovWebViewDelegate?.attemptedIProovLaunch == false,
-                      "Expected the function to return before the evaluateJavaScript() method was reached")
-    }
 }
 
 class MockWebViewDelegate : WebViewDelegate {
-    var attemptedIProovLaunch = false
-
     override init(controller: HomeViewController, knownServiceProvider: KnownServicesProtocol,
     configurationServiceProvider: ConfigurationServiceProtocol, webAppInterface: WebAppInterface) {
         super.init(controller: controller,knownServiceProvider: knownServiceProvider, configurationServiceProvider: configurationServiceProvider, webAppInterface: webAppInterface)
-    }
-}
-
-class IProovMockWebViewDelegate : WebViewDelegate {
-    var attemptedIProovLaunch = false;
-    
-    override func launchIproov(url: URL, webView: WKWebView) {
-        attemptedIProovLaunch = true;
     }
 }
 
@@ -139,17 +98,5 @@ class MockWKWebView : WKWebView {
     
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         attemptedEvaluateJavaScript =  true;
-    }
-}
-
-class iProovNavigationAction: WKNavigationAction {
-    let testRequest: URLRequest
-    override var request: URLRequest {
-        return testRequest
-    }
-
-    init(testRequest: URLRequest) {
-        self.testRequest = testRequest
-        super.init()
     }
 }

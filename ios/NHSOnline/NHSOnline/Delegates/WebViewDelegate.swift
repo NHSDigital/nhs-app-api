@@ -53,13 +53,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
         if (checkIfIproov(navigationAction: navigationAction)) {
-            let url = navigationAction.request.url;
-
-            launchIproov(url: url!, webView: webView);
+            let url = navigationAction.request.url
+            IProov.handle(url: url!, from: webView)
             decisionHandler(.cancel)
-            return;
-
+            return
         }
+
         navigate(webView: webView, navigationAction: navigationAction, decisionHandler: decisionHandler);
     }
 
@@ -129,69 +128,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
 
         decisionHandler(.allow)
-    }
-
-    func launchIproov(url: URL, webView: WKWebView) {
-        if (url.pathComponents.count < 2) {
-            Logger.logInfo(message: "Too few path components")
-            return;
-        }
-
-        let token = url.pathComponents[1]
-
-        Logger.logInfo(message: "Launching IProov")
-        let options = Options()
-        options.ui.title = NSLocalizedString("NHSLoginTitle", comment: "")
-
-        let completionHandler: (Any?, Error?) -> Void = {
-            (data, error) in
-            if (error != nil || data == nil) {
-                Logger.logError(message: "An error occurred when attempting to navigate to the iProov page.")
-                return;
-            }
-            // The if statement below has been added to mitigate a bug in iProov and should be removed when this has been resolved.
-            // This is covered in further detail in the Jira ticket NHSO-8203.
-            if (!Reachability.isConnectedToNetwork()) {
-                self.showNativeViewContainerWithError(ErrorMessage(.NoInternetConnection))
-                return
-            }
-            IProov.launch(streamingURL: data as! String, token: token, options: options) { (status) in
-                self.checkIproovStatus(status: status);
-            }
-        }
-        webView.evaluateJavaScript("window.getIproovEndpoint()", completionHandler: completionHandler)
-    }
-
-
-    private func checkIproovStatus(status: Status) {
-        switch status {
-        case let .processing(progress, message):
-            // The SDK will update your app with the progress of streaming to the server and authenticating
-            // the user. This will be called multiple time as the progress updates.
-            Logger.logInfo(message: "IProov - Processing: progress = %@, message = %@", progress, message)
-
-        case .success(_):
-            // The user was successfully verified/enrolled and the token has been validated.
-            // The token passed back will be the same as the one passed in to the original call.
-            Logger.logInfo(message: "IProov - Success")
-
-        case let .failure(reason, feedbackCode):
-            // The user was not successfully verified/enrolled, as their identity could not be verified,
-            // or there was another issue with their verification/enrollment. A reason (as a string)
-            // is provided as to why the claim failed, along with a feedback code from the back-end.
-            Logger.logInfo(message: "IProov - Failure: reason = %@, feedbackCode = %@", reason, feedbackCode)
-
-        case .cancelled:
-            // The user cancelled iProov, either by pressing the close button at the top right, or sending
-            // the app to the background.
-            Logger.logInfo(message: "IProov - Cancelled")
-
-        case let .error(error):
-            // The user was not successfully verified/enrolled due to an error (e.g. lost internet connection)
-            // along with an `iProovError` with more information about the error (NSError in Objective-C).
-            // It will be called once, or never.
-            Logger.logError(message: "IProov - Error: error = %@", "\(error)")
-        }
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
