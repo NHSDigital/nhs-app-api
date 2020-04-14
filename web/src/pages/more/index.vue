@@ -1,11 +1,7 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
     <menu-item-list>
-      <third-party-jump-off-button v-if="showPkbMessages && isNativeApp && !isProxying"
-                                   id="btn_pkb_messages_and_consultations"
-                                   provider-id="pkb"
-                                   :jump-off-type="thirdPartyProvider.pkb.messages.type"
-                                   :redirect-path="thirdPartyProvider.pkb.messages.redirectPath" />
+
       <menu-item v-if="messagingEnabled"
                  id="btn_messaging"
                  header-tag="h2"
@@ -28,10 +24,23 @@
                  :aria-label="$t('sc04.requestGpHelp.subheader') |
                    join($t('sc04.requestGpHelp.body') ,'. ')"/>
 
+      <third-party-jump-off-button v-if="showPkbMessages"
+                                   id="btn_pkb_messages_and_consultations"
+                                   provider-id="pkb"
+                                   :jump-off-type="thirdPartyProvider.pkb.messages.type"
+                                   :redirect-path="thirdPartyProvider.pkb.messages.redirectPath" />
+
       <organ-donation-link id="btn_organ_donation"
                            header-tag="h2"
                            :display-description="true"
                            :back-link-override="morePath"/>
+
+      <third-party-jump-off-button
+        v-if="showPkbSharedLinks"
+        id="btn_pkb_shared_links"
+        provider-id="pkb"
+        :jump-off-type="thirdPartyProvider.pkb.sharedLinks.type"
+        :redirect-path="thirdPartyProvider.pkb.sharedLinks.redirectPath" />
 
       <menu-item id="btn_data_sharing"
                  header-tag="h2"
@@ -86,14 +95,6 @@ export default {
       isProxying: this.$store.getters['session/isProxying'],
       morePath: MORE.path,
       patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
-      showPkbMessages: sjrIf({
-        $store: this.$store,
-        journey: 'silverIntegration',
-        context: {
-          provider: 'pkb',
-          serviceType: 'messages',
-        },
-      }),
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
   },
@@ -103,11 +104,37 @@ export default {
         ? DATA_SHARING_OVERVIEW.path
         : this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL;
     },
+    hasPkbMessages() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'messages',
+        },
+      });
+    },
+    hasPkbSharedLinks() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'libraries',
+        },
+      });
+    },
+    showPkbMessages() {
+      return this.hasPkbMessages && this.isNativeApp && !this.isProxying;
+    },
+    showPkbSharedLinks() {
+      return this.hasPkbSharedLinks && this.isNativeApp && !this.isProxying;
+    },
     // patientpracticemessaging should be shown on desktop & native if enabled
     // appMessaging should only be shown on native devices if enabled
     messagingEnabled() {
       return this.patientPracticeMessagingEnabled ||
-      (this.appMessagingEnabled && this.$store.state.device.isNativeApp);
+        (this.appMessagingEnabled && this.$store.state.device.isNativeApp);
     },
     messagingPath() {
       return this.patientPracticeMessagingEnabled

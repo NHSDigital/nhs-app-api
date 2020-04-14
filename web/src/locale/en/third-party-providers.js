@@ -55,6 +55,21 @@ export default {
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
         },
       },
+      {
+        id: 'sharedLinks',
+        path: '/nhs-login/login?phrPath=/library/manageLibrary.action',
+        jumpOffContent: {
+          headerText: 'Shared links',
+          descriptionText: 'View links your doctor or health professional has shared with you',
+        },
+        thirdPartyWarning: {
+          featureName: 'Shared links',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
     ],
   },
 };

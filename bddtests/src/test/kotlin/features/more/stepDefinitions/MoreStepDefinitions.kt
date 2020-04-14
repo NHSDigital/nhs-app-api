@@ -39,6 +39,11 @@ class MoreStepDefinitions {
         morePage.btnMessagesAndConsultations.click()
     }
 
+    @When("^I click the Shared links link on the More page")
+    fun iClickTheSharedLinksLinkOnTheMorePage() {
+        morePage.btnSharedLinks.click()
+    }
+
     @When("^I click the Data Sharing link on the More page")
     fun iClickTheDataSharingLinkOnTheMorePage() {
         morePage.btnDataSharing.click()
@@ -80,6 +85,16 @@ class MoreStepDefinitions {
     @Then("the link to Messages and consultations is not available on the More page")
     fun theLinkToMessagesAndConsultationsIsNotAvailableOnTheMorePage() {
         morePage.btnMessagesAndConsultations.assertElementNotPresent()
+    }
+
+    @Then("the link to Shared links is available on the More page")
+    fun theLinkToSharedLinksIsAvailableOnTheMorePage() {
+        morePage.btnSharedLinks.assertSingleElementPresent()
+    }
+
+    @Then("the link to Shared links is not available on the More page")
+    fun theLinkToSharedLinksIsNotAvailableOnTheMorePage() {
+        morePage.btnSharedLinks.assertElementNotPresent()
     }
 
     @Then("the More page explains that it is not possible to access it while acting on behalf of someone else")
@@ -127,7 +142,6 @@ class MoreStepDefinitions {
             morePage.btnDataSharing.click()
             browser.assertNewTab()
         }
-
     }
 
     private fun followOrganDonationLink() {

@@ -28,6 +28,9 @@ open class MorePage : HybridPageObject() {
     private val messagesAndConsultationsDescription = "Message your healthcare team, " +
             "or answer questions online and get a response from a health professional"
 
+    private val sharedLinksTitle = "Shared links"
+    private val sharedLinksDescription = "View links your doctor or health professional has shared with you"
+
     val content = LinksWithDescriptionsContent(
             linkBlockTitle = "More",
             containerXPath = "//div[@id='mainDiv']",
@@ -44,6 +47,7 @@ open class MorePage : HybridPageObject() {
     val btnRequestGpHelp by lazy { links.link(requestGpHelpTitle, requestGpHelpDescription) }
     val btnMessagesAndConsultations by lazy { links.link(messagesAndConsultationsTitle,
             messagesAndConsultationsDescription) }
+    val btnSharedLinks by lazy { links.link(sharedLinksTitle, sharedLinksDescription)}
 
     fun assertProxyText(patientName: String){
         val expectedText = arrayListOf(

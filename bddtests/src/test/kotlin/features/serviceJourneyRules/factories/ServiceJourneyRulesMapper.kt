@@ -33,6 +33,7 @@ class ServiceJourneyRulesMapper {
                                 JourneyType.MESSAGES_DISABLED,
                                 JourneyType.USER_INFO_DISABLED,
                                 JourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,
+                                JourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
                                 JourneyType.SILVER_INTEGRATION_MESSAGES_PKB,
                                 JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB),
                 GpInformation(Supplier.EMIS, ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED) to
@@ -46,6 +47,7 @@ class ServiceJourneyRulesMapper {
                                 JourneyType.MEDICAL_RECORD_GPATHAND,
                                 JourneyType.PRESCRIPTIONS_GPATHAND,
                                 JourneyType.SILVER_INTEGRATION_CONSULTATIONS_NONE,
+                                JourneyType.SILVER_INTEGRATION_LIBRARY_NONE,
                                 JourneyType.SILVER_INTEGRATION_MESSAGES_NONE,
                                 JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE),
                 GpInformation(Supplier.TPP, TPP_ONLINE_CONSULTATIONS_DISABLED) to
@@ -153,6 +155,8 @@ class ServiceJourneyRulesMapper {
             PRESCRIPTIONS_IM1,
             SILVER_INTEGRATION_CONSULTATIONS_PKB,
             SILVER_INTEGRATION_CONSULTATIONS_NONE,
+            SILVER_INTEGRATION_LIBRARY_PKB,
+            SILVER_INTEGRATION_LIBRARY_NONE,
             SILVER_INTEGRATION_MESSAGES_PKB,
             SILVER_INTEGRATION_MESSAGES_NONE,
             SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB,

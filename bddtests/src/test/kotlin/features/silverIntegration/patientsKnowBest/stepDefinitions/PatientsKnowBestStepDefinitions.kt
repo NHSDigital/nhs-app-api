@@ -38,6 +38,16 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
+    @Given("^I am a user who can view Shared Links from Patients Know Best$")
+    fun iAmAUserWhoCanViewSharedLinksFromPatientsKnowBest(){
+        setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_LIBRARY_PKB)
+    }
+
+    @Given("^I am a user who cannot view Shared Links from Patients Know Best$")
+    fun iAmAUserWhoCannotViewSharedLinksFromPatientsKnowBest(){
+        setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
+    }
+
     @When("^I click the 'Continue' button on the redirector page with a url starting with '(.*)'$")
     fun iClickTheContinueButtonOnTheRedirectorPageWithAUrlOf(continueUrl: String) {
         redirector.interruptionCard.assertContinueAndClick(continueUrl)

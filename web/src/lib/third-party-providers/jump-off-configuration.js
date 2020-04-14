@@ -15,6 +15,10 @@ export default {
         type: 'messages',
         redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages',
       },
+      sharedLinks: {
+        type: 'sharedLinks',
+        redirectPath: '/nhs-login/login?phrPath=%2Flibrary%2FmanageLibrary.action',
+      },
     },
   },
 };

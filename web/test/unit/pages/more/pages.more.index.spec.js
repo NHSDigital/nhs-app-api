@@ -215,6 +215,51 @@ describe('more', () => {
     });
   });
 
+  describe('pkb shared links link', () => {
+    const getPkbSharedLinksLink = wrapperObj =>
+      wrapperObj.find('#btn_pkb_shared_links');
+
+    describe('pkb shared links enabled, native, not proxying', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: false });
+      });
+
+      it('will show link', () => {
+        expect(getPkbSharedLinksLink(wrapper).exists()).toBe(true);
+      });
+    });
+
+    describe('pkb shared links enabled, desktop, not proxying', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: false, isProxying: false });
+      });
+
+      it('will not show link', () => {
+        expect(getPkbSharedLinksLink(wrapper).exists()).toBe(false);
+      });
+    });
+
+    describe('pkb shared links disabled', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: false, isNativeApp: true, isProxying: false });
+      });
+
+      it('will not show link', () => {
+        expect(getPkbSharedLinksLink(wrapper).exists()).toBe(false);
+      });
+    });
+
+    describe('pkb shared links enabled, native, proxying', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
+      });
+
+      it('will not show link', () => {
+        expect(getPkbSharedLinksLink(wrapper).exists()).toBe(false);
+      });
+    });
+  });
+
   describe('methods', () => {
     it('will navigate to data preferences when data preferences menu item clicked if native', () => {
       wrapper = mountAs({ isNativeApp: true });
