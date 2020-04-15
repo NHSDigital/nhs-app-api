@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -32,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
     {
         private readonly ICitizenIdSessionService _citizenIdSessionService;
         private readonly IGpSystemFactory _gpSystemFactory;
-        private readonly ISessionCacheService _sessionCacheService;
+        private readonly UserSessionService _userSessionService;
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<SessionController> _logger;
         private readonly IAuditor _auditor;
@@ -42,11 +43,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
         private readonly IUserInfoService _userInfoService;
         private readonly IGpSessionManager _gpSessionManager;
+        private readonly IAntiforgery _antiforgery;
 
         public SessionController(
             ICitizenIdSessionService citizenIdSessionService,
             IGpSystemFactory gpSystemFactory,
-            ISessionCacheService sessionCacheService,
+            UserSessionService userSessionService,
             ConfigurationSettings settings,
             ILogger<SessionController> logger,
             IAuditor auditor,
@@ -55,12 +57,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             IServiceJourneyRulesService serviceJourneyRules,
             IErrorReferenceGenerator errorReferenceGenerator,
             IUserInfoService userInfoService,
-            IGpSessionManager gpSessionManager
-        )
+            IGpSessionManager gpSessionManager, IAntiforgery antiforgery)
         {
             _citizenIdSessionService = citizenIdSessionService;
             _gpSystemFactory = gpSystemFactory;
-            _sessionCacheService = sessionCacheService;
+            _userSessionService = userSessionService;
             _settings = settings;
             _logger = logger;
             _auditor = auditor;
@@ -70,6 +71,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _errorReferenceGenerator = errorReferenceGenerator;
             _userInfoService = userInfoService;
             _gpSessionManager = gpSessionManager;
+            _antiforgery = antiforgery;
         }
 
         [HttpGet]
@@ -234,8 +236,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     ProofLevel = citizenIdSessionResult.Session.ProofLevel
                 }
             };
+            var csrfToken = _antiforgery.GetTokens(HttpContext).RequestToken;
 
-            var result = await _gpSessionManager.CreateSession(gpSystem, gpSessionMgrCitizenIdSessionResult);
+            var result = await _gpSessionManager.CreateSession(gpSystem, gpSessionMgrCitizenIdSessionResult, csrfToken);
 
             if (!(result is CreateSessionResult.Success successResult))
             {
@@ -279,8 +282,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
             await Task.WhenAll(appendCookieToResponseTask, tokenDeletionTask);
 
+            _userSessionService.SetUserSession(userSession);
+
             // Audit that the user is logged on.
-            HttpContext.SetUserSession(userSession);
             await _auditor.Audit(AuditingOperations.SessionCreateResponse, "Session successfully created.");
 
             return await Task.FromResult(CreateCreatedResult(userSession, serviceJourneyRulesVisitorOutput.Response));

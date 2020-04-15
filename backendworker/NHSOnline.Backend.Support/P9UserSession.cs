@@ -1,20 +1,18 @@
 using System;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.Support
 {
     [Serializable]
-    public class P9UserSession
+    public sealed class P9UserSession: P5UserSession
     {
-        public string Key { get; set; }
-
-        public string CsrfToken { get; set; }
-
         public GpUserSession GpUserSession { get; set; }
-
-        public CitizenIdUserSession CitizenIdUserSession { get; set; }
 
         public Guid OrganDonationSessionId { get; set; }
 
         public string Im1ConnectionToken { get; set; }
+
+        public override TResult Accept<TResult>(IUserSessionVisitor<TResult> visitor)
+            => visitor.Visit(this);
     }
 }

@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.AspNet;
 
 namespace NHSOnline.Backend.PfsApi
 {
@@ -38,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi
 
                 if (retrieveSessionResult is RetrieveSessionResult.Success success)
                 {
-                    context.HttpContext.SetUserSession(success.UserSession);
+                    context.HttpContext.RequestServices.GetRequiredService<UserSessionService>().SetUserSession(success.UserSession);
                     _logger.LogDebug("Finish: Validate Principal");
                     return;
                 }

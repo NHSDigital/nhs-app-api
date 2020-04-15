@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -16,6 +16,7 @@ using NHSOnline.Backend.ServiceJourneyRules.Common;
 using NHSOnline.Backend.ServiceJourneyRules.Common.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 {
@@ -54,6 +55,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             // Setup the Mocks
             var mockLogger = new Mock<ILogger<JourneyFeatureFilterAttribute>>();
             var mockServiceProvider = new Mock<IServiceProvider>();
+            var mockUserSessionService = new Mock<IUserSessionService>();
 
             _mockSjrClient = new Mock<IServiceJourneyRulesClient>();
             _mockHttpContext = new Mock<HttpContext>();
@@ -62,10 +64,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                 .Setup(x => x.RequestServices)
                 .Returns(mockServiceProvider.Object);
 
-            _mockHttpContext
-                .Setup(x => x.Items)
-                .Returns(new Dictionary<object, object>
-                    { { Constants.HttpContextItems.UserSession, _userSession } });
+            mockUserSessionService
+                .Setup(x => x.GetRequiredUserSession<P9UserSession>(It.IsAny<string>()))
+                .Returns(_userSession);
 
             mockServiceProvider
                 .Setup(x => x.GetService(typeof(IServiceJourneyRulesClient)))
@@ -74,7 +75,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             mockServiceProvider
                 .Setup(x => x.GetService(typeof(ILogger<JourneyFeatureFilterAttribute>)))
                 .Returns(mockLogger.Object);
-          
+
+            mockServiceProvider
+                .Setup(x => x.GetService(typeof(IUserSessionService)))
+                .Returns(mockUserSessionService.Object);
+
             _mockSjrClient
                 .Setup(x => x.GetServiceJourneyRules(_userSession.GpUserSession.OdsCode))
                 .ReturnsAsync(
@@ -83,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
                         Body = _sjrResponse
                     });
             
-            var actionContext = new ActionContext()
+            var actionContext = new ActionContext
             {
                 HttpContext = _mockHttpContext.Object,
                 RouteData = new RouteData(),

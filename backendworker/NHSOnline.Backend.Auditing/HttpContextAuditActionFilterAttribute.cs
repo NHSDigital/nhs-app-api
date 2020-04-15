@@ -14,8 +14,6 @@ namespace NHSOnline.Backend.Auditing
             _auditor = auditor;
         }
         
-        public IAuditor Auditor => _auditor;
-
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             _context = _auditor.BeginScope(context.HttpContext);

@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 using Constants = NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.PfsApi.Filters
@@ -15,20 +16,32 @@ namespace NHSOnline.Backend.PfsApi.Filters
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var logger = context.HttpContext.RequestServices.GetService<ILogger<ProxyingNotAllowedAttribute>>();
-            var userSession = context.HttpContext.GetUserSession();
+            var httpContext = context.HttpContext;
+            var logger = httpContext.RequestServices.GetRequiredService<ILogger<ProxyingNotAllowedAttribute>>();
+            var p9UserSessionOpt = httpContext.RequestServices
+                .GetRequiredService<IUserSessionService>()
+                .GetUserSession<P9UserSession>();
 
-            if (logger == null) throw new InvalidDataException(nameof(logger));
-            if (userSession == null) throw new InvalidDataException(nameof(userSession));
-
-            var loggedInPatientIdFromSession = userSession.GpUserSession.Id;
-            var patientIdInRequestHeader = context.HttpContext.Request.Headers[Constants.HttpHeaders.PatientId];
-
-            if (!string.Equals(loggedInPatientIdFromSession.ToString(), patientIdInRequestHeader.ToString(), StringComparison.Ordinal))
+            p9UserSessionOpt.IfSome(p9UserSession =>
             {
-                logger.LogWarning($"action requires header {nameof(Constants.HttpHeaders.PatientId)} to match id of session user");
-                context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
-            }
+                if (IsProxying(p9UserSession, httpContext))
+                {
+                    logger.LogWarning(
+                        $"action requires header {nameof(Constants.HttpHeaders.PatientId)} to match id of session user");
+                    context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
+                }
+            });
+        }
+
+        private static bool IsProxying(P9UserSession userSession, HttpContext httpContext)
+        {
+            var loggedInPatientIdFromSession = userSession.GpUserSession.Id;
+            var patientIdInRequestHeader = httpContext.Request.Headers[Constants.HttpHeaders.PatientId];
+
+            return !string.Equals(
+                loggedInPatientIdFromSession.ToString(),
+                patientIdInRequestHeader.ToString(),
+                StringComparison.Ordinal);
         }
     }
 }

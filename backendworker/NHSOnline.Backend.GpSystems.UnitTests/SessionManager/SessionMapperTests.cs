@@ -1,10 +1,7 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.Support;
@@ -15,8 +12,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
     public class SessionMapperTests
     {
         private IFixture _fixture;
-        private Mock<IAntiforgery> _mockAntiForgery;
-        private Mock<HttpContext> _mockHttpContext;
         private string _csrfToken;
         private string _im1ConnectionToken;
 
@@ -28,16 +23,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
 
-            _mockAntiForgery = _fixture.Freeze<Mock<IAntiforgery>>();
-            _mockHttpContext = _fixture.Freeze<Mock<HttpContext>>();
-
             _csrfToken = _fixture.Create<string>();
             _im1ConnectionToken = _fixture.Create<string>();
-
-            _mockAntiForgery
-                .Setup(x => x.GetTokens(_mockHttpContext.Object))
-                .Returns(new AntiforgeryTokenSet(_csrfToken, "", "", ""))
-                .Verifiable();
 
             _systemUnderTest = _fixture.Create<SessionMapper>();
         }
@@ -68,15 +55,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             };
 
             // Act
-            var result = _systemUnderTest.Map(
-                _mockHttpContext.Object, gpUserSession, gpSessionManagerCitizenIdUserSession, _im1ConnectionToken);
+            var result = _systemUnderTest.Map(_csrfToken, gpUserSession, gpSessionManagerCitizenIdUserSession, _im1ConnectionToken);
 
             // Assert
             result.Should().BeEquivalentTo(
                 expectedResult,
                 options => options.Excluding(x => x.OrganDonationSessionId));
             result.OrganDonationSessionId.Should().NotBeEmpty();
-            _mockAntiForgery.Verify();
         }
     }
 }

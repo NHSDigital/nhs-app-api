@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Session;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 
 namespace NHSOnline.Backend.PfsApi.Filters
@@ -12,27 +15,25 @@ namespace NHSOnline.Backend.PfsApi.Filters
     public class ProxyAuditingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<ProxyAuditingMiddleware> _logger;
         
         private readonly List<string> _patientIdHeaderNotExpectedForPaths = new List<string> {
             @"/v1/patient/configuration", @"/v1/patient/journey-configuration"
         };
         
-        public ProxyAuditingMiddleware(RequestDelegate next, IGpSystemFactory gpSystemFactory, ILogger<ProxyAuditingMiddleware> logger)
+        public ProxyAuditingMiddleware(RequestDelegate next, ILogger<ProxyAuditingMiddleware> logger)
         {
             _next = next;
-            _gpSystemFactory = gpSystemFactory;
             _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
         {
-            var userSession = context.GetUserSession();
+            var userSessionOption = context.RequestServices.GetRequiredService<IUserSessionService>().GetUserSession<P9UserSession>();
 
-            if (userSession != null)
+            userSessionOption.IfSome(userSession =>
             {
-                var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
+                var gpSystem = context.RequestServices.GetRequiredService<IGpSystemFactory>().CreateGpSystem(userSession.GpUserSession.Supplier);
 
                 if (gpSystem.SupportsLinkedAccounts && TryParsePatientId(context, out var patientId))
                 {
@@ -41,7 +42,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
 
                     context.SetLinkedAccountAuditInfo(result);
                 }
-            }
+            });
 
             await _next(context);
         }

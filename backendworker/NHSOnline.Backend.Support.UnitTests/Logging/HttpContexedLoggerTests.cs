@@ -14,7 +14,9 @@ using System.IO;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Support.Logging;
 using System.Threading;
+using Moq;
 using NHSOnline.Backend.Support.AspNet.Filters;
+using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.Support.UnitTests.Logging
@@ -157,23 +159,26 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
             // Setup for getting the log system back in injection for test
+            var mockUserSessionService = new Mock<IUserSessionService>();
+            mockUserSessionService
+                .Setup(x => x.GetUserSession<P5UserSession>())
+                .Returns(Option.Some(new P5UserSession { Key = SessionId }));
+
             var serviceProvider = new ServiceCollection()
                 .AddLogging(ConfigureLogging)
+                .AddSingleton(mockUserSessionService.Object)
                 .BuildServiceProvider();
             _fixture.Inject(serviceProvider.GetService<ILoggerFactory>());
 
+            // set up http contexts for both controller and calling attribute overloads..
+            var actionContext = new ActionContext(new DefaultHttpContext(), new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
+            actionContext.HttpContext.RequestServices = serviceProvider;
+
             // Create system under test from IOC injection...
             _systemUnderTest = _fixture.Create<DummyController>();
-
-            // set up http contexts for both controller and calling attribute overloads..
-            var actionContext = new ActionContext(new DefaultHttpContext(),
-                new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
-            actionContext.HttpContext.Items.Add("UserSession", new P9UserSession { Key = SessionId });
             _systemUnderTest.ControllerContext = new ControllerContext(actionContext);
-            _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(),
-                new Dictionary<string, object>(), _systemUnderTest);
-            _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1),
-                _systemUnderTest);
+            _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(), new Dictionary<string, object>(), _systemUnderTest);
+            _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
         }
 
         private void ConfigureLogging(ILoggingBuilder logBuilder)

@@ -6,18 +6,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi
 {
-    public class UserSessionManager: IUserSessionManager
+    public class UserSessionManager : IUserSessionManager
     {
+        private readonly IUserSessionService _userSessionService;
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IAuditor _auditor;
         private readonly ILogger<UserSessionManager> _logger;
 
-        public UserSessionManager(ISessionCacheService sessionCacheService, IAuditor auditor, ILogger<UserSessionManager> logger)
+        public UserSessionManager(
+            IUserSessionService userSessionService,
+            ISessionCacheService sessionCacheService,
+            IAuditor auditor,
+            ILogger<UserSessionManager> logger)
         {
+            _userSessionService = userSessionService;
             _sessionCacheService = sessionCacheService;
             _auditor = auditor;
             _logger = logger;
@@ -25,10 +33,14 @@ namespace NHSOnline.Backend.PfsApi
 
         public async Task<bool> SignOutAsync(HttpContext httpContext)
         {
-            if (httpContext == null) throw new ArgumentNullException(nameof(httpContext));
+            if (httpContext == null)
+            {
+                throw new ArgumentNullException(nameof(httpContext));
+            }
 
             var success = true;
-            var userSession = httpContext.GetUserSession();
+            var userSession = _userSessionService.GetRequiredUserSession<P9UserSession>();
+
             var gpUserSession = userSession.GpUserSession;
             var citizenIdUserSession = userSession.CitizenIdUserSession;
 
@@ -53,7 +65,10 @@ namespace NHSOnline.Backend.PfsApi
 
             await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            if (!success) return false;
+            if (!success)
+            {
+                return false;
+            }
 
             _logger.LogDebug("Session successfully deleted.");
             await _auditor.AuditSessionEvent(

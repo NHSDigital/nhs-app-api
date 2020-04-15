@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Filters
 {
@@ -17,7 +18,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
         {
             foreach (var userSessionParameter in context.ActionDescriptor.Parameters.OfType<ControllerParameterDescriptor>().Where(HasUserSessionAttribute))
             {
-                var session = context.HttpContext.GetUserSession();
+                var session = context.HttpContext.RequestServices.GetRequiredService<IUserSessionService>().GetRequiredUserSession<UserSession>();
                 if (userSessionParameter.ParameterType.IsInstanceOfType(session))
                 {
                     context.ActionArguments[userSessionParameter.Name] = session;
@@ -26,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 {
                     var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<UserSessionFilter>>();
                     logger.LogInformation(
-                        $"Action requires {userSessionParameter.ParameterType.Name} session but current session is {session?.GetType().Name ?? "null"}");
+                        $"Action requires {userSessionParameter.ParameterType.Name} session but current session is {session.GetType().Name}");
                     context.Result = new UnauthorizedResult();
                     return;
                 }

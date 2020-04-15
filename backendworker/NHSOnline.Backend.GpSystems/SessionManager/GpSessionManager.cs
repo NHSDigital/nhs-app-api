@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.GpSystems.SessionManager
 {
@@ -14,25 +13,28 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
     {
         private readonly ILogger<GpSessionManager> _logger;
         private readonly ISessionMapper _sessionMapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserSessionService _userSessionService;
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IGpSystemFactory _gpSystemFactory;
+
         public GpSessionManager(
             ILogger<GpSessionManager> logger,
             ISessionMapper sessionMapper,
-            IHttpContextAccessor httpContextAccessor,
+            IUserSessionService userSessionService,
             ISessionCacheService sessionCacheService,
             IGpSystemFactory gpSystemFactory)
         {
             _logger = logger;
             _sessionMapper = sessionMapper;
-            _httpContextAccessor = httpContextAccessor;
+            _userSessionService = userSessionService;
             _sessionCacheService = sessionCacheService;
             _gpSystemFactory = gpSystemFactory;
         }
 
         public async Task<CreateSessionResult> CreateSession(
-            IGpSystem gpSystem, GpSessionManagerCitizenIdSessionResult citizenIdSessionResult)
+            IGpSystem gpSystem,
+            GpSessionManagerCitizenIdSessionResult citizenIdSessionResult,
+            StringValues csrfToken)
         {
             // Create a session with the GP system, using the IM1 connection token.
             var gpSessionCreateResult = await GetGpSessionCreateResult(
@@ -45,8 +47,10 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             }
 
             var userSession = _sessionMapper.Map(
-                _httpContextAccessor.HttpContext, result.UserSession,
-                citizenIdSessionResult.Session, citizenIdSessionResult.Im1ConnectionToken);
+                csrfToken,
+                result.UserSession,
+                citizenIdSessionResult.Session,
+                citizenIdSessionResult.Im1ConnectionToken);
 
             var sessionId = await _sessionCacheService.CreateUserSession(userSession);
             _logger.LogDebug($"Fetched Session Id: '{sessionId}'");
@@ -85,7 +89,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
         public async Task<RecreateSessionResult> RecreateSession(string patientId)
         {
             // 1. retrieve session from cosmos
-            var userSession = _httpContextAccessor.HttpContext.GetUserSession();
+            var userSession = _userSessionService.GetRequiredUserSession<P9UserSession>();
             var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
             var gpUserSession = userSession.GpUserSession;
 

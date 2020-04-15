@@ -17,6 +17,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
@@ -42,8 +43,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         private Mock<ILogger<GpSessionManager>> _mockLogger;
         private Mock<ISessionMapper> _mockSessionMapper;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
-        private Mock<IHttpContextAccessor> _mockHttpContextAccessor;
         private Mock<IRecreateSessionMapperService> _mockRecreateSessionMapperService;
+        private Mock<IUserSessionService> _mockUserSessionService;
 
         [TestInitialize]
         public void TestInitialize()
@@ -84,7 +85,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 Im1ConnectionToken = _userProfile.Im1ConnectionToken
             };
 
-            _mockHttpContextAccessor = _fixture.Freeze<Mock<IHttpContextAccessor>>();
             _mockLogger = _fixture.Freeze<Mock<ILogger<GpSessionManager>>>();
             _mockSessionMapper = _fixture.Freeze<Mock<ISessionMapper>>();
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
@@ -117,22 +117,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
 
             _mockSessionMapper
                 .Setup(x => x.Map(
-                    _mockHttpContextAccessor.Object.HttpContext,
+                    _csrfToken,
                     emisUserSession,
                     gpSessMgrCitizenIdUserSession,
                     _userProfile.Im1ConnectionToken))
                 .Returns(_userSession)
                 .Verifiable();
 
-            _mockHttpContextAccessor.Object.HttpContext.Items[Constants.HttpContextItems.UserSession] = _userSession;
-
-            _mockHttpContextAccessor
-                .Setup(x=> x.HttpContext.Items[Constants.HttpContextItems.UserSession])
-                .Returns(_userSession);
-
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(It.IsAny<Supplier>()))
                 .Returns(_mockGpSystem.Object);
+
+            _mockUserSessionService = _fixture.Freeze<Mock<IUserSessionService>>();
+            _mockUserSessionService
+                .Setup(x => x.GetRequiredUserSession<P9UserSession>(It.IsAny<string>()))
+                .Returns(_userSession);
 
             //create the class under test
             _gpSessionManager = _fixture.Create<GpSessionManager>();
@@ -148,7 +147,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 .Verifiable();
 
             // Act
-            var result = await _gpSessionManager.CreateSession(_mockGpSystem.Object, _gpSessMgrCitizenIdSessionResult);
+            var result = await _gpSessionManager.CreateSession(_mockGpSystem.Object, _gpSessMgrCitizenIdSessionResult, _csrfToken);
 
             // Assert
             var failureResult = result.Should().BeOfType<CreateSessionResult.Failure>().Subject;
@@ -163,7 +162,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         public async Task CreateSession_ReturnsCreateSessionResult_Success()
         {
             // Act
-            var result = await _gpSessionManager.CreateSession(_mockGpSystem.Object, _gpSessMgrCitizenIdSessionResult);
+            var result = await _gpSessionManager.CreateSession(_mockGpSystem.Object, _gpSessMgrCitizenIdSessionResult, _csrfToken);
 
             // Assert
             var successResult = result.Should().BeOfType<CreateSessionResult.Success>().Subject;

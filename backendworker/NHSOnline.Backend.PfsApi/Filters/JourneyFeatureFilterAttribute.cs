@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRules.Common;
-using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Filters
 {
@@ -22,15 +23,15 @@ namespace NHSOnline.Backend.PfsApi.Filters
             _httpStatusCode = currentHttpStatusCode;
         }
 
-        public JourneyFeature CurrentJourneyFeature => _journeyFeature;
-
-        public HttpStatusCode CurrentHttpStatusCode => _httpStatusCode;
-
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             var logger = context.HttpContext.RequestServices.GetService<ILogger<JourneyFeatureFilterAttribute>>();
             var sjrClient = context.HttpContext.RequestServices.GetService<IServiceJourneyRulesClient>();
-            var odsCode = context.HttpContext.GetUserSession().GpUserSession.OdsCode;
+            var odsCode = context.HttpContext.RequestServices
+                .GetRequiredService<IUserSessionService>()
+                .GetRequiredUserSession<P9UserSession>()
+                .GpUserSession
+                .OdsCode;
 
             ValidateObjects(logger, sjrClient, odsCode);
 

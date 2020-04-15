@@ -8,7 +8,10 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 {
     public interface IGpSessionManager
     {
-        Task<CreateSessionResult> CreateSession(IGpSystem gpSystem, GpSessionManagerCitizenIdSessionResult citizenIdSessionResult);
+        Task<CreateSessionResult> CreateSession(
+            IGpSystem gpSystem,
+            GpSessionManagerCitizenIdSessionResult citizenIdSessionResult,
+            StringValues csrfToken);
 
         Task<RetrieveSessionResult> RetrieveSession(string sessionId, StringValues csrfToken);
 

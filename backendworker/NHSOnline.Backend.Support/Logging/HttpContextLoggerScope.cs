@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Support.AspNet;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.Support.Logging
 {
     internal sealed class HttpContextLoggerScope
     {
+        private const string NoSessionYet = "{No Session yet}";
         private readonly HttpContext _httpContext;
 
         internal HttpContextLoggerScope(HttpContext httpContext)
@@ -14,22 +17,20 @@ namespace NHSOnline.Backend.Support.Logging
 
         public override string ToString()
         {
-            var items = _httpContext?.Items;
-            object value = null;
-            items?.TryGetValue(Constants.HttpContextItems.UserSession, out value);
+            var userSessionKey = _httpContext?.RequestServices
+                .GetService<IUserSessionService>()
+                ?.GetUserSession<P5UserSession>()
+                .Select(userSession => userSession.Key)
+                .ValueOr(() => NoSessionYet) ?? NoSessionYet;
 
-            var userSession = value as P9UserSession ?? new P9UserSession { Key = "{No Session yet}" };
+            var linkedAccountAuditInfo = _httpContext?.GetLinkedAccountAuditInfo();
 
-            if (userSession.GpUserSession != null) //valid session has been retrieved
+            if (linkedAccountAuditInfo?.IsProxyMode == true)
             {
-                var linkedAccountAuditInfo = _httpContext.GetLinkedAccountAuditInfo();
-
-                if (linkedAccountAuditInfo?.IsProxyMode == true)
-                {
-                    return $"SessionId:{userSession.Key} | In proxy mode";                   
-                }
+                return $"SessionId:{userSessionKey} | In proxy mode";
             }
-            return $"SessionId:{userSession.Key}";
+
+            return $"SessionId:{userSessionKey}";
         }
     }
 }

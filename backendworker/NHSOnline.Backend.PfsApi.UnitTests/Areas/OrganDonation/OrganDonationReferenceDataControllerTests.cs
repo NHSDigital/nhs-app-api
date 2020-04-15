@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -22,7 +22,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         private OrganDonationReferenceDataController _systemUnderTest;
         private IFixture _fixture;
         private Mock<IOrganDonationService> _mockOrganDonationService;
-        private P9UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
 
         private const string RequestAuditType = "OrganDonation_ReferenceData_Request";
@@ -37,19 +36,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _userSession = _fixture.Create<P9UserSession>();
             _mockOrganDonationService = _fixture.Freeze<Mock<IOrganDonationService>>();
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
-
             _systemUnderTest = _fixture.Create<OrganDonationReferenceDataController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
         }
 
         [TestMethod]

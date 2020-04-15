@@ -11,11 +11,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.Auditing.UnitTests
@@ -33,6 +35,8 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         private DummyClassThatAudits _systemUnderTest;
         private ActionExecutingContext _actionExecutingContext;
         private ResultExecutedContext _resultContext;
+        private IServiceProvider _requestServices;
+        private Mock<IUserSessionService> _mockUserSessionService;
 
         private class UnknownSupplierSession : GpUserSession
         {
@@ -70,11 +74,19 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         {
             private readonly IAuditor _auditor;
             private readonly NestedCallClass _nestedClass;
+            private readonly IServiceProvider _requestServices;
+            private readonly Mock<IUserSessionService> _mockUserSessionService;
 
-            public DummyClassThatAudits(IAuditor auditor, NestedCallClass nestedClass)
+            public DummyClassThatAudits(
+                IAuditor auditor,
+                NestedCallClass nestedClass,
+                IServiceProvider requestServices,
+                Mock<IUserSessionService> mockUserSessionService)
             {
                 _auditor = auditor;
                 _nestedClass = nestedClass;
+                _requestServices = requestServices;
+                _mockUserSessionService = mockUserSessionService;
             }
 
             public async Task BasicAudit()
@@ -94,8 +106,16 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 _nestedClass.PauseNestedExecution = true;
                 var awaiter = Task.Run(_nestedClass.TaskAsyncMethod);
 
-                var dummyContext = new DefaultHttpContext();
-                dummyContext.Items.Add("UserSession", CreateUserSession(_nhsNumber2, AuditorTestResources.AccessTokenValid) );
+                var mockUserSessionService = new Mock<IUserSessionService>();
+                mockUserSessionService
+                    .Setup(x => x.GetUserSession<UserSession>())
+                    .Returns(Option.Some(CreateUserSession(_nhsNumber2, AuditorTestResources.AccessTokenValid)));
+                var requestServices = new ServiceCollection()
+                    .AddSingleton(mockUserSessionService.Object)
+                    .BuildServiceProvider();
+
+                var dummyContext = new DefaultHttpContext { RequestServices = requestServices };
+
                 using (_auditor.BeginScope(dummyContext))
                 {
                     await _auditor.Audit("Testing", "Message with rubbish scope 1");
@@ -107,15 +127,17 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             }
 
             public async Task Audit(
-                P9UserSession userSessionInContext,
+                UserSession userSessionInContext,
                 string operation, 
                 string details,
                 params object[] parameters
             )
             {
-                var dummyContext = new DefaultHttpContext();
-                dummyContext.Items.Add("UserSession", userSessionInContext);
-                
+                var dummyContext = new DefaultHttpContext { RequestServices = _requestServices };
+                _mockUserSessionService
+                    .Setup(x => x.GetUserSession<UserSession>())
+                    .Returns(Option.Some(userSessionInContext));
+
                 using (_auditor.BeginScope(dummyContext))
                 {
                     await _auditor.Audit(operation, details, parameters);                    
@@ -130,8 +152,8 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 params object[] parameters
             )
             {
-                var dummyContext = new DefaultHttpContext();
-                
+                var dummyContext = new DefaultHttpContext { RequestServices = _requestServices };
+
                 using (_auditor.BeginScope(dummyContext))
                 {
                     await _auditor.AuditRegistrationEvent(nhsNumber, supplier, operation, details, parameters);                    
@@ -147,8 +169,8 @@ namespace NHSOnline.Backend.Auditing.UnitTests
                 params object[] parameters
                 )
             {
-                var dummyContext = new DefaultHttpContext();
-                
+                var dummyContext = new DefaultHttpContext { RequestServices = _requestServices };
+
                 using (_auditor.BeginScope(dummyContext))
                 {
                     await _auditor.AuditSessionEvent(accessToken, nhsNumber, supplier, operation, details, parameters);                    
@@ -175,18 +197,30 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             
             _fixture.Inject(new AuditorFactory(new StreamAuditSink(_stream), configBuilder.Build()).CreateAuditor(logger.Object));
 
-            // Create system under test from IOC injection...
-            _systemUnderTest = _fixture.Create<DummyClassThatAudits>();
+            _mockUserSessionService = _fixture.Freeze<Mock<IUserSessionService>>();
+            _mockUserSessionService
+                .Setup(x => x.GetUserSession<UserSession>())
+                .Returns(Option.Some(CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid)));
+
+            var mockServiceProvider = _fixture.Freeze<Mock<IServiceProvider>>();
+            mockServiceProvider
+                .Setup(x => x.GetService(typeof(IUserSessionService)))
+                .Returns(_mockUserSessionService.Object);
+
+            _requestServices = mockServiceProvider.Object;
 
             // set up http contexts for both controller and calling attribute overloads..
             var actionContext = new ActionContext(new DefaultHttpContext(), new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
-            actionContext.HttpContext.Items.Add("UserSession", CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid));
             actionContext.HttpContext.Items.Add("LinkedAccountAuditInfo", CreateLinkedAccountAuditInfo(false, ""));
+            actionContext.HttpContext.RequestServices = _requestServices;
             _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(), new Dictionary<string, object>(), _systemUnderTest);
             _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
+
+            // Create system under test from IOC injection...
+            _systemUnderTest = _fixture.Create<DummyClassThatAudits>();
         }
 
-        private static P9UserSession CreateUserSession(string nhsNumber, string accessToken)
+        private static UserSession CreateUserSession(string nhsNumber, string accessToken)
         {
             return new P9UserSession
             {
@@ -421,8 +455,8 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             const string proxyNhsNumber = "123 456 7890";
             // set up http contexts for both controller and calling attribute overloads..
             var actionContext = new ActionContext(new DefaultHttpContext(), new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
-            actionContext.HttpContext.Items.Add("UserSession", CreateUserSession(_nhsNumber1, AuditorTestResources.AccessTokenValid));
             actionContext.HttpContext.Items.Add("LinkedAccountAuditInfo", CreateLinkedAccountAuditInfo(true, proxyNhsNumber));
+            actionContext.HttpContext.RequestServices = _requestServices;
             _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(), new Dictionary<string, object>(), _systemUnderTest);
             _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
 

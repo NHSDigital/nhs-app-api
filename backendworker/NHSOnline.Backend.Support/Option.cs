@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NHSOnline.Backend.Support
@@ -38,16 +38,34 @@ namespace NHSOnline.Backend.Support
             throw new OptionalValueMissingException();
         }
 
+        public T ValueOr(Func<T> orElse)
+        {
+            if (HasValue)
+            {
+                return Value;
+            }
+
+            return orElse();
+        }
+
         public Option<T> IfNone(Func<Option<T>> next)
         {
-            return HasValue ? this : next.Invoke();
+            return HasValue ? this : next();
         }
 
         public Option<T> IfSome(Func<T, Option<T>> next)
         {
-            return HasValue ? next.Invoke(Value) : this;
+            return HasValue ? next(Value) : this;
         }
-        
+
+        public void IfSome(Action<T> next)
+        {
+            if (HasValue)
+            {
+                next(Value);
+            }
+        }
+
         public override string ToString()
         {
             return HasValue ? $"{Value}" : "None";
@@ -55,7 +73,7 @@ namespace NHSOnline.Backend.Support
     
         public Option<TResult> Select<TResult>(Func<T, TResult> next)
         {
-            return HasValue ? Option.Some(next.Invoke(Value)) : Option.None<TResult>();
+            return HasValue ? Option.Some(next(Value)) : Option.None<TResult>();
         }
     }
 }

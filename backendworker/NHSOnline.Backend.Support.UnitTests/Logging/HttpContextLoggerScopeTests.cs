@@ -1,8 +1,11 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.Support.UnitTests.Logging
 {
@@ -17,7 +20,8 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         [TestMethod]
         public void ToString_UserSessionNotPresent_ReturnsNoSessionMessage()
         {
-            var systemUnderTest = new HttpContextLoggerScope(new DefaultHttpContext());
+            var httpContext = CreateHttpContext(Option.None<P5UserSession>());
+            var systemUnderTest = new HttpContextLoggerScope(httpContext);
             var result = systemUnderTest.ToString();
 
             result.Should().Be(NoSessionMessage);
@@ -26,25 +30,12 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         [TestMethod]
         public void ToString_UserSessionPresent_ReturnsSessionIDMessage()
         {
-            var httpContext = new DefaultHttpContext();
-            httpContext.Items.Add("UserSession", new P9UserSession { Key = SessionId });
+            var httpContext = CreateHttpContext(new P9UserSession { Key = SessionId });
 
             var systemUnderTest = new HttpContextLoggerScope(httpContext);
             var result = systemUnderTest.ToString();
 
             result.Should().Be($"SessionId:{SessionId}");
-        }
-
-        [TestMethod]
-        public void ToString_UserSessionNull_ReturnsNoSessionMessage()
-        {
-            var httpContext = new DefaultHttpContext();
-            httpContext.Items.Add("UserSession", null);
-
-            var systemUnderTest = new HttpContextLoggerScope(httpContext);
-            var result = systemUnderTest.ToString();
-
-            result.Should().Be(NoSessionMessage);
         }
 
         [TestMethod]
@@ -57,26 +48,31 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         }
 
         [TestMethod]
-        public void ToString_HttpContextItemsNull_ReturnsNoSessionMessage()
+        public void ToString_UserSessionServiceNotRegistered_ReturnsNoSessionMessage()
         {
-            var systemUnderTest = new HttpContextLoggerScope(new DefaultHttpContext {Items = null});
+            var httpContext = new DefaultHttpContext
+            {
+                RequestServices = new ServiceCollection().BuildServiceProvider()
+            };
+
+            var systemUnderTest = new HttpContextLoggerScope(httpContext);
             var result = systemUnderTest.ToString();
 
             result.Should().Be(NoSessionMessage);
         }
-        
+
         [TestMethod]
         public void ToString_UserSessionPresent_ProxyModeTrue_ReturnsSessionIDMessageAndProxyMessage()
         {
-            var httpContext = new DefaultHttpContext();
-            httpContext.Items.Add("UserSession", new P9UserSession
-            {
-                Key = SessionId,
-                GpUserSession = new EmisUserSession
+            var httpContext = CreateHttpContext(
+                new P9UserSession
                 {
-                    NhsNumber = MainNhsNumber
-                }
-            });
+                    Key = SessionId,
+                    GpUserSession = new EmisUserSession
+                    {
+                        NhsNumber = MainNhsNumber
+                    }
+                });
             
             httpContext.Items.Add("LinkedAccountAuditInfo", new LinkedAccountAuditInfo
             {
@@ -93,15 +89,15 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         [TestMethod]
         public void ToString_UserSessionPresent_NoLinkedAccountAuditInfo_ReturnsSessionIDMessage()
         {
-            var httpContext = new DefaultHttpContext();
-            httpContext.Items.Add("UserSession", new P9UserSession
-            {
-                Key = SessionId,
-                GpUserSession = new EmisUserSession
+            var httpContext = CreateHttpContext(
+                new P9UserSession
                 {
-                    NhsNumber = MainNhsNumber
-                }
-            });
+                    Key = SessionId,
+                    GpUserSession = new EmisUserSession
+                    {
+                        NhsNumber = MainNhsNumber
+                    }
+                });
             
             httpContext.Items.Add("LinkedAccountAuditInfo", null);
 
@@ -114,15 +110,15 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         [TestMethod]
         public void ToString_UserSessionPresent_ProxyModeFalse_ReturnsSessionIDMessage()
         {
-            var httpContext = new DefaultHttpContext();
-            httpContext.Items.Add("UserSession", new P9UserSession
-            {
-                Key = SessionId,
-                GpUserSession = new EmisUserSession
+            var httpContext = CreateHttpContext(
+                new P9UserSession
                 {
-                    NhsNumber = MainNhsNumber
-                }
-            });
+                    Key = SessionId,
+                    GpUserSession = new EmisUserSession
+                    {
+                        NhsNumber = MainNhsNumber
+                    }
+                });
             
             httpContext.Items.Add("LinkedAccountAuditInfo", new LinkedAccountAuditInfo
             {
@@ -134,6 +130,19 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             var result = systemUnderTest.ToString();
 
             result.Should().Be($"SessionId:{SessionId}");
+        }
+
+        private static DefaultHttpContext CreateHttpContext(P5UserSession userSession)
+            => CreateHttpContext(Option.Some(userSession));
+
+        private static DefaultHttpContext CreateHttpContext(Option<P5UserSession> userSession)
+        {
+            var mockUserSessionService = new Mock<IUserSessionService>();
+            mockUserSessionService.Setup(x => x.GetUserSession<P5UserSession>()).Returns(userSession);
+            return new DefaultHttpContext
+            {
+                RequestServices = new ServiceCollection().AddSingleton(mockUserSessionService.Object).BuildServiceProvider()
+            };
         }
     }
 }

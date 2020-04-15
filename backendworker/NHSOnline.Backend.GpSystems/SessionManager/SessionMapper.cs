@@ -1,6 +1,5 @@
 using System;
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.Support;
 
@@ -8,18 +7,11 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 {
     public class SessionMapper : ISessionMapper
     {
-        private readonly IAntiforgery _antiforgery;
-
-        public SessionMapper(IAntiforgery antiforgery)
-        {
-            _antiforgery = antiforgery;
-        }
-
-        public P9UserSession Map(HttpContext context,  GpUserSession gpUserSession, GpSessionManagerCitizenIdUserSession citizenIdUserSession, string im1ConnectionToken)
+        public P9UserSession Map(StringValues csrfToken, GpUserSession gpUserSession, GpSessionManagerCitizenIdUserSession citizenIdUserSession, string im1ConnectionToken)
         {
             return new P9UserSession
             {
-                CsrfToken = _antiforgery.GetTokens(context).RequestToken,
+                CsrfToken = csrfToken,
                 GpUserSession = gpUserSession,
                 CitizenIdUserSession = new CitizenIdUserSession
                 {
