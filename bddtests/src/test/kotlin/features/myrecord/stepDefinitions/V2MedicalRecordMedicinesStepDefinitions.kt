@@ -90,6 +90,11 @@ open class V2MedicalRecordMedicinesStepDefinitions : AbstractDemographicsStepDef
         medicinesIndexPage.clickDiscontinuedMedicinesLink()
     }
 
+    @Then("^I see the medical record v2 medicines page$")
+    fun thenISeeTheMedicalRecordV2MedicinesPage(){
+        medicinesIndexPage.assertIsVisible()
+    }
+
     @Then("^I see the expected acute medicines - Medical Record v2$")
     fun thenISeeExpectedAcuteMedicinesV2() {
         assertExpectedMedicinesPresent(expectedAcuteMedicinesData)

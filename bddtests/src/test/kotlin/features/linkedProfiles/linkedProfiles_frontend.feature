@@ -251,12 +251,14 @@ Feature: Login with proxy access
     And I have switched to a linked profile
     And the GP Practice has enabled all medical records for the proxy patient
     When I click on the My Record link on the header
-    When I click continue
+    And I click continue
     Then I see the medical record v2 page
     When I click the Medicines link on my record - Medical Record v2
-    And I click the Acute medicines link - Medical Record v2
+    Then I see the medical record v2 medicines page
+    When I click the Acute medicines link - Medical Record v2
     Then I see the expected acute medicines - Medical Record v2
     When I click the Back link
+    Then I see the medical record v2 medicines page
     When I click the Back link
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see the expected consultations and events - Medical Record v2

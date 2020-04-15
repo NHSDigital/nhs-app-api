@@ -8,9 +8,11 @@ Feature: Combined Frontend - Medical Record v2
     When I click continue
     Then I see the medical record v2 page
     When I click the Medicines link on my record - Medical Record v2
-    And I click the Acute medicines link - Medical Record v2
+    Then I see the medical record v2 medicines page
+    When I click the Acute medicines link - Medical Record v2
     Then I see the expected acute medicines - Medical Record v2
     When I click the Back link
+    Then I see the medical record v2 medicines page
     When I click the Back link
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see the expected consultations and events - Medical Record v2
@@ -34,9 +36,11 @@ Feature: Combined Frontend - Medical Record v2
     When I click continue
     Then I see the medical record v2 page
     When I click the Medicines link on my record - Medical Record v2
-    And I click the Acute medicines link - Medical Record v2
+    Then I see the medical record v2 medicines page
+    When I click the Acute medicines link - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
     When I click the Back link
+    Then I see the medical record v2 medicines page
     When I click the Back link
     And I click the Consultations and events link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
