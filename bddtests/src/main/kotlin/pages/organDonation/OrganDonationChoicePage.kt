@@ -5,6 +5,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.assertIsVisible
+import pages.avoidChromeWebDriverServiceCrash
 import utils.isTrueOrFalse
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
@@ -40,7 +41,7 @@ class OrganDonationChoicePage : OrganDonationBasePage() {
 
     override fun assertDisplayed() {
         //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        Thread.sleep(RELOAD_WAIT)
+        avoidChromeWebDriverServiceCrash()
         title.assertIsVisible()
         noButton.assertIsVisible()
         yesButton.assertIsVisible()

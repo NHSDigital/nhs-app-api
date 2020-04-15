@@ -26,4 +26,12 @@ fun HybridPageObject.isActionVisible(actionText: String): Boolean {
     return isVisible
 }
 
+/**
+ * This wait is used to fix an issue with Chrome bug and will need removing
+ * as part of NHSO-8408 when tickets NHSO-8407 and NHSO-8408
+ */
+const val CHROME_DRIVER_SERVICE_CRASH_DELAY: Long = 130
 
+fun HybridPageObject.avoidChromeWebDriverServiceCrash() {
+    Thread.sleep(CHROME_DRIVER_SERVICE_CRASH_DELAY)
+}

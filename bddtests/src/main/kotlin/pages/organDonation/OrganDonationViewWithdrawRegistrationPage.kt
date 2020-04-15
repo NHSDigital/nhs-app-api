@@ -2,6 +2,7 @@ package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.assertIsVisible
+import pages.avoidChromeWebDriverServiceCrash
 import pages.sharedElements.BannerObject
 import pages.sharedElements.TextBlockElement
 
@@ -9,7 +10,7 @@ import pages.sharedElements.TextBlockElement
 open class OrganDonationViewWithdrawRegistrationPage: OrganDonationBasePage()  {
     override fun assertDisplayed() {
         //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        Thread.sleep(RELOAD_WAIT)
+        avoidChromeWebDriverServiceCrash()
         title.assertIsVisible()
     }
     override val titleText = "What to do next"

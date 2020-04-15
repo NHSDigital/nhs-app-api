@@ -6,6 +6,7 @@ import org.junit.Assert
 import pages.HybridPageElement
 import pages.assertElementNotPresent
 import pages.assertIsVisible
+import pages.avoidChromeWebDriverServiceCrash
 import pages.sharedElements.BannerObject
 import pages.sharedElements.TextBlockElement
 import pages.text
@@ -15,7 +16,7 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
 
     override fun assertDisplayed() {
         //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        Thread.sleep(RELOAD_WAIT)
+        avoidChromeWebDriverServiceCrash()
         title.assertIsVisible()
     }
 
@@ -33,7 +34,7 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
 
     fun assertCreatedBanner() {
         //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        Thread.sleep(RELOAD_WAIT)
+        avoidChromeWebDriverServiceCrash()
         BannerObject.success(this).assertVisible("Your decision has been recorded")
         title.assertIsVisible()
         amendDecisionLink.assertIsVisible()

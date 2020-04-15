@@ -4,11 +4,9 @@ import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
+import pages.avoidChromeWebDriverServiceCrash
 
 const val RACE_CONDITION_WAIT: Long = 60
-//This wait is used to fix an issue with Chrome bug and will need removing
-//as part of NHSO-8408 when tickets NHSO-8407 and NHSO-8408
-const val RELOAD_WAIT: Long = 125
 
 abstract class OrganDonationBasePage: HybridPageObject() {
 
@@ -52,7 +50,7 @@ abstract class OrganDonationBasePage: HybridPageObject() {
 
     protected fun assertPageFullyLoaded() {
         //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        Thread.sleep(RELOAD_WAIT)
+        avoidChromeWebDriverServiceCrash()
         title.waitForElement()
     }
 
