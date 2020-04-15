@@ -145,7 +145,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetLinkedAccountsService();
 
-            var switchResult = await linkedAccountsService.SwitchAccount(userSession.GpUserSession, id);
+            var linkedAccountModel = new GpLinkedAccountModel(userSession.GpUserSession, id);
+
+            var switchResult = await linkedAccountsService.SwitchAccount(linkedAccountModel);
 
             if (switchResult is SwitchAccountResult.Success success)
             {

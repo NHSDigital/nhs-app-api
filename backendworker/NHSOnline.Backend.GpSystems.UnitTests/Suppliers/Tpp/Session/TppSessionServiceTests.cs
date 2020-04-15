@@ -28,14 +28,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         private const string ResponseSuidHeader = "suid";
 
         private Mock<ITppClientRequest<Authenticate, AuthenticateReply>> _mockAuthenticate;
-        private Mock<ITppClientRequest<TppUserSession, LogoffReply>> _mockLogOff;
+        private Mock<ITppClientRequest<TppRequestParameters, LogoffReply>> _mockLogOff;
         private Mock<ITppClientRequest<TppRequestParameters, PatientSelectedReply>> _mockPatientSelected;
         private Mock<IConfigurationSettings> _mockConfigurationSettings;
         private Mock<ITppSessionMapper> _mockTppSessionMapper;
         private Mock<ITppClientRequest<TppUserSession, ListServiceAccessesReply>> _mockListServicesAccessesPost;
 
         private Authenticate _actual;
-        private GpUserSession _tppUserSession;
+        private TppUserSession _tppUserSession;
         private int _sessionTimeoutMinutes;
         private string _nhsNumber;
         private string _patientId;
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var services = new ServiceCollection();
             services.RegisterTppSessionServices();
 
-            _tppUserSession = new TppUserSession();
+            _tppUserSession = CreateUserSession("name", "ods");
             _actual = null;
             _authenticatePostResult = null;
 
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 .Setup(x => x.Post(It.IsAny<TppRequestParameters>()))
                 .ReturnsAsync(() => null);
 
-            _mockLogOff = services.AddMock<ITppClientRequest<TppUserSession, LogoffReply>>();
+            _mockLogOff = services.AddMock<ITppClientRequest<TppRequestParameters, LogoffReply>>();
             _mockListServicesAccessesPost =
                 services.AddMock<ITppClientRequest<TppUserSession, ListServiceAccessesReply>>();
 
@@ -427,13 +427,46 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         }
 
         [TestMethod]
-        public async Task Logoff_WhenCalledWithAValidUserSession_ReturnsSuccessfullyDeleted()
+        public async Task Logoff_WhenCalledWithAValidUserSessionWithMainUserAuthenticated_ReturnsSuccessfullyDeleted()
         {
             // Arrange
             var reply = LogoffReply();
 
+            const string suid = "suid-to-be-logged-off";
+            _tppUserSession.Suid = suid;
+            _tppUserSession.ProxyPatients = new List<TppProxyUserSession>
+            {
+                new TppProxyUserSession { Id = Guid.NewGuid(), Suid = null },
+                new TppProxyUserSession { Id = Guid.NewGuid(), Suid = null }
+            };
+
             _mockLogOff.Setup(x => x
-                .Post(It.IsAny<TppUserSession>()))
+                .Post(It.Is<TppRequestParameters>(req => req.Suid == suid)))
+                .ReturnsAsync(() => reply);
+
+            // Act
+            var result = await _systemUnderTest.Logoff(_tppUserSession);
+
+            // Assert
+            result.Should().BeOfType<SessionLogoffResult.Success>();
+        }
+
+        [TestMethod]
+        public async Task Logoff_WhenCalledWithAValidUserSessionWithProxyUserAuthenticated_ReturnsSuccessfullyDeleted()
+        {
+            // Arrange
+            var reply = LogoffReply();
+
+            const string suid = "suid-to-be-logged-off";
+            _tppUserSession.Suid = null;
+            _tppUserSession.ProxyPatients = new List<TppProxyUserSession>
+            {
+                new TppProxyUserSession { Id = Guid.NewGuid(), Suid = null },
+                new TppProxyUserSession { Id = Guid.NewGuid(), Suid = suid }
+            };
+
+            _mockLogOff.Setup(x => x
+                    .Post(It.Is<TppRequestParameters>(req => req.Suid == suid)))
                 .ReturnsAsync(() => reply);
 
             // Act
@@ -451,7 +484,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             reply.ErrorResponse = new Error();
 
             _mockLogOff
-                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
+                .Setup(x => x.Post(It.IsAny<TppRequestParameters>()))
                 .ReturnsAsync(() => reply);
 
             // Act
@@ -469,7 +502,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             reply.StatusCode = HttpStatusCode.BadGateway;
 
             _mockLogOff
-                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
+                .Setup(x => x.Post(It.IsAny<TppRequestParameters>()))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -485,7 +518,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         {
             // Arrange
             _mockLogOff
-                .Setup(x => x.Post(It.IsAny<TppUserSession>()))
+                .Setup(x => x.Post(It.IsAny<TppRequestParameters>()))
                 .ThrowsAsync(new UnauthorisedGpSystemHttpRequestException());
 
             // Act

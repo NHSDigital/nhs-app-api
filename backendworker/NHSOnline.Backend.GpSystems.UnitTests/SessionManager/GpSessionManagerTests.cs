@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
@@ -209,15 +210,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task RecreateSession_ReturnsSuccessfullyAndUpdatesSession()
         {
-            //Arrange
+            // Arrange
             var originalGpUserSession = BuildTppUserSession();
             _userSession.GpUserSession = originalGpUserSession;
 
             var gpSessionRecreateResult = _fixture.Freeze<GpSessionRecreateResult.Success>();
 
-            var updatedGpUserSession = _fixture.Freeze<TppUserSession>();
-            var updatedUserSession = _userSession;
-            updatedUserSession.GpUserSession = updatedGpUserSession;
+            var updatedGpUserSession = new TppUserSession
+            {
+                OdsCode = originalGpUserSession.OdsCode,
+                NhsNumber = originalGpUserSession.NhsNumber,
+                PatientId = originalGpUserSession.PatientId,
+            };
 
             _mockSessionService
                 .Setup(x => x.Recreate(
@@ -229,20 +233,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 .Returns(_mockRecreateSessionMapperService.Object);
 
             _mockRecreateSessionMapperService
-                .Setup(x => x.Map(originalGpUserSession, "suid", _patientId))
+                .Setup(x => x.Map(originalGpUserSession, gpSessionRecreateResult.Suid, _patientId))
                 .Returns(updatedGpUserSession);
 
-            //Act
+            // Act
             var recreateSessionResult = await _gpSessionManager.RecreateSession(_patientId);
 
-            //Assert
+            // Assert
             var successResult = recreateSessionResult.Should().BeOfType<RecreateSessionResult.Success>().Subject;
-            successResult.UserSession.Should().BeEquivalentTo(updatedUserSession);
-
+            successResult.UserSession.GpUserSession.Should().BeEquivalentTo(updatedGpUserSession);
+            _userSession.GpUserSession.Should().Be(updatedGpUserSession);
             _mockGpSystem.Verify(x => x.GetRecreateSessionMapperService(), Times.Once);
             _mockRecreateSessionMapperService.Verify(x =>
                 x.Map(It.IsAny<GpUserSession>(), gpSessionRecreateResult.Suid, _patientId), Times.Once);
-            _mockSessionCacheService.Verify(x => x.UpdateUserSession(updatedUserSession));
+            _mockSessionCacheService.Verify(x => x.UpdateUserSession(_userSession));
         }
 
         [TestMethod]

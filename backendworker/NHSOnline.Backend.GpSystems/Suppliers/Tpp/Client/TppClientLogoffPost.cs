@@ -6,7 +6,7 @@ using NHSOnline.Backend.Support.Logging;
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
     internal sealed class TppClientLogoffPost
-        : ITppClientRequest<TppUserSession, LogoffReply>
+        : ITppClientRequest<TppRequestParameters, LogoffReply>
     {
         private readonly ILogger<TppClientLogoffPost> _logger;
         private readonly TppClientRequestExecutor _requestExecutor;
@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             _requestExecutor = requestExecutor;
         }
 
-        public async Task<TppApiObjectResponse<LogoffReply>> Post(TppUserSession tppUserSession)
+        public async Task<TppApiObjectResponse<LogoffReply>> Post(TppRequestParameters tppRequestParameters)
         {
             _logger.LogEnter();
 
@@ -26,13 +26,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
                 var request = new Logoff();
 
                 return await _requestExecutor.Post<LogoffReply>(
-                    requestBuilder => requestBuilder.Model(request).Suid(tppUserSession.Suid));
+                    requestBuilder => requestBuilder.Model(request).Suid(tppRequestParameters.Suid));
             }
             finally
             {
                 _logger.LogExit();
             }
-
         }
     }
 }

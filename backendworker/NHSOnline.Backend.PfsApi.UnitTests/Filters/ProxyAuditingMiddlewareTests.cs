@@ -75,8 +75,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             _context.Request.Headers.Add(Constants.HttpHeaders.PatientId, _patientId.ToString());
             var result = _fixture.Create<LinkedAccountAuditInfo>();
 
-            _mockLinkedAccountService.Setup(
-                    x => x.GetProxyAuditData(_userSession.GpUserSession, _patientId))
+            _mockLinkedAccountService.Setup(x => x.GetProxyAuditData(
+                    It.Is<GpLinkedAccountModel>(m =>
+                        m.GpUserSession == _userSession.GpUserSession
+                        && m.PatientId == _patientId)))
                 .Returns(result).Verifiable();
 
             var subject = new ProxyAuditingMiddleware(_next, _mockLogger.Object);

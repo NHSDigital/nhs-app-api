@@ -84,7 +84,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
 
             var id = Guid.NewGuid();
 
-            _linkedAccountService.Setup(x => x.SwitchAccount(_userSession.GpUserSession, id))
+            _linkedAccountService.Setup(x => x.SwitchAccount(
+                    It.Is<GpLinkedAccountModel>(gp => gp.GpUserSession == _userSession.GpUserSession && gp.PatientId == id)))
                 .ReturnsAsync(new SwitchAccountResult.Success())
                 .Verifiable();
 
@@ -108,7 +109,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
 
             var id = Guid.NewGuid();
 
-            _linkedAccountService.Setup(x => x.SwitchAccount(_userSession.GpUserSession, id))
+            _linkedAccountService.Setup(x => x.SwitchAccount(
+                    It.Is<GpLinkedAccountModel>(gp => gp.GpUserSession == _userSession.GpUserSession && gp.PatientId == id)))
                 .ReturnsAsync(new SwitchAccountResult.Success())
                 .Verifiable();
 
@@ -133,7 +135,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             // Arrange
             var id = Guid.NewGuid();
 
-            _linkedAccountService.Setup(x => x.SwitchAccount(_userSession.GpUserSession, id))
+            _linkedAccountService.Setup(x => x.SwitchAccount(
+                    It.Is<GpLinkedAccountModel>(gp => gp.GpUserSession == _userSession.GpUserSession && gp.PatientId == id)))
                 .ReturnsAsync(new SwitchAccountResult.Failure(id))
                 .Verifiable();
 
@@ -154,7 +157,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             // Arrange
             var id = Guid.NewGuid();
 
-            _linkedAccountService.Setup(x => x.SwitchAccount(_userSession.GpUserSession, id))
+            _linkedAccountService.Setup(x => x.SwitchAccount(
+                    It.Is<GpLinkedAccountModel>(gp => gp.GpUserSession == _userSession.GpUserSession && gp.PatientId == id)))
                 .ReturnsAsync(new SwitchAccountResult.AlreadyAuthenticated(id))
                 .Verifiable();
 

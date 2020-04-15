@@ -140,6 +140,7 @@ namespace NHSOnline.Backend.PfsApi
             services.AddTransient<ISpineSearchService, SpineSearchService>();
             services.AddTransient(typeof(HttpTimeoutHandler<>));
             services.AddTransient(typeof(HttpRequestIdentificationHandler<>));
+            services.AddTransient<IFireAndForgetService, FireAndForgetService>();
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();

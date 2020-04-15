@@ -28,11 +28,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
                 if (proxy != null)
                 {
-                    tppRequestParameters = new TppRequestParameters(tppUserSession)
-                    {
-                        PatientId = proxy.PatientId,
-                        Suid = proxy.Suid,
-                    };
+                    tppRequestParameters = new TppRequestParameters(tppUserSession, proxy);
                 }
             }
 

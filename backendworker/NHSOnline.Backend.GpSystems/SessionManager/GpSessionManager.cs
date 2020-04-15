@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
@@ -64,26 +65,23 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
         public async Task<RecreateSessionResult> RecreateSession(string patientId)
         {
-            // 1. retrieve session from cosmos
             var userSession = _userSessionService.GetRequiredUserSession<P9UserSession>();
+
             var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
             var gpUserSession = userSession.GpUserSession;
 
-            var connectionToken = userSession.Im1ConnectionToken;
-            var odsCode = gpUserSession.OdsCode;
-            var nhsNumber = gpUserSession.NhsNumber;
-
-            // 2. create new session with provider
             var sessionService = gpSystem.GetSessionService();
-            var recreateGpUserSessionResult = await sessionService.Recreate(connectionToken, odsCode, nhsNumber, patientId);
+            var recreateGpUserSessionResult = await sessionService.Recreate(
+                userSession.Im1ConnectionToken,
+                gpUserSession.OdsCode,
+                gpUserSession.NhsNumber,
+                patientId);
 
             if (recreateGpUserSessionResult is GpSessionRecreateResult.Success success)
             {
-                // 3. merge new session - i.e. modify the GpUserSession
                 var recreateSessionMapperService = gpSystem.GetRecreateSessionMapperService();
                 var updatedGpUserSession = recreateSessionMapperService.Map(gpUserSession, success.Suid, patientId);
 
-                // 4. update session in cosmos db
                 userSession.GpUserSession = updatedGpUserSession;
                 await _sessionCacheService.UpdateUserSession(userSession);
 

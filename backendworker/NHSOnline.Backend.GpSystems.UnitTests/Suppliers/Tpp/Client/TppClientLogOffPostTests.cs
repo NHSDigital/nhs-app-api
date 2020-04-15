@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
     public sealed class TppClientLogOffPostTests : IDisposable
     {
         private TppClientTestsContext Context { get; set; }
-        private ITppClientRequest<TppUserSession, LogoffReply> SystemUnderTest { get; set; }
+        private ITppClientRequest<TppRequestParameters, LogoffReply> SystemUnderTest { get; set; }
 
         private MockHttpMessageHandler MockHttpHandler => Context.MockHttpHandler;
         private Mock<ILogger<TppClientRequestExecutor>> MockLogger => Context.MockLogger;
@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
         {
             Context = new TppClientTestsContext();
             Context.Initialise();
-            SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClientRequest<TppUserSession, LogoffReply>>();
+            SystemUnderTest = Context.ServiceProvider.GetRequiredService<ITppClientRequest<TppRequestParameters, LogoffReply>>();
         }
         [TestMethod]
         public async Task LogoffPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
                 { TppClientTestsContext.RequestSuidHeader, TppClientTestsContext.Suid }
             };
 
-            var tppUserSession = new TppUserSession
+            var tppRequestParameters = new TppRequestParameters
             {
                 Suid = TppClientTestsContext.Suid
             };
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
                 .WithContent(logoffRequestModel.SerializeXml())
                 .Respond(TppClientTestsContext.MediaType, errorResponseBuilder.BuildXml());
 
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             response.ErrorResponse.Should().BeEquivalentTo(errorResponseBuilder.BuildExpected());
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
 
             var expectedLogoffResponse = new LogoffReply();
             var responseContent = new StringContent(expectedLogoffResponse.SerializeXml());
-            var tppUserSession = new TppUserSession
+            var tppRequestParameters = new TppRequestParameters
             {
                 Suid = TppClientTestsContext.Suid
             };
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
                 .WithContent(logoffRequestModel.SerializeXml())
                 .Respond(HttpStatusCode.OK, responseContent);
 
-            var response = await SystemUnderTest.Post(tppUserSession);
+            var response = await SystemUnderTest.Post(tppRequestParameters);
 
             response.Body.Should().BeEquivalentTo(expectedLogoffResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);

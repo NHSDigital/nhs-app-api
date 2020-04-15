@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 {
     internal class TppSessionService : ISessionService
     {
-        private readonly ITppClientRequest<TppUserSession, LogoffReply> _logoff;
+        private readonly ITppClientRequest<TppRequestParameters, LogoffReply> _logoff;
         private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
         private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccesses;
         private readonly ITppClientRequest<TppRequestParameters, PatientSelectedReply> _patientSelected;
@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         private readonly ITppSessionMapper _sessionMapper;
 
         public TppSessionService(
-            ITppClientRequest<TppUserSession, LogoffReply> logoff,
+            ITppClientRequest<TppRequestParameters, LogoffReply> logoff,
             ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
             ITppClientRequest<TppRequestParameters, PatientSelectedReply> patientSelected,
             ILogger<TppSessionService> logger,
@@ -105,14 +105,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 _logger.LogEnter();
 
                 var tppUserSession = (TppUserSession)gpUserSession;
-                var logoffReply = await _logoff.Post(tppUserSession);
 
-                if (!logoffReply.HasSuccessResponse)
+                var authenticatedId = tppUserSession.GetCurrentlyAuthenticatedId();
+
+                if (authenticatedId.HasValue)
                 {
-                    return new SessionLogoffResult.BadGateway();
+                    var linkedAccountModel = new GpLinkedAccountModel(tppUserSession, authenticatedId.Value);
+                    var tppRequestParameters = linkedAccountModel.BuildTppRequestParameters(_logger);
+
+                    var logoffReply = await _logoff.Post(tppRequestParameters);
+
+                    if (!logoffReply.HasSuccessResponse)
+                    {
+                        return new SessionLogoffResult.BadGateway();
+                    }
+
+                    _logger.LogDebug("TPP user session successfully deleted");
                 }
 
-                _logger.LogDebug($"TPP user session successfully deleted");
                 return new SessionLogoffResult.Success(gpUserSession);
             }
             catch (HttpRequestException e)

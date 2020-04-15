@@ -1,39 +1,31 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 {
     internal sealed class TppScopedLogMessagingService : ITppLogMessagingService
     {
-        private readonly ILogger _logger;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IFireAndForgetService _fireAndForgetService;
 
-        public TppScopedLogMessagingService(ILogger<TppScopedLogMessagingService> logger, IServiceProvider serviceProvider)
+        public TppScopedLogMessagingService(
+            IFireAndForgetService fireAndForgetService)
         {
-            _logger = logger;
-            _serviceProvider = serviceProvider;
+            _fireAndForgetService = fireAndForgetService;
         }
 
         public void FetchAndLogAccessInformation(TppUserSession userSession)
         {
-            Task.Factory
-                .StartNew(RunInScope, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default)
-                .Unwrap()
-                .ContinueWith(LogException, CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
+            _fireAndForgetService.Run(
+                (serviceProvider) => LogAccessInformation(serviceProvider, userSession),
+                "Failed request to get list of service accesses");
+        }
 
-            async Task RunInScope()
-            {
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var tppAccessInformationService = scope.ServiceProvider.GetRequiredService<TppLogMessagingService>();
-                    await tppAccessInformationService.FetchAndLogAccessInformation(userSession);
-                }
-            }
-
-            void LogException(Task task) => _logger.LogError(task.Exception, "Failed request to get list of service accesses");
+        private async Task LogAccessInformation(IServiceProvider serviceProvider, TppUserSession userSession)
+        {
+            var tppAccessInformationService = serviceProvider.GetRequiredService<TppLogMessagingService>();
+            await tppAccessInformationService.FetchAndLogAccessInformation(userSession);
         }
     }
 }

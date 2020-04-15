@@ -150,8 +150,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 }
             };
 
+            var request = new GpLinkedAccountModel(_emisUserSession, proxyId);
+
             // Act
-            var result = await _systemUnderTest.SwitchAccount(_emisUserSession, proxyId);
+            var result = await _systemUnderTest.SwitchAccount(request);
 
             // Assert
             result.Should().BeOfType<SwitchAccountResult.Success>();
@@ -179,8 +181,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 }
             };
 
+            var request = new GpLinkedAccountModel(_emisUserSession, mainUserGuid);
+
             // Act
-            var result = await _systemUnderTest.SwitchAccount(_emisUserSession, mainUserGuid);
+            var result = await _systemUnderTest.SwitchAccount(request);
 
             // Assert
             result.Should().BeOfType<SwitchAccountResult.Success>();
@@ -207,8 +211,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                 }
             };
 
+            var request = new GpLinkedAccountModel(_emisUserSession, randomGuidWhichWontBeFound);
+
             // Act
-            var result = await _systemUnderTest.SwitchAccount(_emisUserSession, randomGuidWhichWontBeFound);
+            var result = await _systemUnderTest.SwitchAccount(request);
 
             // Assert
             result.Should().BeOfType<SwitchAccountResult.NotFound>();
@@ -606,7 +612,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             //Act
-            var result = _systemUnderTest.GetProxyAuditData(_emisUserSession, patientId);
+            var result = _systemUnderTest.GetProxyAuditData(
+                new GpLinkedAccountModel(_emisUserSession, patientId));
 
             //Assert
             result.IsProxyMode.Should().Be(true);
@@ -639,7 +646,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             //Act
-            var result = _systemUnderTest.GetProxyAuditData(_emisUserSession, patientId);
+            var result = _systemUnderTest.GetProxyAuditData(
+                new GpLinkedAccountModel(_emisUserSession, patientId));
 
             //Assert
             result.IsProxyMode.Should().Be(false);
@@ -671,7 +679,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             };
 
             //Act
-            var result = _systemUnderTest.GetProxyAuditData(_emisUserSession, patientId);
+            var result = _systemUnderTest.GetProxyAuditData(
+                new GpLinkedAccountModel(_emisUserSession, patientId));
 
             //Assert
             result.IsProxyMode.Should().Be(false);

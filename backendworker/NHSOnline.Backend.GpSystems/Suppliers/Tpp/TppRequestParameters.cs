@@ -2,13 +2,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 {
     public class TppRequestParameters
     {
-        public TppRequestParameters(TppUserSession tppUserSession)
+        private TppRequestParameters(
+            string odsCode,
+            string onlineUserId,
+            string patientId,
+            string suid)
         {
-            PatientId = tppUserSession.PatientId;
-            OdsCode = tppUserSession.OdsCode;
-            OnlineUserId = tppUserSession.OnlineUserId;
-            Suid = tppUserSession.Suid;
+            OdsCode = odsCode;
+            OnlineUserId = onlineUserId;
+            PatientId = patientId;
+            Suid = suid;
         }
+
+        public TppRequestParameters(TppUserSession tppUserSession) :
+            this(tppUserSession.OdsCode, tppUserSession.OnlineUserId, tppUserSession.PatientId, tppUserSession.Suid) {}
+
+        public TppRequestParameters(TppUserSession tppUserSession, TppProxyUserSession proxySession) :
+            this(tppUserSession.OdsCode, tppUserSession.OnlineUserId, proxySession.PatientId, proxySession.Suid) {}
 
         public TppRequestParameters()
         {

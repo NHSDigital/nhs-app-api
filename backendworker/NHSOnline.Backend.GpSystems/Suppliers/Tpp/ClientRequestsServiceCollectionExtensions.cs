@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         public static IServiceCollection ConfigureUserClientRequests(this IServiceCollection services)
         {
             services.AddTppClientRequest<Authenticate, AuthenticateReply, TppClientAuthenticatePost>()
-                .AddTppClientRequest<TppUserSession, LogoffReply, TppClientLogoffPost>()
+                .AddTppClientRequest<TppRequestParameters, LogoffReply, TppClientLogoffPost>()
                 .AddTppClientRequest<AddNhsUserRequest, AddNhsUserResponse, TppClientNhsUserPost>()
                 .AddTppClientRequest<LinkAccount, LinkAccountReply, TppClientLinkAccountPost>();
 

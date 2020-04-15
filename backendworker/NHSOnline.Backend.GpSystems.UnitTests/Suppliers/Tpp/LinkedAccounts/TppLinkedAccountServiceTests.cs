@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
@@ -22,6 +23,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
         private TppUserSession _tppUserSession;
         private IFixture _fixture;
         private Mock<IGpSessionManager> _gpSessionManager;
+        private Mock<IFireAndForgetService> _fireAndForgetService;
 
         [TestInitialize]
         public void TestInitialize()
@@ -30,7 +32,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
 
             _tppUserSession = _fixture.Create<TppUserSession>();
             _gpSessionManager = _fixture.Freeze<Mock<IGpSessionManager>>();
-
+            _fireAndForgetService = _fixture.Freeze<Mock<IFireAndForgetService>>();
             _systemUnderTest = _fixture.Create<TppLinkedAccountsService>();
         }
 
@@ -68,6 +70,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
 
             _tppUserSession = new TppUserSession
             {
+                Id = Guid.NewGuid(),
                 ProxyPatients = new List<TppProxyUserSession>
                 {
                     new TppProxyUserSession
@@ -81,14 +84,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                 }
             };
 
+            var request = new GpLinkedAccountModel(_tppUserSession, proxyId);
+
+            _gpSessionManager.Setup(x => x.CloseSession(It.IsAny<TppUserSession>()))
+                .ReturnsAsync(new CloseSessionResult.Success())
+                .Verifiable();
+
+            Func<IServiceProvider, Task> action = null;
+            _fireAndForgetService.Setup(x => x.Run(It.IsAny<Func<IServiceProvider, Task>>(), It.IsAny<string>()))
+                .Callback<Func<IServiceProvider, Task>, string>((a, m) => action = a);
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(_gpSessionManager.Object)
+                .BuildServiceProvider();
+
             // Act
-            var result = await _systemUnderTest.SwitchAccount(_tppUserSession, proxyId);
+            var result = await _systemUnderTest.SwitchAccount(request);
+            await action(serviceProvider);
 
             // Assert
             result.Should().BeOfType<SwitchAccountResult.Success>();
-            //TODO - add this back in when next story is complete
-            //_gpSessionManager.Verify(x => x.CloseSession(_tppUserSession), Times.Once);
-
+            _gpSessionManager.Verify();
         }
 
         [TestMethod]
@@ -99,6 +115,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
 
             _tppUserSession = new TppUserSession
             {
+                Id = mainUserGuid,
                 ProxyPatients = new List<TppProxyUserSession>
                 {
                     new TppProxyUserSession
@@ -112,13 +129,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                 }
             };
 
+            _gpSessionManager.Setup(x => x.CloseSession(It.IsAny<TppUserSession>()))
+                .ReturnsAsync(new CloseSessionResult.Success())
+                .Verifiable();
+
+            var request = new GpLinkedAccountModel(_tppUserSession, mainUserGuid);
+
+            Func<IServiceProvider, Task> action = null;
+            _fireAndForgetService.Setup(x => x.Run(It.IsAny<Func<IServiceProvider, Task>>(), It.IsAny<string>()))
+                .Callback<Func<IServiceProvider, Task>, string>((a, m) => action = a);
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(_gpSessionManager.Object)
+                .BuildServiceProvider();
+
             // Act
-            var result = await _systemUnderTest.SwitchAccount(_tppUserSession, mainUserGuid);
+            var result = await _systemUnderTest.SwitchAccount(request);
+            await action(serviceProvider);
 
             // Assert
             result.Should().BeOfType<SwitchAccountResult.Success>();
-            //TODO - add this back in when next story is complete
-            //_gpSessionManager.Verify(x => x.CloseSession(_tppUserSession), Times.Once);
+            _gpSessionManager.Verify();
         }
 
         [TestMethod]
@@ -142,8 +173,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                 }
             };
 
+            var request = new GpLinkedAccountModel(_tppUserSession, randomGuidWhichWontBeFound);
+
             // Act
-            var result = await _systemUnderTest.SwitchAccount(_tppUserSession, randomGuidWhichWontBeFound);
+            var result = await _systemUnderTest.SwitchAccount(request);
 
             // Assert
             result.Should().BeOfType<SwitchAccountResult.NotFound>();
@@ -176,7 +209,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             };
 
             //Act
-            var result = _systemUnderTest.GetProxyAuditData(_tppUserSession, patientId);
+            var result = _systemUnderTest.GetProxyAuditData(
+                new GpLinkedAccountModel(_tppUserSession, patientId));
 
             //Assert
             result.IsProxyMode.Should().Be(true);
@@ -209,7 +243,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             };
 
             //Act
-            var result = _systemUnderTest.GetProxyAuditData(_tppUserSession, patientId);
+            var result = _systemUnderTest.GetProxyAuditData(
+                new GpLinkedAccountModel(_tppUserSession, patientId));
 
             //Assert
             result.IsProxyMode.Should().Be(false);
@@ -241,7 +276,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
             };
 
             //Act
-            var result = _systemUnderTest.GetProxyAuditData(_tppUserSession, patientId);
+            var result = _systemUnderTest.GetProxyAuditData(
+                new GpLinkedAccountModel(_tppUserSession, patientId));
 
             //Assert
             result.IsProxyMode.Should().Be(false);

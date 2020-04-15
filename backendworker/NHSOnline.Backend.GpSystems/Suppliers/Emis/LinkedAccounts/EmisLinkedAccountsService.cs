@@ -37,13 +37,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             return proxy?.OdsCode;
         }
 
-        public async Task<SwitchAccountResult> SwitchAccount(GpUserSession gpUserSession, Guid id)
+        public async Task<SwitchAccountResult> SwitchAccount(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            if (IsValidLinkedAccount(gpUserSession, id) || gpUserSession.Id == id)
+            if (IsValidLinkedAccount(gpLinkedAccountModel)
+                || gpLinkedAccountModel.GpUserSession.Id == gpLinkedAccountModel.PatientId)
             {
                 return await Task.FromResult(new SwitchAccountResult.Success());
             }
-            return await Task.FromResult(new SwitchAccountResult.NotFound(id));
+            return await Task.FromResult(new SwitchAccountResult.NotFound(gpLinkedAccountModel.PatientId));
         }
 
         public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
@@ -100,18 +101,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             return new LinkedAccountAccessSummaryResult.BadGateway();
         }
 
-        public LinkedAccountAuditInfo GetProxyAuditData(GpUserSession gpUserSession, Guid id)
+        public LinkedAccountAuditInfo GetProxyAuditData(GpLinkedAccountModel gpLinkedAccountModel)
         {
             var linkedAccountAuditResult = new LinkedAccountAuditInfo();
 
-            if (IsValidLinkedAccount(gpUserSession, id))
+            if (IsValidLinkedAccount(gpLinkedAccountModel))
             {
-                var emisUserSession = (EmisUserSession)gpUserSession;
+                var emisUserSession = (EmisUserSession)gpLinkedAccountModel.GpUserSession;
 
                 linkedAccountAuditResult.IsProxyMode = true;
-                linkedAccountAuditResult.ProxyNhsNumber
-                    = emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id)?.NhsNumber;
-
+                linkedAccountAuditResult.ProxyNhsNumber = emisUserSession.ProxyPatients
+                    .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId)?.NhsNumber;
             }
 
             return linkedAccountAuditResult;
@@ -206,10 +206,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
 
             return new LinkedAccountsResult.Success(summary, hasAnyNhsNumberBeenUpdatedInSession);
         }
-        private bool IsValidLinkedAccount(GpUserSession gpUserSession, Guid id)
+        private bool IsValidLinkedAccount(GpLinkedAccountModel gpLinkedAccountModel)
         {
-            var emisUserSession = (EmisUserSession)gpUserSession;
-            return  emisUserSession.ProxyPatients.FirstOrDefault(x => x.Id == id) != null;
+            var emisUserSession = (EmisUserSession)gpLinkedAccountModel.GpUserSession;
+            return  emisUserSession.ProxyPatients
+                .FirstOrDefault(x => x.Id == gpLinkedAccountModel.PatientId) != null;
         }
 
         private static EmisProxyUserSession GetLinkedAccountFromGpUserSession(GpUserSession gpUserSession, Guid linkedAccountId)

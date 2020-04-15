@@ -20,12 +20,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
         public Guid? GetCurrentlyAuthenticatedId()
         {
-            if (Suid != null)
-            {
-                return Id;
-            }
-
-            return ProxyPatients.FirstOrDefault(x => x.Suid != null)?.Id;
+            return Suid != null ? Id : ProxyPatients?.FirstOrDefault(x => x.Suid != null)?.Id;
         }
     }
 }

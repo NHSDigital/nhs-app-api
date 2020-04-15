@@ -16,11 +16,11 @@ namespace NHSOnline.Backend.PfsApi.Filters
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ProxyAuditingMiddleware> _logger;
-        
+
         private readonly List<string> _patientIdHeaderNotExpectedForPaths = new List<string> {
             @"/v1/patient/configuration", @"/v1/patient/journey-configuration"
         };
-        
+
         public ProxyAuditingMiddleware(RequestDelegate next, ILogger<ProxyAuditingMiddleware> logger)
         {
             _next = next;
@@ -38,7 +38,8 @@ namespace NHSOnline.Backend.PfsApi.Filters
                 if (gpSystem.SupportsLinkedAccounts && TryParsePatientId(context, out var patientId))
                 {
                     var linkedAccountsService = gpSystem.GetLinkedAccountsService();
-                    var result = linkedAccountsService.GetProxyAuditData(userSession.GpUserSession, patientId);
+                    var gpSessionDetails = new GpLinkedAccountModel(userSession.GpUserSession, patientId);
+                    var result = linkedAccountsService.GetProxyAuditData(gpSessionDetails);
 
                     context.SetLinkedAccountAuditInfo(result);
                 }
