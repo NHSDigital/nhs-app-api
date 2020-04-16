@@ -101,6 +101,7 @@ const routes = {
   ACCOUNT: {
     name: 'account',
     path: '/account',
+    proofLevel: 5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'account',
@@ -118,6 +119,7 @@ const routes = {
   ACCOUNT_COOKIES: {
     name: 'account-cookies',
     path: '/account/cookies',
+    proofLevel: 5,
     crumb: {
       nativeDisabled: false,
       i18nKey: 'accountCookies',
@@ -130,6 +132,7 @@ const routes = {
   ACCOUNT_NOTIFICATIONS: {
     name: 'account-notifications',
     path: '/account/notifications',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'accountNotifications',
       get defaultCrumb() {
@@ -154,6 +157,7 @@ const routes = {
   ACCOUNT_SIGNOUT: {
     name: 'account-signout',
     path: '/account/signout',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'accountSignOut',
       get defaultCrumb() {
@@ -165,6 +169,8 @@ const routes = {
   ACUTE_MEDICINES: {
     name: 'gp-medical-record-medicines-acute-medicines',
     path: '/gp-medical-record/medicines/acute-medicines',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'medicines',
       get defaultCrumb() {
@@ -172,11 +178,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   APPOINTMENTS: {
     name: 'appointments',
     path: '/appointments',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       nativeDisabled: true,
       i18nKey: 'appointments',
@@ -185,11 +192,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
   },
   GP_APPOINTMENTS: {
     name: 'appointments-gp-appointments',
     path: '/appointments/gp-appointments',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       nativeDisabled: false,
       i18nKey: 'gpAppointments',
@@ -199,7 +207,6 @@ const routes = {
     },
     proxyShutterPath: '/linked-profiles/shutter/appointments',
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [
       linkedAccountAppointmentRedirect,
       gpAtHandAppointmentRedirect,
@@ -209,6 +216,8 @@ const routes = {
   HOSPITAL_APPOINTMENTS: {
     name: 'appointments-hospital-appointments',
     path: '/appointments/hospital-appointments',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       nativeDisabled: false,
       i18nKey: 'hospitalAppointments',
@@ -220,12 +229,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [silverIntegrationsSecondaryAppointmentsDisabledRedirect],
   },
   APPOINTMENT_ADMIN_HELP: {
     name: 'appointments-admin-help',
     path: '/appointments/admin-help',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     warningBanner: true,
     crumb: {
       i18nKey: 'appointmentsAdminHelp',
@@ -237,12 +247,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}online-consultations/`,
-    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [adminHelpDisabledRedirect],
   },
   APPOINTMENT_GP_ADVICE: {
     name: 'appointments-gp-advice',
     path: '/appointments/gp-advice',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     warningBanner: true,
     crumb: {
       i18nKey: 'appointmentsGpAdvice',
@@ -254,12 +265,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}online-consultations/`,
-    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [gpAdviceDisabledRedirect],
   },
   APPOINTMENT_BOOKING: {
     name: 'appointments-booking',
     path: '/appointments/booking',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsBooking',
       get defaultCrumb() {
@@ -267,11 +279,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
   },
   APPOINTMENT_BOOKING_GUIDANCE: {
     name: 'appointments-booking-guidance',
     path: '/appointments/booking-guidance',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsGuidanceBooking',
       get defaultCrumb() {
@@ -279,7 +292,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [
       gpAtHandAppointmentRedirect,
       informaticaAppointmentRedirect,
@@ -288,6 +300,8 @@ const routes = {
   APPOINTMENT_CANCEL_NOJS: {
     name: 'appointments-cancel-noJs',
     path: '/nojs/appointments/cancel',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsCancelling',
       get defaultCrumb() {
@@ -295,11 +309,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
   },
   APPOINTMENT_CANCELLING: {
     name: 'appointments-cancelling',
     path: '/appointments/cancelling',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsCancelling',
       get defaultCrumb() {
@@ -307,11 +322,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
   },
   APPOINTMENT_CANCELLING_SUCCESS: {
     name: 'appointments-cancelling-success',
     path: '/appointments/cancelling-success',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       nativeDisabled: true,
       i18nKey: 'appointmentsConfirmation',
@@ -319,7 +335,6 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.APPOINTMENTS, this.allRoutes.GP_APPOINTMENTS];
       },
     },
-    upliftPath: '/uplift/appointments',
     redirectRules: [{
       condition: 'myAppointments/isCancellingAppointmentInProgress',
       value: false,
@@ -330,6 +345,8 @@ const routes = {
   APPOINTMENT_CONFIRMATIONS: {
     name: 'appointments-confirmation',
     path: '/appointments/confirmation',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsConfirmation',
       get defaultCrumb() {
@@ -337,11 +354,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
   },
   APPOINTMENT_BOOKING_SUCCESS: {
     name: 'appointments-booking-success',
     path: '/appointments/booking-success',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       nativeDisabled: true,
       i18nKey: 'appointmentsConfirmation',
@@ -350,7 +368,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
     redirectRules: [{
       condition: 'availableAppointments/isBookingAppointmentInProgress',
       value: false,
@@ -360,6 +377,8 @@ const routes = {
   APPOINTMENT_GP_AT_HAND: {
     name: 'appointments-gp-at-hand',
     path: '/appointments/gp-at-hand',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsGpAtHand',
       get defaultCrumb() {
@@ -367,7 +386,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [
       im1AppointmentRedirect,
       informaticaAppointmentRedirect,
@@ -376,6 +394,8 @@ const routes = {
   APPOINTMENT_INFORMATICA: {
     name: 'appointments-informatica',
     path: '/appointments/informatica',
+    proofLevel: 9,
+    upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsInformatica',
       get defaultCrumb() {
@@ -383,7 +403,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    upliftPath: '/uplift/appointments',
     sjrRedirectRules: [
       gpAtHandAppointmentRedirect,
       im1AppointmentRedirect,
@@ -416,6 +435,8 @@ const routes = {
   CURRENT_MEDICINES: {
     name: 'gp-medical-record-medicines-current-medicines',
     path: '/gp-medical-record/medicines/current-medicines',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'current_medicines',
       get defaultCrumb() {
@@ -423,7 +444,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   CHECKYOURSYMPTOMS: {
     name: 'check-your-symptoms',
@@ -440,6 +460,8 @@ const routes = {
   CONSULTATIONS: {
     name: 'gp-medical-record-consultations',
     path: '/gp-medical-record/consultations',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'consultations',
       get defaultCrumb() {
@@ -447,11 +469,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   DATA_SHARING_OVERVIEW: {
     name: 'data-sharing',
     path: '/data-sharing',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'dataSharingOverview',
       get defaultCrumb() {
@@ -459,7 +482,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}ndop/`,
-    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -469,6 +491,8 @@ const routes = {
   DATA_SHARING_WHERE_USED: {
     name: 'data-sharing-where-used',
     path: '/data-sharing/where-used',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'dataSharingWhereUsed',
       get defaultCrumb() {
@@ -476,7 +500,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}ndop/`,
-    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -486,6 +509,8 @@ const routes = {
   DATA_SHARING_DOES_NOT_APPLY: {
     name: 'data-sharing-does-not-apply',
     path: '/data-sharing/does-not-apply',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'dataSharingDoesNotApply',
       get defaultCrumb() {
@@ -493,7 +518,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}ndop/`,
-    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -503,6 +527,8 @@ const routes = {
   DATA_SHARING_MAKE_YOUR_CHOICE: {
     name: 'data-sharing-make-your-choice',
     path: '/data-sharing/make-your-choice',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'dataSharingMakeYourChoice',
       get defaultCrumb() {
@@ -510,7 +536,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}ndop/`,
-    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -520,6 +545,8 @@ const routes = {
   EVENTS: {
     name: 'gp-medical-record-events',
     path: '/gp-medical-record/events',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'events',
       get defaultCrumb() {
@@ -527,11 +554,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   DISCONTINUED_MEDICINES: {
     name: 'gp-medical-record-medicines-discontinued-medicines',
     path: '/gp-medical-record/medicines/discontinued-medicines',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'medicines',
       get defaultCrumb() {
@@ -539,11 +567,11 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   INDEX: {
     name: 'index',
     path: '/',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'home',
       get defaultCrumb() {
@@ -555,6 +583,7 @@ const routes = {
   INTERSTITIAL_REDIRECTOR: {
     name: 'redirector',
     path: '/redirector',
+    proofLevel: 5,
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX];
@@ -578,6 +607,7 @@ const routes = {
   LOGOUT: {
     name: 'logout',
     path: '/logout',
+    proofLevel: 5,
     crumb: {
       get defaultCrumb() {
         return [];
@@ -588,6 +618,8 @@ const routes = {
   MESSAGING: {
     name: 'messaging',
     path: '/messaging',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'messaging',
       get defaultCrumb() {
@@ -595,7 +627,6 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
-    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -606,6 +637,8 @@ const routes = {
   MESSAGING_MESSAGES: {
     name: 'messaging-messages',
     path: '/messaging/messages',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     shouldShowContentHeader: false,
     crumb: {
       get defaultCrumb() {
@@ -613,7 +646,6 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
-    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'device/isNativeApp',
       value: false,
@@ -624,6 +656,8 @@ const routes = {
   MORE: {
     name: 'more',
     path: '/more',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       nativeDisabled: true,
       i18nKey: 'more',
@@ -632,7 +666,6 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
-    upliftPath: '/uplift/more',
     redirectRules: [{
       condition: 'session/isProxying',
       value: true,
@@ -642,6 +675,8 @@ const routes = {
   MYRECORD: {
     name: 'my-record',
     path: '/my-record',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       nativeDisabled: true,
       i18nKey: 'myRecord',
@@ -650,7 +685,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
     sjrRedirectRules: [
       gpAtHandMedicalRecordRedirectV2,
       gpAtHandMyRecordRedirect,
@@ -660,6 +694,8 @@ const routes = {
   GP_MEDICAL_RECORD: {
     name: 'gp-medical-record',
     path: '/gp-medical-record',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       nativeDisabled: true,
       i18nKey: 'myRecord',
@@ -668,11 +704,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   MYRECORD_GP_AT_HAND: {
     name: 'my-record-gp-at-hand',
     path: '/my-record/gp-at-hand',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordGpAtHand',
       get defaultCrumb() {
@@ -680,12 +717,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
     sjrRedirectRules: [im1MyRecordRedirect],
   },
   GP_MEDICAL_RECORD_GP_AT_HAND: {
     name: 'gp-medical-record-gp-at-hand',
     path: '/gp-medical-record/gp-at-hand',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordGpAtHand',
       get defaultCrumb() {
@@ -693,12 +731,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
     sjrRedirectRules: [im1GpMedicalRecordRedirectV2],
   },
   MYRECORDNOACCESS: {
     name: 'my-record-noaccess',
     path: '/my-record/noaccess',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordNoAccess',
       get defaultCrumb() {
@@ -706,11 +745,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   ALLERGIESANDREACTIONS: {
     name: 'gp-medical-record-allergies-and-reactions',
     path: '/gp-medical-record/allergies-and-reactions',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'allergiesAndReactions',
       get defaultCrumb() {
@@ -718,11 +758,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   ENCOUNTERS: {
     name: 'gp-medical-record-encounters',
     path: '/gp-medical-record/encounters',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'encounters',
       get defaultCrumb() {
@@ -730,11 +771,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   TESTRESULTS: {
     name: 'gp-medical-record-test-results',
     path: '/gp-medical-record/test-results',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'testResults',
       get defaultCrumb() {
@@ -742,11 +784,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   TESTRESULTSDETAIL: {
     name: 'gp-medical-record-test-results-detail',
     path: '/gp-medical-record/test-results-detail',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'gpMedicalRecordTestResultsDetail',
       get defaultCrumb() {
@@ -754,11 +797,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   TESTRESULTID: {
     name: 'gp-medical-record-testresultdetail-testResultId',
     path: '/gp-medical-record/testresultdetail/:testResultId',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'gpMedicalRecordTestResult',
       get defaultCrumb() {
@@ -766,11 +810,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   IMMUNISATIONS: {
     name: 'gp-medical-record-immunisations',
     path: '/gp-medical-record/immunisations',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'immunisations',
       get defaultCrumb() {
@@ -778,11 +823,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   DIAGNOSIS_V2: {
     name: 'gp-medical-record-diagnosis',
     path: '/gp-medical-record/diagnosis',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'diagnosis',
       get defaultCrumb() {
@@ -790,11 +836,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   EXAMINATIONS_V2: {
     name: 'gp-medical-record-examinations',
     path: '/gp-medical-record/examinations',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'examinations',
       get defaultCrumb() {
@@ -802,11 +849,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   PROCEDURES_V2: {
     name: 'gp-medical-record-procedures',
     path: '/gp-medical-record/procedures',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'procedures',
       get defaultCrumb() {
@@ -814,11 +862,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   MEDICINES: {
     name: 'gp-medical-record-medicines',
     path: '/gp-medical-record/medicines-index',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'medicines',
       get defaultCrumb() {
@@ -826,11 +875,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   MEDICAL_HISTORY: {
     name: 'gp-medical-record-medical-history',
     path: '/gp-medical-record/medical-history',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'medicalHistory',
       get defaultCrumb() {
@@ -838,11 +888,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   MYRECORDTESTRESULT: {
     name: 'my-record-testresultdetail-testResultId',
     path: '/my-record/testresultdetail/:testResultId',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordTestResult',
       get defaultCrumb() {
@@ -850,11 +901,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   MY_RECORD_VISION_DIAGNOSIS_DETAIL: {
     name: 'my-record-diagnosis-detail',
     path: '/my-record/diagnosis-detail',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordDiagnosisDetail',
       get defaultCrumb() {
@@ -862,11 +914,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   MY_RECORD_VISION_EXAMINATIONS_DETAIL: {
     name: 'my-record-examinations-detail',
     path: '/my-record/examinations-detail',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordExaminationsDetail',
       get defaultCrumb() {
@@ -874,11 +927,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   MY_RECORD_VISION_PROCEDURES_DETAIL: {
     name: 'my-record-procedures-detail',
     path: '/my-record/procedures-detail',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordProceduresDetail',
       get defaultCrumb() {
@@ -886,11 +940,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   MY_RECORD_VISION_TEST_RESULTS_DETAIL: {
     name: 'my-record-test-results-detail',
     path: '/my-record/test-results-detail',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordTestResultsDetail',
       get defaultCrumb() {
@@ -898,11 +953,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   DOCUMENTS: {
     name: 'gp-medical-record-documents',
     path: '/gp-medical-record/documents',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordDocuments',
       get defaultCrumb() {
@@ -910,24 +966,26 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
     sjrRedirectRules: [documentsDisabledRedirect],
   },
   DOCUMENT: {
     name: 'gp-medical-record-documents-id',
     path: '/gp-medical-record/documents/:id',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.GP_MEDICAL_RECORD];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
     sjrRedirectRules: [documentsDisabledRedirect],
   },
   DOCUMENT_DETAIL: {
     name: 'gp-medical-record-documents-detail-id',
     path: '/gp-medical-record/documents/detail/:id',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     shouldShowContentHeader: false,
     crumb: {
       get defaultCrumb() {
@@ -935,118 +993,129 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
     sjrRedirectRules: [documentsDisabledRedirect],
   },
   NOMINATED_PHARMACY: {
     name: 'nominated-pharmacy',
     path: '/nominated-pharmacy',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_SEARCH: {
     name: 'nominated-pharmacy-search',
     path: '/nominated-pharmacy/search',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_CONFIRM: {
     name: 'nominated-pharmacy-confirm',
     path: '/nominated-pharmacy/confirm',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_CHANGE_SUCCESS: {
     name: 'nominated-pharmacy-change-success',
     path: '/nominated-pharmacy/change-success',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {},
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_INTERRUPT: {
     name: 'nominated-pharmacy-interrupt',
     path: '/nominated-pharmacy/interrupt',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_DSP_INTERRUPT: {
     name: 'nominated-pharmacy-dsp-interrupt',
     path: '/nominated-pharmacy/dsp-interrupt',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_SEARCH_RESULTS: {
     name: 'nominated-pharmacy-results',
     path: '/nominated-pharmacy/results',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_CHECK: {
     name: 'nominated-pharmacy-check',
     path: '/nominated-pharmacy/check',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_CHOOSE_TYPE: {
     name: 'nominated-pharmacy-choose-type',
     path: '/nominated-pharmacy/choose-type',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES: {
     name: 'nominated-pharmacy-online-only-choices',
     path: '/nominated-pharmacy/online-only-choices',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH: {
     name: 'nominated-pharmacy-online-only-search',
     path: '/nominated-pharmacy/online-only-search',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     shouldShowContentHeader: false,
     crumb: {
       get defaultCrumb() {
@@ -1054,11 +1123,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
-    upliftPath: '/uplift/prescriptions',
   },
   ORGAN_DONATION: {
     name: 'organ-donation',
     path: '/organ-donation',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1066,11 +1136,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_ADDITIONAL_DETAILS: {
     name: 'organ-donation-additional-details',
     path: '/organ-donation/additional-details',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1078,11 +1149,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_AMEND: {
     name: 'organ-donation-amend',
     path: '/organ-donation/amend',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1090,11 +1162,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_FAITH: {
     name: 'organ-donation-faith',
     path: '/organ-donation/faith',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1102,11 +1175,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_MORE_ABOUT_ORGANS: {
     name: 'organ-donation-more-about-organs',
     path: '/organ-donation/more-about-organs',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1114,11 +1188,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_SOME_ORGANS: {
     name: 'organ-donation-some-organs',
     path: '/organ-donation/some-organs',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1126,11 +1201,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_REVIEW_YOUR_DECISION: {
     name: 'organ-donation-review-your-decision',
     path: '/organ-donation/review-your-decision',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1138,11 +1214,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_VIEW_DECISION: {
     name: 'organ-donation-view-decision',
     path: '/organ-donation/view-decision',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1150,11 +1227,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_WITHDRAW_REASON: {
     name: 'organ-donation-withdraw-reason',
     path: '/organ-donation/withdraw-reason',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1162,11 +1240,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_WITHDRAWN: {
     name: 'organ-donation-withdrawn',
     path: '/organ-donation/withdrawn',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1174,11 +1253,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   ORGAN_DONATION_YOUR_CHOICE: {
     name: 'organ-donation-your-choice',
     path: '/organ-donation/your-choice',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
       get defaultCrumb() {
@@ -1186,11 +1266,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
-    upliftPath: '/uplift/more',
   },
   PATIENT_PRACTICE_MESSAGING: {
     name: 'patient-practice-messaging',
     path: '/patient-practice-messaging',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessaging',
       get defaultCrumb() {
@@ -1198,12 +1279,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DELETE: {
     name: 'patient-practice-messaging-delete',
     path: '/patient-practice-messaging/delete',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingDelete',
       get defaultCrumb() {
@@ -1214,12 +1296,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect, deleteMessageRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY: {
     name: 'patient-practice-messaging-urgency',
     path: '/patient-practice-messaging/urgency',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingUrgency',
       get defaultCrumb() {
@@ -1230,12 +1313,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP: {
     name: 'patient-practice-messaging-urgency-contact-your-gp',
     path: '/patient-practice-messaging/urgency/contact-your-gp',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingUrgencyContactYourGp',
       get defaultCrumb() {
@@ -1246,12 +1330,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS: {
     name: 'patient-practice-messaging-recipients',
     path: '/patient-practice-messaging/recipients',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingRecipients',
       get defaultCrumb() {
@@ -1262,12 +1347,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging`,
-    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE: {
     name: 'patient-practice-messaging-view-details',
     path: '/patient-practice-messaging/view-details',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingViewDetails',
       get defaultCrumb() {
@@ -1278,12 +1364,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_CREATE: {
     name: 'patient-practice-messaging-send-message',
     path: '/patient-practice-messaging/send-message',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingCreate',
       get defaultCrumb() {
@@ -1294,12 +1381,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS: {
     name: 'patient-practice-messaging-delete-success',
     path: '/patient-practice-messaging/delete-success',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
     crumb: {
       nativeDisabled: true,
       i18nKey: 'patientPracticeMessagingDeleteSuccess',
@@ -1311,12 +1399,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    upliftPath: '/uplift/more',
     sjrRedirectRules: [im1MessagingDisabledRedirect, deleteMessageRedirect],
   },
   PRESCRIPTIONS: {
     name: 'prescriptions',
     path: '/prescriptions',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       nativeDisabled: true,
       i18nKey: 'prescriptions',
@@ -1326,12 +1415,13 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
-    upliftPath: '/uplift/prescriptions',
     sjrRedirectRules: [gpAtHandPrescriptionsRedirect],
   },
   PRESCRIPTION_CONFIRM_COURSES: {
     name: 'prescriptions-confirm-prescription-details',
     path: '/prescriptions/confirm-prescription-details',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       i18nKey: 'prescriptionConfirmCourses',
       get defaultCrumb() {
@@ -1339,11 +1429,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
-    upliftPath: '/uplift/prescriptions',
   },
   PRESCRIPTIONS_GP_AT_HAND: {
     name: 'prescriptions-gp-at-hand',
     path: '/prescriptions/gp-at-hand',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       i18nKey: 'prescriptionsGpAtHand',
       get defaultCrumb() {
@@ -1351,12 +1442,13 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
-    upliftPath: '/uplift/prescriptions',
     sjrRedirectRules: [im1PrescriptionsRedirect],
   },
   PRESCRIPTION_REPEAT_COURSES: {
     name: 'prescriptions-repeat-courses',
     path: '/prescriptions/repeat-courses',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       i18nKey: 'prescriptionRepeatCourses',
       get defaultCrumb() {
@@ -1364,11 +1456,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
-    upliftPath: '/uplift/prescriptions',
   },
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS: {
     name: 'prescriptions-repeat-partial-success',
     path: '/prescriptions/repeat-partial-success',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       nativeDisabled: true,
       i18nKey: 'prescriptionRepeatPartialSuccess',
@@ -1377,7 +1470,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
-    upliftPath: '/uplift/prescriptions',
     redirectRules: [{
       condition: 'repeatPrescriptionCourses/isOrderPrescriptionInProgress',
       value: false,
@@ -1387,6 +1479,8 @@ const routes = {
   PRESCRIPTIONS_ORDER_SUCCESS: {
     name: 'prescriptions-order-success',
     path: '/prescriptions/order-success',
+    proofLevel: 9,
+    upliftPath: '/uplift/prescriptions',
     crumb: {
       nativeDisabled: true,
       i18nKey: 'prescriptionsOrderSuccess',
@@ -1395,7 +1489,6 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
-    upliftPath: '/uplift/prescriptions',
     redirectRules: [{
       condition: 'repeatPrescriptionCourses/isOrderPrescriptionInProgress',
       value: false,
@@ -1405,6 +1498,8 @@ const routes = {
   RECALLS: {
     name: 'gp-medical-record-recalls',
     path: '/gp-medical-record/recalls',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'recalls',
       get defaultCrumb() {
@@ -1412,11 +1507,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   REFERRALS: {
     name: 'gp-medical-record-referrals',
     path: '/gp-medical-record/referrals',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'referrals',
       get defaultCrumb() {
@@ -1424,11 +1520,12 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   HEALTH_CONDITIONS: {
     name: 'gp-medical-record-health-conditions',
     path: '/gp-medical-record/health-conditions',
+    proofLevel: 9,
+    upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'healthConditions',
       get defaultCrumb() {
@@ -1436,11 +1533,11 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    upliftPath: '/uplift/gp-medical-record',
   },
   SYMPTOMS: {
     name: 'symptoms',
     path: '/symptoms',
+    proofLevel: 5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'symptoms',
@@ -1458,6 +1555,7 @@ const routes = {
   TERMSANDCONDITIONS: {
     name: 'terms-and-conditions',
     path: '/terms-and-conditions',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'termsAndConditions',
       get defaultCrumb() {
@@ -1469,6 +1567,7 @@ const routes = {
   LINKED_PROFILES: {
     name: 'linked-profiles',
     path: '/linked-profiles',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1480,6 +1579,7 @@ const routes = {
   LINKED_PROFILES_SUMMARY: {
     name: 'linked-profiles-summary',
     path: '/linked-profiles/summary',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1491,6 +1591,7 @@ const routes = {
   LINKED_PROFILES_SHUTTER_MORE: {
     name: 'linked-profiles-shutter-more',
     path: '/linked-profiles/shutter/more',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1502,6 +1603,7 @@ const routes = {
   LINKED_PROFILES_SHUTTER_SYMPTOMS: {
     name: 'linked-profiles-shutter-symptoms',
     path: '/linked-profiles/shutter/symptoms',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1513,6 +1615,7 @@ const routes = {
   LINKED_PROFILES_SHUTTER_SETTINGS: {
     name: 'linked-profiles-shutter-settings',
     path: '/linked-profiles/shutter/settings',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1524,6 +1627,7 @@ const routes = {
   LINKED_PROFILES_SHUTTER_APPOINTMENTS: {
     name: 'linked-profiles-shutter-appointments',
     path: '/linked-profiles/shutter/appointments',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1535,6 +1639,7 @@ const routes = {
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS: {
     name: 'linked-profiles-shutter-prescriptions',
     path: '/linked-profiles/shutter/prescriptions',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1546,6 +1651,7 @@ const routes = {
   SWITCH_PROFILE: {
     name: 'switch-profile',
     path: '/switch-profile',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'switchProfile',
       get defaultCrumb() {
@@ -1558,6 +1664,7 @@ const routes = {
   LEGACY_MYRECORDWARNING: {
     name: 'my-record-warning',
     path: '/my-record-warning',
+    proofLevel: 5,
     crumb: {
       i18nKey: 'legacyMyRecordWarning',
       get defaultCrumb() {
@@ -1570,6 +1677,7 @@ const routes = {
   UPLIFT_APPOINTMENTS: {
     name: 'uplift-appointments',
     path: '/uplift/appointments',
+    proofLevel: 5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'appointments',
@@ -1582,6 +1690,7 @@ const routes = {
   UPLIFT_GP_MEDICAL_RECORD: {
     name: 'uplift-gp-medical-record',
     path: '/uplift/gp-medical-record',
+    proofLevel: 5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'myRecord',
@@ -1594,6 +1703,7 @@ const routes = {
   UPLIFT_MORE: {
     name: 'uplift-more',
     path: '/uplift-more',
+    proofLevel: 5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'more',
@@ -1606,6 +1716,7 @@ const routes = {
   UPLIFT_PRESCRIPTIONS: {
     name: 'uplift-prescriptions',
     path: '/uplift/prescriptions',
+    proofLevel: 5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'prescriptions',
