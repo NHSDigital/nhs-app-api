@@ -55,7 +55,7 @@ data class Patient(
         val im1ConnectionToken: Im1ConnectionToken? = null,
         val organDonationRegistrationId: String = "AD02745157",
         var linkedAccounts: Set<Patient> = setOf(),
-        val identityProofingLevel: IdentityProofingLevel = IdentityProofingLevel.P9
+        var identityProofingLevel: IdentityProofingLevel = IdentityProofingLevel.P9
 ) {
     var accessToken: String = AccessTokenBuilder().getSignedToken(this).serialize()
 

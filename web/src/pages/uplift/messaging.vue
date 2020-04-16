@@ -1,5 +1,7 @@
 <template>
-  <proof-level-uplift-banner/>
+  <div v-if="showTemplate">
+    <proof-level-uplift-banner/>
+  </div>
 </template>
 
 <script>

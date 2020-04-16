@@ -19,7 +19,10 @@ import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.assertIsVisible
 import pages.navigation.NavBarNative
+import pages.navigation.WebHeader
+import pages.withNormalisedText
 import utils.SerenityHelpers
 import webdrivers.browserstack.BrowserstackLocalService
 import webdrivers.options.OptionManager
@@ -39,6 +42,7 @@ open class SharedStepDefinitions {
     @Steps
     lateinit var navBar: NavigationSteps
 
+    lateinit var webHeader: WebHeader
     val mockingClient = MockingClient.instance
 
     @After
@@ -150,5 +154,10 @@ open class SharedStepDefinitions {
     @Then("I wait for (\\d+) seconds")
     fun iWaitForXSeconds(secondsToWaitFor: Long) {
         Thread.sleep(((secondsToWaitFor) * WAIT_IN_SECONDS_MODIFIER))
+    }
+
+    @Then("^the page title is '(.*)'$")
+    fun thePageTitleIsYourAppointments(title: String) {
+        webHeader.getPageTitle().withNormalisedText(title).assertIsVisible()
     }
 }
