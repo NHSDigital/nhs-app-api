@@ -20,6 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 @RunWith(RobolectricTestRunner::class)
 class ConfigurationServiceTest : ResourceMockingClass() {
@@ -42,7 +43,17 @@ class ConfigurationServiceTest : ResourceMockingClass() {
 
     @Test
     fun getConfigurationResponse_WhenThereIsNoConnection_ItShowsNoConnectionErrorAndReturnsNull() {
-        whenever(httpClientMock.readText(any())).thenAnswer { throw IOException() }
+        whenever(httpClientMock.readText(any(), any())).thenAnswer { throw IOException() }
+        MockConnectionStateMonitor().mockNetworkCallback(mockDisconnectedContext())
+
+        val configuration = configurationService.call()
+        verify(uiIInteractor).showUnavailabilityError(errorMessageHandler.getErrorMessage(ErrorType.NoConnection))
+        assertNull(configuration)
+    }
+
+    @Test
+    fun getConfigurationResponse_WhenThereIsAConnectionTimeout_ItShowsNoConnectionErrorAndReturnsNull() {
+        whenever(httpClientMock.readText(any(), any())).thenAnswer { throw SocketTimeoutException() }
         MockConnectionStateMonitor().mockNetworkCallback(mockDisconnectedContext())
 
         val configuration = configurationService.call()
@@ -52,7 +63,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
 
     @Test
     fun getConfigurationResponse_WhenResponseIsEmpty_ItShowsApiCallErrorAndReturnsNull() {
-        whenever(httpClientMock.readText(any())).thenReturn("")
+        whenever(httpClientMock.readText(any(), any())).thenReturn("")
 
         val configuration = configurationService.call()
         verify(uiIInteractor).showUnavailabilityError(apiCallFailureError())
@@ -61,7 +72,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
 
     @Test
     fun getConfigurationResponse_WhenResponseIsEmptyObject_ItShowsApiCallErrorAndReturnsNull() {
-        whenever(httpClientMock.readText(any())).thenReturn("{}")
+        whenever(httpClientMock.readText(any(), any())).thenReturn("{}")
 
         val configuration = configurationService.call()
 
@@ -71,7 +82,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
 
     @Test
     fun getConfigurationResponse_WhenEmptyKnownServices_ReturnsMappedResponse() {
-        whenever(httpClientMock.readText(any())).thenReturn("{ " +
+        whenever(httpClientMock.readText(any(), any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
                 "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
@@ -93,7 +104,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
 
     @Test
     fun getConfigurationResponse_WhenHasUnknownEnums_ReturnsMappedResponseWithUnknowns() {
-        whenever(httpClientMock.readText(any())).thenReturn("{ " +
+        whenever(httpClientMock.readText(any(), any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
                 "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
@@ -131,7 +142,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
 
     @Test
     fun getConfigurationResponse_WhenHasRootServiceWithNoSubServices_ReturnsMappedResponse() {
-        whenever(httpClientMock.readText(any())).thenReturn("{ " +
+        whenever(httpClientMock.readText(any(), any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
                 "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
@@ -169,7 +180,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
 
     @Test
     fun getConfigurationResponse_WhenHasRootServiceWitSubServices_ReturnsMappedResponse() {
-        whenever(httpClientMock.readText(any())).thenReturn("{ " +
+        whenever(httpClientMock.readText(any(), any())).thenReturn("{ " +
                 "\"minimumSupportedAndroidVersion\": \"v1.27.0\"," +
                 "\"fidoServerUrl\": \"www.fidoserver.com\"," +
                 "\"nhsLoginLoggedInPaths\": [\"/path\"]," +
