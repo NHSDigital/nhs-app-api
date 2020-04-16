@@ -5,7 +5,11 @@ export const conditionalRedirector = ({ redirect, path, redirectRules, store }) 
   if (isArray(redirectRules)) {
     for (let i = 0; i < redirectRules.length; i += 1) {
       const rule = redirectRules[i];
-      if (getOr(true, 'value', rule) === store.getters[rule.condition]) {
+      const result = rule.context
+        ? store.getters[rule.condition](rule.context)
+        : store.getters[rule.condition];
+
+      if (getOr(true, 'value', rule) === result) {
         if (path === rule.url) {
           break;
         }

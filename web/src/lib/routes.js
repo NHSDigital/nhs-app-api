@@ -1,5 +1,6 @@
 import get from 'lodash/fp/get';
 import find from 'lodash/fp/find';
+import proofLevel from './proofLevel';
 
 const adminHelpDisabledRedirect = {
   journey_disabled: 'cdssAdmin',
@@ -97,11 +98,11 @@ const deleteMessageRedirect = {
 
 const baseNhsAppHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
 
-export const routes = {
+const routes = {
   ACCOUNT: {
     name: 'account',
     path: '/account',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'account',
@@ -119,7 +120,7 @@ export const routes = {
   ACCOUNT_COOKIES: {
     name: 'account-cookies',
     path: '/account/cookies',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       nativeDisabled: false,
       i18nKey: 'accountCookies',
@@ -132,7 +133,7 @@ export const routes = {
   ACCOUNT_NOTIFICATIONS: {
     name: 'account-notifications',
     path: '/account/notifications',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'accountNotifications',
       get defaultCrumb() {
@@ -157,7 +158,7 @@ export const routes = {
   ACCOUNT_SIGNOUT: {
     name: 'account-signout',
     path: '/account/signout',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'accountSignOut',
       get defaultCrumb() {
@@ -169,7 +170,7 @@ export const routes = {
   ACUTE_MEDICINES: {
     name: 'gp-medical-record-medicines-acute-medicines',
     path: '/gp-medical-record/medicines/acute-medicines',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'medicines',
@@ -182,7 +183,7 @@ export const routes = {
   APPOINTMENTS: {
     name: 'appointments',
     path: '/appointments',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       nativeDisabled: true,
@@ -196,7 +197,7 @@ export const routes = {
   GP_APPOINTMENTS: {
     name: 'appointments-gp-appointments',
     path: '/appointments/gp-appointments',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       nativeDisabled: false,
@@ -216,7 +217,7 @@ export const routes = {
   HOSPITAL_APPOINTMENTS: {
     name: 'appointments-hospital-appointments',
     path: '/appointments/hospital-appointments',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       nativeDisabled: false,
@@ -234,7 +235,7 @@ export const routes = {
   APPOINTMENT_ADMIN_HELP: {
     name: 'appointments-admin-help',
     path: '/appointments/admin-help',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     warningBanner: true,
     crumb: {
@@ -252,7 +253,7 @@ export const routes = {
   APPOINTMENT_GP_ADVICE: {
     name: 'appointments-gp-advice',
     path: '/appointments/gp-advice',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     warningBanner: true,
     crumb: {
@@ -270,7 +271,7 @@ export const routes = {
   APPOINTMENT_BOOKING: {
     name: 'appointments-booking',
     path: '/appointments/booking',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsBooking',
@@ -283,7 +284,7 @@ export const routes = {
   APPOINTMENT_BOOKING_GUIDANCE: {
     name: 'appointments-booking-guidance',
     path: '/appointments/booking-guidance',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsGuidanceBooking',
@@ -300,7 +301,7 @@ export const routes = {
   APPOINTMENT_CANCEL_NOJS: {
     name: 'appointments-cancel-noJs',
     path: '/nojs/appointments/cancel',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsCancelling',
@@ -313,7 +314,7 @@ export const routes = {
   APPOINTMENT_CANCELLING: {
     name: 'appointments-cancelling',
     path: '/appointments/cancelling',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsCancelling',
@@ -326,7 +327,7 @@ export const routes = {
   APPOINTMENT_CANCELLING_SUCCESS: {
     name: 'appointments-cancelling-success',
     path: '/appointments/cancelling-success',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       nativeDisabled: true,
@@ -345,7 +346,7 @@ export const routes = {
   APPOINTMENT_CONFIRMATIONS: {
     name: 'appointments-confirmation',
     path: '/appointments/confirmation',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsConfirmation',
@@ -358,7 +359,7 @@ export const routes = {
   APPOINTMENT_BOOKING_SUCCESS: {
     name: 'appointments-booking-success',
     path: '/appointments/booking-success',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       nativeDisabled: true,
@@ -377,7 +378,7 @@ export const routes = {
   APPOINTMENT_GP_AT_HAND: {
     name: 'appointments-gp-at-hand',
     path: '/appointments/gp-at-hand',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsGpAtHand',
@@ -394,7 +395,7 @@ export const routes = {
   APPOINTMENT_INFORMATICA: {
     name: 'appointments-informatica',
     path: '/appointments/informatica',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
       i18nKey: 'appointmentsInformatica',
@@ -435,7 +436,7 @@ export const routes = {
   CURRENT_MEDICINES: {
     name: 'gp-medical-record-medicines-current-medicines',
     path: '/gp-medical-record/medicines/current-medicines',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'current_medicines',
@@ -460,7 +461,7 @@ export const routes = {
   CONSULTATIONS: {
     name: 'gp-medical-record-consultations',
     path: '/gp-medical-record/consultations',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'consultations',
@@ -473,7 +474,7 @@ export const routes = {
   DATA_SHARING_OVERVIEW: {
     name: 'data-sharing',
     path: '/data-sharing',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'dataSharingOverview',
@@ -491,7 +492,7 @@ export const routes = {
   DATA_SHARING_WHERE_USED: {
     name: 'data-sharing-where-used',
     path: '/data-sharing/where-used',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'dataSharingWhereUsed',
@@ -509,7 +510,7 @@ export const routes = {
   DATA_SHARING_DOES_NOT_APPLY: {
     name: 'data-sharing-does-not-apply',
     path: '/data-sharing/does-not-apply',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'dataSharingDoesNotApply',
@@ -527,7 +528,7 @@ export const routes = {
   DATA_SHARING_MAKE_YOUR_CHOICE: {
     name: 'data-sharing-make-your-choice',
     path: '/data-sharing/make-your-choice',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'dataSharingMakeYourChoice',
@@ -545,7 +546,7 @@ export const routes = {
   EVENTS: {
     name: 'gp-medical-record-events',
     path: '/gp-medical-record/events',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'events',
@@ -558,7 +559,7 @@ export const routes = {
   DISCONTINUED_MEDICINES: {
     name: 'gp-medical-record-medicines-discontinued-medicines',
     path: '/gp-medical-record/medicines/discontinued-medicines',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'medicines',
@@ -571,7 +572,7 @@ export const routes = {
   INDEX: {
     name: 'index',
     path: '/',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'home',
       get defaultCrumb() {
@@ -583,7 +584,7 @@ export const routes = {
   INTERSTITIAL_REDIRECTOR: {
     name: 'redirector',
     path: '/redirector',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       get defaultCrumb() {
         return [this.allRoutes.INDEX];
@@ -607,7 +608,7 @@ export const routes = {
   LOGOUT: {
     name: 'logout',
     path: '/logout',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       get defaultCrumb() {
         return [];
@@ -618,7 +619,7 @@ export const routes = {
   MESSAGING: {
     name: 'messaging',
     path: '/messaging',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'messaging',
@@ -637,7 +638,7 @@ export const routes = {
   MESSAGING_MESSAGES: {
     name: 'messaging-messages',
     path: '/messaging/messages',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     shouldShowContentHeader: false,
     crumb: {
@@ -656,7 +657,7 @@ export const routes = {
   MORE: {
     name: 'more',
     path: '/more',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       nativeDisabled: true,
@@ -675,7 +676,7 @@ export const routes = {
   MYRECORD: {
     name: 'my-record',
     path: '/my-record',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       nativeDisabled: true,
@@ -694,7 +695,7 @@ export const routes = {
   GP_MEDICAL_RECORD: {
     name: 'gp-medical-record',
     path: '/gp-medical-record',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       nativeDisabled: true,
@@ -708,7 +709,7 @@ export const routes = {
   MYRECORD_GP_AT_HAND: {
     name: 'my-record-gp-at-hand',
     path: '/my-record/gp-at-hand',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordGpAtHand',
@@ -722,7 +723,7 @@ export const routes = {
   GP_MEDICAL_RECORD_GP_AT_HAND: {
     name: 'gp-medical-record-gp-at-hand',
     path: '/gp-medical-record/gp-at-hand',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordGpAtHand',
@@ -736,7 +737,7 @@ export const routes = {
   MYRECORDNOACCESS: {
     name: 'my-record-noaccess',
     path: '/my-record/noaccess',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordNoAccess',
@@ -749,7 +750,7 @@ export const routes = {
   ALLERGIESANDREACTIONS: {
     name: 'gp-medical-record-allergies-and-reactions',
     path: '/gp-medical-record/allergies-and-reactions',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'allergiesAndReactions',
@@ -762,7 +763,7 @@ export const routes = {
   ENCOUNTERS: {
     name: 'gp-medical-record-encounters',
     path: '/gp-medical-record/encounters',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'encounters',
@@ -775,7 +776,7 @@ export const routes = {
   TESTRESULTS: {
     name: 'gp-medical-record-test-results',
     path: '/gp-medical-record/test-results',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'testResults',
@@ -788,7 +789,7 @@ export const routes = {
   TESTRESULTSDETAIL: {
     name: 'gp-medical-record-test-results-detail',
     path: '/gp-medical-record/test-results-detail',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'gpMedicalRecordTestResultsDetail',
@@ -801,7 +802,7 @@ export const routes = {
   TESTRESULTID: {
     name: 'gp-medical-record-testresultdetail-testResultId',
     path: '/gp-medical-record/testresultdetail/:testResultId',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'gpMedicalRecordTestResult',
@@ -814,7 +815,7 @@ export const routes = {
   IMMUNISATIONS: {
     name: 'gp-medical-record-immunisations',
     path: '/gp-medical-record/immunisations',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'immunisations',
@@ -827,7 +828,7 @@ export const routes = {
   DIAGNOSIS_V2: {
     name: 'gp-medical-record-diagnosis',
     path: '/gp-medical-record/diagnosis',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'diagnosis',
@@ -840,7 +841,7 @@ export const routes = {
   EXAMINATIONS_V2: {
     name: 'gp-medical-record-examinations',
     path: '/gp-medical-record/examinations',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'examinations',
@@ -853,7 +854,7 @@ export const routes = {
   PROCEDURES_V2: {
     name: 'gp-medical-record-procedures',
     path: '/gp-medical-record/procedures',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'procedures',
@@ -866,7 +867,7 @@ export const routes = {
   MEDICINES: {
     name: 'gp-medical-record-medicines',
     path: '/gp-medical-record/medicines-index',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'medicines',
@@ -879,7 +880,7 @@ export const routes = {
   MEDICAL_HISTORY: {
     name: 'gp-medical-record-medical-history',
     path: '/gp-medical-record/medical-history',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'medicalHistory',
@@ -892,7 +893,7 @@ export const routes = {
   MYRECORDTESTRESULT: {
     name: 'my-record-testresultdetail-testResultId',
     path: '/my-record/testresultdetail/:testResultId',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordTestResult',
@@ -905,7 +906,7 @@ export const routes = {
   MY_RECORD_VISION_DIAGNOSIS_DETAIL: {
     name: 'my-record-diagnosis-detail',
     path: '/my-record/diagnosis-detail',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordDiagnosisDetail',
@@ -918,7 +919,7 @@ export const routes = {
   MY_RECORD_VISION_EXAMINATIONS_DETAIL: {
     name: 'my-record-examinations-detail',
     path: '/my-record/examinations-detail',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordExaminationsDetail',
@@ -931,7 +932,7 @@ export const routes = {
   MY_RECORD_VISION_PROCEDURES_DETAIL: {
     name: 'my-record-procedures-detail',
     path: '/my-record/procedures-detail',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordProceduresDetail',
@@ -944,7 +945,7 @@ export const routes = {
   MY_RECORD_VISION_TEST_RESULTS_DETAIL: {
     name: 'my-record-test-results-detail',
     path: '/my-record/test-results-detail',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordTestResultsDetail',
@@ -957,7 +958,7 @@ export const routes = {
   DOCUMENTS: {
     name: 'gp-medical-record-documents',
     path: '/gp-medical-record/documents',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'myRecordDocuments',
@@ -971,7 +972,7 @@ export const routes = {
   DOCUMENT: {
     name: 'gp-medical-record-documents-id',
     path: '/gp-medical-record/documents/:id',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       get defaultCrumb() {
@@ -984,7 +985,7 @@ export const routes = {
   DOCUMENT_DETAIL: {
     name: 'gp-medical-record-documents-detail-id',
     path: '/gp-medical-record/documents/detail/:id',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     shouldShowContentHeader: false,
     crumb: {
@@ -998,7 +999,7 @@ export const routes = {
   NOMINATED_PHARMACY: {
     name: 'nominated-pharmacy',
     path: '/nominated-pharmacy',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
@@ -1010,7 +1011,7 @@ export const routes = {
   NOMINATED_PHARMACY_SEARCH: {
     name: 'nominated-pharmacy-search',
     path: '/nominated-pharmacy/search',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
@@ -1022,7 +1023,7 @@ export const routes = {
   NOMINATED_PHARMACY_CONFIRM: {
     name: 'nominated-pharmacy-confirm',
     path: '/nominated-pharmacy/confirm',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
@@ -1034,7 +1035,7 @@ export const routes = {
   NOMINATED_PHARMACY_CHANGE_SUCCESS: {
     name: 'nominated-pharmacy-change-success',
     path: '/nominated-pharmacy/change-success',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {},
     helpUrl: `${baseNhsAppHelpUrl}pharmacy/`,
@@ -1042,7 +1043,7 @@ export const routes = {
   NOMINATED_PHARMACY_INTERRUPT: {
     name: 'nominated-pharmacy-interrupt',
     path: '/nominated-pharmacy/interrupt',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
@@ -1054,7 +1055,7 @@ export const routes = {
   NOMINATED_PHARMACY_DSP_INTERRUPT: {
     name: 'nominated-pharmacy-dsp-interrupt',
     path: '/nominated-pharmacy/dsp-interrupt',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
@@ -1066,7 +1067,7 @@ export const routes = {
   NOMINATED_PHARMACY_SEARCH_RESULTS: {
     name: 'nominated-pharmacy-results',
     path: '/nominated-pharmacy/results',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
@@ -1078,7 +1079,7 @@ export const routes = {
   NOMINATED_PHARMACY_CHECK: {
     name: 'nominated-pharmacy-check',
     path: '/nominated-pharmacy/check',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
@@ -1090,7 +1091,7 @@ export const routes = {
   NOMINATED_PHARMACY_CHOOSE_TYPE: {
     name: 'nominated-pharmacy-choose-type',
     path: '/nominated-pharmacy/choose-type',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
@@ -1102,7 +1103,7 @@ export const routes = {
   NOMINATED_PHARMACY_ONLINE_ONLY_CHOICES: {
     name: 'nominated-pharmacy-online-only-choices',
     path: '/nominated-pharmacy/online-only-choices',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       get defaultCrumb() {
@@ -1114,7 +1115,7 @@ export const routes = {
   NOMINATED_PHARMACY_ONLINE_ONLY_SEARCH: {
     name: 'nominated-pharmacy-online-only-search',
     path: '/nominated-pharmacy/online-only-search',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     shouldShowContentHeader: false,
     crumb: {
@@ -1127,7 +1128,7 @@ export const routes = {
   ORGAN_DONATION: {
     name: 'organ-donation',
     path: '/organ-donation',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1140,7 +1141,7 @@ export const routes = {
   ORGAN_DONATION_ADDITIONAL_DETAILS: {
     name: 'organ-donation-additional-details',
     path: '/organ-donation/additional-details',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1153,7 +1154,7 @@ export const routes = {
   ORGAN_DONATION_AMEND: {
     name: 'organ-donation-amend',
     path: '/organ-donation/amend',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1166,7 +1167,7 @@ export const routes = {
   ORGAN_DONATION_FAITH: {
     name: 'organ-donation-faith',
     path: '/organ-donation/faith',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1179,7 +1180,7 @@ export const routes = {
   ORGAN_DONATION_MORE_ABOUT_ORGANS: {
     name: 'organ-donation-more-about-organs',
     path: '/organ-donation/more-about-organs',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1192,7 +1193,7 @@ export const routes = {
   ORGAN_DONATION_SOME_ORGANS: {
     name: 'organ-donation-some-organs',
     path: '/organ-donation/some-organs',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1205,7 +1206,7 @@ export const routes = {
   ORGAN_DONATION_REVIEW_YOUR_DECISION: {
     name: 'organ-donation-review-your-decision',
     path: '/organ-donation/review-your-decision',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1218,7 +1219,7 @@ export const routes = {
   ORGAN_DONATION_VIEW_DECISION: {
     name: 'organ-donation-view-decision',
     path: '/organ-donation/view-decision',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1231,7 +1232,7 @@ export const routes = {
   ORGAN_DONATION_WITHDRAW_REASON: {
     name: 'organ-donation-withdraw-reason',
     path: '/organ-donation/withdraw-reason',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1244,7 +1245,7 @@ export const routes = {
   ORGAN_DONATION_WITHDRAWN: {
     name: 'organ-donation-withdrawn',
     path: '/organ-donation/withdrawn',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1257,7 +1258,7 @@ export const routes = {
   ORGAN_DONATION_YOUR_CHOICE: {
     name: 'organ-donation-your-choice',
     path: '/organ-donation/your-choice',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'organ_donation',
@@ -1270,7 +1271,7 @@ export const routes = {
   PATIENT_PRACTICE_MESSAGING: {
     name: 'patient-practice-messaging',
     path: '/patient-practice-messaging',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessaging',
@@ -1284,7 +1285,7 @@ export const routes = {
   PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT: {
     name: 'patient-practice-messaging-view-attachment',
     path: '/patient-practice-messaging/view-attachment',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingViewAttachment',
@@ -1302,7 +1303,7 @@ export const routes = {
   PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT: {
     name: 'patient-practice-messaging-download-attachment',
     path: '/patient-practice-messaging/download-attachment',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingDownloadAttachment',
@@ -1320,7 +1321,7 @@ export const routes = {
   PATIENT_PRACTICE_MESSAGING_DELETE: {
     name: 'patient-practice-messaging-delete',
     path: '/patient-practice-messaging/delete',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingDelete',
@@ -1337,7 +1338,7 @@ export const routes = {
   PATIENT_PRACTICE_MESSAGING_URGENCY: {
     name: 'patient-practice-messaging-urgency',
     path: '/patient-practice-messaging/urgency',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingUrgency',
@@ -1354,7 +1355,7 @@ export const routes = {
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP: {
     name: 'patient-practice-messaging-urgency-contact-your-gp',
     path: '/patient-practice-messaging/urgency/contact-your-gp',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingUrgencyContactYourGp',
@@ -1371,7 +1372,7 @@ export const routes = {
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS: {
     name: 'patient-practice-messaging-recipients',
     path: '/patient-practice-messaging/recipients',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingRecipients',
@@ -1388,7 +1389,7 @@ export const routes = {
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE: {
     name: 'patient-practice-messaging-view-details',
     path: '/patient-practice-messaging/view-details',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingViewDetails',
@@ -1405,7 +1406,7 @@ export const routes = {
   PATIENT_PRACTICE_MESSAGING_CREATE: {
     name: 'patient-practice-messaging-send-message',
     path: '/patient-practice-messaging/send-message',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'patientPracticeMessagingCreate',
@@ -1422,7 +1423,7 @@ export const routes = {
   PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS: {
     name: 'patient-practice-messaging-delete-success',
     path: '/patient-practice-messaging/delete-success',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       nativeDisabled: true,
@@ -1440,7 +1441,7 @@ export const routes = {
   PRESCRIPTIONS: {
     name: 'prescriptions',
     path: '/prescriptions',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       nativeDisabled: true,
@@ -1456,7 +1457,7 @@ export const routes = {
   PRESCRIPTION_CONFIRM_COURSES: {
     name: 'prescriptions-confirm-prescription-details',
     path: '/prescriptions/confirm-prescription-details',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       i18nKey: 'prescriptionConfirmCourses',
@@ -1469,7 +1470,7 @@ export const routes = {
   PRESCRIPTIONS_GP_AT_HAND: {
     name: 'prescriptions-gp-at-hand',
     path: '/prescriptions/gp-at-hand',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       i18nKey: 'prescriptionsGpAtHand',
@@ -1483,7 +1484,7 @@ export const routes = {
   PRESCRIPTION_REPEAT_COURSES: {
     name: 'prescriptions-repeat-courses',
     path: '/prescriptions/repeat-courses',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       i18nKey: 'prescriptionRepeatCourses',
@@ -1496,7 +1497,7 @@ export const routes = {
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS: {
     name: 'prescriptions-repeat-partial-success',
     path: '/prescriptions/repeat-partial-success',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       nativeDisabled: true,
@@ -1515,7 +1516,7 @@ export const routes = {
   PRESCRIPTIONS_ORDER_SUCCESS: {
     name: 'prescriptions-order-success',
     path: '/prescriptions/order-success',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/prescriptions',
     crumb: {
       nativeDisabled: true,
@@ -1534,7 +1535,7 @@ export const routes = {
   RECALLS: {
     name: 'gp-medical-record-recalls',
     path: '/gp-medical-record/recalls',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'recalls',
@@ -1547,7 +1548,7 @@ export const routes = {
   REFERRALS: {
     name: 'gp-medical-record-referrals',
     path: '/gp-medical-record/referrals',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'referrals',
@@ -1560,7 +1561,7 @@ export const routes = {
   HEALTH_CONDITIONS: {
     name: 'gp-medical-record-health-conditions',
     path: '/gp-medical-record/health-conditions',
-    proofLevel: 9,
+    proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
       i18nKey: 'healthConditions',
@@ -1573,7 +1574,7 @@ export const routes = {
   SYMPTOMS: {
     name: 'symptoms',
     path: '/symptoms',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'symptoms',
@@ -1591,7 +1592,7 @@ export const routes = {
   TERMSANDCONDITIONS: {
     name: 'terms-and-conditions',
     path: '/terms-and-conditions',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'termsAndConditions',
       get defaultCrumb() {
@@ -1603,7 +1604,7 @@ export const routes = {
   LINKED_PROFILES: {
     name: 'linked-profiles',
     path: '/linked-profiles',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1615,7 +1616,7 @@ export const routes = {
   LINKED_PROFILES_SUMMARY: {
     name: 'linked-profiles-summary',
     path: '/linked-profiles/summary',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1627,7 +1628,7 @@ export const routes = {
   LINKED_PROFILES_SHUTTER_MORE: {
     name: 'linked-profiles-shutter-more',
     path: '/linked-profiles/shutter/more',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1639,7 +1640,7 @@ export const routes = {
   LINKED_PROFILES_SHUTTER_SYMPTOMS: {
     name: 'linked-profiles-shutter-symptoms',
     path: '/linked-profiles/shutter/symptoms',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1651,7 +1652,7 @@ export const routes = {
   LINKED_PROFILES_SHUTTER_SETTINGS: {
     name: 'linked-profiles-shutter-settings',
     path: '/linked-profiles/shutter/settings',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1663,7 +1664,7 @@ export const routes = {
   LINKED_PROFILES_SHUTTER_APPOINTMENTS: {
     name: 'linked-profiles-shutter-appointments',
     path: '/linked-profiles/shutter/appointments',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1675,7 +1676,7 @@ export const routes = {
   LINKED_PROFILES_SHUTTER_PRESCRIPTIONS: {
     name: 'linked-profiles-shutter-prescriptions',
     path: '/linked-profiles/shutter/prescriptions',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'linkedProfiles',
       get defaultCrumb() {
@@ -1687,7 +1688,7 @@ export const routes = {
   SWITCH_PROFILE: {
     name: 'switch-profile',
     path: '/switch-profile',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'switchProfile',
       get defaultCrumb() {
@@ -1700,7 +1701,7 @@ export const routes = {
   LEGACY_MYRECORDWARNING: {
     name: 'my-record-warning',
     path: '/my-record-warning',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       i18nKey: 'legacyMyRecordWarning',
       get defaultCrumb() {
@@ -1713,7 +1714,7 @@ export const routes = {
   UPLIFT_APPOINTMENTS: {
     name: 'uplift-appointments',
     path: '/uplift/appointments',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'appointments',
@@ -1726,7 +1727,7 @@ export const routes = {
   UPLIFT_GP_MEDICAL_RECORD: {
     name: 'uplift-gp-medical-record',
     path: '/uplift/gp-medical-record',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'myRecord',
@@ -1739,7 +1740,7 @@ export const routes = {
   UPLIFT_MORE: {
     name: 'uplift-more',
     path: '/uplift-more',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'more',
@@ -1752,7 +1753,7 @@ export const routes = {
   UPLIFT_PRESCRIPTIONS: {
     name: 'uplift-prescriptions',
     path: '/uplift/prescriptions',
-    proofLevel: 5,
+    proofLevel: proofLevel.P5,
     crumb: {
       nativeDisabled: true,
       i18nKey: 'prescriptions',
@@ -1954,3 +1955,5 @@ export const {
   UPLIFT_MORE,
   UPLIFT_PRESCRIPTIONS,
 } = routes;
+
+export default routes;

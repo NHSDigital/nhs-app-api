@@ -1,5 +1,6 @@
 import moment from 'moment';
 import getters from '@/store/modules/session/getters';
+import proofLevel from '@/lib/proofLevel';
 
 describe('getters', () => {
   describe('isLoggedIn', () => {
@@ -195,6 +196,45 @@ describe('getters', () => {
       // act / assert
       expect(currentProfile(currentSessionState, mockGetters, rootState))
         .toEqual(sessionUserDetails);
+    });
+  });
+
+  describe('shouldUplift', () => {
+    const { shouldUplift } = getters;
+    let state;
+
+    describe('for P9 user', () => {
+      let action;
+
+      beforeEach(() => {
+        state = { proofLevel: proofLevel.P9 };
+        action = shouldUplift(state);
+      });
+
+      it('will be false when it requires proof level 5', () => {
+        expect(action(proofLevel.P5)).toBe(false);
+      });
+
+      it('will be false when it requires proof level 9', () => {
+        expect(action(proofLevel.P9)).toBe(false);
+      });
+    });
+
+    describe('for P5 user', () => {
+      let action;
+
+      beforeEach(() => {
+        state = { proofLevel: proofLevel.P5 };
+        action = shouldUplift(state);
+      });
+
+      it('will be false when it requires proof level 5', () => {
+        expect(action(proofLevel.P5)).toBe(false);
+      });
+
+      it('will be true when it requires proof level 9', () => {
+        expect(action(proofLevel.P9)).toBe(true);
+      });
     });
   });
 });

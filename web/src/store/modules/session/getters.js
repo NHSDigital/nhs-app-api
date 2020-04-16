@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { P9_PROOF_LEVEL } from './mutation-types';
+import proofLevel from '@/lib/proofLevel';
 
 export default {
   currentProfile(state, getters, rootState) {
@@ -34,7 +34,6 @@ export default {
     const state = input.session || input;
     return () => !!state.csrfToken;
   },
-  isP9User: state => state.proofLevel === P9_PROOF_LEVEL,
   isProxying(state, getters, rootState) {
     return !!(rootState.linkedAccounts && rootState.linkedAccounts.actingAsUser);
   },
@@ -46,5 +45,9 @@ export default {
       const expiryTime = moment(lastCalledAt).add(durationSeconds, 'seconds').toDate();
       return now < expiryTime;
     };
+  },
+  shouldUplift(state) {
+    return requiredProofLevel => requiredProofLevel === proofLevel.P9
+      && state.proofLevel !== proofLevel.P9;
   },
 };

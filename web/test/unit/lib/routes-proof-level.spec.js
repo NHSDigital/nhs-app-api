@@ -1,6 +1,7 @@
 import each from 'jest-each';
+import proofLevel from '@/lib/proofLevel';
+import routes from '@/lib/routes';
 import values from 'lodash/fp/values';
-import { routes } from '@/lib/routes';
 
 describe('routes - proof level usage', () => {
   each(values(routes).map(x => [x.name, x]))
@@ -10,14 +11,14 @@ describe('routes - proof level usage', () => {
         expect(route.upliftPath).toBeUndefined();
       } else {
         switch (route.proofLevel) {
-          case 9:
+          case proofLevel.P9:
             expect(route.upliftPath).toBeDefined();
             break;
-          case 5:
+          case proofLevel.P5:
             expect(route.upliftPath).toBeUndefined();
             break;
           default:
-            fail('route must have a valid proof level set to either 9 or 5');
+            fail(`route must have a valid proof level set to one of (${values(proofLevel).join(', ')})`);
         }
       }
     });
