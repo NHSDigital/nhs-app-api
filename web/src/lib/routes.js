@@ -97,7 +97,7 @@ const deleteMessageRedirect = {
 
 const baseNhsAppHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
 
-const routes = {
+export const routes = {
   ACCOUNT: {
     name: 'account',
     path: '/account',
@@ -1798,7 +1798,6 @@ export const executeHomeNavigationRule = (currentRouteName) => {
   mapping[routes.TERMSANDCONDITIONS.name] = routes.LOGOUT.path;
   return mapping[currentRouteName] || routes.INDEX.path;
 };
-
 
 export const {
   ACCOUNT,
