@@ -29,6 +29,7 @@ using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
+using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
 using ConfigurationSettings = NHSOnline.Backend.Support.Settings.ConfigurationSettings;
 
@@ -168,8 +169,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
             _mockSessionCacheService
-                .Setup(x => x.CreateUserSession(It.IsAny<P9UserSession>()))
-                .Callback<P9UserSession>(userSession => userSession.Key = _apiSessionId)
+                .Setup(x => x.CreateUserSession(It.IsAny<UserSession>()))
+                .Callback<UserSession>(userSession => userSession.Key = _apiSessionId)
                 .Returns(Task.FromResult(_apiSessionId));
 
             _authenticationServiceMock = new Mock<IAuthenticationService>();

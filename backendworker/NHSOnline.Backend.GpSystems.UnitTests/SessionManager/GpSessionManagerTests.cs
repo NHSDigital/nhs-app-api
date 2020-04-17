@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
 
             _mockSessionCacheService
                 .Setup(x => x.GetUserSession(_sessionId))
-                .Returns(Task.FromResult(Option.Some(_userSession)))
+                .Returns(Task.FromResult(Option.Some<UserSession>(_userSession)))
                 .Verifiable();
 
             _mockSessionCacheService.Setup(x => x.CreateUserSession(_userSession))
@@ -180,7 +180,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             //Arrange
             _mockSessionCacheService
                 .Setup(x => x.GetUserSession(_sessionId))
-                .Returns(Task.FromResult(Option.None<P9UserSession>()))
+                .Returns(Task.FromResult(Option.None<UserSession>()))
                 .Verifiable();
 
             //Act

@@ -14,6 +14,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Cipher;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
 {
@@ -58,7 +59,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
-            session.ValueOrFailure().GpUserSession.Should().BeOfType<TppUserSession>($"{nameof(TppUserSession)} should be deserialised");
+            session.ValueOrFailure()
+                .Should().BeOfType<P9UserSession>().Subject
+                .GpUserSession.Should().BeOfType<TppUserSession>($"{nameof(TppUserSession)} should be deserialised");
         }
 
         [TestMethod]
@@ -74,7 +77,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
-            session.ValueOrFailure().GpUserSession.Should().BeOfType<EmisUserSession>($"{nameof(EmisUserSession)} should be deserialised");
+            session.ValueOrFailure()
+                .Should().BeOfType<P9UserSession>().Subject
+                .GpUserSession.Should().BeOfType<EmisUserSession>($"{nameof(EmisUserSession)} should be deserialised");
         }
 
         [TestMethod]
@@ -90,7 +95,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
-            session.ValueOrFailure().GpUserSession.Should().BeOfType<MicrotestUserSession>($"{nameof(MicrotestUserSession)} should be deserialised");
+            session.ValueOrFailure()
+                .Should().BeOfType<P9UserSession>().Subject
+                .GpUserSession.Should().BeOfType<MicrotestUserSession>($"{nameof(MicrotestUserSession)} should be deserialised");
         }
 
         [TestMethod]
@@ -106,7 +113,50 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var session = await sut.GetUserSession("");
 
             session.HasValue.Should().BeTrue("session should be returned");
-            session.ValueOrFailure().GpUserSession.Should().BeOfType<VisionUserSession>($"{nameof(VisionUserSession)} should be deserialised");
+            session.ValueOrFailure()
+                .Should().BeOfType<P9UserSession>().Subject
+                .GpUserSession.Should().BeOfType<VisionUserSession>($"{nameof(VisionUserSession)} should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetUserSession_CreatedWithP5Session_ReturnsP5Session()
+        {
+            var userSession = new P5UserSession(string.Empty, new CitizenIdUserSession { ProofLevel = ProofLevel.P5 });
+
+            ArrangeNoEncryption();
+            var json = await CreateSessionAndCaptureJson(userSession);
+            ArrangeSessionData(json);
+
+            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var session = await sut.GetUserSession("");
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            var actual = session.ValueOrFailure().Should().BeOfType<P5UserSession>().Subject;
+            actual.CitizenIdUserSession.Should().NotBeNull();
+            actual.CitizenIdUserSession.ProofLevel.Should().Be(ProofLevel.P5);
+        }
+
+        [TestMethod]
+        public async Task GetUserSession_CreatedWithP9Session_ReturnsP9Session()
+        {
+            var userSession = new P9UserSession(
+                string.Empty,
+                new CitizenIdUserSession { ProofLevel = ProofLevel.P9 },
+                new EmisUserSession(),
+                string.Empty);
+
+
+            ArrangeNoEncryption();
+            var json = await CreateSessionAndCaptureJson(userSession);
+            ArrangeSessionData(json);
+
+            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var session = await sut.GetUserSession("");
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            var actual = session.ValueOrFailure().Should().BeOfType<P9UserSession>().Subject;
+            actual.CitizenIdUserSession.Should().NotBeNull();
+            actual.CitizenIdUserSession.ProofLevel.Should().Be(ProofLevel.P9);
         }
 
         [TestMethod]
@@ -152,7 +202,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
         }
 
-        private async Task<string> CreateSessionAndCaptureJson(P9UserSession userSession)
+        private async Task<string> CreateSessionAndCaptureJson(UserSession userSession)
         {
             BsonDocument update = null;
             _mockMongoCollection

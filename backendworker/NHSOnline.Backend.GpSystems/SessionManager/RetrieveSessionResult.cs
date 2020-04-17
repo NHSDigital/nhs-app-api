@@ -1,19 +1,17 @@
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.GpSystems.SessionManager
 {
     public abstract class RetrieveSessionResult
     {
-        public class Success : RetrieveSessionResult
+        public sealed class Success : RetrieveSessionResult
         {
-            public P9UserSession UserSession { get; }
-            public Success(P9UserSession userSession)
-            {
-                UserSession = userSession;
-            }
+            public Success(UserSession userSession) => UserSession = userSession;
+
+            public UserSession UserSession { get; }
         }
 
-        public class Failure : RetrieveSessionResult
+        public sealed class Failure : RetrieveSessionResult
         {
         }
     }

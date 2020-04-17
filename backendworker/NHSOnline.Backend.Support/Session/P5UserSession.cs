@@ -9,12 +9,8 @@ namespace NHSOnline.Backend.Support.Session
         { }
 
         public P5UserSession(string csrfToken, CitizenIdUserSession citizenIdUserSession)
-        {
-            CsrfToken = csrfToken;
-            CitizenIdUserSession = citizenIdUserSession;
-        }
-
-        public string CsrfToken { get; set; }
+            : base(csrfToken)
+            => CitizenIdUserSession = citizenIdUserSession;
 
         public CitizenIdUserSession CitizenIdUserSession { get; set; }
 

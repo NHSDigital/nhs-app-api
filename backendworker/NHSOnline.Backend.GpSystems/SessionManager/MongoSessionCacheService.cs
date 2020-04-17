@@ -8,6 +8,7 @@ using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Cipher;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.GpSystems.SessionManager
 {
@@ -43,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             _collectionName = config.MongoDatabaseIm1CollectionName;
         }
 
-        public async Task<string> CreateUserSession(P9UserSession userSession)
+        public async Task<string> CreateUserSession(UserSession userSession)
         {
             try
             {
@@ -69,7 +70,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             }
         }
 
-        public async Task<Option<P9UserSession>> GetUserSession(string sessionId)
+        public async Task<Option<UserSession>> GetUserSession(string sessionId)
         {
             try
             {
@@ -86,11 +87,11 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 if (sessionValue == null)
                 {
                     _logger.LogDebug("No Mongo value Found");
-                    return Option.None<P9UserSession>();
+                    return Option.None<UserSession>();
                 }
 
                 var sessionJson = _cipherService.Decrypt(sessionValue["session"].ToString());
-                var userSession = JsonConvert.DeserializeObject<P9UserSession>(sessionJson, _serializerSettings);
+                var userSession = JsonConvert.DeserializeObject<UserSession>(sessionJson, _serializerSettings);
 
                 userSession.Key = sessionId;
 
@@ -122,7 +123,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             }
         }
 
-        public async Task UpdateUserSession(P9UserSession userSession)
+        public async Task UpdateUserSession(UserSession userSession)
         {
             try
             {
