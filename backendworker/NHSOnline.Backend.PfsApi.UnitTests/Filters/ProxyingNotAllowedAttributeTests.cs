@@ -99,14 +99,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
 
         private P9UserSession ArrangeP9UserSession()
         {
-            var userSession = new P9UserSession
-            {
-                GpUserSession = new EmisUserSession
+            var userSession = new P9UserSession(
+                string.Empty,
+                new CitizenIdUserSession(),
+                new EmisUserSession
                 {
                     OdsCode = "X10000",
                     Id = Guid.NewGuid(),
-                }
-            };
+                },
+                string.Empty);
 
             _mockUserSessionService
                 .Setup(x => x.GetUserSession<P9UserSession>())

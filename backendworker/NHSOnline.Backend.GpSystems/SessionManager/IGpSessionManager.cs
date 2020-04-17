@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
-using NHSOnline.Backend.GpSystems.SessionManager.Model;
+using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.Support;
 
 
@@ -8,10 +8,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 {
     public interface IGpSessionManager
     {
-        Task<CreateSessionResult> CreateSession(
-            IGpSystem gpSystem,
-            GpSessionManagerCitizenIdSessionResult citizenIdSessionResult,
-            StringValues csrfToken);
+        Task<GpSessionCreateResult> CreateSession(IGpSessionCreateArgs args);
 
         Task<RetrieveSessionResult> RetrieveSession(string sessionId, StringValues csrfToken);
 

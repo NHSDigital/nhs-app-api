@@ -48,10 +48,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithTppGpSession_ReturnsTppGpSession()
         {
-            var userSession = new P9UserSession
-            {
-                GpUserSession = new TppUserSession()
-            };
+            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new TppUserSession(), string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -67,10 +64,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithEmisGpSession_ReturnsEmisGpSession()
         {
-            var userSession = new P9UserSession
-            {
-                GpUserSession = new EmisUserSession()
-            };
+            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new EmisUserSession(), string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -86,10 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithMicrotestGpSession_ReturnsMicrotestGpSession()
         {
-            var userSession = new P9UserSession
-            {
-                GpUserSession = new MicrotestUserSession()
-            };
+            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new MicrotestUserSession(), string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);
@@ -105,10 +96,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         [TestMethod]
         public async Task GetUserSession_CreatedWithVisionGpSession_ReturnsVisionGpSession()
         {
-            var userSession = new P9UserSession
-            {
-                GpUserSession = new VisionUserSession()
-            };
+            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new VisionUserSession(), string.Empty);
 
             ArrangeNoEncryption();
             var json = await CreateSessionAndCaptureJson(userSession);

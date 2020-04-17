@@ -162,7 +162,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             var mockUserSessionService = new Mock<IUserSessionService>();
             mockUserSessionService
                 .Setup(x => x.GetUserSession<P5UserSession>())
-                .Returns(Option.Some(new P5UserSession { Key = SessionId }));
+                .Returns(Option.Some(new P5UserSession(string.Empty, new CitizenIdUserSession()) { Key = SessionId }));
 
             var serviceProvider = new ServiceCollection()
                 .AddLogging(ConfigureLogging)

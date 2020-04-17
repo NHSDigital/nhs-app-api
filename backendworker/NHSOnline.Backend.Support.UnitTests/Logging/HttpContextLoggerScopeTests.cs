@@ -30,7 +30,15 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         [TestMethod]
         public void ToString_UserSessionPresent_ReturnsSessionIDMessage()
         {
-            var httpContext = CreateHttpContext(new P9UserSession { Key = SessionId });
+            var httpContext = CreateHttpContext(
+                new P9UserSession(
+                    string.Empty,
+                    new CitizenIdUserSession(),
+                    new EmisUserSession(),
+                    string.Empty)
+                {
+                    Key = SessionId
+                });
 
             var systemUnderTest = new HttpContextLoggerScope(httpContext);
             var result = systemUnderTest.ToString();
@@ -65,15 +73,15 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         public void ToString_UserSessionPresent_ProxyModeTrue_ReturnsSessionIDMessageAndProxyMessage()
         {
             var httpContext = CreateHttpContext(
-                new P9UserSession
+                new P9UserSession(
+                    string.Empty,
+                    new CitizenIdUserSession(),
+                    new EmisUserSession { NhsNumber = MainNhsNumber },
+                    string.Empty)
                 {
-                    Key = SessionId,
-                    GpUserSession = new EmisUserSession
-                    {
-                        NhsNumber = MainNhsNumber
-                    }
+                    Key = SessionId
                 });
-            
+
             httpContext.Items.Add("LinkedAccountAuditInfo", new LinkedAccountAuditInfo
             {
                 IsProxyMode = true,
@@ -90,15 +98,15 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         public void ToString_UserSessionPresent_NoLinkedAccountAuditInfo_ReturnsSessionIDMessage()
         {
             var httpContext = CreateHttpContext(
-                new P9UserSession
+                new P9UserSession(
+                    string.Empty,
+                    new CitizenIdUserSession(),
+                    new EmisUserSession { NhsNumber = MainNhsNumber },
+                    string.Empty)
                 {
-                    Key = SessionId,
-                    GpUserSession = new EmisUserSession
-                    {
-                        NhsNumber = MainNhsNumber
-                    }
+                    Key = SessionId
                 });
-            
+
             httpContext.Items.Add("LinkedAccountAuditInfo", null);
 
             var systemUnderTest = new HttpContextLoggerScope(httpContext);
@@ -111,13 +119,13 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         public void ToString_UserSessionPresent_ProxyModeFalse_ReturnsSessionIDMessage()
         {
             var httpContext = CreateHttpContext(
-                new P9UserSession
+                new P9UserSession(
+                    string.Empty,
+                    new CitizenIdUserSession(),
+                    new EmisUserSession { NhsNumber = MainNhsNumber },
+                    string.Empty)
                 {
-                    Key = SessionId,
-                    GpUserSession = new EmisUserSession
-                    {
-                        NhsNumber = MainNhsNumber
-                    }
+                    Key = SessionId
                 });
             
             httpContext.Items.Add("LinkedAccountAuditInfo", new LinkedAccountAuditInfo

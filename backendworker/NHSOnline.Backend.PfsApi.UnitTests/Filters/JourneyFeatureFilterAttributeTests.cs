@@ -36,13 +36,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
         {
             _systemUnderTest = new JourneyFeatureFilterAttribute(JourneyFeature.NominatedPharmacy);
 
-            _userSession = new P9UserSession()
-            {
-                GpUserSession = new EmisUserSession()
-                {
-                    OdsCode = "X10000"
-                }
-            };            
+            _userSession = new P9UserSession(
+                string.Empty,
+                new CitizenIdUserSession(), 
+                new EmisUserSession { OdsCode = "X10000" },
+                string.Empty);            
             
             _sjrResponse = new ServiceJourneyRulesResponse()
             {

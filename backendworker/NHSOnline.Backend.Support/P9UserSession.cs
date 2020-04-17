@@ -3,9 +3,22 @@ using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.Support
 {
-    [Serializable]
     public sealed class P9UserSession: P5UserSession
     {
+        [Obsolete("Public for MVC model binding")]
+        public P9UserSession() { }
+
+        public P9UserSession(
+            string csrfToken,
+            CitizenIdUserSession citizenIdUserSession,
+            GpUserSession gpUserSession,
+            string im1ConnectionToken) : base(csrfToken, citizenIdUserSession)
+        {
+            GpUserSession = gpUserSession;
+            Im1ConnectionToken = im1ConnectionToken;
+            OrganDonationSessionId = Guid.NewGuid();
+        }
+
         public GpUserSession GpUserSession { get; set; }
 
         public Guid OrganDonationSessionId { get; set; }

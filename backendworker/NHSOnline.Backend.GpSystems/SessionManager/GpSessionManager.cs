@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using NHSOnline.Backend.GpSystems.Session;
-using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
@@ -12,50 +11,27 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
     public class GpSessionManager : IGpSessionManager
     {
         private readonly ILogger<GpSessionManager> _logger;
-        private readonly ISessionMapper _sessionMapper;
         private readonly IUserSessionService _userSessionService;
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IGpSystemFactory _gpSystemFactory;
 
         public GpSessionManager(
             ILogger<GpSessionManager> logger,
-            ISessionMapper sessionMapper,
             IUserSessionService userSessionService,
             ISessionCacheService sessionCacheService,
             IGpSystemFactory gpSystemFactory)
         {
             _logger = logger;
-            _sessionMapper = sessionMapper;
             _userSessionService = userSessionService;
             _sessionCacheService = sessionCacheService;
             _gpSystemFactory = gpSystemFactory;
         }
 
-        public async Task<CreateSessionResult> CreateSession(
-            IGpSystem gpSystem,
-            GpSessionManagerCitizenIdSessionResult citizenIdSessionResult,
-            StringValues csrfToken)
+        public async Task<GpSessionCreateResult> CreateSession(IGpSessionCreateArgs args)
         {
-            // Create a session with the GP system, using the IM1 connection token.
-            var gpSessionCreateResult = await GetGpSessionCreateResult(
-                gpSystem, citizenIdSessionResult.Im1ConnectionToken,
-                citizenIdSessionResult.OdsCode, citizenIdSessionResult.NhsNumber);
+            var sessionService = args.GpSystem.GetSessionService();
 
-            if (!(gpSessionCreateResult is GpSessionCreateResult.Success result))
-            {
-                return new CreateSessionResult.Failure(gpSessionCreateResult.StatusCode);
-            }
-
-            var userSession = _sessionMapper.Map(
-                csrfToken,
-                result.UserSession,
-                citizenIdSessionResult.Session,
-                citizenIdSessionResult.Im1ConnectionToken);
-
-            var sessionId = await _sessionCacheService.CreateUserSession(userSession);
-            _logger.LogDebug($"Fetched Session Id: '{sessionId}'");
-
-            return new CreateSessionResult.Success(userSession);
+            return await sessionService.Create(args.Im1ConnectionToken, args.OdsCode, args.NhsNumber);
         }
 
         public async Task<RetrieveSessionResult> RetrieveSession(string sessionId, StringValues csrfToken)
@@ -188,13 +164,6 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 _logger.LogError(
                     $"Deleting the GP Supplier session failed with status code: '{visitorResult.StatusCode}'");
             }
-        }
-
-        private static async Task<GpSessionCreateResult> GetGpSessionCreateResult(
-            IGpSystem gpSystem, string im1ConnectionToken, string odsCode, string nhsNumber)
-        {
-            var sessionService = gpSystem.GetSessionService();
-            return await sessionService.Create(im1ConnectionToken, odsCode, nhsNumber);
         }
     }
 }

@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -27,7 +26,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.SessionManager;
-using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
@@ -52,14 +50,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private ConfigurationSettings _configurationSettings;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IIm1CacheService> _mockIm1CacheService;
-        private Mock<ISessionMapper> _mockSessionMapper;
         private Mock<ILogger<SessionController>> _mockLogger;
         private Mock<IOdsCodeMassager> _mockOdsCodeMassager;
         private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
         private Mock<IGpSessionManager> _mockGpSessionManager;
         private Mock<IAntiforgery> _mockAntiforgery;
-
-
+        
         private const string DateFormat = "yyyy-MM-dd";
 
         private ServiceJourneyRulesResponse _serviceJourneyRulesResponse;
@@ -79,12 +75,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private const int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;
         private const int SessionTimeoutMinutes = 10;
         private const int MinimumLinkageAge = 16;
-        private static readonly StringValues AntiforgeryRequestToken = "requestToken";
         private string _serviceDeskReference;
         private SessionConfigurationSettings _sessionConfigSettings;
         private CitizenIdSessionResult _citizenIdSessionResult;
-        private GpSessionManagerCitizenIdSessionResult _gpSessMgrCitizenIdSessionResult;
-        private string _im1ConnectionToken;
 
         [TestInitialize]
         public void TestInitialize()
@@ -93,7 +86,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _im1ConnectionToken = _fixture.Create<string>();
             _connectionToken = _fixture.Create<EmisConnectionToken>();
             _name = _fixture.Create<string>();
             _sessionTimeoutSeconds = SessionTimeoutMinutes * 60;
@@ -128,20 +120,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 Session = _citizenIdUserSession
             };
 
-            _gpSessMgrCitizenIdSessionResult = new GpSessionManagerCitizenIdSessionResult
-            {
-                Im1ConnectionToken = _citizenIdSessionResult.Im1ConnectionToken,
-                NhsNumber = _citizenIdSessionResult.NhsNumber,
-                OdsCode = _citizenIdSessionResult.OdsCode,
-                Session = new GpSessionManagerCitizenIdUserSession
-                {
-                    AccessToken = _citizenIdUserSession.AccessToken,
-                    DateOfBirth = _citizenIdUserSession.DateOfBirth,
-                    FamilyName = _citizenIdUserSession.FamilyName,
-                    IdTokenJti = _citizenIdUserSession.IdTokenJti
-                }
-            };
-
             _mockCitizenIdSessionService = _fixture.Freeze<Mock<ICitizenIdSessionService>>();
             _mockCitizenIdSessionService
                 .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier,
@@ -164,12 +142,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult));
 
-            _userSession = new P9UserSession
-            {
-                CsrfToken = CsrfRequestToken,
-                GpUserSession = _emisUserSession,
-                CitizenIdUserSession = _citizenIdUserSession
-            };
+            _userSession = new P9UserSession(CsrfRequestToken, _citizenIdUserSession, _emisUserSession, string.Empty);
 
             _mockOdsCodeLookup = _fixture.Freeze<Mock<IOdsCodeLookup>>();
             _mockOdsCodeLookup
@@ -196,6 +169,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
             _mockSessionCacheService
                 .Setup(x => x.CreateUserSession(It.IsAny<P9UserSession>()))
+                .Callback<P9UserSession>(userSession => userSession.Key = _apiSessionId)
                 .Returns(Task.FromResult(_apiSessionId));
 
             _authenticationServiceMock = new Mock<IAuthenticationService>();
@@ -210,14 +184,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _mockIm1CacheService.Setup(x => x.DeleteIm1ConnectionToken(_connectionToken.Im1CacheKey))
                 .Returns(Task.FromResult(true)).Verifiable();
-
-            _mockSessionMapper = _fixture.Freeze<Mock<ISessionMapper>>();
-            _mockSessionMapper.Setup(x => x.Map(
-                    AntiforgeryRequestToken,
-                    _emisUserSession,
-                    _gpSessMgrCitizenIdSessionResult.Session,
-                    _im1ConnectionToken))
-                .Returns(_userSession);
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(IAuthenticationService)))
@@ -249,7 +215,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockAntiforgery = _fixture.Freeze<Mock<IAntiforgery>>();
             _mockAntiforgery
                 .Setup(x => x.GetTokens(httpContextMock.Object))
-                .Returns(new AntiforgeryTokenSet(AntiforgeryRequestToken, "cookieToken", "formFieldName", "headerName"));
+                .Returns(new AntiforgeryTokenSet(CsrfRequestToken, "cookieToken", "formFieldName", "headerName"));
 
             _systemUnderTest = _fixture.Create<SessionController>();
 
@@ -458,19 +424,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            var returnResult = new CreateSessionResult.Failure(StatusCodes.Status403Forbidden);
+            var returnResult = new GpSessionCreateResult.Forbidden();
 
             _mockGpSessionManager
                 .Setup(
                     x => x.CreateSession(
-                        _mockGpSystem.Object,
-                        It.Is<GpSessionManagerCitizenIdSessionResult>(p
-                            => p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal)
-                               && p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal)
-                               && p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal)
-                               && p.Session.AccessToken.Equals(_citizenIdUserSession.AccessToken, StringComparison.Ordinal)
-                               && p.Session.DateOfBirth.Equals(_citizenIdUserSession.DateOfBirth)),
-                        AntiforgeryRequestToken))
+                        It.Is<IGpSessionCreateArgs>(p
+                            => ReferenceEquals(p.GpSystem, _mockGpSystem.Object) &&
+                               p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
+                               p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal) &&
+                               p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
                 .ReturnsAsync(returnResult);
 
             // Act
@@ -522,19 +485,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            var returnResult = new CreateSessionResult.Failure(StatusCodes.Status502BadGateway);
+            var returnResult = new GpSessionCreateResult.BadGateway();
 
             _mockGpSessionManager
                 .Setup(
                     x => x.CreateSession(
-                        _mockGpSystem.Object,
-                        It.Is<GpSessionManagerCitizenIdSessionResult>(p
-                            => p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal)
-                            && p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal)
-                            && p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal)
-                            && p.Session.AccessToken.Equals(_citizenIdUserSession.AccessToken, StringComparison.Ordinal)
-                            && p.Session.DateOfBirth.Equals(_citizenIdUserSession.DateOfBirth)),
-                        AntiforgeryRequestToken))
+                        It.Is<IGpSessionCreateArgs>(p
+                            => ReferenceEquals(p.GpSystem, _mockGpSystem.Object) &&
+                               p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
+                               p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal) &&
+                               p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
                 .ReturnsAsync(returnResult);
 
             // Act
@@ -672,19 +632,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _userSession.Key = "123";
 
-            var returnResult = new CreateSessionResult.Success(_userSession);
+            var returnResult = new GpSessionCreateResult.Success(_userSession.GpUserSession);
 
             _mockGpSessionManager
                 .Setup(
                     x => x.CreateSession(
-                        _mockGpSystem.Object,
-                        It.Is<GpSessionManagerCitizenIdSessionResult>(p
-                            => p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal)
-                               && p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal)
-                               && p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal)
-                               && p.Session.AccessToken.Equals(_citizenIdUserSession.AccessToken, StringComparison.Ordinal)
-                               && p.Session.DateOfBirth.Equals(_citizenIdUserSession.DateOfBirth)),
-                        AntiforgeryRequestToken))
+                        It.Is<IGpSessionCreateArgs>(p
+                            => ReferenceEquals(p.GpSystem, _mockGpSystem.Object) &&
+                               p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
+                               p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal) &&
+                               p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
                 .ReturnsAsync(returnResult);
 
             // Act
@@ -721,7 +678,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
         [TestMethod]
         public async Task Post_Im1ConnectionTokenHasCacheKey_AttemptsToDeleteFromCache()
-        {   // Arrange
+        {
+            // Arrange
             _sessionConfigSettings.ProxyEnabled = true;
             _emisUserSession.ProxyPatients = new List<EmisProxyUserSession>
             {
@@ -732,15 +690,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockIm1CacheService.Setup(x => x.DeleteIm1ConnectionToken(_connectionToken.Im1CacheKey))
                 .Returns(Task.FromResult(true));
 
-            var returnResult = new CreateSessionResult.Failure(StatusCodes.Status204NoContent);
+            var returnResult = new GpSessionCreateResult.Success(_userSession.GpUserSession);
 
             _mockGpSessionManager
                 .Setup(
                     x => x.CreateSession(
-                        _mockGpSystem.Object,
-                        _gpSessMgrCitizenIdSessionResult,
-                        AntiforgeryRequestToken))
+                        It.Is<IGpSessionCreateArgs>(p
+                            => ReferenceEquals(p.GpSystem, _mockGpSystem.Object) &&
+                               p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
+                               p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal) &&
+                               p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
                 .ReturnsAsync(returnResult);
+
             // Act
             await _systemUnderTest.Post(_userSessionRequest);
 

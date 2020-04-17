@@ -25,8 +25,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             ICipherService cipherService,
             ILogger<MongoSessionCacheService> logger,
             IMongoClient mongoClient,
-            IMongoSessionCacheServiceConfig config
-            )
+            IMongoSessionCacheServiceConfig config)
         {
             _mongoClient = mongoClient;
 
@@ -34,7 +33,8 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             _serializerSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
-                SerializationBinder = new RenameUserSessionSerializationBinder()
+                SerializationBinder = new RenameUserSessionSerializationBinder(),
+                ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
             };
 
             _logger = logger;

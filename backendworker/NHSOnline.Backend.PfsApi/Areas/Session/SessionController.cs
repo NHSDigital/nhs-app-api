@@ -12,8 +12,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
-using NHSOnline.Backend.GpSystems.SessionManager.Model;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
@@ -44,6 +44,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly IUserInfoService _userInfoService;
         private readonly IGpSessionManager _gpSessionManager;
         private readonly IAntiforgery _antiforgery;
+        private readonly ISessionCacheService _sessionCacheService;
 
         public SessionController(
             ICitizenIdSessionService citizenIdSessionService,
@@ -57,7 +58,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             IServiceJourneyRulesService serviceJourneyRules,
             IErrorReferenceGenerator errorReferenceGenerator,
             IUserInfoService userInfoService,
-            IGpSessionManager gpSessionManager, IAntiforgery antiforgery)
+            IGpSessionManager gpSessionManager,
+            IAntiforgery antiforgery,
+            ISessionCacheService sessionCacheService)
         {
             _citizenIdSessionService = citizenIdSessionService;
             _gpSystemFactory = gpSystemFactory;
@@ -72,6 +75,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _userInfoService = userInfoService;
             _gpSessionManager = gpSessionManager;
             _antiforgery = antiforgery;
+            _sessionCacheService = sessionCacheService;
         }
 
         [HttpGet]
@@ -222,27 +226,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             CitizenIdSessionResult citizenIdSessionResult,
             ServiceJourneyRulesVisitorOutput serviceJourneyRulesResultVisited)
         {
-            var gpSessionMgrCitizenIdSessionResult = new GpSessionManagerCitizenIdSessionResult
-            {
-                OdsCode = citizenIdSessionResult.OdsCode,
-                NhsNumber = citizenIdSessionResult.NhsNumber,
-                Im1ConnectionToken = citizenIdSessionResult.Im1ConnectionToken,
-                Session = new GpSessionManagerCitizenIdUserSession
-                {
-                    AccessToken = citizenIdSessionResult.Session.AccessToken,
-                    FamilyName = citizenIdSessionResult.Session.FamilyName,
-                    DateOfBirth = citizenIdSessionResult.Session.DateOfBirth,
-                    IdTokenJti =  citizenIdSessionResult.Session.IdTokenJti,
-                    ProofLevel = citizenIdSessionResult.Session.ProofLevel
-                }
-            };
-            var csrfToken = _antiforgery.GetTokens(HttpContext).RequestToken;
+            var gpSessionCreateResult = await _gpSessionManager.CreateSession(new GpSessionCreateArgs(gpSystem, citizenIdSessionResult));
 
-            var result = await _gpSessionManager.CreateSession(gpSystem, gpSessionMgrCitizenIdSessionResult, csrfToken);
-
-            if (!(result is CreateSessionResult.Success successResult))
+            if (!(gpSessionCreateResult is GpSessionCreateResult.Success result))
             {
-                var failureStatusCode = result.StatusCode;
+                var failureStatusCode = gpSessionCreateResult.StatusCode;
 
                 var errorMessage =
                     $"Creating the session failed with status code: '{failureStatusCode}'";
@@ -262,7 +250,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 return objectResult;
             }
 
-            return await CreateSession(successResult.UserSession, serviceJourneyRulesResultVisited, citizenIdSessionResult);
+            var userSession = new P9UserSession(
+                _antiforgery.GetTokens(HttpContext).RequestToken,
+                citizenIdSessionResult.Session,
+                result.UserSession, citizenIdSessionResult.Im1ConnectionToken);
+
+            var sessionId = await _sessionCacheService.CreateUserSession(userSession);
+            _logger.LogDebug($"Created Session Id: '{sessionId}'");
+
+            return await CreateSession(userSession, serviceJourneyRulesResultVisited, citizenIdSessionResult);
         }
 
         private async Task<IActionResult> CreateSession(P9UserSession userSession,
@@ -434,7 +430,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private void PopulateUserSessionResponse(UserSessionResponse response, P9UserSession userSession)
         {
             response.Name = userSession.GpUserSession.Name;
-            response.SessionTimeout = _settings.DefaultSessionExpiryMinutes * 60;
+            response.SessionTimeout = (int) TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes).TotalSeconds;
             response.Token = userSession.CsrfToken;
             response.OdsCode = userSession.GpUserSession.OdsCode;
             response.DateOfBirth = userSession.CitizenIdUserSession.DateOfBirth;

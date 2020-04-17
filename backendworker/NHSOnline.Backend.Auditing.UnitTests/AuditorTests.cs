@@ -222,17 +222,11 @@ namespace NHSOnline.Backend.Auditing.UnitTests
 
         private static UserSession CreateUserSession(string nhsNumber, string accessToken)
         {
-            return new P9UserSession
-            {
-                GpUserSession = new EmisUserSession
-                {
-                    NhsNumber = nhsNumber
-                },
-                CitizenIdUserSession = new CitizenIdUserSession
-                {
-                    AccessToken = accessToken
-                }
-            };
+            return new P9UserSession(
+                string.Empty,
+                new CitizenIdUserSession { AccessToken = accessToken },
+                new EmisUserSession { NhsNumber = nhsNumber },
+                string.Empty);
         }
 
         private static LinkedAccountAuditInfo CreateLinkedAccountAuditInfo(bool isProxying, string proxyNhsNumber)
