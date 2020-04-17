@@ -5,6 +5,7 @@ import models.Patient
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.openqa.selenium.WebElement
 import pages.sharedElements.PublicHealthNotificationElement
 import utils.SerenityHelpers
@@ -109,36 +110,34 @@ open class HomePage : HybridPageObject() {
     val expectedLinksIncludingLinkedProfiles = expectedLinks.union(listOf(linkedProfilesLink))
 
     fun assertHasWelcomeMessageFor(patient: Patient) {
-        val name = "${patient.title} ${patient.firstName} ${patient.surname}".trim()
+        val name = patient.formattedFullName()
         val expected = "Welcome, $name"
         val text = greeting.text
-        Assert.assertEquals("Welcome message did not match", expected, text)
+        assertEquals("Welcome message did not match", expected, text)
     }
 
-    fun assertHasWelcomeMessageForProxy(proxy: LinkedProfileFacade) {
-        val name = "${proxy.profile.title} ${proxy.profile.firstName} ${proxy.profile.surname}".trim()
-        val expected = "Welcome, $name"
-        val text = greeting.text
-        Assert.assertEquals("Welcome message did not match", expected, text)
+    fun assertPatientDetailIsVisible(detail:String, value: String) {
+        val element = getPatientDetailElement(detail)
+        element.assertIsVisible()
+        assertEquals("Expected $detail to be $value", value, element.text)
     }
 
-    fun assertHasPatientDetails(patient: Patient, expectedDetails: ArrayList<String>) {
-
-        assertHasWelcomeMessageFor(patient)
-        val actualDetails = arrayListOf<String>()
-        greeting.actOnTheElement {
-            actualDetails.addAll(
-                    it.findElements<WebElement>(
-                            By.xpath("./following-sibling::div[1]/p"))
-                            .map { element -> element.text })
-        }
-        assertCollection("PatientDetails", expectedDetails, actualDetails)
+    fun assertPatientDetailIsNotPresent(detail:String) {
+        getPatientDetailElement(detail).assertElementNotPresent()
     }
 
+    private fun getPatientDetailElement(detail:String) : HybridPageElement {
+        return HybridPageElement(
+                webDesktopLocator = "${greeting.webDesktopLocator}/following-sibling::div[1]/" +
+                        "p[strong[text()='$detail:']]/span",
+                androidLocator = null,
+                page = this
+        )
+    }
 
     fun assertHasProxyPatientDetails(proxyPatient: LinkedProfileFacade, expectedDetails: ArrayList<String>) {
 
-        assertHasWelcomeMessageForProxy(proxyPatient)
+        assertHasWelcomeMessageFor(proxyPatient.profile)
         val actualDetails = arrayListOf<String>()
         greeting.actOnTheElement {
             actualDetails.addAll(

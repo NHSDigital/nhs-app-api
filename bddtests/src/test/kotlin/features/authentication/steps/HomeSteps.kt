@@ -9,6 +9,15 @@ import pages.HomePage
 import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
 
+enum class PatientDetail(val label: String) {
+    NHS_NUMBER("NHS number"),
+    DOB("Date of birth");
+
+    companion object {
+        fun fromLabel(label: String): PatientDetail = values().first { it.label == label }
+    }
+}
+
 open class HomeSteps {
 
     lateinit var homePage: HomePage
@@ -23,29 +32,20 @@ open class HomeSteps {
         homePage.assertHasWelcomeMessageFor(patient)
     }
 
-    fun getExpectedDetails(patient:Patient): ArrayList<String> {
-        return arrayListOf(
-                "Date of birth: ${patient.formattedDateOfBirth()}",
-                "NHS number: ${patient.formattedNHSNumber()}")
-    }
-
-    fun getExpectedProxyDetails(proxyPatient:LinkedProfileFacade): ArrayList<String> {
-        return arrayListOf(
-                "Age: ${proxyPatient.profile.formattedAge()}",
-                "GP surgery: ${proxyPatient.gpPracticeName}"
-        )
+    @Step
+    fun assertPatientDetailIsVisible(patient: Patient, detail: PatientDetail) {
+        homePage.assertPatientDetailIsVisible(detail.label, getDetailValue(patient, detail))
     }
 
     @Step
-    fun assertPatientDetailsShownFor(patient:Patient ) {
-        homePage.assertHasPatientDetails(patient, getExpectedDetails(patient))
+    fun assertPatientDetailIsNotPresent(detail: PatientDetail) {
+        homePage.assertPatientDetailIsNotPresent(detail.label)
     }
 
     @Step
-    fun assertProxyPatientDetailsShownFor(proxyProfile:LinkedProfileFacade ) {
+    fun assertProxyPatientDetailsShownFor(proxyProfile: LinkedProfileFacade) {
         homePage.assertHasProxyPatientDetails(proxyProfile, getExpectedProxyDetails(proxyProfile))
     }
-
 
     @Step
     fun assertHeaderVisible() {
@@ -59,6 +59,20 @@ open class HomeSteps {
         if (homePage.onMobile()) {
             Assert.assertEquals("Dismiss button text", "Dismiss", homePage.dismissButton.textValue.trim())
             homePage.dismissButton.click()
+        }
+    }
+
+    private fun getExpectedProxyDetails(proxyPatient: LinkedProfileFacade): ArrayList<String> {
+        return arrayListOf(
+                "Age: ${proxyPatient.profile.formattedAge()}",
+                "GP surgery: ${proxyPatient.gpPracticeName}"
+        )
+    }
+
+    private fun getDetailValue(patient: Patient, detail: PatientDetail): String {
+        return when (detail) {
+            PatientDetail.DOB -> patient.formattedDateOfBirth()
+            PatientDetail.NHS_NUMBER -> patient.formattedNHSNumber()
         }
     }
 }

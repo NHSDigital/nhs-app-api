@@ -26,8 +26,7 @@ class P5UpliftStepDefinitions : HybridPageObject() {
     mockingClient.clearWiremock()
     mockingClient.favicon()
 
-    val patient = Patient.getDefault(supplier)
-    patient.identityProofingLevel = IdentityProofingLevel.P5
+    val patient = Patient.getDefault(supplier).copy(identityProofingLevel = IdentityProofingLevel.P5)
 
     SerenityHelpers.setPatient(patient)
     SerenityHelpers.setGpSupplier(supplier)

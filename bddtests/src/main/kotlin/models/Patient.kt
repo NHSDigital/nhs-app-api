@@ -55,11 +55,11 @@ data class Patient(
         val im1ConnectionToken: Im1ConnectionToken? = null,
         val organDonationRegistrationId: String = "AD02745157",
         var linkedAccounts: Set<Patient> = setOf(),
-        var identityProofingLevel: IdentityProofingLevel = IdentityProofingLevel.P9
+        val identityProofingLevel: IdentityProofingLevel = IdentityProofingLevel.P9
 ) {
     var accessToken: String = AccessTokenBuilder().getSignedToken(this).serialize()
 
-    val tppUserSession : TppUserSession? by lazy {
+    val tppUserSession: TppUserSession? by lazy {
         TppUserSession("ZT8wLjK6beFO" +
                 "dXoiNIHbD+TbPrl0Y3Km" +
                 "VXy4GYM253hQlxwp2qMKW" +
@@ -112,7 +112,12 @@ data class Patient(
     }
 
     fun formattedFullName(): String {
-        val fullName = "$title $firstName $surname"
+        val fullName = if (identityProofingLevel == IdentityProofingLevel.P9) {
+            "$title $firstName $surname"
+        } else {
+            "$firstName $surname"
+        }
+
         return fullName.trim()
     }
 
@@ -178,7 +183,7 @@ data class Patient(
 
         fun setTppOdsCode(patient: Patient, provider: String) {
             return when (provider.toUpperCase()) {
-                "ECONSULT" ->  {
+                "ECONSULT" -> {
                     updateOdsCodes(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT)
                     updateUnitId(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT)
                 }
@@ -210,19 +215,19 @@ data class Patient(
 
         fun updateOdsCodes(patient: Patient, odsCode: String) {
             patient.odsCode = odsCode
-            patient.linkedAccounts.forEach {e -> e.odsCode = odsCode }
+            patient.linkedAccounts.forEach { e -> e.odsCode = odsCode }
         }
 
         private fun updateUnitId(patient: Patient, odsCode: String) {
             patient.tppUserSession!!.unitId = odsCode
-            patient.linkedAccounts.forEach {e -> e.tppUserSession!!.unitId = odsCode }
+            patient.linkedAccounts.forEach { e -> e.tppUserSession!!.unitId = odsCode }
         }
 
         fun getAgePart(dob: String, unit: ChronoUnit): Int {
             val dateOfBirth = LocalDate.parse(dob, DateTimeFormatter.ISO_DATE)
             return when (unit) {
                 ChronoUnit.YEARS -> unit.between(dateOfBirth, LocalDate.now()).toInt()
-                ChronoUnit.MONTHS -> (unit.between(dateOfBirth, LocalDate.now()) % monthsInYear) .toInt()
+                ChronoUnit.MONTHS -> (unit.between(dateOfBirth, LocalDate.now()) % monthsInYear).toInt()
                 else -> throw IllegalArgumentException("Only years or months are supported")
             }
         }

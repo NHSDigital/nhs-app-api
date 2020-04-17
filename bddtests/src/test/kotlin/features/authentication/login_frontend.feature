@@ -8,7 +8,8 @@ Feature: Login frontend
     Given I am a <GP System> patient
     And I am logged in
     Then I see a welcome message
-    And I see the patient details of name, date of birth and NHS number
+    And I see my Date of birth on the home page
+    And I see my NHS number on the home page
     And I see the home page header
     And I see the navigation menu
     And I see and can follow links within the home page body
@@ -21,6 +22,13 @@ Feature: Login frontend
       | GP System |
       | EMIS      |
 
+  Scenario: A EMIS user sees no NHS number when logging in with proof level 5 access
+    Given I am patient using the EMIS with proof level 5 access
+    And I am logged in
+    Then I see a welcome message
+    And I see my Date of birth on the home page
+    And I don't see my NHS number on the home page
+
   Scenario: A user does not see the OLC beta banner when on not on an online consultations page
     Given I am a EMIS patient
     And I am logged in
@@ -32,7 +40,8 @@ Feature: Login frontend
     Given I am a MICROTEST patient
     And I am logged in
     Then I see a welcome message
-    And I see the patient details of name, date of birth and NHS number
+    And I see my Date of birth on the home page
+    And I see my NHS number on the home page
     And I see the home page header
 
   Scenario Outline: A <GP System> user can still log in when the Im1 Connection Token doesn't contain a key

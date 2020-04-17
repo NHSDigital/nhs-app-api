@@ -7,6 +7,7 @@ import cucumber.api.java.en.When
 import features.im1Appointments.steps.YourAppointmentsUISteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
+import features.authentication.steps.PatientDetail
 import features.myrecord.stepDefinitions.MedicalRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
@@ -107,14 +108,15 @@ class HomePageStepDefinitions {
         browser.shouldHaveUrl(SURVEY_URL)
     }
 
-    @Then("I see the patient details of name, date of birth and NHS number$")
-    fun iSeePatientDetails() {
+    @Then("^I don't see my (.*) on the home page$")
+    fun iDontSeeMyDetailOnTheHomePage(detail: String) {
+        homeSteps.assertPatientDetailIsNotPresent(PatientDetail.fromLabel(detail))
+    }
+
+    @Then("^I see my (.*) on the home page$")
+    fun iSeeMyDetailOnTheHomePage(detail: String) {
         val patient = SerenityHelpers.getPatient()
-        val regex = """${'^'}${'['}0-9${']'}${'{'}10${'}'}${'$'}""".toRegex()
-        Assert.assertTrue("Test Setup Incorrect: Patient must have unformatted nhs number " +
-                "to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
-                regex.containsMatchIn(patient.nhsNumbers.first()))
-        homeSteps.assertPatientDetailsShownFor(patient)
+        homeSteps.assertPatientDetailIsVisible(patient, PatientDetail.fromLabel(detail))
     }
 
     @Then("I see the proxy patient details of age and gp surgery$")

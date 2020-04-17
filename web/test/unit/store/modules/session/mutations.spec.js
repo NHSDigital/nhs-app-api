@@ -1,15 +1,14 @@
 import mutations from '@/store/modules/session/mutations';
-
 import {
   CLEAR,
   END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
+  HIDE_SESSION_EXPIRING,
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
-  START_VALIDATION_CHECKING,
   SHOW_SESSION_EXPIRING,
-  HIDE_SESSION_EXPIRING,
-} from '../../../../../src/store/modules/session/mutation-types';
+  START_VALIDATION_CHECKING,
+} from '@/store/modules/session/mutation-types';
 
 describe('mutations', () => {
   describe('CLEAR', () => {

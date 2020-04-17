@@ -3,25 +3,20 @@
        data-sid="welcome-info">
     <p v-if="name" class="nhsuk-u-margin-bottom-0">
       <strong>Name:</strong>
-      <span data-sid="user-name" data-hj-suppress>
-        {{ name }}
-      </span>
+      <span data-sid="user-name" data-hj-suppress>{{ name }}</span>
       <br>
     </p>
     <p v-if="dateOfBirth" class="nhsuk-u-margin-bottom-0">
       <strong>Date of birth:</strong>
-      <span data-sid="user-date-of-birth">
-        {{ dateOfBirth | longDate }}
-      </span>
+      <span data-sid="user-date-of-birth">{{ dateOfBirth | longDate }}</span>
       <br>
     </p>
-    <p v-if="nhsNumber" class="nhsuk-u-margin-bottom-0">
-      <strong >NHS number:</strong>
+    <p v-if="nhsNumber" id="welcomeSectionNhsNumber" class="nhsuk-u-margin-bottom-0">
+      <strong>NHS number:</strong>
       <generic-voice-over-text-split :class="$style.fieldValue"
                                      :text="nhsNumber"
                                      :data-sid="'user-nhs-number'"/>
     </p>
-
   </div>
 </template>
 
@@ -32,11 +27,11 @@ export default {
   name: 'WelcomeSection',
   components: { GenericVoiceOverTextSplit },
   props: {
-    name: {
+    dateOfBirth: {
       type: String,
       default: '',
     },
-    dateOfBirth: {
+    name: {
       type: String,
       default: '',
     },
@@ -49,8 +44,7 @@ export default {
 </script>
 
 <style module lang="scss">
-
- .welcomeInfo {
-  padding-bottom: 1em;
- }
+  .welcomeInfo {
+    padding-bottom: 1em;
+  }
 </style>
