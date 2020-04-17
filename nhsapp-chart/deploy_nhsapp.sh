@@ -8,6 +8,9 @@ source script_helpers/aks_access
 source script_helpers/unlock_repo
 
 function trigger_sjr() {
+	SJR_IMAGE_TAG="$1"
+	SJRCONFIG_IMAGE_TAG="$2"
+	  
     info "Triggering SJR deployment job for $TARGET_ENVIRONMENT"
 
 	case $TARGET_ENVIRONMENT in
@@ -46,7 +49,7 @@ function trigger_sjr() {
 	if [[ $TARGET_ZONE == "dev" || $TARGET_ENVIRONMENT == "stubbed"* ]]; then
 		# Prepare JSON data containing required parameters - including passing through the app version
 		DATA=$(cat <<-EOF
-		{"buildType":{"id":"${BUILD_CONFIG_ID}","projectId":"NHSOnline"},"triggeringOptions":{"queueAtTop":true},"properties":{"property":[{"name":"env.TARGET_ENVIRONMENT","value":"${TARGET_ENVIRONMENT}"},{"name":"env.SJR_IMAGE_TAG","value":"${APP_IMAGE_TAG}"},{"name":"env.SJRCONFIG_IMAGE_TAG","value":"${APP_IMAGE_TAG}"},{"name":"env.REGION","value":"${REGION}"},{"name":"env.AKSCLUSTERNAME","value":"${AKSCLUSTERNAME}"}]}}
+		{"buildType":{"id":"${BUILD_CONFIG_ID}","projectId":"NHSOnline"},"triggeringOptions":{"queueAtTop":true},"properties":{"property":[{"name":"env.TARGET_ENVIRONMENT","value":"${TARGET_ENVIRONMENT}"},{"name":"env.SJR_IMAGE_TAG","value":"${SJR_IMAGE_TAG}"},{"name":"env.SJRCONFIG_IMAGE_TAG","value":"${SJRCONFIG_IMAGE_TAG}"},{"name":"env.REGION","value":"${REGION}"},{"name":"env.AKSCLUSTERNAME","value":"${AKSCLUSTERNAME}"}]}}
 		EOF
 		)
 	else
@@ -70,21 +73,22 @@ function trigger_sjr() {
 AKS_SHORTNAME=$(echo $AKSCLUSTERNAME | sed 's/nhsapp-//')
 
 # Image Tag Overrides
+COMMIT_ID="$(git rev-parse HEAD)"
 COSMOS_DB_NAME=${COSMOS_DB_NAME:-$TARGET_ENVIRONMENT}
-API_IMAGE_TAG=${API_IMAGE_TAG:-latest}
-CID_IMAGE_TAG=${CID_IMAGE_TAG:-latest}
-WEB_IMAGE_TAG=${WEB_IMAGE_TAG:-latest}
-CDSSWIREMOCK_IMAGE_TAG=${CDSSWIREMOCK_IMAGE_TAG:-latest}
-SJR_IMAGE_TAG=${SJR_IMAGE_TAG:-latest}
-SJRCONFIG_IMAGE_TAG=${SJRCONFIG_IMAGE_TAG:-latest}
-LOGGER_IMAGE_TAG=${LOGGER_IMAGE_TAG:-latest}
+API_IMAGE_TAG=${API_IMAGE_TAG:-$COMMIT_ID}
+CID_IMAGE_TAG=${CID_IMAGE_TAG:-$COMMIT_ID}
+WEB_IMAGE_TAG=${WEB_IMAGE_TAG:-$COMMIT_ID}
+CDSSWIREMOCK_IMAGE_TAG=${CDSSWIREMOCK_IMAGE_TAG:-develop}
+SJR_IMAGE_TAG=${SJR_IMAGE_TAG:-$COMMIT_ID}
+SJRCONFIG_IMAGE_TAG=${SJRCONFIG_IMAGE_TAG:-$COMMIT_ID}
+LOGGER_IMAGE_TAG=${LOGGER_IMAGE_TAG:-$COMMIT_ID}
 STUBBED=${STUBBED:-false}
 WIREMOCK_IMAGE_TAG=${WIREMOCK_IMAGE_TAG:-2.17.0-alpine}
 PERF_WIREMOCK_IMAGE_TAG=${PERF_WIREMOCK_IMAGE_TAG:-latest}
 STUB_LOADER_IMAGE_TAG=${STUB_LOADER_IMAGE_TAG:-latest}
-USERS_IMAGE_TAG=${USERS_IMAGE_TAG:-latest}
-MESSAGES_IMAGE_TAG=${MESSAGES_IMAGE_TAG:-latest}
-INFO_IMAGE_TAG=${INFO_IMAGE_TAG:-latest}
+USERS_IMAGE_TAG=${USERS_IMAGE_TAG:-$COMMIT_ID}
+MESSAGES_IMAGE_TAG=${MESSAGES_IMAGE_TAG:-$COMMIT_ID}
+INFO_IMAGE_TAG=${INFO_IMAGE_TAG:-$COMMIT_ID}
 RELEASE_CLEANUP=${RELEASE_CLEANUP:-false}
 
 PUBLIC_IP_RESOURCE_GROUP="${AKSCLUSTERNAME}_PIP"
@@ -384,5 +388,5 @@ if [[ "$TARGET_ZONE" == production || "$TARGET_ENVIRONMENT" == "staging" ]]; the
 	[[ "$TARGET_ENVIRONMENT" == "staging" ]] && info "Target environment is Staging, not triggering SJR deployment."
 else
 	info "Deploying SJR into namespace $TARGET_ENVIRONMENT"
-  trigger_sjr
+  trigger_sjr "$SJR_IMAGE_TAG" "$SJRCONFIG_IMAGE_TAG"
 fi
