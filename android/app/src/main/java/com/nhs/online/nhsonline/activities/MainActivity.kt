@@ -536,8 +536,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     private fun showErrorScreen() {
         hideBlankScreen()
-        dismissSplashScreen()
-        dismissProgressDialog()
         activityViewSwitcher.switchTo(ActivityView.ERROR)
         nhsWeb.requiresFullPageLoad = true
     }

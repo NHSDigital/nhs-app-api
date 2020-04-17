@@ -11,8 +11,6 @@ import com.nhs.online.nhsonline.services.knownservices.enums.ViewModeAdapter
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import java.io.IOException
-import java.lang.Exception
-import java.net.SocketTimeoutException
 import java.util.concurrent.Callable
 
 private val TAG = ConfigurationService::class.java.simpleName
@@ -23,11 +21,10 @@ class ConfigurationService(
         private val errorMessageHandler: ErrorMessageHandler,
         private val httpClient: HttpClient
 ) : Callable<Configuration?> {
-    private val timeoutMilliseconds: Int = 5000
 
     private fun getConfigurationResponse(): Configuration? {
         try {
-            val jsonString = httpClient.readText(configurationUrl, timeoutMilliseconds)
+            val jsonString = httpClient.readText(configurationUrl)
             return Moshi.Builder()
                     .add(MenuTabAdapter())
                     .add(ViewModeAdapter())
@@ -38,12 +35,8 @@ class ConfigurationService(
             Log.e(TAG, "Configuration error: failed to parse response", e)
         } catch (e: IllegalArgumentException) {
             Log.e(TAG, "Configuration error: failed to parse response", e)
-        } catch (e: SocketTimeoutException) {
-            Log.e(TAG, "Configuration error: connection timeout", e)
         } catch (e: IOException) {
             Log.e(TAG, "Configuration error: connection error", e)
-        } catch (e: Exception) {
-            Log.e(TAG, "Unexpected exception", e)
         }
         handleError()
         return null
