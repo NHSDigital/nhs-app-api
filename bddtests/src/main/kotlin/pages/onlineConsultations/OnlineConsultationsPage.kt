@@ -4,6 +4,7 @@ import mocking.onlineConsultations.constants.OnlineConsultationConstants
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.avoidChromeWebDriverServiceCrash
 import pages.sharedElements.DropdownElement
 import pages.text
 import pages.typeTextIntoTextArea
@@ -26,6 +27,8 @@ class OnlineConsultationsPage: HybridPageObject() {
     }
 
     fun iSeeAdviceOnWhatToDoNext(){
+        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
+        avoidChromeWebDriverServiceCrash()
         val adviceText = HybridPageElement(
                 webDesktopLocator = "//span[@role='text']",
                 page = this)
