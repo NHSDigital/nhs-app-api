@@ -196,7 +196,7 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
         val fileName = if (supplier == Supplier.EMIS) {
             "${selectedDocument.name}.pdf"
         } else {
-            "${selectedDocument.term} added on ${selectedDocument.date}.jpeg"
+            "${selectedDocument.term} added on ${selectedDocument.date}.jpg"
         }
         Assert.assertTrue(myRecordDocumentInformationPage.hasFileDownloaded(fileName))
     }

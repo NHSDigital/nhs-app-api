@@ -104,6 +104,65 @@ Feature: Patient to practice messaging
     When I select a patient practice message in my inbox
     Then I see my patient practice message along with the replies from the GP
 
+  Scenario: A TPP patient can view an attachment on a message
+    Given I am a TPP patient
+    And I am a user who can access patient practice messaging
+    And I am logged in
+    And I have patient practice messages in my inbox, some of which are unread with an attachment
+    When I follow the Messages link from the home page
+    Then the patient to practice inbox page is displayed
+    And I see a list of patient practice messages without the subject and without the unread count
+    When I select a patient practice message in my inbox
+    And I see my patient practice message along with the replies from the GP
+    And I see the view and download links on the message
+    And I click on the view link
+    Then I can view the message attachment
+
+  Scenario: A TPP user can view a message attachment without access to documents
+    Given I am a TPP patient
+    And I am a user who can access patient practice messaging
+    And the Patient has no access to Documents
+    And I am logged in
+    And I have patient practice messages in my inbox, some of which are unread with an attachment
+    When I follow the Messages link from the home page
+    Then the patient to practice inbox page is displayed
+    And I see a list of patient practice messages without the subject and with the unread count
+    When I select a patient practice message in my inbox
+    And I see my patient practice message along with the replies from the GP
+    And I see the view and download links on the message
+    And I click on the view link
+    Then I can view the message attachment
+    
+  Scenario: A TPP patient can download an attachment on a message
+    Given I am a TPP patient
+    And I am a user who can access patient practice messaging
+    And I am logged in
+    And I have patient practice messages in my inbox, some of which are unread with an attachment
+    When I follow the Messages link from the home page
+    Then the patient to practice inbox page is displayed
+    And I see a list of patient practice messages without the subject and with the unread count
+    When I select a patient practice message in my inbox
+    And I see my patient practice message along with the replies from the GP
+    And I see the view and download links on the message
+    And I click on the download link
+    And I see the download information page
+    When I click on the download button
+    Then the attachment has been downloaded
+
+  Scenario: A TPP patient cannot view an invalid attachment on a message
+    Given I am a TPP patient
+    And I am a user who can access patient practice messaging
+    And I am logged in
+    And I have patient practice messages in my inbox, some of which are unread with an invalid attachment
+    When I follow the Messages link from the home page
+    Then the patient to practice inbox page is displayed
+    And I see a list of patient practice messages without the subject and with the unread count
+    When I select a patient practice message in my inbox
+    And I see my patient practice message along with the replies from the GP
+    And I see the view and download links on the message
+    And I click on the view link
+    Then I see the invalid attachment message
+
   Scenario: A TPP patient can view a patient message the gp sent
     Given I am a TPP patient
     And I am a user who can access patient practice messaging
@@ -214,3 +273,4 @@ Feature: Patient to practice messaging
     When I click the Send a message button and I choose that I do not need urgent advice via patient practice messaging
     Then I see the patient practice messaging recipients page
     And I see a list of patient practice messaging recipients
+

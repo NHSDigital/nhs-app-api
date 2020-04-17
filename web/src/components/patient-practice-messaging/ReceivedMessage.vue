@@ -6,6 +6,7 @@
       <message-panel :index="replyIndex"
                      :id-prefix="replyPrefixIdentifier"
                      :message="message"
+                     :attachment-id="attachmentId"
                      :message-content="getContent"/>
     </li>
   </div>
@@ -41,6 +42,9 @@ export default {
   computed: {
     getContent() {
       return this.messageContent || '';
+    },
+    attachmentId() {
+      return this.message.attachmentId;
     },
   },
 };

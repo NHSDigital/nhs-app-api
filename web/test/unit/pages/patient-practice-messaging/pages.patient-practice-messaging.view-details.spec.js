@@ -253,12 +253,4 @@ describe('patient messaging messages', () => {
       expect(wrapper.find('#unreadReplySentMessage0').exists()).toBe(true);
     });
   });
-
-  describe('beforeDestroy', () => {
-    it('will set selectedRecipient to undefined in the store', () => {
-      mountPage();
-      wrapper.destroy();
-      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/clearSelectedRecipient');
-    });
-  });
 });

@@ -8,14 +8,9 @@ import {
   LOADED_EXAMINATIONS,
   LOADED_PROCEDURES,
   LOADED_DETAILED_TEST_RESULT,
-  LOADED_DOCUMENT,
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
   SET_RELOAD,
-  SET_SELECTED_DOCUMENT_INFO,
-  SET_VALID_FILE,
-  SET_IS_VIEWABLE,
-  SET_IS_DOWNLOADABLE,
 } from '@/store/modules/myRecord/mutation-types';
 import AnalyticsValues from '@/lib/analytics-values';
 
@@ -77,39 +72,8 @@ export default {
       = await this.app.$http.getV1PatientTestResult({ testResultId }) || {};
     commit(LOADED_DETAILED_TEST_RESULT, { data });
   },
-  async loadDocument({ commit, state }, documentIdentifier) {
-    const response = await this.app.$http.postV1DocumentsByDocumentidentifier({
-      documentIdentifier,
-      getPatientDocumentRequest: {
-        type: state.document.type,
-        name: state.document.name,
-      },
-    }) || {};
-    const { content, isViewable, isDownloadable } = response || {};
-
-    commit(LOADED_DOCUMENT, content);
-
-    commit(SET_VALID_FILE, isViewable || isDownloadable);
-
-    if (state.document.needMoreInformation) {
-      commit(SET_IS_VIEWABLE, isViewable);
-      commit(SET_IS_DOWNLOADABLE, isDownloadable);
-    }
-  },
-  downloadDocument({ state }, { documentIdentifier, fileName }) {
-    return this.app.$http.postV1DocumentsByDocumentidentifierDownload({
-      documentIdentifier,
-      getPatientDocumentRequest: {
-        type: state.document.type,
-        name: fileName,
-      },
-    });
-  },
   reload({ commit }, value) {
     commit(SET_RELOAD, value);
-  },
-  setSelectedDocumentInfo({ commit }, selectedDocumentInfo) {
-    commit(SET_SELECTED_DOCUMENT_INFO, selectedDocumentInfo);
   },
   togglePatientDetail({ commit }) {
     commit(TOGGLE_PATIENT_DETAIL);

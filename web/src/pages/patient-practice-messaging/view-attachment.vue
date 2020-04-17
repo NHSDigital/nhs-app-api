@@ -2,11 +2,14 @@
 <template>
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div id="document" class="documentContainer nhsuk-u-margin-top-5" v-html="document"/>
-      <glossary/>
+      <p v-if="!isViewable">{{ $t('my_record.documents.documentUnavailableSubtext') }}</p>
+      <div v-else>
+        <div id="document" class="attachmentContainer nhsuk-u-margin-top-5" v-html="attachment"/>
+        <glossary/>
+      </div>
       <desktop-generic-back-link v-if="!$store.state.device.isNativeApp"
-                                 :path="documentPath"
-                                 @clickAndPrevent="backToDocumentsClicked"/>
+                                 :path="messagePath"
+                                 @clickAndPrevent="backToMessageClicked"/>
     </div>
   </div>
 </template>
@@ -15,8 +18,7 @@
 import NativeAppCallbacks from '@/services/native-app';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
-import { GP_MEDICAL_RECORD, LOGIN, LOGOUT, DOCUMENT } from '@/lib/routes';
-import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
+import { PATIENT_PRACTICE_MESSAGING, LOGIN, LOGOUT, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE } from '@/lib/routes';
 import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
 export default {
@@ -31,26 +33,30 @@ export default {
     };
   },
   computed: {
-    document() {
+    attachment() {
       return this.$store.state.documents.currentDocument.data;
+    },
+    messagePath() {
+      return PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path;
     },
     isAndroid() {
       return this.$store.state.device.source === 'android';
     },
-    documentPath() {
-      return DOCUMENT.path.replace(':id', this.$route.params.id);
-    },
   },
-  async asyncData({ store, route, redirect }) {
-    if (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) {
-      redirect(GP_MEDICAL_RECORD.path);
-      return;
+  async asyncData({ store, redirect }) {
+    if (!store.state.patientPracticeMessaging.selectedMessageDetails ||
+      !store.state.documents.currentDocument) {
+      return redirect(PATIENT_PRACTICE_MESSAGING.path);
+    }
+    const { isViewable } = store.state.documents.currentDocument;
+    if (!isViewable) {
+      store.dispatch('header/updateHeaderText',
+        store.app.i18n.t('pageHeaders.patientPracticeMessagingAttachmentUnavailable'));
+      store.dispatch('pageTitle/updatePageTitle',
+        store.app.i18n.t('pageTitles.patientPracticeMessagingAttachmentUnavailable'));
     }
 
-    // TPP documents would already have been loaded into the store at this point.
-    if (!store.state.documents.currentDocument.data) {
-      await store.dispatch('documents/loadDocument', route.params.id);
-    }
+    return { isViewable };
   },
   created() {
     if (this.document && process.client) {
@@ -73,17 +79,14 @@ export default {
     this.setZoom(false);
   },
   methods: {
-    backToDocumentsClicked() {
+    backToMessageClicked() {
       this.$router.go(-1);
     },
     setZoom(zoomable) {
       const viewport = document.getElementsByName('viewport')[0];
       let content = 'width=device-width, initial-scale=1, minimum-scale=1.0';
-      if (!zoomable) {
-        content += ', maximum-scale=1.0, user-scalable=0';
-      } else {
-        content += ', maximum-scale=10.0, user-scalable=yes';
-      }
+      content += (!zoomable) ? ', maximum-scale=1.0, user-scalable=0' :
+        ', maximum-scale=10.0, user-scalable=yes';
       viewport.setAttribute('content', content);
 
       // Android needs a native callback to set zoom on the webview natively.
@@ -103,7 +106,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .documentContainer {
+  .attachmentContainer {
     margin-bottom: 40px;
     word-break: break-word;
 

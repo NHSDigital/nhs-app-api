@@ -16,6 +16,7 @@ import {
   SET_DELETED,
   CLEAR_SELECTED_MESSAGE_DETAILS,
   CLEAR_SELECTED_RECIPIENT,
+  SET_ATTACHMENT_ID,
 } from './mutation-types';
 
 export default {
@@ -94,7 +95,7 @@ export default {
     try {
       const response = await this.app.$http.postV1PatientMessages({ createMessageRequest });
       if (response.messageSent) {
-        commit(MESSAGE_SENT);
+        commit(MESSAGE_SENT, true);
       }
     } catch {
       // Nothing to do. A server error / messages error is displayed
@@ -122,6 +123,9 @@ export default {
   setUrgencyChoice({ commit }, choice) {
     commit(SET_URGENCY_CHOICE, choice);
   },
+  setAttachmentId({ commit }, id) {
+    commit(SET_ATTACHMENT_ID, id);
+  },
   clear({ commit }) {
     commit(CLEAR);
   },
@@ -130,5 +134,8 @@ export default {
   },
   clearSelectedRecipient({ commit }) {
     commit(CLEAR_SELECTED_RECIPIENT);
+  },
+  setMessageSent({ commit }, messageSent) {
+    commit(MESSAGE_SENT, messageSent);
   },
 };

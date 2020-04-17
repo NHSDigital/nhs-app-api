@@ -56,6 +56,7 @@ export default {
     recipientClicked(recipient) {
       this.$store.dispatch('patientPracticeMessaging/setSelectedRecipient',
         { id: recipient.recipientIdentifier, name: recipient.name });
+      this.$store.dispatch('patientPracticeMessaging/setMessageSent', false);
       redirectTo(this, PATIENT_PRACTICE_MESSAGING_CREATE.path);
     },
   },

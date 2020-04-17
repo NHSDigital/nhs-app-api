@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -26,7 +27,35 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         public void Map_WhenCalledHappyPath_ReturnsMappedGetPatientMessageResponse()
         {
             // Arrange
-            var messageGetResponse = _fixture.Create<MessageGetResponse>();
+            var recipients = new UserMessageRecipient
+            {
+                Name = "Recipient 1",
+            };
+
+            var reply = new MessageReply
+            {
+                Sender = "Test sender",
+                ReplyContent = "This is a reply",
+                OutboundMessage = false,
+                IsUnread = true,
+                SentDateTime = _fixture.Create<string>(),
+                AttachmentId = null,
+            };
+
+            var messageGetResponse = new MessageGetResponse
+            {
+                Message = new MessageDetails
+                {
+                    MessageId = 1,
+                    SentDateTime = _fixture.Create<string>(),
+                    Subject = _fixture.Create<string>(),
+                    Content = _fixture.Create<string>(),
+                    Recipients = new List<UserMessageRecipient>{ recipients },
+                    MessageReplies = new List<MessageReply>{ reply },
+                }
+            };
+
+            messageGetResponse.Message.MessageReplies = new List<MessageReply>{ reply };
 
             // Act
             var result = _systemUnderTest.Map(messageGetResponse);

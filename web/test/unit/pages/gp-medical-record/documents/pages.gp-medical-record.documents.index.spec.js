@@ -135,7 +135,7 @@ describe('gp-medical-record documents', () => {
       await page.vm.documentClicked(defaultDocuments[0]);
 
       // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('myRecord/setSelectedDocumentInfo', {
+      expect($store.dispatch).toHaveBeenCalledWith('documents/setSelectedDocumentInfo', {
         type: 'jpg',
         date: { value: '2019-08-08T12:03:44+00:00' },
         documentType: 'Letter',

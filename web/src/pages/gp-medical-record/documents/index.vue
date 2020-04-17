@@ -144,8 +144,7 @@ export default {
       return dateString;
     },
     documentClicked(document) {
-      this.$store.dispatch('myRecord/setSelectedDocumentInfo', mapDocumentInfo(document));
-
+      this.$store.dispatch('documents/setSelectedDocumentInfo', mapDocumentInfo(document));
       this.$router.push({
         name: DOCUMENT.name,
         params: { id: document.documentIdentifier },

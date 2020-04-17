@@ -19,8 +19,7 @@ object TppMessagingData {
     private val RECIPIENT_1 = Recipient("Dr. Dolittle", "1234-12345678-1234-1234-1")
     private val RECIPIENT_2 = Recipient("Dr. NHS Online", "1234-12345678-1234-1234-2")
 
-
-    fun getDefaultTppMessages(hasUnread: Boolean = false): MessagesViewReply {
+    fun getDefaultTppMessages(hasUnread: Boolean = false, hasAttachment: Boolean = false): MessagesViewReply {
         PatientPracticeMessagingSerenityHelpers
                 .INITIAL_FROM_GP
                 .setIfNotAlreadySet( false )
@@ -28,7 +27,7 @@ object TppMessagingData {
         val todaysDate = ZonedDateTime.now(ZoneId.of("UTC")).withMinute(TWELVE)
 
         val expectedDates = mutableListOf(
-                DateAndFormat(todaysDate,
+                DateAndFormat(todaysDate.minusDays(TWO),
                         MessageDateFormat.INBOX_TIME_12_HR)
         )
 
@@ -52,7 +51,7 @@ object TppMessagingData {
                 conversationId,
                 expectedDates[0].date,
                 "y",
-                "y")
+                incoming="y")
         )
 
         PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID.set(
@@ -68,7 +67,8 @@ object TppMessagingData {
                         conversationId,
                         dateObject.date,
                         read,
-                        "n")
+                        incoming ="n",
+                        binaryDataId = if (hasAttachment) "123456433546" else null)
                 )
                 if (read === "y") {
                     PatientPracticeMessagingSerenityHelpers
@@ -91,7 +91,7 @@ object TppMessagingData {
                 .EXPECTED_MESSAGE_SENT_DATE
                 .setIfNotAlreadySet(
                         DateHelpers().getExpectedFormattedMessageDate(
-                                expectedDates[0].date, MessageDateFormat.DETAILS_TODAY))
+                                expectedDates[0].date, MessageDateFormat.DETAILS_BEFORE_YESTERDAY))
 
             return MessagesViewReply(Message = messages)
         }
@@ -100,35 +100,39 @@ object TppMessagingData {
         val messages = mutableListOf<Message>()
         val todaysDate = ZonedDateTime.now(ZoneId.of("UTC")).withMinute(TWELVE)
 
-        val expectedDates = mutableListOf(
-                DateAndFormat(todaysDate,
-                        MessageDateFormat.INBOX_TIME_12_HR)
+        val expectedReplyDates = mutableListOf(
+                DateAndFormat(todaysDate.minusDays(TWO),
+                        MessageDateFormat.INBOX_LAST_WEEK)
         )
+
+        val expectedInboxDates = mutableListOf(
+                DateAndFormat(todaysDate.minusDays(TWO),
+                              MessageDateFormat.INBOX_LAST_WEEK))
 
         val conversationId = UUID.randomUUID().toString()
 
         messages.add(MessageHelpers().createMessage(
                 conversationId,
                 conversationId,
-                expectedDates[0].date,
+                expectedInboxDates[0].date,
                 "y",
-                "n")
+                incoming = "n")
         )
 
         PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID.set(
                 conversationId)
 
         PatientPracticeMessagingSerenityHelpers.EXPECTED_INBOX_MESSAGE_DATES.set(
-                expectedDates)
+                expectedInboxDates)
 
         PatientPracticeMessagingSerenityHelpers.EXPECTED_REPLY_MESSAGE_DATES.set(
-                expectedDates)
+                expectedReplyDates)
 
         PatientPracticeMessagingSerenityHelpers
                 .EXPECTED_MESSAGE_SENT_DATE
                 .setIfNotAlreadySet(
                         DateHelpers().getExpectedFormattedMessageDate(
-                                expectedDates[0].date, MessageDateFormat.DETAILS_TODAY))
+                                expectedInboxDates[0].date, MessageDateFormat.DETAILS_BEFORE_YESTERDAY))
 
         PatientPracticeMessagingSerenityHelpers
                 .INITIAL_FROM_GP
@@ -161,7 +165,7 @@ object TppMessagingData {
     }
 
     fun getDefaultTppRecipients(): MessageRecipientsReply {
-        val items = mutableListOf<Item>();
+        val items = mutableListOf<Item>()
         items.add(Item(
                 id = RECIPIENT_1.recipientIdentifier!!,
                 value = RECIPIENT_1.name!!

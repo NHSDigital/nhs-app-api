@@ -23,6 +23,8 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
         header.waitForElement()
     }
 
+    val attachment = getElementById("//div[@id='document']")
+
     fun assertReadRepliesCorrect(expectedReplies: List<MessageReply>){
         for (expectedReply in expectedReplies) {
             if (!expectedReply.isUnread!!) {
@@ -42,47 +44,28 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
     }
 
     fun assertMessageCorrect(content: String, id: String){
-        val sentMessage =  HybridPageElement(
-                webDesktopLocator = "//*[@id='${id}']//p",
-                androidLocator = null,
-                page = this)
-
+        val sentMessage =  getElementById("//*[@id='${id}']//p")
         return assertEquals(sentMessage.text, content)
     }
 
     fun assertSentSubjectCorrect(subject: String){
-        val sentMessage =  HybridPageElement(
-                webDesktopLocator = "//*[@id='initialMessageSubject0']",
-                androidLocator = null,
-                page = this)
-
+        val sentMessage =  getElementById("//*[@id='initialMessageSubject0']")
         return assertEquals(sentMessage.text, subject)
     }
 
     fun assertUnreadDividerIsOnSceen(){
-        val pageDivider =  HybridPageElement(
-                webDesktopLocator = "//*[@id='receivedMessagesDivider']",
-                androidLocator = null,
-                page = this)
-
+        val pageDivider = getElementById("//*[@id='receivedMessagesDivider']")
         return assert(pageDivider.isVisible)
     }
 
     fun assertDateTimeCorrect(expectedSentMessageDate: String, id: String){
-        val sentDateTimeMessage =  HybridPageElement(
-                webDesktopLocator = "//*[@id='${id}']",
-                androidLocator = null,
-                page = this)
-
+        val sentDateTimeMessage =  getElementById("//*[@id='${id}']")
         return assertEquals(expectedSentMessageDate, sentDateTimeMessage.text)
     }
 
     private fun getReceivedDateTimeMessage(index: Int, read: Boolean): HybridPageElement {
         val idPrefix = if (read) "readMessageReplyDateTime" else "unreadMessageReplyDateTime"
-        return HybridPageElement(
-            webDesktopLocator = "//*[@id='$idPrefix$index']",
-            androidLocator = null,
-            page = this)
+        return getElementById("//*[@id='$idPrefix$index']")
     }
 
     fun assertReceivedDateTimesCorrect(expectedDates: List<String>, read: Boolean){
@@ -90,6 +73,15 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
             assertEquals(date, getReceivedDateTimeMessage(index, read).text)
         })
     }
+
+    fun assertLink(linkType: String){
+        return assert(getElementById("//*[@id='$linkType']").isVisible)
+    }
+
+    fun clickLink(linkType: String){
+        getElementById("//*[@id='$linkType']").click()
+    }
+
 
     private fun setReadMessageReplyId(replyId: Int) {
         baseReplyPath = "//*[@id='readMessageReplyPanel$replyId']"
@@ -100,18 +92,18 @@ class PatientPracticeMessagingDetailsPage: HybridPageObject() {
     }
 
     private fun assertReplyTextCorrect(): HybridPageElement{
+        return getElementById("$baseReplyPath//p")
+    }
+
+    private fun getElementById(locator: String): HybridPageElement{
         return HybridPageElement(
-                webDesktopLocator = "$baseReplyPath//p",
+                webDesktopLocator = locator,
                 androidLocator = null,
                 page = this)
     }
 
     fun clickDeleteConversation() {
-        HybridPageElement(
-                webDesktopLocator = "//a[@id='deleteMessage']",
-                androidLocator = null,
-                page= this
-        ).click()
+        getElementById("//a[@id='deleteMessage']").click()
     }
 
 }

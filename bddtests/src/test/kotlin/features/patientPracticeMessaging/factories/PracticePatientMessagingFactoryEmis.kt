@@ -68,7 +68,7 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         }
     }
 
-    override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean){
+    override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean, hasAttachment: Boolean){
         setUpMessageDataAndStubs(patient, hasUnread)
     }
 
@@ -145,5 +145,9 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
 
     companion object {
         const val REPLY_COUNT = 3
+    }
+
+    override fun enabledWithInvalidAttachmentOnMessage(patient: Patient) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

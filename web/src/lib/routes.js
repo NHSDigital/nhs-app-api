@@ -1281,6 +1281,42 @@ export const routes = {
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [im1MessagingDisabledRedirect],
   },
+  PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT: {
+    name: 'patient-practice-messaging-view-attachment',
+    path: '/patient-practice-messaging/view-attachment',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
+    crumb: {
+      i18nKey: 'patientPracticeMessagingViewAttachment',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE];
+      },
+      get moreCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [im1MessagingDisabledRedirect],
+  },
+  PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT: {
+    name: 'patient-practice-messaging-download-attachment',
+    path: '/patient-practice-messaging/download-attachment',
+    proofLevel: 9,
+    upliftPath: '/uplift/more',
+    crumb: {
+      i18nKey: 'patientPracticeMessagingDownloadAttachment',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE];
+      },
+      get moreCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+    sjrRedirectRules: [im1MessagingDisabledRedirect],
+  },
   PATIENT_PRACTICE_MESSAGING_DELETE: {
     name: 'patient-practice-messaging-delete',
     path: '/patient-practice-messaging/delete',
@@ -1885,8 +1921,10 @@ export const {
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   PATIENT_PRACTICE_MESSAGING_CREATE,
+  PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT,
   PATIENT_PRACTICE_MESSAGING_DELETE,
   PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
+  PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_REPEAT_COURSES,

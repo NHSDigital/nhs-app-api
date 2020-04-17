@@ -2,9 +2,15 @@ import get from 'lodash/fp/get';
 import capitalize from 'lodash/fp/capitalize';
 import isEqual from 'lodash/fp/isEqual';
 import moment from 'moment-timezone';
+import Mime from 'mime/Mime';
+import { getType as lookupMimeType } from 'mime';
 
 const protocol = 'http://';
 const secureProtocol = 'https://';
+
+const customMimeTypes = new Mime({
+  'image/bmp': ['dib'],
+});
 
 export const datePart = (value, dateFormat) => {
   switch (dateFormat) {
@@ -21,6 +27,8 @@ export const datePart = (value, dateFormat) => {
       return value ? moment.utc(value).format('D MMMM YYYY') : '';
   }
 };
+
+export const mimeType = type => lookupMimeType(type) || customMimeTypes.getType(type) || 'application/octet-stream';
 
 export const isEmptyArray = array => (Array.isArray(array) && array.length === 0);
 

@@ -132,6 +132,7 @@ export default {
             sentDateTime: message.sentDateTime,
             sender: message.sender,
             messageReplies: message.replies,
+            attachmentId: message.attachmentId,
             outboundMessage: message.outboundMessage },
           });
       }

@@ -11,6 +11,26 @@
                   'nhsuk-u-padding-2']">
       <linkify-content class="panel-content nhsuk-u-font-size-19"
                        :content="getContent" tag="p"/>
+      <div v-if="fileAttached">
+        <strong>
+          <span :class="['nhsuk-u-font-size-16','nhsuk-u-margin-bottom-0',
+                         'nhsuk-u-padding-top-0', $style.attachmentText]">
+            {{ $t('patient_practice_messaging.view_details.attachment') }}
+          </span>
+        </strong>
+        <div>
+          <desktopGenericBackLink id="viewLink"
+                                  :class="$style['attachmentLink']"
+                                  :path="viewAttachmentPath"
+                                  button-text="patient_practice_messaging.view_details.view"
+                                  @clickAndPrevent="viewClicked"/>
+          <desktopGenericBackLink id="downloadLink"
+                                  :class="$style['attachmentLink']"
+                                  :path="downloadAttachmentPath"
+                                  button-text="patient_practice_messaging.view_details.download"
+                                  @clickAndPrevent="downloadClicked"/>
+        </div>
+      </div>
     </div>
     <p :id="idPrefix+`MessageReplyDateTime`+index"
        class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-0">
@@ -20,11 +40,19 @@
 </template>
 <script>
 import LinkifyContent from '@/components/widgets/LinkifyContent';
-import { formatIndividualMessageTime } from '@/lib/utils';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import { formatIndividualMessageTime, redirectTo, isBlankString } from '@/lib/utils';
+import {
+  PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT,
+  PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT,
+} from '@/lib/routes';
 
 export default {
   name: 'ReceivedMessagePanel',
-  components: { LinkifyContent },
+  components: {
+    LinkifyContent,
+    DesktopGenericBackLink,
+  },
   props: {
     index: {
       type: Number,
@@ -38,6 +66,10 @@ export default {
       type: Object,
       required: true,
     },
+    attachmentId: {
+      type: String,
+      default: undefined,
+    },
     messageContent: {
       type: String,
       default: '',
@@ -49,6 +81,32 @@ export default {
     },
     getContent() {
       return this.messageContent || '';
+    },
+    fileAttached() {
+      return !isBlankString(this.attachmentId);
+    },
+    downloadAttachmentPath() {
+      return PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT.path;
+    },
+    viewAttachmentPath() {
+      return PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT.path;
+    },
+  },
+  methods: {
+    async loadDocument() {
+      await this.$store.dispatch('documents/loadDocument', this.attachmentId);
+    },
+    async viewClicked() {
+      await this.loadDocument();
+      redirectTo(this, PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT.path);
+    },
+    async downloadClicked() {
+      await this.loadDocument();
+      this.$store.dispatch('patientPracticeMessaging/setAttachmentId', this.attachmentId);
+      this.$router.push({
+        name: PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT.name,
+        params: { date: this.message.sentDateTime },
+      });
     },
   },
 };
@@ -70,5 +128,13 @@ export default {
 
   .nhsuk-panel-sender {
     text-align: left;
+  }
+
+  .attachmentText {
+    color: #425563;
+  }
+
+  .attachmentLink {
+    display: inline;
   }
 </style>

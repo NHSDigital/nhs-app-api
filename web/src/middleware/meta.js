@@ -86,12 +86,14 @@ import {
   ORGAN_DONATION_YOUR_CHOICE,
   PATIENT_PRACTICE_MESSAGING,
   PATIENT_PRACTICE_MESSAGING_CREATE,
+  PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT,
   PATIENT_PRACTICE_MESSAGING_DELETE,
   PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
   PATIENT_PRACTICE_MESSAGING_URGENCY,
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+  PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTIONS,
@@ -255,6 +257,21 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.dataSharingOverview';
       route.meta.pageTitleKey = 'pageTitles.dataSharingOverview';
       break;
+    case PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT.name:
+      route.meta.headerKey = 'pageHeaders.patientPracticeMessagingDownloadAttachment';
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingDownloadAttachment';
+      break;
+    case PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT.name: {
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingViewAttachment';
+      break;
+    }
+    case PATIENT_PRACTICE_MESSAGING_DELETE.name: {
+      const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
+      route.meta.headerKey = 'pageTitles.patientPracticeMessagingDeleteMessage';
+      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingDeleteMessage';
+      route.meta.formatArguments = { name };
+      break;
+    }
     case DATA_SHARING_WHERE_USED.name:
       route.meta.headerKey = 'pageHeaders.dataSharingWhereUsed';
       route.meta.pageTitleKey = 'pageTitles.dataSharingWhereUsed';
@@ -509,13 +526,6 @@ export default function ({ route, store, app }) {
       const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
       route.meta.headerKey = 'pageTitles.patientPracticeMessagingCreateMessage';
       route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingCreateMessage';
-      route.meta.formatArguments = { name };
-      break;
-    }
-    case PATIENT_PRACTICE_MESSAGING_DELETE.name: {
-      const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
-      route.meta.headerKey = 'pageTitles.patientPracticeMessagingDeleteMessage';
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingDeleteMessage';
       route.meta.formatArguments = { name };
       break;
     }

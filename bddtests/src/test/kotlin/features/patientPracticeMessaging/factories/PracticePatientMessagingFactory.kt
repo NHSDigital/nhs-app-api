@@ -10,7 +10,8 @@ abstract class PracticePatientMessagingFactory {
 
     abstract fun enabled(patient: Patient)
     abstract fun disabled(patient: Patient)
-    abstract fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean)
+    abstract fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean,
+                                                     hasAttachment: Boolean = false)
     abstract fun enabledWithPatientPracticeMessagingFromGP(patient: Patient, hasUnread: Boolean)
     abstract fun forbiddenErrorWithPatientPracticeMessaging(patient: Patient)
     abstract fun unknownErrorWithPatientPracticeMessaging(patient: Patient)
@@ -20,6 +21,7 @@ abstract class PracticePatientMessagingFactory {
     abstract fun patientSuccessfullySendsAMessage(patient: Patient, createMessageRequest: CreateMessageRequest)
     abstract fun errorSendingAMessage(patient: Patient, createMessageRequest: CreateMessageRequest)
     abstract fun noRecipients(patient: Patient)
+    abstract fun enabledWithInvalidAttachmentOnMessage(patient: Patient)
 
     val mockingClient = MockingClient.instance
 

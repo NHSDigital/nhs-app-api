@@ -1368,6 +1368,9 @@ export default {
       unreadMessages: 'Unread messages',
       unreadMessage: 'Unread message',
       deleteMenuItemText: 'Delete conversation',
+      view: 'View',
+      download: 'Download',
+      attachment: 'Attachment',
       backButtonText: {
         text: 'Back',
       },
@@ -1393,6 +1396,10 @@ export default {
       or: 'or',
       call111Link: 'call 111',
       sendButtonText: 'Send message',
+    },
+    downloadAttachment: {
+      buttonText: 'Download file',
+      downloadWarning: 'When you download this file, you become responsible for keeping it confidential.',
     },
     delete: {
       firstParagraph: 'Deleting your conversation will remove it from your list of messages.',
@@ -1568,6 +1575,8 @@ export default {
     patientPracticeMessagingUrgency: 'Do you need urgent advice?',
     patientPracticeMessagingUrgencyContactYourGp: 'Call your GP or use NHS 111',
     patientPracticeMessagingRecipients: 'Select who to message',
+    patientPracticeMessagingDownloadAttachment: 'Download file',
+    patientPracticeMessagingAttachmentUnavailable: 'This file is not available in the NHS App',
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
   },
   pageTitles: {
@@ -1587,6 +1596,9 @@ export default {
     appointmentBookingSuccess: 'Your GP appointment has been booked',
     patientPracticeMessaging: 'Messages',
     patientPracticeMessagingViewMessage: 'Conversation with {name}',
+    patientPracticeMessagingViewAttachment: 'View file - Messages',
+    patientPracticeMessagingDownloadAttachment: 'Download file - Messages',
+    patientPracticeMessagingAttachmentUnavailable: 'This file is not available',
     patientPracticeMessagingCreateMessage: 'Send your message to {name}',
     patientPracticeMessagingDeleteMessage: 'Delete your conversation with {name}',
     patientPracticeMessagingDeleteMessageSuccess: 'Your conversation with {name} is deleted',
@@ -1688,7 +1700,7 @@ export default {
     switchProfile: 'Home',
     organ_donation: 'Organ Donation',
     patientPracticeMessaging: 'Messages',
-    patientPracticeMessagingViewDetails: 'Message Details',
+    patientPracticeMessagingViewDetails: 'Your conversation',
     prescriptions: 'Your repeat prescriptions',
     prescriptionRepeatCourses: 'Your repeat prescriptions',
     prescriptionConfirmCourses: 'Your repeat prescriptions',

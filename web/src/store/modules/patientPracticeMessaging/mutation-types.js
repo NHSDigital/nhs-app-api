@@ -14,6 +14,7 @@ export const MESSAGE_SENT = 'MESSAGE_SENT';
 export const SET_DELETED = 'SET_DELETED';
 export const CLEAR_SELECTED_MESSAGE_DETAILS = 'CLEAR_SELECTED_MESSAGE_DETAILS';
 export const CLEAR_SELECTED_RECIPIENT = 'CLEAR_SELECTED_RECIPIENT';
+export const SET_ATTACHMENT_ID = 'SET_ATTACHMENT_ID';
 
 export const initialState = () => ({
   loadedMessages: false,
@@ -28,4 +29,5 @@ export const initialState = () => ({
   statusState: undefined,
   messageSent: false,
   messageDeleted: false,
+  attachmentId: undefined,
 });

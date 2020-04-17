@@ -16,6 +16,7 @@ import {
   SET_DELETED,
   CLEAR_SELECTED_MESSAGE_DETAILS,
   CLEAR_SELECTED_RECIPIENT,
+  SET_ATTACHMENT_ID,
   initialState,
 } from './mutation-types';
 
@@ -53,8 +54,8 @@ export default {
   [LOADED_RECIPIENTS](state, loaded) {
     state.loadedRecipients = !!loaded;
   },
-  [MESSAGE_SENT](state) {
-    state.messageSent = true;
+  [MESSAGE_SENT](state, messageSent) {
+    state.messageSent = messageSent;
   },
   [LOADED_MESSAGE](state, loaded) {
     state.loadedDetails = !!loaded;
@@ -82,5 +83,8 @@ export default {
   },
   [SET_DELETED](state, status) {
     state.messageDeleted = status;
+  },
+  [SET_ATTACHMENT_ID](state, attachmentId) {
+    state.attachmentId = attachmentId;
   },
 };

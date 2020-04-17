@@ -22,6 +22,8 @@ import pages.patientPracticeMessaging.PatientPracticeMessagingRecipientsPage
 import pages.patientPracticeMessaging.PatientPracticeMessagingUrgencyPage
 import utils.SerenityHelpers
 import net.thucydides.core.annotations.Steps
+import pages.assertIsVisible
+import pages.patientPracticeMessaging.PatientPracticeDownloadAttachmentPage
 import pages.patientPracticeMessaging.PatientPracticeMessagingDeletePage
 import pages.patientPracticeMessaging.PatientPracticeMessagingDeleteSuccessPage
 import pages.patientPracticeMessaging.PracticePatientMessagingCreateMessagePage
@@ -40,6 +42,7 @@ open class PatientPracticeMessageStepDefinitions {
     private lateinit var patientPracticeMessagingRecipientsPage: PatientPracticeMessagingRecipientsPage
     private lateinit var patientPracticeMessagingDeletePage: PatientPracticeMessagingDeletePage
     private lateinit var patientPracticeMessagingDeleteSuccessPage: PatientPracticeMessagingDeleteSuccessPage
+    private lateinit var patientPracticeMessagingDownloadAttachmentPage: PatientPracticeDownloadAttachmentPage
     private lateinit var errorPage: ErrorPage
 
     private val expectedCareCardContent = arrayListOf(
@@ -81,10 +84,63 @@ open class PatientPracticeMessageStepDefinitions {
                 .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(), true)
     }
 
+    @Given("^I have patient practice messages in my inbox, some of which are unread with an attachment$")
+    fun thePatientHasPatientPracticeMessagesInTheirInboxWithUnreadMessagesWithAnAttachment() {
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(),
+                                                     hasUnread = true,
+                                                     hasAttachment = true)
+    }
+
+    @Given("^I have patient practice messages in my inbox, some of which are unread with an invalid attachment$")
+    fun thePatientHasPatientPracticeMessagesInTheirInboxWithUnreadMessagesWithInvalidAttachment() {
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(),
+                                                     hasUnread = true,
+                                                     hasAttachment = true)
+
+        PracticePatientMessagingFactory
+                .getForSupplier(SerenityHelpers.getGpSupplier())
+                .enabledWithInvalidAttachmentOnMessage(SerenityHelpers.getPatient())
+    }
+
     @When("^I enter url address for the send message page$")
     fun whenIEnterTheUrlAddressForSendMessagePage() {
         val fullUrl = Config.instance.url + "/patient-practice-messaging/send-message"
         browser.browseTo(fullUrl)
+    }
+
+    @When("^I click on the view link$")
+    fun iClickOnTheViewLink() {
+        patientPracticeMessagingDetailsPage.clickLink("viewLink")
+    }
+
+    @When("^I click on the download link$")
+    fun iClickOnTheDownloadLink() {
+        patientPracticeMessagingDetailsPage.clickLink("downloadLink")
+    }
+
+    @When("^I click on the download button$")
+    fun iClickOnTheDownloadButton() {
+        patientPracticeMessagingDownloadAttachmentPage.downloadButtonClicked()
+    }
+
+    @Then("^I see the download information page$")
+    fun iSeeTheDownloadInformationPage() {
+        patientPracticeMessagingDownloadAttachmentPage.assertDownloadButtonDisplayed()
+        patientPracticeMessagingDownloadAttachmentPage.assertInformationParagraph()
+    }
+
+    @Then("^the attachment has been downloaded$")
+    fun attachmentHasBeenDownloaded() {
+        patientPracticeMessagingDownloadAttachmentPage.hasAttachmentDownloaded("Attachment_14 April 2020")
+    }
+
+    @Then("^I see the invalid attachment message$")
+    fun iSeeInvalidAttachmentMessage() {
+        patientPracticeMessagingDownloadAttachmentPage.assertInvalidMessage()
     }
 
 
@@ -342,6 +398,11 @@ open class PatientPracticeMessageStepDefinitions {
         patientPracticeMessagingDetailsPage.assertMessageCorrect(messageDetails.messageBody, "initialMessageSentPanel0")
     }
 
+    @Then("^I can view the message attachment")
+    fun iSeeTheMessageAttachment() {
+        patientPracticeMessagingDetailsPage.attachment.assertIsVisible()
+    }
+
     @Then("^I see my patient practice message along with the replies from the GP")
     fun iSeeMyPatientPracticeMessageAlongWithTheReplies() {
         val message = PatientPracticeMessagingSerenityHelpers
@@ -394,6 +455,12 @@ open class PatientPracticeMessageStepDefinitions {
             patientPracticeMessagingDetailsPage.assertReceivedDateTimesCorrect(
                     expectedReadMessageReplyDates!!, true)
         }
+    }
+
+    @Then("^I see the view and download links on the message$")
+    fun iSeeTheViewAndDownloadLinksOnTheMessage() {
+        patientPracticeMessagingDetailsPage.assertLink("downloadLink")
+        patientPracticeMessagingDetailsPage.assertLink("viewLink")
     }
 
     @Then("^I see a list of patient practice messaging recipients$")

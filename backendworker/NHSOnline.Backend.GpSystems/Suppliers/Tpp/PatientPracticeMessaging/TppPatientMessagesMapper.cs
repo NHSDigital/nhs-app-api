@@ -110,6 +110,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
                     SentDateTime = GetFormattedDateString(reply.Sent),
                     IsUnread = reply.Read != YesNo.y,
                     ReplyContent = reply.MessageText,
+                    AttachmentId = reply.BinaryDataId,
                     OutboundMessage = reply.Incoming == YesNo.y
                 }).ToList();
         }

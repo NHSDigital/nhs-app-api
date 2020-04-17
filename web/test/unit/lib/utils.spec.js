@@ -10,6 +10,7 @@ import {
   formatInboxMessageTime,
   formatIndividualMessageTime,
   getThirdPartyLocaleText,
+  mimeType,
 } from '@/lib/utils';
 import { create$T } from '../helpers';
 
@@ -191,6 +192,21 @@ describe('util library', () => {
 
       // Assert
       expect(output).toEqual(bytes);
+    });
+  });
+
+  describe('mime type', () => {
+    each([
+      ['jpg', 'image/jpeg'],
+      ['dib', 'image/bmp'],
+      ['pdf', 'application/pdf'],
+      ['spooby', 'application/octet-stream'],
+    ]).it('will parse the %s file mime type correctly', async (type, expectedMimeType) => {
+      // Act
+      const mimeTypeProperty = mimeType(type);
+
+      // Assert
+      expect(mimeTypeProperty).toEqual(expectedMimeType);
     });
   });
 

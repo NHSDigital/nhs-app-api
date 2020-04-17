@@ -15,7 +15,13 @@ private const val DATE_FOR_DOCUMENT_DAY = 18
 class DocumentsFactoryTpp: DocumentsFactory() {
 
     override fun disabled(patient: Patient) {
-        TODO("not implemented")
+        val errorMsg = "You don't have access to this online service"
+        val disabledTppError = Error(errorCode = ErrorResponseCodeTpp.NO_ACCESS,
+                                     userFriendlyMessage = errorMsg)
+        mockingClient.forTpp {
+            myRecord.patientRecordRequest(patient.tppUserSession!!)
+                    .respondWithError(disabledTppError)
+        }
     }
 
     override fun enabledWithNoDocuments(patient: Patient) {

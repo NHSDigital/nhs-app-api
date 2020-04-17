@@ -3,6 +3,7 @@ package features.patientPracticeMessaging.factories
 import constants.ErrorResponseCodeTpp
 import constants.TppConstants
 import mocking.data.TppListServiceAccessesData
+import mocking.data.myrecord.TppDocumentData
 import mocking.data.patientPracticeMessaging.DateHelpers
 import mocking.data.patientPracticeMessaging.MessageDateFormat
 import mocking.data.patientPracticeMessaging.TppMessagingData
@@ -43,9 +44,9 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
     }
 
     override fun enabledWithPatientPracticeMessaging(patient: Patient,
-                                                     hasUnread: Boolean) {
+                                                     hasUnread: Boolean, hasAttachment: Boolean) {
 
-        val messagesFromData = TppMessagingData.getDefaultTppMessages(hasUnread)
+        val messagesFromData = TppMessagingData.getDefaultTppMessages(hasUnread, hasAttachment)
 
         mockingClient.forTpp {
             patientPracticeMessaging.viewMessagesRequest(patient.tppUserSession!!)
@@ -55,6 +56,14 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
         mockingClient.forTpp {
             patientPracticeMessaging.requestRecipientsRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppMessagingData.getDefaultTppRecipients())
+        }
+
+        if (hasAttachment) {
+            mockingClient.forTpp {
+                patientPracticeMessaging
+                        .attachmentRequest(patient.tppUserSession!!)
+                        .respondWithSuccess(TppDocumentData.getDocumentData("jpg"))
+            }
         }
 
         val expectedMessages = getExpectedMessages(messagesFromData.Message.toList(),
@@ -79,6 +88,15 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
 
         PatientPracticeMessagingSerenityHelpers.AVAILABLE_MESSAGE
                 .setIfNotAlreadySet(messageDetails)
+    }
+
+    override fun enabledWithInvalidAttachmentOnMessage(patient: Patient) {
+        mockingClient.forTpp {
+            patientPracticeMessaging
+                    .attachmentRequest(patient.tppUserSession!!)
+                    .respondWithError(Error(ErrorResponseCodeTpp.FILE_SIZE_TOO_LARGE,
+                                            "File exceeds 2MB"))
+        }
     }
 
     override fun enabledWithPatientPracticeMessagingFromGP(patient: Patient, hasUnread: Boolean) {

@@ -5,6 +5,7 @@ import availableAppointments from './modules/availableAppointments';
 import biometricBanner from './modules/biometricBanner';
 import cookieBanner from './modules/cookieBanner';
 import device from './modules/device';
+import documents from './modules/documents';
 import errors from './modules/errors';
 import flashMessage from './modules/flashMessage';
 import header from './modules/header';
@@ -39,6 +40,7 @@ export const modules = {
   biometricBanner,
   cookieBanner,
   device,
+  documents,
   errors,
   flashMessage,
   header,

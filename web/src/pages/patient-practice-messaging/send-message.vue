@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate && selectedMessageRecipient">
+  <div v-if="showTemplate && !hasSent">
     <div class="nhsuk-grid-row nhsuk-grid-column-full">
       <div v-if="showError" class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
@@ -131,6 +131,9 @@ export default {
     selectedMessageRecipient() {
       return this.$store.state.patientPracticeMessaging.selectedMessageRecipient;
     },
+    hasSent() {
+      return this.$store.state.patientPracticeMessaging.messageSent;
+    },
   },
   fetch({ store, redirect }) {
     if (store.state.patientPracticeMessaging.selectedMessageRecipient === undefined) {
@@ -138,7 +141,7 @@ export default {
     }
   },
   created() {
-    if (this.selectedMessageRecipient === undefined) {
+    if (this.selectedMessageRecipient === undefined || this.hasSent) {
       redirectTo(this, PATIENT_PRACTICE_MESSAGING.path);
     }
   },

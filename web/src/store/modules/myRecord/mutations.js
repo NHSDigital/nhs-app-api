@@ -11,14 +11,9 @@ import {
   LOADED_EXAMINATIONS,
   LOADED_PROCEDURES,
   LOADED_DETAILED_TEST_RESULT,
-  LOADED_DOCUMENT,
   TOGGLE_PATIENT_DETAIL,
   SET_MEDICAL_RECORD_TYPE,
   SET_RELOAD,
-  SET_SELECTED_DOCUMENT_INFO,
-  SET_VALID_FILE,
-  SET_IS_VIEWABLE,
-  SET_IS_DOWNLOADABLE,
   initialState,
 } from './mutation-types';
 
@@ -142,28 +137,13 @@ export default {
   [LOADED_DETAILED_TEST_RESULT](state, { data }) {
     state.detailedTestResult = { data, hasLoaded: true };
   },
-  [LOADED_DOCUMENT](state, documentData) {
-    state.document.data = documentData;
-  },
   [SET_RELOAD](state, value) {
     state.reload = value;
-  },
-  [SET_SELECTED_DOCUMENT_INFO](state, document) {
-    state.document = document;
   },
   [TOGGLE_PATIENT_DETAIL](state) {
     state.isPatientDetailsCollapsed = !state.isPatientDetailsCollapsed;
   },
   [SET_MEDICAL_RECORD_TYPE](state, { medicalRecordType }) {
     state.medicalRecordType = medicalRecordType;
-  },
-  [SET_VALID_FILE](state, isValidFile) {
-    state.document.isValidFile = isValidFile;
-  },
-  [SET_IS_VIEWABLE](state, isViewable) {
-    state.document.isViewable = isViewable;
-  },
-  [SET_IS_DOWNLOADABLE](state, isDownloadable) {
-    state.document.isDownloadable = isDownloadable;
   },
 };

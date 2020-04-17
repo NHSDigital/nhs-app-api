@@ -55,55 +55,13 @@
 </template>
 <script>
 import get from 'lodash/fp/get';
-import { getType as lookupMimeType } from 'mime';
-import Mime from 'mime/Mime';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { DOCUMENT_DETAIL, DOCUMENTS, GP_MEDICAL_RECORD } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
-import { isBlankString, isEmptyArray, isTruthy, redirectTo, datePart } from '@/lib/utils';
-import NativeCallbacks from '@/services/native-app';
+import { isBlankString, isEmptyArray, isTruthy, redirectTo, datePart, mimeType } from '@/lib/utils';
 import Glossary from '@/components/Glossary';
-
-const customMimeTypes = new Mime({
-  'image/bmp': ['dib'],
-});
-
-/*
-  Edge or IE do not support the File constructor
-  IE does not support createObjectURL so need to use msSaveOrOpenBlob
-  Trident is used to match IE11 and MSIE is used for IE < 11
-  All other relevant browsers support File but do not seem to
-  download if the Blob constructor is used.
-*/
-function buildFileBlob(userAgent, response, fullFileName, mimeType) {
-  if (userAgent.match(/Edge/i)) {
-    return new Blob([response], fullFileName, { type: mimeType });
-  }
-
-  if (userAgent.match(/Trident/i)) {
-    const blob = new Blob([response], fullFileName, { type: mimeType });
-
-    window.navigator.msSaveOrOpenBlob(blob, fullFileName);
-
-    return blob;
-  }
-
-  if (userAgent.match(/CriOS/i)) {
-    const reader = new FileReader();
-    const blob = new File([response], fullFileName, { type: mimeType });
-
-    reader.onload = () => {
-      window.location.href = reader.result;
-    };
-    reader.readAsDataURL(blob);
-
-    return blob;
-  }
-
-  return new File([response], fullFileName, { type: mimeType });
-}
 
 function updateHeaderText(store, name, isValidFile, datePartString, documentType, dateString) {
   if (isValidFile) {
@@ -135,7 +93,7 @@ function updateHeaderText(store, name, isValidFile, datePartString, documentType
 }
 
 function loadComments(store) {
-  const documentComments = get('state.myRecord.document.comments', store);
+  const documentComments = get('state.documents.currentDocument.comments', store);
 
   if (!Array.isArray(documentComments)) {
     return [];
@@ -161,14 +119,11 @@ export default {
       return this.comments;
     },
     documentsPath: () => DOCUMENTS.path,
-    mimeType() {
-      return lookupMimeType(this.type) || customMimeTypes.getType(this.type) || 'application/octet-stream';
-    },
   },
 
   async asyncData({ store, redirect, route }) {
-    const date = get('state.myRecord.document.date', store);
-    const needMoreInformation = get('state.myRecord.document.needMoreInformation', store);
+    const date = get('state.documents.currentDocument.date', store);
+    const needMoreInformation = get('state.documents.currentDocument.needMoreInformation', store);
 
     if (!store.state.myRecord.hasAcceptedTerms && !hasAgreedToMedicalWarning()) {
       redirect(GP_MEDICAL_RECORD.path);
@@ -176,17 +131,17 @@ export default {
     }
 
     if (isTruthy(needMoreInformation)) {
-      await store.dispatch('myRecord/loadDocument', route.params.id);
+      await store.dispatch('documents/loadDocument', route.params.id);
     }
 
-    const size = get('state.myRecord.document.size', store);
+    const size = get('state.documents.currentDocument.size', store);
     const datePartString = (!date || !date.value) ? 'Unknown Date' : datePart(date.value, 'YearMonthDay');
-    const name = get('state.myRecord.document.name', store);
-    const type = get('state.myRecord.document.type', store);
-    const documentType = get('state.myRecord.document.documentType', store);
-    const isViewable = get('state.myRecord.document.isViewable', store);
-    const isDownloadable = get('state.myRecord.document.isDownloadable', store);
-    const isValidFile = get('state.myRecord.document.isValidFile', store);
+    const name = get('state.documents.currentDocument.name', store);
+    const type = get('state.documents.currentDocument.type', store);
+    const documentType = get('state.documents.currentDocument.documentType', store);
+    const isViewable = get('state.documents.currentDocument.isViewable', store);
+    const isDownloadable = get('state.documents.currentDocument.isDownloadable', store);
+    const isValidFile = get('state.documents.currentDocument.isValidFile', store);
     const comments = loadComments(store);
 
     let dateString;
@@ -207,7 +162,7 @@ export default {
     );
 
     return {
-      document: store.state.myRecord.document,
+      document: store.state.documents.currentDocument,
       dateString,
       name,
       type,
@@ -238,40 +193,17 @@ export default {
       }
 
       const fileExtension = this.mapFileTypeToDownloadType(this.type);
-      const { mimeType } = this;
+      const fileMimeType = mimeType(this.type);
       const isNative = this.$store.state.device.isNativeApp;
-      const { userAgent } = window.navigator;
-      const fullFileName = `${fileName}.${fileExtension}`;
 
-      const response = await this.$store.dispatch('myRecord/downloadDocument',
-        { documentIdentifier: this.$route.params.id, fileName });
-
-      const blob = buildFileBlob(userAgent, response, fullFileName, mimeType);
-
-      if (isNative) {
-        const fileReader = new FileReader();
-
-        fileReader.readAsDataURL(blob);
-        fileReader.onloadend = () => {
-          const base64data = fileReader.result;
-
-          NativeCallbacks.startDownload(base64data, fullFileName, mimeType);
-        };
-
-        return;
-      }
-
-      const link = document.createElement('a');
-
-      link.href = window.URL.createObjectURL(blob);
-      link.download = fullFileName;
-
-      document.body.appendChild(link);
-
-      link.click();
-
-      document.body.removeChild(link);
+      await this.$store.dispatch('documents/downloadDocument',
+        { documentIdentifier: this.$route.params.id,
+          fileName,
+          fileExtension,
+          mimeType: fileMimeType,
+          isNative });
     },
+
     // this function should mimic that in backendworker
     // PatientDocumentController#GetPatientDocumentForDownload
     mapFileTypeToDownloadType(fileType) {

@@ -11,12 +11,13 @@ describe('patient messaging messages', () => {
   const mountPage = ({
     toggle = true,
     selectedMessageRecipient = undefined,
+    messageSent = false,
     selectedId = undefined } = {}) => {
     store = createStore({
       state: {
         patientPracticeMessaging: {
           selectedMessageId: selectedId,
-          messageSent: true,
+          messageSent,
           selectedMessageRecipient,
         },
         device: { isNativeApp: false } },
@@ -95,7 +96,7 @@ describe('patient messaging messages', () => {
 
   describe('methods', () => {
     it('will send the message if the inputs are valid', async () => {
-      mountPage({ selectedMessageRecipient: 'Recipient' });
+      mountPage({ selectedMessageRecipient: 'Recipient', messageSent: true });
       dependency.redirectTo = jest.fn();
 
       wrapper.vm.messageText = 'Test message';

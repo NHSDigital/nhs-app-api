@@ -33,8 +33,11 @@ describe('gp-medical-record documents', () => {
         CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
       },
       state: {
-        myRecord: initialState(),
+        documents: {
+          currentDocument: {},
+        },
         device: { isNativeApp: false },
+        myRecord: initialState(),
       },
     });
     hasAgreedToMedicalWarning.mockClear();
@@ -56,12 +59,12 @@ describe('gp-medical-record documents', () => {
         $store.state.myRecord.hasAcceptedTerms = true;
         await DocumentPage.asyncData({ redirect, route, store: $store });
         expect(redirect).not.toHaveBeenCalled();
-        expect($store.dispatch).toHaveBeenCalledWith('myRecord/loadDocument', route.params.id);
+        expect($store.dispatch).toHaveBeenCalledWith('documents/loadDocument', route.params.id);
       });
 
       it('will not load document if it is already loaded', async () => {
         $store.state.myRecord.hasAcceptedTerms = true;
-        $store.state.myRecord.document.data = 'testData';
+        $store.state.documents.currentDocument.data = 'testData';
         await DocumentPage.asyncData({ redirect, route, store: $store });
         expect(redirect).not.toHaveBeenCalled();
         expect($store.dispatch).not.toHaveBeenCalled();
@@ -81,14 +84,14 @@ describe('gp-medical-record documents', () => {
     });
     it('will hide header and menubar if document exists and on client', () => {
       process.client = true;
-      $store.state.myRecord.document.data = {};
+      $store.state.documents.currentDocument.data = {};
       mountPage();
       expect(NativeCallbacks.hideHeader).toHaveBeenCalled();
       expect(NativeCallbacks.hideMenuBar).toHaveBeenCalled();
     });
     it('will set the meta tag content so the user can zoom in', () => {
       process.client = true;
-      $store.state.myRecord.document.data = {};
+      $store.state.documents.currentDocument.data = {};
       mountPage();
       expect(document.getElementsByName('viewport')[0].getAttribute('content'))
         .toEqual('width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=10.0, user-scalable=yes');
@@ -101,7 +104,7 @@ describe('gp-medical-record documents', () => {
       document: undefined,
     }]).it('will not hide header and menubar if document absent or not on client', ({ client, document }) => {
       process.client = client;
-      $store.state.myRecord.document.data = document;
+      $store.state.documents.currentDocument.data = document;
       mountPage();
       expect(NativeCallbacks.hideHeader).not.toHaveBeenCalled();
       expect(NativeCallbacks.hideMenuBar).not.toHaveBeenCalled();
@@ -158,7 +161,7 @@ describe('gp-medical-record documents', () => {
     });
     describe('document', () => {
       it('will render the document as html', () => {
-        $store.state.myRecord.document.data = '<div id="document-content"><h1>This is a document</h1></div>';
+        $store.state.documents.currentDocument.data = '<div id="document-content"><h1>This is a document</h1></div>';
         mountPage();
         const documentContent = page.find('div[id="document-content"]');
         expect(documentContent.exists()).toBe(true);

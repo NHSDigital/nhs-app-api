@@ -24,9 +24,11 @@ const newStore = ({
     },
     state: {
       myRecord: {
-        document,
         hasAcceptedTerms: true,
         documentConsultationsWithComments,
+      },
+      documents: {
+        currentDocument: document,
       },
       device: {
         isNativeApp: false,
@@ -255,7 +257,6 @@ describe('document view', () => {
       if (isValidFile && isDownloadable) {
         expect(downloadItem.text()).toEqual('translate_my_record.documents.actions.download');
       }
-
       expect(viewItem.exists()).toBe(isValidFile && isViewable);
       expect(downloadItem.exists()).toBe(isValidFile && isDownloadable);
     });
@@ -332,19 +333,6 @@ describe('document view', () => {
       expect(page.vm.mapFileTypeToDownloadType('jpeg')).toEqual('jpeg');
     });
 
-    each([
-      ['jpg', 'image/jpeg'],
-      ['dib', 'image/bmp'],
-      ['pdf', 'application/pdf'],
-      ['spooby', 'application/octet-stream'],
-    ]).it('will parse the %s file mime type correctly', async (type, expectedMimeType) => {
-      const page = mountPage();
-      // eslint-disable-next-line no-underscore-dangle
-      const mimeTypeProperty = page.vm._computedWatchers.mimeType.getter;
-
-      expect(mimeTypeProperty.call({ type })).toEqual(expectedMimeType);
-    });
-
     it('will display a different header if the file is invalid', async () => {
       // Arrange
       const document = {
@@ -410,7 +398,7 @@ describe('document view', () => {
       await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
 
       // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('myRecord/loadDocument', 1);
+      expect($store.dispatch).toHaveBeenCalledWith('documents/loadDocument', 1);
     });
 
     it('will set the header to the document date if no name exists', async () => {

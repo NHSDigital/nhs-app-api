@@ -14,6 +14,7 @@ class MessageHelpers {
                       conversationId: String,
                       date: ZonedDateTime,
                       read: String,
+                      binaryDataId: String? = null,
                       incoming: String): Message {
         return Message(
                 messageId = messageId,
@@ -24,6 +25,7 @@ class MessageHelpers {
                 sender = "Gp Test Practice",
                 recipient = "Recipient1",
                 read = read,
+                binaryDataId = binaryDataId,
                 incoming = incoming
         )
     }
