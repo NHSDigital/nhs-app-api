@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace NHSOnline.Backend.PfsApi
+namespace NHSOnline.Backend.PfsApi.Session
 {
     public interface IUserSessionManager
     {

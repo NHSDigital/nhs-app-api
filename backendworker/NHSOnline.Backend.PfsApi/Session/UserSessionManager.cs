@@ -7,10 +7,9 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Session;
 
-namespace NHSOnline.Backend.PfsApi
+namespace NHSOnline.Backend.PfsApi.Session
 {
     public class UserSessionManager : IUserSessionManager
     {

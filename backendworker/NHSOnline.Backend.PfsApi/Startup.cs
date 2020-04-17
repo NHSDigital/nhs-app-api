@@ -40,6 +40,7 @@ using NHSOnline.Backend.PfsApi.SpineSearch;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.Support.Repository;
 using Wkhtmltopdf.NetCore;
