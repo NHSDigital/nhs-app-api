@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -28,6 +26,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
+using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
@@ -38,192 +37,190 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
     [TestClass]
     public class SessionControllerPostTests
     {
-        private SessionController _systemUnderTest;
-        private IFixture _fixture;
+        private const string Name = "Name";
+        private const int SessionTimeoutMinutes = 10;
+        private const int SessionTimeoutSeconds = 600;
+        private const string ApiSessionId = "ApiSessionId";
+        private const string ServiceDeskReference = "ServiceDeskReference";
+        private const string AccessToken = "AccessToken";
+        private const string CsrfRequestToken = "dskhfakserhhvjcgbfdsh";
+
         private Mock<ICitizenIdSessionService> _mockCitizenIdSessionService;
         private Mock<IGpSystem> _mockGpSystem;
-        private Mock<IOdsCodeLookup> _mockOdsCodeLookup;
-        private Mock<IErrorReferenceGenerator> _mockServiceDeskErrorReferenceGenerator;
-        private Mock<ISessionCacheService> _mockSessionCacheService;
         private Mock<ITokenValidationService> _mockTokenValidationService;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
-        private Mock<IAuthenticationService> _authenticationServiceMock;
-        private ConfigurationSettings _configurationSettings;
+        private Mock<ILogger<SessionController>> _mockLogger;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IIm1CacheService> _mockIm1CacheService;
-        private Mock<ILogger<SessionController>> _mockLogger;
         private Mock<IOdsCodeMassager> _mockOdsCodeMassager;
         private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
+        private Mock<IErrorReferenceGenerator> _mockErrorReferenceGenerator;
         private Mock<IGpSessionManager> _mockGpSessionManager;
+        private Mock<HttpContext> _mockHttpContext;
         private Mock<IAntiforgery> _mockAntiforgery;
-        
-        private const string DateFormat = "yyyy-MM-dd";
+        private Mock<ISessionCacheService> _mockSessionCacheService;
+        private Mock<IAuthenticationService> _mockAuthenticationService;
 
-        private ServiceJourneyRulesResponse _serviceJourneyRulesResponse;
-        private ServiceJourneyRulesConfigResult _serviceJourneyRulesConfigResult;
+        private EmisConnectionToken _connectionToken;
         private UserSessionRequest _userSessionRequest;
+        private Auth.CitizenId.Models.UserInfo _userInfo;
         private UserProfile _userProfile;
         private EmisUserSession _emisUserSession;
         private CitizenIdUserSession _citizenIdUserSession;
-        private P9UserSession _userSession;
-        private EmisConnectionToken _connectionToken;
-        private string _apiSessionId;
-        private string _name;
-        private int _sessionTimeoutSeconds;
-        private const string CsrfRequestToken = "dskhfakserhhvjcgbfdsh";
-        private const int MinimumAppAge = 13;
-        private const string CookieDomain = "CookieDomain";
-        private const int PrescriptionsDefaultLastNumberMonthsToDisplay = 12;
-        private const int SessionTimeoutMinutes = 10;
-        private const int MinimumLinkageAge = 16;
-        private string _serviceDeskReference;
-        private SessionConfigurationSettings _sessionConfigSettings;
         private CitizenIdSessionResult _citizenIdSessionResult;
+        private ServiceJourneyRulesResponse _serviceJourneyRulesResponse;
+        private SessionConfigurationSettings _sessionConfigSettings;
+        private P9UserSession _userSession;
+        private ServiceJourneyRulesConfigResult _serviceJourneyRulesConfigResult;
+        private ConfigurationSettings _configurationSettings;
+
+        private ServiceProvider _serviceProvider;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            InitializeData();
+            InitializeMocks();
+            InitializeServiceProvider();
+        }
 
-            _connectionToken = _fixture.Create<EmisConnectionToken>();
-            _name = _fixture.Create<string>();
-            _sessionTimeoutSeconds = SessionTimeoutMinutes * 60;
+        private void InitializeData()
+        {
+            _connectionToken = new EmisConnectionToken();
 
-            _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
-            var userInfo = _fixture.Freeze<Auth.CitizenId.Models.UserInfo>();
-            userInfo.Birthdate = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture);
-            userInfo.Im1ConnectionToken = _connectionToken.SerializeJson();
-            _userProfile = _fixture.Freeze<UserProfile>();
+            _userSessionRequest = new UserSessionRequest
+            {
+                AuthCode = "AuthCode",
+                CodeVerifier = "CodeVerifier",
+                RedirectUrl = "RedirectUrl"
+            };
 
-            _apiSessionId = _fixture.Create<string>();
+            _userInfo = new Auth.CitizenId.Models.UserInfo
+            {
+                Birthdate = "1980-01-02",
+                Im1ConnectionToken = _connectionToken.SerializeJson(),
+                NhsNumber = "012 345 6789",
+                GpIntegrationCredentials = new GpIntegrationCredentials { OdsCode = "OdsCode" }
+            };
+            _userProfile = new UserProfile(_userInfo, AccessToken);
 
-            _serviceDeskReference = _fixture.Create<string>();
+            _emisUserSession = new EmisUserSession
+            {
+                OdsCode = _userProfile.OdsCode,
+                NhsNumber = _userProfile.NhsNumber,
+                Name = Name
+            };
 
-            _emisUserSession = _fixture.Create<EmisUserSession>();
-            _emisUserSession.OdsCode = _userProfile.OdsCode;
-            _emisUserSession.NhsNumber = _userProfile.NhsNumber;
-            _emisUserSession.Name = _name;
-
-            _citizenIdUserSession = new CitizenIdUserSession { AccessToken = _userProfile.AccessToken };
-
-            _mockServiceDeskErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
+            _citizenIdUserSession = new CitizenIdUserSession { AccessToken = AccessToken };
 
             _citizenIdSessionResult = new CitizenIdSessionResult
             {
                 StatusCode = (int) HttpStatusCode.OK,
-                DateOfBirth =
-                    DateTime.ParseExact(_userProfile.DateOfBirth, DateFormat, CultureInfo.InvariantCulture),
+                DateOfBirth = new DateTime(1980, 01, 02, 0, 0, 0, DateTimeKind.Utc),
                 Im1ConnectionToken = _userProfile.Im1ConnectionToken,
                 NhsNumber = _userProfile.NhsNumber,
                 OdsCode = _userProfile.OdsCode,
                 Session = _citizenIdUserSession
             };
 
-            _mockCitizenIdSessionService = _fixture.Freeze<Mock<ICitizenIdSessionService>>();
+            _serviceJourneyRulesResponse = new ServiceJourneyRulesResponse { Journeys = new Journeys { Supplier = Supplier.Emis } };
+            _serviceJourneyRulesConfigResult = new ServiceJourneyRulesConfigResult.Success(_serviceJourneyRulesResponse);
+
+            _sessionConfigSettings = new SessionConfigurationSettings(false);
+
+            _userSession = new P9UserSession(CsrfRequestToken, _citizenIdUserSession, _emisUserSession, string.Empty);
+
+            _configurationSettings = new ConfigurationSettings
+            {
+                DefaultSessionExpiryMinutes = SessionTimeoutMinutes,
+            };
+        }
+
+        private void InitializeMocks()
+        {
+            _mockCitizenIdSessionService = new Mock<ICitizenIdSessionService>();
             _mockCitizenIdSessionService
                 .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier,
                     _userSessionRequest.RedirectUrl))
                 .Returns(Task.FromResult(_citizenIdSessionResult));
 
-            _serviceJourneyRulesResponse = _fixture.Create<ServiceJourneyRulesResponse>();
-            _serviceJourneyRulesResponse.Journeys.Supplier = Supplier.Emis;
-
-            _sessionConfigSettings = _fixture.Freeze<SessionConfigurationSettings>();
-
-            _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
-
-            _serviceJourneyRulesConfigResult =
-                new ServiceJourneyRulesConfigResult.Success(_serviceJourneyRulesResponse);
-            _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode));
-
-            _mockServiceJourneyRulesService
-                .Setup(x =>
-                    x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
-                .Returns(Task.FromResult(_serviceJourneyRulesConfigResult));
-
-            _userSession = new P9UserSession(CsrfRequestToken, _citizenIdUserSession, _emisUserSession, string.Empty);
-
-            _mockOdsCodeLookup = _fixture.Freeze<Mock<IOdsCodeLookup>>();
-            _mockOdsCodeLookup
-                .Setup(x => x.LookupSupplier(_userProfile.OdsCode))
-                .Returns(Task.FromResult(Option.Some(Supplier.Emis)));
-
-            _mockTokenValidationService = _fixture.Freeze<Mock<ITokenValidationService>>();
+            _mockTokenValidationService = new Mock<ITokenValidationService>();
             _mockTokenValidationService
                 .Setup(x => x.IsValidConnectionTokenFormat(_userProfile.Im1ConnectionToken))
                 .Returns(true);
 
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem.SetupGet(x => x.Supplier).Returns(Supplier.Emis);
-            _mockGpSystem
-                .Setup(x => x.GetTokenValidationService())
-                .Returns(_mockTokenValidationService.Object);
+            _mockGpSystem.Setup(x => x.GetTokenValidationService()).Returns(_mockTokenValidationService.Object);
 
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(Supplier.Emis)).Returns(_mockGpSystem.Object);
 
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
-            _mockGpSystemFactory
-                .Setup(x => x.CreateGpSystem(Supplier.Emis))
-                .Returns(_mockGpSystem.Object);
-
-            _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
-            _mockSessionCacheService
-                .Setup(x => x.CreateUserSession(It.IsAny<UserSession>()))
-                .Callback<UserSession>(userSession => userSession.Key = _apiSessionId)
-                .Returns(Task.FromResult(_apiSessionId));
-
-            _authenticationServiceMock = new Mock<IAuthenticationService>();
-            _authenticationServiceMock
-                .Setup(x => x.SignInAsync(It.IsAny<HttpContext>(), It.IsAny<string>(), It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<AuthenticationProperties>()))
-                .Returns(Task.FromResult((object) null));
-            var serviceProviderMock = new Mock<IServiceProvider>();
-            var httpContextMock = new Mock<HttpContext>();
-            var responseMock = new Mock<HttpResponse>();
-
-            _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
-            _mockIm1CacheService.Setup(x => x.DeleteIm1ConnectionToken(_connectionToken.Im1CacheKey))
-                .Returns(Task.FromResult(true)).Verifiable();
-
-            serviceProviderMock
-                .Setup(x => x.GetService(typeof(IAuthenticationService)))
-                .Returns(_authenticationServiceMock.Object);
-
-            httpContextMock.SetupGet(h => h.Response).Returns(responseMock.Object);
-            httpContextMock.SetupGet(h => h.RequestServices).Returns(serviceProviderMock.Object);
-            httpContextMock.SetupGet(h => h.Items).Returns(new Dictionary<object, object>());
-
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
-
-            _mockLogger = _fixture.Freeze<Mock<ILogger<SessionController>>>();
+            _mockLogger = new Mock<ILogger<SessionController>>();
             _mockLogger.SetupLogger(LogLevel.Information, $"NhsNumber={_userProfile.NhsNumber}", null);
 
-            _mockOdsCodeMassager = _fixture.Freeze<Mock<IOdsCodeMassager>>();
+            _mockAuditor = new Mock<IAuditor>();
+
+            _mockIm1CacheService = new Mock<IIm1CacheService>();
+            _mockIm1CacheService
+                .Setup(x => x.DeleteIm1ConnectionToken(_connectionToken.Im1CacheKey))
+                .Returns(Task.FromResult(true)).Verifiable();
+
+            _mockOdsCodeMassager = new Mock<IOdsCodeMassager>();
             _mockOdsCodeMassager.Setup(x => x.CheckOdsCode(_userProfile.OdsCode)).Returns(_userProfile.OdsCode);
 
-            _mockGpSessionManager = _fixture.Freeze<Mock<IGpSessionManager>>();
+            _mockServiceJourneyRulesService = new Mock<IServiceJourneyRulesService>();
+            _mockServiceJourneyRulesService
+                .Setup(x => x.GetServiceJourneyRulesForOdsCode(_userProfile.OdsCode))
+                .Returns(Task.FromResult(_serviceJourneyRulesConfigResult));
 
-            _configurationSettings = _fixture.Freeze<ConfigurationSettings>();
-            _configurationSettings.CookieDomain = CookieDomain;
-            _configurationSettings.PrescriptionsDefaultLastNumberMonthsToDisplay =
-                PrescriptionsDefaultLastNumberMonthsToDisplay;
-            _configurationSettings.DefaultSessionExpiryMinutes = SessionTimeoutMinutes;
-            _configurationSettings.DefaultHttpTimeoutSeconds = _sessionTimeoutSeconds;
-            _configurationSettings.MinimumAppAge = MinimumAppAge;
-            _configurationSettings.MinimumLinkageAge = MinimumLinkageAge;
+            _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
 
-            _mockAntiforgery = _fixture.Freeze<Mock<IAntiforgery>>();
+            _mockGpSessionManager = new Mock<IGpSessionManager>();
+
+            _mockHttpContext = new Mock<HttpContext>();
+            _mockHttpContext.Setup(x => x.RequestServices).Returns(() => _serviceProvider);
+
+            _mockAntiforgery = new Mock<IAntiforgery>();
             _mockAntiforgery
-                .Setup(x => x.GetTokens(httpContextMock.Object))
+                .Setup(x => x.GetTokens(_mockHttpContext.Object))
                 .Returns(new AntiforgeryTokenSet(CsrfRequestToken, "cookieToken", "formFieldName", "headerName"));
 
-            _systemUnderTest = _fixture.Create<SessionController>();
+            _mockSessionCacheService = new Mock<ISessionCacheService>();
+            _mockSessionCacheService
+                .Setup(x => x.CreateUserSession(It.IsAny<UserSession>()))
+                .Callback<UserSession>(userSession => userSession.Key = ApiSessionId)
+                .Returns(Task.FromResult(ApiSessionId));
 
-            _systemUnderTest.ControllerContext = new ControllerContext
-            {
-                HttpContext = httpContextMock.Object
-            };
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
+            _mockAuthenticationService
+                .Setup(x => x.SignInAsync(It.IsAny<HttpContext>(), It.IsAny<string>(), It.IsAny<ClaimsPrincipal>(),
+                    It.IsAny<AuthenticationProperties>()))
+                .Returns(Task.FromResult((object)null));
+        }
+
+        private void InitializeServiceProvider()
+        {
+            var serviceCollection = new ServiceCollection()
+                .AddTransient<SessionController>()
+                .AddSingleton(_mockCitizenIdSessionService.Object)
+                .AddSingleton(_mockGpSystemFactory.Object)
+                .AddSingleton(_configurationSettings)
+                .AddSingleton(_mockLogger.Object)
+                .AddSingleton(_mockAuditor.Object)
+                .AddSingleton(_mockIm1CacheService.Object)
+                .AddSingleton(_mockOdsCodeMassager.Object)
+                .AddSingleton(_mockServiceJourneyRulesService.Object)
+                .AddSingleton(_mockErrorReferenceGenerator.Object)
+                .AddSingleton(new Mock<IUserInfoService>().Object)
+                .AddSingleton(_mockGpSessionManager.Object)
+                .AddSingleton(_mockAntiforgery.Object)
+                .AddSingleton(_mockSessionCacheService.Object)
+                .AddSingleton(_mockAuthenticationService.Object);
+
+            new PfsApi.Session.ServiceConfigurationModule().ConfigureServices(serviceCollection, null);
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
         }
 
         [TestMethod]
@@ -234,25 +231,25 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Setup(x =>
                     x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier,
                         _userSessionRequest.RedirectUrl))
-                .Returns(Task.FromResult(new CitizenIdSessionResult()
+                .Returns(Task.FromResult(new CitizenIdSessionResult
                 {
                     StatusCode = (int) HttpStatusCode.BadRequest
                 }))
                 .Verifiable();
 
-            _mockServiceDeskErrorReferenceGenerator
+            _mockErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Login,
                     StatusCodes.Status400BadRequest, SourceApi.None))
-                .Returns(_serviceDeskReference)
+                .Returns(ServiceDeskReference)
                 .Verifiable();
 
             var expectedValue = new PfsErrorResponse
             {
-                ServiceDeskReference = _serviceDeskReference,
+                ServiceDeskReference = ServiceDeskReference,
             };
 
             // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
+            var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
             // Assert
             _mockCitizenIdSessionService.Verify();
@@ -280,14 +277,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 }))
                 .Verifiable();
 
-            _mockServiceDeskErrorReferenceGenerator
+            _mockErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Login,
                     StatusCodes.Status502BadGateway, SourceApi.NhsLogin))
-                .Returns(_serviceDeskReference)
+                .Returns(ServiceDeskReference)
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
+            var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
             // Assert
             _mockCitizenIdSessionService.Verify();
@@ -300,10 +297,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_UnknownOdsCode_Returns464OdsCodeNotSupported()
         {
             // Arrange
-            _mockServiceDeskErrorReferenceGenerator
+            _mockErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(
                     It.IsAny<ErrorTypes.LoginOdsCodeNotFoundOrNotSupported>()))
-                .Returns(_serviceDeskReference)
+                .Returns(ServiceDeskReference)
                 .Verifiable();
 
             _serviceJourneyRulesConfigResult =
@@ -319,11 +316,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             var expectedValue = new PfsErrorResponse
             {
-                ServiceDeskReference = _serviceDeskReference
+                ServiceDeskReference = ServiceDeskReference
             };
 
             // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
+            var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
             // Assert
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -342,13 +339,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_Im1ConnectionTokenIsInvalidFormat_ReturnsForbidden()
         {
             // Arrange
-            _mockServiceDeskErrorReferenceGenerator
+            _mockErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginForbidden>()))
-                .Returns(_serviceDeskReference)
+                .Returns(ServiceDeskReference)
                 .Verifiable();
             var expectedValue = new PfsErrorResponse
             {
-                ServiceDeskReference = _serviceDeskReference
+                ServiceDeskReference = ServiceDeskReference
             };
 
             _mockAuditor.Setup(x => x.AuditSessionEvent(
@@ -377,7 +374,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
+            var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
             // Assert
             _mockTokenValidationService.Verify();
@@ -396,16 +393,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_Im1ConnectionTokenFailsAuthenticationWithGpSupplier_ReturnsForbidden()
         {
             // Arrange
-            _mockServiceDeskErrorReferenceGenerator
+            _mockErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Login, StatusCodes.Status403Forbidden,
                     SourceApi.None))
-                .Returns(_serviceDeskReference)
+                .Returns(ServiceDeskReference)
                 .Verifiable();
             _userSession.Key = "123";
 
             var expectedValue = new PfsErrorResponse
             {
-                ServiceDeskReference = _serviceDeskReference
+                ServiceDeskReference = ServiceDeskReference
             };
             _mockAuditor.Setup(x => x.AuditSessionEvent(
                     _citizenIdUserSession.AccessToken,
@@ -427,18 +424,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             var returnResult = new GpSessionCreateResult.Forbidden();
 
-            _mockGpSessionManager
-                .Setup(
-                    x => x.CreateSession(
-                        It.Is<IGpSessionCreateArgs>(p
-                            => ReferenceEquals(p.GpSystem, _mockGpSystem.Object) &&
-                               p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
-                               p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal) &&
-                               p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
-                .ReturnsAsync(returnResult);
+            ArrangeGpSessionManagerCreateSession(returnResult);
 
             // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
+            var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
@@ -455,15 +444,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_GpSupplierSessionCreateFails_Returns502BadGateway()
         {
             // Arrange
-            _mockServiceDeskErrorReferenceGenerator
+            _mockErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Login, StatusCodes.Status502BadGateway,
                     Supplier.Emis))
-                .Returns(_serviceDeskReference)
+                .Returns(ServiceDeskReference)
                 .Verifiable();
 
             var expectedValue = new PfsErrorResponse
             {
-                ServiceDeskReference = _serviceDeskReference
+                ServiceDeskReference = ServiceDeskReference
             };
 
             _mockAuditor.Setup(x => x.AuditSessionEvent(
@@ -486,20 +475,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
-            var returnResult = new GpSessionCreateResult.BadGateway();
-
-            _mockGpSessionManager
-                .Setup(
-                    x => x.CreateSession(
-                        It.Is<IGpSessionCreateArgs>(p
-                            => ReferenceEquals(p.GpSystem, _mockGpSystem.Object) &&
-                               p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
-                               p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal) &&
-                               p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
-                .ReturnsAsync(returnResult);
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.BadGateway());
 
             // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
+            var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
@@ -522,13 +501,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 new EmisProxyUserSession()
             };
 
-            _mockServiceDeskErrorReferenceGenerator
+            _mockErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginOdsCodeNotFoundOrNotSupported>()))
-                .Returns(_serviceDeskReference)
+                .Returns(ServiceDeskReference)
                 .Verifiable();
             var expectedValue = new PfsErrorResponse
             {
-                ServiceDeskReference = _serviceDeskReference
+                ServiceDeskReference = ServiceDeskReference
             };
             _serviceJourneyRulesConfigResult =
                 new ServiceJourneyRulesConfigResult.NotFound();
@@ -550,7 +529,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
+            var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
             // Assert
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -575,14 +554,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 new EmisProxyUserSession()
             };
 
-            _mockServiceDeskErrorReferenceGenerator
+            _mockErrorReferenceGenerator
                 .Setup(x => x.GenerateAndLogErrorReference(It.IsAny<ErrorTypes.LoginServiceJourneyRulesOtherError>()))
-                .Returns(_serviceDeskReference)
+                .Returns(ServiceDeskReference)
                 .Verifiable();
 
             var expectedValue = new PfsErrorResponse
             {
-                ServiceDeskReference = _serviceDeskReference
+                ServiceDeskReference = ServiceDeskReference
             };
 
             _serviceJourneyRulesConfigResult =
@@ -605,7 +584,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
+            var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
             // Assert
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
@@ -633,26 +612,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _userSession.Key = "123";
 
-            var returnResult = new GpSessionCreateResult.Success(_userSession.GpUserSession);
-
-            _mockGpSessionManager
-                .Setup(
-                    x => x.CreateSession(
-                        It.Is<IGpSessionCreateArgs>(p
-                            => ReferenceEquals(p.GpSystem, _mockGpSystem.Object) &&
-                               p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
-                               p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal) &&
-                               p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
-                .ReturnsAsync(returnResult);
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(_userSession.GpUserSession));
 
             // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
+            var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
             // Assert
             var expectedUserSessionResponse = new PostUserSessionResponse
             {
-                Name = _name,
-                SessionTimeout = _sessionTimeoutSeconds,
+                Name = Name,
+                SessionTimeout = SessionTimeoutSeconds,
                 OdsCode = _userProfile.OdsCode,
                 DateOfBirth = _citizenIdUserSession.DateOfBirth,
                 NhsNumber = _userProfile.NhsNumber,
@@ -663,8 +632,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             using (new AssertionScope())
             {
                 var createdResultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
-                var actualUserSessionResponse =
-                    createdResultValue.Should().BeAssignableTo<PostUserSessionResponse>().Subject;
+                var actualUserSessionResponse = createdResultValue.Should().BeAssignableTo<PostUserSessionResponse>().Subject;
                 actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
                 actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
                 actualUserSessionResponse.Token.Should().Be(CsrfRequestToken);
@@ -672,8 +640,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 actualUserSessionResponse.DateOfBirth.Should().Be(expectedUserSessionResponse.DateOfBirth);
                 actualUserSessionResponse.NhsNumber.Should().Be(expectedUserSessionResponse.NhsNumber);
                 actualUserSessionResponse.AccessToken.Should().Be(expectedUserSessionResponse.AccessToken);
-                actualUserSessionResponse.ServiceJourneyRules.Should()
-                    .BeEquivalentTo(expectedUserSessionResponse.ServiceJourneyRules);
+                actualUserSessionResponse.ServiceJourneyRules.Should().BeEquivalentTo(expectedUserSessionResponse.ServiceJourneyRules);
             }
         }
 
@@ -688,23 +655,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             };
             _userSession.Key = "123";
 
-            _mockIm1CacheService.Setup(x => x.DeleteIm1ConnectionToken(_connectionToken.Im1CacheKey))
+            _mockIm1CacheService
+                .Setup(x => x.DeleteIm1ConnectionToken(_connectionToken.Im1CacheKey))
                 .Returns(Task.FromResult(true));
 
-            var returnResult = new GpSessionCreateResult.Success(_userSession.GpUserSession);
-
-            _mockGpSessionManager
-                .Setup(
-                    x => x.CreateSession(
-                        It.Is<IGpSessionCreateArgs>(p
-                            => ReferenceEquals(p.GpSystem, _mockGpSystem.Object) &&
-                               p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
-                               p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal) &&
-                               p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
-                .ReturnsAsync(returnResult);
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(_userSession.GpUserSession));
 
             // Act
-            await _systemUnderTest.Post(_userSessionRequest);
+            await CreateSystemUnderTest().Post(_userSessionRequest);
 
             // Assert
             _mockIm1CacheService.Verify();
@@ -714,31 +672,49 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_Im1ConnectionTokenIsAGuid_DoesNotAttemptToDeleteFromCache()
         {
             // Arrange
-            _fixture.Create<Auth.CitizenId.Models.UserInfo>().Im1ConnectionToken = _fixture.Create<Guid>().ToString();
+            _userInfo.Im1ConnectionToken  = "0E5DD1C4-C519-4EF5-9B0F-624357F6F26F";
 
             _mockCitizenIdSessionService
-                .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier,
-                    _userSessionRequest.RedirectUrl))
-                .Returns(Task.FromResult(new CitizenIdSessionResult
-                {
-                    StatusCode = (int) HttpStatusCode.OK,
-                    DateOfBirth =
-                        DateTime.ParseExact(_userProfile.DateOfBirth, DateFormat, CultureInfo.InvariantCulture),
-                    Im1ConnectionToken = _userProfile.Im1ConnectionToken,
-                    NhsNumber = _userProfile.NhsNumber,
-                    OdsCode = _userProfile.OdsCode,
-                    Session = _citizenIdUserSession
-                }));
+                .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
+                .Returns(Task.FromResult(_citizenIdSessionResult));
 
             _mockIm1CacheService.Reset();
-            _mockIm1CacheService.Setup(x => x.DeleteIm1ConnectionToken(It.IsAny<string>()))
+            _mockIm1CacheService
+                .Setup(x => x.DeleteIm1ConnectionToken(It.IsAny<string>()))
                 .Returns(Task.FromResult(false));
 
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(_userSession.GpUserSession));
+
             // Act
-            await _systemUnderTest.Post(_userSessionRequest);
+            await CreateSystemUnderTest().Post(_userSessionRequest);
 
             // Assert
             _mockIm1CacheService.Verify(x => x.DeleteIm1ConnectionToken(It.IsAny<string>()), Times.Never);
+        }
+
+        private void ArrangeGpSessionManagerCreateSession(GpSessionCreateResult returnResult)
+        {
+            _mockGpSessionManager
+                .Setup(
+                    x => x.CreateSession(
+                        It.Is<IGpSessionCreateArgs>(p
+                            => ReferenceEquals(p.GpSystem, _mockGpSystem.Object) &&
+                               p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
+                               p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal) &&
+                               p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
+                .ReturnsAsync(returnResult);
+        }
+
+        private SessionController CreateSystemUnderTest()
+        {
+            var systemUnderTest = _serviceProvider.GetRequiredService<SessionController>();
+
+            systemUnderTest.ControllerContext = new ControllerContext
+            {
+                HttpContext = _mockHttpContext.Object
+            };
+
+            return systemUnderTest;
         }
     }
 }
