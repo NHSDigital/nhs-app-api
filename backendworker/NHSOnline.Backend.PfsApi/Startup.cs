@@ -1,7 +1,6 @@
 using CorrelationId;
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Globalization;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -40,7 +39,6 @@ using NHSOnline.Backend.PfsApi.SpineSearch;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
-using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.Support.Repository;
 using Wkhtmltopdf.NetCore;
@@ -129,7 +127,6 @@ namespace NHSOnline.Backend.PfsApi
             services.AddTransient<ISessionCacheService, MongoSessionCacheService>();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddTransient<IIm1CacheService, Im1CacheService>();
-            services.AddTransient<IUserSessionManager, UserSessionManager>();
             services.AddTransient<IGpSessionManager, GpSessionManager>();
             services.AddTransient<IOdsCodeLookup, OdsCodeLookup>();
             services.AddTransient<IGpSystemResolver, GpSystemResolver>();

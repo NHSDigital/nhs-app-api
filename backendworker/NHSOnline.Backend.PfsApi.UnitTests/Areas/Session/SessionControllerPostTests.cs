@@ -26,6 +26,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support.Session;
@@ -49,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<ITokenValidationService> _mockTokenValidationService;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
-        private Mock<ILogger<SessionController>> _mockLogger;
+        private Mock<ILogger<SessionController>> _mockSessionControllerLogger;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IIm1CacheService> _mockIm1CacheService;
         private Mock<IOdsCodeMassager> _mockOdsCodeMassager;
@@ -156,8 +157,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(Supplier.Emis)).Returns(_mockGpSystem.Object);
 
-            _mockLogger = new Mock<ILogger<SessionController>>();
-            _mockLogger.SetupLogger(LogLevel.Information, $"NhsNumber={_userProfile.NhsNumber}", null);
+            _mockSessionControllerLogger = new Mock<ILogger<SessionController>>();
+            _mockSessionControllerLogger.SetupLogger(LogLevel.Information, $"NhsNumber={_userProfile.NhsNumber}", null);
 
             _mockAuditor = new Mock<IAuditor>();
 
@@ -206,7 +207,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .AddSingleton(_mockCitizenIdSessionService.Object)
                 .AddSingleton(_mockGpSystemFactory.Object)
                 .AddSingleton(_configurationSettings)
-                .AddSingleton(_mockLogger.Object)
+                .AddSingleton(_mockSessionControllerLogger.Object)
                 .AddSingleton(_mockAuditor.Object)
                 .AddSingleton(_mockIm1CacheService.Object)
                 .AddSingleton(_mockOdsCodeMassager.Object)
@@ -216,7 +217,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .AddSingleton(_mockGpSessionManager.Object)
                 .AddSingleton(_mockAntiforgery.Object)
                 .AddSingleton(_mockSessionCacheService.Object)
-                .AddSingleton(_mockAuthenticationService.Object);
+                .AddSingleton(_mockAuthenticationService.Object)
+                .AddSingleton(new Mock<ILogger<UserSessionManager>>().Object);
 
             new PfsApi.Session.ServiceConfigurationModule().ConfigureServices(serviceCollection, null);
 
@@ -336,7 +338,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             }
 
             _mockAuditor.VerifyNoOtherCalls();
-            _mockLogger.Verify();
+            _mockSessionControllerLogger.Verify();
         }
 
         [TestMethod]
@@ -390,7 +392,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             }
 
             _mockAuditor.Verify();
-            _mockLogger.Verify();
+            _mockSessionControllerLogger.Verify();
         }
 
         [TestMethod]
@@ -446,7 +448,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             }
 
             _mockAuditor.Verify();
-            _mockLogger.Verify();
+            _mockSessionControllerLogger.Verify();
         }
 
         [TestMethod]
@@ -501,7 +503,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             }
 
             _mockAuditor.Verify();
-            _mockLogger.Verify();
+            _mockSessionControllerLogger.Verify();
         }
 
         [TestMethod]
@@ -554,7 +556,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockServiceJourneyRulesService.Verify();
             _mockAuditor.Verify();
-            _mockLogger.Verify();
+            _mockSessionControllerLogger.Verify();
         }
 
         [TestMethod]
@@ -609,7 +611,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockServiceJourneyRulesService.Verify();
             _mockAuditor.Verify();
-            _mockLogger.Verify();
+            _mockSessionControllerLogger.Verify();
         }
 
 

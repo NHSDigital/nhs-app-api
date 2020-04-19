@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
@@ -24,6 +23,7 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session
@@ -32,7 +32,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
     public class SessionController : Controller
     {
         private readonly ICitizenIdSessionService _citizenIdSessionService;
-        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly UserSessionService _userSessionService;
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<SessionController> _logger;
@@ -44,11 +43,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly IUserInfoService _userInfoService;
         private readonly IGpSessionManager _gpSessionManager;
         private readonly IAntiforgery _antiforgery;
-        private readonly ISessionCacheService _sessionCacheService;
+        private readonly IUserSessionManager _userSessionManager;
 
         public SessionController(
             ICitizenIdSessionService citizenIdSessionService,
-            IGpSystemFactory gpSystemFactory,
             UserSessionService userSessionService,
             ConfigurationSettings settings,
             ILogger<SessionController> logger,
@@ -60,10 +58,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             IUserInfoService userInfoService,
             IGpSessionManager gpSessionManager,
             IAntiforgery antiforgery,
-            ISessionCacheService sessionCacheService)
+            IUserSessionManager userSessionManager)
         {
             _citizenIdSessionService = citizenIdSessionService;
-            _gpSystemFactory = gpSystemFactory;
             _userSessionService = userSessionService;
             _settings = settings;
             _logger = logger;
@@ -75,7 +72,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _userInfoService = userInfoService;
             _gpSessionManager = gpSessionManager;
             _antiforgery = antiforgery;
-            _sessionCacheService = sessionCacheService;
+            _userSessionManager = userSessionManager;
         }
 
         [HttpGet]
@@ -86,9 +83,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 _logger.LogEnter();
                 await _auditor.Audit(AuditingOperations.SessionGetRequest, "Session Get called.");
 
-                var responseBody = new UserSessionResponse();
-
-                PopulateUserSessionResponse(responseBody, userSession);
+                var responseBody = userSession.Accept(new UserSessionResponseVisitor(_settings, null));
 
                 await _auditor.Audit(AuditingOperations.SessionGetResponse, "Successfully retrieved session.");
 
@@ -178,98 +173,32 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 return objectResult;
             }
 
-            return await GetGpSystemAndCreateSession(citizenIdSessionResult, serviceJourneyRulesResultVisited);
+            return await GetGpSystemAndCreateSession(citizenIdSessionResult, serviceJourneyRulesResultVisited.Response);
         }
-        private async Task<IActionResult> GetGpSystemAndCreateSession(CitizenIdSessionResult citizenIdSessionResult, ServiceJourneyRulesVisitorOutput serviceJourneyRulesResultVisited)
+
+        private async Task<IActionResult> GetGpSystemAndCreateSession(CitizenIdSessionResult citizenIdSessionResult, ServiceJourneyRulesResponse serviceJourneyRules)
         {
-            // Get a suitable GP system, based on the ODS code.
-            var gpSystemOption = GetGpSystem(serviceJourneyRulesResultVisited.Response.Journeys.Supplier);
-            if (!gpSystemOption.HasValue)
-            {
-                _logger.LogError(
-                    $"Failed to determine the GP system based on ODS code '{citizenIdSessionResult.OdsCode}'");
+            var createUserSessionResult = await _userSessionManager.Create(
+                serviceJourneyRules,
+                citizenIdSessionResult,
+                _antiforgery.GetTokens(HttpContext).RequestToken);
 
-                return BuildErrorResult(new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported());
-            }
-
-            var gpSystem = gpSystemOption.ValueOrFailure();
-            _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
-
-            await _auditor.AuditSessionEvent(
-                citizenIdSessionResult.Session.AccessToken,
-                citizenIdSessionResult.NhsNumber,
-                gpSystem.Supplier,
-                AuditingOperations.SessionCreateRequest,
-                "Attempting to create Session");
-
-            // Validate the format of the IM1 connection token for this GP system.
-            var tokenValidationService = gpSystem.GetTokenValidationService();
-            if (!tokenValidationService.IsValidConnectionTokenFormat(citizenIdSessionResult.Im1ConnectionToken))
-            {
-                const string errorMessage = "Failed to validate Im1 connection";
-                _logger.LogError(errorMessage);
-                await _auditor.AuditSessionEvent(
-                    citizenIdSessionResult.Session.AccessToken,
-                    citizenIdSessionResult.NhsNumber,
-                    gpSystem.Supplier,
-                    AuditingOperations.SessionCreateResponse,
-                    errorMessage);
-
-                return BuildErrorResult(new ErrorTypes.LoginForbidden());
-            }
-
-            return await GetUserSessionAndCreateSession(gpSystem, citizenIdSessionResult, serviceJourneyRulesResultVisited);
+            return await createUserSessionResult.Accept(
+                error => Task.FromResult(BuildErrorResult(error.ErrorType)),
+                success => CreateSession(success.UserSession, serviceJourneyRules, citizenIdSessionResult));
         }
 
-        private async Task<IActionResult> GetUserSessionAndCreateSession(IGpSystem gpSystem,
-            CitizenIdSessionResult citizenIdSessionResult,
-            ServiceJourneyRulesVisitorOutput serviceJourneyRulesResultVisited)
-        {
-            var gpSessionCreateResult = await _gpSessionManager.CreateSession(new GpSessionCreateArgs(gpSystem, citizenIdSessionResult));
-
-            if (!(gpSessionCreateResult is GpSessionCreateResult.Success result))
-            {
-                var failureStatusCode = gpSessionCreateResult.StatusCode;
-
-                var errorMessage =
-                    $"Creating the session failed with status code: '{failureStatusCode}'";
-                _logger.LogError(errorMessage);
-                await _auditor.AuditSessionEvent(
-                    citizenIdSessionResult.Session.AccessToken,
-                    citizenIdSessionResult.NhsNumber,
-                    gpSystem.Supplier,
-                    AuditingOperations.SessionCreateResponse,
-                    errorMessage);
-
-                // 502 Bad gateway error references differ by supplier. The other error types do not.
-                var objectResult = failureStatusCode == StatusCodes.Status502BadGateway
-                    ? BuildErrorResult(ErrorTypes.LoginBadGateway(_logger, gpSystem.Supplier))
-                    : BuildErrorResult(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login, failureStatusCode));
-
-                return objectResult;
-            }
-
-            var userSession = new P9UserSession(
-                _antiforgery.GetTokens(HttpContext).RequestToken,
-                citizenIdSessionResult.Session,
-                result.UserSession, citizenIdSessionResult.Im1ConnectionToken);
-
-            var sessionId = await _sessionCacheService.CreateUserSession(userSession);
-            _logger.LogDebug($"Created Session Id: '{sessionId}'");
-
-            return await CreateSession(userSession, serviceJourneyRulesResultVisited, citizenIdSessionResult);
-        }
-
-        private async Task<IActionResult> CreateSession(P9UserSession userSession,
-            ServiceJourneyRulesVisitorOutput serviceJourneyRulesVisitorOutput,
+        private async Task<IActionResult> CreateSession(
+            UserSession userSession,
+            ServiceJourneyRulesResponse serviceJourneyRules,
             CitizenIdSessionResult citizenIdSessionResult)
         {
             var appendCookieToResponseTask = AppendCookieToResponse(userSession.Key);
 
             // Post to the UserInfo service
-            if (serviceJourneyRulesVisitorOutput.Response.Journeys.UserInfo == true)
+            if (serviceJourneyRules.Journeys.UserInfo == true)
             {
-                await _userInfoService.Update(userSession.CitizenIdUserSession.AccessToken, HttpContext);
+                await _userInfoService.Update(citizenIdSessionResult.Session.AccessToken, HttpContext);
             }
 
             // Delete connection token from cache
@@ -282,7 +211,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             // Audit that the user is logged on.
             await _auditor.Audit(AuditingOperations.SessionCreateResponse, "Session successfully created.");
 
-            return await Task.FromResult(CreateCreatedResult(userSession, serviceJourneyRulesVisitorOutput.Response));
+            var responseBody = userSession.Accept(new UserSessionResponseVisitor(_settings, serviceJourneyRules));
+            return new CreatedResult(string.Empty, responseBody);
         }
 
         [HttpDelete]
@@ -331,21 +261,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             }
         }
 
-        private CreatedResult CreateCreatedResult(
-            P9UserSession userSession,
-            ServiceJourneyRulesResponse serviceJourneyRules)
-        {
-            var responseBody = new PostUserSessionResponse
-            {
-                ServiceJourneyRules = serviceJourneyRules
-            };
-
-            PopulateUserSessionResponse(responseBody, userSession);
-
-            return new CreatedResult(string.Empty, responseBody);
-        }
-
-        private ObjectResult BuildErrorResult(ErrorTypes errorTypes)
+        private IActionResult BuildErrorResult(ErrorTypes errorTypes)
         {
             var serviceDeskReference = _errorReferenceGenerator.GenerateAndLogErrorReference(errorTypes);
 
@@ -353,12 +269,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             {
                 StatusCode = errorTypes.StatusCode
             };
-        }
-
-        private Option<IGpSystem> GetGpSystem(Supplier supplier)
-        {
-            return supplier == Supplier.Unknown ? Option.None<IGpSystem>() :
-                Option.Some(_gpSystemFactory.CreateGpSystem(supplier));
         }
 
         private async Task<ServiceJourneyRulesVisitorOutput> GetServiceJourneyRulesVisitorOutput(string odsCode)
@@ -402,17 +312,44 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             }
         }
 
-        private void PopulateUserSessionResponse(UserSessionResponse response, P9UserSession userSession)
+        private sealed class UserSessionResponseVisitor: IUserSessionVisitor<UserSessionResponse>
         {
-            response.Name = userSession.GpUserSession.Name;
-            response.SessionTimeout = (int) TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes).TotalSeconds;
-            response.Token = userSession.CsrfToken;
-            response.OdsCode = userSession.GpUserSession.OdsCode;
-            response.DateOfBirth = userSession.CitizenIdUserSession.DateOfBirth;
-            response.NhsNumber = userSession.GpUserSession.NhsNumber;
-            response.AccessToken = userSession.CitizenIdUserSession.AccessToken;
-            response.Im1MessagingEnabled = userSession.GpUserSession.Im1MessagingEnabled;
-            response.ProofLevel = userSession.CitizenIdUserSession.ProofLevel;
+            private readonly ConfigurationSettings _settings;
+            private readonly ServiceJourneyRulesResponse _serviceJourneyRules;
+
+            public UserSessionResponseVisitor(
+                ConfigurationSettings settings,
+                ServiceJourneyRulesResponse serviceJourneyRules)
+            {
+                _settings = settings;
+                _serviceJourneyRules = serviceJourneyRules;
+            }
+
+            public UserSessionResponse Visit(P5UserSession userSession)
+                => new PostUserSessionResponse
+                {
+                    ServiceJourneyRules = _serviceJourneyRules,
+                    SessionTimeout = (int) TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes).TotalSeconds,
+                    Token = userSession.CsrfToken,
+                    DateOfBirth = userSession.CitizenIdUserSession.DateOfBirth,
+                    AccessToken = userSession.CitizenIdUserSession.AccessToken,
+                    ProofLevel = userSession.CitizenIdUserSession.ProofLevel
+                };
+
+            public UserSessionResponse Visit(P9UserSession userSession)
+                => new PostUserSessionResponse
+                {
+                    ServiceJourneyRules = _serviceJourneyRules,
+                    Name = userSession.GpUserSession.Name,
+                    SessionTimeout = (int) TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes).TotalSeconds,
+                    Token = userSession.CsrfToken,
+                    OdsCode = userSession.GpUserSession.OdsCode,
+                    DateOfBirth = userSession.CitizenIdUserSession.DateOfBirth,
+                    NhsNumber = userSession.GpUserSession.NhsNumber,
+                    AccessToken = userSession.CitizenIdUserSession.AccessToken,
+                    Im1MessagingEnabled = userSession.GpUserSession.Im1MessagingEnabled,
+                    ProofLevel = userSession.CitizenIdUserSession.ProofLevel
+                };
         }
     }
 }
