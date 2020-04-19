@@ -4,6 +4,7 @@ import ExpectedPageStructureElement
 import ParsedPageElement
 import org.junit.Assert
 import pages.HybridPageObject
+import pages.avoidChromeWebDriverServiceCrash
 import kotlin.streams.toList
 
 class ExpectedPageStructureAssertor {
@@ -13,6 +14,8 @@ class ExpectedPageStructureAssertor {
     private val knownTags = tagsToAssert  + tagsToExclude
 
     fun assert(page: HybridPageObject, expectedPage: MutableList<ExpectedPageStructureElement>) {
+        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
+        page.avoidChromeWebDriverServiceCrash()
         val firstElement = expectedPage[0]
         val containerPath = "//div[${firstElement.tag}[normalize-space(text())=\"${firstElement.content}\"]]"
         val parsedPage = ParsedPage.parse(page, containerPath)
