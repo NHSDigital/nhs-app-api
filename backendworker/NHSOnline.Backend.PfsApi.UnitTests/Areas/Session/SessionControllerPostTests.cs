@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 Name = Name
             };
 
-            _citizenIdUserSession = new CitizenIdUserSession { AccessToken = AccessToken };
+            _citizenIdUserSession = new CitizenIdUserSession { AccessToken = AccessToken, ProofLevel = ProofLevel.P9 };
 
             _citizenIdSessionResult = new CitizenIdSessionResult
             {
@@ -218,7 +218,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .AddSingleton(_mockAntiforgery.Object)
                 .AddSingleton(_mockSessionCacheService.Object)
                 .AddSingleton(_mockAuthenticationService.Object)
-                .AddSingleton(new Mock<ILogger<UserSessionManager>>().Object);
+                .AddSingleton(new Mock<ILogger<UserSessionManager>>().Object)
+                .AddSingleton(new Mock<ILogger<P9UserSessionCreator>>().Object);
 
             new PfsApi.Session.ServiceConfigurationModule().ConfigureServices(serviceCollection, null);
 

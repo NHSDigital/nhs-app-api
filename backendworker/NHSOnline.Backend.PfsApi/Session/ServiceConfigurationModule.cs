@@ -11,6 +11,8 @@ namespace NHSOnline.Backend.PfsApi.Session
             services.AddScoped<UserSessionService>();
             services.AddTransient<IUserSessionService>(sp => sp.GetRequiredService<UserSessionService>());
             services.AddTransient<IUserSessionManager, UserSessionManager>();
+            services.AddTransient<UserSessionCreator>();
+            services.AddTransient<P9UserSessionCreator>();
         }
     }
 }
