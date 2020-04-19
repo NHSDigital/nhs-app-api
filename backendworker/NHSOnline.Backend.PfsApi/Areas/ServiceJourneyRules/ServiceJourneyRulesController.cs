@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
-using NHSOnline.Backend.GpSystems.LinkedAccounts;
-using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
@@ -14,6 +12,7 @@ using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 {
@@ -33,8 +32,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
             IServiceJourneyRulesService serviceJourneyRulesService,
             SessionConfigurationSettings sessionSettings,
             IGpSystemFactory gpSystemFactory,
-            ISessionCacheService sessionCacheService
-        )
+            ISessionCacheService sessionCacheService)
         {
             _logger = logger;
             _auditor = auditor;
@@ -46,16 +44,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
         [HttpGet]
         [ApiVersionRoute("patient/journey-configuration")]
-        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
+        public async Task<IActionResult> Get([UserSession] P5UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
 
-                await _auditor.Audit(AuditingOperations.GetServiceJourneyRulesAuditTypeRequest,
-                    "Attempting to get service journey rules");
+                if (userSession is P9UserSession)
+                {
+                    await _auditor.Audit(
+                        AuditingOperations.GetServiceJourneyRulesAuditTypeRequest,
+                        "Attempting to get service journey rules");
+                }
 
-                var odsCode = userSession.GpUserSession.OdsCode;
+                var odsCode = userSession.OdsCode;
 
                 _logger.LogInformation($"Fetching Service Journey Rules for {odsCode}");
 
@@ -71,38 +73,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
         [HttpGet]
         [ApiVersionRoute("patient/configuration")]
-        public async Task<IActionResult> GetLinkedAccountPatientConfig([UserSession] P9UserSession userSession)
+        public async Task<IActionResult> GetLinkedAccountPatientConfig([UserSession] P5UserSession userSession)
         {
-            await _auditor.Audit(AuditingOperations.GetPatientConfigRequest,"Attempting to get config for patient");
+            var visitor = new LinkedAccountPatientConfigVisitor(_logger, _auditor, _sessionSettings, _gpSystemFactory, _sessionCacheService);
+            var result = await userSession.Accept(visitor);
 
-            var linkedAccountsBreakdown = new LinkedAccountsBreakdownSummary();
-
-            var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
-
-            if (gpSystem.SupportsLinkedAccounts
-                && userSession.GpUserSession.HasLinkedAccounts)
-            {
-                var linkedAccountsService = gpSystem.GetLinkedAccountsService();
-
-                var linkedAccountsResult = await linkedAccountsService.GetLinkedAccounts(userSession.GpUserSession);
-
-                if (linkedAccountsResult is LinkedAccountsResult.Success success)
-                {
-                    linkedAccountsBreakdown = success.LinkedAccountsBreakdown;
-                    if (success.HasAnyProxyInfoBeenUpdatedInSession)
-                    {
-                        _logger.LogInformation("Updating session as proxy info has been updated");
-                        await _sessionCacheService.UpdateUserSession(userSession);
-                    }
-                }
-            }
-
-            LinkedAccountsConfigResult result = new LinkedAccountsConfigResult.Success(
-                userSession.GpUserSession.Id,
-                _sessionSettings,
-                linkedAccountsBreakdown);
-
-            await result.Accept(new LinkedAccountConfigResultAuditingVisitor(_auditor, _logger));
             return result.Accept(new LinkedAccountsConfigResultVisitor());
         }
 
@@ -116,7 +91,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
             {
                 _logger.LogEnter();
 
-                await _auditor.Audit(AuditingOperations.GetServiceJourneyRulesAuditForLinkedAccountRequest,
+                await _auditor.Audit(
+                    AuditingOperations.GetServiceJourneyRulesAuditForLinkedAccountRequest,
                     "Attempting to get service journey rules for linked account");
 
                 var gpUserSession = userSession.GpUserSession;
@@ -137,6 +113,5 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
                 _logger.LogExit();
             }
         }
-
     }
 }

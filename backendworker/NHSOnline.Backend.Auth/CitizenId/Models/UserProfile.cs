@@ -14,6 +14,7 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
         public string OdsCode => _userInfo.GpIntegrationCredentials.OdsCode;
         public string DateOfBirth => _userInfo.Birthdate;
         public string NhsNumber => _userInfo.NhsNumber;
+        public string GivenName => _userInfo.GivenName;
         public string FamilyName => _userInfo.FamilyName;
         public string IdentityProofingLevel => _userInfo.IdentityProofingLevel;
 

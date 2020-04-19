@@ -81,13 +81,14 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                 {
                     DateOfBirth = dateOfBirthParsed.Value,
                     Im1ConnectionToken = cidUserProfile.Im1ConnectionToken,
-                    OdsCode = cidUserProfile.OdsCode,
                     StatusCode = (int) userProfileResult.StatusCode,
                     NhsNumber = nhsNumberFormatted,
                     Session = new CitizenIdUserSession
                     {
                         AccessToken = cidUserProfile.AccessToken,
+                        GivenName = cidUserProfile.GivenName,
                         FamilyName = cidUserProfile.FamilyName,
+                        OdsCode = cidUserProfile.OdsCode,
                         DateOfBirth = dateOfBirthParsed.Value,
                         IdTokenJti = userProfileResult.IdTokenJti,
                         ProofLevel = proofLevel.Value

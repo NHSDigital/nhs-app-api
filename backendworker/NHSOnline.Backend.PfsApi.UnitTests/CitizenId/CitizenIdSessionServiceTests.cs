@@ -94,13 +94,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                 DateOfBirth = dateTimeNow.Date,
                 Im1ConnectionToken = _im1Token,
                 NhsNumber = FormattedNhsNumber,
-                OdsCode = _odsCode,
                 Session = new CitizenIdUserSession
                 {
                     AccessToken = _accessToken,
                     DateOfBirth = dateTimeNow.Date,
                     FamilyName = _familyName,
                     IdTokenJti = _idTokenJti,
+                    OdsCode = _odsCode,
                     ProofLevel = ProofLevel.P9
                 },
                 StatusCode = 200

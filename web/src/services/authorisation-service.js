@@ -58,7 +58,7 @@ class AuthorisationService {
     const fidoResponse = fidoAuthResponse;
 
     const request = {
-      scope: 'openid profile nhs_app_credentials gp_integration_credentials',
+      scope: 'openid profile nhs_app_credentials gp_integration_credentials profile_extended',
       clientId: this.cidClientId,
       redirectUri,
       responseType: 'code',

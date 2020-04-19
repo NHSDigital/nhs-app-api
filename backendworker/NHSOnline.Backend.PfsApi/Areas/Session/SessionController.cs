@@ -76,16 +76,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
+        public async Task<IActionResult> Get([UserSession] P5UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
-                await _auditor.Audit(AuditingOperations.SessionGetRequest, "Session Get called.");
+                if (userSession is P9UserSession)
+                {
+                    await _auditor.Audit(AuditingOperations.SessionGetRequest, "Session Get called.");
+                }
 
-                var responseBody = userSession.Accept(new UserSessionResponseVisitor(_settings, null));
+                var responseBody = userSession.Accept(new UserSessionResponseVisitor<UserSessionResponse>(_settings, new UserSessionResponse()));
 
-                await _auditor.Audit(AuditingOperations.SessionGetResponse, "Successfully retrieved session.");
+                if (userSession is P9UserSession)
+                {
+                    await _auditor.Audit(AuditingOperations.SessionGetResponse, "Successfully retrieved session.");
+                }
 
                 return new OkObjectResult(responseBody);
             }
@@ -138,7 +144,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 return objectResult;
             }
 
-            citizenIdSessionResult.OdsCode = _odsCodeMassager.CheckOdsCode(citizenIdSessionResult.OdsCode);
+            citizenIdSessionResult.Session.OdsCode = _odsCodeMassager.CheckOdsCode(citizenIdSessionResult.Session.OdsCode);
 
             _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
 
@@ -148,10 +154,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private async Task<IActionResult> GetServiceJourneyRulesAndCreateSession(CitizenIdSessionResult citizenIdSessionResult)
         {
             // Get Service Journey Rules
-            _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {citizenIdSessionResult.OdsCode}");
+            _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {citizenIdSessionResult.Session.OdsCode}");
 
             var serviceJourneyRulesResultVisited =
-                await GetServiceJourneyRulesVisitorOutput(citizenIdSessionResult.OdsCode);
+                await GetServiceJourneyRulesVisitorOutput(citizenIdSessionResult.Session.OdsCode);
 
             if (!serviceJourneyRulesResultVisited.ServiceJourneyRulesRetrieved)
             {
@@ -209,9 +215,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _userSessionService.SetUserSession(userSession);
 
             // Audit that the user is logged on.
-            await _auditor.Audit(AuditingOperations.SessionCreateResponse, "Session successfully created.");
+            await _auditor.AuditSessionEvent(
+                citizenIdSessionResult.Session.AccessToken,
+                citizenIdSessionResult.NhsNumber,
+                serviceJourneyRules.Journeys.Supplier,
+                AuditingOperations.SessionCreateResponse,
+                "Session successfully created.");
 
-            var responseBody = userSession.Accept(new UserSessionResponseVisitor(_settings, serviceJourneyRules));
+            var responseBody = new PostUserSessionResponse { ServiceJourneyRules = serviceJourneyRules };
+            responseBody = userSession.Accept(new UserSessionResponseVisitor<PostUserSessionResponse>(_settings, responseBody));
             return new CreatedResult(string.Empty, responseBody);
         }
 
@@ -312,44 +324,46 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             }
         }
 
-        private sealed class UserSessionResponseVisitor: IUserSessionVisitor<UserSessionResponse>
+        private sealed class UserSessionResponseVisitor<TUserSessionResponse> : IUserSessionVisitor<TUserSessionResponse>
+            where TUserSessionResponse: UserSessionResponse
         {
             private readonly ConfigurationSettings _settings;
-            private readonly ServiceJourneyRulesResponse _serviceJourneyRules;
+            private readonly TUserSessionResponse _userSessionResponse;
 
             public UserSessionResponseVisitor(
                 ConfigurationSettings settings,
-                ServiceJourneyRulesResponse serviceJourneyRules)
+                TUserSessionResponse userSessionResponse)
             {
                 _settings = settings;
-                _serviceJourneyRules = serviceJourneyRules;
+                _userSessionResponse = userSessionResponse;
             }
 
-            public UserSessionResponse Visit(P5UserSession userSession)
-                => new PostUserSessionResponse
-                {
-                    ServiceJourneyRules = _serviceJourneyRules,
-                    SessionTimeout = (int) TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes).TotalSeconds,
-                    Token = userSession.CsrfToken,
-                    DateOfBirth = userSession.CitizenIdUserSession.DateOfBirth,
-                    AccessToken = userSession.CitizenIdUserSession.AccessToken,
-                    ProofLevel = userSession.CitizenIdUserSession.ProofLevel
-                };
+            public TUserSessionResponse Visit(P5UserSession userSession)
+            {
+                SetCommonProperties(userSession);
+                _userSessionResponse.Name = $"{userSession.CitizenIdUserSession.GivenName} {userSession.CitizenIdUserSession.FamilyName}";
+                _userSessionResponse.Im1MessagingEnabled = false;
+                return _userSessionResponse;
+            }
 
-            public UserSessionResponse Visit(P9UserSession userSession)
-                => new PostUserSessionResponse
-                {
-                    ServiceJourneyRules = _serviceJourneyRules,
-                    Name = userSession.GpUserSession.Name,
-                    SessionTimeout = (int) TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes).TotalSeconds,
-                    Token = userSession.CsrfToken,
-                    OdsCode = userSession.GpUserSession.OdsCode,
-                    DateOfBirth = userSession.CitizenIdUserSession.DateOfBirth,
-                    NhsNumber = userSession.GpUserSession.NhsNumber,
-                    AccessToken = userSession.CitizenIdUserSession.AccessToken,
-                    Im1MessagingEnabled = userSession.GpUserSession.Im1MessagingEnabled,
-                    ProofLevel = userSession.CitizenIdUserSession.ProofLevel
-                };
+            public TUserSessionResponse Visit(P9UserSession userSession)
+            {
+                SetCommonProperties(userSession);
+                _userSessionResponse.Name = userSession.GpUserSession.Name;
+                _userSessionResponse.NhsNumber = userSession.GpUserSession.NhsNumber;
+                _userSessionResponse.Im1MessagingEnabled = userSession.GpUserSession.Im1MessagingEnabled;
+                return _userSessionResponse;
+            }
+
+            private void SetCommonProperties(P5UserSession userSession)
+            {
+                _userSessionResponse.SessionTimeout = (int)TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes).TotalSeconds;
+                _userSessionResponse.OdsCode = userSession.OdsCode;
+                _userSessionResponse.Token = userSession.CsrfToken;
+                _userSessionResponse.DateOfBirth = userSession.CitizenIdUserSession.DateOfBirth;
+                _userSessionResponse.AccessToken = userSession.CitizenIdUserSession.AccessToken;
+                _userSessionResponse.ProofLevel = userSession.CitizenIdUserSession.ProofLevel;
+            }
         }
     }
 }

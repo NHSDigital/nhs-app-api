@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         {
             GpSystem = gpSystem;
             Im1ConnectionToken = citizenIdSessionResult.Im1ConnectionToken;
-            OdsCode = citizenIdSessionResult.OdsCode;
+            OdsCode = citizenIdSessionResult.Session.OdsCode;
             NhsNumber = citizenIdSessionResult.NhsNumber;
         }
 

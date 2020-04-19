@@ -112,7 +112,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 Name = Name
             };
 
-            _citizenIdUserSession = new CitizenIdUserSession { AccessToken = AccessToken, ProofLevel = ProofLevel.P9 };
+            _citizenIdUserSession = new CitizenIdUserSession
+            {
+                AccessToken = AccessToken,
+                ProofLevel = ProofLevel.P9,
+                OdsCode = _userProfile.OdsCode
+            };
 
             _citizenIdSessionResult = new CitizenIdSessionResult
             {
@@ -120,7 +125,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 DateOfBirth = new DateTime(1980, 01, 02, 0, 0, 0, DateTimeKind.Utc),
                 Im1ConnectionToken = _userProfile.Im1ConnectionToken,
                 NhsNumber = _userProfile.NhsNumber,
-                OdsCode = _userProfile.OdsCode,
                 Session = _citizenIdUserSession
             };
 
@@ -219,6 +223,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .AddSingleton(_mockSessionCacheService.Object)
                 .AddSingleton(_mockAuthenticationService.Object)
                 .AddSingleton(new Mock<ILogger<UserSessionManager>>().Object)
+                .AddSingleton(new Mock<ILogger<P5UserSessionCreator>>().Object)
                 .AddSingleton(new Mock<ILogger<P9UserSessionCreator>>().Object);
 
             new PfsApi.Session.ServiceConfigurationModule().ConfigureServices(serviceCollection, null);
@@ -716,7 +721,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                         It.Is<IGpSessionCreateArgs>(p
                             => ReferenceEquals(p.GpSystem, _mockGpSystem.Object) &&
                                p.NhsNumber.Equals(_citizenIdSessionResult.NhsNumber, StringComparison.Ordinal) &&
-                               p.OdsCode.Equals(_citizenIdSessionResult.OdsCode, StringComparison.Ordinal) &&
+                               p.OdsCode.Equals(_citizenIdSessionResult.Session.OdsCode, StringComparison.Ordinal) &&
                                p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
                 .ReturnsAsync(returnResult);
         }

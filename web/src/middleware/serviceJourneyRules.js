@@ -15,8 +15,10 @@ export default async ({ route, store }) => {
     if (!store.state.linkedAccounts.config.hasLoaded) {
       await store.dispatch('linkedAccounts/initialiseConfig');
 
-      // want to run this on full page refresh to make sure TPP main user suid is set
-      await store.dispatch('linkedAccounts/switchToMainUserProfile');
+      if (store.state.linkedAccounts.config.hasLinkedAccounts) {
+        // want to run this on full page refresh to make sure TPP main user suid is set
+        await store.dispatch('linkedAccounts/switchToMainUserProfile');
+      }
     }
   }
 

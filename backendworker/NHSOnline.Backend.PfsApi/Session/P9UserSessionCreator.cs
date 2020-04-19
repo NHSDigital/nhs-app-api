@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             if (serviceJourneyRules.Journeys.Supplier == Supplier.Unknown)
             {
                 _logger.LogError(
-                    $"Failed to determine the GP system based on ODS code '{citizenIdSessionResult.OdsCode}'");
+                    $"Failed to determine the GP system based on ODS code '{citizenIdSessionResult.Session.OdsCode}'");
 
                 return CreateUserSessionResult.Failed(new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported());
             }

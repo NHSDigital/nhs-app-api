@@ -12,6 +12,7 @@ using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 {
@@ -22,12 +23,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         private readonly ILogger<TermsAndConditionsController> _logger;
         private readonly IAuditor _auditor;
 
-        public TermsAndConditionsController
-        (
+        public TermsAndConditionsController(
             ITermsAndConditionsService termsAndConditionsService,
             ILogger<TermsAndConditionsController> logger,
-            IAuditor auditor
-        )
+            IAuditor auditor)
         {
             _termsAndConditionsService = termsAndConditionsService;
             _logger = logger;
@@ -36,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 
         [HttpGet]
         [ApiVersionRoute("patient/terms-and-conditions/consent")]
-        public async Task<IActionResult> Get([UserSession] P9UserSession userSession)
+        public async Task<IActionResult> Get([UserSession] P5UserSession userSession)
         {
             _logger.LogEnter();
 
@@ -53,7 +52,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         [ApiVersionRoute("patient/terms-and-conditions/consent")]
         public async Task<IActionResult> Post(
             [FromBody] ConsentRequest model,
-            [UserSession] P9UserSession userSession)
+            [UserSession] P5UserSession userSession)
         {
             _logger.LogEnter();
 
@@ -65,16 +64,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             var nhsLoginId = GetNhsLoginId(userSession);
             var termsAndConditionsAcceptanceDate = DateTimeOffset.Now;
 
-            await _auditor.Audit(AuditingOperations.TermsAndConditionsRecordConsentAuditTypeRequest,
-                $"Attempting to record patient consent - ConsentGiven={model.ConsentGiven}, " +
-                $"AnalyticsCookieAccepted={model.AnalyticsCookieAccepted} " +
-                $"at DateOfConsent={termsAndConditionsAcceptanceDate.ToString(CultureInfo.InvariantCulture)}");
+            if (userSession is P9UserSession)
+            {
+                await _auditor.Audit(AuditingOperations.TermsAndConditionsRecordConsentAuditTypeRequest,
+                    $"Attempting to record patient consent - ConsentGiven={model.ConsentGiven}, " +
+                    $"AnalyticsCookieAccepted={model.AnalyticsCookieAccepted} " +
+                    $"at DateOfConsent={termsAndConditionsAcceptanceDate.ToString(CultureInfo.InvariantCulture)}");
+            }
 
             if (!model.AnalyticsCookieAccepted)
             {
                 _logger.LogInformation(
                     $"Recording user did not accept optional analytics cookies." +
-                    $" {nameof(userSession.GpUserSession.OdsCode)}: {userSession.GpUserSession.OdsCode}");
+                    $" {nameof(userSession.OdsCode)}: {userSession.OdsCode}");
             }
 
             _logger.LogDebug("Recording user consent");
@@ -96,7 +98,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
         [ApiVersionRoute("patient/terms-and-conditions/toggle-analytics-cookie-acceptance")]
         public async Task<IActionResult> ToggleAnalyticsCookieAcceptance(
             [FromBody] AnalyticsCookieAcceptance analyticsCookieAcceptance,
-            [UserSession] P9UserSession userSession)
+            [UserSession] P5UserSession userSession)
         {
             _logger.LogEnter();
 
@@ -108,10 +110,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             var nhsLoginId = GetNhsLoginId(userSession);
             var dateTimeOffset = DateTimeOffset.Now;
 
-            await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceRequest,
-                $"Attempting to toggle analytics cookie acceptance - " +
-                $"AnalyticsCookieAccepted={analyticsCookieAcceptance.AnalyticsCookieAccepted} " +
-                $"at DateOfAnalyticsCookieToggle={dateTimeOffset.ToString(CultureInfo.InvariantCulture)}");
+            if (userSession is P9UserSession)
+            {
+                await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceRequest,
+                    $"Attempting to toggle analytics cookie acceptance - " +
+                    $"AnalyticsCookieAccepted={analyticsCookieAcceptance.AnalyticsCookieAccepted} " +
+                    $"at DateOfAnalyticsCookieToggle={dateTimeOffset.ToString(CultureInfo.InvariantCulture)}");
+            }
 
             var result = await _termsAndConditionsService.ToggleAnalyticsCookieAcceptance(
                 nhsLoginId,
@@ -127,7 +132,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             return result.Accept(new ToggleAnalyticsCookieAcceptanceResultVisitor());
         }
 
-        private string GetNhsLoginId(P9UserSession userSession)
+        private string GetNhsLoginId(P5UserSession userSession)
             => AccessToken.Parse(_logger, userSession.CitizenIdUserSession.AccessToken).Subject;
     }
 }

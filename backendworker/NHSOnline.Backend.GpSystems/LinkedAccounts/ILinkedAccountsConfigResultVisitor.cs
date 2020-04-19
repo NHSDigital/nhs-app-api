@@ -1,4 +1,4 @@
-namespace NHSOnline.Backend.GpSystems.LinkedAccounts.Models
+namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 {
     public interface ILinkedAccountsConfigResultVisitor<out T>
     {

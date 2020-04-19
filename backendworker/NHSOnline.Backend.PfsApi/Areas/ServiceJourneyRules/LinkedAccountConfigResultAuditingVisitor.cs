@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
-using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 {
