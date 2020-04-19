@@ -1,9 +1,16 @@
+using System.Net;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Support
 {
     public abstract partial class ErrorTypes
     {
+        public static ErrorTypes LoginBadGateway(ILogger logger, Supplier supplier)
+        {
+            return LookupErrorType(logger, ErrorCategory.Login, StatusCodes.Status502BadGateway, SupplierSourceApiConverter.Instance[supplier]);
+        }
+
         public class LoginBadRequest : ErrorTypes
         {
             public override string Prefix => "3a";

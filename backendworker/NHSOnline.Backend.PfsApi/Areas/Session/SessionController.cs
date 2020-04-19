@@ -137,9 +137,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             {
                 // 502 Bad gateway error references differ by source API. The other error types do not.
                 var objectResult = citizenIdSessionResult.StatusCode == StatusCodes.Status502BadGateway
-                    ? BuildErrorResult(ErrorCategory.Login, StatusCodes.Status502BadGateway,
-                        SourceApi.NhsLogin)
-                    : BuildErrorResult(ErrorCategory.Login, citizenIdSessionResult.StatusCode);
+                    ? BuildErrorResult(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login, StatusCodes.Status502BadGateway, SourceApi.NhsLogin))
+                    : BuildErrorResult(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login, citizenIdSessionResult.StatusCode));
 
                 return objectResult;
             }
@@ -244,8 +243,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
                 // 502 Bad gateway error references differ by supplier. The other error types do not.
                 var objectResult = failureStatusCode == StatusCodes.Status502BadGateway
-                    ? BuildErrorResult(ErrorCategory.Login, StatusCodes.Status502BadGateway, gpSystem.Supplier)
-                    : BuildErrorResult(ErrorCategory.Login, failureStatusCode);
+                    ? BuildErrorResult(ErrorTypes.LoginBadGateway(_logger, gpSystem.Supplier))
+                    : BuildErrorResult(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login, failureStatusCode));
 
                 return objectResult;
             }
@@ -332,7 +331,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             }
         }
 
-        private CreatedResult CreateCreatedResult(P9UserSession userSession,
+        private CreatedResult CreateCreatedResult(
+            P9UserSession userSession,
             ServiceJourneyRulesResponse serviceJourneyRules)
         {
             var responseBody = new PostUserSessionResponse
@@ -347,36 +347,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
         private ObjectResult BuildErrorResult(ErrorTypes errorTypes)
         {
-            var serviceDeskReference =
-                _errorReferenceGenerator.GenerateAndLogErrorReference(errorTypes);
+            var serviceDeskReference = _errorReferenceGenerator.GenerateAndLogErrorReference(errorTypes);
 
-            return BuildErrorResult(serviceDeskReference, errorTypes.StatusCode);
-        }
-
-        private ObjectResult BuildErrorResult(ErrorCategory errorCategory, int statusCode, SourceApi sourceApi = SourceApi.None)
-        {
-            var serviceDeskReference =
-                _errorReferenceGenerator.GenerateAndLogErrorReference(errorCategory, statusCode, sourceApi);
-
-            return BuildErrorResult(serviceDeskReference, statusCode);
-        }
-
-        private ObjectResult BuildErrorResult(ErrorCategory errorCategory, int statusCode, Supplier supplier)
-        {
-            var serviceDeskReference =
-                _errorReferenceGenerator.GenerateAndLogErrorReference(errorCategory, statusCode, supplier);
-
-            return BuildErrorResult(serviceDeskReference, statusCode);
-        }
-
-        private static ObjectResult BuildErrorResult(string serviceDeskReference, int statusCode)
-        {
-            return new ObjectResult(new PfsErrorResponse
+            return new ObjectResult(new PfsErrorResponse { ServiceDeskReference = serviceDeskReference })
             {
-                ServiceDeskReference = serviceDeskReference
-            })
-            {
-                StatusCode = statusCode
+                StatusCode = errorTypes.StatusCode
             };
         }
 

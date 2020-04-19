@@ -238,8 +238,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Verifiable();
 
             _mockErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Login,
-                    StatusCodes.Status400BadRequest, SourceApi.None))
+                .Setup(x => x.GenerateAndLogErrorReference(
+                    It.Is<ErrorTypes>(
+                        et =>
+                            et.Category == ErrorCategory.Login &&
+                            et.StatusCode == StatusCodes.Status400BadRequest &&
+                            et.SourceApi == SourceApi.None)))
                 .Returns(ServiceDeskReference)
                 .Verifiable();
 
@@ -394,10 +398,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         {
             // Arrange
             _mockErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Login, StatusCodes.Status403Forbidden,
-                    SourceApi.None))
+                .Setup(x => x.GenerateAndLogErrorReference(
+                    It.Is<ErrorTypes>(
+                        et =>
+                            et.Category == ErrorCategory.Login &&
+                            et.StatusCode == StatusCodes.Status403Forbidden &&
+                            et.SourceApi == SourceApi.None)))
                 .Returns(ServiceDeskReference)
                 .Verifiable();
+
             _userSession.Key = "123";
 
             var expectedValue = new PfsErrorResponse
@@ -445,8 +454,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         {
             // Arrange
             _mockErrorReferenceGenerator
-                .Setup(x => x.GenerateAndLogErrorReference(ErrorCategory.Login, StatusCodes.Status502BadGateway,
-                    Supplier.Emis))
+                .Setup(x => x.GenerateAndLogErrorReference(
+                    It.Is<ErrorTypes>(
+                        et =>
+                            et.Category == ErrorCategory.Login &&
+                            et.StatusCode == StatusCodes.Status502BadGateway &&
+                            et.SourceApi == SourceApi.Emis)))
                 .Returns(ServiceDeskReference)
                 .Verifiable();
 
