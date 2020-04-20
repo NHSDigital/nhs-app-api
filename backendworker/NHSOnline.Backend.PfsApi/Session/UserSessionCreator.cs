@@ -22,6 +22,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             switch (citizenIdSessionResult.Session.ProofLevel)
             {
                 case ProofLevel.P9:
+                case ProofLevel.P5:
                     return await _p9UserSessionCreator.Create(serviceJourneyRules, citizenIdSessionResult, csrfToken);
                 default:
                     return CreateUserSessionResult.Failed(new ErrorTypes.UnhandledError());
