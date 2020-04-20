@@ -35,10 +35,13 @@ Feature: Use the navigation header bar
     And a booked appointment can be cancelled
     When I follow the Appointments link from the home page
     Then the Appointments Hub page is displayed
-    And I click the GP Appointments link
-    And I select "Book an appointment" button
-    And I select "Book an appointment" button
-    And I have selected an appointment slot to book
+    When I click the GP Appointments link
+    Then the Your Appointments page is displayed
+    When I select "Book an appointment" button
+    Then I am on the Appointments Guidance page
+    When I select "Book an appointment" button
+    Then the Available Appointments page is displayed
+    When I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I click the 'Back' breadcrumb
     Then the Available Appointments page is displayed
