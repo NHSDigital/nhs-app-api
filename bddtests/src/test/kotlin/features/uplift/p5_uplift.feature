@@ -1,11 +1,11 @@
-Feature: P5 uplift shutter screens
+Feature: Proof level 5 shutter screens
 
-  Scenario Outline: P5 user attempts to view a P9 <Page> screen
-    Given I am patient using the EMIS with proof level 5 access
+  Scenario Outline: A user with proof level 5 is asked to prove identity when they attempt to view <Page Title>
+    Given I am a patient with proof level 5
     And I am logged in
     When I retrieve the '<Page>' page directly
     Then the page title is '<Page Title>'
-    And I am told to finish setting up my NHS login
+    And I am asked to prove my identity
     Examples:
       | Page               | Page Title                |
       | appointment hub    | Appointments              |

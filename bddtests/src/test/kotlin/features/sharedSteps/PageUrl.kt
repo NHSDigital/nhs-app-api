@@ -50,7 +50,8 @@ open class PageUrl {
                         "patient practice messaging send message" to "/patient-practice-messaging/send-message",
                         "patient practice messaging delete" to "/patient-practice-messaging/delete",
                         "patient practice messaging delete success" to "/patient-practice-messaging/delete-success",
-                        "notifications settings" to "/account/notifications"
+                        "notifications settings" to "/account/notifications",
+                        "symptoms" to "/symptoms"
                 )
 
         fun getPage(pageName: String): String {

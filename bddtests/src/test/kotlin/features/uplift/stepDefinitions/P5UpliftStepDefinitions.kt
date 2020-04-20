@@ -20,9 +20,9 @@ class P5UpliftStepDefinitions : HybridPageObject() {
   @Steps
   private lateinit var p5ShutterPage: P5UpliftPage
 
-  @Given("^I am patient using the (.*) with proof level 5 access$")
-  fun userWithProofLevelFive(gpSystem: String) {
-    val supplier = Supplier.valueOf(gpSystem)
+  @Given("^I am a patient with proof level 5$")
+  fun iAmAPatientWithProofLevel5() {
+    val supplier = Supplier.valueOf("EMIS")
     mockingClient.clearWiremock()
     mockingClient.favicon()
 
@@ -35,8 +35,8 @@ class P5UpliftStepDefinitions : HybridPageObject() {
     SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
   }
 
-  @Then("I am told to finish setting up my NHS login")
-  fun assertP5ShutterPageContent() {
+  @Then("I am asked to prove my identity")
+  fun iAmAskedToProveMyIdentity() {
     p5ShutterPage.assertUpliftBanner()
   }
 }

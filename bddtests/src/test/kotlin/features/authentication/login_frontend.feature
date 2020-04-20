@@ -22,8 +22,8 @@ Feature: Login frontend
       | GP System |
       | EMIS      |
 
-  Scenario: A EMIS user sees no NHS number when logging in with proof level 5 access
-    Given I am patient using the EMIS with proof level 5 access
+  Scenario: A patient with proof level 5 sees no NHS number when logging in
+    Given I am a patient with proof level 5
     And I am logged in
     Then I see a welcome message
     And I see my Date of birth on the home page
