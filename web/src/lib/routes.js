@@ -1795,6 +1795,14 @@ export const backLinkOverrides = {
     ignoreStore: true,
     defaultPath: routes.MORE.path,
   },
+  [routes.LINKED_PROFILES_SHUTTER_APPOINTMENTS.name]: {
+    ignoreStore: true,
+    defaultPath: routes.APPOINTMENTS.path,
+  },
+  [routes.LINKED_PROFILES_SHUTTER_PRESCRIPTIONS.name]: {
+    ignoreStore: true,
+    defaultPath: routes.INDEX.path,
+  },
 };
 
 /**

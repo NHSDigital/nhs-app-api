@@ -43,10 +43,14 @@ describe('routes', () => {
 
   describe('backLinkOverrides', () => {
     each([
+      ['appointments-cancelling-success', '/appointments', true],
+      ['appointments-booking-success', '/appointments', true],
       ['organ-donation', '/more', undefined],
       ['organ-donation-view-decision', '/more', undefined],
       ['patient-practice-messaging', '/more', true],
-      ['switch-profile', '/', true]])
+      ['switch-profile', '/', true],
+      ['linked-profiles-shutter-appointments', '/appointments', true],
+      ['linked-profiles-shutter-prescriptions', '/', true]])
       .it('will go to $path from $name by default', (name, path, ignoreStore) => {
         const override = backLinkOverrides[name];
         expect(override.defaultPath).toBe(path);
