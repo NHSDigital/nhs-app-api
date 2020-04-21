@@ -208,9 +208,18 @@
             },
             "requiresDetailsRequest": {
               "enum": ["true", "false"]
+            },
+            "sendMessageSubject": {
+              "enum": ["true", "false"]
             }
           },
-          "required": [ "isEnabled", "canDeleteMessages", "canUpdateReadStatus", "requiresDetailsRequest"]
+          "required": [
+            "isEnabled",
+            "canDeleteMessages",
+            "canUpdateReadStatus",
+            "requiresDetailsRequest",
+            "sendMessageSubject"
+          ]
         },
         {
           "additionalProperties": false,
@@ -225,6 +234,9 @@
               "enum": ["false"]
             },
             "requiresDetailsRequest": {
+              "enum": ["false"]
+            },
+            "sendMessageSubject": {
               "enum": ["false"]
             }
           },

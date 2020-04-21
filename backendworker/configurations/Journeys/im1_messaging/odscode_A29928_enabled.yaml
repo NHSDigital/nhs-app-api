@@ -7,3 +7,4 @@ journeys:
     canDeleteMessages: false
     canUpdateReadStatus: true
     requiresDetailsRequest: true
+    sendMessageSubject: true

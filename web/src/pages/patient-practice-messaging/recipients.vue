@@ -24,7 +24,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import {
-  INDEX,
+  PATIENT_PRACTICE_MESSAGING,
   PATIENT_PRACTICE_MESSAGING_URGENCY,
   PATIENT_PRACTICE_MESSAGING_CREATE,
 } from '@/lib/routes';
@@ -46,7 +46,7 @@ export default {
   fetch({ store, redirect }) {
     const { messageRecipients } = store.state.patientPracticeMessaging;
     if (!messageRecipients || isEmptyArray(messageRecipients)) {
-      redirect(INDEX.path);
+      redirect(PATIENT_PRACTICE_MESSAGING.path);
     }
   },
   methods: {

@@ -232,11 +232,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             {
                 Subject = "subject",
                 MessageBody = "message",
-                Recipient = "recipient 1"
+                RecipientIdentifier = "recipient 1"
 
             };
             var successResponse = _fixture.Create<PostPatientMessageResponse>();
-            var successResult = new PostPatientMessageResult.Success(successResponse);
+            var successResult = new PostPatientMessageResult.Success();
 
             _mockPatientMessagesService
                 .Setup(s => s.SendMessage(
@@ -254,8 +254,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             VerifyMockAuditor();
 
             result
-                .Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().Be(successResponse);
+                .Should().BeAssignableTo<NoContentResult>();
         }
 
         [DataTestMethod]
@@ -514,7 +513,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             {
                 Subject = "subject",
                 MessageBody = "message",
-                Recipient = "recipient 1"
+                RecipientIdentifier = "recipient 1"
             };
             var serviceResult = (PostPatientMessageResult) Activator.CreateInstance(serviceResultType);
 

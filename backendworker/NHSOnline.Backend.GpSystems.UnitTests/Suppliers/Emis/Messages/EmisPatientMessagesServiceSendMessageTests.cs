@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             var messagePostResponse = _fixture.Create<MessagePostResponse>();
             var postMessageResponse = _fixture.Create<PostPatientMessageResponse>();
             var message = _fixture.Create<CreatePatientMessage>();
-            message.Recipient = "Recipient 1";
+            message.RecipientIdentifier = "Recipient 1";
             message.Subject = "Subject";
             message.MessageBody = "Message";
 
@@ -81,8 +81,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient.Verify();
             _mockMessagesMapper.Verify();
 
-            result.Should().BeAssignableTo<PostPatientMessageResult.Success>()
-                .Subject.Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PostPatientMessageResult.Success>();
         }
 
         [TestMethod]
@@ -93,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             {
                 Subject = "subject",
                 MessageBody = "message",
-                Recipient = "recipient 1"
+                RecipientIdentifier = "recipient 1"
             };
 
             var badRequestErrorResponse = _fixture.Create<BadRequestErrorResponse>();
@@ -124,7 +123,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             {
                 Subject = "subject",
                 MessageBody = "message",
-                Recipient = "recipient 1"
+                RecipientIdentifier = "recipient 1"
             };
             var exceptionErrorResponse = _fixture.Create<ExceptionErrorResponse>();
             exceptionErrorResponse.Exceptions.First().Message = EmisApiErrorMessages.EmisService_NotEnabledForUser;
@@ -155,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             {
                 Subject = "subject",
                 MessageBody = "message",
-                Recipient = "recipient 1"
+                RecipientIdentifier = "recipient 1"
             };
 
             _mockClient
@@ -180,7 +179,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             {
                 Subject = "subject",
                 MessageBody = "message",
-                Recipient = "recipient 1"
+                RecipientIdentifier = "recipient 1"
             };
 
             _mockClient

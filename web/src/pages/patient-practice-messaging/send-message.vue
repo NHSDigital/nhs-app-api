@@ -9,11 +9,13 @@
             </message-text>
             <div data-purpose="error-dialog-list">
               <message-list>
-                <li v-if="subjectError" data-purpose="subject-error">
-                  <p class="nhsuk-u-margin-left-2">
-                    {{ $t('patient_practice_messaging.createMessage.subjectTextError') }}
-                  </p>
-                </li>
+                <sjr-if journey="sendMessageSubject">
+                  <li v-if="subjectError" data-purpose="subject-error">
+                    <p class="nhsuk-u-margin-left-2">
+                      {{ $t('patient_practice_messaging.createMessage.subjectTextError') }}
+                    </p>
+                  </li>
+                </sjr-if>
                 <li v-if="messageTextError" data-purpose="message-error">
                   <p class="nhsuk-u-margin-left-2">
                     {{ $t('patient_practice_messaging.createMessage.messageTextError') }}
@@ -33,23 +35,25 @@
           {{ $t('patient_practice_messaging.createMessage.call111Link') }}.
         </a>
       </p>
-      <div :class="['nhsuk-u-padding-top-1', getErrorClass]">
-        <label id="subjectTextLabel" for="subjectText" class="nhsuk-label">
-          <strong>
-            {{ $t('patient_practice_messaging.createMessage.subjectLabelText') }}
-          </strong>
-          <div class="nhsuk-u-padding-top-2 nhsuk-hint">
-            {{ $t('patient_practice_messaging.createMessage.subjectHintText') }}
-          </div>
-        </label>
-        <generic-text-input id="subjectText"
-                            v-model="subjectText"
-                            maxlength="64"
-                            :error-text="
-                              $t('patient_practice_messaging.createMessage.subjectTextError')"
-                            :error="subjectError"
-                            :required="true"/>
-      </div>
+      <sjr-if journey="sendMessageSubject">
+        <div :class="['nhsuk-u-padding-top-1', getErrorClass]">
+          <label id="subjectTextLabel" for="subjectText" class="nhsuk-label">
+            <strong>
+              {{ $t('patient_practice_messaging.createMessage.subjectLabelText') }}
+            </strong>
+            <div class="nhsuk-u-padding-top-2 nhsuk-hint">
+              {{ $t('patient_practice_messaging.createMessage.subjectHintText') }}
+            </div>
+          </label>
+          <generic-text-input id="subjectText"
+                              v-model="subjectText"
+                              maxlength="64"
+                              :error-text="
+                                $t('patient_practice_messaging.createMessage.subjectTextError')"
+                              :error="subjectError"
+                              :required="true"/>
+        </div>
+      </sjr-if>
       <div :class="['nhsuk-u-padding-top-4', getErrorClass]">
         <label id="messageTextLabel" for="messageText" class="nhsuk-label">
           <strong>
@@ -86,8 +90,7 @@
 
 <script>
 import { redirectTo } from '@/lib/utils';
-import { INDEX,
-  PATIENT_PRACTICE_MESSAGING,
+import { PATIENT_PRACTICE_MESSAGING,
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
 } from '@/lib/routes';
@@ -98,6 +101,8 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import srjIf from '@/lib/sjrIf';
+import SjrIf from '@/components/SjrIf';
 
 export default {
   layout: 'nhsuk-layout',
@@ -109,6 +114,7 @@ export default {
     MessageText,
     MessageList,
     DesktopGenericBackLink,
+    SjrIf,
   },
   data() {
     return {
@@ -120,7 +126,7 @@ export default {
   },
   computed: {
     showError() {
-      return this.subjectError || this.messageTextError;
+      return (this.subjectError && this.subjectEnabled) || this.messageTextError;
     },
     backPath() {
       return PATIENT_PRACTICE_MESSAGING_RECIPIENTS.path;
@@ -134,10 +140,13 @@ export default {
     hasSent() {
       return this.$store.state.patientPracticeMessaging.messageSent;
     },
+    subjectEnabled() {
+      return srjIf({ $store: this.$store, journey: 'sendMessageSubject' });
+    },
   },
   fetch({ store, redirect }) {
     if (store.state.patientPracticeMessaging.selectedMessageRecipient === undefined) {
-      redirect(INDEX.path);
+      redirect(PATIENT_PRACTICE_MESSAGING.path);
     }
   },
   created() {

@@ -9,5 +9,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessag
 
         [XmlAttribute("id")]
         public string Id { get; set; }
+
+        [XmlAttribute("description")]
+        public string Description { get; set; }
     }
 }

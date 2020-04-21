@@ -12,6 +12,8 @@ import mocking.tpp.models.Error
 import mocking.tpp.models.Message
 import mocking.tpp.models.MessagesViewReply
 import mocking.patientPracticeMessaging.DateAndFormat
+import mocking.patientPracticeMessaging.Recipient
+import mocking.tpp.models.MessageCreateReply
 import models.ExpectedMessage
 import models.Patient
 import utils.SerenityHelpers
@@ -43,8 +45,8 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
         }
     }
 
-    override fun enabledWithPatientPracticeMessaging(patient: Patient,
-                                                     hasUnread: Boolean, hasAttachment: Boolean) {
+    override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean,
+                                                     hasAttachment: Boolean, unitRecipient: Boolean) {
 
         val messagesFromData = TppMessagingData.getDefaultTppMessages(hasUnread, hasAttachment)
 
@@ -81,6 +83,8 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
                 firstMessage,
                 replyList
         )
+
+        mockMessageCreate(unitRecipient)
 
         SerenityHelpers.setSerenityVariableIfNotAlreadySet(
                 PatientPracticeMessagingSerenityHelpers.EXPECTED_MESSAGES,
@@ -230,6 +234,23 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
             }
         }
 
+    }
+
+    private fun mockMessageCreate(unitRecipient: Boolean) {
+        val recipients = PatientPracticeMessagingSerenityHelpers
+                .AVAILABLE_RECIPIENTS
+                .getOrNull<List<Recipient>>()!!
+        val recipient = if (unitRecipient) recipients[1] else recipients[0]
+        val createMessageRequest = CreateMessageRequest(messageBody = "This is a message",
+                                                        recipient = recipient.recipientIdentifier!!)
+        mockingClient.forTpp {
+            patientPracticeMessaging.createMessageRequest(SerenityHelpers.getPatient().tppUserSession!!,
+                                                          createMessageRequest)
+                    .respondWithSuccess(MessageCreateReply())
+        }
+
+        PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE
+                .setIfNotAlreadySet(createMessageRequest)
     }
 
 }

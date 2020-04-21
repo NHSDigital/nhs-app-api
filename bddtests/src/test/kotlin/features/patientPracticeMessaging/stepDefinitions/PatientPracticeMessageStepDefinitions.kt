@@ -1,6 +1,7 @@
 package features.patientPracticeMessaging.stepDefinitions
 
 import config.Config
+import constants.Supplier
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -93,14 +94,19 @@ open class PatientPracticeMessageStepDefinitions {
                                                      hasAttachment = true)
     }
 
-    @Given("^I have patient practice messages in my inbox, some of which are unread with an invalid attachment$")
-    fun thePatientHasPatientPracticeMessagesInTheirInboxWithUnreadMessagesWithInvalidAttachment() {
+    @Given("^I want to send a message to a (.*) recipient and have unread messages in my inbox$")
+    fun thePatientHasPatientPracticeMessagesInTheirInboxAndSendsToAUnitRecipient(recipientType: String) {
+        val unitRecipient = recipientType == "unit"
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .enabledWithPatientPracticeMessaging(SerenityHelpers.getPatient(),
                                                      hasUnread = true,
-                                                     hasAttachment = true)
+                                                     unitRecipient = unitRecipient)
+    }
 
+
+    @Given("^that attachment is invalid$")
+    fun thePatientHasPatientPracticeMessagesInTheirInboxWithUnreadMessagesWithInvalidAttachment() {
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .enabledWithInvalidAttachmentOnMessage(SerenityHelpers.getPatient())
@@ -210,28 +216,56 @@ open class PatientPracticeMessageStepDefinitions {
             .AVAILABLE_RECIPIENTS
             .getOrNull<List<Recipient>>()!!
         patientPracticePatientMessagingCreateMessagePage.assertHeaderContainsRecipient(expectedRecipients[0].name!!)
-        patientPracticePatientMessagingCreateMessagePage.assertDisplayed()
+
+        when(SerenityHelpers.getGpSupplier()){
+            Supplier.EMIS -> {
+                patientPracticePatientMessagingCreateMessagePage.assertDisplayed(true)
+            }
+            Supplier.TPP -> {
+                patientPracticePatientMessagingCreateMessagePage.assertDisplayed(false)
+            }
+            else -> throw NotImplementedError()
+        }
     }
 
-    @When("^I insert a subject and message")
-    fun iInsertSubjectAndMessageText() {
-        val messageDetails = PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE.getOrNull<CreateMessageRequest>()!!
-        patientPracticePatientMessagingCreateMessagePage.insertSubjectAndMessageText(
-            messageDetails.subject,
-            messageDetails.messageBody)
+    @When("^I insert a subject")
+    fun iInsertSubjectText() {
+        val subject = PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE.getOrNull<CreateMessageRequest>()!!.subject
+        patientPracticePatientMessagingCreateMessagePage.insertSubjectText(
+            subject!!)
     }
 
-    @When("^I click on a recipient$")
-    fun iClickOnARecipient(){
+    @When("^I insert a message")
+    fun iInsertMessageText() {
+        val messageBody = PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE.getOrNull<CreateMessageRequest>()!!
+                .messageBody
+        patientPracticePatientMessagingCreateMessagePage.insertMessageText(messageBody)
+    }
+
+    @When("^I click on a (.*) recipient$")
+    fun iClickOnARecipient(recipientType: String){
         val expectedRecipients = PatientPracticeMessagingSerenityHelpers
             .AVAILABLE_RECIPIENTS
             .getOrNull<List<Recipient>>()!!
-        patientPracticeMessagingRecipientsPage.clickRecipient(expectedRecipients)
+
+        when(recipientType){
+            "regular" -> {
+                patientPracticeMessagingRecipientsPage.clickRecipient(expectedRecipients)
+            }
+            "unit" -> {
+                patientPracticeMessagingRecipientsPage.clickRecipient(expectedRecipients, true)
+            }
+        }
     }
+
 
     @When("^I leave the message and subject fields blank")
     fun iDoNotInsertSubjectAndMessageText() {
-        patientPracticePatientMessagingCreateMessagePage.insertSubjectAndMessageText("", "")
+        patientPracticePatientMessagingCreateMessagePage.insertMessageText("")
+
+        if (SerenityHelpers.getGpSupplier() == Supplier.EMIS) {
+            patientPracticePatientMessagingCreateMessagePage.insertSubjectText("")
+        }
     }
 
     @When("^I click send message")
@@ -394,7 +428,11 @@ open class PatientPracticeMessageStepDefinitions {
     @Then("^I see my new message after it has been sent")
     fun iSeeMyNewMessageAfterItHasBeenSent(){
         val messageDetails = PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE.getOrNull<CreateMessageRequest>()!!
-        patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(messageDetails.subject)
+
+        if (SerenityHelpers.getGpSupplier() == Supplier.EMIS) {
+            patientPracticeMessagingDetailsPage.assertSentSubjectCorrect(messageDetails.subject!!)
+        }
+
         patientPracticeMessagingDetailsPage.assertMessageCorrect(messageDetails.messageBody, "initialMessageSentPanel0")
     }
 

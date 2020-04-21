@@ -44,11 +44,13 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 .Add(journeys => journeys.Documents.HasValue, "journeys.Documents")
                 .Add(journeys => journeys.Im1Messaging?.IsEnabled != null, "journeys.im1Messaging.isEnabled")
                 .Add(journeys => journeys.Im1Messaging?.CanDeleteMessages != null,
-                    "journeys.im1Messaging.canDeleteMessages")
+                    "journeys.Im1Messaging.CanDeleteMessages")
                 .Add(journeys => journeys.Im1Messaging?.CanUpdateReadStatus != null,
-                    "journeys.im1Messaging.canUpdateReadStatus")
+                    "journeys.Im1Messaging.CanUpdateReadStatus")
                 .Add(journeys => journeys.Im1Messaging?.RequiresDetailsRequest != null,
-        "journeys.im1Messaging.requiresDetailsRequest")
+        "journeys.Im1Messaging.RequiresDetailsRequest")
+                .Add(journeys => journeys.Im1Messaging?.SendMessageSubject != null,
+                    "journeys.Im1Messaging.SendMessageSubject")
                 .Add(journeys => journeys.Supplier != Supplier.Unknown, "journeys.Supplier")
                 .Add(journeys =>
                 {

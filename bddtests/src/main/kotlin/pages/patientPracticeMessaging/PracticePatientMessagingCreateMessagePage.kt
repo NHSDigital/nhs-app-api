@@ -9,9 +9,11 @@ import pages.text
 
 class PracticePatientMessagingCreateMessagePage: HybridPageObject() {
 
-    fun assertDisplayed() {
+    fun assertDisplayed(assertSubject: Boolean) {
         messageTextInput().isDisplayed
-        subjectTextInput().isDisplayed
+        if (assertSubject) {
+            subjectTextInput().isDisplayed
+        }
         messageSubHeader().isDisplayed
         sendMessageButton().isDisplayed
 
@@ -34,10 +36,12 @@ class PracticePatientMessagingCreateMessagePage: HybridPageObject() {
         assertEquals("Enter a message", message.text)
     }
 
-    fun insertSubjectAndMessageText(subject: String, message: String) {
-        subjectTextInput().actOnTheElement { it.type<WebElementFacade>(subject) }
+    fun insertMessageText(message: String) {
         messageTextInput().actOnTheElement { it.type<WebElementFacade>(message) }
+    }
 
+    fun insertSubjectText(subject: String) {
+        subjectTextInput().actOnTheElement { it.type<WebElementFacade>(subject) }
     }
 
     fun sendMessage() {

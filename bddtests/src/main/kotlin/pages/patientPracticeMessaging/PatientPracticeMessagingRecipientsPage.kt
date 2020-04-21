@@ -41,8 +41,13 @@ class PatientPracticeMessagingRecipientsPage: HybridPageObject() {
         )
     }
 
-    fun clickRecipient(expectedRecipients: List<Recipient>) {
-        recipientLink(expectedRecipients[0].name!!).click()
+    fun clickRecipient(expectedRecipients: List<Recipient>, unitRecipient: Boolean = false) {
+        if (unitRecipient) {
+            recipientLink(expectedRecipients[1].name!!).click()
+        } else{
+            recipientLink(expectedRecipients[0].name!!).click()
+        }
+
     }
 
     fun assertRecipients(expectedRecipients: List<Recipient>) {

@@ -29,12 +29,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
             _mappedRecipientOne = new MessageRecipient
             {
                 Name = _recipientOne.ItemText,
-                RecipientIdentifier = _recipientOne.Id
+                RecipientIdentifier = $"{_recipientOne.Id}:{_recipientOne.Description}"
             };
             _mappedRecipientTwo = new MessageRecipient
             {
                 Name = _recipientTwo.ItemText,
-                RecipientIdentifier = _recipientTwo.Id
+                RecipientIdentifier = $"{_recipientTwo.Id}:{_recipientTwo.Description}"
             };
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Azure.Documents.SystemFunctions;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages;
 using NHSOnline.Backend.GpSystems.Messages.Models;
@@ -18,6 +19,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
         private readonly ITppClientRequest<TppUserSession, MessageRecipientsReply> _messageRecipients;
         private readonly IGetPatientPracticeMessagingRecipientsTaskChecker _messageRecipientsTaskChecker;
         private readonly ITppClientRequest<TppUserSession, MessagesViewReply> _messagesViewPost;
+
+        private readonly ITppClientRequest<(TppUserSession tppUserSession, string recipientIdentifier,
+            string messageText), MessageCreateReply> _messagesCreateMessagePost;
         private readonly ITppPatientMessagesMapper _messagesViewMapper;
 
         public PatientPracticeMessagingService(
@@ -25,13 +29,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
             ITppClientRequest<TppUserSession, MessageRecipientsReply> messageRecipients,
             IGetPatientPracticeMessagingRecipientsTaskChecker messageRecipientsTaskChecker,
             ITppPatientMessagesMapper messagesViewMapper,
-            ITppClientRequest<TppUserSession, MessagesViewReply> messagesViewPost)
+            ITppClientRequest<TppUserSession, MessagesViewReply> messagesViewPost,
+            ITppClientRequest<(TppUserSession tppUserSession, string recipientIdentifier,
+                    string messageText), MessageCreateReply> messagesCreateMessagePost)
         {
             _logger = logger;
             _messageRecipients = messageRecipients;
             _messageRecipientsTaskChecker = messageRecipientsTaskChecker;
             _messagesViewMapper = messagesViewMapper;
             _messagesViewPost = messagesViewPost;
+            _messagesCreateMessagePost = messagesCreateMessagePost;
         }
 
         public async Task<GetPatientMessagesResult> GetMessages(GpUserSession gpUserSession)
@@ -132,9 +139,40 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
             }
         }
 
-        public Task<PostPatientMessageResult> SendMessage(GpUserSession gpUserSession, CreatePatientMessage message)
+        public async Task<PostPatientMessageResult> SendMessage(GpUserSession gpUserSession, CreatePatientMessage message)
         {
-            throw new System.NotImplementedException();
+            _logger.LogEnter();
+
+            try
+            {
+                var tppUserSession = (TppUserSession) gpUserSession;
+                var parameters = (tppUserSession, message.RecipientIdentifier, message.MessageBody);
+                var response = await _messagesCreateMessagePost.Post(parameters);
+
+                if (response.Body is null)
+                {
+                    _logger.LogTppErrorResponse(response);
+                    return new PostPatientMessageResult.BadGateway();
+                }
+
+                return new PostPatientMessageResult.Success();
+
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Unsuccessful request post message patient practice messaging");
+                return new PostPatientMessageResult.BadGateway();
+            }
+            catch (NullReferenceException e)
+            {
+                _logger.LogError(e, "Patient practice messaging message create reply returned a null body");
+                return new PostPatientMessageResult.BadGateway();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+
         }
 
         public Task<DeletePatientMessageResult> DeleteMessage(GpUserSession gpUserSession, string messageId)

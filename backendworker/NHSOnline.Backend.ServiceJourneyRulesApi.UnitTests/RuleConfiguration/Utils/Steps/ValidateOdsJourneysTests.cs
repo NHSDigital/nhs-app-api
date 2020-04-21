@@ -101,7 +101,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments( SecondaryAppointmentProvider.pkb ))
                             .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
-                            .Im1MessagingEnabled(true, true, true, true)
+                            .Im1MessagingEnabled(true, true, true,
+                                true, true)
                             .WithSupplier(Supplier.Emis)
                             .Build()
                     },
@@ -126,7 +127,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Messages()
                                 .SecondaryAppointments())
                             .DocumentsEnabled(false)
-                            .Im1MessagingEnabled(false, false, false, false)
+                            .Im1MessagingEnabled(false, false, false,
+                                false, false)
                             .WithSupplier(Supplier.Tpp)
                             .Build()
                     },
@@ -151,7 +153,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Messages()
                                 .SecondaryAppointments())
                             .DocumentsEnabled(true)
-                            .Im1MessagingEnabled(true, false, false, false)
+                            .Im1MessagingEnabled(
+                                true,
+                                false,
+                                false,
+                                false,
+                                false)
                             .WithSupplier(Supplier.Vision)
                             .Build()
                     }
@@ -194,7 +201,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Messages()
                                 .SecondaryAppointments())
                             .DocumentsEnabled(true)
-                            .Im1MessagingEnabled(true, false, false, false)
+                            .Im1MessagingEnabled(true, false,
+                                false, false, false)
                             .WithSupplier(Supplier.Microtest)
                             .Build()
                     },
@@ -219,7 +227,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Messages()
                                 .SecondaryAppointments())
                             .DocumentsEnabled(false)
-                            .Im1MessagingEnabled(false, false, false, false)
+                            .Im1MessagingEnabled(false, false, false,
+                                false, false)
                             .WithSupplier(Supplier.Emis)
                             .Build()
                     },
@@ -245,7 +254,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .SecondaryAppointments())
                             .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
-                            .Im1MessagingEnabled(true, true, true, true)
+                            .Im1MessagingEnabled(true, true, true,
+                                true, true)
                             .WithSupplier(Supplier.Tpp)
                             .Build()
                     }
@@ -451,7 +461,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .SecondaryAppointments()
                     )
                 .DocumentsEnabled(true)
-                .Im1MessagingEnabled(true, true, true, true)
+                .Im1MessagingEnabled(true,
+                    true,
+                    true,
+                    true,
+                    true)
                 .WithSupplier(Supplier.Emis);
         }
 

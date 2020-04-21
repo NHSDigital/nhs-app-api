@@ -25,6 +25,8 @@ const {
   IM1MESSAGING_ENABLED,
   DELETE_PATIENT_PRACTICE_MESSAGING_ENABLED,
   REQUIRED_DETAILS_CALL_PATIENT_PRACTICE_MESSAGING_ENABLED,
+  UPDATE_STATUS_PATIENT_PRACTICE_MESSAGING_ENABLED,
+  SEND_MESSAGE_SUBJECT_ENABLED,
 } = getterNames;
 
 const {
@@ -32,7 +34,6 @@ const {
   IM1_PROVIDER,
   INFORMATICA,
   LINKED_ACCOUNT,
-  UPDATE_STATUS_PATIENT_PRACTICE_MESSAGING_ENABLED,
 } = mutationNames;
 
 // export references getterNames to allow sharing of
@@ -109,5 +110,8 @@ export default {
   },
   [REQUIRED_DETAILS_CALL_PATIENT_PRACTICE_MESSAGING_ENABLED](state) {
     return get('rules.im1Messaging.requiresDetailsRequest')(state);
+  },
+  [SEND_MESSAGE_SUBJECT_ENABLED](state) {
+    return get('rules.im1Messaging.sendMessageSubject')(state);
   },
 };

@@ -1,10 +1,10 @@
 package mocking.data.patientPracticeMessaging
 
 import mocking.patientPracticeMessaging.MessageResponseModel
-import mocking.patientPracticeMessaging.Recipient
 import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
 import mocking.patientPracticeMessaging.DateAndFormat
-import mocking.tpp.models.Item
+import mocking.patientPracticeMessaging.Recipient
+import mocking.tpp.models.TppRecipient
 import mocking.tpp.models.Message
 import mocking.tpp.models.MessageRecipientsReply
 import mocking.tpp.models.MessagesViewReply
@@ -12,12 +12,9 @@ import utils.set
 import utils.setIfNotAlreadySet
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.UUID
 
 object TppMessagingData {
-
-    private val RECIPIENT_1 = Recipient("Dr. Dolittle", "1234-12345678-1234-1234-1")
-    private val RECIPIENT_2 = Recipient("Dr. NHS Online", "1234-12345678-1234-1234-2")
 
     fun getDefaultTppMessages(hasUnread: Boolean = false, hasAttachment: Boolean = false): MessagesViewReply {
         PatientPracticeMessagingSerenityHelpers
@@ -165,19 +162,17 @@ object TppMessagingData {
     }
 
     fun getDefaultTppRecipients(): MessageRecipientsReply {
-        val items = mutableListOf<Item>()
-        items.add(Item(
-                id = RECIPIENT_1.recipientIdentifier!!,
-                value = RECIPIENT_1.name!!
-        ))
-        items.add(Item(
-                id = RECIPIENT_2.recipientIdentifier!!,
-                value = RECIPIENT_2.name!!
-        ))
+       val recipient1 = TppRecipient("1234-12345678-1234-1234-1", "Recipient", "Dr. Dolittle")
+       val recipient2 = TppRecipient("1234-12345678-1234-1234-2", "UnitRecipient", "Dr. NHS Online")
+
+        val items = mutableListOf(recipient1, recipient2)
+        val expectedRecipients = mutableListOf(
+                Recipient(recipient1.value, "${recipient1.id}:${recipient1.description}"),
+                Recipient(recipient2.value, "${recipient2.id}:${recipient2.description}"))
 
         PatientPracticeMessagingSerenityHelpers
                 .AVAILABLE_RECIPIENTS
-                .setIfNotAlreadySet(arrayListOf(RECIPIENT_1, RECIPIENT_2))
+                .setIfNotAlreadySet(expectedRecipients)
 
         return MessageRecipientsReply(
                 Item = items

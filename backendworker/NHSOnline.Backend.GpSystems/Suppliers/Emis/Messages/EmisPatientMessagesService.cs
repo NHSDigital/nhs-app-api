@@ -283,7 +283,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                 {
                     return new PutPatientMessageReadStatusResult.Success(mapped);
                 }
-                
+
                 _logger.LogInformation("Mapping EMIS patient message update status returned null");
                 return new PutPatientMessageReadStatusResult.BadGateway();
 
@@ -344,7 +344,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                 var mapped = _messageSendWrapper.Map(response.Body);
                 if (mapped.HasValue)
                 {
-                    return new PostPatientMessageResult.Success(mapped.ValueOrFailure());
+                    return new PostPatientMessageResult.Success();
                 }
 
                 return new PostPatientMessageResult.BadRequest();

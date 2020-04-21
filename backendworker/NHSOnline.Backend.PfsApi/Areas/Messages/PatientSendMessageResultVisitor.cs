@@ -7,14 +7,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
 {
     public class PatientSendMessageResultVisitor : ResultVisitorBase, IPatientSendMessageResultVisitor<IActionResult>
     {
-        public PatientSendMessageResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, P9UserSession userSession) 
+        public PatientSendMessageResultVisitor(IErrorReferenceGenerator errorReferenceGenerator, P9UserSession userSession)
             : base(errorReferenceGenerator, userSession){}
-        
+
         protected override ErrorCategory ErrorCategory => ErrorCategory.PatientPracticeMessages;
-        
+
         public IActionResult Visit(PostPatientMessageResult.Success result)
         {
-            return new OkObjectResult(result.Response);
+            return new NoContentResult();
         }
 
         public IActionResult Visit(PostPatientMessageResult.BadRequest result)

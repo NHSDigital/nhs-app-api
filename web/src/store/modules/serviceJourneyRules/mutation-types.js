@@ -39,6 +39,7 @@ export const initialState = () => ({
       canDeleteMessages: false,
       canUpdateReadStatus: false,
       requiresDetailsRequest: false,
+      sendMessageSubject: false,
     },
   },
 });

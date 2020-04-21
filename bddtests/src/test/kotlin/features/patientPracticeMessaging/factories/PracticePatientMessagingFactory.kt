@@ -10,8 +10,10 @@ abstract class PracticePatientMessagingFactory {
 
     abstract fun enabled(patient: Patient)
     abstract fun disabled(patient: Patient)
-    abstract fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean,
-                                                     hasAttachment: Boolean = false)
+    abstract fun enabledWithPatientPracticeMessaging(patient: Patient,
+                                                     hasUnread: Boolean = false,
+                                                     hasAttachment: Boolean = false,
+                                                     unitRecipient: Boolean = false)
     abstract fun enabledWithPatientPracticeMessagingFromGP(patient: Patient, hasUnread: Boolean)
     abstract fun forbiddenErrorWithPatientPracticeMessaging(patient: Patient)
     abstract fun unknownErrorWithPatientPracticeMessaging(patient: Patient)

@@ -3118,7 +3118,7 @@
                   subject: 
                     type: "string"
                     description: "The subject of the message"
-                  recipient: 
+                  recipientIdentifier: 
                     type: "string"
                     description: "The guid of recipient of the message"
           description: "The message to be sent"

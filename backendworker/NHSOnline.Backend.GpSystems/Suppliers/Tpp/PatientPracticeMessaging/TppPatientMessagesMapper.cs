@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
         private static int GetUnreadCount(IEnumerable<Message> messages, string conversationId)
         {
             var unreadMessages = messages
-                .Where(r => r.ConversationId == conversationId && r.Read != YesNo.y)
+                .Where(r => r.ConversationId == conversationId && r.Read != YesNo.y && r.Incoming == YesNo.n)
                 .ToList();
             return unreadMessages.Count;
         }

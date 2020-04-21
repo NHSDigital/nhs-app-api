@@ -35,7 +35,7 @@ Feature: Patient to practice messaging
     When I click the Send a message button and I choose that I do not need urgent advice via patient practice messaging
     Then I see the patient practice messaging recipients page
     And I see a list of patient practice messaging recipients
-    When I click on a recipient
+    When I click on a regular recipient
     Then I am on the send message page
     And I leave the message and subject fields blank
     And I click send message
@@ -78,11 +78,33 @@ Feature: Patient to practice messaging
     When I click the Send a message button and I choose that I do not need urgent advice via patient practice messaging
     Then I see the patient practice messaging recipients page
     And I see a list of patient practice messaging recipients
-    When I click on a recipient
+    When I click on a regular recipient
     Then I am on the send message page
-    And I insert a subject and message
+    And I insert a subject
+    And I insert a message
     And I click send message
     Then I see my new message after it has been sent
+
+    @james
+  Scenario Outline: A TPP patient can send a patient practice message to a <Recipient Type> recipient
+    Given I am an TPP patient
+    And I am a user who can access patient practice messaging
+    And I am logged in
+    And I want to send a message to a <Recipient Type> recipient and have unread messages in my inbox
+    When I follow the Messages link from the home page
+    Then the patient to practice inbox page is displayed
+    When I click the Send a message button and I choose that I do not need urgent advice via patient practice messaging
+    Then I see the patient practice messaging recipients page
+    And I see a list of patient practice messaging recipients
+    When I click on a <Recipient Type> recipient
+    Then I am on the send message page
+    And I insert a message
+    And I click send message
+    Then I see my new message after it has been sent
+    Examples:
+      | Recipient Type |
+      | unit           |
+      | regular        |
 
   Scenario: A TPP patient can view their patient messaging inbox and the unread count is displayed
     Given I am a TPP patient
@@ -153,7 +175,8 @@ Feature: Patient to practice messaging
     Given I am a TPP patient
     And I am a user who can access patient practice messaging
     And I am logged in
-    And I have patient practice messages in my inbox, some of which are unread with an invalid attachment
+    And I have patient practice messages in my inbox, some of which are unread with an attachment
+    And that attachment is invalid
     When I follow the Messages link from the home page
     Then the patient to practice inbox page is displayed
     And I see a list of patient practice messages without the subject and with the unread count

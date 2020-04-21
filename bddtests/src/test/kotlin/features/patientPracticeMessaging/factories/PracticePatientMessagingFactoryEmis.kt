@@ -67,8 +67,9 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
             messaging.deleteConversationRequest(patient).respondWithBadRequest()
         }
     }
-
-    override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean, hasAttachment: Boolean){
+    
+    override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean,
+                                                     hasAttachment: Boolean, unitRecipient: Boolean){
         setUpMessageDataAndStubs(patient, hasUnread)
     }
 

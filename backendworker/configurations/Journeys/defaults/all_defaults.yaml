@@ -32,3 +32,4 @@ journeys:
     canDeleteMessages: false
     canUpdateReadStatus: false
     requiresDetailsRequest: false
+    sendMessageSubject: false

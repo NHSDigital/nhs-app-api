@@ -14,12 +14,12 @@ data class MessageRecipientsReply(
         @XmlAttribute var onlineUserId: String = "default onlineUserId",
         @XmlAttribute var uuid: String = "default uuid",
         @field:XmlElement(name="Item")
-        @XmlElement var Item: MutableCollection<Item> = mutableListOf()
+        @XmlElement var Item: MutableCollection<TppRecipient> = mutableListOf()
 )
 
 @XmlRootElement(name = "Item")
 @XmlAccessorType(XmlAccessType.FIELD)
-data class Item(
+data class TppRecipient(
         @XmlAttribute var id: String = "default Id",
         @XmlAttribute var description: String = "default description",
         @XmlValue var value: String = "default name"

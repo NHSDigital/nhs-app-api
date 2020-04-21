@@ -300,33 +300,45 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         [TestMethod]
-        [DataRow("\"homeScreen\": { \"publicHealthNotifications\": [{ \"id\": \"1\", \"type\": \"callout\", \"urgency\": \"warning\", \"title\": \"foo\", \"body\": \"bar\" }] }")]
-        [DataRow("\"appointments\": { \"provider\": \"im1\" }")]
-        [DataRow("\"appointments\": { \"provider\": \"informatica\", \"informaticaUrl\": \"http://example.com\" }")]
-        [DataRow("\"appointments\": { \"provider\": \"gpAtHand\" }")]
-        [DataRow("\"cdssAdvice\": { \"provider\": \"none\" }")]
-        [DataRow("\"cdssAdvice\": { \"provider\": \"eConsult\", \"serviceDefinition\": \"foo\", \"conditionsServiceDefinition\": \"bar\" }")]
-        [DataRow("\"cdssAdmin\": { \"provider\": \"none\" }")]
-        [DataRow("\"cdssAdmin\": { \"provider\": \"eConsult\", \"serviceDefinition\": \"foo\" }")]
-        [DataRow("\"medicalRecord\": { \"provider\": \"im1\", \"version\": \"2\"}")]
-        [DataRow("\"medicalRecord\": { \"provider\": \"gpAtHand\", \"version\": \"2\"}")]
-        [DataRow("\"prescriptions\": { \"provider\": \"im1\"}")]
-        [DataRow("\"prescriptions\": { \"provider\": \"gpAtHand\"}")]
-        [DataRow("\"nominatedPharmacy\": \"true\"")]
-        [DataRow("\"nominatedPharmacy\": \"false\"")]
-        [DataRow("\"notifications\": \"true\"")]
-        [DataRow("\"notifications\": \"false\"")]
-        [DataRow("\"messaging\": \"true\"")]
-        [DataRow("\"messaging\": \"false\"")]
-        [DataRow("\"userInfo\": \"true\"")]
-        [DataRow("\"userInfo\": \"false\"")]
-        [DataRow("\"documents\": \"true\"")]
-        [DataRow("\"documents\": \"false\"")]
-        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"true\", \"canUpdateReadStatus\": \"true\", \"requiresDetailsRequest\": \"true\" }")]
-        [DataRow("\"im1Messaging\": { \"isEnabled\": \"false\", \"canDeleteMessages\": \"false\", \"canUpdateReadStatus\": \"false\", \"requiresDetailsRequest\": \"false\" }")]
-        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"false\", \"canUpdateReadStatus\": \"false\", \"requiresDetailsRequest\": \"false\" }")]
-        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"false\", \"canUpdateReadStatus\": \"true\", \"requiresDetailsRequest\": \"true\" }")]
-        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"true\", \"canUpdateReadStatus\": \"false\", \"requiresDetailsRequest\": \"false\" }")]
+        [DataRow("\"homeScreen\": { \"publicHealthNotifications\": [{ \"id\": \"1\", \"type\": \"callout\", \"urgency\": \"warning\", \"title\": \"foo\", \"body\": \"bar\" }] }",
+            DisplayName = "Valid configuration:: publicHealthNotifications")]
+
+        [DataRow("\"appointments\": { \"provider\": \"im1\" }", DisplayName = "Valid configuration: appointments provider = im1")]
+        [DataRow("\"appointments\": { \"provider\": \"informatica\", \"informaticaUrl\": \"http://example.com\" }", DisplayName = "Valid configuration: appointments provider = informatica, informaticaUrl = http://example.com")]
+        [DataRow("\"appointments\": { \"provider\": \"gpAtHand\" }", DisplayName = "Valid configuration: appointments provider = gpAtHand")]
+        [DataRow("\"cdssAdvice\": { \"provider\": \"none\" }", DisplayName = "Valid configuration: cdssAdmin provider = none")]
+        [DataRow("\"cdssAdvice\": { \"provider\": \"eConsult\", \"serviceDefinition\": \"foo\", \"conditionsServiceDefinition\": \"bar\" }", DisplayName = "Valid configuration: cdssAdvice provider = eConsult")]
+        [DataRow("\"cdssAdmin\": { \"provider\": \"none\" }", DisplayName = "Valid configuration: cdssAdmin provider = none")]
+        [DataRow("\"cdssAdmin\": { \"provider\": \"eConsult\", \"serviceDefinition\": \"foo\" }", DisplayName = "Valid configuration: cdssAdmin provider = eConsult")]
+        [DataRow("\"medicalRecord\": { \"provider\": \"im1\", \"version\": \"2\"}", DisplayName = "Valid configuration: medicalRecord provider = im1, version = 2")]
+        [DataRow("\"medicalRecord\": { \"provider\": \"gpAtHand\", \"version\": \"2\"}", DisplayName = "Valid medicalRecord gpAtHand provider version 2 journey")]
+        [DataRow("\"prescriptions\": { \"provider\": \"im1\"}", DisplayName = "Valid configuration: medicalRecord provider = im1")]
+        [DataRow("\"prescriptions\": { \"provider\": \"gpAtHand\"}", DisplayName = "Valid configuration: medicalRecord provider = gpAtHand")]
+        [DataRow("\"nominatedPharmacy\": \"true\"", DisplayName = "Valid configuration: nominatedPharmacy = true")]
+        [DataRow("\"nominatedPharmacy\": \"false\"", DisplayName = "Valid configuration: nominatedPharmacy = false")]
+        [DataRow("\"notifications\": \"true\"", DisplayName = "Valid configuration: notifications = true")]
+        [DataRow("\"notifications\": \"false\"", DisplayName = "Valid configuration: notifications = false")]
+        [DataRow("\"messaging\": \"true\"", DisplayName = "Valid configuration: messaging = true")]
+        [DataRow("\"messaging\": \"false\"", DisplayName = "Valid configuration: messaging = false")]
+        [DataRow("\"userInfo\": \"true\"", DisplayName = "Valid configuration: userInfo = true")]
+        [DataRow("\"userInfo\": \"false\"", DisplayName = "Valid configuration: userInfo = false")]
+        [DataRow("\"documents\": \"true\"", DisplayName = "Valid configuration: documents = true")]
+        [DataRow("\"documents\": \"false\"", DisplayName = "Valid configuration:. documents = false")]
+
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"true\", \"canUpdateReadStatus\": \"true\", \"requiresDetailsRequest\": \"true\", \"sendMessageSubject\": \"true\"}",
+            DisplayName = "Valid all im1messaging implementations enabled journey")]
+
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"false\", \"canDeleteMessages\": \"false\", \"canUpdateReadStatus\": \"false\", \"requiresDetailsRequest\": \"false\", \"sendMessageSubject\": \"false\"}",
+            DisplayName = "Valid all im1messaging implementations disabled journey")]
+
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"false\", \"canUpdateReadStatus\": \"false\", \"requiresDetailsRequest\": \"false\", \"sendMessageSubject\": \"false\"}",
+            DisplayName = "Valid configuration: im1messaging: isEnabled = true, canDeleteMessages = false, canUpdateReadStatus = false, requiresDetailRequest = false, sendMessageSubject = false")]
+
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"false\", \"canUpdateReadStatus\": \"true\", \"requiresDetailsRequest\": \"true\", \"sendMessageSubject\": \"true\"}",
+            DisplayName = "Valid configuration: im1messaging: isEnabled = true, canDeleteMessages = false, canUpdateReadStatus = false, requiresDetailRequest = false, sendMessageSubject = false")]
+
+        [DataRow("\"im1Messaging\": { \"isEnabled\": \"true\", \"canDeleteMessages\": \"true\", \"canUpdateReadStatus\": \"false\", \"requiresDetailsRequest\": \"false\", \"sendMessageSubject\": \"true\"}",
+            DisplayName = "Valid configuration: im1messaging: isEnabled = true, canDeleteMessages = true, canUpdateReadStatus = false, requiresDetailRequest = false, sendMessageSubject = true")]
         public async Task ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithValidJourneys_ReturnsTrue(
             string journeys)
         {
@@ -381,6 +393,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("im1Messaging", "{\"isEnabled\": \"yes\", \"canUpdateReadStatus\" : \"true\"}", "NotInEnumeration: #/journeys.im1Messaging.isEnabled", false)]
         [DataRow("im1Messaging", "{\"isEnabled\": \"true\"}", "PropertyRequired: #/journeys.im1Messaging.requiresDetailsRequest", true)]
         [DataRow("im1Messaging", "{\"isEnabled\": \"yes\", \"requiresDetailsRequest\" : \"true\"}", "NotInEnumeration: #/journeys.im1Messaging.isEnabled", false)]
+        [DataRow("im1Messaging", "{\"isEnabled\": \"true\"}", "PropertyRequired: #/journeys.im1Messaging.sendMessageSubject", true)]
         public async Task
             ValidateJsonAgainstSchema_JourneyConfiguration_WhenCalledWithInvalidJourney_ReturnsFalse(
                 string journeyType, string value, string expectedError, bool oneOfMultipleOptions)

@@ -90,11 +90,12 @@ export default {
     const createMessageRequest = {
       messageBody: message.messageText,
       subject: message.subjectText,
-      recipient: state.selectedMessageRecipient.id,
+      recipientIdentifier: state.selectedMessageRecipient.id,
     };
     try {
-      const response = await this.app.$http.postV1PatientMessages({ createMessageRequest });
-      if (response.messageSent) {
+      const response = await this.app.$http.postV1PatientMessages({ createMessageRequest,
+        returnResponse: true });
+      if (response.status === 204) {
         commit(MESSAGE_SENT, true);
       }
     } catch {

@@ -55,12 +55,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             {
                 current.CarePlans = new List<CarePlansProvider>();
             }
-            
+
             if (current.Consultations == null)
             {
                 current.Consultations = new List<ConsultationsProvider>();
             }
-            
+
             if (current.HealthTrackers == null)
             {
                 current.HealthTrackers = new List<HealthTrackersProvider>();
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             {
                 current.Medicines = new List<MedicinesProvider>();
             }
-            
+
             if (current.Messages == null)
             {
                 current.Messages = new List<MessagesProvider>();
@@ -90,12 +90,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             {
                 current.CarePlans = merge.CarePlans;
             }
-            
+
             if (merge?.Consultations != null)
             {
                 current.Consultations = merge.Consultations;
             }
-            
+
             if (merge?.HealthTrackers != null)
             {
                 current.HealthTrackers = merge.HealthTrackers;
@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             {
                 current.Messages = merge.Messages;
             }
-            
+
             if (merge?.SecondaryAppointments != null)
             {
                 current.SecondaryAppointments = merge.SecondaryAppointments;
@@ -225,6 +225,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             if (merge?.RequiresDetailsRequest != null)
             {
                 current.RequiresDetailsRequest = merge.RequiresDetailsRequest;
+            }
+
+            if (merge?.SendMessageSubject != null)
+            {
+                current.SendMessageSubject = merge.SendMessageSubject;
             }
 
             return current;

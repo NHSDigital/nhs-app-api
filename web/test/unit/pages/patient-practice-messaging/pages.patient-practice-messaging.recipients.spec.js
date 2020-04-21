@@ -33,14 +33,14 @@ describe('patient practice messaging recipients page', () => {
     });
 
     describe('no message recipients', () => {
-      it('will redirect to home', async () => {
+      it('will redirect to the inbox', async () => {
         isEmptyArray.mockReturnValueOnce(true);
         mountPage();
 
         await wrapper.vm.$options.fetch({ store, redirect });
 
         expect(isEmptyArray).toHaveBeenCalledWith([]);
-        expect(redirect).toHaveBeenCalledWith('/');
+        expect(redirect).toHaveBeenCalledWith('/patient-practice-messaging');
       });
     });
 
@@ -53,7 +53,7 @@ describe('patient practice messaging recipients page', () => {
         await wrapper.vm.$options.fetch({ store, redirect });
 
         expect(isEmptyArray).toHaveBeenCalledWith(messageRecipients);
-        expect(redirect).not.toHaveBeenCalledWith('/');
+        expect(redirect).not.toHaveBeenCalledWith('/patient-practice-messaging');
       });
     });
   });

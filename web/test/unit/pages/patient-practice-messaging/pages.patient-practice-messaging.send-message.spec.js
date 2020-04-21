@@ -12,7 +12,8 @@ describe('patient messaging messages', () => {
     toggle = true,
     selectedMessageRecipient = undefined,
     messageSent = false,
-    selectedId = undefined } = {}) => {
+    selectedId = undefined,
+    sendMessageSubjectEnabled = true } = {}) => {
     store = createStore({
       state: {
         patientPracticeMessaging: {
@@ -20,7 +21,11 @@ describe('patient messaging messages', () => {
           messageSent,
           selectedMessageRecipient,
         },
-        device: { isNativeApp: false } },
+        device: { isNativeApp: false },
+      },
+      getters: {
+        'serviceJourneyRules/sendMessageSubjectEnabled': sendMessageSubjectEnabled,
+      },
       $env: { PATIENT_PRACTICE_MESSAGING_ENABLED: toggle },
     });
     $t = create$T();
@@ -57,6 +62,7 @@ describe('patient messaging messages', () => {
     });
 
     it('will show validation errors if the input is invalid', () => {
+      mountPage({ selectedMessageRecipient: 'Recipient' });
       wrapper.vm.subjectError = true;
       wrapper.vm.messageTextError = true;
 
@@ -68,10 +74,31 @@ describe('patient messaging messages', () => {
       expect(subjectError.exists()).toBe(true);
       expect(messageError.exists()).toBe(true);
     });
+
+    it('will not show the subject field if sendMessageSubjectEnabled is false in SJR', () => {
+      mountPage({ selectedMessageRecipient: 'Recipient', sendMessageSubjectEnabled: false });
+      const subjectField = wrapper.find('#subjectText');
+
+      expect(subjectField.exists()).toBe(false);
+    });
+
+    it('will not validate the subject field if sendMessageSubjectEnabled is false in SJR', () => {
+      mountPage({ sendMessageSubjectEnabled: false });
+      wrapper.vm.subjectError = true;
+
+      const errorDialog = wrapper.find('#errorDialog');
+      const subjectError = wrapper.find('#subjectText-error-message');
+
+      expect(errorDialog.exists()).toBe(false);
+      expect(subjectError.exists()).toBe(false);
+    });
   });
 
   describe('computed', () => {
-    it('will return true for showError if there is a message error or aa subject error', () => {
+    beforeEach(() => {
+      mountPage({ selectedMessageRecipient: 'Recipient' });
+    });
+    it('will return true for showError if there is a message error or a subject error', () => {
       wrapper.vm.subjectError = true;
       expect(wrapper.vm.showError).toBe(true);
     });
@@ -87,10 +114,10 @@ describe('patient messaging messages', () => {
   });
 
   describe('fetch', () => {
-    it('will redirect to the home page if the toggle is false', async () => {
+    it('will redirect to the messaging inbox page if the toggle is false', async () => {
       mountPage({ toggle: false });
       await wrapper.vm.$options.fetch({ store, redirect });
-      expect(redirect).toHaveBeenCalledWith('/');
+      expect(redirect).toHaveBeenCalledWith('/patient-practice-messaging');
     });
   });
 

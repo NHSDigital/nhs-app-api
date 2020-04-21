@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Messages.Models
             UserPatientLinkToken = userPatientLinkToken;
             Subject = message.Subject;
             MessageBody = message.MessageBody;
-            Recipients = new List<string> { message.Recipient };
+            Recipients = new List<string> { message.RecipientIdentifier };
         }
 
         public string UserPatientLinkToken { get; }

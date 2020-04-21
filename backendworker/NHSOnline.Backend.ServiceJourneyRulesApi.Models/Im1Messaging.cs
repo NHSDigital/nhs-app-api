@@ -12,6 +12,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
         public bool? RequiresDetailsRequest { set; get; }
 
+        public bool? SendMessageSubject { set; get; }
+
         public Im1Messaging Clone() => MemberwiseClone() as Im1Messaging;
     }
 }

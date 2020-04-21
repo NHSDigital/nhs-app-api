@@ -70,6 +70,7 @@ namespace NHSOnline.Backend.Support
             public const string ClientSideLogMessageNewLine = "\r\n";
             public const string TppDocumentDetailsRegexWithComments = @"(?<type>^[a-zA-Z0-9 ]*): (?<fileName>.*)\.(?<extension>[^\s]*) - (?<comments>[\s\S]*)";
             public const string TppDocumentDetailsRegexWithoutComments = @"(?<type>^[a-zA-Z0-9 ]*): (?<fileName>.*)\.(?<extension>[^\s]*)";
+            public const string IdentifierRegex = @"^([^:]+):(Unit)*Recipient$";
         }
 
         public static class FileConstants

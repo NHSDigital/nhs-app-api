@@ -157,7 +157,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
         }
 
         public JourneysBuilder Im1MessagingEnabled(bool? isEnabled,
-            bool? canDeleteMessages, bool? canUpdateReadStatus, bool? requiresDetailsRequest)
+            bool? canDeleteMessages, bool? canUpdateReadStatus, bool? requiresDetailsRequest,
+            bool? sendMessageSubject)
         {
             if (isEnabled != null)
             {
@@ -166,7 +167,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
                     IsEnabled = isEnabled,
                     CanDeleteMessages = canDeleteMessages,
                     CanUpdateReadStatus = canUpdateReadStatus,
-                    RequiresDetailsRequest = requiresDetailsRequest
+                    RequiresDetailsRequest = requiresDetailsRequest,
+                    SendMessageSubject = sendMessageSubject,
                 };
             }
             else
@@ -176,7 +178,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
                     IsEnabled = null,
                     CanDeleteMessages = null,
                     CanUpdateReadStatus = null,
-                    RequiresDetailsRequest = null
+                    RequiresDetailsRequest = null,
+                    SendMessageSubject = null,
                 };
             }
 

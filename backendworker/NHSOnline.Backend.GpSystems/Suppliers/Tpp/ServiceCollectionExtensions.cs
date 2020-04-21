@@ -70,14 +70,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 .AddTppClientRequest<TppUserSession, LogoffReply, TppClientLogoffPost>()
                 .AddTppClientRequest<AddNhsUserRequest, AddNhsUserResponse, TppClientNhsUserPost>()
                 .AddTppClientRequest<(TppRequestParameters, RepeatPrescriptionRequest), RequestMedicationReply, TppClientOrderPrescriptionsPost>()
-                .AddTppClientRequest<TppRequestParameters, ViewPatientOverviewReply, TppClientPatientOverviewPost>()
-                .AddTppClientRequest<TppRequestParameters, PatientSelectedReply, TppClientPatientSelectedPost>()
                 .AddTppClientRequest<TppUserSession, MessagesViewReply, TppClientMessagesViewPost>()
                 .AddTppClientRequest<LinkAccount, LinkAccountReply, TppClientLinkAccountPost>()
-                .AddTppClientRequest<TppRequestParameters, RequestPatientRecordReply, TppClientRequestPatientRecordPost>()
-                .AddTppClientRequest<(TppRequestParameters, string), RequestBinaryDataReply, TppClientRequestBinaryDataPost>()
                 .AddTppClientRequest<TppRequestParameters, RequestSystmOnlineMessagesReply, TppClientRequestSystmOnlineMessages>()
-                .AddTppClientRequest<(TppRequestParameters, string, string), TestResultsViewReply, TppClientTestResultsView>()
                 .AddTppClientRequest<(TppRequestParameters, string), TestResultsViewReply, TppClientTestResultsViewDetailed>()
                 .AddTppClientRequest< (TppRequestParameters, AppointmentViewType), ViewAppointmentsReply, TppClientViewAppointmentsPost>()
                 .AddTppClientRequest<TppUserSession, MessageRecipientsReply, TppClientMessageRecipientsPost>()
@@ -86,7 +81,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
                 .AddTppClientRequest<TppRequestParameters, RequestPatientRecordReply, TppClientRequestPatientRecordPost>()
                 .AddTppClientRequest<(TppRequestParameters, string), RequestBinaryDataReply, TppClientRequestBinaryDataPost>()
                 .AddTppClientRequest<(TppRequestParameters, string, string), TestResultsViewReply, TppClientTestResultsView>()
-                .AddTppClientRequest<(TppRequestParameters, string), TestResultsViewReply, TppClientTestResultsViewDetailed>();
+                .AddTppClientRequest<(TppUserSession, string, string), MessageCreateReply, TppClientMessagesSendMessagePost>();
 
             return services;
         }
