@@ -67,9 +67,9 @@ export default {
     descriptionText() {
       return this.getMessage('descriptionText');
     },
-    getMessage(type) {
+    getMessage(property) {
       const thirdPartyLocales = this.getText(`thirdPartyProviders.${this.providerId}`);
-      return getThirdPartyLocaleText(thirdPartyLocales, type, this.redirectPath, 'jumpOffContent');
+      return getThirdPartyLocaleText(thirdPartyLocales, this.redirectPath, 'jumpOffContent', property);
     },
     getText(key) {
       return this.$te(key) ? this.$t(key) : '';

@@ -180,11 +180,30 @@ export const hrefForURL = (originalURL) => {
   return `//${originalURL}`;
 };
 
-export const getThirdPartyLocaleText = (thirdPartyLocales, type, redirectPath, feature) => {
-  for (let i = 0; i < thirdPartyLocales.jumpOffs.length; i += 1) {
-    if (thirdPartyLocales.jumpOffs[i].path === decodeURIComponent(redirectPath)) {
-      return thirdPartyLocales.jumpOffs[i][feature][type];
+export const getPathAndQuery = (url) => {
+  try {
+    const theUrl = new URL(url);
+    return theUrl.pathname + theUrl.search;
+  } catch (e) {
+    return '';
+  }
+};
+
+export const getThirdPartyJumpOff = (thirdPartyLocales, redirectPath) => {
+  if (thirdPartyLocales.jumpOffs !== undefined) {
+    for (let i = 0; i < thirdPartyLocales.jumpOffs.length; i += 1) {
+      if (thirdPartyLocales.jumpOffs[i].path === decodeURIComponent(redirectPath)) {
+        return thirdPartyLocales.jumpOffs[i];
+      }
     }
   }
   return '';
+};
+
+export const getThirdPartyLocaleText = (thirdPartyLocales, redirectPath, feature, property) => {
+  const jumpOff = getThirdPartyJumpOff(thirdPartyLocales, redirectPath);
+  if (jumpOff === '') {
+    return '';
+  }
+  return jumpOff[feature][property];
 };

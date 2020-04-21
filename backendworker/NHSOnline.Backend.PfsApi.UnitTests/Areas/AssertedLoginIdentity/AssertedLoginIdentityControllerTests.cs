@@ -70,7 +70,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
 
             _mockAuditor.Verify(x => x.Audit(RequestAuditType,
-                "Creating Asserted login Identity JWT for intended relying party URL: " + _request.IntendedRelyingPartyUrl));
+                "Creating Asserted login Identity JWT for Provider ID '{0}', Provider Name '{1}', "
+                + "Jump Off ID '{2}', intended relying party URL: {3}",
+                _request.ProviderId, _request.ProviderName, _request.JumpOffId,
+                _request.IntendedRelyingPartyUrl));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "AssertedLoginIdentity Token creation failed."));
 
@@ -97,12 +100,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 .Subject.Should().Be(expectedResponse);
 
             _mockAuditor.Verify(x => x.Audit(RequestAuditType,
-                "Creating Asserted login Identity JWT for intended relying party URL: " + _request.IntendedRelyingPartyUrl));
+                "Creating Asserted login Identity JWT for Provider ID '{0}', Provider Name '{1}', "
+                + "Jump Off ID '{2}', intended relying party URL: {3}",
+                _request.ProviderId, _request.ProviderName, _request.JumpOffId,
+                _request.IntendedRelyingPartyUrl));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "AssertedLoginIdentity Token creation succeeded."));
 
             _mockLogger.VerifyLogger(LogLevel.Information,
-                $"Created Asserted Login Identity: IntendedRelyingPartyUrl={_request.IntendedRelyingPartyUrl}", Times.Once());
+                $"Created Asserted Login Identity: ProviderId={_request.ProviderId} " +
+                    $"ProviderName={_request.ProviderName} " +
+                    $"JumpOffId={_request.JumpOffId} " +
+                    $"IntendedRelyingPartyUrl={_request.IntendedRelyingPartyUrl}", Times.Once());
         }
     }
 }

@@ -5021,6 +5021,15 @@
                   intendedRelyingPartyUrl: 
                     type: "string"
                     description: "URL of the intended relying party that the asserted login identity will be used to access."
+                  providerId: 
+                    type: "string"
+                    description: "ID of the silver integration third party, e.g. 'pkb', 'ers'."
+                  providerName: 
+                    type: "string"
+                    description: "Name of the silver integration third party, e.g. 'Patient Knows Best'."
+                  jumpOffId: 
+                    type: "string"
+                    description: "ID of the silver integration jump-off point, e.g. 'appointments', 'sharedLinks'"
           description: "Creates an asserted login identity javascript web token for the logged-in user."
           required: true
         responses: 

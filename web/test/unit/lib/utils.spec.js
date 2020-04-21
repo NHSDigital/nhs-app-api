@@ -9,6 +9,7 @@ import {
   stripHtml,
   formatInboxMessageTime,
   formatIndividualMessageTime,
+  getPathAndQuery,
   getThirdPartyLocaleText,
   mimeType,
 } from '@/lib/utils';
@@ -272,6 +273,20 @@ describe('util library', () => {
         });
     });
 
+    describe('getPathAndQuery', () => {
+      each([
+        { url: 'http://www.test.com/path?query=string', expectedResult: '/path?query=string' },
+        { url: 'http://www.test.com/path', expectedResult: '/path' },
+        { url: 'http://www.test.com?query=string', expectedResult: '/?query=string' },
+        { url: 'http://www.test.com', expectedResult: '/' },
+        { url: '/path?query=string', expectedResult: '' },
+        { url: 'some random string', expectedResult: '' },
+      ]).it('will return the path and querystring for a given URL',
+        ({ url, expectedResult }) => {
+          expect(getPathAndQuery(url)).toEqual(expectedResult);
+        });
+    });
+
     describe('getThirdPartyLocaleText', () => {
       const $te = create$T(false);
       each([{
@@ -288,7 +303,7 @@ describe('util library', () => {
         ({ textType, redirectPath, feature, expectedText }) => {
           const thirdPartyLocales = $te('thirdPartyProviders.pkb') ? $t('thirdPartyProviders.pkb') : '';
           const retrievedText =
-            getThirdPartyLocaleText(thirdPartyLocales, textType, redirectPath, feature);
+            getThirdPartyLocaleText(thirdPartyLocales, redirectPath, feature, textType);
 
           expect(retrievedText).toEqual(expectedText);
         });

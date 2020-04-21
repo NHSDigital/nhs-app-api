@@ -77,7 +77,7 @@ describe('redirector page', () => {
       mountRedirector($http, $store);
     });
 
-    it('will call router push with INDEX path', () => {
+    it('will call router push with APPOINTMENTS path', () => {
       expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
     });
   });
@@ -94,7 +94,7 @@ describe('redirector page', () => {
       mountRedirector($http, $store);
     });
 
-    it('will call router push with INDEX path', () => {
+    it('will call router push with APPOINTMENTS path', () => {
       expect($router.push).toHaveBeenCalledWith(APPOINTMENTS.path);
     });
   });
@@ -146,22 +146,21 @@ describe('redirector page', () => {
             id: 'nonethirdParty',
             requiresAssertedLoginIdentity: true,
             showThirdPartyWarning: false,
-            url: 'www.url.com',
+            url: 'http://www.url.com',
           }],
         },
       };
       const $store = createStore({ $http, state: $state });
       $route = {
         ...INTERSTITIAL_REDIRECTOR,
-        query: { [REDIRECT_PARAMETER]: 'www.url.com' },
+        query: { [REDIRECT_PARAMETER]: 'http://www.url.com' },
       };
 
       wrapper = mountRedirector($http, $store);
     });
 
     it('will call router push with INDEX path', () => {
-      const expectedRequest = { assertedLoginIdentityRequest: { IntendedRelyingPartyUrl: 'www.url.com' } };
-      expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith(expectedRequest);
+      expect($router.push).toHaveBeenCalledWith(INDEX.path);
     });
 
     it('warning section should not be shown', () => {
@@ -207,7 +206,11 @@ describe('redirector page', () => {
 
     it('will call router push on button click', () => {
       const expectedRequest = { assertedLoginIdentityRequest: {
-        IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' } };
+        IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+        JumpOffId: 'messages',
+        ProviderId: 'pkb',
+        ProviderName: 'Patients Know Best',
+      } };
       const continueButton = wrapper.find('a.nhsuk-button');
       continueButton.trigger('click');
 
@@ -309,7 +312,11 @@ describe('redirector page', () => {
 
     it('will call router push', () => {
       const expectedRequest = { assertedLoginIdentityRequest: {
-        IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages' } };
+        IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
+        JumpOffId: 'messages',
+        ProviderId: 'pkb',
+        ProviderName: 'Patients Know Best',
+      } };
 
       expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith(expectedRequest);
     });

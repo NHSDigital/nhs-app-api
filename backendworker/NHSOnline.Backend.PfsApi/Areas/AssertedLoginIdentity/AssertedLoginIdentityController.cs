@@ -39,11 +39,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
                 }
 
                 await _auditor.Audit(AuditingOperations.CreateAssertedLoginIdentityTokenRequest,
-                    "Creating Asserted login Identity JWT for intended relying party URL: " + model.IntendedRelyingPartyUrl);
+                    "Creating Asserted login Identity JWT for Provider ID '{0}', Provider Name '{1}', " +
+                    "Jump Off ID '{2}', intended relying party URL: {3}",
+                    model.ProviderId, model.ProviderName, model.JumpOffId, model.IntendedRelyingPartyUrl);
 
                 var result = _assertedLoginIdentityService.CreateJwtToken(userSession.CitizenIdUserSession.IdTokenJti);
 
-                await result.Accept(new CreateJwtAuditingVisitor(_auditor, _logger, model.IntendedRelyingPartyUrl));
+                await result.Accept(new CreateJwtAuditingVisitor(_auditor, _logger, model));
                 return result.Accept(new CreateJwtResultVisitor());
             }
             finally

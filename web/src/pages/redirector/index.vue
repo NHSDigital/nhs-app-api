@@ -1,27 +1,27 @@
 <template>
   <div v-if="showTemplate">
-    <div v-if="shouldShowWarning">
-      <div :class="$style['app-interruption']" data-purpose="silver-integration-warning">
-        <div :class="$style['app-interruption__content']">
-          <h2>{{ $t('thirdPartyProviders.warningConjunctions.heading2') }}</h2>
-          <p>{{ paragraphText() }}
-            <strong>{{ providerName() }}</strong>.
-          </p>
+    <warning-content-panel v-if="shouldShowWarning" data-purpose="silver-integration-warning">
+      <template slot="header">
+        {{ $t('thirdPartyProviders.warningConjunctions.heading2') }}
+      </template>
+      <template>
+        <p>{{ paragraphText() }}
+          <strong>{{ providerName() }}</strong>.
+        </p>
 
-          <a :href="formAction" :class="['nhsuk-button', 'nhsuk-button--reverse']"
-             @click="addSessionStorage">
-            {{ $t('thirdPartyProviders.warningConjunctions.button') }}
+        <a :href="buttonHref" :class="['nhsuk-button', 'nhsuk-button--reverse']"
+           @click="setSessionStorage">
+          {{ $t('thirdPartyProviders.warningConjunctions.button') }}
+        </a>
+
+        <p>
+          <a class="inline-link" :href="linkHref()"
+             target="_blank" rel="noopener noreferrer">
+            {{ linkText() }}
           </a>
-
-          <p>
-            <a :class="$style['inline-link']" :href="linkHref()"
-               target="_blank" rel="noopener noreferrer">
-              {{ linkText() }}
-            </a>
-          </p>
-        </div>
-      </div>
-    </div>
+        </p>
+      </template>
+    </warning-content-panel>
     <div v-else :class="$style['spacer']" />
   </div>
 </template>
@@ -29,10 +29,14 @@
 <script>
 import get from 'lodash/fp/get';
 import agreedToThirdPartyWarning from '@/lib/sessionStorage';
+import WarningContentPanel from '@/components/widgets/WarningContentPanel';
 import { REDIRECT_PARAMETER, INDEX, findByName, findByPath } from '@/lib/routes';
-import { getThirdPartyLocaleText } from '@/lib/utils';
+import { getPathAndQuery, getThirdPartyJumpOff, getThirdPartyLocaleText } from '@/lib/utils';
 
 export default {
+  components: {
+    WarningContentPanel,
+  },
   layout(context) {
     const redirectPath = get(REDIRECT_PARAMETER)(context.route.query);
     const services = context.store.state.knownServices.knownServices
@@ -48,11 +52,10 @@ export default {
       showWarning: false,
       services: [],
       redirectPath: '',
-      paragraphTextData: '',
-      linkTextData: '',
-      featureNameData: '',
-      formAction: '',
+      redirectPathAndQuery: '',
+      buttonHref: '',
       sessionStorageName: '',
+      thirdPartyServiceContent: '',
     };
   },
   computed: {
@@ -83,50 +86,60 @@ export default {
     if (this.services.length > 0 &&
       (this.services[0].requiresAssertedLoginIdentity || {}) === true) {
       this.sessionStorageName = `agreedThirdPartyWarning_${this.services[0].id}`;
+      this.redirectPathAndQuery = getPathAndQuery(this.redirectPath);
+      this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${this.services[0].id}`);
+      this.JumpOffId =
+        getThirdPartyJumpOff(this.thirdPartyServiceContent, this.redirectPathAndQuery).id;
+
+      if (this.JumpOffId === undefined) {
+        this.$router.push(INDEX.path);
+        return;
+      }
+
       if (this.services[0].showThirdPartyWarning === false ||
           agreedToThirdPartyWarning(this.sessionStorageName)) {
         this.getAssertedLoginIdentityAndNavigate();
         return;
       }
 
-      const featureName = this.getMessage('featureName');
-      if (featureName !== '') {
-        this.getAssertedLoginIdentityUrl();
-        this.showWarning = true;
-        this.$store.dispatch('pageTitle/updatePageTitle', featureName);
-        this.$store.dispatch('header/updateHeaderText', featureName);
-        return;
-      }
+      const featureName = this.getWarningMessage('featureName');
+      this.setButtonHref();
+      this.showWarning = true;
+      this.$store.dispatch('pageTitle/updatePageTitle', featureName);
+      this.$store.dispatch('header/updateHeaderText', featureName);
+      return;
     }
     this.$router.push(INDEX.path);
   },
   methods: {
-    async getAssertedLoginIdentityUrl() {
-      await this.$store.app.$http
+    async postPatientAssertedLoginIdentity() {
+      return this.$store.app.$http
         .postV1PatientAssertedLoginIdentity({
           assertedLoginIdentityRequest: {
             IntendedRelyingPartyUrl: this.redirectPath,
+            ProviderId: this.thirdPartyServiceContent.serviceId,
+            ProviderName: this.thirdPartyServiceContent.providerName,
+            JumpOffId: this.JumpOffId,
           },
         })
+        .then(response => this.appendAssertedLoginIdentity(this.redirectPath, response));
+    },
+    async setButtonHref() {
+      await this.postPatientAssertedLoginIdentity()
         .then((response) => {
-          this.formAction = this.appendAssertedLoginIdentity(this.redirectPath, response);
+          this.buttonHref = response;
         });
     },
     async getAssertedLoginIdentityAndNavigate() {
-      await this.$store.app.$http
-        .postV1PatientAssertedLoginIdentity({
-          assertedLoginIdentityRequest: {
-            IntendedRelyingPartyUrl: this.redirectPath,
-          },
-        })
+      await this.postPatientAssertedLoginIdentity()
         .then((response) => {
-          window.location = this.appendAssertedLoginIdentity(this.redirectPath, response);
+          window.location = response;
         })
         .catch(() => {
           this.$router.push(INDEX.path);
         });
     },
-    addSessionStorage() {
+    setSessionStorage() {
       sessionStorage.setItem(this.sessionStorageName, true);
     },
     appendAssertedLoginIdentity(uri, response) {
@@ -136,57 +149,48 @@ export default {
       return `${uri}?assertedLoginIdentity=${response.token}`;
     },
     paragraphText() {
-      if (this.paragraphTextData === '') {
-        const paragraph = this.showWarning ? this.getWarningMessage('paragraph') : '';
-        this.paragraphTextData = paragraph.replace('{{ servicePurchaser }}', this.servicePurchaser())
+      if (this.showWarning) {
+        const paragraph = this.getWarningConjunction('paragraph');
+        return paragraph
+          .replace('{{ servicePurchaser }}', this.servicePurchaser())
           .replace('{{ serviceType }}', this.serviceType());
       }
-      return this.paragraphTextData;
+      return '';
     },
     linkText() {
-      if (this.linkTextData === '') {
-        const paragraph = this.showWarning ? this.getWarningMessage('linkText') : '';
-        this.linkTextData = paragraph.replace('{{ serviceTypePlural }}', this.serviceTypePlural());
+      if (this.showWarning) {
+        const paragraph = this.getWarningConjunction('linkText');
+        return paragraph.replace('{{ serviceTypePlural }}', this.serviceTypePlural());
       }
-      return this.linkTextData;
-    },
-    featureName() {
-      if (this.featureNameData === '') {
-        this.featureNameData = this.showWarning ? this.getMessage('featureName') : '';
-      }
-      return this.featureNameData;
+      return '';
     },
     servicePurchaser() {
-      return this.showWarning ? this.getMessage('servicePurchaser') : '';
+      return this.showWarning ? this.getWarningMessage('servicePurchaser') : '';
     },
     serviceType() {
-      return this.showWarning ? this.getMessage('serviceType') : '';
+      return this.showWarning ? this.getWarningMessage('serviceType') : '';
     },
     serviceTypePlural() {
-      return this.showWarning ? this.getMessage('serviceTypePlural') : '';
+      return this.showWarning ? this.getWarningMessage('serviceTypePlural') : '';
     },
     linkHref() {
-      return this.showWarning ? this.getMessage('linkHref') : '';
+      return this.showWarning ? this.getWarningMessage('linkHref') : '';
     },
     providerName() {
-      return this.showWarning ? this.getMessage('providerName') : '';
+      if (this.showWarning && this.services[0]) {
+        return this.getText(`thirdPartyProviders.${this.services[0].id}.providerName`);
+      }
+      return '';
     },
-    getWarningMessage(type) {
+    getWarningConjunction(type) {
       if (this.services[0]) {
         return this.getText(`thirdPartyProviders.warningConjunctions.${type}`);
       }
       return '';
     },
-    getMessage(property) {
+    getWarningMessage(property) {
       if (this.services[0]) {
-        if (property === 'providerName') {
-          return this.getText(`thirdPartyProviders.${this.services[0].id}.${property}`);
-        }
-        const thirdPartyContent = this.getText(`thirdPartyProviders.${this.services[0].id}`);
-        const url = new URL(this.redirectPath);
-        const pathAndQuery = url.pathname + url.search;
-
-        return getThirdPartyLocaleText(thirdPartyContent, property, pathAndQuery, 'thirdPartyWarning');
+        return getThirdPartyLocaleText(this.thirdPartyServiceContent, this.redirectPathAndQuery, 'thirdPartyWarning', property);
       }
       return '';
     },
@@ -198,51 +202,7 @@ export default {
 </script>
 
 <style module lang="scss">
-@import '~nhsuk-frontend/packages/core/settings/colours';
-@import '~nhsuk-frontend/packages/core/settings/globals';
-@import '~nhsuk-frontend/packages/core/settings/spacing';
-@import '~nhsuk-frontend/packages/core/tools/ifff';
-@import '~nhsuk-frontend/packages/core/tools/sass-mq';
-@import '~nhsuk-frontend/packages/core/tools/spacing';
-@import "../../style/colours";
-
 .spacer {
   min-height: 100vh;
-}
-
-.app-interruption {
-  @include nhsuk-responsive-margin(4, "top");
-  @include nhsuk-responsive-margin(4, "bottom");
-  width: 100%;
-  color: $color_nhsuk-white;
-  background-color: $panel_blue;
-  .app-interruption__content {
-    @include nhsuk-responsive-padding(2);
-    @include nhsuk-responsive-padding(4, "left");
-    @include nhsuk-responsive-padding(4, "right");
-    strong {
-      display: inline;
-    }
-
-    a {
-      color: $nhsuk-text-color;
-    }
-
-    .inline-link {
-      color: $color_nhsuk-white;
-      text-decoration: underline;
-      display: inline;
-      &:visited {
-        color: $color_nhsuk-white;
-      }
-      &:focus {
-        color: $nhsuk-text-color;
-      }
-      &:hover {
-        color: $nhsuk-text-color;
-        text-decoration: none;
-      }
-    }
-  }
 }
 </style>
