@@ -65,7 +65,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         
         private static void ConfigureMvcOptions(MvcOptions options)
         {
-            options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
         }

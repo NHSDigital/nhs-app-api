@@ -39,6 +39,7 @@ using NHSOnline.Backend.PfsApi.SpineSearch;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
+using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.Support.Repository;
 using Wkhtmltopdf.NetCore;
@@ -155,7 +156,6 @@ namespace NHSOnline.Backend.PfsApi
         private static void ConfigureMvcOptions(MvcOptions options)
         {
             options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
-            options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
             options.Filters.Add(new AuthorizeFilter(
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
             );
@@ -268,6 +268,8 @@ namespace NHSOnline.Backend.PfsApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseMiddleware<SessionLoggingScopeMiddleware>();
+
             app.UseAuthentication();
 
             loggerFactory.ConfigureLogging(Configuration);

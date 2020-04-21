@@ -72,7 +72,6 @@ namespace NHSOnline.Backend.LoggerApi
 
         private static void ConfigureMvcOptions(MvcOptions options)
         {
-            options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
             options.Filters.Add(new AuthorizeFilter(
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())

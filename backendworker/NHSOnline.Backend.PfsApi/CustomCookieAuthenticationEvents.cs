@@ -27,25 +27,22 @@ namespace NHSOnline.Backend.PfsApi
 
         public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
         {
-            using (_logger.BeginScope(context.HttpContext))
+            if (context.HttpContext.Request.Path.Equals("/v1/session", StringComparison.OrdinalIgnoreCase) &&
+                context.HttpContext.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
             {
-                if (context.HttpContext.Request.Path.Equals("/v1/session", StringComparison.OrdinalIgnoreCase) &&
-                    context.HttpContext.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
-                {
-                    return;
-                }
-
-                var retrieveSessionResult = await RetrieveSession(context);
-
-                if (retrieveSessionResult is RetrieveSessionResult.Success success)
-                {
-                    context.HttpContext.RequestServices.GetRequiredService<UserSessionService>().SetUserSession(success.UserSession);
-                    _logger.LogDebug("Finish: Validate Principal");
-                    return;
-                }
-
-                await RejectPrincipalAndSignOut(context);
+                return;
             }
+
+            var retrieveSessionResult = await RetrieveSession(context);
+
+            if (retrieveSessionResult is RetrieveSessionResult.Success success)
+            {
+                context.HttpContext.RequestServices.GetRequiredService<UserSessionService>().SetUserSession(success.UserSession);
+                _logger.LogDebug("Finish: Validate Principal");
+                return;
+            }
+
+            await RejectPrincipalAndSignOut(context);
         }
 
         private async Task<RetrieveSessionResult> RetrieveSession(CookieValidatePrincipalContext context)

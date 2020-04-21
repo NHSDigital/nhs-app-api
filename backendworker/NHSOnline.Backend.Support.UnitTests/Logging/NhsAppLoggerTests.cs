@@ -3,7 +3,6 @@ using AutoFixture.AutoMoq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,17 +13,13 @@ using System.IO;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Support.Logging;
 using System.Threading;
-using Moq;
-using NHSOnline.Backend.Support.AspNet.Filters;
-using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.Support.UnitTests.Logging
 {
     [TestClass]
-    public sealed class HttpContexedLoggerTests : IDisposable
+    public sealed class NhsAppLoggerTests : IDisposable
     {
-        const string SessionId = "sfd-bnfg-sdf-dsgd-gf";
         const string MethodLogPrefix = "Test log ";
         private const string RegExt1 = "personalData=[^&]*";
         private const string RegExt2 = "gobbledygook=[^&]*";
@@ -148,9 +143,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         private DummyController _systemUnderTest;
         private Stream _stream;
 
-        private ActionExecutingContext _actionExecutingContext;
-        private ResultExecutedContext _resultContext;
-
         [TestInitialize]
         public void TestInitialize()
         {
@@ -158,15 +150,8 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            // Setup for getting the log system back in injection for test
-            var mockUserSessionService = new Mock<IUserSessionService>();
-            mockUserSessionService
-                .Setup(x => x.GetUserSession<P5UserSession>())
-                .Returns(Option.Some(new P5UserSession(string.Empty, new CitizenIdUserSession()) { Key = SessionId }));
-
             var serviceProvider = new ServiceCollection()
                 .AddLogging(ConfigureLogging)
-                .AddSingleton(mockUserSessionService.Object)
                 .BuildServiceProvider();
             _fixture.Inject(serviceProvider.GetService<ILoggerFactory>());
 
@@ -177,8 +162,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             // Create system under test from IOC injection...
             _systemUnderTest = _fixture.Create<DummyController>();
             _systemUnderTest.ControllerContext = new ControllerContext(actionContext);
-            _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(), new Dictionary<string, object>(), _systemUnderTest);
-            _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
         }
 
         private void ConfigureLogging(ILoggingBuilder logBuilder)
@@ -194,7 +177,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             };
 
             _stream = new MemoryStream();
-            logBuilder.AddProvider(new HttpContextLoggerProvider(new StreamWriter(_stream), LogLevel.Critical,
+            logBuilder.AddProvider(new NhsAppLoggerProvider(new StreamWriter(_stream), LogLevel.Critical,
                 LogLevel.None, filters));
         }
 
@@ -207,12 +190,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
 
         private string RunControllerMethod(Action controllerMethod)
         {
-            var attribute = _fixture.Create<HttpContextLogActionFilterAttribute>();
-            attribute.OnActionExecuting(_actionExecutingContext);
             controllerMethod();
-            attribute.OnActionExecuted(null); // Method should do nothing so can pass null in...
-            attribute.OnResultExecuting(null); // Method should do nothing so can pass null in...
-            attribute.OnResultExecuted(_resultContext);
             return controllerMethod.Method.Name;
         }
 
@@ -224,7 +202,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             _stream.Position = 0;
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain(SessionId);
             testString.Should().Contain(MethodLogPrefix + methodName);
         }
 
@@ -238,13 +215,12 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             var testString = streamReader.ReadLine();
             testString.Should().NotBeEmpty();
             testString.Should().NotContain("Rubbish Scope");
-            testString.Should().Contain(SessionId);
             testString.Should().Contain(MethodLogPrefix + "TaskedMethod");
 
             // Read 2nd log line
             testString = streamReader.ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain($"{SessionId}=>Rubbish Scope |");
+            testString.Should().Contain("Rubbish Scope |");
             testString.Should().Contain("Message with rubbish scope");
 
             streamReader.ReadLine().Should().BeNull();
@@ -258,7 +234,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             _stream.Position = 0;
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain(SessionId);
             testString.Should().Contain(MethodLogPrefix + "NonControllerMethod");
         }
 
@@ -273,13 +248,11 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             // Read first log line
             var testString = streamReader.ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain(SessionId);
             testString.Should().Contain(MethodLogPrefix + "TaskedMethod");
 
             // Read 2nd log line
             testString = streamReader.ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain(SessionId);
             testString.Should().Contain(MethodLogPrefix + "NestedCallMethod");
         }
 
@@ -291,7 +264,6 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             _stream.Position = 0;
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain(SessionId);
             testString.Should()
                 .EndWith("| Logging an exception. [Exception: System.ArgumentException: Something has gone wrong!");
         }

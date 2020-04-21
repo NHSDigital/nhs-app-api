@@ -1,5 +1,3 @@
-﻿using System;
-
 namespace NHSOnline.Backend.Support.Settings
 {
     public class ConfigurationSettings: IConfigurationSettings, IHttpTimeoutConfigurationSettings

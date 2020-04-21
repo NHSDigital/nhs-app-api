@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Text;
 
 namespace NHSOnline.Backend.Support.Logging
 {
-    internal sealed class HttpContextLoggerProvider : ILoggerProvider
+    internal sealed class NhsAppLoggerProvider : ILoggerProvider
     {
         private readonly TextWriter _logWriter;
         private readonly LogLevel _minLogLevel;
@@ -17,7 +16,7 @@ namespace NHSOnline.Backend.Support.Logging
 
         private bool _disposed;
 
-        public HttpContextLoggerProvider(
+        public NhsAppLoggerProvider(
             TextWriter logWriter,
             LogLevel minLogLevel,
             LogLevel maxLogLevelLimit = LogLevel.None,
@@ -48,10 +47,10 @@ namespace NHSOnline.Backend.Support.Logging
                 throw new ObjectDisposedException(GetType().FullName);
             }
 
-            return new HttpContextLogger(categoryName, _logWriter, _minLogLevel, _maxLogLevelLimit, _scopeProvider, _regexFilterList);
+            return new NhsAppLogger(categoryName, _logWriter, _minLogLevel, _maxLogLevelLimit, _scopeProvider, _regexFilterList);
         }
 
-        private sealed class HttpContextLogger : ILogger
+        private sealed class NhsAppLogger : ILogger
         {
             private readonly TextWriter _textWriter;
             private readonly LogLevel _minLogLevel;
@@ -60,7 +59,7 @@ namespace NHSOnline.Backend.Support.Logging
             private readonly string _categoryName;
             private readonly IEnumerable<LogCensorFilter> _regexFilterList;
 
-            public HttpContextLogger(
+            public NhsAppLogger(
                 string categoryName,
                 TextWriter logWriter,
                 LogLevel minLogLevel,
@@ -119,7 +118,7 @@ namespace NHSOnline.Backend.Support.Logging
                     {
                         scope.Append("=>");
                     }
-                    scope.Append(s.ToString());
+                    scope.Append(s);
                 }, state);
 
                 return CensorLogMessage(scope.ToString());
@@ -132,11 +131,6 @@ namespace NHSOnline.Backend.Support.Logging
 
             public IDisposable BeginScope<TState>(TState state)
             {
-                if (state.GetType().IsSubclassOf(typeof(HttpContext)))
-                {
-                    return _scopeProvider.Push(new HttpContextLoggerScope(state as HttpContext));
-                }
-
                 return _scopeProvider.Push(state);
             }
         }

@@ -13,6 +13,8 @@ namespace NHSOnline.Backend.PfsApi.Session
             services.AddTransient<IUserSessionManager, UserSessionManager>();
             services.AddTransient<UserSessionCreator>();
             services.AddTransient<P9UserSessionCreator>();
+
+            services.AddTransient<SessionLoggerScope>();
         }
     }
 }
