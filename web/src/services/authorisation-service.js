@@ -37,6 +37,7 @@ const generateCIDUrl = (redirectData) => {
     [camelToUnderscore('redirectUri')]: redirectData.redirectUri,
     [camelToUnderscore('state')]: redirectData.state,
     [camelToUnderscore('responseType')]: redirectData.responseType,
+    [camelToUnderscore('vtr')]: redirectData.vtr,
   };
 
   return `${redirectData.authoriseUrl}?${querystring.stringify(newData)}`;
@@ -48,6 +49,7 @@ class AuthorisationService {
     this.webCidRedirectUri = environment.CID_REDIRECT_URI;
     this.cidClientId = environment.CID_CLIENT_ID;
     this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT;
+    this.cidP5VectorOfTrustEnabled = environment.CID_P5_VECTOR_OF_TRUST_ENABLED;
   }
 
   generateLoginUrl({ isNativeApp, redirectTo, cookies, fidoAuthResponse }) {
@@ -68,6 +70,7 @@ class AuthorisationService {
       codeChallengeMethod: 'S256',
       authoriseUrl: this.cidAuthEndpoint,
       fidoAuthResponse: fidoResponse,
+      vtr: this.cidP5VectorOfTrustEnabled ? '["P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm"]' : '["P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]',
     };
 
     cookies.set('nhso.auth', {

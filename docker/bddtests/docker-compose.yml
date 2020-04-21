@@ -11,9 +11,9 @@ secrets:
     file: "./bddtests/dummysecrets/microtest_client_cert.pfx"
   microtest_cert_password:
     file: "./bddtests/dummysecrets/microtest_client_cert.password"
-  nhslogin_ext_private_key:
+  nhslogin_private_key:
     file: "./bddtests/dummysecrets/nhslogin_ext_private_key.pem"
-  nhslogin_ext_rsapass:
+  nhslogin_rsapass:
     file: "./bddtests/dummysecrets/nhslogin_ext_rsapass.password"
   organ_donation_cert:
     file: "./bddtests/dummysecrets/organ_donation_cert.pfx"

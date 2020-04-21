@@ -93,6 +93,7 @@ const config = {
     // Citizen ID
     CID_CLIENT_ID: 'nhs-online',
     CID_AUTH_ENDPOINT: 'https://auth.ext.signin.nhs.uk/authorize',
+    CID_P5_VECTOR_OF_TRUST_ENABLED: false,
     // Organ Donation
     ORGAN_DONATION_FIND_OUT_MORE_URL: 'https://www.organdonation.nhs.uk/app/app-donation/',
     ORGAN_DONATION_URL: 'https://www.organdonation.nhs.uk/',

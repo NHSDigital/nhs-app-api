@@ -1,0 +1,18 @@
+version: "3.4"
+
+secrets:
+
+  nhslogin_private_key:
+    file: "~/.nhsonline/secrets/nhslogin_dev_private_key.pem"
+  nhslogin_rsapass:
+    file: "~/.nhsonline/secrets/nhslogin_dev_rsapass.password"
+
+services:
+
+  web.local.bitraft.io:
+    env_file:
+      - ./docker/nhslogin_connectivity_dev.env
+
+  pfs.local.bitraft.io:
+    env_file:
+      - ./docker/nhslogin_connectivity_dev.env

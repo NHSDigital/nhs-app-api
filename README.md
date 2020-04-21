@@ -40,6 +40,12 @@ make run TAG=develop
 make run
 ```
 
+### Run everything built locally using the NHS login dev environment (without this defaults to ext)
+
+```bash
+make run LOGINENV=dev
+```
+
 ### Debugging web locally
 
 ```bash

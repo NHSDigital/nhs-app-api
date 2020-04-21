@@ -17,6 +17,10 @@ for file in $(env | grep _DOCKER_PORTS | sed "s#^.*_DOCKER_PORTS=#docker/#"); do
   DOCKER_COMPOSE_FILES_ARGS+=(-f "$file")
 done
 
+if [ -n "$LOGINENV" ]; then
+  DOCKER_COMPOSE_FILES_ARGS+=(-f "docker/docker-compose.nhslogin-$LOGINENV.yml")
+fi
+
 echo "Docker compose files: ${DOCKER_COMPOSE_FILES_ARGS[*]}"
 
 if [ -z "$NO_PULL" ]; then

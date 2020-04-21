@@ -13,9 +13,9 @@ secrets:
     file: "~/.nhsonline/secrets/microtest_client_cert.pfx"
   microtest_cert_password:
     file: "~/.nhsonline/secrets/microtest_client_cert.password"
-  nhslogin_ext_private_key:
+  nhslogin_private_key:
     file: "~/.nhsonline/secrets/nhslogin_ext_private_key.pem"
-  nhslogin_ext_rsapass:
+  nhslogin_rsapass:
     file: "~/.nhsonline/secrets/nhslogin_ext_rsapass.password"
   organ_donation_cert:
     file: "~/.nhsonline/secrets/organ_donation_cert.pfx"
@@ -51,6 +51,7 @@ services:
     env_file:
       - ./docker/web.env
       - ./docker/gplookup_connectivity.env
+      - ./docker/nhslogin_connectivity_ext.env
 
   pfs.local.bitraft.io:
     image: ${PFSAPI_DOCKER_REGISTRY:-local}/nhsonline-backendpfsapi:${PFSAPI_DOCKER_TAG:-latest}
@@ -84,7 +85,7 @@ services:
       - ./docker/gplookup_connectivity.env
       - ./docker/im1cache_database.env
       - ./docker/microtest_connectivity.env
-      - ./docker/nhslogin_connectivity.env
+      - ./docker/nhslogin_connectivity_ext.env
       - ./docker/organdonation_connectivity.env
       - ./docker/session_database.env
       - ./docker/sjr_connectivity.env
@@ -103,8 +104,8 @@ services:
       - microtest_cert_password
       - organ_donation_cert
       - organ_donation_cert_password
-      - nhslogin_ext_private_key
-      - nhslogin_ext_rsapass
+      - nhslogin_private_key
+      - nhslogin_rsapass
       - spine_cert
       - spine_cert_password
       - session_encryption_key
@@ -170,7 +171,7 @@ services:
       - "--"
     command: dotnet NHSOnline.Backend.UsersApi.dll
     env_file:
-      - ./docker/nhslogin_connectivity.env
+      - ./docker/nhslogin_connectivity_ext.env
       - ./docker/notificationhub_connectivity.env
       - ./docker/users.env
     secrets:
@@ -179,13 +180,13 @@ services:
   userinfo.local.bitraft.io:
     image: ${USERINFOAPI_DOCKER_REGISTRY:-local}/nhsonline-backenduserinfoapi:${USERINFOAPI_DOCKER_TAG:-latest}
     env_file:
-      - ./docker/nhslogin_connectivity.env
+      - ./docker/nhslogin_connectivity_ext.env
       - ./docker/userinfo.env
 
   messages.local.bitraft.io:
     image: ${MESSAGESAPI_DOCKER_REGISTRY:-local}/nhsonline-backendmessagesapi:${MESSAGESAPI_DOCKER_TAG:-latest}
     env_file:
-      - ./docker/nhslogin_connectivity.env
+      - ./docker/nhslogin_connectivity_ext.env
       - ./docker/messages.env
 
   log.local.bitraft.io:
