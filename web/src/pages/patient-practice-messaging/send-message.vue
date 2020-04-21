@@ -9,13 +9,11 @@
             </message-text>
             <div data-purpose="error-dialog-list">
               <message-list>
-                <sjr-if journey="sendMessageSubject">
-                  <li v-if="subjectError" data-purpose="subject-error">
-                    <p class="nhsuk-u-margin-left-2">
-                      {{ $t('patient_practice_messaging.createMessage.subjectTextError') }}
-                    </p>
-                  </li>
-                </sjr-if>
+                <li v-if="subjectError && subjectEnabled" data-purpose="subject-error">
+                  <p class="nhsuk-u-margin-left-2">
+                    {{ $t('patient_practice_messaging.createMessage.subjectTextError') }}
+                  </p>
+                </li>
                 <li v-if="messageTextError" data-purpose="message-error">
                   <p class="nhsuk-u-margin-left-2">
                     {{ $t('patient_practice_messaging.createMessage.messageTextError') }}

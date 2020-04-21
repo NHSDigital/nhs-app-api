@@ -84,8 +84,7 @@ Feature: Patient to practice messaging
     And I insert a message
     And I click send message
     Then I see my new message after it has been sent
-
-    @james
+    
   Scenario Outline: A TPP patient can send a patient practice message to a <Recipient Type> recipient
     Given I am an TPP patient
     And I am a user who can access patient practice messaging
