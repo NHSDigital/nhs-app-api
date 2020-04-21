@@ -1773,13 +1773,25 @@ const routes = {
  * to be ignored and the default path is to always be used, be sure to set ignoreStore: true
  */
 export const backLinkOverrides = {
-  [routes.APPOINTMENT_CANCELLING_SUCCESS.name]: {
+  [routes.ACCOUNT_COOKIES.name]: {
     ignoreStore: true,
-    defaultPath: routes.APPOINTMENTS.path,
+    defaultPath: routes.ACCOUNT.path,
   },
   [routes.APPOINTMENT_BOOKING_SUCCESS.name]: {
     ignoreStore: true,
     defaultPath: routes.APPOINTMENTS.path,
+  },
+  [routes.APPOINTMENT_CANCELLING_SUCCESS.name]: {
+    ignoreStore: true,
+    defaultPath: routes.APPOINTMENTS.path,
+  },
+  [routes.LINKED_PROFILES_SHUTTER_APPOINTMENTS.name]: {
+    ignoreStore: true,
+    defaultPath: routes.APPOINTMENTS.path,
+  },
+  [routes.LINKED_PROFILES_SHUTTER_PRESCRIPTIONS.name]: {
+    ignoreStore: true,
+    defaultPath: routes.INDEX.path,
   },
   [routes.ORGAN_DONATION.name]: {
     defaultPath: routes.MORE.path,
@@ -1787,19 +1799,11 @@ export const backLinkOverrides = {
   [routes.ORGAN_DONATION_VIEW_DECISION.name]: {
     defaultPath: routes.MORE.path,
   },
-  [routes.SWITCH_PROFILE.name]: {
-    ignoreStore: true,
-    defaultPath: routes.INDEX.path,
-  },
   [routes.PATIENT_PRACTICE_MESSAGING.name]: {
     ignoreStore: true,
     defaultPath: routes.MORE.path,
   },
-  [routes.LINKED_PROFILES_SHUTTER_APPOINTMENTS.name]: {
-    ignoreStore: true,
-    defaultPath: routes.APPOINTMENTS.path,
-  },
-  [routes.LINKED_PROFILES_SHUTTER_PRESCRIPTIONS.name]: {
+  [routes.SWITCH_PROFILE.name]: {
     ignoreStore: true,
     defaultPath: routes.INDEX.path,
   },
