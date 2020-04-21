@@ -6,12 +6,6 @@ import org.joda.time.DateTime
 
 object MongoTermsAndConditions
 {
-
-    fun clearTermsAndConditionsAcceptance()
-    {
-        MongoDBConnection.TermsAndconditionsCollection.clearCache()
-    }
-
     fun addTermsAndConditionsAcceptance(subject: String, consentDate: DateTime)
     {
         val termsAndConditionRecord = MongoRepositoryTermsAndConditions (
@@ -22,6 +16,6 @@ object MongoTermsAndConditions
                 DateOfAnalyticsCookieToggle = consentDate.toString()
         )
 
-        MongoDBConnection.TermsAndconditionsCollection.clearAndInsertValue(termsAndConditionRecord)
+        MongoDBConnection.TermsAndConditionsCollection.clearAndInsertValue(termsAndConditionRecord)
     }
 }

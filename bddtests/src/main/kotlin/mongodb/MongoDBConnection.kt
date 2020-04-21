@@ -1,5 +1,6 @@
 package mongodb
 
+import com.google.common.collect.ImmutableList
 import com.google.gson.GsonBuilder
 import com.mongodb.MongoClient
 import com.mongodb.client.MongoCollection
@@ -120,9 +121,18 @@ class MongoDBConnection(private val collectionName: String, private val host: St
                 userInfoCollectionName,
                 Config.instance.usersMongoDbHost,
                 Config.instance.usersMongoDbPort.toInt())
-        val TermsAndconditionsCollection = MongoDBConnection(
+        val TermsAndConditionsCollection = MongoDBConnection(
                 termsAndConditionsCollectionName,
                 Config.instance.consentMongoDbHost,
                 Config.instance.consentMongoDbPort.toInt())
+
+        fun collections(): ImmutableList<MongoDBConnection> =
+                ImmutableList.of(
+                        Im1CacheCollection,
+                        UserDevicesCollection,
+                        MessagesCollection,
+                        UserInfoCollection,
+                        TermsAndConditionsCollection
+                )
     }
 }

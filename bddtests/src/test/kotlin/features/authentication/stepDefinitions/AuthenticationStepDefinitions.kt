@@ -19,6 +19,7 @@ import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -80,6 +81,7 @@ class AuthenticationStepDefinitions {
         val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        TermsAndConditionsJourneyFactory.consent(patient)
         //Whereas the usual TppSessionCreateJourneyFactory.createFor includes the logOff request,
         //createAuthenticateRequest does not.
         TppSessionCreateJourneyFactory(mockingClient).createAuthenticateRequest(patient)

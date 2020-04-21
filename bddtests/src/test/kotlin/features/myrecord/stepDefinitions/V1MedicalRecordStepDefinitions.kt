@@ -11,6 +11,7 @@ import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -42,6 +43,7 @@ open class V1MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        TermsAndConditionsJourneyFactory.consent(patient)
         MyRecordFactory.getForSupplier(supplier).enabledWithBlankRecord(patient)
         DemographicsFactory.getForSupplier(supplier).enabled(patient)
     }

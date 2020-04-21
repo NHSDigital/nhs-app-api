@@ -5,6 +5,7 @@ import cucumber.api.Scenario
 import cucumber.api.java.After
 import cucumber.api.java.Before
 import mocking.MockingClient
+import mongodb.MongoDBConnection
 import net.serenitybdd.core.Serenity.getCurrentSession
 import net.serenitybdd.core.Serenity.getWebdriverManager
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -36,6 +37,7 @@ class SetupAndTeardown {
     @Before
     fun beforeEachScenario(scenario: Scenario) {
         getCurrentSession().clear()
+        MongoDBConnection.collections().forEach { connection -> connection.clearCache() }
 
         val workerClient = WorkerClient()
         mockingClient.clearWiremock()

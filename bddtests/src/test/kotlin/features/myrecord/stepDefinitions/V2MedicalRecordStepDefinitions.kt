@@ -8,6 +8,7 @@ import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.MyRecordFactory
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
 import pages.gpMedicalRecord.MedicalRecordV2Page
@@ -28,6 +29,7 @@ open class V2MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        TermsAndConditionsJourneyFactory.consent(patient)
         MyRecordFactory.getForSupplier(supplier).enabledWithBlankRecord(patient)
         DemographicsFactory.getForSupplier(supplier).enabled(patient)
     }

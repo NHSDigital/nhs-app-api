@@ -26,7 +26,7 @@ class TermsAndConditionsStepDefinitions {
     @Given("^I am an? (.*) patient who has not already accepted terms and conditions$")
     fun iHaveNotAcceptedTermsAndConditions(gpSystem: String) {
         initialisePatientAndGpSystem(gpSystem)
-        TermsAndConditionsJourneyFactory.removeConsents()
+        TermsAndConditionsJourneyFactory.noConsent()
     }
 
     @Given("^I am an? (.*) patient who has already accepted terms and conditions$")

@@ -16,6 +16,9 @@ Feature: Patient Registration Frontend
   @ios
   Scenario Outline: <GP System> User launches and completes account creation from web
     Given I have completed <GP System> account creation
+    Then the Terms and Conditions page is displayed
+    When I check the agree to terms and conditions checkbox
+    And I click the continue button on Terms and Conditions
     Then I see the signed in home page
     And I see a welcome message
     And I see the navigation menu
