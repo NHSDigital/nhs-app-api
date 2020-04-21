@@ -16,7 +16,7 @@ function trigger_sjr() {
 	case $TARGET_ENVIRONMENT in
 	"ops"*)
 		if [ $TARGET_ZONE = "sandbox" ]; then
-			BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_1Sandbox_Namespaces_1OpsSelfService_DeploySjr"
+			BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_1Sandbox_Namespaces_1OpsSelfService_2DeploySjrAppRepoTest"
 		elif [ $TARGET_ZONE = "dev" ]; then
 			BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_TeamDevelopmentEnvironment_DeploySjrAppRepo"
 		else
@@ -112,9 +112,9 @@ kubectl label namespace $TARGET_ENVIRONMENT letsencrypt=apply --overwrite
 
 # 2. Copy public key to Kubernetes
 info "Adding Public Key"
-INTERNAL_PUBLIC_KEY=$(kubectl --namespace=kube-system get secret internal-ca-key-pair -o jsonpath --template '{.data.tls\.crt}' | base64 -d)
-if [ -z ${INTERNAL_PUBLIC_KEY+x} ]; then
-  die "Unable to retrieve internal CA public key from kube-system namespace"
+INTERNAL_PUBLIC_KEY=$(kubectl --namespace=cert-manager get secret internal-ca-key-pair -o jsonpath --template '{.data.tls\.crt}' | base64 -d)
+if [[ -z ${INTERNAL_PUBLIC_KEY+x} ]]; then
+  die "Unable to retrieve internal CA public key from cert-manager namespace"
 fi
 
 kubectl get secret -n $TARGET_ENVIRONMENT internal-ca-public-key > /dev/null || kubectl create secret generic internal-ca-public-key --namespace $TARGET_ENVIRONMENT --from-literal=tls.crt="$INTERNAL_PUBLIC_KEY"
