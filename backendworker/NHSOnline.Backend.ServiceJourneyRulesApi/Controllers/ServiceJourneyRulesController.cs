@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Controllers
     {
         private readonly ILogger<ServiceJourneyRulesController> _logger;
         private readonly IServiceJourneyRulesService _serviceJourneyRulesService;
-        
+
         public ServiceJourneyRulesController(
             ILoggerFactory loggerFactory,
             IServiceJourneyRulesService serviceJourneyRulesService)
@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Controllers
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Get([FromQuery]string odsCode)
-        {   
+        {
             try
             {
                 _logger.LogEnter();
@@ -35,21 +35,42 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Controllers
                     return BadRequest();
                 }
 
-                _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {odsCode}");
-                
-                var result = _serviceJourneyRulesService.GetServiceJourneyRulesForOdsCode(odsCode);
-
-                if (result?.Journeys == null)
-                {
-                    return NotFound();
-                }
-
-                return new OkObjectResult(result);
+                return RetrieveSjrRulesForOds(odsCode);
             }
             finally
             {
                 _logger.LogExit();
             }
+        }
+
+        [HttpGet("no-ods")]
+        [AllowAnonymous]
+        public IActionResult Get()
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                _logger.LogInformation($"Retrieving Service Journey Rules for no ods code");
+
+                return RetrieveSjrRulesForOds(Constants.OdsCode.None);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private IActionResult RetrieveSjrRulesForOds(string odsCode)
+        {
+            var result = _serviceJourneyRulesService.GetServiceJourneyRulesForOdsCode(odsCode);
+
+            if (result?.Journeys == null)
+            {
+                return NotFound();
+            }
+
+            return new OkObjectResult(result);
         }
     }
 }

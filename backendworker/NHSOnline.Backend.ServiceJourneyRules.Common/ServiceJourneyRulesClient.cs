@@ -37,7 +37,11 @@ namespace NHSOnline.Backend.ServiceJourneyRules.Common
 
         private async Task<ServiceJourneyRulesApiObjectResponse<TResponse>> Get<TResponse>(string odsCode)
         {
-            var path = $"{ServiceJourneyRulesPath}?odsCode={odsCode}";
+
+            var path = string.IsNullOrWhiteSpace(odsCode)
+                ? $"{ServiceJourneyRulesPath}/no-ods"
+                : $"{ServiceJourneyRulesPath}?odsCode={odsCode}";
+            
             using (var request = BuildRequest(HttpMethod.Get, path))
             {
                 return await SendRequestAndParseResponse<TResponse>(request);

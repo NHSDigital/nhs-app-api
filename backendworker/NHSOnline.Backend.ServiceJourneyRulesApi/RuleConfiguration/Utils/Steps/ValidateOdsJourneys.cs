@@ -48,10 +48,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                 .Add(journeys => journeys.Im1Messaging?.CanUpdateReadStatus != null,
                     "journeys.Im1Messaging.CanUpdateReadStatus")
                 .Add(journeys => journeys.Im1Messaging?.RequiresDetailsRequest != null,
-        "journeys.Im1Messaging.RequiresDetailsRequest")
+                    "journeys.Im1Messaging.RequiresDetailsRequest")
                 .Add(journeys => journeys.Im1Messaging?.SendMessageSubject != null,
                     "journeys.Im1Messaging.SendMessageSubject")
-                .Add(journeys => journeys.Supplier != Supplier.Unknown, "journeys.Supplier")
+                .Add((odsCode, journeys) => journeys.Supplier != Supplier.Unknown || odsCode == Constants.OdsCode.None,
+                    "journeys.Supplier")
                 .Add(journeys =>
                 {
                     var homeScreen = journeys.HomeScreen;
@@ -92,7 +93,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             var isValid = true;
             foreach (var (odsCode, journeys) in odsJourneys)
             {
-                var errorList = _journeysValidator.GetAnyInvalidProperties(journeys);
+                var errorList = _journeysValidator.GetAnyInvalidProperties(odsCode, journeys);
 
                 if (errorList.Any())
                 {
@@ -105,6 +106,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
                     _logger.LogDebug($"Validation successful for '{odsCode}'");
                 }
             }
+
             return isValid;
         }
     }

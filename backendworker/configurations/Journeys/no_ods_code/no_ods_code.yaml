@@ -1,0 +1,33 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "no-ods-code"
+journeys:
+  appointments:
+    provider: im1
+  cdssAdvice:
+    provider: none
+  cdssAdmin:
+    provider: none
+  medicalRecord:
+    provider: im1
+    version: "2"
+  prescriptions:
+    provider: im1
+  nominatedPharmacy: false
+  notifications: true
+  messaging: true
+  userInfo: true
+  silverIntegrations:
+    carePlans: []
+    consultations: []
+    healthTrackers: []
+    libraries: []
+    medicines: []
+    messages: []
+    secondaryAppointments: []
+  documents: false
+  im1Messaging: 
+    isEnabled: false
+    canDeleteMessages: false
+    canUpdateReadStatus: false
+    requiresDetailsRequest: false

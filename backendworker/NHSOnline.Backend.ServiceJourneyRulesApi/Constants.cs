@@ -22,5 +22,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         {
             public const string Include = "!include";
         }
+
+        public static class OdsCode
+        {
+            public const string None = "no-ods-code";
+        }
     }
 }

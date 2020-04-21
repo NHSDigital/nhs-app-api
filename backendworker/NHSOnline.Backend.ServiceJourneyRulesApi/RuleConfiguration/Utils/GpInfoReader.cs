@@ -31,9 +31,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 
                 if (!_processState.HasError)
                 {
-                    return result.GroupBy(g => g.Ods)
+                    var gpInfos = result.GroupBy(g => g.Ods)
                         .Select(g => g.OrderByDescending(i => i.EndpointCreated).First())
                         .ToDictionary(g => g.Ods, g => g);
+
+                    gpInfos.Add(Constants.OdsCode.None, new GpInfo { Ods = Constants.OdsCode.None });
+                    return gpInfos;
                 }
 
                 _logger.LogError(ErrorReadingMessage);

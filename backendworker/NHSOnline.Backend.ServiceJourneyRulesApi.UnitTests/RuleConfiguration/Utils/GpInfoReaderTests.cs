@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public void GetGpInfo_WhenCalledWithValidFileName_ReturnsLatestRecordForGivenOdsCode(string odsCode,
             string endpointCreated)
         {
-            // Arrange            
+            // Arrange
             SetupFileHandlerForMultipleOdsCode();
 
             // Act
@@ -80,14 +80,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public void GetGpInfo_WhenCalledWithValidFileName_MatchesGpSupplierEnumValue
             (string gpSupplier, GpInfoSupplier expectedSupplierEnumValue)
         {
-            // Arrange         
+            // Arrange
             SetupFileHandlerForVariousSuppliers(gpSupplier);
 
             // Act
             var result = _gpInfoReader.GetGpInfo(GpInfoFilePath);
 
             // Assert
-            result.Should().NotBeNull().And.HaveCount(1);
+            result.Should().NotBeNull().And.HaveCount(2);
             result.First().Value.Supplier.Should().Be(expectedSupplierEnumValue);
         }
 
