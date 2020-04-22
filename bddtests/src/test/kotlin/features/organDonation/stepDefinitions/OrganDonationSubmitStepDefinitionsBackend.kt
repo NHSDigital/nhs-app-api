@@ -4,12 +4,15 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.MockingClient
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
+import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.organDonation.OrganDonationWithdrawalResponse
 import mocking.organDonation.models.OrganDonationRegistrationRequest
 import mocking.organDonation.models.OrganDonationWithdrawRequest
-import net.serenitybdd.core.Serenity
+import models.IdentityProofingLevel
+import models.Patient
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
@@ -23,6 +26,8 @@ import worker.models.organdonation.OrganDonationRegistrationResponse
 
 class OrganDonationSubmitStepDefinitionsBackend {
 
+    val mockingClient = MockingClient.instance
+
     @Given("^I am a (\\w+) api user who wants to opt-out of organ donation$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptOut(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
@@ -32,11 +37,22 @@ class OrganDonationSubmitStepDefinitionsBackend {
             request -> request.respondWithSuccess("NewOrganDonationId") }}
     }
 
-    @Given("^I am a (\\w+) api user who wants to opt-in to organ donation$")
+    @Given("^I am a (.*) api user who wants to opt-in to organ donation$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptIn(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
+        factory.create { registration->registration.optIn {
+            request -> request.respondWithSuccess("NewOrganDonationId") }}
+    }
+
+    @Given("^I am a user with proof level 5 who wants to opt-in to organ donation$")
+    fun iAmAUserWithProofLevel5WhoWantsToOptInToOrganDonation() {
+        val gpSystem = Supplier.EMIS
+        val patient =  Patient.getDefault(gpSystem).copy(identityProofingLevel = IdentityProofingLevel.P5)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
+        val factory = OrganDonationFactory(gpSystem)
         factory.create { registration->registration.optIn {
             request -> request.respondWithSuccess("NewOrganDonationId") }}
     }
@@ -119,8 +135,8 @@ class OrganDonationSubmitStepDefinitionsBackend {
 
     @Then("^I receive my registration id from organ donation$")
     fun iReceiveMyRegistrationIdFromOrganDonation() {
-        val organDonationResponse = Serenity
-                .sessionVariableCalled<OrganDonationRegistrationResponse>(OrganDonationRegistrationResponse::class)
+        val organDonationResponse =
+                sessionVariableCalled<OrganDonationRegistrationResponse>(OrganDonationRegistrationResponse::class)
         val expected = OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.getOrFail<String>()
         Assert.assertEquals("Expected Organ Donation Registration Id",
                 expected,

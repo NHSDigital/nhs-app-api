@@ -6,7 +6,7 @@ Feature: View prescriptions backend
   Scenario Outline: <GP System> patient requesting prescriptions with correct data returns a list of prescriptions when a patient had repeat prescriptions in the last 6 months (Date 6 months ago provided)
     Given I have logged into <GP System> and have a valid session cookie
     And From date is 6 months ago and I have 10 prescriptions in the last 6 months
-    When I get the users prescriptions with a valid cookie
+    When I request the users prescriptions with a valid cookie
     Then I receive a list of 10 prescriptions
     Examples:
       | GP System |
@@ -113,7 +113,7 @@ Feature: View prescriptions backend
     Given I have logged into <GP System> and have a valid session cookie
     And I have 110 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    When I get the users prescriptions with a valid cookie
+    When I request the users prescriptions with a valid cookie
     Then I receive a list of 100 prescriptions
     Examples:
       | GP System |
@@ -126,7 +126,7 @@ Feature: View prescriptions backend
     Given I have logged into <GP System> and have a valid session cookie
     And I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    When I get the users prescriptions with a valid cookie
+    When I request the users prescriptions with a valid cookie
     Then I receive a list of 3 prescriptions
     Examples:
       | GP System |
@@ -139,7 +139,7 @@ Feature: View prescriptions backend
     Given I have logged into <GP System> and have a valid session cookie
     And I have 3 past repeat prescriptions
     And each repeat prescription shares the same course
-    When I get the users prescriptions with a valid cookie
+    When I request the users prescriptions with a valid cookie
     Then I receive a list of 3 prescriptions
     Examples:
       | GP System |
@@ -152,7 +152,7 @@ Feature: View prescriptions backend
     Given I have logged into <GP System> and have a valid session cookie
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 3 are repeats
-    When I get the users prescriptions with a valid cookie
+    When I request the users prescriptions with a valid cookie
     Then I receive a list of 3 prescriptions
     Examples:
       | GP System |
@@ -164,7 +164,7 @@ Feature: View prescriptions backend
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has only dosage info
-    When I get the users prescriptions with a valid cookie
+    When I request the users prescriptions with a valid cookie
     Then I receive a list of 1 prescriptions
     Examples:
       | GP System |
@@ -177,7 +177,7 @@ Feature: View prescriptions backend
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has only quantity info
-    When I get the users prescriptions with a valid cookie
+    When I request the users prescriptions with a valid cookie
     Then I receive a list of 1 prescriptions
     Examples:
       | GP System |
@@ -189,7 +189,7 @@ Feature: View prescriptions backend
     Given I have logged into <GP System> and have a valid session cookie
     And I have 0 past repeat prescriptions
     And each repeat prescription contains 0 courses of which 0 are repeats
-    When I get the users prescriptions with a valid cookie
+    When I request the users prescriptions with a valid cookie
     Then I receive a list of 0 prescriptions
     Examples:
       | GP System |
@@ -203,8 +203,13 @@ Feature: View prescriptions backend
     But the patient id sent in the request is not valid
     And I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    When I get the users prescriptions with a valid cookie
+    When I request the users prescriptions with a valid cookie
     Then I receive a "patient id not found" error
     Examples:
       | GP System |
       | EMIS      |
+
+  Scenario: A user with proof level 5 receives an 'Unauthorized' error when they attempt to access prescriptions
+    Given I am a user with proof level 5 and have a valid session cookie
+    When I request the users prescriptions with a valid cookie
+    Then I receive an "Unauthorized" error

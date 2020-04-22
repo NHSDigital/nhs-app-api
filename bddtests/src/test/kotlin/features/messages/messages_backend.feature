@@ -90,3 +90,10 @@ Feature: Messages Backend
     Given I am an api user wishing to mark a message as read
     And I have logged in and have a valid session cookie
     Then an attempt to mark a message as read with an invalid access token will return an Unauthorised error
+
+  Scenario: An api user with proof level 5 can successfully get a summary of their messages
+    Given I am an api user with proof level 5 wishing to get my messages
+    And I have logged in and have a valid session cookie
+    When I get a summary of my messages from the api
+    Then I receive a "OK" success code
+    And I receive a summary of my messages

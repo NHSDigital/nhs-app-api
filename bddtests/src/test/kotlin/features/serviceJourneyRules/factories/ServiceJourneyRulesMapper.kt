@@ -1,6 +1,7 @@
 package features.serviceJourneyRules.factories
 
 import constants.Supplier
+import models.IdentityProofingLevel
 import models.Patient
 import org.junit.Assert
 import utils.SerenityHelpers
@@ -61,64 +62,72 @@ class ServiceJourneyRulesMapper {
                                 JourneyType.MESSAGES_ENABLED,
                                 JourneyType.USER_INFO_ENABLED),
 
-            // Medical Record V1
-            GpInformation(Supplier.VISION, VISION_ONLINE_CONSULTATIONS_DISABLED)
-                to EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED),
+                // Medical Record V1
+                GpInformation(Supplier.VISION, VISION_ONLINE_CONSULTATIONS_DISABLED)
+                        to EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED),
 
-            // Medical Record V1
-            GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V1) to
-                EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-            GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V1) to
-                EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-            GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
-                EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-            GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
-                EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                // Medical Record V1
+                GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
 
-            // Home Screen Public Health Notifications
-            GpInformation(Supplier.EMIS, ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION) to
-                EnumSet.of(JourneyType.HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS),
-            // Medical Record V1
-            GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V1) to
-                    EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-            GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V1) to
-                    EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-            GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
-                    EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-            GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
-                    EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                // Home Screen Public Health Notifications
+                GpInformation(Supplier.EMIS, ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION) to
+                        EnumSet.of(JourneyType.HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS),
+                // Medical Record V1
+                GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
+                GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
+                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
 
-            // Gp Medical Record Documents / Im1 Messaging
-            GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_ENABLED) to
-                    EnumSet.of(JourneyType.DOCUMENTS_ENABLED,
-                            JourneyType.IM1_MESSAGING_ENABLED,
-                            JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
-                            JourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
-                            JourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED),
-            GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_DISABLED) to
-                    EnumSet.of(JourneyType.DOCUMENTS_DISABLED,
-                            JourneyType.IM1_MESSAGING_DISABLED,
-                            JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
-                            JourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
-                            JourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED)
+                // Gp Medical Record Documents / Im1 Messaging
+                GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_ENABLED) to
+                        EnumSet.of(JourneyType.DOCUMENTS_ENABLED,
+                                JourneyType.IM1_MESSAGING_ENABLED,
+                                JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
+                                JourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
+                                JourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED),
+                GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_DISABLED) to
+                        EnumSet.of(JourneyType.DOCUMENTS_DISABLED,
+                                JourneyType.IM1_MESSAGING_DISABLED,
+                                JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
+                                JourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
+                                JourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED)
         )
 
-        fun findPatientForConfiguration(gpSystem: Supplier?, journeyType:JourneyType): Patient {
-            return findPatientForConfiguration(gpSystem, arrayListOf(journeyType))
+        fun findPatientForConfiguration(gpSystem: Supplier?,
+                                        journeyType: JourneyType,
+                                        proofLevel: IdentityProofingLevel? = null): Patient {
+            return findPatientForConfiguration(gpSystem, arrayListOf(journeyType), proofLevel)
         }
 
-        fun findPatientForConfiguration(gpSystem: Supplier?, configurations: List<ServiceJourneyRulesConfiguration>):
-                Patient {
+        fun findPatientForConfiguration(gpSystem: Supplier?,
+                                        configurations: List<ServiceJourneyRulesConfiguration>,
+                                        proofLevel: IdentityProofingLevel? = null): Patient {
             val journeyTypes = configurations.map { configuration -> configuration.toJourneyType() }
-            return findPatientForConfiguration(gpSystem, journeyTypes)
+            return findPatientForConfiguration(gpSystem, journeyTypes, proofLevel)
         }
 
-        private fun findPatientForConfiguration(gpSystem: Supplier?, journeyTypes: Collection<JourneyType>): Patient {
+        private fun findPatientForConfiguration(gpSystem: Supplier?,
+                                                journeyTypes: Collection<JourneyType>,
+                                                proofLevel: IdentityProofingLevel?): Patient {
             val gpInformation = findGpInformation(gpSystem, journeyTypes)
             Assert.assertNotNull("""Test setup incorrect: Cannot find a matching ods code for system:
                     $gpSystem and odsCode: ${gpInformation?.odsCode}, with given configuration in SJR""",
                     gpInformation)
-            val patient = Patient.getDefault(gpInformation!!.gpSupplier).copy(odsCode = gpInformation.odsCode)
+            var patient = Patient.getDefault(gpInformation!!.gpSupplier).copy(odsCode = gpInformation.odsCode)
+            if (proofLevel != null) {
+                patient = patient.copy(identityProofingLevel = proofLevel)
+            }
             SerenityHelpers.setGpSupplier(gpInformation.gpSupplier)
             SerenityHelpers.setPatient(patient)
             return patient

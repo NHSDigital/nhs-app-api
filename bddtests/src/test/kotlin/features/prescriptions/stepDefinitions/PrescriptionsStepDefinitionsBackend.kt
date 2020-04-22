@@ -20,8 +20,8 @@ class PrescriptionsStepDefinitionsBackend {
 
     private val fromDateKey = "FromDate"
 
-    @When("I get the users prescriptions with a valid cookie")
-    fun whenIGetTheUsersPrescriptionsWithAValidCookie() {
+    @When("I request the users prescriptions with a valid cookie")
+    fun whenIRequestTheUsersPrescriptionsWithAValidCookie() {
         val formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(fromDateKey)
 
         try {

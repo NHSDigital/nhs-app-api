@@ -86,7 +86,7 @@ class ServiceJourneyRulesStepDefinitions {
     @When("^I login but service journey rules has no configuration for my GP practice")
     fun whenILoginButServiceJourneyRulesHasNoConfigurationForMyGPPractice() {
         try {
-            SharedStepDefinitionsBackend().givenIHaveLoggedInAndHaveAValidSessionCookie()
+            SharedStepDefinitionsBackend().iHaveLoggedInAndHaveAValidSessionCookie()
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)
         }

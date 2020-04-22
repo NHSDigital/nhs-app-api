@@ -7,7 +7,7 @@ Feature: Get patient problems data Backend
     Given I am a <GP System> user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has enabled problems functionality
-    When I get the users my record data
+    When I request my record data
     Then I receive "3" problems as part of the my record object
     And the flag informing that the patient has access to the problem data is set to "True"
     And the flag informing that there was an error retrieving the problem data is set to "False"
@@ -22,7 +22,7 @@ Feature: Get patient problems data Backend
     Given I am a <GP System> user setup to use medical record version 2
     And I have logged in and have a valid session cookie
     And the GP Practice has disabled problems functionality
-    When I get the users my record data
+    When I request my record data
     Then I receive "0" problems as part of the my record object
     And the flag informing that the patient has access to the problem data is set to "False"
     And the flag informing that there was an error retrieving the problem data is set to "False"
@@ -32,3 +32,8 @@ Feature: Get patient problems data Backend
       | GP System |
       | EMIS      |
       | VISION    |
+
+  Scenario: A user with proof level 5 receives an 'Unauthorized' error when they attempt to retrieve their health record
+    Given I am a user with proof level 5 and have a valid session cookie
+    When I request my record data
+    Then I receive an "Unauthorized" error

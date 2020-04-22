@@ -129,3 +129,8 @@ Feature: Your Appointments Backend
       | past                   |
       | upcoming               |
       | both past and upcoming |
+
+  Scenario: A user with proof level 5 receives an 'Unauthorized' error when they attempt to retrieve their appointments
+    Given I am a user with proof level 5 and have a valid session cookie
+    When my appointments are requested
+    Then I receive a "Unauthorized" error

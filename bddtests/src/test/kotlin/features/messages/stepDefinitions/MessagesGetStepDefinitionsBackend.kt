@@ -3,7 +3,9 @@ package features.messages.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.sharedSteps.InvalidAccessTokenTester
+import models.IdentityProofingLevel
 import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -18,6 +20,15 @@ class MessagesGetStepDefinitionsBackend {
     fun iAmAnApiUserWishingToGetTheirMessages() {
         val factory = MessagesFactory()
         factory.setUpUser()
+        factory.setUpMultipleMessagesInCache()
+    }
+
+    @Given("^I am an api user with proof level 5 wishing to get my messages$")
+    fun iAmAnApiUserWithProofLevelFiveWishingToGetMyMessages() {
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(null,
+                ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED, IdentityProofingLevel.P5)
+        val factory = MessagesFactory()
+        factory.setUpUser(patient)
         factory.setUpMultipleMessagesInCache()
     }
 

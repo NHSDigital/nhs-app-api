@@ -7,7 +7,7 @@ Feature: Get Allergies data Backend
     Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has enabled allergies functionality and the patient has "3" allergies
     And I have logged in and have a valid session cookie
-    When I get the users my record data
+    When I request my record data
     Then I receive "3" allergies as part of the my record object
     And the flag informing that the patient has access to the allergy data is set to "True"
     And the flag informing that there was an error retrieving the allergy data is set to "False"
@@ -23,7 +23,7 @@ Feature: Get Allergies data Backend
     Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has disabled allergies functionality
     And I have logged in and have a valid session cookie
-    When I get the users my record data
+    When I request my record data
     Then I receive "0" allergies as part of the my record object
     And the flag informing that the patient has access to the allergy data is set to "False"
     And the flag informing that there was an error retrieving the allergy data is set to "False"

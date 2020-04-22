@@ -167,8 +167,8 @@ open class MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() 
         browser.browseTo(fullUrl)
     }
 
-    @When("^I get the users my record data$")
-    fun whenIGetTheUsersMyRecordData() {
+    @When("^I request my record data$")
+    fun whenIRequestMyRecordData() {
         try {
             val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)

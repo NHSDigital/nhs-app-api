@@ -103,3 +103,9 @@ Feature: Organ Donation Register Backend
       | Error Code |
       | 500        |
       | 502        |
+
+  Scenario: A user with proof level 5 receives an 'Unauthorized' error when they attempt to submit their organ donation decision
+    Given I am a user with proof level 5 who wants to opt-in to organ donation
+    And I have logged in and have a valid session cookie
+    When I submit my decision to organ donation
+    Then I receive an "Unauthorized" error
