@@ -1,4 +1,3 @@
-using System;
 using Newtonsoft.Json;
 
 namespace NHSOnline.Backend.Support.Session

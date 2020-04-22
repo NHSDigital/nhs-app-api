@@ -160,11 +160,70 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         }
 
         [TestMethod]
-        public async Task GetUserSession_StoredSessionBasedOnOldTypeName_ReturnsP9UserSession()
+        public async Task GetUserSession_StoredP9UserSessionBasedOnFullTypeName_ReturnsP9UserSession()
         {
-            const string json =
+            var json = CreateSessionJsonWithTypeName("NHSOnline.Backend.Support.P9UserSession");
+
+            ArrangeNoEncryption();
+            ArrangeSessionData(json);
+
+            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var session = await sut.GetUserSession("");
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetUserSession_StoredP9UserSessionBasedOnName_ReturnsP9UserSession()
+        {
+            var json = CreateSessionJsonWithTypeName("P9UserSession");
+
+            ArrangeNoEncryption();
+            ArrangeSessionData(json);
+
+            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var session = await sut.GetUserSession("");
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetUserSession_StoredP5UserSessionBasedOnFullTypeName_ReturnsP5UserSession()
+        {
+            var json = CreateSessionJsonWithTypeName("NHSOnline.Backend.Support.Session.P5UserSession");
+
+            ArrangeNoEncryption();
+            ArrangeSessionData(json);
+
+            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var session = await sut.GetUserSession("");
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetUserSession_StoredP5UserSessionBasedOnName_ReturnsP5UserSession()
+        {
+            var json = CreateSessionJsonWithTypeName("P5UserSession");
+
+            ArrangeNoEncryption();
+            ArrangeSessionData(json);
+
+            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var session = await sut.GetUserSession("");
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
+        }
+
+        private static string CreateSessionJsonWithTypeName(string typeName)
+        {
+            string json =
                 "{" +
-                "\"$type\":\"NHSOnline.Backend.Support.UserSession, NHSOnline.Backend.Support\"," +
+                $"\"$type\":\"{typeName}, NHSOnline.Backend.Support\"," +
                 "\"Key\":\"Keyf5687d2c-5857-450b-8625-a8b4c5b84068\"," +
                 "\"CsrfToken\":\"CsrfTokend3aea227-7dcf-47ac-bf7c-5a61a8870dc9\"," +
                 "\"GpUserSession\":{" +
@@ -191,15 +250,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
                 "\"OrganDonationSessionId\":\"0495a20c-228e-44fd-9988-e6e0834d75c2\"," +
                 "\"Im1ConnectionToken\":\"This is a Connection Token\"" +
                 "}";
-
-            ArrangeNoEncryption();
-            ArrangeSessionData(json);
-
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
-            var session = await sut.GetUserSession("");
-
-            session.HasValue.Should().BeTrue("session should be returned");
-            session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
+            return json;
         }
 
         private async Task<string> CreateSessionAndCaptureJson(UserSession userSession)

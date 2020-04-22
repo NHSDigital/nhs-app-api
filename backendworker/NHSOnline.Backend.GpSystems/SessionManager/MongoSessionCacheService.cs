@@ -171,12 +171,19 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
             public Type BindToType(string assemblyName, string typeName)
             {
-                if (typeName == "NHSOnline.Backend.Support.UserSession")
+                switch (typeName)
                 {
-                    return typeof(P9UserSession);
-                }
+                    case "NHSOnline.Backend.Support.P9UserSession":
+                    case "P9UserSession":
+                        return typeof(P9UserSession);
 
-                return _defaultBinder.BindToType(assemblyName, typeName);
+                    case "NHSOnline.Backend.Support.Session.P5UserSession":
+                    case "P5UserSession":
+                        return typeof(P5UserSession);
+
+                    default:
+                        return _defaultBinder.BindToType(assemblyName, typeName);
+                }
             }
 
             public void BindToName(Type serializedType, out string assemblyName, out string typeName)
