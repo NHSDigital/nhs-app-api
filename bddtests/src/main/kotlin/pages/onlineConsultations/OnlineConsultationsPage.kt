@@ -4,19 +4,23 @@ import mocking.onlineConsultations.constants.OnlineConsultationConstants
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertIsVisible
 import pages.avoidChromeWebDriverServiceCrash
 import pages.sharedElements.DropdownElement
 import pages.text
 import pages.typeTextIntoTextArea
 import pages.value
+import pages.withNormalisedText
 import utils.SerenityHelpers
 
 class OnlineConsultationsPage: HybridPageObject() {
 
     private val firstName: String = SerenityHelpers.getPatient().firstName
 
-    private val expectedAdviceText = "Emergency advice:\nYou've chosen to end your consultation. Your practice hasn't" +
-            " been notified and won't contact you about your request. You should still seek medical advice now."
+    private val expectedAdviceText =
+            "You've chosen to end your consultation. " +
+            "Your practice hasn't been notified and won't contact you about your request. " +
+            "You should still seek medical advice now."
 
     private val expectedCarePlanText = "Thank you $firstName. " +
             "The answers to your consultation have been securely sent to your GPs at Integration Test Practice."
@@ -29,19 +33,24 @@ class OnlineConsultationsPage: HybridPageObject() {
     fun iSeeAdviceOnWhatToDoNext(){
         //Please do not delete until NHSO-8407 and NHSO-8408 are completed
         avoidChromeWebDriverServiceCrash()
-        val adviceText = HybridPageElement(
-                webDesktopLocator = "//span[@role='text']",
+        HybridPageElement(
+                webDesktopLocator = "//span/span",
                 page = this)
-                .text
-        Assert.assertEquals(expectedAdviceText, adviceText)
+                .withNormalisedText("Emergency advice:")
+                .assertIsVisible()
+        HybridPageElement(
+                webDesktopLocator = "//span",
+                page = this)
+                .withNormalisedText(expectedAdviceText)
+                .assertIsVisible()
     }
 
     fun iSeeACarePlan() {
-        val carePlanText = HybridPageElement(
-                webDesktopLocator = "//div[@id='question']//h1",
+        HybridPageElement(
+                webDesktopLocator = "//div//h1",
                 page = this)
-                .text
-        Assert.assertEquals(expectedCarePlanText, carePlanText)
+                .withNormalisedText(expectedCarePlanText)
+                .assertIsVisible()
     }
 
     fun clickFormElement(element: String = "input", id: String) {
