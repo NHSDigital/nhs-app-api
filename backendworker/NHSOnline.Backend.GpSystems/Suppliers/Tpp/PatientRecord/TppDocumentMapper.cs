@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
         FileContentResult MapForDownload(RequestBinaryDataReply requestBinaryDataReply, string documentName);
     }
 
+    [SuppressMessage("Microsoft.Naming", "CA1308", Justification = "Required for matching file extensions")]
     public class TppDocumentMapper : ITppDocumentMapper
     {
         private readonly ILogger<ITppDocumentMapper> _logger;
@@ -98,21 +100,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 
         private string MapFileTypeToDownloadType(string fileType)
         {
-            if (String.IsNullOrWhiteSpace(fileType))
+            if (string.IsNullOrWhiteSpace(fileType))
             {
                 throw new ArgumentException("Must not be null or blank", nameof(fileType));
             }
 
-            string mappedFileType;
+            var mappedFileType = fileType.ToLowerInvariant();
 
-            switch (fileType)
+            if (mappedFileType == Constants.FileConstants.FileTypes.ImageType.Jfif)
             {
-                case Constants.FileConstants.FileTypes.ImageType.Jfif:
-                    mappedFileType = Constants.FileConstants.FileTypes.ImageType.Jpg;
-                    break;
-                default:
-                    mappedFileType = fileType;
-                    break;
+                mappedFileType = Constants.FileConstants.FileTypes.ImageType.Jpg;
             }
 
             _logger.LogInformation($"Mapped actual document type {fileType} to {mappedFileType} for download");

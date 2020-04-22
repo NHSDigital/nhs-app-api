@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         FileContentResult MapForDownload(IndividualDocument documentGetResponse, string documentType, string documentName);
     }
 
+    [SuppressMessage("Microsoft.Naming", "CA1308", Justification = "Required for matching file extensions")]
     public class EmisPatientDocumentMapper: IEmisPatientDocumentMapper
     {
         private readonly ILogger<IEmisPatientDocumentMapper> _logger;
@@ -162,22 +164,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
         private byte[] ConvertHtmlDocumentToBytes(string type, string content)
         {
-            if (FileTypes.TextTypes.Contains(type))
+            if (FileTypes.TextTypes.Contains(type, StringComparer.OrdinalIgnoreCase))
             {
                 return _emisDocumentDownloadConverter.ConvertToText(content);
             }
 
-            if (FileTypes.ImageTypes.Contains(type))
+            if (FileTypes.ImageTypes.Contains(type, StringComparer.OrdinalIgnoreCase))
             {
                 return _emisDocumentDownloadConverter.ConvertToImage(content);
             }
 
-            if (FileTypes.DocumentTypes.Contains(type))
+            if (FileTypes.DocumentTypes.Contains(type, StringComparer.OrdinalIgnoreCase))
             {
                 return _emisDocumentDownloadConverter.ConvertToWordDocument(content);
             }
 
-            return type.Equals(FileTypes.DocumentType.Pdf, StringComparison.Ordinal)
+            return !string.IsNullOrEmpty(type) && FileTypes.DocumentType.Pdf.Equals(type.ToLowerInvariant(), StringComparison.Ordinal)
                 ? _emisDocumentDownloadConverter.ConvertToPdf(content)
                 : null;
         }
@@ -185,14 +187,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
         private static bool ShouldAddAltTextToImage(string documentType, string documentName) =>
             !string.IsNullOrEmpty(documentType) &&
             !string.IsNullOrEmpty(documentName) &&
-            (FileTypes.ImageTypes.Contains(documentType) ||
+            (FileTypes.ImageTypes.Contains(documentType, StringComparer.OrdinalIgnoreCase) ||
              FileTypes.DocumentType.Pdf.Equals(documentType, StringComparison.Ordinal));
 
         private string MapFileTypeToDownloadType(string fileType)
         {
-            string mappedFileType;
+            var mappedFileType = fileType.ToLowerInvariant();
 
-            switch (fileType)
+            switch (mappedFileType)
             {
                 case FileTypes.DocumentType.Docm:
                     mappedFileType = FileTypes.DocumentType.Doc;
@@ -202,9 +204,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                     break;
                 case FileTypes.ImageType.Jfif:
                     mappedFileType = FileTypes.ImageType.Jpg;
-                    break;
-                default:
-                    mappedFileType = fileType;
                     break;
             }
 

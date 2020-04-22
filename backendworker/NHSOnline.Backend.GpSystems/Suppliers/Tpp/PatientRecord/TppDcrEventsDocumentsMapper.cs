@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 DocumentIdentifier = inputEventItem.BinaryDataId,
                 IsAvailable = true,
                 Type = type,
-                IsValidFile = Constants.FileConstants.FileTypes.WhiteListTypes.Contains(extension),
+                IsValidFile = Constants.FileConstants.FileTypes.WhiteListTypes.Contains(extension, StringComparer.OrdinalIgnoreCase),
                 Comments = string.IsNullOrEmpty(comments) ? null : comments,
                 Extension = extension,
                 NeedMoreInformation = true
