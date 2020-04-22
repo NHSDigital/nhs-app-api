@@ -17,6 +17,9 @@
             description-data-sid="age-months"
             :description-id="'linked-account-age-' + index"
             header-tag="h2"
+            :aria-label="ariaLabelCaption(
+              item.fullName,
+              getDisplayedAgeText(item))"
             data-sid="linked-account"/>
         </menu-item-list>
       </div>
@@ -50,6 +53,9 @@ export default {
     },
   },
   methods: {
+    ariaLabelCaption(fullName, age) {
+      return `${fullName}. ${age}`;
+    },
     onLinkedProfileClicked(id) {
       const selectedLinkedAccount = find(item => item.id === id)(this.linkedAccounts);
       this.$store.dispatch('linkedAccounts/select', selectedLinkedAccount);

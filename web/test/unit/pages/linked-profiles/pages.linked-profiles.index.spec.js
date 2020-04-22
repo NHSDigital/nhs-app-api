@@ -54,6 +54,7 @@ describe('linked profile is there', () => {
     it('first linked user name and age is visible', () => {
       linkedProfileMenuItem = wrapper.find('#linked-account-menu-item-0');
       expect(linkedProfileMenuItem.exists()).toBe(true);
+      expect(linkedProfileMenuItem.attributes('aria-label')).toBe('user 0. 20translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
       expect(linkedProfileMenuItem.text()).toContain('user 0');
       expect(wrapper.find('#linked-account-age-0').text()).toEqual('20translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
     });
@@ -62,6 +63,7 @@ describe('linked profile is there', () => {
       linkedProfileMenuItem = wrapper.find('#linked-account-menu-item-1');
 
       expect(linkedProfileMenuItem.exists()).toBe(true);
+      expect(linkedProfileMenuItem.attributes('aria-label')).toBe('user 1. 42translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
       expect(linkedProfileMenuItem.text()).toContain('user 1');
       expect(wrapper.find('#linked-account-age-1').text()).toEqual('42translate_linkedProfiles.ageLabels.greaterThanOneYearOld');
     });
