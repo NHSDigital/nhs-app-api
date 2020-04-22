@@ -331,6 +331,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 ServiceDeskReference = ServiceDeskReference
             };
 
+            var auditStub = ArrangeAudit();
+
             // Act
             var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
@@ -341,9 +343,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 objectResult.StatusCode.Should()
                     .Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
+                auditStub.AccessTokenString.Should().Be(_citizenIdUserSession.AccessToken);
+                auditStub.NhsNumber.Should().Be(_userProfile.NhsNumber);
+                auditStub.Supplier.Should().Be(Supplier.Unknown);
+                auditStub.Operation.Should().Be("GP_Session_Create");
+                auditStub.Details.Should().Be("Attempting to create Session");
+                auditStub.ResponseDetails.Should().Be("Failed to determine the GP system based on ODS code 'OdsCode'");
             }
 
-            _mockAuditor.VerifyNoOtherCalls();
             _mockSessionControllerLogger.Verify();
         }
 
@@ -360,25 +367,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 ServiceDeskReference = ServiceDeskReference
             };
 
-            _mockAuditor.Setup(x => x.AuditSessionEvent(
-                    _citizenIdUserSession.AccessToken,
-                    _userProfile.NhsNumber,
-                    Supplier.Emis,
-                    AuditingOperations.SessionCreateRequest,
-                    "Attempting to create Session",
-                    It.IsAny<object[]>()))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
-
-            _mockAuditor.Setup(x => x.AuditSessionEvent(
-                    _citizenIdUserSession.AccessToken,
-                    _userProfile.NhsNumber,
-                    Supplier.Emis,
-                    AuditingOperations.SessionCreateResponse,
-                    "Failed to validate Im1 connection",
-                    It.IsAny<object[]>()))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+            var auditStub = ArrangeAudit();
 
             _mockTokenValidationService
                 .Setup(x => x.IsValidConnectionTokenFormat(_userProfile.Im1ConnectionToken))
@@ -395,6 +384,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 objectResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
+                auditStub.AccessTokenString.Should().Be(_citizenIdUserSession.AccessToken);
+                auditStub.NhsNumber.Should().Be(_userProfile.NhsNumber);
+                auditStub.Supplier.Should().Be(Supplier.Emis);
+                auditStub.Operation.Should().Be("GP_Session_Create");
+                auditStub.Details.Should().Be("Attempting to create Session");
+                auditStub.ResponseDetails.Should().Be("Failed to validate Im1 connection");
             }
 
             _mockAuditor.Verify();
@@ -421,27 +416,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 ServiceDeskReference = ServiceDeskReference
             };
-            _mockAuditor.Setup(x => x.AuditSessionEvent(
-                    _citizenIdUserSession.AccessToken,
-                    _userProfile.NhsNumber,
-                    Supplier.Emis,
-                    AuditingOperations.SessionCreateRequest,
-                    "Attempting to create Session",
-                    It.IsAny<object[]>()))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
-            _mockAuditor.Setup(x => x.AuditSessionEvent(
-                    _citizenIdUserSession.AccessToken,
-                    _userProfile.NhsNumber,
-                    Supplier.Emis,
-                    AuditingOperations.SessionCreateResponse,
-                    "Creating the session failed with status code: '403'", It.IsAny<object[]>()))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
 
-            var returnResult = new GpSessionCreateResult.Forbidden();
+            var auditStub = ArrangeAudit();
 
-            ArrangeGpSessionManagerCreateSession(returnResult);
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Forbidden());
 
             // Act
             var result = await CreateSystemUnderTest().Post(_userSessionRequest);
@@ -451,6 +429,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 objectResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
+                auditStub.AccessTokenString.Should().Be(_citizenIdUserSession.AccessToken);
+                auditStub.NhsNumber.Should().Be(_userProfile.NhsNumber);
+                auditStub.Supplier.Should().Be(Supplier.Emis);
+                auditStub.Operation.Should().Be("GP_Session_Create");
+                auditStub.Details.Should().Be("Attempting to create Session");
+                auditStub.ResponseDetails.Should().Be("Creating the session failed");
             }
 
             _mockAuditor.Verify();
@@ -476,25 +460,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 ServiceDeskReference = ServiceDeskReference
             };
 
-            _mockAuditor.Setup(x => x.AuditSessionEvent(
-                    _citizenIdUserSession.AccessToken,
-                    _userProfile.NhsNumber,
-                    Supplier.Emis,
-                    AuditingOperations.SessionCreateRequest,
-                    "Attempting to create Session",
-                    It.IsAny<object[]>()))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
-
-            _mockAuditor.Setup(x => x.AuditSessionEvent(
-                    _citizenIdUserSession.AccessToken,
-                    _userProfile.NhsNumber,
-                    Supplier.Emis,
-                    AuditingOperations.SessionCreateResponse,
-                    "Creating the session failed with status code: '502'",
-                    It.IsAny<object[]>()))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+            var auditStub = ArrangeAudit();
 
             ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.BadGateway());
 
@@ -506,9 +472,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 objectResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
+                auditStub.AccessTokenString.Should().Be(_citizenIdUserSession.AccessToken);
+                auditStub.NhsNumber.Should().Be(_userProfile.NhsNumber);
+                auditStub.Supplier.Should().Be(Supplier.Emis);
+                auditStub.Operation.Should().Be("GP_Session_Create");
+                auditStub.Details.Should().Be("Attempting to create Session");
+                auditStub.ResponseDetails.Should().Be("Creating the session failed");
             }
 
-            _mockAuditor.Verify();
             _mockSessionControllerLogger.Verify();
         }
 
@@ -539,15 +510,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
                 .Verifiable();
 
-            _mockAuditor.Setup(x => x.AuditSessionEvent(
-                    _citizenIdUserSession.AccessToken,
-                    _userProfile.NhsNumber,
-                    Supplier.Unknown,
-                    AuditingOperations.SessionCreateResponse,
-                    "Retrieving Service Journey Rules failed with status code: '404'",
-                    It.IsAny<object[]>()))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+            _mockAuditor.Setup(x => x.Audit()).Returns(new AuditBuilderStub());
 
             // Act
             var result = await CreateSystemUnderTest().Post(_userSessionRequest);
@@ -561,7 +524,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             }
 
             _mockServiceJourneyRulesService.Verify();
-            _mockAuditor.Verify();
             _mockSessionControllerLogger.Verify();
         }
 
@@ -594,15 +556,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Returns(Task.FromResult(_serviceJourneyRulesConfigResult))
                 .Verifiable();
 
-            _mockAuditor.Setup(x => x.AuditSessionEvent(
-                    _citizenIdUserSession.AccessToken,
-                    _userProfile.NhsNumber,
-                    Supplier.Unknown,
-                    AuditingOperations.SessionCreateResponse,
-                    "Retrieving Service Journey Rules failed with status code: '500'",
-                    It.IsAny<object[]>()))
-                .Returns(Task.CompletedTask)
-                .Verifiable();
+            _mockAuditor.Setup(x => x.Audit()).Returns(new AuditBuilderStub());
 
             // Act
             var result = await CreateSystemUnderTest().Post(_userSessionRequest);
@@ -616,7 +570,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             }
 
             _mockServiceJourneyRulesService.Verify();
-            _mockAuditor.Verify();
             _mockSessionControllerLogger.Verify();
         }
 
@@ -634,6 +587,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _userSession.Key = "123";
 
             ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(_userSession.GpUserSession));
+            ArrangeAudit();
 
             // Act
             var result = await CreateSystemUnderTest().Post(_userSessionRequest);
@@ -680,6 +634,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Setup(x => x.DeleteIm1ConnectionToken(_connectionToken.Im1CacheKey))
                 .Returns(Task.FromResult(true));
 
+            ArrangeAudit();
+
             ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(_userSession.GpUserSession));
 
             // Act
@@ -704,6 +660,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Setup(x => x.DeleteIm1ConnectionToken(It.IsAny<string>()))
                 .Returns(Task.FromResult(false));
 
+            ArrangeAudit();
+
             ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(_userSession.GpUserSession));
 
             // Act
@@ -724,6 +682,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                                p.OdsCode.Equals(_citizenIdSessionResult.Session.OdsCode, StringComparison.Ordinal) &&
                                p.Im1ConnectionToken.Equals(_citizenIdSessionResult.Im1ConnectionToken, StringComparison.Ordinal))))
                 .ReturnsAsync(returnResult);
+        }
+
+        private AuditBuilderStub ArrangeAudit()
+        {
+            var auditBuilderStub = new AuditBuilderStub();
+            _mockAuditor.Setup(x => x.Audit()).Returns(auditBuilderStub);
+            return auditBuilderStub;
         }
 
         private SessionController CreateSystemUnderTest()

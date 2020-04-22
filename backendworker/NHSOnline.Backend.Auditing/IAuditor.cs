@@ -20,5 +20,7 @@ namespace NHSOnline.Backend.Auditing
             string details, params object[] parameters);
 
         IDisposable BeginScope(HttpContext httpContext);
+
+        IAuditBuilder Audit();
     }
 }

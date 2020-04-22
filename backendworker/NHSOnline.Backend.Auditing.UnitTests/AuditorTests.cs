@@ -38,12 +38,6 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         private IServiceProvider _requestServices;
         private Mock<IUserSessionService> _mockUserSessionService;
 
-        private class UnknownSupplierSession : GpUserSession
-        {
-            public override Supplier Supplier => Supplier.Unknown;
-            public override bool HasLinkedAccounts => false;
-        }
-        
         private class NestedCallClass
         {
             private readonly IAuditor _auditor;
@@ -190,7 +184,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             
             // Set the stream for audits
             _stream = new MemoryStream();
-            var logger = _fixture.Freeze<Mock<ILogger<Auditor>>>();
+            var logger = _fixture.Freeze<Mock<ILogger>>();
 
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constants.EnvironmentalVariables.VersionTag, "UNIT TEST") });
@@ -281,10 +275,12 @@ namespace NHSOnline.Backend.Auditing.UnitTests
             testString.Should().Contain(SupplierEmis.ToString());
         }
 
-        [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        [TestMethod]
         public async Task TestThrowsExceptionIfAuditScopeNotSetUp()
         {
-            await _systemUnderTest.BasicAudit();
+            Func<Task> act = async () => await _systemUnderTest.BasicAudit();
+
+            await act.Should().ThrowAsync<NoAuditKeyException>();
         }
 
         [TestMethod]

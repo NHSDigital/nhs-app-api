@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Session
@@ -9,8 +9,6 @@ namespace NHSOnline.Backend.GpSystems.Session
         {
         }
 
-        public int StatusCode { get; set; }
-        
         public abstract T Accept<T>(IGpSessionCreateResultVisitor<T> visitor);
         
         public class Success : GpSessionCreateResult
@@ -20,7 +18,6 @@ namespace NHSOnline.Backend.GpSystems.Session
             public Success(GpUserSession userSession)
             {
                 UserSession = userSession;
-                StatusCode = StatusCodes.Status200OK;
             }
 
             public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
@@ -31,11 +28,6 @@ namespace NHSOnline.Backend.GpSystems.Session
 
         public class Forbidden : GpSessionCreateResult
         {
-            public Forbidden() 
-            {
-                StatusCode = StatusCodes.Status403Forbidden;
-            }
-
             public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
@@ -44,11 +36,6 @@ namespace NHSOnline.Backend.GpSystems.Session
 
         public class BadGateway : GpSessionCreateResult
         {
-            public BadGateway() 
-            {
-                StatusCode = StatusCodes.Status502BadGateway;
-            }
-
             public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
@@ -57,11 +44,6 @@ namespace NHSOnline.Backend.GpSystems.Session
         
         public class BadRequest : GpSessionCreateResult
         {
-            public BadRequest() 
-            {
-                StatusCode = StatusCodes.Status400BadRequest;
-            }
-
             public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
@@ -70,11 +52,6 @@ namespace NHSOnline.Backend.GpSystems.Session
 
         public class InternalServerError : GpSessionCreateResult
         {
-            public InternalServerError() 
-            {
-                StatusCode = StatusCodes.Status500InternalServerError;
-            }
-
             public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);

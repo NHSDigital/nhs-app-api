@@ -123,8 +123,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var result = await _gpSessionManager.CreateSession(args.Object);
 
             // Assert
-            var failureResult = result.Should().BeOfType<GpSessionCreateResult.BadGateway>().Subject;
-            failureResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            result.Should().BeOfType<GpSessionCreateResult.BadGateway>();
 
             _mockSessionCacheService.Verify(x => x.CreateUserSession(It.IsAny<P9UserSession>()), Times.Never());
             _mockSessionService.Verify();

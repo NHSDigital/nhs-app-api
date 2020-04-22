@@ -17,18 +17,20 @@ namespace NHSOnline.Backend.PfsApi.Session
         }
 
         public async Task<CreateUserSessionResult> Create(
-            ServiceJourneyRulesResponse serviceJourneyRules,
             CitizenIdSessionResult citizenIdSessionResult,
+            ServiceJourneyRulesResponse serviceJourneyRules,
             string csrfToken)
         {
             switch (citizenIdSessionResult.Session.ProofLevel)
             {
                 case ProofLevel.P9:
-                    return await _p9UserSessionCreator.Create(serviceJourneyRules, citizenIdSessionResult, csrfToken);
+                    return await _p9UserSessionCreator.Create(citizenIdSessionResult, serviceJourneyRules, csrfToken);
                 case ProofLevel.P5:
                     return await _p5UserSessionCreator.Create(citizenIdSessionResult, csrfToken);
                 default:
-                    return CreateUserSessionResult.Failed(new ErrorTypes.UnhandledError());
+                    return CreateUserSessionResult.Failed(
+                        new ErrorTypes.UnhandledError(),
+                        $"Unsupported ProofLevel {citizenIdSessionResult.Session.ProofLevel}");
             }
         }
     }

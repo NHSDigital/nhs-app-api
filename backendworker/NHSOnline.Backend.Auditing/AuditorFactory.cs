@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Auditing
 {
-    public class AuditorFactory : IAuditorFactory
+    public class AuditorFactory
     {
         private readonly IAuditSink _auditSink;
         private readonly IConfiguration _configuration;
@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Auditing
             _scopeProvider = new AsyncLocal<HttpContextAuditorScope>();
         }
 
-        public IAuditor CreateAuditor(ILogger<Auditor> logger)
+        public IAuditor CreateAuditor(ILogger logger)
         {
             return new Auditor(_auditSink, _scopeProvider, logger, _configuration);
         }
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Auditing
         public static IAuditor BuildAuditor(IServiceProvider serviceProvider)
         {
             var logger = serviceProvider.GetService<ILogger<Auditor>>();
-            return serviceProvider.GetService<IAuditorFactory>().CreateAuditor(logger);
+            return serviceProvider.GetService<AuditorFactory>().CreateAuditor(logger);
         }
     }
 }

@@ -8,8 +8,8 @@ namespace NHSOnline.Backend.PfsApi.Session
     public interface IUserSessionManager
     {
         Task<CreateUserSessionResult> Create(
-            ServiceJourneyRulesResponse serviceJourneyRules,
             CitizenIdSessionResult citizenIdSessionResult,
+            ServiceJourneyRulesResponse serviceJourneyRules,
             string csrfToken);
 
         Task<bool> SignOutAsync(HttpContext httpContext);

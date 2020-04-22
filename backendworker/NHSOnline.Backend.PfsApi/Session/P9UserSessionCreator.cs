@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Auditing;
@@ -40,63 +39,57 @@ namespace NHSOnline.Backend.PfsApi.Session
         }
 
         public async Task<CreateUserSessionResult> Create(
-            ServiceJourneyRulesResponse serviceJourneyRules,
             CitizenIdSessionResult citizenIdSessionResult,
+            ServiceJourneyRulesResponse serviceJourneyRules,
             string csrfToken)
         {
-            if (SupplierIsUnknown(serviceJourneyRules))
+            return await _auditor.Audit()
+                .AccessToken(citizenIdSessionResult.Session.AccessToken)
+                .NhsNumber(citizenIdSessionResult.NhsNumber)
+                .Supplier(serviceJourneyRules.Journeys.Supplier)
+                .Operation(AuditingOperations.GpSessionCreate)
+                .Details("Attempting to create Session")
+                .Execute(async () => await CreateP9UserSession(citizenIdSessionResult, serviceJourneyRules.Journeys.Supplier, csrfToken));
+        }
+
+        private async Task<CreateUserSessionResult> CreateP9UserSession(
+            CitizenIdSessionResult citizenIdSessionResult,
+            Supplier supplier,
+            string csrfToken)
+        {
+            var gpSystem = FetchGpSystem(citizenIdSessionResult, supplier);
+            if (gpSystem.ProcessFinishedEarly(out var gpSystemResult))
             {
-                return FailedToDetermineGpSystem(citizenIdSessionResult);
+                return gpSystemResult;
             }
 
-            var gpSystem = FetchGpSystem(serviceJourneyRules);
-
-            await AuditAttemptToCreateSession(citizenIdSessionResult, gpSystem);
-
-            if (IsInvalidIm1ConnectionToken(gpSystem, citizenIdSessionResult.Im1ConnectionToken))
+            var gpSessionCreateResult = await CreateGpSession(citizenIdSessionResult, gpSystem.Result);
+            if (gpSessionCreateResult.ProcessFinishedEarly(out var gpSessionResult))
             {
-                return await FailedToValidateIm1Connection(citizenIdSessionResult, gpSystem);
+                return gpSessionResult;
             }
 
-            var gpSessionCreateResult = await _gpSessionManager.CreateSession(new GpSessionCreateArgs(gpSystem, citizenIdSessionResult));
-            if (!(gpSessionCreateResult is GpSessionCreateResult.Success gpSessionCreateSuccess))
-            {
-                return await FailedToCreateGpSession(citizenIdSessionResult, gpSessionCreateResult, gpSystem);
-            }
-
-            var userSession = await CreateP9UserSession(citizenIdSessionResult, csrfToken, gpSessionCreateSuccess);
+            var userSession = await CreateP9UserSession(citizenIdSessionResult, gpSessionCreateResult.Result, csrfToken);
 
             await DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
 
             return CreateUserSessionResult.Succeeded(userSession);
         }
 
-        private static bool SupplierIsUnknown(ServiceJourneyRulesResponse serviceJourneyRules)
-            => serviceJourneyRules.Journeys.Supplier == Supplier.Unknown;
-
-        private CreateUserSessionResult FailedToDetermineGpSystem(CitizenIdSessionResult citizenIdSessionResult)
+        private ProcessResult<IGpSystem, CreateUserSessionResult> FetchGpSystem(
+            CitizenIdSessionResult citizenIdSessionResult,
+            Supplier supplier)
         {
-            _logger.LogError(
-                $"Failed to determine the GP system based on ODS code '{citizenIdSessionResult.Session.OdsCode}'");
+            if (supplier == Supplier.Unknown)
+            {
+                return FinalResult<IGpSystem>(
+                    $"Failed to determine the GP system based on ODS code '{citizenIdSessionResult.Session.OdsCode}'",
+                    new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported());
+            }
 
-            return CreateUserSessionResult.Failed(new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported());
-        }
-
-        private IGpSystem FetchGpSystem(ServiceJourneyRulesResponse serviceJourneyRules)
-        {
-            var gpSystem = _gpSystemFactory.CreateGpSystem(serviceJourneyRules.Journeys.Supplier);
+            var gpSystem = _gpSystemFactory.CreateGpSystem(supplier);
             _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
-            return gpSystem;
-        }
-
-        private async Task AuditAttemptToCreateSession(CitizenIdSessionResult citizenIdSessionResult, IGpSystem gpSystem)
-        {
-            await _auditor.AuditSessionEvent(
-                citizenIdSessionResult.Session.AccessToken,
-                citizenIdSessionResult.NhsNumber,
-                gpSystem.Supplier,
-                AuditingOperations.SessionCreateRequest,
-                "Attempting to create Session");
+            return ProcessResult.StepResult<IGpSystem, CreateUserSessionResult>(gpSystem);
         }
 
         private static bool IsInvalidIm1ConnectionToken(IGpSystem gpSystem, string im1ConnectionToken)
@@ -106,47 +99,26 @@ namespace NHSOnline.Backend.PfsApi.Session
             return isInvalidIm1ConnectionToken;
         }
 
-        private async Task<CreateUserSessionResult> FailedToValidateIm1Connection(CitizenIdSessionResult citizenIdSessionResult, IGpSystem gpSystem)
+        private async Task<ProcessResult<GpUserSession, CreateUserSessionResult>> CreateGpSession(
+            CitizenIdSessionResult citizenIdSessionResult, IGpSystem gpSystem)
         {
-            const string errorMessage = "Failed to validate Im1 connection";
-            _logger.LogError(errorMessage);
+            if (IsInvalidIm1ConnectionToken(gpSystem, citizenIdSessionResult.Im1ConnectionToken))
+            {
+                return FinalResult<GpUserSession>("Failed to validate Im1 connection", new ErrorTypes.LoginForbidden());
+            }
 
-            await _auditor.AuditSessionEvent(
-                citizenIdSessionResult.Session.AccessToken,
-                citizenIdSessionResult.NhsNumber,
-                gpSystem.Supplier,
-                AuditingOperations.SessionCreateResponse,
-                errorMessage);
-
-            return CreateUserSessionResult.Failed(new ErrorTypes.LoginForbidden());
+            var gpSessionCreateResult = await _gpSessionManager.CreateSession(new GpSessionCreateArgs(gpSystem, citizenIdSessionResult));
+            return gpSessionCreateResult.Accept(new GpSessionCreateResultVisitor(_logger, gpSystem.Supplier));
         }
 
-        private async Task<CreateUserSessionResult> FailedToCreateGpSession(CitizenIdSessionResult citizenIdSessionResult,
-            GpSessionCreateResult gpSessionCreateResult, IGpSystem gpSystem)
-        {
-            var failureStatusCode = gpSessionCreateResult.StatusCode;
-
-            var errorMessage = $"Creating the session failed with status code: '{failureStatusCode}'";
-            _logger.LogError(errorMessage);
-            await _auditor.AuditSessionEvent(
-                citizenIdSessionResult.Session.AccessToken,
-                citizenIdSessionResult.NhsNumber,
-                gpSystem.Supplier,
-                AuditingOperations.SessionCreateResponse,
-                errorMessage);
-
-            // 502 Bad gateway error references differ by supplier. The other error types do not.
-            return failureStatusCode == StatusCodes.Status502BadGateway
-                ? CreateUserSessionResult.Failed(ErrorTypes.LoginBadGateway(_logger, gpSystem.Supplier))
-                : CreateUserSessionResult.Failed(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login, failureStatusCode));
-        }
-
-        private async Task<P9UserSession> CreateP9UserSession(CitizenIdSessionResult citizenIdSessionResult, string csrfToken, GpSessionCreateResult.Success result)
+        private async Task<P9UserSession> CreateP9UserSession(CitizenIdSessionResult citizenIdSessionResult,
+            GpUserSession gpUserSession, string csrfToken)
         {
             var userSession = new P9UserSession(
                 csrfToken,
                 citizenIdSessionResult.Session,
-                result.UserSession, citizenIdSessionResult.Im1ConnectionToken);
+                gpUserSession,
+                citizenIdSessionResult.Im1ConnectionToken);
 
             var sessionId = await _sessionCacheService.CreateUserSession(userSession);
             _logger.LogDebug($"Created Session Id: '{sessionId}'");
@@ -174,5 +146,47 @@ namespace NHSOnline.Backend.PfsApi.Session
             }
         }
 
+        private ProcessResult<TStepResult, CreateUserSessionResult> FinalResult<TStepResult>(string message, ErrorTypes errorTypes)
+        {
+            _logger.LogError(message);
+            return ProcessResult.FinalResult<TStepResult, CreateUserSessionResult>(CreateUserSessionResult.Failed(errorTypes, message));
+        }
+
+        private sealed class GpSessionCreateResultVisitor : IGpSessionCreateResultVisitor<ProcessResult<GpUserSession, CreateUserSessionResult>>
+        {
+            private readonly ILogger _logger;
+            private readonly Supplier _supplier;
+
+            public GpSessionCreateResultVisitor(ILogger logger, Supplier supplier)
+            {
+                _logger = logger;
+                _supplier = supplier;
+            }
+
+            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.Success success)
+                => ProcessResult.StepResult<GpUserSession, CreateUserSessionResult>(success.UserSession);
+
+            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.Forbidden _)
+                => Failed(new ErrorTypes.LoginForbidden());
+
+            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.BadGateway _)
+                => Failed(ErrorTypes.LoginBadGateway(_logger, _supplier));
+
+            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.InternalServerError _)
+                => Failed(new ErrorTypes.LoginUnexpectedError());
+
+            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.BadRequest _)
+                => Failed(new ErrorTypes.LoginBadRequest());
+
+            private ProcessResult<GpUserSession, CreateUserSessionResult> Failed(ErrorTypes errorType)
+            {
+                const string errorMessage = "Creating the session failed";
+
+                _logger.LogError(errorMessage);
+                var result = CreateUserSessionResult.Failed(errorType, "Creating the session failed");
+
+                return ProcessResult.FinalResult<GpUserSession, CreateUserSessionResult>(result);
+            }
+        }
     }
 }

@@ -2,15 +2,14 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auditing
 {
-    public class AuditUserContext
+    internal sealed class AuditUserContext
     {
         public AuditUserContext(
             string accessToken,
             string nhsNumber,
             Supplier supplier,
             bool isProxying,
-            string linkedAccountNhsNumber
-        )
+            string linkedAccountNhsNumber)
         {
             AccessToken = accessToken;
             NhsNumber = nhsNumber;

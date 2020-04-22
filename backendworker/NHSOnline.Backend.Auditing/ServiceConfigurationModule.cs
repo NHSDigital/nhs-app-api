@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Auditing
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient(AuditorFactory.BuildAuditor);
-            services.AddSingleton<IAuditorFactory, AuditorFactory>();
+            services.AddSingleton<AuditorFactory>();
 
             var sinkType = configuration["AUDIT_SINK_TYPE"];
 

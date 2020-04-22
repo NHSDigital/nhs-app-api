@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Auditing;
-using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
@@ -36,7 +34,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<SessionController> _logger;
         private readonly IAuditor _auditor;
-        private readonly IIm1CacheService _im1CacheService;
         private readonly IOdsCodeMassager _odsCodeMassager;
         private readonly IServiceJourneyRulesService _serviceJourneyRules;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
@@ -51,7 +48,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             ConfigurationSettings settings,
             ILogger<SessionController> logger,
             IAuditor auditor,
-            IIm1CacheService iIm1CacheService,
             IOdsCodeMassager odsCodeMassager,
             IServiceJourneyRulesService serviceJourneyRules,
             IErrorReferenceGenerator errorReferenceGenerator,
@@ -65,7 +61,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             _settings = settings;
             _logger = logger;
             _auditor = auditor;
-            _im1CacheService = iIm1CacheService;
             _odsCodeMassager = odsCodeMassager;
             _serviceJourneyRules = serviceJourneyRules;
             _errorReferenceGenerator = errorReferenceGenerator;
@@ -138,13 +133,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             {
                 // 502 Bad gateway error references differ by source API. The other error types do not.
                 var objectResult = citizenIdSessionResult.StatusCode == StatusCodes.Status502BadGateway
-                    ? BuildErrorResult(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login, StatusCodes.Status502BadGateway, SourceApi.NhsLogin))
-                    : BuildErrorResult(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login, citizenIdSessionResult.StatusCode));
+                    ? BuildErrorResult(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login,
+                        StatusCodes.Status502BadGateway, SourceApi.NhsLogin))
+                    : BuildErrorResult(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login,
+                        citizenIdSessionResult.StatusCode));
 
                 return objectResult;
             }
 
             citizenIdSessionResult.Session.OdsCode = _odsCodeMassager.CheckOdsCode(citizenIdSessionResult.Session.OdsCode);
+
+            await _auditor.Audit()
+                .AccessToken(citizenIdSessionResult.Session.AccessToken)
+                .NhsNumber(citizenIdSessionResult.NhsNumber)
+                .Supplier(Supplier.Unknown)
+                .Operation(AuditingOperations.CitizenIdSessionCreate)
+                .Details("Create Citizen Id Session")
+                .Execute(() => Task.FromResult(citizenIdSessionResult));
 
             _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
 
@@ -164,12 +169,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 var errorMessage =
                     $"Retrieving Service Journey Rules failed with status code: '{serviceJourneyRulesResultVisited.StatusCode}'";
                 _logger.LogError(errorMessage);
-                await _auditor.AuditSessionEvent(
-                    citizenIdSessionResult.Session.AccessToken,
-                    citizenIdSessionResult.NhsNumber,
-                    Supplier.Unknown,
-                    AuditingOperations.SessionCreateResponse,
-                    errorMessage);
 
                 // Specific error reference for a 404 from SJR.
                 var objectResult = serviceJourneyRulesResultVisited.StatusCode == StatusCodes.Status404NotFound ?
@@ -182,8 +181,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             var serviceJourneyRules = serviceJourneyRulesResultVisited.Response;
 
             var createUserSessionResult = await _userSessionManager.Create(
-                serviceJourneyRules,
                 citizenIdSessionResult,
+                serviceJourneyRules,
                 _antiforgery.GetTokens(HttpContext).RequestToken);
 
             return await createUserSessionResult.Accept(
@@ -205,14 +204,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             await AppendCookieToResponse(userSession.Key);
 
             _userSessionService.SetUserSession(userSession);
-
-            // Audit that the user is logged on.
-            await _auditor.AuditSessionEvent(
-                citizenIdSessionResult.Session.AccessToken,
-                citizenIdSessionResult.NhsNumber,
-                serviceJourneyRules.Journeys.Supplier,
-                AuditingOperations.SessionCreateResponse,
-                "Session successfully created.");
 
             var responseBody = new PostUserSessionResponse { ServiceJourneyRules = serviceJourneyRules };
             responseBody = userSession.Accept(new UserSessionResponseVisitor<PostUserSessionResponse>(_settings, responseBody));

@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Auditing
             return new VersionTag(_appApiVersion, webAppVersion, nativeAppVersion);
         }
 
-        public AuditUserContext UserContext()
+        internal AuditUserContext UserContext()
         {
             var userSession = _httpContext.RequestServices
                 .GetService<IUserSessionService>()

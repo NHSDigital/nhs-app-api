@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.GpSystems.Session
+namespace NHSOnline.Backend.GpSystems.Session
 {
     public interface IGpSessionCreateResultVisitor<out T>
     {
