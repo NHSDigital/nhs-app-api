@@ -179,11 +179,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 return objectResult;
             }
 
-            return await GetGpSystemAndCreateSession(citizenIdSessionResult, serviceJourneyRulesResultVisited.Response);
-        }
+            var serviceJourneyRules = serviceJourneyRulesResultVisited.Response;
 
-        private async Task<IActionResult> GetGpSystemAndCreateSession(CitizenIdSessionResult citizenIdSessionResult, ServiceJourneyRulesResponse serviceJourneyRules)
-        {
             var createUserSessionResult = await _userSessionManager.Create(
                 serviceJourneyRules,
                 citizenIdSessionResult,
@@ -199,18 +196,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             ServiceJourneyRulesResponse serviceJourneyRules,
             CitizenIdSessionResult citizenIdSessionResult)
         {
-            var appendCookieToResponseTask = AppendCookieToResponse(userSession.Key);
-
             // Post to the UserInfo service
             if (serviceJourneyRules.Journeys.UserInfo == true)
             {
                 await _userInfoService.Update(citizenIdSessionResult.Session.AccessToken, HttpContext);
             }
 
-            // Delete connection token from cache
-            var tokenDeletionTask = DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
-
-            await Task.WhenAll(appendCookieToResponseTask, tokenDeletionTask);
+            await AppendCookieToResponse(userSession.Key);
 
             _userSessionService.SetUserSession(userSession);
 
@@ -302,26 +294,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity)
             );
-        }
-
-        private async Task DeleteConnectionTokenFromCache(string im1ConnectionToken)
-        {
-            if (Guid.TryParse(im1ConnectionToken, out _))
-            {
-                return;
-            }
-
-            var tokenObject = JObject.Parse(im1ConnectionToken);
-
-            if (tokenObject.TryGetValue(Im1CacheService.Im1ConnectionTokenCacheKeyPropertyName,
-                StringComparison.Ordinal,
-                out var cacheKey))
-            {
-                if (!string.IsNullOrEmpty(cacheKey?.ToString()))
-                {
-                    await _im1CacheService.DeleteIm1ConnectionToken(cacheKey.ToString());
-                }
-            }
         }
 
         private sealed class UserSessionResponseVisitor<TUserSessionResponse> : IUserSessionVisitor<TUserSessionResponse>
