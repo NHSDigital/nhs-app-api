@@ -11,7 +11,6 @@ import {
   SET_SELECTED_MESSAGE_ID,
   SET_SELECTED_MESSAGE_RECIPIENT,
   SET_URGENCY_CHOICE,
-  SET_STATUS_STATE,
   MESSAGE_SENT,
   SET_DELETED,
   CLEAR_SELECTED_MESSAGE_DETAILS,
@@ -19,12 +18,12 @@ import {
   SET_ATTACHMENT_ID,
   initialState,
 } from './mutation-types';
+import buildMessageMetadata from '@/lib/patient-practice-messaging/build-message-metadata';
 
 const clearMessage = (state) => {
   state.selectedMessageDetails = undefined;
   state.selectedMessageId = undefined;
   state.selectedMessageRecipient = undefined;
-  state.statusState = undefined;
   state.messageSent = false;
 };
 
@@ -68,6 +67,10 @@ export default {
   },
   [SET_DETAILS](state, data) {
     state.selectedMessageDetails = data || undefined;
+
+    if (state.selectedMessageDetails) {
+      buildMessageMetadata(state);
+    }
   },
   [SET_SELECTED_MESSAGE_ID](state, id) {
     state.selectedMessageId = id;
@@ -77,9 +80,6 @@ export default {
   },
   [SET_URGENCY_CHOICE](state, choice) {
     state.urgencyChoice = choice;
-  },
-  [SET_STATUS_STATE](state, status) {
-    state.statusState = status;
   },
   [SET_DELETED](state, status) {
     state.messageDeleted = status;

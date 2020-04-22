@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
 import javax.xml.bind.annotation.XmlRootElement
 
-@XmlRootElement(name = "LogOffReply")
+@XmlRootElement(name = "LogoffReply")
 @XmlAccessorType(XmlAccessType.FIELD)
 data class LogOffReply(
         @XmlAttribute var uuid: String = "default uuid"

@@ -86,13 +86,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Messages
             return result.Accept(new PatientMessageResultVisitor(_errorReferenceGenerator, userSession));
         }
 
-        [HttpPost]
+        [HttpPut]
         [ApiVersionRoute("patient/messages/updateReadStatus")]
         public async Task<IActionResult> PostUpdateMessageReadStatus(
             [FromBody] UpdateMessageReadStatusRequestBody updateMessageReadStatusRequest,
             [UserSession] P9UserSession userSession)
         {
-
             _logger.LogEnter();
 
             if (!ModelState.IsValid)

@@ -8,7 +8,7 @@ const $store = () => (
       patientPracticeMessaging: {
         selectedMessageDetails: {
           messageDetails: {
-            messageReplies: [{
+            replies: [{
               sender: 'Test',
               replyContent: 'This is a test',
               sentDateTime: '2019-12-09T13:56:50.377',

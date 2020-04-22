@@ -2,7 +2,16 @@ import Delete from '@/pages/patient-practice-messaging/delete';
 import { createStore, mount } from '../../helpers';
 import { redirectTo } from '@/lib/utils';
 
-jest.mock('@/lib/utils');
+jest.mock('@/lib/utils', () => {
+  const { isBlankString } = jest.requireActual('@/lib/utils');
+
+  // we want to mock redirectTo but NOT isBlankString
+  return {
+    isBlankString,
+    redirectTo: jest.fn(),
+  };
+});
+
 
 describe('patient messaging delete', () => {
   let wrapper;
@@ -58,7 +67,7 @@ describe('patient messaging delete', () => {
 
     describe('current route is view details and selected message id is defined', () => {
       it('will not redirect', async () => {
-        mountPage({ selectedId: 1 });
+        mountPage({ selectedId: '1' });
         await wrapper.vm.$options.fetch({ store, redirect });
         expect(redirect).not.toHaveBeenCalled();
       });
@@ -67,7 +76,7 @@ describe('patient messaging delete', () => {
 
   describe('computed and data', () => {
     beforeEach(() => {
-      mountPage({ selectedId: 1 });
+      mountPage({ selectedId: '1' });
     });
 
     it('will return the correct messages path', () => {
@@ -79,7 +88,7 @@ describe('patient messaging delete', () => {
     });
 
     it('will return the correct message id', () => {
-      expect(wrapper.vm.messageID).toBe(1);
+      expect(wrapper.vm.messageID).toBe('1');
     });
 
     it('will return the correct delete button text reference', () => {
@@ -89,7 +98,7 @@ describe('patient messaging delete', () => {
 
   describe('back link clicked', () => {
     it('will redirect to message details page', () => {
-      mountPage({ isNativeApp: false, selectedId: 1 });
+      mountPage({ isNativeApp: false, selectedId: '1' });
       wrapper.vm.backLinkClicked();
       expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/patient-practice-messaging/view-details');
     });
@@ -97,12 +106,12 @@ describe('patient messaging delete', () => {
 
   describe('delete clicked', () => {
     beforeEach(async () => {
-      mountPage({ isNativeApp: false, selectedId: 1, messageDeleted: true });
+      mountPage({ isNativeApp: false, selectedId: '1', messageDeleted: true });
       await wrapper.vm.deleteButtonClicked();
     });
 
     it('will call delete', () => {
-      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/deleteMessage', 1);
+      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/deleteMessage', '1');
     });
 
     it('will call redirect', () => {

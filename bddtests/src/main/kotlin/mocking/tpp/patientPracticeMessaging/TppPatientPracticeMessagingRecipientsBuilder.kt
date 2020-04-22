@@ -1,5 +1,6 @@
-package mocking.tpp.patientPracticeMessaging
+package mocking.tpp.patientpracticemessaging
 
+import mocking.defaults.TppMockDefaults.Companion.DEFAULT_TPP_SESSION_ID
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.Error
@@ -10,9 +11,8 @@ import java.io.StringWriter
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
-
 class TppPatientPracticeMessagingRecipientsBuilder(
-        tppUserSession: TppUserSession) : TppMappingBuilder("POST", "/tpp/") {
+        tppUserSession: TppUserSession) : TppMappingBuilder() {
     init {
         val typeHeader = "type"
         val typeValue = "MessageRecipients"
@@ -29,24 +29,24 @@ class TppPatientPracticeMessagingRecipientsBuilder(
 
     fun respondWithSuccess(messageRecipientsReply: MessageRecipientsReply): Mapping {
         val suidHeader = "suid"
-        val suidValue = "alsdkfjLIKASDLIHUAJakjshdLIASKHDJALsdiojALSasIADJAISDioasjd"
+        val suidValue = DEFAULT_TPP_SESSION_ID
 
         val jaxbContext = JAXBContext.newInstance(MessageRecipientsReply::class.java)
         val marshaller = jaxbContext.createMarshaller()
+
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
 
         val stringWriter = StringWriter()
+
         stringWriter.use {
             marshaller.marshal(messageRecipientsReply, stringWriter)
         }
 
-        val resp = respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_OK) {
             andXmlBody(stringWriter.toString())
                     .andHeader(suidHeader, suidValue)
                     .build()
         }
-
-        return resp
     }
 
     fun respondWithError(errorBody: Error): Mapping {
@@ -58,9 +58,11 @@ class TppPatientPracticeMessagingRecipientsBuilder(
 
         val jaxbContext = JAXBContext.newInstance(Error::class.java)
         val marshaller = jaxbContext.createMarshaller()
+
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
 
         val stringWriter = StringWriter()
+
         stringWriter.use {
             marshaller.marshal(responseBody, stringWriter)
         }

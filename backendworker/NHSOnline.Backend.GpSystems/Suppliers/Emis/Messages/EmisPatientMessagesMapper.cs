@@ -30,7 +30,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                             LastMessageDateTime = m.LastReplyDateTime ?? m.SentDateTime,
                             Recipient = GetRecipientFromMessageMetaData(m),
                             ReplyCount = m.ReplyCount,
-                            HasUnreadReplies = m.HasUnreadReplies,
+                            IsUnread = false,
+                            UnreadReplyInfo = new UnreadReplyInfo
+                            {
+                                Present = m.HasUnreadReplies
+                            },
                             OutboundMessage = true
                         })
                         .OrderByDescending(pm => pm.LastMessageDateTime)

@@ -13,9 +13,9 @@ class MessageHelpers {
     fun createMessage(messageId: String,
                       conversationId: String,
                       date: ZonedDateTime,
-                      read: String,
+                      read: String = "y",
                       binaryDataId: String? = null,
-                      incoming: String): Message {
+                      incoming: String = "n"): Message {
         return Message(
                 messageId = messageId,
                 conversationId = conversationId,
@@ -35,7 +35,7 @@ class MessageHelpers {
                            isUnread: Boolean?,
                            replyContent: String,
                            outboundMessage: Boolean,
-                           isLegacy: Boolean?): MessageReply {
+                           isLegacy: Boolean? = null): MessageReply {
         return MessageReply(
                 sender = sender,
                 sentDateTime = sentDateTime,
@@ -51,8 +51,8 @@ class MessageHelpers {
                              messageReplies: List<MessageReply> = arrayListOf(),
                              content: String,
                              sentDateTime: String,
-                             subject: String?,
-                             clientApplicationName: String?): MessageDetails {
+                             subject: String? = null,
+                             clientApplicationName: String? = null): MessageDetails {
         return MessageDetails(
                 messageId = messageId,
                 recipients = recipients,

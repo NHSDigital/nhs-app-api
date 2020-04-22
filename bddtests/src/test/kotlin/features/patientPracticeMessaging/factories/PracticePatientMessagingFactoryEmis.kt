@@ -33,7 +33,7 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
     override fun patientHasNoMessages(patient: Patient){
         mockingClient.forEmis{
             messaging.viewMyMessagesRequest(patient)
-                    .respondWithSuccess(MessagesResponseModel(mutableListOf<PatientMessageSummary>()))
+                    .respondWithSuccess(MessagesResponseModel(mutableListOf()))
         }
     }
 

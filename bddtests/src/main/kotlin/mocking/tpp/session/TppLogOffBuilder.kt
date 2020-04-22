@@ -15,8 +15,7 @@ class TppLogOffBuilder : TppMappingBuilder("POST", "/tpp/") {
         requestBuilder
                 .andHeader(typeHeader, typeValue)
                 .andBodyMatchingXpath("//Logoff[" +
-                        "@apiVersion='${apiVersion}' and " +
-                        "@uuid='${uuid}']")
+                        "@apiVersion='${apiVersion}']")
     }
 
     fun respondWithSuccess(): Mapping {

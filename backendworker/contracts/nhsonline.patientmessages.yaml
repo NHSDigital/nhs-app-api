@@ -88,7 +88,7 @@ paths:
   /messages/recipients:
     get:
       tags:
-        -patientMessages
+        - patientMessages
       summary: Get a list of available recipients to which the user can send a message
       description: Get a list of available recipients to which the user can send a message
       responses:
@@ -123,7 +123,7 @@ paths:
               schema:
                 $ref: "./nhsonline.shared.yaml#/components/schemas/PfsErrorResponse"
   /messages/updateReadStatus:
-    post:
+    put:
       tags:
         - patientMessages
       summary: Update the read status of a message thread
@@ -137,12 +137,8 @@ paths:
         description: Details of the message and the new read status.
         required: true
       responses:
-        "200":
+        "204":
           description: Successfully updated the read status of the message
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PatientMessageReadStatusUpdatedResponse"
         "400":
           description: Upstream system returned BadRequest status.
           content:
@@ -288,12 +284,6 @@ components:
         IsDeleted:
           type: boolean
           description: Flag to indicate if the message has been deleted
-    PatientMessageReadStatusUpdatedResponse:
-      type: object
-      properties:
-        MessageReadStateUpdateStatus:
-          type: string
-          description: read status of the message
     PatientMessageRecipient:
       type: object
       properties:
@@ -336,16 +326,17 @@ components:
         sender:
           type: string
           description: This field contains the string for the sender of the message
-        unreadCount:
-          type: integer
-          description: Count which will represent the number of unread messages in the conversation
+        isUnread:
+          type: boolean
+          description: Is the initial message in the conversation unread?
+        unreadReplyInfo:
+          description: Information on unread replies for this conversation
+          oneOf:
+            - $ref: "#/components/schemas/PatientMessageUnreadReplyInfo"
+            - $ref: "#/components/schemas/PatientMessageUnreadReplyInfoWithCount"
         attachmentId:
           type: string
           description: Identifier for the attachment which has been sent in a message, which can be used to obtain the file.
-        hasUnreadReplies:
-          type: boolean
-          nullable: true
-          description: Indicates whether there are messages the patient has not read
         replies:
           type: array
           description: array of message replies
@@ -358,9 +349,9 @@ components:
       type: object
       properties:
         messageId:
-          type: integer
+          type: string
           nullable: true
-          description: A unique indentifier for this conversation
+          description: A unique identifier for this conversation
         subject:
           type: string
           description: A message summary provided by the patient when initiating the conversation
@@ -370,7 +361,7 @@ components:
         recipient:
           type: string
           description: recipient of the message sent by the user
-        messageReplies:
+        replies:
           type: array
           description: array of message replies
           items:
@@ -395,11 +386,28 @@ components:
         outboundMessage:
           type: boolean
           description: Indicates whether the message is from the patient to the practice
+    PatientMessageUnreadReplyInfo:
+      type: object
+      properties:
+        present: 
+          $ref: "#/components/schemas/PatientMessageUnreadReplyInfoPresentProperty"
+    PatientMessageUnreadReplyInfoWithCount:
+      type: object
+      properties:
+        present: 
+          $ref: "#/components/schemas/PatientMessageUnreadReplyInfoPresentProperty"
+        count: 
+          type: integer
+          description: The number of unread messages in this conversation 
+    PatientMessageUnreadReplyInfoPresentProperty:
+      type: boolean
+      nullable: true
+      description: Indicates whether there are messages the patient has not read
     UpdateMessageReadStatusRequestBody:
       type: object
       properties:
         messageId:
-          type: integer
+          type: string
           description: id of the message to update the status
         messageReadState:
           type: string

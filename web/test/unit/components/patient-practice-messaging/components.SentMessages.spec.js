@@ -7,7 +7,7 @@ const createPropsData = () => ({
     subject: 'Test',
     sentDateTime: '2019-12-09T13:56:50.377',
     outboundMessage: true,
-    messageReplies: [{
+    replies: [{
       sender: 'Test',
       replyContent: 'This is a test',
       sentDateTime: '2019-12-09T13:56:50.377',
@@ -28,7 +28,7 @@ const $store = () => (
             content: 'Test message',
             subject: 'Test',
             sentDateTime: '2019-12-09T13:56:50.377',
-            messageReplies: [{
+            replies: [{
               sender: 'Test',
               replyContent: 'This is a test',
               sentDateTime: '2019-12-09T13:56:50.377',

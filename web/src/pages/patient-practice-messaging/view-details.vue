@@ -1,54 +1,25 @@
 <template>
   <div>
-    <div v-if="showTemplate && detailsLoaded">
+    <template v-if="showTemplate && detailsLoaded">
       <ul :class="['nhsuk-u-margin-top-2',
                    'nhsuk-u-margin-bottom-4',
                    'nhsuk-u-padding-left-0']">
-        <sentMessage v-if="isOutbound"
-                     class="nhsuk-u-padding-bottom-4"
-                     :message="selectedMessage"
-                     :sent-index="0"
-                     :sent-prefix-identifier="'initial'"
-                     :message-content="selectedMessage.content"/>
-        <receivedMessage v-else class="nhsuk-u-padding-bottom-4"
-                         :message="selectedMessage"
-                         :reply-index="0"
-                         :reply-prefix-identifier="'initial'"
-                         :message-content="selectedMessage.content"/>
-        <div v-for="(reply, index) in readMessages"
-             :key="`readMessageReply`+ index">
-          <div v-if="reply.outboundMessage">
-            <sentMessage class="nhsuk-u-padding-bottom-4"
-                         :message="reply"
-                         :sent-index="index"
-                         :sent-prefix-identifier="'readReply'"
-                         :message-content="reply.replyContent"/>
-          </div>
-          <div v-else>
-            <receivedMessage class="nhsuk-u-padding-bottom-4"
-                             :message="reply"
-                             :reply-index="index"
-                             :reply-prefix-identifier="'read'"
-                             :message-content="reply.replyContent"/>
-          </div>
-        </div>
-        <page-divider v-if="hasUnreadMessages" id="receivedMessagesDivider" :text="unreadText" />
-        <div v-for="(reply, index) in unreadMessages"
-             :key="`unreadMessageReply`+ index">
-          <div v-if="reply.outboundMessage">
-            <sentMessage class="nhsuk-u-padding-bottom-4"
-                         :message="reply"
-                         :sent-index="index"
-                         :sent-prefix-identifier="'unreadReply'"
-                         :message-content="reply.replyContent"/>
-          </div>
-          <div v-else>
-            <receivedMessage class="nhsuk-u-padding-bottom-4"
-                             :message="reply"
-                             :reply-index="index"
-                             :reply-prefix-identifier="'unread'"
-                             :message-content="reply.replyContent"/>
-          </div>
+        <div v-for="message in messages" :key="message.key">
+          <page-divider v-if="message.isFirstUnreadMessage"
+                        id="receivedMessagesDivider"
+                        :text="getUnreadText" />
+          <sentMessage v-if="message.outboundMessage"
+                       class="nhsuk-u-padding-bottom-4"
+                       :message="message"
+                       :sent-index="message.index"
+                       :sent-prefix-identifier="message.prefixIdentifier"
+                       :message-content="message.content"/>
+          <receivedMessage v-else
+                           class="nhsuk-u-padding-bottom-4"
+                           :message="message"
+                           :reply-index="message.index"
+                           :reply-prefix-identifier="message.prefixIdentifier"
+                           :message-content="message.content"/>
         </div>
       </ul>
       <menu-item-list id="messageDetailsOptionsList" class="nhsuk-u-margin-bottom-3">
@@ -59,7 +30,7 @@
                    header-tag="h2"
                    href="#"/>
       </menu-item-list>
-    </div>
+    </template>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <desktopGenericBackLink
@@ -79,10 +50,8 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import { PATIENT_PRACTICE_MESSAGING, PATIENT_PRACTICE_MESSAGING_DELETE } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, isBlankString } from '@/lib/utils';
 import srjIf from '@/lib/sjrIf';
-import takeWhile from 'lodash/fp/takeWhile';
-import dropWhile from 'lodash/fp/dropWhile';
 import PageDivider from '@/components/widgets/PageDivider';
 
 export default {
@@ -104,58 +73,44 @@ export default {
     detailsLoaded() {
       return this.$store.state.patientPracticeMessaging.loadedDetails;
     },
-    messageID() {
-      return this.$store.state.patientPracticeMessaging.selectedMessageId;
-    },
     deleteEnabled() {
       return srjIf({ $store: this.$store, journey: 'deletePatientPracticeMessage' });
     },
     updateStatusEnabled() {
       return srjIf({ $store: this.$store, journey: 'updateStatusPatientPracticeMessage' });
     },
-    selectedMessage() {
-      return this.$store.state.patientPracticeMessaging.selectedMessageDetails.messageDetails;
+    messages() {
+      return this.$store.state.patientPracticeMessaging.messages;
     },
-    isOutbound() {
-      return this.selectedMessage.outboundMessage;
-    },
-    selectedMessageReplies() {
-      return this.selectedMessage.messageReplies;
-    },
-    readMessages() {
-      return takeWhile(m => !m.isUnread)(this.selectedMessageReplies);
-    },
-    unreadMessages() {
-      return dropWhile(m => !m.isUnread)(this.selectedMessageReplies);
-    },
-    hasUnreadMessages() {
-      return this.unreadMessages.length > 0;
-    },
-    unreadText() {
-      if (this.unreadMessages.length > 1) {
-        return this.$t('patient_practice_messaging.view_details.unreadMessages');
-      }
-      return this.$t('patient_practice_messaging.view_details.unreadMessage');
+    getUnreadText() {
+      return this.$store.state.patientPracticeMessaging.unreadIndex > 0
+        ? this.$t('patient_practice_messaging.view_details.unreadMessages')
+        : this.$t('patient_practice_messaging.view_details.unreadMessage');
     },
   },
   async fetch({ store, redirect }) {
-    if (store.state.patientPracticeMessaging.selectedMessageId === undefined) {
+    if (isBlankString(store.state.patientPracticeMessaging.selectedMessageId)) {
       return redirect(PATIENT_PRACTICE_MESSAGING.path);
     }
 
-    if (store.state.patientPracticeMessaging.selectedMessageId !== 0 &&
-        store.state.patientPracticeMessaging.selectedMessageDetails === undefined) {
-      const selectedId = store.state.patientPracticeMessaging.selectedMessageId;
-      return store.dispatch('patientPracticeMessaging/loadMessage', { id: selectedId, clearApiError: true });
+    if (store.state.patientPracticeMessaging.selectedMessageId === '0'
+      || store.state.patientPracticeMessaging.selectedMessageDetails !== undefined) {
+      return undefined;
     }
-    return undefined;
+
+    const selectedId = store.state.patientPracticeMessaging.selectedMessageId;
+
+    return store.dispatch('patientPracticeMessaging/loadMessage', {
+      id: selectedId,
+      clearApiError: true,
+    });
   },
   mounted() {
-    if (this.$store.state.patientPracticeMessaging.loadedDetails &&
-      this.updateStatusEnabled) {
-      if (this.$store.state.patientPracticeMessaging.selectedMessageId !== 0) {
-        this.$store.dispatch('patientPracticeMessaging/updateReadStatusAsRead');
-      }
+    if (this.$store.state.patientPracticeMessaging.loadedDetails
+      && this.updateStatusEnabled
+      && !isBlankString(this.$store.state.patientPracticeMessaging.selectedMessageId)
+      && this.$store.state.patientPracticeMessaging.selectedMessageId !== '0') {
+      this.$store.dispatch('patientPracticeMessaging/updateReadStatusAsRead');
     }
   },
   methods: {

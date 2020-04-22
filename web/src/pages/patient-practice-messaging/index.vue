@@ -8,12 +8,16 @@
                    header-tag="h2"
                    href="#"/>
       </menu-item-list>
+
       <p v-if="hasNoSummaries">{{ $t('im01.noMessages') }}</p>
+
       <template v-else>
         <menu-item-list-header id="messages_list_header"
                                header-tag="h2"
                                :text="$t('im01.subheader')"/>
+
         <p v-if="hasNoSummaries">{{ $t('im01.noMessages') }}</p>
+
         <ul id="patientPracticeInboxMessages" :class="$style['nhs-app-message']">
           <li v-for="(summary, index) in summaries"
               :key="`summary-${index}`"
@@ -23,12 +27,13 @@
                              :sub-title="getSubtitle(summary)"
                              :date-time="summary.lastMessageDateTime"
                              :aria-label="getMessageLabel(summary)"
-                             :has-unread-messages="summary.hasUnreadReplies"
+                             :has-unread-messages="summary.unreadReplyInfo.present"
                              :list-index="index"
-                             :unread-count="getUnreadCount(summary.unreadCount)"
+                             :unread-count="getUnreadCount(summary.unreadReplyInfo.count)"
                              @click="goToMessageDetails(summary)"/>
           </li>
         </ul>
+
         <desktopGenericBackLink
           v-if="!$store.state.device.isNativeApp"
           id="desktopBackLink"
@@ -52,7 +57,7 @@ import {
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   INDEX,
 } from '@/lib/routes';
-import { redirectTo, datePart } from '@/lib/utils';
+import { redirectTo, datePart, isNumber } from '@/lib/utils';
 import { formatDate } from '@/plugins/filters';
 import srjIf from '@/lib/sjrIf';
 
@@ -89,6 +94,10 @@ export default {
       redirect(INDEX.path);
       return;
     }
+
+    store.dispatch('patientPracticeMessaging/clearSelectedRetainingId');
+    store.dispatch('patientPracticeMessaging/clearSelectedRecipient');
+
     await store.dispatch('patientPracticeMessaging/loadMessages');
   },
   mounted() {
@@ -96,7 +105,11 @@ export default {
   },
   methods: {
     getUnreadCount(unreadCount) {
-      return (unreadCount > 0) ? unreadCount : undefined;
+      if (!isNumber(unreadCount) || unreadCount < 1) {
+        return undefined;
+      }
+
+      return unreadCount;
     },
     sendMessage() {
       redirectTo(this, PATIENT_PRACTICE_MESSAGING_URGENCY.path);
@@ -107,6 +120,7 @@ export default {
     },
     getMessageLabel(summary) {
       const { subject, recipient, lastMessageDateTime } = summary;
+
       return (subject) ?
         this.$t('im01.summary.hiddenWithSubject', {
           recipient,
@@ -126,16 +140,9 @@ export default {
       this.$store.dispatch('patientPracticeMessaging/setSelectedRecipient', { name: message.recipient });
 
       if (!this.additionalDetailsCallRequired) {
-        this.$store.dispatch('patientPracticeMessaging/setMessageDetails',
-          { messageDetails: {
-            content: message.content,
-            sentDateTime: message.sentDateTime,
-            sender: message.sender,
-            messageReplies: message.replies,
-            attachmentId: message.attachmentId,
-            outboundMessage: message.outboundMessage },
-          });
+        this.$store.dispatch('patientPracticeMessaging/setMessageDetails', { messageDetails: message });
       }
+
       redirectTo(this, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path);
     },
   },

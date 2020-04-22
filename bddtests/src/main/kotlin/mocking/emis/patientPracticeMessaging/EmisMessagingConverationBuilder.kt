@@ -12,7 +12,7 @@ class EmisMessagingConverationBuilder(configuration: EmisConfiguration?,
                            linkToken: String,
                            apiEndUserSessionId: String,
                            apiSessionId: String) : EmisMappingBuilder(
-        configuration, "GET", "/messages/0/") {
+        configuration, "GET", "/messages/10/") {
     init {
         requestBuilder
                 .andHeader(mocking.emis.HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)

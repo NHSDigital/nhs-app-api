@@ -6,7 +6,7 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
-    internal sealed class TppClientRequestBuilder: IDisposable
+    internal sealed class TppClientRequestBuilder: ITppClientRequestBuilder, IDisposable
     {
         private const string RequestTypeHeader = "type";
         private const string RequestSuidHeader = "suid";
@@ -24,10 +24,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             _guidCreator = guidCreator;
         }
 
-        internal string RequestType { get; private set; }
-        internal Guid Uuid { get; private set; }
+        public string RequestType { get; private set; }
+        public Guid Uuid { get; private set; }
 
-        internal TppClientRequestBuilder Model<TRequest>(TRequest model) where TRequest : ITppRequest
+        public ITppClientRequestBuilder Model<TRequest>(TRequest model) where TRequest : ITppRequest
         {
             RequestType = model.RequestType;
             Uuid = model.Uuid = _guidCreator.CreateGuid();
@@ -56,13 +56,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
             }
         }
 
-        internal TppClientRequestBuilder Suid(string suid)
+        public ITppClientRequestBuilder Suid(string suid)
         {
             _request.Headers.Add(RequestSuidHeader, suid);
             return this;
         }
 
-        internal HttpRequestMessage Build() => _request;
+        public HttpRequestMessage Build() => _request;
         public void Dispose()
         {
             _request.Dispose();

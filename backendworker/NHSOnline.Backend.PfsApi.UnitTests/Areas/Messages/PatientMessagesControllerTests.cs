@@ -168,15 +168,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         }
 
         [TestMethod]
-        public async Task PostUpdateMessageReadStatus_ReturnsSuccessResult_WhenServiceReturnsSuccessfulResponse()
+        public async Task PutUpdateMessageReadStatus_ReturnsSuccessResult_WhenServiceReturnsSuccessfulResponse()
         {
             // Arrange
-            var successResponse = _fixture.Create<PutPatientMessageUpdateStatusResponse>();
-            var successResult = new PutPatientMessageReadStatusResult.Success(successResponse);
+            var successResult = new PutPatientMessageReadStatusResult.Success();
 
             var requestBody = new UpdateMessageReadStatusRequestBody
             {
-                MessageId = 1,
+                MessageId = "1",
                 MessageReadState = "Read"
             };
 
@@ -197,8 +196,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             VerifyMockAuditor();
 
             result
-                .Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().Be(successResponse);
+                .Should().BeAssignableTo<NoContentResult>();
         }
 
         [TestMethod]
@@ -454,7 +452,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
             // Arrange
             var requestBody = new UpdateMessageReadStatusRequestBody
             {
-                MessageId = 1,
+                MessageId = "1",
                 MessageReadState = "Read"
             };
             var serviceResult = (PutPatientMessageReadStatusResult) Activator.CreateInstance(serviceResultType);

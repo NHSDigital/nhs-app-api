@@ -134,7 +134,7 @@ describe('patient messaging messages', () => {
       expect(wrapper.vm.messageTextError).toBe(false);
       expect(wrapper.vm.subjectError).toBe(false);
 
-      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/setSelectedMessageID', 0);
+      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/setSelectedMessageID', '0');
       expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/sendMessage', {
         messageText: 'Test message',
         subjectText: 'Test subject',
@@ -154,7 +154,7 @@ describe('patient messaging messages', () => {
       expect(wrapper.vm.messageTextError).toBe(true);
       expect(wrapper.vm.subjectError).toBe(true);
 
-      expect(store.dispatch).not.toHaveBeenCalledWith('patientPracticeMessaging/setSelectedMessageID', 0);
+      expect(store.dispatch).not.toHaveBeenCalledWith('patientPracticeMessaging/setSelectedMessageID', '0');
       expect(store.dispatch).not.toHaveBeenCalledWith('patientPracticeMessaging/sendMessage', {
         messageText: 'Test message',
         subjectText: 'Test subject',

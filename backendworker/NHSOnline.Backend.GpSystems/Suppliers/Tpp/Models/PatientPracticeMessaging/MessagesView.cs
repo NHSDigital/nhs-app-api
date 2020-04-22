@@ -13,7 +13,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessag
         public string OnlineUserId { get; set; }
 
         [XmlIgnore]
-        public override string RequestType => "MessagesView";
-
+        public override string RequestType => nameof(MessagesView);
     }
 }

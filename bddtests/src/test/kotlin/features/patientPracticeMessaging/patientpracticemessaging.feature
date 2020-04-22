@@ -84,7 +84,7 @@ Feature: Patient to practice messaging
     And I insert a message
     And I click send message
     Then I see my new message after it has been sent
-    
+
   Scenario Outline: A TPP patient can send a patient practice message to a <Recipient Type> recipient
     Given I am an TPP patient
     And I am a user who can access patient practice messaging
@@ -113,6 +113,16 @@ Feature: Patient to practice messaging
     When I follow the Messages link from the home page
     Then the patient to practice inbox page is displayed
     And I see a list of patient practice messages without the subject and with the unread count
+
+  Scenario: A TPP patient viewing a message marks it as read
+    Given I am a TPP patient
+    And I am a user who can access patient practice messaging
+    And I am logged in
+    And I have patient practice messages in my inbox, some of which are unread
+    When I follow the Messages link from the home page
+    Then the patient to practice inbox page is displayed
+    When I select a patient practice message in my inbox
+    Then the message is marked as read
 
   Scenario: A TPP patient can view a patient message they started
     Given I am a TPP patient
@@ -153,7 +163,7 @@ Feature: Patient to practice messaging
     And I see the view and download links on the message
     And I click on the view link
     Then I can view the message attachment
-    
+
   Scenario: A TPP patient can download an attachment on a message
     Given I am a TPP patient
     And I am a user who can access patient practice messaging

@@ -44,7 +44,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
                     LastMessageDateTime = m.LastReplyDateTime,
                     Subject = m.Subject,
                     ReplyCount = m.ReplyCount,
-                    HasUnreadReplies = m.HasUnreadReplies,
+                    IsUnread = false,
+                    UnreadReplyInfo = new UnreadReplyInfo
+                    {
+                        Present = m.HasUnreadReplies
+                    },
                     OutboundMessage = true
                 }).ToList()
             });

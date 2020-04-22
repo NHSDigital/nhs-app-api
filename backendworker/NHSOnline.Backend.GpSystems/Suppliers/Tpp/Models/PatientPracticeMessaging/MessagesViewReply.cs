@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessag
         [XmlAttribute(AttributeName="uuid")]
         public string Uuid { get; set; }
 
-        [XmlElement("Message", Type = typeof(Message))]
-        public List<Message> Messages { get; set; }
+        [XmlElement("Message", Type = typeof(MessageDetails))]
+        public List<MessageDetails> Messages { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 package mocking.tpp.listServiceAccesses
 
+import mocking.defaults.TppMockDefaults.Companion.DEFAULT_TPP_SESSION_ID
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.ListServiceAccessesReply
@@ -26,7 +27,7 @@ class TppListServiceAccessesBuilder(tppUserSession: TppUserSession): TppMappingB
 
     fun respondWithSuccess(listServiceAccessesReply: ListServiceAccessesReply): Mapping {
         val suidHeader = "suid"
-        val suidValue = "alsdkfjLIKASDLIHUAJakjshdLIASKHDJALsdiojALSasIADJAISDioasjd"
+        val suidValue = DEFAULT_TPP_SESSION_ID
 
         val jaxbContext = JAXBContext.newInstance(ListServiceAccessesReply::class.java)
         val marshaller = jaxbContext.createMarshaller()

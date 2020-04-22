@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
 using NHSOnline.Backend.Support.Logging;
+using MessageDetails = NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging.MessageDetails;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
 {
@@ -26,17 +27,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
 
         public GetPatientMessagesResponse Map(MessagesViewReply response)
         {
+            _logger.LogEnter();
+
             if (response == null)
             {
                 _logger.LogError("MessagesViewReply is null, throwing null argument exception");
                 _logger.LogExit();
+
                 throw new ArgumentNullException(nameof(response));
             }
 
-            if (response.Messages == null || response.Messages.Count == 0)
+            if ((response.Messages?.Count ?? 0) == 0)
             {
                 _logger.LogError("Messages is empty or null, returning");
                 _logger.LogExit();
+
                 return new GetPatientMessagesResponse
                 {
                     MessageSummaries = new List<PatientMessageSummary>()
@@ -44,37 +49,32 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
             }
 
             _logger.LogInformation("Mapping TPP messages");
-            _logger.LogExit();
 
             var summaries = response.Messages
-                .Where(m => m.Deleted != YesNo.y)
+                .Where(m => m.Deleted != YesNo.y && m.HasSentDateTime)
                 .GroupBy(m => m.ConversationId)
                 .Select(c =>
                 {
-                    var messages = c.ToList().OrderBy(m => DateTime.Parse(m.Sent, CultureInfo.InvariantCulture));
-                    var initialMessage = c.First();
-                    var unreadCount = GetUnreadCount(messages, c.Key);
+                    var orderedMessages = c.ToList()
+                        .OrderBy(m => m.SentDateTime)
+                        .ToList();
+                    var unreadMessages = orderedMessages.Where(r =>
+                            r.Incoming == YesNo.n && r.Read == YesNo.n)
+                        .ToList();
+                    var initialMessage = orderedMessages.First();
+                    var unreadCount = unreadMessages.Count;
+                    var lastMessageSentDateTime = orderedMessages.Last().SentDateTime;
 
-                    return new PatientMessageSummary
-                    {
-                        MessageId = initialMessage.MessageId,
-                        ConversationId = initialMessage.ConversationId,
-                        Content = initialMessage.MessageText,
-                        Recipient = initialMessage.Incoming != YesNo.y
-                            ? initialMessage.Sender
-                            : initialMessage.Recipient,
-                        Sender = initialMessage.Sender,
-                        HasUnreadReplies = unreadCount > 0,
-                        UnreadCount = unreadCount,
-                        LastMessageDateTime = GetFormattedDateString(messages.Last().Sent),
-                        SentDateTime = GetFormattedDateString(initialMessage.Sent),
-                        AttachmentId = initialMessage.BinaryDataId,
-                        OutboundMessage = initialMessage.Incoming == YesNo.y,
-                        Replies = GetReplies (response.Messages, initialMessage.ConversationId)
-                    };
+                    return (
+                        buildMessageSummary(initialMessage, unreadCount, lastMessageSentDateTime, orderedMessages),
+                        lastMessageSentDateTime
+                    );
                 })
-                .OrderByDescending(c => c.LastMessageDateTime)
+                .OrderByDescending(m => m.Item2)
+                .Select(m => m.Item1)
                 .ToList();
+
+            _logger.LogExit();
 
             return new GetPatientMessagesResponse
             {
@@ -82,37 +82,56 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
             };
         }
 
-        private static string GetFormattedDateString(String date)
+        private PatientMessageSummary buildMessageSummary(
+            MessageDetails initialMessageDetails,
+            int unreadCount,
+            DateTime lastMessageSentDateTime,
+            List<MessageDetails> orderedMessages
+        )
         {
-            return DateTime.Parse(
-                date,
-                CultureInfo.InvariantCulture).ToString(
-                "s",
-                CultureInfo.InvariantCulture);
+            return new PatientMessageSummary
+            {
+                MessageId = initialMessageDetails.ConversationId,
+                Content = initialMessageDetails.MessageText,
+                Recipient = initialMessageDetails.Incoming == YesNo.n
+                    ? initialMessageDetails.Sender
+                    : initialMessageDetails.Recipient,
+                Sender = initialMessageDetails.Sender,
+                IsUnread = initialMessageDetails.Incoming == YesNo.n
+                           && initialMessageDetails.Read == YesNo.n,
+                UnreadReplyInfo = new UnreadReplyInfo
+                {
+                    Present = unreadCount > 0,
+                    Count = unreadCount,
+                },
+                LastMessageDateTime = GetFormattedDateString(lastMessageSentDateTime),
+                SentDateTime = GetFormattedDateString(initialMessageDetails.SentDateTime),
+                AttachmentId = initialMessageDetails.BinaryDataId,
+                OutboundMessage = initialMessageDetails.Incoming == YesNo.y,
+                Replies = GetReplies(orderedMessages, initialMessageDetails.ConversationId)
+            };
         }
 
-        private static int GetUnreadCount(IEnumerable<Message> messages, string conversationId)
-        {
-            var unreadMessages = messages
-                .Where(r => r.ConversationId == conversationId && r.Read != YesNo.y && r.Incoming == YesNo.n)
-                .ToList();
-            return unreadMessages.Count;
-        }
-
-        private static List<MessageReply> GetReplies(List<Message> messages, string conversationId)
+        private static List<MessageReply> GetReplies(List<MessageDetails> messages, string conversationId)
         {
             return messages
-                .Where(r => r.MessageId != conversationId && r.ConversationId == conversationId )
-                .Select(
-                reply => new MessageReply
-                {
-                    Sender = reply.Sender,
-                    SentDateTime = GetFormattedDateString(reply.Sent),
-                    IsUnread = reply.Read != YesNo.y,
-                    ReplyContent = reply.MessageText,
-                    AttachmentId = reply.BinaryDataId,
-                    OutboundMessage = reply.Incoming == YesNo.y
-                }).ToList();
+                .Where(r => r.MessageId != conversationId )
+                .Select(reply => new MessageReply
+                    {
+                        Sender = reply.Sender,
+                        SentDateTime = GetFormattedDateString(reply.SentDateTime),
+                        IsUnread = reply.Read != YesNo.y,
+                        ReplyContent = reply.MessageText,
+                        AttachmentId = reply.BinaryDataId,
+                        OutboundMessage = reply.Incoming == YesNo.y
+                    }).ToList();
+        }
+
+        private static string GetFormattedDateString(DateTime date)
+        {
+            return date.ToString(
+                "s",
+                CultureInfo.InvariantCulture);
         }
     }
 }

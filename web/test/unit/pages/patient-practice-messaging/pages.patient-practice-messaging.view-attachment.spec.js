@@ -30,7 +30,7 @@ describe('patient practice view attachment page', () => {
       subject: 'Test subject',
       sentDateTime: '2019-12-09T13:56:50.377',
       outboundMessage: true,
-      messageReplies: [],
+      replies: [],
     },
   };
 

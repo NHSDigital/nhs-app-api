@@ -37,7 +37,8 @@ export default {
   },
   methods: {
     addListeners() {
-      this.links = this.$el.getElementsByTagName('a');
+      this.links = this.$el.getElementsByTagName('a') || [];
+
       for (let i = 0; i < this.links.length; i += 1) {
         this.links[i].addEventListener('click', this.navigateTo, false);
         this.links[i].addEventListener('keypress', this.onKeyDown, false);
@@ -45,6 +46,7 @@ export default {
     },
     navigateTo(event) {
       const href = event.target.getAttribute('href');
+
       if (href.startsWith('/') && !href.startsWith('//')) {
         event.preventDefault();
         redirectTo(this, href, null);
@@ -56,10 +58,16 @@ export default {
       }
     },
     removeListeners() {
+      if (!Array.isArray(this.links)) {
+        this.links = [];
+        return;
+      }
+
       for (let i = 0; i < this.links.length; i += 1) {
         this.links[i].removeEventListener('click', this.navigateTo, false);
         this.links[i].addEventListener('keypress', this.onKeyDown, false);
       }
+
       this.links = [];
     },
   },

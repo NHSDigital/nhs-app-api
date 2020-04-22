@@ -1,5 +1,6 @@
 package mocking.tpp.patientSelected
 
+import mocking.defaults.TppMockDefaults.Companion.DEFAULT_TPP_SESSION_ID
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.Error
@@ -28,7 +29,7 @@ class TppPatientSelectedBuilder(tppUserSession: TppUserSession) : TppMappingBuil
 
     fun respondWithSuccess(patientSelectedReply: PatientSelectedReply): Mapping {
         val suidHeader = "suid"
-        val suidValue = "alsdkfjLIKASDLIHUAJakjshdLIASKHDJALsdiojALSasIADJAISDioasjd"
+        val suidValue = DEFAULT_TPP_SESSION_ID
 
         val jaxbContext = JAXBContext.newInstance(PatientSelectedReply::class.java)
         val marshaller = jaxbContext.createMarshaller()

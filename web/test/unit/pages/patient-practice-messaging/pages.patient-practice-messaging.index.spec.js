@@ -21,7 +21,10 @@ describe('practice patient messaging inbox', () => {
     recipient: 'Dr NHS Online',
     subject: 'This is the message subject',
     lastMessageDateTime: '2020-01-01T13:37:00.137Z',
-    hasUnreadReplies: true,
+    unreadReplyInfo: {
+      present: true,
+      count: 1,
+    },
     content: 'test',
     sentDateTime: '2020-01-01T13:37:00.137Z',
     sender: 'Dr Nhs Online',
@@ -66,6 +69,14 @@ describe('practice patient messaging inbox', () => {
   });
 
   describe('asyncData', () => {
+    it('will clear selected message and recipient if im1MessagingEnabled is enabled for the practice', async () => {
+      mountPage({ im1MessagingEnabled: true });
+      await wrapper.vm.$options.asyncData({ store, redirect });
+
+      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/clearSelectedRetainingId');
+      expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/clearSelectedRecipient');
+    });
+
     it('will dispatch load if im1MessagingEnabled is enabled for the practice', async () => {
       mountPage({ im1MessagingEnabled: true });
       await wrapper.vm.$options.asyncData({ store, redirect });
@@ -160,13 +171,7 @@ describe('practice patient messaging inbox', () => {
       expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/setSelectedMessageID', summaries[0].messageId);
       expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/setSelectedRecipient', { name: summaries[0].recipient });
       expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/setMessageDetails', {
-        messageDetails: {
-          content: 'test',
-          sentDateTime: '2020-01-01T13:37:00.137Z',
-          sender: 'Dr Nhs Online',
-          messageReplies: [],
-          outboundMessage: true,
-        },
+        messageDetails: summaries[0],
       });
     });
   });

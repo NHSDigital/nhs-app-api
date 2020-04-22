@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -7,11 +9,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging;
+using MessageDetails = NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging.MessageDetails;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMessaging
 {
     [TestClass]
-    public class TppPatientPracticeMessagesMapperTests
+    public class TppPatientMessagesMapperTests
     {
         private IFixture _fixture;
 
@@ -29,12 +32,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
         public void Map_WhenCalledWithSuccessResponse_ReturnsMappedGetPatientMessagesResponse()
         {
             // Arrange
-            var message = new Message
+            var message = new MessageDetails
             {
                 MessageId = "1",
                 ConversationId = "1",
                 MessageText = _fixture.Create<string>(),
-                ReadString = "y",
+                ReadString = "n",
                 IncomingString = "y",
                 Recipient = _fixture.Create<string>(),
                 Sender = _fixture.Create<string>(),
@@ -43,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
 
             var messagesViewReply = new MessagesViewReply
             {
-                Messages = new List<Message>{ message }
+                Messages = new List<MessageDetails>{ message }
             };
 
             // Act
@@ -54,13 +57,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
             {
                 MessageSummaries = messagesViewReply.Messages.Select(m => new PatientMessageSummary
                 {
-                    MessageId = m.MessageId,
-                    ConversationId = m.ConversationId,
+                    MessageId = m.ConversationId,
                     Content = m.MessageText,
                     Recipient = m.Recipient,
                     LastMessageDateTime = "2020-02-03T11:08:32",
-                    HasUnreadReplies = false,
-                    UnreadCount = 0,
+                    IsUnread = false,
+                    UnreadReplyInfo = new UnreadReplyInfo()
+                    {
+                        Present = false,
+                        Count = 0,
+                    },
                     Sender = m.Sender,
                     SentDateTime = "2020-02-03T11:08:32",
                     Replies = new List<MessageReply>(),
@@ -70,10 +76,57 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
         }
 
         [TestMethod]
+        public void Map_WhenCalledWithSuccessResponseWithUnreadNonIncomingMessage_ReturnsMappedGetPatientMessagesResponse()
+        {
+            // Arrange
+            var message = new MessageDetails
+            {
+                MessageId = "1",
+                ConversationId = "1",
+                MessageText = "some message text",
+                ReadString = "n",
+                IncomingString = "n",
+                Recipient = "Recipient thingy",
+                Sender = "a sendery boy",
+                Sent = "2020-02-03T11:08:32.0Z"
+            };
+
+            var messagesViewReply = new MessagesViewReply
+            {
+                Messages = new List<MessageDetails>{ message }
+            };
+
+            // Act
+            var result = _systemUnderTest.Map(messagesViewReply);
+
+            // Assert
+            result.Should().BeEquivalentTo(new GetPatientMessagesResponse
+            {
+                MessageSummaries = messagesViewReply.Messages.Select(m => new PatientMessageSummary
+                {
+                    MessageId = m.ConversationId,
+                    Content = m.MessageText,
+                    Recipient = m.Sender,
+                    LastMessageDateTime = "2020-02-03T11:08:32",
+                    IsUnread = true,
+                    UnreadReplyInfo = new UnreadReplyInfo()
+                    {
+                        Present = true,
+                        Count = 1,
+                    },
+                    Sender = m.Sender,
+                    SentDateTime = "2020-02-03T11:08:32",
+                    Replies = new List<MessageReply>(),
+                    OutboundMessage = false
+                }).ToList()
+            });
+        }
+
+        [TestMethod]
         public void Map_WhenCalledWithSuccessResponse_ReturnsMappedGetPatientMessagesResponseWithReplies()
         {
             // Arrange
-            var message = new Message
+            var message = new MessageDetails
             {
                 MessageId = "1",
                 ConversationId = "1",
@@ -85,7 +138,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
                 Sent = "2020-04-01T12:00:00Z"
             };
 
-            var messageFirstReply = new Message
+            var messageFirstReply = new MessageDetails
             {
                 MessageId = "2",
                 ConversationId = "1",
@@ -97,7 +150,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
                 Sent = "2020-04-02T12:00:00Z"
             };
 
-            var messageSecondReply = new Message
+            var messageSecondReply = new MessageDetails
             {
                 MessageId = "3",
                 ConversationId = "1",
@@ -111,7 +164,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
 
             var messagesViewReply = new MessagesViewReply
             {
-                Messages = new List<Message>{ message, messageFirstReply, messageSecondReply }
+                Messages = new List<MessageDetails>{ message, messageFirstReply, messageSecondReply }
             };
 
             // Act
@@ -147,12 +200,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
         [TestMethod]
         public void Map_WhenCalledWithSuccessResponse_OrdersMessagesByDateDesc()
         {
-            // Arrange
+            var sentDateTime = DateTime.Parse("2018-01-01T12:00:00Z", CultureInfo.InvariantCulture);
             var messagesViewReply = new MessagesViewReply
             {
-                Messages = Enumerable.Range(1, 3).Select(i => new Message
+                Messages = Enumerable.Range(1, 3).Select(i => new MessageDetails
                 {
-                    Sent = $"2018-0{i}-01T12:00:00Z",
+                    Sent = sentDateTime.AddDays(i).ToString(CultureInfo.InvariantCulture),
                     MessageId = $"{i}",
                     ConversationId = $"{i}",
                     MessageText = _fixture.Create<string>(),
@@ -163,19 +216,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
                 }).ToList()
             };
 
-            // Act
             var result = _systemUnderTest.Map(messagesViewReply);
 
-            // Assert
             result.MessageSummaries.Select(m => m.MessageId)
-                .ToList().Should().BeEquivalentTo(new List<string>{"3", "2", "1"});
+                .Should()
+                .BeEquivalentTo(new List<string>{"3", "2", "1"});
         }
 
         [TestMethod]
         public void Map_WhenCalledWithSuccessResponseWithNotIncomingAndUniqueConversationId_SetsRecipientToSender()
         {
             // Arrange
-            var message = new Message
+            var message = new MessageDetails
             {
                 MessageId = "123",
                 ConversationId = "123",
@@ -186,7 +238,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
 
             var messagesViewReply = new MessagesViewReply
             {
-                Messages = new List<Message>{ message }
+                Messages = new List<MessageDetails>{ message }
             };
 
             // Act
@@ -203,7 +255,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
         public void Map_WhenCalledWithSuccessResponseWithUnreadReplies_SetsUnreadRepliesAndUnreadCount()
         {
             // Arrange
-            var parentMessage = new Message
+            var parentMessage = new MessageDetails
             {
                 MessageId = "1",
                 ConversationId = "1",
@@ -214,7 +266,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
                 Sent = "2018-01-01T12:00:00Z"
             };
 
-            var childMessage = new Message
+            var childMessage = new MessageDetails
             {
                 MessageId = "2",
                 ConversationId = "1",
@@ -226,22 +278,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
 
             var messagesViewReply = new MessagesViewReply
             {
-                Messages = new List<Message>{  parentMessage, childMessage }
+                Messages = new List<MessageDetails>{  parentMessage, childMessage }
             };
 
             // Act
             var result = _systemUnderTest.Map(messagesViewReply);
 
             // Assert
-            result.MessageSummaries.First().HasUnreadReplies.Should().BeTrue();
-            result.MessageSummaries.First().UnreadCount.Should().Be(1);
+            result.MessageSummaries.First().UnreadReplyInfo.Present.Should().BeTrue();
+            result.MessageSummaries.First().UnreadReplyInfo.Count.Should().Be(1);
         }
 
         [TestMethod]
         public void Map_WhenCalledWithSuccessResponseWithDeletedFlag_ShouldNotBeReturned()
         {
             // Arrange
-            var deletedMessage = new Message
+            var deletedMessage = new MessageDetails
             {
                 MessageId = "1",
                 ConversationId = "1",
@@ -255,7 +307,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
 
             var messagesViewReply = new MessagesViewReply
             {
-                Messages = new List<Message>{ deletedMessage }
+                Messages = new List<MessageDetails>{ deletedMessage }
             };
 
             // Act

@@ -35,7 +35,6 @@ import worker.models.patientPracticeMessaging.CreateMessageRequest
 const val RACE_CONDITION_WAIT: Long = 60
 
 open class PatientPracticeMessageStepDefinitions {
-
     private lateinit var patientPracticeMessagingPage: PatientPracticeMessagingPage
     private lateinit var patientPracticeMessagingDetailsPage: PatientPracticeMessagingDetailsPage
     private lateinit var patientPracticeMessagingUrgencyPage: PatientPracticeMessagingUrgencyPage
@@ -397,7 +396,7 @@ open class PatientPracticeMessageStepDefinitions {
     }
 
     @Then("^I see the appropriate error for (.*) patient practice message\\(s\\)$")
-    fun iSeeTheAppropriateErrorForPatientPracticeMessage(action: String){
+    fun iSeeTheAppropriateErrorForPatientPracticeMessage(action: String) {
         when (action) {
             "deleting" -> {
                 errorPage.assertPageHeader("Error deleting conversation")
@@ -426,7 +425,7 @@ open class PatientPracticeMessageStepDefinitions {
     }
 
     @Then("^I see my new message after it has been sent")
-    fun iSeeMyNewMessageAfterItHasBeenSent(){
+    fun iSeeMyNewMessageAfterItHasBeenSent() {
         val messageDetails = PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE.getOrNull<CreateMessageRequest>()!!
 
         if (SerenityHelpers.getGpSupplier() == Supplier.EMIS) {
@@ -510,12 +509,12 @@ open class PatientPracticeMessageStepDefinitions {
     }
 
     @When("^I select delete conversation on the view conversation page$")
-    fun iClickOnDeleteConversationFromViewDetailsScreen(){
+    fun iClickOnDeleteConversationFromViewDetailsScreen() {
         patientPracticeMessagingDetailsPage.clickDeleteConversation()
     }
 
     @Then("^I am prompted to confirm my intention to delete the conversation$")
-    fun iSeeTheDeleteInfoPage(){
+    fun iSeeTheDeleteInfoPage() {
         patientPracticeMessagingDeletePage.assertDisplayed()
     }
 
@@ -525,7 +524,7 @@ open class PatientPracticeMessageStepDefinitions {
     }
 
     @Then("^I see a page indicating my patient practice message has been deleted$")
-    fun iSeeTheDeleteSuccessPage(){
+    fun iSeeTheDeleteSuccessPage() {
         Thread.sleep(RACE_CONDITION_WAIT)
         patientPracticeMessagingDeleteSuccessPage.assertDisplayed()
     }
@@ -534,6 +533,12 @@ open class PatientPracticeMessageStepDefinitions {
     fun iClickToGoBackToPatientPracticeMessages() {
         patientPracticeMessagingDeleteSuccessPage.clickBackToMessages()
     }
+
+    @Then("^the message is marked as read$")
+    fun theMessageIsMarkedAsRead() =
+        mockingClient.assertRequestWasMade(
+            "/tpp/",
+            headers = mapOf("type" to "MessageMarkAsRead"))
 
     private fun clickMessageBySerenityVariable(messageToClick: PatientPracticeMessagingSerenityHelpers) {
         assertNotNull("Expected the value for the serenity variable 'messageToClick' to not be null",

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -65,10 +66,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             {
                 MessageDetails =
                 {
-                    MessageId = messageGetResponse.Message.MessageId,
+                    MessageId = messageGetResponse.Message.MessageId?.ToString(CultureInfo.InvariantCulture),
                     Subject = messageGetResponse.Message.Subject,
                     Recipient = messageGetResponse.Message.Recipients[0].Name,
-                    MessageReplies = messageGetResponse.Message.MessageReplies,
+                    Replies = messageGetResponse.Message.MessageReplies,
                     Content = messageGetResponse.Message.Content,
                     SentDateTime = messageGetResponse.Message.SentDateTime,
                     OutboundMessage = true

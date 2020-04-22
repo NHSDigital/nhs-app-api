@@ -37,46 +37,44 @@ object TppMessagingData {
                         MessageDateFormat.DETAILS_TODAY_AT_MIDNIGHT),
                 DateAndFormat(todaysDate.minusDays(ONE),
                         MessageDateFormat.DETAILS_YESTERDAY)
-        )
+        ).sortedBy { d -> d.date }
 
         val conversationId = UUID.randomUUID().toString()
-
-        val repliesDates = mutableListOf<String>()
 
         messages.add(MessageHelpers().createMessage(
                 conversationId,
                 conversationId,
                 expectedDates[0].date,
-                "y",
-                incoming="y")
+                incoming = "y")
         )
 
         PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID.set(
                 conversationId)
 
-        expectedReplyDates.forEachIndexed(fun (_, dateObject) {
-                val read = if (hasUnread) "n" else "y"
+        val repliesDates = expectedReplyDates.map { dateObject ->
+            val read = if (hasUnread) "n" else "y"
+            val date = DateHelpers().getExpectedFormattedMessageDate(dateObject.date, dateObject.format)
 
-                repliesDates.add(DateHelpers().getExpectedFormattedMessageDate(dateObject.date, dateObject.format))
+            messages.add(MessageHelpers().createMessage(
+                    "${UUID.randomUUID()}",
+                    conversationId,
+                    dateObject.date,
+                    read,
+                    if (hasAttachment) "123456433546" else null,
+                    "n"))
 
-                messages.add(MessageHelpers().createMessage(
-                        UUID.randomUUID().toString(),
-                        conversationId,
-                        dateObject.date,
-                        read,
-                        incoming ="n",
-                        binaryDataId = if (hasAttachment) "123456433546" else null)
-                )
-                if (read === "y") {
-                    PatientPracticeMessagingSerenityHelpers
-                            .EXPECTED_READ_MESSAGE_REPLY_DATES
-                            .set(repliesDates)
-                } else {
-                    PatientPracticeMessagingSerenityHelpers
-                            .EXPECTED_UNREAD_MESSAGE_REPLY_DATES
-                            .setIfNotAlreadySet(repliesDates)
-                }
-            })
+            date
+        }
+
+        if (!hasUnread) {
+            PatientPracticeMessagingSerenityHelpers
+                .EXPECTED_READ_MESSAGE_REPLY_DATES
+                .set(repliesDates)
+        } else {
+            PatientPracticeMessagingSerenityHelpers
+                .EXPECTED_UNREAD_MESSAGE_REPLY_DATES
+                .set(repliesDates)
+        }
 
         PatientPracticeMessagingSerenityHelpers.EXPECTED_INBOX_MESSAGE_DATES.set(
                     expectedDates)
@@ -90,8 +88,8 @@ object TppMessagingData {
                         DateHelpers().getExpectedFormattedMessageDate(
                                 expectedDates[0].date, MessageDateFormat.DETAILS_BEFORE_YESTERDAY))
 
-            return MessagesViewReply(Message = messages)
-        }
+        return MessagesViewReply(Message = messages)
+    }
 
     fun getTppMessagesInitialFromGp (): MessagesViewReply {
         val messages = mutableListOf<Message>()
@@ -111,10 +109,7 @@ object TppMessagingData {
         messages.add(MessageHelpers().createMessage(
                 conversationId,
                 conversationId,
-                expectedInboxDates[0].date,
-                "y",
-                incoming = "n")
-        )
+                expectedInboxDates[0].date))
 
         PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID.set(
                 conversationId)
@@ -133,30 +128,29 @@ object TppMessagingData {
 
         PatientPracticeMessagingSerenityHelpers
                 .INITIAL_FROM_GP
-                .setIfNotAlreadySet( true )
+                .setIfNotAlreadySet(true)
         return MessagesViewReply(Message = messages)
     }
 
     fun getDefaultSelected(message: Message, replies: List<Message>): MessageResponseModel {
         val replyList = replies.filter{
             messageObject -> messageObject.conversationId != messageObject.messageId}
-                .map { MessageHelpers().createMessageReply(
+                .map {
+                    MessageHelpers().createMessageReply(
                         it.sender,
                         it.sent,
                         it.read !== "y",
                         it.messageText,
-                        it.incoming == "y",
-                        null
-                ) }
+                        it.incoming == "y"
+                    )
+                }
 
         val messageDetails = MessageHelpers().createMessageDetails(
                 message.messageId,
                 listOf(Recipient(message.sender)),
                 replyList,
                 message.messageText,
-                message.sent,
-                null,
-                null)
+                message.sent)
 
         return MessageResponseModel(messageDetails)
     }

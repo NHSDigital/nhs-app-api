@@ -15,7 +15,7 @@ using NHSOnline.Backend.Support.AspNet.Filters;
 using RichardSzalay.MockHttp;
 using Application = NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Application;
 
-namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
 {
     [TestClass]
     public sealed class TppClientAuthenticatePostTests : IDisposable
@@ -166,7 +166,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             // Act
             var response = await SystemUnderTest.Post(authenticateRequestModel);
-            
+
             // Assert
             response.ErrorResponse.Should().BeEquivalentTo(errorResponseBuilder.BuildExpected());
             response.StatusCode.Should().Be(HttpStatusCode.OK);

@@ -7,6 +7,7 @@
             [$style['nhs-app-message__item']]: true,
             [$style['nhs-app-message__item--unread']]: !!senderMessage.unreadCount
           }">
+
         <summary-message v-for="(message, messageIndex) in senderMessage.messages"
                          :key="messageIndex"
                          :title="senderMessage.sender"
@@ -21,6 +22,7 @@
                          @click="goToMessages(senderMessage.sender)"/>
       </li>
     </ul>
+
     <span v-else id="noMessages">{{ $t('messaging.index.noMessages') }}</span>
   </div>
 </template>
@@ -73,12 +75,8 @@ export default {
       }
       return label;
     },
-    sanitizedContent(text) {
-      return stripHtml(text);
-    },
-    isUnread(message) {
-      return message.unreadCount > 0;
-    },
+    sanitizedContent: stripHtml,
+    isUnread: message => message.unreadCount > 0,
   },
 };
 </script>

@@ -1,6 +1,7 @@
 package mocking.tpp.testResultDetail
 
 import mocking.GsonFactory
+import mocking.defaults.TppMockDefaults.Companion.DEFAULT_TPP_SESSION_ID
 import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
@@ -30,7 +31,7 @@ class TppTestResultDetailBuilder(tppUserSession: TppUserSession, testResultId: S
 
     fun respondWithSuccess(testResultsViewReply: TestResultsViewReply): Mapping {
         val suidHeader = "suid"
-        val suidValue = "alsdkfjLIKASDLIHUAJakjshdLIASKHDJALsdiojALSasIADJAISDioasjd"
+        val suidValue = DEFAULT_TPP_SESSION_ID
 
         val jaxbContext = JAXBContext.newInstance(TestResultsViewReply::class.java)
         val marshaller = jaxbContext.createMarshaller()

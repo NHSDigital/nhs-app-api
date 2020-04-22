@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
 
         public IPatientMessagesService GetPatientMessagesService()
         {
-            return _serviceProvider.GetService<PatientPracticeMessagingService>();
+            return _serviceProvider.GetService<TppPatientMessagesService>();
         }
 
         public IRecreateSessionMapperService GetRecreateSessionMapperService()

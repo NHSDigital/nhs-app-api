@@ -37,7 +37,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 
                 _logger.LogInformation("Unauthorised TPP response");
                 throw new UnauthorisedGpSystemHttpRequestException();
-
             }
         }
     }

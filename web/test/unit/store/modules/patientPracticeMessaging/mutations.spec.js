@@ -1,5 +1,7 @@
 import mutations from '@/store/modules/patientPracticeMessaging/mutations';
+import buildMessageMetadata from '@/lib/patient-practice-messaging/build-message-metadata';
 
+jest.mock('@/lib/patient-practice-messaging/build-message-metadata');
 
 describe('patient practice messaging store mutations', () => {
   let state;
@@ -39,6 +41,10 @@ describe('patient practice messaging store mutations', () => {
 
       it('will set the message summaries state to the received value', () => {
         expect(state.selectedMessageDetails).toBe(data);
+      });
+
+      it('will call buildMessageMetadata with the current state', () => {
+        expect(buildMessageMetadata).toHaveBeenCalledWith(state);
       });
     });
 

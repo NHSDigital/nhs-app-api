@@ -7,135 +7,194 @@ describe('patient messaging messages', () => {
   let redirect;
   let $t;
 
-  const messageDetailsNoReplies = {
-    messageDetails: {
-      recipient: 'test',
-      content: 'Test content',
-      subject: 'Test subject',
-      sentDateTime: '2019-12-09T13:56:50.377',
-      outboundMessage: true,
-      messageReplies: [],
-    },
-  };
+  const messageDetailsNoReplies = [{
+    messageId: '1',
+    recipient: 'test',
+    content: 'Test content',
+    subject: 'Test subject',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: true,
+    replies: [],
+    isUnread: false,
+    key: 'initialMessage',
+    index: 0,
+    prefixIdentifier: 'initial',
+    isFirstUnreadMessage: false,
+  }];
 
-  const messageDetailsUnreadReplies = {
-    messageDetails: {
-      recipient: 'test',
-      content: 'Test content',
-      subject: 'Test subject',
-      sentDateTime: '2019-12-09T13:56:50.377',
-      outboundMessage: true,
-      messageReplies: [{
-        sender: 'Test',
-        replyContent: 'This is a test',
-        sentDateTime: '2019-12-09T13:56:50.377',
-        outboundMessage: false,
-        isUnread: true,
-      }, {
-        sender: 'Test',
-        replyContent: 'This is a test',
-        sentDateTime: '2019-12-09T13:56:50.377',
-        outboundMessage: false,
-        isUnread: true,
-      }],
-    },
-  };
+  const messageDetailsUnreadReplies = [{
+    messageId: '1',
+    recipient: 'test',
+    content: 'Test content',
+    subject: 'Test subject',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: true,
+    isUnread: false,
+    key: 'initialMessage',
+    index: 0,
+    prefixIdentifier: 'initial',
+    isFirstUnreadMessage: false,
+  }, {
+    sender: 'Test',
+    content: 'This is a test',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: true,
+    key: 'unreadMessageReply0',
+    index: 0,
+    prefixIdentifier: 'unreadReply',
+    isFirstUnreadMessage: true,
+  }, {
+    sender: 'Test',
+    content: 'This is a test',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: true,
+    key: 'unreadMessageReply1',
+    index: 1,
+    prefixIdentifier: 'unreadReply',
+    isFirstUnreadMessage: false,
+  }];
 
-  const messageDetailsReadReplies = {
-    messageDetails: {
-      recipient: 'test',
-      content: 'Test content',
-      subject: 'Test subject',
-      sentDateTime: '2019-12-09T13:56:50.377',
-      outboundMessage: true,
-      messageReplies: [{
-        sender: 'Test',
-        replyContent: 'This is a test',
-        sentDateTime: '2019-12-09T13:56:50.377',
-        outboundMessage: false,
-        isUnread: false,
-      }, {
-        sender: 'Test',
-        replyContent: 'This is a test',
-        sentDateTime: '2019-12-09T13:56:50.377',
-        outboundMessage: false,
-        isUnread: false,
-      }],
-    },
-  };
+  const messageDetailsReadReplies = [{
+    messageId: '1',
+    recipient: 'test',
+    content: 'Test content',
+    subject: 'Test subject',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: true,
+    isUnread: false,
+    key: 'initialMessage',
+    index: 0,
+    prefixIdentifier: 'initial',
+    isFirstUnreadMessage: false,
+  }, {
+    sender: 'Test',
+    content: 'This is a test',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: false,
+    key: 'readMessage0',
+    index: 0,
+    prefixIdentifier: 'read',
+    isFirstUnreadMessage: false,
+  }, {
+    sender: 'Test',
+    content: 'This is a test',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: false,
+    key: 'readMessage1',
+    index: 1,
+    prefixIdentifier: 'read',
+    isFirstUnreadMessage: false,
+  }];
 
-  const messageDetailsMixedReadReplies = {
-    messageDetails: {
-      recipient: 'test',
-      content: 'Test content',
-      subject: 'Test subject',
-      sentDateTime: '2019-12-09T13:56:50.377',
-      outboundMessage: true,
-      messageReplies: [{
-        sender: 'Test',
-        replyContent: 'This is a test',
-        sentDateTime: '2019-12-09T13:56:50.377',
-        outboundMessage: false,
-        isUnread: false,
-      }, {
-        sender: 'Test',
-        replyContent: 'This is a test',
-        sentDateTime: '2019-12-09T13:56:50.377',
-        outboundMessage: false,
-        isUnread: true,
-      }],
-    },
-  };
+  const messageDetailsMixedReadReplies = [{
+    messageId: '1',
+    recipient: 'test',
+    content: 'Test content',
+    subject: 'Test subject',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: true,
+    isUnread: false,
+    key: 'initialMessage',
+    index: 0,
+    prefixIdentifier: 'initial',
+    isFirstUnreadMessage: false,
+  },
+  {
+    sender: 'Test',
+    content: 'This is a test',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: false,
+    key: 'readMessage0',
+    index: 0,
+    prefixIdentifier: 'read',
+    isFirstUnreadMessage: false,
+  }, {
+    sender: 'Test',
+    content: 'This is a test',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: true,
+    key: 'unreadMessageReply0',
+    index: 0,
+    prefixIdentifier: 'unread',
+    isFirstUnreadMessage: true,
+  }];
 
-  const messageDetailsInitialFromSupplier = {
-    messageDetails: {
-      recipient: 'test',
-      content: 'Test content',
-      subject: 'Test subject',
-      sentDateTime: '2019-12-09T13:56:50.377',
-      outboundMessage: false,
-      messageReplies: [{
-        sender: 'Test',
-        replyContent: 'This is a test',
-        sentDateTime: '2019-12-09T13:56:50.377',
-        outboundMessage: false,
-        isUnread: false,
-      }, {
-        sender: 'Test',
-        replyContent: 'This is a test',
-        sentDateTime: '2019-12-09T13:56:50.377',
-        outboundMessage: false,
-        isUnread: true,
-      }],
-    },
-  };
+  const messageDetailsInitialFromSupplier = [{
+    messageId: '1',
+    recipient: 'test',
+    content: 'Test content',
+    subject: 'Test subject',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: false,
+    key: 'initialMessage',
+    index: 0,
+    prefixIdentifier: 'initial',
+    isFirstUnreadMessage: false,
+  }, {
+    sender: 'Test',
+    content: 'This is a test',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: false,
+    key: 'readMessage0',
+    index: 0,
+    prefixIdentifier: 'read',
+    isFirstUnreadMessage: false,
+  }, {
+    sender: 'Test',
+    content: 'This is a test',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: true,
+    key: 'unreadMessageReply0',
+    index: 0,
+    prefixIdentifier: 'unreadReply',
+    isFirstUnreadMessage: true,
+  }];
 
-  const messageDetailsInitialFromSupplierWithPatientReply = {
-    messageDetails: {
-      recipient: 'test',
-      content: 'Test content',
-      subject: 'Test subject',
-      sentDateTime: '2019-12-09T13:56:50.377',
-      outboundMessage: false,
-      messageReplies: [{
-        sender: 'Test',
-        replyContent: 'This is a test',
-        sentDateTime: '2019-12-09T13:56:50.377',
-        outboundMessage: false,
-        isUnread: false,
-      }, {
-        sender: 'Test',
-        replyContent: 'This is a test',
-        sentDateTime: '2019-12-09T13:56:50.377',
-        outboundMessage: true,
-        isUnread: true,
-      }],
-    },
-  };
-
+  const messageDetailsInitialFromSupplierWithPatientReply = [{
+    messageId: '1',
+    recipient: 'test',
+    content: 'Test content',
+    subject: 'Test subject',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: false,
+    key: 'initialMessage',
+    index: 0,
+    prefixIdentifier: 'initial',
+    isFirstUnreadMessage: false,
+  }, {
+    sender: 'Test',
+    content: 'This is a test',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: false,
+    isUnread: false,
+    key: 'readMessage0',
+    index: 0,
+    prefixIdentifier: 'read',
+    isFirstUnreadMessage: false,
+  }, {
+    sender: 'Test',
+    content: 'This is a test',
+    sentDateTime: '2019-12-09T13:56:50.377',
+    outboundMessage: true,
+    isUnread: true,
+    key: 'unreadMessageReply0',
+    index: 0,
+    prefixIdentifier: 'unreadReply',
+    isFirstUnreadMessage: true,
+  }];
 
   const mountPage = ({
-    messageDetails,
+    messages,
     deleteEnabled = true,
     updateEnabled = true,
     selectedId = undefined,
@@ -143,10 +202,15 @@ describe('patient messaging messages', () => {
     store = createStore({
       state: {
         patientPracticeMessaging: {
-          selectedMessageDetails: messageDetails,
+          selectedMessageDetails: Array.isArray(messages) && messages.length > 0
+            ? messages[0]
+            : undefined,
           selectedMessageId: selectedId,
           loadedDetails: loaded,
           selectedMessageRecipient: 'test',
+          unreadIndex: 0,
+          readIndex: 0,
+          messages,
         },
         device: { isNativeApp: false },
       },
@@ -170,7 +234,7 @@ describe('patient messaging messages', () => {
   describe('fetch', () => {
     describe('selected message id is defined', () => {
       beforeEach(async () => {
-        mountPage({ messageDetails: undefined, selectedId: '1' });
+        mountPage({ messages: undefined, selectedId: '1' });
         await wrapper.vm.$options.fetch({ store, redirect });
       });
 
@@ -197,34 +261,35 @@ describe('patient messaging messages', () => {
 
   describe('mounted', () => {
     it('will dispatch update read status', () => {
-      mountPage({ messageDetails: messageDetailsNoReplies, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsNoReplies, selectedId: '1', loaded: true });
       expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/updateReadStatusAsRead');
     });
   });
 
   describe('template', () => {
     it('will show the delete button if the delete functionality is enabled', () => {
-      mountPage({ messageDetails: messageDetailsNoReplies, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsNoReplies, toggle: true, selectedId: '1', loaded: true });
       expect(wrapper.find('#deleteMessage').exists()).toBe(true);
     });
 
     it('will hide the delete button if the delete functionality is disabled', () => {
-      mountPage({ messageDetails: messageDetailsNoReplies, deleteEnabled: false, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsNoReplies, deleteEnabled: false, toggle: true, selectedId: '1', loaded: true });
       expect(wrapper.find('#deleteMessage').exists()).toBe(false);
     });
 
     it('will show the page divider if there are unread messages', () => {
-      mountPage({ messageDetails: messageDetailsUnreadReplies, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsUnreadReplies, toggle: true, selectedId: '1', loaded: true });
       expect(wrapper.find('#receivedMessagesDivider').exists()).toBe(true);
     });
 
     it('will not show the page divider if there are only read messages', () => {
-      mountPage({ messageDetails: messageDetailsReadReplies, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsReadReplies, toggle: true, selectedId: '1', loaded: true });
       expect(wrapper.find('#receivedMessagesDivider').exists()).toBe(false);
     });
 
     it('will show two read replies', () => {
-      mountPage({ messageDetails: messageDetailsReadReplies, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsReadReplies, toggle: true, selectedId: '1', loaded: true });
+
       expect(wrapper.find('#initialSentMessage0').exists()).toBe(true);
       expect(wrapper.find('#readMessageReplyPanel0').exists()).toBe(true);
       expect(wrapper.find('#readMessageReplyPanel1').exists()).toBe(true);
@@ -232,7 +297,8 @@ describe('patient messaging messages', () => {
     });
 
     it('will show one read one unread replies', () => {
-      mountPage({ messageDetails: messageDetailsMixedReadReplies, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsMixedReadReplies, toggle: true, selectedId: '1', loaded: true });
+
       expect(wrapper.find('#initialSentMessage0').exists()).toBe(true);
       expect(wrapper.find('#readMessageReplyPanel0').exists()).toBe(true);
       expect(wrapper.find('#readMessageReplyPanel1').exists()).toBe(false);
@@ -241,12 +307,14 @@ describe('patient messaging messages', () => {
     });
 
     it('will show initial as received if from supplier', () => {
-      mountPage({ messageDetails: messageDetailsInitialFromSupplier, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsInitialFromSupplier, toggle: true, selectedId: '1', loaded: true });
+
       expect(wrapper.find('#initialMessageReplyPanel0').exists()).toBe(true);
     });
 
     it('will show correct message panels if one reply is from the patient', () => {
-      mountPage({ messageDetails: messageDetailsInitialFromSupplierWithPatientReply, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsInitialFromSupplierWithPatientReply, toggle: true, selectedId: '1', loaded: true });
+
       expect(wrapper.find('#initialMessageReplyPanel0').exists()).toBe(true);
       expect(wrapper.find('#readMessageReplyPanel0').exists()).toBe(true);
       expect(wrapper.find('#readMessageReplyPanel1').exists()).toBe(false);

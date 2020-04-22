@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging;
+using MessageDetails = NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging.MessageDetails;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMessaging
 {
@@ -26,7 +27,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
         private Mock<ITppClientRequest<TppUserSession, MessagesViewReply>> _messagesViewPost;
         private Mock<ITppPatientMessagesMapper> _mockMessagesMapper;
 
-        private PatientPracticeMessagingService _systemUnderTest;
+        private TppPatientMessagesService _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
@@ -36,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
             _messagesViewPost = _fixture.Freeze<Mock<ITppClientRequest<TppUserSession, MessagesViewReply>>>();
             _mockMessagesMapper = _fixture.Freeze<Mock<ITppPatientMessagesMapper>>();
 
-            _systemUnderTest = _fixture.Create<PatientPracticeMessagingService>();
+            _systemUnderTest = _fixture.Create<TppPatientMessagesService>();
         }
 
         [TestMethod]
@@ -52,7 +53,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
                 OdsCode = "1234"
             };
 
-            var message = new Message
+            var message = new MessageDetails
             {
                 MessageId = "1",
                 Sender = "Test Sender",
@@ -63,7 +64,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
 
             var expectedMessageViewReply = new MessagesViewReply
             {
-                Messages = new List<Message> { message }
+                Messages = new List<MessageDetails> { message }
             };
 
             _messagesViewPost

@@ -543,19 +543,21 @@ components:
                         description: reference to the questionnaire.
     serviceDefinitionList:
       type: array
-      properties:
-        category:
-          type: string
-          description: catageory of the service definitions
-        items:
-          type: array
-          description: Array of questions answers.
+      items:
+        type: object
+        properties:
+          category:
+            type: string
+            description: category of the service definitions
           items:
-            type: object
-            properties:
-              id:
-                type: string
-                description: service definition id
-              title:
-                type: string
-                description: title of the service definition
+            type: array
+            description: Array of questions answers.
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: service definition id
+                title:
+                  type: string
+                  description: title of the service definition

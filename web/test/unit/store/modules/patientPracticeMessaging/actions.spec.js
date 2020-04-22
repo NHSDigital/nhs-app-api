@@ -12,18 +12,18 @@ describe('patient practice messaging store actions', () => {
   const mockDelete = { isDeleted: true };
   let commit;
   let dispatch;
-  const id = 1;
+  const id = '1';
   const recipient = 'test';
 
   const state = {
-    selectedMessageId: 1,
+    selectedMessageId: '1',
   };
 
   const store = () => ({
     app: { $http: { getV1PatientMessages: jest.fn().mockResolvedValue(mockMessages),
       getV1PatientMessagesById: jest.fn()
         .mockImplementation(() => Promise.resolve(getMessageResponse)),
-      postV1PatientMessagesUpdateReadStatus: jest.fn()
+      putV1PatientMessagesUpdateReadStatus: jest.fn()
         .mockImplementation(() => Promise.resolve(mockUpdateStatus)),
       deleteV1PatientMessagesById: jest.fn()
         .mockImplementation(() => Promise.resolve(mockDelete)) } },
@@ -95,7 +95,7 @@ describe('patient practice messaging store actions', () => {
     });
 
     it('will commit endpoint response to `SET_SELECTED_MESSAGE_ID`', () => {
-      expect(commit).toHaveBeenCalledWith('SET_SELECTED_MESSAGE_ID', 1);
+      expect(commit).toHaveBeenCalledWith('SET_SELECTED_MESSAGE_ID', '1');
     });
   });
 
@@ -124,24 +124,33 @@ describe('patient practice messaging store actions', () => {
       await actions.clearErrorsAndLoadDetails.call(store(), { state });
     });
 
-    it('will dispath to load message', () => {
+    it('will dispatch to load message', () => {
       expect(dispatch).toHaveBeenCalledWith('patientPracticeMessaging/loadMessage', { id, clearApiError: true });
     });
   });
 
   describe('updateReadStatusAsRead', () => {
+    let currentStore;
+
     beforeEach(async () => {
-      await actions.updateReadStatusAsRead.call(store(), { commit, state });
+      currentStore = store();
+
+      await actions.updateReadStatusAsRead.call(currentStore, { commit, state });
     });
 
-    it('will dispatch to load message', () => {
-      expect(commit).toHaveBeenCalledWith('SET_STATUS_STATE', 'Updated');
+    it('will call API to mark message as read', () => {
+      expect(currentStore.app.$http.putV1PatientMessagesUpdateReadStatus).toHaveBeenCalledWith({
+        updateMessageReadStatusRequestBody: {
+          messageId: '1',
+          messageReadState: 'Read',
+        },
+      });
     });
   });
 
   describe('deleteMessage', () => {
     beforeEach(async () => {
-      await actions.deleteMessage.call(store(), { commit }, 1);
+      await actions.deleteMessage.call(store(), { commit }, '1');
     });
 
     it('will dispatch to set deleted', () => {
@@ -151,7 +160,7 @@ describe('patient practice messaging store actions', () => {
 
   describe('clearSelectedRetainingId', () => {
     beforeEach(async () => {
-      await actions.clearSelectedRetainingId.call(store(), { commit }, 1);
+      await actions.clearSelectedRetainingId.call(store(), { commit }, '1');
     });
 
     it('will dispatch to clear but retain id', () => {
@@ -161,11 +170,11 @@ describe('patient practice messaging store actions', () => {
 
   describe('retryMessageDelete', () => {
     beforeEach(async () => {
-      await actions.retryMessageDelete.call(store(), { commit, state }, 1);
+      await actions.retryMessageDelete.call(store(), { commit, state }, '1');
     });
 
     it('will dispatch to retry to delete message', () => {
-      expect(dispatch).toHaveBeenCalledWith('patientPracticeMessaging/deleteMessage', 1);
+      expect(dispatch).toHaveBeenCalledWith('patientPracticeMessaging/deleteMessage', '1');
     });
   });
 });

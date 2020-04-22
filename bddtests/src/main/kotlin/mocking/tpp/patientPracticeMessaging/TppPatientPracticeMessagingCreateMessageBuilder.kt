@@ -1,4 +1,4 @@
-package mocking.tpp.patientPracticeMessaging
+package mocking.tpp.patientpracticemessaging
 
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
@@ -10,7 +10,6 @@ import worker.models.patientPracticeMessaging.CreateMessageRequest
 import java.io.StringWriter
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
-
 
 class TppPatientPracticeMessagingCreateMessageBuilder(tppUserSession: TppUserSession,
                                                       createMessageRequest: CreateMessageRequest) :

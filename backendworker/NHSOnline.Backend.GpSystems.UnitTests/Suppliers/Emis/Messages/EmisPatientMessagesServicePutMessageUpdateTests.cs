@@ -23,7 +23,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
         private IFixture _fixture;
 
         private Mock<IEmisClient> _mockClient;
-        private Mock<IEmisPatientMessageUpdateMapper> _mockMessagePutMapper;
 
         private EmisUserSession _userSession;
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
@@ -36,8 +35,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _mockClient = _fixture.Freeze<Mock<IEmisClient>>();
-            _mockMessagePutMapper = _fixture.Freeze<Mock<IEmisPatientMessageUpdateMapper>>();
-
             _userSession = _fixture.Create<EmisUserSession>();
 
             _systemUnderTest = _fixture.Create<EmisPatientMessagesService>();
@@ -60,7 +57,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             var requestBody = new UpdateMessageReadStatusRequestBody()
             {
-                MessageId = 1,
+                MessageId = "1",
                 MessageReadState = "Read"
             };
 
@@ -71,20 +68,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
                     Body = messageUpdateResponse
                 }))
                 .Verifiable();
-            _mockMessagePutMapper
-                .Setup(e => e.Map(It.Is<MessageUpdateResponse>(m => m.Equals(messageUpdateResponse))))
-                .Returns(putPatientMessageUpdateStatusResponse)
-                .Verifiable();
 
             // Act
             var result = await _systemUnderTest.UpdateMessageMessageReadStatus( _userSession, requestBody);
 
             // Assert
             _mockClient.Verify();
-            _mockMessagePutMapper.Verify();
 
-            result.Should().BeAssignableTo<PutPatientMessageReadStatusResult.Success>()
-                .Subject.Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PutPatientMessageReadStatusResult.Success>();
         }
 
         [TestMethod]
@@ -95,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             var requestBody = new UpdateMessageReadStatusRequestBody()
             {
-                MessageId = 1,
+                MessageId = "1",
                 MessageReadState = "Read"
             };
 
@@ -127,7 +118,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             var requestBody = new UpdateMessageReadStatusRequestBody()
             {
-                MessageId = 1,
+                MessageId = "1",
                 MessageReadState = "Read"
             };
 
@@ -147,7 +138,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
 
             var requestBody = new UpdateMessageReadStatusRequestBody()
             {
-                MessageId = 1,
+                MessageId = "1",
                 MessageReadState = "Read"
             };
 
@@ -167,6 +158,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
             _mockClient.Verify();
 
             result.Should().BeAssignableTo<PutPatientMessageReadStatusResult.Forbidden>();
+        }
+
+        [TestMethod]
+        [DataRow("-1", DisplayName = "negative")]
+        [DataRow("1.01", DisplayName = "double")]
+        [DataRow(null, DisplayName = "null")]
+        [DataRow("", DisplayName = "empty")]
+        [DataRow("\t\r  \r\n", DisplayName = "blank")]
+        public async Task PutPatientMessageUpdateReadStatus_WhenMessageIdIsNotAPositiveInteger_ThenArgumentExceptionIsThrown(string value)
+        {
+            var request = new UpdateMessageReadStatusRequestBody()
+            {
+                MessageId = value,
+                MessageReadState = "Read"
+            };
+
+            await _systemUnderTest.Awaiting(s => s.UpdateMessageMessageReadStatus(_userSession, request))
+                .Should()
+                .ThrowAsync<ArgumentException>();
         }
 
         private Expression<Func<IEmisClient, Task<EmisClient.EmisApiObjectResponse<MessagesGetResponse>>>>

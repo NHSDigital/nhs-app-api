@@ -14,7 +14,7 @@ using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support;
 using RichardSzalay.MockHttp;
 
-namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
 {
     [TestClass]
     public sealed class TppClientLinkAccountPostTests : IDisposable
@@ -59,14 +59,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             {
                 { TppClientTestsContext.ResponseSuidHeader, TppClientTestsContext.Suid }
             };
-            
+
             var responseContent = new StringContent(expectedLinkAccountResponse.SerializeXml());
-            
+
             MockHttpHandler
                 .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
                 .WithHeaders(requestHeaders)
                 .WithContent(linkRequestModel.SerializeXml())
-                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);    
+                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
 
             // Act
             var response = await SystemUnderTest.Post(linkRequestModel);
@@ -79,10 +79,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
 
             Context.VerifyLogging(linkRequestModel);
         }
-        
+
         [TestMethod]
         public async Task LinkAccountPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
-        {   
+        {
             // Arrange
             var linkAccountRequestModel = new LinkAccount
             {
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             {
                 { TppClientTestsContext.RequestTypeHeader, linkAccountRequestModel.RequestType }
             };
-            
+
             MockHttpHandler
                 .When(HttpMethod.Post, TppClientTestsContext.ApiUrl.ToString())
                 .WithHeaders(tppRequestHeaders)

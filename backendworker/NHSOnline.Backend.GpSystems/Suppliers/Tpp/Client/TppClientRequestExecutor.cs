@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
 {
-    internal sealed class TppClientRequestExecutor
+    internal sealed class TppClientRequestExecutor : ITppClientRequestExecutor
     {
         private readonly ILogger<TppClientRequestExecutor> _logger;
         private readonly Func<TppClientRequestBuilder> _requestBuilderFactory;
@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client
         }
 
         public async Task<TppApiObjectResponse<TReply>> Post<TReply>(
-            Action<TppClientRequestBuilder> buildRequest)
+            Action<ITppClientRequestBuilder> buildRequest)
         {
             using (var requestBuilder = _requestBuilderFactory())
             {

@@ -10,7 +10,6 @@ import {
   SET_DETAILS,
   SET_SELECTED_MESSAGE_ID,
   SET_SELECTED_MESSAGE_RECIPIENT,
-  SET_STATUS_STATE,
   SET_URGENCY_CHOICE,
   MESSAGE_SENT,
   SET_DELETED,
@@ -26,10 +25,13 @@ export default {
   async loadMessages({ commit }, clearApiError) {
     if (clearApiError) {
       this.dispatch('errors/clearAllApiErrors');
+
       commit(LOADED_MESSAGES, false);
     }
+
     try {
       const response = await this.app.$http.getV1PatientMessages();
+
       commit(SET_SUMMARIES, get('messageSummaries', response));
       commit(LOADED_MESSAGES, true);
     } catch {
@@ -42,11 +44,15 @@ export default {
   async loadRecipients({ commit }, clearApiError) {
     if (clearApiError) {
       this.dispatch('errors/clearAllApiErrors');
+
       commit(LOADED_RECIPIENTS, false);
     }
+
     commit(CLEAR);
+
     try {
       const response = await this.app.$http.getV1PatientMessagesRecipients();
+
       commit(SET_RECIPIENTS, get('messageRecipients', response));
       commit(LOADED_RECIPIENTS, true);
     } catch {
@@ -56,10 +62,13 @@ export default {
   async loadMessage({ commit }, { id, clearApiError }) {
     if (clearApiError) {
       this.dispatch('errors/clearAllApiErrors');
+
       commit(LOADED_MESSAGE, false);
     }
+
     try {
       const response = await this.app.$http.getV1PatientMessagesById({ id });
+
       commit(SET_DETAILS, response);
       commit(LOADED_MESSAGE, true);
     } catch {
@@ -72,16 +81,16 @@ export default {
   retryMessageDelete({ state }) {
     this.dispatch('patientPracticeMessaging/deleteMessage', state.selectedMessageId);
   },
-  async updateReadStatusAsRead({ commit, state }) {
+  async updateReadStatusAsRead({ state }) {
     const request = {
       updateMessageReadStatusRequestBody: {
         messageId: state.selectedMessageId,
         messageReadState: 'Read',
       },
     };
+
     try {
-      const response = await this.app.$http.postV1PatientMessagesUpdateReadStatus(request);
-      commit(SET_STATUS_STATE, response.messageReadStateUpdateStatus);
+      await this.app.$http.putV1PatientMessagesUpdateReadStatus(request);
     } catch {
       // Nothing to do. A server error / messages error is displayed
     }
@@ -92,9 +101,13 @@ export default {
       subject: message.subjectText,
       recipientIdentifier: state.selectedMessageRecipient.id,
     };
+
     try {
-      const response = await this.app.$http.postV1PatientMessages({ createMessageRequest,
-        returnResponse: true });
+      const response = await this.app.$http.postV1PatientMessages({
+        createMessageRequest,
+        returnResponse: true,
+      });
+
       if (response.status === 204) {
         commit(MESSAGE_SENT, true);
       }
@@ -105,6 +118,7 @@ export default {
   async deleteMessage({ commit }, id) {
     try {
       await this.app.$http.deleteV1PatientMessagesById({ id });
+
       commit(SET_DELETED, true);
     } catch {
       commit(SET_DELETED, false);

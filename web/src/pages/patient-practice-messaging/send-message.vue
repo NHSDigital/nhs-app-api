@@ -171,18 +171,19 @@ export default {
       }
       const { messageText, subjectText } = this;
 
-      this.$store.dispatch('patientPracticeMessaging/setSelectedMessageID', 0);
+      this.$store.dispatch('patientPracticeMessaging/setSelectedMessageID', '0');
       await this.$store.dispatch('patientPracticeMessaging/sendMessage', { messageText, subjectText });
 
       if (this.$store.state.patientPracticeMessaging.messageSent) {
-        this.$store.dispatch('patientPracticeMessaging/setMessageDetails',
-          { messageDetails: {
+        this.$store.dispatch('patientPracticeMessaging/setMessageDetails', {
+          messageDetails: {
+            messageId: '0',
             subject: subjectText,
             content: messageText,
             sentDateTime: new Date(),
             outboundMessage: true,
-            messageReplies: [] },
-          });
+            replies: [],
+          } });
         redirectTo(this, PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path);
       }
     },

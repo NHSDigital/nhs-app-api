@@ -18,7 +18,8 @@ open class WiremockHelper(val configuration: MockingConfiguration) {
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .and()
                 .body(gson.toJson(mapping))
-                .expect().statusCode(HttpStatus.SC_CREATED)
+                .expect()
+                .statusCode(HttpStatus.SC_CREATED)
                 .`when`()
                 .post("${configuration.wiremockAdminUrl}/mappings")
     }
@@ -26,6 +27,14 @@ open class WiremockHelper(val configuration: MockingConfiguration) {
     fun clearWiremock() {
         deleteWiremockDetails(endpoint = "mappings")
         deleteWiremockDetails(endpoint = "requests")
+    }
+
+    protected fun getRequests(): Response {
+        return SerenityRest
+            .expect()
+            .statusCode(HttpStatus.SC_OK)
+            .`when`()
+            .get("${configuration.wiremockAdminUrl}/requests")
     }
 
     private fun deleteWiremockDetails(endpoint: String) {

@@ -30,7 +30,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
 
         private TppRequestParameters _tppRequestParameters;
 
-
         [TestInitialize]
         public void TestInitialize()
         {

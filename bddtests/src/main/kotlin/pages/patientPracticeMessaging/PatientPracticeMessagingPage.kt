@@ -37,38 +37,35 @@ class PatientPracticeMessagingPage: HybridPageObject() {
     }
 
     fun assertCorrectMessagesDisplayed(expectedMessages: List<ExpectedMessage>,
-                                       hasSubject: Boolean = true, hasUnreadCount: Boolean = false, fromGP: Boolean =
-                                               false) {
+                                       hasSubject: Boolean = true,
+                                       hasUnreadCount: Boolean = false,
+                                       fromGP: Boolean = false) {
+        expectedMessages.filter { m -> m.conversationId === m.id }
+            .forEach { message ->
+                baseMessagePath = "//a[@id='${message.id}']"
 
-        for (expectedMessage in expectedMessages) {
+                if (!fromGP) {
+                    assertEquals(getMessageTitle().text, message.recipient)
+                } else {
+                    assertEquals(getMessageTitle().text, message.sender)
+                }
 
-            if (expectedMessage.conversationId !== expectedMessage.id) {
-                continue;
+                assertEquals(getMessageDate().text, message.lastMessageDateTime)
+
+                if (hasSubject) {
+                    assertEquals(getMessageSubject().text, message.subject)
+                }
+
+                if (hasUnreadCount) {
+                    assertEquals(
+                        getUnreadIndicator().textValue,
+                        message.unreadCount.toString())
+                }
+
+                if (message.hasUnreadReplies!!) {
+                    assert(getUnreadIndicator().isVisible)
+                }
             }
-
-            baseMessagePath = "//a[@id='${expectedMessage.id}']"
-
-            if (!fromGP) {
-                assertEquals(getMessageTitle().text, expectedMessage.recipient)
-            } else {
-                assertEquals(getMessageTitle().text, expectedMessage.sender)
-            }
-            assertEquals(getMessageDate().text, expectedMessage.lastMessageDateTime)
-
-            if (hasSubject) {
-                assertEquals(getMessageSubject().text, expectedMessage.subject)
-            }
-
-            if (hasUnreadCount) {
-                assertEquals(getUnreadIndicator()
-                        .textValue,
-                        expectedMessage.unreadCount.toString())
-            }
-
-            if (expectedMessage.hasUnreadReplies!!) {
-                assert(getUnreadIndicator().isVisible)
-            }
-        }
     }
 
     fun clickFirstMessage() {

@@ -13,6 +13,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         public TppRequestParameters()
         {
         }
+
         public string PatientId { get; set; }
         public string OnlineUserId { get; set; }
         public string OdsCode { get; set; }

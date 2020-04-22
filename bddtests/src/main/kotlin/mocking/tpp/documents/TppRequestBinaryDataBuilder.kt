@@ -1,5 +1,6 @@
 package mocking.tpp.documents
 
+import mocking.defaults.TppMockDefaults.Companion.DEFAULT_TPP_SESSION_ID
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.Error
@@ -29,7 +30,7 @@ class TppRequestBinaryDataBuilder(tppUserSession: TppUserSession) : TppMappingBu
 
     fun respondWithSuccess(requestBinaryDataReply: RequestBinaryDataReply): Mapping {
         val suidHeader = "suid"
-        val suidValue = "alsdkfjLIKASDLIHUAJakjshdLIASKHDJALsdiojALSasIADJAISDioasjd"
+        val suidValue = DEFAULT_TPP_SESSION_ID
 
         val jaxbContext = JAXBContext.newInstance(RequestBinaryDataReply::class.java)
         val marshaller = jaxbContext.createMarshaller()

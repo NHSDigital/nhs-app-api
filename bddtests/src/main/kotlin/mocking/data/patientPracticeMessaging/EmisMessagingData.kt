@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 object EmisMessagingData {
+    private const val MESSAGE_ID_OFFSET = 10
 
     private val RECIPIENT_RESPONSE_1 = RecipientResponse("Dr. Dolittle", "1234-12345678-1234-1234-1")
     private val RECIPIENT_RESPONSE_2 = RecipientResponse("Dr. NHS Online", "1234-12345678-1234-1234-2")
@@ -51,10 +52,12 @@ object EmisMessagingData {
         )
 
         inboxDates.forEachIndexed(fun (index, dateObject) {
+            val messageId = "${index + MESSAGE_ID_OFFSET}"
+
             expectedDates.add(DateHelpers().getExpectedFormattedMessageDate(dateObject.date, dateObject.format))
             messages.add(PatientMessageSummary(
-                index.toString(),
-                "GP Practice information $index",
+                messageId,
+                "GP Practice information $messageId",
                 dateObject.date.format(DateTimeFormatter.ofPattern(DateTimeFormats.emisMessageDateTimeFormat)),
                 mutableListOf(RECIPIENT_1),
                 replyCount,
@@ -62,8 +65,7 @@ object EmisMessagingData {
             ))
         })
 
-        PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID.set(
-                "0")
+        PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID.set("$MESSAGE_ID_OFFSET")
 
         PatientPracticeMessagingSerenityHelpers.EXPECTED_INBOX_MESSAGE_DATES.setIfNotAlreadySet(expectedDates)
         return MessagesResponseModel(messages)

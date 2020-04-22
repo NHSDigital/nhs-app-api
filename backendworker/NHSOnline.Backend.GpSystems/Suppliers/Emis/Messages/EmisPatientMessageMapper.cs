@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages.Models;
@@ -23,10 +24,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                 return new GetPatientMessageResponse
                 {
                     MessageDetails = {
-                        MessageId = response.Message.MessageId,
+                        MessageId = response.Message.MessageId?.ToString(CultureInfo.InvariantCulture),
                         Subject = response.Message.Subject,
                         Recipient = GetRecipientFromMessageMetaData(response),
-                        MessageReplies = RetrieveReplies(response.Message.MessageReplies),
+                        Replies = RetrieveReplies(response.Message.MessageReplies),
                         Content = response.Message.Content,
                         SentDateTime = response.Message.SentDateTime,
                         OutboundMessage = true

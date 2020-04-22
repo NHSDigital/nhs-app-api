@@ -2996,16 +2996,32 @@
                           sender: 
                             type: "string"
                             description: "This field contains the string for the sender of the message"
-                          unreadCount: 
-                            type: "integer"
-                            description: "Count which will represent the number of unread messages in the conversation"
+                          isUnread: 
+                            type: "boolean"
+                            description: "Is the initial message in the conversation unread?"
+                          unreadReplyInfo: 
+                            description: "Information on unread replies for this conversation"
+                            oneOf: 
+                              - 
+                                type: "object"
+                                properties: 
+                                  present: 
+                                    type: "boolean"
+                                    nullable: true
+                                    description: "Indicates whether there are messages the patient has not read"
+                              - 
+                                type: "object"
+                                properties: 
+                                  present: 
+                                    type: "boolean"
+                                    nullable: true
+                                    description: "Indicates whether there are messages the patient has not read"
+                                  count: 
+                                    type: "integer"
+                                    description: "The number of unread messages in this conversation"
                           attachmentId: 
                             type: "string"
                             description: "Identifier for the attachment which has been sent in a message, which can be used to obtain the file."
-                          hasUnreadReplies: 
-                            type: "boolean"
-                            nullable: true
-                            description: "Indicates whether there are messages the patient has not read"
                           replies: 
                             type: "array"
                             description: "array of message replies"
@@ -3232,9 +3248,9 @@
                         type: "object"
                         properties: 
                           messageId: 
-                            type: "integer"
+                            type: "string"
                             nullable: true
-                            description: "A unique indentifier for this conversation"
+                            description: "A unique identifier for this conversation"
                           subject: 
                             type: "string"
                             description: "A message summary provided by the patient when initiating the conversation"
@@ -3244,7 +3260,7 @@
                           recipient: 
                             type: "string"
                             description: "recipient of the message sent by the user"
-                          messageReplies: 
+                          replies: 
                             type: "array"
                             description: "array of message replies"
                             items: 
@@ -3421,7 +3437,8 @@
                       description: "Six character service desk reference code."
     /v1/patient/messages/recipients: 
       get: 
-        tags: "-patientMessages"
+        tags: 
+          - "patientMessages"
         summary: "Get a list of available recipients to which the user can send a message"
         description: "Get a list of available recipients to which the user can send a message"
         responses: 
@@ -3513,7 +3530,7 @@
                       type: "string"
                       description: "Six character service desk reference code."
     /v1/patient/messages/updateReadStatus: 
-      post: 
+      put: 
         tags: 
           - "patientMessages"
         summary: "Update the read status of a message thread"
@@ -3526,7 +3543,7 @@
                 type: "object"
                 properties: 
                   messageId: 
-                    type: "integer"
+                    type: "string"
                     description: "id of the message to update the status"
                   messageReadState: 
                     type: "string"
@@ -3534,16 +3551,8 @@
           description: "Details of the message and the new read status."
           required: true
         responses: 
-          200: 
+          204: 
             description: "Successfully updated the read status of the message"
-            content: 
-              application/json: 
-                schema: 
-                  type: "object"
-                  properties: 
-                    MessageReadStateUpdateStatus: 
-                      type: "string"
-                      description: "read status of the message"
           400: 
             description: "Upstream system returned BadRequest status."
             content: 
@@ -3708,7 +3717,7 @@
             description: "Successfully retrieved user session"
             content: 
               application/json: 
-                scheme: 
+                schema: 
                   type: "object"
                   properties: 
                     name: 
@@ -6172,22 +6181,24 @@
               application/json: 
                 schema: 
                   type: "array"
-                  properties: 
-                    category: 
-                      type: "string"
-                      description: "catageory of the service definitions"
-                    items: 
-                      type: "array"
-                      description: "Array of questions answers."
+                  items: 
+                    type: "object"
+                    properties: 
+                      category: 
+                        type: "string"
+                        description: "category of the service definitions"
                       items: 
-                        type: "object"
-                        properties: 
-                          id: 
-                            type: "string"
-                            description: "service definition id"
-                          title: 
-                            type: "string"
-                            description: "title of the service definition"
+                        type: "array"
+                        description: "Array of questions answers."
+                        items: 
+                          type: "object"
+                          properties: 
+                            id: 
+                              type: "string"
+                              description: "service definition id"
+                            title: 
+                              type: "string"
+                              description: "title of the service definition"
           404: 
             description: "Service definition list could not be found for the provider specified."
           500: 

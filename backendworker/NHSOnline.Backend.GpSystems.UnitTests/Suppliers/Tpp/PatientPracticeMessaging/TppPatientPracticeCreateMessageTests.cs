@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
         private Mock<ITppClientRequest<(TppUserSession tppUserSession, string recipientIdentifier,
             string messageText), MessageCreateReply>> _messageCreatePost;
 
-        private PatientPracticeMessagingService _systemUnderTest;
+        private TppPatientMessagesService _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientPracticeMes
                 _fixture
                     .Freeze<Mock<ITppClientRequest<(TppUserSession tppUserSession, string recipientIdentifier, string
                         messageText), MessageCreateReply>>>();
-            _systemUnderTest = _fixture.Create<PatientPracticeMessagingService>();
+            _systemUnderTest = _fixture.Create<TppPatientMessagesService>();
         }
 
         [TestMethod]

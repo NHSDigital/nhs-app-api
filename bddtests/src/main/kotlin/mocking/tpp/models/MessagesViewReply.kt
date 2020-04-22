@@ -19,9 +19,9 @@ data class MessagesViewReply(
 @XmlRootElement(name = "Message")
 @XmlAccessorType(XmlAccessType.FIELD)
 data class Message(
-        @XmlAttribute var messageId: String = "default patientId",
-        @XmlAttribute var conversationId: String = "default onlineUserId",
-        @XmlAttribute var messageText: String = "default uuid",
+        @XmlAttribute var messageId: String = "default messageId",
+        @XmlAttribute var conversationId: String = "default conversationId",
+        @XmlAttribute var messageText: String = "default messageText",
         @XmlAttribute var read: String? = null,
         @XmlAttribute var deleted: String? = null,
         @XmlAttribute var incoming: String = "y",

@@ -29,7 +29,7 @@ import {
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
 } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, isBlankString } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
@@ -52,7 +52,7 @@ export default {
     },
   },
   fetch({ store, redirect }) {
-    if (store.state.patientPracticeMessaging.selectedMessageId === undefined ||
+    if (isBlankString(store.state.patientPracticeMessaging.selectedMessageId) ||
         store.app.router.currentRoute.path !== PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path) {
       redirect(PATIENT_PRACTICE_MESSAGING.path);
     }
@@ -61,6 +61,7 @@ export default {
     async deleteButtonClicked() {
       await this.$store.dispatch('patientPracticeMessaging/deleteMessage',
         this.$store.state.patientPracticeMessaging.selectedMessageId);
+
       if (this.$store.state.patientPracticeMessaging.messageDeleted) {
         redirectTo(this, PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS.path);
       }

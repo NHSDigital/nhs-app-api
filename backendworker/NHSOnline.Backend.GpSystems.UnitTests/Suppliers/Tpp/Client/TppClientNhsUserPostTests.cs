@@ -13,7 +13,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support;
 using RichardSzalay.MockHttp;
 
-namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
 {
     [TestClass]
     public sealed class TppClientNhsUserPostTests : IDisposable

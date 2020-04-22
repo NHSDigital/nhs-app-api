@@ -15,7 +15,7 @@ paths:
           description: Successfully retrieved user session
           content:
             application/json:
-              scheme:
+              schema:
                 $ref: "#/components/schemas/UserSessionResponse"
         "401":
           description: User session has expired.

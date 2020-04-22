@@ -8,12 +8,13 @@ import mocking.data.patientPracticeMessaging.DateHelpers
 import mocking.data.patientPracticeMessaging.MessageDateFormat
 import mocking.data.patientPracticeMessaging.TppMessagingData
 import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
-import mocking.tpp.models.Error
-import mocking.tpp.models.Message
-import mocking.tpp.models.MessagesViewReply
 import mocking.patientPracticeMessaging.DateAndFormat
 import mocking.patientPracticeMessaging.Recipient
+import mocking.tpp.models.Error
+import mocking.tpp.models.Message
 import mocking.tpp.models.MessageCreateReply
+import mocking.tpp.models.MessageMarkAsReadReply
+import mocking.tpp.models.MessagesViewReply
 import models.ExpectedMessage
 import models.Patient
 import utils.SerenityHelpers
@@ -47,7 +48,6 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
 
     override fun enabledWithPatientPracticeMessaging(patient: Patient, hasUnread: Boolean,
                                                      hasAttachment: Boolean, unitRecipient: Boolean) {
-
         val messagesFromData = TppMessagingData.getDefaultTppMessages(hasUnread, hasAttachment)
 
         mockingClient.forTpp {
@@ -60,6 +60,11 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
                     .respondWithSuccess(TppMessagingData.getDefaultTppRecipients())
         }
 
+        mockingClient.forTpp {
+            patientPracticeMessaging.markMessagesAsReadRequest(patient.tppUserSession!!)
+                .respondWithSuccess(MessageMarkAsReadReply())
+        }
+
         if (hasAttachment) {
             mockingClient.forTpp {
                 patientPracticeMessaging
@@ -68,17 +73,13 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
             }
         }
 
-        val expectedMessages = getExpectedMessages(messagesFromData.Message.toList(),
-                                                           hasUnread)
+        val expectedMessages = getExpectedMessages(messagesFromData.Message, hasUnread)
 
-        val firstMessage = messagesFromData.Message.toList()[1]
-        val replyList = mutableListOf<Message>()
+        val firstMessage = messagesFromData.Message.first()
+        val replyList = messagesFromData.Message.filter{
+            m -> m.conversationId == firstMessage.conversationId
+        }
 
-        messagesFromData.Message.toList().forEachIndexed(fun (_, messageObject) {
-            if (messageObject.conversationId == firstMessage.conversationId) {
-                replyList.add(messageObject)
-            }
-        })
         val messageDetails = TppMessagingData.getDefaultSelected(
                 firstMessage,
                 replyList
@@ -112,23 +113,20 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
                     .viewMessagesRequest(patient.tppUserSession!!)
                     .respondWithSuccess(messagesFromData)
         }
-        val expectedMessages = getExpectedMessages(
-                messagesFromData
-                .Message.toList(),
+
+        mockingClient.forTpp {
+            patientPracticeMessaging.markMessagesAsReadRequest(patient.tppUserSession!!)
+                .respondWithSuccess(MessageMarkAsReadReply())
+        }
+
+        val expectedMessages = getExpectedMessages(messagesFromData.Message,
                 hasUnread)
 
-        val firstMessage = messagesFromData
-                .Message
-                .toList()[0]
-        val replyList = mutableListOf<Message>()
+        val firstMessage = messagesFromData.Message.first()
+        val replyList = messagesFromData.Message.filter{
+            m -> m.conversationId != firstMessage.conversationId
+        }
 
-        messagesFromData
-                .Message.toList()
-                .forEachIndexed(fun (_, messageObject) {
-            if (messageObject.conversationId != firstMessage.conversationId) {
-                replyList.add(messageObject)
-            }
-        })
         val messageDetails = TppMessagingData.getDefaultSelected(
                 firstMessage,
                 replyList
@@ -143,41 +141,42 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
     }
 
     override fun unknownErrorWithPatientPracticeMessaging(patient: Patient) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun patientHasNoMessages(patient: Patient) {
         mockingClient.forTpp{
             patientPracticeMessaging.viewMessagesRequest(patient.tppUserSession!!)
-                    .respondWithSuccess(
-                            MessagesViewReply( Message = mutableListOf())
-                    )
+                .respondWithSuccess(
+                    MessagesViewReply( Message = mutableListOf())
+                )
         }
     }
 
-    private fun getExpectedMessages(messages: List<Message>, hasUnread: Boolean =
-                                            false):
-            List<ExpectedMessage> {
-        var unreadCount = 0
-        if (hasUnread) {
-            unreadCount = UNREAD_COUNT
-        }
-        val expectedInboxMessageDates = PatientPracticeMessagingSerenityHelpers
+    private fun getExpectedMessages(
+        messages: Iterable<Message>,
+        hasUnread: Boolean = false): List<ExpectedMessage> {
+        val unreadCount = if (hasUnread) UNREAD_COUNT else 0
+
+        val latestMessageDateTime = PatientPracticeMessagingSerenityHelpers
                 .EXPECTED_REPLY_MESSAGE_DATES
-                .getOrNull<List<DateAndFormat>>()!!.sortedByDescending { it.date }
-        return messages.mapIndexed(fun(_, message): ExpectedMessage {
-            return ExpectedMessage(
-                    message.messageId,
-                    message.conversationId,
-                    messageText = message.messageText,
-                    lastMessageDateTime = DateHelpers().getExpectedFormattedMessageDate(
-                            expectedInboxMessageDates[0].date, getInboxDateFormatFromReply(
-                            expectedInboxMessageDates[0].format)),
-                    sender = message.sender,
-                    recipient = message.recipient,
-                    hasUnreadReplies = hasUnread,
-                    unreadCount = unreadCount)
-        })
+                .getOrNull<List<DateAndFormat>>()!!
+                .sortedByDescending { it.date }
+                .first()
+
+        return messages.map { message ->
+            ExpectedMessage(
+                message.messageId,
+                message.conversationId,
+                messageText = message.messageText,
+                lastMessageDateTime = DateHelpers().getExpectedFormattedMessageDate(
+                    latestMessageDateTime.date, getInboxDateFormatFromReply(
+                    latestMessageDateTime.format)),
+                sender = message.sender,
+                recipient = message.recipient,
+                hasUnreadReplies = hasUnread,
+                unreadCount = unreadCount)
+        }
     }
 
     override fun forbiddenErrorWithPatientPracticeMessaging(patient: Patient) {
@@ -191,21 +190,21 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
 
 
     override fun errorWithPatientPracticeMessagingMessageDetails(patient: Patient) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun errorWithPatientPracticeMessagingConversationDelete(patient: Patient) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun patientSuccessfullySendsAMessage(patient: Patient,
                                                   createMessageRequest: CreateMessageRequest) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun errorSendingAMessage(patient: Patient,
                                       createMessageRequest: CreateMessageRequest) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented")
     }
 
     override fun noRecipients(patient: Patient) {
@@ -233,7 +232,6 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
                 format
             }
         }
-
     }
 
     private fun mockMessageCreate(unitRecipient: Boolean) {
@@ -252,5 +250,4 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
         PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE
                 .setIfNotAlreadySet(createMessageRequest)
     }
-
 }

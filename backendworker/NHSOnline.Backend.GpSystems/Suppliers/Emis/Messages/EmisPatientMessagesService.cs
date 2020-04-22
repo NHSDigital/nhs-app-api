@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -12,11 +13,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
 {
     public class EmisPatientMessagesService : IPatientMessagesService
     {
+        private const NumberStyles POSTIVE_INTEGER = NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite;
+
         private readonly ILogger<EmisPatientMessagesService> _logger;
         private readonly IEmisClient _emisClient;
         private readonly IEmisPatientMessagesMapper _messageListMapper;
         private readonly IEmisPatientMessageMapper _messageMapper;
-        private readonly IEmisPatientMessageUpdateMapper _messageUpdateMapper;
         private readonly IEmisPatientMessageSendMapper _messageSendWrapper;
         private readonly IEmisPatientMessageRecipientsMapper _messageRecipientsMapper;
 
@@ -25,7 +27,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             IEmisClient emisClient,
             IEmisPatientMessagesMapper messageListMapper,
             IEmisPatientMessageMapper messageMapper,
-            IEmisPatientMessageUpdateMapper messageUpdateMapper,
             IEmisPatientMessageSendMapper messageSendMapper,
             IEmisPatientMessageRecipientsMapper messageRecipientsMapper)
         {
@@ -33,7 +34,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             _emisClient = emisClient;
             _messageListMapper = messageListMapper;
             _messageMapper = messageMapper;
-            _messageUpdateMapper = messageUpdateMapper;
             _messageSendWrapper = messageSendMapper;
             _messageRecipientsMapper = messageRecipientsMapper;
         }
@@ -92,19 +92,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
 
         public async Task<PutPatientMessageReadStatusResult> UpdateMessageMessageReadStatus(GpUserSession gpUserSession, UpdateMessageReadStatusRequestBody updateRequest)
         {
+            if (updateRequest is null)
+            {
+                throw new ArgumentNullException(nameof(updateRequest));
+            }
+
             _logger.LogEnter();
+
+            var emisRequestParameters = new EmisRequestParameters((EmisUserSession) gpUserSession);
+            var putRequestBody = new UpdateMessageReadStatusRequest
+            {
+                MessageId = ParseMessageId(updateRequest),
+                MessageReadState = updateRequest.MessageReadState,
+                UserPatientLinkToken = emisRequestParameters.UserPatientLinkToken
+            };
 
             try
             {
-                var emisRequestParameters = new EmisRequestParameters((EmisUserSession) gpUserSession);
-
-                var putRequestBody = new UpdateMessageReadStatusRequest
-                {
-                    MessageId = updateRequest.MessageId,
-                    MessageReadState = updateRequest.MessageReadState,
-                    UserPatientLinkToken = emisRequestParameters.UserPatientLinkToken
-                };
-
                 var response = await _emisClient.PatientMessageUpdatePut(emisRequestParameters, putRequestBody);
 
                 return InterpretPatientMessagePutResponse(response);
@@ -246,9 +250,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
                     return new GetPatientMessageResult.BadGateway();
                 }
 
-                if (mapped.MessageDetails.MessageReplies != null)
+                if (mapped.MessageDetails.Replies != null)
                 {
-                    _logger.LogInformation($"Number of replies for message with id {mapped.MessageDetails.MessageId} is {mapped.MessageDetails.MessageReplies.Count}");
+                    _logger.LogInformation($"Number of replies for message with id {mapped.MessageDetails.MessageId} is {mapped.MessageDetails.Replies.Count}");
                 }
                 return new GetPatientMessageResult.Success(mapped);
             }
@@ -276,17 +280,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         {
             if (response.HasSuccessResponse)
             {
-                _logger.LogInformation("Mapping EMIS patient message update status");
-                var mapped = _messageUpdateMapper.Map(response.Body);
-
-                if (mapped != null)
-                {
-                    return new PutPatientMessageReadStatusResult.Success(mapped);
-                }
-
-                _logger.LogInformation("Mapping EMIS patient message update status returned null");
-                return new PutPatientMessageReadStatusResult.BadGateway();
-
+                return new PutPatientMessageReadStatusResult.Success();
             }
 
             if (response.HasForbiddenResponse())
@@ -304,6 +298,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
 
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
+
             return new PutPatientMessageReadStatusResult.BadGateway();
         }
 
@@ -373,7 +368,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
         {
             if (response.HasSuccessResponse)
             {
-
                 if (response.Body?.IsDeleted != null && !response.Body.IsDeleted.Value)
                 {
                     return new DeletePatientMessageResult.BadGateway();
@@ -398,6 +392,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Messages
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
             return new DeletePatientMessageResult.BadGateway();
+        }
+
+        private int ParseMessageId(UpdateMessageReadStatusRequestBody updateRequest)
+        {
+            var messageIdWasParsed = int.TryParse(
+                updateRequest.MessageId,
+                POSTIVE_INTEGER,
+                CultureInfo.InvariantCulture,
+                out var messageId);
+
+            if (!messageIdWasParsed)
+            {
+                throw new ArgumentException($"Field {nameof(updateRequest.MessageId)} in " +
+                                            $"parameter {nameof(updateRequest)} must be a valid positive integer");
+            }
+
+            return messageId;
         }
     }
 }
