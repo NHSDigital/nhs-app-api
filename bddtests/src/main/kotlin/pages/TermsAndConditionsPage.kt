@@ -32,6 +32,11 @@ class TermsAndConditionsPage : HybridPageObject() {
             text = "I understand and accept the terms of use and privacy policy."
     )
 
+    val acceptCookiesCheckBox = CheckBoxElement(
+            page = this,
+            text = "I accept the use of optional analytic cookies used to improve the performance of the NHS App."
+    )
+
     val continueButton = HybridPageElement(
             webDesktopLocator = "//button",
             androidLocator = null,

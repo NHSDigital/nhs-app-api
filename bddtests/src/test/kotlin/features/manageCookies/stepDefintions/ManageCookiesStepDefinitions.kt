@@ -6,7 +6,6 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import org.junit.Assert
 import org.openqa.selenium.Cookie
-import pages.HybridPageObject
 import pages.manageCookies.ManageCookiesPage
 import java.net.URI
 import java.net.URLDecoder
@@ -21,7 +20,6 @@ data class AnalyticCookieConsent(
 class ManageCookiesStepDefinitions {
 
     lateinit var manageCookies: ManageCookiesPage
-    lateinit var genericPage: HybridPageObject
 
     @Then("^the Cookies page is displayed$")
     fun theAccountPageIsDisplayed() {
@@ -44,8 +42,17 @@ class ManageCookiesStepDefinitions {
         manageCookies.cookieToggle.assertOn()
     }
 
-    @When("^I click the change consent toggle$")
-    fun iClickTheChangeConsentToggle() {
+    @When("^I change the cookie consent toggle to 'on'$")
+    fun iChangeTheCookieConsentToggleToOn() {
+        manageCookies.cookieToggle.assertIsVisible()
+        manageCookies.cookieToggle.assertOff()
+        manageCookies.cookieToggle.click()
+    }
+
+    @When("^I change the cookie consent toggle to 'off'$")
+    fun iChangeTheCookieConsentToggleToOff() {
+        manageCookies.cookieToggle.assertIsVisible()
+        manageCookies.cookieToggle.assertOn()
         manageCookies.cookieToggle.click()
     }
 
@@ -62,8 +69,13 @@ class ManageCookiesStepDefinitions {
         Assert.assertEquals(null, deletedCookie)
     }
 
-    @Then("^I can see the toggle button to change my current consent$")
-    fun iCanSeeToggleButton() {
+    @Then("^I can see the toggle button is set to 'on'$")
+    fun iCanSeeToggleButtonSetToOn() {
         manageCookies.cookieToggle.assertOn()
+    }
+
+    @Then("^I can see the toggle button is set to 'off'$")
+    fun iCanSeeToggleButtonSetToOff() {
+        manageCookies.cookieToggle.assertOff()
     }
 }

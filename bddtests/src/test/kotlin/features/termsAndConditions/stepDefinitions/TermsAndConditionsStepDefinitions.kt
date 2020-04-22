@@ -8,13 +8,13 @@ import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
+import models.IdentityProofingLevel
 import models.Patient
 import org.joda.time.DateTime
 import utils.SerenityHelpers
 import pages.TermsAndConditionsPage
 import pages.UpdatedTermsAndConditionsPage
 import pages.assertIsVisible
-import java.util.*
 
 class TermsAndConditionsStepDefinitions {
 
@@ -25,19 +25,31 @@ class TermsAndConditionsStepDefinitions {
 
     @Given("^I am an? (.*) patient who has not already accepted terms and conditions$")
     fun iHaveNotAcceptedTermsAndConditions(gpSystem: String) {
-        initialisePatientAndGpSystem(gpSystem)
+        initialisePatientAndGpSystem(Supplier.valueOf(gpSystem))
+        TermsAndConditionsJourneyFactory.noConsent()
+    }
+
+    @Given("^I am a patient with proof level 5 who has not already accepted terms and conditions$")
+    fun iAmAPatientWithProofLevel5WhoHasNotAlreadyAcceptedTermsAndConditions() {
+        initialisePatientAndGpSystem(Supplier.EMIS, IdentityProofingLevel.P5)
         TermsAndConditionsJourneyFactory.noConsent()
     }
 
     @Given("^I am an? (.*) patient who has already accepted terms and conditions$")
     fun iHaveAlreadyAcceptedTermsAndConditions(gpSystem: String) {
-        val patient = initialisePatientAndGpSystem(gpSystem)
+        val patient = initialisePatientAndGpSystem(Supplier.valueOf(gpSystem))
         TermsAndConditionsJourneyFactory.consent(patient)
     }
 
     @Given("^I am an? (.*) patient who has accepted terms and conditions but updated terms and conditions exist$")
     fun iHavePreviouslyAcceptedTermsAndConditionsAndUpdatedAcceptanceIsRequired(gpSystem: String) {
-        val patient = initialisePatientAndGpSystem(gpSystem)
+        val patient = initialisePatientAndGpSystem(Supplier.valueOf(gpSystem))
+        TermsAndConditionsJourneyFactory.consent(patient, DateTime.parse("2018-11-11T00:00:00+00:00"))
+    }
+
+    @Given("^I am a patient with proof level 5 who has updated terms and conditions$")
+    fun iAmAPatientWithProofLevel5WhoHasUpdatedTermsAndConditions() {
+        val patient = initialisePatientAndGpSystem(Supplier.EMIS, IdentityProofingLevel.P5)
         TermsAndConditionsJourneyFactory.consent(patient, DateTime.parse("2018-11-11T00:00:00+00:00"))
     }
 
@@ -55,6 +67,13 @@ class TermsAndConditionsStepDefinitions {
     @When("^I check the agree to terms and conditions checkbox$")
     fun iAgreeToTheTermsAndConditions() {
         termsAndConditionsPage.acceptTermsAndConditionsCheckBox.click()
+        termsAndConditionsPage.acceptTermsAndConditionsCheckBox.assertChecked()
+    }
+
+    @When("^I check the agree to cookies checkbox$")
+    fun iCheckTheAgreeToCookiesCheckbox() {
+        termsAndConditionsPage.acceptCookiesCheckBox.click()
+        termsAndConditionsPage.acceptCookiesCheckBox.assertChecked()
     }
 
     @When("^I agree to the updated terms and conditions$")
@@ -93,18 +112,17 @@ class TermsAndConditionsStepDefinitions {
         updatedTermsAndConditionsPage.mainErrorMessage.assertIsVisible()
     }
 
-    private fun initialisePatientAndGpSystem(gpSystem: String): Patient {
-        val supplier = Supplier.valueOf(gpSystem)
-
-        // The integration tests use a single 'real' Cosmos collection so a unique id must be used to avoid
-        // test runs affecting each other.
-        val patient = Patient.getDefault(supplier).copy(nhsNumbers = listOf(UUID.randomUUID().toString()))
+    private fun initialisePatientAndGpSystem(gpSystem: Supplier, proofLevel: IdentityProofingLevel? = null): Patient {
+        var patient = Patient.getDefault(gpSystem)
+        if (proofLevel != null) {
+            patient = patient.copy(identityProofingLevel = proofLevel)
+        }
 
         SerenityHelpers.setPatient(patient)
-        SerenityHelpers.setGpSupplier(supplier)
+        SerenityHelpers.setGpSupplier(gpSystem)
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
 
         return patient
     }
