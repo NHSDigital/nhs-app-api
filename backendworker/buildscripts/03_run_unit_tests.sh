@@ -22,17 +22,11 @@ docker run \
     dotnet test \
     -c Release \
     --no-build \
-    --results-directory TestResults \
+    --results-directory /TestResults \
     --logger:trx \
     /p:CollectCoverage=true \
     /p:CoverletOutputFormat=cobertura; \
     test_run_result=\$?; \
-    mkdir /TestResults; \
-    index=1; \
-    for trx in */TestResults/*.trx; do \
-      cp \$trx /TestResults/\$index.trx; \
-      ((index+=1)); \
-    done; \
     index=1; \
     for coverage in */coverage.cobertura.xml; do \
       cp \"\$coverage\" /coverage/backend-\$index-cobertura.xml; \

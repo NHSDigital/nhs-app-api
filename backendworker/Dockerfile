@@ -1,4 +1,4 @@
-FROM nhsapp.azurecr.io/nhsonline-dotnetcore-build as dependencies
+FROM nhsapp.azurecr.io/nhsonline-dotnetcore-build:3.1 as dependencies
 WORKDIR /src
 COPY *.sln */*.csproj Directory.Build.props ./
 RUN for file in *.csproj; do mkdir "${file%.*}" && mv "$file" "${file%.*}"; done
@@ -15,8 +15,7 @@ RUN dotnet build --no-restore -c Release
 
 
 FROM built AS published
-RUN dotnet publish --no-build -c Release -o _published_artifacts
-
+RUN dotnet publish --no-build -c Release -p:PublishDir=_published_artifacts
 
 FROM nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:2.1 AS final
 ARG PROJECT_NAME
