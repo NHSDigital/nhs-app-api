@@ -3,10 +3,6 @@ import {
   CLEAR,
   LOADED_DOCUMENT,
   SET_SELECTED_DOCUMENT_INFO,
-  SET_VALID_FILE,
-  SET_IS_VIEWABLE,
-  SET_IS_DOWNLOADABLE,
-  SET_FILE_TYPE,
 } from './mutation-types';
 import NativeCallbacks from '@/services/native-app';
 
@@ -17,7 +13,7 @@ export default {
   clear({ commit }) {
     commit(CLEAR);
   },
-  async loadDocument({ commit, state }, documentIdentifier) {
+  async loadDocument({ commit, state }, { documentIdentifier, updateMetaData = false } = {}) {
     const response = await this.app.$http.postV1DocumentsByDocumentidentifier({
       documentIdentifier,
       getPatientDocumentRequest: {
@@ -28,10 +24,15 @@ export default {
     const { content, isViewable, isDownloadable, type } = response || {};
 
     commit(LOADED_DOCUMENT, content);
-    commit(SET_VALID_FILE, isViewable || isDownloadable);
-    commit(SET_FILE_TYPE, type);
-    commit(SET_IS_VIEWABLE, isViewable);
-    commit(SET_IS_DOWNLOADABLE, isDownloadable);
+    if (updateMetaData) {
+      commit(SET_SELECTED_DOCUMENT_INFO, {
+        ...state.currentDocument,
+        isValidFile: isViewable || isDownloadable,
+        isViewable,
+        isDownloadable,
+        type,
+      });
+    }
   },
   async downloadDocument({ state }, { documentIdentifier, fileName,
     fileExtension, mimeType, isNative }) {

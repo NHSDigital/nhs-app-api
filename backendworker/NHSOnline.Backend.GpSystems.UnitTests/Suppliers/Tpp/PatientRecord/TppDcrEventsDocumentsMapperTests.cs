@@ -254,9 +254,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         }
 
         [DataTestMethod]
-        [DataRow("test: test", "rtf")]
-        [DataRow("test: test.jpg", "jpg")]
-        public void MapRequestPatientRecordReplyTppDcrEventsResponse_WithLetterFileType_ReturnsMappedDocumentWithTypeTxtIfNoTypeFoundAndIsValidTrue(string details, string expectedType)
+        [DataRow("test: test", "", false)]
+        [DataRow("test: test.jpg", "jpg", true)]
+        public void MapRequestPatientRecordReplyTppDcrEventsResponse_WithLetterFileType_ReturnsMappedDocumentWithNoTypeIfNoExtensionFound(string details, string expectedType, bool expectedIsValidFile)
         {
             // Arrange
             var requestPatientRecordReply = new RequestPatientRecordReply
@@ -295,7 +295,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
                         DocumentIdentifier = "123454",
                         IsAvailable = true,
                         Type = "Letter",
-                        IsValidFile = true,
+                        IsValidFile = expectedIsValidFile,
                         Extension = expectedType,
                         NeedMoreInformation = true
                     }

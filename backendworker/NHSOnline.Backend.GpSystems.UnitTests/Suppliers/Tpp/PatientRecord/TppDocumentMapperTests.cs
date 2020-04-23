@@ -220,6 +220,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         [DataRow("pdf", "application/pdf", "pdf")]
         [DataRow("txt", "text/plain", "txt")]
         [DataRow("rtf", "application/rtf", "rtf")]
+        [DataRow("JPG", "image/jpg", "jpg")]
+        [DataRow("BMP", "image/bmp", "bmp")]
+        [DataRow("DIB", "image/dib", "dib")]
+        [DataRow("GIF", "image/gif", "gif")]
+        [DataRow("JPEG", "image/jpg", "jpeg")]
+        [DataRow("JPE", "image/jpg", "jpe")]
+        [DataRow("JFIF", "image/jpg", "jpg")]
+        [DataRow("PNG", "image/png", "png")]
+        [DataRow("TIF", "image/tiff", "tif")]
+        [DataRow("TIFF", "image/tiff", "tiff")]
+        [DataRow("DOC", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "doc")]
+        [DataRow("DOCX", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "docx")]
+        [DataRow("DOCM", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "docm")]
+        [DataRow("DOT", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "dot")]
+        [DataRow("PDF", "application/pdf", "pdf")]
+        [DataRow("TXT", "text/plain", "txt")]
+        [DataRow("RTF", "application/rtf", "rtf")]
         public void MapForDownload_WithValidRequestBinaryDataReply_ReturnsSuccessfulFileContentResult(
             string fileType, string mimeType, string mappedType)
         {

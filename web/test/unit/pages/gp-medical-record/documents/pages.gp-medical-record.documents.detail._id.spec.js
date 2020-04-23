@@ -59,7 +59,7 @@ describe('gp-medical-record documents', () => {
         $store.state.myRecord.hasAcceptedTerms = true;
         await DocumentPage.asyncData({ redirect, route, store: $store });
         expect(redirect).not.toHaveBeenCalled();
-        expect($store.dispatch).toHaveBeenCalledWith('documents/loadDocument', route.params.id);
+        expect($store.dispatch).toHaveBeenCalledWith('documents/loadDocument', { documentIdentifier: route.params.id });
       });
 
       it('will not load document if it is already loaded', async () => {

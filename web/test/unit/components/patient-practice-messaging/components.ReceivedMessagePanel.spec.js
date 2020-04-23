@@ -53,13 +53,13 @@ describe('Received Message Panel', () => {
 
   it('will navigate to the view attachment when clicked', async () => {
     await wrapper.vm.viewClicked();
-    expect(store.dispatch).toBeCalledWith('documents/loadDocument', '1');
+    expect(store.dispatch).toBeCalledWith('documents/loadDocument', { documentIdentifier: '1', updateMetaData: true });
     expect(redirectTo).toBeCalledWith(wrapper.vm, '/patient-practice-messaging/view-attachment');
   });
 
   it('will navigate to the download attachment when clicked', async () => {
     await wrapper.vm.downloadClicked();
-    expect(store.dispatch).toBeCalledWith('documents/loadDocument', '1');
+    expect(store.dispatch).toBeCalledWith('documents/loadDocument', { documentIdentifier: '1', updateMetaData: true });
     expect(store.dispatch).toBeCalledWith('patientPracticeMessaging/setAttachmentId', '1');
     expect($router.push).toBeCalledWith({
       name: 'patient-practice-messaging-download-attachment',

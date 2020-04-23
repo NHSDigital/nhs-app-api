@@ -90,10 +90,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
             var comments = match.Groups[_documentDetailsComments].ToString();
             var type = "Attachment".Equals(inputEventItem.Type, StringComparison.Ordinal) ? "Document" : "Letter";
 
-            extension = string.IsNullOrEmpty(extension) && string.Equals("Letter", type, StringComparison.Ordinal)
-                ? Constants.FileConstants.FileTypes.TextType.Rtf
-                : extension;
-
             _logger.LogExit();
             return new DocumentItem
             {

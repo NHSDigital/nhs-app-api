@@ -47,9 +47,9 @@ export default {
       return;
     }
 
-    // TPP documents would already have been loaded into the store at this point.
+    // TPP document would already have been loaded into the store at this point.
     if (!store.state.documents.currentDocument.data) {
-      await store.dispatch('documents/loadDocument', route.params.id);
+      await store.dispatch('documents/loadDocument', { documentIdentifier: route.params.id });
     }
   },
   created() {

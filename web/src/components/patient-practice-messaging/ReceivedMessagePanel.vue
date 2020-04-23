@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     async loadDocument() {
-      await this.$store.dispatch('documents/loadDocument', this.attachmentId);
+      await this.$store.dispatch('documents/loadDocument', { documentIdentifier: this.attachmentId, updateMetaData: true });
     },
     async viewClicked() {
       await this.loadDocument();

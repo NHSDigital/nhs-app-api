@@ -131,7 +131,7 @@ export default {
     }
 
     if (isTruthy(needMoreInformation)) {
-      await store.dispatch('documents/loadDocument', route.params.id);
+      await store.dispatch('documents/loadDocument', { documentIdentifier: route.params.id, updateMetaData: true });
     }
 
     const size = get('state.documents.currentDocument.size', store);

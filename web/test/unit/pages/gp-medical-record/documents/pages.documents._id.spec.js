@@ -398,7 +398,7 @@ describe('document view', () => {
       await page.vm.$options.asyncData({ store: $store, route: $route, redirect });
 
       // Assert
-      expect($store.dispatch).toHaveBeenCalledWith('documents/loadDocument', 1);
+      expect($store.dispatch).toHaveBeenCalledWith('documents/loadDocument', { documentIdentifier: 1, updateMetaData: true });
     });
 
     it('will set the header to the document date if no name exists', async () => {

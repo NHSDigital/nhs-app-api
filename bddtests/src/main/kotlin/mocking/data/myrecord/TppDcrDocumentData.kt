@@ -11,7 +11,7 @@ object TppDcrDocumentData {
         hasNonViewableType: Boolean = false): RequestPatientRecordReply {
         val tppDcrEvents = mutableListOf<Event>()
 
-        var details = "JPEG: Blood-tests.jpeg - some comments"
+        var details = "JPG: Blood-tests.jpg - some comments"
 
         if (hasInvalidType) {
             details = "TGA: Blood-tests.tga - some comments"

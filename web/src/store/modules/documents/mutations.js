@@ -5,10 +5,6 @@ import {
   CLEAR,
   LOADED_DOCUMENT,
   SET_SELECTED_DOCUMENT_INFO,
-  SET_VALID_FILE,
-  SET_IS_VIEWABLE,
-  SET_IS_DOWNLOADABLE,
-  SET_FILE_TYPE,
   initialState,
 } from './mutation-types';
 
@@ -35,17 +31,5 @@ export default {
   },
   [SET_SELECTED_DOCUMENT_INFO](state, document) {
     state.currentDocument = document;
-  },
-  [SET_VALID_FILE](state, isValidFile) {
-    state.currentDocument.isValidFile = isValidFile;
-  },
-  [SET_IS_VIEWABLE](state, isViewable) {
-    state.currentDocument.isViewable = isViewable;
-  },
-  [SET_IS_DOWNLOADABLE](state, isDownloadable) {
-    state.currentDocument.isDownloadable = isDownloadable;
-  },
-  [SET_FILE_TYPE](state, type) {
-    state.currentDocument.type = type;
   },
 };
