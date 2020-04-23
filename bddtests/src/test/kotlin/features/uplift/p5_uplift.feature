@@ -6,6 +6,8 @@ Feature: Proof level 5 shutter screens
     When I retrieve the '<Page>' page directly
     Then the page title is '<Page Title>'
     And I am asked to prove my identity
+    When I click the 'Continue' button
+    Then the uplift journey starts
     Examples:
       | Page               | Page Title                |
       | appointment hub    | Appointments              |

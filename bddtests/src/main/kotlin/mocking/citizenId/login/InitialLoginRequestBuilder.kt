@@ -23,6 +23,7 @@ class InitialLoginRequestBuilder(
                 .andQueryParameter("redirect_uri", redirectUri, matcherString)
                 .andQueryParameter("client_id", clientId)
                 .andQueryParameter("response_type", "code")
+                .andQueryParameter("vtr", "[\"P5.Cp.Cd\", \"P5.Cp.Ck\", \"P5.Cm\"]")
     }
 
     fun respondWithLoginPage(): Mapping {

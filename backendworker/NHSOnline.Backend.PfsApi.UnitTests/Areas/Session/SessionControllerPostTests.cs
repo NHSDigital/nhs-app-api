@@ -27,6 +27,7 @@ using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
 using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.PfsApi.UnitTests.Audit;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support.Session;
@@ -150,7 +151,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem.SetupGet(x => x.Supplier).Returns(Supplier.Emis);
-            
+
             _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(Supplier.Emis)).Returns(_mockGpSystem.Object);
 

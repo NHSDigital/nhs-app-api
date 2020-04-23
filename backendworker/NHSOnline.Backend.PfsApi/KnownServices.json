@@ -132,6 +132,28 @@
       "validateSession": false
     },
     {
+      "id": "cid-dev-account",
+      "url": "https://account.dev.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
+      "id": "cid-dev-auth",
+      "url": "https://auth.dev.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
       "id": "cid-uaf",
       "url": "https://uaf.ext.signin.nhs.uk",
       "subServices": null,

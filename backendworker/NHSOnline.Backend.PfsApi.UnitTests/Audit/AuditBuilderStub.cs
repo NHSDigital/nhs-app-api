@@ -4,7 +4,7 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
+namespace NHSOnline.Backend.PfsApi.UnitTests.Audit
 {
     internal sealed class AuditBuilderStub: IAuditBuilder, IAuditBuilderSupplier, IAuditBuilderDetails, IAuditBuilderExecute
     {

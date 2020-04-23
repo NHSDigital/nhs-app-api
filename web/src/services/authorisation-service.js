@@ -53,12 +53,35 @@ class AuthorisationService {
   }
 
   generateLoginUrl({ isNativeApp, redirectTo, cookies, fidoAuthResponse }) {
+    return this.generateAuthUrl({
+      isNativeApp,
+      redirectTo,
+      cookies,
+      fidoAuthResponse,
+      p5VectorOfTrust: this.cidP5VectorOfTrustEnabled,
+    });
+  }
+
+  generateUpliftUrl({ isNativeApp, cookies }) {
+    const { loginUrl } = this.generateAuthUrl({
+      isNativeApp,
+      cookies,
+      p5VectorOfTrust: false,
+    });
+
+    return { upliftUrl: loginUrl };
+  }
+
+  generateAuthUrl({
+    isNativeApp,
+    redirectTo,
+    cookies,
+    fidoAuthResponse,
+    p5VectorOfTrust }) {
     const verifier = createVerifier();
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
     const redirectUri = this.getRedirectUri(isNativeApp);
-    const fidoResponse = fidoAuthResponse;
-
     const request = {
       scope: 'openid profile nhs_app_credentials gp_integration_credentials profile_extended',
       clientId: this.cidClientId,
@@ -69,8 +92,8 @@ class AuthorisationService {
       codeChallenge: challenge,
       codeChallengeMethod: 'S256',
       authoriseUrl: this.cidAuthEndpoint,
-      fidoAuthResponse: fidoResponse,
-      vtr: this.cidP5VectorOfTrustEnabled ? '["P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm"]' : '["P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]',
+      fidoAuthResponse,
+      vtr: p5VectorOfTrust ? '["P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm"]' : '["P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]',
     };
 
     cookies.set('nhso.auth', {

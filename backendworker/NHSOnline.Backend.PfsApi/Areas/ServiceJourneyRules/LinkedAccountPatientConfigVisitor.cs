@@ -8,6 +8,7 @@ using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.PfsApi.AssertedLoginIdentity;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 

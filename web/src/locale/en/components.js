@@ -6,7 +6,7 @@ export default {
   proofLevelUpliftBanner: {
     heading: 'Finish setting up your NHS login',
     description: 'You\'ll need to connect to your GP surgery before you can book appointments, order prescriptions and view your health records.',
-    buttonText: 'Connect to my GP surgery',
+    buttonText: 'Continue',
   },
   insetText: {
     heading: 'Information: ',

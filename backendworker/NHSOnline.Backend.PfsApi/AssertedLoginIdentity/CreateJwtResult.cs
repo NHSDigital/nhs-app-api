@@ -1,8 +1,9 @@
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity.Models;
 
 namespace NHSOnline.Backend.PfsApi.AssertedLoginIdentity
 {
-    public abstract class CreateJwtResult
+    public abstract class CreateJwtResult : IAuditedResult
     {
         public abstract T Accept<T>(ICreateJwtResultVisitor<T> visitor);
 
@@ -19,6 +20,8 @@ namespace NHSOnline.Backend.PfsApi.AssertedLoginIdentity
             {
                 return visitor.Visit(this);
             }
+
+            public override string Details => "AssertedLoginIdentity Token creation succeeded.";
         }
 
         public class InternalServerError : CreateJwtResult
@@ -27,6 +30,10 @@ namespace NHSOnline.Backend.PfsApi.AssertedLoginIdentity
             {
                 return visitor.Visit(this);
             }
+
+            public override string Details => "AssertedLoginIdentity Token creation failed.";
         }
+
+        public abstract string Details { get; }
     }
 }

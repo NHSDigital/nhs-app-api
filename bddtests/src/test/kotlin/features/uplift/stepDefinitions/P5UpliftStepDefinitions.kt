@@ -4,6 +4,7 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import mocking.MockingClient
+import mocking.citizenId.login.UpliftLoginRequestBuilder
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.IdentityProofingLevel
@@ -11,6 +12,9 @@ import models.Patient
 import net.thucydides.core.annotations.Steps
 import pages.HybridPageObject
 import pages.P5UpliftPage
+import pages.assertIsVisible
+import pages.navigation.WebHeader
+import pages.withNormalisedText
 import utils.SerenityHelpers
 
 class P5UpliftStepDefinitions : HybridPageObject() {
@@ -19,6 +23,8 @@ class P5UpliftStepDefinitions : HybridPageObject() {
 
   @Steps
   private lateinit var p5ShutterPage: P5UpliftPage
+
+  lateinit var webHeader: WebHeader
 
   @Given("^I am a patient with proof level 5$")
   fun iAmAPatientWithProofLevel5() {
@@ -38,5 +44,10 @@ class P5UpliftStepDefinitions : HybridPageObject() {
   @Then("I am asked to prove my identity")
   fun iAmAskedToProveMyIdentity() {
     p5ShutterPage.assertUpliftBanner()
+  }
+
+  @Then("the uplift journey starts")
+  fun theUpliftJourneyStarts() {
+    webHeader.getPageTitle().withNormalisedText(UpliftLoginRequestBuilder.title).assertIsVisible()
   }
 }

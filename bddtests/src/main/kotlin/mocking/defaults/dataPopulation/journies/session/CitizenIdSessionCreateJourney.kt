@@ -2,6 +2,7 @@ package mocking.defaults.dataPopulation.journies.session
 
 import config.Config
 import mocking.MockingClient
+import mocking.citizenId.login.UpliftLoginRequestBuilder
 import mocking.citizenId.models.notifications.SuccessResponse
 import mocking.citizenId.models.signingKeys.SucceededResponse
 import models.Patient
@@ -83,6 +84,11 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
         mockingClient.forCitizenId {
             initialLoginRequest(patient, redirectUri, Config.instance.cidClientId)
                     .respondWithLoginPage()
+        }
+
+        mockingClient.forCitizenId {
+            UpliftLoginRequestBuilder(patient, redirectUri, Config.instance.cidClientId)
+                    .respondWithUpliftPage()
         }
 
         mockingClient.forCitizenId {

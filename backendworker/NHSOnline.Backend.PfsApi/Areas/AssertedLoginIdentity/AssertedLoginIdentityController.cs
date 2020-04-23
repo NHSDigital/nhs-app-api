@@ -5,9 +5,9 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity.Models;
 using NHSOnline.Backend.PfsApi.Session;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
 {
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateJwtRequest model, [UserSession] P9UserSession userSession)
+        public async Task<IActionResult> Post([FromBody] CreateJwtRequest model, [UserSession] UserSession userSession)
         {
             try
             {
@@ -38,15 +38,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
                     return new BadRequestObjectResult(ModelState);
                 }
 
-                await _auditor.Audit(AuditingOperations.CreateAssertedLoginIdentityTokenRequest,
-                    "Creating Asserted login Identity JWT for Provider ID '{0}', Provider Name '{1}', " +
-                    "Jump Off ID '{2}', intended relying party URL: {3}",
-                    model.ProviderId, model.ProviderName, model.JumpOffId, model.IntendedRelyingPartyUrl);
+                var result =
+                    await userSession.Accept(new AssertedLoginSessionVisitor(model, _auditor,
+                        _assertedLoginIdentityService));
 
-                var result = _assertedLoginIdentityService.CreateJwtToken(userSession.CitizenIdUserSession.IdTokenJti);
+                var response = result.Accept(new CreateJwtResultVisitor(_logger, model));
 
-                await result.Accept(new CreateJwtAuditingVisitor(_auditor, _logger, model));
-                return result.Accept(new CreateJwtResultVisitor());
+                return response;
             }
             finally
             {

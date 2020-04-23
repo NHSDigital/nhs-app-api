@@ -1,6 +1,5 @@
 <template>
-  <button :id="id"
-          :class="defaultClasses" :type="type"
+  <button :class="defaultClasses"
           @click="clicked($event)">
     <slot/>
   </button>
@@ -16,14 +15,6 @@ export default {
     buttonClasses: {
       type: Array,
       default: () => [],
-    },
-    id: {
-      type: String,
-      default: '',
-    },
-    type: {
-      type: String,
-      default: undefined,
     },
   },
   computed: {
