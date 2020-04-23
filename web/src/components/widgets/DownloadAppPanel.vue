@@ -4,8 +4,8 @@
       {{ $t('web.home.appStorePanelTitle') }}</strong>
     </p>
     <a data-id="apple-store-icon" href="https://apps.apple.com/gb/app/nhs-app/id1388411277"
-       target="_blank" rel="noopener noreferrer"
-       class="nhsuk-u-margin-bottom-1 nhsuk-u-margin-top-2">
+       class="nhsuk-u-margin-bottom-2 nhsuk-u-margin-right-3"
+       target="_blank" rel="noopener noreferrer">
       <img alt="Download on the App Store"
            src="~assets/download-on-the-app-store.png">
     </a>
@@ -26,6 +26,7 @@ export default {
 <style scoped>
   a {
     display: inline-block;
+    vertical-align: top;
   }
   a:hover {
     color: transparent;
