@@ -28,5 +28,9 @@ export default {
 .banner-panel--blue {
   @include panel($color_shade_nhsuk-blue-35, $color_nhsuk-white);
   @include nhsuk-responsive-padding(2, 'top');
+  /* overriding this to prevent elements style file forcing black text*/
+  p {
+    color: $color_nhsuk-white;
+  }
 }
 </style>
