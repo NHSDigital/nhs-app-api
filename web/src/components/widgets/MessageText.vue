@@ -1,6 +1,6 @@
 <template>
-  <p :class="[messageTextStyle,
-              marginStyle,
+  <p :class="[this.$style.msgText,
+              indentStyle,
               extendedStyle,
               !$store.state.device.isNativeApp && $style.desktopWeb]"
      :aria-label="ariaLabel"
@@ -35,7 +35,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isApiError: {
+    unindent: {
       type: Boolean,
       default: false,
     },
@@ -54,13 +54,8 @@ export default {
       }
       return `${style} nhsuk-u-margin-bottom-2`;
     },
-    marginStyle() {
-      if (this.isApiError) return '';
-      return 'nhsuk-u-margin-left-2';
-    },
-    messageTextStyle() {
-      if (this.isApiError) return '';
-      return this.$style.msgText;
+    indentStyle() {
+      return this.unindent ? this.$style.unindented : 'nhsuk-u-margin-left-2';
     },
   },
 };
@@ -80,5 +75,8 @@ export default {
   &.footerMargin {
    margin-bottom: 1em;
   }
+}
+.unindented {
+  padding: 1em 1em 0 0;
 }
 </style>

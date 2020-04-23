@@ -3,22 +3,24 @@
     <div v-if="isStandardError" :id="$style.serverError" class="pull-content">
       <message-dialog :override-style="overrideStyle" message-type="error" aria-live="polite">
         <message-text :is-header="true"
-                      :is-api-error="true"
+                      :unindent="isPlainNativeError"
                       :override-style="overrideStyle"
                       data-purpose="msg-header">
           {{ header }}
         </message-text>
-        <message-text v-if="subheader!==''" data-purpose="msg-subheader">
+        <message-text v-if="subheader!==''"
+                      :unindent="isPlainNativeError"
+                      data-purpose="msg-subheader">
           {{ subheader }}
         </message-text>
         <message-text :is-before-footer="true"
-                      :is-api-error="true"
+                      :unindent="isPlainNativeError"
                       :aria-label="messageLabel"
                       data-purpose="msg-text">
           {{ messageText }}
         </message-text>
         <message-text v-if="hasAdditionalInfo"
-                      :is-api-error="true"
+                      :unindent="isPlainNativeError"
                       :aria-label="additionalInfoLabel"
                       :class="$style.additionalInformation"
                       data-purpose="msg-extratext">
@@ -132,6 +134,11 @@ export default {
       const headerMessage = getMessage(this, 'header');
       this.trackSystemError(headerMessage);
       return headerMessage;
+    },
+    isPlainNativeError() {
+      return this.$store.state.device.isNativeApp &&
+      (this.$store.state.errors.pageSettings.errorOverrideStyles[this.statusCode]
+      === 'plain');
     },
     isStandardError() {
       return this.$store.getters['errors/isStandardError'];
