@@ -59,6 +59,16 @@ parameters:
       - Scratch21
       - Preview
 
+  - name: intTestsRunAndroidNative
+    displayName: Run Android Native Integration Tests
+    type: boolean
+    default: false
+
+  - name: intTestsRuniOSNative
+    displayName: Run iOS Native Integration Tests
+    type: boolean
+    default: false
+
   - name: intTestsRunNativeAndroidLongRunning
     displayName: Run Android Native Long Running Integration Tests
     type: boolean
@@ -90,6 +100,19 @@ variables:
   source.tag: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
   native.android.target: ${{ parameters.androidTarget }}
   native.ios.target: ${{ parameters.iosTarget }}
+
+  # Build.Reason is blank when specifying parameters but Manual when running the pipeline
+  ${{ if or(eq(variables['Build.Reason'], ''), eq(variables['Build.Reason'], 'Manual')) }}:
+    int.tests.run.native.android: ${{ parameters.intTestsRunAndroidNative }}
+    int.tests.run.native.ios: ${{ parameters.intTestsRuniOSNative }}
+  ${{ if and(ne(variables['Build.Reason'], ''), ne(variables['Build.Reason'], 'Manual')) }}:
+    ${{ if or(eq(variables['Build.SourceBranchName'], 'develop'), eq(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+      int.tests.run.native.android: true
+      int.tests.run.native.ios: true
+    ${{ if and(ne(variables['Build.SourceBranchName'], 'develop'), ne(variables['Build.SourceBranch'], 'refs/tags/')) }}:
+      int.tests.run.native.android: false
+      int.tests.run.native.ios: false
+
   ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
     int.tests.run.native.android.long-running: true
   ${{ if ne(variables['Build.Reason'], 'Schedule') }}:
@@ -193,30 +216,31 @@ stages:
         steps:
           - template: .azuredevops/templates/integration-tests-steps.yml
 
-  - stage: android_integration_tests
-    displayName: Android Integration Tests
-    dependsOn:
-      - web
-      - backend
-      - android
-    condition: and(succeeded(), eq(variables['native.android.target'], 'browserstack'))
-    jobs:
-      - template: .azuredevops/templates/integration-tests-android-job.yml
-        parameters:
-          job.condition: and(succeeded(), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'), eq(variables['int.tests.run.native.android'], 'True')))
+  - ${{ if or(eq(variables['int.tests.run.native.android'], 'true'), eq(variables['int.tests.run.native.android.long-running'], 'true')) }}:
+    - stage: android_integration_tests
+      displayName: Android Integration Tests
+      dependsOn:
+        - web
+        - backend
+        - android
+      condition: and(succeeded(), eq(variables['native.android.target'], 'browserstack'))
+      jobs:
+        - ${{ if eq(variables['int.tests.run.native.android'], 'true') }}:
+          - template: .azuredevops/templates/integration-tests-android-job.yml
 
-      - ${{ if eq(variables['int.tests.run.native.android.long-running'], 'true') }}:
-        - template: .azuredevops/templates/integration-tests-android-job.yml
-          parameters:
-            job.name: Long Running
-            tranche.tag: long-running
+        - ${{ if eq(variables['int.tests.run.native.android.long-running'], 'true') }}:
+          - template: .azuredevops/templates/integration-tests-android-job.yml
+            parameters:
+              job.name: Long Running
+              tranche.tag: long-running
 
-  - stage: ios_integration_tests
-    displayName: iOS Integration Tests
-    condition: and(succeeded(), eq(variables['native.ios.target'], 'BrowserStack'), or(eq(variables['source.tag'], 'True'), eq(variables['source.develop'], 'True'), eq(variables['int.tests.run.native.ios'], 'True')))
-    dependsOn:
-      - web
-      - backend
-      - ios
-    jobs:
-      - template: .azuredevops/templates/integration-tests-ios-job.yml
+  - ${{ if eq(variables['int.tests.run.native.ios'], 'true') }}:
+    - stage: ios_integration_tests
+      displayName: iOS Integration Tests
+      condition: and(succeeded(), eq(variables['native.ios.target'], 'BrowserStack'))
+      dependsOn:
+        - web
+        - backend
+        - ios
+      jobs:
+        - template: .azuredevops/templates/integration-tests-ios-job.yml
