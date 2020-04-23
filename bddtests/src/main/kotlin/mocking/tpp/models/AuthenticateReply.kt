@@ -38,5 +38,6 @@ data class AuthenticateReply(
                                 "default name"
                         )
                 )
-        )
+        ),
+        @field:XmlElement(name= "Registration") var registration: Registration = Registration()
 )

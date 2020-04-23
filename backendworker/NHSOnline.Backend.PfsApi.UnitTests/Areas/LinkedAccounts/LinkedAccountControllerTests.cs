@@ -176,7 +176,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         public async Task Get_ReturnsSuccessfulResultAndUserSessionUpdated_WhenServiceReturnsSuccessfully()
         {
             LinkedAccountsResult linkedAccountResult = new LinkedAccountsResult.Success(
-                _fixture.Create<LinkedAccountsBreakdownSummary>(), true);
+                _fixture.Create<List<LinkedAccount>>(), true);
 
             // Arrange
             _linkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
@@ -201,7 +201,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         public async Task Get_ReturnsSuccessfulResultAndUserSessionNotUpdated_WhenServiceReturnsSuccessfully()
         {
             LinkedAccountsResult linkedAccountResult = new LinkedAccountsResult.Success(
-                _fixture.Create<LinkedAccountsBreakdownSummary>(), false);
+                _fixture.Create<List<LinkedAccount>>(), false);
 
             // Arrange
             _linkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))

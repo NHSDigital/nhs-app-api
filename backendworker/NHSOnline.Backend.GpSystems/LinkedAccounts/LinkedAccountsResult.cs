@@ -1,4 +1,6 @@
-﻿using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 
 namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 {
@@ -8,13 +10,13 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 
         public class Success : LinkedAccountsResult
         {
-            public LinkedAccountsBreakdownSummary LinkedAccountsBreakdown { get; }
+            public IEnumerable<LinkedAccount> ValidAccounts { get; } = Enumerable.Empty<LinkedAccount>();
 
             public bool HasAnyProxyInfoBeenUpdatedInSession { get; }
 
-            public Success(LinkedAccountsBreakdownSummary linkedAccountsBreakdown, bool hasAnyProxyInfoBeenUpdatedInSession)
+            public Success(IEnumerable<LinkedAccount> linkedAccounts, bool hasAnyProxyInfoBeenUpdatedInSession)
             {
-                LinkedAccountsBreakdown = linkedAccountsBreakdown;
+                ValidAccounts = linkedAccounts;
                 HasAnyProxyInfoBeenUpdatedInSession = hasAnyProxyInfoBeenUpdatedInSession;
             }
 

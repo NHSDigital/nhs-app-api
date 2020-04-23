@@ -12,9 +12,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
             var response = new LinkedAccountsConfigResponse
             {
                 Id = result.PatientId,
-                HasLinkedAccounts = result.SessionSettings.ProxyEnabled && result.LinkedAccountsBreakdownSummary.ValidAccounts.Any(),
+                HasLinkedAccounts = result.SessionSettings.ProxyEnabled && result.LinkedAccounts.Any(),
                 LinkedAccounts = result.SessionSettings.ProxyEnabled
-                    ? result.LinkedAccountsBreakdownSummary.ValidAccounts
+                    ? result.LinkedAccounts
                     : Enumerable.Empty<LinkedAccount>(),
             };
 

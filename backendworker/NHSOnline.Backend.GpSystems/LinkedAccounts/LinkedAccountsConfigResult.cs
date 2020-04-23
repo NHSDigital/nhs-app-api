@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.GpSystems.Session;
 
@@ -14,16 +15,16 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts
 
             public SessionConfigurationSettings SessionSettings { get; }
 
-            public LinkedAccountsBreakdownSummary LinkedAccountsBreakdownSummary { get; }
+            public IEnumerable<LinkedAccount> LinkedAccounts { get; }
 
             public Success(
                 Guid patientId,
                 SessionConfigurationSettings sessionSettings,
-                LinkedAccountsBreakdownSummary linkedAccountsBreakdownSummary)
+                IEnumerable<LinkedAccount> linkedAccounts)
             {
                 PatientId = patientId;
                 SessionSettings = sessionSettings;
-                LinkedAccountsBreakdownSummary = linkedAccountsBreakdownSummary;
+                LinkedAccounts = linkedAccounts;
             }
 
             public override T Accept<T>(ILinkedAccountsConfigResultVisitor<T> visitor)

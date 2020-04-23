@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Services;
 using NHSOnline.Backend.Support;
@@ -19,6 +19,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         private readonly ILogger<TppSessionService> _logger;
         private readonly ITppSessionMapper _sessionMapper;
         private readonly TppTokenValidationService _tokenValidationService;
+        private readonly ITppLinkedAccountsService _tppLinkedAccountsService;
 
         private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
         private readonly ITppClientRequest<TppRequestParameters, PatientSelectedReply> _patientSelected;
@@ -29,6 +30,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             ILogger<TppSessionService> logger,
             ITppSessionMapper sessionMapper,
             TppTokenValidationService tokenValidationService,
+            ITppLinkedAccountsService tppLinkedAccountService,
             ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
             ITppClientRequest<TppRequestParameters, PatientSelectedReply> patientSelected,
             ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccesses,
@@ -37,6 +39,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             _logger = logger;
             _sessionMapper = sessionMapper;
             _tokenValidationService = tokenValidationService;
+            _tppLinkedAccountsService = tppLinkedAccountService;
             _authenticate = authenticate;
             _patientSelected = patientSelected;
             _listServiceAccesses = listServiceAccesses;
@@ -60,9 +63,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                     return CheckFailureTypeForGpSessionCreateResult(authenticateReply);
                 }
 
-                LogProxyInformation(authenticateReply.Body);
+                var validProxyPatients = _tppLinkedAccountsService.ExtractValidProxyPatients(authenticateReply.Body);
 
-                var userSession = _sessionMapper.Map(authenticateReply, odsCode, nhsNumber);
+                var userSession = _sessionMapper.Map(authenticateReply, odsCode, nhsNumber, validProxyPatients.Select(x => x.PatientId));
                 if (!userSession.HasValue)
                 {
                     const string message = "Cannot create a valid session from Tpp response";
@@ -74,7 +77,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 // The PatientSelected call is only required if
                 // more than 1 person is found in the response.
-                if (tppUserSession.ProxyPatients.Any())
+                if (authenticateReply.Body.ExtractLinkedPatients().Any())
                 {
                     var tppRequestParameters = new GpLinkedAccountModel(tppUserSession)
                         .BuildTppRequestParameters(_logger);
@@ -191,53 +194,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             {
                 _logger.LogExit();
             }
-        }
-
-        private void LogProxyInformation(AuthenticateReply response)
-        {
-            var patientId = response.User?.Person?.PatientId;
-
-            if (string.IsNullOrWhiteSpace(patientId))
-            {
-                _logger.LogWarning($"TPP user with no {nameof(AuthenticateReply.User.Person.PatientId)}");
-                return;
-            }
-
-            var patientAccessItems = response.Registration?.PatientAccess ?? new List<PatientAccess>();
-
-            var selfPatient = patientAccessItems.FirstOrDefault(
-                x => patientId.Equals(x.PatientId, StringComparison.Ordinal));
-
-            var linkedPatients = patientAccessItems
-                .Where(x => !patientId.Equals(x.PatientId, StringComparison.Ordinal))
-                .ToList();
-
-            if (selfPatient == null)
-            {
-                _logger.LogWarning(
-                    $"TPP user details not found in {nameof(AuthenticateReply.Registration.PatientAccess)}");
-                return;
-            }
-
-            var userPractice = new
-            {
-                selfPatient.SiteDetails?.UnitName,
-                selfPatient.SiteDetails?.Address?.Address,
-            };
-
-            if (userPractice.UnitName == null || userPractice.Address == null)
-            {
-                _logger.LogWarning(
-                    $"TPP user practice details not specified. unitName:{userPractice.UnitName} address:{userPractice.Address}");
-                return;
-            }
-
-            var differentPracticeAddressCount = linkedPatients.Count(x =>
-                !userPractice.UnitName.Equals(x.SiteDetails.UnitName, StringComparison.Ordinal) ||
-                !userPractice.Address.Equals(x.SiteDetails.Address.Address, StringComparison.Ordinal));
-
-            _logger.LogInformation(
-                $"User has linked_accounts={linkedPatients.Count}, with different_ods_codes_to_user={differentPracticeAddressCount}");
         }
 
         private async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(string connectionToken, string odsCode)

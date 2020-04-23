@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
@@ -39,7 +40,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
             LinkedAccountsConfigResult result = new LinkedAccountsConfigResult.Success(
                 Guid.Empty,
                 _sessionSettings,
-                new LinkedAccountsBreakdownSummary());
+                Enumerable.Empty<LinkedAccount>());
 
             return Task.FromResult(result);
         }
@@ -48,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
         {
             await _auditor.Audit(AuditingOperations.GetPatientConfigRequest, "Attempting to get config for patient");
 
-            var linkedAccountsBreakdown = new LinkedAccountsBreakdownSummary();
+            var validAccounts = Enumerable.Empty<LinkedAccount>();
 
             var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
 
@@ -61,7 +62,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
                 if (linkedAccountsResult is LinkedAccountsResult.Success success)
                 {
-                    linkedAccountsBreakdown = success.LinkedAccountsBreakdown;
+                    validAccounts = success.ValidAccounts;
                     if (success.HasAnyProxyInfoBeenUpdatedInSession)
                     {
                         _logger.LogInformation("Updating session as proxy info has been updated");
@@ -73,7 +74,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
             LinkedAccountsConfigResult result = new LinkedAccountsConfigResult.Success(
                 userSession.GpUserSession.Id,
                 _sessionSettings,
-                linkedAccountsBreakdown);
+                validAccounts);
 
             await result.Accept(new LinkedAccountConfigResultAuditingVisitor(_auditor, _logger));
 

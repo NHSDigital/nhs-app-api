@@ -27,13 +27,6 @@ class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", 
     }
 
     fun respondWithSuccess(authenticateReply: AuthenticateReply): Mapping {
-        val responseBody = AuthenticateReply(
-                authenticateReply.patientId,
-                authenticateReply.onlineUserId,
-                authenticateReply.uuid,
-                authenticateReply.user,
-                authenticateReply.person)
-
         val suidHeader = "suid"
         val suidValue = TppMockDefaults.DEFAULT_TPP_SESSION_ID
 
@@ -43,7 +36,7 @@ class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", 
 
         val stringWriter = StringWriter()
         stringWriter.use {
-            marshaller.marshal(responseBody, stringWriter)
+            marshaller.marshal(authenticateReply, stringWriter)
         }
 
         return respondWith(HttpStatus.SC_OK) {

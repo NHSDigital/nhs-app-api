@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.LinkedAccounts
         {
             var response = new GetLinkedAccountsResponse
             {
-                LinkedAccounts = result.LinkedAccountsBreakdown.ValidAccounts,
+                LinkedAccounts = result.ValidAccounts,
             };
 
             return await Task.FromResult(new OkObjectResult(response));

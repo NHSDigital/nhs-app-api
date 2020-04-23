@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
     public interface ITppSessionMapper
     {
         Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse,
-            string odsCode, string nhsNumber);
+            string odsCode, string nhsNumber, IEnumerable<string> proxyPatientIdsToBeIncluded);
 
         Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse,
             string odsCode, string nhsNumber, string patientId);
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             _logger = logger;
         }
 
-        public Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse, string odsCode, string nhsNumber)
+        public Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse, string odsCode, string nhsNumber, IEnumerable<string> proxyPatientIdsToBeIncluded)
         {
             if (!IsResponseValid(authenticateResponse))
             {
@@ -34,7 +34,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
             var suidHeader = GetSuidHeader(authenticateResponse);
 
-            var linkedPatients = authenticateResponse.Body.ExtractLinkedPatients();
+            var linkedPatients = authenticateResponse.Body.ExtractLinkedPatients()
+                .Where(x => proxyPatientIdsToBeIncluded.Contains(x.PatientId));
 
             return Option.Some(new TppUserSession
             {
@@ -58,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
         public Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse, string odsCode, string nhsNumber, string patientId)
         {
-            var response = Map(authenticateResponse, odsCode, nhsNumber);
+            var response = Map(authenticateResponse, odsCode, nhsNumber, Enumerable.Empty<string>());
 
             if (response.HasValue)
             {

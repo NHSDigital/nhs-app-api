@@ -131,6 +131,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
             LinkedAccountsBreakdownSummary summary = new LinkedAccountsBreakdownSummary();
             bool hasAnyNhsNumberBeenUpdatedInSession = false;
 
+            var linkedAccounts = Enumerable.Empty<LinkedAccount>();
+
             if (gpUserSession.HasLinkedAccounts)
             {
                 var tasks = new Dictionary<Guid, Task<DemographicsResult>>();
@@ -165,7 +167,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                     _logger.LogWarning("Not all demographics calls for proxy patients were successful.");
                 }
 
-                var linkedAccounts = successResults.Select(x =>
+                linkedAccounts = successResults.Select(x =>
                 {
                     var demographics = (DemographicsResult.Success)x.Value.Result;
 
@@ -200,11 +202,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                         proxy.NhsNumber = nhsNumberFromDemographics;
                     }
                 }
-
-                summary = GroupLinkedAccounts(emisUserSession, linkedAccounts);
             }
 
-            return new LinkedAccountsResult.Success(summary, hasAnyNhsNumberBeenUpdatedInSession);
+            var linkedAccountsGrouped = GroupLinkedAccounts(emisUserSession, linkedAccounts);
+
+            return new LinkedAccountsResult.Success(linkedAccountsGrouped.ValidAccounts, hasAnyNhsNumberBeenUpdatedInSession);
         }
         private bool IsValidLinkedAccount(GpLinkedAccountModel gpLinkedAccountModel)
         {

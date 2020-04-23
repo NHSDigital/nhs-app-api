@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -191,10 +192,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
-            var linkedAccountsBreakdownSummary = _fixture.Create<LinkedAccountsBreakdownSummary>();
+            var linkedAccounts = _fixture.Create<List<LinkedAccount>>();
 
             _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
-                .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccountsBreakdownSummary, false))
+                .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccounts, false))
                 .Verifiable();
 
             var expectedResponse = new LinkedAccountsConfigResponse
@@ -222,17 +223,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
-            var linkedAccountsBreakdownSummary = _fixture.Create<LinkedAccountsBreakdownSummary>();
+            var linkedAccounts = _fixture.Create<List<LinkedAccount>>();
 
             _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
-                .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccountsBreakdownSummary, false))
+                .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccounts, false))
                 .Verifiable();
 
             var expectedResponse = new LinkedAccountsConfigResponse
             {
                 Id = _userSession.GpUserSession.Id,
                 HasLinkedAccounts = true,
-                LinkedAccounts = linkedAccountsBreakdownSummary.ValidAccounts,
+                LinkedAccounts = linkedAccounts,
             };
 
             // Act
@@ -253,10 +254,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
-            var linkedAccountsBreakdownSummary = new LinkedAccountsBreakdownSummary();
+            var linkedAccounts = new List<LinkedAccount>();
 
             _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
-                .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccountsBreakdownSummary, false))
+                .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccounts, false))
                 .Verifiable();
 
             var expectedResponse = new LinkedAccountsConfigResponse
@@ -284,20 +285,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
-            var linkedAccountsBreakdownSummary = new LinkedAccountsBreakdownSummary
-            {
-                ValidAccounts = new[] { new LinkedAccount() }
-            };
+            var linkedAccounts = new[] { new LinkedAccount() };
 
             _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
-                .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccountsBreakdownSummary, true))
+                .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccounts, true))
                 .Verifiable();
 
             var expectedResponse = new LinkedAccountsConfigResponse
             {
                 Id = _userSession.GpUserSession.Id,
                 HasLinkedAccounts = true,
-                LinkedAccounts = linkedAccountsBreakdownSummary.ValidAccounts,
+                LinkedAccounts = linkedAccounts,
             };
 
             // Act
@@ -319,20 +317,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
-            var linkedAccountsBreakdownSummary = new LinkedAccountsBreakdownSummary
-            {
-                ValidAccounts = new[] { new LinkedAccount() }
-            };
+            var linkedAccounts = new[] { new LinkedAccount() };
 
             _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
-                .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccountsBreakdownSummary, false))
+                .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccounts, false))
                 .Verifiable();
 
             var expectedResponse = new LinkedAccountsConfigResponse
             {
                 Id = _userSession.GpUserSession.Id,
                 HasLinkedAccounts = true,
-                LinkedAccounts = linkedAccountsBreakdownSummary.ValidAccounts,
+                LinkedAccounts = linkedAccounts,
             };
 
             // Act

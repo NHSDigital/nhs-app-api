@@ -8,11 +8,12 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
 {
-    public class TppLinkedAccountsService : ILinkedAccountsService
+    public class TppLinkedAccountsService : ILinkedAccountsService, ITppLinkedAccountsService
     {
         private readonly ILogger<TppLinkedAccountsService> _logger;
         private readonly IGpSessionManager _gpSessionManager;
@@ -84,12 +85,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
         public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession)
         {
             var tppUserSession = (TppUserSession)gpUserSession;
-            LinkedAccountsBreakdownSummary summary = new LinkedAccountsBreakdownSummary();
+
+            var linkedAccounts = new List<LinkedAccount>();
 
             if (tppUserSession.HasLinkedAccounts)
             {
-                var linkedAccounts = new List<LinkedAccount>();
-
                 foreach (var proxyPatient in tppUserSession.ProxyPatients)
                 {
                     var dateOfBirth = proxyPatient.DateOfBirth;
@@ -103,45 +103,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
                         DisplayPersonalizedContent = false
                     });
                 }
-                summary = GroupLinkedAccounts(tppUserSession, linkedAccounts);
             }
 
-            return await Task.FromResult(new LinkedAccountsResult.Success(summary, false));
+            return await Task.FromResult(new LinkedAccountsResult.Success(linkedAccounts, false));
         }
 
-        private LinkedAccountsBreakdownSummary GroupLinkedAccounts(TppUserSession tppUserSession, IEnumerable<LinkedAccount> linkedAccounts)
-        {
-            var withoutNhsNumbers = new List<LinkedAccount>();
-            var validAccounts = new List<LinkedAccount>();
+        private static TppProxyUserSession GetLinkedAccountFromGpUserSession(TppUserSession tppUserSession, Guid linkedAccountId)
+         {
+             var proxy = tppUserSession.ProxyPatients.FirstOrDefault(x => x.Id == linkedAccountId);
+             return proxy;
+         }
 
-            foreach (var account in linkedAccounts)
-            {
-                var accountInSession = tppUserSession.ProxyPatients.FirstOrDefault(pp => pp.Id == account.Id);
-
-                if (!string.IsNullOrEmpty(accountInSession?.NhsNumber))
-                {
-                    validAccounts.Add(account);
-                }
-                else
-                {
-                    withoutNhsNumbers.Add(account);
-                }
-            }
-
-            _logger.LogInformation($"Linked_profiles_count={linkedAccounts.Count()}, " +
-                                   $"excluded_for_not_having_NHS_number={withoutNhsNumbers.Count}, " +
-                                   $"excluding_for_having_different_ODS_code=0, " +
-                                   $"valid_and_being_returned: {validAccounts.Count}");
-
-            return new LinkedAccountsBreakdownSummary
-            {
-                ValidAccounts = validAccounts,
-                AccountsWithNoNhsNumber = withoutNhsNumbers,
-                AccountsWithMismatchingOdsCode = new List<LinkedAccount>(),
-            };
-        }
-
-         public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
+        public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
             var response = new GetAccountAccessSummaryResponse
             {
@@ -164,6 +137,110 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             }
 
             return linkedAccountAuditResult;
+        }
+
+        public List<Person> ExtractValidProxyPatients(AuthenticateReply response)
+        {
+            var mainPatientId = response.User?.Person?.PatientId;
+
+            if (string.IsNullOrWhiteSpace(mainPatientId))
+            {
+                _logger.LogWarning($"TPP user with no {nameof(AuthenticateReply.User.Person.PatientId)}");
+                return new List<Person>();
+            }
+
+            var patientAccessItems = response.Registration?.PatientAccess ?? new List<PatientAccess>();
+
+            var selfPatient = patientAccessItems.FirstOrDefault(
+                x => mainPatientId.Equals(x.PatientId, StringComparison.Ordinal));
+
+            if (selfPatient == null)
+            {
+                _logger.LogWarning(
+                    $"TPP user details not found in {nameof(AuthenticateReply.Registration.PatientAccess)}");
+                return new List<Person>();
+            }
+
+            var userPractice = new
+            {
+                selfPatient.SiteDetails?.UnitName,
+                selfPatient.SiteDetails?.Address?.Address,
+            };
+
+            if (userPractice.UnitName == null || userPractice.Address == null)
+            {
+                _logger.LogWarning(
+                    $"TPP user practice details not specified. unitName:{userPractice.UnitName} address:{userPractice.Address}");
+                return new List<Person>();
+            }
+
+            var linkedPatientAccessItems = patientAccessItems
+                .Where(x => !mainPatientId.Equals(x.PatientId, StringComparison.Ordinal))
+                .ToList();
+
+            var allLinkedPatients = response.ExtractLinkedPatients();
+            var withoutNhsNumbers = new List<Person>();
+            var mismatchingOdsCodes = new List<Person>();
+            var validPatients = new List<Person>();
+
+            foreach (var patient in allLinkedPatients)
+            {
+                if (string.IsNullOrEmpty(patient?.NationalId?.Value))
+                {
+                    withoutNhsNumbers.Add(patient);
+                }
+                else
+                {
+                    var siteDetailsForProxyPatient =
+                        linkedPatientAccessItems
+                            .FirstOrDefault(x => x.PatientId == patient.PatientId)?.SiteDetails;
+                    var hasSamePracticeDetailsAsMainUser =
+                        HasSamePracticeAsMainUser(selfPatient.SiteDetails, siteDetailsForProxyPatient);
+
+                    if (!hasSamePracticeDetailsAsMainUser)
+                    {
+                        mismatchingOdsCodes.Add(patient);
+                    }
+                    else
+                    {
+                        validPatients.Add(patient);
+                    }
+                }
+            }
+
+            var differentPracticeAddressCount = linkedPatientAccessItems.Count(x =>
+                !HasSamePracticeAsMainUser(selfPatient.SiteDetails, x.SiteDetails));
+
+            _logger.LogInformation(
+                $"User has linked_accounts={allLinkedPatients.Count()}, with different_ods_codes_to_user={differentPracticeAddressCount}");
+
+            _logger.LogInformation($"Linked_profiles_count={allLinkedPatients.Count()}, " +
+                                   $"excluded_for_not_having_NHS_number={withoutNhsNumbers.Count}, " +
+                                   $"excluding_for_having_different_ODS_code={mismatchingOdsCodes.Count}, " +
+                                   $"valid_and_being_returned: {validPatients.Count}");
+
+            return validPatients;
+        }
+
+        private bool HasSamePracticeAsMainUser(SiteDetails mainUserSiteDetails, SiteDetails proxyUserSiteDetails)
+        {
+            var unitNameMatch = string.Equals(mainUserSiteDetails.UnitName, proxyUserSiteDetails.UnitName, StringComparison.Ordinal);
+            var addressMatch = string.Equals(mainUserSiteDetails.Address?.Address, proxyUserSiteDetails.Address?.Address, StringComparison.Ordinal);
+
+            if (!unitNameMatch && !addressMatch)
+            {
+                _logger.LogInformation("Practice mismatch - different unit name and address");
+            }
+            else if (!unitNameMatch)
+            {
+                _logger.LogInformation("Practice mismatch - different unit name");
+            }
+            else if (!addressMatch)
+            {
+                _logger.LogInformation("Practice mismatch - different address");
+            }
+
+            return unitNameMatch && addressMatch;
         }
 
         private bool IsValidLinkedAccount(GpLinkedAccountModel gpLinkedAccountModel)

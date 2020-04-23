@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -32,10 +33,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             // Arrange
             var id = Guid.NewGuid();
             var settings = new SessionConfigurationSettings(false);
-            var linkedAccountsBreakdown = _fixture.Create<LinkedAccountsBreakdownSummary>();
+            var linkedAccounts = _fixture.Create<List<LinkedAccount>>();
 
             var successfulResult =
-                new LinkedAccountsConfigResult.Success(id, settings, linkedAccountsBreakdown);
+                new LinkedAccountsConfigResult.Success(id, settings, linkedAccounts);
 
             // Act
             var result = _systemUnderTest.Visit(successfulResult);
@@ -54,10 +55,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             // Arrange
             var id = Guid.NewGuid();
             var settings = new SessionConfigurationSettings(true);
-            var linkedAccountsBreakdown = _fixture.Create<LinkedAccountsBreakdownSummary>();
+            var linkedAccounts = _fixture.Create<List<LinkedAccount>>();
 
             var successfulResult =
-                new LinkedAccountsConfigResult.Success(id, settings, linkedAccountsBreakdown);
+                new LinkedAccountsConfigResult.Success(id, settings, linkedAccounts);
 
             // Act
             var result = _systemUnderTest.Visit(successfulResult);
@@ -67,7 +68,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             var response = okObjectResult.Value.Should().BeAssignableTo<LinkedAccountsConfigResponse>().Subject;
             response.Id.Should().Be(id);
             response.HasLinkedAccounts.Should().BeTrue();
-            response.LinkedAccounts.Should().Equal(linkedAccountsBreakdown.ValidAccounts);
+            response.LinkedAccounts.Should().Equal(linkedAccounts);
         }
     }
 }

@@ -29,9 +29,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
 
                 if (result.SessionSettings.ProxyEnabled)
                 {
-                    auditMessage.Append($"{result.LinkedAccountsBreakdownSummary.ValidAccounts.Count()} linked accounts returned. " +
-                        $"{result.LinkedAccountsBreakdownSummary.AccountsWithNoNhsNumber.Count()} excluded for no NHS number. " +
-                        $"{result.LinkedAccountsBreakdownSummary.AccountsWithMismatchingOdsCode.Count()} excluded for mismatching ODS code.");
+                    auditMessage.Append($"{result.LinkedAccounts.Count()} linked accounts returned.");
                 }
                 else
                 {

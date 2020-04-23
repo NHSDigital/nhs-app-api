@@ -317,15 +317,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
-            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
-            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(_emisUserSession.ProxyPatients.Count);
+            successResult.Should().NotBeNull();
+            successResult.ValidAccounts.Count().Should().Be(_emisUserSession.ProxyPatients.Count);
             successResult.HasAnyProxyInfoBeenUpdatedInSession.Should().BeTrue();
 
             for (var i = 0; i < _emisUserSession.ProxyPatients.Count; i++)
             {
                 var emisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(i);
                 var demographicsResponseForUser = demographicsResponses[emisProxyPatient.Id];
-                var linkedAccountDetail = successResult.LinkedAccountsBreakdown.ValidAccounts.ElementAt(i);
+                var linkedAccountDetail = successResult.ValidAccounts.ElementAt(i);
 
                 emisProxyPatient.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
 
@@ -369,7 +369,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
-            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
+            successResult.Should().NotBeNull();
             successResult.HasAnyProxyInfoBeenUpdatedInSession.Should().BeFalse();
 
             _demographicsService.VerifyAll();
@@ -431,10 +431,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
-            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
-            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(1);
-            successResult.LinkedAccountsBreakdown.AccountsWithMismatchingOdsCode.Count().Should().Be(1);
-            successResult.LinkedAccountsBreakdown.AccountsWithNoNhsNumber.Count().Should().Be(1);
+            successResult.Should().NotBeNull();
+            successResult.ValidAccounts.Count().Should().Be(1);
 
             var expectedLogMessage =
                 $"Linked_profiles_count={3}, " +
@@ -445,17 +443,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             var validEmisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(1);
             var demographicsResponseForValidUser = demographicsResponses[validEmisProxyPatient.Id];
-            var validLinkedAccountDetail = successResult.LinkedAccountsBreakdown.ValidAccounts.ElementAt(0);
+            var validLinkedAccountDetail = successResult.ValidAccounts.ElementAt(0);
 
-            var noNhsNumberEmisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(2);
-            var demographicsResponseForNoNhsNumberUser = demographicsResponses[noNhsNumberEmisProxyPatient.Id];
-            var noNhsNumberLinkedAccountDetail = successResult.LinkedAccountsBreakdown.AccountsWithNoNhsNumber.ElementAt(0);
-
-            var notMatchingOdsCodeEmisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(0);
-            var demographicsResponseForNotMatchingOdsCodeUser = demographicsResponses[notMatchingOdsCodeEmisProxyPatient.Id];
-            var notMatchingOdsCodeLinkedAccountDetail = successResult.LinkedAccountsBreakdown.AccountsWithMismatchingOdsCode.ElementAt(0);
-
-            var groupedPatientData = new[]
+            var validPatientData = new[]
             {
                 new
                 {
@@ -463,21 +453,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
                     DemographicsResponse = demographicsResponseForValidUser,
                     LinkedAccountDetail = validLinkedAccountDetail,
                 },
-                new
-                {
-                    Patient = noNhsNumberEmisProxyPatient,
-                    DemographicsResponse = demographicsResponseForNoNhsNumberUser,
-                    LinkedAccountDetail = noNhsNumberLinkedAccountDetail,
-                },
-                new
-                {
-                    Patient = notMatchingOdsCodeEmisProxyPatient,
-                    DemographicsResponse = demographicsResponseForNotMatchingOdsCodeUser,
-                    LinkedAccountDetail = notMatchingOdsCodeLinkedAccountDetail,
-                },
             };
 
-            foreach (var patientData in groupedPatientData)
+            foreach (var patientData in validPatientData)
             {
                 patientData.Patient.NhsNumber.Should().Be(patientData.DemographicsResponse.NhsNumber);
                 patientData.LinkedAccountDetail.Id.Should().Be(patientData.Patient.Id);
@@ -498,8 +476,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
-            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
-            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(0);
+            successResult.Should().NotBeNull();
+            successResult.ValidAccounts.Count().Should().Be(0);
             _demographicsService.VerifyAll();
         }
 
@@ -516,8 +494,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
 
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
-            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
-            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(0);
+            successResult.Should().NotBeNull();
+            successResult.ValidAccounts.Count().Should().Be(0);
             _demographicsService.VerifyAll();
         }
 
@@ -562,9 +540,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
 
-            successResult.LinkedAccountsBreakdown.Should().NotBeNull();
+            successResult.Should().NotBeNull();
             // valid accounts count should be one less as we returned a non-success for one demographics call
-            successResult.LinkedAccountsBreakdown.ValidAccounts.Count().Should().Be(_emisUserSession.ProxyPatients.Count - 1);
+            successResult.ValidAccounts.Count().Should().Be(_emisUserSession.ProxyPatients.Count - 1);
             successResult.HasAnyProxyInfoBeenUpdatedInSession.Should().BeTrue();
 
             var validProxyPatients = _emisUserSession.ProxyPatients.Except(new[] { patientToFailDemographicsFor });
@@ -572,7 +550,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             {
                 var emisProxyPatient = validProxyPatients.ElementAt(i);
                 var demographicsResponseForUser = demographicsResponses[emisProxyPatient.Id];
-                var linkedAccountDetail = successResult.LinkedAccountsBreakdown.ValidAccounts.ElementAt(i);
+                var linkedAccountDetail = successResult.ValidAccounts.ElementAt(i);
 
                 emisProxyPatient.NhsNumber.Should().Be(demographicsResponseForUser.NhsNumber);
 

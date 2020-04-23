@@ -7,8 +7,10 @@ import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.NationalId
+import mocking.tpp.models.PatientAccess
 import mocking.tpp.models.Person
 import mocking.tpp.models.PersonName
+import mocking.tpp.models.Registration
 import mocking.tpp.models.User
 import models.Patient
 
@@ -37,11 +39,15 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
                 onlineUserId = patient.patientId,
                 uuid = "01068966-0a47-429c-9abd-e5c05736a6f7",
                 user = User(person),
-                person = mutableListOf<Person>(person)
+                person = mutableListOf<Person>(person),
+                registration = Registration(
+                        mutableListOf(PatientAccess(patientId = patient.patientId))
+                )
         )
 
         patient.linkedAccounts.forEach {
             reply.person.add(createPerson(it))
+            reply.registration.patientAccess.add(PatientAccess(patientId = it.patientId))
         }
 
         return reply
