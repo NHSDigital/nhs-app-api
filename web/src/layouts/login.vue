@@ -207,7 +207,7 @@ export default {
   }
 
   .login-app-header-flex-container {
-    display: inline-grid;
+    display: flex;
     flex-direction: column;
     height: 90vh;
   }

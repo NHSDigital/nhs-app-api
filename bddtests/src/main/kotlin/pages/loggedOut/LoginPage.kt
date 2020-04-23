@@ -12,6 +12,14 @@ import pages.isVisible
 @DefaultUrl("http://web.local.bitraft.io:3000/login")
 class LoginPage : HybridPageObject() {
 
+    private val pageHeading = HybridPageElement(
+            webDesktopLocator = "//h1[contains(text(), 'Access your NHS services')]",
+            webMobileLocator = "//h2[contains(text(), 'How are you feeling today?')]",
+            androidLocator = "//h2[contains(text(), 'How are you feeling today?')]",
+            iOSLocator = "//h2[contains(text(), 'How are you feeling today?')]",
+            page = this
+    )
+
     val downloadAppPanel = HybridPageElement(
              webDesktopLocator = "//div[@data-id='app-panel']",
             webMobileLocator = "//div[@data-id='app-panel']",
@@ -71,22 +79,14 @@ class LoginPage : HybridPageObject() {
     override fun shouldBeDisplayed() {
         super.shouldBeDisplayed()
 
-        assertTrue("Other Services information is not displayed correctly.",
-                otherServicesDivIsDisplayed())
-        assertTrue("Before you start information is not displayed correctly.",
-                beforeYouStartDivIsDisplayed())
-        assertTrue("Download app panel is not displayed correctly.",
-                downloadAppPanelIsDisplayed())
-        assertTrue("'Continue with NHS login' button is not displayed correctly.",
-                loginOrCreateAccountButtonIsDisplayed())
+        assertTrue("Page heading is not displayed correctly.",
+                pageHeadingIsDisplayed())
     }
 
+    private fun pageHeadingIsDisplayed() = pageHeading.isDisplayed
     private fun loginOrCreateAccountButtonIsDisplayed() = loginOrCreateAccountButton.isDisplayed
-
     private fun otherServicesDivIsDisplayed() = otherServicesDiv.isDisplayed
-
     private fun beforeYouStartDivIsDisplayed() = beforeYouStartDiv.isDisplayed
-
     private fun downloadAppPanelIsDisplayed() = downloadAppPanel.isDisplayed
 
     fun helpIconIsVisible() = helpIcon.isVisible
