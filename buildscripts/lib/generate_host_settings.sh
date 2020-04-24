@@ -51,6 +51,9 @@ function generate_launch_settings() {
     # Add quotes around key and value
     echo 's/^[[:space:]]*\(.*\): \(.*\)$/        "\1": "\2"/'
 
+    # Use localhost for mongo connections
+    echo 's/nhsonline\.mongodb/127.0.0.1/'
+
     echo "s#/app/bddcerts#$REPO_ROOT/bddtests/src/main/kotlin/mocking/dummycerts#"
   } >> "$SED_SCRIPT"
 
