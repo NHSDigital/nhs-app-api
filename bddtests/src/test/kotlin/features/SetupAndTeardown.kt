@@ -51,10 +51,10 @@ class SetupAndTeardown {
 
     @After
     @Suppress("TooGenericExceptionCaught") // Exception is re-thrown
-    fun afterEachScenario() {
+    fun afterEachScenario(scenario: Scenario) {
         try {
             executeTearDownActions()
-            assertNoConsoleLogs()
+            assertNoConsoleLogs(scenario)
         } catch (e: Exception) {
             // If an exception is thrown from this method serenity fails to close the driver
             getWebdriverManager().closeAllDrivers()
@@ -63,7 +63,7 @@ class SetupAndTeardown {
         }
     }
 
-    private fun assertNoConsoleLogs() {
+    private fun assertNoConsoleLogs(scenario: Scenario) {
         var driver = getWebdriverManager().currentDriver
 
         if (driver != null && (driver.isAndroid() || driver.isIOS())) {
@@ -72,10 +72,16 @@ class SetupAndTeardown {
 
         if (driver != null) {
             val logs = driver.manage().logs().get("browser")
+
+            if (scenario.isFailed) {
+                println("Console logs:\r\n$logs")
+            }
+
+            val errorLogs = logs
                     .filter { it.level == Level.SEVERE }
                     .filterNot { it.message.contains(CONSOLE_LOG_STRINGS_TO_IGNORE) }
 
-            Assert.assertTrue("There should not be any console logs but found:\r\n$logs", logs.isEmpty())
+            Assert.assertTrue("There should not be any console logs but found:\r\n$errorLogs", errorLogs.isEmpty())
         }
     }
 
