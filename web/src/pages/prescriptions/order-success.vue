@@ -26,7 +26,7 @@
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton';
 import get from 'lodash/fp/get';
-import { PRESCRIPTIONS } from '@/lib/routes';
+import { PRESCRIPTIONS_VIEW_ORDERS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -41,7 +41,7 @@ export default {
       isProxying: this.$store.getters['session/isProxying'],
       name: get('$store.state.linkedAccounts.actingAsUser.fullName', this),
       givenName: get('$store.state.linkedAccounts.actingAsUser.givenName', this),
-      backPath: PRESCRIPTIONS.path,
+      backPath: PRESCRIPTIONS_VIEW_ORDERS.path,
     };
   },
   mounted() {

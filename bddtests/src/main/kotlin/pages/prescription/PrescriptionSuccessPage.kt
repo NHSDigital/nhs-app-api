@@ -9,7 +9,7 @@ class PrescriptionSuccessPage : HybridPageObject() {
 
     private val prescriptionSuccessMessage = "Your prescription has been ordered"
 
-    private val backLinkText = "Go to your prescriptions"
+    private val backLinkText = "Go to your prescription orders"
 
     private val successMessage = HybridPageElement(
         webDesktopLocator = "//h1[contains(text(),\"$prescriptionSuccessMessage\")]",

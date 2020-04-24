@@ -13,11 +13,17 @@ import {
 export default {
   init({ commit }) {
     commit(INIT_REPEAT_PRESCRIPTIONS);
+    this.dispatch('device/unlockNavBar');
   },
   load({ commit }) {
-    return this.app.$http.getV1PatientCourses().then((data) => {
-      commit(REPEAT_PRESCRIPTION_COURSES_LOADED, data);
-    });
+    return this.app.$http.getV1PatientCourses()
+      .then((data) => {
+        commit(REPEAT_PRESCRIPTION_COURSES_LOADED, data);
+      })
+      .catch(() => false)
+      .finally(() => {
+        this.dispatch('device/unlockNavBar');
+      });
   },
   validate({ commit }, validationObject) {
     commit(REPEAT_PRESCRIPTION_VALIDATED, validationObject);

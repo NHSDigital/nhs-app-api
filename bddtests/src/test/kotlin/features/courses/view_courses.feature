@@ -287,6 +287,8 @@ Feature: View Courses Frontend
     And prescriptions is disabled at a GP Practice level
     And I am logged in
     When I browse to the page at /prescriptions/confirm-prescription-details
+    And the Prescriptions Hub page is displayed
+    And I click the Order a repeat prescription button
     Then I see a message informing me that I don't currently have access to this service
 
   Scenario: The user has 1 repeatable prescription with missing quantity info

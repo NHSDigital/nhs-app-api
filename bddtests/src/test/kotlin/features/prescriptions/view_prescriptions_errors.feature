@@ -10,6 +10,7 @@ Feature: View prescriptions error cases
     And I am logged in
     And The prescriptions endpoint is timing out
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     And I wait for 20 seconds
     Then I see the appropriate error message for a prescription timeout
     Examples:
@@ -22,6 +23,7 @@ Feature: View prescriptions error cases
     And I am logged in
     And The prescriptions endpoint is throwing a server error
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see the appropriate error message for a prescription server error
     Examples:
       | GP System |
@@ -34,6 +36,7 @@ Feature: View prescriptions error cases
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the Order a repeat prescription button
     And My session has expired
     Then I see the login page with the session expiry notification
 

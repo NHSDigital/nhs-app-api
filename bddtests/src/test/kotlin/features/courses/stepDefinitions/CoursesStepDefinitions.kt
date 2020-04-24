@@ -18,9 +18,9 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert
+import pages.PrescriptionsHubPage
 import pages.nominatedPharmacy.NominatedPharmacyCheckPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
-import pages.prescription.PrescriptionsPage
 import pages.prescription.RepeatPrescriptionsPage
 import utils.SerenityHelpers
 import utils.getOrNull
@@ -37,7 +37,7 @@ open class CoursesStepDefinitions {
 
     private val mockingClient = MockingClient.instance
 
-    private lateinit var prescriptions : PrescriptionsPage
+    private lateinit var prescriptionsHubPage : PrescriptionsHubPage
     private lateinit var repeatPrescriptions : RepeatPrescriptionsPage
     private lateinit var nominatedPharmacyCheckPage : NominatedPharmacyCheckPage
     private lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
@@ -169,7 +169,7 @@ open class CoursesStepDefinitions {
 
     @When("I click 'Order a new repeat prescription'")
     fun iClickOrderARepeatPrescription() {
-        prescriptions.clickOrderARepeatPrescriptionButton()
+        prescriptionsHubPage.clickOrderARepeatPrescriptionButton()
     }
 
     @When("I click Continue on the Order a repeat prescription page")

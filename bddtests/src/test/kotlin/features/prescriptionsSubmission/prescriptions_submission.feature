@@ -1,5 +1,4 @@
 @prescription
-
 Feature: Prescriptions submission Frontend
   A user can submit a request for a repeat prescription
 
@@ -23,7 +22,6 @@ Feature: Prescriptions submission Frontend
     And I see the Repeat prescription page with 6 prescriptions
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
-
   Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
     Given the scenario is submit prescription
     And I am using <GP System> GP System to submit my prescription
@@ -107,7 +105,7 @@ Feature: Prescriptions submission Frontend
     And I am using MICROTEST GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
-    When I retrieve the 'Your Prescriptions' page directly
+    Then I navigate to prescriptions
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     But the GP system responds with an error indicating the order was partially successful

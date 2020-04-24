@@ -27,7 +27,7 @@ import models.prescriptions.HistoricPrescription
 import models.prescriptions.PrescriptionLoaderConfiguration
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import pages.prescription.PrescriptionsPage
+import pages.prescription.ViewOrdersPrescriptionsPage
 import pages.prescription.RepeatPrescriptionConfirmationPage
 import pages.prescription.RepeatPrescriptionsPage
 import utils.GlobalSerenityHelpers
@@ -44,7 +44,7 @@ private const val NUM_OF_PRESCRIPTIONS = 10
 
 open class PrescriptionsStepDefinitions {
 
-    private lateinit var prescriptions : PrescriptionsPage
+    private lateinit var viewOrders : ViewOrdersPrescriptionsPage
     private lateinit var repeatPrescriptions: RepeatPrescriptionsPage
     private lateinit var repeatPrescriptionConfirmation : RepeatPrescriptionConfirmationPage
 
@@ -318,31 +318,37 @@ open class PrescriptionsStepDefinitions {
 
     @Then("^I see the name of the proxy user who ordered the prescription$")
     fun thenISeeTheNameOfTheProxyUseWhoOrderedThePrescription() {
-        assertTrue(prescriptions.isOrderedByLabelVisible())
+        assertTrue(viewOrders.isOrderedByLabelVisible())
+    }
+
+
+    @Then("^I click the change nominated pharmacy link on the view orders page$")
+    fun thenIClickTheChangeNominatedPharmacyLink() {
+        viewOrders.iClickTheChangeNominatedPharmacyLink()
     }
 
     @Then("^I do not see the name of the proxy user who ordered the prescription$")
     fun thenIDoNotSeeTheNameOfTheProxyUseWhoOrderedThePrescription() {
-        assertFalse(prescriptions.isOrderedByLabelVisible())
+        assertFalse(viewOrders.isOrderedByLabelVisible())
     }
 
     @Then("^I see a message indicating that I have no repeat prescriptions$")
     fun thenISeeAMessageIndicatingThatIHaveNoRepeatPrescriptions() {
-        assertTrue(prescriptions.isNoPrescriptionsMessageVisible())
+        assertTrue(viewOrders.isNoPrescriptionsMessageVisible())
     }
 
     @Then("^I see (\\d+) prescriptions$")
     fun thenISeeXPrescriptions(numPrescriptions: Int) {
-        prescriptions
+        viewOrders
                 .assertPrescriptionsMatch(
                         getResponseToExpectedPrescriptionFormat(),
                         numPrescriptions,
                         providerHasAllPrescriptionFields())
     }
 
-    @Then("^I see prescriptions page loaded$")
-    fun iSeePrescriptionsPageLoaded() {
-        prescriptions.isLoaded()
+    @Then("^I see view orders prescriptions page loaded$")
+    fun iSeeViewOrdersPrescriptionsPageLoaded() {
+        viewOrders.isLoaded()
     }
 
     @Then("^I see repeat prescription confirmation page loaded$")
@@ -357,7 +363,7 @@ open class PrescriptionsStepDefinitions {
 
     @Then("^I see no prescriptions$")
     fun iSeeNoPrescriptions() {
-        assertTrue(prescriptions.isNoPrescriptionsMessageVisible())
+        assertTrue(viewOrders.isNoPrescriptionsMessageVisible())
     }
 
     private fun providerHasAllPrescriptionFields(): Boolean {

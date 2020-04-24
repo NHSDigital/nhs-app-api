@@ -92,25 +92,21 @@ describe('prescriptions/index.vue', () => {
       wrapper = mountPage(true);
     });
 
-    it('will show pharmacy section', () => {
-      expect(wrapper.find('#nominated-pharmacy-section').exists()).toBe(true);
-    });
-
-    describe('pharmacy link', () => {
-      let nominatedPharmacyLink;
+    describe('nominated pharmacy panel', () => {
+      let nominatedPharmacyPanel;
 
       beforeEach(() => {
         global.digitalData = {};
-        nominatedPharmacyLink = wrapper.find('#nominated-pharmacy');
+        nominatedPharmacyPanel = wrapper.find('#nominated-pharmacy');
       });
 
       it('will exist', () => {
-        expect(nominatedPharmacyLink.exists()).toEqual(true);
+        expect(nominatedPharmacyPanel.exists()).toEqual(true);
       });
 
       describe('clicked', () => {
         beforeEach(() => {
-          nominatedPharmacyLink.trigger('click');
+          nominatedPharmacyPanel.trigger('click');
         });
 
         it('will track nominated pharmacy interrupt path when no nominated pharmacy is assigned', () => {
@@ -128,7 +124,7 @@ describe('prescriptions/index.vue', () => {
       let button;
 
       beforeEach(() => {
-        button = wrapper.find('#order-prescription-button');
+        button = wrapper.find('#repeat-prescription-button');
       });
 
       describe('clicked', () => {
@@ -153,25 +149,21 @@ describe('prescriptions/index.vue', () => {
       wrapper = mountPageWithNominatedPharmacy(true);
     });
 
-    it('will show pharmacy section', () => {
-      expect(wrapper.find('#nominated-pharmacy-section').exists()).toBe(true);
-    });
-
-    describe('pharmacy link', () => {
-      let nominatedPharmacyLink;
+    describe('nominated pharmacy panel', () => {
+      let nominatedPharmacyPanel;
 
       beforeEach(() => {
         global.digitalData = {};
-        nominatedPharmacyLink = wrapper.find('#nominated-pharmacy');
+        nominatedPharmacyPanel = wrapper.find('#nominated-pharmacy');
       });
 
       it('will exist', () => {
-        expect(nominatedPharmacyLink.exists()).toEqual(true);
+        expect(nominatedPharmacyPanel.exists()).toEqual(true);
       });
 
       describe('clicked', () => {
         beforeEach(() => {
-          nominatedPharmacyLink.trigger('click');
+          nominatedPharmacyPanel.trigger('click');
         });
 
         it('will track nominated pharmacy search path when no nominated pharmacy is assigned', () => {
@@ -192,14 +184,14 @@ describe('prescriptions/index.vue', () => {
     });
 
     it('will not show pharmacy section', () => {
-      expect(wrapper.find('#nominated-pharmacy-section').exists()).toBe(false);
+      expect(wrapper.find('#nominatedPharmacyPanel').exists()).toBe(false);
     });
 
     describe('order new repeat prescription button', () => {
       let button;
 
       beforeEach(() => {
-        button = wrapper.find('#order-prescription-button');
+        button = wrapper.find('#repeat-prescription-button');
       });
 
       describe('clicked', () => {

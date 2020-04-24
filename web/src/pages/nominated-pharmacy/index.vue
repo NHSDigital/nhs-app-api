@@ -27,12 +27,11 @@
     </div>
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <analytics-tracked-tag :text="$t('generic.backButton.text')">
-          <desktopGenericBackLink v-if="!$store.state.device.isNativeApp"
-                                  :id="'back-button'"
-                                  :path="prescriptionsPath"
-                                  :button-text="'generic.backButton.text'"
-                                  @clickAndPrevent="backButtonClicked"/>
+        <analytics-tracked-tag v-if="!$store.state.device.isNativeApp"
+                               :text="$t('generic.backButton.text')">
+          <p>
+            <a href="#" @click="backButtonClicked"> {{ $t('generic.backButton.text') }} </a>
+          </p>
         </analytics-tracked-tag>
       </div>
     </div>
@@ -43,19 +42,17 @@
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
-import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import { PRESCRIPTIONS, NOMINATED_PHARMACY } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
+import { redirectTo, navigateBack } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
     AnalyticsTrackedTag,
     PharmacyDetail,
-    DesktopGenericBackLink,
     MessageDialog,
     MessageText,
   },
@@ -85,8 +82,14 @@ export default {
   },
   methods: {
     backButtonClicked() {
-      redirectTo(this, this.prescriptionsPath);
+      navigateBack(this);
     },
   },
+
 };
 </script>
+<style module lang="scss" scoped>
+  a {
+    display: inline-block;
+  }
+</style>

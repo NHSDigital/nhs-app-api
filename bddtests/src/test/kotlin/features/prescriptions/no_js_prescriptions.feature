@@ -27,7 +27,7 @@ Feature: Prescriptions Service With Javascript Disabled
     And I am using EMIS GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
-    When I retrieve the 'Your Prescriptions' page directly
+    And I navigate to prescriptions
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     But EMIS responds with an error indicating an included course has already been ordered in the last 30 days when submitting the repeat prescription

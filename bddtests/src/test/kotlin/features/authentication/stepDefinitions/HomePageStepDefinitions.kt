@@ -20,7 +20,7 @@ import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
 import pages.AppointmentHubPage
 import pages.HybridPageElement
-import pages.prescription.PrescriptionsPage
+import pages.PrescriptionsHubPage
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -48,7 +48,7 @@ class HomePageStepDefinitions {
     @Steps
     private lateinit var recordWarning: MedicalRecordWarningStepDefinitions
 
-    private lateinit var prescriptions: PrescriptionsPage
+    private lateinit var prescriptionsHubPage: PrescriptionsHubPage
 
     @Given("^I am at the login page")
     fun givenIAmAtTheLoginPage() {
@@ -146,6 +146,13 @@ class HomePageStepDefinitions {
         }
     }
 
+    @And("I see the medical record page for EMIS")
+    fun iSeeMedicalRecordForEmis() {
+        homeSteps.homePage.viewMedicalRecordLink.click()
+        recordWarning.thenISeeRecordWarningPageOpened()
+        navBar.isHighlighted(NavBarNative.NavBarType.MY_RECORD)
+    }
+
     @And("I do not see the home page links")
     fun iDoNotSeeTheHomePageLinks() {
         homeSteps.homePage.assertHomePageLinksNotPresent()
@@ -174,7 +181,16 @@ class HomePageStepDefinitions {
 
     private fun followPrescriptionLink(linkElement: HybridPageElement) {
         linkElement.click()
-        prescriptions.isLoaded()
+        prescriptionsHubPage.assertPrescriptionsHubIsDisplayed()
+    }
+
+    private fun followMessagesLink() {
+        homeSteps.homePage.messagesLink.click()
+    }
+
+    private fun followPrescriptionLink() {
+        homeSteps.homePage.orderRepeatPrescriptionLink.click()
+        prescriptionsHubPage.assertPrescriptionsHubIsDisplayed()
         navBar.isHighlighted(NavBarNative.NavBarType.PRESCRIPTIONS)
     }
 

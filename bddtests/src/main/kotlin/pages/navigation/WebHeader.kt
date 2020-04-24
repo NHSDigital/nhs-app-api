@@ -8,7 +8,7 @@ open class WebHeader : HybridPageObject() {
     var pageHeaders: Map<String, String> = mapOf(
             Pair("Symptoms", "Symptoms"),
             Pair("Appointments", "Your appointments"),
-            Pair("Repeat prescriptions", "Your repeat prescriptions"),
+            Pair("Prescriptions", "Prescriptions"),
             Pair("Your medical record", "Your medical record"),
             Pair("More", "More"),
             Pair("Account", "My account"),

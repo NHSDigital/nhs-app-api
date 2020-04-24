@@ -9,10 +9,10 @@ Feature: nominated pharmacy journey
     And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
     And I am logged in
     And I navigate to prescriptions
-    Then I see prescriptions page loaded
-    And I see the nominated pharmacy panel on the prescriptions page
-    And I see my nominated pharmacy on the prescriptions page
-    When I click on the nominated pharmacy panel
+    Then the Prescriptions Hub page is displayed
+    And I see the nominated pharmacy panel on the prescriptions hub page
+    And I see my nominated pharmacy on the prescriptions hub page
+    When I click the nominated pharmacy link on the Prescriptions Hub
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
     When I click on change your nominated pharmacy link
@@ -29,9 +29,41 @@ Feature: nominated pharmacy journey
     And I see confirm nominated page with selected pharmacy details
     When I click on confirm button to change my nominated pharmacy
     Then I see the change success page with my nominated pharmacy details
-    When I click on the go to your repeat prescriptions link
-    Then I see prescriptions page loaded
-    And I see my nominated pharmacy on the prescriptions page
+    When I click on the go to your prescriptions orders link
+    Then I see view orders prescriptions page loaded
+    And I see my nominated pharmacy on the view orders page
+
+    Examples:
+      | GP System | Pharmacy type | search text | OdsCode |
+      | EMIS      | P1            | se1       | SW11XR  |
+
+  Scenario Outline: Patient can change their nominated pharmacy from View Orders
+    Given I am patient using the <GP System> GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
+    And I am logged in
+    And I navigate to prescriptions
+    Then the Prescriptions Hub page is displayed
+    When I click the View Orders link
+    And I click the change nominated pharmacy link on the view orders page
+    Then I see the update nominated pharmacy interrupt page loaded
+    When I click on the interrupt continue button
+    Then I see the choose type page is loaded
+    And I select high street pharmacy
+    And I click on the choose type continue button
+    And I see search nominated pharmacy page loaded
+    Given searching for pharmacies with <search text> has 10 results
+    When I search for a <search text> and click on search button
+    Then I see list of pharmacies displayed on the result page
+    And I click on item 4 pharmacy from the list of pharmacies
+    And I see confirm nominated page with selected pharmacy details
+    When I click on confirm button to change my nominated pharmacy
+    Then I see the change success page with my nominated pharmacy details
+    When I click on the go to your prescriptions orders link
+    And I see view orders prescriptions page loaded
+    Then I see my nominated pharmacy on the view orders page
 
     Examples:
       | GP System | Pharmacy type | search text | OdsCode |
@@ -45,10 +77,10 @@ Feature: nominated pharmacy journey
     And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
     And I am logged in
     And I navigate to prescriptions
-    Then I see prescriptions page loaded
-    And I see the nominated pharmacy panel on the prescriptions page
-    And I see my nominated pharmacy on the prescriptions page
-    When I click on the nominated pharmacy panel
+    Then the Prescriptions Hub page is displayed
+    And I see the nominated pharmacy panel on the prescriptions hub page
+    And I see my nominated pharmacy on the prescriptions hub page
+    When I click the nominated pharmacy link on the Prescriptions Hub
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
     When I click on change your nominated pharmacy link
@@ -59,9 +91,9 @@ Feature: nominated pharmacy journey
     And I click on the choose type continue button
     And I see the dsp interrupt page is loaded
     And I click on the DSP Interrupt Prescription Home link
-    And I see prescriptions page loaded
-    And I see the nominated pharmacy panel on the prescriptions page
-    And I see my nominated pharmacy on the prescriptions page
+    And the Prescriptions Hub page is displayed
+    And I see the nominated pharmacy panel on the prescriptions hub page
+    And I see my nominated pharmacy on the prescriptions hub page
     Examples:
       | GP System | Pharmacy type | OdsCode |
       | EMIS      | P1            | SW11XR  |
@@ -74,10 +106,10 @@ Feature: nominated pharmacy journey
     And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
     And I am logged in
     And I navigate to prescriptions
-    Then I see prescriptions page loaded
-    And I see the nominated pharmacy panel on the prescriptions page
-    And I see my nominated pharmacy on the prescriptions page
-    When I click on the nominated pharmacy panel
+    Then the Prescriptions Hub page is displayed
+    And I see the nominated pharmacy panel on the prescriptions hub page
+    And I see my nominated pharmacy on the prescriptions hub page
+    When I click the nominated pharmacy link on the Prescriptions Hub
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
     When I click on change your nominated pharmacy link
@@ -101,10 +133,10 @@ Feature: nominated pharmacy journey
     And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
     And I am logged in
     And I navigate to prescriptions
-    Then I see prescriptions page loaded
-    And I see the nominated pharmacy panel on the prescriptions page
-    And I see my nominated pharmacy on the prescriptions page
-    When I click on the nominated pharmacy panel
+    Then the Prescriptions Hub page is displayed
+    And I see the nominated pharmacy panel on the prescriptions hub page
+    And I see my nominated pharmacy on the prescriptions hub page
+    When I click the nominated pharmacy link on the Prescriptions Hub
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
     When I click on change your nominated pharmacy link
@@ -128,10 +160,10 @@ Feature: nominated pharmacy journey
     And I have a <Pharmacy type> typed nominated pharmacy with <OdsCode> OdsCode
     And I am logged in
     And I navigate to prescriptions
-    Then I see prescriptions page loaded
-    And I see the nominated pharmacy panel on the prescriptions page
-    And I see my nominated pharmacy on the prescriptions page
-    When I click on the nominated pharmacy panel
+    Then the Prescriptions Hub page is displayed
+    And I see the nominated pharmacy panel on the prescriptions hub page
+    And I see my nominated pharmacy on the prescriptions hub page
+    When I click the nominated pharmacy link on the Prescriptions Hub
     Then I see nominated pharmacy page loaded
     And I see the change my nominated pharmacy link
     When I click on change your nominated pharmacy link
@@ -157,10 +189,10 @@ Feature: nominated pharmacy journey
     And I don't have a nominated pharmacy of any type
     And I am logged in
     When I navigate to prescriptions
-    Then I see prescriptions page loaded
-    And I see the nominated pharmacy panel on the prescriptions page
+    And the Prescriptions Hub page is displayed
+    Then I see the nominated pharmacy panel on the prescriptions hub page
     And I see that I haven't nominated a pharmacy on the prescriptions page
-    When I click on the nominated pharmacy panel
+    When I click the nominated pharmacy link on the Prescriptions Hub
     Then I see the set nominated pharmacy interrupt page loaded
     When I click on the interrupt continue button
     Then I see the choose type page is loaded
@@ -173,9 +205,9 @@ Feature: nominated pharmacy journey
     Then I see confirm nominated page with selected pharmacy details
     When I click on confirm button to change my nominated pharmacy
     Then I see the change success page with my nominated pharmacy details
-    When I click on the go to your repeat prescriptions link
-    Then I see prescriptions page loaded
-    And I see my nominated pharmacy on the prescriptions page
+    When I click on the go to your prescriptions orders link
+    Then I see view orders prescriptions page loaded
+    And I see my nominated pharmacy on the view orders page
 
     Examples:
       | GP System | search text |
@@ -188,8 +220,23 @@ Feature: nominated pharmacy journey
     And my GP Practice is EPS disabled
     And I am logged in
     When I navigate to prescriptions
-    Then I see prescriptions page loaded
+    Then the Prescriptions Hub page is displayed
     And I do not see the nominated pharmacy panel
+
+    Examples:
+      | GP System |
+      | EMIS      |
+
+  Scenario Outline: Patient with no nominated pharmacy sees relevant text in View Orders Page
+    Given I am patient using the <GP System> GP System
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And my GP Practice is EPS enabled
+    And I don't have a nominated pharmacy of any type
+    And I am logged in
+    When I navigate to prescriptions
+    And I click the View Orders link
+    Then I see the help text for no set nominated pharmacy
 
     Examples:
       | GP System |
@@ -203,7 +250,7 @@ Feature: nominated pharmacy journey
     And I have a P1 typed nominated pharmacy with SW11XR OdsCode and S ConfidentialityCode
     And I am logged in
     When I navigate to prescriptions
-    Then I see prescriptions page loaded
+    Then the Prescriptions Hub page is displayed
     And I do not see the nominated pharmacy panel
 
     Examples:
@@ -218,7 +265,7 @@ Feature: nominated pharmacy journey
     And I have a P1 typed nominated pharmacy with SW11XR OdsCode and nhsNumber 1234567890 is returned
     And I am logged in
     When I navigate to prescriptions
-    Then I see prescriptions page loaded
+    Then the Prescriptions Hub page is displayed
     And I do not see the nominated pharmacy panel
 
     Examples:
@@ -235,7 +282,7 @@ Feature: nominated pharmacy journey
     And I have a P1 typed nominated pharmacy with SW11XR OdsCode
     And I am logged in
     When I navigate to prescriptions
-    Then I see prescriptions page loaded
+    Then the Prescriptions Hub page is displayed
     And I do not see the nominated pharmacy panel
 
   Scenario Outline: If patient has a P3 typed nominated pharmacy then Patient does not see nominated pharmacy
@@ -246,12 +293,12 @@ Feature: nominated pharmacy journey
     And I have a <Pharmacy Type> typed nominated pharmacy with <OdsCode> OdsCode
     And I am logged in
     When I navigate to prescriptions
-    Then I see prescriptions page loaded
+    Then the Prescriptions Hub page is displayed
     And I do not see the nominated pharmacy panel
   # these steps have been commented out but not deleted as the expectation is that we will be enabling for phase 2
   # so these steps become relevant at that point
 
-  #  And I see the nominated pharmacy panel on the prescriptions page
+  #  And I see the nominated pharmacy panel on the prescriptions hub page
   #  When I click on the nominated pharmacy panel
   #  Then I see nominated pharmacy page loaded with dispensing practise header
   #  And I see how to change dispensing practice instruction
@@ -270,9 +317,9 @@ Feature: nominated pharmacy journey
     And I have a P1 typed Internet pharmacy with <OdsCode> OdsCode
     And I am logged in
     When I navigate to prescriptions
-    Then I see prescriptions page loaded
-    And I see the nominated pharmacy panel on the prescriptions page
-    And I see my nominated pharmacy on the prescriptions page
+    Then the Prescriptions Hub page is displayed
+    And I see the nominated pharmacy panel on the prescriptions hub page
+    And I see my nominated pharmacy on the prescriptions hub page
 
     Examples:
       | GP System | OdsCode |

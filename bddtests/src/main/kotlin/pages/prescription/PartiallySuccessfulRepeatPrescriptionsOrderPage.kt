@@ -19,7 +19,7 @@ open class PartiallySuccessfulRepeatPrescriptionsOrderPage : HybridPageObject() 
     }
 
     val backToPrescriptionsButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(), 'Back to prescriptions')]",
+            webDesktopLocator = "//button[contains(text(), 'Go to your prescription orders')]",
             page = this
     )
 

@@ -32,6 +32,7 @@ import {
   GP_MESSAGES_DELETE,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
+  PRESCRIPTIONS_VIEW_ORDERS,
   PRESCRIPTION_REPEAT_COURSES,
   TESTRESULTID,
   TESTRESULTS,
@@ -211,6 +212,13 @@ export default {
     },
     {
       route: PRESCRIPTIONS.path,
+      errorOverrideStyles: { 403: 'plain' },
+      redirectUrl: {
+        default: PRESCRIPTIONS.path,
+      },
+    },
+    {
+      route: PRESCRIPTIONS_VIEW_ORDERS.path,
       errorOverrideStyles: { 403: 'plain' },
       redirectUrl: {
         default: PRESCRIPTIONS.path,

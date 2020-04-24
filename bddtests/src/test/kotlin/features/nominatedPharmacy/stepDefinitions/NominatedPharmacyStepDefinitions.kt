@@ -13,6 +13,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import pages.PrescriptionsHubPage
 import pages.isVisible
 import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
 import pages.nominatedPharmacy.SearchNominatedPharmacyPage
@@ -21,7 +22,7 @@ import pages.nominatedPharmacy.ConfirmNominatedPharmacyPage
 import pages.nominatedPharmacy.NominatedPharmacyResultsPage
 import pages.nominatedPharmacy.NominatedPharmacyChangeSuccessPage
 import pages.nominatedPharmacy.NominatedPharmacyInterruptPage
-import pages.prescription.PrescriptionsPage
+import pages.prescription.ViewOrdersPrescriptionsPage
 import pages.text
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -33,11 +34,13 @@ class NominatedPharmacyStepDefinitions {
 
     private lateinit var nominatedPharmacyPage: NominatedPharmacyPage
 
+    private lateinit var viewOrdersPrescriptionsPage: ViewOrdersPrescriptionsPage
+
     private lateinit var confirmNominatedPharmacyPage: ConfirmNominatedPharmacyPage
 
-    private lateinit var nominatedPharmacyResultsPage : NominatedPharmacyResultsPage
+    private lateinit var nominatedPharmacyResultsPage: NominatedPharmacyResultsPage
 
-    private lateinit var prescriptionsPage: PrescriptionsPage
+    private lateinit var prescriptionsHubPage: PrescriptionsHubPage
 
     private lateinit var nominatedPharmacyChangeSuccessPage: NominatedPharmacyChangeSuccessPage
 
@@ -75,12 +78,12 @@ class NominatedPharmacyStepDefinitions {
     }
 
     @Given("^I have a (.*) typed nominated pharmacy with (.*) OdsCode$")
-    fun iHaveANominatedPharmacy(pharmacyType : String, odsCode: String) {
+    fun iHaveANominatedPharmacy(pharmacyType: String, odsCode: String) {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacy(pharmacyType, odsCode)
     }
 
     @Given("^I have a (.*) typed nominated pharmacy$")
-    fun iHaveANominatedPharmacy(pharmacyType : String) {
+    fun iHaveANominatedPharmacy(pharmacyType: String) {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacy(pharmacyType, SerenityHelpers.getPatient().odsCode)
     }
 
@@ -90,12 +93,12 @@ class NominatedPharmacyStepDefinitions {
     }
 
     @Given("^I have a (.*) typed nominated pharmacy with (.*) OdsCode and nhsNumber (.*) is returned$")
-    fun iHaveANomPharmButDifferentNhsNumberIsReturned(pharmacyType : String, odsCode: String, nhsNumber: String) {
+    fun iHaveANomPharmButDifferentNhsNumberIsReturned(pharmacyType: String, odsCode: String, nhsNumber: String) {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacyWithDifferentNhsNumber(pharmacyType, odsCode, nhsNumber)
     }
 
     @Given("^I have a (.*) typed nominated pharmacy with (.*) OdsCode and (.*) ConfidentialityCode$")
-    fun iHaveANomPharmAndConfidentialityCode(pharmacyType : String, odsCode: String, confidentialityCode: String) {
+    fun iHaveANomPharmAndConfidentialityCode(pharmacyType: String, odsCode: String, confidentialityCode: String) {
         nominatedPharmacyDataSetupSteps.setupNominatedPharmacy(pharmacyType, odsCode, confidentialityCode)
     }
 
@@ -109,9 +112,14 @@ class NominatedPharmacyStepDefinitions {
         nominatedPharmacyPage.changePharmacyLink.click()
     }
 
-    @When("^I click on the nominated pharmacy panel$")
-    fun iClickTheNominatedPharmacyPanel() {
-        prescriptionsPage.nominatedPharmacyPanel.click()
+    @When("^I click on the nominated pharmacy panel when pharmacy is set$")
+    fun iClickTheNominatedPharmacyPanelWhenPharmacyIsSet() {
+        prescriptionsHubPage.nominatedPharmacyLink.click()
+    }
+
+    @When("^I click on the nominated pharmacy panel when pharmacy is not set$")
+    fun iClickTheNominatedPharmacyPanelWhenPharmacyIsNotSet() {
+        prescriptionsHubPage.nominatedPharmacyLink.click()
     }
 
     @When("^I search for a (.*) and click on search button$")
@@ -200,18 +208,18 @@ class NominatedPharmacyStepDefinitions {
         }
     }
 
-    @When("^I click on the go to your repeat prescriptions link$")
+    @When("^I click on the go to your prescriptions orders link$")
     fun iClickOnGoToYourRepeatPrescriptionsLink() {
         nominatedPharmacyChangeSuccessPage.prescriptionsLink.click()
     }
 
-    @Then("^I see the nominated pharmacy panel on the prescriptions page$")
+    @Then("^I see the nominated pharmacy panel on the prescriptions hub page$")
     fun iSeeTheNominatedPharmacyBanner() {
         assertTrue(
-                "Nominated pharmacy panel is visible", prescriptionsPage.nominatedPharmacyPanel.isVisible)
+                "Nominated pharmacy panel is visible", prescriptionsHubPage.nominatedPharmacyLink.isVisible)
     }
 
-    @Then("^I see my nominated pharmacy on the prescriptions page$")
+    @Then("^I see my nominated pharmacy on the prescriptions hub page$")
     fun iSeeMyNominatedPharmacyOnThePrescriptionsPage() {
         val updatedPharmacy = NominatedPharmacySerenityHelpers
                 .MY_NOMINATED_PHARMACY
@@ -219,12 +227,32 @@ class NominatedPharmacyStepDefinitions {
 
         assertEquals(
                 "Nominated pharmacy name is not correct",
-                updatedPharmacy.OrganisationName, prescriptionsPage.getNominatedPharmacyName())
+                updatedPharmacy.OrganisationName, prescriptionsHubPage.pharmacyName.text)
+    }
+
+    @Then("^I see the help text for no set nominated pharmacy$")
+    fun iSeeTheHelpTextForNoSetNominatedPharmacy() {
+        assertEquals(
+                "Help text for no set pharmacy is missing",
+                "You do not have a nominated pharmacy.",
+                viewOrdersPrescriptionsPage.noSetNominatedPharmacyHelpText.text)
+    }
+
+    @Then("^I see my nominated pharmacy on the view orders page$")
+    fun iSeeMyNominatedPharmacyOnTheViewOrdersPage() {
+        val updatedPharmacy = NominatedPharmacySerenityHelpers
+                .MY_NOMINATED_PHARMACY
+                .getOrFail<NhsAzureSearchOrganisationItem>()
+
+        assertEquals(
+                "Nominated pharmacy name is not correct",
+                updatedPharmacy.OrganisationName, viewOrdersPrescriptionsPage.getNominatedPharmacyName())
     }
 
     @Then("^I see that I haven't nominated a pharmacy on the prescriptions page$")
     fun iSeeThatIHaventNominatedAPharmacyOnThePrescriptionsPage() {
-        assertEquals("You've not nominated a pharmacy", prescriptionsPage.getNominatedPharmacyName())
+        assertEquals("Choose a pharmacy for your prescriptions to be sent to",
+                prescriptionsHubPage.pharmacyName.text)
     }
 
     @Then("^I see nominated pharmacy page loaded$")
@@ -276,7 +304,7 @@ class NominatedPharmacyStepDefinitions {
     }
 
     @Then("^I see list of pharmacies displayed on the result page$")
-    fun iSeePharmaciesOnResultsPage(){
+    fun iSeePharmaciesOnResultsPage() {
         nominatedPharmacyResultsPage.isLoaded()
         val expectedData = NominatedPharmacySerenityHelpers
                 .SEARCH_RESULTS
@@ -284,8 +312,7 @@ class NominatedPharmacyStepDefinitions {
 
         val searchResults = nominatedPharmacyResultsPage.getPharmacies()
 
-        expectedData.forEachIndexed {
-            index, dataItem ->
+        expectedData.forEachIndexed { index, dataItem ->
             assertEquals(
                     "Pharmacy name is not correct",
                     dataItem.OrganisationName, searchResults[index].pharmacyName)
@@ -348,32 +375,7 @@ class NominatedPharmacyStepDefinitions {
         }
     }
 
-    @Then("^I see my nominated pharmacy page with updated pharmacy details$")
-    fun iSeeNominatedPharmacyPageWithUpdatedPharmacyDetails() {
-        nominatedPharmacyPage.isLoadedWithPharmacy()
-        nominatedPharmacyPage.assertYouHaveChangedYourPharmacySuccessBannerIsVisible()
-
-        checkPharmacyDetailsAreCorrect()
-    }
-
-    @Then("^I see your nominated pharmacy page with chosen pharmacy details$")
-    fun iSeeNominatedPharmacyPageWithChosenPharmacyDetails() {
-        nominatedPharmacyPage.isLoadedWithPharmacy()
-        nominatedPharmacyPage.assertYouHaveChosenYourNominatedPharmacyBannerIsVisible()
-
-        checkPharmacyDetailsAreCorrect()
-    }
-
-    @Then("^I see how to change dispensing practice instruction$")
-    fun iSeeHowToChangeDispensingPractise() {
-        assertTrue("Instruction 1 to change pharmacy is not visible",
-                nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine1.isVisible)
-
-        assertTrue("Instruction 2 to change pharmacy is not visible",
-                nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine2.isVisible)
-    }
-
-    private fun checkPharmacyDetailsAreCorrect() {
+    fun checkPharmacyDetailsAreCorrect() {
         val selectedPharmacy = NominatedPharmacySerenityHelpers
                 .MY_NOMINATED_PHARMACY
                 .getOrFail<NhsAzureSearchOrganisationItem>()
@@ -414,5 +416,30 @@ class NominatedPharmacyStepDefinitions {
                     "Phone number is not correct",
                     "Telephone: " + phoneNumber, nominatedPharmacyPage.pharmacyPhoneNumber.text)
         }
+    }
+
+    @Then("^I see my nominated pharmacy page with updated pharmacy details$")
+    fun iSeeNominatedPharmacyPageWithUpdatedPharmacyDetails() {
+        nominatedPharmacyPage.isLoadedWithPharmacy()
+        nominatedPharmacyPage.assertYouHaveChangedYourPharmacySuccessBannerIsVisible()
+
+        checkPharmacyDetailsAreCorrect()
+    }
+
+    @Then("^I see your nominated pharmacy page with chosen pharmacy details$")
+    fun iSeeNominatedPharmacyPageWithChosenPharmacyDetails() {
+        nominatedPharmacyPage.isLoadedWithPharmacy()
+        nominatedPharmacyPage.assertYouHaveChosenYourNominatedPharmacyBannerIsVisible()
+
+        checkPharmacyDetailsAreCorrect()
+    }
+
+    @Then("^I see how to change dispensing practice instruction$")
+    fun iSeeHowToChangeDispensingPractise() {
+        assertTrue("Instruction 1 to change pharmacy is not visible",
+                nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine1.isVisible)
+
+        assertTrue("Instruction 2 to change pharmacy is not visible",
+                nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine2.isVisible)
     }
 }

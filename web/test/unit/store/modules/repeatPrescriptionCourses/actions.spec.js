@@ -14,11 +14,28 @@ describe('load', () => {
           getV1PatientCourses: jest.fn().mockResolvedValue(),
         },
       },
+      dispatch: jest.fn(),
     };
 
     return load.call(that, { commit: jest.fn() }).then(() => {
       expect(that.app.$http.getV1PatientCourses).toBeCalled();
     });
+  });
+
+  it('will dispatch device/unlockNavBar', async () => {
+    const dispatch = jest.fn();
+    const that = {
+      app: {
+        $http: {
+          getV1PatientCourses: jest.fn().mockImplementation(() => Promise.resolve()),
+        },
+      },
+      dispatch,
+    };
+
+    await load.call(that, { commit: jest.fn() });
+
+    expect(dispatch).toHaveBeenCalledWith('device/unlockNavBar');
   });
 
   it('will call commit with the data returned from the HTTP call', () => {
@@ -36,6 +53,7 @@ describe('load', () => {
           getV1PatientCourses: () => Promise.resolve(expected),
         },
       },
+      dispatch: jest.fn(),
     };
 
     const commit = jest.fn();

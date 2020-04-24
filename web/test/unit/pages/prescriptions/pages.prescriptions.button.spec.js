@@ -9,6 +9,7 @@ describe('prescriptions page', () => {
   let wrapper;
   let $router;
   let state;
+  let button;
 
   const createState = () => {
     state = {
@@ -42,12 +43,16 @@ describe('prescriptions page', () => {
         'page-title': '<div></div>',
       },
     });
+    button = wrapper.find('#repeat-prescription-button');
   });
 
   describe('order a repeat prescription button', () => {
     it('will exist on page', () => {
-      const button = wrapper.find('#order-prescription-button');
       expect(button.exists()).toBe(true);
+    });
+
+    it('will have the correct text', () => {
+      expect(button.text()).toEqual('translate_gpPrescriptionsHub.menuOptions.orderRepeat');
     });
   });
 });

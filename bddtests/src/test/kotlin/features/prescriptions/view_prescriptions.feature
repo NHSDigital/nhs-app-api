@@ -11,7 +11,7 @@ Feature: View prescriptions Frontend
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
     And I navigate to prescriptions
-    Then I see prescriptions page loaded
+    Then the Prescriptions Hub page is displayed
     And the prescriptions menu button is highlighted on mobile
     Examples:
       | GP System |
@@ -26,6 +26,7 @@ Feature: View prescriptions Frontend
     And each repeat prescription contains 0 courses of which 0 are repeats
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see no prescriptions
     And I see a message indicating that I have no repeat prescriptions
     Examples:
@@ -38,6 +39,7 @@ Feature: View prescriptions Frontend
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see 100 prescriptions
     Examples:
       | GP System |
@@ -51,6 +53,7 @@ Feature: View prescriptions Frontend
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see 3 prescriptions
     Examples:
       | GP System |
@@ -62,6 +65,7 @@ Feature: View prescriptions Frontend
     And each repeat prescription shares the same course
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see 3 prescriptions
     Examples:
       | GP System |
@@ -76,6 +80,7 @@ Feature: View prescriptions Frontend
     And I am logged in
     And I see the home page
     When I navigate to Prescriptions
+    And I click the View Orders link
     Then I see the name of the proxy user who ordered the prescription
 
   Scenario: The Ordered by label does not exist if the prescription was not ordered by proxy
@@ -85,6 +90,7 @@ Feature: View prescriptions Frontend
     And I am logged in
     And I see the home page
     When I navigate to Prescriptions
+    And I click the View Orders link
     Then I do not see the name of the proxy user who ordered the prescription
 
   Scenario Outline: <GP System> patient who has only one prescription containing multiple courses
@@ -93,6 +99,7 @@ Feature: View prescriptions Frontend
     And each repeat prescription contains 3 courses of which 3 are repeats
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see 3 prescriptions
     Examples:
       | GP System |
@@ -104,6 +111,7 @@ Feature: View prescriptions Frontend
     And each repeat prescription contains 3 courses of which 2 are repeats
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see 2 prescriptions
 
   @nativesmoketest
@@ -112,6 +120,7 @@ Feature: View prescriptions Frontend
     And prescriptions is disabled at a GP Practice level
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click 'Order a new repeat prescription'
     Then I see a message informing me that I don't currently have access to this service
     Examples:
       | GP System |
@@ -124,6 +133,7 @@ Feature: View prescriptions Frontend
     And each course has only dosage info
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see 1 prescriptions
     Examples:
       | GP System |
@@ -136,6 +146,7 @@ Feature: View prescriptions Frontend
     And each course has only quantity info
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see 1 prescriptions
     Examples:
       | GP System |
@@ -148,6 +159,7 @@ Feature: View prescriptions Frontend
     And each course has no info
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see 1 prescriptions
 
   Scenario: A user who has multiple prescriptions but medication status should not be displayed
@@ -163,5 +175,6 @@ Feature: View prescriptions Frontend
       | Cancelled           |
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
+    And I click the View Orders link
     Then I see 4 prescriptions
 

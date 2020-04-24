@@ -261,12 +261,13 @@ describe('api errors', () => {
 
           describe('retry action and retry text', () => {
             beforeEach(() => {
-              // This has retry text because prescriptions has an associated `retryButtonText`
+              // This has retry text because View orders page from prescriptions hub
+              // has an associated `retryButtonText`
               // in the locale file.
               state = createState({
                 action: { 504: '/test' },
                 isNativeApp: false,
-                path: '/prescriptions',
+                path: '/prescriptions/view-orders',
                 status: 504,
               });
               $store = createStore({ getters, state });
@@ -279,7 +280,7 @@ describe('api errors', () => {
 
             it('will have the retry text', () => {
               expect(wrapper.find('[data-purpose="retry-or-back-button"').text())
-                .toEqual('translate_prescriptions.errors.504.retryButtonText');
+                .toEqual('translate_prescriptions.view_orders.errors.504.retryButtonText');
             });
 
             it('will call setFocus method on update', () => {

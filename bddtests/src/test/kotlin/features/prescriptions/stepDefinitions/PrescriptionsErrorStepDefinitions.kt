@@ -12,7 +12,7 @@ import org.junit.Assert
 import pages.ErrorPage
 import pages.navigation.WebHeader
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
-import pages.prescription.PrescriptionsPage
+import pages.prescription.ViewOrdersPrescriptionsPage
 import pages.text
 import utils.SerenityHelpers
 
@@ -20,7 +20,7 @@ class PrescriptionsErrorStepDefinitions {
 
     private val mockingClient = MockingClient.instance
 
-    private lateinit var prescriptionsPage: PrescriptionsPage
+    private lateinit var prescriptionsViewOrdersPage: ViewOrdersPrescriptionsPage
     private lateinit var confirmRepeatPrescriptionsOrderPage: ConfirmRepeatPrescriptionsOrderPage
     private lateinit var errorPage: ErrorPage
     private lateinit var webHeader: WebHeader
@@ -86,10 +86,10 @@ class PrescriptionsErrorStepDefinitions {
     @Then("I see the appropriate error message for a prescription timeout")
     fun thenISeeTheAppropriateErrorMessageForAPrescriptionTimeout() {
 
-        val pageHeader = prescriptionsPage.timeoutPageHeader
-        val header = prescriptionsPage.timeoutHeader
-        val message = prescriptionsPage.timeoutMessage
-        val retryButtonText = prescriptionsPage.timeoutRetryButtonText
+        val pageHeader = prescriptionsViewOrdersPage.timeoutPageHeader
+        val header = prescriptionsViewOrdersPage.timeoutHeader
+        val message = prescriptionsViewOrdersPage.timeoutMessage
+        val retryButtonText = prescriptionsViewOrdersPage.timeoutRetryButtonText
 
         errorPage.assertHeaderText(header)
                 .assertMessageText(message)
@@ -100,9 +100,9 @@ class PrescriptionsErrorStepDefinitions {
     @Then("I see the appropriate error message for a prescription server error")
     fun thenISeeTheAppropriateErrorMessageForAPrescriptionServerError() {
 
-        val pageHeader = prescriptionsPage.serverErrorPageHeader
-        val header = prescriptionsPage.serverErrorHeader
-        val message = prescriptionsPage.serverErrorMessage
+        val pageHeader = prescriptionsViewOrdersPage.serverErrorPageHeader
+        val header = prescriptionsViewOrdersPage.serverErrorHeader
+        val message = prescriptionsViewOrdersPage.serverErrorMessage
 
         errorPage.assertHeaderText(header)
                 .assertMessageText(message)

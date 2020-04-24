@@ -15,7 +15,6 @@ function getPrescriptionsParameters() {
 
 export default {
   load({ commit }) {
-    this.dispatch('repeatPrescriptionCourses/init');
     return this.app.$http
       .getV1PatientPrescriptions(getPrescriptionsParameters())
       .then((data) => {

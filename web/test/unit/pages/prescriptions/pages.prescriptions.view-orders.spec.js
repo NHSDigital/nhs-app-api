@@ -3,10 +3,10 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import { createLocalVue, mount } from '@vue/test-utils';
-import PrescriptionsPage from '@/pages/prescriptions/index';
+import ViewOrders from '@/pages/prescriptions/view-orders';
 
 const mockDependency = (name) => {
-  PrescriptionsPage.components[name] = {
+  ViewOrders.components[name] = {
     computed: {},
     staticRenderFns: [],
     name,
@@ -38,7 +38,9 @@ const createStore = hasLoaded => ({
       prescriptionCourses: {},
     },
     nominatedPharmacy: {
-      pharmacy: {},
+      pharmacy: {
+        pharmacyName: 'Boots',
+      },
       nominatedPharmacyEnabled: true,
     },
   },
@@ -47,7 +49,7 @@ const createStore = hasLoaded => ({
   },
 });
 
-const createPrescriptionsPage = ($store) => {
+const createViewOrdersPrescriptionsPage = ($store) => {
   const $http = jest.fn();
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -55,7 +57,7 @@ const createPrescriptionsPage = ($store) => {
 
   mockDependency('HistoricPrescription');
 
-  return mount(PrescriptionsPage, {
+  return mount(ViewOrders, {
     localVue,
     mocks: {
       $http,
@@ -72,20 +74,19 @@ const createPrescriptionsPage = ($store) => {
   });
 };
 
-describe('prescriptions/index.vue -', () => {
+describe('prescriptions/view-orders.vue -', () => {
   describe('fetch (server)', () => {
     beforeEach(() => {
       process.server = false;
       process.client = true;
     });
-    it('will clear and load the prescriptions, '
-    + 'and will clear and load nominated pharmacy when enabled via sjr and nominated pharamcy is not already loaded', async () => {
+    it('will clear and load the prescriptions and will clear and load nominated pharmacy when enabled via sjr and nominated pharamcy is not already loaded', async () => {
       const $store = createStore(true);
       $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = true;
       $store.state.nominatedPharmacy.hasLoaded = false;
       jest.spyOn($store, 'dispatch');
 
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
@@ -101,7 +102,7 @@ describe('prescriptions/index.vue -', () => {
       $store.state.nominatedPharmacy.hasLoaded = true;
       jest.spyOn($store, 'dispatch');
 
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
@@ -115,7 +116,7 @@ describe('prescriptions/index.vue -', () => {
       const $store = createStore(true);
       jest.spyOn($store, 'dispatch');
 
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
@@ -130,14 +131,13 @@ describe('prescriptions/index.vue -', () => {
       process.server = false;
       process.client = true;
     });
-    it('will clear and load the prescriptions, '
-    + 'and will clear and load nominated pharmacy when enabled via sjr and is not already loaded', async () => {
+    it('will clear and load the prescriptions and will clear and load nominated pharmacy when enabled via sjr and is not already loaded', async () => {
       const $store = createStore(true);
       $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = true;
       $store.state.nominatedPharmacy.hasLoaded = false;
       jest.spyOn($store, 'dispatch');
 
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
@@ -146,14 +146,13 @@ describe('prescriptions/index.vue -', () => {
       expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/load');
     });
 
-    it('will clear and load the prescriptions, '
-    + 'but will not clear and load nominated pharmacy when enabled via sjr and is already loaded', async () => {
+    it('will clear and load the prescriptions but will not clear and load nominated pharmacy when enabled via sjr and is already loaded', async () => {
       const $store = createStore(true);
       $store.getters['serviceJourneyRules/nominatedPharmacyEnabled'] = true;
       $store.state.nominatedPharmacy.hasLoaded = true;
       jest.spyOn($store, 'dispatch');
 
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
@@ -162,12 +161,11 @@ describe('prescriptions/index.vue -', () => {
       expect($store.dispatch).not.toHaveBeenCalledWith('nominatedPharmacy/load');
     });
 
-    it('will clear and load prescriptions, '
-    + 'but will not clear and load nominated pharmacy when not enabled via sjr', async () => {
+    it('will clear and load prescriptions, but will not clear and load nominated pharmacy when not enabled via sjr', async () => {
       const $store = createStore(true);
       jest.spyOn($store, 'dispatch');
 
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       await page.vm.$options.fetch({ store: $store });
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
@@ -181,31 +179,32 @@ describe('prescriptions/index.vue -', () => {
     it('will show the no prescriptions banner after data loading is complete.', () => {
       const $store = createStore(true);
 
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       expect(page.vm.showNoPrescriptions).toBe(true);
     });
 
     it('will not show the no prescriptions and yield true as data not loaded yet.', () => {
       const $store = createStore(false);
 
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       expect(page.vm.showNoPrescriptions).toBe(false);
     });
 
     it('will show prescriptions after loading as there is data to show.', () => {
       const $store = createStore(true);
       $store.state.prescriptions.prescriptionCourses.Approved = {};
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       expect(page.vm.showNoPrescriptions).toBe(false);
     });
   });
+
 
   describe('showPrescriptions', () => {
     it('will show prescriptions after data loading is complete.', () => {
       const $store = createStore(true);
       $store.state.prescriptions.prescriptionCourses.Approved = {};
 
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       expect(page.vm.showPrescriptions).toBe(true);
     });
 
@@ -213,13 +212,13 @@ describe('prescriptions/index.vue -', () => {
       const $store = createStore(false);
       $store.state.prescriptions.prescriptionCourses.Approved = {};
 
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       expect(page.vm.showPrescriptions).toBe(false);
     });
 
     it('will not show prescriptions as there is no data to show.', () => {
       const $store = createStore(true);
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
       expect(page.vm.showPrescriptions).toBe(false);
     });
   });
@@ -256,7 +255,7 @@ describe('prescriptions/index.vue -', () => {
       const $store = myStore(true);
 
       jest.spyOn($store, 'dispatch');
-      const page = createPrescriptionsPage($store);
+      const page = createViewOrdersPrescriptionsPage($store);
 
       expect(page.vm.prescriptionCoursesToDisplay).toEqual({
         Requested: [{ courseId: 'pqr' }],

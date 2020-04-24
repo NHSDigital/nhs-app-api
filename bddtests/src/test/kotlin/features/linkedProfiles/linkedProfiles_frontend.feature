@@ -84,7 +84,7 @@ Feature: Login with proxy access
     And my GP Practice is EPS enabled
     And I have a P1 typed nominated pharmacy
     And I navigate to prescriptions
-    And I see prescriptions page loaded
+    And the Prescriptions Hub page is displayed
     And I do not see the nominated pharmacy panel
     Examples:
       | Appointments Provider |
@@ -109,6 +109,7 @@ Feature: Login with proxy access
     When I navigate to Symptoms
     Then the symptoms shutter page is displayed
     When I navigate to Prescriptions
+    And I click the View Orders link
     Then the prescriptions shutter page is displayed
     When I navigate to My_Record
     And I click continue
@@ -134,8 +135,9 @@ Feature: Login with proxy access
     Then I see the home page
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
+    And there are 5 repeatable prescriptions available
     And I navigate to prescriptions
-    And I see prescriptions page loaded
+    And the Prescriptions Hub page is displayed
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     When I click Confirm and order repeat prescription
@@ -288,6 +290,8 @@ Feature: Login with proxy access
     When I navigate to Symptoms
     Then the symptoms shutter page is displayed
     When I navigate to Prescriptions
+    And the Prescriptions Hub page is displayed
+    And I click the Order a repeat prescription button
     Then the prescriptions shutter page is displayed
     When I navigate to My_Record
     And I click continue

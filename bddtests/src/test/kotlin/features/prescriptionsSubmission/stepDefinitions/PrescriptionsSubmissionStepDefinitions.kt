@@ -36,7 +36,7 @@ import org.junit.Assert
 import pages.ErrorPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PartiallySuccessfulRepeatPrescriptionsOrderPage
-import pages.prescription.PrescriptionsPage
+import pages.prescription.ViewOrdersPrescriptionsPage
 import pages.text
 import utils.LinkedProfilesSerenityHelpers
 import utils.ProxySerenityHelpers
@@ -58,7 +58,7 @@ open class PrescriptionsSubmissionStepDefinitions {
     @Steps
     lateinit var coursesStepDefinitions: CoursesStepDefinitions
 
-    lateinit var prescriptions : PrescriptionsPage
+    lateinit var prescriptions : ViewOrdersPrescriptionsPage
 
     private val mockingClient = MockingClient.instance
 
@@ -70,7 +70,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     var currentScenarioState: String = Scenario.STARTED
 
-    private lateinit var prescriptionPage: PrescriptionsPage
+    private lateinit var viewOrdersPrescriptionsPage: ViewOrdersPrescriptionsPage
     private lateinit var confirmRepeatPrescriptionsOrderPage: ConfirmRepeatPrescriptionsOrderPage
     private lateinit var partiallySuccessfulPrescriptionsOrderPage: PartiallySuccessfulRepeatPrescriptionsOrderPage
     private lateinit var errorPage: ErrorPage
@@ -315,7 +315,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
     fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
-        assertTrueWithRetry(prescriptionPage.isOrderSuccessfullTextVisible(),
+        assertTrueWithRetry(viewOrdersPrescriptionsPage.isOrderSuccessfullTextVisible(),
                 "Expected order success text to be visible")
         assertAmountOfPrescriptionsIsCorrect(amount)
     }
@@ -329,7 +329,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
         when (currentProvider) {
             Supplier.TPP -> {
-                prescriptionPage.assertPrescriptionsMatch(
+                viewOrdersPrescriptionsPage.assertPrescriptionsMatch(
                         TppPrescriptionMapper.map(prescriptionLoader.data as ListRepeatMedicationReply),
                         amount,
                         false)
@@ -339,11 +339,11 @@ open class PrescriptionsSubmissionStepDefinitions {
                         Serenity.sessionVariableCalled<MutableMap<String,
                                 PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
 
-                prescriptionPage.assertPrescriptionsMatch(EmisPrescriptionMapper.map(
+                viewOrdersPrescriptionsPage.assertPrescriptionsMatch(EmisPrescriptionMapper.map(
                         map[currentScenarioState]!!), amount)
             }
             Supplier.VISION -> {
-                prescriptionPage.assertPrescriptionsMatch(VisionPrescriptionMapper
+                viewOrdersPrescriptionsPage.assertPrescriptionsMatch(VisionPrescriptionMapper
                         .map(prescriptionLoader.data as PrescriptionHistory), amount)
             }
             Supplier.MICROTEST -> {
@@ -351,7 +351,7 @@ open class PrescriptionsSubmissionStepDefinitions {
                         Serenity.sessionVariableCalled<MutableMap<String,
                                 PrescriptionHistoryGetResponse>>("MicrotestPrescriptionsMap")
 
-                prescriptionPage.assertPrescriptionsMatch(MicrotestPrescriptionMapper.map(
+                viewOrdersPrescriptionsPage.assertPrescriptionsMatch(MicrotestPrescriptionMapper.map(
                         map[currentScenarioState]!!), amount)
             }
         }

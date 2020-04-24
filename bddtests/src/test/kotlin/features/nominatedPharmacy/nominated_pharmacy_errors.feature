@@ -9,7 +9,7 @@ Feature: Error scenarios for nominated pharmacy
     And the request to PDS Trace to retrieve my nominated pharmacy fails
     When I am logged in
     And I navigate to prescriptions
-    Then I see prescriptions page loaded
+    Then the Prescriptions Hub page is displayed
     And I do not see the nominated pharmacy panel
 
     Examples:
@@ -24,7 +24,7 @@ Feature: Error scenarios for nominated pharmacy
     And the request to Azure search to retrieve my nominated pharmacy fails
     When I am logged in
     And I navigate to prescriptions
-    Then I see prescriptions page loaded
+    Then the Prescriptions Hub page is displayed
     And I do not see the nominated pharmacy panel
 
     Examples:

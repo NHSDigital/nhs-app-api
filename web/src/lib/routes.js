@@ -1483,6 +1483,22 @@ const routes = {
       sjrRedirectRules.deleteMessageRedirect,
     ],
   },
+  PRESCRIPTIONS_VIEW_ORDERS: {
+    name: 'prescriptions-view-orders',
+    path: '/prescriptions/view-orders',
+    proofLevel: proofLevel.P9,
+    upliftPath: '/uplift/prescriptions',
+    crumb: {
+      nativeDisabled: false,
+      i18nKey: 'prescriptions',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
+    proxyShutterPath: '/linked-profiles/shutter/prescriptions',
+    sjrRedirectRules: [sjrRedirectRules.gpAtHandPrescriptionsRedirect],
+  },
   PRESCRIPTIONS: {
     name: 'prescriptions',
     path: '/prescriptions',
@@ -1492,7 +1508,7 @@ const routes = {
       nativeDisabled: true,
       i18nKey: 'prescriptions',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX];
+        return [];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
@@ -1558,10 +1574,6 @@ const routes = {
     upliftPath: '/uplift/prescriptions',
     crumb: {
       nativeDisabled: true,
-      i18nKey: 'prescriptionRepeatPartialSuccess',
-      get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
-      },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
     redirectRules: [{
@@ -1577,10 +1589,6 @@ const routes = {
     upliftPath: '/uplift/prescriptions',
     crumb: {
       nativeDisabled: true,
-      i18nKey: 'prescriptionsOrderSuccess',
-      get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PRESCRIPTIONS];
-      },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
     redirectRules: [{
@@ -2013,6 +2021,7 @@ export const {
   GP_MESSAGES_DELETE,
   GP_MESSAGES_DELETE_SUCCESS,
   GP_MESSAGES_VIEW_ATTACHMENT,
+  PRESCRIPTIONS_VIEW_ORDERS,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRE_REGISTRATION_INFORMATION,

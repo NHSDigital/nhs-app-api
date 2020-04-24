@@ -100,6 +100,7 @@ import {
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTIONS,
+  PRESCRIPTIONS_VIEW_ORDERS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTIONS_ORDER_SUCCESS,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,
@@ -584,6 +585,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.repeatPrescriptionCourses';
       route.meta.pageTitleKey = 'pageTitles.repeatPrescriptionCourses';
+      break;
+    case PRESCRIPTIONS_VIEW_ORDERS.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.viewPrescriptionsOrder';
+      route.meta.pageTitleKey = 'pageTitles.viewPrescriptionsOrder';
       break;
     case PRESCRIPTIONS.name:
     case UPLIFT_PRESCRIPTIONS.name:

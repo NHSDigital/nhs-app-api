@@ -4,12 +4,12 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.nominatedPharmacy.steps.NominatedPharmacyDataSetupSteps
 import net.thucydides.core.annotations.Steps
+import pages.PrescriptionsHubPage
 import pages.assertElementNotPresent
-import pages.prescription.PrescriptionsPage
 
 class NominatedPharmacyErrorScenarioStepDefinitions {
 
-    private lateinit var prescriptionsPage: PrescriptionsPage
+    private lateinit var prescriptionsHubPage: PrescriptionsHubPage
 
     @Steps
     private lateinit var nominatedPharmacyDataSetupSteps: NominatedPharmacyDataSetupSteps
@@ -26,6 +26,6 @@ class NominatedPharmacyErrorScenarioStepDefinitions {
 
     @Then("^I do not see the nominated pharmacy panel$")
     fun iDoNotSeeTheNominatedPharmacyPanel() {
-        prescriptionsPage.nominatedPharmacyPanel.assertElementNotPresent()
+        prescriptionsHubPage.nominatedPharmacyLink.assertElementNotPresent()
     }
 }

@@ -29,10 +29,30 @@ Feature: Login frontend
       | GP System |
       | TPP       |
       | VISION    |
+
   @android
-    Examples:
-      | GP System |
-      | EMIS      |
+  Scenario: A EMIS user can see the home page after logging in
+    Given I am a EMIS patient
+    And I am logged in
+    Then I see a welcome message
+    And I see my Date of birth on the home page
+    And I see my NHS number on the home page
+    And I see the home page header
+    And I see the navigation menu
+    And I can see and follow the Check your symptoms link
+    When I click the home icon
+    Then I see the home page
+    And I can see and follow the Book and manage appointments link
+    When I click the home icon
+    Then I see the home page
+    And I can see and follow the Order a repeat prescription link
+    When I click the home icon
+    Then I see the home page
+    And I navigate to the health record hub page
+    And I see the health records hub page
+    When I click the home icon
+    Then I see the home page
+    And I can see and follow the Manage your organ donation decision link
 
   Scenario: A user can see the native instructions
     Given I am a patient using the native app

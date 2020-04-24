@@ -1,5 +1,5 @@
 import * as dependency from '@/lib/utils';
-import { PRESCRIPTIONS } from '@/lib/routes';
+import { PRESCRIPTIONS_VIEW_ORDERS } from '@/lib/routes';
 import PharmacyChangeSuccessDetails from '@/components/nominatedPharmacy/PharmacyChangeSuccessDetails';
 import OnlineOnlyPharmacyDetail from '@/components/nominatedPharmacy/OnlineOnlyPharmacyDetail';
 import NominatedPharmacyChangeSuccess from '@/pages/nominated-pharmacy/change-success';
@@ -173,7 +173,7 @@ describe('confirm nominated pharmacy', () => {
       dependency.redirectTo = jest.fn();
       await goToPrescriptionsLink.trigger('click');
       expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS.path);
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_VIEW_ORDERS.path);
     });
   });
 });

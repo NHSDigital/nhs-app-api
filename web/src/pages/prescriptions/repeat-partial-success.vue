@@ -52,16 +52,11 @@
             </div>
           </div>
           <div class="nhsuk-u-margin-top-3">
-            <no-js-form :action="prescriptionsHomeUrl" :value="{}" method="get">
-              <generic-button
-                id="btn_back_to_prescriptions"
-                :button-classes="['nhsuk-button', 'nhs-uk-button--secondary']"
-                :class="$style.back"
-                tabindex="0"
-                @click="backToPrescriptionsClicked">
+            <p>
+              <a id="back_to_prescriptions_link" href="#" @click="backToPrescriptionsClicked">
                 {{ $t('prescriptions.partialSuccess.backButton') }}
-              </generic-button>
-            </no-js-form>
+              </a>
+            </p>
           </div>
         </div>
       </div>
@@ -72,18 +67,14 @@
 <script>
 import GreenTick from '@/components/icons/GreenTick';
 import RedCross from '@/components/icons/RedCross';
-import GenericButton from '@/components/widgets/GenericButton';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import { redirectTo } from '@/lib/utils';
-import { PRESCRIPTIONS } from '@/lib/routes';
+import { PRESCRIPTIONS, PRESCRIPTIONS_VIEW_ORDERS } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
     GreenTick,
     RedCross,
-    GenericButton,
-    NoJsForm,
   },
   data() {
     return {
@@ -91,7 +82,6 @@ export default {
         .partialOrderResult.successfulOrders,
       unsuccessfulOrders: this.$store.state.repeatPrescriptionCourses
         .partialOrderResult.unsuccessfulOrders,
-      prescriptionsHomeUrl: PRESCRIPTIONS.path,
     };
   },
   mounted() {
@@ -104,7 +94,7 @@ export default {
   },
   methods: {
     backToPrescriptionsClicked() {
-      redirectTo(this, PRESCRIPTIONS.path);
+      redirectTo(this, PRESCRIPTIONS_VIEW_ORDERS.path);
     },
   },
 };

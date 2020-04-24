@@ -1,92 +1,55 @@
 <template>
-  <div v-if="showTemplate && hasLoaded">
+  <div v-if="showTemplate">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full nhsuk-u-padding-top-3">
         <no-js-form :action="getContinueButtonPath()" method="get" :value="{}">
           <generic-button
-            id="order-prescription-button"
+            id="repeat-prescription-button"
             :button-classes="['nhsuk-button']"
             @click.stop.prevent="onOrderRepeatPrescriptionClicked">
-            {{ $t('rp01.orderPrescriptionButton') }}
+            {{ $t('gpPrescriptionsHub.menuOptions.orderRepeat') }}
           </generic-button>
         </no-js-form>
-      </div>
-    </div>
-    <sjr-if journey="nominatedPharmacy">
-      <div v-if="showNominatedPharmacy" id="nominated-pharmacy-section">
         <menu-item-list>
-          <menu-item id="nominated-pharmacy"
-                     header-tag="h2"
-                     data-purpose="text_link"
-                     href="#"
-                     :text="pharmacyWidgetText"
-                     :description="pharmacyName"
-                     :click-func="onNominatedPharmacyDetailClicked"
-                     :aria-label="ariaLabelCaption(
-                       pharmacyWidgetText,
-                       pharmacyName)"/>
+          <menu-item
+            id="view-orders"
+            :text="$t('gpPrescriptionsHub.menuOptions.viewOrders')"
+            :aria-label="ariaLabelCaption
+              ($t('gpPrescriptionsHub.menuOptions.viewOrders'),
+               $t('gpPrescriptionsHub.menuOptions.viewOrdersHelpText'))"
+            :description="$t('gpPrescriptionsHub.menuOptions.viewOrdersHelpText')"
+            :click-func="onViewOrdersClicked"
+            :header-tag="'h2'"
+          />
+          <menu-item
+            v-if="showNominatedPharmacy && !isProxying"
+            id="nominated-pharmacy"
+            :text="nominatedPharmacyText"
+            :aria-label="ariaLabelCaption
+              (nominatedPharmacyText,
+               nominatedPharmacyDescription)"
+            :description="nominatedPharmacyDescription"
+            :click-func="onNominatedPharmacyDetailClicked"
+            :header-tag="'h2'"
+          />
         </menu-item-list>
-      </div>
-    </sjr-if>
-    <div v-if="showNoPrescriptions"
-         data-purpose="no-prescriptions-error"
-         class="nhsuk-u-padding-bottom-6">
-      <h2>{{ $t('rp01.empty.subHeader') }}</h2>
-      <p class="nhsuk-u-padding-bottom-2">
-        {{ $t('rp01.empty.line1') }}
-      </p>
-      <p class="nhsuk-u-padding-bottom-2">
-        {{ $t('rp01.empty.line2') }}
-      </p>
-    </div>
-    <div v-if="showPrescriptions" data-purpose="prescriptions">
-      <div v-for="(statusGroup, key) in prescriptionCoursesToDisplay"
-           :key="key">
-        <div v-if="getMedicationCourseStatus(key) != null">
-          <h2 class="nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-2">
-            {{ getMedicationCourseStatus(key) }}
-          </h2>
-        </div>
-
-        <CardGroup v-for="(prescriptionCourse, index) in statusGroup"
-                   :key="index" role="list" class="nhsuk-grid-row">
-          <CardGroupItem class="nhsuk-grid-column-full">
-            <Card data-label="historic-prescription">
-              <historic-prescription :prescription-course="prescriptionCourse" />
-            </Card>
-          </CardGroupItem>
-        </CardGroup>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
-import HistoricPrescription from '@/components/HistoricPrescription';
-import MedicationCourseStatus from '@/lib/medication-course-status';
-import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import NoJsForm from '@/components/no-js/NoJsForm';
-import SjrIf from '@/components/SjrIf';
-import each from 'lodash/fp/each';
-import isEmpty from 'lodash/fp/isEmpty';
-import keys from 'lodash/fp/keys';
-import sortBy from 'lodash/fp/sortBy';
-import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_INTERRUPT } from '@/lib/routes';
-import CardGroup from '@/components/widgets/card/CardGroup';
-import CardGroupItem from '@/components/widgets/card/CardGroupItem';
-import Card from '@/components/widgets/card/Card';
-import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import GenericButton from '@/components/widgets/GenericButton';
+import MenuItem from '@/components/MenuItem';
+import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
+import { redirectTo } from '@/lib/utils';
+import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_INTERRUPT, PRESCRIPTIONS_VIEW_ORDERS } from '@/lib/routes';
 
 const loadData = async (store) => {
-  store.dispatch('prescriptions/clear');
-  await store.dispatch('prescriptions/load');
-
+  store.dispatch('repeatPrescriptionCourses/init');
   if (store.getters['serviceJourneyRules/nominatedPharmacyEnabled']) {
     store.dispatch('nominatedPharmacy/clearInterruptBackTo');
 
@@ -99,73 +62,34 @@ const loadData = async (store) => {
 
 export default {
   layout: 'nhsuk-layout',
+  name: 'Prescriptions',
   components: {
-    HistoricPrescription,
-    MenuItem,
     MenuItemList,
+    MenuItem,
     NoJsForm,
-    SjrIf,
-    Card,
-    CardGroupItem,
-    CardGroup,
     GenericButton,
   },
-  data() {
-    return {
-      statusDisplayPriority: {
-        [MedicationCourseStatus.Requested]: 1,
-        [MedicationCourseStatus.Approved]: 2,
-        [MedicationCourseStatus.Rejected]: 3,
-      },
-    };
-  },
   computed: {
-    pharmacyName() {
-      if (this.nominatedPharmacyName === undefined) {
-        return this.$t('nominatedPharmacyNotFound.noPharmacyButton');
-      }
-      return this.nominatedPharmacyName;
-    },
-    showNoPrescriptions() {
-      const {
-        hasLoaded,
-        prescriptionCourses,
-      } = this.$store.state.prescriptions;
-      return hasLoaded && isEmpty(prescriptionCourses);
-    },
-    showPrescriptions() {
-      const {
-        hasLoaded,
-        prescriptionCourses,
-      } = this.$store.state.prescriptions;
-      return hasLoaded && !isEmpty(prescriptionCourses);
-    },
-    prescriptionCoursesToDisplay() {
-      const prescriptionKeys =
-        sortBy(i =>
-          this.statusDisplayPriority[i])(keys(this.$store.state.prescriptions.prescriptionCourses));
-
-      const orderedMap = {};
-      each((k) => {
-        orderedMap[k] =
-          this.$store.state.prescriptions.prescriptionCourses[k];
-      })(prescriptionKeys);
-      return orderedMap;
-    },
-    hasLoaded() {
-      return this.$store.state.prescriptions.hasLoaded;
-    },
-    showNominatedPharmacy() {
-      return this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled'];
-    },
     nominatedPharmacyName() {
       return this.$store.getters['nominatedPharmacy/pharmacyName'];
     },
-    pharmacyWidgetText() {
-      if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyType === PharmacyType.P3) {
-        return this.$t('rp04.dispensingPracticeHeader');
+    isProxying() {
+      return this.$store.getters['session/isProxying'];
+    },
+    nominatedPharmacyText() {
+      if (this.nominatedPharmacyName === undefined) {
+        return this.$t('gpPrescriptionsHub.menuOptions.nominatePharmacy');
       }
-      return this.$t('rp04.nominatedPharmacyHeader');
+      return this.$t('gpPrescriptionsHub.menuOptions.yourNominatedPharmacy');
+    },
+    nominatedPharmacyDescription() {
+      if (this.nominatedPharmacyName === undefined) {
+        return this.$t('gpPrescriptionsHub.menuOptions.nominatePharmacyHelpText');
+      }
+      return this.nominatedPharmacyName;
+    },
+    showNominatedPharmacy() {
+      return this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled'];
     },
   },
   watch: {
@@ -187,12 +111,23 @@ export default {
     if (process.client) {
       loadData(this.$store);
     }
-
     if (this.hasLoaded) {
       this.$store.dispatch('flashMessage/show');
     }
   },
   methods: {
+    onOrderRepeatPrescriptionClicked() {
+      const path = this.getContinueButtonPath();
+      this.$store.app.$analytics.trackButtonClick(path, true);
+      this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_CHECK);
+      redirectTo(this, path);
+    },
+    getContinueButtonPath() {
+      return GetNavigationPathFromPrescriptions(this.$store);
+    },
+    onViewOrdersClicked() {
+      redirectTo(this, PRESCRIPTIONS_VIEW_ORDERS.path);
+    },
     onNominatedPharmacyDetailClicked() {
       if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
         this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_INTERRUPT.path, true);
@@ -203,15 +138,6 @@ export default {
         this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_SUMMARY);
         redirectTo(this, NOMINATED_PHARMACY.path);
       }
-    },
-    onOrderRepeatPrescriptionClicked() {
-      const path = this.getContinueButtonPath();
-      this.$store.app.$analytics.trackButtonClick(path, true);
-      this.$store.dispatch('nominatedPharmacy/setInterruptBackTo', InterruptBackTo.NOMINATED_PHARMACY_CHECK);
-      redirectTo(this, path);
-    },
-    getContinueButtonPath() {
-      return GetNavigationPathFromPrescriptions(this.$store);
     },
     ariaLabelCaption(header, body) {
       return `${header}. ${body}`;
