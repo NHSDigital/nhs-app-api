@@ -187,9 +187,9 @@ namespace NHSOnline.Backend.Auditing
             public bool IsProxying { get; set; }
             public Supplier Supplier { get; set; }
             public string Operation { get; set; }
-            public string Details { get; set; }
+            public string RequestDetails { get; set; }
 
-            internal AuditRecord BuildAuditRecord(string operationSuffix)
+            internal AuditRecord BuildAuditRecord(string operationSuffix, string details)
                 => new AuditRecord(
                     DateTime.UtcNow,
                     NhsLoginSubject,
@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.Auditing
                     IsProxying,
                     Supplier,
                     $"{Operation}_{operationSuffix}",
-                    Details,
+                    details,
                     _versionTag);
 
             internal void SetContextFromScope()
@@ -296,7 +296,7 @@ namespace NHSOnline.Backend.Auditing
 
             public IAuditBuilderExecute Details(string details)
             {
-                State.Details = details;
+                State.RequestDetails = details;
                 return this;
             }
 
@@ -326,11 +326,11 @@ namespace NHSOnline.Backend.Auditing
             {
                 try
                 {
-                    await Audit("Request");
+                    await Audit("Request", State.RequestDetails);
                 }
                 catch (Exception e)
                 {
-                    State.Logger.LogError(e, $"Failed to audit {State.Operation} request: {State.Details}");
+                    State.Logger.LogError(e, $"Failed to audit {State.Operation} request: {State.RequestDetails}");
                     throw;
                 }
             }
@@ -339,7 +339,7 @@ namespace NHSOnline.Backend.Auditing
             {
                 try
                 {
-                    await Audit("Response");
+                    await Audit("Response", details);
                 }
                 catch (Exception e)
                 {
@@ -347,9 +347,9 @@ namespace NHSOnline.Backend.Auditing
                 }
             }
 
-            private async Task Audit(string operationSuffix)
+            private async Task Audit(string operationSuffix, string details)
             {
-                var record = State.BuildAuditRecord(operationSuffix);
+                var record = State.BuildAuditRecord(operationSuffix, details);
                 await State.AuditSink.WriteAudit(record);
             }
         }

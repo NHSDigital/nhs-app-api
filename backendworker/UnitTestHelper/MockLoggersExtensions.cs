@@ -4,14 +4,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
+namespace UnitTestHelper
 {
-    internal static class MockLoggersExtensions
+    public static class MockLoggersExtensions
     {
-        internal static IServiceCollection AddMockLoggers(this IServiceCollection service)
+        public static IServiceCollection AddMockLoggers(this IServiceCollection service)
             => service.AddSingleton(typeof(ILogger<>), typeof(MockLoggerWrapper<>));
 
-        internal static Mock<ILogger<TCategoryName>> MockLogger<TCategoryName>(this IServiceProvider serviceProvider)
+        public static Mock<ILogger<TCategoryName>> MockLogger<TCategoryName>(this IServiceProvider serviceProvider)
         {
             var mockLoggerWrapper =
                 serviceProvider.GetRequiredService<ILogger<TCategoryName>>() as MockLoggerWrapper<TCategoryName>

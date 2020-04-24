@@ -14,8 +14,8 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
-{    
-  [TestClass]
+{
+    [TestClass]
     public class TppLogMessagingTests
     {
         private const string ResponseSuidHeader = "suid";
@@ -24,7 +24,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
         private TppLogMessagingService _systemUnderTest;
 
-        private Mock<ILogger<TppLogMessagingService>> TppMessagingLoggerServiceLogger => _serviceProvider.MockLogger<TppLogMessagingService>();
+        private Mock<ILogger<TppLogMessagingService>> TppMessagingLoggerServiceLogger =>
+            _serviceProvider.MockLogger<TppLogMessagingService>();
+
         private Mock<ITppClientRequest<TppUserSession, ListServiceAccessesReply>> _mockListServiceAccesses;
 
 
@@ -62,7 +64,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         public async Task FetchAndLogAccessInformation_WhenServiceAccessDescriptionIsMessaging_Logs()
         {
             // Arrange
-            var userSession = new TppUserSession { OdsCode = "ods"};
+            var userSession = new TppUserSession { OdsCode = "ods" };
 
             var listServicesAccessesResponse = ListServiceAccessesReply(
                 new ServiceAccess { Description = "Messaging", Status = "A", StatusDesc = "Enabled" });
@@ -84,7 +86,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         [TestMethod]
         [DataRow("ods code", "ODSCode ods code  PFS messaging enabled: A with description: Enabled")]
         [DataRow("1234567890", "ODSCode 1234567890  PFS messaging enabled: A with description: Enabled")]
-        public async Task FetchAndLogAccessInformation_WhenServiceAccessDescriptionIsMessaging_LogsOdsCode(string odsCode, string message)
+        public async Task FetchAndLogAccessInformation_WhenServiceAccessDescriptionIsMessaging_LogsOdsCode(
+            string odsCode, string message)
         {
             // Arrange
             var userSession = new TppUserSession { OdsCode = odsCode };
@@ -109,7 +112,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         [TestMethod]
         [DataRow("A", "ODSCode ods  PFS messaging enabled: A with description: Enabled")]
         [DataRow("Z", "ODSCode ods  PFS messaging enabled: Z with description: Enabled")]
-        public async Task FetchAndLogAccessInformation_WhenServiceAccessDescriptionIsMessaging_LogsStatus(string status, string message)
+        public async Task FetchAndLogAccessInformation_WhenServiceAccessDescriptionIsMessaging_LogsStatus(string status,
+            string message)
         {
             // Arrange
             var userSession = new TppUserSession { OdsCode = "ods" };
@@ -134,7 +138,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         [TestMethod]
         [DataRow("Enabled", "ODSCode ods  PFS messaging enabled: A with description: Enabled")]
         [DataRow("Disabled", "ODSCode ods  PFS messaging enabled: A with description: Disabled")]
-        public async Task FetchAndLogAccessInformation_WhenServiceAccessDescriptionIsMessaging_LogsStatusDescription(string statusDesc, string message)
+        public async Task FetchAndLogAccessInformation_WhenServiceAccessDescriptionIsMessaging_LogsStatusDescription(
+            string statusDesc, string message)
         {
             // Arrange
             var userSession = new TppUserSession { OdsCode = "ods" };
@@ -159,7 +164,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         [TestMethod]
         [DataRow("PaperTrail")]
         [DataRow("OtherDescription")]
-        public async Task FetchAndLogAccessInformation_WhenServiceAccessDescriptionIsNotMessaging_LogsNothing(string description)
+        public async Task FetchAndLogAccessInformation_WhenServiceAccessDescriptionIsNotMessaging_LogsNothing(
+            string description)
         {
             // Arrange
             var userSession = new TppUserSession();
@@ -186,7 +192,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
                 Times.Never);
         }
 
-        private static TppApiObjectResponse<ListServiceAccessesReply> ListServiceAccessesReply(params ServiceAccess[] serviceAccesses)
+        private static TppApiObjectResponse<ListServiceAccessesReply> ListServiceAccessesReply(
+            params ServiceAccess[] serviceAccesses)
             => new TppApiObjectResponse<ListServiceAccessesReply>(HttpStatusCode.OK)
             {
                 Body = new ListServiceAccessesReply { ServiceAccess = serviceAccesses.ToList() },
