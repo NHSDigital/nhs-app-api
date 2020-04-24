@@ -48,7 +48,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
         private Mock<ICitizenIdSessionService> _mockCitizenIdSessionService;
         private Mock<IGpSystem> _mockGpSystem;
-        private Mock<ITokenValidationService> _mockTokenValidationService;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<ILogger<SessionController>> _mockSessionControllerLogger;
         private Mock<IAuditor> _mockAuditor;
@@ -149,15 +148,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     _userSessionRequest.RedirectUrl))
                 .Returns(Task.FromResult(_citizenIdSessionResult));
 
-            _mockTokenValidationService = new Mock<ITokenValidationService>();
-            _mockTokenValidationService
-                .Setup(x => x.IsValidConnectionTokenFormat(_userProfile.Im1ConnectionToken))
-                .Returns(true);
-
             _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem.SetupGet(x => x.Supplier).Returns(Supplier.Emis);
-            _mockGpSystem.Setup(x => x.GetTokenValidationService()).Returns(_mockTokenValidationService.Object);
-
+            
             _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(Supplier.Emis)).Returns(_mockGpSystem.Object);
 
@@ -355,7 +348,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_Im1ConnectionTokenIsInvalidFormat_ReturnsForbidden()
+        public async Task Post_GpSessionManagerReturnInvalidConnectionToken_ReturnsForbidden()
         {
             // Arrange
             _mockErrorReferenceGenerator
@@ -369,16 +362,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             var auditStub = ArrangeAudit();
 
-            _mockTokenValidationService
-                .Setup(x => x.IsValidConnectionTokenFormat(_userProfile.Im1ConnectionToken))
-                .Returns(false)
-                .Verifiable();
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.InvalidConnectionToken());
 
             // Act
             var result = await CreateSystemUnderTest().Post(_userSessionRequest);
 
             // Assert
-            _mockTokenValidationService.Verify();
             var objectResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             using (new AssertionScope())
             {
@@ -389,7 +378,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 auditStub.Supplier.Should().Be(Supplier.Emis);
                 auditStub.Operation.Should().Be("GP_Session_Create");
                 auditStub.Details.Should().Be("Attempting to create Session");
-                auditStub.ResponseDetails.Should().Be("Failed to validate Im1 connection");
+                auditStub.ResponseDetails.Should().Be("Creating the session failed: Invalid connection token");
             }
 
             _mockAuditor.Verify();
@@ -397,7 +386,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_Im1ConnectionTokenFailsAuthenticationWithGpSupplier_ReturnsForbidden()
+        public async Task Post_GpSessoinManagerReturnsForbidden_ReturnsForbidden()
         {
             // Arrange
             _mockErrorReferenceGenerator
@@ -419,7 +408,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             var auditStub = ArrangeAudit();
 
-            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Forbidden());
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Forbidden("Message"));
 
             // Act
             var result = await CreateSystemUnderTest().Post(_userSessionRequest);
@@ -434,7 +423,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 auditStub.Supplier.Should().Be(Supplier.Emis);
                 auditStub.Operation.Should().Be("GP_Session_Create");
                 auditStub.Details.Should().Be("Attempting to create Session");
-                auditStub.ResponseDetails.Should().Be("Creating the session failed");
+                auditStub.ResponseDetails.Should().Be("Creating the session failed: Message");
             }
 
             _mockAuditor.Verify();
@@ -462,7 +451,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             var auditStub = ArrangeAudit();
 
-            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.BadGateway());
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.BadGateway("Message"));
 
             // Act
             var result = await CreateSystemUnderTest().Post(_userSessionRequest);
@@ -477,7 +466,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 auditStub.Supplier.Should().Be(Supplier.Emis);
                 auditStub.Operation.Should().Be("GP_Session_Create");
                 auditStub.Details.Should().Be("Attempting to create Session");
-                auditStub.ResponseDetails.Should().Be("Creating the session failed");
+                auditStub.ResponseDetails.Should().Be("Creating the session failed: Message");
             }
 
             _mockSessionControllerLogger.Verify();

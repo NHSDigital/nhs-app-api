@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,11 +14,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
     {
         private readonly IVisionClient _visionClient;
         private readonly ILogger<VisionSessionService> _logger;
+        private readonly VisionTokenValidationService _tokenValidationService;
 
-        public VisionSessionService(IVisionClient visionClient, ILogger<VisionSessionService> logger)
+        public VisionSessionService(
+            IVisionClient visionClient,
+            ILogger<VisionSessionService> logger,
+            VisionTokenValidationService tokenValidationService)
         {
             _visionClient = visionClient;
             _logger = logger;
+            _tokenValidationService = tokenValidationService;
         }
 
         public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
@@ -26,6 +31,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             _logger.LogEnter();
             try
             {
+                if (_tokenValidationService.IsInvalidConnectionTokenFormat(connectionToken))
+                {
+                    _logger.LogError("Invalid Im1 connection token");
+                    return new GpSessionCreateResult.InvalidConnectionToken();
+                }
+
                 var visionConnectionToken = connectionToken.DeserializeJson<VisionConnectionToken>();
 
                 var response = await _visionClient.GetConfiguration(visionConnectionToken, odsCode);
@@ -38,8 +49,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
                 var responseBody = response.Body;
                 if(!IsResponseBodyValid(responseBody))
                 {
-                    _logger.LogError("Vision HttpRequestException has been thrown.");
-                    return new GpSessionCreateResult.BadGateway();
+                    const string message = "Vision HttpRequestException has been thrown.";
+                    _logger.LogError(message);
+                    return new GpSessionCreateResult.BadGateway(message);
                 }
 
                 return new GpSessionCreateResult.Success(
@@ -59,8 +71,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError(ex, "Vision HttpRequestException has been thrown.");
-                return new GpSessionCreateResult.BadGateway();
+                const string message = "Vision HttpRequestException has been thrown.";
+                _logger.LogError(ex, message);
+                return new GpSessionCreateResult.BadGateway(message);
             }
             finally
             {
@@ -90,36 +103,42 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
         {
             if (response.IsInvalidRequestError)
             {
-                _logger.LogError($"Vision invalid request error {response.StatusCode}");
+                var message = $"Vision invalid request error {response.StatusCode}";
+                _logger.LogError(message);
                 _logger.LogVisionErrorResponse(response);
-                return new GpSessionCreateResult.BadRequest();
+                return new GpSessionCreateResult.BadRequest(message);
             }
 
             if (response.IsInvalidUserCredentialsError)
             {
-                _logger.LogError($"Vision invalid user credentials {response.StatusCode}");
+                var message = $"Vision invalid user credentials {response.StatusCode}";
+                _logger.LogError(message);
                 _logger.LogVisionErrorResponse(response);
-                return new GpSessionCreateResult.Forbidden();
+                return new GpSessionCreateResult.Forbidden(message);
             }
 
             if (response.IsInvalidSecurityHeaderError)
             {
-                _logger.LogError($"Vision invalid security header {response.StatusCode}");
+                var message = $"Vision invalid security header {response.StatusCode}";
+                _logger.LogError(message);
                 _logger.LogVisionErrorResponse(response);
-                return new GpSessionCreateResult.InternalServerError();
+                return new GpSessionCreateResult.InternalServerError(message);
             }
 
             if (response.IsUnknownError)
             {
-                _logger.LogError($"Vision unknown error {response.StatusCode}");
+                var message = $"Vision unknown error {response.StatusCode}";
+                _logger.LogError(message);
                 _logger.LogVisionErrorResponse(response);
-                return new GpSessionCreateResult.BadGateway();
+                return new GpSessionCreateResult.BadGateway(message);
             }
-
-            _logger.LogError($"Vision system is currently unavailable {response.StatusCode}");
-            _logger.LogVisionErrorResponse(response);
-            
-            return new GpSessionCreateResult.BadGateway();
+            else
+            {
+                var message = $"Vision system is currently unavailable {response.StatusCode}";
+                _logger.LogError(message);
+                _logger.LogVisionErrorResponse(response);
+                return new GpSessionCreateResult.BadGateway(message);
+            }
         }
 
         private bool IsResponseBodyValid(PatientConfigurationResponse responseBody)

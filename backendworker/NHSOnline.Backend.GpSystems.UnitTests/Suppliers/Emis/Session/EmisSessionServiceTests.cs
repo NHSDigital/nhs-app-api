@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -271,7 +271,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
+            var systemUnderTest = CreateEmisSessionService(enumMapper);
 
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
@@ -293,7 +293,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
+            var systemUnderTest = CreateEmisSessionService(enumMapper);
 
             // only self patient link
             _sessionsResponse.UserPatientLinks = new List<UserPatientLink>
@@ -325,7 +325,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
+            var systemUnderTest = CreateEmisSessionService(enumMapper);
 
             // only self patient link
             _sessionsResponse.UserPatientLinks = new List<UserPatientLink>
@@ -363,7 +363,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
+            var systemUnderTest = CreateEmisSessionService(enumMapper);
 
             // only self patient link
             _sessionsResponse.UserPatientLinks = new List<UserPatientLink>
@@ -403,7 +403,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
+            var systemUnderTest = CreateEmisSessionService(enumMapper);
 
             _sessionsResponse.UserPatientLinks.ToList()[0].AssociationType = AssociationType.None;
             _sessionsResponse.UserPatientLinks.ToList()[1].AssociationType = AssociationType.Self;
@@ -434,7 +434,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
             var enumMapper = new EmisEnumMapper(enumMapperLogger);
 
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger.Object, enumMapper);
+            var systemUnderTest = CreateEmisSessionService(enumMapper);
 
             _sessionsResponse.UserPatientLinks.ToList()[0].AssociationType = AssociationType.Proxy;
             _sessionsResponse.UserPatientLinks.ToList()[1].AssociationType = AssociationType.Self;
@@ -487,6 +487,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             result
                 .Should().BeAssignableTo<GpSessionCreateResult.Success>()
                 .Subject.UserSession.Should().BeAssignableTo<EmisUserSession>();
+        }
+
+        private EmisSessionService CreateEmisSessionService(EmisEnumMapper enumMapper)
+        {
+            return new EmisSessionService(
+                _mockEmisClient.Object,
+                _logger.Object,
+                enumMapper,
+                new EmisTokenValidationService(new Mock<ILogger<EmisTokenValidationService>>().Object));
         }
 
         private Task<EmisClient.EmisApiObjectResponse<SessionsPostResponse>> CreateSessionsPostResponse(string userPatientLinkToken)

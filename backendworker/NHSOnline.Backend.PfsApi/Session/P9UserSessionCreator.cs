@@ -92,21 +92,9 @@ namespace NHSOnline.Backend.PfsApi.Session
             return ProcessResult.StepResult<IGpSystem, CreateUserSessionResult>(gpSystem);
         }
 
-        private static bool IsInvalidIm1ConnectionToken(IGpSystem gpSystem, string im1ConnectionToken)
-        {
-            var tokenValidationService = gpSystem.GetTokenValidationService();
-            var isInvalidIm1ConnectionToken = !tokenValidationService.IsValidConnectionTokenFormat(im1ConnectionToken);
-            return isInvalidIm1ConnectionToken;
-        }
-
         private async Task<ProcessResult<GpUserSession, CreateUserSessionResult>> CreateGpSession(
             CitizenIdSessionResult citizenIdSessionResult, IGpSystem gpSystem)
         {
-            if (IsInvalidIm1ConnectionToken(gpSystem, citizenIdSessionResult.Im1ConnectionToken))
-            {
-                return FinalResult<GpUserSession>("Failed to validate Im1 connection", new ErrorTypes.LoginForbidden());
-            }
-
             var gpSessionCreateResult = await _gpSessionManager.CreateSession(new GpSessionCreateArgs(gpSystem, citizenIdSessionResult));
             return gpSessionCreateResult.Accept(new GpSessionCreateResultVisitor(_logger, gpSystem.Supplier));
         }
@@ -166,24 +154,27 @@ namespace NHSOnline.Backend.PfsApi.Session
             public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.Success success)
                 => ProcessResult.StepResult<GpUserSession, CreateUserSessionResult>(success.UserSession);
 
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.Forbidden _)
-                => Failed(new ErrorTypes.LoginForbidden());
+            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.Forbidden result)
+                => Failed(new ErrorTypes.LoginForbidden(), result.Message);
 
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.BadGateway _)
-                => Failed(ErrorTypes.LoginBadGateway(_logger, _supplier));
+            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.BadGateway result)
+                => Failed(ErrorTypes.LoginBadGateway(_logger, _supplier), result.Message);
 
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.InternalServerError _)
-                => Failed(new ErrorTypes.LoginUnexpectedError());
+            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.InternalServerError result)
+                => Failed(new ErrorTypes.LoginUnexpectedError(), result.Message);
 
-            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.BadRequest _)
-                => Failed(new ErrorTypes.LoginBadRequest());
+            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.BadRequest result)
+                => Failed(new ErrorTypes.LoginBadRequest(), result.Message);
 
-            private ProcessResult<GpUserSession, CreateUserSessionResult> Failed(ErrorTypes errorType)
+            public ProcessResult<GpUserSession, CreateUserSessionResult> Visit(GpSessionCreateResult.InvalidConnectionToken result)
+                => Failed(new ErrorTypes.LoginForbidden(), "Invalid connection token");
+
+            private ProcessResult<GpUserSession, CreateUserSessionResult> Failed(ErrorTypes errorType, string message)
             {
-                const string errorMessage = "Creating the session failed";
+                string errorMessage = $"Creating the session failed: {message}";
 
                 _logger.LogError(errorMessage);
-                var result = CreateUserSessionResult.Failed(errorType, "Creating the session failed");
+                var result = CreateUserSessionResult.Failed(errorType, errorMessage);
 
                 return ProcessResult.FinalResult<GpUserSession, CreateUserSessionResult>(result);
             }

@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
@@ -115,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             // Arrange
             _mockSessionService
                 .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
-                .ReturnsAsync(new GpSessionCreateResult.BadGateway())
+                .ReturnsAsync(new GpSessionCreateResult.BadGateway(""))
                 .Verifiable();
             var args = CreateGpSessionCreateArgs();
 

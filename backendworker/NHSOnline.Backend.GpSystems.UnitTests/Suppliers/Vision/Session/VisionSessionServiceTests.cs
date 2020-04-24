@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                 LocationIds = locations.Select(l => l.Id).ToList()
             });
             
-            var systemUnderTest = new VisionSessionService(_mockVisionClient.Object, _mockLogger);
+            var systemUnderTest = CreateVisionSessionService();
 
             // Act
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                         },
                     }));
 
-            var systemUnderTest = new VisionSessionService(_mockVisionClient.Object, _mockLogger);
+            var systemUnderTest = CreateVisionSessionService();
 
             // Act
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
@@ -187,7 +187,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                         }
                     }));
 
-            var systemUnderTest = new VisionSessionService(_mockVisionClient.Object, _mockLogger);
+            var systemUnderTest = CreateVisionSessionService();
 
             // Act
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
@@ -217,7 +217,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                         },
                     }));
 
-            var systemUnderTest = new VisionSessionService(_mockVisionClient.Object, _mockLogger);
+            var systemUnderTest = CreateVisionSessionService();
 
             // Act
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
@@ -257,7 +257,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                         },
                     }));
 
-            var systemUnderTest = new VisionSessionService(_mockVisionClient.Object, _mockLogger);
+            var systemUnderTest = CreateVisionSessionService();
 
             // Act
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
@@ -284,13 +284,21 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                         },
                     }));
 
-            var systemUnderTest = new VisionSessionService(_mockVisionClient.Object, _mockLogger);
+            var systemUnderTest = CreateVisionSessionService();
 
             // Act
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
 
             // Assert
             result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
+        }
+
+        private VisionSessionService CreateVisionSessionService()
+        {
+            return new VisionSessionService(
+                _mockVisionClient.Object,
+                _mockLogger,
+                new VisionTokenValidationService(new Mock<ILogger<VisionTokenValidationService>>().Object));
         }
     }
 }

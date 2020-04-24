@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         public void TestInitialize()
         {
             var services = new ServiceCollection();
-            services.RegisterTppSessionServices();
+            services.RegisterTppPfsServices();
 
             _tppUserSession = CreateUserSession("name", "ods");
             _actual = null;
@@ -528,8 +528,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             result.Should().BeAssignableTo<SessionLogoffResult.Forbidden>();
         }
 
-        private static string CreateConnectionTokenJson(string accountId = "", string passphrase = "") =>
-            $"{{ \"accountId\": \"{accountId}\", \"passphrase\": \"{passphrase}\" }}";
+        private static string CreateConnectionTokenJson(string accountId = "acc", string passphrase = "pass") =>
+            $"{{ \"accountId\": \"{accountId}\", \"passphrase\": \"{passphrase}\", \"providerId\": \"prov\" }}";
 
         private TppApiObjectResponse<AuthenticateReply> CreateReply(
             string name = "Joanie",

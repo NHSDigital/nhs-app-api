@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -22,17 +22,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
         private readonly IEmisClient _emisClient;
         private readonly ILogger<EmisSessionService> _logger;
         private readonly IEmisEnumMapper _emisEnumMapper;
+        private readonly EmisTokenValidationService _tokenValidationService;
 
         private const string StandardErrorMessage = "Failed request to create Emis user session";
 
         private static readonly HttpStatusCode[] InvalidTokenStatusCodes =
             { HttpStatusCode.Forbidden, HttpStatusCode.BadRequest };
 
-        public EmisSessionService(IEmisClient emisClient, ILogger<EmisSessionService> logger, IEmisEnumMapper emisEnumMapper)
+        public EmisSessionService(
+            IEmisClient emisClient,
+            ILogger<EmisSessionService> logger,
+            IEmisEnumMapper emisEnumMapper,
+            EmisTokenValidationService tokenValidationService)
         {
             _emisClient = emisClient;
             _logger = logger;
             _emisEnumMapper = emisEnumMapper;
+            _tokenValidationService = tokenValidationService;
         }
 
         public async Task<SessionsEndUserSessionPostResponse> SendSessionsEndUserSessionPost()
@@ -42,15 +48,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             {
                 _logger.LogEmisResponseIsForbidden();
                 _logger.LogEmisErrorResponse(endUserSessionResponse);
-                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.BadGateway());
+                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.BadGateway("Call to EMIS returned an error response"));
             }
 
             var responseBody = endUserSessionResponse.Body;
 
             if (string.IsNullOrEmpty(responseBody.EndUserSessionId))
             {
-                _logger.LogError("Gp system did not provide end user session Id");
-                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.BadGateway());
+                const string gpSystemDidNotProvideEndUserSessionId = "Gp system did not provide end user session Id";
+                _logger.LogError(gpSystemDidNotProvideEndUserSessionId);
+                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.BadGateway(gpSystemDidNotProvideEndUserSessionId));
             }
 
             return responseBody;
@@ -71,18 +78,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 {
                     _logger.LogEmisResponseIsForbidden();
                     _logger.LogEmisErrorResponse(sessionsResponse);
-                    throw new EmisSessionResponseErrorException(new GpSessionCreateResult.Forbidden());
+                    throw new EmisSessionResponseErrorException(new GpSessionCreateResult.Forbidden("Call to EMIS returned a forbidden response"));
                 }
 
                 _logger.LogEmisUnknownError(sessionsResponse);
                 _logger.LogEmisErrorResponse(sessionsResponse);
-                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.BadGateway());
+                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.BadGateway("Call to EMIS returned an error response"));
             }
 
             var responseBody = sessionsResponse.Body;
             if (!IsSessionsPostResponseValid(responseBody))
             {
-                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.BadGateway());
+                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.BadGateway("Call to EMIS returned an invalid response"));
             }
 
             return sessionsResponse;
@@ -93,6 +100,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             try
             {
                 _logger.LogEnter();
+
+                if (_tokenValidationService.IsInvalidConnectionTokenFormat(connectionToken))
+                {
+                    _logger.LogError("Invalid Im1 connection token");
+                    return new GpSessionCreateResult.InvalidConnectionToken();
+                }
 
                 var endUserSessionResponse = await SendSessionsEndUserSessionPost();
 
@@ -139,15 +152,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                     if (string.IsNullOrWhiteSpace(patientName))
                     {
-                        _logger.LogError("No patient name found");
-                        return new GpSessionCreateResult.BadGateway();
+                        const string message = "No patient name found";
+                        _logger.LogError(message);
+                        return new GpSessionCreateResult.BadGateway(message);
                     }
 
                     if (string.IsNullOrWhiteSpace(session.UserPatientLinkToken))
                     {
-                        _logger.LogError("No EMIS userPatientLinkToken found");
+                        const string message = "No EMIS userPatientLinkToken found";
+                        _logger.LogError(message);
                         _logger.LogEmisErrorResponse(sessionResponse);
-                        return new GpSessionCreateResult.Forbidden();
+                        return new GpSessionCreateResult.Forbidden(message);
                     }
                 }
                 catch (EmisSessionResponseErrorException responseError)
@@ -158,8 +173,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
                 }
                 catch (HttpRequestException e)
                 {
-                    _logger.LogError(e, $"{StandardErrorMessage}, HttpRequestException has been thrown.");
-                    return new GpSessionCreateResult.BadGateway();
+                    var message = $"{StandardErrorMessage}, HttpRequestException has been thrown.";
+                    _logger.LogError(e, message);
+                    return new GpSessionCreateResult.BadGateway(message);
                 }
 
                 try
@@ -194,8 +210,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError(e, $"{StandardErrorMessage}, HttpRequestException has been thrown.");
-                return new GpSessionCreateResult.BadGateway();
+                var message = $"{StandardErrorMessage}, HttpRequestException has been thrown.";
+                _logger.LogError(e, message);
+                return new GpSessionCreateResult.BadGateway(message);
             }
             finally
             {

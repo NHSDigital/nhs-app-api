@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.GpSystems
+namespace NHSOnline.Backend.GpSystems
 {
     public interface ITokenValidationService
     {

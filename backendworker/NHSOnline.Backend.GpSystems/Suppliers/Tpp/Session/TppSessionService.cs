@@ -16,33 +16,43 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 {
     internal class TppSessionService : ISessionService
     {
-        private readonly ITppClientRequest<TppRequestParameters, LogoffReply> _logoff;
-        private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
-        private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccesses;
-        private readonly ITppClientRequest<TppRequestParameters, PatientSelectedReply> _patientSelected;
         private readonly ILogger<TppSessionService> _logger;
         private readonly ITppSessionMapper _sessionMapper;
+        private readonly TppTokenValidationService _tokenValidationService;
+
+        private readonly ITppClientRequest<Authenticate, AuthenticateReply> _authenticate;
+        private readonly ITppClientRequest<TppRequestParameters, PatientSelectedReply> _patientSelected;
+        private readonly ITppClientRequest<TppUserSession, ListServiceAccessesReply> _listServiceAccesses;
+        private readonly ITppClientRequest<TppRequestParameters, LogoffReply> _logoff;
 
         public TppSessionService(
-            ITppClientRequest<TppRequestParameters, LogoffReply> logoff,
-            ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
-            ITppClientRequest<TppRequestParameters, PatientSelectedReply> patientSelected,
             ILogger<TppSessionService> logger,
             ITppSessionMapper sessionMapper,
-            ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccesses)
+            TppTokenValidationService tokenValidationService,
+            ITppClientRequest<Authenticate, AuthenticateReply> authenticate,
+            ITppClientRequest<TppRequestParameters, PatientSelectedReply> patientSelected,
+            ITppClientRequest<TppUserSession, ListServiceAccessesReply> listServiceAccesses,
+            ITppClientRequest<TppRequestParameters, LogoffReply> logoff)
         {
-            _logoff = logoff;
-            _authenticate = authenticate;
-            _patientSelected = patientSelected;
             _logger = logger;
             _sessionMapper = sessionMapper;
+            _tokenValidationService = tokenValidationService;
+            _authenticate = authenticate;
+            _patientSelected = patientSelected;
             _listServiceAccesses = listServiceAccesses;
+            _logoff = logoff;
         }
 
         public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
         {
             try
             {
+                if (_tokenValidationService.IsInvalidConnectionTokenFormat(connectionToken))
+                {
+                    _logger.LogError("Invalid Im1 connection token");
+                    return new GpSessionCreateResult.InvalidConnectionToken();
+                }
+
                 var authenticateReply = await AuthenticatePost(connectionToken, odsCode);
 
                 if (!authenticateReply.HasSuccessResponse)
@@ -55,8 +65,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 var userSession = _sessionMapper.Map(authenticateReply, odsCode, nhsNumber);
                 if (!userSession.HasValue)
                 {
-                    _logger.LogError("Cannot create a valid session from Tpp response");
-                    return new GpSessionCreateResult.BadGateway();
+                    const string message = "Cannot create a valid session from Tpp response";
+                    _logger.LogError(message);
+                    return new GpSessionCreateResult.BadGateway(message);
                 }
 
                 var tppUserSession = userSession.ValueOrFailure();
@@ -89,8 +100,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError(e, "Failed request to create TPP user session, HttpRequestException has been thrown.");
-                return new GpSessionCreateResult.BadGateway();
+                const string message = "Failed request to create TPP user session, HttpRequestException has been thrown.";
+                _logger.LogError(e, message);
+                return new GpSessionCreateResult.BadGateway(message);
             }
             finally
             {
@@ -248,12 +260,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
         {
             if (authenticateReply.HasErrorWithCode(TppApiErrorCodes.ProblemLoggingOn))
             {
-                _logger.LogError("Failed to authenticate user for TPP - Problem logging on");
-                return new GpSessionCreateResult.Forbidden();
+                const string message = "Failed to authenticate user for TPP - Problem logging on";
+                _logger.LogError(message);
+                return new GpSessionCreateResult.Forbidden(message);
             }
-
-            _logger.LogError("Failed to authenticate user for TPP");
-            return new GpSessionCreateResult.BadGateway();
+            else
+            {
+                const string message = "Failed to authenticate user for TPP";
+                _logger.LogError(message);
+                return new GpSessionCreateResult.BadGateway(message);
+            }
         }
     }
 }

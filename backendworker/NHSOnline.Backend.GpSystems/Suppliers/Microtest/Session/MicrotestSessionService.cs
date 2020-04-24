@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Session;
@@ -11,30 +11,39 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session
     {
         private readonly ILogger<MicrotestSessionService> _logger;
         private readonly IMicrotestDemographicsService _demographicsService;
+        private readonly MicrotestTokenValidationService _tokenValidationService;
 
         public MicrotestSessionService(
             ILogger<MicrotestSessionService> logger,
-            IMicrotestDemographicsService demographicsService)
+            IMicrotestDemographicsService demographicsService,
+            MicrotestTokenValidationService tokenValidationService)
         {
             _logger = logger;
             _demographicsService = demographicsService;
+            _tokenValidationService = tokenValidationService;
         }
 
         public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
         {
+            if (_tokenValidationService.IsInvalidConnectionTokenFormat(connectionToken))
+            {
+                _logger.LogError("Invalid Im1 connection token");
+                return new GpSessionCreateResult.InvalidConnectionToken();
+            }
+
             var session = new MicrotestUserSession
             {
                 NhsNumber = nhsNumber,
                 OdsCode = odsCode
             };
 
-            var demographicsResult = await _demographicsService.GetDemographics(
-                new GpLinkedAccountModel(session));
+            var demographicsResult = await _demographicsService.GetDemographics(new GpLinkedAccountModel(session));
 
             if (!(demographicsResult is DemographicsResult.Success successfulDemographicsResult))
             {
-                _logger.LogError("Error retrieving demographics when creating session");
-                return new GpSessionCreateResult.BadGateway();
+                const string message = "Error retrieving demographics when creating session";
+                _logger.LogError(message);
+                return new GpSessionCreateResult.BadGateway(message);
             }
 
             session.Name = successfulDemographicsResult.Response.PatientName;

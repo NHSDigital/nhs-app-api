@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Session
@@ -11,7 +10,7 @@ namespace NHSOnline.Backend.GpSystems.Session
 
         public abstract T Accept<T>(IGpSessionCreateResultVisitor<T> visitor);
         
-        public class Success : GpSessionCreateResult
+        public sealed class Success : GpSessionCreateResult
         {
             public GpUserSession UserSession { get; }
 
@@ -26,36 +25,41 @@ namespace NHSOnline.Backend.GpSystems.Session
             }
         }
 
-        public class Forbidden : GpSessionCreateResult
+        public sealed class Forbidden : GpSessionCreateResult
         {
-            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
+            public Forbidden(string message) => Message = message;
+            public string Message { get; }
+
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        public class BadGateway : GpSessionCreateResult
+        public sealed class BadGateway : GpSessionCreateResult
         {
-            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
+            public BadGateway(string message) => Message = message;
+            public string Message { get; }
+
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor) => visitor.Visit(this);
         }
         
-        public class BadRequest : GpSessionCreateResult
+        public sealed class BadRequest : GpSessionCreateResult
         {
-            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
+            public BadRequest(string message) => Message = message;
+            public string Message { get; }
+
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        public class InternalServerError : GpSessionCreateResult
+        public sealed class InternalServerError : GpSessionCreateResult
         {
-            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
+            public InternalServerError(string message) => Message = message;
+            public string Message { get; }
+
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        public sealed class InvalidConnectionToken : GpSessionCreateResult
+        {
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor) => visitor.Visit(this);
         }
     }
 }
