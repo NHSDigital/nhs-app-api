@@ -8,7 +8,6 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.openqa.selenium.WebElement
 import pages.sharedElements.PublicHealthNotificationElement
-import utils.SerenityHelpers
 import worker.models.serviceJourneyRules.PublicHealthNotification
 
 @DefaultUrl("http://web.local.bitraft.io:3000/")
@@ -100,16 +99,6 @@ open class HomePage : HybridPageObject() {
 
     val messagesLink = link("View your messages")
 
-    val expectedLinks = arrayListOf(checkSymptomsLink,
-            bookAndManageAppointmentsLink,
-            orderRepeatPrescriptionLink,
-            viewMedicalRecordLink,
-            messagesLink,
-            organDonationLink
-    )
-
-    val expectedLinksIncludingLinkedProfiles = expectedLinks.union(listOf(linkedProfilesLink))
-
     fun assertHasWelcomeMessageFor(patient: Patient) {
         val name = patient.formattedFullName()
         val expected = "Welcome, $name"
@@ -161,25 +150,16 @@ open class HomePage : HybridPageObject() {
 
     private fun assertCollection(message: String, expected: ArrayList<String>, actual: ArrayList<String>) {
         val listed = "Expected = ${expected.joinToString(", ")} Actual = ${actual.joinToString(", ")}"
-        Assert.assertEquals("$message. Expected number. $listed", expected.count(), actual.count())
+        assertEquals("$message. Expected number. $listed", expected.count(), actual.count())
         Assert.assertTrue("$message. Contents. $listed", actual.containsAll(expected))
     }
 
-    fun assertLinksPresentWithinHomePageBody() {
-        val links = listOfLinks().elements
+    fun assertLinkIsVisible(linkText: String): HybridPageElement {
+        return link(linkText).assertIsVisible()
+    }
 
-        val patient = SerenityHelpers.getPatient()
-        val linksToCheck = if (patient.linkedAccounts.count() > 0) {
-            expectedLinksIncludingLinkedProfiles
-        }
-        else {
-            expectedLinks
-        }
-
-        linksToCheck.forEach { link -> link.assertSingleElementPresent() }
-        Assert.assertEquals("Number of expected Links",
-                linksToCheck.count(),
-                links.count())
+    fun assertLinkNotPresent(linkText: String) {
+        link(linkText).assertElementNotPresent()
     }
 
     fun assertHomePageLinksNotPresent() {
@@ -210,7 +190,7 @@ open class HomePage : HybridPageObject() {
     fun assertSurveyLinkContent() {
         surveyLinkTab.assertSingleElementPresent().assertIsVisible()
         surveyContent.assertSingleElementPresent().assertIsVisible()
-        Assert.assertEquals("Expected survey content",
+        assertEquals("Expected survey content",
                 "Help us make this service better. Complete our quick survey.",
                 surveyContent.text)
     }

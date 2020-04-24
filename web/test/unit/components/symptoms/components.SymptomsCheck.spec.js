@@ -11,7 +11,12 @@ describe('GP Guidence button tests', () => {
   let $store;
   let $router;
 
-  const createWrapper = (rules, isLoggedIn, cdssAdviceEnabled) => {
+  const createWrapper = (
+    rules,
+    isLoggedIn,
+    cdssAdviceEnabled,
+    isProofLevel9 = true,
+  ) => {
     $router = createRouter();
     $store = createStore({
       $router,
@@ -25,6 +30,7 @@ describe('GP Guidence button tests', () => {
       getters: {
         'session/isLoggedIn': isLoggedIn,
         'serviceJourneyRules/cdssAdviceEnabled': cdssAdviceEnabled,
+        'session/isProofLevel9': isProofLevel9,
       },
     });
     return mount(SymptomsCheck, { $store, $router });
@@ -114,6 +120,19 @@ describe('GP Guidence button tests', () => {
       const http = createHttp(mockRules);
       const rules = await http.getV1PatientJourneyConfiguration();
       wrapper = createWrapper(rules, false, false);
+      const adminMenuItem = wrapper.find('#btn_gpAdvice');
+      expect(adminMenuItem.exists()).toBe(false);
+    });
+
+    it('Hide the GP advice button if logged in, practice does offer it but the user is p5', async () => {
+      const mockRules = {
+        loggedIn: {
+          provider: 'eConsult',
+        },
+      };
+      const http = createHttp(mockRules);
+      const rules = await http.getV1PatientJourneyConfiguration();
+      wrapper = createWrapper(rules, true, true, false);
       const adminMenuItem = wrapper.find('#btn_gpAdvice');
       expect(adminMenuItem.exists()).toBe(false);
     });

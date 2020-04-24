@@ -34,6 +34,9 @@ export default {
     const state = input.session || input;
     return () => !!state.csrfToken;
   },
+  isProofLevel9(state) {
+    return state.proofLevel === proofLevel.P9;
+  },
   isProxying(state, getters, rootState) {
     return !!(rootState.linkedAccounts && rootState.linkedAccounts.actingAsUser);
   },

@@ -9,7 +9,8 @@
                :click-func="goToUrl"
                :click-param="symptomsPath"/>
 
-    <menu-item id="menu-item-appointments"
+    <menu-item v-if="isProofLevel9"
+               id="menu-item-appointments"
                :header-tag="headerTag"
                data-sid="appointments-menu-item"
                :href="appointmentsPath"
@@ -18,7 +19,8 @@
                :click-func="goToUrl"
                :click-param="appointmentsPath"/>
 
-    <menu-item id="menu-item-prescriptions"
+    <menu-item v-if="isProofLevel9"
+               id="menu-item-prescriptions"
                :header-tag="headerTag"
                data-sid="prescriptions-menu-item"
                :href="prescriptionsPath"
@@ -27,7 +29,8 @@
                :click-func="goToUrl"
                :click-param="prescriptionsPath"/>
 
-    <menu-item id="menu-item-myRecord"
+    <menu-item v-if="isProofLevel9"
+               id="menu-item-myRecord"
                :header-tag="headerTag"
                data-sid="myrecord-menu-item"
                :href="gpMedicalRecordPath"
@@ -45,11 +48,12 @@
                :click-func="goToUrl"
                :click-param="messagesPath"/>
 
-    <organ-donation-link id="organ-donation-link"
+    <organ-donation-link v-if="isProofLevel9"
+                         id="organ-donation-link"
                          data-sid="organ-donation-menu-item"
                          :back-link-override="indexPath"/>
 
-    <menu-item v-if="hasLinkedProfiles()"
+    <menu-item v-if="hasLinkedProfiles && isProofLevel9"
                id="menu-item-linkedProfiles"
                :header-tag="headerTag"
                data-sid="linkedProfile-menu-item"
@@ -95,10 +99,15 @@ export default {
       indexPath: INDEX.path,
     };
   },
-  methods: {
+  computed: {
     hasLinkedProfiles() {
       return this.$store.getters['linkedAccounts/hasLinkedAccounts'];
     },
+    isProofLevel9() {
+      return this.$store.getters['session/isProofLevel9'];
+    },
+  },
+  methods: {
     navigate(event) {
       redirectTo(this, event.currentTarget.pathname);
       event.preventDefault();

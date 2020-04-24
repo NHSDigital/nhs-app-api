@@ -6,20 +6,20 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
+import features.authentication.steps.NavigationLinkText
 import features.authentication.steps.PatientDetail
 import features.myrecord.stepDefinitions.MedicalRecordWarningStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.serviceJourneyRules.stepDefinitions.ServiceJourneyRulesSerenityHelpers
 import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
 import pages.AppointmentHubPage
+import pages.HybridPageElement
 import pages.prescription.PrescriptionsPage
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
@@ -43,8 +43,6 @@ class HomePageStepDefinitions {
     private lateinit var loginSteps: LoginSteps
     @Steps
     private lateinit var navBar: NavBarNative
-    @Steps
-    private lateinit var navHeader: NavigationSteps
     @Steps
     private lateinit var organDonationSteps: OrganDonationStepDefinitions
     @Steps
@@ -70,13 +68,14 @@ class HomePageStepDefinitions {
     }
 
     @When("I follow the Appointments link from the home page$")
-    fun iFollowTheAppointmentsLinkFromHomePage() {
-        followAppointmentsLink()
+    fun iFollowTheAppointmentsLinkFromTheHomePage() {
+        val linkElement = homeSteps.assertLinkIsVisible(NavigationLinkText.APPOINTMENTS)
+        followAppointmentsLink(linkElement)
     }
 
     @When("I follow the Messages link from the home page$")
-    fun iFollowTheMesaagesLinkFromHomePage() {
-        followMessagesLink()
+    fun iFollowTheMessagesLinkFromTheHomePage() {
+        homeSteps.assertLinkIsVisible(NavigationLinkText.MESSAGES).click()
     }
 
     @Then("^I see the home page$")
@@ -116,15 +115,10 @@ class HomePageStepDefinitions {
         homeSteps.assertPatientDetailIsVisible(patient, PatientDetail.fromLabel(detail))
     }
 
-    @Then("I see the proxy patient details of age and gp surgery$")
+    @Then("^I see the proxy patient details of age and gp surgery$")
     fun iSeeProxyPatientDetails() {
         val selectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()
         homeSteps.assertProxyPatientDetailsShownFor(selectedProfile)
-    }
-
-    @Then("the link to Messages is not available on the Home page")
-    fun theLinkToMessagesIsNotAvailableOnTheHomePage() {
-        homeSteps.homePage.messagesLink.assertElementNotPresent()
     }
 
     @Then("^I see a welcome message$")
@@ -133,28 +127,22 @@ class HomePageStepDefinitions {
         homeSteps.assertWelcomeMessageShownFor(patient)
     }
 
-    @Then("I see and can follow links within the home page body$")
-    fun iSeeAndCanFollowLinksWithinTheHomePageBody() {
-        homeSteps.homePage.assertLinksPresentWithinHomePageBody()
+    @Then("^I can't see the (.*) link$")
+    fun iCantSeeTheSpecifiedLink(linkText: String) {
+        homeSteps.homePage.assertLinkNotPresent(linkText)
+    }
 
-        val linksToFollow = arrayListOf(
-                { followSymptomLink() },
-                { followAppointmentsLink() },
-                { followPrescriptionLink() },
-                { followMedicalRecordLink() },
-                { followMessagesLink() },
-                { followOrganDonationLink() }
-        )
+    @Then("^I can see and follow the (.*) link$")
+    fun iCanSeeAndFollowTheSpecifiedLink(linkText: String) {
+        val linkElement = homeSteps.homePage.assertLinkIsVisible(linkText)
 
-        Assert.assertEquals("Test Setup Incorrect. Expected Number of links does not match those to follow. " +
-                "This test must be updated if a link is added or removed.",
-                homeSteps.homePage.expectedLinks.count(),
-                linksToFollow.count())
-
-        linksToFollow.forEachIndexed { index, link ->
-            link.invoke()
-            if (index != linksToFollow.size - 1)
-                navigateBackToHomePage()
+        when (linkText) {
+            NavigationLinkText.SYMPTOMS.linkText -> followSymptomLink(linkElement)
+            NavigationLinkText.APPOINTMENTS.linkText -> followAppointmentsLink(linkElement)
+            NavigationLinkText.PRESCRIPTIONS.linkText -> followPrescriptionLink(linkElement)
+            NavigationLinkText.MEDICAL_RECORD.linkText -> followMedicalRecordLink(linkElement)
+            NavigationLinkText.ORGAN_DONATION.linkText -> followOrganDonationLink(linkElement)
+            else -> Assert.fail("Test set up incorrect, there is no matching follow on function for `$linkText`")
         }
     }
 
@@ -170,43 +158,34 @@ class HomePageStepDefinitions {
         homeSteps.homePage.assertHasPublicHealthNotifications(publicHealthNotifications)
     }
 
-    private fun navigateBackToHomePage(){
-        navHeader.headerNative.clickHome()
-        homeSteps.assertHeaderVisible()
-    }
-
-    private fun followSymptomLink() {
-        homeSteps.homePage.checkSymptomsLink.click()
+    private fun followSymptomLink(linkElement: HybridPageElement) {
+        linkElement.click()
         checkMySymptoms.assertConditionsHeaderVisible()
         checkMySymptoms.assertNhs111HeaderVisible()
         checkMySymptoms.assertCoronaHeaderVisible()
         navBar.isHighlighted(NavBarNative.NavBarType.SYMPTOMS)
     }
 
-    private fun followAppointmentsLink() {
-        homeSteps.homePage.bookAndManageAppointmentsLink.click()
+    private fun followAppointmentsLink(linkElement: HybridPageElement) {
+        linkElement.click()
         appointmentHubPage.assertAppointmentsHubIsDisplayed()
         navBar.isHighlighted(NavBarNative.NavBarType.APPOINTMENTS)
     }
 
-    private fun followMessagesLink() {
-        homeSteps.homePage.messagesLink.click()
-    }
-
-    private fun followPrescriptionLink() {
-        homeSteps.homePage.orderRepeatPrescriptionLink.click()
+    private fun followPrescriptionLink(linkElement: HybridPageElement) {
+        linkElement.click()
         prescriptions.isLoaded()
         navBar.isHighlighted(NavBarNative.NavBarType.PRESCRIPTIONS)
     }
 
-    private fun followMedicalRecordLink() {
-        homeSteps.homePage.viewMedicalRecordLink.click()
+    private fun followMedicalRecordLink(linkElement: HybridPageElement) {
+        linkElement.click()
         recordWarning.thenISeeRecordWarningPageOpened()
         navBar.isHighlighted(NavBarNative.NavBarType.MY_RECORD)
     }
 
-    private fun followOrganDonationLink() {
-        homeSteps.homePage.organDonationLink.click()
+    private fun followOrganDonationLink(linkElement: HybridPageElement) {
+        linkElement.click()
         organDonationSteps.iAmOnTheOrganDonationPage()
     }
 }

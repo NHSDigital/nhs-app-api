@@ -16,26 +16,29 @@
       :body="publicHealthNotification.body"/>
     <biometric-banner v-if="!isProxying" />
     <navigation-list-menu v-if="!isProxying" />
+    <proof-level-uplift-banner v-if="!isProofLevel9" id="upliftBlueBanner"/>
   </div>
 </template>
 
 <script>
-import get from 'lodash/fp/get';
-import NavigationListMenu from '../components/NavigationListMenu';
-import ProxyWelcomeSection from '../components/ProxyWelcomeSection';
-import WelcomeSection from '../components/WelcomeSection';
-import BiometricBanner from '../components/widgets/BiometricBanner';
-import PublicHealthNotification from '../components/widgets/PublicHealthNotification';
+import BiometricBanner from '@/components/widgets/BiometricBanner';
 import CalculateAgeInMonthsAndYears from '@/plugins/mixinDefinitions/CalculateAgeInMonthsAndYears';
+import get from 'lodash/fp/get';
+import NavigationListMenu from '@/components/NavigationListMenu';
+import ProofLevelUpliftBanner from '@/components/uplift/ProofLevelUpliftBanner';
+import ProxyWelcomeSection from '@/components/ProxyWelcomeSection';
+import PublicHealthNotification from '@/components/widgets/PublicHealthNotification';
+import WelcomeSection from '@/components/WelcomeSection';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    PublicHealthNotification,
     BiometricBanner,
-    WelcomeSection,
     NavigationListMenu,
+    ProofLevelUpliftBanner,
     ProxyWelcomeSection,
+    PublicHealthNotification,
+    WelcomeSection,
   },
   mixins: [CalculateAgeInMonthsAndYears],
   data() {
@@ -64,6 +67,9 @@ export default {
     },
     isProxying() {
       return this.$store.getters['session/isProxying'];
+    },
+    isProofLevel9() {
+      return this.$store.getters['session/isProofLevel9'];
     },
   },
   mounted() {

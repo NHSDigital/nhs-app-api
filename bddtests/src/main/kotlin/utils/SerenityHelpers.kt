@@ -96,7 +96,5 @@ class SerenityHelpers {
             }
             return null
         }
-
-
     }
 }

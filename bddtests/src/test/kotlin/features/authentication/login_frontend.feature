@@ -12,7 +12,19 @@ Feature: Login frontend
     And I see my NHS number on the home page
     And I see the home page header
     And I see the navigation menu
-    And I see and can follow links within the home page body
+    And I can see and follow the Check your symptoms link
+    When I click the home icon
+    Then I see the home page
+    And I can see and follow the Book and manage appointments link
+    When I click the home icon
+    Then I see the home page
+    And I can see and follow the Order a repeat prescription link
+    When I click the home icon
+    Then I see the home page
+    And I can see and follow the View your GP medical record link
+    When I click the home icon
+    Then I see the home page
+    And I can see and follow the Manage your organ donation decision link
     Examples:
       | GP System |
       | TPP       |
@@ -28,6 +40,16 @@ Feature: Login frontend
     Then I see a welcome message
     And I see my Date of birth on the home page
     And I don't see my NHS number on the home page
+
+  Scenario: A patient with proof level 5 sees the home page after logging in
+    Given I am a patient with proof level 5
+    And I am logged in
+    Then I am asked to prove my identity
+    And I can't see the Book and manage appointments link
+    And I can't see the Order a repeat prescription link
+    And I can't see the View your GP medical record link
+    And I can't see the Manage your organ donation decision link
+    And I can see and follow the Check your symptoms link
 
   Scenario: A user does not see the OLC beta banner when on not on an online consultations page
     Given I am a EMIS patient

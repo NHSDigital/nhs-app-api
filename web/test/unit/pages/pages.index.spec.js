@@ -14,7 +14,11 @@ describe('index', () => {
     body: `Health notification body ${id}`,
   });
 
-  const mountAs = ({ isProxying = false, homeScreen = {}, isNativeApp = false } = {}) => {
+  const mountAs = ({
+    isProxying = false,
+    homeScreen = {},
+    isNativeApp = false,
+    isProofLevel9 = true } = {}) => {
     $router = createRouter();
     $store = createStore({
       state: {
@@ -39,6 +43,7 @@ describe('index', () => {
         },
       },
     });
+    $store.getters['session/isProofLevel9'] = isProofLevel9;
     $store.getters['session/isProxying'] = isProxying;
     $store.getters['session/currentProfile'] = {
       name: '',
@@ -50,6 +55,18 @@ describe('index', () => {
     wrapper = mountAs({ isProxying: false });
     const navMenu = wrapper.find('[data-sid="navigation-list-menu"]');
     expect(navMenu.exists()).toBe(true);
+  });
+
+  it('will display the banner when user is p5', () => {
+    wrapper = mountAs({ isProofLevel9: false });
+    const blueBanner = wrapper.find('#upliftBlueBanner');
+    expect(blueBanner.exists()).toBe(true);
+  });
+
+  it('will not display the banner when user is p9', () => {
+    wrapper = mountAs({ isProofLevel9: true });
+    const blueBanner = wrapper.find('#upliftBlueBanner');
+    expect(blueBanner.exists()).toBe(false);
   });
 
   it('will not display the navigation items when proxying', () => {

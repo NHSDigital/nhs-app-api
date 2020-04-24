@@ -6,6 +6,7 @@ import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
+import pages.HybridPageElement
 import pages.navigation.HeaderNative
 import pages.navigation.WebHeader
 
@@ -16,6 +17,15 @@ enum class PatientDetail(val label: String) {
     companion object {
         fun fromLabel(label: String): PatientDetail = values().first { it.label == label }
     }
+}
+
+enum class NavigationLinkText (val linkText: String) {
+    SYMPTOMS("Check your symptoms"),
+    APPOINTMENTS("Book and manage appointments"),
+    PRESCRIPTIONS("Order a repeat prescription"),
+    MEDICAL_RECORD("View your GP medical record"),
+    ORGAN_DONATION("Manage your organ donation decision"),
+    MESSAGES("View your messages")
 }
 
 open class HomeSteps {
@@ -60,6 +70,11 @@ open class HomeSteps {
             Assert.assertEquals("Dismiss button text", "Dismiss", homePage.dismissButton.textValue.trim())
             homePage.dismissButton.click()
         }
+    }
+
+    @Step
+    fun assertLinkIsVisible(link: NavigationLinkText): HybridPageElement {
+        return homePage.assertLinkIsVisible(link.linkText);
     }
 
     private fun getExpectedProxyDetails(proxyPatient: LinkedProfileFacade): ArrayList<String> {

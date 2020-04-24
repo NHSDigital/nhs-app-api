@@ -36,7 +36,7 @@
                    'sy01.111.subheaderAriaLabel',
                    'sy01.111.body')"/>
 
-      <menu-item v-if="loggedIn && isCdssAdvice"
+      <menu-item v-if="loggedIn && isCdssAdvice && isProofLevel9"
                  id="btn_gpAdvice"
                  header-tag="h2"
                  data-purpose="text_link"
@@ -92,6 +92,9 @@ export default {
         },
       };
       return createUri({ path: APPOINTMENT_GP_ADVICE.path, noJs: noJsData });
+    },
+    isProofLevel9() {
+      return this.$store.getters['session/isProofLevel9'];
     },
   },
   methods: {
