@@ -97,6 +97,18 @@ describe('login page', () => {
     expect(AuthorisationService).not.toHaveBeenCalled();
   });
 
+  it('will not display the header in web', () => {
+    const fidoQuery = createFidoQueries();
+    wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: false, source: 'web' });
+    expect(wrapper.find('#native-header').exists()).toBe(false);
+  });
+
+  it('will display the header in native', () => {
+    const fidoQuery = createFidoQueries();
+    wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: true, source: 'android' });
+    expect(wrapper.find('#native-header').exists()).toBe(true);
+  });
+
   describe('login button', () => {
     let loginButton;
 

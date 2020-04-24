@@ -1,6 +1,10 @@
 <template>
   <div id="maincontent" :class="dynamicStyle('loginMain')">
     <div>
+      <h2 v-if="this.$store.state.device.isNativeApp" id="native-header"
+          class="nhsuk-u-margin-bottom-2">
+        {{ $t('login.desc') }}
+      </h2>
       <form ref="loginForm"
             :action="authoriseUrl"
             method="get">
