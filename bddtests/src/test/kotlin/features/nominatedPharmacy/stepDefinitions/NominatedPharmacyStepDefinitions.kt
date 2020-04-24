@@ -14,10 +14,10 @@ import org.junit.Assert
 import pages.PrescriptionsHubPage
 import pages.isVisible
 import pages.nominatedPharmacy.ConfirmNominatedPharmacyPage
-import pages.nominatedPharmacy.NominatedPharmacyChangeSuccessPage
-import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
 import pages.nominatedPharmacy.NominatedPharmacyPage
 import pages.nominatedPharmacy.NominatedPharmacyResultsPage
+import pages.nominatedPharmacy.NominatedPharmacyChangeSuccessPage
+import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
 import pages.prescription.ViewOrdersPrescriptionsPage
 import pages.text
 import utils.SerenityHelpers

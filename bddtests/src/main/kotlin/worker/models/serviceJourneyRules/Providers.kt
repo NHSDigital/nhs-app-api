@@ -31,6 +31,10 @@ enum class MessagesProvider {
     testSilverThirdPartyProvider
 }
 
+enum class MedicinesProvider {
+    pkb
+}
+
 enum class ConsultationsProvider {
     pkb
 }

@@ -99,6 +99,21 @@ export default {
           linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
         },
       },
+      {
+        id: 'medicines',
+        path: '/nhs-login/login?phrPath=/auth/manageMedications.action',
+        jumpOffContent: {
+          headerText: 'Hospital and other prescriptions',
+          descriptionText: 'See your current and past prescriptions',
+        },
+        thirdPartyWarning: {
+          featureName: 'Hospital and other prescriptions',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
     ],
   },
   'silver-third-party-api-test': {

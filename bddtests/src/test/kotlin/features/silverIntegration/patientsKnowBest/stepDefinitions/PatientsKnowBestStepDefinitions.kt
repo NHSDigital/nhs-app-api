@@ -8,6 +8,8 @@ import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import pages.HybridPageObject
+import pages.PrescriptionsHubPage
+import pages.assertIsVisible
 import pages.RedirectorPage
 import pages.appointments.HospitalAppointmentsPage
 import pages.assertElementNotPresent
@@ -18,6 +20,7 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
     private lateinit var redirector: RedirectorPage
     private lateinit var hospitalAppointmentsPage: HospitalAppointmentsPage
+    private lateinit var prescriptionsHubPage: PrescriptionsHubPage
 
     @Given("^I am a user who can view Appointments from Patients Know Best$")
     fun iAmAUserWhoCanViewAppointmentsFromPatientsKnowBest(){
@@ -27,6 +30,16 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view Appointments from Patients Know Best$")
     fun iAmAUserWhoCannotViewAppointmentsFromPatientsKnowBest(){
         setupPatient( SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
+    }
+
+    @Given("^I am a user who can view Medicines from Patients Know Best$")
+    fun iAmAUserWhoCanViewMedicinesFromPatientsKnowBest(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB)
+    }
+
+    @Given("^I am a user who cannot view Medicines from Patients Know Best$")
+    fun iAmAUserWhoCannotViewMedicinesFromPatientsKnowBest(){
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_MEDICINES_NONE)
     }
 
     @Given("^I am a user who can view care plans from Patients Know Best$")
@@ -111,6 +124,21 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @Then("^I can see the PKB View Appointments link on the Appointments page$")
     fun iCanSeeThePkbViewAppointmentsLinkOnTheAppointmentsPage(){
         hospitalAppointmentsPage.assertPkbViewAppointmentsIsDisplayed()
+    }
+
+    @Then("^the PKB View Medicines link is available on the Prescriptions Hub$")
+    fun thePKBViewMedicinesLinkIsAvailableOnThePrescriptionsHub() {
+        prescriptionsHubPage.pkbMedicinesJumpOffButton.assertIsVisible()
+    }
+
+    @Then("^the PKB View Medicines link is not available on the Prescriptions Hub$")
+    fun thePKBViewMedicinesLinkIsNotAvailableOnThePrescriptionsHub() {
+        prescriptionsHubPage.pkbMedicinesJumpOffButton.assertElementNotPresent()
+    }
+
+    @Then("^I click the PKB View Medicines link on the Prescriptions hub$")
+    fun iClickThePKBViewMedicinesLink(){
+        prescriptionsHubPage.pkbMedicinesJumpOffButton.click()
     }
 
     private fun setupPatient(configuration: SJRJourneyType) {

@@ -26,13 +26,15 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_MEDICINES_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_PKB))
                 .add(Supplier.EMIS, "A22222",
                         EnumSet.of(SJRJourneyType.APPOINTMENTS_INFORMATICA,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS,
                                 SJRJourneyType.MEDICAL_RECORD_IM1,
                                 SJRJourneyType.PRESCRIPTIONS_IM1,
-                                SJRJourneyType.NOMINATED_PHARMACY_DISABLED))
+                                SJRJourneyType.NOMINATED_PHARMACY_DISABLED,
+                                SJRJourneyType.SILVER_INTEGRATION_MEDICINES_NONE))
                 .add(Supplier.EMIS, "A44444",
                         EnumSet.of(SJRJourneyType.APPOINTMENTS_GPATHAND,
                                 SJRJourneyType.MEDICAL_RECORD_GPATHAND,

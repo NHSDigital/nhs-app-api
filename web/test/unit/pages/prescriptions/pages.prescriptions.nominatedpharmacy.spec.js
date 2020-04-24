@@ -31,6 +31,8 @@ describe('prescriptions/index.vue', () => {
       getters: {
         'nominatedPharmacy/nominatedPharmacyEnabled': isEnabled,
         'serviceJourneyRules/nominatedPharmacyEnabled': isEnabled,
+        'serviceJourneyRules/silverIntegrationEnabled': () => ({ serviceProvider: 'pkb',
+          serviceType: 'messages' }),
       },
     });
     $store.app.$analytics = {
@@ -69,6 +71,8 @@ describe('prescriptions/index.vue', () => {
       getters: {
         'nominatedPharmacy/nominatedPharmacyEnabled': isEnabled,
         'serviceJourneyRules/nominatedPharmacyEnabled': isEnabled,
+        'serviceJourneyRules/silverIntegrationEnabled': () => ({ serviceProvider: 'pkb',
+          serviceType: 'messages' }),
       },
     });
 

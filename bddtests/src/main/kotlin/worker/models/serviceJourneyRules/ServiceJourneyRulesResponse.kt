@@ -23,7 +23,8 @@ data class PrescriptionsJourneyRules(var provider:PrescriptionsProvider)
 
 data class SilverIntegrationJourneyRules(var secondaryAppointments:ArrayList<SecondaryAppointmentsProvider>,
                                          var messages: ArrayList<MessagesProvider>,
-                                         var consultations: ArrayList<ConsultationsProvider>)
+                                         var consultations: ArrayList<ConsultationsProvider>,
+                                         var medicines: ArrayList<MedicinesProvider>)
 
 data class PublicHealthNotification(
         var id: String,

@@ -27,6 +27,10 @@ export default {
         type: 'sharedLinks',
         redirectPath: '/nhs-login/login?phrPath=%2Flibrary%2FmanageLibrary.action',
       },
+      medicines: {
+        type: 'medicines',
+        redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FmanageMedications.action',
+      },
     },
     testProvider: {
       messages: {

@@ -47,8 +47,8 @@ Feature: nominated pharmacy journey
     And I navigate to prescriptions
     Then the Prescriptions Hub page is displayed
     When I click the View Orders link
-    And I click the change nominated pharmacy link on the view orders page
-    Then I see the update nominated pharmacy interrupt page loaded
+    Then I click the change nominated pharmacy link on the view orders page
+    And I see the update nominated pharmacy interrupt page loaded
     When I click on the interrupt continue button
     Then I see the choose type page is loaded
     And I select high street pharmacy
@@ -62,8 +62,8 @@ Feature: nominated pharmacy journey
     When I click on confirm button to change my nominated pharmacy
     Then I see the change success page with my nominated pharmacy details
     When I click on the go to your prescriptions orders link
-    And I see view orders prescriptions page loaded
-    Then I see my nominated pharmacy on the view orders page
+    Then I see view orders prescriptions page loaded
+    And I see my nominated pharmacy on the view orders page
 
     Examples:
       | GP System | Pharmacy type | search text | OdsCode |

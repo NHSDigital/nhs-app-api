@@ -32,6 +32,12 @@
             :click-func="onNominatedPharmacyDetailClicked"
             :header-tag="'h2'"
           />
+          <third-party-jump-off-button
+            v-if="showPkbMedicines"
+            id="btn_pkb_medicines"
+            provider-id="pkb"
+            :jump-off-type="thirdPartyProvider.pkb.medicines.type"
+            :redirect-path="thirdPartyProvider.pkb.medicines.redirectPath" />
         </menu-item-list>
       </div>
     </div>
@@ -47,6 +53,9 @@ import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import InterruptBackTo from '@/lib/pharmacy-detail/interrupt-back-to';
 import { redirectTo } from '@/lib/utils';
 import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_INTERRUPT, PRESCRIPTIONS_VIEW_ORDERS } from '@/lib/routes';
+import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
+import sjrIf from '@/lib/sjrIf';
 
 const loadData = async (store) => {
   store.dispatch('repeatPrescriptionCourses/init');
@@ -68,13 +77,17 @@ export default {
     MenuItem,
     NoJsForm,
     GenericButton,
+    ThirdPartyJumpOffButton,
+  },
+  data() {
+    return {
+      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
+      isProxying: this.$store.getters['session/isProxying'],
+    };
   },
   computed: {
     nominatedPharmacyName() {
       return this.$store.getters['nominatedPharmacy/pharmacyName'];
-    },
-    isProxying() {
-      return this.$store.getters['session/isProxying'];
     },
     nominatedPharmacyText() {
       if (this.nominatedPharmacyName === undefined) {
@@ -90,6 +103,19 @@ export default {
     },
     showNominatedPharmacy() {
       return this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled'];
+    },
+    hasPkbMedicines() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'medicines',
+        },
+      });
+    },
+    showPkbMedicines() {
+      return !this.isProxying && this.hasPkbMedicines;
     },
   },
   watch: {

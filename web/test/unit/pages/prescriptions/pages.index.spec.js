@@ -8,6 +8,9 @@ const createStore = ({
   pharmacyName = undefined,
   sjrEnabled = true,
   isProxying = false,
+  isNativeApp = false,
+  context = { serviceProvider: 'pkb',
+    serviceType: 'messages' },
 }) => ({
   dispatch: jest.fn(),
   app: {
@@ -18,8 +21,12 @@ const createStore = ({
     },
   },
   state: {
-    device: {
-      source: 'web',
+    device: { isNativeApp },
+    knownServices: {
+      knownServices: [{
+        id: 'pkb',
+        url: 'www.url.com',
+      }],
     },
     nominatedPharmacy: {
       pharmacy: {
@@ -32,6 +39,7 @@ const createStore = ({
     'serviceJourneyRules/nominatedPharmacyEnabled': sjrEnabled,
     'session/isProxying': isProxying,
     'nominatedPharmacy/pharmacyName': pharmacyName,
+    'serviceJourneyRules/silverIntegrationEnabled': () => (context),
   },
 });
 
@@ -173,6 +181,51 @@ describe('prescriptions hub index page', () => {
       wrapper.vm.onViewOrdersClicked();
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTIONS_VIEW_ORDERS.path);
+    });
+  });
+
+  describe('patient knows best medicines jump off point', () => {
+    const getPkbMedicinesJumpOff = wrapperObj =>
+      wrapperObj.find('#btn_pkb_medicines');
+
+    describe('pkb medicines enabled, is native app, and not proxying, ', () => {
+      beforeEach(() => {
+        $store = createStore({ context: true, isNativeApp: true, isProxying: false });
+        wrapper = mountPage($store);
+      });
+
+      it('will display the pkb medicines jump off point', async () => {
+        expect(getPkbMedicinesJumpOff(wrapper).exists()).toBe(true);
+      });
+
+      it('the jump off point will have correct title and description', async () => {
+        expect(getPkbMedicinesJumpOff(wrapper).find('h2').text()).toEqual('Hospital and other prescriptions');
+        expect(getPkbMedicinesJumpOff(wrapper).find('p').text()).toEqual('See your current and past prescriptions');
+      });
+    });
+
+    describe('pkb medicines enabled, is native app, and proxying, ', () => {
+      it('will not display the pkb medicines jump off point', async () => {
+        $store = createStore({ context: true, isNativeApp: true, isProxying: true });
+        wrapper = mountPage($store);
+        expect(getPkbMedicinesJumpOff(wrapper).exists()).toBe(false);
+      });
+    });
+
+    describe('pkb medicines enabled, is desktop, and not proxying, ', () => {
+      it('will display the pkb medicines jump off point', async () => {
+        $store = createStore({ context: true, isNativeApp: false, isProxying: false });
+        wrapper = mountPage($store);
+        expect(getPkbMedicinesJumpOff(wrapper).exists()).toBe(true);
+      });
+    });
+
+    describe('pkb medicines disabled ', () => {
+      it('will not display the pkb medicines jump off point', async () => {
+        $store = createStore({ context: false, isNativeApp: true, isProxying: false });
+        wrapper = mountPage($store);
+        expect(getPkbMedicinesJumpOff(wrapper).exists()).toBe(false);
+      });
     });
   });
 });

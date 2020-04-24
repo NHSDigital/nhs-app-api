@@ -33,7 +33,11 @@ describe('prescriptions page', () => {
 
   beforeEach(() => {
     $router = createRouter();
-    $store = createStore({ state: createState() });
+    $store = createStore({ state: createState(),
+      getters: {
+        'serviceJourneyRules/silverIntegrationEnabled': () => ({ serviceProvider: 'pkb',
+          serviceType: 'messages' }),
+      } });
     wrapper = mount(PrescriptionsPage, {
       $router,
       $store,
