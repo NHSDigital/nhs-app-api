@@ -33,8 +33,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public void TestInitialize()
         {
             _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+                .Customize(new AutoMoqCustomization());
             _mockInfoRepository = _fixture.Freeze<Mock<IInfoRepository>>();
             _nhsLoginId = _fixture.Create<string>();
             _nhsNumber = _fixture.Create<string>();

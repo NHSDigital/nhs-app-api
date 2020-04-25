@@ -1,10 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -12,16 +11,15 @@ using NHSOnline.Backend.PfsApi.Areas.MyRecord;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 {
     [TestClass]
-    public class TestResultControllerTests
+    public sealed class TestResultControllerTests: IDisposable
     {
         private DetailedTestResultController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private P9UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
@@ -37,34 +35,31 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _mockAuditor = new Mock<IAuditor>();
 
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
-            _userSession = _fixture.Create<P9UserSession>();
-            
             _mockPatientRecordService = new Mock<IPatientRecordService>();
                 
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem.Setup(x => x.GetPatientRecordService())
                 .Returns(_mockPatientRecordService.Object);
             
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(_mockGpSystem.Object);
             
-            _fixture.Freeze<IDetailedTestResultVisitor<IActionResult>>();
-
-            _systemUnderTest = _fixture.Create<DetailedTestResultController>();
+            _systemUnderTest = new DetailedTestResultController(
+                new Mock<ILogger<DetailedTestResultController>>().Object,
+                _mockGpSystemFactory.Object,
+                _mockAuditor.Object);
         }
         
         [TestMethod]
         public async Task GetTestResult_Returns_SuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             // Arrange
-            var testResultResponse = _fixture.Create<TestResultResponse>();
+            var testResultResponse = new TestResultResponse();
             var testResult = new GetDetailedTestResult.Success(testResultResponse);
             
             _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(It.Is<GpLinkedAccountModel>(
@@ -104,5 +99,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing test result: bad gateway" ));
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

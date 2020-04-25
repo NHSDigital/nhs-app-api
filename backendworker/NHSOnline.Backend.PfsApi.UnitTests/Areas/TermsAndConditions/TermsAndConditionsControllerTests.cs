@@ -3,14 +3,15 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.PfsApi.Areas.TermsAndConditions;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
@@ -20,10 +21,9 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
 {
     [TestClass]
-    public class TermsAndConditionsControllerTests
+    public sealed class TermsAndConditionsControllerTests: IDisposable
     {
         private TermsAndConditionsController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<ITermsAndConditionsService> _termsAndConditionsService;
         private P9UserSession _userSession;
         private string _nhsLoginId;
@@ -31,29 +31,33 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _termsAndConditionsService = new Mock<ITermsAndConditionsService>();
 
-            _termsAndConditionsService = _fixture.Freeze<Mock<ITermsAndConditionsService>>();
+            _nhsLoginId = "NHS login id";
 
-            _nhsLoginId = _fixture.Create<string>();
-
-            _userSession = _fixture.Create<P9UserSession>();
-            _userSession.CitizenIdUserSession.AccessToken = JwtToken.Generate(new[]
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token")
             {
-                new Claim(JwtRegisteredClaimNames.Sub, _nhsLoginId),
-                new Claim("nhs_number", _fixture.Create<string>())
-            });
+                CitizenIdUserSession =
+                {
+                    AccessToken = JwtToken.Generate(new[]
+                    {
+                        new Claim(JwtRegisteredClaimNames.Sub, _nhsLoginId),
+                        new Claim("nhs_number", "NHS Number")
+                    })
+                }
+            };
 
-            _systemUnderTest = _fixture.Create<TermsAndConditionsController>();
+            _systemUnderTest = new TermsAndConditionsController(
+                _termsAndConditionsService.Object,
+                new Mock<ILogger<TermsAndConditionsController>>().Object,
+                new Mock<IAuditor>().Object);
         }
 
         [TestMethod]
         public async Task PostForInitialConsent_Returns_Success()
         {
             // Arrange
-            var request = _fixture.Create<ConsentRequest>();
+            var request = new ConsentRequest();
             var response = new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
 
             _termsAndConditionsService.Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
@@ -74,7 +78,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         public async Task PostForUpdatedConsent_Returns_Success()
         {
             // Arrange
-            var request = _fixture.Create<ConsentRequest>();
+            var request = new ConsentRequest();
             request.UpdatingConsent = true;
 
             var response = new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
@@ -96,7 +100,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         public async Task Post_Returns_Failure()
         {
             // Arrange
-            var request = _fixture.Create<ConsentRequest>();
+            var request = new ConsentRequest();
             var response = new TermsAndConditionsRecordConsentResult.InternalServerError();
             _termsAndConditionsService.Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
                 .Returns(Task.FromResult((TermsAndConditionsRecordConsentResult) response))
@@ -116,7 +120,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         public async Task Get_Returns_Success()
         {
             // Arrange
-            var consentRecord = _fixture.Create<ConsentResponse>();
+            var consentRecord = new ConsentResponse();
             var response = new TermsAndConditionsFetchConsentResult.Success(consentRecord);
             _termsAndConditionsService.Setup(x => x.FetchConsent(_nhsLoginId))
                 .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
@@ -185,7 +189,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         public async Task ToggleAnalyticsCookieAcceptance_Returns_Success()
         {
             // Arrange
-            var request = _fixture.Create<AnalyticsCookieAcceptance>();
+            var request = new AnalyticsCookieAcceptance();
             var response = new ToggleAnalyticsCookieAcceptanceResult.Success();
 
             _termsAndConditionsService.Setup(x
@@ -207,7 +211,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         public async Task ToggleAnalyticsCookieAcceptance_Returns_Failure()
         {
             // Arrange
-            var request = _fixture.Create<AnalyticsCookieAcceptance>();
+            var request = new AnalyticsCookieAcceptance();
             var response = new ToggleAnalyticsCookieAcceptanceResult.Failure();
             _termsAndConditionsService.Setup(x
                     => x.ToggleAnalyticsCookieAcceptance(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
@@ -223,5 +227,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

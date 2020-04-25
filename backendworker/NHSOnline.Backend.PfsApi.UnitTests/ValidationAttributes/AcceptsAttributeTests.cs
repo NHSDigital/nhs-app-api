@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -25,8 +25,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ValidationAttributes
         public void TestInitialize()
         {
             _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+                .Customize(new AutoMoqCustomization());
 
             _acceptedValuesLogger = _fixture.Freeze<Mock<ILogger<AcceptsAttribute>>>();
 

@@ -1,6 +1,5 @@
+using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +17,10 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
 {
     [TestClass]
-    public class AssertedLoginIdentityControllerTests
+    public sealed class AssertedLoginIdentityControllerTests: IDisposable
     {
         private AssertedLoginIdentityController _systemUnderTest;
 
-        private IFixture _fixture;
         private Mock<IAssertedLoginIdentityService> _mockAssertedLoginIdentityService;
         private Mock<IAuditor> _mockAuditor;
         private Mock<ILogger<AssertedLoginIdentityController>> _mockLogger;
@@ -35,21 +33,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
        [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _request = new CreateJwtRequest();
 
-            _fixture.Customize<P9UserSession>(c =>
-                c.With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+            _mockAssertedLoginIdentityService = new Mock<IAssertedLoginIdentityService>();
+            _mockAuditor = new Mock<IAuditor>();
+            _mockLogger = new Mock<ILogger<AssertedLoginIdentityController>>();
 
-            _userSession = _fixture.Create<P9UserSession>();
-            _request = _fixture.Create<CreateJwtRequest>();
-
-            _mockAssertedLoginIdentityService = _fixture.Freeze<Mock<IAssertedLoginIdentityService>>();
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
-            _mockLogger = _fixture.Freeze<Mock<ILogger<AssertedLoginIdentityController>>>();
-
-            _systemUnderTest = _fixture.Create<AssertedLoginIdentityController>();
+            _systemUnderTest = new AssertedLoginIdentityController(_mockAuditor.Object, _mockLogger.Object, _mockAssertedLoginIdentityService.Object);
         }
 
         [TestMethod]
@@ -84,7 +75,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
         public async Task Post_ServiceSucceeds_ReturnsCreatedResult()
         {
             // Arrange
-            var expectedResponse = _fixture.Create<CreateJwtResponse>();
+            var expectedResponse = new CreateJwtResponse();
             _mockAssertedLoginIdentityService
                 .Setup(x => x.CreateJwtToken(_userSession.CitizenIdUserSession.IdTokenJti))
                 .Returns(new CreateJwtResult.Success(expectedResponse));
@@ -113,5 +104,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                     $"JumpOffId={_request.JumpOffId} " +
                     $"IntendedRelyingPartyUrl={_request.IntendedRelyingPartyUrl}", Times.Once());
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

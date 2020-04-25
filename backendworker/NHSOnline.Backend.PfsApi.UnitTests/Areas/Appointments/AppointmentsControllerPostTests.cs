@@ -1,11 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -13,17 +12,16 @@ using NHSOnline.Backend.PfsApi.Areas.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 {
     [TestClass]
-    public class AppointmentsControllerPostTests
+    public sealed class AppointmentsControllerPostTests : IDisposable
     {
         private AppointmentsController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAppointmentsService> _mockAppointmentsService;
@@ -45,26 +43,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public void TestInitialize()
         {
             _patientId = Guid.NewGuid();
-            
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-            
-            _fixture.Customize<P9UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
 
-            _appointmentBookRequest = _fixture.Freeze<AppointmentBookRequest>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
-            _userSession = _fixture.Create<P9UserSession>();
-            
-            _mockAppointmentsService = _fixture.Freeze<Mock<IAppointmentsService>>();
+            _appointmentBookRequest = new AppointmentBookRequest();
 
-            _mockAppointmentsValidationService = _fixture.Freeze<Mock<IAppointmentsValidationService>>();
+            _mockAppointmentsService = new Mock<IAppointmentsService>();
+
+            _mockAppointmentsValidationService = new Mock<IAppointmentsValidationService>();
 
             _mockAppointmentsValidationService.Setup(x => x.IsPostValid(_appointmentBookRequest))
                 .Returns(true);
 
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _mockAuditor = new Mock<IAuditor>();
 
             _mockAppointmentsService.Setup(x => x.Book(
                     It.Is<GpLinkedAccountModel>(
@@ -72,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                     _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.Success()));
 
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem
                 .Setup(x => x.GetAppointmentsService())
                 .Returns(_mockAppointmentsService.Object);
@@ -81,15 +72,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 .Setup(x => x.GetAppointmentsValidationService())
                 .Returns(_mockAppointmentsValidationService.Object);
 
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
             
-            _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
-            _serviceDeskReference = _fixture.Create<string>();
+            _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
+            _serviceDeskReference = "service desk ref";
 
-            _systemUnderTest = _fixture.Create<AppointmentsController>();
+            _systemUnderTest = new AppointmentsController(
+                new Mock<ILogger<AppointmentsController>>().Object,
+                _mockGpSystemFactory.Object,
+                _mockAuditor.Object,
+                new Mock<ISessionCacheService>().Object,
+                _mockErrorReferenceGenerator.Object,
+                new Mock<IAppointmentTypeTransformingVisitor>().Object);
         }
 
         [TestMethod]
@@ -201,5 +198,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 "Appointment successfully booked for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

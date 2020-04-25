@@ -1,11 +1,10 @@
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -15,15 +14,12 @@ using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.PfsApi.Areas.Messages;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
 {
     [TestClass]
-    public class PatientMessagesControllerTests
+    public sealed class PatientMessagesControllerTests: IDisposable
     {
-        private IFixture _fixture;
-
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IPatientMessagesService> _mockPatientMessagesService;
@@ -61,13 +57,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-
-            _mockPatientMessagesService = _fixture.Freeze<Mock<IPatientMessagesService>>();
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockPatientMessagesService = new Mock<IPatientMessagesService>();
+            _mockGpSystem = new Mock<IGpSystem>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
 
             _mockGpSystemFactory
                 .Setup(f => f.CreateGpSystem(Supplier.Emis))
@@ -76,23 +68,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 .Setup(g => g.GetPatientMessagesService())
                 .Returns(_mockPatientMessagesService.Object);
 
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
-            _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
-            _serviceDeskReference = _fixture.Create<string>();
+            _mockAuditor = new Mock<IAuditor>();
+            _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
+            _serviceDeskReference = "Service desk ref";
 
-            _fixture
-                .Customize<P9UserSession>(c => c
-                    .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-            _userSession = _fixture.Create<P9UserSession>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
-            _systemUnderTest = _fixture.Create<PatientMessagesController>();
+            _systemUnderTest = new PatientMessagesController(
+                _mockGpSystemFactory.Object,
+                new Mock<ILogger<PatientMessagesController>>().Object,
+                _mockAuditor.Object,
+                _mockErrorReferenceGenerator.Object);
         }
 
         [TestMethod]
         public async Task GetMessages_ReturnsSuccessResult_WhenServiceReturnsSuccessfulResponse()
         {
             // Arrange
-            var successResponse = _fixture.Create<GetPatientMessagesResponse>();
+            var successResponse = new GetPatientMessagesResponse();
             var successResult = new GetPatientMessagesResult.Success(successResponse);
 
             _mockPatientMessagesService
@@ -118,7 +111,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         public async Task GetMessageDetails_ReturnsSuccessResult_WhenServiceReturnsSuccessfulResponse()
         {
             // Arrange
-            var successResponse = _fixture.Create<GetPatientMessageResponse>();
+            var successResponse = new GetPatientMessageResponse();
             var successResult = new GetPatientMessageResult.Success(successResponse);
 
             _mockPatientMessagesService
@@ -145,7 +138,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
         public async Task GetMessageRecipients_ReturnsSuccessResult_WhenServiceReturnsSuccessfulResponse()
         {
             // Arrange
-            var successResponse = _fixture.Create<PatientPracticeMessageRecipients>();
+            var successResponse = new PatientPracticeMessageRecipients();
             var successResult = new GetPatientMessageRecipientsResult.Success(successResponse);
 
             _mockPatientMessagesService
@@ -233,7 +226,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                 RecipientIdentifier = "recipient 1"
 
             };
-            var successResponse = _fixture.Create<PostPatientMessageResponse>();
             var successResult = new PostPatientMessageResult.Success();
 
             _mockPatientMessagesService
@@ -569,5 +561,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Messages
                     It.IsAny<string>()),
                 Times.Exactly(2));
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

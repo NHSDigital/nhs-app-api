@@ -37,8 +37,7 @@ namespace NHSOnline.Backend.Support.UnitTests.AspNet.Filters
         public void TestInitialise()
         {
             _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+                .Customize(new AutoMoqCustomization());
             _mockServiceDeskErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
             _systemUnderTest =
                 new TimeoutExceptionFilterAttribute(_mockLogger.Object, _mockServiceDeskErrorReferenceGenerator.Object);

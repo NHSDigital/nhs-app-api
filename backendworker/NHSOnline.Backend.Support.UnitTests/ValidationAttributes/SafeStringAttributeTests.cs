@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -26,8 +26,7 @@ namespace NHSOnline.Backend.Support.UnitTests.ValidationAttributes
         public void TestInitialize()
         {
             _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+                .Customize(new AutoMoqCustomization());
 
             _safeStringLogger = _fixture.Freeze<Mock<ILogger<SafeStringAttribute>>>();
 

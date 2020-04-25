@@ -1,8 +1,6 @@
  using System;
  using System.Linq.Expressions;
  using System.Threading.Tasks;
- using AutoFixture;
- using AutoFixture.AutoMoq;
  using FluentAssertions;
  using Hl7.Fhir.Model;
  using Microsoft.AspNetCore.Http;
@@ -21,9 +19,8 @@
  namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceDefinition
  {
      [TestClass]
-     public class ServiceDefinitionControllerTests
+     public sealed class ServiceDefinitionControllerTests: IDisposable
      {
-         private IFixture _fixture;
          private ServiceDefinitionController _serviceDefinitionController;
          private Mock<IServiceDefinitionService> _mockServiceDefinitionService;
          private Mock<HttpContext> _mockHttpContext;
@@ -40,25 +37,23 @@
          {
              _evaluateParameters = new Parameters();
 
-             _fixture = new Fixture()
-                 .Customize(new AutoMoqCustomization())
-                 .Customize(new ApiControllerAutoFixtureCustomization());
+             _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
-             _fixture.Customize<P9UserSession>(c => c
-                 .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-             _userSession = _fixture.Create<P9UserSession>();
+             _mockServiceDefinitionService = new Mock<IServiceDefinitionService>();
 
-             _mockServiceDefinitionService = _fixture
-                 .Freeze<Mock<IServiceDefinitionService>>();
+             var mockRequest = new Mock<HttpRequest>();
+             mockRequest.Setup(x => x.Headers).Returns(new Mock<IHeaderDictionary>().Object);
 
-             _mockHttpContext = _fixture.Create<Mock<HttpContext>>();
+             _mockHttpContext = new Mock<HttpContext>();
+             _mockHttpContext.Setup(x => x.Request).Returns(mockRequest.Object);
 
-             _mockLogger = _fixture.Freeze<Mock<ILogger<ServiceDefinitionController>>>();
+             _mockLogger = new Mock<ILogger<ServiceDefinitionController>>();
 
-             _serviceDefinitionController = _fixture.Create<ServiceDefinitionController>();
-             _serviceDefinitionController.ControllerContext = new ControllerContext
+             _serviceDefinitionController = new ServiceDefinitionController(
+                 _mockServiceDefinitionService.Object,
+                 _mockLogger.Object)
              {
-                 HttpContext = _mockHttpContext.Object
+                 ControllerContext = new ControllerContext { HttpContext = _mockHttpContext.Object }
              };
          }
 
@@ -314,5 +309,7 @@
                  $"Evaluating ServiceDefinition: {ServiceDefinitionId}. ODSCode: {_userSession.GpUserSession.OdsCode}",
                  Times.Once());
          }
+
+         public void Dispose() => _serviceDefinitionController?.Dispose();
      }
  }

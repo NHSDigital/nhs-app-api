@@ -1,11 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -13,16 +12,15 @@ using NHSOnline.Backend.PfsApi.Areas.MyRecord;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 {
     [TestClass]
-    public class PatientDocumentControllerTests
+    public sealed class PatientDocumentControllerTests: IDisposable
     {
         private PatientDocumentController _systemUnderTest;
-        private IFixture _fixture;
 
         private Mock<IPatientRecordService> _mockPatientRecordService;
         private Mock<IAuditor> _mockAuditor;
@@ -46,16 +44,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _mockPatientRecordService = new Mock<IPatientRecordService>();
 
-            _mockPatientRecordService = _fixture.Freeze<Mock<IPatientRecordService>>();
+            var mockGpSystem = new Mock<IGpSystem>();
+            var mockGpSystemFactory = new Mock<IGpSystemFactory>();
 
-            var mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
-            var mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
-
-            _userSession = _fixture.Create<P9UserSession>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
             _patientId = Guid.NewGuid();
 
             var httpContextResponse = new DefaultHttpResponse(new DefaultHttpContext());
@@ -63,8 +57,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.SetupGet(x => x.Response).Returns(httpContextResponse);
 
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
-            _systemUnderTest = _fixture.Create<PatientDocumentController>();
+            _mockAuditor = new Mock<IAuditor>();
+            _systemUnderTest = new PatientDocumentController(
+                new Mock<ILogger<PatientDocumentController>>().Object,
+                mockGpSystemFactory.Object,
+                _mockAuditor.Object);
 
             mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
@@ -82,9 +79,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         public async Task GetPatientDocument_WhenServiceReturnsSuccessResult_ReturnsOkPatientDocumentResult()
         {
             // Arrange
-            var successResponse = _fixture.Create<PatientDocument>();
+            var successResponse = new PatientDocument();
             var successResult = new GetPatientDocumentResult.Success(successResponse);
-
 
             Func<GpLinkedAccountModel, bool> check = d =>
             {
@@ -154,8 +150,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         public async Task GetPatientDocumentForDownload_WhenServiceReturnsSuccessResult_ReturnsFileContentResult()
         {
             // Arrange
-            var fileContents = _fixture.Create<byte[]>();
-            var fileName = _fixture.Create<string>();
+            var fileContents = Array.Empty<byte>();
+            var fileName = "filename.ext";
 
             var successResponse = new FileContentResult(fileContents, DocumentMimeType)
             {
@@ -240,5 +236,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
                     It.IsAny<string>()),
                 Times.Exactly(2));
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

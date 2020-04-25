@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -14,10 +13,10 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts;
 using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts.Models;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using Constants = NHSOnline.Backend.Support.Constants;
@@ -25,10 +24,9 @@ using Constants = NHSOnline.Backend.Support.Constants;
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
 {
     [TestClass]
-    public class LinkedAccountControllerTests
+    public sealed class LinkedAccountControllerTests : IDisposable
     {
         private LinkedAccountsController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<ILinkedAccountsService> _linkedAccountService;
         private Mock<IGpSearchService> _gpSearchService;
@@ -40,17 +38,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
-            _gpSearchService = _fixture.Freeze<Mock<IGpSearchService>>();
-            _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
-            _auditor = _fixture.Freeze<Mock<IAuditor>>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
+            _gpSearchService = new Mock<IGpSearchService>();
+            _mockSessionCacheService = new Mock<ISessionCacheService>();
+            _auditor = new Mock<IAuditor>();
             _linkedAccountService = new Mock<ILinkedAccountsService>();
-            _userSession = _fixture.Create<P9UserSession>();
-            _linkedAccountAuditInfo = _fixture.Create<LinkedAccountAuditInfo>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _linkedAccountAuditInfo = new LinkedAccountAuditInfo();
 
             var mockGpSystem = new Mock<IGpSystem>();
             mockGpSystem.Setup(x => x.GetLinkedAccountsService())
@@ -67,12 +61,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
 
-            _systemUnderTest = _fixture.Create<LinkedAccountsController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
+            _systemUnderTest = new LinkedAccountsController(new Mock<ILogger<LinkedAccountsController>>().Object,
+                _mockGpSystemFactory.Object,
+                _gpSearchService.Object,
+                _mockSessionCacheService.Object,
+                _auditor.Object)
             {
-                HttpContext = httpContextMock.Object
+                ControllerContext = new ControllerContext { HttpContext = httpContextMock.Object }
             };
+
         }
 
         [TestMethod]
@@ -176,7 +173,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         public async Task Get_ReturnsSuccessfulResultAndUserSessionUpdated_WhenServiceReturnsSuccessfully()
         {
             LinkedAccountsResult linkedAccountResult = new LinkedAccountsResult.Success(
-                _fixture.Create<List<LinkedAccount>>(), true);
+                new List<LinkedAccount>(),
+                true);
 
             // Arrange
             _linkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
@@ -201,7 +199,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         public async Task Get_ReturnsSuccessfulResultAndUserSessionNotUpdated_WhenServiceReturnsSuccessfully()
         {
             LinkedAccountsResult linkedAccountResult = new LinkedAccountsResult.Success(
-                _fixture.Create<List<LinkedAccount>>(), false);
+                new List<LinkedAccount>(),
+                false);
 
             // Arrange
             _linkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
@@ -225,8 +224,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         {
             // Arrange
             var id = Guid.NewGuid();
-            var odsCode = _fixture.Create<string>();
-            var organisationName = _fixture.Create<string>();
+            var odsCode = "ODS code";
+            var organisationName = "Org name";
             var gpSearchResponse = new GpSearchResponse
             {
                 Organisations = new List<Organisation>
@@ -239,7 +238,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             };
             var gpSearchResult = new GpSearchResult.Success(gpSearchResponse);
 
-            var linkedAccountAccessSummaryResponse = _fixture.Create<GetAccountAccessSummaryResponse>();
+            var linkedAccountAccessSummaryResponse = new GetAccountAccessSummaryResponse();
             LinkedAccountAccessSummaryResult linkedAccountSummaryResult = new LinkedAccountAccessSummaryResult.Success(linkedAccountAccessSummaryResponse);
 
             _linkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, id))
@@ -277,11 +276,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         {
             // Arrange
             var id = Guid.NewGuid();
-            var odsCode = _fixture.Create<string>();
+            var odsCode = "ODS code";
             var gpSearchResponse = new GpSearchResponse();
             var gpSearchResult = new GpSearchResult.Success(gpSearchResponse);
 
-            var linkedAccountAccessSummaryResponse = _fixture.Create<GetAccountAccessSummaryResponse>();
+            var linkedAccountAccessSummaryResponse = new GetAccountAccessSummaryResponse();
             LinkedAccountAccessSummaryResult linkedAccountSummaryResult = new LinkedAccountAccessSummaryResult.Success(linkedAccountAccessSummaryResponse);
 
             _linkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, id))
@@ -319,10 +318,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         {
             // Arrange
             var id = Guid.NewGuid();
-            var odsCode = _fixture.Create<string>();
+            var odsCode = "ODS code";
             var gpSearchResult = new GpSearchResult.InternalServerError();
 
-            var linkedAccountAccessSummaryResponse = _fixture.Create<GetAccountAccessSummaryResponse>();
+            var linkedAccountAccessSummaryResponse = new GetAccountAccessSummaryResponse();
             LinkedAccountAccessSummaryResult linkedAccountSummaryResult = new LinkedAccountAccessSummaryResult.Success(linkedAccountAccessSummaryResponse);
 
             _linkedAccountService.Setup(x => x.GetOdsCodeForLinkedAccount(_userSession.GpUserSession, id))
@@ -360,7 +359,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
         {
             // Arrange
             var id = Guid.NewGuid();
-            var odsCode = _fixture.Create<string>();
+            var odsCode = "ODS code";
             var gpSearchResponse = new GpSearchResponse();
             var gpSearchResult = new GpSearchResult.Success(gpSearchResponse);
 
@@ -388,5 +387,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts
             var subject = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

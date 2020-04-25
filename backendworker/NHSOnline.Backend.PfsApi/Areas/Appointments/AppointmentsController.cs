@@ -31,8 +31,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             IAuditor auditor,
             ISessionCacheService sessionCacheService,
             IErrorReferenceGenerator errorReferenceGenerator,
-            IAppointmentTypeTransformingVisitor appointmentTypeTransformingVisitor
-            )
+            IAppointmentTypeTransformingVisitor appointmentTypeTransformingVisitor)
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;

@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            _httpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
+            _httpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext();
             _mockHttpHandler = new MockHttpMessageHandler();
 
             _configMock = _fixture.Create<Mock<IUserInfoApiConfig>>();

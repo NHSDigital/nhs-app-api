@@ -1,25 +1,29 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.PfsApi.CitizenId;
+using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using NHSOnline.Backend.PfsApi.Session;
+using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
+using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 {
     [TestClass]
     public sealed class SessionControllerDeleteTests : IDisposable
     {
-        private IFixture _fixture;
         private Mock<IAuditor> _mockAuditor;
         private SessionController _systemUnderTest;
         private P9UserSession _userSession;
@@ -32,12 +36,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-
-            _userSession = _fixture.Create<P9UserSession>();
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _mockAuditor = new Mock<IAuditor>();
 
              var serviceProviderMock = new Mock<IServiceProvider>();
             serviceProviderMock
@@ -49,13 +49,23 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .SetupGet(h => h.RequestServices)
                 .Returns(serviceProviderMock.Object);
 
-            _mockGpSessionManager = _fixture.Freeze<Mock<IGpSessionManager>>();
+            _mockGpSessionManager = new Mock<IGpSessionManager>();
 
-            _systemUnderTest = _fixture.Create<SessionController>();
-
-            _systemUnderTest.ControllerContext = new ControllerContext
+            _systemUnderTest = new SessionController(
+                new Mock<ICitizenIdSessionService>().Object,
+                new UserSessionService(),
+                new ConfigurationSettings(),
+                new Mock<ILogger<SessionController>>().Object,
+                _mockAuditor.Object,
+                new Mock<IOdsCodeMassager>().Object,
+                new Mock<IServiceJourneyRulesService>().Object,
+                new Mock<IErrorReferenceGenerator>().Object,
+                new Mock<IUserInfoService>().Object,
+                _mockGpSessionManager.Object,
+                new Mock<IAntiforgery>().Object,
+                new Mock<IUserSessionManager>().Object)
             {
-                HttpContext = _httpContextMock.Object
+                ControllerContext = new ControllerContext { HttpContext = _httpContextMock.Object }
             };
         }
 

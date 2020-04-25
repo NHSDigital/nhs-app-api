@@ -1,12 +1,12 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
 using NHSOnline.Backend.UserInfoApi.Repository;
@@ -15,27 +15,24 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
 {
     [TestClass]
-    public class InfoControllerGetMeTests
+    public sealed class InfoControllerGetMeTests: IDisposable
     {
-        private IFixture _fixture;
         private InfoController _systemUnderTest;
         private Mock<IInfoService> _mockInfoService;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            var mockHttpContext =  HttpContextGetAccessTokenHelper.CreateMockHttpContext();
 
-            var mockHttpContext =  HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
+            _mockInfoService = new Mock<IInfoService>();
 
-            _mockInfoService = _fixture.Freeze<Mock<IInfoService>>();
-
-            _systemUnderTest = _fixture.Create<InfoController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
+            _systemUnderTest = new InfoController(
+                _mockInfoService.Object,
+                new Mock<ICitizenIdService>().Object,
+                new Mock<ILogger<InfoController>>().Object)
             {
-                HttpContext = mockHttpContext.Object
+                ControllerContext = new ControllerContext { HttpContext = mockHttpContext.Object }
             };
         }
 
@@ -43,8 +40,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_SuccessFound()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
-            var userInfo = _fixture.Create<UserAndInfo>();
+            var userInfo = new UserAndInfo();
             _mockInfoService.Setup(x => x.GetInfo(It.IsAny<AccessToken>()))
                 .ReturnsAsync(new GetInfoResult.Found(userInfo));
 
@@ -62,7 +58,6 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_SuccessNotFound()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
             _mockInfoService.Setup(x => x.GetInfo(It.IsAny<AccessToken>()))
                 .ReturnsAsync(new GetInfoResult.NotFound());
 
@@ -79,7 +74,6 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_WhenGetInfoReturnsBadGateway_ReturnsBadGateway()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
             _mockInfoService.Setup(x => x.GetInfo(It.IsAny<AccessToken>()))
                 .ReturnsAsync(new GetInfoResult.BadGateway());
 
@@ -96,7 +90,6 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_WhenGetInfoReturnsInternalServerError_ReturnsInternalServerError()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
             _mockInfoService.Setup(x => x.GetInfo(It.IsAny<AccessToken>()))
                 .ReturnsAsync(new GetInfoResult.InternalServerError());
 
@@ -113,7 +106,6 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_WhenGetInfoException_ReturnsInternalServerError()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
             _mockInfoService.Setup(x => x.GetInfo(It.IsAny<AccessToken>()))
                 .Throws(new ArgumentException("test"));
 
@@ -127,9 +119,6 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         }
 
         [TestCleanup]
-        public void Dispose()
-        {
-            _systemUnderTest?.Dispose();
-        }
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

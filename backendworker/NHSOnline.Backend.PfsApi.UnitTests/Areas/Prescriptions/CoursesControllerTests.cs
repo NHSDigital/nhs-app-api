@@ -1,7 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +12,7 @@ using NHSOnline.Backend.PfsApi.Areas.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
@@ -21,10 +20,9 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 {
     [TestClass]
-    public class CoursesControllerTests
+    public sealed class CoursesControllerTests : IDisposable
     {
         private CoursesController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private P9UserSession _userSession;
         private Guid _patientId;
@@ -46,20 +44,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         public void TestInitialize()
         {
             _patientId = Guid.NewGuid();
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _fixture.Customize<P9UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
-            _userSession = _fixture.Create<P9UserSession>();
+            _mockCourseService = new Mock<ICourseService>();
+            _mockAuditor = new Mock<IAuditor>();
+            _mockLogger = new Mock<ILogger<CoursesController>>();
 
-            _mockCourseService = _fixture.Freeze<Mock<ICourseService>>();
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
-            _mockLogger = _fixture.Freeze<Mock<ILogger<CoursesController>>>();
-
-            _courseListResponse = _fixture.Create<CourseListResponse>();
+            _courseListResponse = new CourseListResponse();
             var result = new GetCoursesResult.Success(_courseListResponse, new FilteringCounts
             {
                 ReceivedCount = MockNumberOfCourses,
@@ -73,20 +65,25 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                         d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId)))
                 .Returns(Task.FromResult((GetCoursesResult) result));
 
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem
                 .Setup(x => x.GetCourseService())
                 .Returns(_mockCourseService.Object);
             
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
 
-            _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
-            _serviceDeskReference = _fixture.Create<string>();
+            _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
+            _serviceDeskReference = "service desk ref";
 
-            _systemUnderTest = _fixture.Create<CoursesController>();
+            _systemUnderTest = new CoursesController(
+                _mockLogger.Object,
+                _mockGpSystemFactory.Object,
+                _mockAuditor.Object,
+                new Mock<ISessionCacheService>().Object,
+                _mockErrorReferenceGenerator.Object);
         }
 
         [TestMethod]
@@ -193,5 +190,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 $"Courses Returned={MockNumberOfCourses}";
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

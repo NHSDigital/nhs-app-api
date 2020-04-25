@@ -1,7 +1,5 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
@@ -22,10 +20,9 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 {
     [TestClass]
-    public class PrescriptionsControllerGetTests
+    public sealed class PrescriptionsControllerGetTests: IDisposable
     {
         private PrescriptionsController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IPrescriptionValidationService> _mockPrescriptionValidationService;
@@ -38,7 +35,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private P9UserSession _userSession;
 
         private const string CookieDomain = "CookieDomain";
-        private int PrescriptionsDefaultLastNumberMonthsToDisplay;
+        private const int PrescriptionsDefaultLastNumberMonthsToDisplay = 2;
         private const int DefaultSessionExpiryMinutes  = 10;
         private const int DefaultHttpTimeoutSeconds = 6;
         private const int MinimumAppAge = 16;
@@ -56,30 +53,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-
-            _fixture.Customize<P9UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-
             _patientId = Guid.NewGuid();
 
-            _userSession = _fixture.Create<P9UserSession>();
-            _mockPrescriptionsService = _fixture.Freeze<Mock<IPrescriptionService>>();
-            _mockPrescriptionValidationService = _fixture.Freeze<Mock<IPrescriptionValidationService>>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _mockPrescriptionsService = new Mock<IPrescriptionService>();
+            _mockPrescriptionValidationService = new Mock<IPrescriptionValidationService>();
 
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
-            _mockLogger = _fixture.Freeze<Mock<ILogger<PrescriptionsController>>>();
-
-            PrescriptionsDefaultLastNumberMonthsToDisplay  = _fixture.Create<int>();
+            _mockAuditor = new Mock<IAuditor>();
+            _mockLogger = new Mock<ILogger<PrescriptionsController>>();
 
             _options = new ConfigurationSettings(CookieDomain, PrescriptionsDefaultLastNumberMonthsToDisplay, DefaultHttpTimeoutSeconds, DefaultSessionExpiryMinutes,
                 MinimumAppAge, MinimumLinkageAge);
 
-            _fixture.Inject(_options);
-
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem
                 .Setup(x => x.GetPrescriptionService())
                 .Returns(_mockPrescriptionsService.Object);
@@ -87,15 +73,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Setup(x => x.GetPrescriptionValidationService())
                 .Returns(_mockPrescriptionValidationService.Object);
 
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
 
-            _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
-            _serviceDeskReference = _fixture.Create<string>();
+            _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
+            _serviceDeskReference = "service desk ref";
 
-            _systemUnderTest = _fixture.Create<PrescriptionsController>();
+            _systemUnderTest = new PrescriptionsController(
+                _options,
+                _mockLogger.Object,
+                _mockGpSystemFactory.Object,
+                _mockAuditor.Object,
+                _mockErrorReferenceGenerator.Object);
         }
 
         [TestMethod]
@@ -103,7 +94,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         {
             // Arrange
             var fromDate = DateTime.Now;
-            var response = _fixture.Create<PrescriptionListResponse>();
+            var response = new PrescriptionListResponse();
             var filteringCounts = new FilteringCounts
             {
                 ReceivedCount = 10,
@@ -139,7 +130,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         {
             // Arrange
             DateTimeOffset? fromDateGenerated = null;
-            var response = _fixture.Create<PrescriptionListResponse>();
+            var response = new PrescriptionListResponse();
             var filteringCounts = new FilteringCounts
             {
                 ReceivedCount = 10,
@@ -229,7 +220,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         {
             // Arrange
             var fromDate = DateTime.Now;
-            var response = _fixture.Create<PrescriptionListResponse>();
+            var response = new PrescriptionListResponse();
             _mockPrescriptionsService.Setup(x => x.GetPrescriptions(
                     It.Is<GpLinkedAccountModel>(d =>
                         d.GpUserSession == _userSession.GpUserSession && d.PatientId == _patientId), It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
@@ -254,5 +245,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 $"Prescriptions Returned to user={MockNumberOfCourses}";
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

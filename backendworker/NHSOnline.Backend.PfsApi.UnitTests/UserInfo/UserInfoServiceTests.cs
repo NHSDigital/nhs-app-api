@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.UserInfo
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _httpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
+            _httpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext();
 
             _userInfoClient = _fixture.Freeze<Mock<IUserInfoClient>>();
             _systemUnderTest = _fixture.Create<UserInfoService>();

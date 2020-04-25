@@ -1,35 +1,30 @@
 using System;
 using System.Net;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.LoggerApi.Areas.Logging;
 using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
 using NHSOnline.Backend.LoggerApi.Logging;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging
 {   
     [TestClass]
-    public class LoggingControllerTests
+    public sealed class LoggingControllerTests : IDisposable
     {
-        private IFixture _fixture;
         private Mock<ILoggingService> _mockLoggingService;
         private LoggingController _systemUnderTest;
         
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-
-            _mockLoggingService = _fixture.Freeze<Mock<ILoggingService>>();
+            _mockLoggingService = new Mock<ILoggingService>();
             
-            _systemUnderTest = _fixture.Create<LoggingController>();
+            _systemUnderTest = new LoggingController(
+                new Mock<ILogger<LoggingController>>().Object,
+                _mockLoggingService.Object);
         }
         
         [TestMethod]
@@ -80,5 +75,7 @@ namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging
             var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             value.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

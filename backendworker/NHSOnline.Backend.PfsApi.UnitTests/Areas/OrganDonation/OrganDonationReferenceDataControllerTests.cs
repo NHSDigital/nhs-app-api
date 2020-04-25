@@ -1,10 +1,10 @@
+using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -12,15 +12,13 @@ using NHSOnline.Backend.PfsApi.Areas.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 {
     [TestClass]
-    public class OrganDonationReferenceDataControllerTests
+    public sealed class OrganDonationReferenceDataControllerTests : IDisposable
     {
         private OrganDonationReferenceDataController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IOrganDonationService> _mockOrganDonationService;
         private Mock<IAuditor> _mockAuditor;
 
@@ -32,21 +30,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _mockOrganDonationService = new Mock<IOrganDonationService>();
+            _mockAuditor = new Mock<IAuditor>();
 
-            _mockOrganDonationService = _fixture.Freeze<Mock<IOrganDonationService>>();
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
-
-            _systemUnderTest = _fixture.Create<OrganDonationReferenceDataController>();
+            _systemUnderTest = new OrganDonationReferenceDataController(
+                new Mock<ILogger<OrganDonationReferenceDataController>>().Object,
+                _mockOrganDonationService.Object,
+                _mockAuditor.Object);
         }
 
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessullyRetrievedResult()
         {
             // Arrange
-            var organDonationReferenceDataResponse = _fixture.Create<OrganDonationReferenceDataResponse>();
+            var organDonationReferenceDataResponse = new OrganDonationReferenceDataResponse();
             var newResult = new OrganDonationReferenceDataResult.SuccessfullyRetrieved(organDonationReferenceDataResponse);
             
             _mockOrganDonationService
@@ -91,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         public async Task Get_ReturnsBadGateway_WhenServiceReturnUpstreamErrorResult()
         {
             // Arrange
-            var response = _fixture.Create<PfsErrorResponse>();
+            var response = new PfsErrorResponse();
             var newResult = new OrganDonationReferenceDataResult.UpstreamError(response);
 
             _mockOrganDonationService
@@ -137,5 +134,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockAuditor.Verify(
                 x => x.Audit(ResponseAuditType, "There was an issue getting the organ donation reference data"));
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

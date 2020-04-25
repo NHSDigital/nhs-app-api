@@ -1,11 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -14,15 +13,14 @@ using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 {
     [TestClass]
-    public class AppointmentsControllerDeleteTests
+    public sealed class AppointmentsControllerDeleteTests : IDisposable
     {
-        private IFixture _fixture;
         private AppointmentCancelRequest _appointmentCancelRequest;
         private P9UserSession _userSession;
         private Mock<IAppointmentsService> _mockAppointmentsService;
@@ -38,29 +36,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private const string RequestAuditType = "Appointments_Cancel_Request";
         private const string ResponseAuditType = "Appointments_Cancel_Response";
 
-        private string RequestAuditMessage;
+        private string _requestAuditMessage;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _patientId =Guid.NewGuid();
+            _patientId = Guid.NewGuid();
             
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-            
-            _fixture.Customize<P9UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+            _appointmentCancelRequest = new AppointmentCancelRequest();
 
-            _appointmentCancelRequest = _fixture.Freeze<AppointmentCancelRequest>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
-            _userSession = _fixture.Create<P9UserSession>();
+            _mockAppointmentsService = new Mock<IAppointmentsService>();
 
-            _mockAppointmentsService = _fixture.Freeze<Mock<IAppointmentsService>>();
+            _mockAppointmentsValidationService = new Mock<IAppointmentsValidationService>();
 
-            _mockAppointmentsValidationService = _fixture.Freeze<Mock<IAppointmentsValidationService>>();
-
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _mockAuditor = new Mock<IAuditor>();
 
             _mockAppointmentsService.Setup(x => x.Cancel(
                 It.Is<GpLinkedAccountModel>(
@@ -71,7 +62,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAppointmentsValidationService.Setup(x => x.IsDeleteValid(_appointmentCancelRequest))
                 .Returns(true);
 
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem
                 .Setup(x => x.GetAppointmentsService())
                 .Returns(_mockAppointmentsService.Object);
@@ -80,17 +71,23 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 .Setup(x => x.GetAppointmentsValidationService())
                 .Returns(_mockAppointmentsValidationService.Object);
 
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
             
-            _mockErrorReferenceGenerator = _fixture.Freeze<Mock<IErrorReferenceGenerator>>();
-            _serviceDeskReference = _fixture.Create<string>();
+            _mockErrorReferenceGenerator = new Mock<IErrorReferenceGenerator>();
+            _serviceDeskReference = "Error reference";
 
-            _systemUnderTest = _fixture.Create<AppointmentsController>();
+            _systemUnderTest = new AppointmentsController(
+                new Mock<ILogger<AppointmentsController>>().Object,
+                _mockGpSystemFactory.Object,
+                _mockAuditor.Object,
+                new Mock<ISessionCacheService>().Object,
+                _mockErrorReferenceGenerator.Object,
+                new Mock<IAppointmentTypeTransformingVisitor>().Object);
 
-            RequestAuditMessage = $"Attempting to cancel appointment with id: {_appointmentCancelRequest.AppointmentId}";
+            _requestAuditMessage = $"Attempting to cancel appointment with id: {_appointmentCancelRequest.AppointmentId}";
         }
 
         [TestMethod]
@@ -129,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 objectResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, _requestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Unable to cancel appointment due to a bad request for appointment with id: {0}",
                 _appointmentCancelRequest.AppointmentId));
         }
@@ -180,7 +177,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
                 objectResult.StatusCode.Should().Be(expectedStatusCode);
                 objectResult.Value.Should().BeEquivalentTo(expectedValue);
             }
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, _requestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedAuditResponseMessageFormat,
                 _appointmentCancelRequest.AppointmentId));
         }
@@ -195,11 +192,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, _requestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Appointment successfully cancelled for appointment with id: {0}",
                 _appointmentCancelRequest.AppointmentId));
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }
 

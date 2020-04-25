@@ -1,26 +1,25 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Areas.MyRecord;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.PatientRecord;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using GetMyRecordResult = NHSOnline.Backend.GpSystems.PatientRecord.GetMyRecordResult;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 {
     [TestClass]
-    public class MyRecordControllerTests
+    public sealed class MyRecordControllerTests: IDisposable
     {
         private MyRecordController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private P9UserSession _userSession;
         private Guid _patientGuid;
@@ -30,14 +29,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         {
             _patientGuid = Guid.NewGuid();
             
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
-            _userSession = _fixture.Create<P9UserSession>();
-            
-            _systemUnderTest = _fixture.Create<MyRecordController>();
+            _systemUnderTest = new MyRecordController(
+                new Mock<ILogger<MyRecordController>>().Object,
+                _mockGpSystemFactory.Object,
+                new Mock<IAuditor>().Object,
+                new Mock<IMyRecordMetadataLogger>().Object);
         }
         
         [TestMethod]
@@ -134,5 +133,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

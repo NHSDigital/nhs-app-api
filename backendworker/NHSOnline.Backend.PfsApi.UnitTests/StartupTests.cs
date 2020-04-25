@@ -29,8 +29,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
             var isSuccess = false;
             
             _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+                .Customize(new AutoMoqCustomization());
             _mockIHostingEnvironment = _fixture.Freeze<Mock<IHostingEnvironment>>();
             _mockILoggerFactory = _fixture.Freeze<Mock<ILoggerFactory>>();
             _mockIServiceCollection = _fixture.Freeze<Mock<IServiceCollection>>();

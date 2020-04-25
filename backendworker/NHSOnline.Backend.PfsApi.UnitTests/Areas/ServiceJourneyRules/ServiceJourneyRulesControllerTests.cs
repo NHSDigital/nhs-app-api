@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.LinkedAccounts;
 using NHSOnline.Backend.GpSystems.LinkedAccounts.Models;
@@ -25,10 +24,9 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
 {
     [TestClass]
-    public class ServiceJourneyRulesControllerTests
+    public sealed class ServiceJourneyRulesControllerTests: IDisposable
     {
         private ServiceJourneyRulesController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<ILogger<ServiceJourneyRulesController>> _mockLogger;
         private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
         private SessionConfigurationSettings _sessionConfigSettings;
@@ -47,23 +45,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _patientId = Guid.NewGuid();
             _defaultOdsCode = "A123456";
 
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _mockSessionCacheService = new Mock<ISessionCacheService>();
+            _mockServiceJourneyRulesService = new Mock<IServiceJourneyRulesService>();
+            _sessionConfigSettings = new SessionConfigurationSettings(true);
+            _gpUserSession = new Mock<GpUserSession>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), _gpUserSession.Object, "im1token")
+            {
+                GpUserSession = { NhsNumber = "Nhs number", OdsCode = "ODS Code" }
+            };
 
-            _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
-            _mockServiceJourneyRulesService = _fixture.Freeze<Mock<IServiceJourneyRulesService>>();
-            _sessionConfigSettings = _fixture.Freeze<SessionConfigurationSettings>();
-            _gpUserSession = _fixture.Create<Mock<GpUserSession>>();
-            _fixture.Customize<P9UserSession>(x => x.With(y => y.GpUserSession, _gpUserSession.Object));
-            _userSession = _fixture.Create<P9UserSession>();
-            _userSession.GpUserSession.NhsNumber = _fixture.Create<string>();
-            _userSession.GpUserSession.OdsCode = _fixture.Create<string>();
-
-            _mockLogger = _fixture.Freeze<Mock<ILogger<ServiceJourneyRulesController>>>();
+            _mockLogger = new Mock<ILogger<ServiceJourneyRulesController>>();
             _mockLogger.SetupLogger(LogLevel.Information, $"Fetching Service Journey Rules for {_userSession.GpUserSession.OdsCode}", null);
 
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockLinkedAccountService = new Mock<ILinkedAccountsService>();
             _mockGpSystem = new Mock<IGpSystem>();
 
@@ -73,15 +67,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _mockGpSystem.Setup(x => x.GetLinkedAccountsService())
                 .Returns(_mockLinkedAccountService.Object);
 
-            _systemUnderTest = _fixture.Create<ServiceJourneyRulesController>();
+            _systemUnderTest = new ServiceJourneyRulesController(
+                _mockLogger.Object,
+                new Mock<IAuditor>().Object,
+                _mockServiceJourneyRulesService.Object,
+                _sessionConfigSettings,
+                _mockGpSystemFactory.Object,
+                _mockSessionCacheService.Object);
         }
 
         [TestMethod]
         public async Task Get_WhenServiceReturnsSuccessfully_ReturnsSuccessfulResult()
         {
             // Arrange
-            var expectedResponse = new ServiceJourneyRulesResponse();
-            expectedResponse.Journeys = new Journeys();
+            var expectedResponse = new ServiceJourneyRulesResponse { Journeys = new Journeys() };
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(_userSession.GpUserSession.OdsCode))
                 .ReturnsAsync(new ServiceJourneyRulesConfigResult.Success(expectedResponse));
 
@@ -192,7 +191,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
-            var linkedAccounts = _fixture.Create<List<LinkedAccount>>();
+            var linkedAccounts = new List<LinkedAccount>();
 
             _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
                 .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccounts, false))
@@ -223,7 +222,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             _gpUserSession.Setup(x => x.HasLinkedAccounts).Returns(true);
             _mockGpSystem.SetupGet(x => x.SupportsLinkedAccounts).Returns(true);
 
-            var linkedAccounts = _fixture.Create<List<LinkedAccount>>();
+            var linkedAccounts = new List<LinkedAccount> { new LinkedAccount() };
 
             _mockLinkedAccountService.Setup(x => x.GetLinkedAccounts(_userSession.GpUserSession))
                 .ReturnsAsync(new LinkedAccountsResult.Success(linkedAccounts, false))
@@ -389,5 +388,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.ServiceJourneyRules
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

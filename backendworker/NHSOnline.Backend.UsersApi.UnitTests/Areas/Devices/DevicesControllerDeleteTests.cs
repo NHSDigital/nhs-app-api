@@ -1,10 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
@@ -18,7 +17,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
     [TestClass]
     public sealed class DevicesControllerDeleteTests : IDisposable
     {
-        private IFixture _fixture;
         private DevicesController _systemUnderTest;
         private Mock<INotificationService> _mockNotificationService;
         private Mock<IDeviceRepositoryService> _mockDeviceRepositoryService;
@@ -26,17 +24,18 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _mockNotificationService = new Mock<INotificationService>();
+            _mockDeviceRepositoryService = new Mock<IDeviceRepositoryService>();
 
-            _mockNotificationService = _fixture.Freeze<Mock<INotificationService>>();
-            _mockDeviceRepositoryService = _fixture.Freeze<Mock<IDeviceRepositoryService>>();
-            
-            _systemUnderTest = _fixture.Create<DevicesController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
+            _systemUnderTest = new DevicesController(
+                _mockNotificationService.Object,
+                _mockDeviceRepositoryService.Object,
+                new Mock<ILogger<DevicesController>>().Object)
             {
-                HttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture).Object
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext().Object
+                }
             };
         }
 
@@ -44,19 +43,17 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_Success()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
-            var userDevice = _fixture.Build<UserDevice>()
-                .With(u => u.PnsToken, devicePns)
-                .Create();
+            var devicePns = "device PNS";
+            var userDevice = new UserDevice { PnsToken = devicePns };
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, It.IsAny<AccessToken>()))
-                .ReturnsAsync(_fixture.Create<DeleteDeviceResult.Success>());
+                .ReturnsAsync(new DeleteDeviceResult.Success("device id"));
 
             _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
-                .ReturnsAsync(_fixture.Create<DeleteRegistrationResult.Success>());
+                .ReturnsAsync(new DeleteRegistrationResult.Success());
 
             // Act
             var result = await _systemUnderTest.Delete(devicePns);
@@ -86,7 +83,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_NotFoundUserDevice_ReturnsNotFound()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
+            var devicePns = "device PNS";
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .ReturnsAsync(new SearchDeviceResult.NotFound());
@@ -105,7 +102,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_FindDeviceException_ReturnsInternalServerError()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
+            var devicePns = "device PNS";
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .ReturnsAsync(new SearchDeviceResult.InternalServerError());
@@ -124,7 +121,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_FindDeviceBadGateway_ReturnsBadGateway()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
+            var devicePns = "device PNS";
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .ReturnsAsync(new SearchDeviceResult.BadGateway());
@@ -143,16 +140,14 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_DeleteRegistrationException_ReturnsInternalServerError()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
-            var userDevice = _fixture.Build<UserDevice>()
-                .With(u => u.PnsToken, devicePns)
-                .Create();
+            var devicePns = "device PNS";
+            var userDevice = new UserDevice { PnsToken = devicePns };
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
-                .ReturnsAsync(_fixture.Create<DeleteRegistrationResult.InternalServerError>());
+                .ReturnsAsync(new DeleteRegistrationResult.InternalServerError());
 
             // Act
             var result = await _systemUnderTest.Delete(devicePns);
@@ -169,16 +164,14 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_DeleteRegistrationBadGateway_ReturnsBadGateway()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
-            var userDevice = _fixture.Build<UserDevice>()
-                .With(u => u.PnsToken, devicePns)
-                .Create();
+            var devicePns = "device PNS";
+            var userDevice = new UserDevice { PnsToken = devicePns };
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
-                .ReturnsAsync(_fixture.Create<DeleteRegistrationResult.BadGateway>());
+                .ReturnsAsync(new DeleteRegistrationResult.BadGateway());
 
             // Act
             var result = await _systemUnderTest.Delete(devicePns);
@@ -195,19 +188,17 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_DeleteDeviceException_ReturnsInternalServerError()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
-            var userDevice = _fixture.Build<UserDevice>()
-                .With(u => u.PnsToken, devicePns)
-                .Create();
+            var devicePns = "device PNS";
+            var userDevice = new UserDevice { PnsToken = devicePns };
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, It.IsAny<AccessToken>()))
-                .ReturnsAsync(_fixture.Create<DeleteDeviceResult.InternalServerError>());
+                .ReturnsAsync(new DeleteDeviceResult.InternalServerError());
 
             _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
-                .ReturnsAsync(_fixture.Create<DeleteRegistrationResult.Success>());
+                .ReturnsAsync(new DeleteRegistrationResult.Success());
 
             // Act
             var result = await _systemUnderTest.Delete(devicePns);
@@ -224,19 +215,17 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_DeleteDeviceBadGateway_ReturnsBadGateway()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
-            var userDevice = _fixture.Build<UserDevice>()
-                .With(u => u.PnsToken, devicePns)
-                .Create();
+            var devicePns = "device PNS";
+            var userDevice = new UserDevice { PnsToken = devicePns };
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, It.IsAny<AccessToken>()))
-                .ReturnsAsync(_fixture.Create<DeleteDeviceResult.BadGateway>());
+                .ReturnsAsync(new DeleteDeviceResult.BadGateway());
 
             _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
-                .ReturnsAsync(_fixture.Create<DeleteRegistrationResult.Success>());
+                .ReturnsAsync(new DeleteRegistrationResult.Success());
 
             // Act
             var result = await _systemUnderTest.Delete(devicePns);
@@ -253,19 +242,17 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_DeleteDeviceFromRepositoryBadGateway_ReturnsBadGateway()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
-            var userDevice = _fixture.Build<UserDevice>()
-                .With(u => u.PnsToken, devicePns)
-                .Create();
+            var devicePns = "device PNS";
+            var userDevice = new UserDevice { PnsToken = devicePns };
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
-                .ReturnsAsync(_fixture.Create<DeleteRegistrationResult.Success>());
+                .ReturnsAsync(new DeleteRegistrationResult.Success());
 
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, It.IsAny<AccessToken>()))
-                .ReturnsAsync(_fixture.Create<DeleteDeviceResult.BadGateway>());
+                .ReturnsAsync(new DeleteDeviceResult.BadGateway());
 
             // Act
             var result = await _systemUnderTest.Delete(devicePns);
@@ -282,20 +269,18 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_DeleteDeviceFromRepositoryInternalServerError_ReturnsInternalServerError()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
-            var userDevice = _fixture.Build<UserDevice>()
-                .With(u => u.PnsToken, devicePns)
-                .Create();
+            var devicePns = "device PNS";
+            var userDevice = new UserDevice { PnsToken = devicePns };
 
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .ReturnsAsync(new SearchDeviceResult.Found(userDevice));
 
             _mockNotificationService.Setup(x => x.Delete(userDevice.RegistrationId))
-                .ReturnsAsync(_fixture.Create<DeleteRegistrationResult.Success>());
+                .ReturnsAsync(new DeleteRegistrationResult.Success());
 
             _mockDeviceRepositoryService.Setup(x => x.Delete(userDevice.DeviceId, It.IsAny<AccessToken>()))
-                .ReturnsAsync(_fixture.Create<DeleteDeviceResult.InternalServerError>());
+                .ReturnsAsync(new DeleteDeviceResult.InternalServerError());
 
             // Act
             var result = await _systemUnderTest.Delete(devicePns);
@@ -312,7 +297,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Areas.Devices
         public async Task Delete_DeviceDeletionException_ReturnsInternalServerError()
         {
             // Arrange
-            var devicePns = _fixture.Create<string>();
+            var devicePns = "device PNS";
 
             _mockDeviceRepositoryService.Setup(x => x.Find(devicePns, It.IsAny<AccessToken>()))
                 .Throws(new ArgumentException("Test"));

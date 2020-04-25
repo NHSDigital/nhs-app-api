@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
@@ -17,9 +16,8 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 {
     [TestClass]
-    public class MessagesControllerTests
+    public sealed class MessagesControllerTests: IDisposable
     {
-        private IFixture _fixture;
         private MessagesController _systemUnderTest;
         private Mock<IMessageService> _mockMessageService;
         private Mock<IMessagesValidationService> _mockMessagesValidationService;
@@ -30,30 +28,27 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization())
-                .Customize(new MessagesApiCustomization());
+            var mockHttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext();
 
-            var mockHttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
-
-            _nhsLoginId = _fixture.Create<string>();
+            _nhsLoginId = "Nhs login id";
          
-            _mockMessageService = _fixture.Freeze<Mock<IMessageService>>();
-            _validAddMessageRequest = _fixture.Create<AddMessageRequest>();
+            _mockMessageService = new Mock<IMessageService>();
+            _validAddMessageRequest = new AddMessageRequest();
 
-            _mockMessagesValidationService = _fixture.Freeze<Mock<IMessagesValidationService>>();
-            _mockMessagesValidationService.Setup(x => x.IsMessageRequestValid(_validAddMessageRequest, _nhsLoginId))
+            _mockMessagesValidationService = new Mock<IMessagesValidationService>();
+            _mockMessagesValidationService
+                .Setup(x => x.IsMessageRequestValid(_validAddMessageRequest, _nhsLoginId))
                 .Returns(true);
             
-            _mockMessagesValidationService.Setup(x => 
-                    x.IsPatchRequestValid(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>()))
+            _mockMessagesValidationService
+                .Setup(x => x.IsPatchRequestValid(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>()))
                 .Returns(true);
-            
-            _systemUnderTest = _fixture.Create<MessagesController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
+
+            _systemUnderTest = new MessagesController(
+                _mockMessageService.Object,
+                new Mock<ILogger<MessagesController>>().Object)
             {
-                HttpContext = mockHttpContext.Object
+                ControllerContext = new ControllerContext { HttpContext = mockHttpContext.Object }
             };
         }
 
@@ -166,13 +161,13 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Get_WithSender_SuccessSome()
         {
             // Arrange
-            var response = _fixture.Create<MessagesResponse>();
+            var response = new MessagesResponse();
 
             _mockMessageService.Setup(x => x.GetMessages(It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagesResult.Some(response));
 
             // Act
-            var result = await _systemUnderTest.Get(_fixture.Create<string>());
+            var result = await _systemUnderTest.Get("sender");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -189,7 +184,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagesResult.None());
 
             // Act
-            var result = await _systemUnderTest.Get(_fixture.Create<string>());
+            var result = await _systemUnderTest.Get("sender");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -204,7 +199,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagesResult.BadGateway());
 
             // Act
-            var result = await _systemUnderTest.Get(_fixture.Create<string>());
+            var result = await _systemUnderTest.Get("sender");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -220,7 +215,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagesResult.InternalServerError());
 
             // Act
-            var result = await _systemUnderTest.Get(_fixture.Create<string>());
+            var result = await _systemUnderTest.Get("sender");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -236,7 +231,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .Throws<ArgumentException>();
 
             // Act
-            var result = await _systemUnderTest.Get(_fixture.Create<string>());
+            var result = await _systemUnderTest.Get("sender");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -248,7 +243,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task Get_WithSummary_SuccessSome()
         {
             // Arrange
-            var response = _fixture.Create<MessagesResponse>();
+            var response = new MessagesResponse();
             _mockMessageService.Setup(x => x.GetSummaryMessages(It.IsAny<AccessToken>()))
                 .ReturnsAsync(new MessagesResult.Some(response));
 
@@ -334,7 +329,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagePatchResult.Updated());
 
             // Act
-            var result = await _systemUnderTest.Patch(_fixture.Create<JsonPatchDocument<Message>>(), _fixture.Create<string>());
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -350,7 +345,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagePatchResult.NotFound());
 
             // Act
-            var result = await _systemUnderTest.Patch(_fixture.Create<JsonPatchDocument<Message>>(), _fixture.Create<string>());
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -367,7 +362,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagePatchResult.BadGateway());
 
             // Act
-            var result = await _systemUnderTest.Patch(_fixture.Create<JsonPatchDocument<Message>>(), _fixture.Create<string>());
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
 
             // Assert
             _mockMessageService.VerifyAll();
@@ -385,7 +380,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .ReturnsAsync(new MessagePatchResult.InternalServerError());
 
             // Act
-            var result = await _systemUnderTest.Patch(_fixture.Create<JsonPatchDocument<Message>>(), _fixture.Create<string>());
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
             
             // Assert
             _mockMessageService.VerifyAll();
@@ -402,7 +397,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .Throws<ArgumentException>();
 
             // Act
-            var result = await _systemUnderTest.Patch(_fixture.Create<JsonPatchDocument<Message>>(), _fixture.Create<string>());
+            var result = await _systemUnderTest.Patch(new JsonPatchDocument<Message>(), "message id");
             
             // Assert
             _mockMessageService.VerifyAll();
@@ -418,7 +413,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                     It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<AccessToken>(), It.IsAny<string>()))
                 .ReturnsAsync(new MessagePatchResult.BadRequest());
             
-            var result = await _systemUnderTest.Patch(null, _fixture.Create<string>());
+            var result = await _systemUnderTest.Patch(null, "message id");
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
@@ -426,9 +421,6 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         }
 
         [TestCleanup]
-        public void Dispose()
-        {
-            _systemUnderTest?.Dispose();
-        }
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

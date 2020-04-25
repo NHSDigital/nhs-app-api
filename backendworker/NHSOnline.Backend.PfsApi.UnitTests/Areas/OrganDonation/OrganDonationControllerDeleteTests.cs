@@ -1,25 +1,25 @@
+using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.PfsApi.Areas.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 {
     [TestClass]
-    public class OrganDonationControllerDeleteTests
+    public sealed class OrganDonationControllerDeleteTests : IDisposable
     {
         private OrganDonationController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IOrganDonationService> _mockOrganDonationService;
         private P9UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
@@ -33,20 +33,21 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-
-            _userSession = _fixture.Create<P9UserSession>();
-            _mockOrganDonationService = _fixture.Freeze<Mock<IOrganDonationService>>();
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _mockOrganDonationService = new Mock<IOrganDonationService>();
+            _mockAuditor = new Mock<IAuditor>();
             
-            _mockValidator = _fixture.Freeze<Mock<IOrganDonationValidationService>>();
+            _mockValidator = new Mock<IOrganDonationValidationService>();
             _mockValidator
                 .Setup(x => x.IsDeleteValid(It.IsAny<OrganDonationWithdrawRequest>()))
                 .Returns(true);
 
-            _systemUnderTest = _fixture.Create<OrganDonationController>();
+            _systemUnderTest = new OrganDonationController(
+                new Mock<ILogger<OrganDonationController>>().Object,
+                new Mock<IGpSystemFactory>().Object,
+                _mockOrganDonationService.Object,
+                _mockAuditor.Object,
+                _mockValidator.Object);
         }
 
         [TestMethod]
@@ -115,7 +116,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         public async Task Delete_WhenServiceReturnUpstreamErrorResult_ReturnsBadGateway()
         {
             // Arrange
-            var response = _fixture.Create<PfsErrorResponse>();
+            var response = new PfsErrorResponse();
             var upstreamErrorResult = new OrganDonationWithdrawResult.UpstreamError(response);
 
             _mockOrganDonationService
@@ -158,5 +159,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockAuditor.Verify(
                 x => x.Audit(ResponseAuditType, "There was an issue withdrawing the organ donation decision"));
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

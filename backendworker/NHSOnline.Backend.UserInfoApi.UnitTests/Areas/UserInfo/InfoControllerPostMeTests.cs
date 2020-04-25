@@ -1,11 +1,10 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId;
@@ -18,9 +17,8 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
 {
     [TestClass]
-    public class InfoControllerPostMeTests
+    public sealed class InfoControllerPostMeTests: IDisposable
     {
-        private IFixture _fixture;
         private InfoController _systemUnderTest;
         private Mock<IInfoService> _mockInfoService;
         private Mock<ICitizenIdService> _mockCitizenIdService;
@@ -28,19 +26,17 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            var mockHttpContext =  HttpContextGetAccessTokenHelper.CreateMockHttpContext();
 
-            var mockHttpContext =  HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
+            _mockInfoService = new Mock<IInfoService>();
+            _mockCitizenIdService = new Mock<ICitizenIdService>();
 
-            _mockInfoService = _fixture.Freeze<Mock<IInfoService>>();
-            _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
-
-            _systemUnderTest = _fixture.Create<InfoController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
+            _systemUnderTest = new InfoController(
+                _mockInfoService.Object,
+                _mockCitizenIdService.Object,
+                new Mock<ILogger<InfoController>>().Object)
             {
-                HttpContext = mockHttpContext.Object
+                ControllerContext = new ControllerContext { HttpContext = mockHttpContext.Object }
             };
         }
 
@@ -48,10 +44,10 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Post_Success()
         {
             // Arrange
-            var odsCode = _fixture.Freeze<string>();
+            var odsCode = "ODS Code";
             MockUserProfileWithOdsCode(odsCode);
             _mockInfoService.Setup(x => x.Send(It.IsAny<AccessToken>(), odsCode))
-                .ReturnsAsync(new PostInfoResult.Created(_fixture.Create<Info>()));
+                .ReturnsAsync(new PostInfoResult.Created(new Info()));
 
             // Act
             var result = await _systemUnderTest.Post();
@@ -66,7 +62,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Post_WhenSendInfoReturnsBadGateway_ReturnsBadGateway()
         {
             // Arrange
-            var odsCode = _fixture.Freeze<string>();
+            var odsCode = "ODS Code";
             MockUserProfileWithOdsCode(odsCode);
             _mockInfoService.Setup(x => x.Send(It.IsAny<AccessToken>(), odsCode))
                 .ReturnsAsync(new PostInfoResult.BadGateway());
@@ -84,7 +80,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Post_WhenSendInfoReturnsInternalServerError_ReturnsInternalServerError()
         {
             // Arrange
-            var odsCode = _fixture.Freeze<string>();
+            var odsCode = "ODS Code";
             MockUserProfileWithOdsCode(odsCode);
             _mockInfoService.Setup(x => x.Send(It.IsAny<AccessToken>(), odsCode))
                 .ReturnsAsync(new PostInfoResult.InternalServerError());
@@ -102,7 +98,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Post_SendInfoException_ReturnsInternalServerError()
         {
             // Arrange
-            var odsCode = _fixture.Freeze<string>();
+            var odsCode = "ODS Code";
             MockUserProfileWithOdsCode(odsCode);
             _mockInfoService.Setup(x => x.Send(It.IsAny<AccessToken>(), odsCode))
                 .Throws(new ArgumentException("test"));
@@ -139,9 +135,8 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
 
         private void MockUserProfileWithOdsCode(string odsCode)
         {
-            var userInfo = _fixture.Freeze<Auth.CitizenId.Models.UserInfo>();
-            userInfo.GpIntegrationCredentials.OdsCode = odsCode;
-            var userProfile = new UserProfile(userInfo, _fixture.Create<string>());
+            var userInfo = new Auth.CitizenId.Models.UserInfo { GpIntegrationCredentials = new GpIntegrationCredentials { OdsCode = odsCode } };
+            var userProfile = new UserProfile(userInfo, "Access token");
 
             _mockCitizenIdService
                 .Setup(x => x.GetUserProfile(It.IsAny<string>()))

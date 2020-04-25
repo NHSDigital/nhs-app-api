@@ -1,39 +1,36 @@
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
 {
     [TestClass]
-    public class InfoControllerGetTests
+    public sealed class InfoControllerGetTests : IDisposable
     {
-        private IFixture _fixture;
         private InfoController _systemUnderTest;
         private Mock<IInfoService> _mockInfoService;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            var mockHttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext();
 
-            var mockHttpContext =  HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
+            _mockInfoService = new Mock<IInfoService>();
 
-            _mockInfoService = _fixture.Freeze<Mock<IInfoService>>();
-
-            _systemUnderTest = _fixture.Create<InfoController>();
-            _systemUnderTest.ControllerContext = new ControllerContext
+            _systemUnderTest = new InfoController(
+                _mockInfoService.Object,
+                new Mock<ICitizenIdService>().Object,
+                new Mock<ILogger<InfoController>>().Object)
             {
-                HttpContext = mockHttpContext.Object
+                ControllerContext = new ControllerContext { HttpContext = mockHttpContext.Object }
             };
         }
        
@@ -41,9 +38,8 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_WithOdsCode_SuccessFoundMultiple()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
-            var odsCode = _fixture.Create<string>();
-            var nhsLoginIds = _fixture.Create<IEnumerable<string>>();
+            var odsCode = "ods code";
+            var nhsLoginIds = new[] { "login id 1", "login id 2" };
             _mockInfoService.Setup(x => x.GetInfoByOdsCode(odsCode))
                 .ReturnsAsync(new GetInfoResult.FoundMultiple(nhsLoginIds));
 
@@ -60,9 +56,8 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_WithNhsNumber_SuccessFoundMultiple()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
-            var nhsNumber = _fixture.Create<string>();
-            var nhsLoginIds = _fixture.Create<IEnumerable<string>>();
+            var nhsNumber = "NHS number";
+            var nhsLoginIds = new[] { "login id 1", "login id 2" };
             _mockInfoService.Setup(x => x.GetInfoByNhsNumber(nhsNumber))
                 .ReturnsAsync(new GetInfoResult.FoundMultiple(nhsLoginIds));
 
@@ -79,8 +74,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_WithNhsNumber_NotFound_ReturnsNotFound()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
-            var nhsNumber = _fixture.Create<string>();
+            var nhsNumber = "NHS number";
             _mockInfoService.Setup(x => x.GetInfoByNhsNumber(nhsNumber))
                 .ReturnsAsync(new GetInfoResult.NotFound());
 
@@ -98,8 +92,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_WithOdsCode_NotFound_ReturnsNotFound()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
-            var odsCode = _fixture.Create<string>();
+            var odsCode = "ods code";
             _mockInfoService.Setup(x => x.GetInfoByOdsCode(odsCode))
                 .ReturnsAsync(new GetInfoResult.NotFound());
 
@@ -116,8 +109,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_WithNhsNumber_BadGateway_ReturnsBadGateway()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
-            var nhsNumber = _fixture.Create<string>();
+            var nhsNumber = "NHS number";
             _mockInfoService.Setup(x => x.GetInfoByNhsNumber(nhsNumber))
                 .ReturnsAsync(new GetInfoResult.BadGateway());
 
@@ -135,8 +127,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_WithOdsCode_BadGateway_ReturnsBadGateway()
         {
             // Arrange
-            HttpContextGetAccessTokenHelper.CreateMockHttpContext(_fixture);
-            var odsCode = _fixture.Create<string>();
+            var odsCode = "ods code";
             _mockInfoService.Setup(x => x.GetInfoByOdsCode(odsCode))
                 .ReturnsAsync(new GetInfoResult.BadGateway());
 
@@ -153,7 +144,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Get_WithNhsNumberAndOdsCode_ReturnsBadRequest()
         {
             // Act
-            var result = await _systemUnderTest.Get(_fixture.Create<string>(), _fixture.Create<string>());
+            var result = await _systemUnderTest.Get("ods code", "nhs number");
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();

@@ -34,8 +34,7 @@ using NHSOnline.Backend.Support;
         public void TestInitialize()
         {
             _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+                .Customize(new AutoMoqCustomization());
 
             _mockNominatedPharmacyService = _fixture.Freeze<Mock<INominatedPharmacyService>>();
             

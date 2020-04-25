@@ -1,19 +1,16 @@
-using AutoFixture;
-using AutoFixture.AutoMoq;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FluentAssertions;
+using NHSOnline.Backend.Support.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using NHSOnline.Backend.Support.Logging;
 using System.Threading;
-using UnitTestHelper;
+using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Support.UnitTests.Logging
 {
@@ -139,28 +136,26 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             }
         }
 
-        private IFixture _fixture;
         private DummyController _systemUnderTest;
         private Stream _stream;
+        private ServiceProvider _serviceProvider;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-
-            var serviceProvider = new ServiceCollection()
+            _serviceProvider = new ServiceCollection()
+                .AddTransient<DummyController>()
+                .AddTransient<DummyConsoleService>()
+                .AddTransient<NestedCallClass>()
                 .AddLogging(ConfigureLogging)
                 .BuildServiceProvider();
-            _fixture.Inject(serviceProvider.GetService<ILoggerFactory>());
-
+            
             // set up http contexts for both controller and calling attribute overloads..
             var actionContext = new ActionContext(new DefaultHttpContext(), new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
-            actionContext.HttpContext.RequestServices = serviceProvider;
+            actionContext.HttpContext.RequestServices = _serviceProvider;
 
             // Create system under test from IOC injection...
-            _systemUnderTest = _fixture.Create<DummyController>();
+            _systemUnderTest = _serviceProvider.GetRequiredService<DummyController>();
             _systemUnderTest.ControllerContext = new ControllerContext(actionContext);
         }
 
@@ -289,7 +284,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         [TestMethod]
         public void LogFromNonScopedMethod()
         {
-            var systemUnderTest = _fixture.Create<DummyConsoleService>();
+            var systemUnderTest = _serviceProvider.GetRequiredService<DummyConsoleService>();
             systemUnderTest.ConsoleMethod();
 
             _stream.Position = 0;
@@ -304,6 +299,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         {
             _stream?.Dispose();
             _systemUnderTest.Dispose();
+            _serviceProvider?.Dispose();
         }
     }
 }

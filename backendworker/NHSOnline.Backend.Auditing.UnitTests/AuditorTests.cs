@@ -176,8 +176,7 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         public void TestInitialize()
         {
             _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+                .Customize(new AutoMoqCustomization());
             
             _nhsNumber1 = _fixture.CreateNhsNumberFormatted();
             _nhsNumber2 = _fixture.CreateNhsNumberFormatted();

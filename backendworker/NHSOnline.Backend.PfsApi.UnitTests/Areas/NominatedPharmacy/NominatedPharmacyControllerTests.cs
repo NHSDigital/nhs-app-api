@@ -1,31 +1,29 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.Support;
-using UnitTestHelper;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.NominatedPharmacy.Models;
-using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
-using System.Net;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
-using NHSOnline.Backend.PfsApi.GpSearch.Models;
-using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
+using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
+using NHSOnline.Backend.Support;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 {
     [TestClass]
-    public class NominatedPharmacyControllerTests
+    public sealed class NominatedPharmacyControllerTests: IDisposable
     {
         private const string OdsCode = "AB123";
         private const string UpdatedOdsCode = "BB999";
@@ -34,7 +32,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         private readonly string _pertinentSerialChangeNumber = Guid.NewGuid().ToString();
 
         private NominatedPharmacyController _systemUnderTest;
-        private IFixture _fixture;
         private P9UserSession _userSession;
 
         private Mock<INominatedPharmacyService> _mockNominatedPharmacyService;
@@ -49,26 +46,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
-            _fixture.Customize<P9UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-
-            _userSession = _fixture.Create<P9UserSession>();
-
-            _mockNominatedPharmacyService = _fixture.Freeze<Mock<INominatedPharmacyService>>();
-            _mockPharmacyService = _fixture.Freeze<Mock<IPharmacyService>>();
-            _mockPharmacySearchService = _fixture.Freeze<Mock<IPharmacySearchService>>();
-            _mockNominatedPharmacyGatewayUpdateService = _fixture.Freeze<Mock<INominatedPharmacyGatewayUpdateService>>();
-            _mockMapper = _fixture.Freeze<Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper>>();
-            _auditor = _fixture.Freeze<Mock<IAuditor>>();
-            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfigurationSettings>>();
+            _mockNominatedPharmacyService = new Mock<INominatedPharmacyService>();
+            _mockPharmacyService = new Mock<IPharmacyService>();
+            _mockPharmacySearchService = new Mock<IPharmacySearchService>();
+            _mockNominatedPharmacyGatewayUpdateService = new Mock<INominatedPharmacyGatewayUpdateService>();
+            _mockMapper = new Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper>();
+            _auditor = new Mock<IAuditor>();
+            _configMock = new Mock<INominatedPharmacyConfigurationSettings>();
             _configMock.SetupGet(x => x.IsNominatedPharmacyEnabled).Returns(true);
-            _mockGpSearchService = _fixture.Freeze<Mock<IGpSearchService>>();
+            _mockGpSearchService = new Mock<IGpSearchService>();
 
-            _systemUnderTest = _fixture.Create<NominatedPharmacyController>();
+            _systemUnderTest = new NominatedPharmacyController(
+                new Mock<ILogger<NominatedPharmacyController>>().Object,
+                _mockNominatedPharmacyService.Object,
+                _mockPharmacyService.Object,
+                _mockMapper.Object,
+                _mockPharmacySearchService.Object,
+                _mockNominatedPharmacyGatewayUpdateService.Object,
+                _auditor.Object,
+                _configMock.Object,
+                _mockGpSearchService.Object);
         }
 
         [TestMethod]
@@ -80,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(
                 new GetNominatedPharmacyResponse(HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType, ObjectId));
 
-            var pharmacyOrganisation = _fixture.Create<Organisation>();
+            var pharmacyOrganisation = new Organisation();
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.OK, pharmacyOrganisation);
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
@@ -104,7 +103,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Returns(true)
                 .Verifiable();
 
-            var mappedResult = _fixture.Create<PharmacyDetails>();
+            var mappedResult = new PharmacyDetails();
 
             _mockMapper
                 .Setup(x => x.Map(pharmacyDetailResponse.Pharmacy))
@@ -242,7 +241,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.Success(new GetNominatedPharmacyResponse(
                 HttpStatusCode.OK, OdsCode, _pertinentSerialChangeNumber, true, NominatedPharmacyType, ObjectId));
 
-            var pharmacyOrganisation = _fixture.Create<Organisation>();
+            var pharmacyOrganisation = new Organisation();
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.OK, pharmacyOrganisation);
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
@@ -327,7 +326,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var nhsNumber = _userSession.GpUserSession.NhsNumber;
             var nominatedPharmacyResult = new GetNominatedPharmacyResult.InternalServerError();
 
-                new GetNominatedPharmacyResponse(HttpStatusCode.InternalServerError);
             var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
 
             _mockGpSearchService
@@ -594,7 +592,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             const string postcode = "ABC";
 
-            var pharmacy = _fixture.Create<PharmacyDetails>();
+            var pharmacy = new PharmacyDetails();
             var pharmacyResultList = new List<PharmacyDetails> { pharmacy };
             var pharmacySearchResult = new PharmacySearchResult.Success(pharmacyResultList);
             var expectedResult = new PharmacySearchResultResponse
@@ -649,7 +647,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task OnlineOnlyPharmacySearch_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             // Arrange
-            var pharmacy = _fixture.Create<PharmacyDetails>();
+            var pharmacy = new PharmacyDetails();
             var pharmacyResultList = new List<PharmacyDetails> { pharmacy };
             var pharmacySearchResult = new PharmacySearchResult.Success(pharmacyResultList);
             var expectedResult = new PharmacySearchResultResponse
@@ -684,7 +682,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         {
             // Arrange
             var searchTerm = "test";
-            var pharmacy = _fixture.Create<PharmacyDetails>();
+            var pharmacy = new PharmacyDetails();
             var pharmacyResultList = new List<PharmacyDetails> { pharmacy };
             const int pharmacyResultCount = 1;
             var pharmacySearchResult = new PharmacySearchResult.Success(pharmacyResultList, pharmacyResultCount);
@@ -734,5 +732,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             
             _auditor.Verify(x => x.Audit(AuditingOperations.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

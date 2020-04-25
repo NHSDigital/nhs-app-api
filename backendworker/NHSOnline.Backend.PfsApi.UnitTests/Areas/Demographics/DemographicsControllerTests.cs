@@ -1,10 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -12,16 +11,15 @@ using NHSOnline.Backend.PfsApi.Areas.Demographics;
 using NHSOnline.Backend.GpSystems.Demographics.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
 {
     [TestClass]
-    public class DemographicsControllerTests
+    public sealed class DemographicsControllerTests: IDisposable
     {
         private DemographicsController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private P9UserSession _userSession;
         private IDemographicsResultVisitor<IActionResult> _visitor;
@@ -42,35 +40,34 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
         {
             _patientGuid = Guid.NewGuid();
             
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _mockAuditor = new Mock<IAuditor>();
 
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
-            _userSession = _fixture.Create<P9UserSession>();
-            
-            _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
+            _mockDemographicsService = new Mock<IDemographicsService>();
                 
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem.Setup(x => x.GetDemographicsService())
                 .Returns(_mockDemographicsService.Object);
             
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(_mockGpSystem.Object);
             
             _visitor = new DemographicsResultVisitor(new SuccessfulDemographicsResultMapper());
-            _fixture.Inject(_visitor);
 
-            _systemUnderTest = _fixture.Create<DemographicsController>();
+            _systemUnderTest = new DemographicsController(
+                new Mock<ILogger<DemographicsController>>().Object,
+                _mockGpSystemFactory.Object,
+                _visitor,
+                _mockAuditor.Object);
         }
         
         [TestMethod]
         public async Task Get_Returns_SuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             // Arrange
-            var demographicsResponse = _fixture.Create<DemographicsResponse>();
+            var demographicsResponse = new DemographicsResponse();
             var demographicsResult = new DemographicsResult.Success(demographicsResponse);
 
             _mockDemographicsService.Setup(x => x.GetDemographics(
@@ -158,5 +155,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: internal server error" ));
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

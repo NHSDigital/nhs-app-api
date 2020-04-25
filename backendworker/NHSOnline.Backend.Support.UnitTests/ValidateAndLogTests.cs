@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using AutoFixture;
@@ -19,8 +19,7 @@ namespace NHSOnline.Backend.Support.UnitTests
         public void TestInitialize()
         {
             _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+                .Customize(new AutoMoqCustomization());
 
             _logger = _fixture.Freeze<Mock<ILogger>>();
         }

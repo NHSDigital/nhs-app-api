@@ -23,8 +23,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
         public void TestInitialize()
         {
             var fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+                .Customize(new AutoMoqCustomization());
             var logger = fixture.Freeze<Mock<ILogger<TppLinkageMapper>>>();
             _systemUnderTest = new TppLinkageMapper(logger.Object);
         }

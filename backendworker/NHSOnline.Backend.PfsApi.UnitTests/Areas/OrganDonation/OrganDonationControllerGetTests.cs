@@ -1,11 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
@@ -13,18 +12,17 @@ using NHSOnline.Backend.PfsApi.Areas.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.Support;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 {
     [TestClass]
-    public class OrganDonationControllerGetTests
+    public sealed class OrganDonationControllerGetTests: IDisposable
     {
         private OrganDonationController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IOrganDonationService> _mockOrganDonationService;
         private P9UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
@@ -40,41 +38,42 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-
-            _userSession = _fixture.Create<P9UserSession>();
-            _mockOrganDonationService = _fixture.Freeze<Mock<IOrganDonationService>>();
-            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
+            _mockOrganDonationService = new Mock<IOrganDonationService>();
+            _mockAuditor = new Mock<IAuditor>();
 
             var demographicsResult = new DemographicsResult.Success(new DemographicsResponse());
 
-            _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
+            _mockDemographicsService = new Mock<IDemographicsService>();
             _mockDemographicsService
                 .Setup(x => x.GetDemographics(
                     It.Is<GpLinkedAccountModel>(
                         d => d.GpUserSession == _userSession.GpUserSession && d.PatientId == Guid.Empty)))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem
                 .Setup(x => x.GetDemographicsService())
                 .Returns(_mockDemographicsService.Object);
 
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(_mockGpSystem.Object);
 
-            _systemUnderTest = _fixture.Create<OrganDonationController>();
+            _systemUnderTest = new OrganDonationController(
+                new Mock<ILogger<OrganDonationController>>().Object,
+                _mockGpSystemFactory.Object,
+                _mockOrganDonationService.Object,
+                _mockAuditor.Object,
+                new Mock<IOrganDonationValidationService>().Object);
         }
 
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsNewRegistrationResult()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
+            var organDonationRegistration = new OrganDonationRegistration();
             var newResult = new OrganDonationResult.NewRegistration(organDonationRegistration);
 
             _mockOrganDonationService
@@ -97,7 +96,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsExistingRegistrationResult()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
+            var organDonationRegistration = new OrganDonationRegistration();
             var newResult = new OrganDonationResult.ExistingRegistration(organDonationRegistration);
 
             _mockOrganDonationService
@@ -142,7 +141,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         public async Task Get_ReturnsBadGateway_WhenServiceReturnSearchUpstreamErrorResult()
         {
             // Arrange
-            var response = _fixture.Create<PfsErrorResponse>();
+            var response = new PfsErrorResponse();
             var newResult = new OrganDonationResult.SearchUpstreamError(response);
 
             _mockOrganDonationService
@@ -284,5 +283,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         {
             typeof(OrganDonationController).Should().BeDecoratedWith<ProxyingNotAllowedAttribute>();
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

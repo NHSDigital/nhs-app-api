@@ -1,26 +1,24 @@
 using System;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.PfsApi.Areas.Session;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 {
     [TestClass]
-    public class SessionExtendControllerPostTests
+    public sealed class SessionExtendControllerPostTests: IDisposable
     {
         private SessionExtendController _systemUnderTest;
-        private IFixture _fixture;
         private Mock<IGpSystem> _mockGpSystem;
         private P9UserSession _userSession;
         private Guid _patientGuid;
@@ -30,29 +28,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
-            
-            _fixture.Customize<P9UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-            
-            _userSession = _fixture.Create<P9UserSession>();
-            _patientGuid = _fixture.Create<Guid>();
+            _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
 
-            _mockSessionExtendService = _fixture.Freeze<Mock<ISessionExtendService>>();
+            _patientGuid = Guid.NewGuid();
 
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockSessionExtendService = new Mock<ISessionExtendService>();
+
+            _mockGpSystem = new Mock<IGpSystem>();
             _mockGpSystem
                 .Setup(x => x.GetSessionExtendService())
                 .Returns(_mockSessionExtendService.Object);
 
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory = new Mock<IGpSystemFactory>();
             _mockGpSystemFactory
                 .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
 
-            _systemUnderTest = _fixture.Create<SessionExtendController>();
+            _systemUnderTest = new SessionExtendController(
+                _mockGpSystemFactory.Object,
+                new Mock<ILogger<SessionExtendController>>().Object,
+                new Mock<IAuditor>().Object);
         }
 
         [TestMethod]
@@ -95,5 +90,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockSessionExtendService.Verify();
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }

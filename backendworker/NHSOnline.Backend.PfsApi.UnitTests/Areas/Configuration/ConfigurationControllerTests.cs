@@ -1,25 +1,21 @@
 using System;
 using System.Collections.Generic;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.Areas.Configuration;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.Configuration;
 using NHSOnline.Backend.PfsApi.Devices;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
 {
     [TestClass]
-    public class ConfigurationControllerTests
+    public sealed class ConfigurationControllerTests: IDisposable
     {
-        private IFixture _fixture;
-        
         private ConfigurationController _systemUnderTest;
         private Mock<IConfigurationService> _mockDeviceConfigurationService;
         private Mock<ISupportedDeviceService> _mockSupportedDeviceService;
@@ -28,24 +24,25 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new ApiControllerAutoFixtureCustomization());
+            _queryParameters = new GetConfigurationQueryParameters
+            {
+                DeviceName = "name",
+                NativeAppVersion = "version"
+            };
             
-            _queryParameters = _fixture.Create<GetConfigurationQueryParameters>();
+            _mockDeviceConfigurationService = new Mock<IConfigurationService>();
+            _mockSupportedDeviceService = new Mock<ISupportedDeviceService>();
             
-            _mockDeviceConfigurationService = _fixture.Freeze<Mock<IConfigurationService>>();
-            _mockSupportedDeviceService = _fixture.Freeze<Mock<ISupportedDeviceService>>();
-            
-            _systemUnderTest = _fixture.Create<ConfigurationController>();
+            _systemUnderTest = new ConfigurationController(
+                new Mock<ILogger<ConfigurationController>>().Object,
+                _mockSupportedDeviceService.Object,
+                _mockDeviceConfigurationService.Object);
         }
 
         [TestMethod]
         public void Get_Returns_Success()
         {
-            var response = new GetConfigurationResult.Success(
-                _fixture.Create<bool>(),
-                _fixture.Create<Uri>());
+            var response = new GetConfigurationResult.Success(true, new Uri("http://localhost/"));
 
             _mockSupportedDeviceService.Setup(x => x.IsDeviceSupported(It.IsAny<DeviceDetails>()))
                 .Returns(response);
@@ -94,13 +91,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
         public void GetV2_Returns_Success()
         {
             // Arrange
-            var knownServices = _fixture.Create<KnownServices>();
             var response = new GetConfigurationResultV2.Success(
-                _fixture.Create<List<string>>(),
-                _fixture.Create<Uri>(),
-                _fixture.Create<string>(),
-                _fixture.Create<string>(),
-                knownServices.Services);
+                new List<string>(), 
+                new Uri("http://localhost/"), 
+                "min android version",
+                "max iOS version",
+                new List<RootService>());
             
             _mockDeviceConfigurationService.Setup(x => x.GetConfiguration()).Returns(response);
             
@@ -127,5 +123,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
+
+        public void Dispose() => _systemUnderTest?.Dispose();
     }
 }
