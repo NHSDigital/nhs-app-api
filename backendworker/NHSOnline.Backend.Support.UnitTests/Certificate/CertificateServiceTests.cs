@@ -7,10 +7,10 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Support.Certificate;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.Support.UnitTests.Certificate
 {
@@ -74,13 +74,10 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
             var certificateService = new CertificateService(_mockCertificateServiceLogger.Object, _mockConfiguration.Object);
             var certificate = certificateService.GetCertificate("GpSystems/Suppliers/Vision/Resources/wrongFile.pfx", Passphrase);
             certificate.Should().BeNull();
-            _mockCertificateServiceLogger.Verify(x => x.Log(
-                LogLevel.Error, 
-                0,
-                It.Is<FormattedLogValues>(values => values.ToString().Equals("Could not add client certificate due to file GpSystems/Suppliers/Vision/Resources/wrongFile.pfx not existing in certificate path.", StringComparison.Ordinal)),
-                null,
-                It.IsAny<Func<object, Exception, string>>()
-            ));
+            _mockCertificateServiceLogger.VerifyLogger(
+                LogLevel.Error,
+                "Could not add client certificate due to file GpSystems/Suppliers/Vision/Resources/wrongFile.pfx not existing in certificate path.",
+                Times.Once());
         }
 
         [DataTestMethod]
@@ -112,12 +109,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
             var certificateService = new CertificateService(_mockCertificateServiceLogger.Object, _mockConfiguration.Object);
             var certificate = certificateService.GetCertificate(path, passphrase);
             certificate.Should().BeNull();
-            _mockCertificateServiceLogger.Verify(x => x.Log(
-                LogLevel.Error, 0,
-                It.Is<FormattedLogValues>(values => values.ToString().Equals(error, StringComparison.Ordinal)),
-                null,
-                It.IsAny<Func<object, Exception, string>>()
-            ));
+            _mockCertificateServiceLogger.VerifyLogger(LogLevel.Error, error, Times.Once());
         }
     }
 }

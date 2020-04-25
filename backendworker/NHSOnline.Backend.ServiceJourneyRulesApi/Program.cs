@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -63,12 +63,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseConfiguration(BuildConfiguration(args))
-                .ConfigureLogging((context, logBuilder) =>
-                {
-                    logBuilder.ClearProviders();
-
-                    logBuilder.ConfigureLogging(context.Configuration);
-                })
+                .ConfigureLogging((context, logBuilder) => logBuilder.ConfigureNhsAppLogging(context.Configuration))
                 .Build();
 
         private static RunMode DetermineRunModeFromCommandLineArgs(IEnumerable<string> args) =>

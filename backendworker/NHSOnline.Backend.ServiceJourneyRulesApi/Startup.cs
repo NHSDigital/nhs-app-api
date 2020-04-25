@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,15 +20,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
     {
         private IConfiguration Configuration { get; }
         private readonly ModularStartup _modularStartup;
-        
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
+
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
-            
-            if (env.IsDevelopment())
-            {
-                loggerFactory.AddConsole(LogLevel.Debug);
-            }
 
             _modularStartup = new ModularStartup(configuration, loggerFactory);
         }
@@ -38,17 +32,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvc(ConfigureMvcOptions)
-                .AddJsonOptions(
-                    options => options.SerializerSettings.ContractResolver =
-                        new CamelCasePropertyNamesContractResolver()
-                ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            
+                .AddControllers(ConfigureMvcOptions)
+                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
-            
+
             services.AddSingleton(Configuration);
             services.AddSingleton<RandomNumberGenerator, RNGCryptoServiceProvider>();
             services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
@@ -62,7 +53,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
 
             services.ConfigureJourneyRepository();
         }
-        
+
         private static void ConfigureMvcOptions(MvcOptions options)
         {
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
@@ -70,36 +61,23 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                loggerFactory.AddDebug();
-                app.UseDeveloperExceptionPage();
-            }
+            app.UsePathBase("/v1");
 
             app.UseSecurityResponseHeadersMiddleware();
             app.UseResponseHeadersMiddleware();
 
-            var corsAuthority = Configuration["CORS_AUTHORITY"];
-            if (corsAuthority != null)
-            {
-                app.UseCors(builder => builder
-                    .WithOrigins(corsAuthority)
-                    .SetIsOriginAllowedToAllowWildcardSubdomains()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-                );
-            }
+            app.UseRouting();
+            app.UseCors(Configuration);
 
             app.UseLogRequestHeader(new LogRequestHeaderOptions
             {
                HeaderName = Support.Constants.HttpHeaders.CorrelationIdentifier,
                LogTemplate = "CorrelationId={value}",
             });
-            
-            app.UseMvc();
+
+            app.UseEndpoints(b => b.MapControllers());
         }
     }
 }

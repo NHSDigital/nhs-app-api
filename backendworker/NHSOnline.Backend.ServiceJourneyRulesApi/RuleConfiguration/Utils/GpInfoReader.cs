@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using CsvHelper;
 using Microsoft.Extensions.Logging;
@@ -53,15 +54,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
         {
             var reader = _fileHandler.GetTextReader(filePath);
 
-            using (var csvReader = new CsvReader(reader))
-            {
-                csvReader.Configuration.TypeConverterCache.AddConverter<GpInfoSupplier>(
-                    new EnumDescriptionConverter<GpInfoSupplier>(_processState, _logger));
+            using var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture);
 
-                csvReader.Configuration.PrepareHeaderForMatch = (header, index) => header.ToUpperInvariant();
+            csvReader.Configuration.TypeConverterCache.AddConverter<GpInfoSupplier>(
+                new EnumDescriptionConverter<GpInfoSupplier>(_processState, _logger));
 
-                return csvReader.GetRecords<GpInfo>().ToList();
-            }
+            csvReader.Configuration.PrepareHeaderForMatch = (header, index) => header.ToUpperInvariant();
+
+            return csvReader.GetRecords<GpInfo>().ToList();
         }
     }
 }

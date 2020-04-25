@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Support.DependencyInjection
             }
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             foreach (var module in _modules)
             {

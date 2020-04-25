@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
@@ -41,12 +41,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             {
                 var publicHealthNotifications = journey.HomeScreen?.PublicHealthNotifications;
 
-                if (!publicHealthNotifications?.Any() ?? true)
-                {
-                    continue;
-                }
-
-                foreach (var notification in publicHealthNotifications)
+                foreach (var notification in publicHealthNotifications ?? Enumerable.Empty<PublicHealthNotification>())
                 {
                     notification.Body = _htmlSanitizer.SanitizeHtml(notification.Body);
                 }

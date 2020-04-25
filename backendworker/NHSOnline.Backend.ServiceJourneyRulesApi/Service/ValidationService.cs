@@ -9,11 +9,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Service
     internal class ValidationService : BackgroundService
     {
         private readonly IConfigurationRuleFileValidator _configurationRuleFileValidator;
-        private readonly IApplicationLifetime _applicationLifetime;
+        private readonly IHostApplicationLifetime _applicationLifetime;
         
         public ValidationService(
             IConfigurationRuleFileValidator configurationRuleFileValidator,
-            IApplicationLifetime applicationLifetime)
+            IHostApplicationLifetime applicationLifetime)
         {
             _configurationRuleFileValidator = configurationRuleFileValidator;
             _applicationLifetime = applicationLifetime;

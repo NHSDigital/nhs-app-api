@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
     public class StartupTests
     {
         private IFixture _fixture;
-        private Mock<IHostingEnvironment> _mockIHostingEnvironment;
+        private Mock<IWebHostEnvironment> _mockIWebHostEnvironment;
         private Mock<ILoggerFactory> _mockILoggerFactory;
         private Mock<IServiceCollection> _mockIServiceCollection;
         private Startup _systemUnderTest;
@@ -27,18 +27,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
         {
             // Arrange
             var isSuccess = false;
-            
+
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            _mockIHostingEnvironment = _fixture.Freeze<Mock<IHostingEnvironment>>();
+            _mockIWebHostEnvironment = _fixture.Freeze<Mock<IWebHostEnvironment>>();
             _mockILoggerFactory = _fixture.Freeze<Mock<ILoggerFactory>>();
             _mockIServiceCollection = _fixture.Freeze<Mock<IServiceCollection>>();
-            
+
             var configurationRoot = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.test.json")
                 .Build();
-            
-            _systemUnderTest = new Startup(configurationRoot, _mockIHostingEnvironment.Object, _mockILoggerFactory.Object);
+
+            _systemUnderTest = new Startup(configurationRoot, _mockIWebHostEnvironment.Object, _mockILoggerFactory.Object);
 
             // Act
             try

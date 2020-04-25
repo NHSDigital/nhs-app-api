@@ -157,7 +157,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             _mockFileHandler.Verify(f => f.GetTextReader(FilePath));
             _mockYamlToJsonConverter.Verify(c => c.Convert(It.IsAny<FileData>(), out convertedJson));
             _mockSchemaValidator.Verify(s => s.ValidateJsonAgainstSchema(It.IsAny<FileData>(), It.IsAny<FileData>()));
-            _mockLogger.VerifyLogger(LogLevel.Error,typeof(YamlException), Times.Once());
+            _mockLogger.VerifyLogger<YamlException>(LogLevel.Error, Times.Once());
 
             result.Should().BeNull();
         }

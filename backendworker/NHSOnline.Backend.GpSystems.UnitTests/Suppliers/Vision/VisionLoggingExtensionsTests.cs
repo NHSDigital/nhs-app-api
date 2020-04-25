@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -6,7 +7,6 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -43,12 +43,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 m => m.Log(
                     LogLevel.Error,
                     It.IsAny<EventId>(),
-                    It.Is<FormattedLogValues>(v => v.ToString().Contains("Name", StringComparison.InvariantCulture) &&
-                                                   Regex.Matches(v.ToString(), Environment.NewLine).Count < 2),
+                    It.Is<It.IsAnyType>(
+                        (flv, _) =>
+                            flv.ToString().Contains("Name", StringComparison.InvariantCulture) &&
+                            Regex.Matches(flv.ToString(), Environment.NewLine).Count < 2),
                     It.IsAny<Exception>(),
-                    It.IsAny<Func<object, Exception, string>>()
-                )
-            );
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
 
         [TestMethod]

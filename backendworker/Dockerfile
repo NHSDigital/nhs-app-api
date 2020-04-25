@@ -17,7 +17,7 @@ RUN dotnet build --no-restore -c Release
 FROM built AS published
 RUN dotnet publish --no-build -c Release -p:PublishDir=_published_artifacts
 
-FROM nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:2.1 AS final
+FROM nhsapp.azurecr.io/nhsonline-aspdotnetcore-runtime:3.1 AS final
 ARG PROJECT_NAME
 RUN : "${PROJECT_NAME:?PROJECT_NAME argument needs to be set and non-empty.}"
 ENV PORT=8080

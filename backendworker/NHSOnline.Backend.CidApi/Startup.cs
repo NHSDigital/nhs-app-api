@@ -15,7 +15,6 @@ using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
@@ -42,14 +41,9 @@ namespace NHSOnline.Backend.CidApi
         private readonly SupplierStartup _supplierStartup;
         private readonly string _apiAppVersion;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
-
-            if (env.IsDevelopment())
-            {
-                loggerFactory.AddConsole(LogLevel.Debug);
-            }
 
             _apiAppVersion = Configuration.GetApiAppVersion();
 
@@ -73,14 +67,12 @@ namespace NHSOnline.Backend.CidApi
             services.AddMemoryCache();
 
             services
-                .AddMvc(ConfigureMvcOptions)
-                .AddJsonOptions(
-                    options => options.SerializerSettings.ContractResolver =
-                        new CamelCasePropertyNamesContractResolver()
-                ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .AddControllers(ConfigureMvcOptions)
+                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddApiVersioning(options =>
             {
+                options.UseApiBehavior = false; // Treat all controllers as API controller
                 options.DefaultApiVersion = ApiVersion.Parse("1.0");
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.ErrorResponses = new NotFoundErrorResponseProvider();
@@ -120,26 +112,14 @@ namespace NHSOnline.Backend.CidApi
         {
             options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
-            options.Filters.Add(new AuthorizeFilter(
-                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
-            );
+            options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
             options.Filters.Add(typeof(Im1TimeoutExceptionFilterAttribute));
             options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttribute));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseAuthentication();
-
-            loggerFactory.ConfigureLogging(Configuration);
-
-            if (env.IsDevelopment())
-            {
-                loggerFactory.AddDebug();
-                app.UseDeveloperExceptionPage();
-            }
-
             app.Use(async (context, next) =>
             {
                 var logger = loggerFactory.CreateLogger<Startup>();
@@ -150,17 +130,9 @@ namespace NHSOnline.Backend.CidApi
             app.UseSecurityResponseHeadersMiddleware();
             app.UseResponseHeadersMiddleware();
 
-            var corsAuthority = Configuration["CORS_AUTHORITY"];
-            if (corsAuthority != null)
-            {
-                app.UseCors(builder => builder
-                    .WithOrigins(corsAuthority)
-                    .SetIsOriginAllowedToAllowWildcardSubdomains()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-                );
-            }
+            app.UseRouting();
+            app.UseCors(Configuration);
+            app.UseAuthentication();
 
             app.UseCorrelationId(new CorrelationIdOptions
             {
@@ -180,7 +152,7 @@ namespace NHSOnline.Backend.CidApi
                 HeaderName = Constants.HttpHeaders.LoginClient,
             });
 
-            app.UseMvc();
+            app.UseEndpoints(b => b.MapControllers());
 
             _modularStartup.Configure(app, env);
         }

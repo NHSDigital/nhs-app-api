@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -52,10 +51,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
             _patientId = Guid.NewGuid();
 
-            var httpContextResponse = new DefaultHttpResponse(new DefaultHttpContext());
+            var httpContextResponse = new Mock<HttpResponse>();
+            httpContextResponse.Setup(x => x.Headers).Returns(new HeaderDictionary());
 
             var httpContextMock = new Mock<HttpContext>();
-            httpContextMock.SetupGet(x => x.Response).Returns(httpContextResponse);
+            httpContextMock.SetupGet(x => x.Response).Returns(httpContextResponse.Object);
 
             _mockAuditor = new Mock<IAuditor>();
             _systemUnderTest = new PatientDocumentController(

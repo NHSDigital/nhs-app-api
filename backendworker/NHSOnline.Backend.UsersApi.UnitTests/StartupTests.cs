@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -23,7 +24,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
     {
         private IFixture _fixture;
         private Mock<IConfiguration> _mockConfiguration;
-        private Mock<IHostingEnvironment> _mockHostingEnvironment;
+        private Mock<IWebHostEnvironment> _mockHostingEnvironment;
         private Startup _systemUnderTest;
 
         [TestInitialize]
@@ -33,7 +34,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
                 .Customize(new AutoMoqCustomization());
 
             _mockConfiguration = _fixture.Freeze<Mock<IConfiguration>>();
-            _mockHostingEnvironment = _fixture.Freeze<Mock<IHostingEnvironment>>();
+            _mockHostingEnvironment = _fixture.Freeze<Mock<IWebHostEnvironment>>();
 
             _systemUnderTest = _fixture.Create<Startup>();
         }
@@ -294,7 +295,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             // Arrange
             SetupAllConfiguration();
 
-            _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(EnvironmentName.Production).Verifiable();
+            _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(Environments.Production).Verifiable();
 
             var mockServiceCollection = _fixture.Create<Mock<IServiceCollection>>();
             var serviceDescriptors = ServiceCollectionHelper.SetupServiceDescriptor(mockServiceCollection);
@@ -324,7 +325,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests
             // Arrange
             SetupAllConfiguration();
 
-            _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(EnvironmentName.Development);
+            _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(Environments.Development);
 
             var mockServiceCollection = _fixture.Create<Mock<IServiceCollection>>();
             var serviceDescriptors = ServiceCollectionHelper.SetupServiceDescriptor(mockServiceCollection);

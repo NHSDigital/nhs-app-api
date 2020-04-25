@@ -25,6 +25,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.AspNet.ApiKey
         public void TestInitialize()
         {
             _options = new Mock<IOptionsMonitor<ApiKeyAuthenticationOptions>>();
+            _options.Setup(x => x.Get(It.IsAny<string>())).Returns(new ApiKeyAuthenticationOptions());
 
             var logger = new Mock<ILogger<ApiKeyAuthenticationHandler>>();
             _loggerFactory = new Mock<ILoggerFactory>();

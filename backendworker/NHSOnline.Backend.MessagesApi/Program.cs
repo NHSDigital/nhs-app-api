@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.MessagesApi
 {
@@ -12,17 +12,16 @@ namespace NHSOnline.Backend.MessagesApi
             BuildWebHost(args).Run();
         }
 
-        public static IConfigurationRoot BuildConfiguration(string[] args) => new ConfigurationBuilder()
+        private static IConfigurationRoot BuildConfiguration(string[] args) => new ConfigurationBuilder()
             .AddEnvironmentVariables()
             .AddCommandLine(args)
             .Build();
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        private static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseConfiguration(BuildConfiguration(args))
-                // Clear default logging providers these will be added later in startup.
-                .ConfigureLogging((context, logBuilder) => logBuilder.ClearProviders())
+                .ConfigureLogging((context, logBuilder) => logBuilder.ConfigureNhsAppLogging(context.Configuration))
                 .Build();
     }
 }

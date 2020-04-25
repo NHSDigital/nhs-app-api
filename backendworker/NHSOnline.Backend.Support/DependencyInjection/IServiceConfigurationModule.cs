@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +13,6 @@ namespace NHSOnline.Backend.Support.DependencyInjection
             IServiceCollection services,
             IConfiguration configuration);
         
-        void Configure(IApplicationBuilder app, IHostingEnvironment env);
+        void Configure(IApplicationBuilder app, IWebHostEnvironment env);
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -8,12 +7,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Support.Repository;
 using NHSOnline.Backend.Support.Settings;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.UserInfoApi.UnitTests
 {
@@ -22,7 +21,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
     {
         private IFixture _fixture;
         private Mock<IConfiguration> _mockConfiguration;
-        private Mock<IHostingEnvironment> _mockHostingEnvironment;
+        private Mock<IWebHostEnvironment> _mockHostingEnvironment;
         private Startup _systemUnderTest;
 
         [TestInitialize]
@@ -32,7 +31,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
                 .Customize(new AutoMoqCustomization());
 
             _mockConfiguration = _fixture.Freeze<Mock<IConfiguration>>();
-            _mockHostingEnvironment = _fixture.Freeze<Mock<IHostingEnvironment>>();
+            _mockHostingEnvironment = _fixture.Freeze<Mock<IWebHostEnvironment>>();
 
             _systemUnderTest = _fixture.Create<Startup>();
         }
@@ -147,18 +146,14 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");
 
-            var mockServiceCollection = _fixture.Create<Mock<IServiceCollection>>();
-            var serviceDescriptors = ServiceCollectionHelper.SetupServiceDescriptor(mockServiceCollection);
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddHttpClient();
 
             // Act
-            _systemUnderTest.ConfigureServices(mockServiceCollection.Object);
+            _systemUnderTest.ConfigureServices(serviceCollection);
 
             // Assert
-            serviceDescriptors.Should().NotBeEmpty();
-
-            var mongoConfiguration =
-                serviceDescriptors.FirstOrDefault(x => x.ImplementationInstance is IMongoConfiguration)
-                    ?.ImplementationInstance as IMongoConfiguration;
+            var mongoConfiguration = serviceCollection.BuildServiceProvider().GetRequiredService<IMongoConfiguration>();
 
             using (new AssertionScope())
             {
@@ -175,26 +170,18 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             // Arrange
             SetupAllConfiguration();
 
-            _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(EnvironmentName.Production);
+            _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(Environments.Production);
 
-            var mockServiceCollection = _fixture.Create<Mock<IServiceCollection>>();
-            var serviceDescriptors = ServiceCollectionHelper.SetupServiceDescriptor(mockServiceCollection);
+            var serviceCollection = new ServiceCollection();
 
             // Act
-            _systemUnderTest.ConfigureServices(mockServiceCollection.Object);
+            _systemUnderTest.ConfigureServices(serviceCollection);
 
             // Assert
-            serviceDescriptors.Should().NotBeEmpty();
-
-            var configureJwtBearerOptions =
-                serviceDescriptors
-                    .FirstOrDefault(x => x.ImplementationInstance is IConfigureNamedOptions<JwtBearerOptions>)
-                    ?.ImplementationInstance as IConfigureNamedOptions<JwtBearerOptions>;
-
-            configureJwtBearerOptions.Should().NotBeNull();
-            var jwtBearerOptions = new JwtBearerOptions();
-
-            configureJwtBearerOptions.Configure("Bearer", jwtBearerOptions);
+            var jwtBearerOptions = serviceCollection
+                .BuildServiceProvider()
+                .GetRequiredService<IOptionsSnapshot<JwtBearerOptions>>()
+                .Get("Bearer");
 
             jwtBearerOptions.RequireHttpsMetadata.Should().BeTrue();
         }
@@ -205,27 +192,19 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             // Arrange
             SetupAllConfiguration();
 
-            _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(EnvironmentName.Development);
+            _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(Environments.Development);
 
-            var mockServiceCollection = _fixture.Create<Mock<IServiceCollection>>();
-            var serviceDescriptors = ServiceCollectionHelper.SetupServiceDescriptor(mockServiceCollection);
-
+            var serviceCollection = new ServiceCollection();
+            
             // Act
-            _systemUnderTest.ConfigureServices(mockServiceCollection.Object);
+            _systemUnderTest.ConfigureServices(serviceCollection);
 
             // Assert
-            serviceDescriptors.Should().NotBeEmpty();
-
-            var configureJwtBearerOptions =
-                serviceDescriptors
-                    .FirstOrDefault(x => x.ImplementationInstance is IConfigureNamedOptions<JwtBearerOptions>)
-                    ?.ImplementationInstance as IConfigureNamedOptions<JwtBearerOptions>;
-
-            configureJwtBearerOptions.Should().NotBeNull();
-            var jwtBearerOptions = new JwtBearerOptions();
-
-            configureJwtBearerOptions.Configure("Bearer", jwtBearerOptions);
-
+            var jwtBearerOptions = serviceCollection
+                .BuildServiceProvider()
+                .GetRequiredService<IOptionsSnapshot<JwtBearerOptions>>()
+                .Get("Bearer");
+            
             jwtBearerOptions.RequireHttpsMetadata.Should().BeFalse();
         }
 
@@ -237,7 +216,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
                 .Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns("https://authority.which.must.be.https.com/");
             _mockConfiguration.Setup(x => x["AUDIT_SINK_TYPE"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["NHSAPP_API_KEY"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["ConfigurationSettings:DefaultHttpTimeoutSeconds"]).Returns("2");

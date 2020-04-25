@@ -24,14 +24,9 @@ namespace NHSOnline.Backend.LoggerApi
         private IConfiguration Configuration { get; }
         private readonly ModularStartup _modularStartup;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
-
-            if (env.IsDevelopment())
-            {
-                loggerFactory.AddConsole(LogLevel.Debug);
-            }
 
             _apiAppVersion = Configuration.GetApiAppVersion();
 
@@ -44,11 +39,8 @@ namespace NHSOnline.Backend.LoggerApi
             services.AddCors();
 
             services
-                .AddMvc(ConfigureMvcOptions)
-                .AddJsonOptions(
-                    options => options.SerializerSettings.ContractResolver =
-                        new CamelCasePropertyNamesContractResolver()
-                ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .AddControllers(ConfigureMvcOptions)
+                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddOptions();
             services.AddCorrelationId();
@@ -73,19 +65,12 @@ namespace NHSOnline.Backend.LoggerApi
         private static void ConfigureMvcOptions(MvcOptions options)
         {
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
-            options.Filters.Add(new AuthorizeFilter(
-                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
-            );
+            options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            loggerFactory.ConfigureLogging(Configuration);
-
-            loggerFactory.AddDebug();
-            app.UseDeveloperExceptionPage();
-
             app.Use(async (context, next) =>
             {
                 var logger = loggerFactory.CreateLogger<Startup>();
@@ -93,23 +78,13 @@ namespace NHSOnline.Backend.LoggerApi
                 await next();
             });
 
+            app.UsePathBase("/v1");
+
             app.UseSecurityResponseHeadersMiddleware();
             app.UseResponseHeadersMiddleware();
 
-            app.UsePathBase(new PathString("/v1/api"));
-
-            var corsAuthority = Configuration["CORS_AUTHORITY"];
-            if (corsAuthority != null)
-            {
-                app.UseCors(builder => builder
-                    .WithOrigins(corsAuthority)
-                    .SetIsOriginAllowedToAllowWildcardSubdomains()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-                );
-            }
-
+            app.UseRouting();
+            app.UseCors(Configuration);
             app.UseAuthentication();
 
             app.UseCorrelationId(new CorrelationIdOptions
@@ -125,7 +100,7 @@ namespace NHSOnline.Backend.LoggerApi
                 LogTemplate = "CorrelationId={value}",
             });
 
-            app.UseMvc();
+            app.UseEndpoints(c => c.MapControllers());
         }
     }
 }

@@ -179,8 +179,10 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await _step.Execute(context);
 
             // Assert
-            _mockLogger.VerifyLogger(LogLevel.Error, "Error applying '3' ODS configuration to 'folder1' list",
-                typeof(ArgumentException), Times.Once());
+            _mockLogger.VerifyLogger<ValidateUniqueOdsConfiguration, ArgumentException>(
+                LogLevel.Error,
+                "Error applying '3' ODS configuration to 'folder1' list",
+                Times.Once());
 
             _mockLogger.VerifyLogger(LogLevel.Critical, "Error validating unique ODS code per folder", Times.Once());
             _mockLogger.VerifyNoOtherCalls();

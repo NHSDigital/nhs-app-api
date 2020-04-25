@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
@@ -19,7 +19,6 @@ using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
 using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Http;
-using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.Support.Repository;
 using NHSOnline.Backend.Support.Settings;
@@ -29,13 +28,13 @@ namespace NHSOnline.Backend.UserInfoApi
     public class Startup
     {
         private IConfiguration Configuration { get; }
-        private IHostingEnvironment Environment { get; }
+        private IWebHostEnvironment Environment { get; }
         private bool IsDevelopment => Environment.IsDevelopment();
 
         private readonly ModularStartup _modularStartup;
         private readonly ILogger<Startup> _logger;
 
-        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory, IWebHostEnvironment env)
         {
             Configuration = configuration;
             _modularStartup = new ModularStartup(configuration, loggerFactory);
@@ -49,11 +48,8 @@ namespace NHSOnline.Backend.UserInfoApi
             SetupConfigurationSettings(services);
 
             services
-                .AddMvc(ConfigureMvcOptions)
-                .AddJsonOptions(
-                    options => options.SerializerSettings.ContractResolver =
-                        new CamelCasePropertyNamesContractResolver()
-                ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .AddControllers(ConfigureMvcOptions)
+                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddOptions();
             services.AddCorrelationId();
@@ -118,34 +114,17 @@ namespace NHSOnline.Backend.UserInfoApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
-            loggerFactory.ConfigureLogging(Configuration);
+            app.UsePathBase("/v1");
 
-            if (IsDevelopment)
-            {
-                loggerFactory.AddDebug();
-                app.UseDeveloperExceptionPage();
-            }
-
-            UseSecurityHeaders(app);
+            app.UseSecurityResponseHeadersMiddleware();
             app.UseResponseHeadersMiddleware();
 
-            app.UsePathBase(new PathString("/v1"));
-
-            var corsAuthority = Configuration["CORS_AUTHORITY"];
-            if (corsAuthority != null)
-            {
-                app.UseCors(builder => builder
-                    .WithOrigins(corsAuthority)
-                    .SetIsOriginAllowedToAllowWildcardSubdomains()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-                );
-            }
-
+            app.UseRouting();
+            app.UseCors(Configuration);
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseCorrelationId(new CorrelationIdOptions
             {
@@ -160,7 +139,7 @@ namespace NHSOnline.Backend.UserInfoApi
                 LogTemplate = "CorrelationId={value}",
             });
 
-            app.UseMvc();
+            app.UseEndpoints(b => b.MapControllers());
         }
 
         private void ConfigureAuth(IServiceCollection services)
@@ -193,23 +172,7 @@ namespace NHSOnline.Backend.UserInfoApi
                 {
                 });
         }
-
-        private static void UseSecurityHeaders(IApplicationBuilder app)
-        {
-            app.Use(async (context, next) =>
-            {
-                context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
-                context.Response.Headers.Add("X-Frame-Options", "DENY");
-                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                context.Response.Headers.Add("Referrer-Policy", "no-referrer");
-                context.Response.Headers.Add("Content-Security-Policy", "default-src https:");
-                context.Response.Headers.Add("Strict-Transport-Security",
-                    "max-age=31536000; includeSubDomains; preload");
-
-                await next();
-            });
         }
-    }
 
     internal class HttpTimeoutConfigurationSettings : IHttpTimeoutConfigurationSettings
     {

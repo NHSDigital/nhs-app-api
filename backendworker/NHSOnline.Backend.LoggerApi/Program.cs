@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.LoggerApi
 {
@@ -21,8 +21,7 @@ namespace NHSOnline.Backend.LoggerApi
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseConfiguration(BuildConfiguration(args))
-                // Clear default logging providers these will be added later in startup.
-                .ConfigureLogging((context, logBuilder) => logBuilder.ClearProviders())
+                .ConfigureLogging((context, logBuilder) => logBuilder.ConfigureNhsAppLogging(context.Configuration))
                 .Build();
     }
 }

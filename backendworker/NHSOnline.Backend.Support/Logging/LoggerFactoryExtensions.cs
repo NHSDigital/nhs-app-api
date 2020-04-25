@@ -7,6 +7,12 @@ namespace NHSOnline.Backend.Support.Logging
 {
     public static class LoggerFactoryExtensions
     {
+        public static void ConfigureNhsAppLogging(this ILoggingBuilder loggingBuilder, IConfiguration configuration)
+        {
+            loggingBuilder.ClearProviders();
+            AddProviders(p => loggingBuilder.AddProvider(p), configuration);
+        }
+
         public static void ConfigureLogging(this ILoggingBuilder loggingBuilder, IConfiguration configuration)
             => AddProviders(p => loggingBuilder.AddProvider(p), configuration);
 

@@ -16,8 +16,8 @@ using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Session;
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
 
         private readonly ILogger<Startup> _logger;
 
@@ -62,17 +62,10 @@ namespace NHSOnline.Backend.PfsApi
 
         private ConfigurationSettings _configurationSettings;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
             _env = env;
-
-            loggerFactory.ConfigureLogging(Configuration);
-
-            if (env.IsDevelopment())
-            {
-                loggerFactory.AddConsole(LogLevel.Debug);
-            }
 
             _apiAppVersion = Configuration.GetApiAppVersion();
 
@@ -102,14 +95,12 @@ namespace NHSOnline.Backend.PfsApi
             services.AddMemoryCache();
 
             services
-                .AddMvc(ConfigureMvcOptions)
-                .AddJsonOptions(
-                    options => options.SerializerSettings.ContractResolver =
-                        new CamelCasePropertyNamesContractResolver()
-                ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .AddControllers(ConfigureMvcOptions)
+                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddApiVersioning(options =>
             {
+                options.UseApiBehavior = false; // Treat all controllers as API controller
                 options.DefaultApiVersion = ApiVersion.Parse("1.0");
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.ErrorResponses = new NotFoundErrorResponseProvider();
@@ -264,19 +255,9 @@ namespace NHSOnline.Backend.PfsApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseMiddleware<SessionLoggingScopeMiddleware>();
-
-            app.UseAuthentication();
-
-            loggerFactory.ConfigureLogging(Configuration);
-
-            if (env.IsDevelopment())
-            {
-                loggerFactory.AddDebug();
-                app.UseDeveloperExceptionPage();
-            }
 
             app.Use(async (context, next) =>
             {
@@ -287,19 +268,12 @@ namespace NHSOnline.Backend.PfsApi
 
             app.UseSecurityResponseHeadersMiddleware();
             app.UseResponseHeadersMiddleware();
-            app.UseMiddleware<ProxyAuditingMiddleware>();
 
-            var corsAuthority = Configuration["CORS_AUTHORITY"];
-            if (corsAuthority != null)
-            {
-                app.UseCors(builder => builder
-                    .WithOrigins(corsAuthority)
-                    .SetIsOriginAllowedToAllowWildcardSubdomains()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-                );
-            }
+            app.UseRouting();
+            app.UseCors(Configuration);
+            app.UseAuthentication();
+
+            app.UseMiddleware<ProxyAuditingMiddleware>();
 
             app.UseCorrelationId(new CorrelationIdOptions
             {
@@ -314,7 +288,7 @@ namespace NHSOnline.Backend.PfsApi
                 LogTemplate = "CorrelationId={value}",
             });
 
-            app.UseMvc();
+            app.UseEndpoints(b => b.MapControllers());
 
             _modularStartup.Configure(app, env);
         }

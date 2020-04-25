@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Support.DependencyInjection
         {
         }
 
-        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
         }
     }

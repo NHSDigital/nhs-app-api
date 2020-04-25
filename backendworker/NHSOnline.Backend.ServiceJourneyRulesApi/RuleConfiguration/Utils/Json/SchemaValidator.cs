@@ -11,14 +11,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Json
     internal class SchemaValidator : ISchemaValidator
     {
         private readonly ILogger _logger;
-        private Dictionary<string, JsonSchema4> Schemas { get; } = new Dictionary<string, JsonSchema4>();
+        private Dictionary<string, JsonSchema> Schemas { get; } = new Dictionary<string, JsonSchema>();
 
         public SchemaValidator(ILogger<SchemaValidator> logger)
         {
             _logger = logger;
         }
 
-        private async Task<JsonSchema4> GetJsonSchema(FileData schemaFile)
+        private async Task<JsonSchema> GetJsonSchema(FileData schemaFile)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Json
                     return schema;
                 }
 
-                schema = await JsonSchema4.FromJsonAsync(schemaFile.Data);
+                schema = await JsonSchema.FromJsonAsync(schemaFile.Data);
                 Schemas.Add(schemaFile.Name, schema);
                 
                 return schema;

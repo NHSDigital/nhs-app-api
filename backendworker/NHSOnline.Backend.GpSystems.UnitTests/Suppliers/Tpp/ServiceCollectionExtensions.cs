@@ -37,9 +37,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
         private static bool IsPrimaryHandler(ServiceDescriptor descriptor)
         {
             if (descriptor.ServiceType == typeof(IConfigureOptions<HttpClientFactoryOptions>) &&
-                descriptor.ImplementationFactory != null)
+                descriptor.ImplementationInstance is ConfigureNamedOptions<HttpClientFactoryOptions> configureNamedOptions)
             {
-                return descriptor.ImplementationFactory.Method.Name.StartsWith("<ConfigurePrimaryHttpMessageHandler>", StringComparison.Ordinal);
+                return configureNamedOptions.Action.Method.Name.StartsWith("<ConfigurePrimaryHttpMessageHandler>", StringComparison.Ordinal);
             }
 
             return false;
