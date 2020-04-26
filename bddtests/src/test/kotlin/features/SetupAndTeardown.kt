@@ -71,17 +71,20 @@ class SetupAndTeardown {
         }
 
         if (driver != null) {
-            val logs = driver.manage().logs().get("browser")
+            val logs = driver.manage().logs().get("browser")?.toList() ?: emptyList()
 
             if (scenario.isFailed) {
                 println("Console logs:\r\n$logs")
+            } else {
+                val errorLogs = logs
+                        .filter { it.level == Level.SEVERE }
+                        .filterNot { it.message.contains(CONSOLE_LOG_STRINGS_TO_IGNORE) }
+
+                Assert.assertTrue(
+                        "There should not be any console logs but found:\r\n$errorLogs",
+                        errorLogs.isEmpty())
             }
 
-            val errorLogs = logs
-                    .filter { it.level == Level.SEVERE }
-                    .filterNot { it.message.contains(CONSOLE_LOG_STRINGS_TO_IGNORE) }
-
-            Assert.assertTrue("There should not be any console logs but found:\r\n$errorLogs", errorLogs.isEmpty())
         }
     }
 
