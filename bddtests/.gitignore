@@ -10,6 +10,7 @@ lib/*.jar
 
 # Generated files
 out/
+bin/
 
 # OSX files
 .DS_Store

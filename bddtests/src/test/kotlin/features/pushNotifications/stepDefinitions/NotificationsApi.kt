@@ -11,7 +11,9 @@ import worker.models.userDevices.RegisterUserDevicesRequest
 class NotificationsApi {
 
     companion object {
-        fun postRegistration(authToken: String?) {
+        fun setupRegistration(authToken: String?) = postRegistration(authToken, true)
+
+        fun postRegistration(authToken: String?, propagateException: Boolean = false) {
             val pnsToken = PushNotificationsSerenityHelpers.EXPECTED_PNS.getOrFail<String>()
             val deviceType = PushNotificationsSerenityHelpers.EXPECTED_DEVICE_TYPE.getOrFail<String>()
             val request = RegisterUserDevicesRequest(pnsToken, deviceType)
@@ -23,6 +25,9 @@ class NotificationsApi {
                 PushNotificationsSerenityHelpers.REGISTER_RESPONSE.set(response)
             } catch (httpException: NhsoHttpException) {
                 SerenityHelpers.setHttpException(httpException)
+                if (propagateException) {
+                    throw httpException
+                }
             }
         }
 

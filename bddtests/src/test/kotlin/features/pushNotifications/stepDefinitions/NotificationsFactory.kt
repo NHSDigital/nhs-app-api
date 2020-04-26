@@ -9,8 +9,6 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
 import mongodb.MongoDBConnection
-import mongodb.MongoRepositoryUserDevice
-import org.junit.Assert
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.addToList
@@ -80,10 +78,7 @@ class NotificationsFactory {
     fun setUpExistingRegistration(patient: Patient? = null) {
         val patientToUse = patient ?: SerenityHelpers.getPatient()
         val authToken = patientToUse.accessToken
-        NotificationsApi.postRegistration(authToken)
-        val userDevices = MongoDBConnection.UserDevicesCollection
-                .getValues<MongoRepositoryUserDevice>(MongoRepositoryUserDevice::class.java)
-        Assert.assertNotNull(userDevices)
+        NotificationsApi.setupRegistration(authToken)
     }
 
     fun setUpInvalidMongoDeviceRegistration() {
