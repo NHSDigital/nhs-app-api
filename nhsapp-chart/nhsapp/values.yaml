@@ -507,8 +507,8 @@ users:
   mongoDatabaseUserDeviceCollection: devices
   mongoDatabaseUserDeviceAuditCollection: audit_devices
   environmentVariables:
-  - name: ASPNETCORE_ENVIRONMENT
-    value: "Production"
+    - name: ASPNETCORE_ENVIRONMENT
+      value: "Production"
 
 messages:
   createIngress: true
@@ -531,8 +531,8 @@ messages:
   mongoDatabaseMessagesCollection: messages
   mongoDatabaseMessagesAuditCollection: audit_messages
   environmentVariables:
-  - name: ASPNETCORE_ENVIRONMENT
-    value: "Production"
+    - name: ASPNETCORE_ENVIRONMENT
+      value: "Production"
 
 info:
   createIngress: true
@@ -555,8 +555,8 @@ info:
   mongoDatabaseInfoCollection: info
   mongoDatabaseInfoAuditCollection: audit_info
   environmentVariables:
-  - name: ASPNETCORE_ENVIRONMENT
-    value: "Production"
+    - name: ASPNETCORE_ENVIRONMENT
+      value: "Production"
 
 global:
   environment: default

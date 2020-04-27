@@ -1,7 +1,14 @@
+---
 registry: nhsapp.azurecr.io
 networkPolicyEnabled: true
 
 appImageTag: v1.0.0
+
+clusterIP: ""
+global:
+  environment: default
+dockerRegistrySecret: placeholder
+
 
 sjr:
   createIngress: true
@@ -21,7 +28,7 @@ sjr:
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
-  inputPath: /configurations # From mounted image
+  inputPath: /configurations  # From mounted image
   environmentVariables:
   - name: ASPNETCORE_ENVIRONMENT
     value: "Production"

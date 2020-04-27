@@ -51,7 +51,7 @@ popd
 info "Target App Namespace: ${TARGET_ENVIRONMENT}"
 
 # 1. Create Namespace if it doesn't exist
-[[ $(kubectl get namespace | grep -m1 $TARGET_ENVIRONMENT | awk '{print $2}') != 'Active' ]] && kubectl create namespace $TARGET_ENVIRONMENT
+[[ $(kubectl get namespace | grep -w -m1 "$TARGET_ENVIRONMENT" | awk '{print $2}') != 'Active' ]] && kubectl create namespace $TARGET_ENVIRONMENT
 # Force label consistancy
 kubectl label namespace $TARGET_ENVIRONMENT zone=app --overwrite			# Used by LE anisble job
 kubectl label namespace $TARGET_ENVIRONMENT letsencrypt=apply --overwrite

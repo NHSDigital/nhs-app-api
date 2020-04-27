@@ -29,7 +29,7 @@ spec:
         imagePullPolicy: {{ $.Values.sjrconfig.imagePullPolicy }}
         command: ["/bin/sh", "-c"]
         args:
-          - cp -a /output/. {{ $.Values.sjrconfig.mountPath }};
+        - cp -a /output/. {{ $.Values.sjrconfig.mountPath }};
         volumeMounts:
         - name: sjr-config
           mountPath: {{ $.Values.sjrconfig.mountPath }}
@@ -119,4 +119,4 @@ spec:
       - name: azure-registry-sjr-{{ .Chart.AppVersion }}
       dnsConfig:
         options:
-          - name: single-request-reopen
+        - name: single-request-reopen

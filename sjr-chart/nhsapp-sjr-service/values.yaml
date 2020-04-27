@@ -1,3 +1,7 @@
+---
+global:
+  environment: default
+
 sjr:
   createService: true
   role: sjr
