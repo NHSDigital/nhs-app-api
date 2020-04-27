@@ -145,7 +145,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.TermsAndConditions
             _mongoCollectionMock.Verify(x => x.ReplaceOneAsync(
                 It.IsAny<FilterDefinition<TermsAndConditionsRecord>>(),
                 updatedRecord,
-                null,
+                It.IsAny<ReplaceOptions>(),
                 It.IsAny<CancellationToken>()
             ));
             _mongoCollectionMock.VerifyNoOtherCalls();

@@ -61,23 +61,17 @@ spec:
           value: "{{ $.Values.cdsswiremock.image_tag }}"
         - name: SESSION_ENCRYPTION_KEY_FILE
           value: "/secrets/session-key/session.key"
-        - name: SESSION_MONGO_DATABASE_HOST
-          value: "nhsapp-{{ $.Values.zone }}-mongo.documents.azure.com"
-        - name: SESSION_MONGO_DATABASE_PORT
-          value: "{{ $.Values.cosmosDBMongoDefaultPort }}"
+        - name: MONGO_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
+              key: key
         - name: SESSION_MONGO_DATABASE_NAME
           {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}
           {{- else }}
           value: {{ $.Values.global.environment }}
           {{- end }}
-        - name: SESSION_MONGO_DATABASE_USERNAME
-          value: "nhsapp-{{ $.Values.zone }}-mongo"
-        - name: SESSION_MONGO_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongo-key-{{ .Chart.AppVersion }}
-              key: password
         volumeMounts:
         - name: session-key
           mountPath: "/secrets/session-key"

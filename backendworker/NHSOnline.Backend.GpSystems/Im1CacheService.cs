@@ -82,12 +82,12 @@ namespace NHSOnline.Backend.GpSystems
 
                 var id = GetId(key);
                 var filter = new BsonDocument(id);
-                var document = 
+                var document =
                     new BsonDocument{id, GetConnectionToken(connectionToken), GetDocumentType()};
 
                 using (_logger.WithTimer("Add IM1 connection token to cache"))
                 {
-                    await GetCollection().ReplaceOneAsync(filter, document, new UpdateOptions { IsUpsert = true });
+                    await GetCollection().ReplaceOneAsync(filter, document, new ReplaceOptions { IsUpsert = true });
                 }
             }
             finally
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems
                     _logger.LogDebug("No IM1 connection token value found in cache");
                     return Option.None<T>();
                 }
-                
+
                 var connectionToken = JsonConvert
                     .DeserializeObject<T>(_cipherService.Decrypt(
                         sessionValue[ConnectionTokenElementName]

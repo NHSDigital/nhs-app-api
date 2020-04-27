@@ -367,6 +367,7 @@ helm upgrade "$TARGET_ENVIRONMENT-$appImageTag" \
 	--set zone="$TARGET_ZONE" \
 	--set clusterIP="$PUBLIC_IP_ADDRESS" \
 	--set cosmosDBName="$COSMOS_DB_NAME" \
+	--set region="$REGION" \
 	$STUBBED_OVERRIDES \
 	--namespace $TARGET_ENVIRONMENT \
 	--reset-values \

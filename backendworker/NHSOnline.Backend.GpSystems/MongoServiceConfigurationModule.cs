@@ -1,4 +1,3 @@
-using System.Security.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -21,28 +20,13 @@ namespace NHSOnline.Backend.GpSystems
         {
             var logger = _loggerFactory.CreateLogger<MongoServiceConfigurationModule>();
 
-            var host = configuration.GetOrThrow("SESSION_MONGO_DATABASE_HOST", logger);
-            var port = configuration.GetIntOrThrow("SESSION_MONGO_DATABASE_PORT", logger);
-            var database = configuration.GetOrThrow("SESSION_MONGO_DATABASE_NAME", logger);
-            var username = configuration.GetOrNull("SESSION_MONGO_DATABASE_USERNAME");
-            var password = configuration.GetOrNull("SESSION_MONGO_DATABASE_PASSWORD");
+            var connectionString = configuration.GetOrThrow("MONGO_CONNECTION_STRING", logger);
 
-            var settings = new MongoClientSettings
-            {
-                Server = new MongoServerAddress(host, port)
-            };
+            var mongoUrl = new MongoUrl(connectionString);
+            var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
+            var mongoClient= new MongoClient(mongoClientSettings);
 
-            if (!string.IsNullOrEmpty(username))
-            {
-                settings.UseSsl = true;
-                settings.SslSettings = new SslSettings { EnabledSslProtocols = SslProtocols.Tls12 };
-
-                var identity = new MongoInternalIdentity(database, username);
-                var evidence = new PasswordEvidence(password);
-                settings.Credential = new MongoCredential("SCRAM-SHA-1", identity, evidence);
-            }
-
-            services.AddSingleton<IMongoClient>(new MongoClient(settings));
+            services.AddSingleton<IMongoClient>(mongoClient);
 
             base.ConfigureServices(services, configuration);
         }

@@ -1,4 +1,3 @@
-using System.Security.Authentication;
 using MongoDB.Driver;
 
 namespace NHSOnline.Backend.Support.Repository
@@ -12,22 +11,9 @@ namespace NHSOnline.Backend.Support.Repository
 
         private static MongoClientSettings BuildSettings(TConfiguration mongoConfiguration)
         {
-            var username = mongoConfiguration.Username;
-            var settings = new MongoClientSettings
-            {
-                Server = new MongoServerAddress(mongoConfiguration.Host, mongoConfiguration.Port)
-            };
-
-            if (string.IsNullOrEmpty(username)) return settings;
-            
-            settings.UseSsl = true;
-            settings.SslSettings = new SslSettings { EnabledSslProtocols = SslProtocols.Tls12 };
-
-            var identity = new MongoInternalIdentity(mongoConfiguration.DatabaseName, username);
-            var evidence = new PasswordEvidence(mongoConfiguration.Password);
-            settings.Credential = new MongoCredential("SCRAM-SHA-1", identity, evidence);
-
-            return settings;
+            var mongoUrl = new MongoUrl(mongoConfiguration.ConnectionString);
+            var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
+            return mongoClientSettings;
         }
     }
 }

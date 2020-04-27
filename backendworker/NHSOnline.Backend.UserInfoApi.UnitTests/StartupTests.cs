@@ -40,14 +40,35 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]
+        public void ConfigureServices_MongoConfiguration_WhenConnectionStringIsInvalid_ThrowsException(string connectionString)
+        {
+            // Arrange
+            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(connectionString);
+            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_COLLECTION"])
+                .Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
+            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
+
+            // Act
+            Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
+
+            // Assert
+            act.Should().Throw<ConfigurationNotValidException>()
+                .Which.Message.Should().Contain("DEVICES_MONGO_CONNECTION_STRING");
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
         public void ConfigureServices_MongoConfiguration_WhenDatabaseNameIsInvalid_ThrowsException(string databaseName)
         {
             // Arrange
+            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_NAME"]).Returns(databaseName);
             _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_COLLECTION"])
                 .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_HOST"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_PORT"]).Returns($"{_fixture.Create<int>()}");
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
@@ -69,11 +90,10 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
         )
         {
             // Arrange
+            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_COLLECTION"])
                 .Returns(messagesCollection);
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_HOST"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_PORT"]).Returns($"{_fixture.Create<int>()}");
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
@@ -87,70 +107,17 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
         }
 
         [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        public void ConfigureServices_MongoConfiguration_WhenHostIsInvalid_ThrowsException(string host)
-        {
-            // Arrange
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_COLLECTION"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_HOST"]).Returns(host);
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_PORT"]).Returns($"{_fixture.Create<int>()}");
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
-
-            // Act
-            Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
-
-            // Assert
-            act.Should().Throw<ConfigurationNotValidException>()
-                .Which.Message.Should().Contain("USERINFO_MONGO_DATABASE_HOST");
-        }
-
-        [TestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow("sss")]
-        public void ConfigureServices_MongoConfiguration_WhenPortIsInvalid_ThrowsException(string port)
-        {
-            // Arrange
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_COLLECTION"])
-                .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_HOST"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_PORT"]).Returns(port);
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
-
-            // Act
-            Action act = () => _fixture.Do<IServiceCollection>(x => _systemUnderTest.ConfigureServices(x));
-
-            // Assert
-            act.Should().Throw<ConfigurationNotValidException>()
-                .Which.Message.Should().Contain("USERINFO_MONGO_DATABASE_PORT");
-        }
-
-        [TestMethod]
         public void ConfigureServices_MongoConfiguration_WhenAllValuesAreProvided_MapsToProperties()
         {
             // Arrange
+            var connectionString = _fixture.Create<string>();
             var databaseName = _fixture.Create<string>();
             var messsagesCollection = _fixture.Create<string>();
-            var host = _fixture.Create<string>();
-            var port = _fixture.Create<int>();
-            var username = _fixture.Create<string>();
-            var password = _fixture.Create<string>();
 
+            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(connectionString);
             _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_NAME"]).Returns(databaseName);
             _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_COLLECTION"])
                 .Returns(messsagesCollection);
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_HOST"]).Returns(host);
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_PORT"]).Returns($"{port}");
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_USERNAME"]).Returns(username);
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_PASSWORD"]).Returns(password);
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());
@@ -173,12 +140,9 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
             using (new AssertionScope())
             {
                 mongoConfiguration.Should().NotBeNull();
+                mongoConfiguration.ConnectionString.Should().Be(connectionString);
                 mongoConfiguration.DatabaseName.Should().Be(databaseName);
                 mongoConfiguration.CollectionName.Should().Be(messsagesCollection);
-                mongoConfiguration.Host.Should().Be(host);
-                mongoConfiguration.Port.Should().Be(port);
-                mongoConfiguration.Username.Should().Be(username);
-                mongoConfiguration.Password.Should().Be(password);
             }
         }
 
@@ -217,7 +181,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
         {
             // Arrange
             SetupAllConfiguration();
-            
+
             _mockHostingEnvironment.SetupGet(x => x.EnvironmentName).Returns(EnvironmentName.Development);
 
             var mockServiceCollection = _fixture.Create<Mock<IServiceCollection>>();
@@ -244,13 +208,10 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests
 
         private void SetupAllConfiguration()
         {
+            _mockConfiguration.Setup(x => x["DEVICES_MONGO_CONNECTION_STRING"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_NAME"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_COLLECTION"])
                 .Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_HOST"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_PORT"]).Returns($"{_fixture.Create<int>()}");
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_USERNAME"]).Returns(_fixture.Create<string>());
-            _mockConfiguration.Setup(x => x["USERINFO_MONGO_DATABASE_PASSWORD"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_CLIENT_ID"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_JWT_ISSUER"]).Returns(_fixture.Create<string>());
             _mockConfiguration.Setup(x => x["CITIZEN_ID_BASE_URL"]).Returns(_fixture.Create<string>());

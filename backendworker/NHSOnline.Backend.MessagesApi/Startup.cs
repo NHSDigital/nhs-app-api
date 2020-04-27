@@ -72,15 +72,12 @@ namespace NHSOnline.Backend.MessagesApi
 
         private IMongoConfiguration CreateMongoConfiguration()
         {
+            var connectionString = Configuration.GetOrThrow("DEVICES_MONGO_CONNECTION_STRING", _logger);
             var databaseName = Configuration.GetOrThrow("MESSAGES_MONGO_DATABASE_NAME", _logger);
             var messagesCollectionName =
                 Configuration.GetOrThrow("MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION", _logger);
-            var host = Configuration.GetOrThrow("MESSAGES_MONGO_DATABASE_HOST", _logger);
-            var port = Configuration.GetIntOrThrow("MESSAGES_MONGO_DATABASE_PORT", _logger);
-            var username = Configuration.GetOrNull("MESSAGES_MONGO_DATABASE_USERNAME");
-            var password = Configuration.GetOrNull("MESSAGES_MONGO_DATABASE_PASSWORD");
 
-            return new MongoConfiguration(host, port, databaseName, username, password, messagesCollectionName);
+            return new MongoConfiguration(connectionString, databaseName,  messagesCollectionName);
         }
 
         private static void ConfigureMvcOptions(MvcOptions options)

@@ -236,7 +236,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Repository
                 => x.ReplaceOneAsync(
                     It.IsAny<FilterDefinition<UserMessage>>(),
                     userMessage,
-                    It.IsAny<UpdateOptions>(),
+                    It.IsAny<ReplaceOptions>(),
                     It.IsAny<CancellationToken>()
                 )
             );

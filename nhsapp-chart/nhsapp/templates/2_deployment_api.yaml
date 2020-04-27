@@ -364,40 +364,23 @@ spec:
           {{- else }}
           value: {{ $.Values.global.environment }}
           {{- end }}
-        - name: CONSENT_MONGO_DATABASE_HOST
-          value: "nhsapp-{{ $.Values.zone }}-mongo.documents.azure.com"
-        - name: CONSENT_MONGO_DATABASE_PORT
-          value: "{{ $.Values.cosmosDBMongoDefaultPort }}"
         - name: CONSENT_MONGO_DATABASE_NAME
           {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
           {{- else }}
           value: {{ $.Values.global.environment }}-mongo
           {{- end }}
-        - name: CONSENT_MONGO_DATABASE_USERNAME
-          value: "nhsapp-{{ $.Values.zone }}-mongo"
-        - name: CONSENT_MONGO_DATABASE_PASSWORD
+        - name: MONGO_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
-              name: cosmosdb-mongo-key-{{ .Chart.AppVersion }}
-              key: password
-        - name: SESSION_MONGO_DATABASE_HOST
-          value: "nhsapp-{{ $.Values.zone }}-mongo.documents.azure.com"
-        - name: SESSION_MONGO_DATABASE_PORT
-          value: "{{ $.Values.cosmosDBMongoDefaultPort }}"
+              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
+              key: key
         - name: SESSION_MONGO_DATABASE_NAME
-          {{- if $.Values.cosmosDBName }}
+        {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}
-          {{- else }}
+        {{- else }}
           value: {{ $.Values.global.environment }}
-          {{- end }}
-        - name: SESSION_MONGO_DATABASE_USERNAME
-          value: "nhsapp-{{ $.Values.zone }}-mongo"
-        - name: SESSION_MONGO_DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongo-key-{{ .Chart.AppVersion }}
-              key: password
+        {{- end }}
         {{- if $.Values.appInsightsEnabled }}
         - name: APPINSIGHTS_INSTRUMENTATIONKEY
           valueFrom:

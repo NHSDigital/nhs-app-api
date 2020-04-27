@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             _logger = logger;
 
             _databaseName = config.MongoDatabaseName;
-            _collectionName = config.MongoDatabaseIm1CollectionName;
+            _collectionName = config.MongoDatabaseSessionCollectionName;
         }
 
         public async Task<string> CreateUserSession(UserSession userSession)

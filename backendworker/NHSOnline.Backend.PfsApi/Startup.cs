@@ -248,15 +248,12 @@ namespace NHSOnline.Backend.PfsApi
 
         private IMongoConfiguration CreateMongoConfiguration()
         {
+            var connectionString = Configuration.GetOrThrow("MONGO_CONNECTION_STRING", _logger);
             var databaseName = Configuration.GetOrThrow("CONSENT_MONGO_DATABASE_NAME", _logger);
-            var userDeviceCollectionName =
+            var collectionName =
                 Configuration.GetOrThrow("CONSENT_MONGO_DATABASE_COLLECTION", _logger);
-            var host = Configuration.GetOrThrow("CONSENT_MONGO_DATABASE_HOST", _logger);
-            var port = Configuration.GetIntOrThrow("CONSENT_MONGO_DATABASE_PORT", _logger);
-            var username = Configuration.GetOrNull("CONSENT_MONGO_DATABASE_USERNAME");
-            var password = Configuration.GetOrNull("CONSENT_MONGO_DATABASE_PASSWORD");
 
-            return new MongoConfiguration(host, port, databaseName, username, password, userDeviceCollectionName);
+            return new MongoConfiguration(connectionString, databaseName, collectionName);
         }
 
         private SessionConfigurationSettings CreateAndValidateProxyEnvironmentVariables()

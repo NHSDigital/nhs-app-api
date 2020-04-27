@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
             mongoCollectionMock.Setup(
                     x => x.ReplaceOneAsync(It.IsAny<FilterDefinition<UserAndInfo>>(),
                         It.IsAny<UserAndInfo>(),
-                        new UpdateOptions { IsUpsert = true },
+                        new ReplaceOptions { IsUpsert = true },
                         default))
                 .ReturnsAsync(_fixture.Create<Mock<ReplaceOneResult>>().Object);
 

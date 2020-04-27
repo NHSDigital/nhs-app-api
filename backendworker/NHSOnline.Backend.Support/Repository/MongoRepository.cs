@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Support.Repository
         protected async Task CreateOrUpdateOne(Expression<Func<TRecord, bool>> filter, TRecord record)
         {
             record.Timestamp = DateTime.UtcNow;
-            await GetCollection().ReplaceOneAsync(filter, record, new UpdateOptions { IsUpsert = true });
+            await GetCollection().ReplaceOneAsync(filter, record, new ReplaceOptions { IsUpsert = true });
         }
 
         protected async Task DeleteOne(Expression<Func<TRecord, bool>> filter)

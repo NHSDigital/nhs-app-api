@@ -18,6 +18,7 @@ clusterIP: ""
 zone: {}
 domain: ""
 networkPolicyEnabled: true
+region: uksouth
 
 registry: nhsapp.azurecr.io
 

@@ -67,46 +67,34 @@ spec:
           value: "{{ $.Values.info.image_tag }}"
         - name: SESSION_ENCRYPTION_KEY_FILE
           value: "/secrets/session-key/session.key"
-        - name: USERINFO_MONGO_DATABASE_HOST
-          value: "nhsapp-{{ $.Values.zone }}-devices.documents.azure.com"
-        - name: USERINFO_MONGO_DATABASE_PORT
-          value: "{{ $.Values.cosmosDBMongoDefaultPort }}"
         - name: CORS_AUTHORITY
           value: "https://*.{{ $.Values.domain }}"
-        - name: USERINFO_MONGO_DATABASE_NAME
-          {{- if $.Values.cosmosDBName }}
-          value: {{ $.Values.cosmosDBName }}
-          {{- else }}
-          value: {{ $.Values.global.environment }}
-          {{- end }}
-        - name: USERINFO_MONGO_DATABASE_USERNAME
-          value: "nhsapp-{{ $.Values.zone }}-devices"
-        - name: USERINFO_MONGO_DATABASE_PASSWORD
+        - name: DEVICES_MONGO_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
-              name: cosmosdb-devices-key-{{ .Chart.AppVersion }}
-              key: password
+              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
+              key: key
+        - name: USERINFO_MONGO_DATABASE_NAME
+        {{- if $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}
+        {{- else }}
+          value: {{ $.Values.global.environment }}
+        {{- end }}
         - name: USERINFO_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.info.mongoDatabaseInfoCollection }}
-        - name: AUDIT_MONGO_DATABASE_HOST
-          value: "nhsapp-{{ $.Values.zone }}-devices.documents.azure.com"
-        - name: AUDIT_MONGO_DATABASE_PASSWORD
+        - name: AUDIT_MONGO_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
-              name: cosmosdb-devices-key-{{ .Chart.AppVersion }}
-              key: password
+              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
+              key: key
         - name: AUDIT_MONGO_DATABASE_NAME
-          {{- if $.Values.cosmosDBName }}
+        {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}
-          {{- else }}
+        {{- else }}
           value: {{ $.Values.global.environment }}
-          {{- end }}      
+        {{- end }}
         - name: AUDIT_MONGO_DATABASE_COLLECTION
           value: audit_info
-        - name: AUDIT_MONGO_DATABASE_PORT
-          value: "{{ $.Values.cosmosDBMongoDefaultPort }}"
-        - name: AUDIT_MONGO_DATABASE_USERNAME
-          value: "nhsapp-{{ $.Values.zone }}-devices"
         - name: AUDIT_SINK_TYPE
           value: "MONGO"
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
