@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
@@ -18,18 +16,15 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         private readonly IInfoService _infoService;
         private readonly ICitizenIdService _citizenIdService;
         private readonly ILogger<InfoController> _logger;
-        private readonly IAuditor _auditor;
 
         public InfoController(
             IInfoService infoService,
             ICitizenIdService citizenIdService,
-            ILogger<InfoController> logger,
-            IAuditor auditor)
+            ILogger<InfoController> logger)
         {
             _infoService = infoService;
             _citizenIdService = citizenIdService;
             _logger = logger;
-            _auditor = auditor;
         }
 
         [HttpPost]
@@ -41,11 +36,6 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
                 _logger.LogEnter();
 
                 var accessToken = HttpContext.GetAccessToken(_logger);
-                
-                await _auditor.AuditSecureTokenEvent(accessToken,
-                    Supplier.Microsoft,
-                    AuditingOperations.PostUserInfoAuditTypeRequest,
-                    "Attempting to post users info");
 
                 var odsCode = await GetOdsCode(accessToken);
 
@@ -55,7 +45,6 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
                 }
                 var result = await _infoService.Send(accessToken, odsCode);
 
-                await result.Accept(new PostInfoAuditingVisitor(_logger, _auditor, accessToken));
                 return result.Accept(new PostInfoResultVisitor());
             }
             catch (Exception e)
@@ -79,14 +68,8 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 
                 var accessToken = HttpContext.GetAccessToken(_logger);
 
-                await _auditor.AuditSecureTokenEvent(accessToken,
-                    Supplier.Microsoft,
-                    AuditingOperations.GetUserInfoAuditTypeRequest,
-                    "Attempting to get users info");
-
                 var result = await _infoService.GetInfo(accessToken);
 
-                await result.Accept(new GetInfoAuditingVisitor(_logger, _auditor, accessToken));
                 return result.Accept(new GetInfoResultVisitor());
             }
             catch (Exception e)

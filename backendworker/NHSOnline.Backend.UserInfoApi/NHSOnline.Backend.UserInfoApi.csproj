@@ -20,6 +20,5 @@
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Auth\NHSOnline.Backend.Auth.csproj" />
-    <ProjectReference Include="..\NHSOnline.Backend.Auditing\NHSOnline.Backend.Auditing.csproj" />
   </ItemGroup>
 </Project>

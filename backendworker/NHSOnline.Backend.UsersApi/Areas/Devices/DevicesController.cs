@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
@@ -19,21 +18,18 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
     {
         private readonly INotificationService _notificationService;
         private readonly IDeviceRepositoryService _deviceRepositoryService;
-        private readonly IAuditor _auditor;
         private readonly ILogger<DevicesController> _logger;
 
         public DevicesController
         (
             INotificationService notificationService,
             IDeviceRepositoryService deviceRepositoryService,
-            ILogger<DevicesController> logger,
-            IAuditor auditor
+            ILogger<DevicesController> logger
         )
         {
             _notificationService = notificationService;
             _deviceRepositoryService = deviceRepositoryService;
             _logger = logger;
-            _auditor = auditor;
         }
 
         [HttpGet]
@@ -50,22 +46,12 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
 
                 var accessToken = HttpContext.GetAccessToken(_logger);
 
-                await _auditor.AuditSecureTokenEvent(accessToken, Supplier.Microsoft,
-                    AuditingOperations.UsersDeviceGetAuditTypeRequest,
-                    "Attempting to get user notification registration");
-
                 try
                 {
                     var searchDeviceResult = await _deviceRepositoryService.Find(devicePns, accessToken);
 
                     if (!(searchDeviceResult is SearchDeviceResult.Found foundDeviceResult))
                     {
-                        await searchDeviceResult.Accept(
-                            new SearchDeviceAuditingVisitor(
-                                _logger,
-                                _auditor,
-                                accessToken,
-                                AuditingOperations.UsersDeviceGetAuditTypeResponse));
                         return searchDeviceResult.Accept(new SearchDeviceResultVisitor());
                     }
 
@@ -98,11 +84,7 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
                 }
 
                 var accessToken = HttpContext.GetAccessToken(_logger);
-
-                await _auditor.AuditSecureTokenEvent(accessToken, Supplier.Microsoft,
-                    AuditingOperations.UsersDeviceDeleteAuditTypeRequest,
-                    "Attempting to delete user notification registration");
-
+                
                 try
                 {
                     return await Delete(devicePns, accessToken);
@@ -124,11 +106,6 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             var searchDeviceResult = await _deviceRepositoryService.Find(devicePns, accessToken);
             if (!(searchDeviceResult is SearchDeviceResult.Found foundDeviceResult))
             {
-                await searchDeviceResult.Accept(
-                    new SearchDeviceAuditingVisitor(_logger,
-                        _auditor,
-                        accessToken,
-                        AuditingOperations.UsersDeviceDeleteAuditTypeResponse));
                 {
                     return searchDeviceResult.Accept(new SearchDeviceResultVisitor());
                 }
@@ -139,19 +116,10 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             var deleteRegistrationResult = await _notificationService.Delete(userDevice.RegistrationId);
             if (!(deleteRegistrationResult is DeleteRegistrationResult.Success))
             {
-                await deleteRegistrationResult.Accept(
-                    new DeleteRegistrationAuditingVisitor(_logger, _auditor, accessToken));
-                {
-                    return deleteRegistrationResult.Accept(new DeleteRegistrationResultVisitor());
-                }
+                return deleteRegistrationResult.Accept(new DeleteRegistrationResultVisitor());
             }
 
             var deleteDeviceResult = await _deviceRepositoryService.Delete(userDevice.DeviceId, accessToken);
-            await deleteDeviceResult.Accept(new DeleteDeviceAuditingVisitor(
-                _logger,
-                _auditor,
-                accessToken,
-                AuditingOperations.UsersDeviceDeleteAuditTypeResponse));
             return deleteDeviceResult.Accept(new DeleteDeviceResultVisitor());
         }
 
@@ -169,25 +137,17 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
 
                 var accessToken = HttpContext.GetAccessToken(_logger);
 
-                await _auditor.AuditSecureTokenEvent(accessToken, Supplier.Microsoft,
-                    AuditingOperations.UsersDevicePostAuditTypeRequest,
-                    "Attempting to register user notification registration");
-
                 try
                 {
                     var registrationResponse = await _notificationService.Register(model, accessToken);
 
                     if (!(registrationResponse is RegistrationResult.Success successRegistrationResult))
                     {
-                        await registrationResponse.Accept(
-                            new NotificationRegistrationAuditingVisitor(_auditor, _logger, accessToken));
                         return registrationResponse.Accept(new NotificationRegistrationResultVisitor());
                     }
 
                     var deviceRepositoryResult =
                         await _deviceRepositoryService.Create(successRegistrationResult.Response, model, accessToken);
-                    await deviceRepositoryResult.Accept(
-                        new RegistrationRepositoryAuditingVisitor(_auditor, _logger, accessToken));
                     return deviceRepositoryResult.Accept(new DeviceRegistrationResultVisitor(model));
                 }
                 catch (Exception e)
@@ -229,16 +189,12 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             switch (registrationResult)
             {
                 case RegistrationExistsResult.Found _:
-                    await registrationResult.Accept(
-                        new RegistrationExistsAuditingVisitor(_logger, _auditor, accessToken));
                     return foundDeviceResult.Accept(new SearchDeviceResultVisitor());
 
                 case RegistrationExistsResult.NotFound _:
                     return await DeleteOrphanDeviceRecord(foundDeviceResult.UserDevice, accessToken);
 
                 default:
-                    await registrationResult.Accept(
-                        new RegistrationExistsAuditingVisitor(_logger, _auditor, accessToken));
                     return registrationResult.Accept(new RegistrationExistsResultVisitor());
             }
         }
@@ -252,19 +208,8 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             if (deleteDeviceResult is DeleteDeviceResult.Success)
             {
                 var result = new SearchDeviceResult.NotFound();
-                await result.Accept(
-                    new SearchDeviceAuditingVisitor(_logger,
-                        _auditor,
-                        accessToken,
-                        AuditingOperations.UsersDeviceGetAuditTypeResponse));
                 return result.Accept(new SearchDeviceResultVisitor());
             }
-
-            await deleteDeviceResult.Accept(
-                new DeleteDeviceAuditingVisitor(_logger,
-                    _auditor,
-                    accessToken,
-                    AuditingOperations.UsersDeviceGetAuditTypeResponse));
             return deleteDeviceResult.Accept(new DeleteDeviceResultVisitor());
         }
     }

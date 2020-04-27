@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.AspNet.Filters;
@@ -97,7 +96,6 @@ namespace NHSOnline.Backend.UsersApi
 
         private static void ConfigureMvcOptions(MvcOptions options)
         {
-            options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
             options.Filters.Add(new AuthorizeFilter(

@@ -68,12 +68,6 @@ namespace NHSOnline.Backend.Auditing
             await AuditInternal(nhsLoginSubject, nhsNumber, false, supplier, operation, details, parameters);
         }
 
-        public Task AuditSecureTokenEvent(AccessToken accessToken, Supplier supplier, string operation, string details,
-            params object[] parameters)
-        {
-            return AuditInternal(accessToken.Subject, accessToken.NhsNumber, false, supplier, operation, details, parameters);
-        }
-
         public IDisposable BeginScope(HttpContext httpContext)
         {
             _scopeProvider.Value = new HttpContextAuditorScope(httpContext, _configuration);

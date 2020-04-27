@@ -82,21 +82,6 @@ spec:
         {{- end }}
         - name: USERINFO_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.info.mongoDatabaseInfoCollection }}
-        - name: AUDIT_MONGO_CONNECTION_STRING
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
-              key: key
-        - name: AUDIT_MONGO_DATABASE_NAME
-        {{- if $.Values.cosmosDBName }}
-          value: {{ $.Values.cosmosDBName }}
-        {{- else }}
-          value: {{ $.Values.global.environment }}
-        {{- end }}
-        - name: AUDIT_MONGO_DATABASE_COLLECTION
-          value: audit_info
-        - name: AUDIT_SINK_TYPE
-          value: "MONGO"
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
         - name: CITIZEN_ID_JWT_ISSUER
           value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/citizenid/"

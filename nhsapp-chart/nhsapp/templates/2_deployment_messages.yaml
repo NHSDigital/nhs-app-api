@@ -79,21 +79,6 @@ spec:
         {{- end }}
         - name: MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION
           value: {{ $.Values.messages.mongoDatabaseMessagesCollection }}
-        - name: AUDIT_MONGO_CONNECTION_STRING
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
-              key: key
-        - name: AUDIT_MONGO_DATABASE_NAME
-        {{- if $.Values.cosmosDBName }}
-          value: {{ $.Values.cosmosDBName }}
-        {{- else }}
-          value: {{ $.Values.global.environment }}
-        {{- end }}
-        - name: AUDIT_MONGO_DATABASE_COLLECTION
-          value: audit_messages
-        - name: AUDIT_SINK_TYPE
-          value: "MONGO"
         - name: CITIZEN_ID_AUTHENTICATION_TYPE
           value: "{{ $.Values.cidAuthenticationType }}"
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}
