@@ -5,6 +5,7 @@ object WorkerPaths {
     const val patientIm1ConnectionV2 = "/v2/patient/im1connection"
     const val patientIm1ConnectionV1 = "/v1/patient/im1connection"
     const val sessionConnection = "/v1/session"
+    const val refreshAccessToken = "/v1/patient/authorization/access-token/refresh"
     const val getPrescriptionsConnection = "/v1/patient/prescriptions"
     const val postPrescriptionsConnection = "/v1/patient/prescriptions"
     const val getCoursesConnection = "/v1/patient/courses"

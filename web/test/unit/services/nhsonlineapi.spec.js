@@ -140,9 +140,14 @@ describe('services/nhsonlineapi', () => {
 
       describe('set to true', () => {
         beforeEach(() => {
+          store.dispatch.mockImplementation('auth/ensureAccessToken').mockReturnValue(accessToken);
           const api = createRequestApi();
           api.cookie = 'double chocolate fudge';
           request({ headers, useAccessToken: true });
+        });
+
+        it('will call dispatch to get the access token', () => {
+          expect(store.dispatch).toHaveBeenCalledWith('auth/ensureAccessToken');
         });
 
         it('will set the Authorization header', () => {

@@ -12,5 +12,6 @@ namespace NHSOnline.Backend.Support
         public string IdTokenJti { get; set; }
         public ProofLevel ProofLevel { get; set; }
         public string OdsCode { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

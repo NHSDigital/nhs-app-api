@@ -1,0 +1,34 @@
+openapi: 3.0.2
+info:
+  version: 0.0.1
+  title: NHS App Sub-API - Authorization
+  description: NHS App Sub-API - endpoints pertaining to authorisation require
+    NHSO-Session-Id cookie in header from session endpoint.
+paths:
+  /access-token/refresh:
+    post:
+      tags:
+        - authorization
+        - tokens
+      summary: Refreshes a user`s access token
+      description: Refreshes a users access token by calling NhsLogin with the users refresh token, returns the refreshed access token. Requires
+        NHSO-Session-Id cookie in header from session endpoint.
+      responses:
+        "200":
+          description: Access token successfuly refreshed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Signed Jwt.
+        "401":
+          description: User session has expired.
+        "500":
+          description: An unexpected error occurred during the processing of the request.
+        "502":
+          description: Could not refresh token. There is a problem with an upstream request.
+        "504":
+          description: Timeout when calling upstream system.

@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -439,6 +440,78 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             actualUserProfile.Im1ConnectionToken.Should().Be(userProfileResponse.Body.Im1ConnectionToken);
             actualUserProfile.OdsCode.Should().Be(userProfileResponse.Body.GpIntegrationCredentials.OdsCode);
             actualUserProfile.AccessToken.Should().Be(accessToken);
+        }
+
+        [TestMethod]
+        public async Task RefreshAccessToken_HappyPath_ReturnsSuccessResult()
+        {
+            // Arrange
+            var refreshToken = _fixture.Create<string>();
+            var token = _fixture.Create<Token>();
+
+            var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
+            {
+                Body = token,
+                ErrorResponse = null
+            };
+
+            var accessToken = tokenResponse.Body.AccessToken;
+            var refreshAccessTokenResponse = new RefreshAccessTokenResult.Success(accessToken);
+
+            _citizenIdClientMock
+                .Setup(x => x.RefreshAccessToken(refreshToken))
+                .ReturnsAsync(tokenResponse);
+
+            // Act
+            var actualResult = await _systemUnderTest.RefreshAccessToken(refreshToken);
+
+            // Assert
+            _citizenIdClientMock.VerifyAll();
+            actualResult.Should().BeOfType<RefreshAccessTokenResult.Success>();
+            actualResult.Should().BeEquivalentTo(refreshAccessTokenResponse);
+        }
+
+        [TestMethod]
+        public async Task RefreshAccessToken_ErrorResult_ReturnsBadGatewayResult()
+        {
+            // Arrange
+            var refreshToken = _fixture.Create<string>();
+
+            var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.BadRequest)
+            {
+                Body = null,
+                ErrorResponse = new ErrorResponse { Error = "Something went wrong" }
+            };
+
+            _citizenIdClientMock
+                .Setup(x => x.RefreshAccessToken(refreshToken))
+                .ReturnsAsync(tokenResponse);
+
+            // Act
+            var actualResult = await _systemUnderTest.RefreshAccessToken(refreshToken);
+
+            // Assert
+            _citizenIdClientMock.VerifyAll();
+            actualResult.Should().BeOfType<RefreshAccessTokenResult.BadGateway>();
+        }
+
+        [TestMethod]
+        public async Task RefreshAccessToken_ThrowsException_ReturnsInternalServerErrorResult()
+        {
+            // Arrange
+            var refreshToken = _fixture.Create<string>();
+
+            _citizenIdClientMock
+                .Setup(x => x.RefreshAccessToken(It.IsAny<string>()))
+                .ThrowsAsync(new HttpRequestException("An error occured"))
+                .Verifiable();
+
+            // Act
+            var actualResult = await _systemUnderTest.RefreshAccessToken(refreshToken);
+
+            // Assert
+            _citizenIdClientMock.VerifyAll();
+            actualResult.Should().BeOfType<RefreshAccessTokenResult.InternalServerError>();
         }
     }
 }

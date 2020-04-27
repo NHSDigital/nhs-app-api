@@ -7,6 +7,7 @@ import mockingFacade.linkage.LinkageInformationFacade
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
+import worker.models.authorization.RefreshAccessTokenResponse
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
 import worker.models.linkedAccounts.LinkedAccountsConfigResponse
@@ -142,5 +143,14 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
         return gson.fromJson(result, LinkedAccountsConfigResponse::class.java)
+    }
+
+    fun postRefreshAccessToken(sessionCookie: Cookie? = null): RefreshAccessTokenResponse {
+        val httpPost = HttpPost(config.apiBackendUrl + WorkerPaths.refreshAccessToken)
+        if (sessionCookie != null) httpPost.addHeader("Cookie", sessionCookie.value.split(";")[0])
+
+        val result = sender.sendAsyncAndGetResult(httpPost, null)
+        httpPost.releaseConnection()
+        return gson.fromJson(result, RefreshAccessTokenResponse::class.java)
     }
 }

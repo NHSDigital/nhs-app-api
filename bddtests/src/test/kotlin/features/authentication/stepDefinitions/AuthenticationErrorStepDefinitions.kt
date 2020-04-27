@@ -121,7 +121,7 @@ class AuthenticationErrorStepDefinitions {
     private fun setupAndTimeout(patient: Patient, gpSystem: Supplier) {
         SerenityHelpers.setPatient(patient)
 
-        CitizenIdSessionCreateJourney(mockingClient).createTimeoutfor(patient)
+        CitizenIdSessionCreateJourney(mockingClient).createTimeoutFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
 
         browser.goToApp()

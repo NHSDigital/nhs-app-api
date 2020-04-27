@@ -79,11 +79,11 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _mockCitizenIdJwtHelper.Setup(x => x.CreateClientAuthJwt())
                 .Returns(jwt);
 
-            var dict = CreateTokenBody(authCode, redirectUrl, codeVerifier, jwt);
+            var tokenBody = CreateTokenBody(authCode, redirectUrl, codeVerifier, jwt);
 
             _mockHttpHandler
                 .When(HttpMethod.Post, new Uri(_citizenIdApiBaseUrl, _nhsLoginTokenPath).ToString())
-                .WithFormData(dict)
+                .WithFormData(tokenBody)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedTokenResponse));
 
             // Act
@@ -109,11 +109,11 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _mockCitizenIdJwtHelper.Setup(x => x.CreateClientAuthJwt())
                 .Returns(jwt);
 
-            var dict = CreateTokenBody(authCode, redirectUrl, codeVerifier, jwt);
+            var tokenBody = CreateTokenBody(authCode, redirectUrl, codeVerifier, jwt);
 
             _mockHttpHandler
                 .When(HttpMethod.Post, new Uri(_citizenIdApiBaseUrl, _nhsLoginTokenPath).ToString())
-                .WithFormData(dict)
+                .WithFormData(tokenBody)
                 .Respond(HttpStatusCode.Forbidden, "application/json",
                     JsonConvert.SerializeObject(expectedErrorResponse));
 
@@ -283,6 +283,63 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
 
+        [TestMethod]
+        public async Task RefreshAccessToken_HappyPath()
+        {
+            // Arrange
+            var refreshToken = _fixture.Create<string>();
+            var jwt = _fixture.Create<string>();
+            var expectedTokenResponse = _fixture.Create<Token>();
+
+            _mockCitizenIdJwtHelper.Setup(x => x.CreateClientAuthJwt())
+                .Returns(jwt);
+
+            var tokenBody = CreateRefreshTokenBody(refreshToken, jwt);
+
+            _mockHttpHandler
+                .When(HttpMethod.Post, new Uri(_citizenIdApiBaseUrl, _nhsLoginTokenPath).ToString())
+                .WithFormData(tokenBody)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedTokenResponse));
+
+            // Act
+            var response = await _systemUnderTest.RefreshAccessToken(refreshToken);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedTokenResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ErrorResponse.Should().BeNull();
+            _mockHttpHandler.VerifyNoOutstandingExpectation();
+        }
+
+        [TestMethod]
+        public async Task RefreshAccessToken_ErrorResponseReceived_ReturnsErrorMessage()
+        {
+            // Arrange
+            var refreshToken = _fixture.Create<string>();
+            var jwt = _fixture.Create<string>();
+            var expectedErrorResponse = _fixture.Create<ErrorResponse>();
+
+            _mockCitizenIdJwtHelper.Setup(x => x.CreateClientAuthJwt())
+                .Returns(jwt);
+
+            var tokenBody = CreateRefreshTokenBody(refreshToken, jwt);
+
+            _mockHttpHandler
+                .When(HttpMethod.Post, new Uri(_citizenIdApiBaseUrl, _nhsLoginTokenPath).ToString())
+                .WithFormData(tokenBody)
+                .Respond(HttpStatusCode.Forbidden, "application/json",
+                    JsonConvert.SerializeObject(expectedErrorResponse));
+
+            // Act
+            var response = await _systemUnderTest.RefreshAccessToken(refreshToken);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(new Token());
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
+            _mockHttpHandler.VerifyNoOutstandingExpectation();
+        }
+
         public void Dispose()
         {
             _mockHttpHandler.Dispose();
@@ -299,6 +356,18 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
                 { "code_challenge_method", "S256" },
                 { "client_assertion", token },
                 { "client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer" },
+            };
+            return dict;
+        }
+
+        private static Dictionary<string, string> CreateRefreshTokenBody(string refreshToken, string token)
+        {
+            var dict = new Dictionary<string, string>
+            {
+                { "grant_type", "refresh_token" },
+                { "client_assertion", token },
+                { "client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer" },
+                { "refresh_token", refreshToken }
             };
             return dict;
         }

@@ -34,7 +34,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
         }
     }
 
-    fun createTimeoutfor(patient: Patient) {
+    fun createTimeoutFor(patient: Patient) {
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         val idToken = mockingStepsInitialise(patient, redirectUri)
 
@@ -70,7 +70,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
         return idToken
     }
 
-    fun createInvalidAuthenticationTokenfor(patient: Patient) {
+    fun createInvalidAuthenticationTokenFor(patient: Patient) {
         val accessToken = createMockingSteps(patient, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
 
         mockingClient.forCitizenId {

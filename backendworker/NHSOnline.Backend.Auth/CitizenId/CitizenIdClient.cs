@@ -84,6 +84,36 @@ namespace NHSOnline.Backend.Auth.CitizenId
             }
         }
 
+        public async Task<CitizenIdApiObjectResponse<Token>> RefreshAccessToken(string refreshToken)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                using (var request = new HttpRequestMessage(HttpMethod.Post, _config.TokenPath))
+                {
+                    var token = _citizenIdJwtHelper.CreateClientAuthJwt();
+
+                    var dict = new Dictionary<string, string>
+                    {
+                        { "grant_type", "refresh_token" },
+                        { "client_assertion", token },
+                        { "client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer" },
+                        { "refresh_token", refreshToken}
+                    };
+
+                    request.Content = new FormUrlEncodedContent(dict);
+
+                    var response = await SendRequestAndParseResponse<Token>(request);
+                    return response;
+                }
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
         public async Task<CitizenIdApiObjectResponse<JsonWebKeySet>> GetSigningKeys()
         {
             using (var request = new HttpRequestMessage(HttpMethod.Get, SigningKeysPath))

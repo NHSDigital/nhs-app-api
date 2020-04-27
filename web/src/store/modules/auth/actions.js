@@ -1,8 +1,11 @@
 import NativeCallbacks from '@/services/native-app';
 import consola from 'consola';
+import jwt from 'jwt-decode';
+import { AUTH_RESPONSE, INIT_AUTH, LOGOUT, UPDATE_CONFIG } from './mutation-types';
 import { LOGIN } from '@/lib/routes';
-import { removeCookies } from '@/lib/cookie-manager';
-import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
+import { removeCookies, setCookie } from '@/lib/cookie-manager';
+
+const thirtySeconds = 30000;
 
 const final = ({ self, commit }) => {
   commit(LOGOUT, true);
@@ -46,6 +49,23 @@ const logoutCleanUp = ({ self }) => {
 };
 
 export default {
+  async ensureAccessToken() {
+    const cookieValue = this.app.$cookies.get('nhso.session');
+    const decodedToken = jwt(cookieValue.accessToken);
+    if (decodedToken.exp * 1000 < Date.now() + thirtySeconds) {
+      const { token } = await this.app.$http.postV1PatientAuthorizationAccessTokenRefresh();
+      cookieValue.accessToken = token;
+      setCookie({
+        key: 'nhso.session',
+        value: cookieValue,
+        cookies: this.app.$cookies,
+        options: {
+          secure: this.app.$env.SECURE_COOKIES,
+        },
+      });
+    }
+    return cookieValue.accessToken;
+  },
   handleAuthResponse({ commit, state }, code) {
     /**
      * This needs to fire a proxy method

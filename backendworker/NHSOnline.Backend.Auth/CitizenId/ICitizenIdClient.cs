@@ -10,5 +10,6 @@ namespace NHSOnline.Backend.Auth.CitizenId
         Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier, Uri redirectUrl);
         Task<CitizenIdApiObjectResponse<JsonWebKeySet>> GetSigningKeys();
         Task<CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string accessToken);
+        Task<CitizenIdApiObjectResponse<Token>> RefreshAccessToken(string refreshToken);
     }
 }

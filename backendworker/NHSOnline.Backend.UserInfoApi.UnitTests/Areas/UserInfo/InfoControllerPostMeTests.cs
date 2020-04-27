@@ -181,7 +181,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
                 GpIntegrationCredentials = { OdsCode = userProfile.OdsCode },
                 NhsNumber = userProfile.NhsNumber,
             };
-            var cidUserProfile = new UserProfile(userInfo, "Access token");
+            var cidUserProfile = new UserProfile(userInfo, "Access token", "Refresh Token");
 
             _mockCitizenIdService
                 .Setup(x => x.GetUserProfile(It.IsAny<string>()))

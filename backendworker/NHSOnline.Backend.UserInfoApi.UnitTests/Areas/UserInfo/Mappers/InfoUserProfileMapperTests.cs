@@ -26,7 +26,8 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo.Mappers
                     GpIntegrationCredentials = { OdsCode = "ODS Code" },
                     NhsNumber = "NHS Number",
                 },
-                "Access Token"
+                "Access Token",
+                "Refresh Token"
             );
 
             _mockProofLevelMapper = new Mock<IMapper<string, ProofLevel?>>();

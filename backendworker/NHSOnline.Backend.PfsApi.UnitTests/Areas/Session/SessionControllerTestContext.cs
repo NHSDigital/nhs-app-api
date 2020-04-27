@@ -41,6 +41,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         internal const string ServiceDeskReference = "ServiceDeskReference";
         internal const string AccessToken = "AccessToken";
         internal const string CsrfRequestToken = "dskhfakserhhvjcgbfdsh";
+        internal const string RefreshToken = "RefreshToken";
 
         internal Mock<ICitizenIdSessionService> MockCitizenIdSessionService { get; private set; }
         internal Mock<IGpSystem> MockGpSystem { get; private set; }
@@ -98,7 +99,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 NhsNumber = "012 345 6789",
                 GpIntegrationCredentials = { OdsCode = "OdsCode" }
             };
-            UserProfile = new UserProfile(UserInfo, AccessToken);
+            UserProfile = new UserProfile(UserInfo, AccessToken, RefreshToken);
 
             EmisUserSession = new EmisUserSession
             {
@@ -111,7 +112,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 AccessToken = AccessToken,
                 ProofLevel = ProofLevel.P9,
-                OdsCode = UserProfile.OdsCode
+                OdsCode = UserProfile.OdsCode,
+                RefreshToken = RefreshToken
             };
 
             CitizenIdSessionResult = new CitizenIdSessionResult

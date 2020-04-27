@@ -71,6 +71,8 @@ paths:
     $ref: ./nhsonline.linkedaccounts.yaml#/paths/~1linked-accounts~1switch~1{id}
   /v1/patient/asserted-login-identity:
     $ref: ./nhsonline.assertedloginidentity.yaml#/paths/~1asserted-login-identity
+  /v1/patient/authorization/access-token/refresh:
+    $ref: ./nhsonline.authorization.yaml#/paths/~1access-token~1refresh
   /v1/api/users/devices:
     $ref: ./nhsonline.users.yaml#/paths/~1users~1devices
   /v1/api/users/me/messages:

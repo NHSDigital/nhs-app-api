@@ -7,7 +7,9 @@ import mocking.citizenId.login.CompleteLoginRequestBuilder
 import mocking.citizenId.login.InitialLoginRequestBuilder
 import mocking.citizenId.login.UserInfoRequestBuilder
 import mocking.citizenId.login.SigningKeysRequestBuilder
+import mocking.citizenId.login.TokenRefreshRequestBuilder
 import mocking.citizenId.login.TokenRequestBuilder
+import mocking.citizenId.models.TokenRefreshRequest
 import mocking.citizenId.models.TokenRequest
 import mocking.citizenId.notifications.ConfigurationRequestBuilder
 import models.Patient
@@ -32,6 +34,10 @@ open class CitizenIdMappingBuilder(method: String, relativePath: String = "")
     fun tokenRequest(codeVerifier: String, authCode: String? = null, redirectUri : String,
                      customTokenRequest: TokenRequest? = null) = TokenRequestBuilder(
             codeVerifier, authCode, redirectUri, customTokenRequest)
+
+    fun refreshTokenRequest(refreshToken: String,
+                     customTokenRequest: TokenRefreshRequest? = null) = TokenRefreshRequestBuilder(refreshToken,
+            customTokenRequest)
 
     fun userInfoRequest(accessToken: String) = UserInfoRequestBuilder(accessToken)
 

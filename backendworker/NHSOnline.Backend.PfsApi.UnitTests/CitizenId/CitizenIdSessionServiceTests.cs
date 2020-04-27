@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         private string _codeVerifier;
         private Uri _redirectUrl;
         private string _accessToken;
+        private string _refreshToken;
         private string _im1Token;
         private const string NhsNumber = "0123456789";
         private const string FormattedNhsNumber = "012 345 6789";
@@ -54,6 +55,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             _odsCode = _fixture.Create<string>();
             _familyName = _fixture.Create<string>();
             _idTokenJti = _fixture.Create<string>();
+            _refreshToken = _fixture.Create<string>();
 
             _systemUnderTest = _fixture.Create<CitizenIdSessionService>();
         }
@@ -73,7 +75,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     FamilyName = _familyName,
                     IdentityProofingLevel = "P9"
                 },
-                _accessToken
+                _accessToken,
+                _refreshToken
             );
 
             _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
@@ -110,7 +113,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     FamilyName = _familyName,
                     IdTokenJti = _idTokenJti,
                     OdsCode = _odsCode,
-                    ProofLevel = ProofLevel.P9
+                    ProofLevel = ProofLevel.P9,
+                    RefreshToken = _refreshToken
                 },
                 StatusCode = 200
             });
@@ -159,7 +163,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     GpIntegrationCredentials = { OdsCode = _odsCode },
                     FamilyName = _familyName
                 },
-                _accessToken
+                _accessToken,
+                _refreshToken
             );
 
             _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
@@ -195,7 +200,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     GpIntegrationCredentials = { OdsCode = _odsCode },
                     FamilyName = _familyName
                 },
-                _accessToken
+                _accessToken,
+                _refreshToken
             );
 
             _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
@@ -228,7 +234,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     GpIntegrationCredentials = { OdsCode = _odsCode },
                     FamilyName = _familyName
                 },
-                _accessToken
+                _accessToken,
+                _refreshToken
             );
 
             _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
@@ -265,7 +272,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     FamilyName = _familyName,
                     IdentityProofingLevel = "P7"
                 },
-                _accessToken
+                _accessToken,
+                _refreshToken
             );
 
             _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))

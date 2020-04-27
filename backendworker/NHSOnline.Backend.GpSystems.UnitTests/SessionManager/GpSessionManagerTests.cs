@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             var userInfo = _fixture.Freeze<UserInfo>();
             userInfo.Birthdate = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture);
             userInfo.Im1ConnectionToken = _fixture.Create<EmisConnectionToken>().SerializeJson();
-            _userProfile = new UserProfile(userInfo, _fixture.Create<string>());
+            _userProfile = new UserProfile(userInfo, _fixture.Create<string>(), _fixture.Create<string>());
 
             var emisUserSession = _fixture.Create<EmisUserSession>();
             emisUserSession.OdsCode = _userProfile.OdsCode;

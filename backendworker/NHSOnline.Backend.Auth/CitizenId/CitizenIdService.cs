@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -71,7 +70,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
                     .ReadToken(tokenResponse.Body.IdToken, signingKeys.ValueOrFailure())
                     .IfSome(async idToken =>
                     {
-                        result = await GetUserProfile(tokenResponse.Body.AccessToken, idToken.Subject);
+                        result = await GetUserProfileFromCitizenId(tokenResponse.Body.AccessToken, idToken.Subject, tokenResponse.Body.RefreshToken);
                         result.IdTokenJti = idToken.Jti;
                     })
                     .IfNone(() =>
@@ -110,7 +109,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
 
                 var accessTokenObject = AccessToken.Parse(_logger, accessToken);
 
-                return await GetUserProfile(accessToken, accessTokenObject.Subject);
+                return await GetUserProfileFromCitizenId(accessToken, accessTokenObject.Subject);
             }
             finally
             {
@@ -118,7 +117,34 @@ namespace NHSOnline.Backend.Auth.CitizenId
             }
         }
 
-        private async Task<GetUserProfileResult> GetUserProfile(string accessToken, string subject)
+        public async Task<RefreshAccessTokenResult> RefreshAccessToken(string refreshToken)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var result = await _citizenIdClient.RefreshAccessToken(refreshToken);
+
+                if (!result.HasSuccessStatusCode)
+                {
+                    _logger.LogError($"Failed to refresh access token, due to {result.StatusCode} response");
+                    return new RefreshAccessTokenResult.BadGateway();
+                }
+
+                return new RefreshAccessTokenResult.Success(result.Body.AccessToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Unexpected error refreshing access token", ex);
+                return new RefreshAccessTokenResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        private async Task<GetUserProfileResult> GetUserProfileFromCitizenId(string accessToken, string subject, string refreshToken = null)
         {
             var userInfo = await _citizenIdClient.GetUserInfo(accessToken);
 
@@ -142,7 +168,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
                 };
             }
 
-            var userProfile = new UserProfile(userInfo.Body, accessToken);
+            var userProfile = new UserProfile(userInfo.Body, accessToken, refreshToken);
 
             return new GetUserProfileResult
             {

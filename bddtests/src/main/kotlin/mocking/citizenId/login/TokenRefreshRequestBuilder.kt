@@ -3,15 +3,15 @@ package mocking.citizenId.login
 import constants.SessionConstants
 import cucumber.deps.com.thoughtworks.xstream.InitializationException
 import mocking.citizenId.CitizenIdMappingBuilder
-import mocking.citizenId.models.TokenRequest
+import mocking.citizenId.models.TokenRefreshRequest
 import mocking.citizenId.models.login.token.SucceededResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
-class TokenRequestBuilder(codeVerifier: String, authCode: String?, redirectUri: String, customTokenRequest:
-TokenRequest? =null)
+class TokenRefreshRequestBuilder(refreshToken: String = SessionConstants.RefreshToken,
+                                 customRefreshTokenRequest: TokenRefreshRequest? = null)
     : CitizenIdMappingBuilder("POST", "/token") {
 
     init {
@@ -19,22 +19,17 @@ TokenRequest? =null)
                 .andHeader("Content-Type", "application/x-www-form-urlencoded")
 
         // add token query parameters
-        val tokenRequest = customTokenRequest ?: TokenRequest(codeVerifier, code = authCode, redirectUri = redirectUri)
-        val body = tokenRequestToQueryParams(tokenRequest)
+        val tokenRefreshRequest = customRefreshTokenRequest ?: TokenRefreshRequest(refresh_token =  refreshToken)
+        val body = tokenRequestToQueryParams(tokenRefreshRequest)
         requestBuilder.andBody(body, "matches")
     }
 
-    private fun tokenRequestToQueryParams(tokenRequest: TokenRequest): String {
+    private fun tokenRequestToQueryParams(tokenRequest: TokenRefreshRequest): String {
         val map = LinkedHashMap<String, String>()
         map["grant_type"] = tokenRequest.grantType
-        if (tokenRequest.code != null) {
-            map["code"] = tokenRequest.code
-        }
-        map["redirect_uri"] = tokenRequest.redirectUri
-        map["code_verifier"] = ".*"
-        map["code_challenge_method"] = tokenRequest.code_challenge_method
         map["client_assertion"] = ".*"
         map["client_assertion_type"] = tokenRequest.client_assertion_type
+        map["refresh_token"] = tokenRequest.refresh_token
 
         val stringBuilder = StringBuilder()
 
@@ -75,5 +70,3 @@ TokenRequest? =null)
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) { build() }
     }
 }
-
-

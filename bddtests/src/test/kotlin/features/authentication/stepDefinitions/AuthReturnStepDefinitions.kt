@@ -35,7 +35,7 @@ class AuthReturnStepDefinitions {
     fun loggedInInCitizenIdGpAuthenticationFails() {
         this.patient = TppPatients.kevinBarry
 
-        CitizenIdSessionCreateJourney(mockingClient).createInvalidAuthenticationTokenfor(patient)
+        CitizenIdSessionCreateJourney(mockingClient).createInvalidAuthenticationTokenFor(patient)
 
         browser.goToApp()
         login.using(this.patient)

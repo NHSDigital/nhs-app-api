@@ -102,7 +102,7 @@ class NHSOnlineApi {
      * @param {object} ignoreLoading - boolean to control dispatching http/isLoading
      *
      */
-    request({
+    async request({
         method,
         url,
         parameters,
@@ -131,7 +131,7 @@ class NHSOnlineApi {
         }
 
         if (useAccessToken) {
-          const accessToken = get('accessToken')(this.cookies.get('nhso.session'));
+          const accessToken = await this.store.dispatch('auth/ensureAccessToken');
           headers['Authorization'] = `Bearer ${accessToken}`;
         } else {
           const csrfToken = get('csrfToken')(parameters) || get('store.state.session.csrfToken')(this);

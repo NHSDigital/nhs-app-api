@@ -97,7 +97,8 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                         OdsCode = cidUserProfile.OdsCode,
                         DateOfBirth = dateOfBirthParsed.Value,
                         IdTokenJti = userProfileResult.IdTokenJti,
-                        ProofLevel = proofLevel.Value
+                        ProofLevel = proofLevel.Value,
+                        RefreshToken = cidUserProfile.RefreshToken
                     }
                 };
             }
