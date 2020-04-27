@@ -37,7 +37,7 @@ spec:
           name: info-sidecar-proxy-config-{{ .Chart.AppVersion }}
       - name: nhslogin-key
         secret:
-          secretName: nhslogin-key-{{ .Chart.AppVersion }}
+          secretName: {{ $.Values.nhsLoginKeyName }}-{{ .Chart.AppVersion }}
       containers:
       - name: info
         image: {{ $.Values.registry }}/{{ $.Values.info.image }}:{{ $.Values.info.image_tag }}
@@ -120,7 +120,7 @@ spec:
         - name: NHSLOGIN_KEY_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: nhslogin-key-password-{{ .Chart.AppVersion }}
+              name: {{ $.Values.nhsLoginKeyName }}-password-{{ .Chart.AppVersion }}
               key: password
         volumeMounts:
         - name: nhslogin-key

@@ -74,7 +74,7 @@ spec:
       {{- end }}
       - name: nhslogin-key
         secret:
-          secretName: nhslogin-key-{{ .Chart.AppVersion }}
+          secretName: {{ $.Values.nhsLoginKeyName }}-{{ .Chart.AppVersion }}
       - name: wildcard-namespace-cert
         secret:
           secretName: wildcard-{{ $.Values.global.environment }}-tls-{{ .Chart.AppVersion }}
@@ -338,7 +338,7 @@ spec:
         - name: NHSLOGIN_KEY_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: nhslogin-key-password-{{ .Chart.AppVersion }}
+              name: {{ $.Values.nhsLoginKeyName }}-password-{{ .Chart.AppVersion }}
               key: password
           {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.microtestStubbed)) }}
         - name: MICROTEST_BASE_URL
