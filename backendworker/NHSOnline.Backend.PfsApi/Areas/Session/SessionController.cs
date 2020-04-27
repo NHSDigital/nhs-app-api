@@ -204,6 +204,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             await AppendCookieToResponse(userSession.Key);
 
             _userSessionService.SetUserSession(userSession);
+            _logger.LogInformation($"Created {userSession.GetType().Name}");
 
             var responseBody = new PostUserSessionResponse { ServiceJourneyRules = serviceJourneyRules };
             responseBody = userSession.Accept(new UserSessionResponseVisitor<PostUserSessionResponse>(_settings, responseBody));
