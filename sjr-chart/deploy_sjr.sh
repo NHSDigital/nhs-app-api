@@ -39,12 +39,13 @@ pushd nhsapp-sjr
 # Clone nhsapp-ops-vault repository
 info "Cloning nhsapp-ops-vault repo"
 ### Azure DevOps repo code read-only token valid till: 7th Feb 2021 ixso7tesye5wk23eku5f2kopaacyin2ex3hjwwjavh4dkat5xcrq
+VAULT_REPO_PATH="../nhsapp-ops-vault"
 VAULT_REPO_URL="https://oauth2:ixso7tesye5wk23eku5f2kopaacyin2ex3hjwwjavh4dkat5xcrq@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp-ops-vault"
 RELEASE_VAULT_REPO_TAG=${RELEASE_VAULT_REPO_TAG:-develop}
-git clone --single-branch --branch "$RELEASE_VAULT_REPO_TAG" "$VAULT_REPO_URL"
+git clone --single-branch --branch "$RELEASE_VAULT_REPO_TAG" "$VAULT_REPO_URL" "${VAULT_REPO_PATH}"
 
 # Unlock secrets repo
-pushd nhsapp-ops-vault
+pushd "${VAULT_REPO_PATH}"
 unlock_repo
 popd
 
@@ -80,17 +81,17 @@ else
 fi
 
 info "Checking for environment configuration files"
-[ -e "nhsapp-ops-vault/vars/zone/$TARGET_ZONE/vars-$TARGET_ZONE.yaml" ] && {
+[ -e "${VAULT_REPO_PATH}/vars/zone/$TARGET_ZONE/vars-$TARGET_ZONE.yaml" ] && {
 	info "Zone override file found for $TARGET_ZONE, adding config";
-	CUSTOM_VALUES="-f nhsapp-ops-vault/vars/zone/$TARGET_ZONE/vars-$TARGET_ZONE.yaml";
+	CUSTOM_VALUES="-f ${VAULT_REPO_PATH}/vars/zone/$TARGET_ZONE/vars-$TARGET_ZONE.yaml";
 }
-[ -e "nhsapp-ops-vault/vars/cluster/$AKS_SHORTNAME.yaml" ] && {
+[ -e "${VAULT_REPO_PATH}/vars/cluster/$AKS_SHORTNAME.yaml" ] && {
 	info "Cluster override found for $AKS_SHORTNAME, adding config";
-	CUSTOM_VALUES=$CUSTOM_VALUES" -f nhsapp-ops-vault/vars/cluster/vars-$AKS_SHORTNAME.yaml";
+	CUSTOM_VALUES=$CUSTOM_VALUES" -f ${VAULT_REPO_PATH}/vars/cluster/vars-$AKS_SHORTNAME.yaml";
 }
-[ -e "nhsapp-ops-vault/vars/zone/$TARGET_ZONE/namespace/vars-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml" ] && {
+[ -e "${VAULT_REPO_PATH}/vars/zone/$TARGET_ZONE/namespace/vars-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml" ] && {
 	info "Namespace override found for $TARGET_ZONE/$TARGET_ENVIRONMENT, adding config";
-	CUSTOM_VALUES=$CUSTOM_VALUES" -f nhsapp-ops-vault/vars/zone/$TARGET_ZONE/namespace/vars-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml";
+	CUSTOM_VALUES=$CUSTOM_VALUES" -f ${VAULT_REPO_PATH}/vars/zone/$TARGET_ZONE/namespace/vars-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml";
 }
 
 
@@ -111,9 +112,9 @@ fi
 
 # Deploy Chart install
 info "Checking for $TARGET_ENVIRONMENT specific secrets"
-if [ -e "nhsapp-ops-vault/secrets/zone/$TARGET_ZONE/namespace/secrets-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml" ]; then
+if [ -e "${VAULT_REPO_PATH}/secrets/zone/$TARGET_ZONE/namespace/secrets-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml" ]; then
 	info "Deploying $CHART-$appImageTag with $TARGET_ENVIRONMENT secrets"
-	CUSTOM_VALUES=$CUSTOM_VALUES" -f nhsapp-ops-vault/secrets/zone/$TARGET_ZONE/namespace/secrets-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml"
+	CUSTOM_VALUES=$CUSTOM_VALUES" -f ${VAULT_REPO_PATH}/secrets/zone/$TARGET_ZONE/namespace/secrets-$TARGET_ZONE-$TARGET_ENVIRONMENT.yaml"
 else
 	info "Deploying $CHART-$appImageTag with no $TARGET_ENVIRONMENT override secrets"
 fi
@@ -121,7 +122,7 @@ fi
 info "Checking for $REGION specific secrets"
 if [ "$TARGET_ZONE" == "production" ] || [ "$TARGET_ZONE" == "staging" ]; then
 	info "Deploying $CHART-$appImageTag with $REGION secrets"
-	CUSTOM_VALUES=$CUSTOM_VALUES" -f nhsapp-ops-vault/secrets/zone/$TARGET_ZONE/region/secrets-$TARGET_ZONE-$REGION.yaml"
+	CUSTOM_VALUES=$CUSTOM_VALUES" -f ${VAULT_REPO_PATH}/secrets/zone/$TARGET_ZONE/region/secrets-$TARGET_ZONE-$REGION.yaml"
 else
 	info "Deploying $CHART-$appImageTag with no $REGION override secrets"
 fi
@@ -157,7 +158,7 @@ fi
 
 info "Beginning deployment..."
 helm upgrade "$TARGET_ENVIRONMENT-sjr-$appImageTag" \
-	-f "nhsapp-ops-vault/secrets/zone/$TARGET_ZONE/secrets-$TARGET_ZONE.yaml" \
+	-f "${VAULT_REPO_PATH}/secrets/zone/$TARGET_ZONE/secrets-$TARGET_ZONE.yaml" \
 	--set global.environment="$TARGET_ENVIRONMENT" \
 	--set appImageTag="$appImageTag" \
 	--set sjr.image_tag="$SJR_IMAGE_TAG" \
