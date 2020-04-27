@@ -2334,7 +2334,7 @@ export default {
     },
     hospitalAppointments: {
       subheader: 'Hospital and other appointments',
-      body: 'Manage your referral appointments',
+      body: 'View and manage appointments, like your referral appointments',
     },
   },
   healthRecordHubPage: {
