@@ -7,6 +7,7 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
@@ -28,13 +29,13 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         private readonly ILogger<ServiceDefinitionService> _logger;
         private readonly IHtmlSanitizer _htmlSanitizer;
         private readonly IFhirSanitizationHelper _fhirSanitizationHelper;
-        
+
         private readonly FhirJsonParser _parser;
         private readonly FhirJsonSerializer _serializer;
         private readonly IMapper<DemographicsResponse, OlcDemographics> _demographicsOlcMapper;
         private readonly IAuditor _auditor;
         private readonly IGpSystemFactory _gpSystemFactory;
-        private readonly ICreateFhirParameter _createFhirParameter;
+        private readonly IFhirParameterHelpers _fhirParameterHelpers;
         private readonly OnlineConsultationsProvidersSettings _olcProvidersSettings;
         private readonly IEvaluateServiceDefinitionQuery _evaluateServiceDefinitionQuery;
         private readonly IServiceDefinitionIsValidQuery _serviceDefinitionIsValidQuery;
@@ -45,9 +46,9 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             IHtmlSanitizer htmlSanitizer,
             IFhirSanitizationHelper fhirSanitizationHelper,
             IMapper<DemographicsResponse, OlcDemographics> demographicsRegistrationMapper,
-            IAuditor auditor, 
+            IAuditor auditor,
             IGpSystemFactory gpSystemFactory,
-            ICreateFhirParameter createFhirParameter,
+            IFhirParameterHelpers fhirParameterHelpers,
             OnlineConsultationsProvidersSettings olcProvidersSettings,
             IEvaluateServiceDefinitionQuery evaluateServiceDefinitionQuery,
             IServiceDefinitionIsValidQuery serviceDefinitionIsValidQuery,
@@ -60,38 +61,41 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
             _serializer = new FhirJsonSerializer();
             _parser = new FhirJsonParser();
-            
+
             _demographicsOlcMapper = demographicsRegistrationMapper;
 
             _auditor = auditor;
-            
+
             _gpSystemFactory = gpSystemFactory;
-            _createFhirParameter = createFhirParameter;
+            _fhirParameterHelpers = fhirParameterHelpers;
 
             _olcProvidersSettings = olcProvidersSettings;
             _evaluateServiceDefinitionQuery = evaluateServiceDefinitionQuery;
             _serviceDefinitionIsValidQuery = serviceDefinitionIsValidQuery;
         }
 
-        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(string providerKey,
-            string serviceDefinitionId, P9UserSession userSession)
+        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(
+            string providerKey,
+            string serviceDefinitionId,
+            string serviceDefinitionDescription,
+            P9UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
-                _logger.LogInformation($"Initial evaluation for Service Definition with id: {serviceDefinitionId}");
-                
+
                 var odsCode = userSession.GpUserSession.OdsCode;
 
-                var requestBody = "{ \"resourceType\":\"Parameters\", \"meta\":{ \"profile\":[ " +
-                                 "\"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\" ] }, " +
-                                 "\"parameter\": [ { \"name\": \"organization\", \"resource\": { \"resourceType\": " +
-                                 "\"Organization\", \"identifier\": { \"value\": \"" + odsCode + "\" }}}]}";
+                var parameters = _fhirParameterHelpers.CreateInitialServiceDefinitionEvaluateParameters(odsCode);
 
                 return await SendEvaluateQueryAndHandleResponse(
                     providerKey,
                     serviceDefinitionId,
-                    requestBody,
+                    serviceDefinitionDescription,
+                    JsonConvert.SerializeObject(parameters, new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    }),
                     false,
                     odsCode);
             }
@@ -120,6 +124,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
         public async Task<ServiceDefinitionResult> EvaluateServiceDefinition(
             string providerKey,
             string serviceDefinitionId,
+            string serviceDefinitionDescription,
             Parameters parameters,
             bool addJavascriptDisabledHeader,
             bool demographicsConsentGiven,
@@ -135,7 +140,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
                     return new ServiceDefinitionResult.BadRequest();
                 }
-                
+
                 if (demographicsConsentGiven)
                 {
                     _logger.LogInformation($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier.ToString()}");
@@ -146,13 +151,13 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     _logger.LogDebug("Fetching Demographics");
                     var demographics = await demographicsService.GetDemographics(
                         new GpLinkedAccountModel(userSession.GpUserSession));
-                            
+
                     if (!(demographics is DemographicsResult.Success demographicsResult))
                     {
                         return GetDemographicsErrorResult(demographics);
                     }
 
-                    parameters.Add("patient", _createFhirParameter.CreatePatientFhir(_demographicsOlcMapper, demographicsResult));
+                    parameters.Add("patient", _fhirParameterHelpers.CreateFhirPatient(_demographicsOlcMapper, demographicsResult));
                     await _auditor.Audit(
                         AuditingOperations.OnlineConsultationsDemographicAuditTypeRequest,
                         "User has agreed to share their name, age, NHS number and postal address.");
@@ -167,6 +172,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 return await SendEvaluateQueryAndHandleResponse(
                     providerKey,
                     serviceDefinitionId,
+                    serviceDefinitionDescription,
                     _serializer.SerializeToString(parameters),
                     addJavascriptDisabledHeader,
                     userSession.GpUserSession.OdsCode,
@@ -183,32 +189,17 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             try
             {
                 _logger.LogEnter();
-                
+
                 var odsCode = userSession.GpUserSession.OdsCode;
-                
+
                 _logger.LogInformation($"Checking if online consultations are enabled for practice: {odsCode}");
 
                 var requestId = _guidCreator.CreateGuid().ToString();
-                
+
                 _logger.LogInformation($"$isValid requestId: {requestId}");
-                
-                var parameters = new Parameters
-                {
-                    Parameter = new List<Parameters.ParameterComponent>
-                    {
-                        new Parameters.ParameterComponent
-                        {
-                            Name = "ODSCode",
-                            Value = new FhirString(odsCode)
-                        },
-                        new Parameters.ParameterComponent
-                        {
-                            Name = "requestId",
-                            Value = new FhirString(requestId)
-                        }
-                    }
-                };
-                
+
+                var parameters = _fhirParameterHelpers.CreateServiceDefinitionIsValidParameters(odsCode, requestId);
+
                 return await SendIsValidQueryAndHandleResponse(
                     providerKey,
                     _serializer.SerializeToString(parameters));
@@ -242,7 +233,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             if (!responseMessage.IsSuccessStatusCode)
             {
                 _logger.LogError($"Provider responded with status code: {responseMessage.StatusCode}");
-                
+
                 return new ServiceDefinitionIsValidResult.BadGateway();
             }
 
@@ -277,27 +268,28 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             }
 
             _logger.LogInformation("Unable to retrieve validity from provider response");
-                
+
             return new ServiceDefinitionIsValidResult.BadGateway();
         }
 
         private async Task<ServiceDefinitionResult> SendEvaluateQueryAndHandleResponse(
             string providerKey,
             string serviceDefinitionId,
-            string requestBody,
+            string serviceDefinitionDescription,
+            string parameters,
             bool addJavascriptDisabledHeader,
             string odsCode,
             string sessionId = null)
         {
             HttpResponseMessage responseMessage;
             GuidanceResponse guidanceResponse;
-            
+
             try
             {
                 responseMessage = await _evaluateServiceDefinitionQuery.EvaluateServiceDefinition(
                     providerKey,
                     serviceDefinitionId,
-                    requestBody,
+                    parameters,
                     addJavascriptDisabledHeader,
                     sessionId);
             }
@@ -325,7 +317,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                 {
                     _logger.LogError(e, "Unable to determine reason - null response body returned from provider");
                 }
-                
+
                 return new ServiceDefinitionResult.BadGateway();
             }
 
@@ -352,19 +344,19 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
 
             if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Failure)
             {
-                _logger.LogInformation($"Ending consultation with failure status for ServiceDefinition: {serviceDefinitionId}. ODSCode: {odsCode}");
+                _logger.LogInformation($"Ending consultation with failure status for {serviceDefinitionDescription}. ODSCode: {odsCode}");
                 return GetServiceDefinitionResultFromErrorCode(guidanceResponse);
             }
 
             if (guidanceResponse.Status == GuidanceResponse.GuidanceResponseStatus.Success)
             {
                 _logger.LogInformation(
-                    $"Ending consultation with ServiceDefinition: {serviceDefinitionId}. ODSCode: {odsCode}");
+                    $"Ending consultation for {serviceDefinitionDescription}. ODSCode: {odsCode}");
             }
 
             return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
         }
-        
+
         private ServiceDefinitionResult GetDemographicsErrorResult(DemographicsResult myRecord)
         {
             switch (myRecord)
@@ -426,10 +418,9 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
                     .ExtractOperationOutcomes()
                     .ExtractNotFoundOutcomes()
                     .IsSessionEnded())
-                {
-                    return
-                        new ServiceDefinitionResult.CustomError(Constants.ErrorCodes.SessionEndErrorCode);
-                }
+            {
+                return new ServiceDefinitionResult.CustomError(Constants.ErrorCodes.SessionEndErrorCode);
+            }
 
             return new ServiceDefinitionResult.Success(_serializer.SerializeToString(guidanceResponse));
         }

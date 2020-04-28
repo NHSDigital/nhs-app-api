@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             services.AddSingleton<IMapper<string, DemographicsName, Name>,
                 OlcDemographicsNameMapper>();
             services.AddSingleton<IOlcDataMaps, OlcDataMaps>();
-            services.AddTransient<ICreateFhirParameter, CreateFhirParameter>();
+            services.AddTransient<IFhirParameterHelpers, FhirParameterHelpers>();
 
             base.ConfigureServices(services, configuration);
         }

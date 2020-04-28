@@ -42,10 +42,24 @@ import {
 import { getQuestion, getConditionsList } from '@/lib/online-consultations/mappers/item';
 import { getParameters, getAnswerFromItem } from '@/lib/online-consultations/mappers/parameters';
 import { DATA_REQUIRED, SUCCESS } from '@/lib/online-consultations/constants/status-types';
+import ServiceDefinitionTypes from '@/lib/online-consultations/constants/service-definition-types';
 import getTCsAnswerForProvider from '@/lib/online-consultations/constants/termsConditionsAnswers';
 
 const showError = (store) => {
   store.dispatch('onlineConsultations/clearAndSetError');
+};
+
+const getServiceDefinitionType = (journeyRules, serviceDefinitionId) => {
+  switch (serviceDefinitionId) {
+    case journeyRules.cdssAdmin.serviceDefinition:
+      return ServiceDefinitionTypes.AdminHelp;
+    case journeyRules.cdssAdvice.serviceDefinition:
+      return ServiceDefinitionTypes.GeneralAdvice;
+    case journeyRules.cdssAdvice.conditionsServiceDefinition:
+      return ServiceDefinitionTypes.ConditionList;
+    default:
+      return ServiceDefinitionTypes.ConditionAdvice;
+  }
 };
 
 export default {
@@ -54,26 +68,33 @@ export default {
   },
   async setProviderNames({ commit }, { adminProviderName, adviceProviderName }) {
     if (adminProviderName !== 'none') {
-      await this.app.$http.getV1ServiceDefinitionProviderNameByProvider({
+      await this.app.$httpV2.getV2CdssServiceDefinitionByProviderDetails({
         provider: adminProviderName,
       }).then((providerName) => {
         commit(SET_ADMIN_PROVIDER_NAME, providerName);
       }).catch(() => {});
     }
     if (adviceProviderName !== 'none') {
-      await this.app.$http.getV1ServiceDefinitionProviderNameByProvider({
+      await this.app.$httpV2.getV2CdssServiceDefinitionByProviderDetails({
         provider: adviceProviderName,
       }).then((providerName) => {
         commit(SET_ADVICE_PROVIDER_NAME, providerName);
       }).catch(() => {});
     }
   },
-  getServiceDefinition({ commit }, params = {}) {
+  getServiceDefinition({ commit, rootState }, params = {}) {
     const store = this;
     const { serviceDefinitionId, provider } = params;
 
-    return store.app.$http.getV1ServiceDefinitionByProviderByServicedefinitionid({
-      serviceDefinitionId,
+    const serviceDefinitionType = getServiceDefinitionType(
+      rootState.serviceJourneyRules.rules, serviceDefinitionId,
+    );
+
+    return store.app.$httpV2.postV2CdssServiceDefinitionByProvider({
+      serviceDefinitionMetaData: {
+        id: serviceDefinitionId,
+        type: serviceDefinitionType,
+      },
       provider,
     }).then((response) => {
       commit(CLEAR);
@@ -118,7 +139,12 @@ export default {
       addJavascriptDisabledHeader,
       answeringConditionsQuestion,
     } = params;
-    const parameters = getParameters(state, rootState, answeringConditionsQuestion);
+    const serviceDefinitionType = getServiceDefinitionType(
+      rootState.serviceJourneyRules.rules, serviceDefinitionId,
+    );
+    const parameters = getParameters(
+      state, rootState, answeringConditionsQuestion, serviceDefinitionId, serviceDefinitionType,
+    );
 
     if (parameters === undefined) {
       showError(store);
@@ -126,7 +152,6 @@ export default {
     }
 
     const requestParams = {
-      serviceDefinitionId,
       provider,
       addJavascriptDisabledHeader,
       parameters,
@@ -143,7 +168,7 @@ export default {
     ) {
       requestParams.demographicsConsentGiven = !!state.demographicsConsentGiven;
     }
-    return store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate(
+    return store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate(
       requestParams,
     ).then((response) => {
       commit(CLEAR);
@@ -214,7 +239,7 @@ export default {
     let isAvailable;
 
     try {
-      response = await this.app.$http.getV1ServiceDefinitionByProviderIsValid({
+      response = await this.app.$httpV2.getV2CdssServiceDefinitionByProviderIsValid({
         provider,
         returnResponse: true,
       });

@@ -60,7 +60,7 @@ paths:
   /v1/patient/journey-configuration:
     $ref: ./nhsonline.journey.yaml#/paths/~1journey-configuration
   /v1/patient/configuration:
-      $ref: ./nhsonline.journey.yaml#/paths/~1configuration  
+    $ref: ./nhsonline.journey.yaml#/paths/~1configuration  
   /v1/patient/linked-account-journey-configuration:
     $ref: ./nhsonline.journey.yaml#/paths/~1linked-account-journey-configuration
   /v1/patient/linked-accounts:
@@ -91,13 +91,11 @@ paths:
     $ref: ./nhsonline.documents.yaml#/paths/~1documents~1{documentIdentifier}
   /v1/documents/{documentIdentifier}/download:
     $ref: ./nhsonline.documents.yaml#/paths/~1documents~1{documentIdentifier}~1download
-  /v1/service-definition/{provider}/{serviceDefinitionId}:
-    $ref: ./nhsonline.cds.yaml#/paths/~1service-definition~1{provider}~1{serviceDefinitionId}
-  /v1/service-definition/{provider}/{serviceDefinitionId}/$evaluate:
-    $ref: ./nhsonline.cds.yaml#/paths/~1service-definition~1{provider}~1{serviceDefinitionId}~1$evaluate
-  /v1/service-definition/{provider}:
-    $ref: ./nhsonline.cds.yaml#/paths/~1service-definition~1{provider}
-  /v1/service-definition/provider-name/{provider}:
-    $ref: ./nhsonline.cds.yaml#/paths/~1service-definition~1provider-name~1{provider}
-  /v1/service-definition/{provider}/$isValid:
-    $ref: ./nhsonline.cds.yaml#/paths/~1service-definition~1{provider}~1$isValid
+  /v2/cdss/service-definition/{provider}:
+    $ref: ./nhsonline.cdss_v2.yaml#/paths/~1cdss~1service-definition~1{provider}
+  /v2/cdss/service-definition/{provider}/evaluate:
+    $ref: ./nhsonline.cdss_v2.yaml#/paths/~1cdss~1service-definition~1{provider}~1evaluate
+  /v2/cdss/service-definition/{provider}/details:
+    $ref: ./nhsonline.cdss_v2.yaml#/paths/~1cdss~1service-definition~1{provider}~1details
+  /v2/cdss/service-definition/{provider}/isValid:
+    $ref: ./nhsonline.cdss_v2.yaml#/paths/~1cdss~1service-definition~1{provider}~1isValid

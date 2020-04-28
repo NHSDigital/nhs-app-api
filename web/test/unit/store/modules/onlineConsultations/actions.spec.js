@@ -33,11 +33,11 @@ const {
 const commit = jest.fn();
 const store = {
   app: {
-    $http: {
-      postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate: jest.fn(),
-      getV1ServiceDefinitionByProviderByServicedefinitionid: jest.fn(),
-      getV1ServiceDefinitionProviderNameByProvider: jest.fn(),
-      getV1ServiceDefinitionByProviderIsValid: jest.fn(),
+    $httpV2: {
+      postV2CdssServiceDefinitionByProviderEvaluate: jest.fn(),
+      postV2CdssServiceDefinitionByProvider: jest.fn(),
+      getV2CdssServiceDefinitionByProviderDetails: jest.fn(),
+      getV2CdssServiceDefinitionByProviderIsValid: jest.fn(),
     },
   },
   dispatch: jest.fn(),
@@ -84,10 +84,10 @@ describe('online consultations store actions', () => {
   };
   beforeEach(() => {
     commit.mockClear();
-    store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate.mockClear();
-    store.app.$http.getV1ServiceDefinitionByProviderByServicedefinitionid.mockClear();
-    store.app.$http.getV1ServiceDefinitionProviderNameByProvider.mockClear();
-    store.app.$http.getV1ServiceDefinitionByProviderIsValid.mockClear();
+    store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate.mockClear();
+    store.app.$httpV2.postV2CdssServiceDefinitionByProvider.mockClear();
+    store.app.$httpV2.getV2CdssServiceDefinitionByProviderDetails.mockClear();
+    store.app.$httpV2.getV2CdssServiceDefinitionByProviderIsValid.mockClear();
     store.dispatch.mockClear();
     error.response.status = 400;
   });
@@ -95,34 +95,74 @@ describe('online consultations store actions', () => {
   describe('getServiceDefinition', () => {
     let serviceDefinitionId;
     let provider;
-    let parameters;
+    let actionParameters;
+    let apiParameters;
 
     beforeAll(() => {
       serviceDefinitionId = 'NHS_ADMIN';
       provider = 'stubs';
-      parameters = {
+      apiParameters = {
+        serviceDefinitionMetaData: {
+          id: serviceDefinitionId,
+          type: 'AdminHelp',
+        },
+        provider,
+      };
+      actionParameters = {
         serviceDefinitionId,
         provider,
       };
     });
 
+    each([
+      ['NHS_ADMIN', 'AdminHelp'],
+      ['NHS_ADVICE', 'GeneralAdvice'],
+      ['NHS_CONDITION_LIST', 'ConditionList'],
+      ['ANOTHER_SERVICE_DEFINITION', 'ConditionAdvice'],
+    ]).it('will map service definition id %s to %s type for api request', (
+      id, type,
+    ) => {
+      // Arrange
+      store.app.$httpV2.postV2CdssServiceDefinitionByProvider
+        .mockImplementation(
+          () => Promise.resolve(),
+        );
+
+      actionParameters.serviceDefinitionId = id;
+      apiParameters.serviceDefinitionMetaData = {
+        id,
+        type,
+      };
+
+      // Act
+      return getServiceDefinition
+        .call(store, { rootState, commit }, actionParameters)
+        .then(() => {
+          // Assert
+          expect(store.app.$httpV2.postV2CdssServiceDefinitionByProvider)
+            .toHaveBeenCalledWith(apiParameters);
+          expect(store.app.$httpV2.postV2CdssServiceDefinitionByProvider)
+            .toHaveBeenCalledTimes(1);
+        });
+    });
+
     describe('attempted get service definition is rejected', () => {
       it('will dispatch clearAndSetError', () => {
         // Arrange
-        store.app.$http.getV1ServiceDefinitionByProviderByServicedefinitionid
+        store.app.$httpV2.postV2CdssServiceDefinitionByProvider
           .mockImplementation(
             () => Promise.reject(error),
           );
 
         // Act
         return getServiceDefinition
-          .call(store, { rootState, commit }, parameters)
+          .call(store, { rootState, commit }, actionParameters)
           .then(() => {
             // Assert
-            const { getV1ServiceDefinitionByProviderByServicedefinitionid } = store.app.$http;
-            expect(getV1ServiceDefinitionByProviderByServicedefinitionid)
-              .toHaveBeenCalledWith(parameters);
-            expect(getV1ServiceDefinitionByProviderByServicedefinitionid)
+            const { postV2CdssServiceDefinitionByProvider } = store.app.$httpV2;
+            expect(postV2CdssServiceDefinitionByProvider)
+              .toHaveBeenCalledWith(apiParameters);
+            expect(postV2CdssServiceDefinitionByProvider)
               .toHaveBeenCalledTimes(1);
             expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
             expect(store.dispatch).toHaveBeenCalledTimes(1);
@@ -138,14 +178,14 @@ describe('online consultations store actions', () => {
       describe('response is undefined', () => {
         it('will dispatch clearAndSetError', () => {
           // Arrange
-          store.app.$http.getV1ServiceDefinitionByProviderByServicedefinitionid
+          store.app.$httpV2.postV2CdssServiceDefinitionByProvider
             .mockImplementation(
               () => Promise.resolve(undefined),
             );
 
           // Act
           return getServiceDefinition
-            .call(store, { rootState, commit }, parameters)
+            .call(store, { rootState, commit }, actionParameters)
             .then(() => {
               // Assert
               expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -157,7 +197,7 @@ describe('online consultations store actions', () => {
       describe('getDataRequirements returns undefined', () => {
         it('will dispatch clearAndSetError', () => {
           // Arrange
-          store.app.$http.getV1ServiceDefinitionByProviderByServicedefinitionid
+          store.app.$httpV2.postV2CdssServiceDefinitionByProvider
             .mockImplementation(
               () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
             );
@@ -165,7 +205,7 @@ describe('online consultations store actions', () => {
 
           // Act
           return getServiceDefinition
-            .call(store, { rootState, commit }, parameters)
+            .call(store, { rootState, commit }, actionParameters)
             .then(() => {
               // Assert
               expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -184,14 +224,14 @@ describe('online consultations store actions', () => {
           };
           getDataRequirements.mockReturnValue(expectedDataRequirements);
 
-          store.app.$http.getV1ServiceDefinitionByProviderByServicedefinitionid
+          store.app.$httpV2.postV2CdssServiceDefinitionByProvider
             .mockImplementation(
               () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
             );
 
           // Act
           return getServiceDefinition
-            .call(store, { rootState, commit }, parameters)
+            .call(store, { rootState, commit }, actionParameters)
             .then(() => {
               // Assert
               expect(commit).toHaveBeenCalledWith(SET_DATA_REQUIREMENTS, expectedDataRequirements);
@@ -214,7 +254,7 @@ describe('online consultations store actions', () => {
 
               // Act
               return getServiceDefinition
-                .call(store, { rootState, commit }, parameters)
+                .call(store, { rootState, commit }, actionParameters)
                 .then(() => {
                   // Assert
                   expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
@@ -233,7 +273,7 @@ describe('online consultations store actions', () => {
               };
               getDataRequirements.mockReturnValue(expectedDataRequirements);
 
-              store.app.$http.getV1ServiceDefinitionByProviderByServicedefinitionid
+              store.app.$httpV2.postV2CdssServiceDefinitionByProvider
                 .mockImplementation(
                   () => Promise.resolve({ resourceType: 'ServiceDefinition' }),
                 );
@@ -243,7 +283,7 @@ describe('online consultations store actions', () => {
 
               // Act
               return getServiceDefinition
-                .call(store, { rootState, commit }, parameters)
+                .call(store, { rootState, commit }, actionParameters)
                 .then(() => {
                   // Assert
                   expect(commit).toHaveBeenCalledWith(SET_STATUS, 'data-required');
@@ -271,11 +311,11 @@ describe('online consultations store actions', () => {
 
         // Assert
         expect(result).toBeUndefined();
-        expect(getParameters).toHaveBeenCalledWith(state, rootState, undefined);
+        expect(getParameters).toHaveBeenCalledWith(state, rootState, undefined, 'NHS_ADMIN', 'AdminHelp');
         expect(getParameters).toHaveBeenCalledTimes(1);
         expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
         expect(store.dispatch).toHaveBeenCalledTimes(1);
-        expect(store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate)
+        expect(store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate)
           .not.toHaveBeenCalled();
       });
     });
@@ -291,11 +331,15 @@ describe('online consultations store actions', () => {
         };
         request = {
           parameters,
-          serviceDefinitionId: 'NHS_ADMIN',
           provider: 'stubs',
           addJavascriptDisabledHeader: true,
         };
-        actionParams = { provider: 'stubs', serviceDefinitionId: 'NHS_ADMIN', addJavascriptDisabledHeader: true, answeringConditionsQuestion: false };
+        actionParams = {
+          provider: 'stubs',
+          serviceDefinitionId: 'NHS_ADMIN',
+          addJavascriptDisabledHeader: true,
+          answeringConditionsQuestion: false,
+        };
 
         getParameters.mockClear();
         getParameters.mockReturnValue(parameters);
@@ -304,7 +348,7 @@ describe('online consultations store actions', () => {
       describe('action called with addJavascriptDisabledHeader set to true', () => {
         it('will include addJavascriptDisabledHeader in post parameter', () => {
           // Arrange
-          store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+          store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
             .mockImplementation(
               () => Promise.reject(error),
             );
@@ -315,11 +359,11 @@ describe('online consultations store actions', () => {
             .then(() => {
               // Assert
               const {
-                postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate,
-              } = store.app.$http;
-              expect(postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate)
+                postV2CdssServiceDefinitionByProviderEvaluate,
+              } = store.app.$httpV2;
+              expect(postV2CdssServiceDefinitionByProviderEvaluate)
                 .toHaveBeenCalledWith(request);
-              expect(postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate)
+              expect(postV2CdssServiceDefinitionByProviderEvaluate)
                 .toHaveBeenCalledTimes(1);
               expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
               expect(store.dispatch).toHaveBeenCalledTimes(1);
@@ -331,7 +375,7 @@ describe('online consultations store actions', () => {
         it('will not dispatch clearAndSetError', () => {
           // Arrange
           error.response.status = 480;
-          store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+          store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
             .mockImplementation(
               () => Promise.reject(error),
             );
@@ -349,7 +393,7 @@ describe('online consultations store actions', () => {
       describe('attempted evaluation is rejected', () => {
         it('will dispatch clearAndSetError', () => {
           // Arrange
-          store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+          store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
             .mockImplementation(
               () => Promise.reject(error),
             );
@@ -360,11 +404,11 @@ describe('online consultations store actions', () => {
             .then(() => {
               // Assert
               const {
-                postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate,
-              } = store.app.$http;
-              expect(postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate)
+                postV2CdssServiceDefinitionByProviderEvaluate,
+              } = store.app.$httpV2;
+              expect(postV2CdssServiceDefinitionByProviderEvaluate)
                 .toHaveBeenCalledWith(request);
-              expect(postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate)
+              expect(postV2CdssServiceDefinitionByProviderEvaluate)
                 .toHaveBeenCalledTimes(1);
               expect(store.dispatch).toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
               expect(store.dispatch).toHaveBeenCalledTimes(1);
@@ -380,7 +424,7 @@ describe('online consultations store actions', () => {
         describe('response is undefined', () => {
           it('will dispatch clearAndSetError', () => {
             // Arrange
-            store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+            store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
               .mockImplementation(
                 () => Promise.resolve(undefined),
               );
@@ -402,7 +446,7 @@ describe('online consultations store actions', () => {
             'unknown-status',
           ]).it('will dispatch clearAndSetError', (status) => {
             // Arrange
-            store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+            store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
               .mockImplementation(
                 () => Promise.resolve({ status }),
               );
@@ -448,7 +492,7 @@ describe('online consultations store actions', () => {
                 // Arrange
                 const expectedQuestionnaireItem = { item: 'value' };
                 const expectedResponse = { status: 'data-required' };
-                store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+                store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
                   .mockImplementation(
                     () => Promise.resolve(expectedResponse),
                   );
@@ -484,7 +528,7 @@ describe('online consultations store actions', () => {
                     title: 'Urticaria',
                   }],
                 }];
-                store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+                store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
                   .mockImplementation(
                     () => Promise.resolve({ status: 'data-required' }),
                   );
@@ -511,7 +555,7 @@ describe('online consultations store actions', () => {
                 // Arrange
                 const expectedTCsAnswer = { termsAccepted: true };
                 const expectedRequest = { ...request, demographicsConsentGiven: false };
-                store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+                store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
                   .mockImplementation(
                     () => Promise.resolve({ status: 'data-required' }),
                   );
@@ -524,8 +568,8 @@ describe('online consultations store actions', () => {
                   .then(() => {
                     // Assert
                     expect(getTCsAnswerForProvider).toHaveBeenCalledWith(actionParams.provider);
-                    expect(store.app.$http
-                      .postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate)
+                    expect(store.app.$httpV2
+                      .postV2CdssServiceDefinitionByProviderEvaluate)
                       .toHaveBeenCalledWith(expectedRequest);
                     expect(store.dispatch).not.toHaveBeenCalledWith('onlineConsultations/clearAndSetError');
                   });
@@ -539,7 +583,7 @@ describe('online consultations store actions', () => {
                 const expectedQuestion = { text: 'question' };
                 const expectedResponse = { status: 'data-required' };
                 const expectedQuestionnaireItem = { item: 'value' };
-                store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+                store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
                   .mockImplementation(
                     () => Promise.resolve(expectedResponse),
                   );
@@ -573,7 +617,7 @@ describe('online consultations store actions', () => {
               it('will dispatch clearAndSetError', () => {
                 // Arrange
                 const expectedResponse = { status: 'success' };
-                store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+                store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
                   .mockImplementation(
                     () => Promise.resolve(expectedResponse),
                   );
@@ -603,7 +647,7 @@ describe('online consultations store actions', () => {
               }]).it('will commit care plans and referral requests to store', ({ carePlans, referralRequests }) => {
                 // Arrange
                 const expectedResponse = { status: 'success' };
-                store.app.$http.postV1ServiceDefinitionByProviderByServicedefinitionidEvaluate
+                store.app.$httpV2.postV2CdssServiceDefinitionByProviderEvaluate
                   .mockImplementation(
                     () => Promise.resolve(expectedResponse),
                   );
@@ -629,7 +673,7 @@ describe('online consultations store actions', () => {
   describe('setProviderNames', () => {
     describe('sets provider names correctly', () => {
       it('will set names when they exist', () => {
-        store.app.$http.getV1ServiceDefinitionProviderNameByProvider
+        store.app.$httpV2.getV2CdssServiceDefinitionByProviderDetails
           .mockImplementation(
             () => Promise.resolve({ response: 'test' }),
           );
@@ -640,7 +684,7 @@ describe('online consultations store actions', () => {
           })
           .then(() => {
             // Assert
-            expect(store.app.$http.getV1ServiceDefinitionProviderNameByProvider)
+            expect(store.app.$httpV2.getV2CdssServiceDefinitionByProviderDetails)
               .toHaveBeenCalledTimes(2);
             expect(commit)
               .toHaveBeenCalledWith(SET_ADMIN_PROVIDER_NAME, { response: 'test' });
@@ -658,7 +702,7 @@ describe('online consultations store actions', () => {
           })
           .then(() => {
             // Assert
-            expect(store.app.$http.getV1ServiceDefinitionProviderNameByProvider)
+            expect(store.app.$httpV2.getV2CdssServiceDefinitionByProviderDetails)
               .toHaveBeenCalledTimes(0);
             expect(commit)
               .toHaveBeenCalledTimes(0);
@@ -668,7 +712,7 @@ describe('online consultations store actions', () => {
   });
   describe('serviceDefinitionIsValid', () => {
     it('will commit isValid true to store when successful', () => {
-      store.app.$http.getV1ServiceDefinitionByProviderIsValid
+      store.app.$httpV2.getV2CdssServiceDefinitionByProviderIsValid
         .mockImplementation((params) => {
           switch (params.provider) {
             case 'test-provider':
@@ -682,7 +726,7 @@ describe('online consultations store actions', () => {
       serviceDefinitionIsValid.call(store, { commit }, 'test-provider')
         .then(() => {
           // Assert
-          expect(store.app.$http.getV1ServiceDefinitionByProviderIsValid)
+          expect(store.app.$httpV2.getV2CdssServiceDefinitionByProviderIsValid)
             .toHaveBeenCalledWith({
               provider: 'test-provider',
               returnResponse: true,
@@ -693,12 +737,12 @@ describe('online consultations store actions', () => {
     });
 
     it('will not set isValid when api call throws non 580 error', () => {
-      store.app.$http.getV1ServiceDefinitionByProviderIsValid
+      store.app.$httpV2.getV2CdssServiceDefinitionByProviderIsValid
         .mockImplementation(() => Promise.reject(error));
       serviceDefinitionIsValid.call(store, { commit }, 'test-provider')
         .then(() => {
           // Assert
-          expect(store.app.$http.getV1ServiceDefinitionByProviderIsValid)
+          expect(store.app.$httpV2.getV2CdssServiceDefinitionByProviderIsValid)
             .toHaveBeenCalledWith({
               provider: 'test-provider',
               returnResponse: true,
@@ -709,12 +753,12 @@ describe('online consultations store actions', () => {
 
     it('will set isValid to false when api call throws custom 580 error', () => {
       error.response.status = 580;
-      store.app.$http.getV1ServiceDefinitionByProviderIsValid
+      store.app.$httpV2.getV2CdssServiceDefinitionByProviderIsValid
         .mockImplementation(() => Promise.reject(error));
       serviceDefinitionIsValid.call(store, { commit }, 'test-provider')
         .then(() => {
           // Assert
-          expect(store.app.$http.getV1ServiceDefinitionByProviderIsValid)
+          expect(store.app.$httpV2.getV2CdssServiceDefinitionByProviderIsValid)
             .toHaveBeenCalledWith({
               provider: 'test-provider',
               returnResponse: true,

@@ -1,4 +1,4 @@
-import { SESSION_ID, INPUT_DATA, ORGANIZATION as ORGANIZATION_PARAMETER } from '@/lib/online-consultations/constants/parameter-names';
+import { SESSION_ID, INPUT_DATA, ORGANIZATION as ORGANIZATION_PARAMETER, NHS_APP_SERVICE_DEFINITION_ID, NHS_APP_SERVICE_DEFINITION_TYPE } from '@/lib/online-consultations/constants/parameter-names';
 import { COMPLETED, DATA_REQUIRED } from '@/lib/online-consultations/constants/status-types';
 import { PARAMETERS, QUESTIONNAIRE_RESPONSE, ORGANIZATION as ORGANIZATION_RESOURCE } from '@/lib/online-consultations/constants/resource-types';
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
@@ -252,12 +252,28 @@ function getInputDataParameter({ question,
   return inputData;
 }
 
-export function getParameters(state, rootState, answeringConditionsQuestion) {
+function getServiceDefinitionMetaDataParameters(serviceDefinitionId, serviceDefinitionType) {
+  return [{
+    name: NHS_APP_SERVICE_DEFINITION_ID,
+    valueString: serviceDefinitionId,
+  }, {
+    name: NHS_APP_SERVICE_DEFINITION_TYPE,
+    valueString: serviceDefinitionType,
+  }];
+}
+
+export function getParameters(
+  state, rootState, answeringConditionsQuestion, serviceDefinitionId, serviceDefinitionType,
+) {
   try {
     const parameters = {
       resourceType: PARAMETERS,
       parameter: [],
     };
+
+    parameters.parameter.push(
+      ...getServiceDefinitionMetaDataParameters(serviceDefinitionId, serviceDefinitionType),
+    );
 
     if ((state.answerIsValid && state.dataRequirements && state.dataRequirements.organization)
         || answeringConditionsQuestion) {

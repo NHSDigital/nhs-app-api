@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import { getParameters, getAnswerFromItem } from '@/lib/online-consultations/mappers/parameters';
 import { initialState } from '@/store/modules/onlineConsultations/mutation-types';
-import { SESSION_ID, INPUT_DATA, ORGANIZATION as ORGANIZATION_PARAMETER } from '@/lib/online-consultations/constants/parameter-names';
+import { SESSION_ID, INPUT_DATA, ORGANIZATION as ORGANIZATION_PARAMETER, NHS_APP_SERVICE_DEFINITION_ID, NHS_APP_SERVICE_DEFINITION_TYPE } from '@/lib/online-consultations/constants/parameter-names';
 import { QUESTIONNAIRE_RESPONSE, ORGANIZATION as ORGANIZATION_RESOURCE } from '@/lib/online-consultations/constants/resource-types';
 import { COMPLETED, DATA_REQUIRED } from '@/lib/online-consultations/constants/status-types';
 import QuestionTypes from '@/lib/online-consultations/constants/question-types';
@@ -777,6 +777,26 @@ describe('online consultations mappers parameters', () => {
           });
         });
       });
+    });
+  });
+
+  describe('nhs app parameters', () => {
+    it('will add the service definition id and type to parameters', () => {
+      state.status = COMPLETED;
+      state.answerIsValid = false;
+
+      const serviceDefinitionId = 'TEST_SERVICE_DEFINITION';
+      const serviceDefinitionType = 'TestServiceDefinitionType';
+
+      const parameters = getParameters(state, rootState, false, serviceDefinitionId, serviceDefinitionType);
+
+      expect(parameters.parameter).toEqual([{
+        name: NHS_APP_SERVICE_DEFINITION_ID,
+        valueString: serviceDefinitionId,
+      }, {
+        name: NHS_APP_SERVICE_DEFINITION_TYPE,
+        valueString: serviceDefinitionType,
+      }]);
     });
   });
 });

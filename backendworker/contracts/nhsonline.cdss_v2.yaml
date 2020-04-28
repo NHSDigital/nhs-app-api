@@ -1,23 +1,18 @@
 openapi: 3.0.2
+
 info:
-  version: 0.0.4
-  title: NHS Online API - CDS API.
-  description: This is the API for NHS Online endpoints that are intended for CDS.
+  version: 2.0.1
+  title: NHS App Sub-API - CDSS V2
+  description: This is the API for NHS Online endpoints that are intended for CDSS.
+
 paths:
-  /service-definition/{provider}/{serviceDefinitionId}:
-    get:
-      x-area: olc
+  /cdss/service-definition/{provider}:
+    post:
       tags:
-        - cds-admin
-      summary: Gets the first question in admin help.
-      description: This call returns the first question in admin help.
+        - cdss
+      summary: Initiates the relevant provider's service definition with the given id 
+      description: Initiates the relevant provider's service definition with the given id
       parameters:
-        - in: path
-          name: serviceDefinitionId
-          description: service definition id
-          required: true
-          schema:
-            type: string
         - in: path
           name: provider
           description: online consultations provider
@@ -48,33 +43,41 @@ paths:
           description: token sent with the request
           schema:
             type: string
+      requestBody:
+        x-name: serviceDefinitionMetaData
+        required: true
+        $ref: "#/components/schemas/ServiceDefinitionMetaData"
       responses:
         "200":
-          description: Successful operation. First question returned.
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/cdsResponse"
         "403":
-          description: Forbidden access when trying to obtain demographic details.
+          description: Forbidden access when trying to obtain demographic information.
         "404":
-          description: This is either that the demographic details could not be found or service definition ID could not be found with the provided details.
+          description: Either the patient's demographic information or a matching service definition id could not be found.
         "500":
-          description: An unexpected error occurred processing the request to get the service ID, or to obtain paitent demographics.
+          description: An error occured either when getting the patient's demographic information or matching the service definition id.
         "502":
-          description: Bad response received from system.
-  /service-definition/{provider}/{serviceDefinitionId}/$evaluate:
+          description: Bad response received from online consultation provider.
+  /cdss/service-definition/{provider}/evaluate:
     post:
       x-area: olc
+      tags:
+        - cdss
       summary: Gets the first question in admin help.
-      description: This call returns the first question in admin help.
+      description: |
+        Evaluates the request body for the given service definition. 
+        The parameter array in the request body must contain parameters named:
+        - nhsAppServiceDefinitionId - the service definition id to evaluate against
+        - nhsAppServiceDefinitionType - the service definition type. Must be one of:
+          - AdminHelp
+          - ConditionList
+          - GeneralAdvice
+          - ConditionAdvice
       parameters:
-        - in: path
-          name: serviceDefinitionId
-          description: service definition id
-          required: true
-          schema:
-            type: string
         - in: path
           name: provider
           description: online consultations provider
@@ -138,9 +141,10 @@ paths:
           description: An unexpected error occurred processing the request to evaluate the answer, or to obtain paitent demographics.
         "502":
           description: Bad response received from system.
-  /service-definition/{provider}/$isValid:
+  /cdss/service-definition/{provider}/isValid:
     get:
-      x-area: olc
+      tags:
+        - cdss
       summary: Indicates whether online consultations are available for the user with this provider
       description: Indicates whether online consultations are available for the user with this provider
       parameters:
@@ -177,52 +181,10 @@ paths:
           description: Invalid or unsuccessful response received from upstream system
         "580":
           description: Service definitions for the given provider are unavailable
-  /service-definition/{provider}:
+  /cdss/service-definition/{provider}/details:
     get:
-      x-area: olc
-      summary: get service definition for provider
-      description: This call will return the service definitions for the provider eConsult
-      parameters:
-        - in: path
-          name: provider
-          description: online consultations provider
-          required: true
-          schema:
-            type: string
-        - in: header
-          name: Accept
-          required: true
-          description: must be application/json
-          schema:
-            type: string
-        - in: header
-          name: NHSO-Request-ID
-          required: true
-          description: id of the request
-          schema:
-            type: string
-        - in: header
-          name: X-CSRF-TOKEN
-          required: true
-          description: token sent with the request
-          schema:
-            type: string
-      responses:
-        "200":
-          description: successful return of the conditions list
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/serviceDefinitionList"
-        "404":
-          description: Service definition list could not be found for the provider specified.
-        "500":
-          description: An unexpected error occurred processing the request.
-        "502":
-          description: Bad response received from system.
-  /service-definition/provider-name/{provider}:
-    get:
-      x-area: olc
+      tags:
+        - cdss
       summary: get the name for the provider
       description: This call will return the provider name
       parameters:
@@ -270,7 +232,29 @@ components:
             $ref: "#/components/schemas/olcEvaluate"
       description: Evaluate the question answer.
       required: true
+    serviceDefinitionMetaData:
+      x-name: serviceDefinitionMetaData
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ServiceDefinitionMetaData"
+      description: Meta data about the chosen service definition
+      required: true
   schemas:
+    ServiceDefinitionMetaData:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The service definition id
+        type:
+          type: string
+          enum:
+            - Unknown
+            - AdminHelp
+            - ConditionList
+            - GeneralAdvice
+            - ConditionAdvice
     cdsResponse:
       type: object
       properties:
@@ -541,23 +525,3 @@ components:
                       reference:
                         type: string
                         description: reference to the questionnaire.
-    serviceDefinitionList:
-      type: array
-      items:
-        type: object
-        properties:
-          category:
-            type: string
-            description: category of the service definitions
-          items:
-            type: array
-            description: Array of questions answers.
-            items:
-              type: object
-              properties:
-                id:
-                  type: string
-                  description: service definition id
-                title:
-                  type: string
-                  description: title of the service definition

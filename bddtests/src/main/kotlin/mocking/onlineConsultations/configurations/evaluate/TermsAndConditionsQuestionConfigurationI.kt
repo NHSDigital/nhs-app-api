@@ -6,11 +6,6 @@ class TermsAndConditionsQuestionConfigurationI: IQuestionConfiguration {
     
     override val request = """{
        "resourceType":"Parameters",
-       "meta":{
-          "profile":[
-             "http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate"
-          ]
-       },
        "parameter":[
           {
              "name":"organization",

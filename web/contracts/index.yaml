@@ -5644,21 +5644,13 @@
                 schema: 
                   type: "string"
                   format: "binary"
-    /v1/service-definition/{provider}/{serviceDefinitionId}: 
-      get: 
-        x-area: "olc"
+    /v2/cdss/service-definition/{provider}: 
+      post: 
         tags: 
-          - "cds-admin"
-        summary: "Gets the first question in admin help."
-        description: "This call returns the first question in admin help."
+          - "cdss"
+        summary: "Initiates the relevant provider's service definition with the given id"
+        description: "Initiates the relevant provider's service definition with the given id"
         parameters: 
-          - 
-            in: "path"
-            name: "serviceDefinitionId"
-            description: "service definition id"
-            required: true
-            schema: 
-              type: "string"
           - 
             in: "path"
             name: "provider"
@@ -5694,9 +5686,25 @@
             description: "token sent with the request"
             schema: 
               type: "string"
+        requestBody: 
+          x-name: "serviceDefinitionMetaData"
+          required: true
+          type: "object"
+          properties: 
+            id: 
+              type: "string"
+              description: "The service definition id"
+            type: 
+              type: "string"
+              enum: 
+                - "Unknown"
+                - "AdminHelp"
+                - "ConditionList"
+                - "GeneralAdvice"
+                - "ConditionAdvice"
         responses: 
           200: 
-            description: "Successful operation. First question returned."
+            description: "Successful operation."
             content: 
               application/json: 
                 schema: 
@@ -5822,26 +5830,21 @@
                             type: "string"
                             description: "link to the profile of the data requirement."
           403: 
-            description: "Forbidden access when trying to obtain demographic details."
+            description: "Forbidden access when trying to obtain demographic information."
           404: 
-            description: "This is either that the demographic details could not be found or service definition ID could not be found with the provided details."
+            description: "Either the patient's demographic information or a matching service definition id could not be found."
           500: 
-            description: "An unexpected error occurred processing the request to get the service ID, or to obtain paitent demographics."
+            description: "An error occured either when getting the patient's demographic information or matching the service definition id."
           502: 
-            description: "Bad response received from system."
-    /v1/service-definition/{provider}/{serviceDefinitionId}/$evaluate: 
+            description: "Bad response received from online consultation provider."
+    /v2/cdss/service-definition/{provider}/evaluate: 
       post: 
         x-area: "olc"
+        tags: 
+          - "cdss"
         summary: "Gets the first question in admin help."
-        description: "This call returns the first question in admin help."
+        description: "Evaluates the request body for the given service definition. \nThe parameter array in the request body must contain parameters named:\n- nhsAppServiceDefinitionId - the service definition id to evaluate against\n- nhsAppServiceDefinitionType - the service definition type. Must be one of:\n  - AdminHelp\n  - ConditionList\n  - GeneralAdvice\n  - ConditionAdvice\n"
         parameters: 
-          - 
-            in: "path"
-            name: "serviceDefinitionId"
-            description: "service definition id"
-            required: true
-            schema: 
-              type: "string"
           - 
             in: "path"
             name: "provider"
@@ -6182,74 +6185,10 @@
             description: "An unexpected error occurred processing the request to evaluate the answer, or to obtain paitent demographics."
           502: 
             description: "Bad response received from system."
-    /v1/service-definition/{provider}: 
+    /v2/cdss/service-definition/{provider}/details: 
       get: 
-        x-area: "olc"
-        summary: "get service definition for provider"
-        description: "This call will return the service definitions for the provider eConsult"
-        parameters: 
-          - 
-            in: "path"
-            name: "provider"
-            description: "online consultations provider"
-            required: true
-            schema: 
-              type: "string"
-          - 
-            in: "header"
-            name: "Accept"
-            required: true
-            description: "must be application/json"
-            schema: 
-              type: "string"
-          - 
-            in: "header"
-            name: "NHSO-Request-ID"
-            required: true
-            description: "id of the request"
-            schema: 
-              type: "string"
-          - 
-            in: "header"
-            name: "X-CSRF-TOKEN"
-            required: true
-            description: "token sent with the request"
-            schema: 
-              type: "string"
-        responses: 
-          200: 
-            description: "successful return of the conditions list"
-            content: 
-              application/json: 
-                schema: 
-                  type: "array"
-                  items: 
-                    type: "object"
-                    properties: 
-                      category: 
-                        type: "string"
-                        description: "category of the service definitions"
-                      items: 
-                        type: "array"
-                        description: "Array of questions answers."
-                        items: 
-                          type: "object"
-                          properties: 
-                            id: 
-                              type: "string"
-                              description: "service definition id"
-                            title: 
-                              type: "string"
-                              description: "title of the service definition"
-          404: 
-            description: "Service definition list could not be found for the provider specified."
-          500: 
-            description: "An unexpected error occurred processing the request."
-          502: 
-            description: "Bad response received from system."
-    /v1/service-definition/provider-name/{provider}: 
-      get: 
-        x-area: "olc"
+        tags: 
+          - "cdss"
         summary: "get the name for the provider"
         description: "This call will return the provider name"
         parameters: 
@@ -6291,9 +6230,10 @@
                   description: "provider name"
           404: 
             description: "provider name was not found in the configuration"
-    /v1/service-definition/{provider}/$isValid: 
+    /v2/cdss/service-definition/{provider}/isValid: 
       get: 
-        x-area: "olc"
+        tags: 
+          - "cdss"
         summary: "Indicates whether online consultations are available for the user with this provider"
         description: "Indicates whether online consultations are available for the user with this provider"
         parameters: 

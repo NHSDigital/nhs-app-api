@@ -3,6 +3,9 @@ const parameterNames = {
   ORGANIZATION: 'organization',
   PATIENT: 'patient',
   SESSION_ID: 'sessionId',
+  /* For use by the NHS App only */
+  NHS_APP_SERVICE_DEFINITION_ID: 'nhsAppServiceDefinitionId',
+  NHS_APP_SERVICE_DEFINITION_TYPE: 'nhsAppServiceDefinitionType',
 };
 
 export const {
@@ -10,4 +13,6 @@ export const {
   ORGANIZATION,
   PATIENT,
   SESSION_ID,
+  NHS_APP_SERVICE_DEFINITION_ID,
+  NHS_APP_SERVICE_DEFINITION_TYPE,
 } = parameterNames;
