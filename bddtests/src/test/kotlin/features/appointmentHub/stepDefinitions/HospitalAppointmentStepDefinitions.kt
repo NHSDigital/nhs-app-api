@@ -4,6 +4,7 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.myrecord.factories.DemographicsFactory
+import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -23,7 +24,7 @@ class HospitalAppointmentStepDefinitions {
     fun iAmAUserWhoCanManageTheirHospitalAppointments(){
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null,
-                ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB)
+                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB)
         val supplier = SerenityHelpers.getGpSupplier()
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
@@ -33,10 +34,9 @@ class HospitalAppointmentStepDefinitions {
     fun iAmAUserWhoCanManageTheirHospitalAppointmentsAndHasLinkedProfiles() {
         val patient = EmisPatients.getPatientWithLinkedProfiles()
         val supplier = Supplier.EMIS
-        val journey = ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB
-        val gpInformation = ServiceJourneyRulesMapper.findGpInformation(
-                null, arrayListOf(journey))
-        Patient.updateOdsCodes(patient, gpInformation!!.odsCode)
+        val journey = SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB
+        val odsCode = ServiceJourneyRulesMapper.findOdsCode(supplier, arrayListOf(journey))
+        Patient.updateOdsCodes(patient, odsCode)
         SerenityHelpers.setGpSupplier(supplier)
         SerenityHelpers.setPatient(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
@@ -52,7 +52,7 @@ class HospitalAppointmentStepDefinitions {
     fun iAmAUserWithoutThePermissionToManageTheirHospitalAppointments(){
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null,
-                ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE)
+                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE)
         val supplier = SerenityHelpers.getGpSupplier()
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)

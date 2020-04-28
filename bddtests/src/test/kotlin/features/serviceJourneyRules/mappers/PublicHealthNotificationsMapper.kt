@@ -1,5 +1,6 @@
 package features.serviceJourneyRules.mappers
 
+import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.serviceJourneyRules.stepDefinitions.ServiceJourneyRulesSerenityHelpers
@@ -24,7 +25,7 @@ open class PublicHealthNotificationsMapper {
                 configuration ->
                 when (Pair(odsCode, configuration.toJourneyType())) {
                     Pair(ServiceJourneyRulesMapper.Companion.ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION,
-                         ServiceJourneyRulesMapper.Companion.JourneyType.HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS) -> {
+                         SJRJourneyType.HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS) -> {
                         ServiceJourneyRulesSerenityHelpers.HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS
                             .setIfNotAlreadySet(mutableListOf(coronavirus_covid19))
                     }

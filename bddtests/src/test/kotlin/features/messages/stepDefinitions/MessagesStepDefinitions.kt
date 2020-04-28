@@ -5,6 +5,7 @@ import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import pages.messages.MessagesErrorPage
@@ -25,7 +26,7 @@ class MessagesStepDefinitions {
     fun iAmAUserWishingToViewTheirMessages() {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null,
-                ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED)
+                SJRJourneyType.MESSAGES_ENABLED)
         val factory = MessagesFactory()
         factory.setUpUser(patient)
         factory.setUpMultipleMessagesInCache()
@@ -35,7 +36,7 @@ class MessagesStepDefinitions {
     fun iAmAUserWishingToViewTheirAppointmentsAndMessagesWithContent(table: DataTable) {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null,
-                ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED)
+                SJRJourneyType.MESSAGES_ENABLED)
         val factory = MessagesFactory()
         factory.setUpUser(patient)
         factory.setUpMultipleMessagesWithContentInCache(table)
@@ -48,7 +49,7 @@ class MessagesStepDefinitions {
     fun iAmAUserWishingToViewTheirMessagesWithContent(table: DataTable) {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null,
-                ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED)
+                SJRJourneyType.MESSAGES_ENABLED)
         val factory = MessagesFactory()
         factory.setUpUser(patient)
         factory.setUpMultipleMessagesWithContentInCache(table)
@@ -58,7 +59,7 @@ class MessagesStepDefinitions {
     fun iAmAUserWishingToViewTheirMessagesButIHaveNoMessages() {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null,
-                ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED)
+                SJRJourneyType.MESSAGES_ENABLED)
         val factory = MessagesFactory()
         factory.setUpUser(patient)
     }
@@ -67,7 +68,7 @@ class MessagesStepDefinitions {
     fun iAmAUserWishingToViewTheirMessagesButIHaveAnInvalidMessage() {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null,
-                ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED)
+                SJRJourneyType.MESSAGES_ENABLED)
         val factory = MessagesFactory()
         factory.setUpUser(patient)
         factory.setUpInvalidMessageInCache()

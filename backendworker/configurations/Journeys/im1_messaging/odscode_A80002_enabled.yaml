@@ -1,0 +1,10 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "A80002"
+journeys:
+  im1Messaging: 
+    isEnabled: true
+    canDeleteMessages: false
+    canUpdateReadStatus: true
+    requiresDetailsRequest: false
+    sendMessageSubject: false

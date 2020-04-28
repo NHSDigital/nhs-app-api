@@ -6,7 +6,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.DemographicsFactory
 import features.myrecord.factories.MyRecordFactory
-import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
+import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -29,14 +29,13 @@ open class V1MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     @Steps
     private lateinit var nav: NavigationSteps
     private lateinit var medicalRecordV1Page: MedicalRecordV1Page
-    private var medicalRecordStepDefinitions = MedicalRecordStepDefinitions()
     private lateinit var headerNative: HeaderNative
 
     @Given("^I am a (\\w+) user setup to use medical record version 1$")
     fun iAmAUserSetupToUseMedicalRecordV1(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
-                listOf(ServiceJourneyRulesConfiguration("medical record version", "1")))
+                SJRJourneyType.MEDICAL_RECORD_VERSION_1)
 
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)

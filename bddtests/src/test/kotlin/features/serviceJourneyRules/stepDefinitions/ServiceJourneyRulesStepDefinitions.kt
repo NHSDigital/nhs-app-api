@@ -63,7 +63,8 @@ class ServiceJourneyRulesStepDefinitions {
 
     private fun createUser(supplier: Supplier?,
                            configurations: List<ServiceJourneyRulesConfiguration>) {
-        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(supplier, ArrayList(configurations))
+        val journeyTypes = configurations.map { configuration -> configuration.toJourneyType() }
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(supplier, journeyTypes)
         val supplierToUse = supplier ?: SerenityHelpers.getGpSupplier()
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(

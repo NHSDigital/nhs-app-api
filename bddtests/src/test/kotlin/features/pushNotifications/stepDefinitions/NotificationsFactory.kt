@@ -1,7 +1,7 @@
 package features.pushNotifications.stepDefinitions
 
 import constants.Supplier
-import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
+import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.AccessTokenBuilder
 import mocking.MockingClient
@@ -12,8 +12,8 @@ import mongodb.MongoDBConnection
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.addToList
-import utils.getOrFail
 import utils.set
+import utils.getOrFail
 import worker.models.userDevices.InvalidUserDevice
 import java.util.*
 
@@ -23,7 +23,7 @@ class NotificationsFactory {
 
     fun setUpUser(supplier: Supplier? = null, patient: Patient? = null): Patient {
         val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
-                listOf(ServiceJourneyRulesConfiguration("notifications", "enabled")))
+                SJRJourneyType.NOTIFICATIONS_ENABLED)
         val supplierToUse = supplier ?: SerenityHelpers.getGpSupplier()
         SerenityHelpers.setPatient(patientToUse)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patientToUse)
@@ -37,7 +37,7 @@ class NotificationsFactory {
         // Use SJR generated patient, but then change subject and access token based on that,
         // to create a new nhsLoginId and differentiate from the primary patient
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(SerenityHelpers.getGpSupplier(),
-                listOf(ServiceJourneyRulesConfiguration("notifications", "enabled")))
+                SJRJourneyType.NOTIFICATIONS_ENABLED)
         patient.subject = UUID.randomUUID().toString()
         patient.accessToken = AccessTokenBuilder().getSignedToken(patient).serialize()
         CitizenIdSessionCreateJourney(mockingClient)

@@ -154,7 +154,7 @@ class HomePageStepDefinitions {
     @Then("^I see the home screen public health notifications$")
     fun iSeeTheHomeScreenPublicHealthNotifications() {
         val publicHealthNotifications = ServiceJourneyRulesSerenityHelpers
-            .HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS.getOrFail<List<PublicHealthNotification>>()
+                .HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS.getOrFail<List<PublicHealthNotification>>()
         homeSteps.homePage.assertHasPublicHealthNotifications(publicHealthNotifications)
     }
 

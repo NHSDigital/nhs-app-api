@@ -7,124 +7,94 @@ import org.junit.Assert
 import utils.SerenityHelpers
 import java.util.*
 
-private const val ODSCODE_IM1_ECONSULT_OLC_DISABLED_NOMINATED_PHARMACY_ENABLED = "A11111"
-private const val ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED = "A22222"
-private const val ODSCODE_GP_AT_HAND_CONFIGURATIONS = "A44444"
-private const val ODSCODE_IM1_MESSAGING_DOCUMENTS_ENABLED = "A10003"
-private const val ODSCODE_IM1_MESSAGING_DOCUMENTS_DISABLED = "A10004"
-private const val TPP_ONLINE_CONSULTATIONS_DISABLED = "A55555"
-private const val VISION_ONLINE_CONSULTATIONS_DISABLED = "A66666"
-private const val EMIS_GP_MEDICAL_RECORD_V1 = "A80001"
-private const val TPP_GP_MEDICAL_RECORD_V1 = "A80002"
-private const val VISION_GP_MEDICAL_RECORD_V1 = "A80003"
-private const val MICROTEST_GP_MEDICAL_RECORD_V1 = "A80004"
-
 class ServiceJourneyRulesMapper {
     companion object {
-        public val ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION = "A10006"
+        val ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION = "A10006"
 
-        private val journeysToGpInformationMap = mapOf(
-                GpInformation(Supplier.EMIS, ODSCODE_IM1_ECONSULT_OLC_DISABLED_NOMINATED_PHARMACY_ENABLED) to
-                        EnumSet.of(JourneyType.APPOINTMENTS_IM1,
-                                JourneyType.MEDICAL_RECORD_IM1,
-                                JourneyType.PRESCRIPTIONS_IM1,
-                                JourneyType.ONLINE_CONSULTATIONS_DISABLED,
-                                JourneyType.NOMINATED_PHARMACY_ENABLED,
-                                JourneyType.NOTIFICATIONS_DISABLED,
-                                JourneyType.MESSAGES_DISABLED,
-                                JourneyType.USER_INFO_DISABLED,
-                                JourneyType.SILVER_INTEGRATION_CAREPLANS_PKB,
-                                JourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,
-                                JourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,
-                                JourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
-                                JourneyType.SILVER_INTEGRATION_MESSAGES_PKB,
-                                JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB),
-                GpInformation(Supplier.EMIS, ODSCODE_INFORMATICA_NOMINATED_PHARMACY_DISABLED) to
-                        EnumSet.of(JourneyType.APPOINTMENTS_INFORMATICA,
-                                JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS,
-                                JourneyType.MEDICAL_RECORD_IM1,
-                                JourneyType.PRESCRIPTIONS_IM1,
-                                JourneyType.NOMINATED_PHARMACY_DISABLED
-                        ),
-                GpInformation(Supplier.EMIS, ODSCODE_GP_AT_HAND_CONFIGURATIONS) to
-                        EnumSet.of(JourneyType.APPOINTMENTS_GPATHAND,
-                                JourneyType.MEDICAL_RECORD_GPATHAND,
-                                JourneyType.PRESCRIPTIONS_GPATHAND,
-                                JourneyType.SILVER_INTEGRATION_CAREPLANS_NONE,
-                                JourneyType.SILVER_INTEGRATION_CONSULTATIONS_NONE,
-                                JourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE,
-                                JourneyType.SILVER_INTEGRATION_LIBRARY_NONE,
-                                JourneyType.SILVER_INTEGRATION_MESSAGES_NONE,
-                                JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE),
-                GpInformation(Supplier.TPP, TPP_ONLINE_CONSULTATIONS_DISABLED) to
-                        EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED,
-                                JourneyType.NOTIFICATIONS_ENABLED,
-                                JourneyType.MESSAGES_ENABLED,
-                                JourneyType.USER_INFO_ENABLED),
-
-                // Medical Record V1
-                GpInformation(Supplier.VISION, VISION_ONLINE_CONSULTATIONS_DISABLED)
-                        to EnumSet.of(JourneyType.ONLINE_CONSULTATIONS_DISABLED),
-
-                // Medical Record V1
-                GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-                GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-                GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-                GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-
-                // Home Screen Public Health Notifications
-                GpInformation(Supplier.EMIS, ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION) to
-                        EnumSet.of(JourneyType.HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS),
-                // Medical Record V1
-                GpInformation(Supplier.EMIS, EMIS_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-                GpInformation(Supplier.VISION, VISION_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-                GpInformation(Supplier.MICROTEST, MICROTEST_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-                GpInformation(Supplier.TPP, TPP_GP_MEDICAL_RECORD_V1) to
-                        EnumSet.of(JourneyType.MEDICAL_RECORD_VERSION_1),
-
-                // Gp Medical Record Documents / Im1 Messaging
-                GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_ENABLED) to
-                        EnumSet.of(JourneyType.DOCUMENTS_ENABLED,
-                                JourneyType.IM1_MESSAGING_ENABLED,
-                                JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
-                                JourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
-                                JourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED),
-                GpInformation(Supplier.EMIS, ODSCODE_IM1_MESSAGING_DOCUMENTS_DISABLED) to
-                        EnumSet.of(JourneyType.DOCUMENTS_DISABLED,
-                                JourneyType.IM1_MESSAGING_DISABLED,
-                                JourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
-                                JourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
-                                JourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED)
-        )
+        private val journeysToGpInformationMap = ServiceJourneyRulesConfigurationBuilder()
+                .add(Supplier.EMIS, "A11111",
+                        EnumSet.of(SJRJourneyType.APPOINTMENTS_IM1,
+                                SJRJourneyType.MEDICAL_RECORD_IM1,
+                                SJRJourneyType.PRESCRIPTIONS_IM1,
+                                SJRJourneyType.ONLINE_CONSULTATIONS_DISABLED,
+                                SJRJourneyType.NOMINATED_PHARMACY_ENABLED,
+                                SJRJourneyType.NOTIFICATIONS_DISABLED,
+                                SJRJourneyType.MESSAGES_DISABLED,
+                                SJRJourneyType.USER_INFO_DISABLED,
+                                SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB))
+                .add(Supplier.EMIS, "A22222",
+                        EnumSet.of(SJRJourneyType.APPOINTMENTS_INFORMATICA,
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS,
+                                SJRJourneyType.MEDICAL_RECORD_IM1,
+                                SJRJourneyType.PRESCRIPTIONS_IM1,
+                                SJRJourneyType.NOMINATED_PHARMACY_DISABLED))
+                .add(Supplier.EMIS, "A44444",
+                        EnumSet.of(SJRJourneyType.APPOINTMENTS_GPATHAND,
+                                SJRJourneyType.MEDICAL_RECORD_GPATHAND,
+                                SJRJourneyType.PRESCRIPTIONS_GPATHAND,
+                                SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE,
+                                SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_NONE,
+                                SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE,
+                                SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE,
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE))
+                .add(Supplier.TPP, "A55555",
+                        EnumSet.of(SJRJourneyType.ONLINE_CONSULTATIONS_DISABLED,
+                                SJRJourneyType.NOTIFICATIONS_ENABLED,
+                                SJRJourneyType.MESSAGES_ENABLED,
+                                SJRJourneyType.USER_INFO_ENABLED,
+                                SJRJourneyType.IM1_MESSAGING_ENABLED,
+                                SJRJourneyType.ONLINE_CONSULTATIONS_DISABLED))
+                .add(Supplier.VISION, "A66666",
+                        EnumSet.of(SJRJourneyType.ONLINE_CONSULTATIONS_DISABLED))
+                .add(Supplier.EMIS, "A80001",
+                        EnumSet.of(SJRJourneyType.MEDICAL_RECORD_VERSION_1,
+                                SJRJourneyType.IM1_MESSAGING_ENABLED,
+                                SJRJourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
+                                SJRJourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_ENABLED,
+                                SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_ENABLED))
+                .add(Supplier.VISION, "A80003",
+                        EnumSet.of(SJRJourneyType.MEDICAL_RECORD_VERSION_1))
+                .add(Supplier.MICROTEST, "A80004",
+                        EnumSet.of(SJRJourneyType.MEDICAL_RECORD_VERSION_1))
+                .add(Supplier.TPP, "A80002",
+                        EnumSet.of(SJRJourneyType.MEDICAL_RECORD_VERSION_1,
+                                SJRJourneyType.IM1_MESSAGING_ENABLED,
+                                SJRJourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
+                                SJRJourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_ENABLED,
+                                SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED))
+                .add(Supplier.EMIS, ODSCODE_HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATION,
+                        EnumSet.of(SJRJourneyType.HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS))
+                .add(Supplier.EMIS, "A10003",
+                        EnumSet.of(SJRJourneyType.DOCUMENTS_ENABLED,
+                                SJRJourneyType.IM1_MESSAGING_ENABLED,
+                                SJRJourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
+                                SJRJourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
+                                SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED))
+                .add(Supplier.EMIS, "A10004",
+                        EnumSet.of(SJRJourneyType.DOCUMENTS_DISABLED,
+                                SJRJourneyType.IM1_MESSAGING_DISABLED,
+                                SJRJourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
+                                SJRJourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
+                                SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED)
+                )
 
         fun findPatientForConfiguration(gpSystem: Supplier?,
-                                        journeyType: JourneyType,
+                                        journeyType: SJRJourneyType,
                                         proofLevel: IdentityProofingLevel? = null): Patient {
             return findPatientForConfiguration(gpSystem, arrayListOf(journeyType), proofLevel)
         }
 
         fun findPatientForConfiguration(gpSystem: Supplier?,
-                                        configurations: List<ServiceJourneyRulesConfiguration>,
+                                        journeyTypes: Collection<SJRJourneyType>,
                                         proofLevel: IdentityProofingLevel? = null): Patient {
-            val journeyTypes = configurations.map { configuration -> configuration.toJourneyType() }
-            return findPatientForConfiguration(gpSystem, journeyTypes, proofLevel)
-        }
-
-        private fun findPatientForConfiguration(gpSystem: Supplier?,
-                                                journeyTypes: Collection<JourneyType>,
-                                                proofLevel: IdentityProofingLevel?): Patient {
-            val gpInformation = findGpInformation(gpSystem, journeyTypes)
-            Assert.assertNotNull("""Test setup incorrect: Cannot find a matching ods code for system:
-                    $gpSystem and odsCode: ${gpInformation?.odsCode}, with given configuration in SJR""",
-                    gpInformation)
-            var patient = Patient.getDefault(gpInformation!!.gpSupplier).copy(odsCode = gpInformation.odsCode)
+            val gpInformation = journeysToGpInformationMap.find(gpSystem, journeyTypes)
+            var patient = Patient.getDefault(gpInformation.gpSupplier).copy(odsCode = gpInformation.odsCode)
             if (proofLevel != null) {
                 patient = patient.copy(identityProofingLevel = proofLevel)
             }
@@ -133,67 +103,39 @@ class ServiceJourneyRulesMapper {
             return patient
         }
 
-        fun findGpInformation(gpSystem: Supplier?, journeyTypes: Collection<JourneyType>): GpInformation? {
-            val filteredMappings =
-                    if (gpSystem != null)
-                        journeysToGpInformationMap.filter { map -> map.key.gpSupplier == gpSystem }
-                    else journeysToGpInformationMap
-
-            filteredMappings
-                    .forEach { (gpInformation, journeyTypesConfig) ->
-                        if (journeyTypesConfig.size >= journeyTypes.size &&
-                                journeyTypesConfig.containsAll(journeyTypes)) {
-                            return gpInformation
-                        }
-                    }
-            return null
+        fun findOdsCode(gpSystem: Supplier?, journeyTypes: ArrayList<SJRJourneyType>): String {
+            return journeysToGpInformationMap.find(gpSystem, journeyTypes).odsCode
         }
 
-        data class GpInformation(val gpSupplier: Supplier, val odsCode: String)
+        private class ServiceJourneyRulesConfigurationBuilder {
+            private val configs = mutableListOf<GpInformation>()
 
-        enum class JourneyType {
-            APPOINTMENTS_GPATHAND,
-            APPOINTMENTS_IM1,
-            APPOINTMENTS_INFORMATICA,
-            MEDICAL_RECORD_GPATHAND,
-            MEDICAL_RECORD_IM1,
-            MEDICAL_RECORD_VERSION_1,
-            MESSAGES_DISABLED,
-            MESSAGES_ENABLED,
-            NOTIFICATIONS_DISABLED,
-            NOTIFICATIONS_ENABLED,
-            NOMINATED_PHARMACY_DISABLED,
-            NOMINATED_PHARMACY_ENABLED,
-            ONLINE_CONSULTATIONS_DISABLED,
-            PRESCRIPTIONS_GPATHAND,
-            PRESCRIPTIONS_IM1,
-            SILVER_INTEGRATION_CONSULTATIONS_PKB,
-            SILVER_INTEGRATION_CONSULTATIONS_NONE,
-            SILVER_INTEGRATION_LIBRARY_PKB,
-            SILVER_INTEGRATION_LIBRARY_NONE,
-            SILVER_INTEGRATION_MESSAGES_PKB,
-            SILVER_INTEGRATION_MESSAGES_NONE,
-            SILVER_INTEGRATION_CAREPLANS_PKB,
-            SILVER_INTEGRATION_CAREPLANS_NONE,
-            SILVER_INTEGRATION_HEALTHTRACKER_PKB,
-            SILVER_INTEGRATION_HEALTHTRACKER_NONE,
-            SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB,
-            SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS,
-            SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE,
-            USER_INFO_DISABLED,
-            USER_INFO_ENABLED,
-            HOME_SCREEN_PUBLIC_HEALTH_NOTIFICATIONS,
-            DOCUMENTS_ENABLED,
-            DOCUMENTS_DISABLED,
-            IM1_MESSAGING_ENABLED,
-            IM1_MESSAGING_CANDELETEMESSAGES_ENABLED,
-            IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
-            IM1_MESSAGING_CANUPDATEREADSTATUS_ENABLED,
-            IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
-            IM1_MESSAGING_REQUIRESDETAILSREQUEST_ENABLED,
-            IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED,
-            IM1_MESSAGING_DISABLED
+            fun add(supplier: Supplier, odsCode: String, journeys: EnumSet<SJRJourneyType>)
+                    : ServiceJourneyRulesConfigurationBuilder {
+                if (configs.any { config -> config.odsCode == odsCode }) {
+                    Assert.fail("Duplicate ODS code in SJR setup: '$odsCode'")
+                }
+                configs.add(GpInformation(supplier, odsCode, journeys))
+                return this
+            }
+
+            fun find(supplier: Supplier? = null, journeyTypes: Collection<SJRJourneyType>): GpInformation {
+                val matchingConfig = configs.firstOrNull { config -> config.matches(supplier, journeyTypes) }
+                Assert.assertNotNull("Test setup incorrect: Cannot find a matching ods code for system:" +
+                        "'$supplier', with journeys $journeyTypes",
+                        matchingConfig)
+                return matchingConfig!!
+            }
+
+            internal data class GpInformation(val gpSupplier: Supplier, val odsCode: String,
+                                              val journeyTypes: EnumSet<SJRJourneyType>) {
+                fun matches(targetSupplier: Supplier? = null, targetJourneyTypes: Collection<SJRJourneyType>): Boolean {
+                    val matchesSupplier = targetSupplier == null || targetSupplier == gpSupplier
+                    val matchesJourney = journeyTypes.size >= targetJourneyTypes.size &&
+                            journeyTypes.containsAll(targetJourneyTypes)
+                    return matchesSupplier && matchesJourney
+                }
+            }
         }
     }
 }
-

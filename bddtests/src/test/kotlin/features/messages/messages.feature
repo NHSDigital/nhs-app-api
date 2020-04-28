@@ -161,3 +161,12 @@ Feature: Messages
     And I click the 'Try again' button
     Then the Messages page is displayed
     And my messages from the sender are displayed
+
+Scenario: A desktop user can see their messages if enabled
+  Given I am a user wishing to view my messages
+  And I am logged in
+  When I navigate to the More page
+  And I click the Messages link on the More page
+  Then the Messages Hub page is displayed
+  And I click on the NHS App Messages link on the Messages Hub page
+  Then the Messages Inbox page is displayed

@@ -3,6 +3,7 @@ package features.silverIntegration.patientsKnowBest.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -22,52 +23,52 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
 
     @Given("^I am a user who can view Appointments from Patients Know Best$")
     fun iAmAUserWhoCanViewAppointmentsFromPatientsKnowBest(){
-        setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB)
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB)
     }
 
     @Given("^I am a user who cannot view Appointments from Patients Know Best$")
     fun iAmAUserWhoCannotViewAppointmentsFromPatientsKnowBest(){
-        setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
     }
 
     @Given("^I am a user who can view care plans from Patients Know Best$")
     fun iAmAUserWhoCanViewCarePlansFromPatientsKnowBest() {
-        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_CAREPLANS_PKB)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB)
     }
 
     @Given("^I am a user who cannot view care plans from Patients Know Best$")
     fun iAmAUserWhoCannotViewCarePlansFromPatientsKnowBest() {
-        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_CAREPLANS_NONE)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE)
     }
 
     @Given("^I am a user who can view health tracker from Patients Know Best$")
     fun iAmAUserWhoCanViewHealthTrackerFromPatientsKnowBest() {
-        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB)
     }
 
     @Given("^I am a user who cannot view health tracker from Patients Know Best$")
     fun iAmAUserWhoCannotViewHealthTrackerFromPatientsKnowBest() {
-        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE)
     }
 
     @Given("^I am a user who can view Messages and Online Consultations from Patients Know Best$")
     fun iAmAUserWhoCanViewMessagesAndOnlineConsultationsFromPatientsKnowBest(){
-        setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_MESSAGES_PKB)
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB)
     }
 
     @Given("^I am a user who cannot view Messages and Online Consultations from Patients Know Best$")
     fun iAmAUserWhoCannotViewMessagesAndOnlineConsultationsFromPatientsKnowBest() {
-        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
     @Given("^I am a user who can view Shared Links from Patients Know Best$")
     fun iAmAUserWhoCanViewSharedLinksFromPatientsKnowBest(){
-        setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_LIBRARY_PKB)
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB)
     }
 
     @Given("^I am a user who cannot view Shared Links from Patients Know Best$")
     fun iAmAUserWhoCannotViewSharedLinksFromPatientsKnowBest(){
-        setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
+        setupPatient( SJRJourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
     }
 
     @Then("the link to Track your health is not available on the health record hub page")
@@ -114,7 +115,7 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         hospitalAppointmentsPage.assertPkbViewAppointmentsIsDisplayed()
     }
 
-    private fun setupPatient(configuration: ServiceJourneyRulesMapper.Companion.JourneyType) {
+    private fun setupPatient(configuration: SJRJourneyType) {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null, configuration)
         val supplier = SerenityHelpers.getGpSupplier()

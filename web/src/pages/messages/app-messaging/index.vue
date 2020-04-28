@@ -16,11 +16,11 @@
                          :date-time="message.sentTime"
                          :unread-count="senderMessage.unreadCount"
                          :aria-label="messageLabel(senderMessage, message)"
-                         :href="generateMessageUrl(senderMessage.sender)"
+                         :href="generateMessageUrl(senderMessage)"
                          :list-index="messageIndex"
                          :has-unread-messages="isUnread(senderMessage)"
                          date-format="DD/MM/YYYY"
-                         @click="goToMessages(senderMessage.sender)"/>
+                         @click="goToMessages(senderMessage)"/>
       </li>
     </ul>
 
@@ -54,15 +54,21 @@ export default {
     await store.dispatch('messaging/load');
   },
   methods: {
-    generateMessageUrl(sender) {
+    setUpUnreadAnchor(unreadCount) {
+      if (unreadCount > 0) {
+        return `${HEALTH_INFORMATION_UPDATES_MESSAGES.path}#unreadMessages`;
+      }
+      return HEALTH_INFORMATION_UPDATES_MESSAGES.path;
+    },
+    generateMessageUrl(senderMessage) {
       return createUri({
-        path: HEALTH_INFORMATION_UPDATES_MESSAGES.path,
-        noJs: { messaging: { selectedSender: sender } },
+        path: this.setUpUnreadAnchor(senderMessage.unreadCount),
+        noJs: { messaging: { selectedSender: senderMessage.sender } },
       });
     },
-    goToMessages(sender) {
-      this.$store.dispatch('messaging/selectSender', sender);
-      redirectTo(this, HEALTH_INFORMATION_UPDATES_MESSAGES.path);
+    goToMessages(senderMessage) {
+      this.$store.dispatch('messaging/selectSender', senderMessage.sender);
+      redirectTo(this, this.setUpUnreadAnchor(senderMessage.unreadCount));
     },
     messageLabel(senderMessage, message) {
       let label = this.$t('messaging.index.hidden.intro')

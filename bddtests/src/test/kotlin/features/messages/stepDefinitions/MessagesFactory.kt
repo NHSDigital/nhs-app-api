@@ -2,6 +2,7 @@ package features.messages.stepDefinitions
 
 import config.Config
 import cucumber.api.DataTable
+import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -41,7 +42,7 @@ class MessagesFactory {
     fun setUpUser(patient: Patient? = null) {
         val patientToUse = patient ?:
         ServiceJourneyRulesMapper.findPatientForConfiguration(null,
-                ServiceJourneyRulesMapper.Companion.JourneyType.MESSAGES_ENABLED)
+                SJRJourneyType.MESSAGES_ENABLED)
         SerenityHelpers.setPatient(patientToUse)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patientToUse)
         SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier(), mockingClient)

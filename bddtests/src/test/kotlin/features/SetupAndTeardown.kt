@@ -84,7 +84,6 @@ class SetupAndTeardown {
                         "There should not be any console logs but found:\r\n$errorLogs",
                         errorLogs.isEmpty())
             }
-
         }
     }
 
@@ -111,4 +110,3 @@ class SetupAndTeardown {
         return driver
     }
 }
-

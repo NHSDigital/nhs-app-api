@@ -4,6 +4,7 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.serviceJourneyRules.factories.SJRJourneyType
 import pages.gpMedicalRecord.MedicalRecordHubPage
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.MockingClient
@@ -18,17 +19,17 @@ open class MedicalRecordHubPageStepDefinitions {
 
     @Given("I am an (.*) patient with no access to PKB")
     fun setupUser(supplier: String) {
-        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_CAREPLANS_NONE, supplier)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_NONE, supplier)
     }
 
     @Given("I am an (.*) patient and I have access to Patients Know Best Care Plans")
     fun setupPKBCarePlansPatient(supplier: String) {
-        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_CAREPLANS_PKB, supplier)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB, supplier)
     }
 
     @Given("I am an (.*) patient and I have access to Patients Know Best Health Tracker")
     fun setupPKBHealthTrackerPatient(supplier: String) {
-        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB, supplier)
+        setupPatient(SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB, supplier)
     }
 
     @When("I click the menu item '(.*)'$")
@@ -61,7 +62,7 @@ open class MedicalRecordHubPageStepDefinitions {
         medicalRecordHubPage.getGpRecordHeader("Your GP medical record").assertSingleElementPresent()
     }
 
-    private fun setupPatient(configuration: ServiceJourneyRulesMapper.Companion.JourneyType, gpSystem: String) {
+    private fun setupPatient(configuration: SJRJourneyType, gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 supplier, configuration)

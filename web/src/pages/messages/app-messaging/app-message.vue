@@ -14,6 +14,9 @@
     <ul v-if="hasReadMessages" id="readSection" :class="$style['message-panel__list']">
       <message v-for="(message, index) in readMessages" :key="index" :message="message" />
     </ul>
+    <a v-if="hasUnreadMessages" id="unreadMessages"
+       :class="[$style['messageAnchorPosition'],
+                $store.state.device.isNativeApp ? $style['messageAnchorNativePosition'] : '']" />
 
     <page-divider v-if="hasUnreadMessages" :text="$t('app_messaging.messages.unreadMessages')" />
 
@@ -84,6 +87,18 @@ export default {
 @import '~nhsuk-frontend/packages/core/tools/ifff';
 @import '~nhsuk-frontend/packages/core/tools/sass-mq';
 @import '~nhsuk-frontend/packages/core/tools/spacing';
+
+.messageAnchorPosition, .messageAnchorPosition:hover {
+  padding-top: 15px;
+  background-color: transparent;
+  box-shadow: 0 0 0 0;
+}
+
+.messageAnchorNativePosition, .messageAnchorNativePosition:hover  {
+  padding-top: 0;
+  margin-top:-50px;
+  padding-bottom:50px;
+}
 
 .message-panel__list {
   @include nhsuk-responsive-margin(2, "top");

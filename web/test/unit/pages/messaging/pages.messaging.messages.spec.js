@@ -36,6 +36,9 @@ describe('messaging messages', () => {
       },
       state: {
         messaging: initialState(),
+        device: {
+          isNativeApp: true,
+        },
       },
     });
   });
