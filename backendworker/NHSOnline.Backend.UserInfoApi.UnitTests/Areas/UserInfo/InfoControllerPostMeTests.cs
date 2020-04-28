@@ -135,7 +135,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
 
         private void MockUserProfileWithOdsCode(string odsCode)
         {
-            var userInfo = new Auth.CitizenId.Models.UserInfo { GpIntegrationCredentials = new GpIntegrationCredentials { OdsCode = odsCode } };
+            var userInfo = new Auth.CitizenId.Models.UserInfo { GpIntegrationCredentials = { OdsCode = odsCode } };
             var userProfile = new UserProfile(userInfo, "Access token");
 
             _mockCitizenIdService

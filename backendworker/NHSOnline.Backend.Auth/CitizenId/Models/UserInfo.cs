@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
         public string FamilyName { get; set; }
 
         [JsonProperty("gp_integration_credentials")]
-        public GpIntegrationCredentials GpIntegrationCredentials { get; set; }
+        public GpIntegrationCredentials GpIntegrationCredentials { get; } = new GpIntegrationCredentials();
 
         [JsonProperty("nhs_number")]
         public string NhsNumber { get; set; }

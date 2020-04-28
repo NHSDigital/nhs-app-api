@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 Birthdate = "1980-01-02",
                 Im1ConnectionToken = _connectionToken.SerializeJson(),
                 NhsNumber = "012 345 6789",
-                GpIntegrationCredentials = new GpIntegrationCredentials { OdsCode = "OdsCode" }
+                GpIntegrationCredentials = { OdsCode = "OdsCode" }
             };
             _userProfile = new UserProfile(_userInfo, AccessToken);
 
