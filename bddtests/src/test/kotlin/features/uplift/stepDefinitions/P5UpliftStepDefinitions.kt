@@ -41,9 +41,14 @@ class P5UpliftStepDefinitions : HybridPageObject() {
     SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
   }
 
-  @Then("I am asked to prove my identity")
+  @Then("^I am asked to prove my identity$")
   fun iAmAskedToProveMyIdentity() {
     p5ShutterPage.assertUpliftBanner()
+  }
+
+  @Then("^I am asked to prove my identity to access '(.*)'$")
+  fun iAmAskedToProveMyIdentityToAccessPage(page: String) {
+    p5ShutterPage.assertUpliftBanner(page)
   }
 
   @Then("the uplift journey starts")

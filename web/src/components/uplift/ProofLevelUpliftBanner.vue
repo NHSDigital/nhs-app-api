@@ -1,7 +1,7 @@
 <template>
   <div class="banner-panel--blue">
     <h2>{{ $t('components.proofLevelUpliftBanner.heading') }}</h2>
-    <p>{{ $t('components.proofLevelUpliftBanner.description') }}</p>
+    <p>{{ $t(`components.proofLevelUpliftBanner.description.${description}`) }}</p>
     <generic-button class="nhsuk-button nhsuk-button--reverse"
                     @click.prevent.stop="onUpliftClick">
       {{ $t('components.proofLevelUpliftBanner.buttonText') }}
@@ -16,6 +16,12 @@ import GenericButton from '@/components/widgets/GenericButton';
 export default {
   name: 'ProofLevelUpliftBanner',
   components: { GenericButton },
+  props: {
+    description: {
+      type: String,
+      default: 'default',
+    },
+  },
   computed: {
     upliftUrl() {
       const authorisationService = new AuthorisationService(this.$store.app.$env);

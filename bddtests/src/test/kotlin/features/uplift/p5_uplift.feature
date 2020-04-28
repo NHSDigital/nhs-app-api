@@ -5,7 +5,7 @@ Feature: Proof level 5 shutter screens
     And I am logged in
     When I retrieve the '<Page>' page directly
     Then the page title is '<Page Title>'
-    And I am asked to prove my identity
+    And I am asked to prove my identity to access '<Page>'
     When I click the 'Continue' button
     Then the uplift journey starts
     Examples:

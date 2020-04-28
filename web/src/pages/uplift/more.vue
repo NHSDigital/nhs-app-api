@@ -1,6 +1,6 @@
 <template>
   <div v-if="showTemplate">
-    <proof-level-uplift-banner/>
+    <proof-level-uplift-banner description="more"/>
   </div>
 </template>
 
