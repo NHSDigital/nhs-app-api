@@ -84,11 +84,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             var recordConsentResult = await _termsAndConditionsService.RecordConsent(
                 nhsLoginId,
                 model,
-                termsAndConditionsAcceptanceDate
-            );
+                termsAndConditionsAcceptanceDate);
 
-            await recordConsentResult.Accept(new TermsAndConditionsRecordConsentAuditingVisitor(
-                _auditor, _logger, model, termsAndConditionsAcceptanceDate));
+            if (userSession is P9UserSession)
+            {
+                await recordConsentResult.Accept(new TermsAndConditionsRecordConsentAuditingVisitor(
+                    _auditor, _logger, model, termsAndConditionsAcceptanceDate));
+            }
 
             _logger.LogExit();
             return recordConsentResult.Accept(new TermsAndConditionsRecordConsentResultVisitor());
@@ -124,8 +126,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
                 dateTimeOffset
             );
 
-            await result.Accept(new ToggleAnalyticsCookieAcceptanceAuditingVisitor(_auditor, _logger,
-                dateTimeOffset, analyticsCookieAcceptance.AnalyticsCookieAccepted));
+            if (userSession is P9UserSession)
+            {
+                await result.Accept(new ToggleAnalyticsCookieAcceptanceAuditingVisitor(_auditor, _logger,
+                    dateTimeOffset, analyticsCookieAcceptance.AnalyticsCookieAccepted));
+            }
 
             _logger.LogExit();
 
