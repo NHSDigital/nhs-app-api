@@ -13,13 +13,14 @@ DOCKER_COMPOSE_FILES_ARGS=()
 for file in "$@"; do
   DOCKER_COMPOSE_FILES_ARGS+=(-f "$file")
 done
-for file in $(env | grep _DOCKER_PORTS | sed "s#^.*_DOCKER_PORTS=#docker/#"); do
-  DOCKER_COMPOSE_FILES_ARGS+=(-f "$file")
-done
 
 if [ -n "$LOGINENV" ]; then
   DOCKER_COMPOSE_FILES_ARGS+=(-f "docker/docker-compose.nhslogin-$LOGINENV.yml")
 fi
+
+for file in $(env | grep _DOCKER_PORTS | sed "s#^.*_DOCKER_PORTS=#docker/#"); do
+  DOCKER_COMPOSE_FILES_ARGS+=(-f "$file")
+done
 
 echo "Docker compose files: ${DOCKER_COMPOSE_FILES_ARGS[*]}"
 
