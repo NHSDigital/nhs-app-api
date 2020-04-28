@@ -52,7 +52,7 @@ class AuthorisationService {
     this.cidP5VectorOfTrustEnabled = environment.CID_P5_VECTOR_OF_TRUST_ENABLED;
   }
 
-  generateLoginUrl({ isNativeApp, redirectTo, cookies, fidoAuthResponse, secureCookies }) {
+  generateLoginUrl({ isNativeApp, redirectTo, cookies, fidoAuthResponse }) {
     const verifier = createVerifier();
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
@@ -73,14 +73,10 @@ class AuthorisationService {
       vtr: this.cidP5VectorOfTrustEnabled ? '["P5.Cp.Cd", "P5.Cp.Ck", "P5.Cm"]' : '["P9.Cp.Cd", "P9.Cp.Ck", "P9.Cm"]',
     };
 
-    cookies.set(
-      'nhso.auth', {
-        redirectUri,
-        codeVerifier: verifier,
-      }, {
-        secure: secureCookies,
-      },
-    );
+    cookies.set('nhso.auth', {
+      redirectUri,
+      codeVerifier: verifier,
+    });
 
     let responseUrl;
     if (fidoAuthResponse === undefined) {

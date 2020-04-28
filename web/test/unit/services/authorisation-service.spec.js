@@ -13,11 +13,9 @@ describe('login values generation', () => {
   const cookies = {
     a: undefined,
     b: undefined,
-    c: undefined,
-    set: (a, b, c) => {
+    set: (a, b) => {
       cookies.a = a;
       cookies.b = b;
-      cookies.c = c;
     },
   };
   const fidoAuthResponse = 'mock auth response';
@@ -28,7 +26,6 @@ describe('login values generation', () => {
         isNativeApp: true,
         cookies,
         fidoAuthResponse,
-        secureCookies: true,
       },
     ));
   });
@@ -39,10 +36,6 @@ describe('login values generation', () => {
 
   it('adds a verifier to the cookie in the request', () => {
     expect(cookies.b.codeVerifier).toBeDefined();
-  });
-
-  it('sets the appropriate secure option', () => {
-    expect(cookies.c.secure).toEqual(true);
   });
 
   it('uses the correct auth response in the request', () => {
