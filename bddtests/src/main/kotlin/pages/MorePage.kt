@@ -17,16 +17,12 @@ open class MorePage : HybridPageObject() {
     private val dataSharingDescription =
             "Find out how the NHS uses your confidential patient " +
                     "information and choose whether or not it can be used for research and planning."
-    private val messagesTitle = "Your messages"
+    private val messagesTitle = "Messages"
     private val messagesDescription = "Get messages from your GP surgery and other NHS services."
 
     // online consultations menu item
     private val requestGpHelpTitle = "Additional GP services"
     private val requestGpHelpDescription = "Get sick notes and GP letters or ask about recent tests."
-
-    private val messagesAndConsultationsTitle = "Messages and online consultations"
-    private val messagesAndConsultationsDescription = "Message your healthcare team, " +
-            "or answer questions online and get a response from a health professional"
 
     private val sharedLinksTitle = "Shared links"
     private val sharedLinksDescription = "View links your doctor or health professional has shared with you"
@@ -45,8 +41,6 @@ open class MorePage : HybridPageObject() {
     val btnMessages by lazy { links.link(messagesTitle, messagesDescription) }
     val btnDataSharing by lazy { links.link(dataSharingTitle, dataSharingDescription) }
     val btnRequestGpHelp by lazy { links.link(requestGpHelpTitle, requestGpHelpDescription) }
-    val btnMessagesAndConsultations by lazy { links.link(messagesAndConsultationsTitle,
-            messagesAndConsultationsDescription) }
     val btnSharedLinks by lazy { links.link(sharedLinksTitle, sharedLinksDescription)}
 
     fun assertProxyText(patientName: String){

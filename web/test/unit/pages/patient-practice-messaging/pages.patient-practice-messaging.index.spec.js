@@ -126,10 +126,10 @@ describe('practice patient messaging inbox', () => {
   });
 
   describe('back link', () => {
-    it('will go back to the more screen', () => {
+    it('will go back to the messages hub', () => {
       mountPage();
       wrapper.vm.backLinkClicked();
-      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/more');
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages');
     });
   });
 

@@ -14,8 +14,8 @@ import {
   GP_MEDICAL_RECORD,
   HEALTH_RECORDS,
   LOGIN,
-  MESSAGING,
-  MESSAGING_MESSAGES,
+  HEALTH_INFORMATION_UPDATES,
+  HEALTH_INFORMATION_UPDATES_MESSAGES,
   MORE,
   MYRECORD,
   MYRECORDTESTRESULT,
@@ -98,15 +98,15 @@ export default {
       },
     },
     {
-      route: MESSAGING.path,
+      route: HEALTH_INFORMATION_UPDATES.path,
       redirectUrl: {
-        default: MESSAGING.path,
+        default: HEALTH_INFORMATION_UPDATES.path,
       },
     },
     {
-      route: MESSAGING_MESSAGES.path,
+      route: HEALTH_INFORMATION_UPDATES_MESSAGES.path,
       redirectUrl: {
-        default: MESSAGING_MESSAGES.path,
+        default: HEALTH_INFORMATION_UPDATES_MESSAGES.path,
       },
       additionalInfoComponent: 'MessagesSenderError',
     },

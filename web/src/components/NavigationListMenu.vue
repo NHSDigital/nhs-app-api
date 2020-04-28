@@ -36,14 +36,14 @@
                :click-func="goToUrl"
                :click-param="gpMedicalRecordPath"/>
 
-    <menu-item v-if="messagingEnabled"
-               id="btn_messaging"
-               header-tag="h2"
-               data-purpose="text_link"
-               :href="messagingPath"
-               :text="$t('navigationMenuList.messaging')"
-               :click-func="navigate"
-               :aria-label="$t('navigationMenuList.messaging')"/>
+    <menu-item id="btn_messages"
+               :header-tag="headerTag"
+               data-purpose="messages-menu-item"
+               :href="messagesPath"
+               :text="$t('navigationMenuList.messages')"
+               :aria-label="$t('navigationMenuList.messages')"
+               :click-func="goToUrl"
+               :click-param="messagesPath"/>
 
     <organ-donation-link id="organ-donation-link"
                          data-sid="organ-donation-menu-item"
@@ -66,9 +66,8 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { APPOINTMENTS, GP_MEDICAL_RECORD, PRESCRIPTIONS, SYMPTOMS, LINKED_PROFILES, INDEX,
-  PATIENT_PRACTICE_MESSAGING, MESSAGING } from '@/lib/routes';
-import sjrIf from '@/lib/sjrIf';
+import { APPOINTMENTS, GP_MEDICAL_RECORD, PRESCRIPTIONS, SYMPTOMS,
+  LINKED_PROFILES, INDEX, MESSAGES } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -86,47 +85,15 @@ export default {
   },
   data() {
     return {
-      appMessagingEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
-      patientPracticeMessagingPath: PATIENT_PRACTICE_MESSAGING.path,
-      appMessagingPath: MESSAGING.path,
       organDonationUrl: this.$store.app.$env.ORGAN_DONATION_URL,
-      im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
-      im1MessagingPracticeEnabled: this.$store.state.practiceSettings.im1MessagingEnabled,
+      messagesPath: MESSAGES.path,
+      symptomsPath: SYMPTOMS.path,
+      appointmentsPath: APPOINTMENTS.path,
+      prescriptionsPath: PRESCRIPTIONS.path,
+      gpMedicalRecordPath: GP_MEDICAL_RECORD.path,
+      linkedProfilesPath: LINKED_PROFILES.path,
+      indexPath: INDEX.path,
     };
-  },
-  computed: {
-    symptomsPath() {
-      return SYMPTOMS.path;
-    },
-    appointmentsPath() {
-      return APPOINTMENTS.path;
-    },
-    prescriptionsPath() {
-      return PRESCRIPTIONS.path;
-    },
-    gpMedicalRecordPath() {
-      return GP_MEDICAL_RECORD.path;
-    },
-    linkedProfilesPath() {
-      return LINKED_PROFILES.path;
-    },
-    indexPath() {
-      return INDEX.path;
-    },
-    patientPracticeMessagingEnabled() {
-      return this.im1MessagingSjrEnabled && this.im1MessagingPracticeEnabled;
-    },
-    // patientpracticemessaging should be shown on desktop & native if enabled
-    // appMessaging should only be shown on native devices if enabled
-    messagingEnabled() {
-      return this.patientPracticeMessagingEnabled ||
-      (this.appMessagingEnabled && this.$store.state.device.isNativeApp);
-    },
-    messagingPath() {
-      return (this.patientPracticeMessagingEnabled)
-        ? this.patientPracticeMessagingPath
-        : this.appMessagingPath;
-    },
   },
   methods: {
     hasLinkedProfiles() {

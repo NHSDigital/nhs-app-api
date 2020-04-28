@@ -8,8 +8,9 @@ Feature: Patients Know Best Messages
     And I am logged in
     When I navigate to the More page
     Then I am on the More Page
-    Then the link to Messages and consultations is available on the More page
-    And I click the Messages and online consultations link on the More page
+    And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click the Messages and online consultations link on the Messages Hub page
     Then I am redirected to the redirector page with the header 'Messages and online consultations'
     And the warning message on the Redirector page explains the service is from Patients Know Best
 
@@ -19,14 +20,17 @@ Feature: Patients Know Best Messages
     And I am logged in
     And I navigate to the More page
     Then I am on the More Page
-    Then the link to Messages and consultations is not available on the More page
+    And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    Then the link to Messages and consultations is not available on the Messages Hub page
 
   Scenario: The menu item 'Messages and online consultations' is not visible on desktop
     Given I am a user who can view Messages and Online Consultations from Patients Know Best
     And I am logged in
     When I navigate to the More page
-    Then I am on the More Page
-    Then the link to Messages and consultations is not available on the More page
+    And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    Then the link to Messages and consultations is not available on the Messages Hub page
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view Messages and Online Consultations from Patients Know Best

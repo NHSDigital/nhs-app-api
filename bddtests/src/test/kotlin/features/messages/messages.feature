@@ -9,6 +9,8 @@ Feature: Messages
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click on the NHS App Messages link on the Messages Hub page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
@@ -31,6 +33,8 @@ Feature: Messages
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click on the NHS App Messages link on the Messages Hub page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
@@ -39,6 +43,8 @@ Feature: Messages
     Then the Account page for mobile devices is displayed
     When I navigate to the More page
     And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click on the NHS App Messages link on the Messages Hub page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
@@ -56,6 +62,8 @@ Feature: Messages
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click on the NHS App Messages link on the Messages Hub page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
@@ -72,6 +80,8 @@ Feature: Messages
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click on the NHS App Messages link on the Messages Hub page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
@@ -85,6 +95,8 @@ Feature: Messages
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click on the NHS App Messages link on the Messages Hub page
     Then the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
@@ -98,17 +110,10 @@ Feature: Messages
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click on the NHS App Messages link on the Messages Hub page
     Then the Messages Inbox page is displayed
     And a message is displayed indicating that there are no messages in the Messages Inbox
-
-  Scenario: A desktop user cannot see their messages
-    Given I am a user wishing to view my messages
-    And I am logged in
-    When I navigate to the More page
-    Then the link to Messages is not available on the More page
-    When I browse to the pages at the following urls I see the home page
-      | /messaging  |
-      | /messaging/messages  |
 
   Scenario: A user with messages disabled in service journey rules cannot see their messages
     Given I am using the native app user agent
@@ -117,15 +122,15 @@ Feature: Messages
       | messages      | disabled |
     And I am logged in
     When I navigate to the More page
-    Then the link to Messages is not available on the More page
+    And I click the Messages link on the More page
+    Then the link to NHS App Messages link is not displayed
     When I browse to the pages at the following urls I see the home page
-      | /messaging  |
-      | /messaging?source=ios  |
-      | /messaging?source=android  |
-      | /messaging/messages  |
-      | /messaging/messages?source=ios  |
-      | /messaging/messages?source=android  |
-
+      | /messages/app-messaging  |
+      | /messages/app-messaging?source=ios  |
+      | /messages/app-messaging?source=android  |
+      | /messages/app-messaging/app-message  |
+      | /messages/app-messaging/app-message?source=ios  |
+      | /messages/app-messaging/app-message?source=android  |
 
   Scenario: A user getting their summary messages when an internal server error occurs sees an error and can try again
     Given I am using the native app user agent
@@ -133,6 +138,8 @@ Feature: Messages
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click on the NHS App Messages link on the Messages Hub page
     Then an error with a retry button is displayed indicating that there was a problem getting messages
     When the messages in the repository can be retrieved successfully
     And I click the 'Try again' button
@@ -144,6 +151,8 @@ Feature: Messages
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
+    Then the Messages Hub page is displayed
+    And I click on the NHS App Messages link on the Messages Hub page
     Then the senders and latest messages are displayed on the Messages Inbox page
     When retrieving the messages from the repository will cause an internal server error
     And I click on a sender in the Messages Inbox

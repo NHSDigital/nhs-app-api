@@ -52,8 +52,9 @@ import {
   LOGOUT,
   MEDICAL_HISTORY,
   MEDICINES,
-  MESSAGING,
-  MESSAGING_MESSAGES,
+  MESSAGES,
+  HEALTH_INFORMATION_UPDATES,
+  HEALTH_INFORMATION_UPDATES_MESSAGES,
   MORE,
   MY_RECORD_VISION_DIAGNOSIS_DETAIL,
   MY_RECORD_VISION_EXAMINATIONS_DETAIL,
@@ -410,11 +411,16 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.medicines';
       route.meta.pageTitleKey = 'pageTitles.medicines';
       break;
-    case MESSAGING.name:
-    case MESSAGING_MESSAGES.name:
+    case MESSAGES.name:
       store.dispatch('navigation/setNewMenuItem', 4);
-      route.meta.headerKey = 'pageHeaders.messaging';
-      route.meta.pageTitleKey = 'pageTitles.messaging';
+      route.meta.headerKey = 'pageHeaders.messages';
+      route.meta.pageTitleKey = 'pageTitles.messages';
+      break;
+    case HEALTH_INFORMATION_UPDATES.name:
+    case HEALTH_INFORMATION_UPDATES_MESSAGES.name:
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'pageHeaders.healthAndInformationUpdates';
+      route.meta.pageTitleKey = 'pageTitles.healthAndInformationUpdates';
       break;
     case MORE.name:
     case UPLIFT_MORE.name:

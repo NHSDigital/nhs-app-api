@@ -609,42 +609,46 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}app-login/`,
   },
-  MESSAGING: {
-    name: 'messaging',
-    path: '/messaging',
-    proofLevel: proofLevel.P9,
-    upliftPath: '/uplift/more',
+  MESSAGES: {
+    name: 'messages',
+    path: '/messages',
+    proofLevel: proofLevel.P5,
     crumb: {
-      i18nKey: 'messaging',
+      nativeDisabled: true,
+      i18nKey: 'messages',
       get defaultCrumb() {
         return [this.allRoutes.INDEX];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
-    redirectRules: [{
-      condition: 'device/isNativeApp',
-      value: false,
-      url: '/',
-    }],
-    sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
+    helpUrl: `${baseNhsAppHelpUrl}messaging/`,
   },
-  MESSAGING_MESSAGES: {
-    name: 'messaging-messages',
-    path: '/messaging/messages',
+  HEALTH_INFORMATION_UPDATES: {
+    name: 'messages-app-messaging',
+    path: '/messages/app-messaging',
     proofLevel: proofLevel.P9,
-    upliftPath: '/uplift/more',
-    shouldShowContentHeader: false,
+    upliftPath: '/uplift/messages',
     crumb: {
+      i18nKey: 'healthAndInformationUpdates',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MESSAGING];
+        return [this.allRoutes.INDEX, this.allRoutes.MESSAGES];
       },
     },
     helpUrl: baseNhsAppHelpUrl,
-    redirectRules: [{
-      condition: 'device/isNativeApp',
-      value: false,
-      url: '/',
-    }],
+    sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
+  },
+  HEALTH_INFORMATION_UPDATES_MESSAGES: {
+    name: 'messages-app-messaging-app-message',
+    path: '/messages/app-messaging/app-message',
+    proofLevel: proofLevel.P9,
+    upliftPath: '/uplift/messages',
+    shouldShowContentHeader: false,
+    crumb: {
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.MORE,
+          this.allRoutes.HEALTH_INFORMATION_UPDATES];
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
   },
   MORE: {
@@ -1301,7 +1305,7 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessaging',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+        return [this.allRoutes.INDEX, this.allRoutes.MESSAGES];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
@@ -1315,11 +1319,12 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessagingViewAttachment',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE];
-      },
-      get moreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+        return [
+          this.allRoutes.INDEX,
+          this.allRoutes.MESSAGES,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+        ];
       },
     },
     helpUrl: baseNhsAppHelpUrl,
@@ -1333,11 +1338,12 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessagingDownloadAttachment',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE];
-      },
-      get moreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+        return [
+          this.allRoutes.INDEX,
+          this.allRoutes.MESSAGES,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+        ];
       },
     },
     helpUrl: baseNhsAppHelpUrl,
@@ -1351,10 +1357,12 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessagingDelete',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING];
-      },
-      get moreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+        return [
+          this.allRoutes.INDEX,
+          this.allRoutes.MESSAGES,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+        ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
@@ -1371,10 +1379,11 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessagingUrgency',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING];
-      },
-      get moreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+        return [
+          this.allRoutes.INDEX,
+          this.allRoutes.MESSAGES,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+        ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
@@ -1388,10 +1397,11 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessagingUrgencyContactYourGp',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING];
-      },
-      get moreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+        return [
+          this.allRoutes.INDEX,
+          this.allRoutes.MESSAGES,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+        ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
@@ -1405,10 +1415,11 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessagingRecipients',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING];
-      },
-      get moreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+        return [
+          this.allRoutes.INDEX,
+          this.allRoutes.MESSAGES,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+        ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging`,
@@ -1422,10 +1433,11 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessagingViewDetails',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING];
-      },
-      get moreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+        return [
+          this.allRoutes.INDEX,
+          this.allRoutes.MESSAGES,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+        ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
@@ -1439,10 +1451,11 @@ const routes = {
     crumb: {
       i18nKey: 'patientPracticeMessagingCreate',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING];
-      },
-      get moreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+        return [
+          this.allRoutes.INDEX,
+          this.allRoutes.MESSAGES,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+        ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
@@ -1457,10 +1470,11 @@ const routes = {
       nativeDisabled: true,
       i18nKey: 'patientPracticeMessagingDeleteSuccess',
       get defaultCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.PATIENT_PRACTICE_MESSAGING];
-      },
-      get moreCrumb() {
-        return [this.allRoutes.INDEX, this.allRoutes.MORE];
+        return [
+          this.allRoutes.INDEX,
+          this.allRoutes.MESSAGES,
+          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+        ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
@@ -1832,7 +1846,7 @@ export const backLinkOverrides = {
   },
   [routes.PATIENT_PRACTICE_MESSAGING.name]: {
     ignoreStore: true,
-    defaultPath: routes.MORE.path,
+    defaultPath: routes.MESSAGES.path,
   },
   [routes.SWITCH_PROFILE.name]: {
     ignoreStore: true,
@@ -1935,8 +1949,9 @@ export const {
   LOGOUT,
   MEDICINES,
   MEDICAL_HISTORY,
-  MESSAGING,
-  MESSAGING_MESSAGES,
+  MESSAGES,
+  HEALTH_INFORMATION_UPDATES,
+  HEALTH_INFORMATION_UPDATES_MESSAGES,
   MORE,
   MYRECORD,
   MYRECORD_GP_AT_HAND,

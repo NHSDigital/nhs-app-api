@@ -1,5 +1,6 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
+    <h2>{{ $t('app_messaging.index.subHeader') }}</h2>
     <ul v-if="hasSenderMessages" id="inboxMessages" :class="$style['nhs-app-message']">
       <li v-for="(senderMessage, index) in senderMessages"
           :key="index"
@@ -23,7 +24,7 @@
       </li>
     </ul>
 
-    <span v-else id="noMessages">{{ $t('messaging.index.noMessages') }}</span>
+    <span v-else id="noMessages">{{ $t('app_messaging.index.noMessages') }}</span>
   </div>
 </template>
 
@@ -31,7 +32,7 @@
 import { formatDate } from '@/plugins/filters';
 import { createUri } from '@/lib/noJs';
 import { redirectTo, stripHtml } from '@/lib/utils';
-import { MESSAGING_MESSAGES } from '@/lib/routes';
+import { HEALTH_INFORMATION_UPDATES_MESSAGES } from '@/lib/routes';
 import SummaryMessage from '@/components/messaging/SummaryMessage';
 
 export default {
@@ -55,13 +56,13 @@ export default {
   methods: {
     generateMessageUrl(sender) {
       return createUri({
-        path: MESSAGING_MESSAGES.path,
+        path: HEALTH_INFORMATION_UPDATES_MESSAGES.path,
         noJs: { messaging: { selectedSender: sender } },
       });
     },
     goToMessages(sender) {
       this.$store.dispatch('messaging/selectSender', sender);
-      redirectTo(this, MESSAGING_MESSAGES.path);
+      redirectTo(this, HEALTH_INFORMATION_UPDATES_MESSAGES.path);
     },
     messageLabel(senderMessage, message) {
       let label = this.$t('messaging.index.hidden.intro')
@@ -88,6 +89,6 @@ export default {
 @import '~nhsuk-frontend/packages/core/settings/spacing';
 @import '~nhsuk-frontend/packages/core/tools/sass-mq';
 @import '~nhsuk-frontend/packages/core/tools/spacing';
-@import '../../style/arrow';
-@import '../../style/messaging';
+@import '../../../style/arrow';
+@import '../../../style/messaging';
 </style>

@@ -142,6 +142,7 @@ class HomePageStepDefinitions {
                 { followAppointmentsLink() },
                 { followPrescriptionLink() },
                 { followMedicalRecordLink() },
+                { followMessagesLink() },
                 { followOrganDonationLink() }
         )
 

@@ -1422,18 +1422,8 @@ export default {
       back: 'Go to your messages',
     },
   },
-  messaging: {
-    index: {
-      hidden: {
-        intro: 'Messages from: {sender}. The last message was sent on {date}. ',
-        unread: 'You have {count} unread message{plural}. ',
-      },
-      noMessages: 'You have no messages',
-    },
-    messages: {
-      titlePrefix: 'Messages from:',
-      unreadMessages: 'Unread messages',
-      errorText: 'If the problem continues and you need this information now, contact {senderName} directly.',
+  messages: {
+    app_messaging: {
       errors: {
         500: {
           pageTitle: 'Messages error',
@@ -1450,22 +1440,39 @@ export default {
           retryButtonText: 'Try again',
         },
       },
+      app_message: {
+        errorText: 'If the problem continues and you need this information now, contact {senderName} directly.',
+        errors: {
+          500: {
+            pageTitle: 'Messages error',
+            pageHeader: 'Messages error',
+            header: 'There is a problem getting your messages',
+            message: 'Try again now.',
+            retryButtonText: 'Try again',
+          },
+          502: {
+            pageTitle: 'Messages error',
+            pageHeader: 'Messages error',
+            header: 'There is a problem getting your messages',
+            message: 'Try again now.',
+            retryButtonText: 'Try again',
+          },
+        },
+      },
     },
-    errors: {
-      500: {
-        pageTitle: 'Messages error',
-        pageHeader: 'Messages error',
-        header: 'There is a problem getting your messages',
-        message: 'Try again now.',
-        retryButtonText: 'Try again',
+  },
+  app_messaging: {
+    index: {
+      subHeader: 'Your messages',
+      hidden: {
+        intro: 'Messages from: {sender}. The last message was sent on {date}. ',
+        unread: 'You have {count} unread message{plural}. ',
       },
-      502: {
-        pageTitle: 'Messages error',
-        pageHeader: 'Messages error',
-        header: 'There is a problem getting your messages',
-        message: 'Try again now.',
-        retryButtonText: 'Try again',
-      },
+      noMessages: 'You have no messages',
+    },
+    messages: {
+      titlePrefix: 'Messages from:',
+      unreadMessages: 'Unread messages',
     },
   },
   common: {
@@ -1570,9 +1577,10 @@ export default {
     cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
     serviceUnavailable: 'Service unavailable',
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
-    messaging: 'Messages',
+    messages: 'Messages',
+    healthAndInformationUpdates: 'Health information and updates',
     messageDetails: 'Messages',
-    patientPracticeMessaging: 'Messages',
+    patientPracticeMessaging: 'GP surgery messages',
     patientPracticeMessagingUrgency: 'Do you need urgent advice?',
     patientPracticeMessagingUrgencyContactYourGp: 'Call your GP or use NHS 111',
     patientPracticeMessagingRecipients: 'Select who to message',
@@ -1595,7 +1603,7 @@ export default {
     appointmentConfirmation: 'Confirm your GP appointment',
     appointmentProxyBookingSuccess: '{name}\'s GP appointment has been booked',
     appointmentBookingSuccess: 'Your GP appointment has been booked',
-    patientPracticeMessaging: 'Messages',
+    patientPracticeMessaging: 'GP surgery messages',
     patientPracticeMessagingViewMessage: 'Conversation with {name}',
     patientPracticeMessagingViewAttachment: 'View file - Messages',
     patientPracticeMessagingDownloadAttachment: 'Download file - Messages',
@@ -1662,7 +1670,8 @@ export default {
     cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
     serviceUnavailable: 'Service unavailable',
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
-    messaging: 'Messages',
+    messages: 'Messages',
+    healthAndInformationUpdates: 'Health information and updates',
     patientPracticeMessagingUrgency: 'Do you need urgent advice?',
     patientPracticeMessagingUrgencyContactYourGp: 'Call your GP or use NHS 111',
     patientPracticeMessagingRecipients: 'Select who to message',
@@ -1701,7 +1710,7 @@ export default {
     myRecordDocuments: 'Documents',
     switchProfile: 'Home',
     organ_donation: 'Organ Donation',
-    patientPracticeMessaging: 'Messages',
+    patientPracticeMessaging: 'GP surgery messages',
     patientPracticeMessagingViewDetails: 'Your conversation',
     prescriptions: 'Your repeat prescriptions',
     prescriptionRepeatCourses: 'Your repeat prescriptions',
@@ -1713,7 +1722,8 @@ export default {
     legacyMyRecordWarning: 'My Record',
     nominatedPharmacy: 'Your nominated pharmacy',
     linkedProfiles: 'Linked profiles',
-    messaging: 'Messages',
+    healthAndInformationUpdates: 'Health information and updates',
+    messages: 'Messages',
   },
   myAccount: {
     detailsHeading: 'Details',
@@ -1854,9 +1864,9 @@ export default {
       subheader: 'Additional GP services',
       body: 'Get sick notes and GP letters or ask about recent tests.',
     },
-    messaging: {
-      subheader: 'Your messages',
-      body: 'Get messages from your GP surgery and other NHS services.',
+    messages: {
+      subheader: 'Messages',
+      body: 'Send or view messages from your GP surgery and other health services',
     },
   },
   webHeader: {
@@ -1896,7 +1906,7 @@ export default {
     myRecord: 'View your GP medical record',
     organDonation: 'Manage your organ donation decision',
     linkedProfiles: 'Linked profiles',
-    messaging: 'View your messages',
+    messages: 'View your messages',
   },
   organ_donation: {
     errors: {
@@ -2341,6 +2351,17 @@ export default {
     gpMedicalRecord: {
       subheader: 'GP medical record',
       body: 'View your GP medical record',
+    },
+  },
+  messagesHub: {
+    noMessages: 'You have no messages.',
+    im1Messaging: {
+      subheader: 'GP surgery messages',
+      body: 'Send or view messages from your GP surgery',
+    },
+    appMessaging: {
+      subHeader: 'Health information and updates',
+      body: 'View messages from health services and the NHS App',
     },
   },
   ds01: {

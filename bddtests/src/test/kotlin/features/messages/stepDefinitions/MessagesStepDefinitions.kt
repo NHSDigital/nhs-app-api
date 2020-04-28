@@ -90,28 +90,29 @@ class MessagesStepDefinitions {
         messagesInboxPage.messages.selectMessageSummary(MessagesSerenityHelpers.TARGET_SENDER.getOrFail())
     }
 
-    @Then("the Messages Inbox page is displayed")
+    @Then("^the Messages Inbox page is displayed$")
     fun theMessagesInboxPageIsDisplayed() {
-        messagesInboxPage.assertDisplayed()
+        messagesInboxPage.assertHeaderDisplayed()
+        messagesInboxPage.assertSubHeaderDisplayed()
     }
 
-    @Then("the senders and latest messages are displayed on the Messages Inbox page")
+    @Then("^the senders and latest messages are displayed on the Messages Inbox page$")
     fun theSendersAndLatestMessagesAreDisplayedOnTheMessageInboxPage() {
         messagesInboxPage.messages.assertMessages(MessagesSerenityHelpers.EXPECTED_SUMMARY_MESSAGES.getOrFail())
     }
 
-    @Then("the viewed messages are marked as read on the Messages Inbox page")
+    @Then("^the viewed messages are marked as read on the Messages Inbox page$")
     fun theViewedMessagesAreMarkedAsReadOnTheMessageInboxPage() {
         messagesInboxPage.messages.assertMessages(
                 MessagesSerenityHelpers.EXPECTED_SUMMARY_MESSAGES_AFTER_READING_SENDER.getOrFail())
     }
 
-    @Then("a message is displayed indicating that there are no messages in the Messages Inbox")
+    @Then("^a message is displayed indicating that there are no messages in the Messages Inbox$")
     fun aMessageIsDisplayedIndicatingThatThereAreNoMessagesInTheMessagesInbox() {
         messagesInboxPage.assertNoMessages()
     }
 
-    @Then("the Messages page is displayed")
+    @Then("^the Messages page is displayed$")
     fun theMessagesPageIsDisplayed() {
         messagesPage.assertDisplayed(MessagesSerenityHelpers.TARGET_SENDER.getOrFail())
     }

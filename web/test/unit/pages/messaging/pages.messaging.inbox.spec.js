@@ -1,4 +1,4 @@
-import Index from '@/pages/messaging/index';
+import Index from '@/pages/messages/app-messaging/index';
 import { initialState } from '@/store/modules/messaging/mutation-types';
 import { create$T, createStore, mount } from '../../helpers';
 
@@ -62,7 +62,7 @@ describe('messaging index', () => {
     });
 
     it('will translate the no message text', () => {
-      expect($t).toHaveBeenCalledWith('messaging.index.noMessages');
+      expect($t).toHaveBeenCalledWith('app_messaging.index.noMessages');
     });
   });
 
@@ -92,7 +92,7 @@ describe('messaging index', () => {
     });
 
     it('will not translate the no message text', () => {
-      expect($t).not.toHaveBeenCalledWith('messaging.index.noMessages');
+      expect($t).not.toHaveBeenCalledWith('app_messaging.index.noMessages');
     });
 
     describe('unread messages', () => {

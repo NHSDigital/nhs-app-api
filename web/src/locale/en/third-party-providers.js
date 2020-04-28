@@ -73,9 +73,8 @@ export default {
         id: 'messages',
         path: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
         jumpOffContent: {
-          headerText: 'Messages and online consultations',
-          descriptionText: 'Message your healthcare team, or answer questions online ' +
-            'and get a response from a health professional',
+          headerText: 'Messages and consultations with a doctor or health professional',
+          descriptionText: 'Send or view messages and online consultations with a doctor or health professional',
         },
         thirdPartyWarning: {
           featureName: 'Messages and online consultations',

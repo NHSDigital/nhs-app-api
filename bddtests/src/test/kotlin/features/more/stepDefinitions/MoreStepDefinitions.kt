@@ -34,11 +34,6 @@ class MoreStepDefinitions {
         morePage.btnMessages.click()
     }
 
-    @When("^I click the Messages and online consultations link on the More page")
-    fun iClickTheMessagesAndOnlineConsultationsLinkOnTheMorePage() {
-        morePage.btnMessagesAndConsultations.click()
-    }
-
     @When("^I click the Shared links link on the More page")
     fun iClickTheSharedLinksLinkOnTheMorePage() {
         morePage.btnSharedLinks.click()
@@ -75,16 +70,6 @@ class MoreStepDefinitions {
     @Then("the link to Messages is not available on the More page")
     fun theLinkToMessagesIsNotAvailableOnTheMorePage() {
         morePage.btnMessages.assertElementNotPresent()
-    }
-
-    @Then("the link to Messages and consultations is available on the More page")
-    fun theLinkToMessagesAndConsultationsIsAvailableOnTheMorePage() {
-        morePage.btnMessagesAndConsultations.assertSingleElementPresent()
-    }
-
-    @Then("the link to Messages and consultations is not available on the More page")
-    fun theLinkToMessagesAndConsultationsIsNotAvailableOnTheMorePage() {
-        morePage.btnMessagesAndConsultations.assertElementNotPresent()
     }
 
     @Then("the link to Shared links is available on the More page")

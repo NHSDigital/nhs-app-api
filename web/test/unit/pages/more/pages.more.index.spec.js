@@ -1,13 +1,7 @@
-import each from 'jest-each';
 import More from '@/pages/more';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { createEvent, createStore, mount, createRouter } from '../../helpers';
-import {
-  PATIENT_PRACTICE_MESSAGING,
-  DATA_SHARING_OVERVIEW,
-  APPOINTMENT_ADMIN_HELP,
-  MESSAGING,
-} from '@/lib/routes';
+import { MESSAGES } from '@/lib/routes';
 
 describe('more', () => {
   let wrapper;
@@ -17,12 +11,8 @@ describe('more', () => {
   const mountAs = ({
     cdssAdminEnabled = false,
     isProxying = false,
-    sjrMessagingEnabled = false,
-    practiceIm1MessagingEnabled = false,
-    sjrIm1MessagingEnabled = false,
     isNativeApp = false,
-    context = { serviceProvider: 'pkb',
-      serviceType: 'messages' },
+    context = true,
   } = {}) => {
     $router = createRouter();
     $store = createStore({
@@ -34,12 +24,9 @@ describe('more', () => {
             url: 'www.url.com',
           }],
         },
-        practiceSettings: { im1MessagingEnabled: practiceIm1MessagingEnabled },
       },
       getters: {
         'serviceJourneyRules/cdssAdminEnabled': cdssAdminEnabled,
-        'serviceJourneyRules/messagingEnabled': sjrMessagingEnabled,
-        'serviceJourneyRules/im1MessagingEnabled': sjrIm1MessagingEnabled,
         'serviceJourneyRules/silverIntegrationEnabled': () => (context),
         'session/isProxying': isProxying,
       },
@@ -62,15 +49,13 @@ describe('more', () => {
   });
 
   describe('gp help link', () => {
-    const gpHelpId = 'btn_gp_help';
-
     describe('sjr cdss admin disabled', () => {
       beforeEach(() => {
         wrapper = mountAs({ cdssAdminEnabled: false });
       });
 
       it('will not show link', () => {
-        expect(wrapper.find(`#${gpHelpId}`).exists()).toBe(false);
+        expect(wrapper.find('#btn_gp_help').exists()).toBe(false);
       });
     });
 
@@ -80,138 +65,25 @@ describe('more', () => {
       });
 
       it('will show link', () => {
-        expect(wrapper.find(`#${gpHelpId}`).exists()).toBe(true);
+        expect(wrapper.find('#btn_gp_help').exists()).toBe(true);
       });
     });
   });
 
   describe('messaging link', () => {
-    const getMessagingLink = wrapperObj => wrapperObj.find('#btn_messaging');
-
-    describe('sjr messaging disabled', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ sjrMessagingEnabled: false });
-      });
-
-      it('will not show link', () => {
-        expect(getMessagingLink(wrapper).exists()).toBe(false);
-      });
+    beforeEach(() => {
+      wrapper = mountAs();
     });
 
-    describe('sjr messaging enabled', () => {
-      let messagingLink;
-
-      beforeEach(() => {
-        global.digitalData = {};
-      });
-
-      it('will show link', () => {
-        wrapper = mountAs({ sjrMessagingEnabled: true, isNativeApp: true });
-        messagingLink = getMessagingLink(wrapper);
-        expect(messagingLink.exists()).toBe(true);
-      });
-
-      it('will not show the link on desktop if enabled', () => {
-        wrapper = mountAs({ sjrMessagingEnabled: true, isNativeApp: false });
-        messagingLink = getMessagingLink(wrapper);
-        expect(messagingLink.exists()).toBe(false);
-      });
-
-      it('will redirect to MESSAGING when clicked', () => {
-        wrapper = mountAs({ sjrMessagingEnabled: true, isNativeApp: true });
-        messagingLink = getMessagingLink(wrapper);
-        messagingLink.trigger('click');
-        expect($router.push).toBeCalledWith(MESSAGING.path);
-      });
+    it('will show link', () => {
+      const messagingLink = wrapper.find('#btn_messages');
+      expect(messagingLink.exists()).toBe(true);
     });
 
-    describe('im1 messaging', () => {
-      describe('practice disabled or sjr disabled', () => {
-        each([
-          { practice: true, sjr: false },
-          { practice: false, sjr: true },
-          { practice: false, sjr: false },
-        ]).it('will not show link', ({ practice, sjr }) => {
-          wrapper = mountAs({
-            practiceIm1MessagingEnabled: practice,
-            sjrIm1MessagingEnabled: sjr,
-          });
-          expect(getMessagingLink(wrapper).exists()).toBe(false);
-        });
-      });
-
-      describe('practice enabled and sjr enabled', () => {
-        let messagingLink;
-
-        beforeEach(() => {
-          global.digitalData = {};
-          wrapper = mountAs({ practiceIm1MessagingEnabled: true, sjrIm1MessagingEnabled: true });
-          messagingLink = getMessagingLink(wrapper);
-        });
-
-        it('will show link', () => {
-          expect(messagingLink.exists()).toBe(true);
-        });
-
-        it('will redirect to /patient-practice-messaging when clicked', () => {
-          messagingLink.trigger('click');
-          expect($router.push).toBeCalledWith(PATIENT_PRACTICE_MESSAGING.path);
-        });
-      });
-
-      describe('app messaging enabled and im1 messaging enabled', () => {
-        it('will redirect to /patient-practice-messaging when clicked', () => {
-          wrapper = mountAs({
-            sjrMessagingEnabled: true,
-            practiceIm1MessagingEnabled: true,
-            sjrIm1MessagingEnabled: true,
-          });
-
-          getMessagingLink(wrapper).trigger('click');
-          expect($router.push).toBeCalledWith(PATIENT_PRACTICE_MESSAGING.path);
-        });
-      });
-    });
-  });
-
-  describe('pkb messages link', () => {
-    const getPkbMessagesAndConsultationsLink = wrapperObj =>
-      wrapperObj.find('#btn_pkb_messages_and_consultations');
-
-    describe('pkb messaging enabled and is native', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: true });
-      });
-
-      it('will show link', () => {
-        expect(getPkbMessagesAndConsultationsLink(wrapper).exists()).toBe(true);
-      });
-    });
-
-    describe('pkb enabled but is desktop', () => {
-      it('will not show link', () => {
-        expect(getPkbMessagesAndConsultationsLink(wrapper).exists()).toBe(false);
-      });
-    });
-
-    describe('pkb messaging is disabled', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ isNativeApp: true });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbMessagesAndConsultationsLink(wrapper).exists()).toBe(false);
-      });
-    });
-
-    describe('is pkb enabled, native and proxying', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbMessagesAndConsultationsLink(wrapper).exists()).toBe(false);
-      });
+    it('will navigate to MESSAGES', () => {
+      const event = createEvent({ currentTarget: { pathname: MESSAGES.path } });
+      wrapper.vm.navigate(event);
+      expect($router.push).toBeCalledWith(MESSAGES.path);
     });
   });
 
@@ -221,7 +93,7 @@ describe('more', () => {
 
     describe('pkb shared links enabled, native, not proxying', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: false });
+        wrapper = mountAs({ isNativeApp: true, isProxying: false });
       });
 
       it('will show link', () => {
@@ -231,7 +103,7 @@ describe('more', () => {
 
     describe('pkb shared links enabled, desktop, not proxying', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: false, isProxying: false });
+        wrapper = mountAs({ isNativeApp: false, isProxying: false });
       });
 
       it('will not show link', () => {
@@ -251,7 +123,7 @@ describe('more', () => {
 
     describe('pkb shared links enabled, native, proxying', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
+        wrapper = mountAs({ isNativeApp: true, isProxying: true });
       });
 
       it('will not show link', () => {
@@ -261,55 +133,31 @@ describe('more', () => {
   });
 
   describe('methods', () => {
-    it('will navigate to data preferences when data preferences menu item clicked if native', () => {
-      wrapper = mountAs({ isNativeApp: true });
-      const event = createEvent({ currentTarget: { pathname: DATA_SHARING_OVERVIEW.path } });
-      wrapper.vm.navigateToDataSharing(event);
-
-      expect($router.push).toHaveBeenCalledWith(DATA_SHARING_OVERVIEW.path);
-      expect(event.preventDefault).toHaveBeenCalled();
-    });
-
-    it('will navigate to ndop home page when data preferences menu item clicked if not native', () => {
-      wrapper = mountAs();
-      const event = createEvent({ currentTarget: { pathname: 'testYourDataMattersUrl.com' } });
-      wrapper.vm.navigateToDataSharing(event);
-
-      expect($router.push).not.toHaveBeenCalledWith('testYourDataMattersUrl.com');
-      expect(event.preventDefault).not.toHaveBeenCalled();
-      expect(window.open).toHaveBeenCalledWith('testYourDataMattersUrl.com', '_blank');
-    });
-
-    it('will navigate to admin help when request gp admin help menu item clicked', () => {
-      wrapper = mountAs({ cdssAdminEnabled: true });
-      wrapper.vm.navigate(
-        createEvent({ currentTarget: { pathname: APPOINTMENT_ADMIN_HELP.path } }),
-      );
-
-      expect($router.push).toHaveBeenCalledWith(APPOINTMENT_ADMIN_HELP.path);
-    });
-
-    it('will navigate to /messaging when messaging enabled in SJR ' +
-      'and messaging menu item clicked', () => {
-      wrapper = mountAs({ sjrMessagingEnabled: true, isNativeApp: true });
-      wrapper.vm.navigate(
-        createEvent({ currentTarget: { pathname: MESSAGING.path } }),
-      );
-
-      expect($router.push).toHaveBeenCalledWith(MESSAGING.path);
-    });
-
-    it('will navigate to /patient-practice-messaging when im1Messaging is on in SJR ' +
-      'and messaging menu item clicked', () => {
-      wrapper = mountAs({
-        practiceIm1MessagingEnabled: true,
-        sjrIm1MessagingEnabled: true,
+    describe('navigate', () => {
+      it('will navigate to event current target path name', () => {
+        wrapper.vm.navigate(createEvent({ currentTarget: { pathname: '/event/path' } }));
+        expect($router.push).toHaveBeenCalledWith('/event/path');
       });
-      wrapper.vm.navigate(
-        createEvent({ currentTarget: { pathname: PATIENT_PRACTICE_MESSAGING.path } }),
-      );
+    });
 
-      expect($router.push).toHaveBeenCalledWith(PATIENT_PRACTICE_MESSAGING.path);
+    describe('navigateToDataSharing', () => {
+      it('will navigate to event current target path name if native', () => {
+        wrapper = mountAs({ isNativeApp: true });
+        const event = createEvent({ currentTarget: { pathname: '/event/path' } });
+        wrapper.vm.navigateToDataSharing(event);
+
+        expect($router.push).toHaveBeenCalledWith('/event/path');
+        expect(event.preventDefault).toHaveBeenCalled();
+      });
+      it('will navigate to ndop home page if not native', () => {
+        wrapper = mountAs();
+        const event = createEvent({ currentTarget: { pathname: 'testYourDataMattersUrl.com' } });
+        wrapper.vm.navigateToDataSharing(event);
+
+        expect($router.push).not.toHaveBeenCalledWith('testYourDataMattersUrl.com');
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        expect(window.open).toHaveBeenCalledWith('testYourDataMattersUrl.com', '_blank');
+      });
     });
   });
 });

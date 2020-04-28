@@ -104,6 +104,7 @@ open class HomePage : HybridPageObject() {
             bookAndManageAppointmentsLink,
             orderRepeatPrescriptionLink,
             viewMedicalRecordLink,
+            messagesLink,
             organDonationLink
     )
 

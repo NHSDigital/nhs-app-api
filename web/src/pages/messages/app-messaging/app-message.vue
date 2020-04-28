@@ -4,7 +4,7 @@
       <div class="nhsuk-grid-column-full">
         <page-title css-class="nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
           <span class="nhsuk-caption-l nhsuk-u-margin-bottom-0">
-            {{ $t('messaging.messages.titlePrefix') }}
+            {{ $t('app_messaging.messages.titlePrefix') }}
           </span>
           {{ sender }}
         </page-title>
@@ -15,7 +15,7 @@
       <message v-for="(message, index) in readMessages" :key="index" :message="message" />
     </ul>
 
-    <page-divider v-if="hasUnreadMessages" :text="$t('messaging.messages.unreadMessages')" />
+    <page-divider v-if="hasUnreadMessages" :text="$t('app_messaging.messages.unreadMessages')" />
 
     <ul v-if="hasUnreadMessages" id="unreadSection" :class="$style['message-panel__list']">
       <message v-for="(message, index) in unreadMessages" :key="index" :message="message" />
@@ -32,7 +32,7 @@ import first from 'lodash/fp/first';
 import takeWhile from 'lodash/fp/takeWhile';
 import dropWhile from 'lodash/fp/dropWhile';
 import { redirectTo } from '@/lib/utils';
-import { MESSAGING } from '@/lib/routes';
+import { HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -65,7 +65,7 @@ export default {
     const sender = store.state.messaging.selectedSender;
 
     if (!sender) {
-      redirect(MESSAGING.path);
+      redirect(HEALTH_INFORMATION_UPDATES.path);
       return;
     }
 
@@ -73,7 +73,7 @@ export default {
   },
   created() {
     if (!this.messages.length) {
-      redirectTo(this, MESSAGING.path);
+      redirectTo(this, HEALTH_INFORMATION_UPDATES.path);
     }
   },
 };

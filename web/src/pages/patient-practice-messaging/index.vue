@@ -37,7 +37,7 @@
         <desktopGenericBackLink
           v-if="!$store.state.device.isNativeApp"
           id="desktopBackLink"
-          :path="morePath"
+          :path="messagesPath"
           :button-text="'patient_practice_messaging.view_details.backButtonText.text'"
           @clickAndPrevent="backLinkClicked"/>
       </template>
@@ -52,7 +52,7 @@ import MenuItemList from '@/components/MenuItemList';
 import MenuItem from '@/components/MenuItem';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import {
-  MORE,
+  MESSAGES,
   PATIENT_PRACTICE_MESSAGING_URGENCY,
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   INDEX,
@@ -72,15 +72,13 @@ export default {
   },
   data() {
     return {
+      messagesPath: MESSAGES.path,
       summaries: this.$store.state.patientPracticeMessaging.messageSummaries,
     };
   },
   computed: {
     summariesLoaded() {
       return this.$store.state.patientPracticeMessaging.loadedMessages;
-    },
-    morePath() {
-      return MORE.path;
     },
     hasNoSummaries() {
       return !(this.summaries && this.summaries.length > 0);
@@ -133,7 +131,7 @@ export default {
         });
     },
     backLinkClicked() {
-      redirectTo(this, this.morePath);
+      redirectTo(this, this.messagesPath);
     },
     goToMessageDetails(message) {
       this.$store.dispatch('patientPracticeMessaging/setSelectedMessageID', message.messageId);

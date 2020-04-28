@@ -16,7 +16,7 @@ import {
   HEALTH_RECORDS,
   INDEX,
   LOGIN,
-  MESSAGING_MESSAGES,
+  HEALTH_INFORMATION_UPDATES_MESSAGES,
   MORE,
   MYRECORD,
   MYRECORD_GP_AT_HAND,
@@ -189,7 +189,7 @@ describe('nhsuk-layout - is web', () => {
     it.each([
       [LOGIN, false],
       [DOCUMENT_DETAIL, false],
-      [MESSAGING_MESSAGES, false],
+      [HEALTH_INFORMATION_UPDATES_MESSAGES, false],
       [APPOINTMENT_BOOKING_GUIDANCE, true],
       [APPOINTMENT_BOOKING, true],
       [APPOINTMENT_CONFIRMATIONS, true],

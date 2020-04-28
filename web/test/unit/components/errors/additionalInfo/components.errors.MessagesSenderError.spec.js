@@ -13,7 +13,7 @@ const mountWrapper = () => mount(MessagesSenderError, {
     },
   },
   $t: (key) => {
-    if (key === 'messaging.messages.errorText') {
+    if (key === 'messages.app_messaging.app_message.errorText') {
       return 'If the problem continues and you need this information now, contact {senderName} directly.';
     }
     return $tMock(key);

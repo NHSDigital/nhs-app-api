@@ -1,6 +1,6 @@
-import Messages from '@/pages/messaging/messages';
+import Messages from '@/pages/messages/app-messaging/app-message';
 import { initialState } from '@/store/modules/messaging/mutation-types';
-import { MESSAGING } from '@/lib/routes';
+import { HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
 import { createStore, mount } from '../../helpers';
 
 describe('messaging messages', () => {
@@ -79,8 +79,8 @@ describe('messaging messages', () => {
         expect($store.dispatch).not.toBeCalled();
       });
 
-      it('will redirect to `MESSAGING`', () => {
-        expect(redirect).toBeCalledWith(MESSAGING.path);
+      it('will redirect to `HEALTH_INFORMATION_UPDATES`', () => {
+        expect(redirect).toBeCalledWith(HEALTH_INFORMATION_UPDATES.path);
       });
     });
   });
@@ -95,8 +95,8 @@ describe('messaging messages', () => {
         wrapper = mountMessages();
       });
 
-      it('will redirect to `MESSAGING`', () => {
-        expect(storeRedirect).toBeCalledWith(MESSAGING.path);
+      it('will redirect to `HEALTH_INFORMATION_UPDATES`', () => {
+        expect(storeRedirect).toBeCalledWith(HEALTH_INFORMATION_UPDATES.path);
       });
     });
 

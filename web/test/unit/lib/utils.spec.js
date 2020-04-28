@@ -293,7 +293,7 @@ describe('util library', () => {
         textType: 'headerText',
         redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
         feature: 'jumpOffContent',
-        expectedText: 'Messages and online consultations',
+        expectedText: 'Messages and consultations with a doctor or health professional',
       }, {
         textType: 'featureName',
         redirectPath: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
