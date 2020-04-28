@@ -34,6 +34,7 @@ describe('switch profile button component', () => {
 
       // assert
       expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchToMainUserProfile');
+      expect($store.dispatch).toHaveBeenCalledWith('myRecord/clear');
       expect($store.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, INDEX.path);

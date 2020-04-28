@@ -3,7 +3,8 @@ Feature: Warning Frontend - Medical Record v1
 
   Scenario: A user navigates to my record warning page - Medical Record v1
     Given I am a EMIS user setup to use medical record version 1
-    And I am on the Medical Record Warning page
+    And I am logged in
+    When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     And I see header text is Your GP medical record
     And I see your record may contain sensitive information message
@@ -14,7 +15,9 @@ Feature: Warning Frontend - Medical Record v1
 
   Scenario: A user navigates back to home - Medical Record v1
     Given I am a EMIS user setup to use medical record version 1
-    And I am on the Medical Record Warning page
+    And I am logged in
+    When I retrieve the 'gp medical record' page directly
+    Then I see the Medical Record Warning page
     When I click back to home
     Then I see the home page
     And No navigation menu bar item will be selected
@@ -33,7 +36,8 @@ Feature: Warning Frontend - Medical Record v1
 
   Scenario: An EMIS user returns to my record and is taken straight to my record - Medical Record v1
     Given I am a EMIS user setup to use medical record version 1
-    And I am on the Medical Record Warning page
+    And I am logged in
+    When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
     Then I see the medical record page - Medical Record v1

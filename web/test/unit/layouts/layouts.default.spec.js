@@ -5,18 +5,20 @@ import WebHeader from '@/components/widgets/WebHeader';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { create$T, mockCookies } from '../helpers';
 import {
-  INDEX,
-  LOGIN,
-  SYMPTOMS,
-  APPOINTMENTS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CONFIRMATIONS,
-  PRESCRIPTIONS,
-  PRESCRIPTION_REPEAT_COURSES,
-  MYRECORD,
+  APPOINTMENTS,
   GP_MEDICAL_RECORD,
+  HEALTH_RECORDS,
+  INDEX,
+  LOGIN,
   MORE,
+  MYRECORD,
+  MYRECORD_GP_AT_HAND,
+  PRESCRIPTION_REPEAT_COURSES,
+  PRESCRIPTIONS,
+  SYMPTOMS,
 } from '@/lib/routes';
 
 const $t = create$T();
@@ -99,7 +101,7 @@ const createDefaultPageForLoginScreen = ($store) => {
   });
 };
 
-const createStore = isNativeApp => ({
+const createStore = (isNativeApp, journey = 'silverIntegration', enabled = true) => ({
   app: {
     $cookies: mockCookies(),
     $env: {
@@ -110,6 +112,7 @@ const createStore = isNativeApp => ({
   subscribe: jest.fn(),
   getters: {
     'errors/showApiError': false,
+    [`serviceJourneyRules/${journey}Enabled`]: () => (enabled),
   },
   state: {
     appVersion: {
@@ -149,37 +152,6 @@ describe('default.vue - is native', () => {
     createDefaultPage($store);
     expect($store.dispatch)
       .toHaveBeenCalledWith('auth/nativeLogin');
-  });
-
-  it('will show breadcrumb on the correct pages when native', () => {
-    const $store = createStore(true);
-
-    const noBreadcrumbPages = [
-      LOGIN,
-      SYMPTOMS,
-      APPOINTMENTS,
-      PRESCRIPTIONS,
-      MYRECORD,
-      GP_MEDICAL_RECORD,
-      MORE,
-    ];
-
-    const breadcrumbPages = [
-      APPOINTMENT_BOOKING_GUIDANCE,
-      APPOINTMENT_BOOKING,
-      APPOINTMENT_CONFIRMATIONS,
-      PRESCRIPTION_REPEAT_COURSES,
-    ];
-
-    noBreadcrumbPages.forEach((name) => {
-      const defaultPage = createDefaultPage($store, name);
-      expect(defaultPage.vm.shouldShowBreadCrumb).toBe(false);
-    });
-
-    breadcrumbPages.forEach((name) => {
-      const defaultPage = createDefaultPage($store, name);
-      expect(defaultPage.vm.shouldShowBreadCrumb).toBe(true);
-    });
   });
 
   it('will not dispatch native login message when native', () => {
@@ -250,6 +222,43 @@ describe('default.vue - is native', () => {
 
     expect(head.script).toBeUndefined();
   });
+
+  describe('breadcrumbs in native', () => {
+    const $store = createStore(true);
+
+    it.each([
+      [LOGIN, false],
+      [SYMPTOMS, false],
+      [APPOINTMENTS, false],
+      [PRESCRIPTIONS, false],
+      [MYRECORD, false],
+      [HEALTH_RECORDS, false],
+      [MORE, false],
+      [APPOINTMENT_BOOKING_GUIDANCE, true],
+      [APPOINTMENT_BOOKING, true],
+      [APPOINTMENT_CONFIRMATIONS, true],
+      [PRESCRIPTION_REPEAT_COURSES, true],
+    ])(
+      'will show breadcrumb on the correct pages when in native', (name, expectedResult) => {
+        const page = createDefaultPage($store, name);
+        expect(page.vm.shouldShowBreadCrumb).toBe(expectedResult);
+      },
+    );
+
+    it.each([
+      [GP_MEDICAL_RECORD, 'silverIntegration', true, true],
+      [GP_MEDICAL_RECORD, 'silverIntegration', false, false],
+      [MYRECORD_GP_AT_HAND, 'silverIntegration', true, true],
+      [MYRECORD_GP_AT_HAND, 'silverIntegration', false, false],
+    ])(
+      'will toggle breadcrumb pages with SJR rule', (page, journey, enabled, expectedResult) => {
+        const $sjrStore = createStore(true, journey, enabled);
+
+        const defaultPage = createDefaultPage($sjrStore, page);
+        expect(defaultPage.vm.shouldShowBreadCrumb).toBe(expectedResult);
+      },
+    );
+  });
 });
 
 describe('default.vue - is web', () => {
@@ -258,34 +267,25 @@ describe('default.vue - is web', () => {
     window.validateSession = () => {};
   });
 
-  it('will show breadcrumb on the correct pages when in web', () => {
+  describe('breadcrumbs in web', () => {
     const $store = createStore(false);
 
-    const noBreadcrumbPages = [
-      LOGIN,
-    ];
-
-    const breadcrumbPages = [
-      APPOINTMENT_BOOKING_GUIDANCE,
-      APPOINTMENT_BOOKING,
-      APPOINTMENT_CONFIRMATIONS,
-      PRESCRIPTION_REPEAT_COURSES,
-      SYMPTOMS,
-      APPOINTMENTS,
-      PRESCRIPTIONS,
-      MYRECORD,
-      GP_MEDICAL_RECORD,
-      MORE,
-    ];
-
-    noBreadcrumbPages.forEach((name) => {
-      const defaultPage = createDefaultPage($store, name);
-      expect(defaultPage.vm.shouldShowBreadCrumb).toBe(false);
-    });
-
-    breadcrumbPages.forEach((name) => {
-      const defaultPage = createDefaultPage($store, name);
-      expect(defaultPage.vm.shouldShowBreadCrumb).toBe(true);
-    });
+    it.each([
+      [LOGIN, false],
+      [APPOINTMENT_BOOKING_GUIDANCE, true],
+      [APPOINTMENT_BOOKING, true],
+      [APPOINTMENT_CONFIRMATIONS, true],
+      [PRESCRIPTION_REPEAT_COURSES, true],
+      [SYMPTOMS, true],
+      [APPOINTMENTS, true],
+      [PRESCRIPTIONS, true],
+      [MYRECORD, true],
+      [MORE, true],
+    ])(
+      'will show breadcrumb on the correct pages when in web', (name, expectedResult) => {
+        const page = createDefaultPage($store, name);
+        expect(page.vm.shouldShowBreadCrumb).toBe(expectedResult);
+      },
+    );
   });
 });

@@ -54,7 +54,7 @@ import orderBy from 'lodash/fp/orderBy';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import Card from '@/components/widgets/card/Card';
-import { MYRECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD } from '@/lib/routes';
 import Glossary from '@/components/Glossary';
 import { redirectTo } from '@/lib/utils';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
@@ -80,7 +80,7 @@ export default {
       return orderBy([problem => this.getEffectiveDate(problem.effectiveDate, '')], ['desc'])(this.problems.data);
     },
     getBackPath() {
-      return MYRECORD.path;
+      return GP_MEDICAL_RECORD.path;
     },
     showError() {
       return this.problems.hasErrored

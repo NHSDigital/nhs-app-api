@@ -3,7 +3,8 @@ Feature: Demographics Frontend - Medical Record v1
 
   Scenario Outline: A <GP System> user navigates to patient information page - Medical Record v1
     Given I am a <GP System> user setup to use medical record version 1
-    And I am on the Medical Record Warning page
+    And I am logged in
+    When I retrieve the 'my record' page directly
     Then I click continue
     And I see header text is Your GP medical record
     Then I see the Your details heading on My Record - Medical Record v1
@@ -19,6 +20,9 @@ Feature: Demographics Frontend - Medical Record v1
 
   Scenario: A EMIS user collapses the patient details section - Medical Record v1
     Given I am a EMIS user setup to use medical record version 1
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Your details section on My Record - Medical Record v1
     Then I do not see patient information details - Medical Record v1

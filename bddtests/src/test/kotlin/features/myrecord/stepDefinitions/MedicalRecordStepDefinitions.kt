@@ -17,6 +17,7 @@ import mocking.microtest.myRecord.TestResultOptions
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+//import pages.gpMedicalRecord.MedicalRecordHubPage
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
@@ -38,7 +39,6 @@ open class MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() 
     lateinit var home: HomeSteps
     @Steps
     lateinit var nav: NavigationSteps
-
     private lateinit var headerNative: HeaderNative
     private lateinit var myRecordWarningPage: MyRecordWarningPage
 
@@ -163,7 +163,7 @@ open class MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() 
 
     @When("^I enter url address for my record directly into the url$")
     fun whenIEnterUrlAddressForMyRecordDirectlyIntoTheUrl() {
-        val fullUrl = Config.instance.url + "/my-record"
+        val fullUrl = Config.instance.url + "/gp-medical-record/gp-record/"
         browser.browseTo(fullUrl)
     }
 

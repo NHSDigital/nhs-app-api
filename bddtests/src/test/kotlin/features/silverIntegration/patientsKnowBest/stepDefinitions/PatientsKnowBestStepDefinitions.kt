@@ -10,10 +10,12 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import pages.HybridPageObject
 import pages.RedirectorPage
 import pages.appointments.HospitalAppointmentsPage
+import pages.assertElementNotPresent
+import pages.gpMedicalRecord.MedicalRecordHubPage
 import utils.SerenityHelpers
 
 class PatientsKnowBestStepDefinitions : HybridPageObject() {
-
+    private lateinit var medicalRecordHubPage: MedicalRecordHubPage
     private val mockingClient = MockingClient.instance
     private lateinit var redirector: RedirectorPage
     private lateinit var hospitalAppointmentsPage: HospitalAppointmentsPage
@@ -28,14 +30,34 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
     }
 
+    @Given("^I am a user who can view care plans from Patients Know Best$")
+    fun iAmAUserWhoCanViewCarePlansFromPatientsKnowBest() {
+        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_CAREPLANS_PKB)
+    }
+
+    @Given("^I am a user who cannot view care plans from Patients Know Best$")
+    fun iAmAUserWhoCannotViewCarePlansFromPatientsKnowBest() {
+        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_CAREPLANS_NONE)
+    }
+
+    @Given("^I am a user who can view health tracker from Patients Know Best$")
+    fun iAmAUserWhoCanViewHealthTrackerFromPatientsKnowBest() {
+        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB)
+    }
+
+    @Given("^I am a user who cannot view health tracker from Patients Know Best$")
+    fun iAmAUserWhoCannotViewHealthTrackerFromPatientsKnowBest() {
+        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_HEALTHTRACKER_NONE)
+    }
+
     @Given("^I am a user who can view Messages and Online Consultations from Patients Know Best$")
     fun iAmAUserWhoCanViewMessagesAndOnlineConsultationsFromPatientsKnowBest(){
         setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_MESSAGES_PKB)
     }
 
     @Given("^I am a user who cannot view Messages and Online Consultations from Patients Know Best$")
-    fun iAmAUserWhoCannotViewMessagesAndOnlineConsultationsFromPatientsKnowBest(){
-        setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
+    fun iAmAUserWhoCannotViewMessagesAndOnlineConsultationsFromPatientsKnowBest() {
+        setupPatient(ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_MESSAGES_NONE)
     }
 
     @Given("^I am a user who can view Shared Links from Patients Know Best$")
@@ -46,6 +68,16 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
     @Given("^I am a user who cannot view Shared Links from Patients Know Best$")
     fun iAmAUserWhoCannotViewSharedLinksFromPatientsKnowBest(){
         setupPatient( ServiceJourneyRulesMapper.Companion.JourneyType.SILVER_INTEGRATION_LIBRARY_NONE)
+    }
+
+    @Then("the link to Track your health is not available on the health record hub page")
+    fun theLinkToHealthTrackerIsNotAvailableOnTheHealthRecordHubPage() {
+        medicalRecordHubPage.getHeaderElement("Track your health").assertElementNotPresent()
+    }
+
+    @Then("the link to Care plans is not available on the health record hub page")
+    fun theLinkToCarePlansIsNotAvailableOnTheHealthRecordHubPage() {
+        medicalRecordHubPage.getHeaderElement("Care plans").assertElementNotPresent()
     }
 
     @When("^I click the 'Continue' button on the redirector page with a url starting with '(.*)'$")

@@ -1,6 +1,7 @@
 import LinkedProfileSummary from '@/pages/linked-profiles/summary';
 import { create$T, createStore, mount } from '../../helpers';
-import { LINKED_PROFILES } from '@/lib/routes';
+import { INDEX, LINKED_PROFILES } from '@/lib/routes';
+import * as dependency from '@/lib/utils';
 import '@/plugins/filters';
 
 const $t = create$T();
@@ -83,6 +84,17 @@ describe('linked profile is there', () => {
 
       expect($store.dispatch).toHaveBeenCalledWith('header/updateHeaderText', 'translate_pageHeaders.linkedProfilesSummary');
       expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_pageTitles.linkedProfilesSummary');
+    });
+
+    it('will call switch and redirect to index when switch back button is clicked', async () => {
+      dependency.redirectTo = jest.fn();
+      await wrapper.vm.switchProfileButtonClicked();
+
+      expect($store.dispatch).toHaveBeenCalledWith('linkedAccounts/switchProfile', $store.state.linkedAccounts.selectedLinkedAccount);
+      expect($store.dispatch).toHaveBeenCalledWith('myRecord/clear');
+      expect($store.dispatch).toHaveBeenCalledWith('serviceJourneyRules/init');
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, INDEX.path);
     });
   });
 

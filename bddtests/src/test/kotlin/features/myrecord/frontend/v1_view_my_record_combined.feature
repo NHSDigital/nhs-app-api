@@ -26,7 +26,8 @@ Feature: Combined Frontend - Medical Record v1
     And the GP practice returns a bad allergies response
     And the GP practice returns bad consultations data
     And the GP Practice has six test results
-    When I am on the Medical Record Warning page
+    And I am logged in
+    When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
     Then I see the medical record page - Medical Record v1
@@ -47,7 +48,8 @@ Feature: Combined Frontend - Medical Record v1
     And the GP practice returns a bad allergies response
     And the GP practice returns bad consultations data
     And the GP Practice sends a bad test results response
-    When I am on the Medical Record Warning page
+    And I am logged in
+    When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
     Then I see the medical record page - Medical Record v1
@@ -62,11 +64,14 @@ Feature: Combined Frontend - Medical Record v1
       | EMIS      |
       | TPP       |
 
-    
+
   Scenario Outline: A <GP System> user receives bad acute, current and discontinued medications data - Medical Record v1
     Given I am a <GP System> user setup to use medical record version 1
     And the GP practice returns bad medications data
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see an error occurred message with Acute (short-term) medications on My Record - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
@@ -82,7 +87,10 @@ Feature: Combined Frontend - Medical Record v1
   Scenario Outline: A <GP System> user can view acute, current and discontinued medications - Medical Record v1
     Given I am a <GP System> user setup to use medical record version 1
     And the GP Practice has enabled medications functionality
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
@@ -100,7 +108,10 @@ Feature: Combined Frontend - Medical Record v1
     Given I am a <GP System> user setup to use medical record version 1
     And the GP practice returns a bad immunisations response
     And the GP Practice has enabled problems functionality
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Immunisations section on My Record - Medical Record v1
     Then I see an error occurred message with Immunisations on My Record - Medical Record v1
     When I click the Health conditions section on My Record - Medical Record v1
@@ -109,12 +120,15 @@ Feature: Combined Frontend - Medical Record v1
       | GP System |
       | EMIS      |
       | VISION    |
-    
+
   Scenario Outline: A <GP System> user can view immunisations and problems - Medical Record v1
     Given I am a <GP System> user setup to use medical record version 1
     And the GP Practice has enabled immunisations functionality and multiple immunisation records exist
     And the GP Practice has enabled problems functionality
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Immunisations section on My Record - Medical Record v1
     Then I see immunisation records displayed - Medical Record v1
     When I click the Health conditions section on My Record - Medical Record v1
@@ -128,7 +142,10 @@ Feature: Combined Frontend - Medical Record v1
     Given I am a <GP System> user setup to use medical record version 1
     And the GP practice returns a bad immunisations response
     And there is bad problems data returned
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Immunisations section on My Record - Medical Record v1
     Then I see an error occurred message with Immunisations on My Record - Medical Record v1
     When I click the Health conditions section on My Record - Medical Record v1
@@ -141,7 +158,8 @@ Feature: Combined Frontend - Medical Record v1
   Scenario: A VISION user can view allergies and demographics - Medical Record v1
     Given I am a VISION user setup to use medical record version 1
     And the GP Practice has enabled allergies functionality and has a drug and non drug allergy record for VISION
-    When I am on the Medical Record Warning page
+    And I am logged in
+    When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
     Then I see the medical record page - Medical Record v1

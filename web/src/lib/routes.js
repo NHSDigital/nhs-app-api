@@ -1,102 +1,95 @@
-import get from 'lodash/fp/get';
-import find from 'lodash/fp/find';
+import { get, find } from 'lodash/fp';
 import proofLevel from './proofLevel';
-
-const adminHelpDisabledRedirect = {
-  journey_disabled: 'cdssAdmin',
-  url: '/appointments',
-};
-
-const gpAdviceDisabledRedirect = {
-  journey_disabled: 'cdssAdvice',
-  url: '/appointments/gp-appointments',
-};
-
-const gpAtHandAppointmentRedirect = {
-  journey: 'gpAtHandAppointments',
-  url: '/appointments/gp-at-hand',
-};
-
-const gpAtHandMyRecordRedirect = {
-  journey: 'gpAtHandMyRecord',
-  url: '/my-record/gp-at-hand',
-};
-
-const gpAtHandMedicalRecordRedirectV2 = {
-  journey: 'gpAtHandGpMedicalRecordV2',
-  url: '/gp-medical-record/gp-at-hand',
-};
-
-const gpMedicalRecordRedirectV2 = {
-  journey: 'gpMedicalRecordV2',
-  url: '/gp-medical-record',
-};
-
-const im1GpMedicalRecordRedirectV2 = {
-  journey: 'im1GpMedicalRecordV2',
-  url: '/gp-medical-record',
-};
-
-const gpAtHandPrescriptionsRedirect = {
-  journey: 'gpAtHandPrescriptions',
-  url: '/prescriptions/gp-at-hand',
-};
-
-const im1AppointmentRedirect = {
-  journey: 'im1Appointments',
-  url: '/appointments/gp-appointments',
-};
-
-const im1MyRecordRedirect = {
-  journey: 'im1MyRecord',
-  url: '/my-record',
-};
-
-const im1PrescriptionsRedirect = {
-  journey: 'im1Prescriptions',
-  url: '/prescriptions',
-};
-
-const informaticaAppointmentRedirect = {
-  journey: 'informaticaAppointments',
-  url: '/appointments/informatica',
-};
-
-const messagingDisabledRedirect = {
-  journey_disabled: 'messaging',
-  url: '/',
-};
-
-const linkedAccountAppointmentRedirect = {
-  journey: 'linkedAccountAppointments',
-  url: '/linked-profiles/shutter/appointments',
-};
-
-const silverIntegrationsSecondaryAppointmentsDisabledRedirect = {
-  journey_disabled: 'silverIntegration',
-  url: '/appointments',
-  context: {
-    provider: 'ers',
-    serviceType: 'secondaryAppointments',
-  },
-};
-
-const documentsDisabledRedirect = {
-  journey_disabled: 'documents',
-  url: '/',
-};
-
-const im1MessagingDisabledRedirect = {
-  journey_disabled: 'im1Messaging',
-  url: '/',
-};
-
-const deleteMessageRedirect = {
-  journey_disabled: 'deletePatientPracticeMessage',
-  url: '/patient-practice-messaging',
-};
+import sjrIf from './sjrIf';
 
 const baseNhsAppHelpUrl = 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/';
+
+const sjrRedirectRules = {
+  adminHelpDisabledRedirect: {
+    journey_disabled: 'cdssAdmin',
+    url: '/appointments',
+  },
+  deleteMessageRedirect: {
+    journey_disabled: 'deletePatientPracticeMessage',
+    url: '/patient-practice-messaging',
+  },
+  documentsDisabledRedirect: {
+    journey_disabled: 'documents',
+    url: '/',
+  },
+  gpAdviceDisabledRedirect: {
+    journey_disabled: 'cdssAdvice',
+    url: '/appointments/gp-appointments',
+  },
+  gpAtHandAppointmentRedirect: {
+    journey: 'gpAtHandAppointments',
+    url: '/appointments/gp-at-hand',
+  },
+  gpAtHandMyRecordRedirect: {
+    journey: 'gpAtHandMyRecord',
+    url: '/my-record/gp-at-hand',
+  },
+  gpAtHandMedicalRecordRedirectV2: {
+    journey: 'gpAtHandGpMedicalRecordV2',
+    url: '/gp-medical-record/gp-at-hand',
+  },
+  gpAtHandPrescriptionsRedirect: {
+    journey: 'gpAtHandPrescriptions',
+    url: '/prescriptions/gp-at-hand',
+  },
+  gpMedicalRecordRedirectV2: {
+    journey: 'gpMedicalRecordV2',
+    url: '/gp-medical-record/gp-record',
+  },
+  im1AppointmentRedirect: {
+    journey: 'im1Appointments',
+    url: '/appointments/gp-appointments',
+  },
+  im1GpMedicalRecordRedirectV2: {
+    journey: 'im1GpMedicalRecordV2',
+    url: '/gp-medical-record/gp-record',
+  },
+  im1MessagingDisabledRedirect: {
+    journey_disabled: 'im1Messaging',
+    url: '/',
+  },
+  im1MyRecordRedirect: {
+    journey: 'im1MyRecord',
+    url: '/my-record',
+  },
+  im1PrescriptionsRedirect: {
+    journey: 'im1Prescriptions',
+    url: '/prescriptions',
+  },
+  informaticaAppointmentRedirect: {
+    journey: 'informaticaAppointments',
+    url: '/appointments/informatica',
+  },
+  messagingDisabledRedirect: {
+    journey_disabled: 'messaging',
+    url: '/',
+  },
+  linkedAccountAppointmentRedirect: {
+    journey: 'linkedAccountAppointments',
+    url: '/linked-profiles/shutter/appointments',
+  },
+  silverIntegrationsSecondaryAppointmentsDisabledRedirect: {
+    journey_disabled: 'silverIntegration',
+    url: '/appointments',
+    context: {
+      provider: 'ers',
+      serviceType: 'secondaryAppointments',
+    },
+  },
+  silverIntegrationsHealthRecordHubCarePlansEnabledRedirect: {
+    journey: 'silverIntegration',
+    url: '/gp-medical-record',
+    context: {
+      provider: 'pkb',
+      serviceType: 'carePlans',
+    },
+  },
+};
 
 const routes = {
   ACCOUNT: {
@@ -209,9 +202,9 @@ const routes = {
     proxyShutterPath: '/linked-profiles/shutter/appointments',
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
     sjrRedirectRules: [
-      linkedAccountAppointmentRedirect,
-      gpAtHandAppointmentRedirect,
-      informaticaAppointmentRedirect,
+      sjrRedirectRules.linkedAccountAppointmentRedirect,
+      sjrRedirectRules.gpAtHandAppointmentRedirect,
+      sjrRedirectRules.informaticaAppointmentRedirect,
     ],
   },
   HOSPITAL_APPOINTMENTS: {
@@ -230,7 +223,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
-    sjrRedirectRules: [silverIntegrationsSecondaryAppointmentsDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.silverIntegrationsSecondaryAppointmentsDisabledRedirect],
   },
   APPOINTMENT_ADMIN_HELP: {
     name: 'appointments-admin-help',
@@ -248,7 +241,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}online-consultations/`,
-    sjrRedirectRules: [adminHelpDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.adminHelpDisabledRedirect],
   },
   APPOINTMENT_GP_ADVICE: {
     name: 'appointments-gp-advice',
@@ -266,7 +259,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}online-consultations/`,
-    sjrRedirectRules: [gpAdviceDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.gpAdviceDisabledRedirect],
   },
   APPOINTMENT_BOOKING: {
     name: 'appointments-booking',
@@ -294,8 +287,8 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
     sjrRedirectRules: [
-      gpAtHandAppointmentRedirect,
-      informaticaAppointmentRedirect,
+      sjrRedirectRules.gpAtHandAppointmentRedirect,
+      sjrRedirectRules.informaticaAppointmentRedirect,
     ],
   },
   APPOINTMENT_CANCEL_NOJS: {
@@ -388,8 +381,8 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
     sjrRedirectRules: [
-      im1AppointmentRedirect,
-      informaticaAppointmentRedirect,
+      sjrRedirectRules.im1AppointmentRedirect,
+      sjrRedirectRules.informaticaAppointmentRedirect,
     ],
   },
   APPOINTMENT_INFORMATICA: {
@@ -405,8 +398,8 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
     sjrRedirectRules: [
-      gpAtHandAppointmentRedirect,
-      im1AppointmentRedirect,
+      sjrRedirectRules.gpAtHandAppointmentRedirect,
+      sjrRedirectRules.im1AppointmentRedirect,
     ],
   },
   AUTH_RETURN: {
@@ -633,7 +626,7 @@ const routes = {
       value: false,
       url: '/',
     }],
-    sjrRedirectRules: [messagingDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
   },
   MESSAGING_MESSAGES: {
     name: 'messaging-messages',
@@ -652,7 +645,7 @@ const routes = {
       value: false,
       url: '/',
     }],
-    sjrRedirectRules: [messagingDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
   },
   MORE: {
     name: 'more',
@@ -687,18 +680,27 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
     sjrRedirectRules: [
-      gpAtHandMedicalRecordRedirectV2,
-      gpAtHandMyRecordRedirect,
-      gpMedicalRecordRedirectV2,
+      sjrRedirectRules.silverIntegrationsHealthRecordHubCarePlansEnabledRedirect,
+      sjrRedirectRules.gpMedicalRecordRedirectV2,
+      sjrRedirectRules.gpAtHandMedicalRecordRedirectV2,
+      sjrRedirectRules.gpAtHandMyRecordRedirect,
     ],
   },
   GP_MEDICAL_RECORD: {
-    name: 'gp-medical-record',
-    path: '/gp-medical-record',
+    name: 'gp-medical-record-gp-record',
+    path: '/gp-medical-record/gp-record',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
-      nativeDisabled: true,
+      nativeDisabled({ $store }) {
+        const rule = sjrRedirectRules.silverIntegrationsHealthRecordHubCarePlansEnabledRedirect;
+        return sjrIf({
+          $store,
+          journey: rule.journey,
+          disabled: true,
+          context: rule.context,
+        });
+      },
       i18nKey: 'myRecord',
       get defaultCrumb() {
         return [this.allRoutes.INDEX];
@@ -706,19 +708,42 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
+  HEALTH_RECORDS: {
+    name: 'gp-medical-record',
+    path: '/gp-medical-record',
+    proofLevel: proofLevel.P9,
+    upliftPath: '/uplift/gp-medical-record',
+    crumb: {
+      nativeDisabled: true,
+      i18nKey: 'healthRecords',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}health-records/`,
+  },
   MYRECORD_GP_AT_HAND: {
     name: 'my-record-gp-at-hand',
     path: '/my-record/gp-at-hand',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
+      nativeDisabled({ $store }) {
+        const rule = sjrRedirectRules.silverIntegrationsHealthRecordHubCarePlansEnabledRedirect;
+        return sjrIf({
+          $store,
+          journey: rule.journey,
+          disabled: true,
+          context: rule.context,
+        });
+      },
       i18nKey: 'myRecordGpAtHand',
       get defaultCrumb() {
         return [this.allRoutes.INDEX];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    sjrRedirectRules: [im1MyRecordRedirect],
+    sjrRedirectRules: [sjrRedirectRules.im1MyRecordRedirect],
   },
   GP_MEDICAL_RECORD_GP_AT_HAND: {
     name: 'gp-medical-record-gp-at-hand',
@@ -732,7 +757,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    sjrRedirectRules: [im1GpMedicalRecordRedirectV2],
+    sjrRedirectRules: [sjrRedirectRules.im1GpMedicalRecordRedirectV2],
   },
   MYRECORDNOACCESS: {
     name: 'my-record-noaccess',
@@ -967,7 +992,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    sjrRedirectRules: [documentsDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.documentsDisabledRedirect],
   },
   DOCUMENT: {
     name: 'gp-medical-record-documents-id',
@@ -980,7 +1005,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    sjrRedirectRules: [documentsDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.documentsDisabledRedirect],
   },
   DOCUMENT_DETAIL: {
     name: 'gp-medical-record-documents-detail-id',
@@ -994,7 +1019,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    sjrRedirectRules: [documentsDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.documentsDisabledRedirect],
   },
   NOMINATED_PHARMACY: {
     name: 'nominated-pharmacy',
@@ -1280,7 +1305,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    sjrRedirectRules: [im1MessagingDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT: {
     name: 'patient-practice-messaging-view-attachment',
@@ -1298,7 +1323,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
-    sjrRedirectRules: [im1MessagingDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT: {
     name: 'patient-practice-messaging-download-attachment',
@@ -1316,7 +1341,7 @@ const routes = {
       },
     },
     helpUrl: baseNhsAppHelpUrl,
-    sjrRedirectRules: [im1MessagingDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DELETE: {
     name: 'patient-practice-messaging-delete',
@@ -1333,7 +1358,10 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    sjrRedirectRules: [im1MessagingDisabledRedirect, deleteMessageRedirect],
+    sjrRedirectRules: [
+      sjrRedirectRules.im1MessagingDisabledRedirect,
+      sjrRedirectRules.deleteMessageRedirect,
+    ],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY: {
     name: 'patient-practice-messaging-urgency',
@@ -1350,7 +1378,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    sjrRedirectRules: [im1MessagingDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP: {
     name: 'patient-practice-messaging-urgency-contact-your-gp',
@@ -1367,7 +1395,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    sjrRedirectRules: [im1MessagingDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_RECIPIENTS: {
     name: 'patient-practice-messaging-recipients',
@@ -1384,7 +1412,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging`,
-    sjrRedirectRules: [im1MessagingDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE: {
     name: 'patient-practice-messaging-view-details',
@@ -1401,7 +1429,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    sjrRedirectRules: [im1MessagingDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_CREATE: {
     name: 'patient-practice-messaging-send-message',
@@ -1418,7 +1446,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    sjrRedirectRules: [im1MessagingDisabledRedirect],
+    sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
   PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS: {
     name: 'patient-practice-messaging-delete-success',
@@ -1436,7 +1464,10 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
-    sjrRedirectRules: [im1MessagingDisabledRedirect, deleteMessageRedirect],
+    sjrRedirectRules: [
+      sjrRedirectRules.im1MessagingDisabledRedirect,
+      sjrRedirectRules.deleteMessageRedirect,
+    ],
   },
   PRESCRIPTIONS: {
     name: 'prescriptions',
@@ -1452,7 +1483,7 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
     proxyShutterPath: '/linked-profiles/shutter/prescriptions',
-    sjrRedirectRules: [gpAtHandPrescriptionsRedirect],
+    sjrRedirectRules: [sjrRedirectRules.gpAtHandPrescriptionsRedirect],
   },
   PRESCRIPTION_CONFIRM_COURSES: {
     name: 'prescriptions-confirm-prescription-details',
@@ -1479,7 +1510,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
-    sjrRedirectRules: [im1PrescriptionsRedirect],
+    sjrRedirectRules: [sjrRedirectRules.im1PrescriptionsRedirect],
   },
   PRESCRIPTION_REPEAT_COURSES: {
     name: 'prescriptions-repeat-courses',
@@ -1709,7 +1740,7 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}record/`,
-    sjrRedirectRules: [gpAtHandMyRecordRedirect],
+    sjrRedirectRules: [sjrRedirectRules.gpAtHandMyRecordRedirect],
   },
   UPLIFT_APPOINTMENTS: {
     name: 'uplift-appointments',
@@ -1853,9 +1884,8 @@ export const {
   ACCOUNT_COOKIES,
   ACCOUNT_NOTIFICATIONS,
   ACCOUNT_SIGNOUT,
-  ALLERGIESANDREACTIONS,
   ACUTE_MEDICINES,
-  APPOINTMENTS,
+  ALLERGIESANDREACTIONS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CANCELLING,
@@ -1867,11 +1897,11 @@ export const {
   APPOINTMENT_GP_ADVICE,
   APPOINTMENT_GP_AT_HAND,
   APPOINTMENT_INFORMATICA,
+  APPOINTMENTS,
   AUTH_RETURN,
   BEGINLOGIN,
   CHECKYOURSYMPTOMS,
   CONSULTATIONS,
-  EVENTS,
   CURRENT_MEDICINES,
   DATA_SHARING_OVERVIEW,
   DATA_SHARING_WHERE_USED,
@@ -1879,13 +1909,28 @@ export const {
   DATA_SHARING_MAKE_YOUR_CHOICE,
   DIAGNOSIS_V2,
   DISCONTINUED_MEDICINES,
+  DOCUMENT,
+  DOCUMENT_DETAIL,
+  DOCUMENTS,
   ENCOUNTERS,
+  EVENTS,
   EXAMINATIONS_V2,
   GP_APPOINTMENTS,
+  GP_MEDICAL_RECORD,
+  GP_MEDICAL_RECORD_GP_AT_HAND,
+  HEALTH_CONDITIONS,
   HOSPITAL_APPOINTMENTS,
   INDEX,
+  IMMUNISATIONS,
   INTERSTITIAL_REDIRECTOR,
   LEGACY_MYRECORDWARNING,
+  LINKED_PROFILES,
+  LINKED_PROFILES_SUMMARY,
+  LINKED_PROFILES_SHUTTER_MORE,
+  LINKED_PROFILES_SHUTTER_SYMPTOMS,
+  LINKED_PROFILES_SHUTTER_SETTINGS,
+  LINKED_PROFILES_SHUTTER_APPOINTMENTS,
+  LINKED_PROFILES_SHUTTER_PRESCRIPTIONS,
   LOGIN,
   LOGOUT,
   MEDICINES,
@@ -1895,17 +1940,13 @@ export const {
   MORE,
   MYRECORD,
   MYRECORD_GP_AT_HAND,
-  GP_MEDICAL_RECORD,
-  GP_MEDICAL_RECORD_GP_AT_HAND,
+  HEALTH_RECORDS,
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
   MY_RECORD_VISION_DIAGNOSIS_DETAIL,
   MY_RECORD_VISION_EXAMINATIONS_DETAIL,
   MY_RECORD_VISION_PROCEDURES_DETAIL,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
-  DOCUMENTS,
-  DOCUMENT,
-  DOCUMENT_DETAIL,
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_CONFIRM,
@@ -1947,21 +1988,12 @@ export const {
   PROCEDURES_V2,
   RECALLS,
   REFERRALS,
-  HEALTH_CONDITIONS,
+  SWITCH_PROFILE,
   SYMPTOMS,
   TERMSANDCONDITIONS,
+  TESTRESULTID,
   TESTRESULTS,
   TESTRESULTSDETAIL,
-  TESTRESULTID,
-  IMMUNISATIONS,
-  LINKED_PROFILES,
-  LINKED_PROFILES_SUMMARY,
-  LINKED_PROFILES_SHUTTER_MORE,
-  LINKED_PROFILES_SHUTTER_SYMPTOMS,
-  LINKED_PROFILES_SHUTTER_SETTINGS,
-  LINKED_PROFILES_SHUTTER_APPOINTMENTS,
-  LINKED_PROFILES_SHUTTER_PRESCRIPTIONS,
-  SWITCH_PROFILE,
   UPLIFT_APPOINTMENTS,
   UPLIFT_GP_MEDICAL_RECORD,
   UPLIFT_MORE,

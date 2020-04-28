@@ -71,7 +71,7 @@ Feature: Authorisation occurs during each URL visit
       | /prescriptions/confirm-prescription-details |
       | /symptoms                                   |
       | /terms-and-conditions                       |
-    
+
 Scenario: User browses to url when logged in
   Given I am a EMIS patient
   And I am about to directly access every page
@@ -83,7 +83,7 @@ Scenario: User browses to url when logged in
     | /appointments/booking-guidance              | /appointments/booking-guidance |
     | /appointments/booking                       | /appointments/booking          |
     | /                                           | /                              |
-    | /my-record                                  | /gp-medical-record             |
+    | /gp-medical-record/gp-record                | /gp-medical-record/gp-record   |
     | /prescriptions                              | /prescriptions                 |
     | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
     | /prescriptions/confirm-prescription-details | /prescriptions                 |
@@ -112,7 +112,7 @@ Scenario: User browses to url when logged in
       | Url                                         | Page                           |
       | /appointments                               | /appointments                  |
       | /                                           | /                              |
-      | /my-record                                  | /gp-medical-record             |
+      | /gp-medical-record/gp-record                | /gp-medical-record/gp-record   |
       | /prescriptions                              | /prescriptions                 |
       | /prescriptions/confirm-prescription-details | /prescriptions                 |
       | /symptoms                                   | /symptoms                      |

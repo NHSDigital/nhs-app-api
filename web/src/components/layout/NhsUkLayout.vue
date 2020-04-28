@@ -68,6 +68,7 @@ import {
   LOGIN,
   DOCUMENT_DETAIL,
 } from '@/lib/routes';
+import isFunction from 'lodash/fp/isFunction';
 
 export default {
   name: 'NhsUkLayout',
@@ -182,11 +183,14 @@ export default {
     breadcrumbDisabledNative() {
       const { previousQuestion, demographicsQuestionAnswered, carePlans } =
       this.$store.state.onlineConsultations;
-
-      return this.$store.state.device.isNativeApp &&
-        (this.currentCrumb.nativeDisabled ||
-        (previousQuestion === undefined && demographicsQuestionAnswered)
-        || carePlans !== undefined);
+      return (this.$store.state.device.isNativeApp && this.nativeDisabled)
+        || (previousQuestion === undefined && demographicsQuestionAnswered)
+        || carePlans !== undefined;
+    },
+    nativeDisabled() {
+      return isFunction(this.currentCrumb.nativeDisabled)
+        ? this.currentCrumb.nativeDisabled(this)
+        : this.currentCrumb.nativeDisabled;
     },
     shouldShowContentHeader() {
       const route = this.currentRoute;

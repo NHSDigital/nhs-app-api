@@ -1535,6 +1535,7 @@ export default {
     appointmentBookingSuccess: 'Your GP appointment has been booked',
     medicalHistory: 'Medical history',
     myRecord: 'Your GP medical record',
+    healthRecords: 'Health records',
     myRecordDocuments: 'Documents',
     notifications: 'Manage notifications',
     organDonation: 'Your organ donation decision',
@@ -1608,6 +1609,7 @@ export default {
     prescriptionProxyOrderSuccess: '{fullName}\'s prescription has been ordered',
     prescriptionOrderSuccess: 'Your prescription has been ordered',
     account: 'My account',
+    healthRecords: 'Health records',
     myRecord: 'Sensitive information - Your GP medical record',
     allergiesAndReactions: 'Allergies and adverse reactions - Your GP medical record',
     medicines: 'Medicines - Your GP medical record',
@@ -2333,6 +2335,12 @@ export default {
     hospitalAppointments: {
       subheader: 'Hospital and other appointments',
       body: 'Manage your referral appointments',
+    },
+  },
+  healthRecordHubPage: {
+    gpMedicalRecord: {
+      subheader: 'GP medical record',
+      body: 'View your GP medical record',
     },
   },
   ds01: {

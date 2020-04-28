@@ -1,154 +1,166 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import Vue from 'vue';
-import GPMedicalRecord from '@/pages/gp-medical-record/';
-import Warning from '@/components/my-record/Warning';
-import Glossary from '@/components/Glossary';
-import { initialState } from '@/store/modules/myRecord/mutation-types';
+import HealthRecords from '@/pages/gp-medical-record';
 import { createStore, mount, createRouter } from '../../helpers';
-import agreedToMedicalWarning from '@/lib/sessionStorage';
 
-jest.mock('@/lib/sessionStorage');
-
-const $style = {
-  info: 'info',
-  h2: 'h2',
-  button: [],
-};
-
-const $router = createRouter();
-
-const createState = () => ({
-  myRecord: initialState(),
-  noJs: {
-    myRecord: {},
-  },
-  device: {
-    source: 'web',
-  },
-});
-
-const createHttp = () => ({
-  getV1PatientDemographics: jest.fn().mockResolvedValue({}),
-  getV1PatientMyRecord: jest.fn().mockResolvedValue({
-    hasSummaryRecordAccess: false,
-  }),
-});
-
-const mountPage =
-({ $http = createHttp(), $state = createState(), $store }) =>
-  mount(GPMedicalRecord,
-    { $http, $router, $store: ($store || createStore({ $http, $state })), $style });
-
-describe('gp-medical-record', () => {
+describe('healthRecords', () => {
+  let wrapper;
   let $store;
-  let page;
+  let $router;
+
+  const mountAs = ({
+    isProxying = false,
+    isNativeApp = false,
+    context = { serviceProvider: 'pkb',
+      serviceType: 'carePlans' },
+  } = {}) => {
+    $router = createRouter();
+    $store = createStore({
+      state: {
+        device: { isNativeApp },
+        knownServices: {
+          knownServices: [{
+            id: 'pkb',
+            url: 'www.url.com',
+          }],
+        },
+      },
+      getters: {
+        'serviceJourneyRules/silverIntegrationEnabled': () => (context),
+        'session/isProxying': isProxying,
+      },
+      $env: { YOUR_NHS_DATA_MATTERS_URL: 'testYourDataMattersUrl.com' },
+    });
+    return mount(HealthRecords, { $store, $router });
+  };
 
   beforeEach(() => {
-    Vue.filter('longDate', () => {});
-    $store = createStore({ $http: createHttp(),
-      state: createState(),
-      $env: {
-        CLINICAL_ABBREVIATIONS_URL: 'www.foo.com',
-        MY_RECORD_DOCUMENTS_ENABLED: true,
-      } });
-    $router.previousPaths = ['/', '/gp-medical-record/medicines'];
+    wrapper = mountAs();
+    window.open = jest.fn();
   });
 
+  it('will dispatch device/unlockNavBar when page mounted', () => {
+    expect($store.dispatch).toHaveBeenCalledWith('device/unlockNavBar');
+  });
 
-  describe('terms not accepted', () => {
-    beforeEach(() => {
-      $store.state.myRecord.hasAcceptedTerms = false;
-      page = mountPage({ $store });
+  describe('gp medical records link is always visible', () => {
+    const getGpMedicalRecordLink = wrapperObj =>
+      wrapperObj.find('#btn_gp_medical_record');
+
+    describe('pkb care plans enabled and is native', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: true });
+      });
+
+      it('will show link', () => {
+        expect(getGpMedicalRecordLink(wrapper).exists()).toBe(true);
+      });
     });
 
-    it('will display the warning', () => {
-      expect(page.find(Warning).exists()).toBe(true);
+    describe('pkb enabled but is desktop', () => {
+      it('will not show link', () => {
+        expect(getGpMedicalRecordLink(wrapper).exists()).toBe(true);
+      });
+    });
+
+    describe('pkb messaging is disabled', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ isNativeApp: true });
+      });
+
+      it('will not show link', () => {
+        expect(getGpMedicalRecordLink(wrapper).exists()).toBe(true);
+      });
+    });
+
+    describe('is pkb enabled, native and proxying', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
+      });
+
+      it('will not show link', () => {
+        expect(getGpMedicalRecordLink(wrapper).exists()).toBe(true);
+      });
     });
   });
 
-  describe('terms accepted', () => {
-    beforeEach(() => {
-      $store.state.myRecord.hasAcceptedTerms = true;
-      page = mountPage({ $store });
+  describe('pkb care plans link', () => {
+    const getPkbCarePlansLink = wrapperObj =>
+      wrapperObj.find('#btn_care_plans');
+
+    describe('pkb care plans enabled and is native', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: true });
+      });
+
+      it('will show link', () => {
+        expect(getPkbCarePlansLink(wrapper).exists()).toBe(true);
+      });
     });
 
-    it('will not display the warning', () => {
-      expect(page.find(Warning).exists()).toBe(false);
+    describe('pkb enabled but is desktop', () => {
+      it('will not show link', () => {
+        expect(getPkbCarePlansLink(wrapper).exists()).toBe(false);
+      });
     });
 
-    it('will display the clinical feedback updates', () => {
-      expect(page.find(Glossary).exists()).toBe(false);
+    describe('pkb messaging is disabled', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ isNativeApp: true });
+      });
+
+      it('will not show link', () => {
+        expect(getPkbCarePlansLink(wrapper).exists()).toBe(false);
+      });
+    });
+
+    describe('is pkb enabled, native and proxying', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
+      });
+
+      it('will not show link', () => {
+        expect(getPkbCarePlansLink(wrapper).exists()).toBe(false);
+      });
     });
   });
 
-  describe('has access to SCR', () => {
-    beforeEach(() => {
-      $store.state.myRecord.hasAcceptedTerms = true;
-      $store.state.myRecord.record.hasSummaryRecordAccess = true;
-      page = mountPage({ $store });
+  describe('pkb Health Trackers link', () => {
+    const getPkbHealthTrackersLink = wrapperObj =>
+      wrapperObj.find('#btn_health_trackers');
+
+    describe('pkb care plans enabled and is native', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: true });
+      });
+
+      it('will show link', () => {
+        expect(getPkbHealthTrackersLink(wrapper).exists()).toBe(true);
+      });
     });
 
-    it('will display the clinical feedback updates', () => {
-      expect(page.find(Glossary).exists()).toBe(true);
-    });
-  });
-
-  describe('should load medical record', () => {
-    beforeEach(() => {
-      process.client = true;
-      process.server = false;
+    describe('pkb enabled but is desktop', () => {
+      it('will not show link', () => {
+        expect(getPkbHealthTrackersLink(wrapper).exists()).toBe(false);
+      });
     });
 
-    it('should not load the medical record if the terms are not accepted', () => {
-      agreedToMedicalWarning.mockImplementation(() => false);
+    describe('pkb messaging is disabled', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ isNativeApp: true });
+      });
 
-      page = mountPage({ $store });
-
-      expect(page.vm.shouldLoadRecord()).toBe(false);
+      it('will not show link', () => {
+        expect(getPkbHealthTrackersLink(wrapper).exists()).toBe(false);
+      });
     });
 
-    it('should load the medical record if the medical record is not loaded ' +
-       'and the user comes from an external page', () => {
-      agreedToMedicalWarning.mockImplementation(() => true);
-      $store.state.myRecord.hasLoaded = false;
-      $router.previousPaths = ['/', '/symptoms'];
+    describe('is pkb enabled, native and proxying', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
+      });
 
-      page = mountPage({ $store, $router });
-
-      expect(page.vm.shouldLoadRecord()).toBe(true);
-    });
-
-    it('should load the medical record if the medical record is not loaded ' +
-       'and the user comes from within the medical record', () => {
-      agreedToMedicalWarning.mockImplementation(() => true);
-      $store.state.myRecord.hasLoaded = false;
-      $router.previousPaths = ['/', '/gp-medical-record/medicines'];
-
-      page = mountPage({ $store, $router });
-
-      expect(page.vm.shouldLoadRecord()).toBe(true);
-    });
-
-    it('should load the medical record if the medical record is already loaded' +
-    'and the `reload` flag has been set to true ', () => {
-      agreedToMedicalWarning.mockImplementation(() => true);
-      $store.state.myRecord.hasLoaded = true;
-      $store.state.myRecord.reload = true;
-
-      page = mountPage({ $store, $router });
-
-      expect(page.vm.shouldLoadRecord()).toBe(true);
-    });
-
-    it('should not load the medical record if the medical record is already loaded ' +
-       'and the `reload` flag has been set to false ', () => {
-      agreedToMedicalWarning.mockImplementation(() => true);
-      $store.state.myRecord.hasLoaded = true;
-      $store.state.myRecord.reload = false;
-
-      page = mountPage({ $store, $router });
-
-      expect(page.vm.shouldLoadRecord()).toBe(false);
+      it('will not show link', () => {
+        expect(getPkbHealthTrackersLink(wrapper).exists()).toBe(false);
+      });
     });
   });
 });

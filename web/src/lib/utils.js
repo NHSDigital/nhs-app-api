@@ -1,6 +1,4 @@
-import get from 'lodash/fp/get';
-import capitalize from 'lodash/fp/capitalize';
-import isEqual from 'lodash/fp/isEqual';
+import { get, capitalize, isEqual } from 'lodash/fp';
 import moment from 'moment-timezone';
 import Mime from 'mime/Mime';
 import { getType as lookupMimeType } from 'mime';

@@ -49,7 +49,7 @@ import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink'
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import { ACUTE_MEDICINES, CURRENT_MEDICINES, DISCONTINUED_MEDICINES, MYRECORD } from '@/lib/routes';
+import { ACUTE_MEDICINES, CURRENT_MEDICINES, DISCONTINUED_MEDICINES, GP_MEDICAL_RECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -62,7 +62,7 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: MYRECORD.path,
+      backPath: GP_MEDICAL_RECORD.path,
       acuteMedicinesPath: ACUTE_MEDICINES.path,
       currentMedicinesPath: CURRENT_MEDICINES.path,
       discontinuedMedicinesPath: DISCONTINUED_MEDICINES.path,

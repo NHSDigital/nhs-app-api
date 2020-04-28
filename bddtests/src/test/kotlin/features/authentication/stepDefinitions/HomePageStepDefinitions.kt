@@ -4,7 +4,6 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.im1Appointments.steps.YourAppointmentsUISteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.authentication.steps.PatientDetail
@@ -42,8 +41,6 @@ class HomePageStepDefinitions {
     private lateinit var homeSteps: HomeSteps
     @Steps
     private lateinit var loginSteps: LoginSteps
-    @Steps
-    private lateinit var myAppointmentsUISteps: YourAppointmentsUISteps
     @Steps
     private lateinit var navBar: NavBarNative
     @Steps

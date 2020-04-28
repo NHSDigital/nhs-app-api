@@ -79,6 +79,7 @@ import {
   isAnonymous,
   LOGIN,
 } from '@/lib/routes';
+import isFunction from 'lodash/fp/isFunction';
 
 export default {
   components: {
@@ -173,8 +174,12 @@ export default {
       );
     },
     breadcrumbDisabledNative() {
-      return this.$store.state.device.isNativeApp &&
-        this.currentCrumb.nativeDisabled;
+      return this.$store.state.device.isNativeApp && this.nativeDisabled;
+    },
+    nativeDisabled() {
+      return isFunction(this.currentCrumb.nativeDisabled)
+        ? this.currentCrumb.nativeDisabled(this)
+        : this.currentCrumb.nativeDisabled;
     },
     shouldShowFullDesktopHeader() {
       return (

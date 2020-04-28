@@ -9,14 +9,16 @@ import {
   APPOINTMENT_GP_ADVICE,
   AUTH_RETURN,
   BEGINLOGIN,
+  DOCUMENT,
+  DOCUMENTS,
   GP_MEDICAL_RECORD,
+  HEALTH_RECORDS,
   LOGIN,
   MESSAGING,
   MESSAGING_MESSAGES,
+  MORE,
   MYRECORD,
   MYRECORDTESTRESULT,
-  DOCUMENT,
-  DOCUMENTS,
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_SEARCH,
   ORGAN_DONATION,
@@ -34,7 +36,6 @@ import {
   TESTRESULTID,
   TESTRESULTS,
   TESTRESULTSDETAIL,
-  MORE,
 } from '@/lib/routes';
 
 export default {
@@ -88,6 +89,12 @@ export default {
       route: GP_MEDICAL_RECORD.path,
       redirectUrl: {
         default: GP_MEDICAL_RECORD.path,
+      },
+    },
+    {
+      route: HEALTH_RECORDS.path,
+      redirectUrl: {
+        default: HEALTH_RECORDS.path,
       },
     },
     {

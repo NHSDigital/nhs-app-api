@@ -4,7 +4,10 @@ Feature: All records enabled - Medical Record v1
   Scenario: A EMIS user can see that the medical record sections are collapsed - Medical Record v1
     Given I am a EMIS user setup to use medical record version 1
     And the GP Practice has enabled all medical records for the patient
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     Then I see the Acute (short-term) medications section collapsed on My Record - Medical Record v1
     And I see the Allergies and adverse reactions section collapsed on My Record - Medical Record v1
     And I see the Repeat medications: current section collapsed on My Record - Medical Record v1
@@ -17,7 +20,10 @@ Feature: All records enabled - Medical Record v1
   Scenario: A VISION user can see that the medical record are sections collapsed - Medical Record v1
     Given I am a VISION user setup to use medical record version 1
     And the GP Practice has enabled all medical records for the patient
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     Then I see the Acute (short-term) medications section collapsed on My Record - Medical Record v1
     And I see the Allergies and adverse reactions section collapsed on My Record - Medical Record v1
     And I see the Repeat medications: current section collapsed on My Record - Medical Record v1
@@ -33,7 +39,10 @@ Feature: All records enabled - Medical Record v1
   Scenario: A TPP user can see that the medical record sections are collapsed - Medical Record v1
     Given I am a TPP user setup to use medical record version 1
     And the GP Practice has enabled all medical records for the patient
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     Then I see the Acute (short-term) medications section collapsed on My Record - Medical Record v1
     And I see the Allergies and adverse reactions section collapsed on My Record - Medical Record v1
     And I see the Repeat medications: current section collapsed on My Record - Medical Record v1
@@ -45,7 +54,10 @@ Feature: All records enabled - Medical Record v1
   Scenario: A VISION user can view medications, immunisations, problems, allergies and test results - Medical Record v1
     Given I am a VISION user setup to use medical record version 1
     And the GP Practice has enabled all medical records for the patient
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
@@ -64,7 +76,10 @@ Feature: All records enabled - Medical Record v1
   Scenario: A EMIS user can view medications, immunisations, problems, allergies, consultations, and test results - Medical Record v1
     Given I am a EMIS user setup to use medical record version 1
     And the GP Practice has enabled all medical records for the patient
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
@@ -86,7 +101,10 @@ Feature: All records enabled - Medical Record v1
   Scenario: A TPP user can view allergies, medications, test results, and consultations - Medical Record v1
     Given I am a TPP user setup to use medical record version 1
     And the GP Practice has enabled all medical records for the patient
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
@@ -104,7 +122,10 @@ Feature: All records enabled - Medical Record v1
   Scenario: A VISION user can view examinations, diagnosis, and procedures - Medical Record v1
     Given I am a VISION user setup to use medical record version 1
     And the GP Practice has enabled all medical records for the patient
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'my record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Examinations section on My Record - Medical Record v1
     Then I see examinations information - Medical Record v1
     And I click on the Back link on the Medical Record page - Medical Record v1

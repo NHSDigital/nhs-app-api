@@ -11,6 +11,14 @@ export default {
         type: 'appointments',
         redirectPath: '/nhs-login/login?phrPath=%2Fdiary%2FlistAppointments.action',
       },
+      carePlans: {
+        type: 'carePlans',
+        redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FlistPlans.action',
+      },
+      healthTrackers: {
+        type: 'healthTrackers',
+        redirectPath: '/nhs-login/login?phrPath=%2FpkbNhsMenu.action',
+      },
       messages: {
         type: 'messages',
         redirectPath: '/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages',

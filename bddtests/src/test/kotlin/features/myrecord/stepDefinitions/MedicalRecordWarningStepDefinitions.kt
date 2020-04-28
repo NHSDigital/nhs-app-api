@@ -33,7 +33,6 @@ open class MedicalRecordWarningStepDefinitions : AbstractDemographicsStepDefinit
     lateinit var medicalRecordStepDefinitions: MedicalRecordStepDefinitions
 
     private lateinit var myRecordWarningPage: MyRecordWarningPage
-
     private lateinit var headerNative: HeaderNative
 
     @Given("^I am on the Medical Record Warning page$")

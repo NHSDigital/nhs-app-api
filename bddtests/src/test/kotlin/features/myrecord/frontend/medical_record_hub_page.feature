@@ -1,0 +1,42 @@
+Feature: Medical record hub page
+
+  Scenario: Redirect to GP medical record page if it's the only available option
+    Given I am using the native app user agent
+    And I am an EMIS patient with no access to PKB
+    And I am logged in
+    When I retrieve the 'health record hub' page directly
+    Then I am redirected to the 'health record hub' page
+
+  Scenario: A user can access the health record hub page if PKB Care Plans is available
+    Given I am using the native app user agent
+    And I am an EMIS patient and I have access to Patients Know Best Care Plans
+    And I am logged in
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    Then I see the PKB menu item 'Care plans'
+
+  Scenario: A user can access the medical record hub page if PKB Health Tracker is available
+    Given I am using the native app user agent
+    And I am an EMIS patient and I have access to Patients Know Best Health Tracker
+    And I am logged in
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    Then I see the PKB menu item 'Track your health'
+
+  Scenario: The GP medical record button redirects to GP medical record page
+    Given I am using the native app user agent
+    And I am an EMIS patient and I have access to Patients Know Best Care Plans
+    And I am logged in
+    When I navigate to the health record hub page
+    Then I see the health records hub page
+    And I click the menu item 'GP medical record'
+    Then I see the 'GP medical record' page
+
+  Scenario: Proxy users are redirected to the sensitive information acceptance screen
+    Given I am an EMIS user with linked profiles
+    And I am logged in
+    When I select the linked profiles link from the home page
+    And I select a linked profile
+    And I click the Switch to this profile button for the proxy user
+    When I navigate to MY_RECORD
+    Then I see 'Your GP medical record' page

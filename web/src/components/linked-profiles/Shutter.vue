@@ -112,6 +112,7 @@ export default {
   methods: {
     async switchProfileButtonClicked() {
       await this.$store.dispatch('linkedAccounts/switchToMainUserProfile');
+      await this.$store.dispatch('myRecord/clear');
       await this.$store.dispatch('serviceJourneyRules/init');
       redirectTo(this, INDEX.path);
     },

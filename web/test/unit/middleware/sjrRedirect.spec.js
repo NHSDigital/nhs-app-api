@@ -36,7 +36,7 @@ describe('middleware/sjrRedirect', () => {
   };
 
   beforeEach(() => {
-    getters = [];
+    getters = {};
     store = {
       getters,
     };
@@ -152,21 +152,24 @@ describe('middleware/sjrRedirect', () => {
     describe('sjr version 2 enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/gpMedicalRecordV2Enabled'] = true;
-        callSjrRedirect(MYRECORD);
+        callSjrRedirect(GP_MEDICAL_RECORD);
       });
 
-      it('will redirect to my record', () => {
-        expect(redirect).toBeCalledWith('302', GP_MEDICAL_RECORD.path);
+      it('will not redirect to my record', () => {
+        expect(redirect).not.toBeCalled();
       });
     });
 
     describe('sjr gp at hand enabled', () => {
       beforeEach(() => {
-        getters['serviceJourneyRules/gpAtHandGpMedicalRecordV2Enabled'] = true;
-
+        store = {
+          getters: {
+            'serviceJourneyRules/silverIntegrationEnabled': () => (false),
+            'serviceJourneyRules/gpAtHandGpMedicalRecordV2Enabled': true,
+          },
+        };
         callSjrRedirect(MYRECORD);
       });
-
       it('will redirect to my record gp at hand', () => {
         expect(redirect).toBeCalledWith('302', GP_MEDICAL_RECORD_GP_AT_HAND.path);
       });
@@ -213,7 +216,7 @@ describe('middleware/sjrRedirect', () => {
     describe('sjr im1 enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/im1MyRecordEnabled'] = true;
-        callSjrRedirect(MYRECORD);
+        callSjrRedirect(GP_MEDICAL_RECORD);
       });
 
       it('will not redirect', () => {
@@ -223,10 +226,14 @@ describe('middleware/sjrRedirect', () => {
 
     describe('sjr gp at hand enabled', () => {
       beforeEach(() => {
-        getters['serviceJourneyRules/gpAtHandMyRecordEnabled'] = true;
+        store = {
+          getters: {
+            'serviceJourneyRules/silverIntegrationEnabled': () => (false),
+            'serviceJourneyRules/gpAtHandMyRecordEnabled': true,
+          },
+        };
         callSjrRedirect(MYRECORD);
       });
-
       it('will redirect to my record gp at hand', () => {
         expect(redirect).toBeCalledWith('302', MYRECORD_GP_AT_HAND.path);
       });

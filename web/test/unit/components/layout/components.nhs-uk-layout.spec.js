@@ -7,20 +7,22 @@ import {
 } from '../../helpers';
 
 import {
-  INDEX,
-  LOGIN,
-  SYMPTOMS,
-  APPOINTMENTS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CONFIRMATIONS,
-  PRESCRIPTIONS,
-  PRESCRIPTION_REPEAT_COURSES,
-  MYRECORD,
+  APPOINTMENTS,
   DOCUMENT_DETAIL,
   GP_MEDICAL_RECORD,
-  MORE,
+  HEALTH_RECORDS,
+  INDEX,
+  LOGIN,
   MESSAGING_MESSAGES,
+  MORE,
+  MYRECORD,
+  MYRECORD_GP_AT_HAND,
+  PRESCRIPTION_REPEAT_COURSES,
+  PRESCRIPTIONS,
+  SYMPTOMS,
 } from '@/lib/routes';
 
 const $t = create$T();
@@ -76,10 +78,15 @@ const createPage = ($store, route = INDEX) => {
     },
   });
 };
-const createLayoutStore = isNativeApp => createStore({
+
+const createLayoutStore = (isNativeApp, journey = 'silverIntegration', enabled = true) => createStore({
   $cookies: mockCookies(),
   $env: {
     VERSION_TAG: 1,
+  },
+  getters: {
+    'errors/showApiError': false,
+    [`serviceJourneyRules/${journey}Enabled`]: () => (enabled),
   },
   state: {
     appVersion: {
@@ -113,37 +120,6 @@ describe('nhsuk-layout - is native', () => {
     jest.clearAllMocks();
   });
 
-  it('will show breadcrumb on the correct pages when native', () => {
-    const $store = createLayoutStore(true);
-
-    const noBreadcrumbPages = [
-      LOGIN,
-      SYMPTOMS,
-      APPOINTMENTS,
-      PRESCRIPTIONS,
-      MYRECORD,
-      GP_MEDICAL_RECORD,
-      MORE,
-    ];
-
-    const breadcrumbPages = [
-      APPOINTMENT_BOOKING_GUIDANCE,
-      APPOINTMENT_BOOKING,
-      APPOINTMENT_CONFIRMATIONS,
-      PRESCRIPTION_REPEAT_COURSES,
-    ];
-
-    noBreadcrumbPages.forEach((name) => {
-      const page = createPage($store, name);
-      expect(page.vm.shouldShowBreadCrumb).toBe(false);
-    });
-
-    breadcrumbPages.forEach((name) => {
-      const page = createPage($store, name);
-      expect(page.vm.shouldShowBreadCrumb).toBe(true);
-    });
-  });
-
   it('will load analytics when on a logged in page', () => {
     const $store = createLayoutStore(true);
     $store.app.$cookies.get = jest.fn(() => undefined);
@@ -161,75 +137,95 @@ describe('nhsuk-layout - is native', () => {
 
     expect(head.script).toBeUndefined();
   });
+
+  describe('breadcrumbs in native', () => {
+    const $store = createLayoutStore(true);
+
+    it.each([
+      [LOGIN, false],
+      [SYMPTOMS, false],
+      [APPOINTMENTS, false],
+      [PRESCRIPTIONS, false],
+      [MYRECORD, false],
+      [HEALTH_RECORDS, false],
+      [MORE, false],
+      [APPOINTMENT_BOOKING_GUIDANCE, true],
+      [APPOINTMENT_BOOKING, true],
+      [APPOINTMENT_CONFIRMATIONS, true],
+      [PRESCRIPTION_REPEAT_COURSES, true],
+    ])(
+      'will show breadcrumb on the correct pages when in native', (name, expectedResult) => {
+        const page = createPage($store, name);
+        expect(page.vm.shouldShowBreadCrumb).toBe(expectedResult);
+      },
+    );
+
+    it.each([
+      [GP_MEDICAL_RECORD, 'silverIntegration', true, true],
+      [GP_MEDICAL_RECORD, 'silverIntegration', false, false],
+      [MYRECORD_GP_AT_HAND, 'silverIntegration', true, true],
+      [MYRECORD_GP_AT_HAND, 'silverIntegration', false, false],
+    ])(
+      'will toggle breadcrumb pages with SJR rule', (page, journey, enabled, expectedResult) => {
+        const $sjrStore = createLayoutStore(true, journey, enabled);
+
+        const defaultPage = createPage($sjrStore, page);
+        expect(defaultPage.vm.shouldShowBreadCrumb).toBe(expectedResult);
+      },
+    );
+  });
 });
 
 describe('nhsuk-layout - is web', () => {
   beforeEach(() => {
     process.client = true;
     window.validateSession = () => {};
+    jest.clearAllMocks();
   });
 
-  it('will show the contentHeader on the correct pages in web', () => {
+  describe('contentHeader in web', () => {
     const $store = createLayoutStore(false);
 
-    const noContentHeaderPages = [
-      LOGIN,
-      DOCUMENT_DETAIL,
-      MESSAGING_MESSAGES,
-    ];
-
-    const contentHeaderPages = [
-      APPOINTMENT_BOOKING_GUIDANCE,
-      APPOINTMENT_BOOKING,
-      APPOINTMENT_CONFIRMATIONS,
-      PRESCRIPTION_REPEAT_COURSES,
-      SYMPTOMS,
-      APPOINTMENTS,
-      PRESCRIPTIONS,
-      MYRECORD,
-      GP_MEDICAL_RECORD,
-      MORE,
-    ];
-
-    noContentHeaderPages.forEach((name) => {
-      const page = createPage($store, name);
-      expect(page.vm.shouldShowContentHeader).toBe(false);
-    });
-
-    contentHeaderPages.forEach((name) => {
-      const page = createPage($store, name);
-      expect(page.vm.shouldShowContentHeader).toBe(true);
-    });
+    it.each([
+      [LOGIN, false],
+      [DOCUMENT_DETAIL, false],
+      [MESSAGING_MESSAGES, false],
+      [APPOINTMENT_BOOKING_GUIDANCE, true],
+      [APPOINTMENT_BOOKING, true],
+      [APPOINTMENT_CONFIRMATIONS, true],
+      [PRESCRIPTION_REPEAT_COURSES, true],
+      [SYMPTOMS, true],
+      [APPOINTMENTS, true],
+      [PRESCRIPTIONS, true],
+      [MYRECORD, true],
+      [MORE, true],
+    ])(
+      'will show the contentHeader on the correct pages in web', (name, expectedResult) => {
+        const page = createPage($store, name);
+        expect(page.vm.shouldShowContentHeader).toBe(expectedResult);
+      },
+    );
   });
 
-  it('will show breadcrumb on the correct pages when in web', () => {
+  describe('breadcrumbs in web', () => {
     const $store = createLayoutStore(false);
 
-    const noBreadcrumbPages = [
-      LOGIN,
-    ];
-
-    const breadcrumbPages = [
-      APPOINTMENT_BOOKING_GUIDANCE,
-      APPOINTMENT_BOOKING,
-      APPOINTMENT_CONFIRMATIONS,
-      PRESCRIPTION_REPEAT_COURSES,
-      SYMPTOMS,
-      APPOINTMENTS,
-      PRESCRIPTIONS,
-      MYRECORD,
-      GP_MEDICAL_RECORD,
-      MORE,
-    ];
-
-    noBreadcrumbPages.forEach((name) => {
-      const page = createPage($store, name);
-      expect(page.vm.shouldShowBreadCrumb).toBe(false);
-    });
-
-    breadcrumbPages.forEach((name) => {
-      const page = createPage($store, name);
-      expect(page.vm.shouldShowBreadCrumb).toBe(true);
-    });
+    it.each([
+      [LOGIN, false],
+      [APPOINTMENT_BOOKING_GUIDANCE, true],
+      [APPOINTMENT_BOOKING, true],
+      [APPOINTMENT_CONFIRMATIONS, true],
+      [PRESCRIPTION_REPEAT_COURSES, true],
+      [SYMPTOMS, true],
+      [APPOINTMENTS, true],
+      [PRESCRIPTIONS, true],
+      [MYRECORD, true],
+      [MORE, true],
+    ])(
+      'will show breadcrumb on the correct pages when in web', (name, expectedResult) => {
+        const page = createPage($store, name);
+        expect(page.vm.shouldShowBreadCrumb).toBe(expectedResult);
+      },
+    );
   });
 });

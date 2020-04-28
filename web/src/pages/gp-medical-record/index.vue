@@ -1,163 +1,81 @@
 <template>
-  <div v-if="$store.state.myRecord.hasAcceptedTerms || hasAgreedToMedicalWarning">
-    <div v-if="showPatientDetails"
-         id="mainDiv"
-         data-sid="user-info-details">
-      <h2 data-sid="patient-name"
-          :class="['nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-3 ' +
-            'nhsuk-u-margin-bottom-0']"
-          data-hj-suppress>
-        {{ $store.state.myRecord.patientDetails.patientName }}
-      </h2>
-      <p class="nhsuk-label nhsuk-u-margin-top-0
-                  nhsuk-u-padding-bottom-0 nhsuk-u-font-weight-bold">
-        {{ $t('my_record.patientInfo.fieldLabelDOB') }}
-      </p>
-      <p data-sid="user-date-of-birth"
-         :class="[$style['user-info'],
-                  'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3' +
-                    'nhsuk-u-margin-bottom-0']">
-        {{ $store.state.myRecord.patientDetails.dateOfBirth | longDate }}
-      </p>
-      <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
-                  nhsuk-u-font-weight-bold">
-        {{ $t('my_record.patientInfo.fieldLabelNHS') }}:
-      </p>
-      <p data-sid="user-nhs-number"
-         :class="[$style['user-info'],
-                  'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-3 nhsuk-u-margin-bottom-0']">
-        {{ $store.state.myRecord.patientDetails.nhsNumber }}
-      </p>
-      <p class="nhsuk-label nhsuk-u-padding-bottom-0 nhsuk-u-margin-bottom-0
-                  nhsuk-u-font-weight-bold">
-        {{ $t('my_record.patientInfo.fieldLabelAddress') }}:
-      </p>
-      <p data-sid="user-address"
-         :class="[$style['user-info'],
-                  'nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-5 nhsuk-u-margin-bottom-0']"
-         data-hj-suppress>
-        {{ $store.state.myRecord.patientDetails.address }}
-      </p>
-    </div>
-
-    <proxy-patient-details v-else-if="showTemplate && isProxying"
-                           :proxy-patient-details="$store.state.linkedAccounts.actingAsUser"/>
-
-    <div v-if="showTemplate && hasRecordAccess()" :class="$style.summaryRecordContainer"
-         data-purpose="medical-record-menu">
-      <menu-item-list>
-        <template v-if="hasSummaryRecordAccess">
-          <scr-emis-gp-record v-if="supplier === 'EMIS'"/>
-
-          <scr-tpp-gp-record v-if="supplier === 'TPP'"/>
-
-          <scr-vision-gp-record v-if="supplier === 'VISION'"/>
-
-          <scr-microtest-gp-record v-if="supplier === 'MICROTEST'"/>
-        </template>
-
-        <template v-if="hasDetailedRecordAccess">
-          <dcr-emis-gp-record v-if="supplier === 'EMIS'"/>
-
-          <dcr-tpp-gp-record v-if="supplier === 'TPP'"/>
-
-          <dcr-vision-gp-record v-if="supplier === 'VISION'"/>
-
-          <dcr-microtest-gp-record v-if="supplier === 'MICROTEST'"/>
-        </template>
-      </menu-item-list>
-      <template v-if="!hasDetailedRecordAccess">
-        <p>
-          {{ $t('my_record.viewRestOfHealthRecordWarning') }}
-        </p>
-      </template>
-      <glossary/>
-    </div>
-    <div v-else class="pull-content">
-      <div v-if="hasLoaded">
-        <div v-if="isProxying" :class="[$style['info'], 'nhsuk-u-margin-top-3']">
-          <shutter :feature="'medicalRecord'" />
-        </div>
-        <div v-else id="errorMsg" :class="[$style['record-content'], 'nhsuk-u-margin-bottom-6']">
-          <p><strong style="margin-top: 0.5em;">
-            {{ $t( supplier === 'MICROTEST' ?
-              'my_record.noRecordsOrNoAccess.warningHeader' :
-              'my_record.noRecordAccess.warningHeader') }}
-          </strong></p>
-          <p>{{ $t('my_record.noRecordAccess.warningBody') }} </p>
-        </div>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <div v-if="showTemplate">
+        <menu-item-list>
+          <menu-item id="btn_gp_medical_record"
+                     header-tag="h2"
+                     role="link"
+                     data-purpose="text_link"
+                     :href="gpMedicalRecordPath"
+                     :click-func="redirectToMedicalRecord"
+                     :description="$t('healthRecordHubPage.gpMedicalRecord.body')"
+                     :text="$t('healthRecordHubPage.gpMedicalRecord.subheader')"
+                     :aria-label="ariaLabelCaption(
+                       'healthRecordHubPage.gpMedicalRecord.subheader',
+                       'healthRecordHubPage.gpMedicalRecord.body')"
+                     :prevent-default="preventDefault()"/>
+          <third-party-jump-off-button v-if="showPkbCarePlans && !isProxying && isNativeApp"
+                                       id="btn_care_plans"
+                                       provider-id="pkb"
+                                       :jump-off-type="thirdPartyProvider.pkb.carePlans.type"
+                                       :redirect-path="thirdPartyProvider
+                                         .pkb.carePlans.redirectPath" />
+          <third-party-jump-off-button v-if="showPkbHealthTracker && !isProxying && isNativeApp"
+                                       id="btn_health_trackers"
+                                       provider-id="pkb"
+                                       :jump-off-type="thirdPartyProvider.pkb.healthTrackers.type"
+                                       :redirect-path="thirdPartyProvider.pkb
+                                         .healthTrackers.redirectPath" />
+        </menu-item-list>
       </div>
     </div>
-
-  </div>
-  <div v-else>
-    <Warning />
   </div>
 </template>
 
 <script>
-import get from 'lodash/fp/get';
-import DcrEmisGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrEMISGpRecord';
-import DcrTppGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrTPPGpRecord';
-import DcrVisionGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrVISIONGpRecord';
-import DcrMicrotestGpRecord from '@/components/gp-medical-record/DetailedCodedRecord/DcrMICROTESTGpRecord';
-import ScrEmisGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrEMISGpRecord';
-import ScrTppGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrTPPGpRecord';
-import ScrVisionGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrVISIONGpRecord';
-import ScrMicrotestGpRecord from '@/components/gp-medical-record/SummaryCareRecord/ScrMICROTESTGpRecord';
-import MenuItemList from '@/components/MenuItemList';
-import Glossary from '@/components/Glossary';
-import Warning from '@/components/my-record/Warning';
-import agreedToMedicalWarning from '@/lib/sessionStorage';
-import Shutter from '@/components/linked-profiles/Shutter';
-import ProxyPatientDetails from '@/components/gp-medical-record/SharedComponents/ProxyPatientDetails';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 
-const PATIENTDETAILS = 'patientdetails';
+import { GP_MEDICAL_RECORD } from '@/lib/routes';
+import MenuItem from '@/components/MenuItem';
+import MenuItemList from '@/components/MenuItemList';
+import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
+import sjrIf from '@/lib/sjrIf';
+import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
+import agreedToMedicalWarning from '@/lib/sessionStorage';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    Glossary,
-    DcrEmisGpRecord,
-    DcrTppGpRecord,
-    DcrVisionGpRecord,
-    DcrMicrotestGpRecord,
-    ScrEmisGpRecord,
-    ScrTppGpRecord,
-    ScrVisionGpRecord,
-    ScrMicrotestGpRecord,
+    MenuItem,
     MenuItemList,
-    Warning,
-    Shutter,
-    ProxyPatientDetails,
+    ThirdPartyJumpOffButton,
   },
   data() {
     return {
-      PATIENTDETAILS,
+      showPkbCarePlans: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'carePlans',
+        },
+      }),
+      showPkbHealthTracker: sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'pkb',
+          serviceType: 'healthTrackers',
+        },
+      }),
+      isNativeApp: this.$store.state.device.isNativeApp,
       isProxying: this.$store.getters['session/isProxying'],
+      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
   },
   computed: {
-    supplier() {
-      return get('$store.state.myRecord.record.supplier')(this);
-    },
-    hasDetailedRecordAccess() {
-      return get('$store.state.myRecord.record.hasDetailedRecordAccess')(this);
-    },
-    hasAcceptedTerms() {
-      return get('$store.state.myRecord.hasAcceptedTerms')(this);
-    },
-    hasLoaded() {
-      return get('$store.state.myRecord.hasLoaded')(this);
-    },
-    hasSummaryRecordAccess() {
-      return get('$store.state.myRecord.record.hasSummaryRecordAccess')(this);
-    },
-    showPatientDetails() {
-      return (this.showTemplate &&
-           !this.isProxying &&
-           this.$store.getters['myRecord/patientDetailsExist']);
+    gpMedicalRecordPath() {
+      return GP_MEDICAL_RECORD.path;
     },
     hasAgreedToMedicalWarning() {
       return agreedToMedicalWarning('agreedToMedicalWarning');
@@ -166,38 +84,23 @@ export default {
   updated() {
     window.scrollTo(0, 0);
   },
-  async mounted() {
-    if (this.shouldLoadRecord()) {
-      await this.$store.dispatch('myRecord/clear');
-      await this.$store.dispatch('myRecord/acceptTerms');
-      await this.$store.dispatch('myRecord/load');
-    }
-
-    this.$store.dispatch('myRecord/reload', true);
-    EventBus.$emit(FOCUS_NHSAPP_ROOT);
+  mounted() {
     this.$store.dispatch('device/unlockNavBar');
   },
   methods: {
-    hasRecordAccess() {
-      return this.hasSummaryRecordAccess || this.hasDetailedRecordAccess;
+    ariaLabelCaption(header, body) {
+      return `${this.$t(header)}. ${this.$t(body)}`;
     },
-    shouldLoadRecord() {
-      if (!this.hasAgreedToMedicalWarning) return false;
-      if (!this.hasLoaded) return true;
-      return this.$store.state.myRecord.reload;
+    redirectToMedicalRecord() {
+      this.$router.push(this.gpMedicalRecordPath);
+    },
+    preventDefault() {
+      return true;
     },
   },
 };
-
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/medrecordcontent';
-
-  .user-info {
-    display: inline-block;
-  }
-  .user-info-name {
-    display: inline-block;
-  }
+  @import "../../style/buttons";
 </style>

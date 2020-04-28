@@ -87,7 +87,7 @@ import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { redirectTo } from '@/lib/utils';
-import { MYRECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -101,7 +101,7 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: MYRECORD.path,
+      backPath: GP_MEDICAL_RECORD.path,
     };
   },
   computed: {

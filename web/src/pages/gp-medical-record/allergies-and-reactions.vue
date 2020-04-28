@@ -46,7 +46,7 @@ import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import ScrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/SCRErrorNoAccessGpRecord';
-import { MYRECORD } from '@/lib/routes';
+import { GP_MEDICAL_RECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -61,7 +61,7 @@ export default {
   mixins: [ReloadRecordMixin],
   data() {
     return {
-      backPath: MYRECORD.path,
+      backPath: GP_MEDICAL_RECORD.path,
       resultsCollapsed: true,
     };
   },

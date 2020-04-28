@@ -4,7 +4,9 @@ Feature: Combined Frontend - Medical Record v2
   Scenario Outline: A <GP System> user can view medicines, consultations, and test results - Medical Record v2
     Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has enabled all medical records for the patient
-    When I am on the Medical Record Warning page
+    And I am logged in
+    When I retrieve the 'gp medical record' page directly
+    Then I see the Medical Record Warning page
     When I click continue
     Then I see the medical record v2 page
     When I click the Medicines link on my record - Medical Record v2
@@ -26,13 +28,15 @@ Feature: Combined Frontend - Medical Record v2
     Examples:
       | GP System |
       | TPP       |
-    
+
   Scenario Outline: A <GP System> user can view their med record with bad medicines and consultations data and OK test results data - Medical Record v2
     Given I am a <GP System> user setup to use medical record version 2
     And The GP practice responds with bad medications data
     And the GP Practice has six test results
     And the GP practice returns bad consultations data
     When I am on the Medical Record Warning page
+    When I retrieve the 'gp medical record' page directly
+    Then I see the Medical Record Warning page
     When I click continue
     Then I see the medical record v2 page
     When I click the Medicines link on my record - Medical Record v2
@@ -55,7 +59,10 @@ Feature: Combined Frontend - Medical Record v2
   Scenario Outline: A <GP System> user can view immunisations and problems - Medical Record v2
     Given I am a <GP System> user setup to use medical record version 2
     And the GP Practice has enabled all medical records for the patient
-    And I am on the medical record page
+    And I am logged in
+    When I retrieve the 'gp medical record' page directly
+    Then I see the Medical Record Warning page
+    When I click continue
     When I click the Immunisations link on my record - Medical Record v2
     Then I see the expected immunisations - Medical Record v2
     When I click the Back link
@@ -64,7 +71,7 @@ Feature: Combined Frontend - Medical Record v2
     Examples:
       | GP System |
       | EMIS      |
-  @smoketest
+    @smoketest
     Examples:
       | GP System |
       | VISION    |

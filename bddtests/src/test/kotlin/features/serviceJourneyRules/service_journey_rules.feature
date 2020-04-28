@@ -4,115 +4,115 @@ Feature: Service Journey Rules Frontend
 
   Scenario: A user with appointments configured to Im1 navigates directly to Informatica appointments page and is redirected to the Im1 Appointments page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value   |
-      | appointments       | im1     |
+      | Journey      | Value |
+      | appointments | im1   |
     And I am logged in
     When I retrieve the 'Informatica Appointments' page directly
     Then I am redirected to the 'Your GP Appointments' page
 
   Scenario: A user with appointments configured to Im1 navigates directly to GP at Hand Appointments page and is redirected to the Im1 Appointments page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value   |
-      | appointments       | im1     |
+      | Journey      | Value |
+      | appointments | im1   |
     And I am logged in
     When I retrieve the 'GP at Hand Appointments' page directly
     Then I am redirected to the 'Your GP Appointments' page
 
   Scenario: A user with appointments configured to Informatica navigates directly to Im1 Appointments page and is redirected to the Informatica Appointments page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value       |
-      | appointments       | informatica |
+      | Journey      | Value       |
+      | appointments | informatica |
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
     Then I am redirected to the 'Informatica Appointments' page
 
   Scenario: A user with appointments configured to Informatica navigates directly to GP at Hand Appointments page and is redirected to the Informatica Appointments page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value       |
-      | appointments       | informatica |
+      | Journey      | Value       |
+      | appointments | informatica |
     And I am logged in
     When I retrieve the 'GP at Hand Appointments' page directly
     Then I am redirected to the 'Informatica Appointments' page
 
   Scenario: A user with appointments configured to GP at Hand navigates directly to Im1 Appointments page and is redirected to the GP at Hand Appointments page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value     |
-      | appointments       | gpAtHand  |
+      | Journey      | Value    |
+      | appointments | gpAtHand |
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
     Then I am redirected to the 'GP at Hand Appointments' page
 
   Scenario: A user with appointments configured to GP at Hand navigates directly to Informatica Appointments page and is redirected to the GP at Hand Appointments page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value     |
-      | appointments       | gpAtHand  |
+      | Journey      | Value    |
+      | appointments | gpAtHand |
     And I am logged in
     When I retrieve the 'Informatica Appointments' page directly
     Then I am redirected to the 'GP at Hand Appointments' page
 
-  Scenario: A user with medical record configured to Im1 navigates directly to GP at Hand Medical Record page and is redirected to the Im1 Medical Record page
+  Scenario: A user with medical record configured to Im1 navigates directly to GP at Hand Medical Record page and is redirected to the Health Record Hub page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value     |
-      | medical record     | im1       |
+      | Journey        | Value |
+      | medical record | im1   |
     And I am logged in
     When I retrieve the 'GP at Hand My Record' page directly
-    Then I am redirected to the 'GP Medical Record' page
+    Then I am redirected to the 'health record hub' page
 
   Scenario: A user with medical record configured to medical records v2 navigates from the navigation panel
     Given I am a EMIS user setup to use medical record version 2
     And I am logged in
-    When I retrieve the 'My Record' page directly
-    Then I am redirected to the 'My GP medical record' page
+    When I retrieve the 'my record' page directly
+    Then I am redirected to the 'health record hub' page
 
   Scenario: A user with medical record configured to GP at Hand navigates directly to Im1 Medical Record page and is redirected to the GP at Hand Medical Record page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value     |
-      | medical record     | gpAtHand  |
+      | Journey        | Value    |
+      | medical record | gpAtHand |
     And I am logged in
     When I retrieve the 'My Record' page directly
     Then I am redirected to the 'GP at Hand My Record' page
 
   Scenario: A user with prescriptions configured to Im1 navigates directly to GP at Hand Prescriptions page and is redirected to the Im1 Prescriptions page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value     |
-      | prescriptions      | im1       |
+      | Journey       | Value |
+      | prescriptions | im1   |
     And I am logged in
     When I retrieve the 'Gp at Hand Prescriptions' page directly
     Then I am redirected to the 'Your Prescriptions' page
 
   Scenario: A user with prescriptions configured to GP at Hand navigates directly to Im1 Prescriptions page and is redirected to the GP at Hand Prescriptions page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value     |
-      | prescriptions      | gpAtHand  |
+      | Journey       | Value    |
+      | prescriptions | gpAtHand |
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
     Then I am redirected to the 'GP at Hand Prescriptions' page
 
   Scenario: A user with home screen configured with public health notifications sees the notifications on the home screen
     Given I am a EMIS user where the expected journey configurations are:
-      | Journey            | Value                       |
-      | home screen        | public health notifications |
+      | Journey     | Value                       |
+      | home screen | public health notifications |
     And I am logged in
     And I see the home page
     Then I see the home screen public health notifications
 
   Scenario Outline: A user with documents disabled navigates directly to any documents page is redirected to the home page
     Given I am a EMIS user where the journey configurations are:
-      | Journey            | Value     |
-      | documents          | disabled  |
+      | Journey   | Value    |
+      | documents | disabled |
     And I am logged in
     When I retrieve the '<Documents Page>' page directly
     Then I am redirected to the 'Home' page
     Examples:
-    | Documents Page |
-    | Gp Medical Record Documents |
-    | Gp Medical Record Document Information |
-    | Gp Medical Record Document Detail |
+      | Documents Page                         |
+      | Gp Medical Record Documents            |
+      | Gp Medical Record Document Information |
+      | Gp Medical Record Document Detail      |
 
   Scenario Outline: A user with im1Messaging disabled navigates directly to any im1 messaging page is redirected to the home page
     Given I am a EMIS user where the journey configurations are:
-      | Journey             | Value     |
-      | im1 messaging       | disabled  |
+      | Journey       | Value    |
+      | im1 messaging | disabled |
     And I am logged in
     When I retrieve the '<Im1Messaging Page>' page directly
     Then I am redirected to the 'Home' page

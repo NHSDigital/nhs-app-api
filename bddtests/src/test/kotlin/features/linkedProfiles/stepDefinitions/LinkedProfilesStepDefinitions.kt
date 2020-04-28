@@ -67,7 +67,7 @@ class LinkedProfilesStepDefinitions {
 
     val mockingClient = MockingClient.instance
 
-    @Given("^I am a (.*) user with linked profiles$")
+    @Given("^I am an? (.*) user with linked profiles$")
     fun iAmAUserWithLinkedProfiles(gpSystem:String) {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = Patient.getPatientWithLinkedProfiles(supplier)
@@ -281,7 +281,7 @@ class LinkedProfilesStepDefinitions {
     fun iClickTheSwitchToThisProfileButtonForTheProxyUser() {
         linkedProfileSummaryPage.switchProfileButton.click()
     }
-    
+
     @Then("^the yellow banner contains details for the user I am acting on behalf of$")
     fun theYellowBannerContainsDetailsForTheUserIAmActingOnBehalfOf() {
         val expectedProfile = LinkedProfilesSerenityHelpers.SELECTED_PROFILE.getOrFail<LinkedProfileFacade>()

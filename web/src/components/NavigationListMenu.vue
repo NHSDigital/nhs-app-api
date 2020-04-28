@@ -30,11 +30,11 @@
     <menu-item id="menu-item-myRecord"
                :header-tag="headerTag"
                data-sid="myrecord-menu-item"
-               :href="myRecordPath"
+               :href="gpMedicalRecordPath"
                :text="$t('navigationMenuList.myRecord')"
                :aria-label="$t('navigationMenuList.myRecord')"
                :click-func="goToUrl"
-               :click-param="myRecordPath"/>
+               :click-param="gpMedicalRecordPath"/>
 
     <menu-item v-if="messagingEnabled"
                id="btn_messaging"
@@ -66,7 +66,7 @@
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { APPOINTMENTS, MYRECORD, PRESCRIPTIONS, SYMPTOMS, LINKED_PROFILES, INDEX,
+import { APPOINTMENTS, GP_MEDICAL_RECORD, PRESCRIPTIONS, SYMPTOMS, LINKED_PROFILES, INDEX,
   PATIENT_PRACTICE_MESSAGING, MESSAGING } from '@/lib/routes';
 import sjrIf from '@/lib/sjrIf';
 import { redirectTo } from '@/lib/utils';
@@ -104,8 +104,8 @@ export default {
     prescriptionsPath() {
       return PRESCRIPTIONS.path;
     },
-    myRecordPath() {
-      return MYRECORD.path;
+    gpMedicalRecordPath() {
+      return GP_MEDICAL_RECORD.path;
     },
     linkedProfilesPath() {
       return LINKED_PROFILES.path;

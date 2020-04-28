@@ -50,10 +50,10 @@ describe('gp-medical-record documents', () => {
     beforeEach(() => redirect.mockClear());
 
     describe('redirect', () => {
-      it('will redirect to gp-medical-record if not accepted terms and not hasAgreedToMedicalWarning', async () => {
+      it('will redirect to gp-medical-record > gp-record if not accepted terms and not hasAgreedToMedicalWarning', async () => {
         hasAgreedToMedicalWarning.mockReturnValue(false);
         await DocumentPage.asyncData({ redirect, store: $store });
-        expect(redirect).toHaveBeenCalledWith('/gp-medical-record');
+        expect(redirect).toHaveBeenCalledWith('/gp-medical-record/gp-record');
       });
       it('will load document and not redirect if toggle on and accepted terms even if type and name not set', async () => {
         $store.state.myRecord.hasAcceptedTerms = true;

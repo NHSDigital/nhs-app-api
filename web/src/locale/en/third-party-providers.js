@@ -40,6 +40,36 @@ export default {
         },
       },
       {
+        id: 'carePlans',
+        path: '/nhs-login/login?phrPath=/auth/listPlans.action',
+        jumpOffContent: {
+          headerText: 'Care plans',
+          descriptionText: 'View your personalised care plans',
+        },
+        thirdPartyWarning: {
+          featureName: 'Care plans',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
+        id: 'healthTrackers',
+        path: '/nhs-login/login?phrPath=/pkbNhsMenu.action',
+        jumpOffContent: {
+          headerText: 'Track your health',
+          descriptionText: 'Record symptoms and add to your health journal',
+        },
+        thirdPartyWarning: {
+          featureName: 'Track your health',
+          servicePurchaser: 'Your GP surgery or hospital',
+          serviceType: 'personal health record service',
+          serviceTypePlural: 'personal health record services',
+          linkHref: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy/personal-health-records/',
+        },
+      },
+      {
         id: 'messages',
         path: '/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
         jumpOffContent: {

@@ -119,7 +119,7 @@ Feature: Login with proxy access
     Then the appointments shutter page is displayed
     When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'https://111.nhs.uk/service/COVID-19/'
     Then a new tab has been opened by the link
-    
+
   Scenario Outline: A <GP System> user proxying on behalf of another will see the confirmation page after booking a repeat prescription
     Given I am logged in as a <GP System> user with linked profiles and appointments provider IM1
     Given the scenario is submit prescription

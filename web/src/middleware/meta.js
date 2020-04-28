@@ -36,6 +36,7 @@ import {
   GP_MEDICAL_RECORD,
   GP_MEDICAL_RECORD_GP_AT_HAND,
   HEALTH_CONDITIONS,
+  HEALTH_RECORDS,
   HOSPITAL_APPOINTMENTS,
   IMMUNISATIONS,
   INDEX,
@@ -58,8 +59,8 @@ import {
   MY_RECORD_VISION_EXAMINATIONS_DETAIL,
   MY_RECORD_VISION_PROCEDURES_DETAIL,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
-  MYRECORD,
   MYRECORD_GP_AT_HAND,
+  MYRECORD,
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
   NOMINATED_PHARMACY,
@@ -320,8 +321,13 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.myRecord';
       route.meta.pageTitleKey = 'pageTitles.myRecord';
       break;
-    case GP_MEDICAL_RECORD_GP_AT_HAND.name:
+    case HEALTH_RECORDS.name:
+      store.dispatch('navigation/setNewMenuItem', 3);
+      route.meta.headerKey = 'pageHeaders.healthRecords';
+      route.meta.pageTitleKey = 'pageTitles.healthRecords';
+      break;
     case MYRECORD_GP_AT_HAND.name:
+    case GP_MEDICAL_RECORD_GP_AT_HAND.name:
       store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaders.serviceUnavailable';
       route.meta.pageTitleKey = 'pageTitles.serviceUnavailable';

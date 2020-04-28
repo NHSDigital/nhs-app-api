@@ -4,7 +4,7 @@ Feature: Login frontend
   Logging into the service is handled via the CitizenID service.
   A user will be shown personalised welcome messages upon successful login.
 
-  Scenario Outline: A <GP System> user sees the home page after logging in
+  Scenario Outline: A <GP System> user can see the home page after logging in
     Given I am a <GP System> patient
     And I am logged in
     Then I see a welcome message
@@ -81,7 +81,7 @@ Feature: Login frontend
     Then I see the home page
     When I use the header link to log out of the website
     Then I see the login page
-    
+
   Scenario: A EMIS user can cycle the header links
     Given I am logged in as a EMIS user
     And I have no booked appointments for EMIS
