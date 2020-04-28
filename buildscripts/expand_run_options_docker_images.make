@@ -10,7 +10,6 @@ $(call expand_run_options_docker_image,$(1),USERSAPI)
 $(call expand_run_options_docker_image,$(1),USERINFOAPI)
 $(call expand_run_options_docker_image,$(1),LOGAPI)
 $(call expand_run_options_docker_image,$(1),MESSAGESAPI)
-$(call expand_run_options_docker_image,$(1),MINIMOCK)
 
 endef
 
