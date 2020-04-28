@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,8 +9,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class EmisMedicationMapper : IEmisMedicationMapper
     {
+        private readonly List<string> _repeatTypes = new List<string> { "Repeat", "RepeatDispensing" };
         private const string PrescriptionTypeAcute = "Acute";
-        private const string PrescriptionTypeRepeat = "Repeat";
         private const string DrugStatusActive = "Active";
         private const string DrugStatusCancelled = "Cancelled";
         private const string DateFormat = "d MMMM yyyy";
@@ -38,14 +38,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                     var currentRepeatMedications = medicalRecord.Medication
                         .OrderByDescending(x => x.LastIssueDate)
-                        .Where(x => PrescriptionTypeRepeat.Equals(x.PrescriptionType, StringComparison.Ordinal) &&
+                        .Where(x => _repeatTypes.Contains(x.PrescriptionType) &&
                                     DrugStatusActive.Equals(x.DrugStatus, StringComparison.Ordinal));
                         
                     result.Data.CurrentRepeatMedications = currentRepeatMedications.Select(MapMedicationResponse);
 
                     var discontinuedRepeatMedications = medicalRecord.Medication
                         .OrderByDescending(x => x.LastIssueDate)
-                        .Where(x => PrescriptionTypeRepeat.Equals(x.PrescriptionType, StringComparison.Ordinal) &&
+                        .Where(x => _repeatTypes.Contains(x.PrescriptionType)  &&
                                     DrugStatusCancelled.Equals(x.DrugStatus, StringComparison.Ordinal));
                     
                     result.Data.DiscontinuedRepeatMedications = discontinuedRepeatMedications.Select(MapMedicationResponse);
@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             return result;
         }
 
-        private static MedicationItem MapMedicationResponse(Medication responseItem)
+        private MedicationItem MapMedicationResponse(Medication responseItem)
         {            
             var result = new MedicationItem
             {
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
             medicationLineItems.Add(dosage);
             var quantityRepresentation = new MedicationLineItem { Text = responseItem.QuantityRepresentation };
             medicationLineItems.Add(quantityRepresentation);
-            if (PrescriptionTypeRepeat.Equals(responseItem.PrescriptionType, StringComparison.Ordinal) &&
+            if (_repeatTypes.Contains(responseItem.PrescriptionType) &&
                 DrugStatusCancelled.Equals(responseItem.DrugStatus, StringComparison.Ordinal) &&
                 responseItem.LastIssueDate != null)
             {

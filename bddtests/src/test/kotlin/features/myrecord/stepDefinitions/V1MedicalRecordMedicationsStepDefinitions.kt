@@ -166,19 +166,19 @@ open class V1MedicalRecordMedicationsStepDefinitions : AbstractDemographicsStepD
         assertEquals(value, result.response.medications.hasErrored)
     }
 
-    @Then("^I receive \"(.*)\" acute medications as part of the my record object$")
+    @Then("^I receive \"(\\w+)\" acute medications as part of the my record object$")
     fun thenIReceiveAnAcuteMedicationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(count, result.response.medications.data.acuteMedications.count())
     }
 
-    @Then("^I receive \"(.*)\" current repeat medications as part of the my record object$")
+    @Then("^I receive \"(\\w+)\" current repeat medications as part of the my record object$")
     fun thenIReceiveACurrentRepeatMedicationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(count, result.response.medications.data.currentRepeatMedications.count())
     }
 
-    @Then("^I receive \"(.*)\" discontinued repeat medications as part of the my record object$")
+    @Then("^I receive \"(\\w+)\" discontinued repeat medications as part of the my record object$")
     fun thenIReceiveADiscontinuedRepeatMedicationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(count, result.response.medications.data.discontinuedRepeatMedications.count())

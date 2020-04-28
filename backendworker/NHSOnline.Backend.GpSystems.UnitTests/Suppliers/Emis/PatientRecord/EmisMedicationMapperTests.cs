@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using FluentAssertions;
@@ -51,6 +51,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
         {
             // Arrange
             var now = DateTimeOffset.Now;
+            var oneMonthAgo = now.AddMonths(-1);
             var oneYearAgo = now.AddYears(-1);
             var twoYearsAgo = now.AddYears(-2);
             
@@ -68,8 +69,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             // Assert
             result.Should().NotBeNull();
             result.Data.AcuteMedications.Should().HaveCount(3);
-            result.Data.CurrentRepeatMedications.Should().HaveCount(2);
-            result.Data.DiscontinuedRepeatMedications.Should().HaveCount(2);
+            result.Data.CurrentRepeatMedications.Should().HaveCount(4);
+            result.Data.DiscontinuedRepeatMedications.Should().HaveCount(3);
 
             var expectedResult = new Medications
             {
@@ -84,34 +85,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                             {
                                 new MedicationLineItem
                                 {
-                                    Text = "First Acute Drug",
+                                    Text = "First Acute Drug"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "One taken twice a day",
+                                    Text = "One taken twice a day"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "14 capsules",
-                                },
-                            }
-                        },
-                        new MedicationItem
-                        {
-                            Date = oneYearAgo,
-                            LineItems = new List<MedicationLineItem>
-                            {
-                                new MedicationLineItem
-                                {
-                                    Text = "Second Acute Drug",
-                                },
-                                new MedicationLineItem
-                                {
-                                    Text = "One taken four times a day",
-                                },
-                                new MedicationLineItem
-                                {
-                                    Text = "28 capsules",
+                                    Text = "14 capsules"
                                 },
                             }
                         },
@@ -122,15 +104,34 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                             {
                                 new MedicationLineItem
                                 {
-                                    Text = "Third Acute Drug",
+                                    Text = "Second Acute Drug"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "One taken twice a day",
+                                    Text = "One taken four times a day"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "10 capsules",
+                                    Text = "28 capsules"
+                                },
+                            }
+                        },
+                        new MedicationItem
+                        {
+                            Date = oneYearAgo,
+                            LineItems = new List<MedicationLineItem>
+                            {
+                                new MedicationLineItem
+                                {
+                                    Text = "Third Acute Drug"
+                                },
+                                new MedicationLineItem
+                                {
+                                    Text = "One taken twice a day"
+                                },
+                                new MedicationLineItem
+                                {
+                                    Text = "10 capsules"
                                 },
                             }
                         },
@@ -144,7 +145,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                             {
                                 new MedicationLineItem
                                 {
-                                    Text = "First Repeat Drug",
+                                    Text = "First Repeat Drug"
                                 },
                                 new MedicationLineItem
                                 {
@@ -152,16 +153,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                                     LineItems = new List<string>
                                     {
                                         "Ibuprofen oral suspension - 100ml",
-                                        "Paracetamol oral suspension - 50ml",
+                                        "Paracetamol oral suspension - 50ml"
                                     }
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "One taken twice a day",
+                                    Text = "One taken twice a day"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "14 capsules",
+                                    Text = "14 capsules"
                                 },
                             }
                         },
@@ -172,15 +173,62 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                             {
                                 new MedicationLineItem
                                 {
-                                    Text = "Second Repeat Drug",
+                                    Text = "First Repeat Dispensing Drug"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "One taken twice a day",
+                                    Text = "One taken twice a day"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "14 capsules",
+                                    Text = "14 capsules"
+                                },
+                            }
+                        },
+                        new MedicationItem
+                        {
+                            Date = oneYearAgo,
+                            LineItems = new List<MedicationLineItem>
+                            {
+                                new MedicationLineItem
+                                {
+                                    Text = "Second Repeat Dispensing Drug"
+                                },
+                                new MedicationLineItem
+                                {
+                                    Text = "PartyMix, consisting of:",
+                                    LineItems = new List<string>
+                                    {
+                                        "Ibuprofen oral suspension - 100ml",
+                                        "Cocodomol oral suspension - 50ml"
+                                    }
+                                },
+                                new MedicationLineItem
+                                {
+                                    Text = "5ml taken twice a day"
+                                },
+                                new MedicationLineItem
+                                {
+                                    Text = "150ml bottle"
+                                },
+                            }
+                        },
+                        new MedicationItem
+                        {
+                            Date = oneYearAgo,
+                            LineItems = new List<MedicationLineItem>
+                            {
+                                new MedicationLineItem
+                                {
+                                    Text = "Second Repeat Drug"
+                                },
+                                new MedicationLineItem
+                                {
+                                    Text = "One taken twice a day"
+                                },
+                                new MedicationLineItem
+                                {
+                                    Text = "14 capsules"
                                 },
                             }
                         },
@@ -194,19 +242,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                             {
                                 new MedicationLineItem
                                 {
-                                    Text = "First Repeat Cancelled Drug",
+                                    Text = "First Repeat Dispensing Cancelled Drug"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "One taken twice a day",
+                                    Text = "One taken twice a day"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "14 capsules",
+                                    Text = "14 capsules"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "Ended: " + oneYearAgo.ToString(DateFormat, CultureInfo.InvariantCulture),
+                                    Text = "Ended: " + oneMonthAgo.ToString(DateFormat, CultureInfo.InvariantCulture),
                                 },
                             }
                         },
@@ -217,22 +265,45 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                             {
                                 new MedicationLineItem
                                 {
-                                    Text = "Second Repeat Cancelled Drug",
+                                    Text = "First Repeat Cancelled Drug"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "One taken twice a day",
+                                    Text = "One taken twice a day"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "14 capsules",
+                                    Text = "14 capsules"
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "Ended: " + twoYearsAgo.ToString(DateFormat, CultureInfo.InvariantCulture),
+                                    Text = "Ended: " + oneYearAgo.ToString(DateFormat, CultureInfo.InvariantCulture)
                                 },
                             }
                         },
+                        new MedicationItem
+                        {
+                            Date = oneYearAgo,
+                            LineItems = new List<MedicationLineItem>
+                            {
+                                new MedicationLineItem
+                                {
+                                    Text = "Second Repeat Cancelled Drug"
+                                },
+                                new MedicationLineItem
+                                {
+                                    Text = "One taken twice a day"
+                                },
+                                new MedicationLineItem
+                                {
+                                    Text = "14 capsules"
+                                },
+                                new MedicationLineItem
+                                {
+                                    Text = "Ended: " + twoYearsAgo.ToString(DateFormat, CultureInfo.InvariantCulture)
+                                }
+                            }
+                        }
                     }
                 }
             };
@@ -245,7 +316,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             // List consists of
             // 3 acute medications, 2 in the last year
             // 2 active repeat medications
-            // 1 inactive repeat medication
+            // 2 active repeat dispensing medications
+            // 2 inactive repeat medications
+            // 1 inactive repeat dispensing medication
             var result = new List<Medication>
             {
                 new Medication
@@ -291,12 +364,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                             new Constituent
                             {
                                 ConstituentName = "Ibuprofen oral suspension",
-                                Strength = "100ml",
+                                Strength = "100ml"
                             },
                             new Constituent
                             {
                                 ConstituentName = "Paracetamol oral suspension",
-                                Strength = "50ml",
+                                Strength = "50ml"
                             }
                         }
                     },
@@ -308,13 +381,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 },
                 new Medication
                 {
+                    FirstIssueDate = now.AddYears(-1),
                     Term = "Second Repeat Drug",
                     IsMixture = false,
                     Dosage = "One taken twice a day",
                     QuantityRepresentation = "14 capsules",
                     PrescriptionType = "Repeat",
                     DrugStatus = "Active",
-                    FirstIssueDate = now.AddYears(-1),
                     LastIssueDate = now.AddMonths(-1)
                 },
                 new Medication
@@ -339,8 +412,57 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     DrugStatus = "Cancelled",
                     LastIssueDate = now.AddYears(-1)
                 },
+                new Medication
+                {
+                    FirstIssueDate = now.AddYears(-1),
+                    Term = "First Repeat Dispensing Drug",
+                    IsMixture = false,
+                    Dosage = "One taken twice a day",
+                    QuantityRepresentation = "14 capsules",
+                    PrescriptionType = "RepeatDispensing",
+                    DrugStatus = "Active",
+                    LastIssueDate = now.AddMonths(-1)
+                },
+                new Medication
+                {
+                    FirstIssueDate = now.AddYears(-1),
+                    Term = "Second Repeat Dispensing Drug",
+                    IsMixture = true,
+                    Mixture = new Mixture
+                    {
+                        MixtureName = "PartyMix",
+                        Constituents = new List<Constituent>
+                        {
+                            new Constituent
+                            {
+                                ConstituentName = "Ibuprofen oral suspension",
+                                Strength = "100ml"
+                            },
+                            new Constituent
+                            {
+                                ConstituentName = "Cocodomol oral suspension",
+                                Strength = "50ml"
+                            }
+                        }
+                    },
+                    Dosage = "5ml taken twice a day",
+                    QuantityRepresentation = "150ml bottle",
+                    PrescriptionType = "RepeatDispensing",
+                    DrugStatus = "Active",
+                    LastIssueDate = now.AddYears(-1)
+                },
+                new Medication
+                {
+                    FirstIssueDate = now.AddYears(-1),
+                    Term = "First Repeat Dispensing Cancelled Drug",
+                    IsMixture = false,
+                    Dosage = "One taken twice a day",
+                    QuantityRepresentation = "14 capsules",
+                    PrescriptionType = "RepeatDispensing",
+                    DrugStatus = "Cancelled",
+                    LastIssueDate = now.AddMonths(-1)
+                }
             }; 
-            
             return result;
         }
     }

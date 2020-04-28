@@ -36,11 +36,16 @@ open class V2MedicalRecordMedicinesStepDefinitions : AbstractDemographicsStepDef
 
     private val expectedCurrentMedicinesData = mapOf(
         Supplier.EMIS to arrayOf(
-                "${formatDate(MedicationsData.tenMonthsAgo)}\nAmoxycillin\nOne to be taken twice a day\n" +
-                        "14 Capsules",
-                "${formatDate(MedicationsData.tenMonthsAgo)}\nInhaler Mix\nMegaMix, consisting of:\n" +
+                "${formatDate(MedicationsData.twoMonthsAgo)}\nPainkiller Cocktail\nMegaMix, consisting of:\n" +
+                        "Cocodomol - 150ml\nPethidine - 200ml\n" +
+                        "5ml to be taken once a day\n350ml",
+                "${formatDate(MedicationsData.threeMonthsAgo)}\nInhaler Mix\nMegaMix, consisting of:\n" +
                         "Ventolin - 150ml\nSalbutanol - 200ml\n" +
                         "One to be taken once a day\n2 inhalers",
+                "${formatDate(MedicationsData.tenMonthsAgo)}\nAmoxycillin\nOne to be taken twice a day\n" +
+                        "14 Capsules",
+                "${formatDate(MedicationsData.twentyMonthsAgo)}\nIbuprofen Extra\nOne to be taken once a day\n" +
+                        "30 Capsules",
                 "${formatDate(MedicationsData.twentyMonthsAgo)}\nIbuprofen Plus\nOne to be taken once a day\n" +
                         "7 Capsules"
         ), Supplier.VISION to arrayOf(
@@ -58,8 +63,10 @@ open class V2MedicalRecordMedicinesStepDefinitions : AbstractDemographicsStepDef
 
     private val expectedDiscontinuedMedicinesData = mapOf(
             Supplier.EMIS to arrayOf(
-                "${formatDate(MedicationsData.twentyMonthsAgo)}\nAmoxycillin\nOne to be taken twice a day\n" +
-                    "14 Capsules\nEnded: ${formatDate(MedicationsData.tenMonthsAgo)}",
+                "${formatDate(MedicationsData.threeMonthsAgo)}\nAmoxycillin\nOne to be taken twice a day\n" +
+                        "14 Capsules\nEnded: ${formatDate(MedicationsData.oneMonthAgo)}",
+                "${formatDate(MedicationsData.tenMonthsAgo)}\nCocodomol\nOne to be taken once a day\n" +
+                        "7 Capsules\nEnded: ${formatDate(MedicationsData.twoMonthsAgo)}",
                 "${formatDate(MedicationsData.twentyMonthsAgo)}\nIbuprofen\nOne to be taken once a day\n" +
                     "7 Capsules\nEnded: ${formatDate(MedicationsData.tenMonthsAgo)}"
             ), Supplier.VISION to arrayOf(
