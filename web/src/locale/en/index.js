@@ -2507,7 +2507,7 @@ export default {
       },
       aged13To15InformationTitle: 'What to do if you\'re aged 13 to 15',
       aged13To15Description: 'You\'ll need to contact your GP surgery first and request access to GP online services.',
-      otherServicesTitle: 'Other services you can use without logging in',
+      otherServicesTitle: 'Other services you can use without logging in:',
       otherServicesBullets: {
         one: 'Check if you have coronavirus symptoms',
         two: 'Search conditions and treatments',
