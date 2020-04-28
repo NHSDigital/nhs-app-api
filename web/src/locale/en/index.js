@@ -1893,7 +1893,7 @@ export default {
     menuLabel: 'Menu',
     appointmentsLabel: 'Appointments',
     moreLabel: 'More',
-    myRecordLabel: 'Your GP medical record',
+    myRecordLabel: 'Your record',
     prescriptionsLabel: 'Repeat prescriptions',
     symptomsLabel: 'Symptoms',
     accountLabel: 'Settings',
