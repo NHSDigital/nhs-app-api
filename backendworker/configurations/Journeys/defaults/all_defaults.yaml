@@ -24,8 +24,7 @@ journeys:
     libraries: []
     medicines: []
     messages: []
-    secondaryAppointments:
-      - ers
+    secondaryAppointments: []
   documents: false
   im1Messaging: 
     isEnabled: false

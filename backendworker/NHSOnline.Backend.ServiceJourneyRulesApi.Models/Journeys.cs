@@ -5,7 +5,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     public class Journeys : ICloneable<Journeys>
     {
         public HomeScreen HomeScreen { get; set; }
-        
+
         public Appointments Appointments { get; set; }
 
         public Cdss CdssAdvice { get; set; }
@@ -53,6 +53,76 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         {
             Supplier = supplier;
             return this;
+        }
+
+        public void Merge(Journeys other)
+        {
+            if (other.HomeScreen != null)
+            {
+                HomeScreen = other.HomeScreen;
+            }
+
+            if (other.Appointments?.Provider != null)
+            {
+                Appointments = other.Appointments;
+            }
+
+            if (other.CdssAdvice?.Provider != null)
+            {
+                CdssAdvice = other.CdssAdvice;
+            }
+
+            if (other.CdssAdmin?.Provider != null)
+            {
+                CdssAdmin = other.CdssAdmin;
+            }
+
+            if (other.MedicalRecord?.Provider != null)
+            {
+                MedicalRecord = other.MedicalRecord;
+            }
+
+            if (other.Prescriptions?.Provider != null)
+            {
+                Prescriptions = other.Prescriptions;
+            }
+
+            if (other.NominatedPharmacy.HasValue)
+            {
+                NominatedPharmacy = other.NominatedPharmacy;
+            }
+
+            if (other.Notifications.HasValue)
+            {
+                Notifications = other.Notifications;
+            }
+
+            if (other.Messaging.HasValue)
+            {
+                Messaging = other.Messaging;
+            }
+
+            if (other.UserInfo.HasValue)
+            {
+                UserInfo = other.UserInfo;
+            }
+
+            if (other.Documents.HasValue)
+            {
+                Documents = other.Documents;
+            }
+
+            if (other.SilverIntegrations != null)
+            {
+                SilverIntegrations ??= new SilverIntegrations();
+                SilverIntegrations.Merge(other.SilverIntegrations);
+            }
+
+            if (other.Im1Messaging != null)
+            {
+                Im1Messaging ??= new Im1Messaging();
+                Im1Messaging.Merge(other.Im1Messaging);
+            }
         }
     }
 }

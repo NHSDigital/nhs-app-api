@@ -67,7 +67,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationsEnabled(true)
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
-                    .SilverIntegrations(x => x.SecondaryAppointments(new[] { SecondaryAppointmentProvider.ers }))
+                    .SilverIntegrations(x => x
+                        .SecondaryAppointments(new[] { SecondaryAppointmentProvider.ers }))
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
                         false)
@@ -87,7 +88,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationsEnabled(false)
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
-                    .SilverIntegrations(x => x.SecondaryAppointments(new[] { SecondaryAppointmentProvider.pkb }))
                     .DocumentsEnabled(false)
                     .Im1MessagingEnabled(false, false, false, false,
                         false)
@@ -128,7 +128,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .Prescriptions(PrescriptionsProvider.im1)
                     .MessagingEnabled(true)
                     .UserInfoEnabled(true)
-                    .SilverIntegrations(x => x.SecondaryAppointments())
+                    .SilverIntegrations(x => x.SecondaryAppointments(SecondaryAppointmentProvider.ers))
                     .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification("2")))
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, false, false, false,
@@ -149,12 +149,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(false)
                     .UserInfoEnabled(false)
                     .SilverIntegrations(x => x
-                        .CarePlans()
-                        .Consultations()
-                        .HealthTrackers()
-                        .Libraries()
-                        .Medicines()
-                        .Messages()
                         .SecondaryAppointments(SecondaryAppointmentProvider.ers)
                     )
                     .DocumentsEnabled(false)
@@ -178,7 +172,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                         .Libraries(LibrariesProvider.pkb)
                         .Medicines(MedicinesProvider.pkb)
                         .Messages(MessagesProvider.pkb)
-                        .SecondaryAppointments(SecondaryAppointmentProvider.pkb))
+                        .SecondaryAppointments(new [] { SecondaryAppointmentProvider.ers , SecondaryAppointmentProvider.pkb}))
                     .HomeScreen(x => x.PublicHealthNotifications(new[] { CreatePublicHealthNotification("1") }))
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, true, true,
@@ -194,13 +188,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .MessagingEnabled(true)
                     .UserInfoEnabled(true)
                     .SilverIntegrations(x => x
-                        .CarePlans()
-                        .Consultations()
-                        .HealthTrackers()
-                        .Libraries()
-                        .Medicines()
-                        .Messages()
-                        .SecondaryAppointments())
+                        .SecondaryAppointments(SecondaryAppointmentProvider.ers))
                     .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification("2")))
                     .DocumentsEnabled(true)
                     .Im1MessagingEnabled(true, false, false,
@@ -215,17 +203,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                     .NotificationsEnabled(null)
                     .MessagingEnabled(null)
                     .UserInfoEnabled(null)
-                    .SilverIntegrations(x => x
-                        .CarePlans()
-                        .Consultations()
-                        .HealthTrackers()
-                        .Libraries()
-                        .Medicines()
-                        .Messages()
-                        .SecondaryAppointments())
                     .DocumentsEnabled(null)
-                    .Im1MessagingEnabled(null, null, null,
-                        null, null)
                     .Build()
             );
 

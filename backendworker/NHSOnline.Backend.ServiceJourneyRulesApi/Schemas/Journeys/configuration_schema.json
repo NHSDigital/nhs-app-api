@@ -189,7 +189,6 @@
           }
         }
       },
-      "required": [ "secondaryAppointments", "messages", "consultations" ],
       "additionalProperties": false
     },
     "im1MessagingJourney": {

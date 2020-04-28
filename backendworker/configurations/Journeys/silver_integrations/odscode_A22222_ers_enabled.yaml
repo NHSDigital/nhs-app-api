@@ -3,11 +3,5 @@ target:
   odsCode: "A22222"
 journeys:
   silverIntegrations:
-    carePlans: []
-    consultations: []
-    healthTrackers: []
-    libraries: []
-    medicines: []
-    messages: []
     secondaryAppointments:
       - ers
