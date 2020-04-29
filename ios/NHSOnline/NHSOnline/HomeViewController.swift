@@ -469,13 +469,19 @@ class HomeViewController : UIViewController {
     }
     @objc func checkSymptomsAndCIDBack() {
         if let webview = self.webViewController?.webView {
-            if(isCheckYourSymptomsPath(webview: webview)
-                || hasCidUrlSuffix(webview: webview)){
+            let backForwardList = webview.backForwardList
+            
+            if(checkCurrentUrlForPath(webview: webview, urlPath: config().CheckSymptomsUrlPath)
+                || hasCidUrlSuffix(webview: webview)
+                || checkCurrentUrlForPath(webview: webview, urlPath: config().PreRegistrationInstructionsPath)){
                 self.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
                 self.showWhiteScreen()
                 self.webViewController?.loadPage(url: config().HomeUrl)
                 self.tabBar.selectedItem = nil
                 self.selectedTab = nil
+            } else if (backForwardList.backItem?.url.path == config().PreRegistrationInstructionsPath
+                || backForwardList.backItem?.url.path == config().CheckSymptomsUrlPath){
+                self.webViewController?.loadPage(url: backForwardList.backItem?.url.absoluteString ?? config().HomeUrl)
             } else {
                 if(webview.canGoBack) {
                     goingBack = true
@@ -516,11 +522,11 @@ class HomeViewController : UIViewController {
         }
     }
     
-    func isCheckYourSymptomsPath(webview: WKWebView!) -> Bool {
-        Logger.logInfo(message: "Checking current url for symptoms path")
+    func checkCurrentUrlForPath(webview: WKWebView!, urlPath: String) -> Bool {
+        Logger.logInfo(message: "Checking current url for %@", urlPath)
 
         let baseUrl = URL(string: config().HomeUrl)
-        return (webview.url?.host == baseUrl?.host && webview.url?.path == config().CheckSymptomsUrlPath)
+        return (webview.url?.host == baseUrl?.host && webview.url?.path == urlPath)
     }
     
     func hasCidUrlSuffix(webview: WKWebView!) -> Bool {

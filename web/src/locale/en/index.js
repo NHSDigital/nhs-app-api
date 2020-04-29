@@ -1504,6 +1504,9 @@ export default {
   loginLink: {
     login: 'Login',
   },
+  preRegistrationInformation: {
+    buttonText: 'Continue',
+  },
   signOutButton: {
     signOut: 'Log out',
   },
@@ -1594,6 +1597,7 @@ export default {
     gpMessagesDownloadAttachment: 'Download file',
     gpMessagesAttachmentUnavailable: 'This file is not available in the NHS App',
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
+    preRegistrationInformation: 'Before you start',
   },
   pageTitles: {
     home: 'Home',
@@ -1683,6 +1687,7 @@ export default {
     gpMessagesUrgencyContactYourGp: 'Call your GP or use NHS 111',
     gpMessagesRecipients: 'Select who to message',
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
+    preRegistrationInformation: 'Before you start',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',
@@ -2531,7 +2536,7 @@ export default {
       beforeYouStartBulletListDescription: 'To use this service you must be:',
       beforeYouStartBullets: {
         one: 'registered with a GP surgery in England',
-        two: 'aged 13 or over',
+        two: 'aged 13 and over',
       },
       aged13To15InformationTitle: 'What to do if you\'re aged 13 to 15',
       aged13To15Description: 'You\'ll need to contact your GP surgery first and request access to GP online services.',

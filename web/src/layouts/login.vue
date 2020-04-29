@@ -44,33 +44,7 @@
               </div>
             </div>
           </div>
-          <div class="nhsuk-grid-row">
-            <div class="nhsuk-grid-column-two-thirds">
-              <div id="before-you-start" class="nhsuk-u-margin-top-1">
-                <h2 class="nhsuk-u-margin-bottom-3">
-                  {{ $t('web.home.beforeYouStartTitle') }}</h2>
-                <p>{{ $t('web.home.beforeYouStartBulletListDescription') }}</p>
-                <ul>
-                  <li class="nhsuk-u-margin-bottom-3">
-                    {{ $t('web.home.beforeYouStartBullets.one') }}
-                  </li>
-                  <li class="nhsuk-u-margin-bottom-3">
-                    {{ $t('web.home.beforeYouStartBullets.two') }}
-                  </li>
-                </ul>
-                <details id="age-info" class="nhsuk-details">
-                  <summary class="nhsuk-details__summary">
-                    <span class="nhsuk-details__summary-text">
-                      {{ $t('web.home.aged13To15InformationTitle') }}
-                    </span>
-                  </summary>
-                  <div class="nhsuk-details__text">
-                    <p>{{ $t('web.home.aged13To15Description') }}</p>
-                  </div>
-                </details>
-              </div>
-            </div>
-          </div>
+          <pre-registration-information :should-show-header="shouldShowPreRegistrationHeader"/>
           <main :class="[this.$style['homeMain-desktop'], this.$style['pull-content']]">
             <flash-message/>
             <nuxt/>
@@ -82,26 +56,7 @@
                 </div>
               </div>
             </div>
-            <div id="other-services">
-              <p>{{ $t('web.home.otherServicesTitle') }}</p>
-              <ul>
-                <li class="nhsuk-u-margin-bottom-3">
-                  <a href="https://111.nhs.uk/service/COVID-19/" target="_blank" rel="noopener noreferrer">
-                    {{ $t('web.home.otherServicesBullets.one') }}
-                  </a>
-                </li>
-                <li class="nhsuk-u-margin-bottom-3">
-                  <a href="https://www.nhs.uk/conditions/" target="_blank" rel="noopener noreferrer">
-                    {{ $t('web.home.otherServicesBullets.two') }}
-                  </a>
-                </li>
-                <li class="nhsuk-u-margin-bottom-3">
-                  <a href="https://111.nhs.uk/" target="_blank" rel="noopener noreferrer">
-                    {{ $t('web.home.otherServicesBullets.three') }}
-                  </a>
-                </li>
-              </ul>
-            </div>
+            <other-services/>
           </main>
         </div>
         <div v-if="!this.$store.state.device.isNativeApp"
@@ -127,11 +82,15 @@ import WebHeader from '@/components/widgets/WebHeader';
 import DownloadAppPanel from '@/components/widgets/DownloadAppPanel';
 import { CHECKYOURSYMPTOMS, findByName } from '@/lib/routes';
 import { getDynamicStyle } from '@/lib/desktop-experience';
+import PreRegistrationInformation from '@/components/PreRegistrationInformation';
+import OtherServices from '../components/OtherServices';
 
 
 export default {
   layout: 'nhsuk-layout',
   components: {
+    OtherServices,
+    PreRegistrationInformation,
     ApiError,
     ConnectionError,
     CoronaVirusBanner,
@@ -147,6 +106,7 @@ export default {
       currentHelpUrl: findByName(this.$route.name).helpUrl,
       symptomButtonId: 'btn_home_symptoms',
       symptomsUrl: CHECKYOURSYMPTOMS.path,
+      shouldShowPreRegistrationHeader: true,
     };
   },
   computed: {
@@ -189,14 +149,6 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-  @import "../style/main";
-  @import "../style/pulltorefresh";
-  @import "../style/elements";
-  @import '../style/screensizes';
-  @import "~nhsuk-frontend/packages/nhsuk";
-</style>
 
 <style module lang="scss" scoped>
   @import "../style/home";

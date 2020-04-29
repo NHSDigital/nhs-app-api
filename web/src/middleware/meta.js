@@ -96,6 +96,7 @@ import {
   GP_MESSAGES_URGENCY_CONTACT_GP,
   GP_MESSAGES_VIEW_MESSAGE,
   GP_MESSAGES_VIEW_ATTACHMENT,
+  PRE_REGISTRATION_INFORMATION,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTIONS,
@@ -567,6 +568,11 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageTitles.gpMessagesDeleteMessage';
       route.meta.pageTitleKey = 'pageTitles.gpMessagesDeleteMessage';
       route.meta.formatArguments = { name };
+      break;
+    }
+    case PRE_REGISTRATION_INFORMATION.name: {
+      route.meta.headerKey = 'pageTitles.preRegistrationInformation';
+      route.meta.pageTitleKey = 'pageTitles.preRegistrationInformation';
       break;
     }
     case PRESCRIPTION_CONFIRM_COURSES.name:

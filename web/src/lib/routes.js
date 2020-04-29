@@ -1526,6 +1526,18 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
     sjrRedirectRules: [sjrRedirectRules.im1PrescriptionsRedirect],
   },
+  PRE_REGISTRATION_INFORMATION: {
+    name: 'pre-registration-information',
+    path: '/pre-registration-information',
+    isAnonymous: true,
+    crumb: {
+      i18nKey: 'preRegistrationInformation',
+      get defaultCrumb() {
+        return [];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}app-login/`,
+  },
   PRESCRIPTION_REPEAT_COURSES: {
     name: 'prescriptions-repeat-courses',
     path: '/prescriptions/repeat-courses',
@@ -1996,6 +2008,7 @@ export const {
   GP_MESSAGES_VIEW_ATTACHMENT,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
+  PRE_REGISTRATION_INFORMATION,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTIONS_REPEAT_PARTIAL_SUCCESS,

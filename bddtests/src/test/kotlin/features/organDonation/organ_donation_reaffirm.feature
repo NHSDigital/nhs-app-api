@@ -6,6 +6,7 @@ Feature: Organ Donation - Reaffirm
   Scenario: A user registered with organ donation can reaffirm their decision to not donate
     Given I am using the native app user agent
     And I am a EMIS user registered as opt-out who wishes to reaffirm their decision
+    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
@@ -17,6 +18,7 @@ Feature: Organ Donation - Reaffirm
   Scenario: A user registered with organ donation can reaffirm their decision to donate all their organs
     Given I am using the native app user agent
     And I am a EMIS user registered as opt-in who wishes to reaffirm their decision
+    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
@@ -28,6 +30,7 @@ Feature: Organ Donation - Reaffirm
   Scenario: A user registered with organ donation can reaffirm their decision to donate some of their organs
     Given I am using the native app user agent
     And I am a EMIS user registered as opt-in with some organs who wishes to reaffirm their decision
+    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
@@ -54,6 +57,7 @@ Feature: Organ Donation - Reaffirm
   Scenario: A user can navigate back through the reaffirm opt out journey
     Given I am using the native app user agent
     And I am a EMIS user registered as opt-out who wishes to reaffirm their decision
+    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
@@ -65,6 +69,7 @@ Feature: Organ Donation - Reaffirm
   Scenario: A user can navigate back through the reaffirm opt in journey
     Given I am using the native app user agent
     And I am a EMIS user registered as opt-in who wishes to reaffirm their decision
+    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed
@@ -76,6 +81,7 @@ Feature: Organ Donation - Reaffirm
   Scenario: A user can navigate back through the reaffirm opt in with some organs journey
     Given I am using the native app user agent
     And I am a EMIS user registered as opt-in with some organs who wishes to reaffirm their decision
+    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed

@@ -2,7 +2,7 @@ import Foundation
 
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
-        case HomeUrl, Nhs111Url, Nhs111LocationUrl, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost, RedirectorUrl
+        case HomeUrl, Nhs111Url, Nhs111LocationUrl, CheckSymptomsUrlPath, PreRegistrationInstructionsPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost, RedirectorUrl
         case AppointmentsUrlPath, AppontmentsGpAtHandUrlPath, InformaticaUrlPath,  AdminHelpUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, PrescriptionsGpAtHandUrlPath, MyAccountUrlPath, MyRecordGpAtHandUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath
         case ResponseWaitingTime, SessionTimeout, ApiCallTimeoutSeconds
         case HelpURL, HelpAccountURL, HelpAppointmentsURL, HelpLoginURL, HelpPrescriptionsURL, HelpRecordURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL, HelpURLOld, TermsAndConditionsURLOld, PrivacyPolicyURLOld, CookiesPolicyURLOld, OpenSourceLicencesURLOld, MedicalRecordAbbreviationsURLOld, AccessibilityStatementURLOld, ConditionsUrlPath, DataSharingUrl
@@ -15,6 +15,7 @@ struct Config: Decodable {
     let Nhs111Url: String
     let Nhs111LocationUrl: String
     let CheckSymptomsUrlPath: String
+    let PreRegistrationInstructionsPath: String
     let AppScheme: String
     let BaseScheme: String
     let HotJarLinkUrl: String

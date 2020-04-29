@@ -59,7 +59,7 @@ class HomeViewControllerTests: XCTestCase {
     func test_isCheckYourSymptomsPath_RandomUrl_Returns_False() {
         testWebview.load(URLRequest(url: URL(string: "https://www.google.com/")!))
 
-        let testResult = vcHome.isCheckYourSymptomsPath(webview: testWebview)
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().CheckSymptomsUrlPath)
 
         XCTAssertFalse(testResult)
     }
@@ -67,13 +67,13 @@ class HomeViewControllerTests: XCTestCase {
     func test_isCheckYourSymptomsPath_BaseHostNoPath_Returns_False() {
         testWebview.load(URLRequest(url: URL(string: config().HomeUrl)!))
 
-        let testResult = vcHome.isCheckYourSymptomsPath(webview: testWebview)
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().CheckSymptomsUrlPath)
 
         XCTAssertFalse(testResult)
     }
 
     func test_isCheckYourSymptomsPath_NilUrl_Returns_False() {
-        let testResult = vcHome.isCheckYourSymptomsPath(webview: testWebview)
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().CheckSymptomsUrlPath)
 
         XCTAssertFalse(testResult)
     }
@@ -83,7 +83,39 @@ class HomeViewControllerTests: XCTestCase {
 
         testWebview.load(URLRequest(url: ((URL(string: config().HomeUrl)?.appendingPathComponent(String(symptomsPath.dropFirst())))!)))
 
-        let testResult = vcHome.isCheckYourSymptomsPath(webview: testWebview)
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().CheckSymptomsUrlPath)
+
+        XCTAssertTrue(testResult)
+    }
+    
+    func test_isPreRegistrationPath_RandomUrl_Returns_False() {
+        testWebview.load(URLRequest(url: URL(string: "https://www.google.com/")!))
+
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().PreRegistrationInstructionsPath)
+
+        XCTAssertFalse(testResult)
+    }
+
+    func test_isPreRegistrationPath_BaseHostNoPath_Returns_False() {
+        testWebview.load(URLRequest(url: URL(string: config().HomeUrl)!))
+
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().PreRegistrationInstructionsPath)
+
+        XCTAssertFalse(testResult)
+    }
+
+    func test_isPreRegistrationPath_NilUrl_Returns_False() {
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().PreRegistrationInstructionsPath)
+
+        XCTAssertFalse(testResult)
+    }
+
+    func test_isPreRegistrationPath_CorrectBaseHost_AndSymptomsPath_Returns_True() {
+        let preRegPath = config().PreRegistrationInstructionsPath
+
+        testWebview.load(URLRequest(url: ((URL(string: config().HomeUrl)?.appendingPathComponent(String(preRegPath.dropFirst())))!)))
+
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().PreRegistrationInstructionsPath)
 
         XCTAssertTrue(testResult)
     }

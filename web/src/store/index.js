@@ -24,6 +24,7 @@ import organDonation from './modules/organDonation';
 import pageTitle from './modules/pageTitle';
 import gpMessages from './modules/gpMessages';
 import practiceSettings from './modules/practiceSettings';
+import preRegistrationInformation from './modules/preRegistrationInformation';
 import prescriptions from './modules/prescriptions';
 import repeatPrescriptionCourses from './modules/repeatPrescriptionCourses';
 import serviceJourneyRules from './modules/serviceJourneyRules';
@@ -59,6 +60,7 @@ export const modules = {
   pageTitle,
   gpMessages,
   practiceSettings,
+  preRegistrationInformation,
   prescriptions,
   repeatPrescriptionCourses,
   serviceJourneyRules,

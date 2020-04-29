@@ -3,7 +3,10 @@ package features.sharedSteps
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
+import org.openqa.selenium.Cookie
 import org.openqa.selenium.support.ui.WebDriverWait
+import pages.HybridPageObject
+import pages.loggedOut.FavIconPage
 import pages.loggedOut.LoginPage
 import utils.GlobalSerenityHelpers
 import utils.getOrNull
@@ -24,12 +27,28 @@ open class BrowserSteps {
 
     lateinit var loginPage: LoginPage
 
+    lateinit var favIcon: FavIconPage
+
     @Step
     open fun goToApp() {
+        goToPage {
+            openPage(loginPage)
+            executeScripts()
+        }
+    }
+
+    @Step
+    open fun goToFavIcon() {
+        goToPage {
+            openPage(favIcon)
+        }
+    }
+
+    private fun goToPage(page: () -> Unit) {
         var tryCount = 0
         while(tryCount< MAX_RETRY_COUNT) {
             try {
-               openLoginPage()
+                page()
                 break
             }
             catch(e: net.thucydides.core.webdriver.DriverConfigurationError){
@@ -43,17 +62,16 @@ open class BrowserSteps {
         }
     }
 
-    private fun openLoginPage() {
-        if (!loginPage.onMobile() && OptionManager.instance().isEnabled(NoJsOption::class)) {
-            loginPage.open()
+    private fun openPage(page: HybridPageObject) {
+        if (!page.onMobile() && OptionManager.instance().isEnabled(NoJsOption::class)) {
+            page.open()
             val optionManager = OptionManager.instance()
             optionManager.getOptions().forEach {
                 ChromeOptionManager.instance.configureOption(it)
             }
         } else {
-            loginPage.open()
+            page.open()
         }
-        executeScripts()
     }
 
     @Step
@@ -133,6 +151,17 @@ open class BrowserSteps {
     @Step
     fun refreshPage() {
         loginPage.driver.navigate().refresh()
+    }
+
+    @Step
+    fun setInstructionsCookie(seen: String) {
+        val cookie = Cookie("SkipPreRegistrationPage", seen)
+        loginPage.driver.manage().addCookie(cookie)
+    }
+
+    @Step
+    fun verifyCookieDoesntExist(cookieName: String) {
+        Assert.assertTrue(loginPage.driver.manage().getCookieNamed(cookieName) == null)
     }
 
     @Step

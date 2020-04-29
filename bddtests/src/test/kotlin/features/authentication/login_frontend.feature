@@ -34,6 +34,22 @@ Feature: Login frontend
       | GP System |
       | EMIS      |
 
+  Scenario: A user can see the native instructions
+    Given I am a patient using the native app
+    When I am on the login logged-out page
+    And I dont have the instructions cookie
+    And I click the 'Continue with NHS login' button
+    Then the page title is 'Before you start'
+    And I click the 'Continue' button
+    Then the page contains the header 'Integration Test Patient'
+
+  Scenario: A user does not see the native instructions
+    Given I am a patient using the native app
+    And I have the instructions cookie
+    When I am on the login logged-out page
+    And I click the 'Continue with NHS login' button
+    Then the page contains the header 'Integration Test Patient'
+
   Scenario: A patient with proof level 5 sees no NHS number when logging in
     Given I am a patient with proof level 5
     And I am logged in

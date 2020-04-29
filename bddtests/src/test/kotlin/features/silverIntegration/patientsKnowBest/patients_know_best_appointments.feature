@@ -5,6 +5,7 @@ Feature: Patients Know Best Appointments
   Scenario: A user navigates to PKB appointments and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view Appointments from Patients Know Best
+    And I have the instructions cookie
     And I am logged in
     And I navigate to the hospital and other appointments page
     Then the Hospital Appointments page is displayed
@@ -17,6 +18,7 @@ Feature: Patients Know Best Appointments
   Scenario: A user without access to PKB cannot see the menu item 'Appointments' on the appointments page
     Given I am using the native app user agent
     And I am a user who cannot view Appointments from Patients Know Best
+    And I have the instructions cookie
     And I am logged in
     Then I see the home page
     Given I navigate to the hospital and other appointments page

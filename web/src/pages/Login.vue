@@ -1,28 +1,24 @@
 <template>
   <div id="maincontent" :class="dynamicStyle('loginMain')">
     <div>
-      <h2 v-if="this.$store.state.device.isNativeApp" id="native-header"
+      <h2 v-if="isUsingNativeApp" id="native-header"
           class="nhsuk-u-margin-bottom-2">
         {{ $t('login.desc') }}
       </h2>
       <form ref="loginForm"
-            :action="authoriseUrl"
+            :action="instructionsUrl"
             method="get">
-        <input :value="redirectTo" type="hidden" :name="redirectName">
-        <generic-button
-          id="login-button"
-          class="nhsuk-u-margin-bottom-3"
-          :button-classes="['nhsuk-login', 'nhsuk-body', 'nhsuk-button',
-                            $store.state.device.isNativeApp
-                              ?'button':'']"
-          type="submit"
-          data-id="login-button"
-          @click="trackLogin">
+        <input :value="redirectTo"
+               type="hidden"
+               :name="redirectName">
+        <generic-button id="viewInstructionsButton"
+                        :button-classes="getButtonClasses"
+                        @click="onContinueClicked">
           {{ $t('loginButton.login') }}
         </generic-button>
       </form>
     </div>
-    <div v-if="this.$store.state.device.isNativeApp"
+    <div v-if="isUsingNativeApp"
          :class="[$style['nhsuk-body-s'], $style['appVersion']]">
       Version {{ this.$store.state.appVersion.webVersion }}
       <span v-if="this.$store.state.appVersion.nativeVersion">
@@ -33,10 +29,10 @@
 </template>
 <script>
 import AuthorisationService from '@/services/authorisation-service';
-import GenericButton from '@/components/widgets/GenericButton';
 import NativeCallbacks from '@/services/native-app';
 import { getDynamicStyle } from '@/lib/desktop-experience';
-import { BEGINLOGIN, REDIRECT_PARAMETER } from '@/lib/routes';
+import { BEGINLOGIN, REDIRECT_PARAMETER, PRE_REGISTRATION_INFORMATION } from '@/lib/routes';
+import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
   layout: 'login',
@@ -46,15 +42,24 @@ export default {
   data() {
     return {
       authoriseUrl: BEGINLOGIN.path,
-      isButtonDisabled: false,
       redirectTo: this.$route.query[REDIRECT_PARAMETER],
       redirectName: REDIRECT_PARAMETER,
+      instructionsUrl: PRE_REGISTRATION_INFORMATION.path,
+      isUsingNativeApp: this.$store.state.device.isNativeApp,
+      hasSeenInstructions: this.$store.getters['preRegistrationInformation/instructionsViewed'],
     };
   },
   computed: {
     shouldShowBiometrics() {
       return this.$store.app.$env.BIOMETRICS_ENABLED && this.$store.state.device.isNativeApp;
     },
+    getButtonClasses() {
+      return ['nhsuk-login', 'nhsuk-body', 'nhsuk-button',
+        this.isUsingNativeApp ? 'button' : ''];
+    },
+  },
+  created() {
+    this.$store.dispatch('preRegistrationInformation/sync');
   },
   mounted() {
     sessionStorage.clear();
@@ -74,21 +79,23 @@ export default {
     generateRedirectData() {
       const authorisationService = new AuthorisationService(this.$store.app.$env);
       const { request, loginUrl } = authorisationService.generateLoginUrl({
-        isNativeApp: this.$store.state.device.isNativeApp,
+        isNativeApp: this.isUsingNativeApp,
         cookies: this.$cookies,
         redirectTo: this.redirectTo,
         fidoAuthResponse: this.$route.query.fidoAuthResponse,
       });
       return { authoriseUrl: request.authoriseUrl, loginUrl };
     },
-    trackLogin() {
-      if (!this.isButtonDisabled) {
+    dynamicStyle(...args) {
+      return getDynamicStyle(this, args);
+    },
+    onContinueClicked() {
+      if (!this.isButtonDisabled
+        && (!this.isUsingNativeApp
+          || this.hasSeenInstructions)) {
         this.$store.dispatch('analytics/satelliteTrack', 'login');
         this.isButtonDisabled = true;
       }
-    },
-    dynamicStyle(...args) {
-      return getDynamicStyle(this, args);
     },
   },
 };

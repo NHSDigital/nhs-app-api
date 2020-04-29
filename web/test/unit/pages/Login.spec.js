@@ -26,7 +26,13 @@ describe('login page', () => {
   let $store;
   let wrapper;
 
-  const mountWithQueryData = ({ isNativeApp = true, query, source = 'android', data }) => {
+  const mountWithQueryData = ({
+    isNativeApp = true,
+    query,
+    source = 'android',
+    data,
+    instructionsViewed = true,
+  }) => {
     const $env = {
       BIOMETRICS_ENABLED: true,
     };
@@ -46,6 +52,13 @@ describe('login page', () => {
         device: {
           isNativeApp,
           source,
+        },
+        preRegistrationInformation: {
+          seen: true,
+        },
+        getters: {
+          'device/isNativeApp': isNativeApp,
+          'preRegistrationInformation/instructionsViewed': instructionsViewed,
         },
       },
       $cookies,
@@ -67,75 +80,56 @@ describe('login page', () => {
     });
   };
 
-  beforeEach(() => {
-    wrapper = mountWithQueryData({ query: defaultQuery });
-    AuthorisationService.mockClear();
-  });
-
-  it('will have a form that performs a get request to the begin login path', () => {
-    const form = wrapper.find(`form[action="${BEGINLOGIN.path}"]`);
-
-    expect(form.exists()).toBe(true);
-    expect(form.attributes().method).toEqual('get');
-  });
-
-  it('will redirect automatically if FidoAuthResponse exists and is native', () => {
-    const fidoQuery = createFidoQueries();
-    wrapper = mountWithQueryData({ query: fidoQuery });
-    expect(AuthorisationService.mock.instances[0].generateLoginUrl).toHaveBeenCalledTimes(1);
-  });
-
-  it('will not automatically redirect if it is native but no fidoResponse', () => {
-    wrapper = mountWithQueryData({ query: defaultQuery });
-    expect(AuthorisationService).not.toHaveBeenCalled();
-  });
-
-  it('will not automatically redirect if it is web', () => {
-    const fidoQuery = createFidoQueries();
-
-    wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: false, source: 'web' });
-    expect(AuthorisationService).not.toHaveBeenCalled();
-  });
-
-  it('will not display the header in web', () => {
-    const fidoQuery = createFidoQueries();
-    wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: false, source: 'web' });
-    expect(wrapper.find('#native-header').exists()).toBe(false);
-  });
-
-  it('will display the header in native', () => {
-    const fidoQuery = createFidoQueries();
-    wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: true, source: 'android' });
-    expect(wrapper.find('#native-header').exists()).toBe(true);
-  });
-
-  describe('login button', () => {
-    let loginButton;
-
+  describe('viewed instructions', () => {
     beforeEach(() => {
-      loginButton = wrapper.find('#login-button');
+      AuthorisationService.mockClear();
     });
 
-    it('exists', () => {
-      expect(loginButton.exists()).toBe(true);
+    it('will redirect automatically if FidoAuthResponse exists and is native', () => {
+      const fidoQuery = createFidoQueries();
+      wrapper = mountWithQueryData({ query: fidoQuery });
+      expect(AuthorisationService.mock.instances[0].generateLoginUrl).toHaveBeenCalledTimes(1);
     });
 
-    it('will not be disabled', () => {
-      expect(wrapper.vm.isButtonDisabled).toBe(false);
+    it('will not automatically redirect if it is native but no fidoResponse', () => {
+      wrapper = mountWithQueryData({ query: defaultQuery });
+      expect(AuthorisationService).not.toHaveBeenCalled();
     });
 
-    describe('click', () => {
-      beforeEach(() => {
-        loginButton.trigger('click');
-      });
+    it('will not automatically redirect if it is web', () => {
+      const fidoQuery = createFidoQueries();
 
-      it('will call analytics/satelliteTrack', () => {
-        expect($store.dispatch).toHaveBeenCalledWith('analytics/satelliteTrack', 'login');
-      });
+      wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: false, source: 'web' });
+      expect(AuthorisationService).not.toHaveBeenCalled();
+    });
 
-      it('will be disabled', () => {
-        expect(wrapper.vm.isButtonDisabled).toBe(true);
-      });
+    it('will not display the header in web', () => {
+      const fidoQuery = createFidoQueries();
+      wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: false, source: 'web' });
+      expect(wrapper.find('#native-header').exists()).toBe(false);
+    });
+
+    it('will display the header in native', () => {
+      const fidoQuery = createFidoQueries();
+      wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: true, source: 'android' });
+      expect(wrapper.find('#native-header').exists()).toBe(true);
+    });
+  });
+
+  describe('pre registration button', () => {
+    beforeEach(() => {
+      wrapper = mountWithQueryData({ query: defaultQuery, instructionsViewed: false });
+      AuthorisationService.mockClear();
+    });
+
+    it('will not have a form that performs a get request to the begin login path', () => {
+      const form = wrapper.find(`form[action="${BEGINLOGIN.path}"]`);
+
+      expect(form.exists()).toBe(false);
+    });
+
+    it('will have a button to go to the instructions page', () => {
+      expect(wrapper.find('#viewInstructionsButton').exists()).toBe(true);
     });
   });
 });

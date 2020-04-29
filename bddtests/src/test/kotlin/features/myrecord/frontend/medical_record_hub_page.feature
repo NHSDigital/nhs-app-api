@@ -3,6 +3,7 @@ Feature: Medical record hub page
   Scenario: Redirect to GP medical record page if it's the only available option
     Given I am using the native app user agent
     And I am an EMIS patient with no access to PKB
+    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'health record hub' page directly
     Then I am redirected to the 'health record hub' page
@@ -10,6 +11,7 @@ Feature: Medical record hub page
   Scenario: A user can access the health record hub page if PKB Care Plans is available
     Given I am using the native app user agent
     And I am an EMIS patient and I have access to Patients Know Best Care Plans
+    And I have the instructions cookie
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
@@ -18,6 +20,7 @@ Feature: Medical record hub page
   Scenario: A user can access the medical record hub page if PKB Health Tracker is available
     Given I am using the native app user agent
     And I am an EMIS patient and I have access to Patients Know Best Health Tracker
+    And I have the instructions cookie
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
@@ -26,6 +29,7 @@ Feature: Medical record hub page
   Scenario: The GP medical record button redirects to GP medical record page
     Given I am using the native app user agent
     And I am an EMIS patient and I have access to Patients Know Best Care Plans
+    And I have the instructions cookie
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page

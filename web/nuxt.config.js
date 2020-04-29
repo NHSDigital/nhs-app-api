@@ -66,6 +66,7 @@ const config = {
       'proxyRecovery',
       'termsAndConditions',
       'myRecordAcceptance',
+      'viewedPreRegInstructions',
       'urlResolution',
       'onlineConsultations',
       'knownServices',

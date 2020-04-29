@@ -5,6 +5,7 @@ Feature: Patients Know Best Health Tracker
   Scenario: A user navigates to PKB health tracker and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view health tracker from Patients Know Best
+    And I have the instructions cookie
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
@@ -15,6 +16,7 @@ Feature: Patients Know Best Health Tracker
   Scenario: A user without access to PKB cannot see the menu item 'Track your health' on the Health Record Hub
     Given I am using the native app user agent
     And I am a user who cannot view health tracker from Patients Know Best
+    And I have the instructions cookie
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page

@@ -63,6 +63,15 @@ open class WebHeader : HybridPageObject() {
         )
     }
 
+    fun getHtmlElement(element: String): HybridPageElement {
+        val headerXPath = "//${element}"
+        return HybridPageElement(
+                webDesktopLocator = headerXPath,
+                webMobileLocator = headerXPath,
+                page = this
+        )
+    }
+
     fun clickSymptomsPageLink() {
         symptomsPageLink.click()
     }

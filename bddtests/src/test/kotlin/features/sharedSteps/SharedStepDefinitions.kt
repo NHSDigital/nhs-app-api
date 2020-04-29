@@ -1,5 +1,6 @@
 package features.sharedSteps
 
+import config.Config
 import constants.Supplier
 import cucumber.api.java.After
 import cucumber.api.java.en.And
@@ -24,7 +25,9 @@ import pages.assertIsVisible
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
 import pages.withNormalisedText
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
+import utils.set
 import webdrivers.browserstack.BrowserstackLocalService
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
@@ -54,6 +57,46 @@ open class SharedStepDefinitions {
     @Given("^I am an? (.*) patient$")
     fun initialisePatientAndGpSystem(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
+        mockingClient.clearWiremock()
+        mockingClient.favicon()
+
+        val patient = Patient.getDefault(supplier)
+        SerenityHelpers.setPatient(patient)
+        SerenityHelpers.setGpSupplier(supplier)
+
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+
+        TermsAndConditionsJourneyFactory.consent(patient)
+    }
+
+    @Given("^I am an? (.*) patient using the native app$")
+    fun initialisePatientAndGpSystemOnNativeApp(gpSystem: String) {
+        browser.setUserAgentSource("ios")
+        GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
+        GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidNativeRedirectUri)
+
+        val supplier = Supplier.valueOf(gpSystem)
+        mockingClient.clearWiremock()
+        mockingClient.favicon()
+
+        val patient = Patient.getDefault(supplier)
+        SerenityHelpers.setPatient(patient)
+        SerenityHelpers.setGpSupplier(supplier)
+
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+
+        TermsAndConditionsJourneyFactory.consent(patient)
+    }
+
+    @Given("^I am a patient using the native app$")
+    fun patientOnNativeApp() {
+        browser.setUserAgentSource("ios")
+        GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
+        GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidNativeRedirectUri)
+
+        val supplier = Supplier.valueOf("EMIS")
         mockingClient.clearWiremock()
         mockingClient.favicon()
 
@@ -165,4 +208,21 @@ open class SharedStepDefinitions {
     fun thePageTitleIsYourAppointments(title: String) {
         webHeader.getPageTitle().withNormalisedText(title).assertIsVisible()
     }
+
+    @Then("^the page contains the header '(.*)'$")
+    fun thePageContainsTheHeaderText(title: String) {
+        webHeader.getHtmlElement("h2").withNormalisedText(title).assertIsVisible()
+    }
+
+    @When("^I dont have the instructions cookie$")
+    fun iDontHaveTheCookie() {
+        browser.verifyCookieDoesntExist("SkipPreRegistrationPage")
+    }
+
+    @When("^I have the instructions cookie$")
+    fun iHaveTheCookie() {
+        browser.goToFavIcon()
+        browser.setInstructionsCookie("true")
+    }
+
 }
