@@ -126,18 +126,22 @@ open class HybridPageElement(
             true -> {
                 HybridPageElement(
                         webDesktopLocator = this.webDesktopLocator.plus("[$textFunc=\"$text\"]"),
+                        webMobileLocator = this.webMobileLocator.plus("[$textFunc=\"$text\"]"),
                         androidLocator = this.androidLocator?.plus("[$textAttribute=\"$text\"]"),
                         iOSLocator = this.iOSLocator?.plus("[$textAttribute=\"$text\"]"),
                         helpfulName = this.helpfulNameToUse,
-                        page = this.page)
+                        page = this.page,
+                        timeToWaitForElement = this.timeToWaitForElement)
             }
             false -> {
                 HybridPageElement(
                         webDesktopLocator = this.webDesktopLocator.plus("[contains($textFunc,\"$text\")]"),
+                        webMobileLocator = this.webMobileLocator.plus("[$textFunc=\"$text\"]"),
                         androidLocator = this.androidLocator?.plus("[contains($textAttribute,\"$text\")]"),
                         iOSLocator = this.iOSLocator?.plus("[contains($textAttribute,\"$text\")]"),
                         helpfulName = this.helpfulNameToUse,
-                        page = this.page)
+                        page = this.page,
+                        timeToWaitForElement = this.timeToWaitForElement)
             }
         }
     }

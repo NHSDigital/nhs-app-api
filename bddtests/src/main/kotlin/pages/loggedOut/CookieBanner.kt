@@ -3,6 +3,7 @@ package pages.loggedOut
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.withNormalisedText
 
 @DefaultUrl("http://web.local.bitraft.io:3000/login")
 class CookieBanner : HybridPageObject() {
@@ -15,19 +16,13 @@ class CookieBanner : HybridPageObject() {
             timeToWaitForElement = 1
     )
 
-    val cookieBanner = HybridPageElement(
-            webDesktopLocator = cookieBannerXpath,
-            page = this,
-            timeToWaitForElement = 1
-    )
-
     val cookieBannerText1 = HybridPageElement(
-            webDesktopLocator = "$cookieBannerXpath/p[contains(text(),'" +
-                    "ve put some small files called cookies on your device. " +
-                    "These are the strictly necessary cookies needed to make the NHS App work.')]",
+            webDesktopLocator = "$cookieBannerXpath/p",
             page = this,
             timeToWaitForElement = 1
-    )
+    ).withNormalisedText(
+            "We've put some small files called cookies on your device. " +
+            "These are the strictly necessary cookies needed to make the NHS App work.")
 
     val cookieBannerText2 = HybridPageElement(
             webDesktopLocator = "$cookieBannerXpath//p[contains(text(),'" +

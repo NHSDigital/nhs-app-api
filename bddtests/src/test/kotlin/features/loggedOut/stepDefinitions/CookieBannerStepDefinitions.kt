@@ -9,9 +9,10 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.CookieSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.CheckMySymptomsPage
+import pages.assertElementNotPresent
+import pages.assertIsNotVisible
+import pages.assertIsVisible
 import pages.loggedOut.CookieBanner
-import pages.loggedOut.LoginPage
 
 private const val DO_SEE = "see"
 private const val DO_NOT_SEE = "do not see"
@@ -27,8 +28,6 @@ class CookieBannerStepDefinitions {
     @Steps
     lateinit var cookieBannerSteps: CookieBannerSteps
 
-    private lateinit var loginPage: LoginPage
-    private lateinit var checkMySymptomsPage: CheckMySymptomsPage
     private lateinit var cookieBanner: CookieBanner
 
     @Given("^session storage is cleared$")
@@ -73,7 +72,7 @@ class CookieBannerStepDefinitions {
 
     @Then("^I do not see the cookie banner with javascript disabled$")
     fun iDoNotSeeTheCookieBannerWithJsDisabled() {
-        cookieBannerSteps.iDoNotSeeCookieBannerNoJs()
+        cookieBanner.cookieWrapper.assertIsNotVisible()
     }
 
     @Then("^session storage is not present$")
@@ -92,8 +91,8 @@ class CookieBannerStepDefinitions {
             val fullUrl = Config.instance.url + url
             browserSteps.browseTo(fullUrl)
             when (visibility) {
-                WILL -> cookieBannerSteps.iSeeCookieBanner(true)
-                WILL_NOT -> cookieBannerSteps.iSeeCookieBanner(false)
+                WILL -> cookieBanner.cookieBannerText1.assertIsVisible()
+                WILL_NOT -> cookieBanner.cookieBannerText1.assertElementNotPresent()
             }
         }
     }
