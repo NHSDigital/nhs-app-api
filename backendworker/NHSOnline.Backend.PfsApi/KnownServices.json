@@ -132,6 +132,28 @@
       "validateSession": false
     },
     {
+      "id": "cid-uaf",
+      "url": "https://uaf.ext.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
+      "id": "cid-access",
+      "url": "https://access.ext.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
       "id": "cid-dev-account",
       "url": "https://account.dev.signin.nhs.uk",
       "subServices": null,
@@ -154,8 +176,19 @@
       "validateSession": false
     },
     {
-      "id": "cid-uaf",
-      "url": "https://uaf.ext.signin.nhs.uk",
+      "id": "cid-dev-uaf",
+      "url": "https://uaf.dev.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
+      "id": "cid-dev-access",
+      "url": "https://access.dev.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
