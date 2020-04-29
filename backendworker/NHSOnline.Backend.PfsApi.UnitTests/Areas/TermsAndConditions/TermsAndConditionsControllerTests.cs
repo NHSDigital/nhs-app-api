@@ -15,6 +15,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.PfsApi.Areas.TermsAndConditions;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
+using NHSOnline.Backend.PfsApi.UnitTests.Audit;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 using UnitTestHelper;
@@ -24,16 +25,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
     [TestClass]
     public sealed class TermsAndConditionsControllerTests: IDisposable
     {
-        private TermsAndConditionsController _systemUnderTest;
-        private Mock<ITermsAndConditionsService> _termsAndConditionsService;
         private P9UserSession _userSession;
         private string _nhsLoginId;
+
+        private Mock<ITermsAndConditionsService> _mockTermsAndConditionsService;
+        private Mock<IAuditor> _mockAuditor;
+
+        private TermsAndConditionsController _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _termsAndConditionsService = new Mock<ITermsAndConditionsService>();
-
             _nhsLoginId = "NHS login id";
 
             _userSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token")
@@ -48,10 +50,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
                 }
             };
 
+            _mockTermsAndConditionsService = new Mock<ITermsAndConditionsService>();
+            _mockAuditor = new Mock<IAuditor>();
+
             _systemUnderTest = new TermsAndConditionsController(
-                _termsAndConditionsService.Object,
+                _mockTermsAndConditionsService.Object,
                 new Mock<ILogger<TermsAndConditionsController>>().Object,
-                new Mock<IAuditor>().Object);
+                _mockAuditor.Object);
         }
 
         [TestMethod]
@@ -59,20 +64,52 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         {
             // Arrange
             var request = new ConsentRequest();
-            var response = new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
+            TermsAndConditionsRecordConsentResult response = new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
 
-            _termsAndConditionsService.Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
-                .Returns(Task.FromResult((TermsAndConditionsRecordConsentResult) response));
+            _mockTermsAndConditionsService
+                .Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult(response));
+            ArrangeAudit();
 
             // Act
             var result = await _systemUnderTest.Post(request, _userSession);
 
             // Assert
-            _termsAndConditionsService.VerifyAll();
+            _mockTermsAndConditionsService.VerifyAll();
 
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             okObjectResult.Value.Should()
                 .BeAssignableTo<TermsAndConditionsRecordConsentResult.InitialConsentRecorded>();
+        }
+
+        [TestMethod]
+        [DataRow(true, true, DisplayName = "Audit Initial Success, Consent: true, Cookies: true")]
+        [DataRow(true, false, DisplayName = "Audit Initial Success, Consent: true, Cookies: false")]
+        [DataRow(false, true, DisplayName = "Audit Initial Success, Consent: false, Cookies: true")]
+        [DataRow(false, false, DisplayName = "Audit Initial Success, Consent: false, Cookies: false")]
+        public async Task PostForInitialConsent_Audits_Success(bool consent, bool analyticsCookieAccepted)
+        {
+            // Arrange
+            var request = new ConsentRequest { AnalyticsCookieAccepted = analyticsCookieAccepted, ConsentGiven = consent, UpdatingConsent = false };
+            TermsAndConditionsRecordConsentResult response = new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
+
+            _mockTermsAndConditionsService
+                .Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult(response));
+            var auditStub = ArrangeAudit();
+
+            // Act
+            await _systemUnderTest.Post(request, _userSession);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                auditStub.Operation.Should().Be("TermsAndConditions_RecordConsent");
+                auditStub.Details.Should().Be("Attempting to record patient consent - ConsentGiven={0}, AnalyticsCookieAccepted={1} at DateOfConsent={2}");
+                auditStub.Parameters[0].Should().Be(consent);
+                auditStub.Parameters[1].Should().Be(analyticsCookieAccepted);
+                auditStub.ResponseDetails.Should().Be("Initial Consent Successfully recorded");
+            }
         }
 
         [TestMethod]
@@ -82,19 +119,51 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             var request = new ConsentRequest();
             request.UpdatingConsent = true;
 
-            var response = new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
+            TermsAndConditionsRecordConsentResult response = new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
 
-            _termsAndConditionsService.Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
-                .Returns(Task.FromResult((TermsAndConditionsRecordConsentResult) response));
+            _mockTermsAndConditionsService
+                .Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult(response));
+            ArrangeAudit();
 
             // Act
             var result = await _systemUnderTest.Post(request, _userSession);
 
             // Assert
-            _termsAndConditionsService.VerifyAll();
+            _mockTermsAndConditionsService.VerifyAll();
 
             result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
+        }
+
+        [TestMethod]
+        [DataRow(true, true, DisplayName = "Audit Update Success, Consent: true, Cookies: true")]
+        [DataRow(true, false, DisplayName = "Audit Update Success, Consent: true, Cookies: false")]
+        [DataRow(false, true, DisplayName = "Audit Update Success, Consent: false, Cookies: true")]
+        [DataRow(false, false, DisplayName = "Audit Update Success, Consent: false, Cookies: false")]
+        public async Task PostForUpdateConsent_Audits_Success(bool consent, bool analyticsCookieAccepted)
+        {
+            // Arrange
+            var request = new ConsentRequest { AnalyticsCookieAccepted = analyticsCookieAccepted, ConsentGiven = consent, UpdatingConsent = true };
+            TermsAndConditionsRecordConsentResult response = new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
+
+            _mockTermsAndConditionsService
+                .Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult(response));
+            var auditStub = ArrangeAudit();
+
+            // Act
+            await _systemUnderTest.Post(request, _userSession);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                auditStub.Operation.Should().Be("TermsAndConditions_RecordConsent");
+                auditStub.Details.Should().Be("Attempting to record patient consent - ConsentGiven={0}, AnalyticsCookieAccepted={1} at DateOfConsent={2}");
+                auditStub.Parameters[0].Should().Be(consent);
+                auditStub.Parameters[1].Should().Be(analyticsCookieAccepted);
+                auditStub.ResponseDetails.Should().Be("Updated Consent Successfully recorded");
+            }
         }
 
         [TestMethod]
@@ -102,19 +171,51 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         {
             // Arrange
             var request = new ConsentRequest();
-            var response = new TermsAndConditionsRecordConsentResult.InternalServerError();
-            _termsAndConditionsService.Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
-                .Returns(Task.FromResult((TermsAndConditionsRecordConsentResult) response))
+            TermsAndConditionsRecordConsentResult response = new TermsAndConditionsRecordConsentResult.InternalServerError();
+            _mockTermsAndConditionsService
+                .Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult(response))
                 .Verifiable();
+            ArrangeAudit();
 
             // Act
             var result = await _systemUnderTest.Post(request, _userSession);
 
             // Assert
-            _termsAndConditionsService.VerifyAll();
+            _mockTermsAndConditionsService.VerifyAll();
 
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+
+        [TestMethod]
+        [DataRow(true, true, DisplayName = "Audit Failure, Consent: true, Cookies: true")]
+        [DataRow(true, false, DisplayName = "Audit Failure, Consent: true, Cookies: false")]
+        [DataRow(false, true, DisplayName = "Audit Failure, Consent: false, Cookies: true")]
+        [DataRow(false, false, DisplayName = "Audit Failure, Consent: false, Cookies: false")]
+        public async Task Post_Audits_Failure(bool consent, bool analyticsCookieAccepted)
+        {
+            // Arrange
+            var request = new ConsentRequest { AnalyticsCookieAccepted = analyticsCookieAccepted, ConsentGiven = consent, UpdatingConsent = true };
+            TermsAndConditionsRecordConsentResult response = new TermsAndConditionsRecordConsentResult.InternalServerError();
+
+            _mockTermsAndConditionsService
+                .Setup(x => x.RecordConsent(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult(response));
+            var auditStub = ArrangeAudit();
+
+            // Act
+            await _systemUnderTest.Post(request, _userSession);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                auditStub.Operation.Should().Be("TermsAndConditions_RecordConsent");
+                auditStub.Details.Should().Be("Attempting to record patient consent - ConsentGiven={0}, AnalyticsCookieAccepted={1} at DateOfConsent={2}");
+                auditStub.Parameters[0].Should().Be(consent);
+                auditStub.Parameters[1].Should().Be(analyticsCookieAccepted);
+                auditStub.ResponseDetails.Should().Be("Failed to record");
+            }
         }
 
         [TestMethod]
@@ -123,14 +224,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             // Arrange
             var consentRecord = new ConsentResponse();
             var response = new TermsAndConditionsFetchConsentResult.Success(consentRecord);
-            _termsAndConditionsService.Setup(x => x.FetchConsent(_nhsLoginId))
+            _mockTermsAndConditionsService.Setup(x => x.FetchConsent(_nhsLoginId))
                 .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
 
             // Act
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            _termsAndConditionsService.VerifyAll();
+            _mockTermsAndConditionsService.VerifyAll();
 
             var value = result.Should().BeAssignableTo<OkObjectResult>()
                 .Subject.Value.Should().BeAssignableTo<TermsAndConditionsFetchConsentResult.Success>()
@@ -148,14 +249,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         {
             // Arrange
             var response = new TermsAndConditionsFetchConsentResult.NoConsentFound(new ConsentResponse());
-            _termsAndConditionsService.Setup(x => x.FetchConsent(_nhsLoginId))
+            _mockTermsAndConditionsService.Setup(x => x.FetchConsent(_nhsLoginId))
                 .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
 
             // Act
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            _termsAndConditionsService.VerifyAll();
+            _mockTermsAndConditionsService.VerifyAll();
 
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             var value = okObjectResult.Value.Should()
@@ -173,14 +274,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
         {
             // Arrange
             var response = new TermsAndConditionsFetchConsentResult.InternalServerError();
-            _termsAndConditionsService.Setup(x => x.FetchConsent(_nhsLoginId))
+            _mockTermsAndConditionsService.Setup(x => x.FetchConsent(_nhsLoginId))
                 .Returns(Task.FromResult((TermsAndConditionsFetchConsentResult) response));
 
             // Act
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            _termsAndConditionsService.VerifyAll();
+            _mockTermsAndConditionsService.VerifyAll();
 
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
@@ -193,19 +294,48 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             var request = new AnalyticsCookieAcceptance();
             var response = new ToggleAnalyticsCookieAcceptanceResult.Success();
 
-            _termsAndConditionsService.Setup(x
+            _mockTermsAndConditionsService.Setup(x
                     => x.ToggleAnalyticsCookieAcceptance(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
                 .Returns(Task.FromResult((ToggleAnalyticsCookieAcceptanceResult) response))
                 .Verifiable();
+            ArrangeAudit();
 
             // Act
             var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request, _userSession);
 
             // Assert
-            _termsAndConditionsService.VerifyAll();
+            _mockTermsAndConditionsService.VerifyAll();
 
             var noContentResult = result.Should().BeAssignableTo<NoContentResult>().Subject;
             noContentResult.Should().BeAssignableTo<NoContentResult>();
+        }
+
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public async Task ToggleAnalyticsCookieAcceptance_Audits_Success(bool analyticsCookieAccepted)
+        {
+            // Arrange
+            var request = new AnalyticsCookieAcceptance { AnalyticsCookieAccepted = analyticsCookieAccepted };
+            var response = new ToggleAnalyticsCookieAcceptanceResult.Success();
+
+            _mockTermsAndConditionsService.Setup(x
+                    => x.ToggleAnalyticsCookieAcceptance(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult((ToggleAnalyticsCookieAcceptanceResult)response))
+                .Verifiable();
+            var auditStub = ArrangeAudit();
+
+            // Act
+            await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request, _userSession);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                auditStub.Operation.Should().Be("TermsAndConditions_ToggleAnalyticsCookieAcceptance");
+                auditStub.Details.Should().Be("Attempting to toggle analytics cookie acceptance - AnalyticsCookieAccepted={0} at DateOfAnalyticsCookieToggle={1}");
+                auditStub.Parameters[0].Should().Be(analyticsCookieAccepted);
+                auditStub.ResponseDetails.Should().Be("Analytics Cookie Consent toggled successfully");
+            }
         }
 
         [TestMethod]
@@ -214,21 +344,56 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.TermsAndConditions
             // Arrange
             var request = new AnalyticsCookieAcceptance();
             var response = new ToggleAnalyticsCookieAcceptanceResult.Failure();
-            _termsAndConditionsService.Setup(x
+            _mockTermsAndConditionsService.Setup(x
                     => x.ToggleAnalyticsCookieAcceptance(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
                 .Returns(Task.FromResult((ToggleAnalyticsCookieAcceptanceResult) response))
                 .Verifiable();
+            ArrangeAudit();
 
             // Act
             var result = await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request, _userSession);
 
             // Assert
-            _termsAndConditionsService.VerifyAll();
+            _mockTermsAndConditionsService.VerifyAll();
 
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }
 
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public async Task ToggleAnalyticsCookieAcceptance_Audits_Failure(bool analyticsCookieAccepted)
+        {
+            // Arrange
+            var request = new AnalyticsCookieAcceptance { AnalyticsCookieAccepted = analyticsCookieAccepted };
+            var response = new ToggleAnalyticsCookieAcceptanceResult.Failure();
+            _mockTermsAndConditionsService.Setup(x
+                    => x.ToggleAnalyticsCookieAcceptance(_nhsLoginId, request, It.IsAny<DateTimeOffset>()))
+                .Returns(Task.FromResult((ToggleAnalyticsCookieAcceptanceResult)response))
+                .Verifiable();
+            var auditStub = ArrangeAudit();
+
+            // Act
+            await _systemUnderTest.ToggleAnalyticsCookieAcceptance(request, _userSession);
+
+            // Assert
+            using (new AssertionScope())
+            {
+                auditStub.Operation.Should().Be("TermsAndConditions_ToggleAnalyticsCookieAcceptance");
+                auditStub.Details.Should().Be("Attempting to toggle analytics cookie acceptance - AnalyticsCookieAccepted={0} at DateOfAnalyticsCookieToggle={1}");
+                auditStub.Parameters[0].Should().Be(analyticsCookieAccepted);
+                auditStub.ResponseDetails.Should().Be("Failed to toggle analytics cookie");
+            }
+        }
+
         public void Dispose() => _systemUnderTest?.Dispose();
+
+        private AuditBuilderStub ArrangeAudit()
+        {
+            var auditBuilderStub = new AuditBuilderStub();
+            _mockAuditor.Setup(x => x.Audit()).Returns(auditBuilderStub);
+            return auditBuilderStub;
+        }
     }
 }

@@ -1,58 +1,45 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 {
-    public class ToggleAnalyticsCookieAcceptanceAuditingVisitor : IToggleAnalyticsCookieAcceptanceVisitor<Task>
+    public class ToggleAnalyticsCookieAcceptanceAuditingVisitor : IUserSessionVisitor<Task<ToggleAnalyticsCookieAcceptanceResult>>
     {
         private readonly IAuditor _auditor;
         private readonly DateTimeOffset _dateOfConsent;
         private readonly bool _analyticsCookieAccepted;
-        private readonly ILogger<TermsAndConditionsController> _logger;
+        private readonly Func<Task<ToggleAnalyticsCookieAcceptanceResult>> _action;
 
-        public ToggleAnalyticsCookieAcceptanceAuditingVisitor(IAuditor auditor,
-            ILogger<TermsAndConditionsController> logger, DateTimeOffset dateOfConsent,
-            bool analyticsCookieAccepted)
+        public ToggleAnalyticsCookieAcceptanceAuditingVisitor(
+            IAuditor auditor,
+            DateTimeOffset dateOfConsent,
+            bool analyticsCookieAccepted,
+            Func<Task<ToggleAnalyticsCookieAcceptanceResult>> action)
         {
             _auditor = auditor;
             _dateOfConsent = dateOfConsent;
             _analyticsCookieAccepted = analyticsCookieAccepted;
-            _logger = logger;
+            _action = action;
         }
 
-        public async Task Visit(ToggleAnalyticsCookieAcceptanceResult.Success result)
-        {
-            try
-            {
-                await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceResponse,
-                    "Analytics Cookie Consent toggled Successfully DateOfAnalyticsCookieToggle: {0:O}" +
-                    " analytics cookie acceptance - AnalyticsCookieAccepted: {1}",
-                    _dateOfConsent, _analyticsCookieAccepted);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e,
-                    $"Exception thrown auditing {AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceResponse} {nameof(ToggleAnalyticsCookieAcceptanceResult.Success)}");
-            }
-        }
+        public async Task<ToggleAnalyticsCookieAcceptanceResult> Visit(P5UserSession userSession)
+            => await _action();
 
-        public async Task Visit(ToggleAnalyticsCookieAcceptanceResult.Failure result)
+        public async Task<ToggleAnalyticsCookieAcceptanceResult> Visit(P9UserSession userSession)
         {
-            try
-            {
-                await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceResponse,
-                    "Failed to toggle analytics cookie DateOfAnalyticsCookieToggle: {0:O}" +
-                    " analytics cookie acceptance - AnalyticsCookieAccepted: {1}",
-                    _dateOfConsent, _analyticsCookieAccepted);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e,
-                    $"Exception thrown auditing {AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceResponse} {nameof(ToggleAnalyticsCookieAcceptanceResult.Failure)}");
-            }
+            return await _auditor
+                .Audit()
+                .Operation(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptance)
+                .Details(
+                    "Attempting to toggle analytics cookie acceptance - AnalyticsCookieAccepted={0} at DateOfAnalyticsCookieToggle={1}",
+                    _analyticsCookieAccepted,
+                    _dateOfConsent.ToString(CultureInfo.InvariantCulture))
+                .Execute(_action);
         }
     }
 }

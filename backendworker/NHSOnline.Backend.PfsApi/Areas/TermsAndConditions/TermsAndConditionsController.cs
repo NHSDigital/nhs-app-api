@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,7 +8,6 @@ using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.PfsApi.TermsAndConditions.Models;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;
@@ -61,17 +59,24 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
                 return new BadRequestObjectResult(ModelState);
             }
 
-            var nhsLoginId = GetNhsLoginId(userSession);
             var termsAndConditionsAcceptanceDate = DateTimeOffset.Now;
 
-            if (userSession is P9UserSession)
-            {
-                await _auditor.Audit(AuditingOperations.TermsAndConditionsRecordConsentAuditTypeRequest,
-                    $"Attempting to record patient consent - ConsentGiven={model.ConsentGiven}, " +
-                    $"AnalyticsCookieAccepted={model.AnalyticsCookieAccepted} " +
-                    $"at DateOfConsent={termsAndConditionsAcceptanceDate.ToString(CultureInfo.InvariantCulture)}");
-            }
+            var auditingVisitor = new TermsAndConditionsRecordConsentAuditingVisitor(
+                _auditor,
+                model,
+                termsAndConditionsAcceptanceDate,
+               async () => await RecordConsent(model, userSession, termsAndConditionsAcceptanceDate));
+            var recordConsentResult = await userSession.Accept(auditingVisitor);
 
+            _logger.LogExit();
+            return recordConsentResult.Accept(new TermsAndConditionsRecordConsentResultVisitor());
+        }
+
+        private async Task<TermsAndConditionsRecordConsentResult> RecordConsent(
+            ConsentRequest model,
+            P5UserSession userSession,
+            DateTimeOffset termsAndConditionsAcceptanceDate)
+        {
             if (!model.AnalyticsCookieAccepted)
             {
                 _logger.LogInformation(
@@ -81,19 +86,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 
             _logger.LogDebug("Recording user consent");
 
-            var recordConsentResult = await _termsAndConditionsService.RecordConsent(
-                nhsLoginId,
-                model,
-                termsAndConditionsAcceptanceDate);
+            var nhsLoginId = GetNhsLoginId(userSession);
 
-            if (userSession is P9UserSession)
-            {
-                await recordConsentResult.Accept(new TermsAndConditionsRecordConsentAuditingVisitor(
-                    _auditor, _logger, model, termsAndConditionsAcceptanceDate));
-            }
-
-            _logger.LogExit();
-            return recordConsentResult.Accept(new TermsAndConditionsRecordConsentResultVisitor());
+            return await _termsAndConditionsService.RecordConsent(nhsLoginId, model, termsAndConditionsAcceptanceDate);
         }
 
         [HttpPost]
@@ -112,25 +107,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             var nhsLoginId = GetNhsLoginId(userSession);
             var dateTimeOffset = DateTimeOffset.Now;
 
-            if (userSession is P9UserSession)
-            {
-                await _auditor.Audit(AuditingOperations.TermsAndConditionsToggleAnalyticsCookieAcceptanceRequest,
-                    $"Attempting to toggle analytics cookie acceptance - " +
-                    $"AnalyticsCookieAccepted={analyticsCookieAcceptance.AnalyticsCookieAccepted} " +
-                    $"at DateOfAnalyticsCookieToggle={dateTimeOffset.ToString(CultureInfo.InvariantCulture)}");
-            }
-
-            var result = await _termsAndConditionsService.ToggleAnalyticsCookieAcceptance(
-                nhsLoginId,
-                analyticsCookieAcceptance,
-                dateTimeOffset
-            );
-
-            if (userSession is P9UserSession)
-            {
-                await result.Accept(new ToggleAnalyticsCookieAcceptanceAuditingVisitor(_auditor, _logger,
-                    dateTimeOffset, analyticsCookieAcceptance.AnalyticsCookieAccepted));
-            }
+            var auditingVisitor = new ToggleAnalyticsCookieAcceptanceAuditingVisitor(
+                _auditor,
+                dateTimeOffset,
+                analyticsCookieAcceptance.AnalyticsCookieAccepted,
+                async () => await _termsAndConditionsService.ToggleAnalyticsCookieAcceptance(nhsLoginId, analyticsCookieAcceptance, dateTimeOffset));
+            var result = await userSession.Accept(auditingVisitor);
 
             _logger.LogExit();
 
