@@ -6,7 +6,7 @@ jobs:
         displayName: Download coverage
         inputs:
           artifactName: 'coverage'
-          downloadPath: $(Build.SourcesDirectory)/coverage
+          downloadPath: $(Build.SourcesDirectory)
 
       - task: Bash@3
         displayName: Fix Coverage Sources
