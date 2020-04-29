@@ -11,7 +11,6 @@ describe('summary message', () => {
   const metaClass = 'nhs-app-message__meta';
   const subjectLineClass = 'nhs-app-message__subject-line';
   const title = 'Test sender';
-  const subTitle = 'Test subject';
   const dateTime = '2019-09-14T02:15:12.356Z';
   const listIndex = 1;
   const href = '/messaging/messages';
@@ -24,6 +23,7 @@ describe('summary message', () => {
     unreadCount = 0,
     hasUnreadMessages = false,
     dateFormat = undefined,
+    subTitle = 'Test subject',
   } = {}) => mount(
     SummaryMessage, {
       $router,
@@ -55,6 +55,15 @@ describe('summary message', () => {
   it('will set the href on the root element', () => {
     wrapper = mountSummaryMessage();
     expect(wrapper.attributes().href).toContain(href);
+  });
+
+  describe('subject', () => {
+    it('will show the subject if hasSubject is true', () => {
+      wrapper = mountSummaryMessage({ hasSubject: true });
+      const subject = wrapper.find('#subject');
+
+      expect(subject.text()).toBe('Test subject');
+    });
   });
 
   describe('unread count', () => {

@@ -37,6 +37,7 @@ describe('practice patient messaging inbox', () => {
     messageSummaries = summaries,
     loadedMessages = true,
     im1MessagingEnabled = false,
+    hasSubject = true,
   } = {}) => {
     store = createStore({
       state: {
@@ -51,6 +52,9 @@ describe('practice patient messaging inbox', () => {
         device: {
           isNativeApp: false,
         },
+      },
+      getters: {
+        'serviceJourneyRules/sendMessageSubjectEnabled': hasSubject,
       },
     });
     $t = create$T();
@@ -116,7 +120,7 @@ describe('practice patient messaging inbox', () => {
         lastMessageDateTime: '2020-01-01T13:37:00.137Z',
         hasUnreadReplies: true,
       }];
-      mountPage({ messagesSummaries: summariesNoSubject });
+      mountPage({ hasSubject: false });
       const messageLabel = wrapper.vm.getMessageLabel(summariesNoSubject[0]);
 
       // Assert
@@ -173,6 +177,70 @@ describe('practice patient messaging inbox', () => {
       expect(store.dispatch).toHaveBeenCalledWith('patientPracticeMessaging/setMessageDetails', {
         messageDetails: summaries[0],
       });
+    });
+    it('will not trim the subtitle if it is 64 characters and there is no subject', () => {
+      const messageSummaries = [{
+        messageId: 'message-1',
+        recipient: 'Dr NHS Online',
+        subject: 'This is the message subject',
+        lastMessageDateTime: '2020-01-01T13:37:00.137Z',
+        unreadReplyInfo: {
+          present: true,
+          count: 1,
+        },
+        content: 'This is sixty-four characters long to check this class method!!!',
+        sentDateTime: '2020-01-01T13:37:00.137Z',
+        sender: 'Dr Nhs Online',
+        replies: [],
+        outboundMessage: true,
+        requiresDetailsRequest: false,
+      }];
+      mountPage({ hasSubject: false });
+      const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
+      expect(subtitle).toBe('This is sixty-four characters long to check this class method!!!');
+    });
+
+    it('will not trim the subtitle if it is less than 64 characters and there is no subject', () => {
+      const messageSummaries = [{
+        messageId: 'message-1',
+        recipient: 'Dr NHS Online',
+        lastMessageDateTime: '2020-01-01T13:37:00.137Z',
+        unreadReplyInfo: {
+          present: true,
+          count: 1,
+        },
+        content: 'This is less than 64 chars',
+        sentDateTime: '2020-01-01T13:37:00.137Z',
+        sender: 'Dr Nhs Online',
+        replies: [],
+        outboundMessage: true,
+        requiresDetailsRequest: false,
+      }];
+      mountPage({ hasSubject: false });
+      const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
+      expect(subtitle).toBe('This is less than 64 chars');
+    });
+
+    it('will trim the subtitle is more than 64 characters and there is no subject', () => {
+      const messageSummaries = [{
+        messageId: 'message-1',
+        recipient: 'Dr NHS Online',
+        lastMessageDateTime: '2020-01-01T13:37:00.137Z',
+        unreadReplyInfo: {
+          present: true,
+          count: 1,
+        },
+        content: 'This is sixty-five characters long to check this class method!!!!',
+        sentDateTime: '2020-01-01T13:37:00.137Z',
+        sender: 'Dr Nhs Online',
+        replies: [],
+        outboundMessage: true,
+        requiresDetailsRequest: false,
+      }];
+      mountPage({ hasSubject: false });
+
+      const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
+      expect(subtitle).toBe('This is sixty-five characters long to check this class method!!!...');
     });
   });
 });
