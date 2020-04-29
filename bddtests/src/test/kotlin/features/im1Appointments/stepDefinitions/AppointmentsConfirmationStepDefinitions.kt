@@ -18,6 +18,7 @@ import pages.ErrorDialogPage
 import pages.assertDoesElementHaveFocus
 import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
+import pages.avoidChromeWebDriverServiceCrash
 import utils.getOrFail
 
 class AppointmentsConfirmationStepDefinitions {
@@ -86,6 +87,7 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^I see appropriate information message " +
             "when there is an error sending data on appointment confirmation page$")
     fun thenISeeAppropriateInformationMessageWhenThereIsAnErrorSendingDataOnAppointmentConfirmationPage() {
+        errorDialogPage.avoidChromeWebDriverServiceCrash()
         errorDialogPage.assertPageHeader(appointmentsConfirmationSteps.appointmentsConfirmation.problemHeader)
                 .assertPageTitle(appointmentsConfirmationSteps.appointmentsConfirmation.problemTitle)
                 .assertParagraphText(appointmentsConfirmationSteps.appointmentsConfirmation.goBackAndTryAgainProblem)
