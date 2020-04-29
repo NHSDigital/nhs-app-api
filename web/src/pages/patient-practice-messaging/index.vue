@@ -25,7 +25,6 @@
             <summary-message :id="summary.messageId"
                              :title="summary.recipient"
                              :sub-title="getSubtitle(summary)"
-                             :has-subject="hasSubject"
                              :date-time="summary.lastMessageDateTime"
                              :aria-label="getMessageLabel(summary)"
                              :has-unread-messages="summary.unreadReplyInfo.present"
@@ -58,7 +57,7 @@ import {
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   INDEX,
 } from '@/lib/routes';
-import { redirectTo, isNumber } from '@/lib/utils';
+import { redirectTo, datePart, isNumber } from '@/lib/utils';
 import { formatDate } from '@/plugins/filters';
 import srjIf from '@/lib/sjrIf';
 
@@ -87,9 +86,6 @@ export default {
     additionalDetailsCallRequired() {
       return srjIf({ $store: this.$store, journey: 'requiredDetailsCallPatientPracticeMessage' });
     },
-    hasSubject() {
-      return srjIf({ $store: this.$store, journey: 'sendMessageSubject' });
-    },
   },
   async asyncData({ store, redirect }) {
     if (!store.state.practiceSettings.im1MessagingEnabled) {
@@ -117,16 +113,13 @@ export default {
       redirectTo(this, PATIENT_PRACTICE_MESSAGING_URGENCY.path);
     },
     getSubtitle(summary) {
-      const { subject, content } = summary;
-      if (this.hasSubject) {
-        return subject;
-      }
-      return (content.length > 64) ? `${content.substring(0, 64)}...` : content;
+      return (summary.subject) ? summary.subject : this.$t('im01.lastMessageRecieved',
+        { date: datePart(summary.lastMessageDateTime, 'YearMonthDayTime') });
     },
     getMessageLabel(summary) {
       const { subject, recipient, lastMessageDateTime } = summary;
 
-      return (this.hasSubject) ?
+      return (subject) ?
         this.$t('im01.summary.hiddenWithSubject', {
           recipient,
           subject,

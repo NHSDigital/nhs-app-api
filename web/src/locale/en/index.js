@@ -1284,14 +1284,13 @@ export default {
     noStartDate: 'Unknown Date',
   },
   im01: {
-    viewFullMessage: 'View full message',
     sendMessageButtonText: 'Send a message',
     subheader: 'Your messages',
     noMessages: 'You have no messages.',
     lastMessageRecieved: 'Last message received at {date}',
     summary: {
       hiddenWithSubject: 'Conversation with {recipient}. Subject: {subject}. The last message in this conversation was sent on {date}.',
-      hiddenWithoutSubject: 'Conversation with {recipient}. The last message in this conversation was sent on {date}. View full message.',
+      hiddenWithoutSubject: 'Conversation with {recipient}. The last message in this conversation was sent on {date}.',
     },
   },
   im02: {
