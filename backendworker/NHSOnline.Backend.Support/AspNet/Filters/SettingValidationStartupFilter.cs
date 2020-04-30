@@ -2,22 +2,24 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using NHSOnline.Backend.Support.Configuration;
 
 namespace NHSOnline.Backend.Support.AspNet.Filters
 {
-    public class SettingValidationStartupFilter : IStartupFilter 
+    public class SettingValidationStartupFilter : IStartupFilter
     {
-        readonly IEnumerable<IValidatable> _validateableObjects;
-        public SettingValidationStartupFilter(IEnumerable<IValidatable> validateableObjects)
+        private readonly IEnumerable<IValidatable> _validatableObjects;
+
+        public SettingValidationStartupFilter(IEnumerable<IValidatable> validatableObjects)
         {
-            _validateableObjects = validateableObjects;
+            _validatableObjects = validatableObjects;
         }
 
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
         {
-            foreach (var validateableObject in _validateableObjects)
+            foreach (var validatableObject in _validatableObjects)
             {
-                validateableObject.Validate();
+                validatableObject.Validate();
             }
 
             return next;

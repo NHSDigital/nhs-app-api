@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.PfsApi
             // Add functionality to inject IOptions<T>
             services.AddOptions();
 
-            services.Configure<KnownServices>(Configuration);
+            services.ConfigureValidatableSetting<KnownServices>(Configuration);
             services.RegisterFakeUserConfiguration(Configuration);
         }
 

@@ -151,8 +151,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
                 doc.DocumentNode
                     .SelectNodes(".//img")
                     ?.Where(n => !n.Attributes.Contains("alt"))
-                    .ForEachWithIndex((node, idx) =>
-                        node.SetAttributeValue("alt", $"{altText} page {idx + 1}"));
+                    .ForEach((node, index) => node.SetAttributeValue("alt", $"{altText} page {index + 1}"));
 
                 return doc.DocumentNode.InnerHtml;
             }

@@ -4,42 +4,24 @@ using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Configuration
 {
-    public abstract class GetConfigurationResultV2
+    public sealed class GetConfigurationResultV2
     {
-        public abstract T Accept<T>(IGetConfigurationResultVisitorV2<T> visitor);
-
-        public class Success : GetConfigurationResultV2
+        public GetConfigurationResultV2(List<string> nhsLoginLoggedInPaths,
+            Uri fidoServerUrl,
+            string minimumSupportedAndroidVersion,
+            string minimumSupportediOSVersion,
+            List<RootService> knownServices)
         {
-            public Success(List<string> nhsLoginLoggedInPaths,
-                Uri fidoServerUrl, 
-                string minimumSupportedAndroidVersion, 
-                string minimumSupportediOSVersion,
-                List<RootService> knownServices)
+            Response = new GetConfigurationResponseV2
             {
-                Response = new GetConfigurationResponseV2
-                {
-                    NhsLoginLoggedInPaths = nhsLoginLoggedInPaths,
-                    FidoServerUrl = fidoServerUrl,
-                    MinimumSupportedAndroidVersion = minimumSupportedAndroidVersion,
-                    MinimumSupportediOSVersion = minimumSupportediOSVersion,
-                    KnownServices = knownServices,
-                };
-            }
-
-            public GetConfigurationResponseV2 Response { get; set; }
-
-            public override T Accept<T>(IGetConfigurationResultVisitorV2<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
+                NhsLoginLoggedInPaths = nhsLoginLoggedInPaths,
+                FidoServerUrl = fidoServerUrl,
+                MinimumSupportedAndroidVersion = minimumSupportedAndroidVersion,
+                MinimumSupportediOSVersion = minimumSupportediOSVersion,
+                KnownServices = knownServices,
+            };
         }
-        
-        public class InternalServerError : GetConfigurationResultV2
-        {
-            public override T Accept<T>(IGetConfigurationResultVisitorV2<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
+
+        public GetConfigurationResponseV2 Response { get; }
     }
 }

@@ -1,5 +1,4 @@
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.Support.Configuration;
 
 namespace NHSOnline.Backend.Repository
 {

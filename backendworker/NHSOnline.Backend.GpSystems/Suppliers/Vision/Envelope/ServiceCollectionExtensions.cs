@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Configuration;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Envelope
 {

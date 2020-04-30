@@ -3,11 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Support.AspNet.Filters;
-using NHSOnline.Backend.Support.Configuration;
 
-namespace NHSOnline.Backend.PfsApi
+namespace NHSOnline.Backend.Support.Configuration
 {
-    public static class ServiceCollectionExtensions
+    public static class ConfigurationExtensions
     {
         /// <summary>
         /// Add an <see cref="IStartupFilter"/> to the application that invokes <see cref="IValidatable.Validate"/> on all registered objects
@@ -18,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi
         }
 
         /// <summary>
-        /// Registers a configuration instance which <typeparamref name="TOptions"/> will bind against, and registers as a validatble setting.
+        /// Registers a configuration instance which <typeparamref name="TOptions"/> will bind against, and registers as a validatable setting.
         /// Additionally registers the configuration object directly with the DI container, so can be retrieved without referencing IOptions.
         ///
         /// </summary>

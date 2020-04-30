@@ -1,14 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.PfsApi.Areas.Configuration;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.Configuration;
 using NHSOnline.Backend.PfsApi.Devices;
@@ -18,327 +13,269 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
     [TestClass]
     public class ConfigurationServiceTests
     {
-        private IFixture _fixture;
-
-        private Mock<ILogger<ConfigurationService>> _logger;
-        private DeviceConfigurationSettings _settings;
-        private Mock<IOptions<KnownServices>> _mockKnownServices;
-
-        private const string MinimumSupportedAndroidVersion = "2.1.0";
-        private const string MinimumSupportediOSVersion = "3.5.0";
-        private readonly string _nhsLoginLoggedInPaths = "/path";
-        private KnownServices _knownServices;
-
-        private readonly Uri _testFidoServerUrl = new Uri("http://test.test.com");
-        private readonly Uri _testWebAppBaseUrl = new Uri("http://test.test.com");
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
-            _settings = new DeviceConfigurationSettings
-            {
-                NhsLoginLoggedInPaths = _nhsLoginLoggedInPaths,
-                MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
-                MinimumSupportediOSVersion = MinimumSupportediOSVersion,
-                FidoServerUrl = _testFidoServerUrl,
-                WebAppBaseUrl = _testWebAppBaseUrl
-            };
-
-            _logger = _fixture.Freeze<Mock<ILogger<ConfigurationService>>>();
-
-            _fixture.Inject(_settings);
-            _fixture.Inject(_logger);
-
-            _knownServices = new KnownServices
-            {
-                Services = new List<RootService>
-                {
-                    new RootService()
-                    {
-                        MenuTab = MenuTab.Prescriptions,
-                        Id = "MyId",
-                        SubServices = new List<SubService>
-                        {
-                            new SubService
-                            {
-                                Path = "test path"
-                            }
-                        },
-                        Url = new Uri("http://test.test.com"),
-                        ValidateSession = false,
-                        RequiresAssertedLoginIdentity = false,
-                        JavaScriptInteractionMode = JavaScriptInteractionMode.NhsApp,
-                        ShowSpinner = false,
-                        ShowThirdPartyWarning = false,
-                        IntegrationLevel = IntegrationLevel.Bronze
-                    }
-                }
-            };
-
-            _mockKnownServices = _fixture.Freeze<Mock<IOptions<KnownServices>>>();
-            _mockKnownServices.Setup(x => x.Value)
-                .Returns(_knownServices);
-        }
-
         [TestMethod]
-        public void GetConfiguration_Returns_CorrectResult()
+        public void GetConfiguration_Valid_ReturnsSuccess()
         {
-            // Arrange
-            var nhsLoginLoggedInPathsList = _nhsLoginLoggedInPaths.Split('|').ToList();
-            var expectedResult = new GetConfigurationResponseV2
-            {
-                NhsLoginLoggedInPaths = nhsLoginLoggedInPathsList,
-                MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
-                MinimumSupportediOSVersion = MinimumSupportediOSVersion,
-                FidoServerUrl = _testFidoServerUrl,
-                KnownServices = _knownServices.Services
-            };
+            var settings = CreateSettings();
+            var knownServices = CreateValidKnownServices();
 
-            var systemUnderTest = _fixture.Create<ConfigurationService>();
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
 
-            // Act
             var result = systemUnderTest.GetConfiguration();
 
-            // Assert
-            var response = result.Should().BeAssignableTo<GetConfigurationResultV2.Success>().Subject;
-            response.Response.Should().BeEquivalentTo(expectedResult);
+            result.Should().NotBeNull();
+            result.Response.Should().NotBeNull();
         }
 
         [TestMethod]
-        public void Constructor_KnownServicesOptionsNull_ThrowsException()
+        public void GetConfiguration_DeviceSettingsNhsLoginPathNoPipes_ReturnsSinglePath()
         {
-            Action act = () => _ = new ConfigurationService(_logger.Object, null, _settings);
+            var settings = CreateSettings(nhsLoginLoggedInPaths: "one/path");
+            var knownServices = CreateValidKnownServices();
 
-            act.Should().Throw<ArgumentNullException>();
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
+
+            var result = systemUnderTest.GetConfiguration();
+
+            result.Response.NhsLoginLoggedInPaths.Should().BeEquivalentTo("one/path");
         }
 
         [TestMethod]
-        public void Constructor_KnownServicesOptionValuesNull_ThrowsException()
+        public void GetConfiguration_DeviceSettingsNhsLoginPathsSeparatedByPipes_ReturnsPaths()
         {
-            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(null);
-            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+            var settings = CreateSettings(nhsLoginLoggedInPaths: "PathOne|PathTwo|PathThree");
+            var knownServices = CreateValidKnownServices();
 
-            act.Should().Throw<ArgumentNullException>();
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
+
+            var result = systemUnderTest.GetConfiguration();
+
+            result.Response.NhsLoginLoggedInPaths.Should().BeEquivalentTo("PathOne", "PathTwo", "PathThree");
         }
 
         [TestMethod]
-        public void Constructor_KnownServicesOptionValuesHasNullServices_ThrowsException()
+        public void GetConfiguration_DeviceSettingsNhsLoginPathsSeparatedByPipes_TrimsReturnedPaths()
         {
-            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
-            {
-                Services = null
-            });
-            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+            var settings = CreateSettings(nhsLoginLoggedInPaths: "  PathOne |PathTwo |   PathThree");
+            var knownServices = CreateValidKnownServices();
 
-            act.Should().Throw<ArgumentNullException>();
-        }
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
 
-        [TestMethod]
-        public void Constructor_KnownServicesOptionValuesHasNullRootService_ThrowsException()
-        {
-            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
-            {
-                Services = new List<RootService>
-                {
-                    null
-                }
-            });
-            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
+            var result = systemUnderTest.GetConfiguration();
 
-            act.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void Constructor_KnownServicesOptionValuesHasNullRootServiceId_ThrowsException()
-        {
-            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
-            {
-                Services = new List<RootService>
-                {
-                    new RootService
-                    {
-                        Id = null,
-                        Url = new Uri("https://somewhere.net"),
-                        SubServices = new List<SubService>()
-                    }
-                }
-            });
-            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
-
-            act.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void Constructor_KnownServicesOptionValuesHasBlankRootServiceId_ThrowsException()
-        {
-            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
-            {
-                Services = new List<RootService>
-                {
-                    new RootService
-                    {
-                        Id = "  ",
-                        Url = new Uri("https://somewhere.net"),
-                        SubServices = new List<SubService>()
-                    }
-                }
-            });
-            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
-
-            act.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void Constructor_KnownServicesOptionValuesHasNullRootServiceUrl_ThrowsException()
-        {
-            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
-            {
-                Services = new List<RootService>
-                {
-                    new RootService
-                    {
-                        Id = "test",
-                        Url = null,
-                        SubServices = new List<SubService>()
-                    }
-                }
-            });
-            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
-
-            act.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void Constructor_KnownServicesOptionValuesHasNullSubService_ThrowsException()
-        {
-            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
-            {
-                Services = new List<RootService>
-                {
-                    new RootService
-                    {
-                        Id = "test",
-                        Url = new Uri("https://somewhere.net"),
-                        SubServices = new List<SubService>
-                        {
-                            null
-                        }
-                    }
-                }
-            });
-            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
-
-            act.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void Constructor_KnownServicesOptionValuesHasSubServiceWithNullPath_ThrowsException()
-        {
-            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
-            {
-                Services = new List<RootService>
-                {
-                    new RootService
-                    {
-                        Id = "test",
-                        Url = new Uri("https://somewhere.net"),
-                        SubServices = new List<SubService>
-                        {
-                            new SubService
-                            {
-                                Path = null
-                            }
-                        }
-                    }
-                }
-            });
-            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
-
-            act.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void Constructor_KnownServicesOptionValuesHasSubServiceWithEmptyPath_ThrowsException()
-        {
-            IOptions<KnownServices> knownServicesOptions = new OptionsWrapper<KnownServices>(new KnownServices
-            {
-                Services = new List<RootService>
-                {
-                    new RootService
-                    {
-                        Id = "test",
-                        Url = new Uri("https://somewhere.net"),
-                        SubServices = new List<SubService>
-                        {
-                            new SubService
-                            {
-                                Path = "  "
-                            }
-                        }
-                    }
-                }
-            });
-            Action act = () => _ = new ConfigurationService(_logger.Object, knownServicesOptions, _settings);
-
-            act.Should().Throw<ArgumentNullException>();
-        }
-
-        [TestMethod]
-        public void Constructor_DeviceConfigurationNull_ThrowsException()
-        {
-            Action act = () => _ = new ConfigurationService(_logger.Object, _mockKnownServices.Object, null);
-
-            act.Should().Throw<ArgumentNullException>();
+            result.Response.NhsLoginLoggedInPaths.Should().BeEquivalentTo("PathOne", "PathTwo", "PathThree");
         }
 
         [DataTestMethod]
-        [DataRow("http://www.test.com", null, "1.12.0", "http://www.test.com")]
-        [DataRow("http://www.test.com", "   ", "1.12.0", "http://www.test.com")]
-        [DataRow("http://www.test.com", "1.12.0", null, "http://www.test.com")]
-        [DataRow("http://www.test.com", "1.12.0", "   ", "http://www.test.com")]
-        [DataRow("http://www.test.com", "1.12.0", "1.12.0", null)]
-        [DataRow(null, "1.12.0", "1.12.0", "http://www.test.com")]
-        public void Constructor_DeviceConfigurationMissingParameters_ThrowsException
-        (
-            string fidoServerUrl,
-            string minimumSupportediOSVersion,
-            string minimumSupportedAndroidVersion,
-            string webAppBaseUrl
-        )
+        [DataRow("1.34.2")]
+        [DataRow("1.34.56")]
+        public void GetConfiguration_Valid_ReturnsMinAndroidVersionFromDeviceSettings(string version)
         {
-            var settings = new DeviceConfigurationSettings()
-            {
-                FidoServerUrl = string.IsNullOrWhiteSpace(fidoServerUrl) ? null : new Uri(fidoServerUrl),
-                MinimumSupportediOSVersion = minimumSupportediOSVersion,
-                MinimumSupportedAndroidVersion = minimumSupportedAndroidVersion,
-                WebAppBaseUrl = string.IsNullOrWhiteSpace(webAppBaseUrl) ? null : new Uri(webAppBaseUrl),
-            };
+            var settings = CreateSettings(minimumSupportedAndroidVersion: version);
+            var knownServices = CreateValidKnownServices();
 
-            Action act = () => _ = new ConfigurationService(_logger.Object, _mockKnownServices.Object, settings);
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
 
-            act.Should().Throw<ArgumentNullException>();
+            var result = systemUnderTest.GetConfiguration();
+
+            result.Response.MinimumSupportedAndroidVersion.Should().Be(version);
+        }
+
+        [DataTestMethod]
+        [DataRow("1.34.2")]
+        [DataRow("1.34.56")]
+        public void GetConfiguration_Valid_ReturnsMiniOSVersionFromDeviceSettings(string version)
+        {
+            var settings = CreateSettings(minimumSupportediOSVersion: version);
+            var knownServices = CreateValidKnownServices();
+
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
+
+            var result = systemUnderTest.GetConfiguration();
+
+            result.Response.MinimumSupportediOSVersion.Should().Be(version);
+        }
+
+        [DataTestMethod]
+        [DataRow("http://test.uri/")]
+        [DataRow("http://another.test.uri/auth")]
+        public void GetConfiguration_Valid_ReturnsFidoServerUrlFromDeviceSettings(string uri)
+        {
+            var settings = CreateSettings(fidoServerUrl: () => new Uri(uri));
+            var knownServices = CreateValidKnownServices();
+
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
+
+            var result = systemUnderTest.GetConfiguration();
+
+            result.Response.FidoServerUrl.Should().Be(new Uri(uri));
         }
 
         [TestMethod]
-        public void Constructor_DeviceConfigurationMultipleNhsLoginLoggedInPaths_PathsAreSplitAndTrimmed()
+        public void GetConfiguration_SingleKnownService_ReturnsKnownService()
         {
-            var settings = new DeviceConfigurationSettings
+            var settings = CreateSettings();
+            var knownService = CreateKnownService();
+
+            var knownServices = new KnownServices()
             {
-                NhsLoginLoggedInPaths = "/path1| /path2|/path3 ||",
-                MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
-                MinimumSupportediOSVersion = MinimumSupportediOSVersion,
-                FidoServerUrl = _testFidoServerUrl,
-                WebAppBaseUrl = _testWebAppBaseUrl,
+                Services = new Dictionary<string, RootService>()
+                {
+                    { "MyId", knownService }
+                }
             };
 
-            var sut = new ConfigurationService(_logger.Object, _mockKnownServices.Object, settings);
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
 
-            var result = sut.GetConfiguration();
+            var result = systemUnderTest.GetConfiguration();
 
-            var response = result.Should().BeAssignableTo<GetConfigurationResultV2.Success>().Subject;
-            response.Response.NhsLoginLoggedInPaths.Should().BeEquivalentTo("/path1", "/path2", "/path3");
+            result.Response.KnownServices
+                .Should().ContainSingle()
+                .Which.Should().BeSameAs(knownService);
+        }
+
+        [TestMethod]
+        public void GetConfiguration_SingleKnownService_ReturnsKnownServiceWithIdSetFromDictionaryKey()
+        {
+            var settings = CreateSettings();
+            var knownService = CreateKnownService();
+
+            var knownServices = new KnownServices()
+            {
+                Services = new Dictionary<string, RootService>()
+                {
+                    { "MyId", knownService }
+                }
+            };
+
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
+
+            var result = systemUnderTest.GetConfiguration();
+
+            result.Response.KnownServices
+                .Should().ContainSingle()
+                .Which.Id.Should().Be("MyId");
+        }
+
+        [TestMethod]
+        public void GetConfiguration_MultipleKnownServices_ReturnsKnownServices()
+        {
+            var settings = CreateSettings();
+            var knownServiceOne = CreateKnownService();
+            var knownServiceTwo = CreateKnownService();
+            var knownServiceThree = CreateKnownService();
+
+            var knownServices = new KnownServices
+            {
+                Services = new Dictionary<string, RootService>
+                {
+                    { "MyId1", knownServiceOne },
+                    { "MyId2", knownServiceTwo },
+                    { "MyId3", knownServiceThree }
+                }
+            };
+
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
+
+            var result = systemUnderTest.GetConfiguration();
+
+            result.Response.KnownServices
+                .Should().BeEquivalentTo(new[] { knownServiceOne, knownServiceTwo, knownServiceThree });
+        }
+
+        [TestMethod]
+        public void GetConfiguration_MultipleKnownServices_ReturnsKnownServicesWithIdsSetFromDictionaryKey()
+        {
+            var settings = CreateSettings();
+            var knownServiceOne = CreateKnownService();
+            var knownServiceTwo = CreateKnownService();
+            var knownServiceThree = CreateKnownService();
+
+            var knownServices = new KnownServices
+            {
+                Services = new Dictionary<string, RootService>
+                {
+                    { "MyId1", knownServiceOne },
+                    { "MyId2", knownServiceTwo },
+                    { "MyId3", knownServiceThree }
+                }
+            };
+
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
+
+            var result = systemUnderTest.GetConfiguration();
+
+            result.Response.KnownServices.Should()
+                .ContainSingle(ks => ks.Id == "MyId1")
+                .And.ContainSingle(ks => ks.Id == "MyId2")
+                .And.ContainSingle(ks => ks.Id == "MyId3");
+        }
+
+        [TestMethod]
+        public void GetConfiguration_KnownServiceUrlContainsWebAppBaseUrl_UrlIsReplacedWithUrlFromDeviceSettings()
+        {
+            var configuredWebAppBaseUrl = new Uri("http://web.base.app/url");
+            var settings = CreateSettings(webAppBaseUrl: () => configuredWebAppBaseUrl);
+            var knownService = new RootService()
+            {
+                Url = new Uri("http://WebAppBaseUrl")
+            };
+
+            var knownServices = new KnownServices
+            {
+                Services = new Dictionary<string, RootService>
+                {
+                    { "MyId", knownService }
+                }
+            };
+
+            var systemUnderTest = CreateConfigurationService(knownServices, settings);
+
+            var result = systemUnderTest.GetConfiguration();
+
+            result.Response.KnownServices.Should().ContainSingle()
+                .Which.Url.Should().Be(configuredWebAppBaseUrl);
+        }
+        
+        private ConfigurationService CreateConfigurationService(
+            KnownServices knownServices,
+            DeviceConfigurationSettings settings)
+        {
+            return new ConfigurationService(knownServices, settings);
+        }
+
+        private DeviceConfigurationSettings CreateSettings(
+            string minimumSupportedAndroidVersion = "2.1.0",
+            string minimumSupportediOSVersion = "3.5.0",
+            string nhsLoginLoggedInPaths = "/path",
+            Func<Uri> fidoServerUrl = null,
+            Func<Uri> webAppBaseUrl = null)
+        {
+            fidoServerUrl ??= (() => new Uri("http://test.test.com"));
+            webAppBaseUrl ??= (() => new Uri("http://test.test.com"));
+
+            return new DeviceConfigurationSettings(
+                nhsLoginLoggedInPaths,
+                minimumSupportedAndroidVersion,
+                minimumSupportediOSVersion,
+                fidoServerUrl(),
+                webAppBaseUrl());
+        }
+
+        private KnownServices CreateValidKnownServices()
+        {
+            return new KnownServices()
+            {
+                Services = new Dictionary<string, RootService>
+                {
+                    {"MyId", CreateKnownService()}
+                }
+            };
+        }
+
+        private static RootService CreateKnownService()
+        {
+            return new RootService {Url = new Uri("https://valid.service.url/")};
         }
     }
 }

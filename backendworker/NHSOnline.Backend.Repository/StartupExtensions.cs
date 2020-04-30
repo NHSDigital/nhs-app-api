@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Configuration;
 
 namespace NHSOnline.Backend.Repository
 {

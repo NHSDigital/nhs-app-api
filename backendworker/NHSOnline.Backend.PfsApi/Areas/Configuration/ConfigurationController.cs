@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
                 }
 
                 if (string.IsNullOrEmpty(deviceDetails?.DeviceName) ||
-                    string.IsNullOrEmpty(deviceDetails?.NativeAppVersion))
+                    string.IsNullOrEmpty(deviceDetails.NativeAppVersion))
                 {
                     _logger.LogDebug($"Request does not contain {nameof(deviceDetails.DeviceName)} or {nameof(deviceDetails.NativeAppVersion)}");
                     return BadRequest();
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
                 _logger.LogEnter();
                 
                 var result = _configurationService.GetConfiguration();
-                return result.Accept(new GetConfigurationResultVisitorV2());
+                return Ok(result.Response);
             }
             finally
             {

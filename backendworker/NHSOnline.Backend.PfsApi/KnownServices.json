@@ -1,7 +1,6 @@
 {
-  "services": [
-    {
-      "id": "stubs-auth",
+  "services": {
+    "stubs-auth": {
       "url": "http://stubs.local.bitraft.io",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -13,8 +12,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "111",
+    "111": {
       "url": "https://111.nhs.uk",
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -39,8 +37,7 @@
         }
       ]
     },
-    {
-      "id": "111-service",
+    "111-service": {
       "url": "https://111.service.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -52,8 +49,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "nhs-uk",
+    "nhs-uk": {
       "url": "https://www.nhs.uk",
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -90,8 +86,7 @@
         }
       ]
     },
-    {
-      "id": "ndop",
+    "ndop": {
       "url": "https://ndopapp-int1.thunderbird.service.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -103,8 +98,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "hotjar",
+    "hotjar": {
       "url": "https://in.hotjar.com",
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -129,8 +123,7 @@
         }
       ]
     },
-    {
-      "id": "cid-account",
+    "cid-account": {
       "url": "https://account.ext.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -142,8 +135,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-auth",
+    "cid-auth": {
       "url": "https://auth.ext.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -155,8 +147,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-uaf",
+    "cid-uaf": {
       "url": "https://uaf.ext.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -168,8 +159,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-access",
+    "cid-access": {
       "url": "https://access.ext.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -181,8 +171,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-dev-account",
+    "cid-dev-account": {
       "url": "https://account.dev.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -194,8 +183,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-dev-auth",
+    "cid-dev-auth": {
       "url": "https://auth.dev.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -207,8 +195,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-dev-uaf",
+    "cid-dev-uaf": {
       "url": "https://uaf.dev.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -220,8 +207,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-dev-access",
+    "cid-dev-access": {
       "url": "https://access.dev.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -233,8 +219,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-signin",
+    "cid-signin": {
       "url": "https://signin.nhs.uk",
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -259,8 +244,7 @@
         }
       ]
     },
-    {
-      "id": "cid-sandpit-account",
+    "cid-sandpit-account": {
       "url": "https://account.sandpit.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -272,8 +256,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-sandpit-auth",
+    "cid-sandpit-auth": {
       "url": "https://auth.sandpit.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -285,8 +268,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-sandpit-uaf",
+    "cid-sandpit-uaf": {
       "url": "https://uaf.sandpit.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -298,8 +280,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-sandpit-access",
+    "cid-sandpit-access": {
       "url": "https://access.sandpit.signin.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -311,56 +292,7 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     },
-    {
-      "id": "cid-sandpit-account",
-      "url": "https://account.sandpit.signin.nhs.uk",
-      "subServices": null,
-      "javaScriptInteractionMode": "None",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
-    },
-    {
-      "id": "cid-sandpit-auth",
-      "url": "https://auth.sandpit.signin.nhs.uk",
-      "subServices": null,
-      "javaScriptInteractionMode": "None",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
-    },
-    {
-      "id": "cid-sandpit-uaf",
-      "url": "https://uaf.sandpit.signin.nhs.uk",
-      "subServices": null,
-      "javaScriptInteractionMode": "None",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
-    },
-    {
-      "id": "cid-sandpit-access",
-      "url": "https://access.sandpit.signin.nhs.uk",
-      "subServices": null,
-      "javaScriptInteractionMode": "None",
-      "menuTab": "None",
-      "viewMode": "WebView",
-      "integrationLevel": "SilverWithoutWebNavigation",
-      "showThirdPartyWarning": false,
-      "requiresAssertedLoginIdentity": false,
-      "validateSession": false
-    },
-    {
-      "id": "nhs-web-app",
+    "nhs-web-app": {
       "url": "https://WebAppBaseUrl",
       "javaScriptInteractionMode": "NhsApp",
       "menuTab": "None",
@@ -493,8 +425,7 @@
         }
       ]
     },
-    {
-      "id": "ers",
+    "ers": {
       "url": "https://pat.rc.refer.nhs.uk",
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
@@ -506,8 +437,7 @@
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
     },
-    {
-      "id": "pkb",
+    "pkb": {
       "url": "https://nhsapp-test.devstacks.pkb.io",
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
@@ -519,8 +449,7 @@
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
     },
-    {
-      "id": "pkb-alt",
+    "pkb-alt": {
       "url": "http://nhsapp-test.devstacks.pkb.io:443",
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
@@ -532,8 +461,7 @@
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
     },
-    {
-      "id": "substraktPatientPack",
+    "substraktPatientPack": {
       "url": "https://patientpack-development.ngrok.io",
       "subServices": null,
       "javaScriptInteractionMode": "SilverThirdParty",
@@ -545,8 +473,7 @@
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
     },
-    {
-      "id": "silver-third-party-api-test",
+    "silver-third-party-api-test": {
       "url": "http://silver.local.bitraft.io:5000",
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
@@ -595,8 +522,7 @@
         }
       ]
     },
-    {
-      "id": "http-status",
+    "http-status": {
       "url": "https://httpstat.us",
       "subServices": null,
       "javaScriptInteractionMode": "None",
@@ -608,5 +534,5 @@
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
     }
-  ]
+  }
 }

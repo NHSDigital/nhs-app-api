@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace NHSOnline.Backend.Support
 {
-    public static class IEnumerableExtensions
+    public static class EnumerableExtensions
     {
         public static IEnumerable<T> InRandomOrder<T>(this IEnumerable<T> list)
         {
@@ -59,21 +59,26 @@ namespace NHSOnline.Backend.Support
 
         public static void ForEach<T>(
             this IEnumerable<T> self,
-            Action<T> handler)
-        {
-            self?.ForEachWithIndex((v, _) => handler(v));
-        }
-
-        public static void ForEachWithIndex<T>(
-            this IEnumerable<T> self,
             Action<T, int> handler)
         {
-            self?.Select((i, idx) =>
-            {
-                handler(i, idx);
+            self.AssertArgumentNotNull(nameof(self));
 
-                return i;
-            }).ToList();
+            foreach (var (item, index) in self.Select((item, index) => (item, index)))
+            {
+                handler(item, index);
+            }
+        }
+
+        public static void ForEach<T>(
+            this IEnumerable<T> self,
+            Action<T> handler)
+        {
+            self.AssertArgumentNotNull(nameof(self));
+
+            foreach (var item in self)
+            {
+                handler(item);
+            }
         }
     }
 }

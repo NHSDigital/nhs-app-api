@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Configuration;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp

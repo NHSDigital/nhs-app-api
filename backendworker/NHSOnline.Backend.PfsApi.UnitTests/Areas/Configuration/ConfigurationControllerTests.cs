@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
         public void GetV2_Returns_Success()
         {
             // Arrange
-            var response = new GetConfigurationResultV2.Success(
+            var response = new GetConfigurationResultV2(
                 new List<string>(), 
                 new Uri("http://localhost/"), 
                 "min android version",
@@ -106,22 +106,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Configuration
             // Assert
             _mockDeviceConfigurationService.VerifyAll();
             result.Should().BeAssignableTo<OkObjectResult>();
-        }
-  
-        [TestMethod]
-        public void GetV2_WhenServiceThrowsException_ReturnsInternalServerError()
-        {
-            // Arrange
-            var response = new GetConfigurationResultV2.InternalServerError();
-            _mockDeviceConfigurationService.Setup(x => x.GetConfiguration()).Returns(response);
-            
-            // Act
-            var result = _systemUnderTest.GetV2();
-
-            // Assert
-            _mockDeviceConfigurationService.VerifyAll();
-            result.Should().BeAssignableTo<StatusCodeResult>()
-                .Subject.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
         public void Dispose() => _systemUnderTest?.Dispose();

@@ -28,12 +28,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
         [TestInitialize]
         public void TestInitialize()
         {
-            _settings = new DeviceConfigurationSettings
-            {
-                MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
-                MinimumSupportediOSVersion = MinimumSupportediOSVersion,
-                FidoServerUrl = _testFidoServerUrl
-            };
+            _settings = new DeviceConfigurationSettings(
+                string.Empty,
+                MinimumSupportedAndroidVersion,
+                MinimumSupportediOSVersion,
+                _testFidoServerUrl,
+                new Uri("http://web.base.uri/"));
 
             TestInitializeWithOptions(_settings);
         }
@@ -143,11 +143,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                 NativeAppVersion = MinimumSupportedAndroidVersion,
             };
 
-            var settings = new DeviceConfigurationSettings
-            {
-                MinimumSupportedAndroidVersion = "1.blah",
-                FidoServerUrl = _testFidoServerUrl
-            };
+            var settings = new DeviceConfigurationSettings(
+                string.Empty,
+                "1.blah",
+                string.Empty,
+                _testFidoServerUrl,
+                new Uri("http://something.com/"));
 
             // Reinitialise with new options
             TestInitializeWithOptions(settings);

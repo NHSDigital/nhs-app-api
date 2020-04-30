@@ -1,22 +1,22 @@
 using System;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Configuration;
 using NHSOnline.Backend.Support.Settings;
 
-namespace NHSOnline.Backend.PfsApi.Devices 
+namespace NHSOnline.Backend.PfsApi.Devices
 {
     public class DeviceConfigurationSettings : IValidatable
     {
         public string NhsLoginLoggedInPaths { get; set; }
 
         public string MinimumSupportedAndroidVersion { get; set; }
-        
+
         public string MinimumSupportediOSVersion { get; set; }
 
         public Uri FidoServerUrl { get; set; }
-        
-        public Uri WebAppBaseUrl { get; set; }
 
-        public DeviceConfigurationSettings() {}
+        public Uri WebAppBaseUrl { get; set; }
 
         public DeviceConfigurationSettings(string nhsLoginLoggedInPaths,
             string minimumSupportedAndroidVersion, string minimumSupportediOSVersion,
@@ -28,20 +28,20 @@ namespace NHSOnline.Backend.PfsApi.Devices
             FidoServerUrl = fidoServerUrl;
             WebAppBaseUrl = webAppBaseUrl;
         }
-        
+
         public void Validate()
         {
-            if (NhsLoginLoggedInPaths == null)
+            if (string.IsNullOrWhiteSpace(NhsLoginLoggedInPaths))
             {
                 throw new ConfigurationNotFoundException(nameof(NhsLoginLoggedInPaths));
             }
-            
-            if (MinimumSupportedAndroidVersion == null)
+
+            if (string.IsNullOrWhiteSpace(MinimumSupportedAndroidVersion))
             {
                 throw new ConfigurationNotFoundException(nameof(MinimumSupportedAndroidVersion));
             }
 
-            if(MinimumSupportediOSVersion == null)
+            if(string.IsNullOrWhiteSpace(MinimumSupportediOSVersion))
             {
                 throw new ConfigurationNotFoundException(nameof(MinimumSupportediOSVersion));
             }
@@ -49,8 +49,8 @@ namespace NHSOnline.Backend.PfsApi.Devices
             if (FidoServerUrl == null)
             {
                 throw new ConfigurationNotFoundException(nameof(FidoServerUrl));
-            } 
-            
+            }
+
             if (WebAppBaseUrl == null)
             {
                 throw new ConfigurationNotFoundException(nameof(WebAppBaseUrl));
