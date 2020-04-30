@@ -31,7 +31,6 @@
         </main>
       </div>
 
-
       <slot name="footer">
         <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
                     @onBarStatusChanged="setSurveyBarStatus"/>
@@ -59,14 +58,14 @@ import Spinner from '@/components/widgets/Spinner';
 import SurveyBar from '@/components/SurveyBar';
 import WebFooter from '@/components/widgets/WebFooter';
 import WebHeader from '@/components/widgets/WebHeader';
-import { EventBus, FOCUS_NHSAPP_ROOT } from '@/services/event-bus';
 import showShutterPage from '@/lib/proxy/shutter';
+import { FOCUS_NHSAPP_ROOT, EventBus } from '@/services/event-bus';
 import {
-  findByName,
-  INDEX,
-  isAnonymous,
-  LOGIN,
   DOCUMENT_DETAIL,
+  INDEX,
+  LOGIN,
+  findByName,
+  isAnonymous,
 } from '@/lib/routes';
 import isFunction from 'lodash/fp/isFunction';
 
@@ -161,24 +160,17 @@ export default {
         '' : 'nhsuk-grid-row';
     },
     showMenu() {
-      return (
-        !this.$store.state.device.isNativeApp &&
+      return !this.$store.state.device.isNativeApp &&
           this.loggedIn &&
-          this.$route.name !== LOGIN.name
-      );
+          this.$route.name !== LOGIN.name;
     },
     shouldShowButton() {
-      return (
-        !this.$store.getters['errors/showApiError']
-          && !this.$store.state.device.isNativeApp
-      );
+      return !this.$store.getters['errors/showApiError'] && !this.$store.state.device.isNativeApp;
     },
     shouldShowBreadCrumb() {
-      return (
-        this.loggedIn &&
+      return this.loggedIn &&
         this.$route.name !== LOGIN.name &&
-        !this.breadcrumbDisabledNative
-      );
+        !this.breadcrumbDisabledNative;
     },
     breadcrumbDisabledNative() {
       const { previousQuestion, demographicsQuestionAnswered, carePlans } =
@@ -198,20 +190,15 @@ export default {
         (route.shouldShowContentHeader === undefined || route.shouldShowContentHeader === true);
     },
     shouldShowFullDesktopHeader() {
-      return (
-        !this.$store.state.device.isNativeApp &&
-          this.loggedIn &&
-          this.$route.name !== LOGIN.name
-      );
+      return !this.$store.state.device.isNativeApp &&
+        this.loggedIn &&
+        this.$route.name !== LOGIN.name;
     },
     shouldShowSlimDesktopHeader() {
-      return (
-        !this.$store.state.device.isNativeApp &&
-          !this.loggedIn
-      );
+      return !this.$store.state.device.isNativeApp && !this.loggedIn;
     },
     showSurvey() {
-      return (this.isHotJarSurveyVisible() && this.$route.name === INDEX.name);
+      return this.isHotJarSurveyVisible() && this.$route.name === INDEX.name;
     },
     mainClass() {
       const clazzes = [];
@@ -282,6 +269,7 @@ export default {
     if (this.pathChanged) {
       this.focusNhsAppRoot();
       this.pathChanged = false;
+      this.$store.dispatch('spinner/prevent', false);
     }
   },
   beforeDestroy() {
