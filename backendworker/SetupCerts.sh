@@ -23,6 +23,9 @@ copy_cert Suppliers/Spine/PublicKeys/nhsapp.ncrs.nhs.uk.crt
 copy_cert Suppliers/Spine/PublicKeys/subca-prod.crt
 copy_cert Suppliers/Spine/PublicKeys/root-prod.crt
 
-chmod 755 /usr/local/share/ca-certificates/ 
+chmod 755 /usr/local/share/ca-certificates/
 find /usr/local/share/ca-certificates/ -type f -print -exec chmod 644 {} \;
 update-ca-certificates
+
+# Disable TLS 1.3 for EMIS connectivity
+sed -i "s|DEFAULT@SECLEVEL=2|DEFAULT@SECLEVEL=1|g" /etc/ssl/openssl.cnf
