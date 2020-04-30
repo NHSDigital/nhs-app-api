@@ -626,7 +626,7 @@ const routes = {
     name: 'messages-app-messaging',
     path: '/messages/app-messaging',
     proofLevel: proofLevel.P9,
-    upliftPath: '/uplift/messages',
+    upliftPath: '/uplift/more',
     crumb: {
       i18nKey: 'healthAndInformationUpdates',
       get defaultCrumb() {
@@ -640,7 +640,7 @@ const routes = {
     name: 'messages-app-messaging-app-message',
     path: '/messages/app-messaging/app-message',
     proofLevel: proofLevel.P9,
-    upliftPath: '/uplift/messages',
+    upliftPath: '/uplift/more',
     shouldShowContentHeader: false,
     crumb: {
       get defaultCrumb() {
@@ -1784,7 +1784,7 @@ const routes = {
   },
   UPLIFT_MORE: {
     name: 'uplift-more',
-    path: '/uplift-more',
+    path: '/uplift/more',
     proofLevel: proofLevel.P5,
     crumb: {
       nativeDisabled: true,
