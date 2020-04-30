@@ -321,6 +321,48 @@
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
+    },
+    {
+      "id": "silver-third-party-api-test",
+      "url": "https://silverintegrationtestsa.z33.web.core.windows.net",
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "AppTab",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/allowed",
+          "queryString": null,
+          "javaScriptInteractionMode": "SilverThirdParty",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/not-allowed",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "WebView",
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        },
+        {
+          "path": "/app-tab.html",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
     }
   ]
 }
