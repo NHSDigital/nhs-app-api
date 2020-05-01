@@ -6,7 +6,7 @@
   "no-dupe-feature-names": "on",
   "no-partially-commented-tag-lines": "on",
   "indentation": "off",
-  "no-trailing-spaces": "off",
+  "no-trailing-spaces": "on",
   "new-line-at-eof": ["off", "no"],
   "no-multiple-empty-lines": "off",
   "no-empty-file": "on",
@@ -22,5 +22,5 @@
   "no-background-only-scenario": "on",
   "no-empty-background": "on",
   "no-scenario-outlines-without-examples": "on",
-  "scenario-size": ["off", { "steps-length": {"Background": 15, "Scenario": 15}}]
+  "scenario-size": ["on", { "steps-length": {"Background": -1, "Scenario": 30}}]
 }

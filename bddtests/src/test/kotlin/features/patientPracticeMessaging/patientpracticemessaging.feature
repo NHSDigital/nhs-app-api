@@ -125,7 +125,7 @@ Feature: Patient to practice messaging
     And I click on the patient practice Messages link on the Messages Hub page
     Then the patient to practice inbox page is displayed
     And I see a list of patient practice messages without the subject and with the unread count
-    
+
   Scenario: A TPP patient viewing a message marks it as read
     Given I am a TPP patient
     And I am a user who can access patient practice messaging

@@ -115,7 +115,7 @@ Feature: Service Journey Rules Backend
       | Toggle   |
       | enabled  |
       | disabled |
-    
+
   Scenario Outline: A user can see the configuration for im1Messaging in SJR
     Given I am a user where the journey configurations are:
       | Journey                                    | Value     |

@@ -77,7 +77,7 @@ Feature: View prescriptions Frontend
     And I see the home page
     When I navigate to Prescriptions
     Then I see the name of the proxy user who ordered the prescription
-    
+
   Scenario: The Ordered by label does not exist if the prescription was not ordered by proxy
     Given I am patient using the EMIS GP System
     And I have 1 past repeat prescriptions

@@ -4,7 +4,7 @@
 Feature: Login backend
 
   Tests Im1 Connection Token caching
-  
+
   Scenario: Logging in with a cached Im1 Connection Token for an EMIS user will remove that token from the cache
     Given I have valid EMIS linkage details and it's the first time a linkage key has been created for my nhs number
     And no IM1 Connection Token is currently cached

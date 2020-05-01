@@ -277,7 +277,7 @@ Feature: nominated pharmacy journey
     Examples:
       | GP System | OdsCode |
       | EMIS      | SW11XR  |
-  
+
   Scenario Outline: The <GP System> user can see nominated pharmacy on the prescriptions summary page
     Given the scenario is submit prescription
     And I am using <GP System> GP System to submit my prescription

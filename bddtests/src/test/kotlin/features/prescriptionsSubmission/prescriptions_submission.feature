@@ -3,13 +3,11 @@
 Feature: Prescriptions submission Frontend
   A user can submit a request for a repeat prescription
 
-  Background:
-    Given the scenario is submit prescription
-
   #This test covers navigation via buttons/links
   @nominatedPharmacy
   @smoketest
   Scenario: The TPP user orders a repeat prescription with 5 entries
+    Given the scenario is submit prescription
     And I am using TPP GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And Azure organisation search is working
@@ -27,6 +25,7 @@ Feature: Prescriptions submission Frontend
 # These tests navigate directly to the pages where the features are to be tested, to save time.
 
   Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
+    Given the scenario is submit prescription
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
@@ -45,6 +44,7 @@ Feature: Prescriptions submission Frontend
       | MICROTEST |
 
   Scenario Outline: The <GP System> user orders a repeat prescription with 1 entries
+    Given the scenario is submit prescription
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
@@ -66,6 +66,7 @@ Feature: Prescriptions submission Frontend
     | VISION    |
 
   Scenario: The EMIS user tries to submit potentially dangerous text for special request
+    Given the scenario is submit prescription
     And I am using EMIS GP System to submit my prescription
     And I have 0 historic prescriptions in this scenario
     And I am logged in
@@ -78,6 +79,7 @@ Feature: Prescriptions submission Frontend
 
   @nativesmoketest
   Scenario: The EMIS user should receive an error when they try to order a drug which they're ordered within the last 30 days
+    Given the scenario is submit prescription
     And I am using EMIS GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
@@ -89,6 +91,7 @@ Feature: Prescriptions submission Frontend
     Then I see a message indicating I've previously ordered one of the selected medications within the last 30 days
 
   Scenario: The MICROTEST user should receive an error when all medications fail
+    Given the scenario is submit prescription
     And I am using MICROTEST GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
@@ -100,6 +103,7 @@ Feature: Prescriptions submission Frontend
     Then I see a message indicating there was an error sending my order
 
   Scenario: The Microtest user see a partial success page if some of their orders fail
+    Given the scenario is submit prescription
     And I am using MICROTEST GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
@@ -111,13 +115,15 @@ Feature: Prescriptions submission Frontend
     Then I can view which medications from my prescription order succeeded and failed
 
   Scenario: A user tries to navigate directly to the success page and is redirected back to the Prescriptions hub page
-    Given I am a EMIS patient
+    Given the scenario is submit prescription
+    And I am a EMIS patient
     When I am logged in
     And I retrieve the 'prescriptions success' page directly
     Then I am redirected to the 'your prescriptions' page
 
-    Scenario: A user tries to navigate directly to the microtest partial success page and is redirected back to the Prescriptions hub page
-      Given I am an EMIS patient
-      When I am logged in
-      And I retrieve the 'partial success' page directly
-      Then I am redirected to the 'your prescriptions' page
+  Scenario: A user tries to navigate directly to the microtest partial success page and is redirected back to the Prescriptions hub page
+    Given the scenario is submit prescription
+    And I am an EMIS patient
+    When I am logged in
+    And I retrieve the 'partial success' page directly
+    Then I am redirected to the 'your prescriptions' page

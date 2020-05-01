@@ -7,9 +7,6 @@ Feature: Book Appointments With Javascript Disabled
   As a logged in user with Javascript switched off
   I want to be able to select, confirm and book selected appointment
 
-  Background:
-    Given I have disabled javascript
-
     #This test covers navigation via buttons/links
 
     # EMIS/Microtest Specific Scenarios (For EMIS/Microtest telephone appointment)
@@ -18,7 +15,8 @@ Feature: Book Appointments With Javascript Disabled
     # Positive submission cases
 
   Scenario Outline: A <GP System> user without Javascript cannot enter or select a phone number for non phone appointments
-    Given there are <GP System> appointments available to book
+    Given I have disabled javascript
+    And there are <GP System> appointments available to book
     And I am logged in
     And I am on the Available Appointments page
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -36,7 +34,8 @@ Feature: Book Appointments With Javascript Disabled
 
   @tech-debt
   Scenario Outline: A <GP System> user with noJs can only enter a phone number for phone appointments, when they have phone numbers saved
-    Given I wish to book a <GP System> telephone appointment
+    Given I have disabled javascript
+    And I wish to book a <GP System> telephone appointment
       | number of stored telephone numbers  | 2         |
       | the reason on the appointment is    | optional  |
       | selecting telephone number          | manual    |
@@ -63,7 +62,8 @@ Feature: Book Appointments With Javascript Disabled
       # Telephone number error scenarios
 
   Scenario Outline: A <GP System> user with noJs receives an error if a phone number is not provided for telephone appointments
-    Given I wish to book a <GP System> telephone appointment
+    Given I have disabled javascript
+    And I wish to book a <GP System> telephone appointment
       | number of stored telephone numbers  | 0         |
       | the reason on the appointment is    | optional  |
       | selecting telephone number          | manual    |
@@ -83,7 +83,8 @@ Feature: Book Appointments With Javascript Disabled
       | MICROTEST |
 
   Scenario Outline: A <GP System> user with noJs receives errors if a phone number and booking reason are not provided for telephone appointments
-    Given I wish to book a <GP System> telephone appointment
+    Given I have disabled javascript
+    And I wish to book a <GP System> telephone appointment
       | number of stored telephone numbers  | 0         |
       | the reason on the appointment is    | mandatory |
       | selecting telephone number          | manual    |
@@ -102,7 +103,8 @@ Feature: Book Appointments With Javascript Disabled
       | MICROTEST |
 
   Scenario Outline: A <GP System> user with noJs receives an error if a phone number is not provided for telephone appointments with optional booking reason
-    Given I wish to book a <GP System> telephone appointment
+    Given I have disabled javascript
+    And I wish to book a <GP System> telephone appointment
       | number of stored telephone numbers  | 0         |
       | the reason on the appointment is    | optional  |
       | selecting telephone number          | manual    |
@@ -121,7 +123,8 @@ Feature: Book Appointments With Javascript Disabled
       | MICROTEST |
 
   Scenario Outline: A <GP System> user with noJs receives an error if an empty string or whitespace provided for telephone appointments
-    Given I wish to book a <GP System> telephone appointment
+    Given I have disabled javascript
+    And I wish to book a <GP System> telephone appointment
       | number of stored telephone numbers  | 0         |
       | the reason on the appointment is    | optional  |
       | selecting telephone number          | manual    |
@@ -146,7 +149,8 @@ Feature: Book Appointments With Javascript Disabled
     # Regression Test scenarios to ensure booking reason is still validated for telephone appointments
 
   Scenario Outline: A <GP System> user with noJs receives an error if a phone number is entered for telephone appointments, but no reason
-    Given I wish to book a <GP System> telephone appointment
+    Given I have disabled javascript
+    And I wish to book a <GP System> telephone appointment
       | number of stored telephone numbers  | 0         |
       | the reason on the appointment is    | mandatory |
       | selecting telephone number          | manual    |
@@ -166,7 +170,8 @@ Feature: Book Appointments With Javascript Disabled
 
   @tech-debt
   Scenario: An EMIS user with noJS can book a telephone appointment if a phone number is provided without describing symptoms when booking reason is optional
-    Given I wish to book a EMIS telephone appointment
+    Given I have disabled javascript
+    And I wish to book a EMIS telephone appointment
       | number of stored telephone numbers  | 0         |
       | the reason on the appointment is    | optional  |
       | selecting telephone number          | manual    |
@@ -184,7 +189,8 @@ Feature: Book Appointments With Javascript Disabled
     # Miscellaneous no-JS scenarios
   @tech-debt
   Scenario Outline: A <GP System> user with noJS can book appointments
-    Given there are multiple appointment slots at the same time, provided by <GP System>
+    Given I have disabled javascript
+    And there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
@@ -205,7 +211,8 @@ Feature: Book Appointments With Javascript Disabled
 
   # Not applicable for VISION
   Scenario Outline: A <GP System> user with noJS cannot book appointments without describing symptoms when booking reason is mandatory
-    Given there are multiple appointment slots at the same time, provided by <GP System>
+    Given I have disabled javascript
+    And there are multiple appointment slots at the same time, provided by <GP System>
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -222,7 +229,8 @@ Feature: Book Appointments With Javascript Disabled
 
   @tech-debt
   Scenario: An EMIS user with noJS can book an appointment without describing symptoms when booking reason is optional
-    Given there are EMIS appointments available to book where booking reason is set optional
+    Given I have disabled javascript
+    And there are EMIS appointments available to book where booking reason is set optional
     And a booked appointment can be cancelled
     And I am logged in
     And I am on the Available Appointments page

@@ -51,7 +51,7 @@ Feature: View prescriptions backend
       | TPP       |
       | VISION    |
       | MICROTEST |
-    
+
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate not in the expected format
     Given I have logged into <GP System> and have a valid session cookie
     But a fromDate in an unexpected format

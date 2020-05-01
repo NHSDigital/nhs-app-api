@@ -2,11 +2,10 @@
 @noJs
 Feature: Prescriptions Service With Javascript Disabled
 
-  Background:
-    Given I have disabled javascript
-    And the scenario is submit prescription
   @tech-debt
   Scenario: The EMIS user orders a repeat prescription with 5 entries without javascript
+    Given I have disabled javascript
+    And the scenario is submit prescription
     And I am using EMIS GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
@@ -23,6 +22,8 @@ Feature: Prescriptions Service With Javascript Disabled
 
   # just a single test to make sure errors are handled for prescription submission when javascript is not enabled
   Scenario: The EMIS user should receive an error when they try to order a drug which they're ordered within the last 30 days
+    Given I have disabled javascript
+    And the scenario is submit prescription
     And I am using EMIS GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
