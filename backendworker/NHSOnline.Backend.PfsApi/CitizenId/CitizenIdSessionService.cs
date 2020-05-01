@@ -29,8 +29,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
             _logger = logger;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
-        public async Task<CitizenIdSessionResult> Create(string authCode, string codeVerifier, string redirectUrl)
+        public async Task<CitizenIdSessionResult> Create(string authCode, string codeVerifier, Uri redirectUrl)
         {
             _logger.LogEnter();
 

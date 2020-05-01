@@ -25,8 +25,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
             _logger = logger;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
-        public async Task<GetUserProfileResult> GetUserProfile(string authCode, string codeVerifier, string redirectUrl)
+        public async Task<GetUserProfileResult> GetUserProfile(string authCode, string codeVerifier, Uri redirectUrl)
         {
             _logger.LogEnter();
             var result = new GetUserProfileResult();
@@ -35,7 +34,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
             {
                 var isValid = new ValidateAndLog(_logger).IsNotNullOrWhitespace(authCode, nameof(authCode))
                     .IsNotNullOrWhitespace(codeVerifier, nameof(codeVerifier))
-                    .IsNotNullOrWhitespace(redirectUrl, nameof(redirectUrl))
+                    .IsNotNull(redirectUrl, nameof(redirectUrl))
                     .IsValid();
 
                 if (!isValid)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             // Arrange
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<Uri>();
             var jwt = _fixture.Create<string>();
             var expectedTokenResponse = _fixture.Create<Token>();
 
@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             // Arrange
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<Uri>();
             var jwt = _fixture.Create<string>();
             var expectedErrorResponse = _fixture.Create<ErrorResponse>();
 
@@ -288,13 +288,13 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             _mockHttpHandler.Dispose();
         }
 
-        private static Dictionary<string, string> CreateTokenBody(string authCode, string redirectUrl, string codeVerifier, string token)
+        private static Dictionary<string, string> CreateTokenBody(string authCode, Uri redirectUrl, string codeVerifier, string token)
         {
             var dict = new Dictionary<string, string>
             {
                 { "grant_type", "authorization_code" },
                 { "code", authCode },
-                { "redirect_uri", redirectUrl },
+                { "redirect_uri", redirectUrl.ToString() },
                 { "code_verifier", codeVerifier },
                 { "code_challenge_method", "S256" },
                 { "client_assertion", token },

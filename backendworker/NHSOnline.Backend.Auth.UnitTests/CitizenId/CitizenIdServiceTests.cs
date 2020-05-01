@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -19,7 +19,7 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 {
     [TestClass]
-    public sealed class CitizenIdServiceTests : IDisposable
+    public sealed class CitizenIdServiceTests
     {
         private IFixture _fixture;
         private CitizenIdService _systemUnderTest;
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         {
             // Arrange
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<Uri>();
 
             // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
         {
             // Arrange
             var authCode = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<Uri>();
 
             // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
@@ -79,9 +79,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
         [DataTestMethod]
         [DataRow(null)]
-        [DataRow("")]
-        [DataRow(" ")]
-        public async Task GetUserProfile_RedirectUrlNullOrWhiteSpace_ReturnsNone(string redirectUrl)
+        public async Task GetUserProfile_RedirectUrlNullOrWhiteSpace_ReturnsNone(Uri redirectUrl)
         {
             // Arrange
             var authCode = _fixture.Create<string>();
@@ -112,7 +110,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
 
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<Uri>();
 
             _citizenIdClientMock
                 .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier, redirectUrl))
@@ -140,7 +138,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var token = _fixture.Create<Token>();
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<Uri>();
             var subject = _fixture.Create<string>();
 
             var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
@@ -211,7 +209,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var token = _fixture.Create<Token>();
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<Uri>();
 
             var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
             {
@@ -249,7 +247,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             // Arrange
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<Uri>();
 
             var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.BadRequest)
             {
@@ -289,7 +287,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var token = _fixture.Create<Token>();
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<Uri>();
 
             var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
             {
@@ -337,7 +335,7 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             var token = _fixture.Create<Token>();
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<Uri>();
 
             var tokenResponse = new CitizenIdApiObjectResponse<Token>(HttpStatusCode.OK)
             {
@@ -441,11 +439,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.CitizenId
             actualUserProfile.Im1ConnectionToken.Should().Be(userProfileResponse.Body.Im1ConnectionToken);
             actualUserProfile.OdsCode.Should().Be(userProfileResponse.Body.GpIntegrationCredentials.OdsCode);
             actualUserProfile.AccessToken.Should().Be(accessToken);
-        }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
         }
     }
 }

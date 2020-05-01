@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             {
                 AuthCode = "AuthCode",
                 CodeVerifier = "CodeVerifier",
-                RedirectUrl = "RedirectUrl"
+                RedirectUrl = "http://RedirectUrl/"
             };
 
             _userInfo = new Auth.CitizenId.Models.UserInfo
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockCitizenIdSessionService = new Mock<ICitizenIdSessionService>();
             _mockCitizenIdSessionService
                 .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier,
-                    _userSessionRequest.RedirectUrl))
+                    new Uri(_userSessionRequest.RedirectUrl)))
                 .Returns(Task.FromResult(_citizenIdSessionResult));
 
             _mockGpSystem = new Mock<IGpSystem>();
@@ -216,6 +216,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .AddSingleton(_mockAntiforgery.Object)
                 .AddSingleton(_mockSessionCacheService.Object)
                 .AddSingleton(_mockAuthenticationService.Object)
+                .AddSingleton(new Mock<ILogger<SessionCreator>>().Object)
                 .AddSingleton(new Mock<ILogger<UserSessionManager>>().Object)
                 .AddSingleton(new Mock<ILogger<P5UserSessionCreator>>().Object)
                 .AddSingleton(new Mock<ILogger<P9UserSessionCreator>>().Object);
@@ -232,7 +233,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockCitizenIdSessionService
                 .Setup(x =>
                     x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier,
-                        _userSessionRequest.RedirectUrl))
+                        new Uri(_userSessionRequest.RedirectUrl)))
                 .Returns(Task.FromResult(new CitizenIdSessionResult
                 {
                     StatusCode = (int) HttpStatusCode.BadRequest
@@ -276,7 +277,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockCitizenIdSessionService
                 .Setup(x =>
                     x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier,
-                        _userSessionRequest.RedirectUrl))
+                       new Uri(_userSessionRequest.RedirectUrl)))
                 .Returns(Task.FromResult(new CitizenIdSessionResult
                 {
                     StatusCode = (int) HttpStatusCode.BadGateway
@@ -642,7 +643,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _userInfo.Im1ConnectionToken  = "0E5DD1C4-C519-4EF5-9B0F-624357F6F26F";
 
             _mockCitizenIdSessionService
-                .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
+                .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, new Uri(_userSessionRequest.RedirectUrl)))
                 .Returns(Task.FromResult(_citizenIdSessionResult));
 
             _mockIm1CacheService.Reset();

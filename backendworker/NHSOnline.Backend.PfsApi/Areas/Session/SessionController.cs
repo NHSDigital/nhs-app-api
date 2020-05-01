@@ -12,15 +12,9 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
-using NHSOnline.Backend.PfsApi.AssertedLoginIdentity;
-using NHSOnline.Backend.PfsApi.CitizenId;
-using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.Session;
-using NHSOnline.Backend.PfsApi.UserInfo;
-using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
-using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
@@ -30,45 +24,33 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
     [ApiVersionRoute("session")]
     public class SessionController : Controller
     {
-        private readonly ICitizenIdSessionService _citizenIdSessionService;
-        private readonly UserSessionService _userSessionService;
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<SessionController> _logger;
         private readonly IAuditor _auditor;
-        private readonly IOdsCodeMassager _odsCodeMassager;
-        private readonly IServiceJourneyRulesService _serviceJourneyRules;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
-        private readonly IUserInfoService _userInfoService;
         private readonly IGpSessionManager _gpSessionManager;
         private readonly IAntiforgery _antiforgery;
-        private readonly IUserSessionManager _userSessionManager;
+        private readonly ISessionCreator _sessionCreator;
+        private readonly UserSessionService _userSessionService;
 
         public SessionController(
-            ICitizenIdSessionService citizenIdSessionService,
-            UserSessionService userSessionService,
             ConfigurationSettings settings,
             ILogger<SessionController> logger,
             IAuditor auditor,
-            IOdsCodeMassager odsCodeMassager,
-            IServiceJourneyRulesService serviceJourneyRules,
             IErrorReferenceGenerator errorReferenceGenerator,
-            IUserInfoService userInfoService,
             IGpSessionManager gpSessionManager,
             IAntiforgery antiforgery,
-            IUserSessionManager userSessionManager)
+            ISessionCreator sessionCreator,
+            UserSessionService userSessionService)
         {
-            _citizenIdSessionService = citizenIdSessionService;
-            _userSessionService = userSessionService;
             _settings = settings;
             _logger = logger;
             _auditor = auditor;
-            _odsCodeMassager = odsCodeMassager;
-            _serviceJourneyRules = serviceJourneyRules;
             _errorReferenceGenerator = errorReferenceGenerator;
-            _userInfoService = userInfoService;
             _gpSessionManager = gpSessionManager;
             _antiforgery = antiforgery;
-            _userSessionManager = userSessionManager;
+            _sessionCreator = sessionCreator;
+            _userSessionService = userSessionService;
         }
 
         [HttpGet]
@@ -116,100 +98,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     return BuildErrorResult(new ErrorTypes.LoginBadRequest());
                 }
 
-                return await GetCitizenIdSessionAndCreateSession(model);
+                var csrfToken = _antiforgery.GetTokens(HttpContext).RequestToken;
+                var request = new CreateSessionRequest(model, csrfToken, HttpContext);
+                var result = await _sessionCreator.CreateSession(request);
+
+                return await result.Accept(new SessionCreateResultVisitor(this));
             }
             finally
             {
                 _logger.LogExit();
             }
-        }
-
-        private async Task<IActionResult> GetCitizenIdSessionAndCreateSession(UserSessionRequest model)
-        {
-            // Call Citizen ID to get the User Profile (IM1 connection token, ODS code, Date of Birth, NHS Number).
-            var citizenIdSessionResult =
-                await _citizenIdSessionService.Create(model.AuthCode, model.CodeVerifier, model.RedirectUrl);
-
-            if (!citizenIdSessionResult.StatusCode.IsSuccessStatusCode())
-            {
-                // 502 Bad gateway error references differ by source API. The other error types do not.
-                var objectResult = citizenIdSessionResult.StatusCode == StatusCodes.Status502BadGateway
-                    ? BuildErrorResult(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login,
-                        StatusCodes.Status502BadGateway, SourceApi.NhsLogin))
-                    : BuildErrorResult(ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login,
-                        citizenIdSessionResult.StatusCode));
-
-                return objectResult;
-            }
-
-            citizenIdSessionResult.Session.OdsCode = _odsCodeMassager.CheckOdsCode(citizenIdSessionResult.Session.OdsCode);
-
-            await _auditor.Audit()
-                .AccessToken(citizenIdSessionResult.Session.AccessToken)
-                .NhsNumber(citizenIdSessionResult.NhsNumber)
-                .Supplier(Supplier.Unknown)
-                .Operation(AuditingOperations.CitizenIdSessionCreate)
-                .Details("Create Citizen Id Session")
-                .Execute(() => Task.FromResult(citizenIdSessionResult));
-
-            _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
-
-            return await GetServiceJourneyRulesAndCreateSession(citizenIdSessionResult);
-        }
-
-        private async Task<IActionResult> GetServiceJourneyRulesAndCreateSession(CitizenIdSessionResult citizenIdSessionResult)
-        {
-            // Get Service Journey Rules
-            _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {citizenIdSessionResult.Session.OdsCode}");
-
-            var serviceJourneyRulesResultVisited =
-                await GetServiceJourneyRulesVisitorOutput(citizenIdSessionResult.Session.OdsCode);
-
-            if (!serviceJourneyRulesResultVisited.ServiceJourneyRulesRetrieved)
-            {
-                var errorMessage =
-                    $"Retrieving Service Journey Rules failed with status code: '{serviceJourneyRulesResultVisited.StatusCode}'";
-                _logger.LogError(errorMessage);
-
-                // Specific error reference for a 404 from SJR.
-                var objectResult = serviceJourneyRulesResultVisited.StatusCode == StatusCodes.Status404NotFound ?
-                    BuildErrorResult(new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported()):
-                    BuildErrorResult(new ErrorTypes.LoginServiceJourneyRulesOtherError());
-
-                return objectResult;
-            }
-
-            var serviceJourneyRules = serviceJourneyRulesResultVisited.Response;
-
-            var createUserSessionResult = await _userSessionManager.Create(
-                citizenIdSessionResult,
-                serviceJourneyRules,
-                _antiforgery.GetTokens(HttpContext).RequestToken);
-
-            return await createUserSessionResult.Accept(
-                error => Task.FromResult(BuildErrorResult(error.ErrorType)),
-                success => CreateSession(success.UserSession, serviceJourneyRules, citizenIdSessionResult));
-        }
-
-        private async Task<IActionResult> CreateSession(
-            UserSession userSession,
-            ServiceJourneyRulesResponse serviceJourneyRules,
-            CitizenIdSessionResult citizenIdSessionResult)
-        {
-            // Post to the UserInfo service
-            if (serviceJourneyRules.Journeys.UserInfo == true)
-            {
-                await _userInfoService.Update(citizenIdSessionResult.Session.AccessToken, HttpContext);
-            }
-
-            await AppendCookieToResponse(userSession.Key);
-
-            _userSessionService.SetUserSession(userSession);
-            _logger.LogInformation($"Created {userSession.GetType().Name}");
-
-            var responseBody = new PostUserSessionResponse { ServiceJourneyRules = serviceJourneyRules };
-            responseBody = userSession.Accept(new UserSessionResponseVisitor<PostUserSessionResponse>(_settings, responseBody));
-            return new CreatedResult(string.Empty, responseBody);
         }
 
         [HttpDelete]
@@ -268,29 +166,71 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             };
         }
 
-        private async Task<ServiceJourneyRulesVisitorOutput> GetServiceJourneyRulesVisitorOutput(string odsCode)
+        private sealed class CreateSessionRequest: ICreateSessionRequest
         {
-            var serviceJourneyRulesConfig = await _serviceJourneyRules.GetServiceJourneyRulesForOdsCode(odsCode);
-            return serviceJourneyRulesConfig.Accept(new ServiceJourneyRulesConfigResultVisitor());
+            private readonly UserSessionRequest _model;
+
+            internal CreateSessionRequest(UserSessionRequest model, string csrfToken, HttpContext httpContext)
+            {
+                _model = model;
+                CsrfToken = csrfToken;
+                HttpContext = httpContext;
+            }
+
+            public string AuthCode => _model.AuthCode;
+            public string CodeVerifier => _model.CodeVerifier;
+            public Uri RedirectUrl => new Uri(_model.RedirectUrl);
+            public string CsrfToken { get; }
+            public HttpContext HttpContext { get; }
         }
 
-        private async Task AppendCookieToResponse(string sessionId)
+        private sealed class SessionCreateResultVisitor : ICreateSessionResultVisitor<Task<IActionResult>>
         {
-            var claims = new List<Claim>
+            private readonly SessionController _controller;
+
+            public SessionCreateResultVisitor(SessionController controller) => _controller = controller;
+
+            private UserSessionService UserSessionService => _controller._userSessionService;
+            private ILogger Logger => _controller._logger;
+            private ConfigurationSettings Settings => _controller._settings;
+            private HttpContext HttpContext => _controller.HttpContext;
+
+            public async Task<IActionResult> Visit(CreateSessionResult.Success success)
             {
-                new Claim(Constants.ClaimTypes.SessionId, sessionId)
-            };
+                var userSession = success.UserSession;
+                var serviceJourneyRules = success.ServiceJourneyRules;
 
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await AppendCookieToResponse(userSession.Key);
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity)
-            );
+                UserSessionService.SetUserSession(userSession);
+                Logger.LogInformation($"Created {userSession.GetType().Name}");
+
+                var responseBody = new PostUserSessionResponse { ServiceJourneyRules = serviceJourneyRules };
+                responseBody = userSession.Accept(new UserSessionResponseVisitor<PostUserSessionResponse>(Settings, responseBody));
+
+                return new CreatedResult(string.Empty, responseBody);
+            }
+
+            public Task<IActionResult> Visit(CreateSessionResult.Error error)
+                => Task.FromResult(_controller.BuildErrorResult(error.ErrorTypes));
+
+            private async Task AppendCookieToResponse(string sessionId)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(Constants.ClaimTypes.SessionId, sessionId)
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity));
+            }
         }
 
         private sealed class UserSessionResponseVisitor<TUserSessionResponse> : IUserSessionVisitor<TUserSessionResponse>
-            where TUserSessionResponse: UserSessionResponse
+            where TUserSessionResponse : UserSessionResponse
         {
             private readonly ConfigurationSettings _settings;
             private readonly TUserSessionResponse _userSessionResponse;

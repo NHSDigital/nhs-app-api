@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -37,9 +37,10 @@ namespace NHSOnline.Backend.Auth.CitizenId
             _citizenIdJwtHelper = citizenIdJwtHelper;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
-        public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier,
-            string redirectUrl)
+        public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(
+            string authCode,
+            string codeVerifier,
+            Uri redirectUrl)
         {
             try
             {
@@ -53,7 +54,7 @@ namespace NHSOnline.Backend.Auth.CitizenId
                     {
                         { "grant_type", "authorization_code" },
                         { "code", authCode },
-                        { "redirect_uri", redirectUrl },
+                        { "redirect_uri", redirectUrl.ToString() },
                         { "code_verifier", codeVerifier },
                         { "code_challenge_method", "S256" },
                         { "client_assertion", token },

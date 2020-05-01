@@ -53,18 +53,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _mockGpSessionManager = new Mock<IGpSessionManager>();
 
             _systemUnderTest = new SessionController(
-                new Mock<ICitizenIdSessionService>().Object,
-                new UserSessionService(),
                 new ConfigurationSettings(),
                 new Mock<ILogger<SessionController>>().Object,
                 _mockAuditor.Object,
-                new Mock<IOdsCodeMassager>().Object,
-                new Mock<IServiceJourneyRulesService>().Object,
                 new Mock<IErrorReferenceGenerator>().Object,
-                new Mock<IUserInfoService>().Object,
                 _mockGpSessionManager.Object,
                 new Mock<IAntiforgery>().Object,
-                new Mock<IUserSessionManager>().Object)
+                new Mock<ISessionCreator>().Object,
+                new UserSessionService())
             {
                 ControllerContext = new ControllerContext { HttpContext = _httpContextMock.Object }
             };

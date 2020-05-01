@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
         private string _authCode;
         private string _codeVerifier;
-        private string _redirectUrl;
+        private Uri _redirectUrl;
         private string _accessToken;
         private string _im1Token;
         private const string NhsNumber = "0123456789";
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
             _authCode = _fixture.Create<string>();
             _codeVerifier = _fixture.Create<string>();
-            _redirectUrl = _fixture.Create<string>();
+            _redirectUrl = _fixture.Create<Uri>();
             _accessToken = _fixture.Create<string>();
             _im1Token = _fixture.Create<string>();
             _odsCode = _fixture.Create<string>();
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var userProfile = new UserProfile(userInfo,  _accessToken);
 
             _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         {
             // Arrange
             _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = statusCode,
@@ -163,7 +163,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var userProfile = new UserProfile(userInfo, _accessToken);
 
             _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -199,7 +199,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var userProfile = new UserProfile(userInfo, _accessToken);
 
             _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -243,7 +243,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var userProfile = new UserProfile(userInfo, _accessToken);
 
             _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = HttpStatusCode.OK,
