@@ -97,9 +97,9 @@ spec:
         {{- else }}
         - name: CITIZEN_ID_BASE_URL
           value: "https://iproxy-cid-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.iproxy.containerPort }}"
+        {{- end }}
         - name: CITIZEN_ID_CLIENT_ID
           value: "{{ $.Values.cidClientID }}"
-        {{- end }}
         - name: NHSLOGIN_KEY_PATH
           value: "/secrets/nhslogin-key/nhslogin.pem"
         - name: NHSLOGIN_KEY_PASSWORD
