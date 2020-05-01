@@ -84,6 +84,7 @@
                             enum: 
                               - "None"
                               - "NhsApp"
+                              - "SilverThirdParty"
                           menuTab: 
                             type: "string"
                             enum: 
@@ -118,6 +119,7 @@
                                   enum: 
                                     - "None"
                                     - "NhsApp"
+                                    - "SilverThirdParty"
                                 menuTab: 
                                   type: "string"
                                   enum: 

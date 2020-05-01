@@ -327,7 +327,7 @@
       "url": "https://silverintegrationtestsa.z33.web.core.windows.net",
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
-      "viewMode": "AppTab",
+      "viewMode": "WebView",
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false,
