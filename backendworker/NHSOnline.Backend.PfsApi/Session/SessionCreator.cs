@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
@@ -42,9 +43,33 @@ namespace NHSOnline.Backend.PfsApi.Session
 
         public async Task<CreateSessionResult> CreateSession(ICreateSessionRequest request)
         {
-            // Call Citizen ID to get the User Profile (IM1 connection token, ODS code, Date of Birth, NHS Number).
-            var citizenIdSessionResult =
-                await _citizenIdSessionService.Create(request.AuthCode, request.CodeVerifier, request.RedirectUrl);
+            var citizenIdSession = await FetchCitizenIdUserProfile(request);
+            if (citizenIdSession.ProcessFinishedEarly(out var citizenIdSessionResult))
+            {
+                return citizenIdSessionResult;
+            }
+
+            var serviceJourneyRules = await FetchServiceJourneyRules(citizenIdSession.Result);
+            if (serviceJourneyRules.ProcessFinishedEarly(out var serviceJourneyRulesResult))
+            {
+                return serviceJourneyRulesResult;
+            }
+
+            var userSession = await CreateUserSession(request, citizenIdSession.Result, serviceJourneyRules.Result);
+            if (userSession.ProcessFinishedEarly(out var userSessionResult))
+            {
+                return userSessionResult;
+            }
+
+            await UpdateUserInfo(request, serviceJourneyRules.Result, citizenIdSession.Result);
+
+            return new CreateSessionResult.Success(serviceJourneyRules.Result, userSession.Result);
+        }
+
+        private async Task<ProcessResult<CitizenIdSessionResult, CreateSessionResult>> FetchCitizenIdUserProfile(
+            ICreateSessionRequest request)
+        {
+            var citizenIdSessionResult = await _citizenIdSessionService.Create(request.AuthCode, request.CodeVerifier, request.RedirectUrl);
 
             if (!citizenIdSessionResult.StatusCode.IsSuccessStatusCode())
             {
@@ -55,7 +80,7 @@ namespace NHSOnline.Backend.PfsApi.Session
                     _ => ErrorTypes.LookupErrorType(_logger, ErrorCategory.Login, citizenIdSessionResult.StatusCode)
                 };
 
-                return new CreateSessionResult.Error(errorTypes);
+                return FinalResult<CitizenIdSessionResult>(errorTypes);
             }
 
             citizenIdSessionResult.Session.OdsCode =
@@ -71,67 +96,72 @@ namespace NHSOnline.Backend.PfsApi.Session
 
             _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
 
-            return await GetServiceJourneyRulesAndCreateSession(request, citizenIdSessionResult);
+            return StepResult(citizenIdSessionResult);
         }
 
-        private async Task<CreateSessionResult> GetServiceJourneyRulesAndCreateSession(
-            ICreateSessionRequest request,
+        private async Task<ProcessResult<ServiceJourneyRulesResponse, CreateSessionResult>> FetchServiceJourneyRules(
             CitizenIdSessionResult citizenIdSessionResult)
         {
-            // Get Service Journey Rules
-            _logger.LogInformation(
-                $"Retrieving Service Journey Rules for ods code: {citizenIdSessionResult.Session.OdsCode}");
+            var odsCode = citizenIdSessionResult.Session.OdsCode;
 
-            var serviceJourneyRulesResultVisited =
-                await GetServiceJourneyRulesVisitorOutput(citizenIdSessionResult.Session.OdsCode);
+            _logger.LogInformation($"Retrieving Service Journey Rules for ods code: {odsCode}");
+            var serviceJourneyRulesConfig = await _serviceJourneyRules.GetServiceJourneyRulesForOdsCode(odsCode);
 
-            if (!serviceJourneyRulesResultVisited.ServiceJourneyRulesRetrieved)
-            {
-                var errorMessage =
-                    $"Retrieving Service Journey Rules failed with status code: '{serviceJourneyRulesResultVisited.StatusCode}'";
-                _logger.LogError(errorMessage);
-
-                // Specific error reference for a 404 from SJR.
-                var errorTypes = serviceJourneyRulesResultVisited.StatusCode switch
-                {
-                    StatusCodes.Status404NotFound => (ErrorTypes)new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported(),
-                    _ => new ErrorTypes.LoginServiceJourneyRulesOtherError()
-                };
-
-                return new CreateSessionResult.Error(errorTypes);
-            }
-
-            var serviceJourneyRules = serviceJourneyRulesResultVisited.Response;
-
-            var createUserSessionResult = await _userSessionManager.Create(citizenIdSessionResult, serviceJourneyRules, request.CsrfToken);
-
-            return await createUserSessionResult.Accept(
-                CreateErrorResult,
-                success => CreateSession(request, success.UserSession, serviceJourneyRules, citizenIdSessionResult));
-
-            static Task<CreateSessionResult> CreateErrorResult(CreateUserSessionResult.Failure error)
-                => Task.FromResult<CreateSessionResult>(new CreateSessionResult.Error(error.ErrorType));
+            return serviceJourneyRulesConfig.Accept(new ServiceJourneyRulesConfigResultVisitor(_logger));
         }
 
-        private async Task<CreateSessionResult> CreateSession(
+        private async Task<ProcessResult<UserSession, CreateSessionResult>> CreateUserSession(
             ICreateSessionRequest request,
-            UserSession userSession,
+            CitizenIdSessionResult citizenIdSessionResult,
+            ServiceJourneyRulesResponse serviceJourneyRules)
+        {
+            var createUserSessionResult = await _userSessionManager.Create(citizenIdSessionResult, serviceJourneyRules, request.CsrfToken);
+
+            return createUserSessionResult.Accept(
+                failure => FinalResult<UserSession>(failure.ErrorType),
+                success => StepResult(success.UserSession));
+        }
+
+        private async Task UpdateUserInfo(
+            ICreateSessionRequest request,
             ServiceJourneyRulesResponse serviceJourneyRules,
             CitizenIdSessionResult citizenIdSessionResult)
         {
-            // Post to the UserInfo service
             if (serviceJourneyRules.Journeys.UserInfo == true)
             {
                 await _userInfoService.Update(citizenIdSessionResult.Session.AccessToken, request.HttpContext);
             }
-
-            return new CreateSessionResult.Success(serviceJourneyRules, userSession);
         }
 
-        private async Task<ServiceJourneyRulesVisitorOutput> GetServiceJourneyRulesVisitorOutput(string odsCode)
+        private static ProcessResult<TStepResult, CreateSessionResult> StepResult<TStepResult>(TStepResult result)
+            => ProcessResult.StepResult<TStepResult, CreateSessionResult>(result);
+
+        private static ProcessResult<TFinalResult, CreateSessionResult> FinalResult<TFinalResult>(ErrorTypes errorTypes)
+            => ProcessResult.FinalResult<TFinalResult, CreateSessionResult>(new CreateSessionResult.Error(errorTypes));
+
+        private sealed class ServiceJourneyRulesConfigResultVisitor
+            : IServiceJourneyRulesConfigResultVisitor<ProcessResult<ServiceJourneyRulesResponse, CreateSessionResult>>
         {
-            var serviceJourneyRulesConfig = await _serviceJourneyRules.GetServiceJourneyRulesForOdsCode(odsCode);
-            return serviceJourneyRulesConfig.Accept(new ServiceJourneyRulesConfigResultVisitor());
+            private readonly ILogger _logger;
+
+            public ServiceJourneyRulesConfigResultVisitor(ILogger logger) => _logger = logger;
+
+            public ProcessResult<ServiceJourneyRulesResponse, CreateSessionResult> Visit(ServiceJourneyRulesConfigResult.Success result)
+                => StepResult(result.Response);
+
+            public ProcessResult<ServiceJourneyRulesResponse, CreateSessionResult> Visit(ServiceJourneyRulesConfigResult.NotFound result)
+                => ErrorResult(new ErrorTypes.LoginOdsCodeNotFoundOrNotSupported());
+
+            public ProcessResult<ServiceJourneyRulesResponse, CreateSessionResult> Visit(ServiceJourneyRulesConfigResult.InternalServerError result)
+                => ErrorResult(new ErrorTypes.LoginServiceJourneyRulesOtherError());
+
+            private ProcessResult<ServiceJourneyRulesResponse, CreateSessionResult> ErrorResult(ErrorTypes errorTypes)
+            {
+                var errorMessage = $"Retrieving Service Journey Rules failed with status code: '{errorTypes.StatusCode}'";
+                _logger.LogError(errorMessage);
+                
+                return FinalResult<ServiceJourneyRulesResponse>(errorTypes);
+            }
         }
     }
 }
