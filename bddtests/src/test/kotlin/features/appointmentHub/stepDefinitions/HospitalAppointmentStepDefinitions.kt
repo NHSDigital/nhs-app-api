@@ -6,7 +6,6 @@ import cucumber.api.java.en.Then
 import features.myrecord.factories.DemographicsFactory
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.patients.EmisPatients
@@ -14,8 +13,6 @@ import pages.appointments.HospitalAppointmentsPage
 import utils.SerenityHelpers
 
 class HospitalAppointmentStepDefinitions {
-
-    private val mockingClient = MockingClient.instance
 
     private lateinit var hospitalAppointmentsPage: HospitalAppointmentsPage
 
@@ -25,8 +22,8 @@ class HospitalAppointmentStepDefinitions {
                 null,
                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB)
         val supplier = SerenityHelpers.getGpSupplier()
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
     }
 
     @Given("^I am a user who can manage their hospital appointments and has linked profiles$")
@@ -38,9 +35,9 @@ class HospitalAppointmentStepDefinitions {
         patient.updateOdsCodes(odsCode)
         SerenityHelpers.setGpSupplier(supplier)
         SerenityHelpers.setPatient(patient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory
-                .getForSupplier(supplier, mockingClient)
+                .getForSupplier(supplier)
                 .createFor(patient)
         DemographicsFactory
                 .getForSupplier(supplier)
@@ -53,8 +50,8 @@ class HospitalAppointmentStepDefinitions {
                 null,
                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_NONE)
         val supplier = SerenityHelpers.getGpSupplier()
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
     }
 
     @Then("^the Hospital Appointments page is displayed$")

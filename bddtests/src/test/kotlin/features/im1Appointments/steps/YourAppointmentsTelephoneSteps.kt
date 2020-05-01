@@ -1,7 +1,6 @@
 package features.im1Appointments.steps
 
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
-import mocking.MockingClient
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -10,7 +9,6 @@ import pages.isDisplayed
 import pages.navigation.HeaderNative
 
 open class YourAppointmentsTelephoneSteps {
-    val mockingClient = MockingClient.instance
 
     lateinit var yourAppointmentsPage: YourAppointmentsPage
     @Steps

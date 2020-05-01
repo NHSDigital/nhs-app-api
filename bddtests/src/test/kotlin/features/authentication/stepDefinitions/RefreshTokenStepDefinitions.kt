@@ -22,7 +22,7 @@ import worker.models.authorization.RefreshAccessTokenResponse
 import javax.servlet.http.Cookie
 
 class RefreshTokenStepDefinitions {
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     @Given("^I am an API user who wishes to refresh their access token$")
     fun givenIAmAnApiUserWhoWishesToRefreshTheirAccessToken() {
@@ -73,8 +73,8 @@ class RefreshTokenStepDefinitions {
         val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
         return patient
     }
 }

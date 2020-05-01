@@ -12,7 +12,7 @@ import utils.SerenityHelpers
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-open class V2MedicalRecordMedicinesStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordMedicinesStepDefinitions {
 
     private lateinit var medicinesIndexPage: MedicinesIndexPage
     private lateinit var medicinesDetailPage: MedicinesDetailPage

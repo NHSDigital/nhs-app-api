@@ -7,6 +7,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.MedicationsFactory
+import mocking.MockingClient
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
@@ -23,9 +24,10 @@ import java.time.format.DateTimeFormatter
 import mocking.data.myrecord.MedicationsData
 import java.lang.UnsupportedOperationException
 
-open class V1MedicalRecordMedicationsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V1MedicalRecordMedicationsStepDefinitions {
 
     private lateinit var medicalRecordV1Page: MedicalRecordV1Page
+    private val mockingClient = MockingClient.instance
 
     @Given("^the GP Practice has enabled medications functionality$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionality() {

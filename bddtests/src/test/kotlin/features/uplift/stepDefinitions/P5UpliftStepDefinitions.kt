@@ -23,7 +23,7 @@ import utils.set
 
 class P5UpliftStepDefinitions : HybridPageObject() {
 
-  val mockingClient = MockingClient.instance
+  private val mockingClient = MockingClient.instance
 
   @Steps
   private lateinit var p5ShutterPage: P5UpliftPage
@@ -43,8 +43,8 @@ class P5UpliftStepDefinitions : HybridPageObject() {
     SerenityHelpers.setPatient(patient)
     SerenityHelpers.setGpSupplier(supplier)
 
-    CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-    SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+    CitizenIdSessionCreateJourney().createFor(patient)
+    SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
   }
 
   @Given("^I am a patient logging in natively with proof level 5$")
@@ -60,8 +60,8 @@ class P5UpliftStepDefinitions : HybridPageObject() {
     SerenityHelpers.setPatient(patient)
     SerenityHelpers.setGpSupplier(supplier)
 
-    CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-    SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+    CitizenIdSessionCreateJourney().createFor(patient)
+    SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
   }
 
   @Then("^I am asked to prove my identity$")

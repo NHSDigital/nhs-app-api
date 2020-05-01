@@ -5,14 +5,11 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.linkage.LinkageResult
-import mocking.MockingClient
 import mockingFacade.linkage.LinkageInformationFacade
 import net.serenitybdd.core.Serenity
 import org.joda.time.DateTime
 
 open class LinkagePostStepDefinitions {
-
-    val mockingClient = MockingClient.instance
 
     @Given("I have valid (.*) linkage details for posting$")
     fun iHaveValidLinkageDetailsForPosting(gpSystem: String) {

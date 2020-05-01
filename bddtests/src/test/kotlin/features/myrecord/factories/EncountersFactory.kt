@@ -1,15 +1,12 @@
 package features.myrecord.factories
 
 import constants.Supplier
-import mocking.MockingClient
 import mocking.SupplierSpecificFactory
 import worker.models.myrecord.EncounterItem
 
 abstract class EncountersFactory {
 
     abstract fun getExpectedEncounters(): List<EncounterItem>
-
-    val mockingClient = MockingClient.instance
 
     companion object : SupplierSpecificFactory<EncountersFactory>() {
 

@@ -7,6 +7,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.AllergiesFactory
 import features.myrecord.factories.MyRecordVisionMocker
+import mocking.MockingClient
 import mocking.data.myrecord.AllergiesData
 import mocking.data.myrecord.MyRecordSerenityHelpers
 import mocking.vision.VisionConstants
@@ -24,8 +25,9 @@ import java.time.format.DateTimeFormatter
 
 private const val NUMBER_OF_ALLERGIES = 5
 
-open class V1MedicalRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V1MedicalRecordAllergiesStepDefinitions {
 
+    private val mockingClient = MockingClient.instance
     private lateinit var medicalRecordV1Page: MedicalRecordV1Page
 
     @Given("^the GP Practice has enabled allergies functionality and the patient has \"(.*)\" allergies$")

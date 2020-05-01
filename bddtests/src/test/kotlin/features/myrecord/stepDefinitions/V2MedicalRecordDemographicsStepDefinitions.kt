@@ -6,7 +6,7 @@ import pages.gpMedicalRecord.MedicalRecordV2Page
 import pages.text
 import utils.SerenityHelpers
 
-open class V2MedicalRecordDemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordDemographicsStepDefinitions {
 
     private lateinit var medicalRecordV2Page: MedicalRecordV2Page
 

@@ -3,7 +3,6 @@ package features.im1Appointments.stepDefinitions
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import constants.Supplier
 import cucumber.api.java.en.Given
-import mocking.MockingClient
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.emis.appointments.AppointmentSlotsBuilderEmis
 import mocking.emis.appointments.AppointmentSlotsMetaBuilderEmis
@@ -15,7 +14,6 @@ private const val TIMEOUT_IN_SECONDS = 90L
 
 class AvailableAppointmentsSlotsTimeoutStepDefinitions {
 
-    val mockingClient = MockingClient.instance
     private val appointmentSlotsExample = AppointmentsSlotsExample()
 
     @Given("^the (.*) doesn't respond in a timely fashion for available appointment slots$")

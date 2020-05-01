@@ -5,7 +5,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.im1Appointments.steps.AvailableAppointmentsSteps
-import mocking.MockingClient
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
@@ -24,7 +23,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import pages.assertIsVisible
 import utils.SerenityHelpers
-import worker.NhsoHttpException
 import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
 import javax.servlet.http.Cookie
@@ -34,7 +32,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
 
-    val mockingClient = MockingClient.instance
     private val appointmentSlotsExample = AppointmentsSlotsExample()
     private val appointmentSlotsExampleForFiltering = AppointmentsSlotsExampleForFiltering()
 
@@ -224,7 +221,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
         for (appointmentSession in expectedAppointmentSessions) {
             expectedAppointmentSlots.addAll(appointmentSession.slots)
         }
-        val httpStatus = SerenityHelpers.getValueOrNull<NhsoHttpException>("HttpException")?.statusCode ?: SC_OK
+        val httpStatus = SerenityHelpers.getHttpException()?.statusCode ?: SC_OK
 
         assertEquals("Http Error Status. ", SC_OK, httpStatus)
 

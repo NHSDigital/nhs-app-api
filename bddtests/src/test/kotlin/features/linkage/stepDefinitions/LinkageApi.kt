@@ -1,6 +1,5 @@
 package features.linkage.stepDefinitions
 
-import mocking.MockingClient
 import mockingFacade.linkage.LinkageInformationFacade
 import net.serenitybdd.core.Serenity
 import utils.SerenityHelpers
@@ -12,7 +11,6 @@ import worker.models.linkage.LinkageResponse
 open class LinkageApi {
 
     companion object {
-        val mockingClient = MockingClient.instance
 
         fun get(linkage: LinkageInformationFacade) {
             try {

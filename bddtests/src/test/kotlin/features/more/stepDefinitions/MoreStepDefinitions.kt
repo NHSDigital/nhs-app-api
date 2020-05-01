@@ -5,7 +5,6 @@ import cucumber.api.java.en.When
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
 import pages.MorePage
 import pages.navigation.HeaderNative
@@ -26,8 +25,6 @@ class MoreStepDefinitions {
     lateinit var headerNative: HeaderNative
     lateinit var webHeader: WebHeader
     lateinit var morePage: MorePage
-
-    val mockingClient = MockingClient.instance
 
     @When("^I click the Messages link on the More page")
     fun iClickTheMessagesLinkOnTheMorePage() {

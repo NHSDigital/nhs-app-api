@@ -32,7 +32,7 @@ import worker.models.patient.Im1ConnectionToken
 import worker.models.session.UserSessionRequest
 
 class Im1ConnectionV1StepDefinitionsBackend {
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     @Given("^I have a new (.+) patient with Nhs Numbers of (.*)$")
     fun iHaveValidPatientDataToRegisterNewAccount(gpSystem: String, nhsNumbers: String) {
@@ -278,8 +278,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
                 age = PatientAge( linkingInformationExample.dateOfBirth),
                 nhsNumbers = arrayListOf(linkingInformationExample.nhsNumber)
         )
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
         SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
         iRegisterAUsersIMCredentials()
         val im1ConnectionResponse = AuthenticationSerenityHelpers.IM1_CONNECTION_RESPONSE

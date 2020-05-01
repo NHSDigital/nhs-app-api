@@ -7,7 +7,7 @@ import models.Patient
 
 class ExaminationsFactoryVision {
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     private var mocker: MyRecordVisionMocker = MyRecordVisionMocker(mockingClient)
 

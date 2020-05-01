@@ -14,6 +14,7 @@ import org.apache.http.HttpStatus
 import org.junit.Assert.assertEquals
 import utils.LinkedProfilesSerenityHelpers
 import utils.ProxySerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrNull
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -247,7 +248,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
             val result = workerClient.appointments.postAppointment(patientId, workerAppointmentRequest, sessionCookie)
             Serenity.setSessionVariable("Http Status Code").to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable("HttpException").to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 }

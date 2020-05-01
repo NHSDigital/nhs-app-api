@@ -5,7 +5,6 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import pages.HybridPageObject
@@ -17,7 +16,6 @@ import utils.SerenityHelpers
 
 class PatientsKnowBestStepDefinitions : HybridPageObject() {
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
-    private val mockingClient = MockingClient.instance
     private lateinit var redirector: RedirectorPage
     private lateinit var hospitalAppointmentsPage: HospitalAppointmentsPage
 
@@ -119,7 +117,7 @@ class PatientsKnowBestStepDefinitions : HybridPageObject() {
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 null, configuration)
         val supplier = SerenityHelpers.getGpSupplier()
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
     }
 }

@@ -4,7 +4,6 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
@@ -20,8 +19,6 @@ class TermsAndConditionsStepDefinitions {
 
     private lateinit var termsAndConditionsPage: TermsAndConditionsPage
     private lateinit var updatedTermsAndConditionsPage: UpdatedTermsAndConditionsPage
-
-    val mockingClient = MockingClient.instance
 
     @Given("^I am an? (.*) patient who has not already accepted terms and conditions$")
     fun iHaveNotAcceptedTermsAndConditions(gpSystem: String) {
@@ -121,8 +118,8 @@ class TermsAndConditionsStepDefinitions {
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(gpSystem)
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
 
         return patient
     }

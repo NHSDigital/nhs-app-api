@@ -13,28 +13,22 @@ class SerenityHelpers {
     companion object {
 
         fun setPatient(patientToSet: Patient) {
-            setSerenityVariableIfNotAlreadySet(
-                    Patient::class,
-                    patientToSet,
-                    "Test setup incorrect, expected patients to be the same"
-            )
+            GlobalSerenityHelpers.PATIENT.setIfNotAlreadySet(patientToSet)
         }
 
         fun resetPatient(patientToSet: Patient) {
-            val currentStoredValue = getValueOrNull<Any>(Patient::class)
+            val currentStoredValue = getValueOrNull<Any>(GlobalSerenityHelpers.PATIENT)
             if (currentStoredValue !== null) {
-                Serenity.setSessionVariable(Patient::class).to(patientToSet)
+                Serenity.setSessionVariable(GlobalSerenityHelpers.PATIENT).to(patientToSet)
             }
         }
 
         fun getPatient(): Patient {
-            Assert.assertTrue("Test setup incorrect, patient needs to be set",
-                    Serenity.hasASessionVariableCalled(Patient::class))
-            return Serenity.sessionVariableCalled<Patient>(Patient::class)
+            return GlobalSerenityHelpers.PATIENT.getOrFail()
         }
 
         fun getPatientOrNull(): Patient? {
-            return getValueOrNull<Patient>(Patient::class)
+            return GlobalSerenityHelpers.PATIENT.getOrNull()
         }
 
         fun getGpSupplier():Supplier{
@@ -56,23 +50,23 @@ class SerenityHelpers {
         }
 
         fun setHttpException(httpException: NhsoHttpException) {
-            Serenity.setSessionVariable("HttpException").to(httpException)
+            GlobalSerenityHelpers.HTTP_EXCEPTION.set(httpException)
         }
 
         fun clearHttpException() {
-            Serenity.setSessionVariable("HttpException").to(null)
+            GlobalSerenityHelpers.HTTP_EXCEPTION.set(null)
         }
 
         fun getHttpException(): NhsoHttpException? {
-            return  getValueOrNull("HttpException")
+            return GlobalSerenityHelpers.HTTP_EXCEPTION.getOrNull()
         }
 
         fun setHttpResponse(response: HttpResponse) {
-            Serenity.setSessionVariable("HttpResponse").to(response)
+            GlobalSerenityHelpers.HTTP_RESPONSE.set(response)
         }
 
         fun getHttpResponse(): HttpResponse? {
-            return  getValueOrNull("HttpResponse")
+            return GlobalSerenityHelpers.HTTP_RESPONSE.getOrFail()
         }
 
         fun setSerenityVariableIfNotAlreadySet(

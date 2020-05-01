@@ -18,7 +18,7 @@ import utils.SerenityHelpers
 
 class PrescriptionsErrorStepDefinitions {
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     private lateinit var prescriptionsPage: PrescriptionsPage
     private lateinit var confirmRepeatPrescriptionsOrderPage: ConfirmRepeatPrescriptionsOrderPage

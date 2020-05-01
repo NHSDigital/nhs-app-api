@@ -4,7 +4,6 @@ import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mockingFacade.appointments.AppointmentSessionFacade
 import net.serenitybdd.core.Serenity
-import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -14,6 +13,7 @@ import pages.appointments.AvailableAppointmentsPage
 import pages.navigation.BreadcrumbHeader
 import pages.navigation.WebHeader
 import utils.LinkedProfilesSerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrNull
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -47,7 +47,7 @@ open class AvailableAppointmentsSteps {
             expectedTimeSlot: String,
             expectedSessionName: String?
     ) {
-        println(sessionVariableCalled<java.util.ArrayList<AppointmentSessionFacade>>(
+        println(Serenity.sessionVariableCalled<java.util.ArrayList<AppointmentSessionFacade>>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
                         .APPOINTMENT_SLOTS_EXAMPLE_SESSIONS
@@ -85,16 +85,16 @@ open class AvailableAppointmentsSteps {
             val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .appointments.getAppointmentSlots(
-                    patientId, null,null, sessionVariableCalled<Cookie>(Cookie::class))
+                    patientId, null,null, Serenity.sessionVariableCalled<Cookie>(Cookie::class))
             Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable("HttpException").to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
     @Step
     fun verifyThatAvailableSlotsAreReturnedWithAppropriateFields() {
-        val result = sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
+        val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         val unmatchedExpectedSlots = getExpectedResponseSlots()
 
         Assert.assertEquals("Number of response slots", unmatchedExpectedSlots.count(), result.slots.count())
@@ -117,7 +117,7 @@ open class AvailableAppointmentsSteps {
     }
 
     private fun getExpectedResponseSlots(): HashMap<String, SlotResponseObject> {
-        val expectedResponseSlots = sessionVariableCalled<List<SlotResponseObject>>(
+        val expectedResponseSlots = Serenity.sessionVariableCalled<List<SlotResponseObject>>(
                 AppointmentsSlotsFactory.Expectations.EXPECTED_API_RESPONSE_OF_AVAILABLE_APPOINTMENTS
         )
         val unmatchedExpectedSlots = HashMap<String, SlotResponseObject>()

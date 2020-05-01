@@ -19,7 +19,7 @@ import worker.models.linkage.LinkageResponse
 
 open class LinkageGetStepDefinitions {
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     @Given("I have valid (.*) linkage details$")
     fun iHaveValidLinkageDetailsFor(gpSystem: String) {

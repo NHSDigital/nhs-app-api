@@ -1,15 +1,15 @@
 package features.im1Appointments.steps
 
 import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
-import mocking.stubs.appointments.factories.MyAppointmentsFactory
-import mocking.MockingClient
 import mocking.emis.models.AppointmentCancellationReason
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import utils.LinkedProfilesSerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -18,8 +18,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 open class YourAppointmentsBackendSteps {
-
-    val mockingClient = MockingClient.instance
 
     @Step
     fun createSerenityMyAppointmentSessionVariable() {
@@ -35,7 +33,7 @@ open class YourAppointmentsBackendSteps {
             println(result)
             Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable("HttpException").to(httpException)
+            SerenityHelpers.setHttpException(httpException)
             println(httpException)
         }
     }

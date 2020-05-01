@@ -3,7 +3,7 @@ package features.myrecord.stepDefinitions
 import cucumber.api.java.en.Then
 import pages.gpMedicalRecord.DiagnosisPage
 
-open class V2MedicalRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordDiagnosisStepDefinitions {
 
     private lateinit var diagnosisPage: DiagnosisPage
 

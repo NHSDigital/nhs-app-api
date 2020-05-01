@@ -1,6 +1,5 @@
 package features.im1Appointments.steps
 
-import mocking.MockingClient
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
 import models.Slot
 import net.serenitybdd.core.Serenity
@@ -12,8 +11,6 @@ import pages.text
 open class AppointmentsConfirmationSteps {
 
     lateinit var appointmentsConfirmation: AppointmentsConfirmationPage
-
-    val mockingClient = MockingClient.instance
 
     @Step
     fun checkValidationErrorMessage() {

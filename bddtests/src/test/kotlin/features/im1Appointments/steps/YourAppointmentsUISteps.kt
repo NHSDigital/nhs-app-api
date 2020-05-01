@@ -2,7 +2,6 @@ package features.im1Appointments.steps
 
 import com.google.common.collect.Ordering
 import mocking.stubs.appointments.factories.MyAppointmentsFactory
-import mocking.MockingClient
 import models.Slot
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
@@ -16,8 +15,6 @@ import pages.navigation.WebHeader
 import java.util.*
 
 open class YourAppointmentsUISteps {
-
-    val mockingClient = MockingClient.instance
 
     lateinit var yourAppointmentsPage: YourAppointmentsPage
     lateinit var headerNative: HeaderNative

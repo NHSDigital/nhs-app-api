@@ -2,16 +2,12 @@ package features.sharedSteps.backend
 
 import com.google.gson.GsonBuilder
 import cucumber.api.java.en.Then
-import net.serenitybdd.core.Serenity.sessionVariableCalled
-import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import utils.SerenityHelpers
-import worker.NhsoHttpException
 import worker.NhsoHttpExceptionErrorBody
-import java.lang.AssertionError
 
 const val LINKAGE_NOT_SUPPORTED_RESPONSE_CODE = 550
 const val ODS_CODE_NOT_FOUND_RESPONSE_CODE = 464
@@ -46,20 +42,20 @@ class ResponseStatusCodeSteps {
     @Then("^I receive (?:a|an) \"(.*)\" success code")
     fun thenIReceiveASuccessMessage(expectedStatusCode: String) {
         val converted = httpStatusCodeTransform(expectedStatusCode)
-        val httpResponse = sessionVariableCalled<HttpResponse>("HttpResponse")
+        val httpResponse = SerenityHelpers.getHttpResponse()!!
         assertEquals(converted, httpResponse.statusLine.statusCode)
     }
 
     @Then("^I receive (?:a|an) \"(.*)\" code")
     fun thenIReceiveAMessage(expectedStatusCode: String) {
         val converted = httpStatusCodeTransform(expectedStatusCode)
-        val httpResponse = sessionVariableCalled<HttpResponse>("HttpResponse")
+        val httpResponse = SerenityHelpers.getHttpResponse()!!
         assertEquals(converted, httpResponse.statusLine.statusCode)
     }
 
     @Then("^I receive (?:a|an) \"(.*)\" error status code$")
     fun thenIReceiveAStatusCode(expectedStatusCode: Int) {
-        val exception = sessionVariableCalled<NhsoHttpException>("HttpException")
+        val exception = SerenityHelpers.getHttpException()!!
         assertEquals(expectedStatusCode, exception.statusCode)
     }
 

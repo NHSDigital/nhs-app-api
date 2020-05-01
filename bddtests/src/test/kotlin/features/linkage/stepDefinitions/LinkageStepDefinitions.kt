@@ -4,7 +4,6 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.linkage.LinkageResult
-import mocking.MockingClient
 import mockingFacade.linkage.LinkageInformationFacade
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
@@ -14,8 +13,6 @@ const val DELAY: Long = 4
 const val DEFAULT_TIMEOUT_MILLISECONDS: Int = 500
 
 open class LinkageStepDefinitions {
-
-    val mockingClient = MockingClient.instance
 
     @Given("^another user has valid (.*) linkage details$")
     fun anotherUserHasValidLinkageDetailsFor(gpSystem: String) {

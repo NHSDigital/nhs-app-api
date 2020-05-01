@@ -6,7 +6,6 @@ import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.MockingClient
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.switchProfiles.SwitchProfileData
 import net.thucydides.core.annotations.Steps
@@ -27,8 +26,6 @@ class SwitchProfileStepDefinitions {
     lateinit var home: HomePage
 
     private lateinit var switchProfilePage: SwitchProfilesPage
-
-    val mockingClient = MockingClient.instance
 
     @Then("^the switch profiles page is displayed$")
     fun theSwitchProfilesPageIsDisplayed() {

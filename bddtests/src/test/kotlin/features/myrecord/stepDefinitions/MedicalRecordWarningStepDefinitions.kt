@@ -19,7 +19,7 @@ import pages.navigation.NavBarNative
 import utils.SerenityHelpers
 import worker.models.myrecord.MyRecordResponse
 
-open class MedicalRecordWarningStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class MedicalRecordWarningStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps

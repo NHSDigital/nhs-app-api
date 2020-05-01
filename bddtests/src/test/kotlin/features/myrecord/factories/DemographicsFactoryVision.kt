@@ -1,11 +1,10 @@
 package features.myrecord.factories
 
-import features.myrecord.stepDefinitions.HTTP_EXCEPTION
-import mocking.stubs.StubbedEnvironment
 import mocking.defaults.VisionMockDefaults
+import mocking.stubs.StubbedEnvironment
 import mocking.vision.models.VisionUserSession
 import models.Patient
-import net.serenitybdd.core.Serenity
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import java.time.Duration
 
@@ -17,7 +16,7 @@ class DemographicsFactoryVision: DemographicsFactory() {
                 ).respondWithAccessDeniedError()
             }
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 

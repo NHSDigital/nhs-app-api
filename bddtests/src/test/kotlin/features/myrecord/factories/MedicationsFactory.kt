@@ -1,12 +1,12 @@
 package features.myrecord.factories
 
 import constants.Supplier
-import features.myrecord.stepDefinitions.HTTP_EXCEPTION
 import mocking.SupplierSpecificFactory
 import mocking.MockingClient
 import models.Patient
 import net.serenitybdd.core.Serenity
 import utils.LinkedProfilesSerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrNull
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -36,7 +36,7 @@ abstract class MedicationsFactory {
                     .myRecord.getMyRecord(patientId)
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 

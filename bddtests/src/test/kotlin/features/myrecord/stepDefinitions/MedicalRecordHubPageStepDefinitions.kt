@@ -7,7 +7,6 @@ import cucumber.api.java.en.When
 import features.serviceJourneyRules.factories.SJRJourneyType
 import pages.gpMedicalRecord.MedicalRecordHubPage
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import pages.assertElementNotPresent
@@ -15,7 +14,6 @@ import pages.assertSingleElementPresent
 
 open class MedicalRecordHubPageStepDefinitions {
     private lateinit var medicalRecordHubPage: MedicalRecordHubPage
-    private val mockingClient = MockingClient.instance
 
     @Given("I am an (.*) patient with no access to PKB")
     fun setupUser(supplier: String) {
@@ -66,7 +64,7 @@ open class MedicalRecordHubPageStepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
                 supplier, configuration)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
     }
 }

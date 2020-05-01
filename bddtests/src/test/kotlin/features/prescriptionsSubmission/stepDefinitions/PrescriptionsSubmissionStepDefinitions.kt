@@ -60,7 +60,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     lateinit var prescriptions : PrescriptionsPage
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     var prescriptionSubmissionRequest: PrescriptionSubmissionRequest? = null
 
@@ -210,8 +210,8 @@ open class PrescriptionsSubmissionStepDefinitions {
            SerenityHelpers.setPatient(Patient.getDefault(supplier))
         }
         val currentPatient = SerenityHelpers.getPatient()
-        CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(currentPatient)
+        CitizenIdSessionCreateJourney().createFor(currentPatient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(currentPatient)
         PrescriptionsSerenityHelpers.PROVIDER.set(supplier)
         prescriptionLoader = PrescriptionsFactory.getForSupplier(supplier).getPrescriptionsLoader
         val emisPrescriptionMap = mutableMapOf<String, PrescriptionRequestsGetResponse>()

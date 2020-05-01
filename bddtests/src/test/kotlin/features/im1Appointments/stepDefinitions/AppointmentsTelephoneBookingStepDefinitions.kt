@@ -5,7 +5,6 @@ import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import features.im1Appointments.steps.AppointmentSerenityHelpers
 import features.myrecord.factories.DemographicsFactory
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.stubs.appointments.factories.AppointmentsBookingFactory
@@ -16,8 +15,6 @@ import utils.set
 import utils.toMap
 
 class AppointmentsTelephoneBookingStepDefinitions {
-
-    val mockingClient = MockingClient.instance
 
     @Given("I wish to book a (.*) telephone appointment$")
     fun iWishToBookATelephoneAppointment(gpSystem: String, parameters: DataTable) {
@@ -56,8 +53,8 @@ class AppointmentsTelephoneBookingStepDefinitions {
                         telephoneSecond = config.secondNumber))
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient, false)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient, false)
+        CitizenIdSessionCreateJourney().createFor(patient)
         DemographicsFactory.getForSupplier(supplier).enabled(patient)
         return patient
     }

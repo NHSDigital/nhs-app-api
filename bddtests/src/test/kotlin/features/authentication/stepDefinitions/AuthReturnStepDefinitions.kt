@@ -25,7 +25,7 @@ class AuthReturnStepDefinitions {
     fun loggedInInCitizenIdInvalidData() {
         this.patient = EmisPatients.paulSmith
 
-        CitizenIdSessionCreateJourney(mockingClient).createInvalidFor(patient)
+        CitizenIdSessionCreateJourney().createInvalidFor(patient)
 
         browser.goToApp()
         login.using(this.patient)
@@ -35,7 +35,7 @@ class AuthReturnStepDefinitions {
     fun loggedInInCitizenIdGpAuthenticationFails() {
         this.patient = TppPatients.kevinBarry
 
-        CitizenIdSessionCreateJourney(mockingClient).createInvalidAuthenticationTokenFor(patient)
+        CitizenIdSessionCreateJourney().createInvalidAuthenticationTokenFor(patient)
 
         browser.goToApp()
         login.using(this.patient)
@@ -45,7 +45,7 @@ class AuthReturnStepDefinitions {
     fun loggedInInCitizenIdSessionNotEstablished() {
         this.patient = EmisPatients.montelFrye
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
         mockingClient.forEmis {
             authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId)
         }

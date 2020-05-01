@@ -14,6 +14,7 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -237,7 +238,7 @@ class YourAppointmentsStepDefinitionsBackend {
             Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
             Assert.fail("The API did not fail with invalid token.")
         } catch (exception: NhsoHttpException) {
-            Serenity.setSessionVariable("HttpException").to(exception)
+            SerenityHelpers.setHttpException(exception)
         }
     }
 

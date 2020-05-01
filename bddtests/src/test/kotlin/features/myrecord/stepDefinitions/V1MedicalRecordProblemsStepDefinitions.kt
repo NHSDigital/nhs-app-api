@@ -15,7 +15,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 private const val NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED = 3
-open class V1MedicalRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions() {
+open class V1MedicalRecordProblemsStepDefinitions {
 
     private lateinit var medicalRecordV1Page: MedicalRecordV1Page
 

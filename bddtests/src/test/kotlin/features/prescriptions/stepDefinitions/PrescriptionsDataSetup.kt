@@ -19,7 +19,7 @@ class PrescriptionsDataSetup {
 
     companion object {
 
-        val mockingClient = MockingClient.instance
+        private val mockingClient = MockingClient.instance
 
         fun initialize(gpSystem: Supplier) {
             PrescriptionsSerenityHelpers.PROVIDER.set(gpSystem)

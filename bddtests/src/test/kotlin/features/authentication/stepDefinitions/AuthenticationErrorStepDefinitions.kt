@@ -8,7 +8,6 @@ import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
@@ -31,9 +30,6 @@ class AuthenticationErrorStepDefinitions {
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var webHeader: WebHeader
-
-    val mockingClient = MockingClient.instance
-
 
     @Given("^I am logged in as a (.*) user$")
     fun iAmLoggedInTo(gpSystem: String) {
@@ -107,8 +103,8 @@ class AuthenticationErrorStepDefinitions {
     private fun setupAndLogIn(patient: Patient, gpSystem: Supplier) {
         SerenityHelpers.setPatient(patient)
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
 
         DemographicsFactory
                 .getForSupplier(gpSystem)
@@ -123,8 +119,8 @@ class AuthenticationErrorStepDefinitions {
     private fun setupAndTimeout(patient: Patient, gpSystem: Supplier) {
         SerenityHelpers.setPatient(patient)
 
-        CitizenIdSessionCreateJourney(mockingClient).createTimeoutFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createTimeoutFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
 
         browser.goToApp()
         login.using(patient)

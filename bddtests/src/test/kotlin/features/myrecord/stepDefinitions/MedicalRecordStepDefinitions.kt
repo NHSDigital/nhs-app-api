@@ -29,7 +29,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
-open class MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class MedicalRecordStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps
@@ -135,8 +135,8 @@ open class MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() 
         val patient = SerenityHelpers.getPatient()
         val supplier = SerenityHelpers.getGpSupplier()
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
         MyRecordFactory.getForSupplier(supplier).respondWithForbidden(patient)
     }
 
@@ -145,8 +145,8 @@ open class MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() 
         val supplier = SerenityHelpers.getGpSupplier()
 
         SerenityHelpers.setGpSupplier(supplier)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(SerenityHelpers.getPatient())
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(SerenityHelpers.getPatient())
+        CitizenIdSessionCreateJourney().createFor(SerenityHelpers.getPatient())
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(SerenityHelpers.getPatient())
         MyRecordFactory.getForSupplier(supplier).
                 enabledWithData(SerenityHelpers.getPatient(), myRecordModuleCounts, testResultOptions)
     }
@@ -156,8 +156,8 @@ open class MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() 
         val supplier = SerenityHelpers.getGpSupplier()
         val patient = SerenityHelpers.getPatient()
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
         MyRecordFactory.getForSupplier(supplier).enabledWithAllRecords(patient)
     }
 
@@ -175,7 +175,7 @@ open class MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() 
                     .myRecord.getMyRecord(patientId)
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 

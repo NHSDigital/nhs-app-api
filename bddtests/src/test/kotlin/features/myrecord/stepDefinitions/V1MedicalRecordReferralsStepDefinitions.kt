@@ -13,7 +13,7 @@ const val REFERRAL_DESCRIPTION_INDEX: Int = 0
 const val SPECIALITY_INDEX: Int = 1
 const val UBRN_INDEX: Int = 2
 
-open class V1MedicalRecordReferralsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V1MedicalRecordReferralsStepDefinitions {
 
     private lateinit var medicalRecordV1Page: MedicalRecordV1Page
 

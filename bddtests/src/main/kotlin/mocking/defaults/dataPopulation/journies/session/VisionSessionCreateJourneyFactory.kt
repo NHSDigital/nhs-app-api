@@ -1,8 +1,7 @@
 package mocking.defaults.dataPopulation.journies.session
 
-import mocking.MockingClient
-import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mocking.defaults.VisionMockDefaults
+import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mocking.vision.appointments.helpers.GeneralAppointmentsHelper
 import mocking.vision.models.VisionUserSession
 import mocking.vision.models.appointments.Location
@@ -11,7 +10,7 @@ import mocking.vision.models.appointments.References
 import models.Patient
 import net.serenitybdd.core.Serenity
 
-class VisionSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
+class VisionSessionCreateJourneyFactory : SessionCreateJourneyFactory() {
 
     override fun createFor(patient: Patient, defaultPracticeSettings:Boolean) {
         var configuration = if (Serenity.sessionVariableCalled<String>(gpAppointmentsDisabled) == "true") {

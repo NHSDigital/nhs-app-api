@@ -11,7 +11,7 @@ import org.junit.Assert
 import pages.myrecord.MedicalRecordV1Page
 import utils.SerenityHelpers
 
-open class V1MedicalRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V1MedicalRecordDiagnosisStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps

@@ -1,7 +1,6 @@
 package features.userInfo.stepDefinitions
 
 import constants.Supplier
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
@@ -12,8 +11,6 @@ import utils.SerenityHelpers
 import utils.set
 
 class UserInfoFactory {
-
-    val mockingClient = MockingClient.instance
 
     //This functionality is gp system agnostic
     private val targetGpSystem = Supplier.EMIS
@@ -28,8 +25,8 @@ class UserInfoFactory {
 
         SerenityHelpers.setGpSupplier(gpSystem)
         SerenityHelpers.setPatient(patientToUse)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patientToUse)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patientToUse)
+        CitizenIdSessionCreateJourney().createFor(patientToUse)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patientToUse)
         MongoDBConnection.UserInfoCollection.clearCache()
     }
 

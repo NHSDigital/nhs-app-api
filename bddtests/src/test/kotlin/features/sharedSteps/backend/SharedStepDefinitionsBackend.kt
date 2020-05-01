@@ -4,15 +4,14 @@ import constants.Supplier
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import features.myrecord.factories.DemographicsFactory
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.IdentityProofingLevel
 import models.Patient
 import net.serenitybdd.core.Serenity
 import utils.GlobalSerenityHelpers
-import utils.SerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
 import worker.WorkerClient
@@ -20,8 +19,6 @@ import worker.models.session.UserSessionRequest
 import java.util.*
 
 open class SharedStepDefinitionsBackend{
-
-    val mockingClient = MockingClient.instance
 
     @Given("^I have logged into (.*) and have a valid session cookie$")
     fun givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem: String) {
@@ -38,10 +35,10 @@ open class SharedStepDefinitionsBackend{
         val patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSystem)
         val isProofLevel9 = patient.identityProofingLevel == IdentityProofingLevel.P9
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
 
         if( isProofLevel9 ) {
-            SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+            SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
         }
 
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication

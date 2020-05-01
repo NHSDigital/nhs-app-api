@@ -9,7 +9,7 @@ import utils.SerenityHelpers
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-open class V2MedicalRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordAllergiesStepDefinitions {
 
     private lateinit var allergiesAndReactionsPage: AllergiesAndReactionsPage
 

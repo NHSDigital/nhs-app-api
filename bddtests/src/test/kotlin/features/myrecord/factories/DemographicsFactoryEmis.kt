@@ -1,11 +1,10 @@
 package features.myrecord.factories
 
-import features.myrecord.stepDefinitions.HTTP_EXCEPTION
 import mocking.data.myrecord.DemographicsData
 import mocking.stubs.StubbedEnvironment
 import models.Patient
-import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import java.time.Duration
 
@@ -16,7 +15,7 @@ class DemographicsFactoryEmis: DemographicsFactory() {
                 myRecord.demographicsRequest(patient).respondWithExceptionWhenNotEnabled()
             }
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 

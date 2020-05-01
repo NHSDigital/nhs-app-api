@@ -66,7 +66,7 @@ class LinkedProfilesStepDefinitions {
     private lateinit var medicalRecordShutterComponent: MedicalRecordShutterComponent
     private lateinit var webHeader: WebHeader
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     @Given("^I am an? (.*) user with linked profiles$")
     fun iAmAUserWithLinkedProfiles(gpSystem:String) {
@@ -106,9 +106,9 @@ class LinkedProfilesStepDefinitions {
 
         SerenityHelpers.setPatient(patient)
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory
-                .getForSupplier(supplier, mockingClient)
+                .getForSupplier(supplier)
                 .createFor(patient)
         TermsAndConditionsJourneyFactory.consent(patient)
 
@@ -145,9 +145,9 @@ class LinkedProfilesStepDefinitions {
 
     private fun setup(patient: Patient, gpSystem: Supplier) {
         SerenityHelpers.setPatient(patient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory
-                .getForSupplier(gpSystem, mockingClient)
+                .getForSupplier(gpSystem)
                 .createFor(patient)
         TermsAndConditionsJourneyFactory.consent(patient)
         DemographicsFactory

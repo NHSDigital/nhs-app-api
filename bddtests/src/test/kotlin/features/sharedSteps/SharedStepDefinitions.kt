@@ -47,7 +47,7 @@ open class SharedStepDefinitions {
     lateinit var navBar: NavigationSteps
 
     lateinit var webHeader: WebHeader
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     @After
     fun stopBrowserstackIfRunning() {
@@ -64,8 +64,8 @@ open class SharedStepDefinitions {
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
 
         TermsAndConditionsJourneyFactory.consent(patient)
     }
@@ -84,8 +84,8 @@ open class SharedStepDefinitions {
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
 
         TermsAndConditionsJourneyFactory.consent(patient)
     }
@@ -104,8 +104,8 @@ open class SharedStepDefinitions {
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
 
         TermsAndConditionsJourneyFactory.consent(patient)
     }
@@ -157,8 +157,8 @@ open class SharedStepDefinitions {
     @Given("^I am not logged in$")
     open fun iAmNotLoggedIn() {
         browser.goToApp()
-        CitizenIdSessionCreateJourney(mockingClient).createFor(EmisMockDefaults.patientEmis)
-        EmisSessionCreateJourneyFactory(mockingClient).createFor(EmisMockDefaults.patientEmis)
+        CitizenIdSessionCreateJourney().createFor(EmisMockDefaults.patientEmis)
+        EmisSessionCreateJourneyFactory().createFor(EmisMockDefaults.patientEmis)
     }
 
     @Given("My session has expired")

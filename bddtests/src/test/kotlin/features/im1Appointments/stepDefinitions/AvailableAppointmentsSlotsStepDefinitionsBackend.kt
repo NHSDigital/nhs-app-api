@@ -95,7 +95,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
                     cookie)
             Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable("HttpException").to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 

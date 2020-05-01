@@ -4,7 +4,6 @@ import config.Config
 import cucumber.api.DataTable
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
@@ -26,10 +25,7 @@ import java.time.format.DateTimeFormatter
 private const val SEVEN_DAYS: Long = 7
 private const val TWO_MONTHS: Long = 2
 private const val ONE_MONTH: Long = 1
-private const val THREE_DAYS: Long = 3
 class MessagesFactory {
-
-    val mockingClient = MockingClient.instance
 
     private val frontendSummaryDateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     private val twoMonthsAgo = ZonedDateTime.now(ZoneId.of("Europe/London")).minusMonths(TWO_MONTHS)
@@ -44,8 +40,8 @@ class MessagesFactory {
         ServiceJourneyRulesMapper.findPatientForConfiguration(null,
                 SJRJourneyType.MESSAGES_ENABLED)
         SerenityHelpers.setPatient(patientToUse)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patientToUse)
-        SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier(), mockingClient)
+        CitizenIdSessionCreateJourney().createFor(patientToUse)
+        SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier())
                 .createFor(patientToUse)
         MongoDBConnection.MessagesCollection.clearCache()
         MessagesSerenityHelpers.TARGET_SENDER.set(senderOne)

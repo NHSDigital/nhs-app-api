@@ -57,7 +57,7 @@ class AuthenticationStepDefinitions {
     lateinit var serviceUnavailablePage: ServiceUnavailablePage
     lateinit var currentUrl: String
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     @Given("^I have just logged out$")
     fun iHaveJustLoggedOut() {
@@ -80,11 +80,11 @@ class AuthenticationStepDefinitions {
         }
         val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
         TermsAndConditionsJourneyFactory.consent(patient)
         //Whereas the usual TppSessionCreateJourneyFactory.createFor includes the logOff request,
         //createAuthenticateRequest does not.
-        TppSessionCreateJourneyFactory(mockingClient).createAuthenticateRequest(patient)
+        TppSessionCreateJourneyFactory().createAuthenticateRequest(patient)
         mockingClient.forTpp { authentication.logOffRequest().respondWithError() }
 
         browser.goToApp()
@@ -96,7 +96,7 @@ class AuthenticationStepDefinitions {
     fun iWantToRegisterForAnAccount(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
         val patient = Patient.getDefault(supplier)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
         SuccessfulRegistrationJourney(mockingClient).create(patient, supplier)
         DemographicsFactory
                 .getForSupplier(supplier)

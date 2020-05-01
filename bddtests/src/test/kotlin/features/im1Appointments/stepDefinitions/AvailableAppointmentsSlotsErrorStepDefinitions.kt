@@ -3,7 +3,6 @@ package features.im1Appointments.stepDefinitions
 import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import mocking.MockingClient
 import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import pages.ErrorDialogPage
 import pages.appointments.AvailableAppointmentsPage
@@ -12,8 +11,6 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
 
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
     lateinit var errorDialogPage: ErrorDialogPage
-
-    val mockingClient = MockingClient.instance
 
     @Given("^(.*) user is not allowed to retrieve appointment slots$")
     fun gpSystemUserUsNotAllowedToRetrieveAppointmentSlots(gpSystem: String) {

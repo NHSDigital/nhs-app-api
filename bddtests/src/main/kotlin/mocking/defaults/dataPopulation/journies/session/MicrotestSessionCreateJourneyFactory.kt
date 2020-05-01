@@ -1,9 +1,8 @@
 package mocking.defaults.dataPopulation.journies.session
 
-import mocking.MockingClient
 import models.Patient
 
-class MicrotestSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
+class MicrotestSessionCreateJourneyFactory : SessionCreateJourneyFactory() {
     override fun createFor(patient: Patient, defaultPracticeSettings:Boolean) {
         client.forMicrotest {
             demographics.demographicsRequest(patient).respondWithSuccess()

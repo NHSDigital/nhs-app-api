@@ -6,7 +6,7 @@ import org.junit.Assert
 import pages.gpMedicalRecord.ImmunisationsPage
 import utils.SerenityHelpers
 
-open class V2MedicalRecordImmunisationsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordImmunisationsStepDefinitions {
 
     private lateinit var immunisationsPage: ImmunisationsPage
 

@@ -8,7 +8,7 @@ import org.junit.Assert
 import pages.gpMedicalRecord.HealthConditionsPage
 import utils.SerenityHelpers
 
-open class V2MedicalRecordHealthConditionsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordHealthConditionsStepDefinitions {
 
     private lateinit var healthConditionsPage: HealthConditionsPage
 

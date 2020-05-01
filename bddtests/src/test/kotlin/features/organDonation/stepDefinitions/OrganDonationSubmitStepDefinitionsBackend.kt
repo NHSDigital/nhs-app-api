@@ -4,7 +4,6 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.MockingClient
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -25,8 +24,6 @@ import worker.WorkerClient
 import worker.models.organdonation.OrganDonationRegistrationResponse
 
 class OrganDonationSubmitStepDefinitionsBackend {
-
-    val mockingClient = MockingClient.instance
 
     @Given("^I am a (\\w+) api user who wants to opt-out of organ donation$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptOut(gpSystem: String) {
@@ -50,7 +47,7 @@ class OrganDonationSubmitStepDefinitionsBackend {
     fun iAmAUserWithProofLevel5WhoWantsToOptInToOrganDonation() {
         val gpSystem = Supplier.EMIS
         val patient =  Patient.getDefault(gpSystem).copy(identityProofingLevel = IdentityProofingLevel.P5)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
         val factory = OrganDonationFactory(gpSystem)
         factory.create { registration->registration.optIn {

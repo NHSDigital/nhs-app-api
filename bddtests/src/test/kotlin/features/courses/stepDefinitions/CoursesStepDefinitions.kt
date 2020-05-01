@@ -35,7 +35,7 @@ open class CoursesStepDefinitions {
     @Steps
     lateinit var login: LoginSteps
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     private lateinit var prescriptions : PrescriptionsPage
     private lateinit var repeatPrescriptions : RepeatPrescriptionsPage

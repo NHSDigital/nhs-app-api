@@ -13,7 +13,7 @@ class PatientDataGenerator {
             patients.forEach { patient ->
                 CitizenIdStubs(mockingClient).createFor(patient)
                 SessionCreateJourneyFactory
-                        .getForSupplier(gpSupplier, MockingClient.instance)
+                        .getForSupplier(gpSupplier)
                         .createFor(patient, alternativeUser = true)
             }
         }

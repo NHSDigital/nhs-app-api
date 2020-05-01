@@ -6,7 +6,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.defaults.TppMockDefaults.Companion.TPP_ODS_CODE_NO_SJR_CONFIGURATION
-import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
 import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.serviceJourneyRules.mappers.PublicHealthNotificationsMapper
@@ -66,9 +65,9 @@ class ServiceJourneyRulesStepDefinitions {
         val journeyTypes = configurations.map { configuration -> configuration.toJourneyType() }
         val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(supplier, journeyTypes)
         val supplierToUse = supplier ?: SerenityHelpers.getGpSupplier()
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(
-                supplierToUse, mockingClient).createFor(patient)
+                supplierToUse).createFor(patient)
     }
 
     @When("^I request the service journey rules for my ODS Code$")

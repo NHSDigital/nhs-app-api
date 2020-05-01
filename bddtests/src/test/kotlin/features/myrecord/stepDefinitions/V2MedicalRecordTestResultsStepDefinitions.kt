@@ -12,7 +12,7 @@ import pages.gpMedicalRecord.TestResultsPage
 import pages.myrecord.MyRecordTestResultDetailPage
 import utils.SerenityHelpers
 
-open class V2MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordTestResultsStepDefinitions {
 
     private lateinit var testResultsPage: TestResultsPage
     private lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage

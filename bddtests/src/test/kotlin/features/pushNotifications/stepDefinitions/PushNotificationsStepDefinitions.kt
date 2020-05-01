@@ -21,7 +21,7 @@ class PushNotificationsStepDefinitions {
     @Steps
     lateinit var browser: BrowserSteps
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
     val errorPage = ErrorPage()
 
     private lateinit var notificationsSettingsPage: NotificationsSettingsPage

@@ -15,7 +15,7 @@ const val RESULT_INDEX: Int = 2
 const val NEXT_DATE_INDEX: Int = 3
 const val STATUS_INDEX: Int = 4
 
-open class V1MedicalRecordRecallsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V1MedicalRecordRecallsStepDefinitions {
 
     private lateinit var medicalRecordV1Page: MedicalRecordV1Page
 

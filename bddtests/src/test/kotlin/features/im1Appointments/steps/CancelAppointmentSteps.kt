@@ -93,7 +93,7 @@ open class CancelAppointmentSteps {
             response: ((ICancelAppointmentsBuilder) -> Mapping)? = null
     ) {
         if (SerenityHelpers.getPatientOrNull() == null) {
-            Serenity.setSessionVariable(Patient::class).to(Patient.getDefault(gpSystem))
+            SerenityHelpers.setPatient(Patient.getDefault(gpSystem))
         }
 
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpSystem)

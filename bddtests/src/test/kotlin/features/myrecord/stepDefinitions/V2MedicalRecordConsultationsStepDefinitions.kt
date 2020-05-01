@@ -8,7 +8,7 @@ import pages.gpMedicalRecord.ConsultationsPage
 import pages.gpMedicalRecord.EventsPage
 import utils.SerenityHelpers
 
-open class V2MedicalRecordConsultationsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordConsultationsStepDefinitions {
 
     private lateinit var consultationsPage: ConsultationsPage
     private lateinit var eventsPage: EventsPage

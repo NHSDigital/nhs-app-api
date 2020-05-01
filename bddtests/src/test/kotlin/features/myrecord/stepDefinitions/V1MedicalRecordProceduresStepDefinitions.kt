@@ -10,7 +10,7 @@ import org.junit.Assert
 import pages.myrecord.MedicalRecordV1Page
 import utils.SerenityHelpers
 
-class V1MedicalRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() {
+class V1MedicalRecordProceduresStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps

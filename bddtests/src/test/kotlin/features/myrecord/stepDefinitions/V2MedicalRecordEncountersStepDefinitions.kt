@@ -4,7 +4,7 @@ import cucumber.api.java.en.Then
 import org.junit.Assert
 import pages.gpMedicalRecord.EncountersPage
 
-open class V2MedicalRecordEncountersStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordEncountersStepDefinitions {
 
     private lateinit var encountersPage: EncountersPage
 

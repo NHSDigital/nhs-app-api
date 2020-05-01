@@ -24,7 +24,7 @@ import pages.navigation.NavBarNative
 import pages.text
 import utils.SerenityHelpers
 
-open class V1MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V1MedicalRecordStepDefinitions {
 
     @Steps
     private lateinit var nav: NavigationSteps
@@ -40,8 +40,8 @@ open class V1MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
         TermsAndConditionsJourneyFactory.consent(patient)
         MyRecordFactory.getForSupplier(supplier).enabledWithBlankRecord(patient)
         DemographicsFactory.getForSupplier(supplier).enabled(patient)

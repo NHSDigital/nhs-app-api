@@ -19,15 +19,15 @@ import java.util.*
 
 class NotificationsFactory {
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     fun setUpUser(supplier: Supplier? = null, patient: Patient? = null): Patient {
         val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,
                 SJRJourneyType.NOTIFICATIONS_ENABLED)
         val supplierToUse = supplier ?: SerenityHelpers.getGpSupplier()
         SerenityHelpers.setPatient(patientToUse)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patientToUse)
-        SessionCreateJourneyFactory.getForSupplier(supplierToUse, mockingClient).createFor(patientToUse)
+        CitizenIdSessionCreateJourney().createFor(patientToUse)
+        SessionCreateJourneyFactory.getForSupplier(supplierToUse).createFor(patientToUse)
         MongoDBConnection.UserDevicesCollection.clearCache()
         PushNotificationsSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(patientToUse.subject)
         return patientToUse
@@ -40,9 +40,9 @@ class NotificationsFactory {
                 SJRJourneyType.NOTIFICATIONS_ENABLED)
         patient.subject = UUID.randomUUID().toString()
         patient.accessToken = AccessTokenBuilder().getSignedToken(patient).serialize()
-        CitizenIdSessionCreateJourney(mockingClient)
+        CitizenIdSessionCreateJourney()
                 .createFor(patient, alternativeUser = true)
-        SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier(), mockingClient)
+        SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier())
                 .createFor(patient, alternativeUser = true)
         MongoDBConnection.UserDevicesCollection.clearCache()
         return patient

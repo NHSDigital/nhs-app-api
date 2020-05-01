@@ -7,12 +7,13 @@ import mocking.emis.testResults.TestResultValue
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import utils.LinkedProfilesSerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrFail
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
-open class V1MedicalRecordTestResultsStepDefinitionsBackend : AbstractDemographicsStepDefinitions() {
+open class V1MedicalRecordTestResultsStepDefinitionsBackend {
 
     @When("^I get the users test results$")
     fun whenIGetTheUsersMyRecordData() {
@@ -23,7 +24,7 @@ open class V1MedicalRecordTestResultsStepDefinitionsBackend : AbstractDemographi
 
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 

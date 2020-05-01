@@ -7,7 +7,7 @@ import org.junit.Assert
 import pages.gpMedicalRecord.ReferralsPage
 import utils.SerenityHelpers
 
-open class V2MedicalRecordReferralsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordReferralsStepDefinitions {
 
     private lateinit var referralsPage: ReferralsPage
 

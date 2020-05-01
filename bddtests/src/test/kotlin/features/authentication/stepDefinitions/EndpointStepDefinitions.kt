@@ -35,7 +35,7 @@ class EndpointStepDefinitions  {
         val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         SuccessfulRegistrationJourney(mockingClient).create(patient, supplier)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
         AppointmentsBookingFactory.getForSupplier(supplier)
                 .defaultAppointmentBookingSetupWithResult { builder -> builder.respondWithSuccess() }
     }

@@ -24,8 +24,8 @@ class OrganDonationFactory(val gpSystem: Supplier) {
     val existing by lazy{OrganDonationExistingFactory(patient,gpSystem)}
 
     fun setupPatientForAppUse() {
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
 
         mockingClient.forOrganDonation {
             referenceData().respondWithSuccess(OrganDonationReferenceDataBuilder.build())

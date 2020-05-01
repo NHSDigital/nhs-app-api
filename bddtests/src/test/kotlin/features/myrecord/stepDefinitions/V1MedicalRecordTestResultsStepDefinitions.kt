@@ -8,6 +8,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.TestResultsFactory
 import features.sharedSteps.BrowserSteps
+import mocking.MockingClient
 import mocking.data.myrecord.TestResultsData
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -22,13 +23,14 @@ private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ZERO = 0
 private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ONE = 1
 private const val NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_TWO = 2
 private const val NUMBER_OF_TEST_RESULTS_EQUALS_FOUR = 4
-open class V1MedicalRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps
     private lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
     lateinit var errorPage: ErrorPage
     lateinit var medicalRecordV1Page: MedicalRecordV1Page
+    private val mockingClient = MockingClient.instance
 
     @Given("^an error occurs retrieving the test result detail$")
     fun givenAnErrorOccursGettingTestResultDetailForTpp() {

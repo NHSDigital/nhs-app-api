@@ -18,7 +18,7 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
                                       var decisionBuilder: OrganDonationMappingBuilder
                                       .(OrganDonationRegistrationRequest)-> OrganDonationSubmitDecisionBuilder) {
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     fun optOut(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
         val organDonationDemographics = OrganDonationDemographics()

@@ -46,7 +46,6 @@ class WorkerClientUserInfo(val config: Config, val sender: WorkerClientSender, v
         val httpGet = HttpGet(path)
         httpGet.addExternalSystemApiKey(includeApiKey)
 
-
         val response = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
         return gson.fromJson(response, Array<String>::class.java)

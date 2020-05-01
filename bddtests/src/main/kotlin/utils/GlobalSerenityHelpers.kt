@@ -10,5 +10,8 @@ enum class GlobalSerenityHelpers : ISerenityHelperEnums{
     USER_SESSION_CREATED,
     SWITCHED_LINKED_ACCOUNT,
     USER_AGENT,
-    SCENARIO_TITLE
+    SCENARIO_TITLE,
+    PATIENT,
+    HTTP_EXCEPTION,
+    HTTP_RESPONSE
 }

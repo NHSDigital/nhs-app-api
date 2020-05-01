@@ -31,8 +31,8 @@ abstract class AppointmentsFactory(gpSupplier: Supplier) {
     }
 
     fun generateDefaultUserData(defaultPracticeSettings:Boolean = true) {
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient, defaultPracticeSettings)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient, defaultPracticeSettings)
+        CitizenIdSessionCreateJourney().createFor(patient)
         generateSpecificUserData()
     }
 

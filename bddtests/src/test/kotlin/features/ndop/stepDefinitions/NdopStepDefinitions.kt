@@ -2,7 +2,6 @@ package features.ndop.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.myrecord.stepDefinitions.AbstractDemographicsStepDefinitions
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.SerenityHelpers
@@ -12,7 +11,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.ndop.NdopResponse
 
-open class NdopStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class NdopStepDefinitions {
 
     @When("I request a Ndop Token")
     fun whenIRequestaNdopToken()

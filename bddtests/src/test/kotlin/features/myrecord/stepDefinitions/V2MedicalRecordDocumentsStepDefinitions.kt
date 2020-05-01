@@ -16,7 +16,7 @@ import pages.myrecord.MyRecordDocumentsPage
 import utils.SerenityHelpers
 import java.lang.IllegalStateException
 
-open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V2MedicalRecordDocumentsStepDefinitions {
 
     private lateinit var myRecordDocumentInformationPage: MyRecordDocumentInformationPage
     private lateinit var myRecordDocumentsPage: MyRecordDocumentsPage

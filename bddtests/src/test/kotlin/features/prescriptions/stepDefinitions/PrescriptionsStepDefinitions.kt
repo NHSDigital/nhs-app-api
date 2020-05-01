@@ -48,7 +48,7 @@ open class PrescriptionsStepDefinitions {
     private lateinit var repeatPrescriptions: RepeatPrescriptionsPage
     private lateinit var repeatPrescriptionConfirmation : RepeatPrescriptionConfirmationPage
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     private val toDate = OffsetDateTime.now()
     private var numberOfPrescriptions: Int = 0
@@ -95,8 +95,8 @@ open class PrescriptionsStepDefinitions {
         SerenityHelpers.setGpSupplier(supplier)
         val currentPatient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(currentPatient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(currentPatient)
+        CitizenIdSessionCreateJourney().createFor(currentPatient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(currentPatient)
         PrescriptionsDataSetup.initialize(supplier)
     }
 
@@ -108,8 +108,8 @@ open class PrescriptionsStepDefinitions {
         val currentPatient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient( currentPatient)
         SerenityHelpers.setPatient(currentPatient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(currentPatient)
+        CitizenIdSessionCreateJourney().createFor(currentPatient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(currentPatient)
         PrescriptionsDataSetup.initialize(supplier)
     }
 

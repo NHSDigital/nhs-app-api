@@ -6,7 +6,6 @@ import cucumber.api.java.en.When
 import features.authentication.factories.PatientVerificationFactory
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.DemographicsFactory
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
@@ -29,8 +28,6 @@ private const val DELAY_BEFORE_RESUME = 10_000L
 
 class SessionExpiryStepDefinitions  {
 
-    private val mockingClient = MockingClient.instance
-
     @Steps
     lateinit var login: LoginSteps
 
@@ -47,8 +44,8 @@ class SessionExpiryStepDefinitions  {
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         patient.linkedAccounts = setOf()
 
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
         DemographicsFactory.getForSupplier(supplier).enabled(patient)
 
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication

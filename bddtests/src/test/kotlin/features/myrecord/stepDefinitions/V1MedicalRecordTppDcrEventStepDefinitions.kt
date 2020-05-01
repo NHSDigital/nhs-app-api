@@ -4,6 +4,7 @@ import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.MockingClient
 import mocking.data.myrecord.TppDcrData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
@@ -16,7 +17,9 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
-open class V1MedicalRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class V1MedicalRecordTppDcrEventStepDefinitions {
+
+    private val mockingClient = MockingClient.instance
 
     @Given("^the GP Practice has multiple dcr events for TPP$")
     fun givenTheGpPracticeHasMultipleDcrEventsForTpp() {
@@ -67,7 +70,7 @@ open class V1MedicalRecordTppDcrEventStepDefinitions : AbstractDemographicsStepD
 
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 

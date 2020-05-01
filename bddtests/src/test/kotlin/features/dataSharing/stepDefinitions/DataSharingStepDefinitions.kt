@@ -35,8 +35,8 @@ class DataSharingStepDefinitions {
         val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
         mockingClient.forNdop { postTokenToNdop().respondWithNdopMockPage() }
     }
 

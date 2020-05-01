@@ -13,7 +13,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.demographics.Demographics
 
-open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
+open class DemographicsStepDefinitions {
 
     @Given("^the GP Practice has enabled demographics functionality$")
     fun givenTheGPPracticeHasEnabledDemographicsFunctionality() {
@@ -52,7 +52,7 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
             Serenity.setSessionVariable(Demographics::class).to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 

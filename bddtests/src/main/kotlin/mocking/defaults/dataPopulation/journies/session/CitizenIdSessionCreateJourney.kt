@@ -14,7 +14,9 @@ import utils.set
 import worker.models.patient.Im1ConnectionToken
 
 private const val DELAY_BY = 1000L
-class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
+class CitizenIdSessionCreateJourney {
+
+    private val mockingClient = MockingClient.instance
 
     fun createFor(patient: Patient, alternativeUser:Boolean = false) {
         if (!GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.isTrueOrFalse() || alternativeUser) {

@@ -8,7 +8,7 @@ import mocking.vision.VisionConstants.htmlResponseFormat
 
 class DiagnosisFactoryVision {
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
 
     private var mocker: MyRecordVisionMocker = MyRecordVisionMocker(mockingClient)
 

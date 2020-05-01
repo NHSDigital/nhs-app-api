@@ -66,7 +66,6 @@ Feature: Im1 Connection GET V2
       | EMIS      |
       | VISION    |
 
-
   Scenario Outline: A Non-existent IM1 Connection Token for the <GP System> tries verification using the v2 endpoint and receives a <Http Error> error
     Given I have an <GP System> IM1 Connection Token that does not exist
     When I verify patient data using the v2 endpoint

@@ -1,7 +1,6 @@
 package mocking.defaults.dataPopulation.journies.session
 
 import constants.TppConstants
-import mocking.MockingClient
 import mocking.defaults.TppMockDefaults
 import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
@@ -14,7 +13,7 @@ import mocking.tpp.models.Registration
 import mocking.tpp.models.User
 import models.Patient
 
-class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
+class TppSessionCreateJourneyFactory : SessionCreateJourneyFactory() {
 
     private fun authenticateRequest(patient: Patient): Authenticate {
         return Authenticate(

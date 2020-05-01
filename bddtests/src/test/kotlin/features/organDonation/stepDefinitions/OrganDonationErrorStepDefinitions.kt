@@ -26,8 +26,8 @@ class OrganDonationErrorStepDefinitions {
     fun iAmRegisteredWithOrganDonationButReferenceDataThrowsError(gpSystem: String, errorCode: Int) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
-        CitizenIdSessionCreateJourney(factory.mockingClient).createFor(factory.patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, factory.mockingClient).createFor(factory.patient)
+        CitizenIdSessionCreateJourney().createFor(factory.patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(factory.patient)
 
         factory.mockingClient.forOrganDonation {
             referenceData().respondWithError(errorCode)
@@ -38,8 +38,8 @@ class OrganDonationErrorStepDefinitions {
     fun iAmRegisteredWithOrganDonationButReferenceDataThrowsErrorAndIRetry(gpSystem: String, errorCode: Int) {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
-        CitizenIdSessionCreateJourney(factory.mockingClient).createFor(factory.patient)
-        SessionCreateJourneyFactory.getForSupplier(supplier, factory.mockingClient).createFor(factory.patient)
+        CitizenIdSessionCreateJourney().createFor(factory.patient)
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(factory.patient)
         val existingRegistration = factory.existing.optIn()
         factory.mockingClient.forOrganDonation {
             referenceData().respondWithError(errorCode)
