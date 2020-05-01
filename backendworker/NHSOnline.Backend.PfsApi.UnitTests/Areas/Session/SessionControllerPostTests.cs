@@ -217,6 +217,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .AddSingleton(_mockSessionCacheService.Object)
                 .AddSingleton(_mockAuthenticationService.Object)
                 .AddSingleton(new Mock<ILogger<SessionCreator>>().Object)
+                .AddSingleton(new Mock<ILogger<SessionCreatorCitizenIdService>>().Object)
+                .AddSingleton(new Mock<ILogger<SessionCreatorServiceJourneyRuleService>>().Object)
                 .AddSingleton(new Mock<ILogger<UserSessionManager>>().Object)
                 .AddSingleton(new Mock<ILogger<P5UserSessionCreator>>().Object)
                 .AddSingleton(new Mock<ILogger<P9UserSessionCreator>>().Object);

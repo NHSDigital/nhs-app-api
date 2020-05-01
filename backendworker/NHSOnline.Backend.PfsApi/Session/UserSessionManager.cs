@@ -35,12 +35,16 @@ namespace NHSOnline.Backend.PfsApi.Session
             _userSessionCreator = userSessionCreator;
         }
 
-        public async Task<CreateUserSessionResult> Create(
+        public async Task<ProcessResult<UserSession, CreateSessionResult>> Create(
             CitizenIdSessionResult citizenIdSessionResult,
             ServiceJourneyRulesResponse serviceJourneyRules,
             string csrfToken)
         {
-            return await _userSessionCreator.Create(citizenIdSessionResult, serviceJourneyRules, csrfToken);
+            var createUserSessionResult = await _userSessionCreator.Create(citizenIdSessionResult, serviceJourneyRules, csrfToken);
+
+            return createUserSessionResult.Accept(
+                failure => ProcessResult.FinalResult<UserSession, CreateSessionResult>(new CreateSessionResult.Error(failure.ErrorType)),
+                success => ProcessResult.StepResult<UserSession, CreateSessionResult>(success.UserSession));
         }
 
         public async Task<bool> SignOutAsync(HttpContext httpContext)

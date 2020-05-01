@@ -12,6 +12,9 @@ namespace NHSOnline.Backend.PfsApi.Session
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<ISessionCreator, SessionCreator>();
+            services.AddTransient<SessionCreatorCitizenIdService>();
+            services.AddTransient<SessionCreatorServiceJourneyRuleService>();
+            services.AddTransient<SessionCreatorUserInfoService>();
 
             services.AddScoped<UserSessionService>();
             services.AddTransient<IUserSessionService>(sp => sp.GetRequiredService<UserSessionService>());
