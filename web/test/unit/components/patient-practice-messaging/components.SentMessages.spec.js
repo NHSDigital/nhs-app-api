@@ -1,4 +1,4 @@
-import SentMessage from '@/components/patient-practice-messaging/SentMessage';
+import SentMessage from '@/components/gp-messages/SentMessage';
 import { mount, createStore, create$T } from '../../helpers';
 
 const createPropsData = () => ({
@@ -22,7 +22,7 @@ const $store = () => (
   createStore({
     state: {
       device: { isNativeApp: true },
-      patientPracticeMessaging: {
+      gpMessages: {
         selectedMessageDetails: {
           messageDetails: {
             content: 'Test message',

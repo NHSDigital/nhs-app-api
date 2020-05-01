@@ -1344,26 +1344,7 @@ export default {
   im04: {
     info: 'This is who your GP surgery lets you message. Your message may be read by any member of staff.',
   },
-  patient_practice_messaging: {
-    errors: {
-      400: {
-        pageTitle: 'Messages error',
-        pageHeader: 'Messages error',
-        header: 'There is a problem getting your messages',
-        message: 'Try again now.',
-        retryButtonText: 'Try again',
-      },
-      403: {
-        pageTitle: 'Messaging unavailable',
-        pageHeader: 'Messaging unavailable',
-        header: 'You are not currently able to use messaging.',
-        subheader: '',
-        message: {
-          text: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call 111.',
-          label: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call one one one.',
-        },
-      },
-    },
+  gp_messages: {
     view_details: {
       you: 'You',
       unreadMessages: 'Unread messages',
@@ -1374,15 +1355,6 @@ export default {
       attachment: 'Attachment',
       backButtonText: {
         text: 'Back',
-      },
-      errors: {
-        400: {
-          pageTitle: 'Message error',
-          pageHeader: 'Message error',
-          header: 'There is a problem getting your message',
-          message: 'Try again now. If the problem continues and you need this information now, contact the person directly.',
-          retryButtonText: 'Try again',
-        },
       },
     },
     createMessage: {
@@ -1409,21 +1381,55 @@ export default {
       backButtonText: {
         text: 'Cancel',
       },
-      errors: {
-        400: {
-          pageTitle: 'Error deleting conversation',
-          pageHeader: 'Error deleting conversation',
-          header: 'Sorry, we could not delete your conversation',
-          message: 'Try again now.',
-          retryButtonText: 'Try again',
-        },
-      },
     },
     deleteSuccess: {
       back: 'Go to your messages',
     },
   },
   messages: {
+    gp_messages: {
+      errors: {
+        400: {
+          pageTitle: 'Messages error',
+          pageHeader: 'Messages error',
+          header: 'There is a problem getting your messages',
+          message: 'Try again now.',
+          retryButtonText: 'Try again',
+        },
+        403: {
+          pageTitle: 'Messaging unavailable',
+          pageHeader: 'Messaging unavailable',
+          header: 'You are not currently able to use messaging.',
+          subheader: '',
+          message: {
+            text: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call 111.',
+            label: 'Contact your GP surgery for more information. For urgent medical advice, go to 111.nhs.uk or call one one one.',
+          },
+        },
+      },
+      view_details: {
+        errors: {
+          400: {
+            pageTitle: 'Message error',
+            pageHeader: 'Message error',
+            header: 'There is a problem getting your message',
+            message: 'Try again now. If the problem continues and you need this information now, contact the person directly.',
+            retryButtonText: 'Try again',
+          },
+        },
+      },
+      delete: {
+        errors: {
+          400: {
+            pageTitle: 'Error deleting conversation',
+            pageHeader: 'Error deleting conversation',
+            header: 'Sorry, we could not delete your conversation',
+            message: 'Try again now.',
+            retryButtonText: 'Try again',
+          },
+        },
+      },
+    },
     app_messaging: {
       errors: {
         500: {
@@ -1581,12 +1587,12 @@ export default {
     messages: 'Messages',
     healthAndInformationUpdates: 'Health information and updates',
     messageDetails: 'Messages',
-    patientPracticeMessaging: 'GP surgery messages',
-    patientPracticeMessagingUrgency: 'Do you need urgent advice?',
-    patientPracticeMessagingUrgencyContactYourGp: 'Call your GP or use NHS 111',
-    patientPracticeMessagingRecipients: 'Select who to message',
-    patientPracticeMessagingDownloadAttachment: 'Download file',
-    patientPracticeMessagingAttachmentUnavailable: 'This file is not available in the NHS App',
+    gpMessages: 'GP surgery messages',
+    gpMessagesUrgency: 'Do you need urgent advice?',
+    gpMessagesUrgencyContactYourGp: 'Call your GP or use NHS 111',
+    gpMessagesRecipients: 'Select who to message',
+    gpMessagesDownloadAttachment: 'Download file',
+    gpMessagesAttachmentUnavailable: 'This file is not available in the NHS App',
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
   },
   pageTitles: {
@@ -1604,14 +1610,14 @@ export default {
     appointmentConfirmation: 'Confirm your GP appointment',
     appointmentProxyBookingSuccess: '{name}\'s GP appointment has been booked',
     appointmentBookingSuccess: 'Your GP appointment has been booked',
-    patientPracticeMessaging: 'GP surgery messages',
-    patientPracticeMessagingViewMessage: 'Conversation with {name}',
-    patientPracticeMessagingViewAttachment: 'View file - Messages',
-    patientPracticeMessagingDownloadAttachment: 'Download file - Messages',
-    patientPracticeMessagingAttachmentUnavailable: 'This file is not available',
-    patientPracticeMessagingCreateMessage: 'Send your message to {name}',
-    patientPracticeMessagingDeleteMessage: 'Delete your conversation with {name}',
-    patientPracticeMessagingDeleteMessageSuccess: 'Your conversation with {name} is deleted',
+    gpMessages: 'GP surgery messages',
+    gpMessagesViewMessage: 'Conversation with {name}',
+    gpMessagesViewAttachment: 'View file - Messages',
+    gpMessagesDownloadAttachment: 'Download file - Messages',
+    gpMessagesAttachmentUnavailable: 'This file is not available',
+    gpMessagesCreateMessage: 'Send your message to {name}',
+    gpMessagesDeleteMessage: 'Delete your conversation with {name}',
+    gpMessagesDeleteMessageSuccess: 'Your conversation with {name} is deleted',
     prescriptions: 'Your repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication - Repeat prescriptions',
     confirmPrescription: 'Confirm prescription - Repeat prescriptions',
@@ -1673,9 +1679,9 @@ export default {
     repeatPrescriptionsPartialSuccess: 'Part of your prescription has not been ordered',
     messages: 'Messages',
     healthAndInformationUpdates: 'Health information and updates',
-    patientPracticeMessagingUrgency: 'Do you need urgent advice?',
-    patientPracticeMessagingUrgencyContactYourGp: 'Call your GP or use NHS 111',
-    patientPracticeMessagingRecipients: 'Select who to message',
+    gpMessagesUrgency: 'Do you need urgent advice?',
+    gpMessagesUrgencyContactYourGp: 'Call your GP or use NHS 111',
+    gpMessagesRecipients: 'Select who to message',
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
   },
   crumbName: {
@@ -1711,8 +1717,8 @@ export default {
     myRecordDocuments: 'Documents',
     switchProfile: 'Home',
     organ_donation: 'Organ Donation',
-    patientPracticeMessaging: 'GP surgery messages',
-    patientPracticeMessagingViewDetails: 'Your conversation',
+    gpMessages: 'GP surgery messages',
+    gpMessagesViewDetails: 'Your conversation',
     prescriptions: 'Your repeat prescriptions',
     prescriptionRepeatCourses: 'Your repeat prescriptions',
     prescriptionConfirmCourses: 'Your repeat prescriptions',

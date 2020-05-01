@@ -16,14 +16,14 @@ import {
   DOCUMENTS,
   DOCUMENT,
   DOCUMENT_DETAIL,
-  PATIENT_PRACTICE_MESSAGING,
-  PATIENT_PRACTICE_MESSAGING_URGENCY,
-  PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
-  PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
-  PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
-  PATIENT_PRACTICE_MESSAGING_CREATE,
-  PATIENT_PRACTICE_MESSAGING_DELETE,
-  PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
+  GP_MESSAGES,
+  GP_MESSAGES_URGENCY,
+  GP_MESSAGES_URGENCY_CONTACT_GP,
+  GP_MESSAGES_RECIPIENTS,
+  GP_MESSAGES_VIEW_MESSAGE,
+  GP_MESSAGES_CREATE,
+  GP_MESSAGES_DELETE,
+  GP_MESSAGES_DELETE_SUCCESS,
 } from '@/lib/routes';
 
 describe('middleware/sjrRedirect', () => {
@@ -340,21 +340,21 @@ describe('middleware/sjrRedirect', () => {
   });
 
   describe('im1Messaging rules', () => {
-    const im1MessagingRoutes = [
-      PATIENT_PRACTICE_MESSAGING,
-      PATIENT_PRACTICE_MESSAGING_URGENCY,
-      PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
-      PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
-      PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
-      PATIENT_PRACTICE_MESSAGING_CREATE,
-      PATIENT_PRACTICE_MESSAGING_DELETE,
-      PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
+    const gpMessagesRoutes = [
+      GP_MESSAGES,
+      GP_MESSAGES_URGENCY,
+      GP_MESSAGES_URGENCY_CONTACT_GP,
+      GP_MESSAGES_RECIPIENTS,
+      GP_MESSAGES_VIEW_MESSAGE,
+      GP_MESSAGES_CREATE,
+      GP_MESSAGES_DELETE,
+      GP_MESSAGES_DELETE_SUCCESS,
     ];
 
     describe('im1Messaging enabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/im1MessagingEnabled'] = true;
-        im1MessagingRoutes.forEach(route => callSjrRedirect(route));
+        gpMessagesRoutes.forEach(route => callSjrRedirect(route));
       });
 
       it('will not redirect', () => {
@@ -365,12 +365,12 @@ describe('middleware/sjrRedirect', () => {
     describe('im1Messaging disabled', () => {
       beforeEach(() => {
         getters['serviceJourneyRules/im1MessagingEnabled'] = false;
-        im1MessagingRoutes.forEach(route => callSjrRedirect(route));
+        gpMessagesRoutes.forEach(route => callSjrRedirect(route));
       });
 
       it('will redirect to home', () => {
         expect(redirect).toBeCalledWith('302', INDEX.path);
-        expect(redirect).toHaveBeenCalledTimes(im1MessagingRoutes.length);
+        expect(redirect).toHaveBeenCalledTimes(gpMessagesRoutes.length);
       });
     });
   });

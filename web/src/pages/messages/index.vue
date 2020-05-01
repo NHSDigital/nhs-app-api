@@ -2,7 +2,7 @@
   <div v-if="showTemplate" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <menu-item-list v-if="hasAnyAccess">
-        <menu-item v-if="gpMessagingEnabled"
+        <menu-item v-if="gpMessagesEnabled"
                    id="btn_im1_messaging"
                    data-sid="im1-messaging-list-item"
                    header-tag="h2"
@@ -24,7 +24,7 @@
                                      :jump-off-type="thirdPartyProvider.testProvider.messages.type"
                                      :redirect-path="thirdPartyProvider
                                        .testProvider.messages.redirectPath" />
-        <menu-item v-if="appMessagingEnabled"
+        <menu-item v-if="appMessagingSjrEnabled"
                    id="btn_appMessaging"
                    header-tag="h2"
                    data-purpose="text_link"
@@ -49,7 +49,7 @@ import sjrIf from '@/lib/sjrIf';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
 import MenuItem from '@/components/MenuItem';
 import { redirectTo } from '@/lib/utils';
-import { PATIENT_PRACTICE_MESSAGING, HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
+import { GP_MESSAGES, HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
 
 export default {
   name: 'Messages',
@@ -61,57 +61,41 @@ export default {
   },
   data() {
     return {
-      im1MessagingPath: PATIENT_PRACTICE_MESSAGING.path,
+      isNativeApp: this.$store.state.device.isNativeApp,
+      isProxying: this.$store.getters['session/isProxying'],
+      isProofLevel9: this.$store.getters['session/isProofLevel9'],
+      im1MessagingPath: GP_MESSAGES.path,
+      appMessagingPath: HEALTH_INFORMATION_UPDATES.path,
+      thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
       im1MessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'im1Messaging' }),
-    };
-  },
-  computed: {
-    hasAnyAccess() {
-      return this.gpMessagingEnabled ||
-        this.appMessagingEnabled ||
-        this.pkbEnabled ||
-        this.testProviderEnabled;
-    },
-    gpMessagingEnabled() {
-      return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
-    },
-    appMessagingEnabled() {
-      return sjrIf({ $store: this.$store, journey: 'messaging' });
-    },
-    appMessagingPath() {
-      return HEALTH_INFORMATION_UPDATES.path;
-    },
-    thirdPartyProvider() {
-      return jumpOffProperties.thirdPartyProvider;
-    },
-    hasPkbMessages() {
-      return sjrIf({
+      appMessagingSjrEnabled: sjrIf({ $store: this.$store, journey: 'messaging' }),
+      hasPkbMessages: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
         context: {
           provider: 'pkb',
           serviceType: 'messages',
         },
-      });
-    },
-    hasTestProviderMessages() {
-      return sjrIf({
+      }),
+      hasTestProviderMessages: sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
         context: {
           provider: 'testSilverThirdPartyProvider',
           serviceType: 'messages',
         },
-      });
+      }),
+    };
+  },
+  computed: {
+    hasAnyAccess() {
+      return this.gpMessagesEnabled ||
+        this.appMessagingSjrEnabled ||
+        this.pkbEnabled ||
+        this.testProviderEnabled;
     },
-    isNativeApp() {
-      return this.$store.state.device.isNativeApp;
-    },
-    isProxying() {
-      return this.$store.getters['session/isProxying'];
-    },
-    isProofLevel9() {
-      return this.$store.getters['session/isProofLevel9'];
+    gpMessagesEnabled() {
+      return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
     pkbEnabled() {
       return this.hasPkbMessages && this.isNativeApp && !this.isProxying && this.isProofLevel9;

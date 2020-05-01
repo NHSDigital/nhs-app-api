@@ -49,7 +49,7 @@ describe('actions', () => {
       'serviceJourneyRules/init',
       'session/setInfo',
       'termsAndConditions/init',
-      'patientPracticeMessaging/init',
+      'gpMessages/init',
       'practiceSettings/init',
     ]).it('will dispatch the `%s` event', (action) => {
       expect(actions.dispatch).toHaveBeenCalledWith(action);

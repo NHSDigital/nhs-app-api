@@ -100,18 +100,6 @@ export default {
     showPkbSharedLinks() {
       return this.hasPkbSharedLinks && this.isNativeApp && !this.isProxying;
     },
-    messagingEnabled() {
-      return this.patientPracticeMessagingEnabled ||
-        (this.appMessagingEnabled);
-    },
-    messagingPath() {
-      return this.patientPracticeMessagingEnabled
-        ? this.patientPracticeMessagingPath
-        : this.appMessagingPath;
-    },
-    patientPracticeMessagingEnabled() {
-      return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
-    },
   },
   mounted() {
     this.$store.dispatch('device/unlockNavBar');

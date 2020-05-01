@@ -10,8 +10,8 @@ const sjrRedirectRules = {
     url: '/appointments',
   },
   deleteMessageRedirect: {
-    journey_disabled: 'deletePatientPracticeMessage',
-    url: '/patient-practice-messaging',
+    journey_disabled: 'deleteGpMessages',
+    url: '/messages/gp-messages',
   },
   documentsDisabledRedirect: {
     journey_disabled: 'documents',
@@ -1297,13 +1297,13 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}organ-donation/`,
   },
-  PATIENT_PRACTICE_MESSAGING: {
-    name: 'patient-practice-messaging',
-    path: '/patient-practice-messaging',
+  GP_MESSAGES: {
+    name: 'messages-gp-messages',
+    path: '/messages/gp-messages',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
-      i18nKey: 'patientPracticeMessaging',
+      i18nKey: 'gpMessages',
       get defaultCrumb() {
         return [this.allRoutes.INDEX, this.allRoutes.MESSAGES];
       },
@@ -1311,57 +1311,57 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
-  PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT: {
-    name: 'patient-practice-messaging-view-attachment',
-    path: '/patient-practice-messaging/view-attachment',
+  GP_MESSAGES_VIEW_ATTACHMENT: {
+    name: 'messages-gp-messages-view-attachment',
+    path: '/messages/gp-messages/view-attachment',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
-      i18nKey: 'patientPracticeMessagingViewAttachment',
+      i18nKey: 'gpMessagesViewAttachment',
       get defaultCrumb() {
         return [
           this.allRoutes.INDEX,
           this.allRoutes.MESSAGES,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+          this.allRoutes.GP_MESSAGES,
+          this.allRoutes.GP_MESSAGES_VIEW_MESSAGE,
         ];
       },
     },
     helpUrl: baseNhsAppHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
-  PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT: {
-    name: 'patient-practice-messaging-download-attachment',
-    path: '/patient-practice-messaging/download-attachment',
+  GP_MESSAGES_DOWNLOAD_ATTACHMENT: {
+    name: 'messages-gp-messages-download-attachment',
+    path: '/messages/gp-messages/download-attachment',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
-      i18nKey: 'patientPracticeMessagingDownloadAttachment',
+      i18nKey: 'gpMessagesDownloadAttachment',
       get defaultCrumb() {
         return [
           this.allRoutes.INDEX,
           this.allRoutes.MESSAGES,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+          this.allRoutes.GP_MESSAGES,
+          this.allRoutes.GP_MESSAGES_VIEW_MESSAGE,
         ];
       },
     },
     helpUrl: baseNhsAppHelpUrl,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
-  PATIENT_PRACTICE_MESSAGING_DELETE: {
-    name: 'patient-practice-messaging-delete',
-    path: '/patient-practice-messaging/delete',
+  GP_MESSAGES_DELETE: {
+    name: 'messages-gp-messages-delete',
+    path: '/messages/gp-messages/delete',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
-      i18nKey: 'patientPracticeMessagingDelete',
+      i18nKey: 'gpMessagesDelete',
       get defaultCrumb() {
         return [
           this.allRoutes.INDEX,
           this.allRoutes.MESSAGES,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
+          this.allRoutes.GP_MESSAGES,
+          this.allRoutes.GP_MESSAGES_VIEW_MESSAGE,
         ];
       },
     },
@@ -1371,109 +1371,109 @@ const routes = {
       sjrRedirectRules.deleteMessageRedirect,
     ],
   },
-  PATIENT_PRACTICE_MESSAGING_URGENCY: {
-    name: 'patient-practice-messaging-urgency',
-    path: '/patient-practice-messaging/urgency',
+  GP_MESSAGES_URGENCY: {
+    name: 'messages-gp-messages-urgency',
+    path: '/messages/gp-messages/urgency',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
-      i18nKey: 'patientPracticeMessagingUrgency',
+      i18nKey: 'gpMessagesUrgency',
       get defaultCrumb() {
         return [
           this.allRoutes.INDEX,
           this.allRoutes.MESSAGES,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.GP_MESSAGES,
         ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
-  PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP: {
-    name: 'patient-practice-messaging-urgency-contact-your-gp',
-    path: '/patient-practice-messaging/urgency/contact-your-gp',
+  GP_MESSAGES_URGENCY_CONTACT_GP: {
+    name: 'messages-gp-messages-urgency-contact-your-gp',
+    path: '/messages/gp-messages/urgency/contact-your-gp',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
-      i18nKey: 'patientPracticeMessagingUrgencyContactYourGp',
+      i18nKey: 'gpMessagesUrgencyContactYourGp',
       get defaultCrumb() {
         return [
           this.allRoutes.INDEX,
           this.allRoutes.MESSAGES,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.GP_MESSAGES,
         ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
-  PATIENT_PRACTICE_MESSAGING_RECIPIENTS: {
-    name: 'patient-practice-messaging-recipients',
-    path: '/patient-practice-messaging/recipients',
+  GP_MESSAGES_RECIPIENTS: {
+    name: 'messages-gp-messages-recipients',
+    path: '/messages/gp-messages/recipients',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
-      i18nKey: 'patientPracticeMessagingRecipients',
+      i18nKey: 'gpMessagesRecipients',
       get defaultCrumb() {
         return [
           this.allRoutes.INDEX,
           this.allRoutes.MESSAGES,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.GP_MESSAGES,
         ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging`,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
-  PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE: {
-    name: 'patient-practice-messaging-view-details',
-    path: '/patient-practice-messaging/view-details',
+  GP_MESSAGES_VIEW_MESSAGE: {
+    name: 'messages-gp-messages-view-details',
+    path: '/messages/gp-messages/view-details',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
-      i18nKey: 'patientPracticeMessagingViewDetails',
+      i18nKey: 'gpMessagesViewDetails',
       get defaultCrumb() {
         return [
           this.allRoutes.INDEX,
           this.allRoutes.MESSAGES,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.GP_MESSAGES,
         ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
-  PATIENT_PRACTICE_MESSAGING_CREATE: {
-    name: 'patient-practice-messaging-send-message',
-    path: '/patient-practice-messaging/send-message',
+  GP_MESSAGES_CREATE: {
+    name: 'messages-gp-messages-send-message',
+    path: '/messages/gp-messages/send-message',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
-      i18nKey: 'patientPracticeMessagingCreate',
+      i18nKey: 'gpMessagesCreate',
       get defaultCrumb() {
         return [
           this.allRoutes.INDEX,
           this.allRoutes.MESSAGES,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.GP_MESSAGES,
         ];
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [sjrRedirectRules.im1MessagingDisabledRedirect],
   },
-  PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS: {
-    name: 'patient-practice-messaging-delete-success',
-    path: '/patient-practice-messaging/delete-success',
+  GP_MESSAGES_DELETE_SUCCESS: {
+    name: 'messages-gp-messages-delete-success',
+    path: '/messages/gp-messages/delete-success',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/more',
     crumb: {
       nativeDisabled: true,
-      i18nKey: 'patientPracticeMessagingDeleteSuccess',
+      i18nKey: 'gpMessagesDeleteSuccess',
       get defaultCrumb() {
         return [
           this.allRoutes.INDEX,
           this.allRoutes.MESSAGES,
-          this.allRoutes.PATIENT_PRACTICE_MESSAGING,
+          this.allRoutes.GP_MESSAGES,
         ];
       },
     },
@@ -1844,7 +1844,7 @@ export const backLinkOverrides = {
   [routes.ORGAN_DONATION_VIEW_DECISION.name]: {
     defaultPath: routes.MORE.path,
   },
-  [routes.PATIENT_PRACTICE_MESSAGING.name]: {
+  [routes.GP_MESSAGES.name]: {
     ignoreStore: true,
     defaultPath: routes.MESSAGES.path,
   },
@@ -1984,16 +1984,16 @@ export const {
   ORGAN_DONATION_WITHDRAW_REASON,
   ORGAN_DONATION_WITHDRAWN,
   ORGAN_DONATION_YOUR_CHOICE,
-  PATIENT_PRACTICE_MESSAGING,
-  PATIENT_PRACTICE_MESSAGING_URGENCY,
-  PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
-  PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
-  PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
-  PATIENT_PRACTICE_MESSAGING_CREATE,
-  PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT,
-  PATIENT_PRACTICE_MESSAGING_DELETE,
-  PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
-  PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT,
+  GP_MESSAGES,
+  GP_MESSAGES_URGENCY,
+  GP_MESSAGES_URGENCY_CONTACT_GP,
+  GP_MESSAGES_RECIPIENTS,
+  GP_MESSAGES_VIEW_MESSAGE,
+  GP_MESSAGES_CREATE,
+  GP_MESSAGES_DOWNLOAD_ATTACHMENT,
+  GP_MESSAGES_DELETE,
+  GP_MESSAGES_DELETE_SUCCESS,
+  GP_MESSAGES_VIEW_ATTACHMENT,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,
   PRESCRIPTION_REPEAT_COURSES,

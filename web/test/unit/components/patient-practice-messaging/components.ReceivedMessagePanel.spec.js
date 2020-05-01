@@ -1,4 +1,4 @@
-import ReceivedMessagePanel from '@/components/patient-practice-messaging/ReceivedMessagePanel';
+import ReceivedMessagePanel from '@/components/gp-messages/ReceivedMessagePanel';
 import { createStore, createRouter, create$T, shallowMount } from '../../helpers';
 import { formatInboxMessageTime, redirectTo } from '@/lib/utils';
 
@@ -45,8 +45,8 @@ describe('Received Message Panel', () => {
     const downloadLink = wrapper.find('desktopgenericbacklink-stub[id="downloadLink"]');
     const viewLink = wrapper.find('desktopgenericbacklink-stub[id="viewLink"]');
 
-    expect(downloadLink.vm.buttonText).toEqual('patient_practice_messaging.view_details.download');
-    expect(viewLink.vm.buttonText).toEqual('patient_practice_messaging.view_details.view');
+    expect(downloadLink.vm.buttonText).toEqual('gp_messages.view_details.download');
+    expect(viewLink.vm.buttonText).toEqual('gp_messages.view_details.view');
     expect(downloadLink.exists()).toBe(true);
     expect(viewLink.exists()).toBe(true);
   });
@@ -54,15 +54,15 @@ describe('Received Message Panel', () => {
   it('will navigate to the view attachment when clicked', async () => {
     await wrapper.vm.viewClicked();
     expect(store.dispatch).toBeCalledWith('documents/loadDocument', { documentIdentifier: '1', updateMetaData: true });
-    expect(redirectTo).toBeCalledWith(wrapper.vm, '/patient-practice-messaging/view-attachment');
+    expect(redirectTo).toBeCalledWith(wrapper.vm, '/messages/gp-messages/view-attachment');
   });
 
   it('will navigate to the download attachment when clicked', async () => {
     await wrapper.vm.downloadClicked();
     expect(store.dispatch).toBeCalledWith('documents/loadDocument', { documentIdentifier: '1', updateMetaData: true });
-    expect(store.dispatch).toBeCalledWith('patientPracticeMessaging/setAttachmentId', '1');
+    expect(store.dispatch).toBeCalledWith('gpMessages/setAttachmentId', '1');
     expect($router.push).toBeCalledWith({
-      name: 'patient-practice-messaging-download-attachment',
+      name: 'messages-gp-messages-download-attachment',
       params: { date: '2019-12-09T13:56:50.377Z' },
     });
   });

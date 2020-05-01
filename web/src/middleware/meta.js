@@ -86,16 +86,16 @@ import {
   ORGAN_DONATION_WITHDRAW_REASON,
   ORGAN_DONATION_WITHDRAWN,
   ORGAN_DONATION_YOUR_CHOICE,
-  PATIENT_PRACTICE_MESSAGING,
-  PATIENT_PRACTICE_MESSAGING_CREATE,
-  PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT,
-  PATIENT_PRACTICE_MESSAGING_DELETE,
-  PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS,
-  PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
-  PATIENT_PRACTICE_MESSAGING_URGENCY,
-  PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
-  PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
-  PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT,
+  GP_MESSAGES,
+  GP_MESSAGES_CREATE,
+  GP_MESSAGES_DOWNLOAD_ATTACHMENT,
+  GP_MESSAGES_DELETE,
+  GP_MESSAGES_DELETE_SUCCESS,
+  GP_MESSAGES_RECIPIENTS,
+  GP_MESSAGES_URGENCY,
+  GP_MESSAGES_URGENCY_CONTACT_GP,
+  GP_MESSAGES_VIEW_MESSAGE,
+  GP_MESSAGES_VIEW_ATTACHMENT,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTIONS,
@@ -259,21 +259,6 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.dataSharingOverview';
       route.meta.pageTitleKey = 'pageTitles.dataSharingOverview';
       break;
-    case PATIENT_PRACTICE_MESSAGING_DOWNLOAD_ATTACHMENT.name:
-      route.meta.headerKey = 'pageHeaders.patientPracticeMessagingDownloadAttachment';
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingDownloadAttachment';
-      break;
-    case PATIENT_PRACTICE_MESSAGING_VIEW_ATTACHMENT.name: {
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingViewAttachment';
-      break;
-    }
-    case PATIENT_PRACTICE_MESSAGING_DELETE.name: {
-      const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
-      route.meta.headerKey = 'pageTitles.patientPracticeMessagingDeleteMessage';
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingDeleteMessage';
-      route.meta.formatArguments = { name };
-      break;
-    }
     case DATA_SHARING_WHERE_USED.name:
       route.meta.headerKey = 'pageHeaders.dataSharingWhereUsed';
       route.meta.pageTitleKey = 'pageTitles.dataSharingWhereUsed';
@@ -529,44 +514,58 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.organDonation';
       route.meta.pageTitleKey = 'pageTitles.organDonationWithdraw';
       break;
-    case PATIENT_PRACTICE_MESSAGING.name:
+    case GP_MESSAGES.name:
       store.dispatch('navigation/setNewMenuItem', 4);
-      route.meta.headerKey = 'pageHeaders.patientPracticeMessaging';
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessaging';
+      route.meta.headerKey = 'pageHeaders.gpMessages';
+      route.meta.pageTitleKey = 'pageTitles.gpMessages';
       break;
-    case PATIENT_PRACTICE_MESSAGING_CREATE.name: {
-      const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
-      route.meta.headerKey = 'pageTitles.patientPracticeMessagingCreateMessage';
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingCreateMessage';
+    case GP_MESSAGES_CREATE.name: {
+      const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
+      route.meta.headerKey = 'pageTitles.gpMessagesCreateMessage';
+      route.meta.pageTitleKey = 'pageTitles.gpMessagesCreateMessage';
       route.meta.formatArguments = { name };
       break;
     }
-    case PATIENT_PRACTICE_MESSAGING_DELETE_SUCCESS.name: {
-      const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
-      route.meta.headerKey = 'pageTitles.patientPracticeMessagingDeleteMessageSuccess';
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingDeleteMessageSuccess';
+    case GP_MESSAGES_DELETE_SUCCESS.name: {
+      const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
+      route.meta.headerKey = 'pageTitles.gpMessagesDeleteMessageSuccess';
+      route.meta.pageTitleKey = 'pageTitles.gpMessagesDeleteMessageSuccess';
       route.meta.formatArguments = { name };
       break;
     }
-    case PATIENT_PRACTICE_MESSAGING_RECIPIENTS.name:
+    case GP_MESSAGES_RECIPIENTS.name:
       store.dispatch('navigation/setNewMenuItem', 4);
-      route.meta.headerKey = 'pageHeaders.patientPracticeMessagingRecipients';
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingRecipients';
+      route.meta.headerKey = 'pageHeaders.gpMessagesRecipients';
+      route.meta.pageTitleKey = 'pageTitles.gpMessagesRecipients';
       break;
-    case PATIENT_PRACTICE_MESSAGING_URGENCY.name:
+    case GP_MESSAGES_URGENCY.name:
       store.dispatch('navigation/setNewMenuItem', 4);
-      route.meta.headerKey = 'pageHeaders.patientPracticeMessagingUrgency';
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingUrgency';
+      route.meta.headerKey = 'pageHeaders.gpMessagesUrgency';
+      route.meta.pageTitleKey = 'pageTitles.gpMessagesUrgency';
       break;
-    case PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP.name:
+    case GP_MESSAGES_URGENCY_CONTACT_GP.name:
       store.dispatch('navigation/setNewMenuItem', 4);
-      route.meta.headerKey = 'pageHeaders.patientPracticeMessagingUrgencyContactYourGp';
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingUrgencyContactYourGp';
+      route.meta.headerKey = 'pageHeaders.gpMessagesUrgencyContactYourGp';
+      route.meta.pageTitleKey = 'pageTitles.gpMessagesUrgencyContactYourGp';
       break;
-    case PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.name: {
-      const name = get('state.patientPracticeMessaging.selectedMessageRecipient.name')(store);
-      route.meta.headerKey = 'pageTitles.patientPracticeMessagingViewMessage';
-      route.meta.pageTitleKey = 'pageTitles.patientPracticeMessagingViewMessage';
+    case GP_MESSAGES_VIEW_MESSAGE.name: {
+      const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
+      route.meta.headerKey = 'pageTitles.gpMessagesViewMessage';
+      route.meta.pageTitleKey = 'pageTitles.gpMessagesViewMessage';
+      route.meta.formatArguments = { name };
+      break;
+    }
+    case GP_MESSAGES_DOWNLOAD_ATTACHMENT.name:
+      route.meta.headerKey = 'pageHeaders.gpMessagesDownloadAttachment';
+      route.meta.pageTitleKey = 'pageTitles.gpMessagesDownloadAttachment';
+      break;
+    case GP_MESSAGES_VIEW_ATTACHMENT.name:
+      route.meta.pageTitleKey = 'pageTitles.gpMessagesViewAttachment';
+      break;
+    case GP_MESSAGES_DELETE.name: {
+      const name = get('state.gpMessages.selectedMessageRecipient.name')(store);
+      route.meta.headerKey = 'pageTitles.gpMessagesDeleteMessage';
+      route.meta.pageTitleKey = 'pageTitles.gpMessagesDeleteMessage';
       route.meta.formatArguments = { name };
       break;
     }

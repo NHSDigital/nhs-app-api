@@ -28,7 +28,7 @@ const final = ({ self, commit }) => {
   self.dispatch('organDonation/init');
   self.dispatch('myRecord/init');
   self.dispatch('serviceJourneyRules/init');
-  self.dispatch('patientPracticeMessaging/init');
+  self.dispatch('gpMessages/init');
   self.dispatch('practiceSettings/init');
 
   self.app.context.redirect(LOGIN.path);

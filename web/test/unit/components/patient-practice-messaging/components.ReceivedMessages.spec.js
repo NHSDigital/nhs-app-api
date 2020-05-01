@@ -1,11 +1,11 @@
-import ReceivedMessage from '@/components/patient-practice-messaging/ReceivedMessage';
+import ReceivedMessage from '@/components/gp-messages/ReceivedMessage';
 import { mount, createStore, create$T } from '../../helpers';
 
 const $store = () => (
   createStore({
     state: {
       device: { isNativeApp: true },
-      patientPracticeMessaging: {
+      gpMessages: {
         selectedMessageDetails: {
           messageDetails: {
             replies: [{

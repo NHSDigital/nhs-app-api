@@ -22,7 +22,7 @@ import notifications from './modules/notifications';
 import onlineConsultations from './modules/onlineConsultations';
 import organDonation from './modules/organDonation';
 import pageTitle from './modules/pageTitle';
-import patientPracticeMessaging from './modules/patientPracticeMessaging';
+import gpMessages from './modules/gpMessages';
 import practiceSettings from './modules/practiceSettings';
 import prescriptions from './modules/prescriptions';
 import repeatPrescriptionCourses from './modules/repeatPrescriptionCourses';
@@ -57,7 +57,7 @@ export const modules = {
   onlineConsultations,
   organDonation,
   pageTitle,
-  patientPracticeMessaging,
+  gpMessages,
   practiceSettings,
   prescriptions,
   repeatPrescriptionCourses,

@@ -50,7 +50,7 @@ describe('routes', () => {
       ['linked-profiles-shutter-prescriptions', '/', true],
       ['organ-donation', '/more', undefined],
       ['organ-donation-view-decision', '/more', undefined],
-      ['patient-practice-messaging', '/messages', true],
+      ['messages-gp-messages', '/messages', true],
       ['switch-profile', '/', true]])
       .it('will go to $path from $name by default', (name, path, ignoreStore) => {
         const override = backLinkOverrides[name];

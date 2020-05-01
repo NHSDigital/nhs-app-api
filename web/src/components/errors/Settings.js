@@ -16,20 +16,20 @@ import {
   LOGIN,
   HEALTH_INFORMATION_UPDATES,
   HEALTH_INFORMATION_UPDATES_MESSAGES,
-  MORE,
+  MESSAGES,
   MYRECORD,
   MYRECORDTESTRESULT,
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_SEARCH,
   ORGAN_DONATION,
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
-  PATIENT_PRACTICE_MESSAGING,
-  PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
-  PATIENT_PRACTICE_MESSAGING_URGENCY,
-  PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP,
-  PATIENT_PRACTICE_MESSAGING_RECIPIENTS,
-  PATIENT_PRACTICE_MESSAGING_CREATE,
-  PATIENT_PRACTICE_MESSAGING_DELETE,
+  GP_MESSAGES,
+  GP_MESSAGES_VIEW_MESSAGE,
+  GP_MESSAGES_URGENCY,
+  GP_MESSAGES_URGENCY_CONTACT_GP,
+  GP_MESSAGES_RECIPIENTS,
+  GP_MESSAGES_CREATE,
+  GP_MESSAGES_DELETE,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -161,52 +161,52 @@ export default {
       additionalInfoComponent: 'ContactOrganDonation',
     },
     {
-      route: PATIENT_PRACTICE_MESSAGING.path,
+      route: GP_MESSAGES.path,
       errorOverrideStyles: { 403: 'plain' },
       action: {
-        400: 'patientPracticeMessaging/clearErrorsAndLoadMessages',
+        400: 'gpMessages/clearErrorsAndLoadMessages',
       },
       redirectUrl: {
-        default: MORE.path,
+        default: MESSAGES.path,
       },
     },
     {
-      route: PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE.path,
+      route: GP_MESSAGES_VIEW_MESSAGE.path,
       action: {
-        400: 'patientPracticeMessaging/clearErrorsAndLoadDetails',
+        400: 'gpMessages/clearErrorsAndLoadDetails',
       },
       redirectUrl: {
-        default: MORE.path,
+        default: MESSAGES.path,
       },
     },
     {
-      route: PATIENT_PRACTICE_MESSAGING_URGENCY.path,
+      route: GP_MESSAGES_URGENCY.path,
       redirectUrl: {
-        default: MORE.path,
+        default: MESSAGES.path,
       },
     },
     {
-      route: PATIENT_PRACTICE_MESSAGING_URGENCY_CONTACT_GP.path,
+      route: GP_MESSAGES_URGENCY_CONTACT_GP.path,
       redirectUrl: {
-        default: MORE.path,
+        default: MESSAGES.path,
       },
     },
     {
-      route: PATIENT_PRACTICE_MESSAGING_RECIPIENTS.path,
+      route: GP_MESSAGES_RECIPIENTS.path,
       redirectUrl: {
-        default: MORE.path,
+        default: MESSAGES.path,
       },
     },
     {
-      route: PATIENT_PRACTICE_MESSAGING_CREATE.path,
+      route: GP_MESSAGES_CREATE.path,
       redirectUrl: {
-        default: MORE.path,
+        default: MESSAGES.path,
       },
     },
     {
-      route: PATIENT_PRACTICE_MESSAGING_DELETE.path,
+      route: GP_MESSAGES_DELETE.path,
       action: {
-        400: 'patientPracticeMessaging/retryMessageDelete',
+        400: 'gpMessages/retryMessageDelete',
       },
     },
     {

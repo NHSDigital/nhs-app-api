@@ -288,17 +288,17 @@ describe('getters', () => {
   });
 
   describe('im1MessagingCanDeleteMessagesEnabled', () => {
-    const { deletePatientPracticeMessageEnabled } = getters;
+    const { deleteGpMessagesEnabled } = getters;
 
     it('will be true if im1Messaging can delete messages is true', () => {
       currentState.rules.im1Messaging.canDeleteMessages = true;
-      expect(deletePatientPracticeMessageEnabled(currentState))
+      expect(deleteGpMessagesEnabled(currentState))
         .toBe(true);
     });
 
     it('will be false if im1Messaging can delete messages  is false', () => {
       currentState.rules.im1Messaging.canDeleteMessages = false;
-      expect(deletePatientPracticeMessageEnabled(currentState))
+      expect(deleteGpMessagesEnabled(currentState))
         .toBe(false);
     });
   });
