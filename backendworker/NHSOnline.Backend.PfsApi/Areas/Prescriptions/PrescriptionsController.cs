@@ -13,6 +13,7 @@ using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 

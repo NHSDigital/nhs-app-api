@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Prescriptions;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 using Course = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Prescriptions.Course;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Prescriptions

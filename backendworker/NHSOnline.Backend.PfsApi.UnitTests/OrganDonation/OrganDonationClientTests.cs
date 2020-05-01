@@ -13,6 +13,7 @@ using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
+using NHSOnline.Backend.Support.Session;
 using RichardSzalay.MockHttp;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation

@@ -13,6 +13,7 @@
  using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition;
  using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition.Models;
  using NHSOnline.Backend.Support;
+ using NHSOnline.Backend.Support.Session;
  using UnitTestHelper;
  using Task = System.Threading.Tasks.Task;
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {

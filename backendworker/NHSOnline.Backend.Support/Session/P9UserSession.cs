@@ -1,8 +1,7 @@
 using System;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Support.Session;
 
-namespace NHSOnline.Backend.Support
+namespace NHSOnline.Backend.Support.Session
 {
     public sealed class P9UserSession: P5UserSession
     {

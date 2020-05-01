@@ -170,21 +170,12 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             private readonly DefaultSerializationBinder _defaultBinder = new DefaultSerializationBinder();
 
             public Type BindToType(string assemblyName, string typeName)
-            {
-                switch (typeName)
+                => typeName switch
                 {
-                    case "NHSOnline.Backend.Support.P9UserSession":
-                    case "P9UserSession":
-                        return typeof(P9UserSession);
-
-                    case "NHSOnline.Backend.Support.Session.P5UserSession":
-                    case "P5UserSession":
-                        return typeof(P5UserSession);
-
-                    default:
-                        return _defaultBinder.BindToType(assemblyName, typeName);
-                }
-            }
+                    "P9UserSession" => typeof(P9UserSession),
+                    "P5UserSession" => typeof(P5UserSession),
+                    _ => _defaultBinder.BindToType(assemblyName, typeName)
+                };
 
             public void BindToName(Type serializedType, out string assemblyName, out string typeName)
                 => _defaultBinder.BindToName(serializedType, out assemblyName, out typeName);

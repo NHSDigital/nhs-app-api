@@ -25,6 +25,7 @@
  using NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Utils;
  using NHSOnline.Backend.Support;
  using NHSOnline.Backend.Support.Sanitization;
+ using NHSOnline.Backend.Support.Session;
  using UnitTestHelper;
  using Address = Hl7.Fhir.Model.Address;
  using Constants = NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Constants;

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {

@@ -17,6 +17,7 @@ using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.PfsApi.UserInfo;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session

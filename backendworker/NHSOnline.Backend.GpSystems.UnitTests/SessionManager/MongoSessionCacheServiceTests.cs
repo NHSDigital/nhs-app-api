@@ -160,21 +160,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         }
 
         [TestMethod]
-        public async Task GetUserSession_StoredP9UserSessionBasedOnFullTypeName_ReturnsP9UserSession()
-        {
-            var json = CreateSessionJsonWithTypeName("NHSOnline.Backend.Support.P9UserSession");
-
-            ArrangeNoEncryption();
-            ArrangeSessionData(json);
-
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
-            var session = await sut.GetUserSession("");
-
-            session.HasValue.Should().BeTrue("session should be returned");
-            session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
-        }
-
-        [TestMethod]
         public async Task GetUserSession_StoredP9UserSessionBasedOnName_ReturnsP9UserSession()
         {
             var json = CreateSessionJsonWithTypeName("P9UserSession");
@@ -187,21 +172,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
 
             session.HasValue.Should().BeTrue("session should be returned");
             session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
-        }
-
-        [TestMethod]
-        public async Task GetUserSession_StoredP5UserSessionBasedOnFullTypeName_ReturnsP5UserSession()
-        {
-            var json = CreateSessionJsonWithTypeName("NHSOnline.Backend.Support.Session.P5UserSession");
-
-            ArrangeNoEncryption();
-            ArrangeSessionData(json);
-
-            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
-            var session = await sut.GetUserSession("");
-
-            session.HasValue.Should().BeTrue("session should be returned");
-            session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
         }
 
         [TestMethod]

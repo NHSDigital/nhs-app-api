@@ -17,6 +17,7 @@ using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Http;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {

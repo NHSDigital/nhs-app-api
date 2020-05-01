@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 using static NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments

@@ -19,6 +19,7 @@ using NHSOnline.Backend.PfsApi.Areas.LinkedAccounts.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using NHSOnline.Backend.Support.Session;
 using Constants = NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.LinkedAccounts

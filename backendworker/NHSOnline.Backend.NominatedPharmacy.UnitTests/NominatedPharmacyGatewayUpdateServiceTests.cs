@@ -10,8 +10,9 @@ using UnitTestHelper;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 
- namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
+namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 {
     [TestClass]
     public class NominatedPharmacyGatewayUpdateServiceTests

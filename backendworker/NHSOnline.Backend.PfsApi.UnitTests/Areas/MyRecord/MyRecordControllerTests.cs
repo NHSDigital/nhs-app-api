@@ -13,6 +13,7 @@ using NHSOnline.Backend.GpSystems.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using GetMyRecordResult = NHSOnline.Backend.GpSystems.PatientRecord.GetMyRecordResult;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
 {
