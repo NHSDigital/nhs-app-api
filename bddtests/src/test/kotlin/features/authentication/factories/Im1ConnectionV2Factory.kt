@@ -42,26 +42,26 @@ abstract class Im1ConnectionV2Factory(protected val gpSystem: Supplier) {
             accountId = patient.accountId,
             nhsNumber = patient.nhsNumbers.first(),
             identityToken = identityToken,
-            emailAddress = patient.emailAddress,
-            surname = patient.surname,
-            dateOfBirth = patient.dateOfBirth)
+            emailAddress = patient.contactDetails.emailAddress,
+            surname = patient.name.surname,
+            dateOfBirth = patient.age.dateOfBirth)
 
     val validIm1Request: Im1ConnectionRequest
             = Im1ConnectionRequest(
             AccountId = patient.accountId,
             LinkageKey = patient.linkageKey,
             OdsCode = patient.odsCode,
-            Surname = patient.surname,
-            DateOfBirth = patient.dateOfBirth)
+            Surname = patient.name.surname,
+            DateOfBirth = patient.age.dateOfBirth)
 
     val validCreateLinkageRequest: Im1ConnectionRequest
             = Im1ConnectionRequest(
             OdsCode = patient.odsCode,
-            Surname = patient.surname,
-            DateOfBirth = patient.dateOfBirth,
+            Surname = patient.name.surname,
+            DateOfBirth = patient.age.dateOfBirth,
             NhsNumber = patient.nhsNumbers.first(),
             IdentityToken = identityToken,
-            EmailAddress = patient.emailAddress)
+            EmailAddress = patient.contactDetails.emailAddress)
 
     companion object : SupplierSpecificFactory<Im1ConnectionV2Factory>() {
 

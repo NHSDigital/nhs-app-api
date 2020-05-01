@@ -48,7 +48,7 @@ class SwitchProfileStepDefinitions {
         // proxy patient was selected in previous step
         Assert.assertEquals(
                 "Proxy patient age did not match",
-                currentProxyPatient.profile.formattedAge(), displayedProxyDetails.age)
+                currentProxyPatient.profile.age.formattedAge(), displayedProxyDetails.age)
 
         Assert.assertEquals(
                 "Proxy patient gp practice did not match",

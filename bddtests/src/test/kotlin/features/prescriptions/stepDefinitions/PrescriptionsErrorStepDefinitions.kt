@@ -3,10 +3,9 @@ package features.prescriptions.stepDefinitions
 import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.TppMockDefaults
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mocking.tpp.models.Error
 import org.apache.http.HttpStatus
 import org.junit.Assert
@@ -51,13 +50,11 @@ class PrescriptionsErrorStepDefinitions {
         factory.coursesEndpointThrowingServerError(SerenityHelpers.getPatient())
     }
 
-    @Given("The prescription submission endpoint is timing out")
-    fun butThePrescriptionSubmissionEndpointIsTimingOut() {
-        mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
-                .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000) }
-
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
-                .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000) }
+    @Given("the prescription submission endpoint is timing out")
+    fun thePrescriptionSubmissionEndpointIsTimingOut() {
+        val patient = SerenityHelpers.getPatient()
+        val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
+        factory.prescriptionsEndpointTimeout(patient)
     }
 
     @Given("The prescription submission endpoint is throwing a server error")
@@ -68,8 +65,9 @@ class PrescriptionsErrorStepDefinitions {
 
     @Given("The prescription submission endpoint is throwing an already ordered exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnAlreadyOrderedException() {
+        val patient = SerenityHelpers.getPatient()
         mockingClient.forTpp {
-            prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
+            prescriptions.prescriptionSubmission(patient, null)
                     .respondWithError(Error(ErrorResponseCodeTpp.MEDICATION_UNAVAILABLE,
                             "One of the medications requested is no longer available",
                             "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
@@ -78,7 +76,8 @@ class PrescriptionsErrorStepDefinitions {
 
     @Given("The prescription submission endpoint is throwing an invalid guid exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnInvalidGuidException() {
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
+        val patient = SerenityHelpers.getPatient()
+        mockingClient.forTpp { prescriptions.prescriptionSubmission(patient, null)
                 .respondWithError(Error(ErrorResponseCodeTpp.MEDICATION_UNAVAILABLE,
                         "There was an error processing your request",
                         "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }

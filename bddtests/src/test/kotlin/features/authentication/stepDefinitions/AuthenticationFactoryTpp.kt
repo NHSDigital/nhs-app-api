@@ -18,7 +18,8 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
         response.person =  mutableListOf<Person>()
 
         mockingClient.forTpp {
-            authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
+            authentication.authenticateRequest(
+                    TppMockDefaults.tppAuthenticateRequest(patient))
                     .respondWithSuccess(response)
         }
     }
@@ -57,7 +58,8 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
 
     override fun validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds: Long) {
         mockingClient.forTpp {
-            authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
+            authentication.authenticateRequest(
+                    TppMockDefaults.tppAuthenticateRequest(patient))
                     .respondWithSuccess(AuthenticateReply())
                     .delayedBy(Duration.ofSeconds(delayBySeconds))
         }
@@ -65,7 +67,8 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
 
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
         mockingClient.forTpp {
-            authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
+            authentication.authenticateRequest(
+                    TppMockDefaults.tppAuthenticateRequest(patient))
                     // respond with error.  Unconfirmed format.
                     .respondWithError(Error(
                             errorCode = ErrorResponseCodeTpp.LOGIN_PROBLEM,
@@ -76,7 +79,8 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
         mockingClient.forTpp {
-            authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
+            authentication.authenticateRequest(
+                    TppMockDefaults.tppAuthenticateRequest(patient))
                     // respond with error.  Unconfirmed format.
                     .respondWithError(Error(
                             errorCode = ErrorResponseCodeTpp.SERVICE_UNAVAILABLE,

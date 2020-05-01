@@ -7,13 +7,15 @@ import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import models.Patient
+import models.PatientAge
+import models.PatientName
 import org.apache.http.HttpStatus
 import utils.set
 import java.time.Duration
 
 private const val REQUEST_DELAY = 1000_000L
 
-class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS){
+class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) {
 
     override fun validPatientWithNoNhsNumber() {
         emisValidCredentialsWithNHSNumbers(arrayListOf())
@@ -58,26 +60,34 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS){
 
     private fun emisValidCredentialsWithNHSNumbers(numbers: List<String>) {
         val patient = Patient(
-                title = "Miss",
-                firstName = "Alexia",
-                surname = "Scott",
+                name = PatientName(title = "Miss",
+                        firstName = "Alexia",
+                        surname = "Scott"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 connectionToken = "fe81f191-b016-466e-aeb2-64f08f2330a4",
                 sessionId = "xkWiivK1WBAkxIN9CDrGyy",
                 endUserSessionId = "9RFDWiqTO8zBWrp2p8s4K7",
                 userPatientLinkToken = "KxLiDl5nRS60DzIlrKoFSl",
                 nhsNumbers = numbers,
-                dateOfBirth = "1985-05-29T00:00:00.0Z")
+                age = PatientAge(dateOfBirth = "1985-05-29"))
 
-        val nhsNumbers = numbers.map { number -> PatientIdentifier(number,
-                identifierType = IdentifierType.NhsNumber) }.toTypedArray()
+        val nhsNumbers = numbers.map { number ->
+            PatientIdentifier(number,
+                    identifierType = IdentifierType.NhsNumber)
+        }.toTypedArray()
 
-        mockingClient.forEmis { authentication.endUserSessionRequest()
-                .respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { authentication.sessionRequest(patient)
-                .respondWithSuccess(patient, AssociationType.Self) }
-        mockingClient.forEmis { myRecord.demographicsRequest(patient)
-                .respondWithSuccess(patient, nhsNumbers) }
+        mockingClient.forEmis {
+            authentication.endUserSessionRequest()
+                    .respondWithSuccess(patient.endUserSessionId)
+        }
+        mockingClient.forEmis {
+            authentication.sessionRequest(patient)
+                    .respondWithSuccess(patient, AssociationType.Self)
+        }
+        mockingClient.forEmis {
+            myRecord.demographicsRequest(patient)
+                    .respondWithSuccess(patient, nhsNumbers)
+        }
 
         PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)

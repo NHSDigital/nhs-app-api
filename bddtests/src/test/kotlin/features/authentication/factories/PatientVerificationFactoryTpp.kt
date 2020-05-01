@@ -17,6 +17,7 @@ import mocking.tpp.models.PersonName
 import mocking.tpp.models.User
 import models.Patient
 import org.junit.Assert
+import utils.SerenityHelpers
 import utils.set
 import java.time.Duration
 
@@ -55,7 +56,7 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
                 user = User(
                         person = Person(
                                 patientId = patient.patientId,
-                                dateOfBirth = patient.dateOfBirth,
+                                dateOfBirth = patient.age.dateOfBirth,
                                 gender = patient.sex.name,
                                 nationalId = NationalId(
                                         type = "NHS",
@@ -91,7 +92,9 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
                 uuid = "47788ae4-10e9-4f2c-9043-e08d285b67b6"
         )
 
-        mockingClient.forTpp { authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
+        mockingClient.forTpp {
+            authentication.authenticateRequest(
+                    TppMockDefaults.tppAuthenticateRequest(SerenityHelpers.getPatient()))
                 .respondWithError(tppNonExistingAccountIdErrorResponse) }
 
         PatientVerificationSerenityHelpers.ConnectionToken.set(nonExistingConnectionToken)
@@ -150,7 +153,7 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
     }
 
     override fun gpSystemNotAvailable() {
-        val patient = TppMockDefaults.patientTpp
+        val patient = SerenityHelpers.getPatient()
         mockingClient.forTpp {
             authentication.authenticateRequest(Authenticate())
                     .respondWithServiceUnavailable()

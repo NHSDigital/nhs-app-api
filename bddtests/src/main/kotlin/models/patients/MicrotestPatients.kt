@@ -4,14 +4,30 @@ import mocking.defaults.MicrotestMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.Sex
 import models.Patient
+import models.PatientAge
+import models.PatientContactDetails
+import models.PatientName
+import org.openqa.selenium.InvalidArgumentException
 import worker.models.patient.Im1ConnectionToken
 
 class MicrotestPatients {
 
-    companion object {
+    companion object : PatientHandler() {
 
-        fun getDefault(): Patient {
+        override fun getDefault(): Patient {
             return eldsonBuleck
+        }
+
+        override fun getPatientWithLinkedProfiles(): Patient {
+            throw InvalidArgumentException("Not implemented for MICROTEST")
+        }
+
+        override fun getPatientWithNoLinkedProfiles(): Patient {
+            throw InvalidArgumentException("Not implemented for MICROTEST")
+        }
+
+        override fun setOdsCode(patient: Patient, provider: String) {
+            throw InvalidArgumentException("Not implemented for MICROTEST")
         }
 
         private val eldsonBuleckIm1ConnectionToken = Im1ConnectionToken(
@@ -19,24 +35,22 @@ class MicrotestPatients {
                 nhsNumber = MicrotestMockDefaults.DEFAULT_NHS_NUMBER
         )
 
-        fun microtestPostLinkageUserDetails(accountId: String, linkageKey: String): Patient{
+        fun postLinkageUserDetails(accountId: String, linkageKey: String): Patient {
             return Patient(
-                    title = "Mr",
-                    firstName = "Eldson",
-                    surname = "Bulbeck",
-                    dateOfBirth = "1986-04-10",
+                    name = PatientName(title = "Mr",
+                            firstName = "Eldson",
+                            surname = "Bulbeck"),
+                    age = PatientAge(dateOfBirth = "1986-04-10"),
                     sex = Sex.Male,
-                    address = Address(
-                            houseNameFlatNumber = "28 Central Path",
-                            numberStreet = "Troy Avenue",
-                            village = "Horsforth",
-                            town = "Leeds",
-                            county = "West Yorkshire",
-                            postcode = "LS18 5TN"
-                    ),
-                    telephoneFirst = Patient.defaultTelephoneFirst,
-                    telephoneSecond = Patient.defaultTelephoneSecond,
-                    emailAddress = Patient.defaultEmailAddress,
+                    contactDetails = PatientContactDetails(
+                            address = Address(
+                                    houseNameFlatNumber = "28 Central Path",
+                                    numberStreet = "Troy Avenue",
+                                    village = "Horsforth",
+                                    town = "Leeds",
+                                    county = "West Yorkshire",
+                                    postcode = "LS18 5TN"
+                            )),
                     odsCode = MicrotestMockDefaults.DEFAULT_ODS_CODE_MICROTEST,
                     nhsNumbers = listOf(MicrotestMockDefaults.DEFAULT_NHS_NUMBER),
                     connectionToken = MicrotestMockDefaults.DEFAULT_CONNECTION_TOKEN,
@@ -49,23 +63,20 @@ class MicrotestPatients {
             )
         }
 
-        val eldsonBuleck = Patient(
-                title = "Mr",
-                firstName = "Eldson",
-                surname = "Bulbeck",
-                dateOfBirth = "1986-04-10",
+        private val eldsonBuleck = Patient(
+                name = PatientName(title = "Mr",
+                        firstName = "Eldson",
+                        surname = "Bulbeck"),
+                age = PatientAge(dateOfBirth = "1986-04-10"),
                 sex = Sex.Male,
-                address = Address(
+                contactDetails = PatientContactDetails(address = Address(
                         houseNameFlatNumber = "28 Central Path",
                         numberStreet = "Troy Avenue",
                         village = "Horsforth",
                         town = "Leeds",
                         county = "West Yorkshire",
                         postcode = "LS18 5TN"
-                ),
-                telephoneFirst = Patient.defaultTelephoneFirst,
-                telephoneSecond = Patient.defaultTelephoneSecond,
-                emailAddress = Patient.defaultEmailAddress,
+                )),
                 odsCode = MicrotestMockDefaults.DEFAULT_ODS_CODE_MICROTEST,
                 nhsNumbers = listOf(MicrotestMockDefaults.DEFAULT_NHS_NUMBER),
                 connectionToken = MicrotestMockDefaults.DEFAULT_CONNECTION_TOKEN,

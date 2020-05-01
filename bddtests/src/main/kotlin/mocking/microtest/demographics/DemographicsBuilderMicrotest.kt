@@ -11,20 +11,20 @@ class DemographicsBuilderMicrotest(private val patient: Patient)
 
     fun respondWithSuccess(): Mapping {
         val response = DemographicsData(
-                title = patient.title,
-                forenames1 = patient.firstName,
-                surname = patient.surname,
-                dob = patient.dateOfBirth,
+                title = patient.name.title,
+                forenames1 = patient.name.firstName,
+                surname = patient.name.surname,
+                dob = patient.age.dateOfBirth,
                 sex = patient.sex.toString(),
                 nhs = patient.formattedNHSNumber(),
-                houseName = patient.address.houseNameFlatNumber!!,
-                roadName = patient.address.numberStreet!!,
-                locality = patient.address.village!!,
-                post_town = patient.address.town!!,
-                county = patient.address.county!!,
-                postcode = patient.address.postcode!!,
-                telephone1 = patient.telephoneFirst,
-                telephone2 = patient.telephoneSecond
+                houseName = patient.contactDetails.address.houseNameFlatNumber!!,
+                roadName = patient.contactDetails.address.numberStreet!!,
+                locality = patient.contactDetails.address.village!!,
+                post_town = patient.contactDetails.address.town!!,
+                county = patient.contactDetails.address.county!!,
+                postcode = patient.contactDetails.address.postcode!!,
+                telephone1 = patient.contactDetails.telephoneFirst,
+                telephone2 = patient.contactDetails.telephoneSecond
                 )
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(GetDemographicsResponseModel(response), GsonFactory.asIs)

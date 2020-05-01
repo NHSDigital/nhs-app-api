@@ -10,7 +10,7 @@ import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mockingFacade.linkage.LinkageInformationFacade
-import models.Patient
+import models.patients.MicrotestPatients
 import net.serenitybdd.core.Serenity
 import org.joda.time.DateTime
 import org.junit.Assert
@@ -116,7 +116,8 @@ open class LinkageGetStepDefinitions {
         val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
         Assert.assertNotNull(linkageResponse)
         Assert.assertEquals(linkage.odsCode, linkageResponse.odsCode)
-        val patient = Patient.getMicrotestPostLinkage(linkageResponse.accountId, linkageResponse.linkageKey)
+        val patient = MicrotestPatients.postLinkageUserDetails(
+                linkageResponse.accountId, linkageResponse.linkageKey)
         DemographicsFactory.getForSupplier(Supplier.MICROTEST).enabled(patient)
         SerenityHelpers.resetPatient(patient)
         SuccessfulRegistrationJourney(mockingClient).create(patient, Supplier.MICROTEST)

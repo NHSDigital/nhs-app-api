@@ -79,14 +79,14 @@ open class HomeSteps {
 
     private fun getExpectedProxyDetails(proxyPatient: LinkedProfileFacade): ArrayList<String> {
         return arrayListOf(
-                "Age: ${proxyPatient.profile.formattedAge()}",
+                "Age: ${proxyPatient.profile.age.formattedAge()}",
                 "GP surgery: ${proxyPatient.gpPracticeName}"
         )
     }
 
     private fun getDetailValue(patient: Patient, detail: PatientDetail): String {
         return when (detail) {
-            PatientDetail.DOB -> patient.formattedDateOfBirth()
+            PatientDetail.DOB -> patient.age.formattedDateOfBirth()
             PatientDetail.NHS_NUMBER -> patient.formattedNHSNumber()
         }
     }

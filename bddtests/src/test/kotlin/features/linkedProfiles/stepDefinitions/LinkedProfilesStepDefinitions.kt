@@ -23,6 +23,7 @@ import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mockingFacade.linkedProfiles.FeaturesEnabledFacade
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.Patient
+import models.patients.PatientHandler
 import models.linkedProfiles.LinkedProfileOption
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -70,7 +71,7 @@ class LinkedProfilesStepDefinitions {
     @Given("^I am an? (.*) user with linked profiles$")
     fun iAmAUserWithLinkedProfiles(gpSystem:String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getPatientWithLinkedProfiles(supplier)
+        val patient = PatientHandler.getForSupplier(supplier).getPatientWithLinkedProfiles()
         SerenityHelpers.setGpSupplier(supplier)
         setup(patient, supplier)
     }
@@ -78,8 +79,8 @@ class LinkedProfilesStepDefinitions {
     @Given("^I am logged in as a (.*) user with linked profiles and appointments provider (.*)$")
     fun iAmLoggedInWithLinkedProfilesAndAppointmentsProvider(gpSystem: String, provider: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getPatientWithLinkedProfiles(supplier)
-        Patient.setOdsCodeBasedOnAppointmentsProvider(supplier, patient, provider)
+        val patient = PatientHandler.getForSupplier(supplier).getPatientWithLinkedProfiles()
+        PatientHandler.getForSupplier(supplier).setOdsCode(patient, provider)
         SerenityHelpers.setGpSupplier(supplier)
         setupAndLogIn(patient, supplier)
     }
@@ -89,8 +90,8 @@ class LinkedProfilesStepDefinitions {
     fun iAmLoggedInWithLinkedProfilesButNoAccessToCoreServicesAndAppointmentsProvider
             (provider: String) {
         val supplier = Supplier.TPP
-        val patient = Patient.getPatientWithLinkedProfiles(supplier)
-        Patient.setOdsCodeBasedOnAppointmentsProvider(supplier, patient, provider)
+        val patient = PatientHandler.getForSupplier(supplier).getPatientWithLinkedProfiles()
+        PatientHandler.getForSupplier(supplier).setOdsCode(patient, provider)
         SerenityHelpers.setGpSupplier(supplier)
         PrescriptionsDataSetup.disabled(patient.linkedAccounts.toList()[0], Supplier.TPP)
         PrescriptionsDataSetup.disabled(patient, Supplier.TPP)
@@ -100,7 +101,7 @@ class LinkedProfilesStepDefinitions {
     @Given("^I am logged in as a (.*) user with no linked profiles")
     fun iAmLoggedInWithNoLinkedProfiles(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getPatientWithNoLinkedProfiles(supplier)
+        val patient = PatientHandler.getForSupplier(supplier).getPatientWithNoLinkedProfiles()
         SerenityHelpers.setGpSupplier(supplier)
 
         SerenityHelpers.setPatient(patient)
@@ -195,7 +196,7 @@ class LinkedProfilesStepDefinitions {
         when (gpSystem) {
             Supplier.TPP -> LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.set(linkedAccount.formattedFullName())
             Supplier.EMIS -> {
-                LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.set(linkedAccount.firstName)
+                LinkedProfilesSerenityHelpers.PROXY_DISPLAY_NAME.set(linkedAccount.name.firstName)
                 GpPracticeAccessSettingsFactory.getForSupplier(gpSystem).enabledViaProxy(
                         callingPatient = patient,
                         actingOnBehalfOf = linkedAccount,
@@ -302,7 +303,7 @@ class LinkedProfilesStepDefinitions {
         if (gpSystem === Supplier.TPP) {
             symptomsShutterPage.assertText(selectedProfile.profile.formattedFullName())
         } else {
-            symptomsShutterPage.assertText(selectedProfile.profile.firstName)
+            symptomsShutterPage.assertText(selectedProfile.profile.name.firstName)
         }
     }
 
@@ -320,8 +321,8 @@ class LinkedProfilesStepDefinitions {
             prescriptionsShutterPage.isLoaded(selectedProfile.profile.formattedFullName())
             prescriptionsShutterPage.assertText(selectedProfile.profile.formattedFullName())
         } else {
-            prescriptionsShutterPage.isLoaded(selectedProfile.profile.firstName)
-            prescriptionsShutterPage.assertText(selectedProfile.profile.firstName)
+            prescriptionsShutterPage.isLoaded(selectedProfile.profile.name.firstName)
+            prescriptionsShutterPage.assertText(selectedProfile.profile.name.firstName)
         }
     }
 
@@ -335,8 +336,8 @@ class LinkedProfilesStepDefinitions {
             appointmentsShutterPage.isLoaded(selectedProfile.profile.formattedFullName())
             appointmentsShutterPage.assertText(selectedProfile.profile.formattedFullName())
         } else {
-            appointmentsShutterPage.isLoaded(selectedProfile.profile.firstName)
-            appointmentsShutterPage.assertText(selectedProfile.profile.firstName)
+            appointmentsShutterPage.isLoaded(selectedProfile.profile.name.firstName)
+            appointmentsShutterPage.assertText(selectedProfile.profile.name.firstName)
         }
     }
 
@@ -349,7 +350,7 @@ class LinkedProfilesStepDefinitions {
                     selectedProfile.profile.formattedFullName())
         } else {
             medicalRecordShutterComponent.assertText(selectedProfile.profile,
-                    selectedProfile.profile.firstName)
+                    selectedProfile.profile.name.firstName)
         }
     }
 
@@ -369,7 +370,7 @@ class LinkedProfilesStepDefinitions {
 
             Assert.assertEquals(
                     "Linked profile age did not match",
-                    patient.formattedAge(),
+                    patient.age.formattedAge(),
                     displayedLinkedProfiles[index].age)
         }
     }

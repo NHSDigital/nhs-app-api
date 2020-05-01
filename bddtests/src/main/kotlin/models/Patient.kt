@@ -1,38 +1,18 @@
 package models
 
-import constants.DateTimeFormats
 import constants.Supplier
 import mocking.AccessTokenBuilder
-import mocking.IdTokenBuilder
-import mocking.defaults.EmisMockDefaults
 import mocking.defaults.TppMockDefaults
-import mocking.emis.demographics.Address
 import mocking.emis.demographics.Sex
-import models.patients.EmisPatients
-import models.patients.MicrotestPatients
-import models.patients.TppPatients
-import models.patients.VisionPatients
-import utils.DateConverter
+import models.patients.PatientHandler
 import worker.models.demographics.TppUserSession
 import worker.models.patient.Im1ConnectionToken
-import worker.models.session.UserSessionRequest
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 data class Patient(
-        val title: String = "",
-        var ageMonths: Int = 0,
-        var ageYears: Int = 0,
-        val firstName: String = "",
-        val surname: String = "",
-        val callingName: String = "",
-        val dateOfBirth: String = "",
+        var name: PatientName = PatientName(),
+        var age : PatientAge = PatientAge("1972-04-12"),
+        var contactDetails: PatientContactDetails = PatientContactDetails(),
         val sex: Sex = Sex.NotSpecified,
-        var telephoneFirst: String = "",
-        var telephoneSecond: String = "",
-        var emailAddress: String = "",
-        val address: Address = Address(),
         val accountId: String = "",
         var odsCode: String = "",
         val connectionToken: String = "",
@@ -72,165 +52,22 @@ data class Patient(
                 onlineUserId)
     }
 
-    fun generateUserSessionRequest(redirectUrl: String): UserSessionRequest {
-        return UserSessionRequest(
-                authCode = this.authCode,
-                codeVerifier = this.codeVerifier,
-                redirectUrl = redirectUrl)
-    }
-
-    fun formattedDateOfBirth(): String {
-        return DateConverter.convertDateToDateTimeFormat(
-                dateOfBirth,
-                DateTimeFormats.dateWithoutTimeFormat,
-                DateTimeFormats.frontendBasicDateFormat)
-    }
-
-    fun formattedAge(): String {
-        var formattedAge = ""
-        if (ageYears == 0 && ageMonths == 0) {
-            formattedAge = "Less than one month old"
-        }
-        if (ageYears == 0 && ageMonths == 1) {
-            formattedAge = ageMonths.toString() + " month old"
-        }
-        if (ageYears == 0 && ageMonths > 1) {
-            formattedAge = ageMonths.toString() + " months old"
-        }
-        if (ageYears == 1 && ageMonths >= 0) {
-            formattedAge = ageYears.toString() + " year old"
-        }
-        if (ageYears > 1 && ageMonths >= 0) {
-            formattedAge = ageYears.toString() + " years old"
-        }
-
-        return formattedAge
-    }
-
-    fun dateOfBirthDigitsOnly(): String {
-        return dateOfBirth.replace("-", "")
-    }
-
-    fun formattedFullName(): String {
-        val fullName = if (identityProofingLevel == IdentityProofingLevel.P9) {
-            "$title $firstName $surname"
-        } else {
-            "$firstName $surname"
-        }
-
-        return fullName.trim()
-    }
-
     fun formattedNHSNumber(): String {
         return NhsNumberFormatter.format(nhsNumbers.first())
     }
 
+    fun formattedFullName(): String {
+        return name.formattedFullName(identityProofingLevel)
+    }
+
+    fun updateOdsCodes(targetOdsCode: String) {
+        odsCode = targetOdsCode
+        linkedAccounts.forEach { e -> e.odsCode = targetOdsCode }
+    }
+
     companion object {
-
-        const val defaultTelephoneFirst = "02837483567"
-        const val defaultTelephoneSecond = "07737483567"
-        const val defaultEmailAddress = "HalleD@fakeemail.com"
-        const val monthsInYear = 12
-
-        val defaultAddress = Address(
-                houseNameFlatNumber = "99",
-                numberStreet = "Fake Street",
-                village = "Fake village",
-                town = "Fake town",
-                county = "Fake county",
-                postcode = "AA00 0AA"
-        )
-
-        fun getIdToken(patient: Patient): String {
-            return IdTokenBuilder().getSignedToken(patient).serialize()
-        }
-
         fun getDefault(gpSystem: Supplier): Patient {
-            return when (gpSystem) {
-                Supplier.EMIS -> EmisPatients.getDefault()
-                Supplier.TPP -> TppPatients.getDefault()
-                Supplier.VISION -> VisionPatients.getDefault()
-                Supplier.MICROTEST -> MicrotestPatients.getDefault()
-            }
-        }
-
-        fun getPatientWithLinkedProfiles(gpSystem: Supplier): Patient {
-            return when (gpSystem) {
-                Supplier.EMIS -> EmisPatients.getPatientWithLinkedProfiles()
-                Supplier.TPP -> TppPatients.getPatientWithLinkedProfiles()
-                else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
-            }
-        }
-
-        fun getPatientWithNoLinkedProfiles(gpSystem: Supplier): Patient {
-            return when (gpSystem) {
-                Supplier.EMIS -> EmisPatients.getPatientWithNoLinkedProfiles()
-                else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
-            }
-        }
-
-        fun getMicrotestPostLinkage(accountID: String, linkageKey: String): Patient {
-            return MicrotestPatients.microtestPostLinkageUserDetails(accountID, linkageKey)
-        }
-
-        fun setOdsCodeBasedOnAppointmentsProvider(supplier: Supplier, patient: Patient, provider: String) {
-            return when (supplier) {
-                Supplier.TPP -> setTppOdsCode(patient, provider)
-                Supplier.EMIS -> setEmisOdsCode(patient, provider)
-                else -> throw IllegalArgumentException("$provider not a valid appointment provider name.")
-            }
-        }
-
-        fun setTppOdsCode(patient: Patient, provider: String) {
-            return when (provider.toUpperCase()) {
-                "ECONSULT" -> {
-                    updateOdsCodes(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT)
-                    updateUnitId(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT)
-                }
-                "IM1" -> {
-                    updateOdsCodes(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_IM1)
-                    updateUnitId(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_IM1)
-                }
-                "INFORMATICA" -> {
-                    updateOdsCodes(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_INFORMATICA)
-                    updateUnitId(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_INFORMATICA)
-                }
-                "GPATHAND" -> {
-                    updateOdsCodes(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_GP_AT_HAND)
-                    updateUnitId(patient, TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_GP_AT_HAND)
-                }
-                else -> throw IllegalArgumentException("$provider not a valid appointment provider name.")
-            }
-        }
-
-        fun setEmisOdsCode(patient: Patient, provider: String) {
-            return when (provider.toUpperCase()) {
-                "ECONSULT" -> updateOdsCodes(patient, EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT)
-                "IM1" -> updateOdsCodes(patient, EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_IM1)
-                "INFORMATICA" -> updateOdsCodes(patient, EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_INFORMATICA)
-                "GPATHAND" -> updateOdsCodes(patient, EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_GP_AT_HAND)
-                else -> throw IllegalArgumentException("$provider not a valid appointment provider name.")
-            }
-        }
-
-        fun updateOdsCodes(patient: Patient, odsCode: String) {
-            patient.odsCode = odsCode
-            patient.linkedAccounts.forEach { e -> e.odsCode = odsCode }
-        }
-
-        private fun updateUnitId(patient: Patient, odsCode: String) {
-            patient.tppUserSession!!.unitId = odsCode
-            patient.linkedAccounts.forEach { e -> e.tppUserSession!!.unitId = odsCode }
-        }
-
-        fun getAgePart(dob: String, unit: ChronoUnit): Int {
-            val dateOfBirth = LocalDate.parse(dob, DateTimeFormatter.ISO_DATE)
-            return when (unit) {
-                ChronoUnit.YEARS -> unit.between(dateOfBirth, LocalDate.now()).toInt()
-                ChronoUnit.MONTHS -> (unit.between(dateOfBirth, LocalDate.now()) % monthsInYear).toInt()
-                else -> throw IllegalArgumentException("Only years or months are supported")
-            }
+            return PatientHandler.getForSupplier(gpSystem).getDefault()
         }
     }
 }
-

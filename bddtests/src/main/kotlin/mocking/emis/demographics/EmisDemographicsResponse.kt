@@ -14,17 +14,17 @@ data class EmisDemographicsResponse(
         var address: Address? = null
 ) {
     constructor(patient: Patient, patientIdentifiers: Array<PatientIdentifier>) : this(
-            title = patient.title,
-            firstName = patient.firstName,
-            surname = patient.surname,
-            callingName = patient.callingName,
+            title = patient.name.title,
+            firstName = patient.name.firstName,
+            surname = patient.name.surname,
+            callingName = patient.name.callingName,
             patientIdentifiers = patientIdentifiers.toMutableList(),
-            dateOfBirth = patient.dateOfBirth,
+            dateOfBirth = patient.age.dateOfBirth,
             sex = patient.sex,
             contactDetails = ContactDetails(
-                    telephoneNumber = patient.telephoneFirst,
-                    mobileNumber = patient.telephoneSecond,
-                    emailAddress = patient.emailAddress),
-            address = patient.address
+                    telephoneNumber = patient.contactDetails.telephoneFirst,
+                    mobileNumber = patient.contactDetails.telephoneSecond,
+                    emailAddress = patient.contactDetails.emailAddress),
+            address = patient.contactDetails.address
     )
 }

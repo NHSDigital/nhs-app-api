@@ -5,7 +5,7 @@ import utils.SerenityHelpers
 
 class CarePlanConfiguration: IQuestionConfiguration {
 
-    private val patientFirstName = SerenityHelpers.getPatient().firstName
+    private val patientFirstName = SerenityHelpers.getPatient().name.firstName
 
     override val request: String  = """{
        "resourceType":"Parameters",

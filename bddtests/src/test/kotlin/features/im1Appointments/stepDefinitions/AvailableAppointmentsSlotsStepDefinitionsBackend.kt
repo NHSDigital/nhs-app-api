@@ -39,18 +39,18 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
         var invalidPhoneNumberTypes = true
 
         val patient = Patient.getDefault(supplier)
-        patient.telephoneFirst = ""
-        patient.telephoneSecond = ""
+        patient.contactDetails.telephoneFirst = ""
+        patient.contactDetails.telephoneSecond = ""
 
         if (telephoneNumberTypes == "no") {
             invalidPhoneNumberTypes = false
         } else {
             if (telephoneNumberTypes.contains("first")) {
-                patient.telephoneFirst = "01234 456789"
+                patient.contactDetails.telephoneFirst = "01234 456789"
                 invalidPhoneNumberTypes = false
             }
             if (telephoneNumberTypes.contains("second")) {
-                patient.telephoneSecond = "07912 345678"
+                patient.contactDetails.telephoneSecond = "07912 345678"
                 invalidPhoneNumberTypes = false
             }
         }
@@ -114,13 +114,13 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
         }
 
         val patient = SerenityHelpers.getPatient()
-        if  (!patient.telephoneFirst.isNullOrEmpty()) Assert.assertTrue(
+        if  (!patient.contactDetails.telephoneFirst.isNullOrEmpty()) Assert.assertTrue(
                 "Telephone Number not found in response. Only found $actualTelephoneNumbers. ",
-                actualTelephoneNumbers.contains(patient.telephoneFirst)
+                actualTelephoneNumbers.contains(patient.contactDetails.telephoneFirst)
         )
-        if  (!patient.telephoneSecond.isNullOrEmpty()) Assert.assertTrue(
+        if  (!patient.contactDetails.telephoneSecond.isNullOrEmpty()) Assert.assertTrue(
                 "Mobile Telephone Number not found in response. Only found $actualTelephoneNumbers. ",
-                actualTelephoneNumbers.contains(patient.telephoneSecond)
+                actualTelephoneNumbers.contains(patient.contactDetails.telephoneSecond)
         )
     }
 }

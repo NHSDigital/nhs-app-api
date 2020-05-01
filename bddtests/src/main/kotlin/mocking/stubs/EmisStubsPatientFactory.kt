@@ -59,8 +59,9 @@ class EmisStubsPatientFactory {
             //do not add end user session id here
             return EmisPatients.picaJones.copy(
                     subject = "subject-${uniqueId.name}",
+                    name = EmisPatients.picaJones.name.copy(
                     firstName = "You are logged in as",
-                    surname = loginID,
+                    surname = loginID),
                     authCode = "authCode$pad",
                     codeVerifier = "codeVerifier$pad",
                     connectionToken = "00000000-0000-0000-0000-$pad",

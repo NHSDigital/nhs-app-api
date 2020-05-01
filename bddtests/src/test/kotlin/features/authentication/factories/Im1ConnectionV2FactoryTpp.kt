@@ -121,16 +121,14 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
                                     user = User(
                                             person = Person(
                                                     patientId = patient.patientId,
-                                                    dateOfBirth = patient.dateOfBirth,
+                                                    dateOfBirth = patient.age.dateOfBirth,
                                                     gender = patient.sex.name,
                                                     nationalId = NationalId(
                                                             type = TppConstants.NationalIdTypeNhs,
                                                             value = patient.nhsNumbers.first()
                                                     ),
                                                     personName = PersonName(
-                                                            name =
-                                                            "${patient.title} " +
-                                                                    "${patient.firstName} ${patient.surname}"
+                                                            name = patient.formattedFullName()
                                                     )
                                             )
                                     ),

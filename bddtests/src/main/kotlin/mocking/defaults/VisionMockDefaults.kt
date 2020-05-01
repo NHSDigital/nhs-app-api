@@ -73,14 +73,16 @@ class VisionMockDefaults{
                 name = patientVision.formattedFullName()))
 
         val visionDemographicsResponse = Demographics(
-                name = Name(patientVision.title, patientVision.firstName, patientVision.surname),
+                name = Name(patientVision.name.title, patientVision.name.firstName, patientVision.name.surname),
                 gender = patientVision.sex.name,
-                dateOfBirth = patientVision.dateOfBirth,
-                primaryAddress = PrimaryAddress(houseName = patientVision.address.houseNameFlatNumber,
-                        street = patientVision.address.numberStreet,
-                        town = patientVision.address.village + ", " + patientVision.address.town,
-                        county = patientVision.address.county,
-                        postcode = patientVision.address.postcode)
+                dateOfBirth = patientVision.age.dateOfBirth,
+                primaryAddress = PrimaryAddress(
+                        houseName = patientVision.contactDetails.address.houseNameFlatNumber,
+                        street = patientVision.contactDetails.address.numberStreet,
+                        town = patientVision.contactDetails.address.village +
+                                ", " + patientVision.contactDetails.address.town,
+                        county = patientVision.contactDetails.address.county,
+                        postcode = patientVision.contactDetails.address.postcode)
         )
 
         fun getVisionUserSession(patient: Patient): VisionUserSession {

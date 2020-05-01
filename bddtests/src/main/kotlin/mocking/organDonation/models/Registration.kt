@@ -32,9 +32,9 @@ data class Name(
 ) {
     companion object {
         fun fromPatient (patient: Patient) :Name{
-           val prefix = listOf(patient.title)
-           val given = listOf(patient.firstName)
-           val  family = patient.surname
+           val prefix = listOf(patient.name.title)
+           val given = listOf(patient.name.firstName)
+           val  family = patient.name.surname
             return Name(prefix,given,family)
         }
     }
@@ -47,9 +47,9 @@ data class Address(
     companion object {
         fun fromPatient (patient: Patient) :Address{
             val line = listOf(
-                    patient.address.houseNameFlatNumber!!,
-                    patient.address.numberStreet!!)
-            val postalCode = patient.address.postcode!!
+                    patient.contactDetails.address.houseNameFlatNumber!!,
+                    patient.contactDetails.address.numberStreet!!)
+            val postalCode = patient.contactDetails.address.postcode!!
             return Address(line,postalCode)
         }
     }

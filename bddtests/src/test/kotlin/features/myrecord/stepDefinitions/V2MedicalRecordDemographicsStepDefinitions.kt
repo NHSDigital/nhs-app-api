@@ -15,8 +15,8 @@ open class V2MedicalRecordDemographicsStepDefinitions : AbstractDemographicsStep
         val patient = SerenityHelpers.getPatient()
 
         Assert.assertEquals(patient.formattedFullName(), medicalRecordV2Page.patientName.text)
-        Assert.assertEquals(patient.formattedDateOfBirth(), medicalRecordV2Page.dateOfBirth.text)
+        Assert.assertEquals(patient.age.formattedDateOfBirth(), medicalRecordV2Page.dateOfBirth.text)
         Assert.assertEquals(patient.formattedNHSNumber(), medicalRecordV2Page.nhsNumber.text)
-        Assert.assertEquals(patient.address.full(), medicalRecordV2Page.address.text)
+        Assert.assertEquals(patient.contactDetails.address.full(), medicalRecordV2Page.address.text)
     }
 }

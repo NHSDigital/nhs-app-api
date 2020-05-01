@@ -78,9 +78,9 @@ open class V1MedicalRecordStepDefinitions : AbstractDemographicsStepDefinitions(
     @Then("^I see the patient information details - Medical Record v1$")
     fun iSeePatientInformationDetailsV1() {
         val patient = SerenityHelpers.getPatient()
-        val address = patient.address.full()
+        val address = patient.contactDetails.address.full()
 
-        medicalRecordV1Page.assertLabelAndValue("Date of birth", patient.formattedDateOfBirth())
+        medicalRecordV1Page.assertLabelAndValue("Date of birth", patient.age.formattedDateOfBirth())
         medicalRecordV1Page.assertLabelAndValue("Address", address)
         medicalRecordV1Page.assertLabelAndValue("NHS number", patient.formattedNHSNumber())
     }

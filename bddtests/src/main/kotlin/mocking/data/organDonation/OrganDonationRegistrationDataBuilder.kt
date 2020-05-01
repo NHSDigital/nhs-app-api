@@ -105,14 +105,14 @@ object OrganDonationRegistrationDataBuilder {
                 name = listOf(Name.fromPatient(patient)),
                 nameFull = patient.formattedFullName(),
                 gender = patient.sex.toString(),
-                birthdate = patient.dateOfBirth,
+                birthdate = patient.age.dateOfBirth,
                 ethnicCategory = getCodeableConcept(demographics.ethnicity),
                 religiousAffiliation = getCodeableConcept(demographics.religion),
                 address = listOf(Address.fromPatient(patient)),
-                addressFull = patient.address.full(),
+                addressFull = patient.contactDetails.address.full(),
                 telecom = listOf(Identifier(
                         system = "phone",
-                        value = patient.telephoneFirst)),
+                        value = patient.contactDetails.telephoneFirst)),
                 organDonationDecision = "opt-out",
                 faithDeclaration = getFaithDeclaration(demographics.faithDeclaration))
     }

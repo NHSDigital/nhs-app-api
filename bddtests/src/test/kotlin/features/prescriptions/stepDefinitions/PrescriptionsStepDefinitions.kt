@@ -94,7 +94,6 @@ open class PrescriptionsStepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         SerenityHelpers.setGpSupplier(supplier)
         val currentPatient = Patient.getDefault(supplier)
-        SerenityHelpers.setPatient( currentPatient)
         SerenityHelpers.setPatient(currentPatient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(currentPatient)
@@ -352,7 +351,7 @@ open class PrescriptionsStepDefinitions {
         if (currentProvider === Supplier.TPP) {
             repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().formattedFullName())
         } else {
-            repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().firstName)
+            repeatPrescriptionConfirmation.isLoaded(ProxySerenityHelpers.getPatientOrProxy().name.firstName)
         }
     }
 

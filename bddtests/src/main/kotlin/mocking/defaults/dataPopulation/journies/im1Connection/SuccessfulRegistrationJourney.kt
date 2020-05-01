@@ -62,8 +62,8 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                 .forEmis {
                     authentication.meApplicationsRequest(patient,
                             LinkApplicationRequestModel(
-                                    surname = patient.surname,
-                                    dateOfBirth = patient.dateOfBirth.plus("T00:00:00"),
+                                    surname = patient.name.surname,
+                                    dateOfBirth = patient.age.dateOfBirth.plus("T00:00:00"),
                                     linkageDetails = LinkageDetailsModel(
                                             accountId = patient.accountId,
                                             linkageKey = patient.linkageKey,
@@ -112,7 +112,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                                     user = User(
                                             person = Person(
                                                     patientId = patient.patientId,
-                                                    dateOfBirth = patient.dateOfBirth,
+                                                    dateOfBirth = patient.age.dateOfBirth,
                                                     gender = patient.sex.name,
                                                     nationalId = NationalId(
                                                             type = TppConstants.NationalIdTypeNhs,
@@ -120,8 +120,8 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                                                     ),
                                                     personName = PersonName(
                                                             name =
-                                                            "${patient.title} " +
-                                                                    "${patient.firstName} ${patient.surname}"
+                                                            "${patient.name.title} " +
+                                                                    "${patient.name.firstName} ${patient.name.surname}"
                                                     )
                                             )
                                     ),

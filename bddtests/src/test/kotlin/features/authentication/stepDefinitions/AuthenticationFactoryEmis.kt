@@ -88,8 +88,8 @@ class AuthenticationFactoryEmis  : AuthenticationFactory(Supplier.EMIS){
 
     private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {
         return LinkApplicationRequestModel(
-                surname = patient.surname,
-                dateOfBirth = patient.dateOfBirth.plus("T00:00:00"),
+                surname = patient.name.surname,
+                dateOfBirth = patient.age.dateOfBirth.plus("T00:00:00"),
                 linkageDetails = LinkageDetailsModel(
                         accountId = patient.accountId,
                         nationalPracticeCode = patient.odsCode,

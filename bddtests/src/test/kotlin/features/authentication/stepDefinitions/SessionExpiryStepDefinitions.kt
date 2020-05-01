@@ -22,6 +22,7 @@ import utils.getOrFail
 import utils.set
 import worker.NhsoHttpException
 import worker.WorkerClient
+import worker.models.session.UserSessionRequest
 
 private const val DELAY_SECONDS_FOR_WAITING = 2000L
 private const val DELAY_BEFORE_RESUME = 10_000L
@@ -51,7 +52,10 @@ class SessionExpiryStepDefinitions  {
         DemographicsFactory.getForSupplier(supplier).enabled(patient)
 
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
-                .postSessionConnection(patient.generateUserSessionRequest(redirectUri))
+                .postSessionConnection(UserSessionRequest(
+                        authCode = patient.authCode,
+                        codeVerifier = patient.codeVerifier,
+                        redirectUrl = redirectUri))
 
         val patientConfig = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .getPatientLinkedAccountsConfiguration()

@@ -3,90 +3,67 @@ package models.patients
 import mocking.defaults.EmisMockDefaults
 import mocking.emis.demographics.Sex
 import models.Patient
+import models.PatientAge
+import models.PatientName
 import worker.models.patient.Im1ConnectionToken
-import java.time.temporal.ChronoUnit
 
 class EmisPatients {
 
-    companion object {
-        fun getDefault(): Patient {
+    companion object : PatientHandler(){
+        override fun getDefault(): Patient {
             return montelFrye
         }
 
-        fun getPatientWithLinkedProfiles(): Patient {
-            // Ensure the sessionId and endUserSessionId of the linkes accounts
+        override fun getPatientWithLinkedProfiles(): Patient {
+            // Ensure the sessionId and endUserSessionId of the linked accounts
             // match the values in the main (logged in) account
-            tonyStark.linkedAccounts.forEach {
-                linkedAccount ->
-                    linkedAccount.sessionId = tonyStark.sessionId
-                    linkedAccount.endUserSessionId = tonyStark.endUserSessionId
+            tonyStark.linkedAccounts.forEach { linkedAccount ->
+                linkedAccount.sessionId = tonyStark.sessionId
+                linkedAccount.endUserSessionId = tonyStark.endUserSessionId
             }
             return tonyStark
         }
 
-        fun getPatientWithNoLinkedProfiles() : Patient {
+        override fun getPatientWithNoLinkedProfiles(): Patient {
             return picaJones
         }
 
+        override fun setOdsCode(patient: Patient, provider: String) {
+            val targetOdsCode = when (provider.toUpperCase()) {
+                "ECONSULT" -> EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT
+                "IM1" -> EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_IM1
+                "INFORMATICA" -> EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_INFORMATICA
+                "GPATHAND" -> EmisMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_GP_AT_HAND
+                else -> throw IllegalArgumentException("$provider not a valid appointment provider name.")
+            }
+            patient.updateOdsCodes(targetOdsCode)
+        }
+
         val paulSmith = Patient(
-                title = "Mr",
-                firstName = "Paul",
-                surname = "Smith",
+                name = PatientName(
+                        title = "Mr",
+                        firstName = "Paul",
+                        surname = "Smith"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
-                dateOfBirth = "1972-04-12",
-                ageMonths = Patient.getAgePart("1972-04-12", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1972-04-12", ChronoUnit.YEARS),
+                age = PatientAge(dateOfBirth = "1972-04-12"),
                 sessionId = "AJYF0ufQI6tTpdfwaXAt",
                 connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 nhsNumbers = listOf("2227007273"))
 
-        val jackJackson = Patient(
-                title = "Mr",
-                firstName = "Jack",
-                surname = "Jackson",
-                dateOfBirth = "1972-04-12",
-                ageMonths = Patient.getAgePart("1972-04-12", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1972-04-12", ChronoUnit.YEARS),
-                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
-                userPatientLinkToken = "nd83jdHg72UeEEjnd3hjU7",
-                sessionId = "gY39SJJMEEg7rNbcsfF8",
-                connectionToken = "efa22020-9221-46a6-a0f0-6c0340b8f44d",
-                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
-                nhsNumbers = listOf("2227007273")
-        )
-
-        val alanCook = Patient(
-                title = "Mr",
-                firstName = "Alan",
-                surname = "Cook",
-                dateOfBirth = "1972-04-12",
-                ageMonths = Patient.getAgePart("1972-04-12", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1972-04-12", ChronoUnit.YEARS),
+        private val alanCook = Patient(
+                name = PatientName(
+                        title = "Mr",
+                        firstName = "Alan",
+                        surname = "Cook"),
+                age = PatientAge(dateOfBirth = "1972-04-12"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 userPatientLinkToken = "id83hdydGyo6kKl0gaRdRb",
                 sessionId = "fbWgorZ8Fggk9c5PgKd7",
                 connectionToken = "7e14cfb4-eb7a-44c3-8603-28ee36c7a9bf",
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 nhsNumbers = listOf("2227007273")
-        )
-
-        val halleDawe = Patient(
-                title = "Miss",
-                firstName = "Halle",
-                surname = "Dawe",
-                dateOfBirth = "1994-02-21",
-                ageMonths = Patient.getAgePart("1994-02-21", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1994-02-21", ChronoUnit.YEARS),
-                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
-                sessionId = "4RDwmQVi3OfSbp47dbAnRF",
-                connectionToken = "1da4fe9d-0fd2-45bc-90a9-014e57291d0f",
-                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
-                nhsNumbers = listOf("2227007273"),
-                accountId = "4937786121",
-                linkageKey = "tTALtBP3rLR16",
-                userPatientLinkToken = "DbLYlUrwyGpgZ65Mlk6601"
         )
 
         private val montelFryeIm1ConnectionToken = Im1ConnectionToken(
@@ -96,17 +73,11 @@ class EmisPatients {
         )
 
         val montelFrye = Patient(
-                title = "Mr",
-                firstName = "Montel",
-                surname = "Frye",
-                dateOfBirth = "1972-04-12",
-                ageMonths = Patient.getAgePart("1972-04-12", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1972-04-12", ChronoUnit.YEARS),
+                name = PatientName(title = "Mr",
+                        firstName = "Montel",
+                        surname = "Frye"),
+                age = PatientAge(dateOfBirth = "1972-04-12"),
                 sex = Sex.Male,
-                address = Patient.defaultAddress,
-                telephoneFirst = Patient.defaultTelephoneFirst,
-                telephoneSecond = Patient.defaultTelephoneSecond,
-                emailAddress = Patient.defaultEmailAddress,
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "2jM47sZ0ic4FIAcVogI4WI",
                 connectionToken = montelFryeIm1ConnectionToken.accessIdentityGuid!!,
@@ -120,16 +91,11 @@ class EmisPatients {
         )
 
         val picaJones = Patient(
-                title = "",
-                firstName = "Pica",
-                surname = "Jones",
-                dateOfBirth = "1972-04-12",
-                ageMonths = Patient.getAgePart("1972-04-12", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1972-04-12", ChronoUnit.YEARS),
-                address = Patient.defaultAddress,
-                telephoneFirst = Patient.defaultTelephoneFirst,
-                telephoneSecond = Patient.defaultTelephoneSecond,
-                emailAddress = Patient.defaultEmailAddress,
+                name = PatientName(
+                        title = "",
+                        firstName = "Pica",
+                        surname = "Jones"),
+                age = PatientAge(dateOfBirth = "1972-04-12"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "4FIAcVogI4WI2jM47sZ0ic",
                 connectionToken = "7a3a3cf8-4fcc-a797-a4b9-629cdbe104fc",
@@ -141,12 +107,11 @@ class EmisPatients {
         )
 
         val johnSmith = Patient(
-                title = "Mr",
-                firstName = "John",
-                surname = "Smith",
-                dateOfBirth = "1919-12-24",
-                ageMonths = Patient.getAgePart("1919-12-24", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1919-12-24", ChronoUnit.YEARS),
+                name = PatientName(
+                        title = "Mr",
+                        firstName = "John",
+                        surname = "Smith"),
+                age = PatientAge(dateOfBirth = "1919-12-24"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
                 sessionId = "MT4vWCxTKXRYr7fFJWM3wB",
@@ -158,14 +123,12 @@ class EmisPatients {
         )
 
         val karadanvers = Patient(
-                title = "Miss",
-                firstName = "Kara",
-                surname = "Danvers",
+                name = PatientName(title = "Miss",
+                        firstName = "Kara",
+                        surname = "Danvers"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
-                dateOfBirth = "1972-04-12",
-                ageMonths = Patient.getAgePart("1972-04-12", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1972-04-12", ChronoUnit.YEARS),
+                age = PatientAge(dateOfBirth = "1972-04-12"),
                 sessionId = "AJYF0ufQI6tTpdfwaXAt",
                 connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -173,12 +136,12 @@ class EmisPatients {
         )
 
         val lenaluthor = Patient(
-                title = "Miss",
-                firstName = "Lena",
-                surname = "Luthor",
-                dateOfBirth = "1972-04-12",
-                ageMonths = Patient.getAgePart("1972-04-12", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1972-04-12", ChronoUnit.YEARS),
+                name = PatientName(
+                        title = "Miss",
+                        firstName = "Lena",
+                        surname = "Luthor"),
+                age = PatientAge(
+                        dateOfBirth = "1972-04-12"),
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 userPatientLinkToken = "id83hdydGyo6kKl0gaRdRb",
                 sessionId = "fbWgorZ8Fggk9c5PgKd7",
@@ -188,17 +151,12 @@ class EmisPatients {
         )
 
         val tonyStark = Patient(
-                title = "Mr",
-                firstName = "Tony",
-                surname = "Stark",
-                dateOfBirth = "1972-04-12",
-                ageMonths = Patient.getAgePart("1972-04-12", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1972-04-12", ChronoUnit.YEARS),
+                name = PatientName(
+                        title = "Mr",
+                        firstName = "Tony",
+                        surname = "Stark"),
+                age = PatientAge(dateOfBirth = "1972-04-12"),
                 sex = Sex.Male,
-                address = Patient.defaultAddress,
-                telephoneFirst = Patient.defaultTelephoneFirst,
-                telephoneSecond = Patient.defaultTelephoneSecond,
-                emailAddress = Patient.defaultEmailAddress,
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "2jM47sZ0ic4FIAcVogI4WI",
                 connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,

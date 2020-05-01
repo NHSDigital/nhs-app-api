@@ -16,6 +16,7 @@ import utils.LinkedProfilesSerenityHelpers
 import utils.getOrFail
 import utils.set
 import worker.WorkerClient
+import worker.models.session.UserSessionRequest
 import java.util.*
 
 open class SharedStepDefinitionsBackend{
@@ -44,7 +45,10 @@ open class SharedStepDefinitionsBackend{
         }
 
         Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
-                .postSessionConnection(patient.generateUserSessionRequest(redirectUri))
+                .postSessionConnection(UserSessionRequest(
+                        authCode = patient.authCode,
+                        codeVerifier = patient.codeVerifier,
+                        redirectUrl = redirectUri))
 
         if( isProofLevel9 ) {
             DemographicsFactory

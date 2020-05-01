@@ -13,8 +13,8 @@ class LinkageFactoryMicrotest : LinkageFactory(Supplier.MICROTEST) {
             linkageKey = patient.linkageKey,
             accountId = patient.accountId,
             nhsNumber = patient.nhsNumbers.first(),
-            surname = patient.surname,
-            dateOfBirth = patient.dateOfBirth)
+            surname = patient.name.surname,
+            dateOfBirth = patient.age.dateOfBirth)
 
     override val linkageDateOfBirthFormat = DateTimeFormats.backendDateTimeFormatWithoutTimezone
 

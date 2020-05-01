@@ -29,8 +29,8 @@ class VisionRegisterBuilder(var userSession: VisionUserSession,
                 .andBody(userSession.accountId, "contains")
                 .andBody(userSession.provider, "contains")
                 .andBody(serviceDefinition.name, "contains")
-                .andBody(patient.surname, "contains")
-                .andBody(patient.dateOfBirth, "contains")
+                .andBody(patient.name.surname, "contains")
+                .andBody(patient.age.dateOfBirth, "contains")
                 .andBody(patient.linkageKey, "contains")
     }
 

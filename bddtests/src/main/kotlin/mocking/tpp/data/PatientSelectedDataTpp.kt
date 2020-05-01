@@ -5,5 +5,5 @@ import mocking.tpp.models.Person
 import mocking.stubs.TppStubsPatientFactory.Companion.goodPatientTPP
 
 class PatientSelectedDataTpp {
-    var selectedPatient = PatientSelectedReply(person = Person(dateOfBirth = goodPatientTPP.dateOfBirth))
+    var selectedPatient = PatientSelectedReply(person = Person(dateOfBirth = goodPatientTPP.age.dateOfBirth))
 }

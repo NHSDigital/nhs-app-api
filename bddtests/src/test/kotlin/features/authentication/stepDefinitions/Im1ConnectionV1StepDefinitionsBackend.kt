@@ -14,6 +14,7 @@ import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
+import models.PatientAge
 import models.patients.EmisPatients
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -28,6 +29,7 @@ import worker.models.linkage.LinkageResponse
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.patient.Im1ConnectionToken
+import worker.models.session.UserSessionRequest
 
 class Im1ConnectionV1StepDefinitionsBackend {
     val mockingClient = MockingClient.instance
@@ -62,7 +64,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
     @Given("^I have data for a (.+) patient with incorrect surname$")
     fun iHaveDataForAPatientWithIncorrectSurname(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getDefault(supplier).copy(surname = "incorrectSurname")
+        val defaultPatient = Patient.getDefault(supplier)
+        val patient = defaultPatient.copy(name = defaultPatient.name.copy(surname = "incorrectSurname"))
         AuthenticationFactory.getForSupplier(supplier).patientWithIncorrectSurname(patient)
         setIm1Request(patient)
     }
@@ -70,7 +73,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
     @Given("^I have data for a (.+) patient with incorrect date of birth$")
     fun iHaveDataForAPatientWithIncorrectDateOfBirth(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getDefault(supplier).copy(surname = "1900-01-01")
+        val defaultPatient = Patient.getDefault(supplier)
+        val patient = defaultPatient.copy(age = PatientAge( "1900-01-01"))
         AuthenticationFactory.getForSupplier(supplier).patientWithIncorrectDOB(patient)
         setIm1Request(patient)
     }
@@ -84,7 +88,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
     @Given("^I have a (.+) user's IM1 credentials with a Surname not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithASurnameNotInTheExpectedFormat(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getDefault(supplier).copy(surname = INVALID_VALUE)
+        val defaultPatient = Patient.getDefault(supplier)
+        val patient = defaultPatient.copy(name = defaultPatient.name.copy(surname = INVALID_VALUE))
         AuthenticationFactory.getForSupplier(supplier).patientWithSurnameInWrongFormat(patient)
         setIm1Request(patient)
     }
@@ -113,7 +118,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
     @Given("^I have a (.+) user's IM1 credentials with a Date Of Birth not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithADateOfBirthNotInTheExpectedFormat(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getDefault(supplier).copy(dateOfBirth = INVALID_VALUE)
+        val defaultPatient = Patient.getDefault(supplier)
+        val patient = defaultPatient.copy(age = PatientAge(INVALID_VALUE))
         AuthenticationFactory.getForSupplier(supplier).patientWithDOBInWrongFormat(patient)
         setIm1Request(patient)
     }
@@ -125,8 +131,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
         AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
-                Surname = patient.surname,
-                DateOfBirth = patient.dateOfBirth))
+                Surname = patient.name.surname,
+                DateOfBirth = patient.age.dateOfBirth))
     }
 
     @Given("^I have data for an EMIS patient that has already been associated with the application in the GP system$")
@@ -143,8 +149,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
 
     private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {
         return LinkApplicationRequestModel(
-                surname = patient.surname,
-                dateOfBirth = patient.dateOfBirth.plus("T00:00:00"),
+                surname = patient.name.surname,
+                dateOfBirth = patient.age.dateOfBirth.plus("T00:00:00"),
                 linkageDetails = LinkageDetailsModel(
                         accountId = patient.accountId,
                         nationalPracticeCode = patient.odsCode,
@@ -174,8 +180,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
-                Surname = patient.surname,
-                DateOfBirth = patient.dateOfBirth))
+                Surname = patient.name.surname,
+                DateOfBirth = patient.age.dateOfBirth))
     }
 
     @Given("^I have a (.+) user's IM1 credentials with missing Surname$")
@@ -187,7 +193,7 @@ class Im1ConnectionV1StepDefinitionsBackend {
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
-                DateOfBirth = patient.dateOfBirth))
+                DateOfBirth = patient.age.dateOfBirth))
     }
 
     @Given("^I have a (.+) user's IM1 credentials with missing Account ID$")
@@ -198,8 +204,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
         AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
-                Surname = patient.surname,
-                DateOfBirth = patient.dateOfBirth))
+                Surname = patient.name.surname,
+                DateOfBirth = patient.age.dateOfBirth))
     }
 
     @Given("^I have a (.+) user's IM1 credentials with missing Linkage Key$")
@@ -210,8 +216,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
         AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 OdsCode = patient.odsCode,
-                Surname = patient.surname,
-                DateOfBirth = patient.dateOfBirth))
+                Surname = patient.name.surname,
+                DateOfBirth = patient.age.dateOfBirth))
     }
 
     @Given("^I have a microtest user's IM1 credentials with a emis connection token$")
@@ -222,8 +228,8 @@ class Im1ConnectionV1StepDefinitionsBackend {
         AuthenticationSerenityHelpers.IM1_CONNECTION_REQUEST.set(Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 OdsCode = patient.odsCode,
-                Surname = patient.surname,
-                DateOfBirth = patient.dateOfBirth
+                Surname = patient.name.surname,
+                DateOfBirth = patient.age.dateOfBirth
         ))
     }
 
@@ -263,12 +269,13 @@ class Im1ConnectionV1StepDefinitionsBackend {
                 linkingInformationExample.dateOfBirth
         ))
         val gpSystem = SerenityHelpers.getGpSupplier()
-        val patient = Patient.getDefault(gpSystem).copy(
+        val defaultPatient = Patient.getDefault(gpSystem)
+        val patient =defaultPatient.copy(
                 accountId = linkingInformationExample.accountId,
                 linkageKey = linkingInformationExample.linkageKey,
                 odsCode = linkingInformationExample.odsCode,
-                surname = linkingInformationExample.surname,
-                dateOfBirth = linkingInformationExample.dateOfBirth,
+                name = defaultPatient.name.copy(surname = linkingInformationExample.surname),
+                age = PatientAge( linkingInformationExample.dateOfBirth),
                 nhsNumbers = arrayListOf(linkingInformationExample.nhsNumber)
         )
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
@@ -286,7 +293,10 @@ class Im1ConnectionV1StepDefinitionsBackend {
         val patient = SerenityHelpers.getPatient()
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         Assert.assertNotNull(Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
-                .postSessionConnection(patient.generateUserSessionRequest(redirectUri)))
+                .postSessionConnection(UserSessionRequest(
+                        authCode = patient.authCode,
+                        codeVerifier = patient.codeVerifier,
+                        redirectUrl = redirectUri)))
     }
 
     @Then("^the response has the expected connection token$")

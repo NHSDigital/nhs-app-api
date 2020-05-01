@@ -57,8 +57,8 @@ class Im1ConnectionV2ErrorStepDefinitions {
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = null,
-                Surname = patient.surname,
-                DateOfBirth = patient.dateOfBirth)
+                Surname = patient.name.surname,
+                DateOfBirth = patient.age.dateOfBirth)
         SerenityHelpers.setPatient(patient)
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
     }
@@ -71,7 +71,7 @@ class Im1ConnectionV2ErrorStepDefinitions {
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
-                Surname = patient.surname,
+                Surname = patient.name.surname,
                 DateOfBirth = null)
         SerenityHelpers.setPatient(patient)
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
@@ -86,7 +86,7 @@ class Im1ConnectionV2ErrorStepDefinitions {
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
                 Surname = null,
-                DateOfBirth = patient.dateOfBirth)
+                DateOfBirth = patient.age.dateOfBirth)
         SerenityHelpers.setPatient(patient)
         Im1ConnectionSerenityHelpers.Im1ConnectionRequest.set(connectionRequest)
     }

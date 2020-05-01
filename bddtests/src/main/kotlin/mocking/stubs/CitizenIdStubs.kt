@@ -1,6 +1,7 @@
 package mocking.stubs
 
 import config.Config
+import mocking.IdTokenBuilder
 import mocking.MockingClient
 import mocking.citizenId.models.TokenRequest
 import mocking.citizenId.models.signingKeys.SucceededResponse
@@ -21,11 +22,11 @@ class CitizenIdStubs(private val mockingClient: MockingClient) {
         }
 
         mockingClient.forCitizenId {
-            completeLoginRequest(patient,patient.surname)
+            completeLoginRequest(patient,patient.name.surname)
                     .respondWithRedirectResponse()
         }
 
-        val idToken = Patient.getIdToken(patient)
+        val idToken = IdTokenBuilder().getSignedToken(patient).serialize()
 
         mockingClient.forCitizenId {
             signingKeyRequest()

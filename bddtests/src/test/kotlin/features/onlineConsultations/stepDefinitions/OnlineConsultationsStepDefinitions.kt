@@ -82,7 +82,7 @@ open class OnlineConsultationsStepDefinitions {
     @When("^I insert my date of birth$")
     fun iInsertMyDateOfBirth(){
         val patient = SerenityHelpers.getPatient()
-        onlineConsultationsPage.checkDateOfBirthPopulated(patient.dateOfBirth)
+        onlineConsultationsPage.checkDateOfBirthPopulated(patient.age.dateOfBirth)
         continueClicked()
     }
 

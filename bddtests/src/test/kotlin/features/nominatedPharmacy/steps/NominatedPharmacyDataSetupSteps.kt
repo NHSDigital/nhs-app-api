@@ -23,8 +23,8 @@ open class NominatedPharmacyDataSetupSteps {
 
     fun setupNoNominatedPharmacy() {
         val nhsNumber = SerenityHelpers.getPatient().nhsNumbers[0]
-        val surname = SerenityHelpers.getPatient().surname
-        val dateOfBirth = SerenityHelpers.getPatient().dateOfBirthDigitsOnly()
+        val surname = SerenityHelpers.getPatient().name.surname
+        val dateOfBirth = SerenityHelpers.getPatient().age.dateOfBirthDigitsOnly()
 
         val responseStringForUpdatedPharmacy =
                 GetNominatedPharmacyRequestBuilder.getResponse(nhsNumber, surname, dateOfBirth)
@@ -46,8 +46,8 @@ open class NominatedPharmacyDataSetupSteps {
 
     fun setupNominatedPharmacyWithInternetPharmacy(odsCode: String) {
         val nhsNumber = SerenityHelpers.getPatient().nhsNumbers[0]
-        val surname = SerenityHelpers.getPatient().surname
-        val dateOfBirth = SerenityHelpers.getPatient().dateOfBirthDigitsOnly()
+        val surname = SerenityHelpers.getPatient().name.surname
+        val dateOfBirth = SerenityHelpers.getPatient().age.dateOfBirthDigitsOnly()
 
         val personalDetails = PersonalCheckDetails(nhsNumber = nhsNumber, surname = surname, dateOfBirth = dateOfBirth)
 
@@ -71,8 +71,8 @@ open class NominatedPharmacyDataSetupSteps {
     }
 
     fun setupNominatedPharmacyWithDifferentNhsNumber(pharmacyType: String, odsCode: String, nhsNumber : String) {
-        val surname = SerenityHelpers.getPatient().surname
-        val dateOfBirth = SerenityHelpers.getPatient().dateOfBirthDigitsOnly()
+        val surname = SerenityHelpers.getPatient().name.surname
+        val dateOfBirth = SerenityHelpers.getPatient().age.dateOfBirthDigitsOnly()
 
         val personalDetails = PersonalCheckDetails(nhsNumber = nhsNumber, surname = surname, dateOfBirth = dateOfBirth)
 
@@ -84,8 +84,8 @@ open class NominatedPharmacyDataSetupSteps {
 
     fun setupNominatedPharmacy(pharmacyType: String, odsCode: String) {
         val nhsNumber = SerenityHelpers.getPatient().nhsNumbers[0]
-        val surname = SerenityHelpers.getPatient().surname
-        val dateOfBirth = SerenityHelpers.getPatient().dateOfBirthDigitsOnly()
+        val surname = SerenityHelpers.getPatient().name.surname
+        val dateOfBirth = SerenityHelpers.getPatient().age.dateOfBirthDigitsOnly()
 
         val personalDetails = PersonalCheckDetails(nhsNumber = nhsNumber, surname = surname, dateOfBirth = dateOfBirth)
 
@@ -97,8 +97,8 @@ open class NominatedPharmacyDataSetupSteps {
 
     fun setupNominatedPharmacy(pharmacyType: String, odsCode: String, code: String? = null) {
         val  nhsNumber = SerenityHelpers.getPatient().nhsNumbers[0]
-        val surname = SerenityHelpers.getPatient().surname
-        val dateOfBirth = SerenityHelpers.getPatient().dateOfBirthDigitsOnly()
+        val surname = SerenityHelpers.getPatient().name.surname
+        val dateOfBirth = SerenityHelpers.getPatient().age.dateOfBirthDigitsOnly()
 
         val personalDetails = PersonalCheckDetails(nhsNumber = nhsNumber, surname = surname, dateOfBirth = dateOfBirth)
 
@@ -155,8 +155,8 @@ open class NominatedPharmacyDataSetupSteps {
 
         val personalDetails = PersonalCheckDetails(
                 nhsNumber =  SerenityHelpers.getPatient().nhsNumbers[0],
-                surname = SerenityHelpers.getPatient().surname,
-                dateOfBirth = SerenityHelpers.getPatient().dateOfBirthDigitsOnly())
+                surname = SerenityHelpers.getPatient().name.surname,
+                dateOfBirth = SerenityHelpers.getPatient().age.dateOfBirthDigitsOnly())
 
         val responseStringForUpdatedPharmacy =
                 GetNominatedPharmacyRequestBuilder.getResponse(

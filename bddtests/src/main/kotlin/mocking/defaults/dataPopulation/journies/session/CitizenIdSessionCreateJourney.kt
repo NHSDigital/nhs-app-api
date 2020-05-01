@@ -1,6 +1,7 @@
 package mocking.defaults.dataPopulation.journies.session
 
 import config.Config
+import mocking.IdTokenBuilder
 import mocking.MockingClient
 import mocking.citizenId.login.UpliftLoginRequestBuilder
 import mocking.citizenId.models.notifications.SuccessResponse
@@ -101,7 +102,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
                     .respondWithRedirectResponse()
         }
 
-        val idToken = Patient.getIdToken(patient)
+        val idToken = IdTokenBuilder().getSignedToken(patient).serialize()
         val accessToken = patient.accessToken
 
         mockingClient.forCitizenId {

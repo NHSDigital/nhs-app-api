@@ -27,11 +27,11 @@ class UserInfoRequestBuilder(
 
         val userInfo = UserInfo(
                 NhsNumber = patient.nhsNumbers.firstOrNull() ?: "",
-                Birthdate = patient.dateOfBirth,
+                Birthdate = patient.age.dateOfBirth,
                 Im1ConnectionToken = im1ConnectionToken,
                 GpIntegrationCredentials = GpIntegrationCredentials(patient.odsCode),
-                GivenName = patient.firstName,
-                FamilyName = patient.surname,
+                GivenName = patient.name.firstName,
+                FamilyName = patient.name.surname,
                 Subject = patient.subject,
                 IdentityProofingLevel = patient.identityProofingLevel.UserInfoValue
         )

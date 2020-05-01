@@ -16,7 +16,7 @@ class OrganDonationLookupRegistrationBuilder(patient: Patient)
                 .andHeader(HEADER_SUBSCRIPTION_KEY, HEADER_SUBSCRIPTION_VALUE)
                 .andHeader(HEADER_CLIENT_ID_KEY, HEADER_CLIENT_ID_VALUE)
                 .andBody("https://fhir.nhs.uk/Id/nhs-number|" + patient.nhsNumbers.first(), "contains")
-                .andBody(patient.dateOfBirth, "contains")
+                .andBody(patient.age.dateOfBirth, "contains")
     }
 
     fun respondWithSuccess(resource : Resource): Mapping {

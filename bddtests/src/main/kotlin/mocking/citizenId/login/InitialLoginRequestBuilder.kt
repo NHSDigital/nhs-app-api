@@ -92,7 +92,7 @@ class InitialLoginRequestBuilder(
             else -> {
                 val patientList = StubbedEnvironment
                         .getPatientList()
-                        .joinToString("") { patientInfo(it, it.surname) }
+                        .joinToString("") { patientInfo(it, it.name.surname) }
                 """
                     <h2>Dev Stubs Patients</h2>
                     <ul>
@@ -109,9 +109,9 @@ class InitialLoginRequestBuilder(
                     <h3>$loginId</h3>
                     <dl>
                         <dt>First Name</di>
-                        <dd>${patient.firstName}</dd>
+                        <dd>${patient.name.firstName}</dd>
                         <dt>Surname</di>
-                        <dd>${patient.surname}</dd>
+                        <dd>${patient.name.surname}</dd>
                     </dl>
                 </li>
             """

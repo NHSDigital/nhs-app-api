@@ -27,10 +27,10 @@ data class OrganDonationRegistration(
                     nhsNumber = patient.formattedNHSNumber(),
                     nameFull = patient.formattedFullName(),
                     name = Name.fromPatient(patient),
-                    dateOfBirth = patient.dateOfBirth,
-                    addressFull = patient.address.full(),
+                    dateOfBirth = patient.age.dateOfBirth,
+                    addressFull = patient.contactDetails.address.full(),
                     address = Address.fromPatient(patient),
-                    emailAddresss = patient.emailAddress,
+                    emailAddresss = patient.contactDetails.emailAddress,
                     decision = OrganDonationRegistrationDecision.OptOut,
                     decisionDetails = null,
                     faithDeclaration = demographics.faithDeclaration.toString()

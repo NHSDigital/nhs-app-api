@@ -22,7 +22,7 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
         val expected = ExpectedPageStructure()
                 .h3("Personal details")
                 .h4("Name").paragraph(patient.formattedFullName())
-                .h4("Date of birth").paragraph(patient.formattedDateOfBirth())
+                .h4("Date of birth").paragraph(patient.age.formattedDateOfBirth())
                 .h4("Gender").paragraph(patient.sex.toString())
                 .h4("NHS number").paragraph(patient.formattedNHSNumber())
                 .paragraph(bodyText)
@@ -33,7 +33,7 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
         ExpectedPageStructure()
                 .h3("Contact details")
                 .paragraph( "We will only contact you about your organ donation registration.")
-                .h4("Postal address").paragraph(patient.address.full())
+                .h4("Postal address").paragraph(patient.contactDetails.address.full())
                 .paragraph( "Contact your GP surgery to amend your postal address.")
                 .assert(this)
     }

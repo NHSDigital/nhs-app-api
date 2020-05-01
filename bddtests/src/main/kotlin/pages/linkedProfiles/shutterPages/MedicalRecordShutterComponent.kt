@@ -14,7 +14,7 @@ class MedicalRecordShutterComponent :  HybridPageObject() {
                 .paragraph("Name")
                 .paragraph(patient.formattedFullName())
                 .paragraph("Age")
-                .paragraph(patient.formattedAge())
+                .paragraph(patient.age.formattedAge())
                 .paragraph(firstLine)
                 .paragraph("Contact $patientDisplayName's GP surgery to request access.")
                 .paragraph("Switch to your profile to view your GP medical record.")

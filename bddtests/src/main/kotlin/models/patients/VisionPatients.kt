@@ -4,14 +4,30 @@ import mocking.defaults.VisionMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.Sex
 import models.Patient
+import models.PatientAge
+import models.PatientContactDetails
+import models.PatientName
+import org.openqa.selenium.InvalidArgumentException
 import worker.models.patient.Im1ConnectionToken
 
 class VisionPatients {
 
-    companion object {
+    companion object : PatientHandler() {
 
-        fun getDefault(): Patient {
+        override fun getDefault(): Patient {
             return aderynCanon
+        }
+
+        override fun getPatientWithLinkedProfiles(): Patient {
+            throw InvalidArgumentException("Not implemented for VISION")
+        }
+
+        override fun getPatientWithNoLinkedProfiles(): Patient {
+            throw InvalidArgumentException("Not implemented for VISION")
+        }
+
+        override fun setOdsCode(patient: Patient, provider: String) {
+            throw InvalidArgumentException("Not implemented for VISION")
         }
 
         private val adreynCanonIm1ConnectionToken = Im1ConnectionToken(
@@ -23,22 +39,20 @@ class VisionPatients {
         )
 
         val aderynCanon = Patient(
-                title = "Mr",
-                firstName = "Aderyn",
-                surname = "Canon",
-                dateOfBirth = "1986-04-10",
+                name = PatientName(
+                        title = "Mr",
+                        firstName = "Aderyn",
+                        surname = "Canon"),
+                age = PatientAge(dateOfBirth = "1986-04-10"),
                 sex = Sex.Male,
-                address = Address(
+                contactDetails = PatientContactDetails(address = Address(
                         houseNameFlatNumber = "28 Central Path",
                         numberStreet = "Troy Avenue",
                         village = "Horsforth",
                         town = "Leeds",
                         county = "West Yorkshire",
                         postcode = "LS18 5TN"
-                ),
-                telephoneFirst = Patient.defaultTelephoneFirst,
-                telephoneSecond = Patient.defaultTelephoneSecond,
-                emailAddress = Patient.defaultEmailAddress,
+                )),
                 odsCode = VisionMockDefaults.DEFAULT_ODS_CODE_VISION,
                 nhsNumbers = listOf("5785445875"),
                 connectionToken = "{\"RosuAccountId\":\"104969\",\"" +

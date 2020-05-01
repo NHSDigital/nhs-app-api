@@ -9,7 +9,6 @@ import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import models.Patient
 import models.patients.EmisPatients
 import pages.appointments.HospitalAppointmentsPage
 import utils.SerenityHelpers
@@ -36,7 +35,7 @@ class HospitalAppointmentStepDefinitions {
         val supplier = Supplier.EMIS
         val journey = SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB
         val odsCode = ServiceJourneyRulesMapper.findOdsCode(supplier, arrayListOf(journey))
-        Patient.updateOdsCodes(patient, odsCode)
+        patient.updateOdsCodes(odsCode)
         SerenityHelpers.setGpSupplier(supplier)
         SerenityHelpers.setPatient(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)

@@ -25,9 +25,9 @@ class EmisSessionBuilder(configuration: EmisConfiguration,
 
     fun respondWithSuccess(patient: Patient, associationType: AssociationType): Mapping {
         val responseBody = CreateSessionResponseModel(
-                title = patient.title,
-                firstName = patient.firstName,
-                surname = patient.surname,
+                title = patient.name.title,
+                firstName = patient.name.firstName,
+                surname = patient.name.surname,
                 sessionId = patient.sessionId,
                 userPatientLinkToken = patient.userPatientLinkToken,
                 odsCode = patient.odsCode,
@@ -35,9 +35,9 @@ class EmisSessionBuilder(configuration: EmisConfiguration,
 
         patient.linkedAccounts.forEach {
             val proxyPatientLink = UserPatientLink(
-                    title = it.title,
-                    firstName = it.firstName,
-                    surname = it.surname,
+                    title = it.name.title,
+                    firstName = it.name.firstName,
+                    surname = it.name.surname,
                     userPatientLinkToken = it.userPatientLinkToken,
                     nationalPracticeCode = it.odsCode,
                     associationType =  AssociationType.Proxy

@@ -4,7 +4,7 @@ import mocking.onlineConsultations.configurations.IQuestionConfiguration
 import utils.SerenityHelpers
 
 class DOBQuestionConfiguration: IQuestionConfiguration {
-    private val patientDateOfBirth = SerenityHelpers.getPatient().dateOfBirth
+    private val patientDateOfBirth = SerenityHelpers.getPatient().age.dateOfBirth
     override val request: String = """{
        "resourceType":"Parameters",
        "parameter":[

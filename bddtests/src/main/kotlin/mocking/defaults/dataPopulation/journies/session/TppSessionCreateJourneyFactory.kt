@@ -68,14 +68,14 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
     private fun createPerson(patient: Patient): Person {
         return Person(
                 patientId = patient.patientId,
-                dateOfBirth = patient.dateOfBirth,
+                dateOfBirth = patient.age.dateOfBirth,
                 gender = patient.sex.name,
                 nationalId = NationalId(
                         type = TppConstants.NationalIdTypeNhs,
                         value = patient.nhsNumbers.firstOrNull() ?: ""
                 ),
                 personName = PersonName(
-                        name = "${patient.title} ${patient.firstName} ${patient.surname}"
+                        name = "${patient.name.title} ${patient.name.firstName} ${patient.name.surname}"
                 )
         )
     }

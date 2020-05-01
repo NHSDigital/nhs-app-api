@@ -29,6 +29,7 @@ class PatientVerificationStepDefinitions {
     @Given("I have an (.*) IM1 Connection Token that does not exist")
     fun givenIHaveAnImConnectionTokenThatDoesNotExist(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
+        SerenityHelpers.setPatient(Patient.getDefault(supplier))
         PatientVerificationFactory.getForSupplier(supplier).im1ConnectionTokenDoesNotExist()
     }
 
@@ -151,6 +152,8 @@ class PatientVerificationStepDefinitions {
     @Given("I have valid a valid IM1 Connection Token for a (\\w+) patient but the GP System is not available$")
     fun giveIHaveAValidIM1ConnectionTokenForAPatientButTheGpSystemIsNotAvailable(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
+        val patient = Patient.getDefault(supplier)
+        SerenityHelpers.setPatient(patient)
         PatientVerificationFactory.getForSupplier(supplier).gpSystemNotAvailable()
     }
 

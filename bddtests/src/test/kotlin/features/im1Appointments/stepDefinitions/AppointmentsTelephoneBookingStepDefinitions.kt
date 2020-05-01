@@ -42,16 +42,18 @@ class AppointmentsTelephoneBookingStepDefinitions {
 
     private fun getTargetTelephoneNumber(patient: Patient, config: AppointmentConfiguration): String {
         val targetTelephoneNumber = if (config.inputType == TelephoneInputType.Select)
-            patient.telephoneFirst else "777777777"
+            patient.contactDetails.telephoneFirst else "777777777"
         AppointmentSerenityHelpers.TELEPHONE_NUMBER_TO_BOOK_AGAINST.set(targetTelephoneNumber)
         return targetTelephoneNumber
     }
 
     private fun createPatientSetup(gpSystem: String, config: AppointmentConfiguration): Patient {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getDefault(supplier).copy(
-                telephoneFirst = config.firstNumber,
-                telephoneSecond = config.secondNumber)
+        val defaultPatient = Patient.getDefault(supplier)
+        val patient = defaultPatient.copy(
+                contactDetails = defaultPatient.contactDetails.copy(
+                        telephoneFirst = config.firstNumber,
+                        telephoneSecond = config.secondNumber))
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient, false)

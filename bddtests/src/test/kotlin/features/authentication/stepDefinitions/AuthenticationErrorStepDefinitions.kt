@@ -13,6 +13,7 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.termsAndConditions.TermsAndConditionsJourneyFactory
 import models.Patient
+import models.PatientAge
 import net.thucydides.core.annotations.Steps
 import org.joda.time.DateTime
 import pages.navigation.WebHeader
@@ -58,7 +59,7 @@ class AuthenticationErrorStepDefinitions {
     @Given("^I attempt to log in as a (.*) user without a date of birth$")
     fun iAmLoggedInToWithoutDOB(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient = Patient.getDefault(supplier).copy(dateOfBirth = "")
+        val patient = Patient.getDefault(supplier).copy(age = PatientAge( dateOfBirth = ""))
         setupAndLogIn(patient, supplier)
     }
 
@@ -68,7 +69,7 @@ class AuthenticationErrorStepDefinitions {
         val birthdayToday = DateTime.now().minusYears(age);
         val birthdayTomorrow = birthdayToday.plusDays(1)
         val dateOfBirth = birthdayTomorrow.toString(DateTimeFormats.dateWithoutTimeFormat)
-        val patient = Patient.getDefault(supplier).copy(dateOfBirth = dateOfBirth)
+        val patient = Patient.getDefault(supplier).copy(age = PatientAge(dateOfBirth))
         setupAndLogIn(patient, supplier)
     }
 
@@ -77,7 +78,8 @@ class AuthenticationErrorStepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         val dateOfBirth = DateTime.now().minusYears(age)
                 .toString(DateTimeFormats.dateWithoutTimeFormat)
-        val patient = Patient.getDefault(supplier).copy(dateOfBirth = dateOfBirth)
+        val patient = Patient.getDefault(supplier).copy(
+                age = PatientAge(dateOfBirth = dateOfBirth))
         setupAndLogIn(patient, supplier)
     }
 

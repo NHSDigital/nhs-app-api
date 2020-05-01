@@ -26,8 +26,8 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
                 .forEmis {
                     authentication.meApplicationsRequest(patient,
                             LinkApplicationRequestModel(
-                                    surname = patient.surname,
-                                    dateOfBirth = patient.dateOfBirth.plus("T00:00:00"),
+                                    surname = patient.name.surname,
+                                    dateOfBirth = patient.age.dateOfBirth.plus("T00:00:00"),
                                     linkageDetails = LinkageDetailsModel(
                                             accountId = patient.accountId,
                                             linkageKey = patient.linkageKey,

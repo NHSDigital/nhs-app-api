@@ -25,8 +25,8 @@ data class LinkAccount(
                     return LinkAccount(
                             accountId = patient.accountId,
                             passphrase = patient.linkageKey,
-                            lastName = patient.surname,
-                            dateOfBirth = patient.dateOfBirth,
+                            lastName = patient.name.surname,
+                            dateOfBirth = patient.age.dateOfBirth,
                             organisationCode = patient.odsCode,
                             uuid = TppMockDefaults.DEFAULT_TPP_UUID
                     )

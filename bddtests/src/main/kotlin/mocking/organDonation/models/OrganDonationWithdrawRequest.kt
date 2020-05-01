@@ -24,8 +24,8 @@ data class OrganDonationWithdrawRequest(
                     nhsNumber = patient.formattedNHSNumber(),
                     name = Name.fromPatient(patient),
                     gender = patient.sex.toString(),
-                    dateOfBirth = patient.dateOfBirth,
-                    addressFull = patient.address.full(),
+                    dateOfBirth = patient.age.dateOfBirth,
+                    addressFull = patient.contactDetails.address.full(),
                     address = Address.fromPatient(patient),
                     WithdrawReasonId = withdrawalReasons.key
             )

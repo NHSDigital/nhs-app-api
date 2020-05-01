@@ -15,7 +15,7 @@ import utils.SerenityHelpers
 
 class OnlineConsultationsPage: HybridPageObject() {
 
-    private val firstName: String = SerenityHelpers.getPatient().firstName
+    private val firstName: String = SerenityHelpers.getPatient().name.firstName
 
     private val expectedAdviceText =
             "You've chosen to end your consultation. " +

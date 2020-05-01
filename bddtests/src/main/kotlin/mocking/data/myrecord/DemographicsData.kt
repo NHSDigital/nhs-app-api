@@ -26,25 +26,25 @@ object DemographicsData {
         }
 
         return EmisDemographicsResponse(
-                patient.title,
-                patient.firstName,
-                patient.surname,
+                patient.name.title,
+                patient.name.firstName,
+                patient.name.surname,
                 "Johnny",
                 patientIdentifiers,
                 DateConverter.convertDateToDateTimeFormat(
-                        patient.dateOfBirth,
+                        patient.age.dateOfBirth,
                         DateTimeFormats.dateWithoutTimeFormat,
                         DateTimeFormats.backendDateTimeFormatWithoutTimezone),
                 patient.sex,
-                ContactDetails(patient.telephoneFirst,
-                        patient.telephoneSecond,
-                        patient.emailAddress),
-                Address(patient.address.houseNameFlatNumber,
-                        patient.address.numberStreet,
-                        patient.address.village,
-                        patient.address.town,
-                        patient.address.county,
-                        patient.address.postcode)
+                ContactDetails(patient.contactDetails.telephoneFirst,
+                        patient.contactDetails.telephoneSecond,
+                        patient.contactDetails.emailAddress),
+                Address(patient.contactDetails.address.houseNameFlatNumber,
+                        patient.contactDetails.address.numberStreet,
+                        patient.contactDetails.address.village,
+                        patient.contactDetails.address.town,
+                        patient.contactDetails.address.county,
+                        patient.contactDetails.address.postcode)
         )
     }
 
@@ -55,13 +55,13 @@ object DemographicsData {
                 "1f907c07-9063-4d3a-81d7-ee8c98c54f4a",
                 Person(patient.patientId,
                         DateConverter.convertDateToDateTimeFormat(
-                                patient.dateOfBirth,
+                                patient.age.dateOfBirth,
                                 DateTimeFormats.dateWithoutTimeFormat,
                                 DateTimeFormats.tppDateTimeFormat),
                         patient.sex.name,
                         NationalId(type = TppConstants.NationalIdTypeNhs, value = patient.nhsNumbers.first()),
                         PersonName(patient.formattedFullName()),
-                        TppAddress(patient.address.full())
+                        TppAddress(patient.contactDetails.address.full())
         ))
     }
 }

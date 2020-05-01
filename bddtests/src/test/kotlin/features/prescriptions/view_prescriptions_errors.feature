@@ -80,7 +80,7 @@ Feature: View prescriptions error cases
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
     Then I retrieve the 'Your Prescriptions' page directly
-    And The prescription submission endpoint is timing out
+    And the prescription submission endpoint is timing out
     When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     And I wait for 20 seconds

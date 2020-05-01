@@ -1,27 +1,46 @@
 package models.patients
 
+import MockDefaults
 import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.Sex
 import models.Patient
+import models.PatientAge
+import models.PatientContactDetails
+import models.PatientName
+import org.openqa.selenium.InvalidArgumentException
 import worker.models.patient.Im1ConnectionToken
-import java.time.temporal.ChronoUnit
 
-class TppPatients{
+class TppPatients {
 
-    companion object {
+    companion object : PatientHandler() {
 
-        fun getDefault(): Patient {
+        override fun getDefault(): Patient {
             return kevinBarry
         }
 
-        fun getPatientWithLinkedProfiles(): Patient {
-            lisaHankey.linkedAccounts.forEach {
-                linkedAccount ->
+        override fun getPatientWithLinkedProfiles(): Patient {
+            lisaHankey.linkedAccounts.forEach { linkedAccount ->
                 linkedAccount.tppUserSession!!.onlineUserId = lisaHankey.onlineUserId
                 linkedAccount.onlineUserId = lisaHankey.onlineUserId
             }
             return lisaHankey
+        }
+
+        override fun getPatientWithNoLinkedProfiles(): Patient {
+            throw InvalidArgumentException("Not implemented for TPP")
+        }
+
+        override fun setOdsCode(patient: Patient, provider: String) {
+            val targetOdsCode = when (provider.toUpperCase()) {
+                "ECONSULT" -> TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_ECONSULT
+                "IM1" -> TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_IM1
+                "INFORMATICA" -> TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_INFORMATICA
+                "GPATHAND" -> TppMockDefaults.ODS_CODE_SJR_LINKED_ACCOUNT_GP_AT_HAND
+                else -> throw IllegalArgumentException("$provider not a valid appointment provider name.")
+            }
+            patient.updateOdsCodes(targetOdsCode)
+            updateUnitId(patient, targetOdsCode)
         }
 
         private val kevinBarryIm1ConnectionToken = Im1ConnectionToken(
@@ -62,24 +81,20 @@ class TppPatients{
         )
 
         val kevinBarry = Patient(
-                title = "Mr",
-                firstName = "Kevin",
-                surname = "Barry",
-                dateOfBirth = "1985-05-29",
-                ageMonths = Patient.getAgePart("1985-05-29", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1985-05-29", ChronoUnit.YEARS),
+                name = PatientName(title = "Mr",
+                        firstName = "Kevin",
+                        surname = "Barry"),
+                age = PatientAge(dateOfBirth = "1985-05-29"),
                 sex = Sex.Male,
-                address = Address(
-                        houseNameFlatNumber = "28 Central Path",
-                        numberStreet = "Troy Road",
-                        village = "Horsforth",
-                        town = "Leeds",
-                        county = "West Yorkshire",
-                        postcode = "LS18 5TN"
-                ),
-                telephoneFirst = Patient.defaultTelephoneFirst,
-                telephoneSecond = Patient.defaultTelephoneSecond,
-                emailAddress = Patient.defaultEmailAddress,
+                contactDetails = PatientContactDetails(
+                        address = Address(
+                                houseNameFlatNumber = "28 Central Path",
+                                numberStreet = "Troy Road",
+                                village = "Horsforth",
+                                town = "Leeds",
+                                county = "West Yorkshire",
+                                postcode = "LS18 5TN"
+                        )),
                 odsCode = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                 nhsNumbers = listOf("5785445875"),
                 linkageKey = "passphraseToLink",
@@ -93,24 +108,21 @@ class TppPatients{
         )
 
         val joeWicks = Patient(
-                title = "Mr",
-                firstName = "Joe",
-                surname = "Wicks",
-                dateOfBirth = "1980-01-01",
-                ageMonths = Patient.getAgePart("1980-01-01", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1980-01-01", ChronoUnit.YEARS),
+                name = PatientName(
+                        title = "Mr",
+                        firstName = "Joe",
+                        surname = "Wicks"),
+                age = PatientAge(dateOfBirth = "1980-01-01"),
                 sex = Sex.Male,
-                address = Address(
-                        houseNameFlatNumber = "100 High Street",
-                        numberStreet = "Get Fit Road",
-                        village = "Fitstown",
-                        town = "Leeds",
-                        county = "West Yorkshire",
-                        postcode = "LS18 5TN"
-                ),
-                telephoneFirst = Patient.defaultTelephoneFirst,
-                telephoneSecond = Patient.defaultTelephoneSecond,
-                emailAddress = Patient.defaultEmailAddress,
+                contactDetails = PatientContactDetails(
+                        address = Address(
+                                houseNameFlatNumber = "100 High Street",
+                                numberStreet = "Get Fit Road",
+                                village = "Fitstown",
+                                town = "Leeds",
+                                county = "West Yorkshire",
+                                postcode = "LS18 5TN"
+                        )),
                 odsCode = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                 nhsNumbers = listOf("5785445875"),
                 linkageKey = "passphraseToLink",
@@ -124,24 +136,21 @@ class TppPatients{
         )
 
         val lisaHankey = Patient(
-                title = "Miss",
-                firstName = "Lisa",
-                surname = "Hankey",
-                dateOfBirth = "1985-05-29",
-                ageMonths = Patient.getAgePart("1985-05-29", ChronoUnit.MONTHS),
-                ageYears = Patient.getAgePart("1985-05-29", ChronoUnit.YEARS),
+                name = PatientName(
+                        title = "Miss",
+                        firstName = "Lisa",
+                        surname = "Hankey"),
+                age = PatientAge(dateOfBirth = "1985-05-29"),
                 sex = Sex.Female,
-                address = Address(
-                        houseNameFlatNumber = "28 Kleenex Road",
-                        numberStreet = "Tissue Avenue",
-                        village = "Cushelle",
-                        town = "Leeds",
-                        county = "West Yorkshire",
-                        postcode = "LS18 5TN"
-                ),
-                telephoneFirst = Patient.defaultTelephoneFirst,
-                telephoneSecond = Patient.defaultTelephoneSecond,
-                emailAddress = Patient.defaultEmailAddress,
+                contactDetails = PatientContactDetails(
+                        address = Address(
+                                houseNameFlatNumber = "28 Kleenex Road",
+                                numberStreet = "Tissue Avenue",
+                                village = "Cushelle",
+                                town = "Leeds",
+                                county = "West Yorkshire",
+                                postcode = "LS18 5TN"
+                        )),
                 odsCode = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                 nhsNumbers = listOf("5785445875"),
                 linkageKey = "passphraseToLink",
@@ -154,5 +163,10 @@ class TppPatients{
                 im1ConnectionToken = lisaHankeyIm1ConnectionToken,
                 linkedAccounts = setOf(joeWicks.copy(), kevinBarry.copy())
         )
+
+        private fun updateUnitId(patient: Patient, odsCode: String) {
+            patient.tppUserSession!!.unitId = odsCode
+            patient.linkedAccounts.forEach { e -> e.tppUserSession!!.unitId = odsCode }
+        }
     }
 }

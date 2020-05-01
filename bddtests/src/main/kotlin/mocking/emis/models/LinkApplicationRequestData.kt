@@ -12,7 +12,7 @@ data class LinkApplicationRequestData(
     @field:XmlElement(name = "LinkageDetails")
     var linkageDetails: LinkageDetails? = null
 
-    constructor(patient: Patient) : this(patient.surname, patient.dateOfBirth) {
+    constructor(patient: Patient) : this(patient.name.surname, patient.age.dateOfBirth) {
         linkageDetails = LinkageDetails(patient.accountId, patient.linkageKey, patient.odsCode)
     }
 }
