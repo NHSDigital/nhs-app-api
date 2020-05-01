@@ -25,6 +25,7 @@
             <summary-message :id="summary.messageId"
                              :title="summary.recipient"
                              :sub-title="getSubtitle(summary)"
+                             :has-subject="hasSubject"
                              :date-time="summary.lastMessageDateTime"
                              :aria-label="getMessageLabel(summary)"
                              :has-unread-messages="summary.unreadReplyInfo.present"
@@ -57,9 +58,10 @@ import {
   PATIENT_PRACTICE_MESSAGING_VIEW_MESSAGE,
   INDEX,
 } from '@/lib/routes';
-import { redirectTo, datePart, isNumber } from '@/lib/utils';
+import { redirectTo, isNumber, isEmptyArray } from '@/lib/utils';
 import { formatDate } from '@/plugins/filters';
 import srjIf from '@/lib/sjrIf';
+import last from 'lodash/fp/last';
 
 export default {
   layout: 'nhsuk-layout',
@@ -85,6 +87,9 @@ export default {
     },
     additionalDetailsCallRequired() {
       return srjIf({ $store: this.$store, journey: 'requiredDetailsCallPatientPracticeMessage' });
+    },
+    hasSubject() {
+      return srjIf({ $store: this.$store, journey: 'sendMessageSubject' });
     },
   },
   async asyncData({ store, redirect }) {
@@ -113,13 +118,20 @@ export default {
       redirectTo(this, PATIENT_PRACTICE_MESSAGING_URGENCY.path);
     },
     getSubtitle(summary) {
-      return (summary.subject) ? summary.subject : this.$t('im01.lastMessageRecieved',
-        { date: datePart(summary.lastMessageDateTime, 'YearMonthDayTime') });
+      const { subject, content } = summary;
+      if (this.hasSubject) {
+        return subject;
+      }
+
+      const subtitle = isEmptyArray(summary.replies) ? content :
+        last(summary.replies).replyContent;
+
+      return (subtitle.length > 64) ? `${subtitle.substring(0, 64)}...` : subtitle;
     },
     getMessageLabel(summary) {
       const { subject, recipient, lastMessageDateTime } = summary;
 
-      return (subject) ?
+      return (this.hasSubject) ?
         this.$t('im01.summary.hiddenWithSubject', {
           recipient,
           subject,

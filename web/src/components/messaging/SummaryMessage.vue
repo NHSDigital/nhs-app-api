@@ -14,14 +14,20 @@
       }">{{ formattedTime }}</span>
     </div>
     <div :class="$style['flex-baseline-container']" aria-hidden="true">
-      <p :class="['nhsuk-body-s', $style['nhs-app-message__subject-line']]">
+      <p id="subject" :class="['nhsuk-body-s', $style['nhs-app-message__subject-line']]">
         {{ subTitle }}
       </p>
+      <br>
       <span v-if="hasUnreadMessages" :class="$style['nhs-app-message__meta']">
         <span :id="'unreadIndicator' + listIndex"
               :class="$style['nhs-app-message__count']">{{ unreadCount }}</span>
       </span>
     </div>
+    <span v-if="!hasSubject"
+          :class="['nhsuk-u-font-size-16','nhsuk-u-margin-bottom-0',
+                   'nhsuk-u-padding-top-0', $style.viewFullMessageText]">
+      <strong>{{ this.$t('im01.viewFullMessage') }}</strong>
+    </span>
   </a>
 </template>
 
@@ -39,6 +45,11 @@ export default {
     subTitle: {
       type: String,
       required: true,
+    },
+    hasSubject: {
+      type: Boolean,
+      required: false,
+      default: true,
     },
     text: {
       type: String,
@@ -105,6 +116,10 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.viewFullMessageText {
+  color: #425563;
 }
 
 .nhs-app-message__link {
