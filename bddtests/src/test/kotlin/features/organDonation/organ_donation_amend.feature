@@ -10,7 +10,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     When I choose to not donate my organs
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button on an Organ Donation page
@@ -28,7 +28,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     When I choose to donate my organs
     Then the Organ Donation Your Choice page is displayed
     And the all organs option is selected
@@ -56,7 +56,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     When I choose to donate my organs
     Then the Organ Donation Your Choice page is displayed
     And the all organs option is selected
@@ -82,7 +82,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     When I choose to not donate my organs
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button on an Organ Donation page
@@ -100,7 +100,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     And I choose to donate my organs
     Then the Organ Donation Your Choice page is displayed
     And the some organs option is selected
@@ -125,7 +125,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     And I choose to donate my organs
     Then the Organ Donation Your Choice page is displayed
     And the some organs option is selected
@@ -153,7 +153,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     And I choose to donate my organs
     Then the Organ Donation Your Choice page is displayed
     And the some organs option is selected
@@ -181,7 +181,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     And I choose to donate my organs
     Then the Organ Donation Your Choice page is displayed
     When I select the option to donate all my organs
@@ -207,7 +207,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     And I choose to donate my organs
     Then the Organ Donation Your Choice page is displayed
     When I select the option to donate some of my organs
@@ -237,7 +237,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     When I click the 'Back' breadcrumb
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
 
@@ -248,7 +248,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     When I follow the opt-out journey to the 'Confirmation' page and see 'Decision Submitted'
     Then the organ donation decision has been submitted and is to be processed
 
@@ -258,7 +258,7 @@ Feature: Organ Donation Amend Frontend
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     When I click the link called 'Find out more about organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/'
     Then a new tab has been opened by the link
 
@@ -269,7 +269,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     When I follow the opt-out journey to the 'Check Details' page
     And I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
@@ -287,7 +287,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     When I follow the opt-out journey to the 'Check Details' page
     And I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
@@ -303,7 +303,7 @@ Feature: Organ Donation Amend Frontend
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
-    Then the internal Organ Donation Choice Page is displayed
+    Then the amend Organ Donation Choice Page is displayed
     When I follow the opt-out journey to the 'Check Details' page
     And I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page

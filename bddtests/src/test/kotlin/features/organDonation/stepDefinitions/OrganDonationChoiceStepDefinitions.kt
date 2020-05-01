@@ -7,7 +7,6 @@ import features.sharedSteps.PageUrl
 import net.thucydides.core.annotations.Steps
 import pages.MorePage
 import pages.assertIsVisible
-import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.organDonation.OrganDonationChoicePage
 
@@ -15,7 +14,6 @@ open class OrganDonationChoiceStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps
-    lateinit var header: HeaderNative
     lateinit var morePage: MorePage
     lateinit var organDonationChoicePage: OrganDonationChoicePage
     lateinit var navbarNative: NavBarNative
@@ -52,5 +50,10 @@ open class OrganDonationChoiceStepDefinitions {
     @Then("^the internal Organ Donation Choice Page is displayed")
     fun theInternalOrganDonationChoicePageIsDisplayed() {
         organDonationChoicePage.assertDisplayed()
+    }
+
+    @Then("^the amend Organ Donation Choice Page is displayed")
+    fun theAmendOrganDonationChoicePageIsDisplayed() {
+        organDonationChoicePage.assertDisplayed(amend = true)
     }
 }

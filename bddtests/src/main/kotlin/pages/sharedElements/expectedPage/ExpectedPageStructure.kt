@@ -31,7 +31,6 @@ class ExpectedPageStructure : ExpectedPageStructureBase<ExpectedPageStructure>()
 
     fun toggle(content: String): ExpectedPageStructure {
         expectedElements.add(content, "label")
-        expectedElements.add(content, "strong")
         return this
     }
 
@@ -40,6 +39,14 @@ class ExpectedPageStructure : ExpectedPageStructureBase<ExpectedPageStructure>()
         expectedElements.add(title.trim(), "summary")
         expectedElements.add(title.trim(), "span")
         content.forEach { element -> expectedElements.add(element, "li") }
+        return this
+    }
+
+    fun menuLinks(links:List<String>) : ExpectedPageStructure {
+        links.forEach { element ->
+            expectedElements.add(element, "li")
+            expectedElements.add(element, "span")
+            expectedElements.add(element, "h3") }
         return this
     }
 

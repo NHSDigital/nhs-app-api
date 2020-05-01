@@ -57,7 +57,7 @@
           <analytics-tracked-tag
             :href="yourDataMattersUrl"
             :text="$t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink')"
-            :class="$style.inline"
+            class="inline"
             tag="a"
             target="_blank">{{ $t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink') }}</analytics-tracked-tag>{{ $t('ds01.pages.p1.moreOptions.paragraph.part2') }}
         </p>
@@ -92,10 +92,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  a.inline {
-    display: inline;
-    vertical-align: initial;
-  }
-</style>

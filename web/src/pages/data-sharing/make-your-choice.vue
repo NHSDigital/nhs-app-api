@@ -19,7 +19,7 @@
           {{ $t('ds01.pages.p4.paragraph2.text') }}
           <analytics-tracked-tag :href="otherWaysToMakeChoiceUrl"
                                  :text="$t('ds01.pages.p4.paragraph2.nhsWebsiteLink')"
-                                 :class="$style.inline"
+                                 class="inline"
                                  tag="a"
                                  target="_blank">
             {{ $t('ds01.pages.p4.paragraph2.nhsWebsiteLink') }}</analytics-tracked-tag>.
@@ -97,10 +97,3 @@ export default {
   },
 };
 </script>
-
-<style module lang="scss" scoped>
-  a.inline {
-    display: inline;
-    vertical-align: initial;
-  }
-</style>

@@ -20,17 +20,16 @@ open class OrganDonationViewWithdrawRegistrationPage: OrganDonationBasePage()  {
 
     fun assertDecisionWithdrawn() {
         val bannerText = arrayListOf("You no longer have a decision recorded on the NHS Organ Donor Register.",
+                "If you die in circumstances where donation is possible, " +
+                        "it will be considered that you have agreed to be an organ donor " +
+                        "unless you are in an excluded group.",
+                "More information about these changes to the law around organ donation",
                 "You can record a new decision at any time.")
         BannerObject.success(this, "Decision withdrawn").assertVisible(bannerText)
 
         val expected = ExpectedPageStructure().h2("What to do next")
-                .paragraph("Let your family know that you have withdrawn your details from the register. " +
-                        "If you die in circumstances where donation is possible, " +
-                        "we will ask your family if you expressed a verbal decision. " +
-                        "If you did not express a verbal decision, " +
-                        "we will ask your family to make a decision on your behalf.")
-                .paragraph("Your family won't know what you want unless you tell them, " +
-                                "so help them now to support your decision at a difficult time.")
+                .paragraph("Let your family know that you have withdrawn your decision from the register. " +
+                        "They will not know what you want unless you tell them.")
 
         expected.assert(this)
     }

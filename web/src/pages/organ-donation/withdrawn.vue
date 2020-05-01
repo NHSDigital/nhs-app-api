@@ -7,6 +7,17 @@
                       :key="index">
           {{ item }}
         </message-text>
+        <message-text>
+          <analytics-tracked-tag :href="lawChangeUrl"
+                                 :text="$t('organDonation.withdrawn.messageLink')"
+                                 class="inline"
+                                 tag="a"
+                                 target="_blank">
+            {{ $t('organDonation.withdrawn.messageLink') }}</analytics-tracked-tag>
+        </message-text>
+        <message-text>
+          {{ $t('organDonation.withdrawn.recordNewDecisionReminder') }}
+        </message-text>
       </message-dialog>
       <div>
         <h2>{{ $t('organDonation.withdrawn.whatNext.header') }}</h2>
@@ -20,6 +31,7 @@
 </template>
 
 <script>
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import NativeOnlyMixin from '@/components/NativeOnlyMixin';
@@ -28,11 +40,17 @@ import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 export default {
   layout: 'nhsuk-layout',
   components: {
-    MessageText,
+    AnalyticsTrackedTag,
     MessageDialog,
+    MessageText,
     OtherThingsToDo,
   },
   mixins: [NativeOnlyMixin],
+  data() {
+    return {
+      lawChangeUrl: this.$store.app.$env.ORGAN_DONATION_LAW_CHANGE_URL,
+    };
+  },
   created() {
     this.$store.dispatch('organDonation/init');
   },

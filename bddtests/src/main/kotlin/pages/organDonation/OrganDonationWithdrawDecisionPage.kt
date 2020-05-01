@@ -14,7 +14,7 @@ open class OrganDonationWithdrawDecisionPage : OrganDonationBasePage()  {
         assertBody()
     }
 
-    override val titleText = "Withdraw your decision"
+    override val titleText = "Withdraw your previous organ donation decision"
 
     val withdrawalReasonList = DropdownElement(
             "Reason for withdrawing",
@@ -29,10 +29,17 @@ open class OrganDonationWithdrawDecisionPage : OrganDonationBasePage()  {
         expectedDropDownContent.addAll(OrganDonationSerenityHelpers.REFERENCE_WITHDRAWAL_REASONS
                 .getOrFail<ArrayList<String>>())
         val expected = ExpectedPageStructure().h2(titleText)
-                .paragraph("Withdrawing your decision means there will be no recorded decision for you, " +
-                        "and without this your family will be asked to decide for you, when you die.")
-                .paragraph("If you are certain you do not want to donate your organs or tissue, " +
-                        "you need to register a 'no' decision.")
+                .paragraph("Withdrawing from the NHS Organ Donor Register is different " +
+                        "from recording a decision not to donate (opting out). " +
+                        "If you withdraw, we will not know your decision.")
+                .paragraph("In line with changes to the law around organ donation, " +
+                        "you are considered to have agreed to be an organ donor, unless:")
+                .listItems("you have recorded a decision not to donate",
+                        "you are in an excluded group")
+                .paragraph("Find out more about the law and excluded groups.")
+                .paragraph("If you do not want to be an organ donor, " +
+                        "the best way to tell us is to update your decision. " +
+                        "You can change your decision at any time.")
                 .paragraph("Whatever you decide, please make sure your family know your decision.")
                 .dropdown("Reason for withdrawing", expectedDropDownContent)
                 .button("Continue")

@@ -9,9 +9,10 @@ import kotlin.streams.toList
 
 class ExpectedPageStructureAssertor {
     private val tagsToAssert = listOf("h1", "h2", "h3", "h4", "li", "p", "span", "button",
-            "details", "summary", "label", "select", "option", "strong")
+            "details", "summary", "label", "select", "option")
     private val tagsToExclude = arrayListOf(
-            "div", "br", "ul", "ol", "a", "nav", "svg", "path", "form", "input", "hr", "b")
+            "div", "br", "ul", "ol", "a", "nav", "svg", "path", "form",
+            "input", "hr", "b", "g", "circle", "strong", "i")
     private val knownTags = tagsToAssert + tagsToExclude
 
     fun assert(page: HybridPageObject, expectedPage: MutableList<ExpectedPageStructureElement>) {
@@ -63,9 +64,9 @@ class ExpectedPageStructureAssertor {
 
     private fun getTagsToAssert(elements: List<ParsedPageElement>): List<ParsedPageElement> {
         if (elements.any { element -> !knownTags.contains(element.tag) }) {
-            val notExpected = elements.stream().filter { element -> !knownTags.contains(element.tag) }
+            val notExpected = elements.filter { element -> !knownTags.contains(element.tag) }
                     .map { element -> "'${element.tag}' containing '${element.content}'" }.toList()
-                    .joinToString { "\n" }
+                    .joinToString ()
             Assert.fail("Html tags must be explicitly excluded. Unexpected tags found: $notExpected")
         }
         return elements.stream()

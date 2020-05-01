@@ -12,9 +12,32 @@
         </message-dialog>
         <div>
           <h2>{{ $t('organDonation.withdrawReason.subheader') }}</h2>
-          <p v-for="(item, index) in $t('organDonation.withdrawReason.bodyItems')" :key="index">
+          <p v-for="(item, index) in $t('organDonation.withdrawReason.explanations')"
+             :key="index">
             {{ item }}
           </p>
+          <ul>
+            <li v-for="(item, index) of $t('organDonation.withdrawReason.exclusions')" :key="index">
+              {{ item }}
+            </li>
+          </ul>
+          <p>
+            {{ $t('organDonation.withdrawReason.moreAboutLawText') }}
+            <analytics-tracked-tag id="law-change"
+                                   :href="lawChangeUrl"
+                                   :text="$t('organDonation.withdrawReason.moreAboutLawLinkText')"
+                                   class="inline"
+                                   tag="a"
+                                   target="_blank">
+              {{ $t('organDonation.withdrawReason.moreAboutLawLinkText') }}</analytics-tracked-tag>.
+          </p>
+          <p>
+            {{ $t('organDonation.withdrawReason.amendBeforeLink') }}
+            <a id="update" href="#" class="inline" @click.stop.prevent="amendDecision">
+              {{ $t('organDonation.withdrawReason.amendLink') }}</a>.
+            {{ $t('organDonation.withdrawReason.amendAfterLink') }}
+          </p>
+          <p>{{ $t('organDonation.withdrawReason.familyText') }}</p>
           <error-group :show-error="showErrors">
             <label for="reason">
               {{ $t('organDonation.withdrawReason.reason.label') }}
@@ -53,6 +76,7 @@
 
 <script>
 import get from 'lodash/fp/get';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import ErrorGroup from '@/components/ErrorGroup';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
@@ -60,15 +84,17 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import { INDEX, ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
+import { INDEX, ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION, ORGAN_DONATION_AMEND } from '@/lib/routes';
 import { isNativeApp } from '@/components/NativeOnlyMixin';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    GenericButton,
+    AnalyticsTrackedTag,
     ErrorGroup,
     ErrorMessage,
+    GenericButton,
     MessageDialog,
     MessageList,
     MessageText,
@@ -77,6 +103,7 @@ export default {
   data() {
     return {
       hasTriedToContinue: false,
+      lawChangeUrl: this.$store.app.$env.ORGAN_DONATION_LAW_CHANGE_URL,
       reasonId: get('organDonation.withdrawReasonId')(this.$store.state),
     };
   },
@@ -99,6 +126,10 @@ export default {
     }
   },
   methods: {
+    amendDecision() {
+      this.$store.dispatch('organDonation/amendStart');
+      redirectTo(this, ORGAN_DONATION_AMEND.path);
+    },
     continueClicked() {
       this.hasTriedToContinue = true;
 

@@ -2,7 +2,6 @@ package pages.organDonation
 
 import mocking.organDonation.models.FaithDeclaration
 import net.thucydides.core.annotations.DefaultUrl
-import pages.HybridPageElement
 import pages.sharedElements.ExpandElement
 import pages.sharedElements.expectedPage.ExpectedPageStructure
 import pages.sharedElements.RadioButtons
@@ -58,9 +57,4 @@ open class OrganDonationFaithAndBeliefsPage : OrganDonationBasePage() {
     private var questionContent =
             "I would like NHS staff to speak to my family and anyone else appropriate about how organ donation " +
                     "can go ahead in line with my faith or beliefs."
-
-    private val question = HybridPageElement(
-            "//b[normalize-space() = \"$questionContent\"]",
-            page = this,
-            helpfulName = "question")
 }

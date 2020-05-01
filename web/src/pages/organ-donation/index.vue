@@ -32,10 +32,24 @@
         <other-things-to-do :can-withdraw="!isConflicted"/>
       </div>
       <div v-else>
+        <menu-item-list>
+          <find-out-more-link/>
+        </menu-item-list>
+        <div class="nhsuk-inset-text">
+          <span class="nhsuk-u-visually-hidden">{{ $t('components.insetText.heading') }}</span>
+          <p>{{ $t('organDonation.register.inset.text') }}
+            <analytics-tracked-tag id="law-change"
+                                   :href="lawChangeUrl"
+                                   :text="$t('organDonation.withdrawReason.moreAboutLawLinkText')"
+                                   class="inline"
+                                   tag="a"
+                                   target="_blank">
+              {{ $t('organDonation.register.inset.linkText') }}</analytics-tracked-tag>.
+          </p>
+        </div>
         <make-decision/>
         <menu-item-list>
           <already-registered-link/>
-          <find-out-more-link/>
         </menu-item-list>
       </div>
     </div>
@@ -44,6 +58,7 @@
 <script>
 import get from 'lodash/fp/get';
 import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import DecisionInfo from '@/components/organ-donation/DecisionInfo';
 import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
@@ -73,6 +88,7 @@ export default {
   layout: 'nhsuk-layout',
   components: {
     AlreadyRegisteredLink,
+    AnalyticsTrackedTag,
     DecisionInfo,
     FaithDetailsRegistered,
     FindOutMoreLink,
@@ -83,6 +99,11 @@ export default {
     NextSteps,
     OtherThingsToDo,
     StillYourDecision,
+  },
+  data() {
+    return {
+      lawChangeUrl: this.$store.app.$env.ORGAN_DONATION_LAW_CHANGE_URL,
+    };
   },
   computed: {
     choices() {

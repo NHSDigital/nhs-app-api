@@ -38,11 +38,14 @@ const createState =
     return state;
   };
 
+const LAW_CHANGE_URL = 'www.boo.com';
+
 const createPageStore = ({ state, isSomeOrgans = false } = {}) => createStore({
   state,
   getters: {
     'organDonation/isSomeOrgans': isSomeOrgans,
   },
+  $env: { ORGAN_DONATION_LAW_CHANGE_URL: LAW_CHANGE_URL },
 });
 
 const createStyle = () => ({
@@ -202,6 +205,26 @@ describe('organ donation index page', () => {
       }, () => wrapper);
     });
 
+    describe('law change', () => {
+      let lawChangeLink;
+
+      beforeEach(() => {
+        lawChangeLink = wrapper.find('#law-change');
+      });
+
+      it('will exist', () => {
+        expect(lawChangeLink.exists()).toBe(true);
+      });
+
+      it('will have target set to blank', () => {
+        expect(lawChangeLink.attributes('target')).toEqual('_blank');
+      });
+
+      it('will have href set to LAW_CHANGE_URL', () => {
+        expect(lawChangeLink.attributes('href')).toEqual(LAW_CHANGE_URL);
+      });
+    });
+
     describe('computed', () => {
       describe('hasExistingDecision', () => {
         it('will be false as the original decision was not found', () => {
@@ -256,6 +279,18 @@ describe('organ donation index page', () => {
         });
       });
     });
+
+    describe('law change', () => {
+      let lawChangeLink;
+
+      beforeEach(() => {
+        lawChangeLink = wrapper.find('#law-change');
+      });
+
+      it('will not exist', () => {
+        expect(lawChangeLink.exists()).toBe(false);
+      });
+    });
   });
 
   describe('loaded registration (conflicted state)', () => {
@@ -296,6 +331,18 @@ describe('organ donation index page', () => {
         reaffirmDecisionLink: false,
         yourDecision: false,
       }, () => wrapper);
+    });
+
+    describe('law change', () => {
+      let lawChangeLink;
+
+      beforeEach(() => {
+        lawChangeLink = wrapper.find('#law-change');
+      });
+
+      it('will not exist', () => {
+        expect(lawChangeLink.exists()).toBe(false);
+      });
     });
   });
 
@@ -351,6 +398,18 @@ describe('organ donation index page', () => {
         $store.state.organDonation.originalRegistration.decision = DECISION_OPT_IN;
         $store.state.organDonation.originalRegistration.decisionDetails.all = true;
         wrapper = mountOrganDonation();
+      });
+
+      describe('law change', () => {
+        let lawChangeLink;
+
+        beforeEach(() => {
+          lawChangeLink = wrapper.find('#law-change');
+        });
+
+        it('will not exist', () => {
+          expect(lawChangeLink.exists()).toBe(false);
+        });
       });
 
       describe('component existence', () => {

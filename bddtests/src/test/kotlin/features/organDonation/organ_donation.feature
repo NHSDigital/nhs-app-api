@@ -1,7 +1,6 @@
 @organ-donation
 Feature: Organ Donation Frontend
 
-
 #  This test covers navigation via buttons/links
   Scenario Outline: A <GP System> user can opt to donate all their organs
     Given I am using the native app user agent
@@ -386,3 +385,11 @@ Feature: Organ Donation Frontend
       When I confirm that my details are accurate, and accept the privacy statement for organ donation
       And I click the 'Submit my decision' button on an Organ Donation page
       Then the 'Submit my decision' button has the 'disabled' attribute
+
+  Scenario: A user can find out more about changes to the organ donation laws when registering
+    Given I am using the native app user agent
+    And I am a EMIS user not registered with organ donation, who wishes to register
+    And I am logged in
+    When I retrieve the 'Organ Donation' page directly
+    And I click the link called 'changes to the law around organ donation may affect you' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/#law'
+    Then a new tab has been opened by the link

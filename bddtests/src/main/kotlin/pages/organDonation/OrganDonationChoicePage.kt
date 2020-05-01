@@ -2,21 +2,19 @@ package pages.organDonation
 
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import net.thucydides.core.annotations.DefaultUrl
-import org.junit.Assert
 import pages.HybridPageElement
-import pages.assertIsVisible
 import pages.avoidChromeWebDriverServiceCrash
+import pages.sharedElements.expectedPage.ExpectedPageStructure
+import pages.sharedElements.expectedPage.ExpectedPageStructureAssertor
+import pages.sharedElements.expectedPage.ParsedPage
 import utils.isTrueOrFalse
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 class OrganDonationChoicePage : OrganDonationBasePage() {
 
-    override val titleText: String by lazy {getCorrectTitleText()}
-
-    private val alreadyRegisteredLinkText = "Think you have registered already?"
-    private val findOutMoreLinkText = "Find out more about organ donation"
-    private val expectedLinksInAmendJourney = arrayOf(findOutMoreLinkText)
-    private val expectedLinksInNewJourney = arrayOf(alreadyRegisteredLinkText, findOutMoreLinkText)
+    private val amendTitle = "Change your decision"
+    private val registerTitle = "Register your decision"
+    override val titleText: String by lazy { getCorrectTitleText() }
 
     val noButton = button("NO", "I do not want to donate my organs")
 
@@ -34,32 +32,53 @@ class OrganDonationChoicePage : OrganDonationBasePage() {
         )
     }
 
-    fun getCorrectTitleText():String{
-        return  if (OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.isTrueOrFalse())
-            "Change your organ donation decision" else "Register your organ donation decision"
-    }
-
     override fun assertDisplayed() {
         //Please do not delete until NHSO-8407 and NHSO-8408 are completed
-        avoidChromeWebDriverServiceCrash()
-        title.assertIsVisible()
-        noButton.assertIsVisible()
-        yesButton.assertIsVisible()
-
-        val expectedLinks = if (OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.isTrueOrFalse())
-            expectedLinksInAmendJourney else expectedLinksInNewJourney
-
-        Assert.assertTrue(getAllLinks().contains(expectedLinks[0]))
-        if(!OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.isTrueOrFalse()) {
-            Assert.assertTrue(getAllLinks().contains(expectedLinks[1]))
-        }
+        assertDisplayed(OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.isTrueOrFalse())
     }
 
-    private fun getAllLinks(): Array<String> {
-        val allLinks = HybridPageElement(
-                "//a",
-                page = this).elements
-        val allVisibleLinks = allLinks.filter { it.isCurrentlyVisible == true }
-        return allVisibleLinks.map { link -> link.text }.toTypedArray()
+    fun assertDisplayed(amend : Boolean) {
+        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
+        avoidChromeWebDriverServiceCrash()
+        val title = if (amend) amendTitle else registerTitle
+        val expected = if (amend) createAmendExpectedPage(title) else createRegistrationExpectedPage(title)
+        val page = ParsedPage.parse(this, "//div[div/h2[normalize-space(text())='${title}']]")
+        ExpectedPageStructureAssertor().assert(page, expected.build())
+    }
+
+    private fun createRegistrationExpectedPage(title: String): ExpectedPageStructure{
+        val expected = ExpectedPageStructure()
+                .menuLinks(listOf("Find out more about organ donation"))
+                .inset {
+                    paragraph("If you have not registered your decision, " +
+                            "changes to the law around organ donation may affect you.")
+                }
+                .h2(title)
+        addButtonsToExpectedPage(expected)
+        expected.menuLinks(listOf("Think you have registered already?"))
+        return expected
+    }
+
+    private fun createAmendExpectedPage(title: String): ExpectedPageStructure{
+        val expected = ExpectedPageStructure()
+                .menuLinks(listOf("Find out more about organ donation"))
+                .h2(title)
+        addButtonsToExpectedPage(expected)
+        return expected
+    }
+
+    private fun addButtonsToExpectedPage(expected: ExpectedPageStructure): ExpectedPageStructure {
+        expected.button("NO\nI do not want to donate my organs")
+                .h2("NO")
+                .paragraph("I do not want to donate my organs")
+                .button("YES\nI want to donate all or some of my organs")
+                .h2("YES")
+                .paragraph("I want to donate all or some of my organs")
+        return expected
+    }
+
+    private fun getCorrectTitleText(): String {
+        return if (OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.isTrueOrFalse())
+            amendTitle else registerTitle
     }
 }

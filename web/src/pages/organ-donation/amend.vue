@@ -1,10 +1,10 @@
 <template>
   <div id="mainDiv" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <make-decision/>
       <menu-item-list>
         <find-out-more-link/>
       </menu-item-list>
+      <make-decision/>
       <generic-button v-if="!$store.state.device.isNativeApp"
                       id="back-button"
                       :class="['nhsuk-button', 'nhsuk-button--secondary']"

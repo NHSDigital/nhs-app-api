@@ -2,7 +2,6 @@
 Feature: Organ Donation Withdraw Frontend
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
-
   #All combinations of GP System users and Decisions have been covered in backend tests
   Scenario Outline: As a <GP System> user, I can withdraw previously registered <Decision> organ donation decision
     Given I am using the native app user agent
@@ -109,3 +108,43 @@ Feature: Organ Donation Withdraw Frontend
     When I click the 'Submit my decision' button on an Organ Donation page
     And I wait for 15 seconds
     Then I see an appropriate Organ Donation decision processing message without a retry option
+
+  Scenario: A user can find out more about changes to the organ donation laws when withdrawing
+    Given I am using the native app user agent
+    And I am a VISION user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns recoverable 503 error
+    And I am logged in
+    When I retrieve the 'Organ Donation' page directly
+    Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
+    When I choose to withdraw my organ donation decision
+    Then the Organ Donation Withdraw Decision page is displayed
+    When I click the link called 'law and excluded groups' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/#law'
+    Then a new tab has been opened by the link
+
+  Scenario: A user can decide to amend their decision when withdrawing
+    Given I am using the native app user agent
+    And I am a VISION user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns recoverable 503 error
+    And I am logged in
+    When I retrieve the 'Organ Donation' page directly
+    Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
+    When I choose to withdraw my organ donation decision
+    Then the Organ Donation Withdraw Decision page is displayed
+    When I click the 'update your decision' link
+    Then the amend Organ Donation Choice Page is displayed
+
+  Scenario: A user can find out more about changes to the organ donation laws after withdrawing
+    Given I am using the native app user agent
+    And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
+    And I am logged in
+    When I retrieve the 'Organ Donation' page directly
+    Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
+    When I choose to withdraw my organ donation decision
+    Then the Organ Donation Withdraw Decision page is displayed
+    And I select an organ donation withdrawal reason from the list
+    When I click the 'Continue' button on an Organ Donation page
+    Then the Organ Donation Check Details page is displayed
+    And my decision to withdraw is recorded on the Organ Donation Check Details page
+    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    When I click the 'Submit my decision' button on an Organ Donation page
+    Then the Organ Donation View Registration page is displayed with my decision to withdraw
+    When I click the link called 'More information about these changes to the law around organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/#law'
+    Then a new tab has been opened by the link

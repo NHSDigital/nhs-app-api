@@ -1,6 +1,8 @@
 <template>
   <div class="nhsuk-u-padding-bottom-4">
-    <h2>{{ headerText }}</h2>
+    <h2 class="nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-0 nhsuk-u-padding-top-0">
+      {{ headerText }}
+    </h2>
     <div class="nhsuk-grid-row" :class="$style['flex-container']">
       <organ-donation-button id="no-button"
                              class="nhsuk-grid-column-one-half

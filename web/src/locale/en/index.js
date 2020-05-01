@@ -2026,13 +2026,17 @@ export default {
         body: 'You could save lives by giving blood. It’s simple. You can find your local centre and book an appointment via the app.',
       },
       withdraw: {
-        subheader: 'Withdraw your decision',
-        body: 'Remove an existing registration from the Organ Donor Register. There will be no recorded decision for you about organ donation.',
+        subheader: 'Withdraw your previous decision',
+        body: 'You can withdraw your previous decision from the Organ Donor Register at any time. If you do this, changes to the law around organ donation may affect you.',
       },
     },
     register: {
-      subheaderRegister: 'Register your organ donation decision',
-      subheaderAmend: 'Change your organ donation decision',
+      inset: {
+        text: 'If you have not registered your decision, ',
+        linkText: 'changes to the law around organ donation may affect you',
+      },
+      subheaderRegister: 'Register your decision',
+      subheaderAmend: 'Change your decision',
       noButton: {
         header: 'NO',
         subheader: 'I do not want to donate my organs',
@@ -2148,7 +2152,7 @@ export default {
       },
       withdraw: {
         subheader: 'What this means',
-        body: 'Your family will be asked to make a decision for you, when you die.',
+        body: 'We will no longer know your decision about organ donation. Therefore, it will be considered that you have agreed to be an organ donor unless you are in an excluded group.',
       },
     },
     stillYourDecision: {
@@ -2248,13 +2252,14 @@ export default {
       dialogText: 'Decision withdrawn',
       messageTextItems: [
         'You no longer have a decision recorded on the NHS Organ Donor Register.',
-        'You can record a new decision at any time.',
+        'If you die in circumstances where donation is possible, it will be considered that you have agreed to be an organ donor unless you are in an excluded group.',
       ],
+      messageLink: 'More information about these changes to the law around organ donation',
+      recordNewDecisionReminder: 'You can record a new decision at any time.',
       whatNext: {
         header: 'What to do next',
         bodyItems: [
-          'Let your family know that you have withdrawn your details from the register. If you die in circumstances where donation is possible, we will ask your family if you expressed a verbal decision. If you did not express a verbal decision, we will ask your family to make a decision on your behalf.',
-          'Your family won\'t know what you want unless you tell them, so help them now to support your decision at a difficult time.',
+          'Let your family know that you have withdrawn your decision from the register. They will not know what you want unless you tell them.',
         ],
       },
     },
@@ -2262,12 +2267,21 @@ export default {
       continueButton: 'Continue',
       errorMessageHeader: 'There\'s a problem',
       errorMessageText: 'Give a reason for withdrawing your decision',
-      subheader: 'Withdraw your decision',
-      bodyItems: [
-        'Withdrawing your decision means there will be no recorded decision for you, and without this your family will be asked to decide for you, when you die.',
-        'If you are certain you do not want to donate your organs or tissue, you need to register a \'no\' decision.',
-        'Whatever you decide, please make sure your family know your decision.',
+      subheader: 'Withdraw your previous organ donation decision',
+      explanations: [
+        'Withdrawing from the NHS Organ Donor Register is different from recording a decision not to donate (opting out). If you withdraw, we will not know your decision.',
+        'In line with changes to the law around organ donation, you are considered to have agreed to be an organ donor, unless:',
       ],
+      exclusions: [
+        'you have recorded a decision not to donate',
+        'you are in an excluded group',
+      ],
+      moreAboutLawText: 'Find out more about the ',
+      moreAboutLawLinkText: 'law and excluded groups',
+      amendBeforeLink: 'If you do not want to be an organ donor, the best way to tell us is to ',
+      amendLink: 'update your decision',
+      amendAfterLink: ' You can change your decision at any time.',
+      familyText: 'Whatever you decide, please make sure your family know your decision.',
       reason: {
         label: 'Reason for withdrawing',
         placeholder: 'Select reason',

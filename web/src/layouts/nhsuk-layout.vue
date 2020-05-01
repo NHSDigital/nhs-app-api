@@ -16,4 +16,5 @@ export default {
 
 <style lang="scss">
   @import "~nhsuk-frontend/packages/nhsuk";
+  @import "../style/links";
 </style>

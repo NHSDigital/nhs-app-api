@@ -24,6 +24,7 @@ describe('organ donation withdraw reason page', () => {
   // In this case we want string numbers to be coerced into actual numbers and vice versa.
   // eslint-disable-next-line eqeqeq
   const findOptionById = id => find(x => x.value == id);
+  const LAW_CHANGE_URL = 'www.boo.com';
   let state;
   let $store;
   let wrapper;
@@ -44,7 +45,10 @@ describe('organ donation withdraw reason page', () => {
         ],
       },
     });
-    $store = createStore({ state });
+    $store = createStore({
+      $env: { ORGAN_DONATION_LAW_CHANGE_URL: LAW_CHANGE_URL },
+      state,
+    });
   });
 
   describe('fetch', () => {
@@ -109,9 +113,15 @@ describe('organ donation withdraw reason page', () => {
         expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.subheader');
       });
 
-      it('will translate the reason body text', () => {
-        const items = locale.organDonation.withdrawReason.bodyItems;
-        items.forEach(item => expect(wrapper.text()).toContain(item));
+      it('will translate the body text', () => {
+        const { explanations, exclusions } = locale.organDonation.withdrawReason;
+        explanations.forEach(item => expect(wrapper.text()).toContain(item));
+        exclusions.forEach(item => expect(wrapper.text()).toContain(item));
+        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.moreAboutLawText');
+        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.amendBeforeLink');
+        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.amendLink');
+        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.amendAfterLink');
+        expect(wrapper.text()).toContain('translate_organDonation.withdrawReason.familyText');
       });
 
       describe('dropdown', () => {
@@ -143,6 +153,47 @@ describe('organ donation withdraw reason page', () => {
           expect(option).not.toBeUndefined();
           expect(option.text).toBe('translate_organDonation.withdrawReason.reason.placeholder');
         });
+      });
+    });
+
+    describe('update redirect', () => {
+      let updateLink;
+
+      beforeEach(() => {
+        updateLink = wrapper.find('#update');
+      });
+
+      it('will exist', () => {
+        expect(updateLink.exists()).toBe(true);
+      });
+
+      it('will display text', () => {
+        expect(updateLink.text()).toEqual('translate_organDonation.withdrawReason.amendLink');
+      });
+
+      it('will dispatch the "organDonation/amendDecision" action when clicked', () => {
+        updateLink.trigger('click');
+        expect($store.dispatch).toHaveBeenCalledWith('organDonation/amendStart');
+      });
+    });
+
+    describe('law change', () => {
+      let lawChangeLink;
+
+      beforeEach(() => {
+        lawChangeLink = wrapper.find('#law-change');
+      });
+
+      it('will exist', () => {
+        expect(lawChangeLink.exists()).toBe(true);
+      });
+
+      it('will have target set to blank', () => {
+        expect(lawChangeLink.attributes('target')).toEqual('_blank');
+      });
+
+      it('will have href set to LAW_CHANGE_URL', () => {
+        expect(lawChangeLink.attributes('href')).toEqual(LAW_CHANGE_URL);
       });
     });
 

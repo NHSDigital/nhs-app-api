@@ -37,7 +37,7 @@ describe('withdrawn', () => {
     expect(wrapper.text()).toContain('translate_organDonation.withdrawn.whatNext.header');
   });
 
-  it('will translate the what next body text', () => {
+  it('will translate the body text', () => {
     const items = locale.organDonation.withdrawn.whatNext.bodyItems;
     items.forEach(item => expect(wrapper.text()).toContain(item));
   });
