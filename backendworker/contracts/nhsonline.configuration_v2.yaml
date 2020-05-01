@@ -54,6 +54,8 @@ components:
           $ref: '#/components/schemas/MenuTab'
         viewMode:
           $ref: '#/components/schemas/ViewMode'
+        showSpinner:
+          type: boolean
         showThirdPartyWarning:
           type: boolean
         requiresAssertedLoginIdentity:
@@ -77,6 +79,8 @@ components:
           $ref: '#/components/schemas/MenuTab'
         viewMode:
           $ref: '#/components/schemas/ViewMode'
+        showSpinner:
+          type: boolean
         showThirdPartyWarning:
           type: boolean
         requiresAssertedLoginIdentity:

@@ -14,6 +14,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration.Models
         [JsonConverter(typeof(StringEnumConverter), false)]
         public ViewMode ViewMode { get; set; }
 
+        public bool ShowSpinner { get; set; }
+
         public bool ShowThirdPartyWarning{ get; set; }
         
         public bool RequiresAssertedLoginIdentity { get; set; }

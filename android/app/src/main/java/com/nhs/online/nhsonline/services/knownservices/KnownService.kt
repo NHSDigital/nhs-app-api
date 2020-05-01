@@ -10,4 +10,5 @@ interface KnownService {
     var menuTab: MenuTab
     var viewMode: ViewMode
     var javaScriptInteractionMode: JavaScriptInteractionMode
+    var showSpinner: Boolean
 }

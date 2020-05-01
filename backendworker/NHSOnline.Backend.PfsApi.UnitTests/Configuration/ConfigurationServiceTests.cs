@@ -63,6 +63,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
                         ValidateSession = false,
                         RequiresAssertedLoginIdentity = false,
                         JavaScriptInteractionMode = JavaScriptInteractionMode.NhsApp,
+                        ShowSpinner = false,
                         ShowThirdPartyWarning = false,
                         ViewMode = ViewMode.WebView
                     }

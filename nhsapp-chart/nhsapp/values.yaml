@@ -563,6 +563,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false,
@@ -573,6 +574,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "None",
           "menuTab": "None",
           "viewMode": "AppTab",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -586,6 +588,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
@@ -596,6 +599,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "AppTab",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false,
@@ -606,6 +610,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "None",
           "menuTab": "None",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -616,6 +621,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "None",
           "menuTab": "None",
           "viewMode": "AppTab",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -629,6 +635,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
@@ -639,6 +646,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "AppTab",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false,
@@ -649,6 +657,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "None",
           "menuTab": "None",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -662,6 +671,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
@@ -673,6 +683,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
@@ -684,6 +695,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
@@ -695,6 +707,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
@@ -706,6 +719,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
@@ -717,6 +731,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
@@ -728,6 +743,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
@@ -739,6 +755,55 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
+      "id": "cid-sandpit-account",
+      "url": "https://account.sandpit.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
+      "id": "cid-sandpit-auth",
+      "url": "https://auth.sandpit.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
+      "id": "cid-sandpit-uaf",
+      "url": "https://uaf.sandpit.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showSpinner": false,
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
+      "id": "cid-sandpit-access",
+      "url": "https://access.sandpit.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false
@@ -793,6 +858,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "NhsApp",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false,
@@ -803,6 +869,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "None",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": true
@@ -813,6 +880,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Appointments",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": true
@@ -823,6 +891,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Symptoms",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -833,6 +902,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "More",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": true
@@ -843,6 +913,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "MyRecord",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": true
@@ -853,6 +924,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "More",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": true
@@ -863,6 +935,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Prescriptions",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": true
@@ -873,6 +946,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "NhsApp",
           "menuTab": "Symptoms",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": true
@@ -886,6 +960,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
@@ -897,6 +972,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": true,
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
@@ -908,6 +984,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": true,
       "showThirdPartyWarning": true,
       "requiresAssertedLoginIdentity": true,
       "validateSession": true
@@ -918,6 +995,7 @@ knownservices_config: {
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
+      "showSpinner": false,
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
       "validateSession": false,
@@ -928,6 +1006,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "SilverThirdParty",
           "menuTab": "None",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -938,6 +1017,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "None",
           "menuTab": "None",
           "viewMode": "WebView",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false
@@ -948,6 +1028,7 @@ knownservices_config: {
           "javaScriptInteractionMode": "None",
           "menuTab": "None",
           "viewMode": "AppTab",
+          "showSpinner": false,
           "showThirdPartyWarning": false,
           "requiresAssertedLoginIdentity": false,
           "validateSession": false

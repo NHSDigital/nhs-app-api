@@ -12,6 +12,7 @@ data class RootService(
         override var menuTab: MenuTab,
         override var viewMode: ViewMode,
         override var javaScriptInteractionMode: JavaScriptInteractionMode,
+        override var showSpinner: Boolean,
         var url: String,
         var subServices: List<SubService>? = null
 ): KnownService

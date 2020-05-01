@@ -64,6 +64,8 @@ class WebClientInterceptor(
             return true
         }
 
+        showKnownServicesSpinner(view.url, url)
+
         if (schemeHandlers.handleUrl(url))
             return true
 
@@ -245,6 +247,8 @@ class WebClientInterceptor(
         }
 
         super.onPageFinished(view, url)
+
+        hideKnownServicesSpinner(url)
         
         uiInteractor.dismissSplashScreen()
     }
@@ -383,6 +387,24 @@ class WebClientInterceptor(
             url.contains(URL(context.resources.getString(R.string.nhsLoginSuffix)).host)
         } catch (exception: MalformedURLException) {
             false
+        }
+    }
+
+    private fun showKnownServicesSpinner(currentUrl: String, newUrl: String) {
+        if (!URL(currentUrl).host.equals(URL(newUrl).host, true)) {
+            val matchingKnownService =
+                    knownServices.findMatchingKnownService(URL(newUrl))
+            if (matchingKnownService != null && matchingKnownService.showSpinner) {
+                uiInteractor.showProgressDialog()
+            }
+        }
+    }
+
+    private fun hideKnownServicesSpinner(url: String?) {
+        val matchingKnownService =
+                knownServices.findMatchingKnownService(URL(url))
+        if (matchingKnownService != null && matchingKnownService.showSpinner) {
+            uiInteractor.dismissProgressDialog()
         }
     }
 }

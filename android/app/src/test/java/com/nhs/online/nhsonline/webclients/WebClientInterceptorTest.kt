@@ -256,6 +256,176 @@ class WebClientInterceptorTest {
     }
 
     @Test
+    fun overrideUrlLoad_knownServicesSpinnerShown() {
+        val url = "https://111.nhs.uk/"
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.None,
+                        viewMode = ViewMode.WebView,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                        url = url,
+                        showSpinner = true,
+                        subServices = null
+                )
+        )
+
+        val activity = Robolectric.buildActivity(MainActivity::class.java).get()
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                nhsWebMock,
+                resourceMock.mockContext(),
+                knownServicesMock,
+                schemeHandlersMock,
+                nhsLoginLoggedInPaths
+        )
+
+        val tmpWebView = createWebView()
+        tmpWebView.loadUrl("https://google.com")
+        webInterceptor.shouldOverrideUrlLoading(tmpWebView, url)
+
+        verify(uiInteractorMock, times(1)).showProgressDialog()
+    }
+
+    @Test
+    fun overrideUrlLoad_knownServicesSpinnerShownWithDifferentCasing() {
+        val url = "https://111.nhs.uk/"
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.None,
+                        viewMode = ViewMode.WebView,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                        url = url,
+                        showSpinner = true,
+                        subServices = null
+                )
+        )
+
+        val activity = Robolectric.buildActivity(MainActivity::class.java).get()
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                nhsWebMock,
+                resourceMock.mockContext(),
+                knownServicesMock,
+                schemeHandlersMock,
+                nhsLoginLoggedInPaths
+        )
+
+        val tmpWebView = createWebView()
+        tmpWebView.loadUrl("https://google.com")
+        webInterceptor.shouldOverrideUrlLoading(tmpWebView, "httPs://111.nHs.uK/")
+
+        verify(uiInteractorMock, times(1)).showProgressDialog()
+    }
+
+    @Test
+    fun overrideUrlLoad_knownServicesSpinnerNotShownWhenConfigSetToFalse() {
+        val url = "https://111.nhs.uk/"
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.None,
+                        viewMode = ViewMode.WebView,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                        url = url,
+                        showSpinner = false,
+                        subServices = null
+                )
+        )
+
+        val activity = Robolectric.buildActivity(MainActivity::class.java).get()
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                nhsWebMock,
+                resourceMock.mockContext(),
+                knownServicesMock,
+                schemeHandlersMock,
+                nhsLoginLoggedInPaths
+        )
+
+        val tmpWebView = createWebView()
+        tmpWebView.loadUrl("https://google.com")
+        webInterceptor.shouldOverrideUrlLoading(tmpWebView, url)
+
+        verify(uiInteractorMock, never()).showProgressDialog()
+    }
+
+    @Test
+    fun overrideUrlLoad_knownServicesSpinnerNotShownWithUrlMismatch() {
+        val url = "https://111.nhs.uk/"
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.None,
+                        viewMode = ViewMode.WebView,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                        url = url,
+                        showSpinner = true,
+                        subServices = null
+                )
+        )
+
+        val activity = Robolectric.buildActivity(MainActivity::class.java).get()
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                nhsWebMock,
+                resourceMock.mockContext(),
+                knownServicesMock,
+                schemeHandlersMock,
+                nhsLoginLoggedInPaths
+        )
+
+        val tmpWebView = createWebView()
+        tmpWebView.loadUrl(url)
+        webInterceptor.shouldOverrideUrlLoading(tmpWebView, "https://google.com/")
+
+        verify(uiInteractorMock, never()).showProgressDialog()
+    }
+
+    @Test
+    fun overrideUrlLoad_knownServicesSpinnerNotShownWithNoBaseUrlChange() {
+        val url = "https://111.nhs.uk/"
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.None,
+                        viewMode = ViewMode.WebView,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                        url = url,
+                        showSpinner = true,
+                        subServices = null
+                )
+        )
+
+        val activity = Robolectric.buildActivity(MainActivity::class.java).get()
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                nhsWebMock,
+                resourceMock.mockContext(),
+                knownServicesMock,
+                schemeHandlersMock,
+                nhsLoginLoggedInPaths
+        )
+
+        val tmpWebView = createWebView()
+        tmpWebView.loadUrl(url)
+        webInterceptor.shouldOverrideUrlLoading(tmpWebView, url)
+
+        verify(uiInteractorMock, never()).showProgressDialog()
+    }
+
+    @Test
     fun onPageStartedNoConnection() {
         val webInterceptor = WebClientInterceptor(
                 uiInteractorMock,
@@ -275,6 +445,7 @@ class WebClientInterceptorTest {
                         viewMode = ViewMode.WebView,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
+                        showSpinner = false,
                         subServices = null
                 )
         )
@@ -307,6 +478,7 @@ class WebClientInterceptorTest {
                         viewMode = ViewMode.WebView,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         path = "/conditions",
+                        showSpinner = false,
                         queryString = null
                 )
         )
@@ -316,6 +488,72 @@ class WebClientInterceptorTest {
                 url,
                 null
         )
+    }
+
+    @Test
+    fun onPageFinished_knownServicesSpinnerHidden() {
+        val url = "https://111.nhs.uk/"
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.None,
+                        viewMode = ViewMode.WebView,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                        url = url,
+                        showSpinner = true,
+                        subServices = null
+                )
+        )
+
+        val activity = Robolectric.buildActivity(MainActivity::class.java).get()
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                nhsWebMock,
+                resourceMock.mockContext(),
+                knownServicesMock,
+                schemeHandlersMock,
+                nhsLoginLoggedInPaths
+        )
+
+        val tmpWebView = createWebView()
+        webInterceptor.onPageFinished(tmpWebView, url)
+
+        verify(uiInteractorMock, times(1)).dismissProgressDialog()
+    }
+
+    @Test
+    fun onPageFinished_knownServicesSpinnerNotHidden() {
+        val url = "https://111.nhs.uk/"
+        whenever(knownServicesMock.findMatchingKnownService(URL(url))).thenReturn(
+                RootService(
+                        requiresAssertedLoginIdentity = true,
+                        validateSession = true,
+                        menuTab = MenuTab.None,
+                        viewMode = ViewMode.WebView,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
+                        url = url,
+                        showSpinner = false,
+                        subServices = null
+                )
+        )
+
+        val activity = Robolectric.buildActivity(MainActivity::class.java).get()
+        val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                nhsWebMock,
+                resourceMock.mockContext(),
+                knownServicesMock,
+                schemeHandlersMock,
+                nhsLoginLoggedInPaths
+        )
+
+        val tmpWebView = createWebView()
+        webInterceptor.onPageFinished(tmpWebView, url)
+
+        verify(uiInteractorMock, never()).dismissProgressDialog()
     }
 
     @Test
@@ -380,8 +618,8 @@ class WebClientInterceptorTest {
                         viewMode = ViewMode.WebView,
                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
+                        showSpinner = false,
                         subServices = null
-
                 )
         )
 

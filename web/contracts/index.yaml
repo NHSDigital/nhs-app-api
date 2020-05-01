@@ -99,6 +99,8 @@
                             enum: 
                               - "AppTab"
                               - "WebView"
+                          showSpinner:
+                            type: "boolean"
                           showThirdPartyWarning: 
                             type: "boolean"
                           requiresAssertedLoginIdentity: 
@@ -134,6 +136,8 @@
                                   enum: 
                                     - "AppTab"
                                     - "WebView"
+                                showSpinner:
+                                  type: "boolean"
                                 showThirdPartyWarning: 
                                   type: "boolean"
                                 requiresAssertedLoginIdentity: 

@@ -12,6 +12,7 @@ data class SubService(
         override var menuTab: MenuTab,
         override var viewMode: ViewMode,
         override var javaScriptInteractionMode: JavaScriptInteractionMode,
+        override var showSpinner: Boolean,
         var path: String? = null,
         var queryString: String? = null
 ): KnownService

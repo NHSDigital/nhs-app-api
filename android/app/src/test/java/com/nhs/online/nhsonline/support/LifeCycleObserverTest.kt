@@ -63,6 +63,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
+                        showSpinner = false,
                         subServices = null
                 )
         )
@@ -83,6 +84,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
+                        showSpinner = false,
                         subServices = null
                 )
         )
@@ -103,6 +105,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
+                        showSpinner = false,
                         subServices = null
                 )
         )
@@ -123,6 +126,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
+                        showSpinner = false,
                         subServices = null
                 )
         )
@@ -143,6 +147,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
+                        showSpinner = false,
                         subServices = null
                 )
         )
@@ -163,6 +168,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         viewMode = ViewMode.Unknown,
                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
+                        showSpinner = false,
                         subServices = null
                 )
         )

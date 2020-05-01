@@ -105,6 +105,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 "\"viewMode\":\"NotValidValue\"," +
                 "\"javaScriptInteractionMode\":\"NotValidValue\"," +
                 "\"url\":\"www.example.com\"," +
+                "\"showSpinner\":false," +
                 "\"subServices\":null" +
                 "}]" +
                 "}")
@@ -125,6 +126,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                                         viewMode = ViewMode.Unknown,
                                         javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                                         url = "www.example.com",
+                                        showSpinner = false,
                                         subServices = null
                                 )
                         )
@@ -145,6 +147,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 "\"viewMode\":\"AppTab\"," +
                 "\"javaScriptInteractionMode\":\"NhsApp\"," +
                 "\"url\":\"www.example.com\"," +
+                "\"showSpinner\":false," +
                 "\"subServices\":null" +
                 "}]" +
                 "}")
@@ -165,6 +168,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                                         viewMode = ViewMode.AppTab,
                                         javaScriptInteractionMode = JavaScriptInteractionMode.NhsApp,
                                         url = "www.example.com",
+                                        showSpinner = false,
                                         subServices = null
                                 )
                         )
@@ -185,6 +189,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 "\"viewMode\":\"AppTab\"," +
                 "\"javaScriptInteractionMode\":\"NhsApp\"," +
                 "\"url\":\"www.example.com\"," +
+                "\"showSpinner\":false," +
                 "\"subServices\": [{" +
                 "\"requiresAssertedLoginIdentity\":true," +
                 "\"validateSession\":false," +
@@ -192,6 +197,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 "\"viewMode\":\"WebView\"," +
                 "\"javaScriptInteractionMode\":\"None\"," +
                 "\"path\":\"/path\"," +
+                "\"showSpinner\":false," +
                 "\"queryString\":null" +
                 "}]" +
                 "}]" +
@@ -213,6 +219,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                                         viewMode = ViewMode.AppTab,
                                         javaScriptInteractionMode = JavaScriptInteractionMode.NhsApp,
                                         url = "www.example.com",
+                                        showSpinner = false,
                                         subServices = listOf(
                                                 SubService(
                                                         requiresAssertedLoginIdentity = true,
@@ -221,7 +228,8 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                                                         viewMode = ViewMode.WebView,
                                                         javaScriptInteractionMode = JavaScriptInteractionMode.None,
                                                         path = "/path",
-                                                        queryString = null
+                                                        queryString = null,
+                                                        showSpinner = false
                                                 )
                                         )
                                 )
