@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
-using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
@@ -28,29 +27,29 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         private readonly ILogger<SessionController> _logger;
         private readonly IAuditor _auditor;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
-        private readonly IGpSessionManager _gpSessionManager;
         private readonly IAntiforgery _antiforgery;
         private readonly ISessionCreator _sessionCreator;
         private readonly UserSessionService _userSessionService;
+        private readonly IUserSessionManager _userSessionManager;
 
         public SessionController(
             ConfigurationSettings settings,
             ILogger<SessionController> logger,
             IAuditor auditor,
             IErrorReferenceGenerator errorReferenceGenerator,
-            IGpSessionManager gpSessionManager,
             IAntiforgery antiforgery,
             ISessionCreator sessionCreator,
-            UserSessionService userSessionService)
+            UserSessionService userSessionService,
+            IUserSessionManager userSessionManager)
         {
             _settings = settings;
             _logger = logger;
             _auditor = auditor;
             _errorReferenceGenerator = errorReferenceGenerator;
-            _gpSessionManager = gpSessionManager;
             _antiforgery = antiforgery;
             _sessionCreator = sessionCreator;
             _userSessionService = userSessionService;
+            _userSessionManager = userSessionManager;
         }
 
         [HttpGet]
@@ -102,44 +101,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([UserSession] P9UserSession userSession)
+        public async Task<IActionResult> Delete([UserSession] UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
-                await _auditor.Audit(AuditingOperations.SessionDeleteRequest, "Session delete called.");
 
-                // Delete GP supplier session
-                var gpUserSession = userSession.GpUserSession;
-                var citizenIdUserSession = userSession.CitizenIdUserSession;
+                var result = await _userSessionManager.Delete(HttpContext, userSession);
 
-                var closeSessionResult = await _gpSessionManager.CloseAndDeleteSession(userSession);
-
-                if (closeSessionResult is CloseSessionResult.Failure)
-                {
-                    await _auditor.AuditSessionEvent(
-                        citizenIdUserSession.AccessToken,
-                        gpUserSession.NhsNumber,
-                        gpUserSession.Supplier,
-                        AuditingOperations.SessionDeleteResponse,
-                        "Delete session failed");
-
-                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-                }
-
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-                _logger.LogDebug(
-                    $"Session successfully deleted. Finished with status code: {StatusCodes.Status204NoContent}");
-
-                await _auditor.AuditSessionEvent(
-                    citizenIdUserSession.AccessToken,
-                    gpUserSession.NhsNumber,
-                    gpUserSession.Supplier,
-                    AuditingOperations.SessionDeleteResponse,
-                    "Session successfully deleted");
-
-                return new StatusCodeResult(StatusCodes.Status204NoContent);
+                return result.Accept(new DeleteUserSessionResponseVisitor());
             }
             finally
             {
@@ -218,6 +188,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
             }
+        }
+
+        private sealed class DeleteUserSessionResponseVisitor : IDeleteUserSessionResultVisitor<IActionResult>
+        {
+            public IActionResult Visit(DeleteUserSessionResult.Success success)
+                => new NoContentResult();
+
+            public IActionResult Visit(DeleteUserSessionResult.Failure failure)
+                => new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
 
         private sealed class UserSessionResponseVisitor<TUserSessionResponse> : IUserSessionVisitor<TUserSessionResponse>

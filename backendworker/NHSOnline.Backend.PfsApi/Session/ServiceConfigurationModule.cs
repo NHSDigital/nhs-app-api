@@ -11,19 +11,15 @@ namespace NHSOnline.Backend.PfsApi.Session
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<ISessionCreator, SessionCreator>();
-            services.AddTransient<SessionCreatorCitizenIdService>();
-            services.AddTransient<SessionCreatorServiceJourneyRuleService>();
-            services.AddTransient<SessionCreatorUserInfoService>();
+            ConfigureSessionScopeServices(services);
+            ConfigureSessionManagementServices(services);
+        }
 
+        private static void ConfigureSessionScopeServices(IServiceCollection services)
+        {
             services.AddScoped<UserSessionService>();
             services.AddTransient<IUserSessionService>(sp => sp.GetRequiredService<UserSessionService>());
 
-            services.AddTransient<IUserSessionManager, UserSessionManager>();
-            services.AddTransient<UserSessionCreator>();
-            services.AddTransient<P9UserSessionCreator>();
-            services.AddTransient<P5UserSessionCreator>();
-            
             services.AddTransient<SessionLoggerScope>();
 
             services.Configure<MvcOptions>(opts =>
@@ -34,6 +30,35 @@ namespace NHSOnline.Backend.PfsApi.Session
                 // https://stackoverflow.com/a/56893947
                 opts.ModelMetadataDetailsProviders.Add(new BindingSourceMetadataProvider(typeof(UserSession), BindingSource.Special));
             });
+        }
+
+        private static void ConfigureSessionManagementServices(IServiceCollection services)
+        {
+            services.AddTransient<IUserSessionManager, UserSessionManager>();
+
+            ConfigureCreateSessionServices(services);
+            ConfigureDeleteSessionServices(services);
+        }
+
+        private static void ConfigureCreateSessionServices(IServiceCollection services)
+        {
+            services.AddTransient<ISessionCreator, SessionCreator>();
+            services.AddTransient<SessionCreatorCitizenIdService>();
+            services.AddTransient<SessionCreatorServiceJourneyRuleService>();
+            services.AddTransient<SessionCreatorUserInfoService>();
+
+            services.AddTransient<UserSessionCreator>();
+            services.AddTransient<P9UserSessionCreator>();
+            services.AddTransient<P5UserSessionCreator>();
+        }
+
+        private static void ConfigureDeleteSessionServices(IServiceCollection services)
+        {
+            services.AddTransient<UserSessionDeleter>();
+            services.AddTransient<UserSessionDeleteSteps>();
+            services.AddTransient<IUserSessionDeleteStep<P9UserSession>, UserSessionDeleteGpSessionStep>();
+            services.AddTransient<IUserSessionDeleteStep<UserSession>, UserSessionDeleteCachedSessionStep>();
+            services.AddTransient<IUserSessionDeleteStep<UserSession>, UserSessionDeleteSignOutStep>();
         }
     }
 }

@@ -9,10 +9,13 @@ namespace NHSOnline.Backend.PfsApi.Session
 {
     public interface IUserSessionManager
     {
-        Task<ProcessResult<UserSession, CreateSessionResult>> Create(CitizenIdSessionResult citizenIdSessionResult,
+        Task<ProcessResult<UserSession, CreateSessionResult>> Create(
+            CitizenIdSessionResult citizenIdSessionResult,
             ServiceJourneyRulesResponse serviceJourneyRules,
             string csrfToken);
 
-        Task<bool> SignOutAsync(HttpContext httpContext);
+        Task<DeleteUserSessionResult> Delete(
+            HttpContext httpContext,
+            UserSession userSession);
     }
 }

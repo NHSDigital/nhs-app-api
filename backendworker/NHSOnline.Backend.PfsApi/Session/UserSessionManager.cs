@@ -1,11 +1,5 @@
-using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
-using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.CitizenId;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 using NHSOnline.Backend.Support;
@@ -15,24 +9,15 @@ namespace NHSOnline.Backend.PfsApi.Session
 {
     internal sealed class UserSessionManager : IUserSessionManager
     {
-        private readonly IUserSessionService _userSessionService;
-        private readonly ISessionCacheService _sessionCacheService;
-        private readonly IAuditor _auditor;
-        private readonly ILogger<UserSessionManager> _logger;
         private readonly UserSessionCreator _userSessionCreator;
+        private readonly UserSessionDeleter _userSessionDeleter;
 
         public UserSessionManager(
-            IUserSessionService userSessionService,
-            ISessionCacheService sessionCacheService,
-            IAuditor auditor,
-            ILogger<UserSessionManager> logger,
-            UserSessionCreator userSessionCreator)
+            UserSessionCreator userSessionCreator,
+            UserSessionDeleter userSessionDeleter)
         {
-            _userSessionService = userSessionService;
-            _sessionCacheService = sessionCacheService;
-            _auditor = auditor;
-            _logger = logger;
             _userSessionCreator = userSessionCreator;
+            _userSessionDeleter = userSessionDeleter;
         }
 
         public async Task<ProcessResult<UserSession, CreateSessionResult>> Create(
@@ -47,55 +32,9 @@ namespace NHSOnline.Backend.PfsApi.Session
                 success => ProcessResult.StepResult<UserSession, CreateSessionResult>(success.UserSession));
         }
 
-        public async Task<bool> SignOutAsync(HttpContext httpContext)
+        public async Task<DeleteUserSessionResult> Delete(HttpContext httpContext, UserSession userSession)
         {
-            if (httpContext == null)
-            {
-                throw new ArgumentNullException(nameof(httpContext));
-            }
-
-            var success = true;
-            var userSession = _userSessionService.GetRequiredUserSession<P9UserSession>();
-
-            var gpUserSession = userSession.GpUserSession;
-            var citizenIdUserSession = userSession.CitizenIdUserSession;
-
-            try
-            {
-                if (!await _sessionCacheService.DeleteUserSession(userSession.Key))
-                {
-                    _logger.LogError("No active session was found");
-                }
-            }
-            catch (Exception e)
-            {
-                success = false;
-                _logger.LogError(e, $"Delete session failed with error: {e.Message}");
-                await _auditor.AuditSessionEvent(
-                    citizenIdUserSession.AccessToken,
-                    gpUserSession.NhsNumber,
-                    gpUserSession.Supplier,
-                    AuditingOperations.SessionDeleteResponse,
-                    "Delete session failed");
-            }
-
-            await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            if (!success)
-            {
-                return false;
-            }
-
-            _logger.LogDebug("Session successfully deleted.");
-            await _auditor.AuditSessionEvent(
-                citizenIdUserSession.AccessToken,
-                gpUserSession.NhsNumber,
-                gpUserSession.Supplier,
-                AuditingOperations.SessionDeleteResponse,
-                "Session successfully deleted"
-            );
-
-            return true;
+            return await _userSessionDeleter.Delete(httpContext, userSession);
         }
     }
 }
