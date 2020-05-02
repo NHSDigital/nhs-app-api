@@ -68,23 +68,19 @@ namespace NHSOnline.Backend.Auth.CitizenId
                     return result;
                 }
 
-                _idTokenService.ReadToken(tokenResponse.Body.IdToken, signingKeys.ValueOrFailure())
-                    .IfSome(idToken =>
+                await _idTokenService
+                    .ReadToken(tokenResponse.Body.IdToken, signingKeys.ValueOrFailure())
+                    .IfSome(async idToken =>
                     {
-                        var resultTask = GetUserProfile(tokenResponse.Body.AccessToken, idToken.Subject);
-                        resultTask.Wait();
-
-                        result = resultTask.Result;
+                        result = await GetUserProfile(tokenResponse.Body.AccessToken, idToken.Subject);
                         result.IdTokenJti = idToken.Jti;
-
-                        return Option.Some(idToken);
                     })
                     .IfNone(() =>
                     {
                         _logger.LogError("Failed to read ID Token");
                         result.StatusCode = HttpStatusCode.BadRequest;
                         result.UserProfile = Option.None<UserProfile>();
-                        return Option.None<IdToken>();
+                        return Task.CompletedTask;
                     });
 
                 return result;

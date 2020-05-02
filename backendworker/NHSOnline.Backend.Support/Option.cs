@@ -53,17 +53,22 @@ namespace NHSOnline.Backend.Support
             return HasValue ? this : next();
         }
 
-        public Option<T> IfSome(Func<T, Option<T>> next)
-        {
-            return HasValue ? next(Value) : this;
-        }
-
         public void IfSome(Action<T> next)
         {
             if (HasValue)
             {
                 next(Value);
             }
+        }
+
+        public OptionElse<TResult> IfSome<TResult>(Func<T, TResult> next)
+        {
+            if (HasValue)
+            {
+                return new OptionElseSome<TResult>(next(Value));
+            }
+
+            return new OptionElseNone<TResult>();
         }
 
         public override string ToString()
@@ -74,6 +79,28 @@ namespace NHSOnline.Backend.Support
         public Option<TResult> Select<TResult>(Func<T, TResult> next)
         {
             return HasValue ? Option.Some(next(Value)) : Option.None<TResult>();
+        }
+
+        public abstract class OptionElse<TResult>
+        {
+            public abstract TResult IfNone(TResult defaultValue);
+            public abstract TResult IfNone(Func<TResult> defaultValueFactory);
+        }
+
+        private sealed class OptionElseNone<TResult>: OptionElse<TResult>
+        {
+            public override TResult IfNone(TResult defaultValue) => defaultValue;
+            public override TResult IfNone(Func<TResult> defaultValueFactory) => defaultValueFactory();
+        }
+
+        private sealed class OptionElseSome<TResult>: OptionElse<TResult>
+        {
+            private readonly TResult _result;
+
+            public OptionElseSome(TResult result) => _result = result;
+
+            public override TResult IfNone(TResult defaultValue) => _result;
+            public override TResult IfNone(Func<TResult> defaultValueFactory) => _result;
         }
     }
 }
