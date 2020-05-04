@@ -83,8 +83,7 @@ export default {
 
     this.services = await this.$store.state.knownServices.knownServices
       .filter(service => this.redirectPath.includes(service.url));
-    if (this.services.length > 0 &&
-      (this.services[0].requiresAssertedLoginIdentity || {}) === true) {
+    if (this.services.length > 0) {
       this.sessionStorageName = `agreedThirdPartyWarning_${this.services[0].id}`;
       this.redirectPathAndQuery = getPathAndQuery(this.redirectPath);
       this.thirdPartyServiceContent = this.getText(`thirdPartyProviders.${this.services[0].id}`);
@@ -98,7 +97,11 @@ export default {
 
       if (this.services[0].showThirdPartyWarning === false ||
           agreedToThirdPartyWarning(this.sessionStorageName)) {
-        this.getAssertedLoginIdentityAndNavigate();
+        if (this.services[0].requiresAssertedLoginIdentity || {} === true) {
+          this.getAssertedLoginIdentityAndNavigate();
+        } else {
+          window.location = this.redirectPath;
+        }
         return;
       }
 
@@ -125,10 +128,14 @@ export default {
         .then(response => this.appendAssertedLoginIdentity(this.redirectPath, response));
     },
     async setButtonHref() {
-      await this.postPatientAssertedLoginIdentity()
-        .then((response) => {
-          this.buttonHref = response;
-        });
+      if (this.services[0].requiresAssertedLoginIdentity || {} === true) {
+        await this.postPatientAssertedLoginIdentity()
+          .then((response) => {
+            this.buttonHref = response;
+          });
+      } else {
+        this.buttonHref = this.redirectPath;
+      }
     },
     async getAssertedLoginIdentityAndNavigate() {
       await this.postPatientAssertedLoginIdentity()

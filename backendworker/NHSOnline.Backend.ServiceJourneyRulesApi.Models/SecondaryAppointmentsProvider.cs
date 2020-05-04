@@ -5,7 +5,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
     /// The lowercase naming is required for serialization, as it currently
     /// does not support conversion from `PascalCase` to `camelCase`.
     /// </summary>
-    public enum SecondaryAppointmentProvider
+    public enum SecondaryAppointmentsProvider
     {
         ers,
         pkb

@@ -28,5 +28,11 @@ export default {
         redirectPath: '/nhs-login/login?phrPath=%2Flibrary%2FmanageLibrary.action',
       },
     },
+    testProvider: {
+      messages: {
+        type: 'messages',
+        redirectPath: '/index.html',
+      },
+    },
   },
 };

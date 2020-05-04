@@ -17,13 +17,13 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             _silverIntegrations.Consultations = providers.ToList();
             return this;
         }
-        
+
         public SilverIntegrationsBuilder HealthTrackers(params HealthTrackersProvider[] providers)
         {
             _silverIntegrations.HealthTrackers = providers.ToList();
             return this;
         }
-        
+
         public SilverIntegrationsBuilder Libraries(params LibrariesProvider[] providers)
         {
             _silverIntegrations.Libraries = providers.ToList();
@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests
             return this;
         }
 
-        public SilverIntegrationsBuilder SecondaryAppointments(params SecondaryAppointmentProvider[] providers)
+        public SilverIntegrationsBuilder SecondaryAppointments(params SecondaryAppointmentsProvider[] providers)
         {
             _silverIntegrations.SecondaryAppointments = providers.ToList();
             return this;

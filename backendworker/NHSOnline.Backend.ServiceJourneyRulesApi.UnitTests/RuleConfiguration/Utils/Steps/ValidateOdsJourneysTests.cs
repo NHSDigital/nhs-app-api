@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                                 .Libraries(LibrariesProvider.pkb)
                                 .Medicines(MedicinesProvider.pkb)
                                 .Messages( MessagesProvider.pkb )
-                                .SecondaryAppointments( SecondaryAppointmentProvider.pkb ))
+                                .SecondaryAppointments( SecondaryAppointmentsProvider.pkb ))
                             .HomeScreen(x => x.PublicHealthNotifications(CreatePublicHealthNotification()))
                             .DocumentsEnabled(true)
                             .Im1MessagingEnabled(true, true, true,

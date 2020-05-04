@@ -1,5 +1,6 @@
 <template>
-  <menu-item :id="id"
+  <menu-item v-if="path"
+             :id="id"
              header-tag="h2"
              data-purpose="text_link"
              :href="path"
@@ -56,6 +57,9 @@ export default {
     path() {
       const services = this.$store.state.knownServices.knownServices
         .filter(service => this.providerId.includes(service.id));
+      if (services.length === 0) {
+        return '';
+      }
       const encodedUri = encodeURIComponent(services[0].url + this.redirectPath);
       return `${this.redirectorPath}?${REDIRECT_PARAMETER}=${encodedUri}`;
     },

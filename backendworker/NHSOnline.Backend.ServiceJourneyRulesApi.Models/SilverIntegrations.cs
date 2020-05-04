@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
         public IList<MessagesProvider> Messages { get; set; }
 
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
-        public IList<SecondaryAppointmentProvider> SecondaryAppointments { get; set; }
+        public IList<SecondaryAppointmentsProvider> SecondaryAppointments { get; set; }
 
         public SilverIntegrations Clone()
         {
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 
             if (other?.SecondaryAppointments != null)
             {
-                SecondaryAppointments ??= new List<SecondaryAppointmentProvider>();
+                SecondaryAppointments ??= new List<SecondaryAppointmentsProvider>();
                 SecondaryAppointments = SecondaryAppointments.Union(other.SecondaryAppointments).ToList();
             }
         }

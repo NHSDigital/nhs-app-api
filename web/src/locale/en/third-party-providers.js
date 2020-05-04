@@ -101,4 +101,18 @@ export default {
       },
     ],
   },
+  'silver-third-party-api-test': {
+    serviceId: 'silver-third-party-api-test',
+    providerName: 'Test Silver Third Party Provider',
+    jumpOffs: [
+      {
+        id: 'messages',
+        path: '/index.html',
+        jumpOffContent: {
+          headerText: 'Test Provider',
+          descriptionText: 'For testing NHS App Javascript API',
+        },
+      },
+    ],
+  },
 };

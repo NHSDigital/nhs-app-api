@@ -178,7 +178,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [ "pkb" ]
+            "enum": [ "pkb", "testSilverThirdPartyProvider" ]
           }
         },
         "secondaryAppointments": {

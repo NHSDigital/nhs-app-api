@@ -18,6 +18,12 @@
                                      :jump-off-type="thirdPartyProvider.pkb.messages.type"
                                      :redirect-path="thirdPartyProvider
                                        .pkb.messages.redirectPath" />
+        <third-party-jump-off-button v-if="testProviderEnabled"
+                                     id="btn_test_silver_messages"
+                                     provider-id="silver-third-party-api-test"
+                                     :jump-off-type="thirdPartyProvider.testProvider.messages.type"
+                                     :redirect-path="thirdPartyProvider
+                                       .testProvider.messages.redirectPath" />
         <menu-item v-if="appMessagingEnabled"
                    id="btn_appMessaging"
                    header-tag="h2"
@@ -61,7 +67,10 @@ export default {
   },
   computed: {
     hasAnyAccess() {
-      return this.gpMessagingEnabled || this.appMessagingEnabled || this.pkbEnabled;
+      return this.gpMessagingEnabled ||
+        this.appMessagingEnabled ||
+        this.pkbEnabled ||
+        this.testProviderEnabled;
     },
     gpMessagingEnabled() {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
@@ -85,6 +94,16 @@ export default {
         },
       });
     },
+    hasTestProviderMessages() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'testSilverThirdPartyProvider',
+          serviceType: 'messages',
+        },
+      });
+    },
     isNativeApp() {
       return this.$store.state.device.isNativeApp;
     },
@@ -93,6 +112,9 @@ export default {
     },
     pkbEnabled() {
       return this.hasPkbMessages && this.isNativeApp && !this.isProxying;
+    },
+    testProviderEnabled() {
+      return this.hasTestProviderMessages;
     },
   },
   methods: {

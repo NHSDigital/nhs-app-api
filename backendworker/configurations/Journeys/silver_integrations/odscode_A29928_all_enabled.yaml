@@ -15,6 +15,7 @@ journeys:
       - pkb
     messages:
       - pkb
+      - testSilverThirdPartyProvider
     secondaryAppointments:
       - ers
       - pkb
