@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
@@ -47,8 +46,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
 
             _systemUnderTest = new SessionExtendController(
                 _mockGpSystemFactory.Object,
-                new Mock<ILogger<SessionExtendController>>().Object,
-                new Mock<IAuditor>().Object);
+                new Mock<ILogger<SessionExtendController>>().Object);
         }
 
         [TestMethod]
@@ -89,6 +87,20 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             // Arrange
             result.Should().BeAssignableTo<StatusCodeResult>()
                 .Subject.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            _mockSessionExtendService.Verify();
+        }
+
+        [TestMethod]
+        public async Task Post_P5UserSession_ReturnsSuccessResponse()
+        {
+            // Arrange
+            var userSession = new P5UserSession("csrf", new CitizenIdUserSession());
+
+            // Act
+            var result = await _systemUnderTest.Post(_patientGuid, userSession);
+
+            // Assert
+            result.Should().BeEquivalentTo(new StatusCodeResult(StatusCodes.Status200OK));
             _mockSessionExtendService.Verify();
         }
 
