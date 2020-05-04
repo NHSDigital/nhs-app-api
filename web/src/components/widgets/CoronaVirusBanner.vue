@@ -1,5 +1,5 @@
 <template>
-  <yellow-banner id="corona-virus-banner">
+  <yellow-banner id="corona-virus-banner" :should-be-floating="shouldBeFloating">
     <analytics-tracked-tag
       :class="$style['banner']"
       :text="$t('coronaVirusBanner.header')"
@@ -25,6 +25,12 @@ export default {
   components: {
     YellowBanner,
     AnalyticsTrackedTag,
+  },
+  props: {
+    shouldBeFloating: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>

@@ -5,7 +5,8 @@
       <api-error/>
     </div>
     <div v-else id="app">
-      <corona-virus-banner v-if="this.$store.state.device.isNativeApp"/>
+      <corona-virus-banner v-if="this.$store.state.device.isNativeApp"
+                           :should-be-floating="true"/>
       <div :class="dynamicStyle('login-app-header-flex-container')">
         <home-header v-if="this.$store.state.device.isNativeApp"/>
         <div v-else>
