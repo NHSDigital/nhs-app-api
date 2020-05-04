@@ -34,10 +34,10 @@ namespace NHSOnline.Backend.Support.UnitTests
         {
             // Arrange
             _mockConfiguration.Setup(x => x["ODS_REMAP_ENABLED"]).Returns("false");
-            var _systemUnderTest = _fixture.Create<OdsCodeMassager>();
+            var systemUnderTest = _fixture.Create<OdsCodeMassager>();
 
             // Act
-            var outputOdsCode = _systemUnderTest.CheckOdsCode(inputOdsCode);
+            var outputOdsCode = systemUnderTest.CheckOdsCode(inputOdsCode);
 
             // Assert
             outputOdsCode.Should().Be(expectedOutputOdsCode);
@@ -54,10 +54,10 @@ namespace NHSOnline.Backend.Support.UnitTests
             // Arrange
             _mockConfiguration.Setup(x => x["ODS_REMAP_ENABLED"]).Returns("true");
             _mockConfiguration.Setup(x => x["ODS_REMAP_MAP"]).Returns((string)null);
-            var _systemUnderTest = _fixture.Create<OdsCodeMassager>();
+            var systemUnderTest = _fixture.Create<OdsCodeMassager>();
 
             // Act
-            var outputOdsCode = _systemUnderTest.CheckOdsCode(inputOdsCode);
+            var outputOdsCode = systemUnderTest.CheckOdsCode(inputOdsCode);
 
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Warning,
@@ -76,10 +76,10 @@ namespace NHSOnline.Backend.Support.UnitTests
             // Arrange
             _mockConfiguration.Setup(x => x["ODS_REMAP_ENABLED"]).Returns("true");
             _mockConfiguration.Setup(x => x["ODS_REMAP_MAP"]).Returns((string)null);
-            var _systemUnderTest = _fixture.Create<OdsCodeMassager>();
+            var systemUnderTest = _fixture.Create<OdsCodeMassager>();
 
             // Act
-            var outputOdsCode = _systemUnderTest.CheckOdsCode(inputOdsCode);
+            var outputOdsCode = systemUnderTest.CheckOdsCode(inputOdsCode);
 
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Warning,
@@ -105,10 +105,10 @@ namespace NHSOnline.Backend.Support.UnitTests
             // Arrange
             _mockConfiguration.Setup(x => x["ODS_REMAP_ENABLED"]).Returns("true");
             _mockConfiguration.Setup(x => x["ODS_REMAP_MAP"]).Returns(odsCodeMap);
-            var _systemUnderTest = _fixture.Create<OdsCodeMassager>();
+            var systemUnderTest = _fixture.Create<OdsCodeMassager>();
 
             // Act
-            var outputOdsCode = _systemUnderTest.CheckOdsCode(inputOdsCode);
+            var outputOdsCode = systemUnderTest.CheckOdsCode(inputOdsCode);
 
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Warning,
@@ -129,10 +129,10 @@ namespace NHSOnline.Backend.Support.UnitTests
             // Arrange
             _mockConfiguration.Setup(x => x["ODS_REMAP_ENABLED"]).Returns("true");
             _mockConfiguration.Setup(x => x["ODS_REMAP_MAP"]).Returns(odsCodeMap);
-            var _systemUnderTest = _fixture.Create<OdsCodeMassager>();
+            var systemUnderTest = _fixture.Create<OdsCodeMassager>();
 
             // Act
-            var outputOdsCode = _systemUnderTest.CheckOdsCode(inputOdsCode);
+            var outputOdsCode = systemUnderTest.CheckOdsCode(inputOdsCode);
 
             // Assert
             outputOdsCode.Should().Be(expectedOutputOdsCode);
@@ -149,10 +149,10 @@ namespace NHSOnline.Backend.Support.UnitTests
             // Arrange
             _mockConfiguration.Setup(x => x["ODS_REMAP_ENABLED"]).Returns("true");
             _mockConfiguration.Setup(x => x["ODS_REMAP_MAP"]).Returns(odsCodeMap);
-            var _systemUnderTest = _fixture.Create<OdsCodeMassager>();
+            var systemUnderTest = _fixture.Create<OdsCodeMassager>();
 
             // Act
-            var outputOdsCode = _systemUnderTest.CheckOdsCode(inputOdsCode);
+            var outputOdsCode = systemUnderTest.CheckOdsCode(inputOdsCode);
 
             // Assert
             outputOdsCode.Should().Be(expectedOutputOdsCode);
@@ -167,10 +167,10 @@ namespace NHSOnline.Backend.Support.UnitTests
             // Arrange
             _mockConfiguration.Setup(x => x["ODS_REMAP_ENABLED"]).Returns("true");
             _mockConfiguration.Setup(x => x["ODS_REMAP_MAP"]).Returns(odsCodeMap);
-            var _systemUnderTest = _fixture.Create<OdsCodeMassager>();
+            var systemUnderTest = _fixture.Create<OdsCodeMassager>();
 
             // Act
-            var outputOdsCode = _systemUnderTest.CheckOdsCode(inputOdsCode);
+            var outputOdsCode = systemUnderTest.CheckOdsCode(inputOdsCode);
 
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Information, $"Massaging ODS Code {inputOdsCode} to {outputOdsCode}", Times.Once());
@@ -186,14 +186,31 @@ namespace NHSOnline.Backend.Support.UnitTests
             // Arrange
             _mockConfiguration.Setup(x => x["ODS_REMAP_ENABLED"]).Returns("true");
             _mockConfiguration.Setup(x => x["ODS_REMAP_MAP"]).Returns(odsCodeMap);
-            var _systemUnderTest = _fixture.Create<OdsCodeMassager>();
+            var systemUnderTest = _fixture.Create<OdsCodeMassager>();
 
             // Act
-            var outputOdsCode = _systemUnderTest.CheckOdsCode(inputOdsCode);
+            var outputOdsCode = systemUnderTest.CheckOdsCode(inputOdsCode);
 
             // Assert
             _mockLogger.VerifyLogger(LogLevel.Information, $"Massaging ODS Code {inputOdsCode} to {outputOdsCode}", Times.Never());
             outputOdsCode.Should().Be(expectedOutputOdsCode);
+        }
+
+        [DataTestMethod]
+        [DataRow("true")]
+        [DataRow("false")]
+        public void CheckOdsCode_NullInput_ReturnsNull(string enabled)
+        {
+            // Arrange
+            _mockConfiguration.Setup(x => x["ODS_REMAP_ENABLED"]).Returns(enabled);
+            _mockConfiguration.Setup(x => x["ODS_REMAP_MAP"]).Returns("A12345:B34567;D98765:E76543");
+            var systemUnderTest = _fixture.Create<OdsCodeMassager>();
+
+            // Act
+            var outputOdsCode = systemUnderTest.CheckOdsCode(null);
+
+            // Assert
+            outputOdsCode.Should().Be(null);
         }
     }
 }

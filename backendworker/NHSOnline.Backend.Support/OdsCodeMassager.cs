@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.Support
 {
     public class OdsCodeMassager : IOdsCodeMassager
     {
-        private static readonly IDictionary<string, string> _defaultOdsCodeMap =
+        private static readonly IDictionary<string, string> DefaultOdsCodeMap =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "G85075", "X00100" },
@@ -43,13 +43,13 @@ namespace NHSOnline.Backend.Support
             if (odsRemapMap == null)
             {
                 _logger.LogWarning("Environment variable ODS_REMAP_MAP not set - using default ODS Code map");
-                return _defaultOdsCodeMap;
+                return DefaultOdsCodeMap;
             }
 
             if (!TryParseOdsRemapMap(odsRemapMap, out var odsCodeMap))
             {
                 _logger.LogWarning("Unable to parse environment variable ODS_REMAP_MAP - using default ODS Code map");
-                return _defaultOdsCodeMap;
+                return DefaultOdsCodeMap;
             }
 
             return odsCodeMap;
@@ -80,9 +80,8 @@ namespace NHSOnline.Backend.Support
                 return odsCode;
             }
 
-            if (_odsCodeMap.ContainsKey(odsCode))
+            if (odsCode != null && _odsCodeMap.TryGetValue(odsCode, out var mappedCode))
             {
-                var mappedCode = _odsCodeMap[odsCode];
                 _logger.LogInformation($"Massaging ODS Code {odsCode} to {mappedCode}");
 
                 return mappedCode;
