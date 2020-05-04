@@ -149,7 +149,7 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
         when (gpSystem) {
             Supplier.EMIS -> {
                 myRecordDocumentInformationPage.documentInfoContains(selectedDocument.date)
-                myRecordDocumentInformationPage.headerContainsText("Name")
+                myRecordDocumentInformationPage.headerContainsText(selectedDocument.term!!)
             }
             Supplier.TPP -> {
                 myRecordDocumentInformationPage.headerContainsText(selectedDocument.date)
@@ -194,7 +194,7 @@ open class V2MedicalRecordDocumentsStepDefinitions : AbstractDemographicsStepDef
         val selectedDocument = SerenityHelpers.getValueOrNull<ExpectedDocument>(SerenityVariable.SELECTED_DOCUMENT)!!
         val supplier = SerenityHelpers.getGpSupplier()
         val fileName = if (supplier == Supplier.EMIS) {
-            "${selectedDocument.name}.pdf"
+            "${selectedDocument.term}.pdf"
         } else {
             "${selectedDocument.term} added on ${selectedDocument.date}.jpg"
         }

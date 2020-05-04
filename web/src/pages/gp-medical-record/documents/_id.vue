@@ -6,7 +6,7 @@
                     !$store.state.device.isNativeApp && $style.desktopWeb]">
 
         <div id="documentInfo" class="nhsuk-u-margin-bottom-1" data-purpose="info">
-          <p v-if="name && isValidFile">{{ dateString }}</p>
+          <p v-if="term && isValidFile">{{ dateString }}</p>
           <p v-if="!isValidFile">{{ $t('my_record.documents.documentUnavailableSubtext') }}</p>
         </div>
 
@@ -63,9 +63,9 @@ import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 import { isBlankString, isEmptyArray, isTruthy, redirectTo, datePart, mimeType } from '@/lib/utils';
 import Glossary from '@/components/Glossary';
 
-function updateHeaderText(store, name, isValidFile, datePartString, documentType, dateString) {
+function updateHeaderText(store, term, isValidFile, datePartString, documentType, dateString) {
   if (isValidFile) {
-    store.dispatch('header/updateHeaderText', name || dateString);
+    store.dispatch('header/updateHeaderText', term || dateString);
 
     return;
   }
@@ -136,7 +136,7 @@ export default {
 
     const size = get('state.documents.currentDocument.size', store);
     const datePartString = (!date || !date.value) ? 'Unknown Date' : datePart(date.value, 'YearMonthDay');
-    const name = get('state.documents.currentDocument.name', store);
+    const term = get('state.documents.currentDocument.term', store);
     const type = get('state.documents.currentDocument.type', store);
     const documentType = get('state.documents.currentDocument.documentType', store);
     const isViewable = get('state.documents.currentDocument.isViewable', store);
@@ -154,7 +154,7 @@ export default {
 
     updateHeaderText(
       store,
-      name,
+      term,
       isValidFile,
       datePartString,
       documentType,
@@ -162,9 +162,8 @@ export default {
     );
 
     return {
-      document: store.state.documents.currentDocument,
       dateString,
-      name,
+      term,
       type,
       comments,
       size,
@@ -186,8 +185,8 @@ export default {
     async startDownload() {
       let fileName;
 
-      if (!isBlankString(this.name)) {
-        fileName = this.name;
+      if (!isBlankString(this.term)) {
+        fileName = this.term;
       } else {
         fileName = this.dateString;
       }

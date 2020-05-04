@@ -50,7 +50,7 @@ describe('document view', () => {
     it('will display Unknown Date if there is no document date', async () => {
       // Arrange
       const data = () => ({
-        name: 'Document1',
+        term: 'Document1',
         comments: [],
         size: 1000000,
         type: 'jpg',
@@ -68,10 +68,10 @@ describe('document view', () => {
       expect(documentInfo.text()).toEqual(dateString);
     });
 
-    it('will display the date subtext if there is a name', () => {
+    it('will display the date subtext if there is a term', () => {
       // Arrange
       const data = () => ({
-        name: 'Document1',
+        term: 'Document1',
         comments: [],
         size: 1000000,
         type: 'jpg',
@@ -361,10 +361,10 @@ describe('document view', () => {
       expect($store.dispatch).toHaveBeenCalledWith('pageTitle/updatePageTitle', 'translate_my_record.documents.documentTypeUnavailablePageTitle');
     });
 
-    it('will set the header and page title to the document name', async () => {
+    it('will set the header and page title to the document term', async () => {
       // Arrange
       const document = {
-        name: 'Document1',
+        term: 'Document1',
         type: 'jpg',
         size: 1000000,
         date: { value: '2019-08-08T12:03:44+00:00' },
@@ -404,7 +404,7 @@ describe('document view', () => {
     it('will set the header to the document date if no name exists', async () => {
       // Arrange
       const document = {
-        name: undefined,
+        term: undefined,
         type: 'jpg',
         size: 1000000,
         date: { value: '2019-08-08T12:03:44+00:00' },

@@ -60,7 +60,7 @@ Feature: Documents Frontend - Medical Record v2
     When I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
 
-  Scenario: An EMIS user who views a document with no name sees the document date as the header - Medical Record v2
+  Scenario: An EMIS user who views a document with no term sees the document date as the header - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2
     And the GP Practice has multiple documents with no name or term
     And I am logged in
