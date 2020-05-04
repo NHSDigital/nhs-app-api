@@ -62,11 +62,9 @@ namespace NHSOnline.Backend.Auditing
         public const string UpdatedNominatedPharmacyResponse = "NominatedPharmacy_Update_Response";
         public const string SearchNominatedPharmacyAuditTypeRequest = "SearchNominatedPharmacy_Get_Request";
         public const string SearchNominatedPharmacyAuditTypeResponse = "SearchNominatedPharmacy_Get_Response";
-        public const string GetServiceJourneyRulesAuditTypeRequest = "ServiceJourneyRules_Get_Request";
         public const string OnlineConsultationsDemographicAuditTypeRequest = "OnlineConsultations_Demographics_Request";
         public const string GetPatientConfigRequest = "Patient_Config_Get_Request";
         public const string GetPatientConfigResponse = "Patient_Config_Get_Response";
-        public const string GetServiceJourneyRulesAuditForLinkedAccountRequest = "ServiceJourneyRules_LinkedAccount_Get_Request";
         public const string GetLinkedAccountsRequest = "LinkedAccounts_Get_Request";
         public const string GetLinkedAccountsResponse = "LinkedAccounts_Get_Response";
         public const string LinkedAccountsAccessSummaryRequest = "LinkedAccounts_Access_Summary_Request";

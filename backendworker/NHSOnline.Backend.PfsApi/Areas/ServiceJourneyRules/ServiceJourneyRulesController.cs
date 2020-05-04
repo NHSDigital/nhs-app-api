@@ -8,7 +8,6 @@ using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.PfsApi.Session;
-using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.Constants.HttpHeaders;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
@@ -24,7 +23,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
         private readonly SessionConfigurationSettings _sessionSettings;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ISessionCacheService _sessionCacheService;
-
 
         public ServiceJourneyRulesController(
             ILogger<ServiceJourneyRulesController> logger,
@@ -49,13 +47,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
             try
             {
                 _logger.LogEnter();
-
-                if (userSession is P9UserSession)
-                {
-                    await _auditor.Audit(
-                        AuditingOperations.GetServiceJourneyRulesAuditTypeRequest,
-                        "Attempting to get service journey rules");
-                }
 
                 var odsCode = userSession.OdsCode;
 
@@ -90,10 +81,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceJourneyRules
             try
             {
                 _logger.LogEnter();
-
-                await _auditor.Audit(
-                    AuditingOperations.GetServiceJourneyRulesAuditForLinkedAccountRequest,
-                    "Attempting to get service journey rules for linked account");
 
                 var gpUserSession = userSession.GpUserSession;
 
