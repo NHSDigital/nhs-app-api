@@ -12,6 +12,7 @@ const mountPage = ({
   practiceIm1MessagingEnabled = true,
   context = true,
   isNativeApp = true,
+  isProxying = false,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
@@ -31,6 +32,7 @@ const mountPage = ({
       'serviceJourneyRules/messagingEnabled': sjrMessagingEnabled,
       'serviceJourneyRules/im1MessagingEnabled': sjrIm1MessagingEnabled,
       'serviceJourneyRules/silverIntegrationEnabled': () => (context),
+      'session/isProxying': isProxying,
     },
   });
   wrapper = mount(Messages, { $store, $router });
@@ -91,6 +93,62 @@ describe('messages page', () => {
         expect(im1MessagingLinkBody.exists()).toBe(true);
         expect(im1MessagingLinkSubHeader.text()).toEqual('translate_messagesHub.im1Messaging.subheader');
         expect(im1MessagingLinkBody.text()).toEqual('translate_messagesHub.im1Messaging.body');
+      });
+    });
+  });
+
+  describe('pkb messages link', () => {
+    describe('pkb messaging enabled and is native', () => {
+      beforeEach(() => {
+        mountPage();
+      });
+      it('will show link', () => {
+        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(true);
+      });
+    });
+
+    describe('pkb messaging enabled, is native but is proxying', () => {
+      beforeEach(() => {
+        mountPage({
+          isProxying: true,
+        });
+      });
+      it('will not show link', () => {
+        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
+      });
+    });
+
+    describe('pkb enabled but is desktop', () => {
+      beforeEach(() => {
+        mountPage({
+          isNativeApp: false,
+        });
+      });
+      it('will not show link', () => {
+        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
+      });
+    });
+
+    describe('pkb enabled but is desktop but is proxying', () => {
+      beforeEach(() => {
+        mountPage({
+          isNativeApp: false,
+          isProxying: true,
+        });
+      });
+      it('will not show link', () => {
+        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
+      });
+    });
+
+    describe('pkb messaging disabled and is native', () => {
+      beforeEach(() => {
+        mountPage({
+          context: false,
+        });
+      });
+      it('will not show link', () => {
+        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
       });
     });
   });
