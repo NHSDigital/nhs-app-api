@@ -54,22 +54,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([UserSession] P5UserSession userSession)
+        public IActionResult Get([UserSession] P5UserSession userSession)
         {
             try
             {
                 _logger.LogEnter();
-                if (userSession is P9UserSession)
-                {
-                    await _auditor.Audit(AuditingOperations.SessionGetRequest, "Session Get called.");
-                }
 
                 var responseBody = userSession.Accept(new UserSessionResponseVisitor<UserSessionResponse>(_settings, new UserSessionResponse()));
-
-                if (userSession is P9UserSession)
-                {
-                    await _auditor.Audit(AuditingOperations.SessionGetResponse, "Successfully retrieved session.");
-                }
 
                 return new OkObjectResult(responseBody);
             }

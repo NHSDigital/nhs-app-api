@@ -4,8 +4,6 @@ namespace NHSOnline.Backend.Auditing
     {
         public const string Im1ConnectionVerifyResponse = "Im1Connection_Verify_Response";
         public const string Im1ConnectionRegisterResponse = "Im1Connection_Register_Response";
-        public const string SessionGetRequest = "Session_Get_Request";
-        public const string SessionGetResponse = "Session_Get_Response";
         public const string GpSessionCreate = "GP_Session_Create";
         public const string CitizenIdSessionCreate = "CitizenId_Session_Create";
         public const string SessionDeleteRequest = "Session_Delete_Request";
