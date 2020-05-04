@@ -211,9 +211,9 @@ eConsult:
 loggerEnabled: true
 
 # Messages, Devices and Users Services
-usersEnabled: false
-infoEnabled: false
-messagesEnabled: false
+usersEnabled: true
+infoEnabled: true
+messagesEnabled: true
 
 # N3 Endpoint
 n3Protocol: https
