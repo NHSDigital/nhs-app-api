@@ -22,6 +22,7 @@ import pages.appointments.BookingSuccessPage
 import pages.appointments.CancellingSuccessPage
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
+import pages.avoidChromeWebDriverServiceCrash
 import pages.isCurrentlyEnabled
 import pages.isDisplayed
 import pages.navigation.WebHeader
@@ -96,6 +97,8 @@ class YourAppointmentsStepDefinitions {
     @When("^I select \"([^\"]*)\" button$")
     fun whenISelectButton(buttonText: String) {
         yourAppointmentsUISteps.yourAppointmentsPage.locatorMethods.waitForNativeStepToComplete()
+        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
+        yourAppointmentsUISteps.yourAppointmentsPage.avoidChromeWebDriverServiceCrash()
         yourAppointmentsUISteps.yourAppointmentsPage.clickOnButtonContainingText(buttonText)
     }
 

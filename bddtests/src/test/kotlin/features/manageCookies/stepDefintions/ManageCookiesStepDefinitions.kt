@@ -6,6 +6,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import org.junit.Assert
 import org.openqa.selenium.Cookie
+import pages.avoidChromeWebDriverServiceCrash
 import pages.manageCookies.ManageCookiesPage
 import java.net.URI
 import java.net.URLDecoder
@@ -63,6 +64,8 @@ class ManageCookiesStepDefinitions {
 
     @Then("^the dummy cookie is deleted$")
     fun dummyCookieIsDeleted() {
+        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
+        manageCookies.avoidChromeWebDriverServiceCrash()
         manageCookies.pageBody.waitForElement()
         val cookieName = "dummyCookie"
         val deletedCookie = manageCookies.driver.manage().getCookieNamed(cookieName)
