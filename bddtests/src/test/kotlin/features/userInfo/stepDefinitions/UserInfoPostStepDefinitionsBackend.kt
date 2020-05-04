@@ -4,19 +4,36 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.sharedSteps.InvalidAccessTokenTester
+import models.IdentityProofingLevel
+import models.Patient
 import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryUserAndInfo
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.fail
 import utils.SerenityHelpers
-import worker.models.userInfo.UserInfoResponse
-import worker.models.userInfo.UserAndInfoResponse
+import utils.getOrFail
+import utils.set
 
 class UserInfoPostStepDefinitionsBackend {
+
+    private enum class RecordDetail(val text: String) {
+        NhsLoginId("NHS Login ID"),
+        OdsCode("ODS Code"),
+        NhsNumber("NHS Number")
+    }
 
     @Given("^I am an api user wishing to submit their details to the user info endpoint$")
     fun iAmAnApiUserWishingToSubmitTheirDetailsToTheUserInfoEndpoint() {
         val factory = UserInfoFactory()
         factory.setUpUser()
+    }
+
+    @Given("^I am an api user with proof level 5 wishing to submit their details to the user info endpoint$")
+    fun iAmAnApiUserWithProofLevel5WishingToSubmitTheirDetailsToTheUserInfoEndpoint() {
+        val factory = UserInfoFactory()
+        factory.setUpUser { it.copy(identityProofingLevel = IdentityProofingLevel.P5) }
     }
 
     @When("^I post to the user info endpoint$")
@@ -37,17 +54,34 @@ class UserInfoPostStepDefinitionsBackend {
         }
     }
 
-    @Then("^my details are available in the user info repository$")
-    fun myDetailsAreAvailableInTheUserInfoRepository() {
+    @Then("^a user info record is created$")
+    fun aUserInfoRecordIsCreated() {
+        MongoDBConnection.UserInfoCollection.assertNumberOfDocuments(1)
+        val userInfo = MongoDBConnection.UserInfoCollection
+                .getValues<MongoRepositoryUserAndInfo>(MongoRepositoryUserAndInfo::class.java)
+        assertNotNull("User info", userInfo)
+        assertEquals("Number of user info documents", 1, userInfo.count())
+
+        UserInfoSerenityHelpers.MONGO_USER_INFO_RECORD.set(userInfo.single())
+    }
+
+    @Then("^the user info record will have my (.*)$")
+    fun theUserInfoRecordWillHaveMyDetail(detail: String) {
         val patient = SerenityHelpers.getPatient()
-        val expectedUserInfo = UserAndInfoResponse(
-                patient.subject,
-                UserInfoResponse(patient.odsCode,
-                        patient.nhsNumbers.first(),
-                        false),
-                ""
-        )
-        assertSingleRecordInUserInfoRepository(expectedUserInfo)
+        val userAndInfoRecord = UserInfoSerenityHelpers.MONGO_USER_INFO_RECORD.getOrFail<MongoRepositoryUserAndInfo>()
+
+        val current = getPatientValue(patient, detail)
+        val expected = getRecordValue(userAndInfoRecord, detail)
+
+        assertEquals("$detail.", expected, current)
+    }
+
+    @Then("^the user info record will not have (.*)$")
+    fun theUserInfoRecordWillNotHaveDetail(detail: String) {
+        val userAndInfoRecord = UserInfoSerenityHelpers.MONGO_USER_INFO_RECORD.getOrFail<MongoRepositoryUserAndInfo>()
+        val expected = getRecordValue(userAndInfoRecord, detail)
+
+        assertNull("Expected `$detail` not to have a value", expected)
     }
 
     @Then("^there are no details available in the user info repository$")
@@ -55,26 +89,27 @@ class UserInfoPostStepDefinitionsBackend {
         MongoDBConnection.UserInfoCollection.assertNumberOfDocuments(0)
     }
 
-    private fun assertSingleRecordInUserInfoRepository(expectedUserInfo: UserAndInfoResponse) {
-        val userInfo = assertNumberOfUserInfoInRepository(1)
-        val registeredUserInfo = userInfo.single()
-        assertFoundUserInfoRecord(expectedUserInfo, registeredUserInfo)
+    private fun getRecordValue(userAndInfoRecord: MongoRepositoryUserAndInfo, detail: String): String? {
+        return when (detail) {
+            RecordDetail.NhsLoginId.text -> userAndInfoRecord.NhsLoginId
+            RecordDetail.OdsCode.text -> userAndInfoRecord.Info.OdsCode
+            RecordDetail.NhsNumber.text -> userAndInfoRecord.Info.NhsNumber
+            else -> {
+                fail("Test setup error, cannot retrieve the specified `$detail` from user and info mongo record")
+                ""
+            }
+        }
     }
 
-    private fun assertFoundUserInfoRecord(expectedUserInfo: UserAndInfoResponse,
-                                          registeredUserInfo: MongoRepositoryUserAndInfo) {
-        Assert.assertEquals("NHS Login ID.", expectedUserInfo.nhsLoginId, registeredUserInfo.NhsLoginId)
-        Assert.assertEquals("ODS Code.", expectedUserInfo.info.odsCode, registeredUserInfo.Info.OdsCode)
-        Assert.assertEquals("NHS Number.", expectedUserInfo.info.nhsNumber, registeredUserInfo.Info.NhsNumber)
-        Assert.assertEquals("Beta Tester.", expectedUserInfo.info.betaTester, registeredUserInfo.Info.BetaTester)
-    }
-
-    private fun assertNumberOfUserInfoInRepository(expectedNumber: Int): List<MongoRepositoryUserAndInfo> {
-        MongoDBConnection.UserInfoCollection.assertNumberOfDocuments(expectedNumber)
-        val userInfo = MongoDBConnection.UserInfoCollection
-                .getValues<MongoRepositoryUserAndInfo>(MongoRepositoryUserAndInfo::class.java)
-        Assert.assertNotNull("User info", userInfo)
-        Assert.assertEquals("Number of user info documents", expectedNumber, userInfo.count())
-        return userInfo
+    private fun getPatientValue(patient: Patient, detail: String): String {
+        return when (detail) {
+            RecordDetail.NhsLoginId.text -> patient.subject
+            RecordDetail.OdsCode.text -> patient.odsCode
+            RecordDetail.NhsNumber.text -> patient.nhsNumbers.first()
+            else -> {
+                fail("Test setup error, cannot retrieve the specified `$detail` from patient")
+                ""
+            }
+        }
     }
 }

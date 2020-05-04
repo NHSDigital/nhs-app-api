@@ -19,8 +19,13 @@ class UserInfoFactory {
     private val targetGpSystem = Supplier.EMIS
 
     fun setUpUser() {
+        setUpUser { it }
+    }
+
+    fun setUpUser(getPatient: (Patient) -> Patient) {
         val gpSystem = targetGpSystem
-        val patientToUse = Patient.getDefault(targetGpSystem)
+        val patientToUse = getPatient.invoke(Patient.getDefault(targetGpSystem))
+
         SerenityHelpers.setGpSupplier(gpSystem)
         SerenityHelpers.setPatient(patientToUse)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patientToUse)

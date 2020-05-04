@@ -8,7 +8,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
+using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 using NHSOnline.Backend.UserInfoApi.Repository;
 using UnitTestHelper;
 
@@ -23,16 +25,18 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         [TestInitialize]
         public void TestInitialize()
         {
-            var mockHttpContext =  HttpContextGetAccessTokenHelper.CreateMockHttpContext();
-
             _mockInfoService = new Mock<IInfoService>();
 
             _systemUnderTest = new InfoController(
                 _mockInfoService.Object,
                 new Mock<ICitizenIdService>().Object,
+                new Mock<IMapper<UserProfile, InfoUserProfile>>().Object,
                 new Mock<ILogger<InfoController>>().Object)
             {
-                ControllerContext = new ControllerContext { HttpContext = mockHttpContext.Object }
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext().Object
+                }
             };
         }
 
@@ -107,7 +111,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             // Arrange
             _mockInfoService.Setup(x => x.GetInfo(It.IsAny<AccessToken>()))
-                .Throws(new ArgumentException("test"));
+                .Throws(new ArgumentException(string.Empty));
 
             // Act
             var result = await _systemUnderTest.Get();

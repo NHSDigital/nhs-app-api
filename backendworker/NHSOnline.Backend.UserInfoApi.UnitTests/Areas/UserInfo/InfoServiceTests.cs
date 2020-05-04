@@ -4,8 +4,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,6 +12,7 @@ using Moq;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.UserInfoApi.Repository;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
+using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
@@ -21,24 +20,23 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
     [TestClass]
     public class InfoServiceTests
     {
-        private IFixture _fixture;
         private InfoService _systemUnderTest;
         private Mock<IInfoRepository> _mockInfoRepository;
         private string _nhsLoginId;
         private AccessToken _accessToken;
         private string _nhsNumber;
         private string _odsCode;
+        private InfoUserProfile _userProfile;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization());
-            _mockInfoRepository = _fixture.Freeze<Mock<IInfoRepository>>();
-            _nhsLoginId = _fixture.Create<string>();
-            _nhsNumber = _fixture.Create<string>();
-            _odsCode = _fixture.Create<string>();
-            var mockLogger = _fixture.Freeze<Mock<ILogger<InfoService>>>();
+            _mockInfoRepository = new Mock<IInfoRepository>();
+            _nhsLoginId = "NHS Login Id";
+            _nhsNumber = "NHS Number";
+            _odsCode = "ODS Code";
+            _userProfile = new InfoUserProfile { NhsNumber = _nhsNumber, OdsCode = _odsCode };
+            var mockLogger = new Mock<ILogger<InfoService>>();
             var accessTokenString = JwtToken.Generate(new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, _nhsLoginId),
@@ -46,7 +44,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             });
 
             _accessToken = AccessToken.Parse(mockLogger.Object, accessTokenString);
-            _systemUnderTest = _fixture.Create<InfoService>();
+            _systemUnderTest = new InfoService(_mockInfoRepository.Object, mockLogger.Object);
         }
 
         [TestMethod]
@@ -54,8 +52,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             // Arrange
             UserAndInfo actualUserInfo = null;
-            PostInfoResult.Created expectedResult
-                = new PostInfoResult.Created(new Info
+            var expectedResult = new PostInfoResult.Created(new Info
                 {
                     NhsNumber = _nhsNumber,
                     OdsCode = _odsCode
@@ -66,7 +63,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
                 .ReturnsAsync(() =>  new PostInfoResult.Created(actualUserInfo.Info));
 
             // Act
-            var result = await _systemUnderTest.Send(_accessToken, _odsCode);
+            var result = await _systemUnderTest.Send(_accessToken, _userProfile);
 
             // Assert
             _mockInfoRepository.VerifyAll();
@@ -81,10 +78,11 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Send_RepositoryThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            _mockInfoRepository.Setup(x => x.Create(It.IsAny<UserAndInfo>())).Throws(new ArgumentException("Test"));
+            _mockInfoRepository.Setup(x => x.Create(It.IsAny<UserAndInfo>()))
+                .Throws(new ArgumentException(string.Empty));
 
             // Act
-            var result = await _systemUnderTest.Send(_accessToken, _odsCode);
+            var result = await _systemUnderTest.Send(_accessToken, _userProfile);
 
             // Assert
             _mockInfoRepository.VerifyAll();
@@ -95,10 +93,11 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task Send_RepositoryThrowsMongoException_ReturnsBadGateway()
         {
             // Arrange
-            _mockInfoRepository.Setup(x => x.Create(It.IsAny<UserAndInfo>())).Throws(new MongoException("Test"));
+            _mockInfoRepository.Setup(x => x.Create(It.IsAny<UserAndInfo>()))
+                .Throws(new MongoException(string.Empty));
 
             // Act
-            var result = await _systemUnderTest.Send(_accessToken, _odsCode);
+            var result = await _systemUnderTest.Send(_accessToken, _userProfile);
 
             // Assert
             _mockInfoRepository.VerifyAll();
@@ -109,9 +108,9 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task GetInfo_SuccessFound()
         {
             // Arrange
-            var userInfo = _fixture.Create<UserAndInfo>();
+            var userInfo = new UserAndInfo { NhsLoginId = _accessToken.Subject };
 
-            _mockInfoRepository.Setup(x => x.FindByNhsLoginId(It.IsAny<string>()))
+            _mockInfoRepository.Setup(x => x.FindByNhsLoginId(_accessToken.Subject))
                 .ReturnsAsync(userInfo);
 
             // Act
@@ -120,7 +119,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             // Assert
             _mockInfoRepository.VerifyAll();
             result.Should().BeAssignableTo<GetInfoResult.Found>().Subject
-                .UserInfo.Should().BeEquivalentTo(userInfo);
+                .UserInfo.Should().Be(userInfo);
         }
 
         [TestMethod]
@@ -142,7 +141,8 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task GetInfo_RepositoryThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            _mockInfoRepository.Setup(x => x.FindByNhsLoginId(It.IsAny<string>())).Throws(new ArgumentException("Test"));
+            _mockInfoRepository.Setup(x => x.FindByNhsLoginId(It.IsAny<string>()))
+                .Throws(new ArgumentException(string.Empty));
 
             // Act
             var result = await _systemUnderTest.GetInfo(_accessToken);
@@ -156,7 +156,8 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task GetInfo_RepositoryThrowsMongoException_ReturnsBadGateway()
         {
             // Arrange
-            _mockInfoRepository.Setup(x => x.FindByNhsLoginId(It.IsAny<string>())).Throws(new MongoException("Test"));
+            _mockInfoRepository.Setup(x => x.FindByNhsLoginId(It.IsAny<string>()))
+                .Throws(new MongoException(string.Empty));
 
             // Act
             var result = await _systemUnderTest.GetInfo(_accessToken);
@@ -170,12 +171,15 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task GetInfoByNhsNumber_SuccessFoundMultiple()
         {
             // Arrange
-            var userInfo = _fixture.CreateMany<UserAndInfo>();;
-            var nhsNumber = _fixture.Create<string>();
-            var nhsLoginIds = userInfo.Select(info => info.NhsLoginId);
+            var userInfos = new []
+            {
+                new UserAndInfo { NhsLoginId = "NHS Login 1" },
+                new UserAndInfo { NhsLoginId = "NHS Login 2" },
+            };
+            const string nhsNumber = "NHS number";
 
             _mockInfoRepository.Setup(x => x.FindByNhsNumber(nhsNumber))
-                .ReturnsAsync(userInfo);
+                .ReturnsAsync(userInfos);
 
             // Act
             var result = await _systemUnderTest.GetInfoByNhsNumber(nhsNumber);
@@ -183,19 +187,18 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             // Assert
             _mockInfoRepository.VerifyAll();
             result.Should().BeAssignableTo<GetInfoResult.FoundMultiple>().Subject.NhsLoginIds
-                .Should().BeEquivalentTo(nhsLoginIds);
+                .Should().BeEquivalentTo(userInfos.Select(info => info.NhsLoginId));
         }
 
         [TestMethod]
         public async Task GetInfoByNhsNumber_SuccessFoundNone()
         {
-            var noInfo = Enumerable.Empty<UserAndInfo>();
             // Arrange
             _mockInfoRepository.Setup(x => x.FindByNhsNumber(It.IsAny<string>()))
-                .ReturnsAsync(noInfo);
+                .ReturnsAsync(Enumerable.Empty<UserAndInfo>());
 
             // Act
-            var result = await _systemUnderTest.GetInfoByNhsNumber(_fixture.Create<string>());
+            var result = await _systemUnderTest.GetInfoByNhsNumber("NHS number");
 
             // Assert
             _mockInfoRepository.VerifyAll();
@@ -211,7 +214,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
                 .ReturnsAsync((IEnumerable<UserAndInfo>) null);
 
             // Act
-            var result = await _systemUnderTest.GetInfoByNhsNumber(_fixture.Create<string>());
+            var result = await _systemUnderTest.GetInfoByNhsNumber("NHS number");
 
             // Assert
             _mockInfoRepository.VerifyAll();
@@ -223,10 +226,10 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             // Arrange
             _mockInfoRepository.Setup(x => x.FindByNhsNumber(It.IsAny<string>()))
-                .Throws(new ArgumentException("Test"));
+                .Throws(new ArgumentException(string.Empty));
 
             // Act
-            var result = await _systemUnderTest.GetInfoByNhsNumber(_fixture.Create<string>());
+            var result = await _systemUnderTest.GetInfoByNhsNumber("NHS number");
 
             // Assert
             _mockInfoRepository.VerifyAll();
@@ -238,10 +241,10 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             // Arrange
             _mockInfoRepository.Setup(x => x.FindByNhsNumber(It.IsAny<string>()))
-                .Throws(new MongoException("Test"));
+                .Throws(new MongoException(string.Empty));
 
             // Act
-            var result = await _systemUnderTest.GetInfoByNhsNumber(_fixture.Create<string>());
+            var result = await _systemUnderTest.GetInfoByNhsNumber("NHS number");
 
             // Assert
             _mockInfoRepository.VerifyAll();
@@ -252,12 +255,15 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         public async Task GetInfoByOdsCode_SuccessFoundMultiple()
         {
             // Arrange
-            var userInfo = _fixture.CreateMany<UserAndInfo>();;
-            var odsCode = _fixture.Create<string>();
-            var nhsLoginIds = userInfo.Select(info => info.NhsLoginId);
+            var userInfos = new []
+            {
+                new UserAndInfo { NhsLoginId = "NHS Login 1" },
+                new UserAndInfo { NhsLoginId = "NHS Login 2" },
+            };
+            var odsCode = "ODS Code";
 
             _mockInfoRepository.Setup(x => x.FindByOdsCode(odsCode))
-                .ReturnsAsync(userInfo);
+                .ReturnsAsync(userInfos);
 
             // Act
             var result = await _systemUnderTest.GetInfoByOdsCode(odsCode);
@@ -265,19 +271,18 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             // Assert
             _mockInfoRepository.VerifyAll();
             result.Should().BeAssignableTo<GetInfoResult.FoundMultiple>().Subject.NhsLoginIds
-                .Should().BeEquivalentTo(nhsLoginIds);
+                .Should().BeEquivalentTo(userInfos.Select(info => info.NhsLoginId));
         }
 
         [TestMethod]
         public async Task GetInfoByOdsCode_SuccessFoundNone()
         {
-            var noInfo = Enumerable.Empty<UserAndInfo>();
             // Arrange
             _mockInfoRepository.Setup(x => x.FindByOdsCode(It.IsAny<string>()))
-                .ReturnsAsync(noInfo);
+                .ReturnsAsync(Enumerable.Empty<UserAndInfo>());
 
             // Act
-            var result = await _systemUnderTest.GetInfoByOdsCode(_fixture.Create<string>());
+            var result = await _systemUnderTest.GetInfoByOdsCode("ODS Code");
 
             // Assert
             _mockInfoRepository.VerifyAll();
@@ -293,7 +298,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
                 .ReturnsAsync((IEnumerable<UserAndInfo>) null);
 
             // Act
-            var result = await _systemUnderTest.GetInfoByOdsCode(_fixture.Create<string>());
+            var result = await _systemUnderTest.GetInfoByOdsCode("ODS Code");
 
             // Assert
             _mockInfoRepository.VerifyAll();
@@ -305,10 +310,10 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             // Arrange
             _mockInfoRepository.Setup(x => x.FindByOdsCode(It.IsAny<string>()))
-                .Throws(new ArgumentException("Test"));
+                .Throws(new ArgumentException(string.Empty));
 
             // Act
-            var result = await _systemUnderTest.GetInfoByOdsCode(_fixture.Create<string>());
+            var result = await _systemUnderTest.GetInfoByOdsCode("ODS Code");
 
             // Assert
             _mockInfoRepository.VerifyAll();
@@ -320,10 +325,10 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             // Arrange
             _mockInfoRepository.Setup(x => x.FindByOdsCode(It.IsAny<string>()))
-                .Throws(new MongoException("Test"));
+                .Throws(new MongoException(string.Empty));
 
             // Act
-            var result = await _systemUnderTest.GetInfoByOdsCode(_fixture.Create<string>());
+            var result = await _systemUnderTest.GetInfoByOdsCode("ODS Code");
 
             // Assert
             _mockInfoRepository.VerifyAll();

@@ -9,7 +9,9 @@ using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 {
@@ -17,15 +19,20 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
     {
         private readonly IInfoService _infoService;
         private readonly ICitizenIdService _citizenIdService;
+        private readonly IMapper<UserProfile, InfoUserProfile> _userProfileMapper;
         private readonly ILogger<InfoController> _logger;
 
-        public InfoController(
+        public InfoController
+        (
             IInfoService infoService,
             ICitizenIdService citizenIdService,
-            ILogger<InfoController> logger)
+            IMapper<UserProfile, InfoUserProfile> userProfileMapper,
+            ILogger<InfoController> logger
+        )
         {
             _infoService = infoService;
             _citizenIdService = citizenIdService;
+            _userProfileMapper = userProfileMapper;
             _logger = logger;
         }
 
@@ -40,13 +47,13 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 
                 var accessToken = HttpContext.GetAccessToken(_logger);
 
-                var odsCode = await GetOdsCode(accessToken);
+                var userProfile = await GetUserProfile(accessToken);
 
-                if (odsCode == null)
+                if (userProfile == null)
                 {
                     return new StatusCodeResult(StatusCodes.Status502BadGateway);
                 }
-                var result = await _infoService.Send(accessToken, odsCode);
+                var result = await _infoService.Send(accessToken, userProfile);
 
                 return result.Accept(new PostInfoResultVisitor());
             }
@@ -60,7 +67,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
                 _logger.LogExit();
             }
         }
-        
+
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("api/me/info")]
@@ -94,7 +101,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
         {
             try
             {
-                if (!string.IsNullOrEmpty(odsCode) && !string.IsNullOrEmpty(nhsNumber) 
+                if (!string.IsNullOrEmpty(odsCode) && !string.IsNullOrEmpty(nhsNumber)
                     || string.IsNullOrEmpty(odsCode) && string.IsNullOrEmpty(nhsNumber))
                 {
                     _logger.LogError("Expected either odsCode or nhsNumber to be supplied");
@@ -121,19 +128,18 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             }
         }
 
-        private async Task<string> GetOdsCode(AccessToken accessToken)
+        private async Task<InfoUserProfile> GetUserProfile(AccessToken accessToken)
         {
             var userProfileResult = await _citizenIdService.GetUserProfile(accessToken.ToString());
             var cidUserProfileOption = userProfileResult.UserProfile;
-            
+
             if (!cidUserProfileOption.HasValue)
             {
                 _logger.LogError("No CID profile was found for access code");
                 return null;
             }
 
-            var cidUserProfile = cidUserProfileOption.ValueOrFailure();
-            return cidUserProfile.OdsCode;
+            return _userProfileMapper.Map(cidUserProfileOption.ValueOrFailure());
         }
     }
 }

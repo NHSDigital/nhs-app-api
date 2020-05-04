@@ -7,7 +7,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auth.CitizenId;
+using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
+using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
@@ -21,19 +24,21 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         [TestInitialize]
         public void TestInitialize()
         {
-            var mockHttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext();
-
             _mockInfoService = new Mock<IInfoService>();
 
             _systemUnderTest = new InfoController(
                 _mockInfoService.Object,
                 new Mock<ICitizenIdService>().Object,
+                new Mock<IMapper<UserProfile, InfoUserProfile>>().Object,
                 new Mock<ILogger<InfoController>>().Object)
             {
-                ControllerContext = new ControllerContext { HttpContext = mockHttpContext.Object }
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = HttpContextGetAccessTokenHelper.CreateMockHttpContext().Object
+                }
             };
         }
-       
+
         [TestMethod]
         public async Task Get_WithOdsCode_SuccessFoundMultiple()
         {

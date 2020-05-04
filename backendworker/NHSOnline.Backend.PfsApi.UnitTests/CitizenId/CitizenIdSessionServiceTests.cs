@@ -22,6 +22,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         private IFixture _fixture;
         private Mock<ICitizenIdService> _mockCitizenIdService;
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
+        private Mock<IMapper<string, ProofLevel?>> _mockProofLevelMapper;
         private CitizenIdSessionService _systemUnderTest;
 
         private string _authCode;
@@ -43,6 +44,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
 
             _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
             _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
+            _mockProofLevelMapper = _fixture.Freeze<Mock<IMapper<string, ProofLevel?>>>();
 
             _authCode = _fixture.Create<string>();
             _codeVerifier = _fixture.Create<string>();
@@ -60,36 +62,43 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         public async Task Create_HappyPath_ReturnsValidGetUserProfileResult()
         {
             // Arrange
-            _mockMinimumAgeValidator
-                .Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
-                .Returns(true)
-                .Verifiable();
-
             var dateTimeNow = DateTime.Now;
 
-            var userInfo = new Auth.CitizenId.Models.UserInfo
-            {
-                Birthdate = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
-                Im1ConnectionToken = _im1Token,
-                NhsNumber = NhsNumber,
-                GpIntegrationCredentials = { OdsCode = _odsCode },
-                FamilyName = _familyName,
-                IdentityProofingLevel = "P9"
+            var userProfile = new UserProfile(new Auth.CitizenId.Models.UserInfo
+                {
+                    Birthdate = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
+                    Im1ConnectionToken = _im1Token,
+                    NhsNumber = NhsNumber,
+                    GpIntegrationCredentials = { OdsCode = _odsCode },
+                    FamilyName = _familyName,
+                    IdentityProofingLevel = "P9"
+                },
+                _accessToken
+            );
 
-            };
-            var userProfile = new UserProfile(userInfo,  _accessToken);
-
-            _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
+            _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = HttpStatusCode.OK,
                     UserProfile = Option.Some(userProfile),
                     IdTokenJti = _idTokenJti
-                })
-                .Verifiable();
+                });
 
-            var expectedResult = new CitizenIdSessionResult
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
+                .Returns(true);
+
+            _mockProofLevelMapper.Setup(x => x.Map(userProfile.IdentityProofingLevel))
+                .Returns(ProofLevel.P9);
+
+            // Act
+            var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
+
+            // Assert
+            _mockMinimumAgeValidator.VerifyAll();
+            _mockCitizenIdService.VerifyAll();
+            _mockProofLevelMapper.VerifyAll();
+
+            result.Should().BeEquivalentTo(new CitizenIdSessionResult
             {
                 DateOfBirth = dateTimeNow.Date,
                 Im1ConnectionToken = _im1Token,
@@ -104,25 +113,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
                     ProofLevel = ProofLevel.P9
                 },
                 StatusCode = 200
-            };
-
-            // Act
-            var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
-
-            // Assert
-            result.Should().BeEquivalentTo(expectedResult);
-            _mockMinimumAgeValidator.Verify();
-            _mockCitizenIdService.Verify();
+            });
         }
 
         [TestMethod]
         [DataRow(HttpStatusCode.BadGateway)]
         [DataRow(HttpStatusCode.GatewayTimeout)]
-        public async Task Create_CitizenIdServiceReturnsNoUserProfile_ReturnsResultWithSameStatusCode(HttpStatusCode statusCode)
+        public async Task Create_CitizenIdServiceReturnsNoUserProfile_ReturnsResultWithSameStatusCode
+        (
+            HttpStatusCode statusCode
+        )
         {
             // Arrange
-            _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
+            _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = statusCode,
@@ -133,6 +136,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
             var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
 
             // Assert
+            _mockCitizenIdService.VerifyAll();
+            _mockMinimumAgeValidator.VerifyNoOtherCalls();
+            _mockProofLevelMapper.VerifyNoOtherCalls();
+
             using (new AssertionScope())
             {
                 result.StatusCode.Should().Be((int) statusCode);
@@ -144,125 +151,145 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         public async Task Create_MinimumAgeValidationFails_ReturnsStatus465FailedAgeRequirement()
         {
             // Arrange
-            _mockMinimumAgeValidator
-                .Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
-                .Returns(false)
-                .Verifiable();
+            var userProfile = new UserProfile(new Auth.CitizenId.Models.UserInfo
+                {
+                    Birthdate = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture),
+                    Im1ConnectionToken = _im1Token,
+                    NhsNumber = NhsNumber,
+                    GpIntegrationCredentials = { OdsCode = _odsCode },
+                    FamilyName = _familyName
+                },
+                _accessToken
+            );
 
-            var dateTimeNow = DateTime.Now;
-
-            var userInfo = new Auth.CitizenId.Models.UserInfo
-            {
-                Birthdate = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
-                Im1ConnectionToken = _im1Token,
-                NhsNumber = NhsNumber,
-                GpIntegrationCredentials = { OdsCode = _odsCode },
-                FamilyName = _familyName
-
-            };
-            var userProfile = new UserProfile(userInfo, _accessToken);
-
-            _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
+            _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = HttpStatusCode.OK,
                     UserProfile = Option.Some(userProfile)
-                })
-                .Verifiable();
+                });
 
-            var expectedResult = new CitizenIdSessionResult
-            {
-                StatusCode = Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement
-            };
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
+                .Returns(false);
 
             // Act
             var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
 
             // Assert
-            result.StatusCode.Should().Be(expectedResult.StatusCode);
-            _mockMinimumAgeValidator.Verify();
-            _mockCitizenIdService.Verify();
+            _mockMinimumAgeValidator.VerifyAll();
+            _mockCitizenIdService.VerifyAll();
+            _mockProofLevelMapper.VerifyNoOtherCalls();
+
+            result.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
         }
 
         [TestMethod]
         public async Task Create_UserProfileHasNoDateOfBirth_ReturnsStatus465FailedAgeRequirement()
         {
-            var userInfo = new Auth.CitizenId.Models.UserInfo
-            {
-                Birthdate = null,
-                Im1ConnectionToken = _im1Token,
-                NhsNumber = NhsNumber,
-                GpIntegrationCredentials = { OdsCode = _odsCode },
-                FamilyName = _familyName
-            };
-            var userProfile = new UserProfile(userInfo, _accessToken);
+            // Arrange
+            var userProfile = new UserProfile(new Auth.CitizenId.Models.UserInfo
+                {
+                    Birthdate = null,
+                    Im1ConnectionToken = _im1Token,
+                    NhsNumber = NhsNumber,
+                    GpIntegrationCredentials = { OdsCode = _odsCode },
+                    FamilyName = _familyName
+                },
+                _accessToken
+            );
 
-            _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
+            _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = HttpStatusCode.OK,
                     UserProfile = Option.Some(userProfile)
-                })
-                .Verifiable();
-
-            var expectedResult = new CitizenIdSessionResult
-            {
-                StatusCode = Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement
-            };
+                });
 
             // Act
             var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
 
             // Assert
-            result.StatusCode.Should().Be(expectedResult.StatusCode);
-            _mockCitizenIdService.Verify();
+            _mockCitizenIdService.VerifyAll();
+            _mockMinimumAgeValidator.VerifyNoOtherCalls();
+            _mockProofLevelMapper.VerifyNoOtherCalls();
+
+            result.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
         }
 
         [TestMethod]
         public async Task Create_InvalidNhsNumber_ReturnsStatus464OdsCodeNotSupportedOrNoNhsNumber()
         {
             // Arrange
-            _mockMinimumAgeValidator
-                .Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
-                .Returns(true)
-                .Verifiable();
+            var userProfile = new UserProfile(new Auth.CitizenId.Models.UserInfo
+                {
+                    Birthdate = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture),
+                    Im1ConnectionToken = _im1Token,
+                    NhsNumber = null,
+                    GpIntegrationCredentials = { OdsCode = _odsCode },
+                    FamilyName = _familyName
+                },
+                _accessToken
+            );
 
-            var dateTimeNow = DateTime.Now;
-
-            var userInfo = new Auth.CitizenId.Models.UserInfo
-            {
-                Birthdate = dateTimeNow.ToString(DateFormat, CultureInfo.InvariantCulture),
-                Im1ConnectionToken = _im1Token,
-                NhsNumber = null,
-                GpIntegrationCredentials = { OdsCode = _odsCode },
-                FamilyName = _familyName
-
-            };
-            var userProfile = new UserProfile(userInfo, _accessToken);
-
-            _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
+            _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
                 .ReturnsAsync(new GetUserProfileResult
                 {
                     StatusCode = HttpStatusCode.OK,
                     UserProfile = Option.Some(userProfile)
-                })
-                .Verifiable();
+                });
 
-            var expectedResult = new CitizenIdSessionResult
-            {
-                StatusCode = Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber
-            };
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
+                .Returns(true);
 
             // Act
             var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
 
             // Assert
-            result.StatusCode.Should().Be(expectedResult.StatusCode);
-            _mockMinimumAgeValidator.Verify();
-            _mockCitizenIdService.Verify();
+            _mockMinimumAgeValidator.VerifyAll();
+            _mockCitizenIdService.VerifyAll();
+            _mockProofLevelMapper.VerifyNoOtherCalls();
+
+            result.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
+        }
+
+        [TestMethod]
+        public async Task Create_UnknownProofLevel_ReturnsStatus500()
+        {
+            // Arrange
+            var userProfile = new UserProfile(new Auth.CitizenId.Models.UserInfo
+                {
+                    Birthdate = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture),
+                    Im1ConnectionToken = _im1Token,
+                    NhsNumber = NhsNumber,
+                    GpIntegrationCredentials = { OdsCode = _odsCode },
+                    FamilyName = _familyName,
+                    IdentityProofingLevel = "P7"
+                },
+                _accessToken
+            );
+
+            _mockCitizenIdService.Setup(x => x.GetUserProfile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Uri>()))
+                .ReturnsAsync(new GetUserProfileResult
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    UserProfile = Option.Some(userProfile)
+                });
+
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
+                .Returns(true);
+
+            _mockProofLevelMapper.Setup(x => x.Map(userProfile.IdentityProofingLevel))
+                .Returns(default(ProofLevel?));
+
+            // Act
+            var result = await _systemUnderTest.Create(_authCode, _codeVerifier, _redirectUrl);
+
+            // Assert
+            _mockMinimumAgeValidator.VerifyAll();
+            _mockCitizenIdService.VerifyAll();
+            _mockProofLevelMapper.VerifyAll();
+
+            result.StatusCode.Should().Be((int) HttpStatusCode.InternalServerError);
         }
     }
 }

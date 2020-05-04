@@ -7,7 +7,20 @@ Feature: User Info Backend
     And I have logged in and have a valid session cookie
     When I post to the user info endpoint
     Then I receive a "Created" success code
-    And my details are available in the user info repository
+    And a user info record is created
+    And the user info record will have my NHS Login ID
+    And the user info record will have my ODS Code
+    And the user info record will have my NHS Number
+
+  Scenario: An api user with proof level 5 can submit their details to the user info endpoint
+    Given I am an api user with proof level 5 wishing to submit their details to the user info endpoint
+    And I have logged in and have a valid session cookie
+    When I post to the user info endpoint
+    Then I receive a "Created" success code
+    And a user info record is created
+    And the user info record will have my NHS Login ID
+    And the user info record will have my ODS Code
+    And the user info record will not have NHS Number
 
   Scenario: An api user posting to the user info endpoint without an access token will receive a 401
     Given I am an api user wishing to submit their details to the user info endpoint

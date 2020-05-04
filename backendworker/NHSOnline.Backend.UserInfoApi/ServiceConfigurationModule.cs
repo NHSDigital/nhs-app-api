@@ -5,9 +5,12 @@ using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Auth;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Repository;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
+using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Mappers;
+using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 using NHSOnline.Backend.UserInfoApi.Repository;
 
 namespace NHSOnline.Backend.UserInfoApi
@@ -22,6 +25,8 @@ namespace NHSOnline.Backend.UserInfoApi
                 .AddHttpMessageHandler<HttpTimeoutHandler<CitizenIdHttpRequestIdentifier>>()
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<CitizenIdHttpRequestIdentifier>>();
 
+            services.AddTransient<IMapper<UserProfile, InfoUserProfile>, InfoUserProfileMapper>();
+
             services.AddScoped<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
             services.AddSingleton<ICitizenIdJwtHelper, CitizenIdJwtHelper>();
@@ -30,7 +35,7 @@ namespace NHSOnline.Backend.UserInfoApi
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<IJwtTokenService<IdToken>, IdTokenService>();
             services.AddSingleton<ICitizenIdSigningKeysService, CitizenIdSigningKeysService>();
-            
+
             services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
             services.AddSingleton<IInfoService, InfoService>();
             services.AddSingleton<IInfoRepository, MongoUserInfoRepository>();

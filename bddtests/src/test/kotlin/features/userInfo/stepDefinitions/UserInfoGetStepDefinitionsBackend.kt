@@ -26,7 +26,7 @@ class UserInfoGetStepDefinitionsBackend {
     }
 
     @Given ("^the user info repository has been emptied$")
-    fun theUserInfoRepostioryHasBeenEmptied(){
+    fun theUserInfoRepositoryHasBeenEmptied(){
         MongoDBConnection.UserInfoCollection.clearCache()
     }
 

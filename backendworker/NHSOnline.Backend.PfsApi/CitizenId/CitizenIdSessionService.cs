@@ -15,15 +15,23 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
     {
         private readonly ICitizenIdService _citizenIdService;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
+        private readonly IMapper<string, ProofLevel?> _proofLevelMapper;
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<CitizenIdSessionService> _logger;
         private const string DateFormat = "yyyy-MM-dd";
 
-        public CitizenIdSessionService(ICitizenIdService citizenIdService, IMinimumAgeValidator minimumAgeValidator,
-            ConfigurationSettings settings, ILogger<CitizenIdSessionService> logger)
+        public CitizenIdSessionService
+        (
+            ICitizenIdService citizenIdService,
+            IMinimumAgeValidator minimumAgeValidator,
+            IMapper<string, ProofLevel?> proofLevelMapper,
+            ConfigurationSettings settings,
+            ILogger<CitizenIdSessionService> logger
+        )
         {
             _citizenIdService = citizenIdService;
             _minimumAgeValidator = minimumAgeValidator;
+            _proofLevelMapper = proofLevelMapper;
             _settings = settings;
             _logger = logger;
         }
@@ -69,7 +77,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
                     };
                 }
 
-                var proofLevel = TryParseIdentityProofingLevel(cidUserProfile.IdentityProofingLevel);
+                var proofLevel = _proofLevelMapper.Map(cidUserProfile.IdentityProofingLevel);
                 if (!proofLevel.HasValue)
                 {
                     return new CitizenIdSessionResult { StatusCode = (int)HttpStatusCode.InternalServerError };
@@ -97,23 +105,6 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
             {
                 _logger.LogExit();
             }
-        }
-
-        private ProofLevel? TryParseIdentityProofingLevel(string identityProofingLevel)
-        {
-            // NHSO-9061: Remove once supported by Login
-            if (string.IsNullOrWhiteSpace(identityProofingLevel))
-            {
-                return ProofLevel.P9;
-            }
-
-            if (Enum.TryParse(typeof(ProofLevel), identityProofingLevel, true, out var proofLevel))
-            {
-                return (ProofLevel)proofLevel;
-            }
-
-            _logger.LogError($"Unsupported identity proofing level returned by Login: {identityProofingLevel}");
-            return null;
         }
 
         private DateTime? ValidateAndParseDateOfBirth(string dateOfBirth)

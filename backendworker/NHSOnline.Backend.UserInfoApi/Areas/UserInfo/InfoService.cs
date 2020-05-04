@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 using NHSOnline.Backend.UserInfoApi.Repository;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
@@ -13,19 +14,15 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
     internal class InfoService : IInfoService
     {
         private readonly IInfoRepository _infoRepository;
-        private readonly ILogger<InfoController> _logger;
+        private readonly ILogger<InfoService> _logger;
 
-        public InfoService
-        (
-            IInfoRepository infoRepository,
-            ILogger<InfoController> logger
-        )
+        public InfoService(IInfoRepository infoRepository, ILogger<InfoService> logger)
         {
             _infoRepository = infoRepository;
             _logger = logger;
         }
 
-        public async Task<PostInfoResult> Send(AccessToken accessToken, string odsCode)
+        public async Task<PostInfoResult> Send(AccessToken accessToken, InfoUserProfile userProfile)
         {
             try
             {
@@ -33,10 +30,10 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
                 var userInfo = new UserAndInfo
                 {
                     NhsLoginId = accessToken.Subject,
-                    Info = new Info()
+                    Info = new Info
                     {
-                        NhsNumber = accessToken.NhsNumber,
-                        OdsCode = odsCode,
+                        NhsNumber = userProfile.NhsNumber,
+                        OdsCode = userProfile.OdsCode,
                         BetaTester = false
                     }
                 };

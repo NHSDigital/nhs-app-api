@@ -5,9 +5,9 @@ import cucumber.api.java.en.Then
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.NhsoHttpExceptionErrorBody
@@ -39,7 +39,7 @@ class ResponseStatusCodeSteps {
     @Then("the response contains an empty body$")
     fun theResponseBodyIsEmpty(){
         val errorResponse = SerenityHelpers.getHttpException()
-        Assert.assertNotNull("Expected Response", errorResponse)
+        assertNotNull("Expected Response", errorResponse)
         assertEquals("Expected an empty body. ", "", errorResponse!!.body)
     }
 
@@ -87,9 +87,9 @@ class ResponseStatusCodeSteps {
     @Then("the Internal Server Error response does not include a retry option$")
     fun theOrganDonationInternalServerErrorResponseDoesNotIncludeARetryOption(){
         val errorResponse = SerenityHelpers.getHttpException()
-        Assert.assertNotNull("Expected Response", errorResponse)
-        Assert.assertEquals("Expected Body", "", errorResponse?.body.toString())
-        Assert.assertEquals("Expected statusCode", HttpStatus.SC_INTERNAL_SERVER_ERROR, errorResponse!!.statusCode)
+        assertNotNull("Expected Response", errorResponse)
+        assertEquals("Expected Body", "", errorResponse?.body.toString())
+        assertEquals("Expected statusCode", HttpStatus.SC_INTERNAL_SERVER_ERROR, errorResponse!!.statusCode)
     }
 
     private fun assertNhsoException(expectedHttpStatusCode: Int,
@@ -105,15 +105,15 @@ class ResponseStatusCodeSteps {
             throw AssertionError("Failed to deserialise JSON error response of:\n${errorResponse?.body}")
         }
 
-        Assert.assertNotNull("Expected Response", errorResponse)
-        Assert.assertEquals("Expected statusCode", expectedHttpStatusCode, errorResponse!!.statusCode)
+        assertNotNull("Expected Response", errorResponse)
+        assertEquals("Expected statusCode", expectedHttpStatusCode, errorResponse!!.statusCode)
 
         if (expectedErrorCode!=null){
-            Assert.assertEquals("Expected errorCode", expectedErrorCode, exception?.errorCode ?: "")
+            assertEquals("Expected errorCode", expectedErrorCode, exception?.errorCode ?: "")
         }
 
         if (expectedServiceDeskReferencePrefix!=null){
-            Assert.assertTrue(
+            assertTrue(
                     "Expected service desk error reference to start with " +
                             expectedServiceDeskReferencePrefix + "  but was " +
                             exception?.serviceDeskReference,
