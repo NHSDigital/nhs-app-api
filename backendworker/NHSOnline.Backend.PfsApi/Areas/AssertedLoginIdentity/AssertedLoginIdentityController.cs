@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity.Models;
 using NHSOnline.Backend.PfsApi.Session;
@@ -16,13 +17,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<AssertedLoginIdentityController> _logger;
+        private readonly IMetricLogger _metricLogger;
         private readonly IAssertedLoginIdentityService _assertedLoginIdentityService;
 
-        public AssertedLoginIdentityController(IAuditor auditor, ILogger<AssertedLoginIdentityController> logger,
+        public AssertedLoginIdentityController(
+            IAuditor auditor,
+            ILogger<AssertedLoginIdentityController> logger,
+            IMetricLogger metricLogger,
             IAssertedLoginIdentityService assertedLoginIdentityService)
         {
             _auditor = auditor;
             _logger = logger;
+            _metricLogger = metricLogger;
             _assertedLoginIdentityService = assertedLoginIdentityService;
         }
 
@@ -38,13 +44,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
                     return new BadRequestObjectResult(ModelState);
                 }
 
-                var result =
-                    await userSession.Accept(new AssertedLoginSessionVisitor(model, _auditor,
-                        _assertedLoginIdentityService));
+                var assertedLoginSessionVisitor = new AssertedLoginSessionVisitor(model, _auditor, _assertedLoginIdentityService);
+                var result = await userSession.Accept(assertedLoginSessionVisitor);
 
-                var response = result.Accept(new CreateJwtResultVisitor(_logger, model));
-
-                return response;
+                return await result.Accept(new CreateJwtResultVisitor(_logger, _metricLogger, model));
             }
             finally
             {

@@ -69,6 +69,7 @@ describe('Proof level uplift banner', () => {
         expect($http.postV1PatientAssertedLoginIdentity).toBeCalledWith({
           assertedLoginIdentityRequest: {
             IntendedRelyingPartyUrl: hostname,
+            action: 'UpliftStarted',
           },
         });
       });

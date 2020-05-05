@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
@@ -16,5 +16,7 @@ namespace NHSOnline.Backend.PfsApi.AssertedLoginIdentity.Models
         public string ProviderName { get; set; }
 
         public string JumpOffId { get; set; }
+
+        public string Action { get; set; }
     }
 }

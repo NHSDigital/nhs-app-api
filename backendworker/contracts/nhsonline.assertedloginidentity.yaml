@@ -50,6 +50,11 @@ components:
         jumpOffId:
           type: string
           description: ID of the silver integration jump-off point, e.g. 'appointments', 'sharedLinks'
+        action:
+          type: string
+          description: Logical action being performed for metric logging
+          enum:
+            - UpliftStarted
     CreateJwtResponse:
       type: object
       properties:

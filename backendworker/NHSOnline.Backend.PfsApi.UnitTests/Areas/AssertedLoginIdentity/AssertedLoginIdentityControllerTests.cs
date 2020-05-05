@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity.Models;
@@ -27,9 +28,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
         private Mock<IAssertedLoginIdentityService> _mockAssertedLoginIdentityService;
         private Mock<IAuditor> _mockAuditor;
         private Mock<ILogger<AssertedLoginIdentityController>> _mockLogger;
+        private Mock<IMetricLogger> _mockMetricLogger;
         private P9UserSession _p9UserSession;
         private P5UserSession _p5UserSession;
-        private CreateJwtRequest _request;
 
         private const string RequestAuditType = "AssertedLoginIdentity_CreateJwt";
 
@@ -38,13 +39,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
         {
             _p9UserSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
             _p5UserSession = new P5UserSession("csrfToken", new CitizenIdUserSession());
-            _request = new CreateJwtRequest();
 
             _mockAssertedLoginIdentityService = new Mock<IAssertedLoginIdentityService>();
             _mockAuditor = new Mock<IAuditor>();
             _mockLogger = new Mock<ILogger<AssertedLoginIdentityController>>();
+            _mockMetricLogger = new Mock<IMetricLogger>();
 
-            _systemUnderTest = new AssertedLoginIdentityController(_mockAuditor.Object, _mockLogger.Object, _mockAssertedLoginIdentityService.Object);
+            _systemUnderTest = new AssertedLoginIdentityController(
+                _mockAuditor.Object,
+                _mockLogger.Object,
+                _mockMetricLogger.Object,
+                _mockAssertedLoginIdentityService.Object);
         }
 
         [TestMethod]
@@ -56,9 +61,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 .Returns(new CreateJwtResult.InternalServerError());
 
             var auditStub = ArrangeAudit();
+            var request = new CreateJwtRequest();
 
             // Act
-            var result = await _systemUnderTest.Post(_request, _p9UserSession);
+            var result = await _systemUnderTest.Post(request, _p9UserSession);
 
             // Assert
             _mockAssertedLoginIdentityService.Verify();
@@ -71,8 +77,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 auditStub.Operation.Should().Be(RequestAuditType);
                 auditStub.Details.Should().Be("Creating Asserted login Identity JWT for Provider ID '{0}', Provider Name '{1}', "
                                               + "Jump Off ID '{2}', intended relying party URL: {3}",
-                    _request.ProviderId, _request.ProviderName, _request.JumpOffId,
-                    _request.IntendedRelyingPartyUrl);
+                    request.ProviderId, request.ProviderName, request.JumpOffId,
+                    request.IntendedRelyingPartyUrl);
                 auditStub.ResponseDetails.Should().Be("AssertedLoginIdentity Token creation failed.");
             }
 
@@ -86,9 +92,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
             _mockAssertedLoginIdentityService
                 .Setup(x => x.CreateJwtToken(_p5UserSession.CitizenIdUserSession.IdTokenJti))
                 .Returns(new CreateJwtResult.InternalServerError());
+            var request = new CreateJwtRequest();
 
             // Act
-            var result = await _systemUnderTest.Post(_request, _p5UserSession);
+            var result = await _systemUnderTest.Post(request, _p5UserSession);
 
             // Assert
             _mockAssertedLoginIdentityService.Verify();
@@ -109,9 +116,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 .Returns(new CreateJwtResult.Success(expectedResponse));
 
             var auditStub = ArrangeAudit();
+            var request = new CreateJwtRequest();
 
             // Act
-            var result = await _systemUnderTest.Post(_request, _p9UserSession);
+            var result = await _systemUnderTest.Post(request, _p9UserSession);
 
             // Assert
             _mockAssertedLoginIdentityService.Verify();
@@ -125,16 +133,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 auditStub.Operation.Should().Be(RequestAuditType);
                 auditStub.Details.Should().Be("Creating Asserted login Identity JWT for Provider ID '{0}', Provider Name '{1}', "
                                               + "Jump Off ID '{2}', intended relying party URL: {3}",
-                    _request.ProviderId, _request.ProviderName, _request.JumpOffId,
-                    _request.IntendedRelyingPartyUrl);
+                    request.ProviderId, request.ProviderName, request.JumpOffId,
+                    request.IntendedRelyingPartyUrl);
                 auditStub.ResponseDetails.Should().Be("AssertedLoginIdentity Token creation succeeded.");
             }
 
             _mockLogger.VerifyLogger(LogLevel.Information,
-                $"Created Asserted Login Identity: ProviderId={_request.ProviderId} " +
-                    $"ProviderName={_request.ProviderName} " +
-                    $"JumpOffId={_request.JumpOffId} " +
-                    $"IntendedRelyingPartyUrl={_request.IntendedRelyingPartyUrl}", Times.Once());
+                $"Created Asserted Login Identity: ProviderId={request.ProviderId} " +
+                    $"ProviderName={request.ProviderName} " +
+                    $"JumpOffId={request.JumpOffId} " +
+                    $"IntendedRelyingPartyUrl={request.IntendedRelyingPartyUrl}", Times.Once());
         }
 
         [TestMethod]
@@ -145,9 +153,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
             _mockAssertedLoginIdentityService
                 .Setup(x => x.CreateJwtToken(_p5UserSession.CitizenIdUserSession.IdTokenJti))
                 .Returns(new CreateJwtResult.Success(expectedResponse));
+            var request = new CreateJwtRequest();
 
             // Act
-            var result = await _systemUnderTest.Post(_request, _p5UserSession);
+            var result = await _systemUnderTest.Post(request, _p5UserSession);
 
             // Assert
             _mockAssertedLoginIdentityService.Verify();
@@ -157,10 +166,67 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 .Subject.Should().Be(expectedResponse);
 
             _mockLogger.VerifyLogger(LogLevel.Information,
-                $"Created Asserted Login Identity: ProviderId={_request.ProviderId} " +
-                $"ProviderName={_request.ProviderName} " +
-                $"JumpOffId={_request.JumpOffId} " +
-                $"IntendedRelyingPartyUrl={_request.IntendedRelyingPartyUrl}", Times.Once());
+                $"Created Asserted Login Identity: ProviderId={request.ProviderId} " +
+                $"ProviderName={request.ProviderName} " +
+                $"JumpOffId={request.JumpOffId} " +
+                $"IntendedRelyingPartyUrl={request.IntendedRelyingPartyUrl}", Times.Once());
+        }
+
+        [TestMethod]
+        public async Task Post_UpliftStartedAction_ServiceSucceeds_CallMetricLoggerUpliftStarted()
+        {
+            // Arrange
+            var expectedResponse = new CreateJwtResponse();
+            _mockAssertedLoginIdentityService
+                .Setup(x => x.CreateJwtToken(_p5UserSession.CitizenIdUserSession.IdTokenJti))
+                .Returns(new CreateJwtResult.Success(expectedResponse));
+            var request = new CreateJwtRequest { Action = "UpliftStarted"};
+
+            // Act
+            await _systemUnderTest.Post(request, _p5UserSession);
+
+            // Assert
+            _mockMetricLogger.Verify(x => x.UpliftStarted(), Times.Once);
+        }
+
+        [TestMethod]
+        [DataRow("")]
+        [DataRow(null)]
+        [DataRow("Hello")]
+        public async Task Post_OtherAction_ServiceSucceeds_DoesNotCallMetricLogger(string action)
+        {
+            // Arrange
+            var expectedResponse = new CreateJwtResponse();
+            _mockAssertedLoginIdentityService
+                .Setup(x => x.CreateJwtToken(_p5UserSession.CitizenIdUserSession.IdTokenJti))
+                .Returns(new CreateJwtResult.Success(expectedResponse));
+            var request = new CreateJwtRequest { Action = action };
+
+            // Act
+            await _systemUnderTest.Post(request, _p5UserSession);
+
+            // Assert
+            _mockMetricLogger.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
+        [DataRow("")]
+        [DataRow(null)]
+        [DataRow("Hello")]
+        [DataRow("UpliftStarted")]
+        public async Task Post_ServiceFails_DoesNotCallMetricLogger(string action)
+        {
+            // Arrange
+            _mockAssertedLoginIdentityService
+                .Setup(x => x.CreateJwtToken(_p5UserSession.CitizenIdUserSession.IdTokenJti))
+                .Returns(new CreateJwtResult.InternalServerError());
+            var request = new CreateJwtRequest { Action = action };
+
+            // Act
+            await _systemUnderTest.Post(request, _p5UserSession);
+
+            // Assert
+            _mockMetricLogger.VerifyNoOtherCalls();
         }
 
         private AuditBuilderStub ArrangeAudit()

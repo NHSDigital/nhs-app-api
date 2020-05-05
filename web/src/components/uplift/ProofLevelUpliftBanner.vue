@@ -39,6 +39,7 @@ export default {
         .postV1PatientAssertedLoginIdentity({
           assertedLoginIdentityRequest: {
             IntendedRelyingPartyUrl: window.location.hostname,
+            action: 'UpliftStarted',
           },
         })
         .then(({ token }) => {
