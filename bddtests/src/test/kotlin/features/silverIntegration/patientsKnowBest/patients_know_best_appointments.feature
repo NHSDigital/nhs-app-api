@@ -13,6 +13,7 @@ Feature: Patients Know Best Appointments
     Then I am redirected to the redirector page with the header 'View appointments'
     And the warning message on the Redirector page explains the service is from Patients Know Best
 
+  @tech-debt @NHSO-9538
   Scenario: A user without access to PKB cannot see the menu item 'Appointments' on the appointments page
     Given I am using the native app user agent
     And I am a user who cannot view Appointments from Patients Know Best

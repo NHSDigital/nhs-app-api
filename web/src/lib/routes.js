@@ -77,7 +77,7 @@ const sjrRedirectRules = {
     journey_disabled: 'silverIntegration',
     url: '/appointments',
     context: {
-      provider: 'ers',
+      provider: 'pkb',
       serviceType: 'secondaryAppointments',
     },
   },

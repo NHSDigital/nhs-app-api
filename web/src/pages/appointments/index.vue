@@ -65,7 +65,7 @@ export default {
         $store: this.$store,
         journey: 'silverIntegration',
         context: {
-          provider: 'ers',
+          provider: 'pkb',
           serviceType: 'secondaryAppointments',
         },
       });
