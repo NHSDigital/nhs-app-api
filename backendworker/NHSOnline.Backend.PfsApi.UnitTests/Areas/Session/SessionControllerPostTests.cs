@@ -366,7 +366,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             Context.MockSessionControllerLogger.Verify();
         }
 
-
         [TestMethod]
         public async Task Post_HappyPath_ReturnsUsersSessionResponse()
         {
@@ -410,6 +409,28 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 actualUserSessionResponse.AccessToken.Should().Be(expectedUserSessionResponse.AccessToken);
                 actualUserSessionResponse.ServiceJourneyRules.Should().BeEquivalentTo(expectedUserSessionResponse.ServiceJourneyRules);
             }
+        }
+
+        [TestMethod]
+        public async Task Post_HappyPath_CallsMetricLoggerLogin()
+        {
+            Context.SessionConfigSettings.ProxyEnabled = true;
+
+            Context.EmisUserSession.ProxyPatients = new List<EmisProxyUserSession>
+            {
+                new EmisProxyUserSession()
+            };
+
+            Context.UserSession.Key = "123";
+
+            ArrangeGpSessionManagerCreateSession(new GpSessionCreateResult.Success(Context.UserSession.GpUserSession));
+            ArrangeAudit();
+
+            // Act
+            await CreateSystemUnderTest().Post(Context.UserSessionRequest);
+
+            // Assert
+            Context.MockMetricLogger.Verify(x => x.Login(), Times.Once);
         }
 
         [TestMethod]

@@ -16,6 +16,7 @@ using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
@@ -55,6 +56,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         internal Mock<IAntiforgery> MockAntiforgery { get; private set; }
         internal Mock<ISessionCacheService> MockSessionCacheService { get; private set; }
         internal Mock<IAuthenticationService> MockAuthenticationService { get; private set; }
+        internal Mock<IMetricLogger> MockMetricLogger { get; private set; }
 
         internal EmisConnectionToken ConnectionToken { get; private set; }
         internal UserSessionRequest UserSessionRequest { get; private set; }
@@ -193,6 +195,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     It.IsAny<ClaimsPrincipal>(),
                     It.IsAny<AuthenticationProperties>()))
                 .Returns(Task.FromResult((object) null));
+
+            MockMetricLogger = new Mock<IMetricLogger>();
         }
 
         private void InitializeServiceProvider()
@@ -213,6 +217,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .AddSingleton(MockAntiforgery.Object)
                 .AddSingleton(MockSessionCacheService.Object)
                 .AddSingleton(MockAuthenticationService.Object)
+                .AddSingleton(MockMetricLogger.Object)
                 .AddMockLoggers();
 
             new PfsApi.Session.ServiceConfigurationModule().ConfigureServices(serviceCollection, null);

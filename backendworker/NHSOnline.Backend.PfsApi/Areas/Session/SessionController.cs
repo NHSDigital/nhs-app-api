@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Auditing;
+using NHSOnline.Backend.Metrics;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.Session;
 using NHSOnline.Backend.Support;
@@ -25,31 +25,31 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
     {
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<SessionController> _logger;
-        private readonly IAuditor _auditor;
         private readonly IErrorReferenceGenerator _errorReferenceGenerator;
         private readonly IAntiforgery _antiforgery;
         private readonly ISessionCreator _sessionCreator;
         private readonly UserSessionService _userSessionService;
         private readonly IUserSessionManager _userSessionManager;
+        private readonly IMetricLogger _metricLogger;
 
         public SessionController(
             ConfigurationSettings settings,
             ILogger<SessionController> logger,
-            IAuditor auditor,
             IErrorReferenceGenerator errorReferenceGenerator,
             IAntiforgery antiforgery,
             ISessionCreator sessionCreator,
             UserSessionService userSessionService,
-            IUserSessionManager userSessionManager)
+            IUserSessionManager userSessionManager,
+            IMetricLogger metricLogger)
         {
             _settings = settings;
             _logger = logger;
-            _auditor = auditor;
             _errorReferenceGenerator = errorReferenceGenerator;
             _antiforgery = antiforgery;
             _sessionCreator = sessionCreator;
             _userSessionService = userSessionService;
             _userSessionManager = userSessionManager;
+            _metricLogger = metricLogger;
         }
 
         [HttpGet]
@@ -168,6 +168,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 
                 var responseBody = new PostUserSessionResponse { ServiceJourneyRules = serviceJourneyRules };
                 responseBody = userSession.Accept(new UserSessionResponseVisitor<PostUserSessionResponse>(Settings, responseBody));
+
+                await _controller._metricLogger.Login();
 
                 return new CreatedResult(string.Empty, responseBody);
             }
