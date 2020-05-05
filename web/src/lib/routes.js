@@ -633,7 +633,7 @@ const routes = {
         return [this.allRoutes.INDEX, this.allRoutes.MESSAGES];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
   },
   HEALTH_INFORMATION_UPDATES_MESSAGES: {
@@ -648,7 +648,7 @@ const routes = {
           this.allRoutes.HEALTH_INFORMATION_UPDATES];
       },
     },
-    helpUrl: baseNhsAppHelpUrl,
+    helpUrl: `${baseNhsAppHelpUrl}messaging/`,
     sjrRedirectRules: [sjrRedirectRules.messagingDisabledRedirect],
   },
   MORE: {
