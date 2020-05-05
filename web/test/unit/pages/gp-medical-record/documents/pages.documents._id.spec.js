@@ -324,13 +324,16 @@ describe('document view', () => {
       expect($router.push).toHaveBeenCalledWith(route);
     });
 
-    it('will map the download type correctly', async () => {
+    it.each([
+      ['jpeg', 'jpeg'],
+      ['docm', 'doc'],
+      ['jfif', 'jpg'],
+    ])('will map the download type correctly', (type, expectedType) => {
       // Arrange
       const page = mountPage();
 
       // Act & Assert
-      expect(page.vm.mapFileTypeToDownloadType('docm')).toEqual('doc');
-      expect(page.vm.mapFileTypeToDownloadType('jpeg')).toEqual('jpeg');
+      expect(page.vm.mapFileTypeToDownloadType(type)).toEqual(expectedType);
     });
 
     it('will display a different header if the file is invalid', async () => {

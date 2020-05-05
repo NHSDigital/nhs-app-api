@@ -209,8 +209,6 @@ export default {
       switch ((fileType || '').toLowerCase()) {
         case 'docm':
           return 'doc';
-        case 'rtf':
-          return 'txt';
         case 'jfif':
           return 'jpg';
         default:
