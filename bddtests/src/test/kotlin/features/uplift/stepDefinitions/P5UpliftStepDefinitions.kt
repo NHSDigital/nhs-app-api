@@ -16,6 +16,8 @@ import pages.assertIsVisible
 import pages.navigation.WebHeader
 import pages.withNormalisedText
 import utils.SerenityHelpers
+import pages.navigation.NavBarNative
+import features.sharedSteps.NavigationSteps
 
 class P5UpliftStepDefinitions : HybridPageObject() {
 
@@ -23,6 +25,8 @@ class P5UpliftStepDefinitions : HybridPageObject() {
 
   @Steps
   private lateinit var p5ShutterPage: P5UpliftPage
+  @Steps
+  lateinit var nav: NavigationSteps
 
   lateinit var webHeader: WebHeader
 
@@ -55,4 +59,37 @@ class P5UpliftStepDefinitions : HybridPageObject() {
   fun theUpliftJourneyStarts() {
     webHeader.getPageTitle().withNormalisedText(UpliftLoginRequestBuilder.title).assertIsVisible()
   }
+
+
+  @Then("the navbar is working")
+  fun checkTheNavbarIsWorking(){
+    val linksToFollow = arrayListOf(
+            {followAppointmentNativeNavBarLink()},
+            {followPrescriptionsNativeNavBarLink()},
+            {followMyRecordNativeNavBarLink()},
+            {followSymptomsNativeNavBarLink()}
+    )
+
+    linksToFollow.forEachIndexed { index, link ->
+      if (index != linksToFollow.size)
+        link.invoke()
+    }
+  }
+
+  private fun followAppointmentNativeNavBarLink() {
+    nav.select(NavBarNative.NavBarType.APPOINTMENTS)
+  }
+
+  private fun followPrescriptionsNativeNavBarLink() {
+    nav.select(NavBarNative.NavBarType.PRESCRIPTIONS)
+  }
+
+  private fun followMyRecordNativeNavBarLink() {
+    nav.select(NavBarNative.NavBarType.MY_RECORD)
+  }
+
+  private fun followSymptomsNativeNavBarLink() {
+    nav.select(NavBarNative.NavBarType.SYMPTOMS)
+  }
+
 }

@@ -12,5 +12,8 @@ export default {
   components: {
     ProofLevelUpliftBanner,
   },
+  mounted() {
+    this.$store.dispatch('device/unlockNavBar');
+  },
 };
 </script>
