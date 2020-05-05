@@ -110,11 +110,14 @@ export default {
     isProxying() {
       return this.$store.getters['session/isProxying'];
     },
+    isProofLevel9() {
+      return this.$store.getters['session/isProofLevel9'];
+    },
     pkbEnabled() {
-      return this.hasPkbMessages && this.isNativeApp && !this.isProxying;
+      return this.hasPkbMessages && this.isNativeApp && !this.isProxying && this.isProofLevel9;
     },
     testProviderEnabled() {
-      return this.hasTestProviderMessages;
+      return this.hasTestProviderMessages && this.isProofLevel9;
     },
   },
   methods: {

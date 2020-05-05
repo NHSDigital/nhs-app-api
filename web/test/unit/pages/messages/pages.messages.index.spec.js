@@ -13,6 +13,7 @@ const mountPage = ({
   context = true,
   isNativeApp = true,
   isProxying = false,
+  isProofLevel9 = true,
 } = {}) => {
   $router = createRouter();
   $store = createStore({
@@ -33,6 +34,7 @@ const mountPage = ({
       'serviceJourneyRules/im1MessagingEnabled': sjrIm1MessagingEnabled,
       'serviceJourneyRules/silverIntegrationEnabled': () => (context),
       'session/isProxying': isProxying,
+      'session/isProofLevel9': isProofLevel9,
     },
   });
   wrapper = mount(Messages, { $store, $router });
@@ -134,6 +136,17 @@ describe('messages page', () => {
         mountPage({
           isNativeApp: false,
           isProxying: true,
+        });
+      });
+      it('will not show link', () => {
+        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
+      });
+    });
+
+    describe('pkb enabled but proof level is p5', () => {
+      beforeEach(() => {
+        mountPage({
+          isProofLevel9: false,
         });
       });
       it('will not show link', () => {
