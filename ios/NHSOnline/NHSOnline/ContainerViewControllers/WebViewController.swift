@@ -28,6 +28,7 @@ class WebViewController: UIViewController, WKUIDelegate {
 
         webView = WKWebView(frame: .zero, configuration: config)
         webView.uiDelegate = self
+        webView.allowsLinkPreview = false
         view = webView
     }
 
