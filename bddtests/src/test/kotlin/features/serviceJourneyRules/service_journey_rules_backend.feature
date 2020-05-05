@@ -78,17 +78,18 @@ Feature: Service Journey Rules Backend
     Then I receive an "Ok" success code
     And the service journey rules response will have medical record version set to 2
 
+  @target
   Scenario: A user can see the configuration for silver service integrations in SJR
     Given I am a user where the journey configurations are:
-      | Journey                                    | Value     |
-      | silver integration secondary appointments  | ers pkb   |
-      | silver integration messages                | pkb       |
-      | silver integration consultations           | pkb       |
+      | Journey                                    | Value                              |
+      | silver integration secondary appointments  | ers pkb                            |
+      | silver integration messages                | pkb testSilverThirdPartyProvider   |
+      | silver integration consultations           | pkb                                |
     And I have logged in and have a valid session cookie
     When I request the service journey rules for my ODS Code
     Then I receive an "Ok" success code
     And the service journey rules response will have silver integration secondary appointments set to ers, pkb
-    And the service journey rules response will have silver integration messages set to pkb
+    And the service journey rules response will have silver integration messages set to pkb, testSilverThirdPartyProvider
     And the service journey rules response will have silver integration consultations set to pkb
 
   Scenario: A user can see the configuration where silver service integrations are not enabled in SJR

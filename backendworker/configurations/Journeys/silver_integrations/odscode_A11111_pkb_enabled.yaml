@@ -16,5 +16,4 @@ journeys:
     messages:
       - pkb
     secondaryAppointments:
-      - ers
       - pkb

@@ -27,7 +27,8 @@ enum class SecondaryAppointmentsProvider {
 }
 
 enum class MessagesProvider {
-    pkb
+    pkb,
+    testSilverThirdPartyProvider
 }
 
 enum class ConsultationsProvider {

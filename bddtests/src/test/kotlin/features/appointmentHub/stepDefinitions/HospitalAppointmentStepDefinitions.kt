@@ -26,6 +26,26 @@ class HospitalAppointmentStepDefinitions {
         CitizenIdSessionCreateJourney().createFor(patient)
     }
 
+    @Given("^I am a user who can manage their pkb hospital appointments but not ers$")
+    fun iAmAUserWhoCanManageTheirPkbHospitalAppointmentsButNotErs(){
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+                null,
+                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS)
+        val supplier = SerenityHelpers.getGpSupplier()
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+    }
+
+    @Given("^I am a user who can manage their ers hospital appointments but not pkb$")
+    fun iAmAUserWhoCanManageTheirErsHospitalAppointmentsButNotPkb(){
+        val patient = ServiceJourneyRulesMapper.findPatientForConfiguration(
+                null,
+                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_PKB)
+        val supplier = SerenityHelpers.getGpSupplier()
+        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
+        CitizenIdSessionCreateJourney().createFor(patient)
+    }
+
     @Given("^I am a user who can manage their hospital appointments and has linked profiles$")
     fun iAmAUserWhoCanManageTheirHospitalAppointmentsAndHasLinkedProfiles() {
         val patient = EmisPatients.getPatientWithLinkedProfiles()

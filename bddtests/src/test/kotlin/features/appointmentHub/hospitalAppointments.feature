@@ -21,6 +21,26 @@ Feature: Hospital Appointments
     And I browse to the pages at the following urls I see the relevant page
     | /appointments/hospital-appointments  | /appointments |
 
+  Scenario: A user with pkb access but no ers access can navigate to the hospital appointments page
+    Given I am using the native app user agent
+    And I am a user who can manage their pkb hospital appointments but not ers
+    And I am logged in
+    When I retrieve the 'appointment hub' page directly
+    Then the Appointments Hub page is displayed
+    When I click the 'Hospital and other services' link on the Appointments Hub
+    Then the Hospital Appointments page is displayed
+    And the Hospital Appointments links are displayed
+
+  Scenario: A user with ers access but no pkb access can navigate to the hospital appointments page
+    Given I am using the native app user agent
+    And I am a user who can manage their pkb hospital appointments but not ers
+    And I am logged in
+    When I retrieve the 'appointment hub' page directly
+    Then the Appointments Hub page is displayed
+    When I click the 'Hospital and other services' link on the Appointments Hub
+    Then the Hospital Appointments page is displayed
+    And the Hospital Appointments links are displayed
+
   Scenario: A user can navigate back from the hospital appointments page to the appointments hub using the breadcrumb
     Given I am a user who can manage their hospital appointments
     And I am logged in

@@ -21,6 +21,7 @@ const {
   NOMINATED_PHARMACY_ENABLED,
   NOTIFICATIONS_ENABLED,
   SILVER_INTEGRATION_ENABLED,
+  SILVER_INTEGRATION_APPOINTMENTS_ENABLED,
   MY_RECORD_HUB_ENABLED,
   DOCUMENTS_ENABLED,
   IM1MESSAGING_ENABLED,
@@ -96,6 +97,9 @@ export default {
   },
   [SILVER_INTEGRATION_ENABLED](state) {
     return ({ provider, serviceType }) => get(`rules.silverIntegrations.${serviceType}`)(state).includes(provider);
+  },
+  [SILVER_INTEGRATION_APPOINTMENTS_ENABLED](state) {
+    return get('rules.silverIntegrations.secondaryAppointments')(state).includes('pkb') || get('rules.silverIntegrations.secondaryAppointments')(state).includes('ers');
   },
   [MY_RECORD_HUB_ENABLED](state) {
     return get('rules.silverIntegrations.carePlans')(state).includes('pkb') ||

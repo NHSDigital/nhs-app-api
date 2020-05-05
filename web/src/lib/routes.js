@@ -74,12 +74,8 @@ const sjrRedirectRules = {
     url: '/linked-profiles/shutter/appointments',
   },
   silverIntegrationsSecondaryAppointmentsDisabledRedirect: {
-    journey_disabled: 'silverIntegration',
+    journey_disabled: 'silverIntegrationAppointments',
     url: '/appointments',
-    context: {
-      provider: 'pkb',
-      serviceType: 'secondaryAppointments',
-    },
   },
   silverIntegrationsHealthRecordHubCarePlansEnabledRedirect: {
     journey: 'myRecordHub',

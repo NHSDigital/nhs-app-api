@@ -394,14 +394,9 @@ describe('middleware/sjrRedirect', () => {
         expect(redirect).not.toBeCalled();
       });
     });
-
     describe('secondary appointments disabled', () => {
       beforeEach(() => {
-        store = {
-          getters: {
-            'serviceJourneyRules/silverIntegrationEnabled': () => (false),
-          },
-        };
+        getters['serviceJourneyRules/silverIntegrationAppointmentsEnabled'] = false;
         routes.forEach(route => callSjrRedirect(route));
       });
 

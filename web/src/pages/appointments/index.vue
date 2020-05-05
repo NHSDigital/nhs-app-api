@@ -60,7 +60,7 @@ export default {
     hospitalAppointmentsPath() {
       return HOSPITAL_APPOINTMENTS.path;
     },
-    hasSecondaryAppointments() {
+    hasPkbAppointments() {
       return sjrIf({
         $store: this.$store,
         journey: 'silverIntegration',
@@ -70,8 +70,22 @@ export default {
         },
       });
     },
+    hasErsAppointments() {
+      return sjrIf({
+        $store: this.$store,
+        journey: 'silverIntegration',
+        context: {
+          provider: 'ers',
+          serviceType: 'secondaryAppointments',
+        },
+      });
+    },
+    isNativeApp() {
+      return this.$store.state.device.isNativeApp;
+    },
     showHospitalAppointments() {
-      return this.hasSecondaryAppointments && !this.isProxying;
+      return !this.isProxying && (this.hasErsAppointments ||
+        (this.hasPkbAppointments && this.isNativeApp));
     },
   },
   mounted() {

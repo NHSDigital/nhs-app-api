@@ -26,7 +26,7 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
                                 SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB,
-                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB))
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_PKB))
                 .add(Supplier.EMIS, "A22222",
                         EnumSet.of(SJRJourneyType.APPOINTMENTS_INFORMATICA,
                                 SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS,
@@ -81,8 +81,15 @@ class ServiceJourneyRulesMapper {
                                 SJRJourneyType.IM1_MESSAGING_DISABLED,
                                 SJRJourneyType.IM1_MESSAGING_CANDELETEMESSAGES_DISABLED,
                                 SJRJourneyType.IM1_MESSAGING_CANUPDATEREADSTATUS_DISABLED,
-                                SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED)
-                )
+                                SJRJourneyType.IM1_MESSAGING_REQUIRESDETAILSREQUEST_DISABLED))
+                .add(Supplier.EMIS, "A00002",
+                        EnumSet.of(
+                                SJRJourneyType.SILVER_INTEGRATION_CAREPLANS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_CONSULTATIONS_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_HEALTHTRACKER_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_LIBRARY_PKB,
+                                SJRJourneyType.SILVER_INTEGRATION_MESSAGES_PKB_TESTSILVERTHIRDPARTYPROVIDER,
+                                SJRJourneyType.SILVER_INTEGRATION_SECONDARY_APPOINTMENTS_ERS_PKB))
 
         fun findPatientForConfiguration(gpSystem: Supplier?,
                                         journeyType: SJRJourneyType,
