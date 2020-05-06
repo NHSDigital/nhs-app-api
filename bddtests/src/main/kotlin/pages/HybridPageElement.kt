@@ -24,10 +24,10 @@ open class HybridPageElement(
         var androidLocator: String? = null,
         var iOSLocator: String? = null,
         open val page: HybridPageObject,
-        helpfulName: String? = null,
+        val helpfulName: String? = null,
         var timeToWaitForElement: Int = TIME_TO_WAIT_FOR_ELEMENT
 ) {
-    val helpfulNameToUse = helpfulName ?: webDesktopLocator
+    var helpfulNameToUse = helpfulName ?: webDesktopLocator
 
     val textValue: String
         get() {
@@ -58,7 +58,7 @@ open class HybridPageElement(
         var staleElement = false
         while (staleElement || retryCount > 0) {
             try {
-                staleElement = false;
+                staleElement = false
                 val foundElements = getElementsWithLocatorMethod()
                 if (foundElements.count() > 0) {
                     return foundElements.map { element -> converter.invoke(element) }
@@ -148,6 +148,14 @@ open class HybridPageElement(
 
     fun sendEnterKey() {
         this.waitForElementToBecomeVisible().sendKeys(Keys.ENTER)
+    }
+
+    protected fun setHelpfulNameToUseFromLocator(locator: String) {
+        if (helpfulName != null) {
+            helpfulNameToUse = "$helpfulName ($locator)"
+        } else {
+            helpfulNameToUse = locator
+        }
     }
 
     protected fun scrollTo(elem: Any) {

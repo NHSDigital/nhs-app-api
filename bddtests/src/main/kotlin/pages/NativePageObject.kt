@@ -1,23 +1,19 @@
 package pages
 
-import com.google.common.collect.ImmutableMap
 import io.appium.java_client.AppiumDriver
+import io.appium.java_client.LocksDevice
 import io.appium.java_client.MobileElement
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.ios.IOSDriver
+import org.junit.Assert
 import org.openqa.selenium.NoSuchElementException
-import org.openqa.selenium.WebDriverException
+import org.openqa.selenium.WebDriver
 import webdrivers.getSpecificDriver
 import webdrivers.isAndroid
 
 const val NATIVE_CONTEXT: String = "native"
 
 abstract class NativePageObject : HybridPageObject() {
-
-    enum class AppAction {
-        Launch,
-        Activate
-    }
 
     private fun getNativeMobileDriver(): AppiumDriver<MobileElement> {
         return when (driver.isAndroid()) {
@@ -31,7 +27,7 @@ abstract class NativePageObject : HybridPageObject() {
     }
 
     fun switchNative() {
-        val driver = getNativeMobileDriver();
+        val driver = getNativeMobileDriver()
         if (driver.context.contains(NATIVE_CONTEXT, ignoreCase = true)) {
             println("Already in $NATIVE_CONTEXT context: ${driver.context}")
         } else {
@@ -45,37 +41,6 @@ abstract class NativePageObject : HybridPageObject() {
             }
         }
         setDriver<NativePageObject>(driver)
-    }
-
-    fun switchToApp(appBundleId: String, action: AppAction) {
-        try {
-            when (action) {
-                AppAction.Launch -> {
-                    launchApp(appBundleId)
-                }
-                AppAction.Activate -> {
-                    activateApp(appBundleId)
-                }
-            }
-        } catch (e: WebDriverException) {
-            println("app switching failed " + e)
-        }
-    }
-
-    //launch an App thats not yet open
-    fun launchApp(appBundleId: String) {
-        val driver = getNativeMobileDriver()
-        val bundleId = HashMap<String, String>()
-        bundleId.put("bundleId", appBundleId)
-        driver.executeScript("mobile: launchApp", bundleId)
-    }
-
-    //activating an App thats already been opened
-    fun activateApp(appBundleId: String) {
-        val driver = getNativeMobileDriver()
-        val bundleId = HashMap<String, String>()
-        bundleId.put("bundleId", appBundleId)
-        driver.executeScript("mobile: activateApp", bundleId)
     }
 
     fun findByAccessibilityId(accessibiltyId: String): MobileElement {
@@ -105,23 +70,35 @@ abstract class NativePageObject : HybridPageObject() {
         return elementNative
     }
 
-    fun lockAndroidDevice() {
-        val driver = driver.getSpecificDriver<AndroidDriver<MobileElement>>()
-        driver.lockDevice()
+    fun lockDevice() {
+        switchNative()
+        val driver = driver.getSpecificDriver<WebDriver>()
+        when (driver is LocksDevice) {
+            true -> driver.lockDevice()
+            false -> Assert.fail("${driver.javaClass.name} does not support locking device")
+        }
     }
 
-    fun unlockAndroidDevice() {
-        val driver = driver.getSpecificDriver<AndroidDriver<MobileElement>>()
-        driver.unlockDevice()
+    fun unlockDevice() {
+        switchNative()
+        val driver = driver.getSpecificDriver<WebDriver>()
+        when (driver is LocksDevice) {
+            true -> driver.unlockDevice()
+            false -> Assert.fail("${driver.javaClass.name} does not support unlocking device")
+        }
     }
 
-    @Suppress("TooGenericExceptionCaught", "Any exception thrown from javascript")
-    fun scrollAndroidNativePage(){
-        val driver = driver.getSpecificDriver<AndroidDriver<MobileElement>>()
-        try {
-        driver.executeScript("mobile: scroll", ImmutableMap.of("direction", "down"))
-        } catch (e: Exception) {
-            println("The current page is not scrollable")
+    fun tryUnlockDevice() {
+        if (onMobile()) {
+            switchNative()
+
+            val driver = driver.getSpecificDriver<WebDriver>()
+            if (driver is LocksDevice) {
+                println("Unlocking device")
+                driver.unlockDevice()
+            } else {
+                println("Device does not support unlocking")
+            }
         }
     }
 

@@ -1,4 +1,5 @@
 package features.authentication.stepDefinitions
+
 import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -11,9 +12,8 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
 import pages.CheckMySymptomsPage
-import pages.SessionExpiryNative
+import pages.SessionExpiry
 import utils.GlobalSerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
@@ -31,7 +31,7 @@ class SessionExpiryStepDefinitions  {
     @Steps
     lateinit var login: LoginSteps
 
-    lateinit var sessionExpiry: SessionExpiryNative
+    lateinit var sessionExpiry: SessionExpiry
 
     lateinit var patient: Patient
 
@@ -122,11 +122,7 @@ class SessionExpiryStepDefinitions  {
     @When("^I am idle long enough on a secure page for the session expiry dialog box to appear$")
     fun iAmIdleLongEnoughOnASecurePageForSessionExpiryDialog() {
         sessionExpiry.waitForSessionExpiryModal()
-        val presentOnPage =  sessionExpiry.isSessionExpiryModalVisibleWithRetry()
-        Assert.assertEquals(true, presentOnPage)
-        if(sessionExpiry.onMobile()) {
-            sessionExpiry.scrollAndroidNativePage()
-        }
+        sessionExpiry.assertIsDisplayed()
     }
 
     @Then("^I see the login page with the session expiry notification$")
@@ -137,15 +133,12 @@ class SessionExpiryStepDefinitions  {
 
     @Then("^I see a dialog box prompting to extend the session$")
     fun iSeeTheDialogBoxPromptingToExtendTheSession() {
-        val presentOnPage =  sessionExpiry.isSessionExpiryModalVisibleWithRetry()
-
-        Assert.assertTrue("Session expiry modal visible", presentOnPage)
+        sessionExpiry.assertIsDisplayed()
     }
 
     @Then("^the dialog box is not visible on the screen$")
-    fun theDialogBoxIsNotVisibile() {
-        val presentOnPage = sessionExpiry.isSessionExpiryModalVisible()
-        Assert.assertFalse("Session expiry modal visible", presentOnPage)
+    fun theDialogBoxIsNotVisible() {
+        sessionExpiry.assertIsNotDisplayed()
     }
 
     @Then("^I background the app long enough for the session warning dialog to appear and bring it back to foreground$")
@@ -155,27 +148,18 @@ class SessionExpiryStepDefinitions  {
     fun iBackgroundTheAppForSessionExpiry() = sessionExpiry.backgroundAppUntilSessionExpiry()
 
     @Then("^I lock the device$")
-    fun iLockTheDevice() = sessionExpiry.lockAndroidDevice()
+    fun iLockTheDevice() = sessionExpiry.lockDevice()
 
     @Then("^I unlock the device$")
     fun iUnlockTheDevice() {
         Thread.sleep(DELAY_SECONDS_FOR_WAITING)
-        sessionExpiry.unlockAndroidDevice()
+        sessionExpiry.unlockDevice()
         Thread.sleep(DELAY_SECONDS_FOR_WAITING)
     }
 
-    @Then("^I scroll the device$")
-    fun iScrollTheDevice() = sessionExpiry.scrollAndroidNativePage()
-
     @Then("^I am idle for a short time$")
     fun iamIdleBeforeResume() {
-        when(sessionExpiry.onMobile()) {
-            true -> {
-                sessionExpiry.scrollAndroidNativePage()
-                Thread.sleep(DELAY_BEFORE_RESUME)
-                sessionExpiry.scrollAndroidNativePage()
-            }
-            false -> Thread.sleep(DELAY_BEFORE_RESUME)
-        }
+        Thread.sleep(DELAY_BEFORE_RESUME)
+        sessionExpiry.tryUnlockDevice()
     }
 }

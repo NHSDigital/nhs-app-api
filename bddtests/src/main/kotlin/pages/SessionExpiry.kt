@@ -3,7 +3,6 @@ package pages
 import config.Config
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileElement
-import org.openqa.selenium.NoSuchElementException
 import webdrivers.getSpecificDriver
 import java.time.Duration
 import java.time.LocalDateTime
@@ -12,10 +11,9 @@ import java.time.temporal.ChronoUnit
 const val SCREEN_LOCK_PREVENTION_INTERVAL = 30_000L
 const val SESSION_EXPIRY_MODAL_DISPLAY_DURATION = 60_000L
 const val ADDITIONAL_TIME_FOR_SESSION_TO_EXPIRE = 60_000L
-const val WAIT_INTERVAL: Long = 1000
-const val TIMES_TO_TRY: Int = 10
+const val SESSION_EXPIRY_DIALOG_MESSAGE = "For security reasons, we'll log you out of the NHS App in 1 minute."
 
-open class SessionExpiryNative : NativePageObject() {
+open class SessionExpiry : NativePageObject() {
 
     private val sessionExpiryModalDisplayDuration = Duration.ofMillis(SESSION_EXPIRY_MODAL_DISPLAY_DURATION)
     private val additionalTimeForSessionToExpire = Duration.ofMillis(ADDITIONAL_TIME_FOR_SESSION_TO_EXPIRE)
@@ -23,67 +21,53 @@ open class SessionExpiryNative : NativePageObject() {
     private val timeUntilSessionExpiryAfterModalDisplay =
             sessionExpiryModalDisplayDuration.plus(additionalTimeForSessionToExpire)
 
-    val header = NativePageElement(
-            androidLocator = "//*[contains(@resource-id, 'sessionExpiryWarningHeader')]",
-            iOSAccessID = "sessionExpiryWarningHeader",
+
+    private val headerNative = NativePageElement(
+            androidLocator = "//android.widget.TextView[@text=\"$SESSION_EXPIRY_DIALOG_MESSAGE\"]",
+            iOSLocator = "//XCUIElementTypeStaticText[@value=\"$SESSION_EXPIRY_DIALOG_MESSAGE\" and @visible='true']",
             webDesktopLocator = "//p[@data-sid='warningDurationInformation']",
             page = this
     )
 
+    private val headerWeb = HybridPageElement(
+            webDesktopLocator = "//p",
+            page = this
+    ).withNormalisedText("For security reasons, you'll be logged out in 1 minute.")
+
     private val extendSessionButton = NativePageElement(
-            androidLocator = "//android.widget.Button[@text = 'STAY LOGGED IN']",
-            iOSAccessID = "sessionExpiryWarningStayLoggedIn",
+            androidLocator = "//android.widget.Button[@text='STAY LOGGED IN']",
+            iOSLocator = "//XCUIElementTypeButton[@label='Stay logged in']",
             webDesktopLocator = "//button[contains(text(),'Stay logged in')]",
             page = this
     )
 
     private val logoutButton = NativePageElement(
-            androidLocator = "//android.widget.Button[@text = 'LOG OUT']",
-            iOSAccessID = "sessionExpiryWarningLogOut",
+            androidLocator = "//android.widget.Button[@text='LOG OUT']",
+            iOSLocator = "//XCUIElementTypeButton[@label='Log out']",
             webDesktopLocator = "//a[contains(text(),'Log out')]",
             page = this
     )
 
-     fun clickExtendSession() {
+    fun assertIsDisplayed() {
+        when (onMobile()) {
+            true -> headerNative.assertIsDisplayed()
+            false -> headerWeb.assertIsVisible()
+        }
+    }
+
+    fun assertIsNotDisplayed() {
+        when (onMobile()) {
+            true -> headerNative.assertElementNotPresent()
+            false -> headerWeb.assertElementNotPresent()
+        }
+    }
+
+    fun clickExtendSession() {
         extendSessionButton.click()
     }
 
-     fun clickLogOut() {
+    fun clickLogOut() {
         logoutButton.click()
-    }
-
-    fun isSessionExpiryModalVisibleWithRetry() : Boolean {
-        var isModalVisible = false
-        var timesLeft = TIMES_TO_TRY
-
-        while (timesLeft >= 0) {
-            Thread.sleep(WAIT_INTERVAL)
-            isModalVisible = isSessionExpiryModalVisible()
-
-            if (isModalVisible) {
-                break
-            }
-            timesLeft--
-        }
-        return isModalVisible
-    }
-
-    fun isSessionExpiryModalVisible() : Boolean {
-        return when(onMobile()) {
-            true -> this.isOnPage("For security reasons, we'll log you out of the NHS App in 1 minute.")
-            false -> header.withoutRetrying().elements.count() > 0
-        }
-    }
-
-    private fun isOnPage(elementText: String): Boolean {
-        return try {
-            findNativeByXpath("//android.widget.TextView[@text = \"$elementText\"]")
-            println("found element text: $elementText")
-            true
-        } catch (e: NoSuchElementException){
-            println("not found element text: $elementText")
-            false
-        }
     }
 
     fun waitForSessionExpiry() {
@@ -113,7 +97,7 @@ open class SessionExpiryNative : NativePageObject() {
     private fun backgroundAppFor(delay: Duration) {
         val driver = driver.getSpecificDriver<AppiumDriver<MobileElement>>()
         driver.runAppInBackground(delay)
-        scrollAndroidNativePage()
+        tryUnlockDevice()
     }
 
     private fun timeUntilSessionExpiry(): Duration =
@@ -135,11 +119,11 @@ open class SessionExpiryNative : NativePageObject() {
             if (delay <= 0) {
                 break
             }
+
             println("$now: Sleeping ${delay}ms until $delayUntil")
             Thread.sleep(delay)
-            if (onMobile()) {
-                scrollAndroidNativePage()
-            }
+
+            tryUnlockDevice()
         }
     }
 }

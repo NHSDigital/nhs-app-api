@@ -1,15 +1,28 @@
+parameters:
+  - name: job.name
+    type: string
+    default: Native
+  - name: job.condition
+    type: string
+    default: succeeded()
+  - name: tranche.tag
+    type: string
+    default: ''
+
 jobs:
-  - job: ios_int_tests
-    displayName: Tranche iOS
+  - job:
+    displayName: Tranche iOS ${{ parameters['job.name'] }}
     timeoutInMinutes: 180
+    condition: ${{ parameters['job.condition'] }}
     variables:
       - template: integration-tests-variables.yml
         parameters:
           additionalVariables:
-            tests.name: "iOS"
+            tests.name: "iOS ${{ parameters['job.name'] }}"
             tests.script: "03_integration_test_run_browserstack_ios.sh"
             native.app.path.ios: "$(System.ArtifactsDirectory)/iOS Package Files/BrowserStack/NHSOnline Dev.ipa"
             browserstack.build: $(Build.BuildNumber)
+            tranche.tag: ${{ parameters['tranche.tag'] }}
     steps:
       - task: DownloadBuildArtifacts@0
         displayName: Download IPA

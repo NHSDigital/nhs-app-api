@@ -17,8 +17,6 @@ class LinkElement(page: HybridPageObject,
     private val linkPath = content.specificLinkXPath(linkTitle)
     private val link = HybridPageElement(
             webDesktopLocator = linkPath,
-            androidLocator = null,
-            iOSLocator = "//div[${content.linkStyling}[normalize-space(text())='$linkTitle')]]",
             page = page,
             helpfulName = "$linkTitle Link")
 

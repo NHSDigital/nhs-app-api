@@ -79,7 +79,6 @@ Feature: Session Expiry and Extend Frontend
     And the user login details are cleared from cookies
 
   @long-running
-  @android
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -93,7 +92,6 @@ Feature: Session Expiry and Extend Frontend
     Then the Your Appointments page is displayed
 
   @long-running
-  @android
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -106,7 +104,6 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @long-running
-  @android
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -119,7 +116,7 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @long-running
-  @android @bug @NHSO-8713
+  @bug @NHSO-8713
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -158,7 +155,6 @@ Feature: Session Expiry and Extend Frontend
     And I am logged in
     When I navigate to Symptoms
     And I click Use NHS 111 online
-    And I scroll the device
     And I am idle long enough for the session expiry dialog box to appear
     And I am idle for a short time
     And I navigate to Appointments
@@ -182,7 +178,7 @@ Feature: Session Expiry and Extend Frontend
     Then I see the login page
 
   @long-running
-  @android @bug @NHSO-8713
+  @bug @NHSO-8713
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -195,7 +191,7 @@ Feature: Session Expiry and Extend Frontend
     Then the Your Appointments page is displayed
 
   @long-running
-  @android @bug @NHSO-8713
+  @bug @NHSO-8713
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -207,7 +203,6 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @long-running
-  @android
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -219,7 +214,6 @@ Feature: Session Expiry and Extend Frontend
     And the dialog box is not visible on the screen
 
   @long-running
-  @android
   Scenario: The native app, on a secure screen is in the background. The session expires, the user brings the app to the foreground and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -250,11 +244,9 @@ Feature: Session Expiry and Extend Frontend
     And I lock the device
     When I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
-    And I scroll the device
-    And I unlock the device
-    And I scroll the device
+    When I unlock the device
     And I am idle for a short time
-    And I see a dialog box prompting to extend the session
+    Then I see a dialog box prompting to extend the session
     When I click to log out
     Then I see the login page
     And the dialog box is not visible on the screen

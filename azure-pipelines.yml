@@ -64,13 +64,18 @@ parameters:
     type: boolean
     default: false
 
+  - name: intTestsRunAndroidNativeLongRunning
+    displayName: Run Android Native Long Running Integration Tests
+    type: boolean
+    default: false
+
   - name: intTestsRuniOSNative
     displayName: Run iOS Native Integration Tests
     type: boolean
     default: false
 
-  - name: intTestsRunNativeAndroidLongRunning
-    displayName: Run Android Native Long Running Integration Tests
+  - name: intTestsRuniOSNativeLongRunning
+    displayName: Run iOS Native Long Running Integration Tests
     type: boolean
     default: false
 
@@ -115,8 +120,10 @@ variables:
 
   ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
     int.tests.run.native.android.long-running: true
+    int.tests.run.native.ios.long-running: true
   ${{ if ne(variables['Build.Reason'], 'Schedule') }}:
-    int.tests.run.native.android.long-running: ${{ parameters.intTestsRunNativeAndroidLongRunning }}
+    int.tests.run.native.android.long-running: ${{ parameters.intTestsRunAndroidNativeLongRunning }}
+    int.tests.run.native.ios.long-running: ${{ parameters.intTestsRuniOSNativeLongRunning }}
 
 stages:
   - stage: backend
@@ -234,13 +241,20 @@ stages:
               job.name: Long Running
               tranche.tag: long-running
 
-  - ${{ if eq(variables['int.tests.run.native.ios'], 'true') }}:
+  - ${{ if or(eq(variables['int.tests.run.native.ios'], 'true'), eq(variables['int.tests.run.native.ios.long-running'], 'true')) }}:
     - stage: ios_integration_tests
       displayName: iOS Integration Tests
-      condition: and(succeeded(), eq(variables['native.ios.target'], 'BrowserStack'))
       dependsOn:
         - web
         - backend
         - ios
+      condition: and(succeeded(), eq(variables['native.ios.target'], 'browserstack'))
       jobs:
-        - template: .azuredevops/templates/integration-tests-ios-job.yml
+        - ${{ if eq(variables['int.tests.run.native.ios'], 'true') }}:
+          - template: .azuredevops/templates/integration-tests-ios-job.yml
+
+        - ${{ if eq(variables['int.tests.run.native.ios.long-running'], 'true') }}:
+          - template: .azuredevops/templates/integration-tests-ios-job.yml
+            parameters:
+              job.name: Long Running
+              tranche.tag: long-running

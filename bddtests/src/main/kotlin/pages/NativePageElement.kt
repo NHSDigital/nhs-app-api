@@ -33,16 +33,20 @@ class NativePageElement(
     private fun selectNativeElement() : MobileElement {
             return when (nativeLocatorStrategy()) {
                 LocatorStrategy.IOS -> page.findNativeByXpath(iOSLocator!!).also {
+                    setHelpfulNameToUseFromLocator(iOSLocator!!)
                     it.getWrappedElementWithRetry()
                 }
                 LocatorStrategy.IOS_ACCESSIBILITY -> page.findByAccessibilityId(iOSAccessID!!).also {
+                    setHelpfulNameToUseFromLocator(iOSAccessID!!)
                     it.getWrappedElementWithRetry()
                 }
                 LocatorStrategy.ANDROID -> page.findNativeByXpath(androidLocator!!).also {
+                    setHelpfulNameToUseFromLocator(androidLocator!!)
                     it.getWrappedElementWithRetry()
                 }
                 LocatorStrategy.WEBVIEW,
                 LocatorStrategy.BROWSER_MOBILE -> page.findNativeByXpath(webMobileLocator).also {
+                    setHelpfulNameToUseFromLocator(webMobileLocator)
                     if ((!it.isDisplayed).or(it.isUnderneathFixedElements())) {
                         it.scroll()
                     }
@@ -50,6 +54,7 @@ class NativePageElement(
                     executor.executeScript("// TODO Invoke hidden mobile view navigation buttons when in native.")
                 }
                 LocatorStrategy.BROWSER_DESKTOP -> page.findNativeByXpath(webDesktopLocator).also {
+                    setHelpfulNameToUseFromLocator(webDesktopLocator)
                     if ((!it.isDisplayed).or(it.isUnderneathFixedElements())) {
                         it.scroll()
                     }
