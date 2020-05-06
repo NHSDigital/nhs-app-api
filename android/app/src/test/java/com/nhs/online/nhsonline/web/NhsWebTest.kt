@@ -19,12 +19,14 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.util.ReflectionHelpers
+import java.io.File
 import java.net.URL
 
 @RunWith(RobolectricTestRunner::class)
@@ -41,6 +43,8 @@ class NhsWebTest {
     private lateinit var spyWeb: NhsWeb
     private lateinit var webSettings: WebSettings
     private var nhsLoginLoggedInPaths: List<String> = listOf()
+    private lateinit var tempAppWebViewDir: File
+    private lateinit var tempCacheDir: File
 
     @Before
     fun setUp() {
@@ -55,13 +59,21 @@ class NhsWebTest {
         interactorMock = mock()
         notificationsServiceMock = mock()
         knownServicesMock = mock()
+
         nhsLoginLoggedInPaths = mock()
+
+        tempCacheDir = mock()
+        tempAppWebViewDir = mock()
 
         nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock, notificationsServiceMock, mock(), knownServicesMock, nhsLoginLoggedInPaths)
         spyWeb = spy(nhsWeb)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
+        ReflectionHelpers.setField(nhsWeb, "cacheDir", tempCacheDir)
+        ReflectionHelpers.setField(nhsWeb, "appWebViewDir", tempAppWebViewDir)
+
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
     }
+
 
     @Test
     fun stopLoading_callsNativeAndroidWebViewStopLoadingFunction() {
@@ -94,7 +106,7 @@ class NhsWebTest {
         val url = "http://unit-test.com"
 
         whenever(spyActivity.getString(R.string.baseHost)).thenReturn(URL(url).host)
-        whenever(webViewMock?.url).thenReturn(url)
+        whenever(webViewMock.url).thenReturn(url)
 
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
 
@@ -234,6 +246,7 @@ class NhsWebTest {
     fun onBiometricOptionChanged() {
         nhsWeb.onWebLoggedIn()
         nhsWeb.onBiometricOptionChanged()
+
         val cookies: String? = CookieManager.getInstance()
                 .getCookie(activity.resources.getString(R.string.cookieDomain))
                 ?.takeIf { it.contains("HideBiometricBanner=") }
@@ -243,6 +256,8 @@ class NhsWebTest {
     @Test
     fun onWebLoggedIn_Sets_IsLoginToTrue_And_ShowsHeaders_And_Menu_And_Clears_MenuBarItem() {
         nhsWeb.onWebLoggedIn()
+
+        // assert
         assertTrue(nhsWeb.isUserLoggedIn)
         verify(interactorMock).showHeader()
         verify(interactorMock).showMenuBar()
@@ -251,10 +266,27 @@ class NhsWebTest {
 
     @Test
     fun onWebLoggedOut_Sets_IsLoginToFalse_And_DismissSessionExtensionDialog() {
+        // arrange
+        val mockFiles = arrayOf<File>(mock(), mock())
+        tempAppWebViewDir = mock {
+            on {listFiles()}.thenReturn(mockFiles)
+        }
+        ReflectionHelpers.setField(nhsWeb, "appWebViewDir", tempAppWebViewDir)
+
+        // act
         nhsWeb.onWebLoggedOut()
+
+        // assert
         assertFalse(nhsWeb.isUserLoggedIn)
         assertFalse(webViewMock.settings.builtInZoomControls)
         verify(interactorMock).dismissSessionExtensionDialog()
+
+        verify(tempCacheDir).delete()
+        verify(tempAppWebViewDir, atLeastOnce()).listFiles()
+
+        mockFiles.forEach {
+            file -> verify(file).delete()
+        }
     }
 
     @Test

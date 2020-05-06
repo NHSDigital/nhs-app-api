@@ -29,6 +29,7 @@ import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.Locale
+import java.io.File
 
 private val TAG = NhsWeb::class.java.simpleName
 private const val NATIVE_APP = "nativeApp"
@@ -43,13 +44,14 @@ class NhsWeb(
         private val nhsLoginLoggedInPaths: List<String>
 ) {
     private val openBrowserActivity = OpenUrlInBrowserActivity()
-    private val urlLoader =
-            UrlLoader(webView, activity.getString(R.string.baseURL), appWebInterface)
+    private val urlLoader = UrlLoader(webView, activity.getString(R.string.baseURL), appWebInterface)
     private val urlHelper = UrlHelper(activity)
     private val chromeClient = ChromeClientLocationHandler(activity)
     private val appPersistData = PersistData(activity)
     private val errorMessageHandler = ErrorMessageHandler(activity.resources)
     private val settingsService = SettingsService(activity)
+    private val cacheDir = File(activity.filesDir.parent + "/cache")
+    private val appWebViewDir = File(activity.filesDir.parent + "/app_webview")
 
     var applicationState =
             ApplicationState(readResourceString(R.string.menuTimeoutSeconds).toLong())
@@ -79,6 +81,7 @@ class NhsWeb(
 
         webView.webChromeClient = chromeClient
         clearSessionCookies()
+        trimCachedFiles()
     }
 
     fun loadWelcomePage() = loadUrl(readResourceString(R.string.baseURL))
@@ -101,7 +104,7 @@ class NhsWeb(
             showNoConnectionError()
             return
         }
-        var url:String
+        val url:String
         if (!appPersistData.getPersistedLink().isNullOrBlank()) {
             url = loadPersistedLink()!!
         }else{
@@ -189,6 +192,28 @@ class NhsWeb(
         webView.settings.builtInZoomControls = false
 
         uiInteractor.dismissSessionExtensionDialog()
+
+        trimCachedFiles()
+    }
+
+    private fun trimCachedFiles() {
+        val contentsToDelete=
+                when(appWebViewDir.listFiles()) {
+                    null -> arrayOf(cacheDir)
+                    else -> appWebViewDir.listFiles().plus(cacheDir)
+        }
+
+        contentsToDelete.forEach { file ->
+            try {
+                if (file.isDirectory) {
+                    file.deleteRecursively()
+                } else {
+                    file.delete()
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Error deleting  ${file.toString()}", e)
+            }
+        }
     }
 
     fun onBiometricOptionChanged() {
