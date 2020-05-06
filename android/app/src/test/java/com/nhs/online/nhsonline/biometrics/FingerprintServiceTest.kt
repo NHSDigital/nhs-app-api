@@ -13,6 +13,7 @@ import com.nhs.online.nhsonline.biometrics.utils.FingerprintSharedPreferences
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -21,7 +22,7 @@ import org.robolectric.util.ReflectionHelpers
 import java.security.Signature
 
 @RunWith(RobolectricTestRunner::class)
-
+@Ignore("Create MainActivity is too slow")
 class FingerprintServiceTest {
     private lateinit var biometricsInteractor: IBiometricsInteractor
     private lateinit var fidoEndpointConfig: FidoEndpointConfig

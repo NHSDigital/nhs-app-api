@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.error_layout.*
 import org.junit.Assert
 import org.junit.Assert.assertFalse
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.internal.util.reflection.FieldSetter
@@ -24,6 +25,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowDialog
 
 @RunWith(RobolectricTestRunner::class)
+@Ignore("Create MainActivity is too slow")
 class MainActivityTest {
 
     private lateinit var mainActivity: MainActivity

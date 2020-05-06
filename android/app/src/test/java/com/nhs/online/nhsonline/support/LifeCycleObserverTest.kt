@@ -11,6 +11,7 @@ import com.nhs.online.nhsonline.web.NhsWebView
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -18,6 +19,7 @@ import org.robolectric.RobolectricTestRunner
 import java.net.URL
 
 @RunWith(RobolectricTestRunner::class)
+@Ignore("Create MainActivity is too slow")
 class LifeCycleObserverTest : ResourceMockingClass() {
 
     private val mainActivity = Robolectric.buildActivity(MainActivity::class.java).create().get()

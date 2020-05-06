@@ -25,6 +25,7 @@ import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.web.NhsWeb
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -184,6 +185,7 @@ class WebClientInterceptorTest {
     }
 
     @Test
+    @Ignore("Create MainActivity is too slow")
     fun overrideUrlLoad() {
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
@@ -209,6 +211,7 @@ class WebClientInterceptorTest {
     }
 
     @Test
+    @Ignore("Create MainActivity is too slow")
     fun overrideUrlLoad_returnsTrueForHandledScheme() {
         val url = "handled:"
         schemeHandlersMock = mock { on { handleUrl(url) } doReturn true }
@@ -233,6 +236,7 @@ class WebClientInterceptorTest {
     }
 
     @Test
+    @Ignore("Create MainActivity is too slow")
     fun overrideUrlLoad_returnsFalseForMalformedURLException() {
         val activity = Robolectric.buildActivity(MainActivity::class.java).get()
         val nhsWebMock = NhsWeb(activity, activity, mock(), mock(), mock(), mock(), mock())
