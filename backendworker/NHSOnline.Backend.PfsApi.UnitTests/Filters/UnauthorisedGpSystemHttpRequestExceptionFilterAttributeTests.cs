@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.Session;
@@ -34,7 +35,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             
             _userSessionManager = new Mock<IUserSessionManager>();
             _userSessionService = new Mock<IUserSessionService>();
-            _systemUnderTest = new UnauthorisedGpSystemHttpRequestExceptionFilterAttribute(_userSessionService.Object, _userSessionManager.Object, logger.Object);
+
+            _systemUnderTest = new UnauthorisedGpSystemHttpRequestExceptionFilterAttribute(
+                _userSessionService.Object,
+                _userSessionManager.Object,
+                new Mock<IAuditor>().Object,
+                logger.Object);
             
             _mockHttpContext = new Mock<HttpContext>();
         }
