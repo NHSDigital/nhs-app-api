@@ -40,6 +40,9 @@ function validate_secret {
   fi
 }
 
+validate_secret android-debug-store-file
+validate_secret android-development.gradle
+validate_secret android_keystore.password
 validate_secret azure_notification_hub_key
 validate_secret azure_notification_hub_key_bdd
 validate_secret browserstack_accesskey

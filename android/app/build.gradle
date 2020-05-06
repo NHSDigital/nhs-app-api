@@ -10,6 +10,13 @@ apply plugin: 'jacoco'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 
+def developmentFolder = java.nio.file.Paths.get(System.getProperty("user.home"),
+        '.nhsonline/secrets/android-development.gradle')
+
+if(file(developmentFolder).exists()){
+    apply from: developmentFolder
+}
+
 android {
     compileSdkVersion 28
     sourceSets {
@@ -29,6 +36,13 @@ android {
     }
     signingConfigs {
         config {
+        }
+        debug {
+            storeFile file(debug_store_location.replaceFirst("^~", System.getProperty("user.home")
+                    .replace("\\", "/")))
+            storePassword debug_store_password
+            keyPassword debug_store_password
+            keyAlias "debug"
         }
         release {
             storeFile file(release_store_location)
@@ -74,6 +88,7 @@ android {
             applicationIdSuffix ".preview"
             manifestPlaceholders = [appName: "NHS App Debug"]
             testCoverageEnabled = true
+            signingConfig signingConfigs.debug
         }
         localHttp {
             initWith debug

@@ -6,6 +6,13 @@
 
 The Fido client library is pulled in from a maven repository hosted within Azure Artifacts. If you get access denied errors ensure you have followed the [instructions to setup maven artifacts development access](https://confluence.service.nhs.uk/display/NO/Tech+and+Tooling+-+Azure+DevOps+-+Maven+Artifacts).
 
+## Development Debug Keystore
+
+In order to build the app, access to a common debug keystore is required. The following files should be copied across by the project build files. If they do not exist, copy manually from keybase:
+
+* `~/.nhsonline/secrets/android-debug-store-file`
+* `~/.nhsonline/secrets/android-development.gradle`
+
 ## Running in Emulator
 
 The emulator uses the IP address 10.0.2.2 to access the host machine. To support this a DNS entry `android.local.bitraft.io` has been created pointing at 10.0.0.2.
