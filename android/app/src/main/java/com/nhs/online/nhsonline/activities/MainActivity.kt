@@ -63,7 +63,12 @@ import java.util.logging.Logger
 
 private val TAG = MainActivity::class.java.simpleName
 
-class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
+class MainActivity :
+        IInteractor,
+        AppCompatActivity(),
+        IBiometricsInteractor,
+        LifeCycleObserverContext {
+
     private val logger = Logger.getLogger(TAG)
     private lateinit var biometricsInterface: BiometricsInterface
     private lateinit var connectionStateMonitor: ConnectionStateMonitor
@@ -178,6 +183,9 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         val userAgent = webview.settings.userAgentString
         webview.settings.userAgentString = "$userAgent $nhsAndroidUserAgent"
     }
+
+    override val url: String?
+        get() = webview.url
 
     private fun onErrorRetryButton() {
         logger.info("${this::class.java.simpleName}: Entering OnErrorRetryButton")
@@ -436,6 +444,12 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
         if (configurationResponse.callSuccessful) {
             nhsWeb.reloadLoginUrl()
+        }
+    }
+
+    override fun ensureSupportedVersion() {
+        if (!configurationResponse.isSupportedVersion && !appDialogs.isUpgradeDialogActive()) {
+            appDialogs.showVersionUpgradeDialog()
         }
     }
 
