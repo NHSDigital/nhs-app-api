@@ -5,9 +5,10 @@
                    'nhsuk-u-margin-bottom-4',
                    'nhsuk-u-padding-left-0']">
         <div v-for="message in messages" :key="message.key">
-          <page-divider v-if="message.isFirstUnreadMessage"
-                        id="receivedMessagesDivider"
-                        :text="getUnreadText" />
+          <template v-if="message.isFirstUnreadMessage">
+            <scroll-to-anchor id="unreadMessages" />
+            <page-divider id="receivedMessagesDivider" :text="getUnreadText" />
+          </template>
           <sentMessage v-if="message.outboundMessage"
                        class="nhsuk-u-padding-bottom-4"
                        :message="message"
@@ -59,28 +60,29 @@
 </template>
 
 <script>
-import SentMessage from '@/components/gp-messages/SentMessage';
-import ReceivedMessage from '@/components/gp-messages/ReceivedMessage';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import { GP_MESSAGES,
-  GP_MESSAGES_DELETE,
-  GP_MESSAGES_URGENCY,
-  GP_MESSAGES_VIEW_MESSAGE } from '@/lib/routes';
+import PageDivider from '@/components/widgets/PageDivider';
+import ReceivedMessage from '@/components/gp-messages/ReceivedMessage';
+import ScrollToAnchor from '@/components/widgets/ScrollToAnchor';
+import SentMessage from '@/components/gp-messages/SentMessage';
+import {
+  GP_MESSAGES, GP_MESSAGES_DELETE, GP_MESSAGES_URGENCY, GP_MESSAGES_VIEW_MESSAGE,
+} from '@/lib/routes';
 import { redirectTo, isBlankString } from '@/lib/utils';
 import srjIf from '@/lib/sjrIf';
-import PageDivider from '@/components/widgets/PageDivider';
 
 export default {
   layout: 'nhsuk-layout',
   components: {
-    SentMessage,
-    ReceivedMessage,
     DesktopGenericBackLink,
     MenuItem,
     MenuItemList,
     PageDivider,
+    ReceivedMessage,
+    ScrollToAnchor,
+    SentMessage,
   },
   data() {
     return {

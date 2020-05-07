@@ -3,14 +3,14 @@ import SummaryMessage from '@/components/messaging/SummaryMessage';
 import { createStore, create$T, mount } from '../../helpers';
 import { formatDate } from '@/plugins/filters';
 import { INDEX } from '@/lib/routes';
-import * as dependency from '@/lib/utils';
+import { isEmptyArray, redirectTo } from '@/lib/utils';
 import last from 'lodash/fp/last';
 
 jest.mock('@/lib/utils');
 jest.mock('@/plugins/filters');
 jest.mock('lodash/fp/last');
 
-dependency.isEmptyArray = jest.fn().mockReturnValue(true);
+isEmptyArray.mockReturnValue(true);
 
 describe('practice patient messaging inbox', () => {
   const messageItemClass = 'nhs-app-message__item';
@@ -32,6 +32,21 @@ describe('practice patient messaging inbox', () => {
     content: 'test',
     sentDateTime: '2020-01-01T13:37:00.137Z',
     sender: 'Dr Nhs Online',
+    replies: [],
+    outboundMessage: true,
+    requiresDetailsRequest: false,
+  }, {
+    messageId: 'message-2',
+    recipient: 'Dr NHS Online2',
+    subject: 'This is the message subject 2',
+    lastMessageDateTime: '2020-01-01T13:37:00.137Z',
+    unreadReplyInfo: {
+      present: false,
+      count: 0,
+    },
+    content: 'test',
+    sentDateTime: '2020-01-01T13:37:00.137Z',
+    sender: 'Dr Nhs Online2',
     replies: [],
     outboundMessage: true,
     requiresDetailsRequest: false,
@@ -137,7 +152,7 @@ describe('practice patient messaging inbox', () => {
     it('will go back to the messages hub', () => {
       mountPage();
       wrapper.vm.backLinkClicked();
-      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages');
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages');
     });
   });
 
@@ -160,8 +175,8 @@ describe('practice patient messaging inbox', () => {
       const summaryMessage = summaryMessages.wrappers[0];
 
       // Assert
-      expect(messageItems.length).toBe(1);
-      expect(summaryMessages.length).toBe(1);
+      expect(messageItems.length).toBe(2);
+      expect(summaryMessages.length).toBe(2);
       expect(summaryMessage.element.id).toEqual('message-1');
       expect(summaryMessage.vm.$props.title).toEqual('Dr NHS Online');
       expect(summaryMessage.vm.$props.subTitle).toEqual('This is the message subject');
@@ -173,109 +188,134 @@ describe('practice patient messaging inbox', () => {
   });
 
   describe('methods', () => {
-    it('will set message details if required', async () => {
-      mountPage();
-      await wrapper.vm.goToMessageDetails(summaries[0]);
-      expect(store.dispatch).toHaveBeenCalledWith('gpMessages/setSelectedMessageID', summaries[0].messageId);
-      expect(store.dispatch).toHaveBeenCalledWith('gpMessages/setSelectedRecipient', { name: summaries[0].recipient });
-      expect(store.dispatch).toHaveBeenCalledWith('gpMessages/setMessageDetails', {
-        messageDetails: summaries[0],
+    describe('goToMessageDetails', () => {
+      describe('message has no unread replies', () => {
+        beforeEach(() => {
+          mountPage();
+          wrapper.vm.goToMessageDetails(summaries[1]);
+        });
+
+        it('will redirect to view gp message path without unread messages url hash', () => {
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/view-details');
+        });
+      });
+
+      describe('message has unread replies', () => {
+        beforeEach(() => {
+          mountPage();
+          wrapper.vm.goToMessageDetails(summaries[0]);
+        });
+
+        it('will redirect to view gp message path with unread messages url hash', () => {
+          expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/view-details#unreadMessages');
+        });
+
+        it('will set message details if required', () => {
+          expect(store.dispatch).toHaveBeenCalledWith('gpMessages/setSelectedMessageID', summaries[0].messageId);
+          expect(store.dispatch).toHaveBeenCalledWith('gpMessages/setSelectedRecipient', { name: summaries[0].recipient });
+          expect(store.dispatch).toHaveBeenCalledWith('gpMessages/setMessageDetails', {
+            messageDetails: summaries[0],
+          });
+        });
       });
     });
-    it('will not trim the subtitle if it is 64 characters and there is no subject', () => {
-      const messageSummaries = [{
-        messageId: 'message-1',
-        recipient: 'Dr NHS Online',
-        subject: 'This is the message subject',
-        lastMessageDateTime: '2020-01-01T13:37:00.137Z',
-        unreadReplyInfo: {
-          present: true,
-          count: 1,
-        },
-        content: 'This is sixty-four characters long to check this class method!!!',
-        sentDateTime: '2020-01-01T13:37:00.137Z',
-        sender: 'Dr Nhs Online',
-        replies: [],
-        outboundMessage: true,
-        requiresDetailsRequest: false,
-      }];
-      mountPage({ hasSubject: false });
-      const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
-      expect(subtitle).toBe('This is sixty-four characters long to check this class method!!!');
-    });
 
-    it('will not trim the subtitle if it is less than 64 characters and there is no subject', () => {
-      const messageSummaries = [{
-        messageId: 'message-1',
-        recipient: 'Dr NHS Online',
-        lastMessageDateTime: '2020-01-01T13:37:00.137Z',
-        unreadReplyInfo: {
-          present: true,
-          count: 1,
-        },
-        content: 'This is less than 64 chars',
-        sentDateTime: '2020-01-01T13:37:00.137Z',
-        sender: 'Dr Nhs Online',
-        replies: [],
-        outboundMessage: true,
-        requiresDetailsRequest: false,
-      }];
-      mountPage({ hasSubject: false });
-      const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
-      expect(subtitle).toBe('This is less than 64 chars');
-    });
+    describe('getSubtitle', () => {
+      it('will not trim the subtitle if it is 64 characters and there is no subject', () => {
+        const messageSummaries = [{
+          messageId: 'message-1',
+          recipient: 'Dr NHS Online',
+          subject: 'This is the message subject',
+          lastMessageDateTime: '2020-01-01T13:37:00.137Z',
+          unreadReplyInfo: {
+            present: true,
+            count: 1,
+          },
+          content: 'This is sixty-four characters long to check this class method!!!',
+          sentDateTime: '2020-01-01T13:37:00.137Z',
+          sender: 'Dr Nhs Online',
+          replies: [],
+          outboundMessage: true,
+          requiresDetailsRequest: false,
+        }];
+        mountPage({ hasSubject: false });
+        const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
+        expect(subtitle).toBe('This is sixty-four characters long to check this class method!!!');
+      });
 
-    it('will trim the subtitle is more than 64 characters and there is no subject', () => {
-      const messageSummaries = [{
-        messageId: 'message-1',
-        recipient: 'Dr NHS Online',
-        lastMessageDateTime: '2020-01-01T13:37:00.137Z',
-        unreadReplyInfo: {
-          present: true,
-          count: 1,
-        },
-        content: 'This is sixty-five characters long to check this class method!!!!',
-        sentDateTime: '2020-01-01T13:37:00.137Z',
-        sender: 'Dr Nhs Online',
-        replies: [],
-        outboundMessage: true,
-        requiresDetailsRequest: false,
-      }];
-      mountPage({ hasSubject: false });
+      it('will not trim the subtitle if it is less than 64 characters and there is no subject', () => {
+        const messageSummaries = [{
+          messageId: 'message-1',
+          recipient: 'Dr NHS Online',
+          lastMessageDateTime: '2020-01-01T13:37:00.137Z',
+          unreadReplyInfo: {
+            present: true,
+            count: 1,
+          },
+          content: 'This is less than 64 chars',
+          sentDateTime: '2020-01-01T13:37:00.137Z',
+          sender: 'Dr Nhs Online',
+          replies: [],
+          outboundMessage: true,
+          requiresDetailsRequest: false,
+        }];
+        mountPage({ hasSubject: false });
+        const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
+        expect(subtitle).toBe('This is less than 64 chars');
+      });
 
-      const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
-      expect(subtitle).toBe('This is sixty-five characters long to check this class method!!!...');
-    });
+      it('will trim the subtitle is more than 64 characters and there is no subject', () => {
+        const messageSummaries = [{
+          messageId: 'message-1',
+          recipient: 'Dr NHS Online',
+          lastMessageDateTime: '2020-01-01T13:37:00.137Z',
+          unreadReplyInfo: {
+            present: true,
+            count: 1,
+          },
+          content: 'This is sixty-five characters long to check this class method!!!!',
+          sentDateTime: '2020-01-01T13:37:00.137Z',
+          sender: 'Dr Nhs Online',
+          replies: [],
+          outboundMessage: true,
+          requiresDetailsRequest: false,
+        }];
+        mountPage({ hasSubject: false });
 
-    it('will set the subtitle to the most recent reply', () => {
-      const reply = {
-        sender: 'Patient',
-        sentDateTime: '2020-01-01T13:37:00.137Z',
-        isUnread: false,
-        replyContent: 'This is the reply content',
-        outboundMessage: true,
-      };
-      const messageSummaries = [{
-        messageId: 'message-1',
-        recipient: 'Dr NHS Online',
-        lastMessageDateTime: '2020-01-01T13:37:00.137Z',
-        unreadReplyInfo: {
-          present: true,
-          count: 1,
-        },
-        content: 'This is sixty-five characters long to check this class method!!!!',
-        sentDateTime: '2020-01-01T13:37:00.137Z',
-        sender: 'Dr Nhs Online',
-        replies: [reply],
-        outboundMessage: true,
-        requiresDetailsRequest: false,
-      }];
-      mountPage({ hasSubject: false });
-      dependency.isEmptyArray = jest.fn().mockReturnValue(false);
-      last.mockImplementation(() => reply);
+        const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
+        expect(subtitle).toBe('This is sixty-five characters long to check this class method!!!...');
+      });
 
-      const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
-      expect(subtitle).toBe('This is the reply content');
+      it('will set the subtitle to the most recent reply', () => {
+        const reply = {
+          sender: 'Patient',
+          sentDateTime: '2020-01-01T13:37:00.137Z',
+          isUnread: false,
+          replyContent: 'This is the reply content',
+          outboundMessage: true,
+        };
+        const messageSummaries = [{
+          messageId: 'message-1',
+          recipient: 'Dr NHS Online',
+          lastMessageDateTime: '2020-01-01T13:37:00.137Z',
+          unreadReplyInfo: {
+            present: true,
+            count: 1,
+          },
+          content: 'This is sixty-five characters long to check this class method!!!!',
+          sentDateTime: '2020-01-01T13:37:00.137Z',
+          sender: 'Dr Nhs Online',
+          replies: [reply],
+          outboundMessage: true,
+          requiresDetailsRequest: false,
+        }];
+        mountPage({ hasSubject: false });
+        isEmptyArray.mockReturnValue(false);
+        last.mockImplementation(() => reply);
+
+        const subtitle = wrapper.vm.getSubtitle(messageSummaries[0]);
+        expect(subtitle).toBe('This is the reply content');
+      });
     });
   });
 });

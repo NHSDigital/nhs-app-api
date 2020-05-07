@@ -14,15 +14,15 @@
     <ul v-if="hasReadMessages" id="readSection" :class="$style['message-panel__list']">
       <message v-for="(message, index) in readMessages" :key="index" :message="message" />
     </ul>
-    <a v-if="hasUnreadMessages" id="unreadMessages"
-       :class="[$style['messageAnchorPosition'],
-                $store.state.device.isNativeApp ? $style['messageAnchorNativePosition'] : '']" />
 
-    <page-divider v-if="hasUnreadMessages" :text="$t('app_messaging.messages.unreadMessages')" />
+    <template v-if="hasUnreadMessages">
+      <scroll-to-anchor id="unreadMessages" />
+      <page-divider :text="$t('app_messaging.messages.unreadMessages')" />
 
-    <ul v-if="hasUnreadMessages" id="unreadSection" :class="$style['message-panel__list']">
-      <message v-for="(message, index) in unreadMessages" :key="index" :message="message" />
-    </ul>
+      <ul id="unreadSection" :class="$style['message-panel__list']">
+        <message v-for="(message, index) in unreadMessages" :key="index" :message="message" />
+      </ul>
+    </template>
   </div>
 </template>
 
@@ -30,12 +30,13 @@
 import Message from '@/components/messaging/Message';
 import PageDivider from '@/components/widgets/PageDivider';
 import PageTitle from '@/components/widgets/PageTitle';
+import ScrollToAnchor from '@/components/widgets/ScrollToAnchor';
+import { redirectTo } from '@/lib/utils';
+import { HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
 import get from 'lodash/fp/get';
 import first from 'lodash/fp/first';
 import takeWhile from 'lodash/fp/takeWhile';
 import dropWhile from 'lodash/fp/dropWhile';
-import { redirectTo } from '@/lib/utils';
-import { HEALTH_INFORMATION_UPDATES } from '@/lib/routes';
 
 export default {
   layout: 'nhsuk-layout',
@@ -43,6 +44,7 @@ export default {
     Message,
     PageDivider,
     PageTitle,
+    ScrollToAnchor,
   },
   data() {
     return {
@@ -87,18 +89,6 @@ export default {
 @import '~nhsuk-frontend/packages/core/tools/ifff';
 @import '~nhsuk-frontend/packages/core/tools/sass-mq';
 @import '~nhsuk-frontend/packages/core/tools/spacing';
-
-.messageAnchorPosition, .messageAnchorPosition:hover {
-  padding-top: 15px;
-  background-color: transparent;
-  box-shadow: 0 0 0 0;
-}
-
-.messageAnchorNativePosition, .messageAnchorNativePosition:hover  {
-  padding-top: 0;
-  margin-top:-50px;
-  padding-bottom:50px;
-}
 
 .message-panel__list {
   @include nhsuk-responsive-margin(2, "top");

@@ -2,7 +2,7 @@ import Message from '@/pages/messages/gp-messages/view-details';
 import { create$T, createStore, mount } from '../../helpers';
 import * as dependency from '@/lib/utils';
 
-describe('patient messaging messages', () => {
+describe('gp message details', () => {
   let wrapper;
   let store;
   let redirect;

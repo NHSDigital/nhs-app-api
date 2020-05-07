@@ -72,12 +72,4 @@ describe('Received Message', () => {
       expect(content).toBe('This is a test');
     });
   });
-
-  describe('Computed properties', () => {
-    beforeEach(() => {
-      wrapper = mount(ReceivedMessages, {
-        $store: $store(),
-      });
-    });
-  });
 });
