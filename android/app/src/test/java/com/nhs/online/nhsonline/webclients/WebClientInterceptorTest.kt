@@ -116,7 +116,7 @@ class WebClientInterceptorTest {
 
         assertEquals(null, response)
         verify(requestMock, times(2)).url
-        verify(contextMock).resources
+        verify(contextMock, atLeastOnce()).resources
         verify(resourceMock).getStringArray(R.array.fonts)
     }
 
@@ -146,7 +146,7 @@ class WebClientInterceptorTest {
         assertEquals("woff2", response.encoding)
         assertEquals("application/font-woff2", response.mimeType)
         verify(requestMock).url
-        verify(contextMock).resources
+        verify(contextMock, atLeastOnce()).resources
         verify(contextMock).assets
         verify(resourceMock).getStringArray(R.array.fonts)
         verify(assetManagerMock).open("fonts/bazz.woff2")
@@ -178,7 +178,7 @@ class WebClientInterceptorTest {
         assertEquals("woff2", response.encoding)
         assertEquals("application/font-woff2", response.mimeType)
         verify(requestMock).url
-        verify(contextMock).resources
+        verify(contextMock, atLeastOnce()).resources
         verify(contextMock).assets
         verify(resourceMock).getStringArray(R.array.fonts)
         verify(assetManagerMock).open("fonts/bazz.woff2")

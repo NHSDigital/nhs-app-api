@@ -27,7 +27,6 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.logging.Logger
 
-private const val REQUEST_TIMEOUT_MILLISECONDS = 20 * 1000L
 private const val WOFF2 = "woff2"
 
 class WebClientInterceptor(
@@ -48,6 +47,9 @@ class WebClientInterceptor(
     private var noConnectionHandled = false
     private var shouldShowErrorPage = false
     private val urlHelper = UrlHelper(context)
+    private val requestTimeout = context.resources
+            .getInteger(R.integer.webClientRequestTimeoutMillis)
+            .toLong()
 
     @Suppress("OverridingDeprecatedMember")
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
@@ -329,7 +331,7 @@ class WebClientInterceptor(
             handleUnavailability(url)
         }
 
-        handler.postDelayed(expireRequestFn, REQUEST_TIMEOUT_MILLISECONDS)
+        handler.postDelayed(expireRequestFn, requestTimeout)
     }
 
     private fun cancelTrackingWebRequestResponse() {

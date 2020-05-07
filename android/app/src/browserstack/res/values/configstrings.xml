@@ -10,6 +10,7 @@
     <string name="ersUrl">pat.dev.refer.nhs.uk</string>
     <string name="ersUrlScheme">https</string>
     <string name="ersUrlPath">/nhslogin</string>
+    <integer name="webClientRequestTimeoutMillis">60000</integer>
     <string-array name="nhsLoginPrefixList">
         <item>stubs</item>
     </string-array>

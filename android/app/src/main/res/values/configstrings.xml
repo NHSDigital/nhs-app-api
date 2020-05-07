@@ -23,6 +23,7 @@
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
     <string name="nhsLoginSuffix">https://signin.nhs.uk</string>
     <string name="redirectorPath">redirector?redirect_to=</string>
+    <integer name="webClientRequestTimeoutMillis">20000</integer>
 
     <string name="accessToken">accessToken</string>
     <string name="fidoUsername">fidoUsername</string>

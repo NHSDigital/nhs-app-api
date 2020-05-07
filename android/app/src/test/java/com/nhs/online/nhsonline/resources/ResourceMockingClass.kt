@@ -65,6 +65,7 @@ open class ResourceMockingClass {
             on { getString(R.string.nhsLoginSuffix) } doReturn "https://ext.signin.nhs.uk"
             on { getString(R.string.admin_help_header) } doReturn "GP help without an appointment"
             on { getString(R.string.browser_unavailable) } doReturn "Browser is disabled"
+            on { getInteger(R.integer.webClientRequestTimeoutMillis) } doReturn 20000
         }
 
         return mock {
@@ -96,6 +97,7 @@ open class ResourceMockingClass {
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.connection_error_title) } doReturn "There\\'s an issue with your internet connection"
             on { getString(R.string.server_error_title) } doReturn "We're experiencing technical difficulties"
+            on { getInteger(R.integer.webClientRequestTimeoutMillis) } doReturn 20000
         }
 
         return mock {
@@ -125,6 +127,7 @@ open class ResourceMockingClass {
             on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
             on { getString(R.string.connection_error_title) } doReturn "\"There's an issue with your internet connection\""
             on { getString(R.string.server_error_title) } doReturn "We're experiencing technical difficulties"
+            on { getInteger(R.integer.webClientRequestTimeoutMillis) } doReturn 20000
         }
 
         return mock {
