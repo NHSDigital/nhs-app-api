@@ -17,6 +17,7 @@
             description-data-sid="age-months"
             :description-id="'linked-account-age-' + index"
             header-tag="h2"
+            href="#"
             :aria-label="ariaLabelCaption(
               item.fullName,
               getDisplayedAgeText(item))"
