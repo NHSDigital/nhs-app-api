@@ -5,7 +5,6 @@
     Scenario: The messages page is captured with messages
       Given I am using the native app user agent
       And I am a user wishing to view my messages
-      And I have the instructions cookie
       And I am logged in
       When I follow the Messages link from the home page
       And I click on the NHS App Messages link on the Messages Hub page
@@ -23,7 +22,6 @@
     Scenario: The messages page is captured with no messages
       Given I am using the native app user agent
       And I am a user wishing to view my messages, but I have no messages
-      And I have the instructions cookie
       And I am logged in
       When I follow the Messages link from the home page
       And I click on the NHS App Messages link on the Messages Hub page

@@ -7,7 +7,6 @@ Feature: Data Sharing Frontend
   Scenario: A user can navigate through the Data Sharing Preferences pages via the Next/Previous buttons
     Given I am using the native app user agent
     And I am a user who wishes to manage their Data Sharing Preferences
-    And I have the instructions cookie
     And I am logged in
     And I retrieve the 'More' page directly
     When I click the Data Sharing link on the More page
@@ -29,7 +28,6 @@ Feature: Data Sharing Frontend
   Scenario: A user can navigate through the Data Sharing Preferences pages via the Contents links
     Given I am using the native app user agent
     And I am a user who wishes to manage their Data Sharing Preferences
-    And I have the instructions cookie
     And I am logged in
     And I retrieve the 'Data Sharing' page directly
     Then the Data Sharing 'Overview' page is displayed
@@ -45,7 +43,6 @@ Feature: Data Sharing Frontend
   Scenario: A user can navigate to the NHS website to find out more information on Data Sharing
     Given I am using the native app user agent
     And I am a user who wishes to manage their Data Sharing Preferences
-    And I have the instructions cookie
     And I am logged in
     And I retrieve the 'Data Sharing' page directly
     Then the Data Sharing 'Overview' page is displayed
@@ -55,7 +52,6 @@ Feature: Data Sharing Frontend
   Scenario: A user can navigate to the NHS website to find out more information on Managing their Choice
     Given I am using the native app user agent
     And I am a user who wishes to manage their Data Sharing Preferences
-    And I have the instructions cookie
     And I am logged in
     And I retrieve the 'Data Sharing Make Your Choice' page directly
     Then the Data Sharing 'Make your choice' page is displayed
@@ -65,7 +61,6 @@ Feature: Data Sharing Frontend
   Scenario: A user chooses to manage their Data Sharing preferences
     Given I am using the native app user agent
     And I am a user who wishes to manage their Data Sharing Preferences
-    And I have the instructions cookie
     And I am logged in
     And I retrieve the 'Data Sharing' page directly
     Then the Data Sharing 'Overview' page is displayed

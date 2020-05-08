@@ -5,7 +5,6 @@ Feature: Patients Know Best Messages
   Scenario: A user navigates to PKB messages and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view Messages and Online Consultations from Patients Know Best
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     Then I am on the More Page
@@ -18,7 +17,6 @@ Feature: Patients Know Best Messages
   Scenario: A user without access to PKB cannot see the menu item 'Messages and online consultations' on the more page
     Given I am using the native app user agent
     And I am a user who cannot view Messages and Online Consultations from Patients Know Best
-    And I have the instructions cookie
     And I am logged in
     And I navigate to the More page
     Then I am on the More Page

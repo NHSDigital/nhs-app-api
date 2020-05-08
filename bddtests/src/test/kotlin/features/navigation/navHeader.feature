@@ -30,7 +30,6 @@ Feature: Use the navigation header bar
   Scenario: Dynamic back link leads to the correct pages
     Given I am using the native app user agent
     And I am a EMIS patient
-    And I have the instructions cookie
     And I am logged in
     And there are EMIS appointments available to book with a reason
     And a booked appointment can be cancelled
@@ -57,7 +56,6 @@ Feature: Use the navigation header bar
   Scenario: A user can navigate through organ donation with the dynamic back button
     Given I am using the native app user agent
     And I am a EMIS patient
-    And I have the instructions cookie
     And I am logged in
     And I am a EMIS user not registered with organ donation, who wishes to register and opt in
     And I navigate to the internal Organ Donation Choice Page

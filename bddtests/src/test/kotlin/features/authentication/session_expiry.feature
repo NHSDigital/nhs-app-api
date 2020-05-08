@@ -82,7 +82,6 @@ Feature: Session Expiry and Extend Frontend
   @android
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
@@ -97,7 +96,6 @@ Feature: Session Expiry and Extend Frontend
   @android
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
@@ -111,7 +109,6 @@ Feature: Session Expiry and Extend Frontend
   @android
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
@@ -125,7 +122,6 @@ Feature: Session Expiry and Extend Frontend
   @android @bug @NHSO-8713
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     When I navigate to Symptoms
     And I click Use NHS 111 online
@@ -142,7 +138,6 @@ Feature: Session Expiry and Extend Frontend
   @android
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     When I navigate to Symptoms
     And I click Use NHS 111 online
@@ -160,7 +155,6 @@ Feature: Session Expiry and Extend Frontend
   @android
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure screen is prompted with the session extension dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     When I navigate to Symptoms
     And I click Use NHS 111 online
@@ -179,7 +173,6 @@ Feature: Session Expiry and Extend Frontend
   @android
   Scenario: The session expires, a user of the native app, on a non secure screen, when navigating back to a secure screen is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     When I navigate to Symptoms
     And I click Use NHS 111 online
@@ -192,7 +185,6 @@ Feature: Session Expiry and Extend Frontend
   @android @bug @NHSO-8713
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     When I navigate to Appointments
     And I background the app long enough for the session warning dialog to appear and bring it back to foreground
@@ -206,7 +198,6 @@ Feature: Session Expiry and Extend Frontend
   @android @bug @NHSO-8713
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     When I navigate to Appointments
     And I background the app long enough for the session warning dialog to appear and bring it back to foreground
@@ -219,7 +210,6 @@ Feature: Session Expiry and Extend Frontend
   @android
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app to the foreground and the session extension dialog box is displayed, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     When I navigate to Appointments
     And I background the app long enough for the session warning dialog to appear and bring it back to foreground
@@ -232,7 +222,6 @@ Feature: Session Expiry and Extend Frontend
   @android
   Scenario: The native app, on a secure screen is in the background. The session expires, the user brings the app to the foreground and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I have the instructions cookie
     And I am logged in
     When I navigate to Appointments
     And I background the app long enough for the session expiry and bring it back to foreground
@@ -296,7 +285,6 @@ Feature: Session Expiry and Extend Frontend
 
   Scenario Outline: The <GP System> GP practice session has expired and user selects the prescriptions button
     Given I am patient using the <GP System> GP System
-    And I have the instructions cookie
     And I am logged in
     Given the GP System session has expired when viewing prescriptions
     When I navigate to prescriptions

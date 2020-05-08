@@ -5,7 +5,6 @@
     Scenario: The organ donation journey pages are captured
       Given I am using the native app user agent
       And I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
-      And I have the instructions cookie
       And I am logged in
       And I navigate to the internal Organ Donation Choice Page
       Then the OrganDonationChoice page is saved to disk
@@ -36,7 +35,6 @@
     Scenario: The organ donation check details page captured for reaffirm journey
       Given I am using the native app user agent
       And I am a EMIS user registered as opt-out who wishes to reaffirm their decision
-      And I have the instructions cookie
       And I am logged in
       And I navigate to the internal Organ Donation Page
       Then the Organ Donation View Registration page is displayed
@@ -48,7 +46,6 @@
     Scenario: The organ donation withdraw journey pages captured
       Given I am using the native app user agent
       And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
-      And I have the instructions cookie
       And I am logged in
       And I navigate to the internal Organ Donation Page
       Then the Organ Donation View Registration page is displayed with my existing decision to opt-in

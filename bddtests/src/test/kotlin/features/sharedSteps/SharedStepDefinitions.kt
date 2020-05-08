@@ -27,6 +27,7 @@ import pages.navigation.WebHeader
 import pages.withNormalisedText
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
+import utils.getOrNull
 import utils.set
 import webdrivers.browserstack.BrowserstackLocalService
 import webdrivers.options.OptionManager
@@ -121,6 +122,10 @@ open class SharedStepDefinitions {
 
         TermsAndConditionsJourneyFactory.consent(patient)
 
+        if (GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.getOrNull<Boolean>() == true) {
+            browser.setInstructionsCookie("true")
+        }
+
         login.using(patient)
         home.waitForLoginToCompleteSuccessfully()
     }
@@ -213,16 +218,4 @@ open class SharedStepDefinitions {
     fun thePageContainsTheHeaderText(title: String) {
         webHeader.getHtmlElement("h2").withNormalisedText(title).assertIsVisible()
     }
-
-    @When("^I dont have the instructions cookie$")
-    fun iDontHaveTheCookie() {
-        browser.verifyCookieDoesntExist("SkipPreRegistrationPage")
-    }
-
-    @When("^I have the instructions cookie$")
-    fun iHaveTheCookie() {
-        browser.goToFavIcon()
-        browser.setInstructionsCookie("true")
-    }
-
 }

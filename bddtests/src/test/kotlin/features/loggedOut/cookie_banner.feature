@@ -18,7 +18,6 @@ Feature: Cookie Banner
   @nativesmoketest
   Scenario: Cookie banner doesn't appear on the "non logged in" login page, on the native app
     Given I am using the native app user agent
-    And I have the instructions cookie
     When I am on the login logged-out page
     Then I do not see the cookie banner
 

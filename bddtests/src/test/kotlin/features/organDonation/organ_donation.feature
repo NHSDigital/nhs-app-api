@@ -6,7 +6,6 @@ Feature: Organ Donation Frontend
   Scenario Outline: A <GP System> user can opt to donate all their organs
     Given I am using the native app user agent
     And I am a <GP System> user not registered with organ donation, who wishes to register and opt in
-    And I have the instructions cookie
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     And I choose to donate my organs
@@ -40,7 +39,6 @@ Feature: Organ Donation Frontend
   Scenario Outline: A user can select '<Option>' for faith and belief sharing when opting to donate all their organs
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to opt in with '<Option>' faith decision
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to donate my organs
@@ -70,7 +68,6 @@ Feature: Organ Donation Frontend
   Scenario Outline: A <GP System> user can opt to not donate their organs
     Given I am using the native app user agent
     And I am a <GP System> user not registered with organ donation, who wishes to register and opt out
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to not donate my organs
@@ -95,7 +92,6 @@ Feature: Organ Donation Frontend
   Scenario Outline: A <GP System> user can opt to donate some of their organs
     Given I am using the native app user agent
     And I am a <GP System> user not registered with organ donation, who wishes to register and donate some organs
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to donate my organs
@@ -127,7 +123,6 @@ Feature: Organ Donation Frontend
   Scenario: A user can choose to record their ethnicity and religion when opting out of organ donation
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and opt out
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     When I choose to not donate my organs
@@ -146,7 +141,6 @@ Feature: Organ Donation Frontend
   Scenario: A user can choose not to record their ethnicity or religion when opting out of organ donation
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and opt out
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     When I choose to not donate my organs
@@ -163,7 +157,6 @@ Feature: Organ Donation Frontend
   Scenario: A user can view the privacy statement on the organ donation Check Details page
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and opt out
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Check Details' page
@@ -173,7 +166,6 @@ Feature: Organ Donation Frontend
   Scenario: A user can register to be a blood donor on the organ donation View Registration page
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and opt out
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Confirmation' page
@@ -183,7 +175,6 @@ Feature: Organ Donation Frontend
   Scenario: A user can navigate back through the opt out journey
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and opt out
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to not donate my organs
@@ -199,7 +190,6 @@ Feature: Organ Donation Frontend
   Scenario: A user can navigate back through the opt in journey
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and opt in
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to donate my organs
@@ -226,7 +216,6 @@ Feature: Organ Donation Frontend
   Scenario: A user can navigate back through the opt in with some organs journey
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to donate my organs
@@ -258,7 +247,6 @@ Feature: Organ Donation Frontend
   Scenario: A user is shown a validation message if they submit their decision without ticking both the required checkboxes
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and opt out
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Check Details' page
@@ -268,7 +256,6 @@ Feature: Organ Donation Frontend
   Scenario: A user is shown a validation message if they submit faith and beliefs without selecting an option
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and opt in
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to donate my organs
@@ -281,7 +268,6 @@ Feature: Organ Donation Frontend
   Scenario: A user is shown a validation message if they attempt to continue opting in without selecting 'All' or 'Some'
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and opt in
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to donate my organs
@@ -291,7 +277,6 @@ Feature: Organ Donation Frontend
   Scenario: A user is shown a validation error if they submit their decision without choosing an option for each organ
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to donate my organs
@@ -304,7 +289,6 @@ Feature: Organ Donation Frontend
   Scenario: A user is shown a validation error if they select 'no' for all specific organ and tissue donation choices
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to donate my organs
@@ -317,7 +301,6 @@ Feature: Organ Donation Frontend
   Scenario: When a user has no organ donation registration, they may follow a link to check their registration
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I click the link called 'Think you have registered already?' with a url of 'https://www.organdonation.nhs.uk/app/app-check/'
@@ -326,7 +309,6 @@ Feature: Organ Donation Frontend
   Scenario: A user can find out more about organ donation when registering
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I click the link called 'Find out more about organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/'
@@ -335,7 +317,6 @@ Feature: Organ Donation Frontend
   Scenario: A user can find out more about examples of of end of life wishes
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and opt in
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-in journey to the 'Faith And Beliefs' page
@@ -345,7 +326,6 @@ Feature: Organ Donation Frontend
   Scenario: A user can view more information about the specific organs and tissue when opting to donate some organs
     Given I am using the native app user agent
     And I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I choose to donate my organs
@@ -361,7 +341,6 @@ Feature: Organ Donation Frontend
   Scenario Outline: A user opting out, where OD returns a <Error Code> recoverable error is shown an error message and can retry
     Given I am using the native app user agent
     And I am a EMIS user who wishes to register as opt out, but OD returns recoverable <Error Code> error
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     When I follow the opt-out journey to the 'Check Details' page
@@ -377,7 +356,6 @@ Feature: Organ Donation Frontend
   Scenario Outline: A user opting out, where OD returns a <Error Code> non-recoverable error, is shown an error message and can't retry
     Given I am using the native app user agent
     And I am a EMIS user who wishes to register as opt out, but OD returns non-recoverable <Error Code> error
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Check Details' page
@@ -391,7 +369,6 @@ Feature: Organ Donation Frontend
     Scenario: A user registering, where OD takes too long to respond, is shown decision pending page
       Given I am using the native app user agent
       And I am a EMIS user who wishes to register as opt out, but OD takes too long to respond
-      And I have the instructions cookie
       And I am logged in
       When I retrieve the 'Organ Donation' page directly
       And I follow the opt-out journey to the 'Check Details' page
@@ -403,7 +380,6 @@ Feature: Organ Donation Frontend
     Scenario: A user cannot submit another registration request while waiting for the first to complete
       Given I am using the native app user agent
       And I am a EMIS user who wishes to register as opt out, but OD takes too long to respond
-      And I have the instructions cookie
       And I am logged in
       When I retrieve the 'Organ Donation' page directly
       And I follow the opt-out journey to the 'Check Details' page

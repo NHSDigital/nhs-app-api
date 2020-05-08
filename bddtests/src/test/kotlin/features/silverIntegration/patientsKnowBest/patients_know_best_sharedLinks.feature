@@ -5,7 +5,6 @@ Feature: Patients Know Best Shared Links
   Scenario: A user navigates to PKB shared links and sees the warning message
     Given I am using the native app user agent
     And I am a user who can view Shared Links from Patients Know Best
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     Then I am on the More Page
@@ -17,7 +16,6 @@ Feature: Patients Know Best Shared Links
   Scenario: A user without access to PKB cannot see the menu item 'Shared links' on the more page
     Given I am using the native app user agent
     And I am a user who cannot view Shared Links from Patients Know Best
-    And I have the instructions cookie
     And I am logged in
     And I navigate to the More page
     Then I am on the More Page

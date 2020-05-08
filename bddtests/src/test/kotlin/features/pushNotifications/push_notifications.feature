@@ -5,7 +5,6 @@ Feature: Push Notifications
   Scenario: A user can enable push notifications for their device for the first time
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications for the first time
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the Account page
     Then the Account Settings are available
@@ -19,7 +18,6 @@ Feature: Push Notifications
   Scenario: A user can enable push notifications for their device
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the Account page
     Then the Account Settings are available
@@ -34,7 +32,6 @@ Feature: Push Notifications
   Scenario: A user can disable push notifications for their device
     Given I am using the native app user agent
     And I am a user wishing to disable push notifications
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the Account page
     And I click the Notifications link on the Account page
@@ -58,7 +55,6 @@ Feature: Push Notifications
     And I am a EMIS user where the journey configurations are:
       | Journey       | Value    |
       | notifications | disabled |
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the Account page
     Then there are no Account Settings available
@@ -70,7 +66,6 @@ Feature: Push Notifications
   Scenario: A user navigating back from the push notifications settings page is directed to the account page
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the Account page
     And I click the Notifications link on the Account page
@@ -81,7 +76,6 @@ Feature: Push Notifications
   Scenario: A user viewing notifications settings when an internal server error occurs sees an error
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications with existing incorrect user device
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the Account page
     And I click the Notifications link on the Account page
@@ -92,7 +86,6 @@ Feature: Push Notifications
   Scenario: A user attempting to disable a non-existing registration is shown an error message
     Given I am using the native app user agent
     And I am a user wishing to disable push notifications
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the Account page
     And I click the Notifications link on the Account page
@@ -107,7 +100,6 @@ Feature: Push Notifications
   Scenario: A user viewing notifications settings when their device's notifications are disabled sees an error
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications with disabled device's notifications
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the Account page
     And I click the Notifications link on the Account page
@@ -122,7 +114,6 @@ Feature: Push Notifications
   Scenario: A user attempting to disable push notifications when device's notifications are disabled sees an error
     Given I am using the native app user agent
     And I am a user wishing to disable push notifications
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the Account page
     And I click the Notifications link on the Account page
@@ -142,7 +133,6 @@ Feature: Push Notifications
   Scenario: A user attempting to enable push notifications when device's notifications are disabled sees an error
     Given I am using the native app user agent
     And I am a user wishing to enable push notifications for the first time
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the Account page
     And I click the Notifications link on the Account page

@@ -6,7 +6,6 @@ import org.junit.Assert
 import org.openqa.selenium.Cookie
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.HybridPageObject
-import pages.loggedOut.FavIconPage
 import pages.loggedOut.LoginPage
 import utils.GlobalSerenityHelpers
 import utils.getOrNull
@@ -27,20 +26,11 @@ open class BrowserSteps {
 
     lateinit var loginPage: LoginPage
 
-    lateinit var favIcon: FavIconPage
-
     @Step
     open fun goToApp() {
         goToPage {
             openPage(loginPage)
             executeScripts()
-        }
-    }
-
-    @Step
-    open fun goToFavIcon() {
-        goToPage {
-            openPage(favIcon)
         }
     }
 

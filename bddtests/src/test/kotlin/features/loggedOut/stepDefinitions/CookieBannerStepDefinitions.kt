@@ -13,6 +13,8 @@ import pages.assertElementNotPresent
 import pages.assertIsNotVisible
 import pages.assertIsVisible
 import pages.loggedOut.CookieBanner
+import utils.GlobalSerenityHelpers
+import utils.getOrNull
 
 private const val DO_SEE = "see"
 private const val DO_NOT_SEE = "do not see"
@@ -37,8 +39,17 @@ class CookieBannerStepDefinitions {
     }
 
     @When("^I am on the login logged-out page$")
+    fun iAmOnTheLoginLoggedOutPageForTheFirstTime() {
+        browserSteps.goToApp()
+        if (GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.getOrNull<Boolean>() == true) {
+            browserSteps.setInstructionsCookie("true")
+        }
+    }
+
+    @When("^I am on the login logged-out page for the first time$")
     fun iAmOnTheLoginLoggedOutPage() {
         browserSteps.goToApp()
+        browserSteps.verifyCookieDoesntExist("SkipPreRegistrationPage")
     }
 
     @When("^I reopen the app$")

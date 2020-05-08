@@ -7,7 +7,6 @@ Feature: Organ Donation Withdraw Frontend
   Scenario Outline: As a <GP System> user, I can withdraw previously registered <Decision> organ donation decision
     Given I am using the native app user agent
     And I am a <GP System> user registered with organ donation with a decision to <Decision> who wishes to withdraw
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to <Decision>
@@ -30,7 +29,6 @@ Feature: Organ Donation Withdraw Frontend
   Scenario: A user sees an error message without retry option when trying to withdraw a previously registered organ donation decision and access is denied
     Given I am using the native app user agent
     And I am a TPP user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns non-recoverable 502 error
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
@@ -48,7 +46,6 @@ Feature: Organ Donation Withdraw Frontend
   Scenario: A user sees an error message with a retry option when trying to withdraw a previously registered organ donation decision and timeout occurs
     Given I am using the native app user agent
     And I am a VISION user registered with organ donation with a decision to opt-out who wishes to withdraw but OD returns recoverable 503 error
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-out
@@ -67,7 +64,6 @@ Feature: Organ Donation Withdraw Frontend
   Scenario: A user is shown a validation error if an organ donation withdrawal reason is not selected
     Given I am using the native app user agent
     And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -83,7 +79,6 @@ Feature: Organ Donation Withdraw Frontend
   Scenario: A user can navigate back through the withdraw journey
     Given I am using the native app user agent
     And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to withdraw
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in
@@ -101,7 +96,6 @@ Feature: Organ Donation Withdraw Frontend
   Scenario: A user, when attempting to withdraw a previously registered <Decision> organ donation decision, but OD takes too long to respond, is shown decision pending page
     Given I am using the native app user agent
     And I am a EMIS user registered with organ donation with a decision to opt-in who wishes to opt-out but OD takes too long to respond
-    And I have the instructions cookie
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     Then the Organ Donation View Registration page is displayed with my existing decision to opt-in

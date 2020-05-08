@@ -4,7 +4,6 @@
     Scenario: The data sharing pages are captured
       Given I am using the native app user agent
       And I am a user who wishes to manage their Data Sharing Preferences
-      And I have the instructions cookie
       And I am logged in
       And I retrieve the 'Data Sharing' page directly
       Then the Data Sharing 'Overview' page is displayed

@@ -36,8 +36,7 @@ Feature: Login frontend
 
   Scenario: A user can see the native instructions
     Given I am a patient using the native app
-    When I am on the login logged-out page
-    And I dont have the instructions cookie
+    When I am on the login logged-out page for the first time
     And I click the 'Continue with NHS login' button
     Then the page title is 'Before you start'
     And I click the 'Continue' button
@@ -45,7 +44,6 @@ Feature: Login frontend
 
   Scenario: A user does not see the native instructions
     Given I am a patient using the native app
-    And I have the instructions cookie
     When I am on the login logged-out page
     And I click the 'Continue with NHS login' button
     Then the page contains the header 'Integration Test Patient'

@@ -30,7 +30,6 @@ Feature: Redirector
   Scenario: The back button on the warning page will take the user to the previous page
     Given I am using the native app user agent
     And I am a user who can view Messages and Online Consultations from Patients Know Best
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page

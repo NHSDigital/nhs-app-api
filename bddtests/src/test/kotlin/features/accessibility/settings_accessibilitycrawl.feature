@@ -18,7 +18,6 @@
     Scenario: The notifications page is captured
       Given I am using the native app user agent
       And I am a user wishing to enable push notifications
-      And I have the instructions cookie
       And I am logged in
       When I navigate to the Account page
       Then the Account Settings are available

@@ -6,7 +6,6 @@ Feature: Messages
   Scenario: A user can see their read and unread messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
@@ -31,7 +30,6 @@ Feature: Messages
     And I am a user wishing to view my appointments and my messages with content
       | /account  |
       | /appointments/booking-guidance  |
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
@@ -61,7 +59,6 @@ Feature: Messages
     And I am a user wishing to view my messages with content
       | https://111.nhs.uk/  |
       | 111.nhs.uk/  |
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
@@ -80,7 +77,6 @@ Feature: Messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages with content
       | email@address.com  |
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
@@ -96,7 +92,6 @@ Feature: Messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages with content
       | /appointments/sausages  |
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
@@ -112,7 +107,6 @@ Feature: Messages
   Scenario: A user with no messages can navigate to the messages inbox, but sees no messages
     Given I am using the native app user agent
     And I am a user wishing to view my messages, but I have no messages
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
@@ -126,7 +120,6 @@ Feature: Messages
     And I am a EMIS user where the journey configurations are:
       | Journey       | Value    |
       | messages      | disabled |
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
@@ -142,7 +135,6 @@ Feature: Messages
   Scenario: A user getting their summary messages when an internal server error occurs sees an error and can try again
     Given I am using the native app user agent
     And I am a user wishing to view my messages but retrieving the messages will cause an internal server error
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
@@ -156,7 +148,6 @@ Feature: Messages
   Scenario: A user getting messages from a sender when an internal server error occurs sees an error and can try again
     Given I am using the native app user agent
     And I am a user wishing to view my messages
-    And I have the instructions cookie
     And I am logged in
     When I navigate to the More page
     And I click the Messages link on the More page
