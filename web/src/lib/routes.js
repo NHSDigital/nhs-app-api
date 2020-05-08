@@ -1483,6 +1483,18 @@ const routes = {
       sjrRedirectRules.deleteMessageRedirect,
     ],
   },
+  LOGIN_SETTINGS: {
+    name: 'account-login-settings',
+    path: '/account/login-settings',
+    proofLevel: proofLevel.P5,
+    crumb: {
+      i18nKey: 'loginSettings',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.ACCOUNT];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}app-login/`,
+  },
   PRESCRIPTIONS_VIEW_ORDERS: {
     name: 'prescriptions-view-orders',
     path: '/prescriptions/view-orders',
@@ -2034,6 +2046,7 @@ export const {
   GP_MESSAGES_DELETE,
   GP_MESSAGES_DELETE_SUCCESS,
   GP_MESSAGES_VIEW_ATTACHMENT,
+  LOGIN_SETTINGS,
   PRESCRIPTIONS_VIEW_ORDERS,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,

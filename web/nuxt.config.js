@@ -88,7 +88,7 @@ const config = {
     // Cookie settings
     SECURE_COOKIES: false,
     // Biometrics
-    BIOMETRICS_ENABLED: false,
+    BIOMETRICS_ENABLED: true,
     // Core
     COOKIE_DOMAIN: '.bitraft.io',
     // Citizen ID
@@ -136,6 +136,7 @@ const config = {
     CORONA_SERVICE_URL: 'https://111.nhs.uk/service/COVID-19/',
     // Nominated Pharmacy
     NOM_PHARMA_DSP_LINK: 'https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies',
+    WEB_BIOMETRICS_ENABLED: false,
     // App Version
     VERSION_TAG: 'dev_web_npm',
     COMMIT_ID: 'dev',

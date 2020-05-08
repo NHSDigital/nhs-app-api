@@ -3,8 +3,8 @@
     <menu-item v-if="showBiometrics"
                id="btn_passwordOptions"
                :header-tag="headerTag"
-               :text="$t('myAccount.accountSettings.passwordOptions')"
-               :aria-label="$t('myAccount.accountSettings.passwordOptions')"
+               :text="$t(getBiometricLinkText)"
+               :aria-label="$t(getBiometricLinkText)"
                :click-func="goToLoginOptions"/>
     <menu-item v-if="showNotifications"
                id="btn_notificationOptions"
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { ACCOUNT_NOTIFICATIONS, findByName } from '@/lib/routes';
+import { ACCOUNT_NOTIFICATIONS, findByName, LOGIN_SETTINGS } from '@/lib/routes';
 import NativeCallbacks from '@/services/native-app';
 import MenuItem from '@/components/MenuItem';
 
@@ -39,10 +39,34 @@ export default {
       required: true,
     },
   },
+  data() {
+    const biometricType = this.$t(this.$store.getters['loginSettings/deviceBiometricType']);
+    return {
+      biometricType,
+      webBiometricsEnabled: this.$store.app.$env.WEB_BIOMETRICS_ENABLED,
+    };
+  },
+  computed: {
+    getBiometricLinkText() {
+      if (!this.webBiometricsEnabled) {
+        return 'myAccount.accountSettings.passwordOptions';
+      }
+
+      if (this.$store.getters['loginSettings/deviceBiometricType'] !== undefined) {
+        return this.$store.getters['loginSettings/deviceBiometricType'];
+      }
+
+      return 'loginSettings.biometrics.noBiometricType.settingsLinkText';
+    },
+  },
   methods: {
     goToLoginOptions() {
-      this.configureWebContext(findByName('Login').helpUrl);
-      NativeCallbacks.goToLoginOptions();
+      if (this.webBiometricsEnabled) {
+        this.$router.push(LOGIN_SETTINGS.path);
+      } else {
+        this.configureWebContext(findByName('Login').helpUrl);
+        NativeCallbacks.goToLoginOptions();
+      }
     },
     showNotificationsClicked() {
       this.$router.push(ACCOUNT_NOTIFICATIONS.path);

@@ -71,3 +71,12 @@ Feature: View My Account Page
     Then the Account page is displayed
     And the Linked Profiles link is not displayed
     And the Cookies link is displayed
+
+  Scenario: A patient can navigate to the Login Settings page on their native device
+    Given I am a EMIS patient using the native app
+    And I am logged in
+    When I retrieve the 'account' page directly
+    Then the Account page for mobile devices is displayed
+    And the Login options link is displayed
+    And I click the Login options link
+    And I see the login options page

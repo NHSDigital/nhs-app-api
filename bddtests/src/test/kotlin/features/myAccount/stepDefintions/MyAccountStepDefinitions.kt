@@ -3,6 +3,7 @@ package features.myAccount.stepDefintions
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import pages.account.MyAccountPage
+import pages.assertElementNotPresent
 
 class MyAccountStepDefinitions {
 
@@ -38,6 +39,21 @@ class MyAccountStepDefinitions {
         myAccount.assertLinkedProfilesLinkIsNotPresent()
     }
 
+    @Then("^the Login options link is displayed$")
+    fun theLoginAndPasswordOptionsLinkIsDisplayed() {
+        myAccount.assertLoginAndPasswordOptionsIsPresent()
+    }
+
+    @Then("^the Login options link is not displayed$")
+    fun theLoginAndPasswordOptionsLinkIsNotDisplayed() {
+        myAccount.assertLoginAndPasswordOptionsIsNotPresent()
+    }
+
+    @Then("^I click the Login options link$")
+    fun iClickTheLoginAndPasswordOptionsLink() {
+        myAccount.loginAndPasswordOptionsLink.click()
+    }
+
     @Then("the Account Settings are available")
     fun theAccountSettingsAreAvailable() {
         myAccount.settings.assertLinksPresent()
@@ -46,6 +62,11 @@ class MyAccountStepDefinitions {
     @Then("there are no Account Settings available")
     fun thereAreNoAccountSettingsAvailable() {
         myAccount.settings.assertNotDisplayed()
+    }
+
+    @Then("there is no notification link available")
+    fun thereIsNoNotificationsLinkAvailable() {
+        myAccount.notificationsLink.assertElementNotPresent()
     }
 
     @Then("the link to Notifications is not available on the Account page")

@@ -39,6 +39,8 @@ class MyAccountPage : HybridPageObject() {
 
     val linkedProfilesLink = link("Linked profiles")
     val cookieLink = link("Cookies")
+    val loginAndPasswordOptionsLink = link("Login options")
+    val notificationsLink = link("Notifications")
 
     fun assertDisplayed() {
         aboutUs.assertLinksPresent(true)
@@ -56,6 +58,14 @@ class MyAccountPage : HybridPageObject() {
 
     fun assertLinkedProfilesLinkIsNotPresent() {
         linkedProfilesLink.assertElementNotPresent()
+    }
+
+    fun assertLoginAndPasswordOptionsIsPresent() {
+        loginAndPasswordOptionsLink.assertIsVisible()
+    }
+
+    fun assertLoginAndPasswordOptionsIsNotPresent() {
+        loginAndPasswordOptionsLink.assertElementNotPresent()
     }
 
     fun assertCookiesLinkIsPresent() {

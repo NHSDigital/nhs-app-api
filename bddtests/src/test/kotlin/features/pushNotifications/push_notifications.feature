@@ -46,7 +46,7 @@ Feature: Push Notifications
     And I am logged in
     When I navigate to the Account page
     Then the Account page is displayed
-    And there are no Account Settings available
+    And there is no notification link available
     When I browse to the pages at the following urls I see the home page
       | /account/notifications |
 
@@ -57,7 +57,7 @@ Feature: Push Notifications
       | notifications | disabled |
     And I am logged in
     When I navigate to the Account page
-    Then there are no Account Settings available
+    Then there is no notification link available
     When I browse to the pages at the following urls I see the home page
       | /account/notifications                |
       | /account/notifications?source=ios     |

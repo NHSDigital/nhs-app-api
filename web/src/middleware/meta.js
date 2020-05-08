@@ -96,6 +96,7 @@ import {
   GP_MESSAGES_URGENCY_CONTACT_GP,
   GP_MESSAGES_VIEW_MESSAGE,
   GP_MESSAGES_VIEW_ATTACHMENT,
+  LOGIN_SETTINGS,
   PRE_REGISTRATION_INFORMATION,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -570,6 +571,19 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageTitles.gpMessagesDeleteMessage';
       route.meta.pageTitleKey = 'pageTitles.gpMessagesDeleteMessage';
       route.meta.formatArguments = { name };
+      break;
+    }
+    case LOGIN_SETTINGS.name: {
+      const biometricTypeReference = get('state.loginSettings.biometricType')(store);
+      if (biometricTypeReference === undefined) {
+        route.meta.headerKey = 'pageTitles.loginSettingsNoType';
+        route.meta.pageTitleKey = 'pageTitles.loginSettingsNoType';
+      } else {
+        const biometricType = app.i18n.tc(biometricTypeReference);
+        route.meta.headerKey = 'pageTitles.loginSettings';
+        route.meta.pageTitleKey = 'pageTitles.loginSettings';
+        route.meta.formatArguments = { biometricType };
+      }
       break;
     }
     case PRE_REGISTRATION_INFORMATION.name: {

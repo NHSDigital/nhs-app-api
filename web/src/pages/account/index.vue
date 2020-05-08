@@ -76,6 +76,7 @@ export default {
       nativeLoginOptionsMethodExists: true,
       cookiesPath: ACCOUNT_COOKIES.path,
       linkedProfilesPath: LINKED_PROFILES.path,
+      webBiometricsEnabled: this.$store.app.$env.WEB_BIOMETRICS_ENABLED,
     };
   },
   computed: {
@@ -92,7 +93,9 @@ export default {
     },
   },
   mounted() {
-    this.nativeLoginOptionsMethodExists = NativeCallbacks.goToLoginOptionsExists();
+    if (!this.webBiometricsEnabled) {
+      this.nativeLoginOptionsMethodExists = NativeCallbacks.goToLoginOptionsExists();
+    }
     if (this.$store.state.device.isNativeApp) {
       this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.settings'));
     }

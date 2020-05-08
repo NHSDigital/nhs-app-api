@@ -106,6 +106,10 @@ spec:
         - name: BIOMETRICS_ENABLED
           value: "true"
         {{- end }}
+        {{- if $.Values.webBiometricsEnabled }}
+        - name: WEB_BIOMETRICS_ENABLED
+          value: "true"
+        {{- end }}
         {{- if $.Values.throttlingEnabled }}
         - name: THROTTLING_ENABLED
           value: "true"

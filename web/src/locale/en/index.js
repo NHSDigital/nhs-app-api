@@ -1,4 +1,5 @@
 import components from './components';
+import loginSettings from './loginSettings';
 import thirdPartyProviders from './third-party-providers';
 
 export default {
@@ -1651,6 +1652,8 @@ export default {
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
     preRegistrationInformation: 'Before you start',
     userResearch: 'Help improve the NHS App',
+    loginSettings: '{biometricType}',
+    loginSettingsNoType: 'Login options',
   },
   pageTitles: {
     home: 'Home',
@@ -1743,6 +1746,8 @@ export default {
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
     preRegistrationInformation: 'Before you start',
     userResearch: 'Help improve the NHS App',
+    loginSettings: '{biometricType}',
+    loginSettingsNoType: 'Login options',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',
@@ -2659,5 +2664,6 @@ export default {
     sentAtTimeYesterdayFormat: '[Sent yesterday at ]{timeFormat}',
   },
   components,
+  loginSettings,
   thirdPartyProviders,
 };

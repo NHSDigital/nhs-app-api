@@ -12,6 +12,7 @@ import header from './modules/header';
 import http from './modules/http';
 import knownServices from './modules/knownServices';
 import linkedAccounts from './modules/linkedAccounts';
+import loginSettings from './modules/loginSettings';
 import modal from './modules/modal';
 import messaging from './modules/messaging';
 import myAppointments from './modules/myAppointments';
@@ -48,6 +49,7 @@ export const modules = {
   http,
   knownServices,
   linkedAccounts,
+  loginSettings,
   messaging,
   modal,
   myAppointments,

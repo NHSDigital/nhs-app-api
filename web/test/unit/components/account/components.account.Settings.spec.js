@@ -1,17 +1,35 @@
 import Settings from '@/components/account/Settings';
-import { ACCOUNT_NOTIFICATIONS } from '@/lib/routes';
-import { createRouter, mount } from '../../helpers';
+import { ACCOUNT_NOTIFICATIONS, LOGIN_SETTINGS } from '@/lib/routes';
+import { createRouter, mount, createStore } from '../../helpers';
 
 describe('Settings', () => {
   let $router;
   let wrapper;
+  let $store;
 
-  const mountSettings = ({ showBiometrics = true, showNotifications = true,
-    showLinkedProfiles = true } = {}) => {
+  const mountSettings = ({
+    showBiometrics = true,
+    showNotifications = true,
+    showLinkedProfiles = true,
+    webBiometrics = false } = {}) => {
     $router = createRouter();
+    $store = createStore({
+      $env: {
+        WEB_BIOMETRICS_ENABLED: webBiometrics,
+      },
+    });
     return mount(Settings, {
       $router,
-      propsData: { showBiometrics, showNotifications, showLinkedProfiles },
+      methods: {
+        configureWebContext(url) {
+          return url;
+        },
+      },
+      $store,
+      propsData: {
+        showBiometrics,
+        showNotifications,
+        showLinkedProfiles },
     });
   };
 
@@ -79,6 +97,36 @@ describe('Settings', () => {
 
     it('can see Notifications', () => {
       expect(notificationsLink.exists()).toBe(true);
+    });
+  });
+
+  describe('Biometric Link', () => {
+    describe('biometrics web enabled', () => {
+      let biometricsLink;
+
+      beforeEach(() => {
+        wrapper = mountSettings({ webBiometrics: true });
+        biometricsLink = wrapper.find('#btn_passwordOptions');
+      });
+
+      it('will navigate to the web biometrics', () => {
+        biometricsLink.trigger('click');
+        expect($router.push).toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+      });
+    });
+
+    describe('biometrics web disabled', () => {
+      let biometricsLink;
+
+      beforeEach(() => {
+        wrapper = mountSettings({ webBiometrics: false });
+        biometricsLink = wrapper.find('#btn_passwordOptions');
+      });
+
+      it('will navigate to the native biometrics', () => {
+        biometricsLink.trigger('click');
+        expect($router.push).not.toHaveBeenCalledWith(LOGIN_SETTINGS.path);
+      });
     });
   });
 });
