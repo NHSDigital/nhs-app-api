@@ -79,4 +79,6 @@ interface IInteractor {
 
     fun switchToFingerprintSuccessView()
 
+    fun updateBiometricRegistration()
+
 }

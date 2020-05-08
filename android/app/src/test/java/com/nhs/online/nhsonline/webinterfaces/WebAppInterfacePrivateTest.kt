@@ -279,4 +279,11 @@ class WebAppInterfacePrivateTest {
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).startDownload("base64", "file", "mime")
     }
+
+    @Test
+    fun updateBiometricRegistrationTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterfacePrivate.updateBiometricRegistration()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+    }
 }

@@ -1660,6 +1660,9 @@ export default {
     userResearch: 'Help improve the NHS App',
     loginSettings: '{biometricType}',
     loginSettingsNoType: 'Login options',
+    loginSettingsErrorCannotFind: 'We cannot find your {biometricType}',
+    loginSettingsErrorCannotChange: 'We could not change your {biometricType} settings',
+    loginBiometricError: 'We could not log you in',
   },
   pageTitles: {
     home: 'Home',
@@ -1754,6 +1757,9 @@ export default {
     userResearch: 'Help improve the NHS App',
     loginSettings: '{biometricType}',
     loginSettingsNoType: 'Login options',
+    loginSettingsErrorCannotFind: 'We cannot find your {biometricType}',
+    loginSettingsErrorCannotChange: 'We could not change your {biometricType} settings',
+    loginBiometricError: 'We could not log you in',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',
@@ -2363,6 +2369,10 @@ export default {
   },
   login: {
     desc: 'To access your NHS services',
+  },
+  loginBiometricError: {
+    paragraph1: 'Go back to the homepage and try logging in again.',
+    paragraph2: 'If you keep seeing this message, go back to the homepage and log in using your email, password and security code.',
   },
   surveyBar: {
     barText: 'Help us make this service better.',

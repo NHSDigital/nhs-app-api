@@ -7,6 +7,31 @@ class AppWebInterface {
         self.webView = webView
     }
     
+    func biometricCompletion(action: String, outcome: String, errorCode: String) {
+        let response = """
+        {
+            action: '\(action)',
+            outcome: '\(outcome)',
+            errorCode: '\(errorCode)'
+        }
+        """
+        dispatchEvent(event: "loginSettings/biometricCompletion", args: response)
+    }
+    
+    func biometricSpec(biometricTypeReference: String, enabled: Bool) {
+        let response = """
+        {
+            biometricTypeReference: '\(biometricTypeReference)',
+            enabled: \(enabled)
+        }
+        """
+        dispatchEvent(event: "loginSettings/biometricSpec", args: response)
+    }
+    
+    func biometricLoginFailure() {
+        dispatchEvent(event: "login/handleBiometricLoginFailure")
+    }
+    
     func getNotificationsStatus(status: String) {
         dispatchEvent(event: "notifications/settingsStatus", args: "'\(status)'")
     }
@@ -24,7 +49,14 @@ class AppWebInterface {
     }
     
     func notificationsAuthorised(devicePns: String, trigger: String) {
-        let response = "'{\"devicePns\":\"\(devicePns)\",\"deviceType\":\"ios\",\"trigger\":\"\(trigger)\"}'"
+        let response = """
+            {
+                devicePns:'\(devicePns)',
+                deviceType:'ios',
+                trigger:'\(trigger)'
+            
+            }
+        """
         dispatchEvent(event: "notifications/authorised", args: response)
     }
     

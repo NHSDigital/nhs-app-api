@@ -40,6 +40,9 @@ class MyAccountPage : HybridPageObject() {
     val linkedProfilesLink = link("Linked profiles")
     val cookieLink = link("Cookies")
     val loginAndPasswordOptionsLink = link("Login options")
+    val faceIDLink = link("Face ID")
+    val touchIDLink = link("Touch ID")
+    val fingerprintLink = link("Fingerprint")
     val notificationsLink = link("Notifications")
 
     fun assertDisplayed() {
@@ -62,6 +65,18 @@ class MyAccountPage : HybridPageObject() {
 
     fun assertLoginAndPasswordOptionsIsPresent() {
         loginAndPasswordOptionsLink.assertIsVisible()
+    }
+
+    fun assertFaceIDIsPresent() {
+        faceIDLink.assertIsVisible()
+    }
+
+    fun assertTouchIDIsPresent() {
+        touchIDLink.assertIsVisible()
+    }
+
+    fun assertFingerprintIsPresent() {
+        fingerprintLink.assertIsVisible()
     }
 
     fun assertLoginAndPasswordOptionsIsNotPresent() {

@@ -191,3 +191,9 @@ Feature: Login frontend
       | GP System |
       | EMIS      |
       | TPP       |
+
+  Scenario: A patient that gets an error due to failing biometric login sees the error page
+    Given I am a patient using the native app
+    And I am on the login logged-out page
+    When I attempt biometric login and fail
+    Then I see the login biometric error page is displayed

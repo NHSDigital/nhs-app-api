@@ -21,7 +21,7 @@
         <div class="nhsuk-u-margin-top-5">
           <labelled-toggle v-model="registered"
                            checkbox-id="updateBiometricReg"
-                           :is-waiting="false"
+                           :is-waiting="isWaiting"
                            :label="toggleLabel"/>
         </div>
       </div>
@@ -42,10 +42,9 @@ export default {
     LabelledToggle,
   },
   data() {
-    const biometricType = this.$t(this.$store.getters['loginSettings/deviceBiometricType']);
+    const biometricType = this.$t(this.$store.getters['loginSettings/getDeviceBiometricNameString']);
     return {
       biometricType,
-      warningText: this.$t('loginSettings.biometrics.warningText.wt1', { biometricType }),
       toggleLabel: this.$t('loginSettings.biometrics.toggleLabel', { biometricType }),
       biometricInformation: this.$t(this.$store.getters['loginSettings/getBiometricInformation']),
       biometricWarningText: this.$t(this.$store.getters['loginSettings/getBiometricWarningText']),
@@ -53,15 +52,21 @@ export default {
     };
   },
   computed: {
+    isWaiting() {
+      return this.$store.state.loginSettings.isWaiting;
+    },
     registered: {
       get() {
         return this.$store.getters['loginSettings/biometricState'];
       },
       set() {
         this.$store.dispatch('spinner/prevent', true);
-        this.$store.dispatch('loginSettings/updateRegistrationStatus');
+        this.$store.dispatch('loginSettings/updateRegistration');
       },
     },
+  },
+  mounted() {
+    this.$store.dispatch('loginSettings/clearErrorCode');
   },
 };
 </script>

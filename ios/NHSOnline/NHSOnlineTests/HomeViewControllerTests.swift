@@ -119,6 +119,38 @@ class HomeViewControllerTests: XCTestCase {
 
         XCTAssertTrue(testResult)
     }
+    
+    func test_isBiometricErrorPage_RandomUrl_Returns_False() {
+        testWebview.load(URLRequest(url: URL(string: "https://www.google.com/")!))
+
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().BiometricLoginErrorPath)
+
+        XCTAssertFalse(testResult)
+    }
+
+    func test_isBiometricErrorPage_BaseHostNoPath_Returns_False() {
+        testWebview.load(URLRequest(url: URL(string: config().HomeUrl)!))
+
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().BiometricLoginErrorPath)
+
+        XCTAssertFalse(testResult)
+    }
+
+    func test_isBiometricErrorPage_NilUrl_Returns_False() {
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().BiometricLoginErrorPath)
+
+        XCTAssertFalse(testResult)
+    }
+
+    func test_isBiometricErrorPage_CorrectBaseHost_AndBiometricErrorPath_Returns_True() {
+        let biometricPath = config().BiometricLoginErrorPath
+
+        testWebview.load(URLRequest(url: ((URL(string: config().HomeUrl)?.appendingPathComponent(String(biometricPath.dropFirst())))!)))
+
+        let testResult = vcHome.checkCurrentUrlForPath(webview: testWebview, urlPath: config().BiometricLoginErrorPath)
+
+        XCTAssertTrue(testResult)
+    }
 
     func test_delayedBiometricsStart_shouldClearMenuBar() {
         testWebview.load(URLRequest(url: ((URL(string:

@@ -97,6 +97,8 @@ import {
   GP_MESSAGES_VIEW_MESSAGE,
   GP_MESSAGES_VIEW_ATTACHMENT,
   LOGIN_SETTINGS,
+  LOGIN_SETTINGS_ERROR,
+  LOGIN_BIOMETRIC_ERROR,
   PRE_REGISTRATION_INFORMATION,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -124,6 +126,8 @@ import {
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import PharmacyTypeChoice from '@/lib/pharmacy-detail/pharmacy-type-choice';
 import get from 'lodash/fp/get';
+import biometricErrorCodes from '@/lib/biometrics/biometricErrorCodes';
+import biometricTypes from '../lib/biometrics/biometricTypes';
 
 function setPageTitle(route, store, app) {
   let header = '';
@@ -574,7 +578,7 @@ export default function ({ route, store, app }) {
       break;
     }
     case LOGIN_SETTINGS.name: {
-      const biometricTypeReference = get('state.loginSettings.biometricType')(store);
+      const biometricTypeReference = get('state.loginSettings.biometricLocaleReference')(store);
       if (biometricTypeReference === undefined) {
         route.meta.headerKey = 'pageTitles.loginSettingsNoType';
         route.meta.pageTitleKey = 'pageTitles.loginSettingsNoType';
@@ -584,6 +588,30 @@ export default function ({ route, store, app }) {
         route.meta.pageTitleKey = 'pageTitles.loginSettings';
         route.meta.formatArguments = { biometricType };
       }
+      break;
+    }
+    case LOGIN_SETTINGS_ERROR.name: {
+      const biometricTypeReference = get('state.loginSettings.biometricLocaleReference')(store);
+      const errorCode = get('state.loginSettings.errorCode')(store);
+      let biometricType = app.i18n.tc(biometricTypeReference);
+      if (biometricType.toLocaleLowerCase() === biometricTypes.Fingerprint.toLocaleLowerCase()) {
+        biometricType = biometricType.toLocaleLowerCase();
+      }
+
+      if (errorCode === biometricErrorCodes.CannotFindBiometrics) {
+        route.meta.headerKey = 'pageTitles.loginSettingsErrorCannotFind';
+        route.meta.pageTitleKey = 'pageTitles.loginSettingsErrorCannotFind';
+      } else {
+        route.meta.headerKey = 'pageTitles.loginSettingsErrorCannotChange';
+        route.meta.pageTitleKey = 'pageTitles.loginSettingsErrorCannotChange';
+      }
+
+      route.meta.formatArguments = { biometricType };
+      break;
+    }
+    case LOGIN_BIOMETRIC_ERROR.name: {
+      route.meta.headerKey = 'pageTitles.loginBiometricError';
+      route.meta.pageTitleKey = 'pageTitles.loginBiometricError';
       break;
     }
     case PRE_REGISTRATION_INFORMATION.name: {

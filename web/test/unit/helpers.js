@@ -47,13 +47,16 @@ export const mockCookies = () => ({
 
 export const createEvent = event => ({ preventDefault: jest.fn(), ...event });
 
-export const createRouter = () => ({
+export const createRouter = (name = undefined) => ({
   go: jest.fn(),
   goBack: jest.fn(),
   push: jest.fn(),
   history: {
     router: {
       previousPaths: [],
+    },
+    current: {
+      name,
     },
   },
 });

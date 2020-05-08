@@ -77,6 +77,8 @@
 	<string>$(CHECK_SYMPTOMS_URL_PATH)</string>
 	<key>PreRegistrationInstructionsPath</key>
 	<string>$(PRE_REGISTRATION_INFORMATION_PATH)</string>
+	<key>BiometricLoginErrorPath</key>
+	<string>$(BIOMETRIC_LOGIN_ERROR_PATH)</string>
 	<key>CidUrlSuffix</key>
 	<string>$(CID_URL_SUFFIX)</string>
 	<key>ConditionsUrlPath</key>

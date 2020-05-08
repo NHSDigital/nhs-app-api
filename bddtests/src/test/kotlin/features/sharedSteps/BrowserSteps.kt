@@ -4,9 +4,12 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.openqa.selenium.Cookie
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.HybridPageObject
+import pages.account.MyAccountPage
 import pages.loggedOut.LoginPage
+import pages.account.LoginSettingsPage
 import utils.GlobalSerenityHelpers
 import utils.getOrNull
 import utils.set
@@ -25,6 +28,8 @@ private const val CHROME_RECOVERY_TIME = 5000L
 open class BrowserSteps {
 
     lateinit var loginPage: LoginPage
+    lateinit var accountPage: MyAccountPage
+    lateinit var loginSettingsPage: LoginSettingsPage
 
     @Step
     open fun goToApp() {
@@ -158,4 +163,40 @@ open class BrowserSteps {
     fun closeApp() {
         loginPage.driver.close()
     }
+
+    @Step
+    fun setBiometricType(biometricReference: String) {
+        triggerWindowDispatch(
+                accountPage.driver as JavascriptExecutor,
+                "loginSettings/biometricSpec",
+                "{ biometricTypeReference:'${biometricReference}', enabled: false}"
+        )
+    }
+
+    @Step
+    fun setBiometricCompletionResult(action: String, outcome: String, errorCode: String) {
+        triggerWindowDispatch(
+                loginSettingsPage.driver as JavascriptExecutor,
+                "loginSettings/biometricCompletion",
+                "{ action:'${action}', outcome:'${outcome}', errorCode:'${errorCode}' }"
+        )
+    }
+
+    @Step
+    fun triggerBiometricLoginError() {
+        triggerWindowDispatch(
+                loginPage.driver as JavascriptExecutor,
+                "login/handleBiometricLoginFailure", ""
+        )
+    }
+
+    private fun triggerWindowDispatch (jsExecutor: JavascriptExecutor, event: String, arg: String) {
+        jsExecutor.executeScript("""
+            this.window.${'$'}nuxt.${'$'}store.dispatch(
+                "$event", 
+                $arg
+            )"""
+        )
+    }
+
 }

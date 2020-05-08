@@ -20,7 +20,7 @@ describe('notifications actions', () => {
     let exception;
     const execute = async () => {
       try {
-        await actions.authorised({ commit, state }, JSON.stringify(deviceResponse));
+        await actions.authorised({ commit, state }, deviceResponse);
       } catch (e) {
         exception = e;
       }
@@ -107,7 +107,7 @@ describe('notifications actions', () => {
       describe('found', () => {
         beforeEach(async () => {
           getSuccess = true;
-          await actions.authorised({ commit, state }, JSON.stringify(deviceResponse));
+          await actions.authorised({ commit, state }, deviceResponse);
         });
 
         it('will call the `getV1ApiUsersDevices` endpoint', () => {
@@ -126,7 +126,7 @@ describe('notifications actions', () => {
       describe('not found', () => {
         beforeEach(async () => {
           getSuccess = false;
-          await actions.authorised({ commit, state }, JSON.stringify(deviceResponse));
+          await actions.authorised({ commit, state }, deviceResponse);
         });
 
         it('will call the `getV1ApiUsersDevices` endpoint', () => {
@@ -151,7 +151,7 @@ describe('notifications actions', () => {
       describe('not registered', () => {
         beforeEach(async () => {
           state.registered = false;
-          await actions.authorised({ commit, state }, JSON.stringify(deviceResponse));
+          await actions.authorised({ commit, state }, deviceResponse);
         });
 
         it('will call the `postV1ApiUsersDevices` endpoint', () => {
@@ -183,7 +183,7 @@ describe('notifications actions', () => {
       describe('registered', () => {
         beforeEach(async () => {
           state.registered = true;
-          await actions.authorised({ commit, state }, JSON.stringify(deviceResponse));
+          await actions.authorised({ commit, state }, deviceResponse);
         });
 
         it('will call the `deleteV1ApiUsersDevices` endpoint', () => {

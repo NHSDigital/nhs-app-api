@@ -1,5 +1,5 @@
-import loginSettings from '@/pages/account/login-settings/';
-import { mount, createRouter, createStore } from '../../helpers';
+import loginSettings from '@/pages/account/login-settings/index';
+import { mount, createRouter, createStore } from '../../../helpers';
 
 describe('login settings page', () => {
   let wrapper;
@@ -25,7 +25,7 @@ describe('login settings page', () => {
       },
       getters: {
         'loginSettings/biometricState': biometricsRegistrationStatus,
-        'loginSettings/deviceBiometricType': biometricType,
+        'loginSettings/getDeviceBiometricNameString': biometricType,
       },
     });
     wrapper = mount(loginSettings,
@@ -82,7 +82,7 @@ describe('login settings page', () => {
         it('will dispatch `loginSettings/updateRegistrationStatus` when clicked',
           () => {
             wrapper.find('label').trigger('click');
-            expect($store.dispatch).toBeCalledWith('loginSettings/updateRegistrationStatus');
+            expect($store.dispatch).toHaveBeenLastCalledWith('loginSettings/updateRegistration');
           });
       });
 

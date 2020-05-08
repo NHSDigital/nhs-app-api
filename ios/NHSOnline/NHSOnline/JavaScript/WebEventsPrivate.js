@@ -88,3 +88,7 @@ window.nativeApp.updateHeaderText = function(header) {
 window.nativeApp.startDownload = function(base64Data, fileName, mimeType) {
     window.webkit.messageHandlers.startDownload.postMessage(base64Data + "|split|" + fileName + "|split|" + mimeType);
 }
+
+window.nativeApp.updateBiometricRegistration = function() {
+    window.webkit.messageHandlers.updateBiometricRegistration.postMessage(null);
+};

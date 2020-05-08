@@ -736,4 +736,8 @@ class MainActivity :
     override fun switchToFingerprintSuccessView() {
         activityViewSwitcher.switchTo(ActivityView.FINGERPRINT_SUCCESS)
     }
+
+    override fun updateBiometricRegistration() {
+        TODO("Not yet implemented")
+    }
 }

@@ -4,10 +4,15 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import pages.account.MyAccountPage
 import pages.assertElementNotPresent
+import features.sharedSteps.BrowserSteps
+import net.thucydides.core.annotations.Steps
 
 class MyAccountStepDefinitions {
 
     lateinit var myAccount: MyAccountPage
+
+    @Steps
+    lateinit var browser: BrowserSteps
 
     @When("I click the Notifications link on the Account page")
     fun iClickTheNotificationsLinkOnTheAccountPage() {
@@ -39,9 +44,23 @@ class MyAccountStepDefinitions {
         myAccount.assertLinkedProfilesLinkIsNotPresent()
     }
 
-    @Then("^the Login options link is displayed$")
-    fun theLoginAndPasswordOptionsLinkIsDisplayed() {
-        myAccount.assertLoginAndPasswordOptionsIsPresent()
+    @Then("^the (.*) settings link is displayed$")
+    fun theLoginAndPasswordOptionsLinkIsDisplayed(linkText: String) {
+        when (linkText) {
+            "Face ID" -> {
+                browser.setBiometricType("face")
+                myAccount.assertFaceIDIsPresent()
+            }
+            "Login options" -> myAccount.assertLoginAndPasswordOptionsIsPresent()
+            "Touch ID" -> {
+                browser.setBiometricType("touch")
+                myAccount.assertTouchIDIsPresent()
+            }
+            "Fingerprint" -> {
+                browser.setBiometricType("fingerPrint")
+                myAccount.assertFingerprintIsPresent()
+            }
+        }
     }
 
     @Then("^the Login options link is not displayed$")
@@ -49,9 +68,14 @@ class MyAccountStepDefinitions {
         myAccount.assertLoginAndPasswordOptionsIsNotPresent()
     }
 
-    @Then("^I click the Login options link$")
-    fun iClickTheLoginAndPasswordOptionsLink() {
-        myAccount.loginAndPasswordOptionsLink.click()
+    @Then("^I click the (.*) link on the settings page$")
+    fun iClickTheLoginAndPasswordOptionsLink(linkText: String) {
+        when (linkText) {
+            "Face ID" -> myAccount.faceIDLink.click()
+            "Login options" -> myAccount.loginAndPasswordOptionsLink.click()
+            "Touch ID" -> myAccount.touchIDLink.click()
+            "Fingerprint" -> myAccount.fingerprintLink.click()
+        }
     }
 
     @Then("the Account Settings are available")

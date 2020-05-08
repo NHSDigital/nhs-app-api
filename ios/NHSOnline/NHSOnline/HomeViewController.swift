@@ -236,7 +236,7 @@ class HomeViewController : UIViewController {
     }
     
     func setupBackArrow() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.checkSymptomsAndCIDBack))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.loggedOutPagesAndCIDBack))
         self.headerBarSlim.backButtonArrow.isUserInteractionEnabled = true
         self.headerBarSlim.backButtonArrow.addGestureRecognizer(tapGesture)
     }
@@ -467,13 +467,14 @@ class HomeViewController : UIViewController {
         v.tag = 2
         self.view.addSubview(v)
     }
-    @objc func checkSymptomsAndCIDBack() {
+    @objc func loggedOutPagesAndCIDBack() {
         if let webview = self.webViewController?.webView {
             let backForwardList = webview.backForwardList
             
             if(checkCurrentUrlForPath(webview: webview, urlPath: config().CheckSymptomsUrlPath)
                 || hasCidUrlSuffix(webview: webview)
-                || checkCurrentUrlForPath(webview: webview, urlPath: config().PreRegistrationInstructionsPath)){
+                || checkCurrentUrlForPath(webview: webview, urlPath: config().PreRegistrationInstructionsPath)
+                || checkCurrentUrlForPath(webview: webview, urlPath: config().BiometricLoginErrorPath)){
                 self.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
                 self.showWhiteScreen()
                 self.webViewController?.loadPage(url: config().HomeUrl)

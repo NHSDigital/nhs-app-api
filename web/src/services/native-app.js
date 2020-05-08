@@ -253,4 +253,15 @@ export default {
     }
     return false;
   },
+
+  updateBiometricRegistration() {
+    const app = window.nativeApp;
+
+    if (app && app.updateBiometricRegistration) {
+      app.updateBiometricRegistration();
+      return true;
+    }
+
+    return false;
+  },
 };

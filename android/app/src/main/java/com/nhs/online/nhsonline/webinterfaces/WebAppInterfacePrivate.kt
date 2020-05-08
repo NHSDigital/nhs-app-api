@@ -174,6 +174,12 @@ class WebAppInterfacePrivate(
         runAction{ uiInteractor.startDownload(base64Data, fileName, mimeType) }
     }
 
+    @JavascriptInterface
+    fun updateBiometricRegistration() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateBiometricRegistration")
+        runAction { uiInteractor.updateBiometricRegistration() }
+    }
+
     private fun runAction(action: () -> Unit){
         if(nhsWeb.javaScriptInteractionMode == JavaScriptInteractionMode.NhsApp){
             activity.runOnUiThread(action)

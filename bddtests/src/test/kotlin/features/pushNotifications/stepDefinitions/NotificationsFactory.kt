@@ -92,10 +92,16 @@ class NotificationsFactory {
     }
 
     private fun mockNotificationsAuthorised(pns: String, deviceType: String): String {
-        return "requestPnsToken : " +
-                "function(trigger){window.\$nuxt.\$store.dispatch(" +
-                "'notifications/authorised', " +
-                "'{\"devicePns\":\"$pns\",\"deviceType\":\"$deviceType\", \"trigger\":\"' + trigger +'\"}')}"
+        return """requestPnsToken : function(trigger){
+                    window.${'$'}nuxt.${'$'}store.dispatch(
+                        'notifications/authorised',
+                        {
+                            devicePns:'$pns',
+                            deviceType:'$deviceType', 
+                            trigger
+                        }
+                    )
+                }"""
     }
 
     private fun mockNotificationsUnauthorised(): String {

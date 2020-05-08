@@ -72,11 +72,17 @@ Feature: View My Account Page
     And the Linked Profiles link is not displayed
     And the Cookies link is displayed
 
-  Scenario: A patient can navigate to the Login Settings page on their native device
+  Scenario Outline: A patient can navigate to the <Biometric Type> page on their native device
     Given I am a EMIS patient using the native app
     And I am logged in
     When I retrieve the 'account' page directly
     Then the Account page for mobile devices is displayed
-    And the Login options link is displayed
-    And I click the Login options link
-    And I see the login options page
+    And the <Biometric Type> settings link is displayed
+    And I click the <Biometric Type> link on the settings page
+    And I see the <Biometric Type> settings page
+    Examples:
+      | Biometric Type|
+      | Login options |
+      | Face ID       |
+      | Touch ID      |
+      | Fingerprint   |

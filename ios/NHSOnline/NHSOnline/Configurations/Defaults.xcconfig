@@ -22,6 +22,7 @@ AUTH_REDIRECT_PATH = /auth-return
 BASE_SCHEME = https
 CHECK_SYMPTOMS_URL_PATH = /check-your-symptoms
 PRE_REGISTRATION_INFORMATION_PATH = /pre-registration-information
+BIOMETRIC_LOGIN_ERROR_PATH = /biometric-login-error
 APP_SCHEME = nhsapp
 MEDICAL_RECORD_ABBREVIATIONS_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/abbreviations/
 HELP_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help/

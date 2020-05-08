@@ -5,28 +5,24 @@ export default {
   deviceBiometricType(state) {
     return state.biometricType;
   },
-  getBiometricInformation(state) {
-    switch (state.biometricType) {
-      case 'loginSettings.biometrics.biometricType.fingerPrint':
-        return 'loginSettings.biometrics.biometricInformation.fingerPrint';
-      case 'loginSettings.biometrics.biometricType.face':
-        return 'loginSettings.biometrics.biometricInformation.face';
-      case 'loginSettings.biometrics.biometricType.touch':
-        return 'loginSettings.biometrics.biometricInformation.touch';
-      default:
-        return undefined;
+  getDeviceBiometricNameString(state) {
+    if (state.biometricType === undefined) {
+      return undefined;
     }
+    return `loginSettings.biometrics.biometricType.${state.biometricType}`;
+  },
+  getBiometricInformation(state) {
+    return `loginSettings.biometrics.warningText.${state.biometricType}`;
   },
   getBiometricWarningText(state) {
-    switch (state.biometricType) {
-      case 'loginSettings.biometrics.biometricType.fingerPrint':
-        return 'loginSettings.biometrics.warningText.fingerPrint';
-      case 'loginSettings.biometrics.biometricType.face':
-        return 'loginSettings.biometrics.warningText.face';
-      case 'loginSettings.biometrics.biometricType.touch':
-        return 'loginSettings.biometrics.warningText.touch';
-      default:
-        return undefined;
-    }
+    return `loginSettings.biometrics.warningText.${state.biometricType}`;
+  },
+
+  retrieveError(state) {
+    return state.errorCode;
+  },
+
+  retrieveCannotFindErrorText(state) {
+    return `loginSettings.biometrics.errors.cannotFindBiometricType.errorText.${state.biometricType}`;
   },
 };

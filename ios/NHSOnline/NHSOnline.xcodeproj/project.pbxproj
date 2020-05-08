@@ -105,6 +105,8 @@
 		F381CB161F572192394126D1 /* SchemeHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F381C6E851F503B59F4449F3 /* SchemeHandlersTests.swift */; };
 		F381CB4C747B08D2BC4ADB45 /* MailToSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F381C5DF75EABE8A1979D4BD /* MailToSchemeHandlerTests.swift */; };
 		F381CE46D03B8D3A42FC7693 /* TelSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F381C4477069757EE3EB44DC /* TelSchemeHandlerTests.swift */; };
+		F9AD8E34247BDD09008978B3 /* WebAppInterfacesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AD8E33247BDD09008978B3 /* WebAppInterfacesTests.swift */; };
+		F9C3FC54247AD1A80024F375 /* AppWebInterfaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C3FC53247AD1A80024F375 /* AppWebInterfaceTests.swift */; };
 		F9EBD64D237C25FE006FFA8C /* DataDownloadErrorStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD64C237C25FD006FFA8C /* DataDownloadErrorStrings.swift */; };
 		F9EBD64F237C260D006FFA8C /* DataDownloadStringHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */; };
 		F9EBD652237C3C5F006FFA8C /* DataDownloadAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EBD651237C3C5F006FFA8C /* DataDownloadAlertType.swift */; };
@@ -350,6 +352,8 @@
 		F381CB87FC6B3F0BDA06A19A /* MenuTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTab.swift; sourceTree = "<group>"; };
 		F381CC2349A20B18DF372019 /* ConfigurationServiceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationServiceProtocol.swift; sourceTree = "<group>"; };
 		F381CE2A5A0DDC8165E4F04A /* KnownService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KnownService.swift; sourceTree = "<group>"; };
+		F9AD8E33247BDD09008978B3 /* WebAppInterfacesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAppInterfacesTests.swift; sourceTree = "<group>"; };
+		F9C3FC53247AD1A80024F375 /* AppWebInterfaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWebInterfaceTests.swift; sourceTree = "<group>"; };
 		F9EBD64C237C25FD006FFA8C /* DataDownloadErrorStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDownloadErrorStrings.swift; sourceTree = "<group>"; };
 		F9EBD64E237C260D006FFA8C /* DataDownloadStringHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataDownloadStringHandler.swift; sourceTree = "<group>"; };
 		F9EBD651237C3C5F006FFA8C /* DataDownloadAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDownloadAlertType.swift; sourceTree = "<group>"; };
@@ -705,6 +709,7 @@
 		C20578162028B94800CDBDC5 /* NHSOnlineTests */ = {
 			isa = PBXGroup;
 			children = (
+				F9C3FC52247AD1630024F375 /* Interfaces */,
 				2EA7BDA32418FCAD00CFEDC8 /* Mocks */,
 				14A4187F22BBE1D6004C07C4 /* TabBarDelegateTests.swift */,
 				2EC6C6C82243128900EE49B9 /* Utils */,
@@ -879,6 +884,15 @@
 				F381C21CE00D37602BC492AE /* SchemeHandlers */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		F9C3FC52247AD1630024F375 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				F9C3FC53247AD1A80024F375 /* AppWebInterfaceTests.swift */,
+				F9AD8E33247BDD09008978B3 /* WebAppInterfacesTests.swift */,
+			);
+			path = Interfaces;
 			sourceTree = "<group>";
 		};
 		F9EBD64B237C25AD006FFA8C /* Download */ = {
@@ -1190,7 +1204,9 @@
 				DB75990E22FC2C98002C26F4 /* BiometricBreadcrumbTests.swift in Sources */,
 				F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */,
 				64C1C76D23E2E56E00FCBA57 /* UrlHelperTests.swift in Sources */,
+				F9AD8E34247BDD09008978B3 /* WebAppInterfacesTests.swift in Sources */,
 				2EA7BDA72418FCF700CFEDC8 /* ConfigurationProtocolMocks.swift in Sources */,
+				F9C3FC54247AD1A80024F375 /* AppWebInterfaceTests.swift in Sources */,
 				14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */,
 				2EA7BDA52418FCDD00CFEDC8 /* KnownServiceProtocolMocks.swift in Sources */,
 				C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */,

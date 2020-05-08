@@ -23,5 +23,18 @@ export default {
         paragraph2: 'You\'ll need to continue using your password and security code to log in.',
       },
     },
+    errors: {
+      cannotFindBiometricType: {
+        errorText: {
+          face: 'Check that you have added a face scan in your device\'s Face ID settings.',
+          touch: 'Check that you have added a fingerprint in your device\'s Touch ID settings.',
+          fingerPrint: 'Check that you have added a fingerprint in your device\'s security settings.',
+        },
+      },
+      cannotChangeBiometricSettings: {
+        paragraph1: 'Go back and try again.',
+        paragraph2: 'If you keep seeing this message, return to your settings later.',
+      },
+    },
   },
 };

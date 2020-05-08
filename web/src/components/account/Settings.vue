@@ -40,7 +40,7 @@ export default {
     },
   },
   data() {
-    const biometricType = this.$t(this.$store.getters['loginSettings/deviceBiometricType']);
+    const biometricType = this.$t(this.$store.getters['loginSettings/getDeviceBiometricNameString']);
     return {
       biometricType,
       webBiometricsEnabled: this.$store.app.$env.WEB_BIOMETRICS_ENABLED,
@@ -52,8 +52,8 @@ export default {
         return 'myAccount.accountSettings.passwordOptions';
       }
 
-      if (this.$store.getters['loginSettings/deviceBiometricType'] !== undefined) {
-        return this.$store.getters['loginSettings/deviceBiometricType'];
+      if (this.$store.getters['loginSettings/getDeviceBiometricNameString'] !== undefined) {
+        return this.$store.getters['loginSettings/getDeviceBiometricNameString'];
       }
 
       return 'loginSettings.biometrics.noBiometricType.settingsLinkText';

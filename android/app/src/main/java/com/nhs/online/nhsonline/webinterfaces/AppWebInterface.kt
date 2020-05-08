@@ -15,6 +15,31 @@ class AppWebInterface(private val webView: WebView) {
         }
     }
 
+    fun biometricCompletion(action: String, outcome: String, errorCode: String) {
+        val response = """
+            {
+                action: '$action',
+                outcome: '$outcome',
+                errorCode: '$errorCode'
+            }
+        """
+        loadDispatchEvent("loginSettings/biometricCompletion", response)
+    }
+
+    fun biometricSpec(biometricTypeReference: String, enabled: Boolean) {
+        val response = """
+            {
+                biometricTypeReference: '$biometricTypeReference',
+                enabled: $enabled
+            }
+        """
+        loadDispatchEvent("loginSettings/biometricSpec", response)
+    }
+
+    fun biometricLoginFailure() {
+        loadDispatchEvent("login/handleBiometricLoginFailure")
+    }
+
     fun logout() {
         loadDispatchEvent("auth/logout")
     }
@@ -28,7 +53,13 @@ class AppWebInterface(private val webView: WebView) {
     }
 
     fun notificationsAuthorised(devicePns: String, trigger: String) {
-        val response = "'{\"devicePns\":\"$devicePns\",\"deviceType\":\"android\",\"trigger\":\"$trigger\"}'"
+        val response = """
+            {
+                devicePns: '$devicePns',
+                deviceType: 'android',
+                trigger: '$trigger'
+            }
+        """
         loadDispatchEvent("notifications/authorised", response)
     }
 

@@ -1484,6 +1484,46 @@ const routes = {
       },
     },
     helpUrl: `${baseNhsAppHelpUrl}app-login/`,
+    redirectRules: [{
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/account',
+    }],
+  },
+  LOGIN_SETTINGS_ERROR: {
+    name: 'account-login-settings-error',
+    path: '/account/login-settings/error',
+    proofLevel: proofLevel.P5,
+    crumb: {
+      i18nKey: 'loginSettingsError',
+      get defaultCrumb() {
+        return [this.allRoutes.INDEX, this.allRoutes.ACCOUNT, this.allRoutes.LOGIN_SETTINGS];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}app-login/`,
+    redirectRules: [{
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/account',
+    }],
+  },
+  LOGIN_BIOMETRIC_ERROR: {
+    name: 'biometric-login-error',
+    path: '/biometric-login-error',
+    isAnonymous: true,
+    crumb: {
+      nativeDisabled: true,
+      i18nKey: 'biometricLoginError',
+      get defaultCrumb() {
+        return [];
+      },
+    },
+    helpUrl: `${baseNhsAppHelpUrl}app-login/`,
+    redirectRules: [{
+      condition: 'device/isNativeApp',
+      value: false,
+      url: '/',
+    }],
   },
   PRESCRIPTIONS_VIEW_ORDERS: {
     name: 'prescriptions-view-orders',
@@ -2037,6 +2077,8 @@ export const {
   GP_MESSAGES_DELETE_SUCCESS,
   GP_MESSAGES_VIEW_ATTACHMENT,
   LOGIN_SETTINGS,
+  LOGIN_SETTINGS_ERROR,
+  LOGIN_BIOMETRIC_ERROR,
   PRESCRIPTIONS_VIEW_ORDERS,
   PRESCRIPTIONS,
   PRESCRIPTIONS_GP_AT_HAND,

@@ -43,15 +43,56 @@ class AppWebInterfaceTest {
     @Test
     fun notificationsAuthorised() {
         appWebInterface.notificationsAuthorised("1234", "load")
-        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('notifications/authorised', " +
-                "'{\"devicePns\":\"1234\",\"deviceType\":\"android\",\"trigger\":\"load\"}')",
-                null)
+        verify(webviewMock).evaluateJavascript(
+            """window.${'$'}nuxt.${'$'}store.dispatch('notifications/authorised', 
+            {
+                devicePns: '1234',
+                deviceType: 'android',
+                trigger: 'load'
+            }
+        )""",
+            null)
     }
 
     @Test
     fun notificationsUnauthorised() {
         appWebInterface.notificationsUnauthorised()
         verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('notifications/unauthorised')",
+                null)
+    }
+
+    @Test
+    fun biometricCompletion() {
+        appWebInterface.biometricCompletion("Register", "Success", "")
+        verify(webviewMock).evaluateJavascript(
+                """window.${'$'}nuxt.${'$'}store.dispatch('loginSettings/biometricCompletion', 
+            {
+                action: 'Register',
+                outcome: 'Success',
+                errorCode: ''
+            }
+        )""",
+                null)
+    }
+
+    @Test
+    fun biometricSpec() {
+        appWebInterface.biometricSpec("FaceID", false)
+        verify(webviewMock).evaluateJavascript(
+                """window.${'$'}nuxt.${'$'}store.dispatch('loginSettings/biometricSpec', 
+            {
+                biometricTypeReference: 'FaceID',
+                enabled: false
+            }
+        )""",
+                null)
+    }
+
+    @Test
+    fun biometricLoginFailure() {
+        appWebInterface.biometricLoginFailure()
+        verify(webviewMock).evaluateJavascript(
+                "window.\$nuxt.\$store.dispatch('login/handleBiometricLoginFailure')",
                 null)
     }
 }
