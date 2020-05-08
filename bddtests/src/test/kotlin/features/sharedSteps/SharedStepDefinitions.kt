@@ -27,7 +27,6 @@ import pages.navigation.WebHeader
 import pages.withNormalisedText
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
-import utils.getOrNull
 import utils.set
 import webdrivers.browserstack.BrowserstackLocalService
 import webdrivers.options.OptionManager
@@ -122,9 +121,7 @@ open class SharedStepDefinitions {
 
         TermsAndConditionsJourneyFactory.consent(patient)
 
-        if (GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.getOrNull<Boolean>() == true) {
-            browser.setInstructionsCookie("true")
-        }
+        browser.setInstructionsCookie("true")
 
         login.using(patient)
         home.waitForLoginToCompleteSuccessfully()

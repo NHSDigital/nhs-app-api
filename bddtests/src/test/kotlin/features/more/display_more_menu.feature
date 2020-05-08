@@ -5,7 +5,7 @@ Feature: Display More Menu
 
   @native
   Scenario: A logged in user using the native app can navigate to the more screen
-    Given I am a EMIS patient
+    Given I am a EMIS patient using the native app
     And I am logged in
     And I navigate to More
     And I see the more page header

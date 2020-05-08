@@ -30,6 +30,7 @@ import org.junit.Assert.assertTrue
 import pages.prescription.PrescriptionsPage
 import pages.prescription.RepeatPrescriptionConfirmationPage
 import pages.prescription.RepeatPrescriptionsPage
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrNull
 import utils.set
@@ -90,6 +91,19 @@ open class PrescriptionsStepDefinitions {
 
     @Given("^I am patient using the (.*) GP System$")
     fun givenIAmAPatientUsingGPSystem(gpSystem: String) {
+        val supplier = Supplier.valueOf(gpSystem)
+        SerenityHelpers.setGpSupplier(supplier)
+        val currentPatient = Patient.getDefault(supplier)
+        SerenityHelpers.setPatient( currentPatient)
+        SerenityHelpers.setPatient(currentPatient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
+        SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(currentPatient)
+        PrescriptionsDataSetup.initialize(supplier)
+    }
+
+    @Given("^I am patient using the (.*) GP System natively$")
+    fun givenIAmAPatientUsingGPSystemNatively(gpSystem: String) {
+        GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
         val supplier = Supplier.valueOf(gpSystem)
         SerenityHelpers.setGpSupplier(supplier)
         val currentPatient = Patient.getDefault(supplier)

@@ -18,6 +18,8 @@ import pages.withNormalisedText
 import utils.SerenityHelpers
 import pages.navigation.NavBarNative
 import features.sharedSteps.NavigationSteps
+import utils.GlobalSerenityHelpers
+import utils.set
 
 class P5UpliftStepDefinitions : HybridPageObject() {
 
@@ -32,6 +34,23 @@ class P5UpliftStepDefinitions : HybridPageObject() {
 
   @Given("^I am a patient with proof level 5$")
   fun iAmAPatientWithProofLevel5() {
+    val supplier = Supplier.valueOf("EMIS")
+    mockingClient.clearWiremock()
+    mockingClient.favicon()
+
+    val patient = Patient.getDefault(supplier).copy(identityProofingLevel = IdentityProofingLevel.P5)
+
+    SerenityHelpers.setPatient(patient)
+    SerenityHelpers.setGpSupplier(supplier)
+
+    CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+    SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
+  }
+
+  @Given("^I am a patient logging in natively with proof level 5$")
+  fun iAmAPatientLoggingInNativelyWithProofLevel5() {
+    GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
+
     val supplier = Supplier.valueOf("EMIS")
     mockingClient.clearWiremock()
     mockingClient.favicon()
