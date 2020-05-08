@@ -97,6 +97,7 @@
     "nuxt": "2.11.0",
     "qs": "6.6.0",
     "querystring": "0.2.0",
+    "sanitize-filename": "1.6.3",
     "semver": "6.3.0",
     "swagger-node-codegen": "1.6.3",
     "uuid": "3.3.2",

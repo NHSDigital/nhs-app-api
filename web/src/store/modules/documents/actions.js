@@ -1,3 +1,5 @@
+import sanitize from 'sanitize-filename';
+
 import {
   INIT,
   CLEAR,
@@ -5,6 +7,10 @@ import {
   SET_SELECTED_DOCUMENT_INFO,
 } from './mutation-types';
 import NativeCallbacks from '@/services/native-app';
+
+const sanitizeFilename = sanitize;
+
+const SANITIZE_FILENAME_OPTIONS = { replacement: '_' };
 
 export default {
   init({ commit }) {
@@ -44,48 +50,61 @@ export default {
       },
     });
     const { userAgent } = window.navigator;
-    const fullFileName = `${fileName}.${fileExtension}`;
-    let blob;
-
+    const fullFileName = sanitizeFilename(`${fileName}.${fileExtension}`, SANITIZE_FILENAME_OPTIONS);
     /*
-      Edge or IE do not support the File constructor
-      IE does not support createObjectURL so need to use msSaveOrOpenBlob
-      Trident is used to match IE11 and MSIE is used for IE < 11
+      IE does not support the File constructor or createObjectURL so need
+      to use msSaveOrOpenBlob. Trident is used to match IE11.
+
       All other relevant browsers support File but do not seem to
       download if the Blob constructor is used.
     */
-    if (userAgent.match(/Edge/i)) {
-      blob = new Blob([response], fullFileName, { type: mimeType });
-    }
-
     if (userAgent.match(/Trident/i)) {
-      blob = new Blob([response], fullFileName, { type: mimeType });
+      const blob = new Blob([response], fullFileName, { type: mimeType });
+
       window.navigator.msSaveOrOpenBlob(blob, fullFileName);
+
       return;
     }
 
+    // Chrome for iOS
     if (userAgent.match(/CriOS/i)) {
       const reader = new FileReader();
-      blob = new File([response], fullFileName, { type: mimeType });
+      const blob = new File([response], fullFileName, { type: mimeType });
 
       reader.onload = () => {
         window.location.href = reader.result;
       };
       reader.readAsDataURL(blob);
+
       return;
     }
 
-    blob = new File([response], fullFileName, { type: mimeType });
+    let blob;
+
+    // Edge does not support the File constructor
+    if (userAgent.match(/Edge/i)) {
+      blob = new Blob([response], fullFileName, { type: mimeType });
+    } else {
+      blob = new File([response], fullFileName, { type: mimeType });
+    }
 
     if (isNative) {
       const fileReader = new FileReader();
 
       fileReader.readAsDataURL(blob);
-      fileReader.onloadend = () => {
-        const base64data = fileReader.result;
 
-        NativeCallbacks.startDownload(base64data, fullFileName, mimeType);
-      };
+      await new Promise((resolve, reject) => {
+        fileReader.onloadend = () => {
+          const base64data = fileReader.result;
+
+          NativeCallbacks.startDownload(base64data, fullFileName, mimeType);
+
+          resolve();
+        };
+
+        fileReader.onerror = reject;
+        fileReader.onabort = reject;
+      });
 
       return;
     }
