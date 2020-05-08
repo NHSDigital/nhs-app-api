@@ -37,6 +37,10 @@ run: run-deps	## Run in docker
 run-dev-stubs:	## Run in docker with dev stubs
 	$(MAKE) -C bddtests run-dev-stubs
 
+$(eval $(call expand_run_options_docker_images,run-perf-stubs))
+run-perf-stubs: $(SSH_CERT)	 ## Run performance stubs in docker
+	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/performance/docker-compose.yml
+
 $(eval $(call expand_run_options_docker_images,run-https))
 run-https: $(SSH_CERT)	## Run in docker with https
 	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/https/docker-compose.yml
