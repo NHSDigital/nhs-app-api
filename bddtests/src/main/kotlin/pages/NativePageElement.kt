@@ -4,10 +4,14 @@ import io.appium.java_client.MobileElement
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
+import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.WebElement
 import webdrivers.getLocatorStrategy
 import webdrivers.isIOS
 import java.lang.AssertionError
+
+const val MAX_WEB_DRIVER_EXCEPTIONS = 5
+const val MAX_ASSERTION_ERRORS = 2
 
 class NativePageElement(
         webDesktopLocator: String,
@@ -77,7 +81,6 @@ class NativePageElement(
                 FLOATING_BUTTON_HEIGHT_PX + NAVBAR_HEIGHT_PX)
 
         return isBehindHeader.or(isBehindFooter)
-
     }
 
     override fun click() {
@@ -91,19 +94,32 @@ class NativePageElement(
     }
 
     fun actOnTheNativeElement(actionOn: (elem: MobileElement) -> Unit) {
-        var retryAssertionsOnce = 2
-        while(retryAssertionsOnce>0) {
+        var assertionErrors = 0
+        var webDriverExceptions = 0
+        while (true) {
             try {
                 actionOn(selectNativeElement())
                 break
             }
             catch(e: StaleElementReferenceException){
-                Thread.sleep(MILLISECONDS_IN_A_SECOND)
+                println("Stale element exception suppressed")
             }
             catch(e: AssertionError) {
-                retryAssertionsOnce--
-                Thread.sleep(MILLISECONDS_IN_A_SECOND)
+                assertionErrors++
+                if (assertionErrors == MAX_ASSERTION_ERRORS) {
+                    throw e
+                }
+                println("Assertion error suppressed")
             }
+            catch(e: WebDriverException) {
+                webDriverExceptions++
+                if (webDriverExceptions == MAX_WEB_DRIVER_EXCEPTIONS) {
+                    throw e
+                }
+                println(e.toString())
+            }
+            println("Retrying")
+            Thread.sleep(MILLISECONDS_IN_A_SECOND)
         }
     }
 
