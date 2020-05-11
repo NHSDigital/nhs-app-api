@@ -6,6 +6,7 @@ import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionModeAdapter
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTabAdapter
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewModeAdapter
 import com.squareup.moshi.JsonDataException
@@ -27,6 +28,7 @@ class ConfigurationService(
             val jsonString = httpClient.readText(configurationUrl)
             return Moshi.Builder()
                     .add(MenuTabAdapter())
+                    .add(JavaScriptInteractionModeAdapter())
                     .add(ViewModeAdapter())
                     .build()
                     .adapter(Configuration::class.java)

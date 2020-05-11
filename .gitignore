@@ -24,3 +24,5 @@ bddtests/tmpDownloads/
 
 ios/NHSonline/NHSOnline.xcworkspace
 ios/NHSOnline/Pods
+android/.settings/org.eclipse.buildship.core.prefs
+android/app/.settings/org.eclipse.buildship.core.prefs

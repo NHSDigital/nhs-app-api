@@ -55,6 +55,7 @@
 		4AAEDF1F235744BE00439EC7 /* BiometricBreadcrumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4B658622FADDB300C8EE99 /* BiometricBreadcrumb.swift */; };
 		4BF31A1F435C7F730D9BC6A3 /* UrlHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF312899B19527799A781CD /* UrlHelper.swift */; };
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
+		647D0C5524694EAC00336949 /* WebEventsThirdParty.js in Resources */ = {isa = PBXBuildFile; fileRef = 647D0C5424694EAC00336949 /* WebEventsThirdParty.js */; };
 		64909CF83EEBD7876CEC4A9E /* Pods_NHSOnlineTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A57034DF92A742FFEFBF35D2 /* Pods_NHSOnlineTests.framework */; };
 		64C1C76423DB4E2400FCBA57 /* KnownServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C1C76323DB4E2400FCBA57 /* KnownServices.swift */; };
 		64C1C76B23E2E33600FCBA57 /* TelSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C1C76A23E2E33600FCBA57 /* TelSchemeHandler.swift */; };
@@ -87,7 +88,7 @@
 		F057336920A72F040059032D /* HeaderBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = F057336B20A72F040059032D /* HeaderBar.xib */; };
 		F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F065B3D7205FCFFE004EF388 /* HomeViewController.swift */; };
 		F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F065B3D9205FDFC6004EF388 /* TabBarDelegate.swift */; };
-		F07607F320B44C0300069F7F /* WebEvents.js in Resources */ = {isa = PBXBuildFile; fileRef = F07607F220B44C0300069F7F /* WebEvents.js */; };
+		F07607F320B44C0300069F7F /* WebEventsPrivate.js in Resources */ = {isa = PBXBuildFile; fileRef = F07607F220B44C0300069F7F /* WebEventsPrivate.js */; };
 		F07607F620B465E400069F7F /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07607F520B465E400069F7F /* FileReader.swift */; };
 		F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F0B4B8BA204D68DC004E4120 /* Localizable.strings */; };
 		F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B7D86F204EA1990078D56E /* WKWebView_Extensions.swift */; };
@@ -227,6 +228,7 @@
 		5E01AB4AED48C58A6C63F7B1 /* Pods-NHSOnline.production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.production.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.production.xcconfig"; sourceTree = "<group>"; };
 		609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime_Extensions.swift; sourceTree = "<group>"; };
 		62E61855971D414EE70893D6 /* Pods-NHSOnline.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.preview.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.preview.xcconfig"; sourceTree = "<group>"; };
+		647D0C5424694EAC00336949 /* WebEventsThirdParty.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebEventsThirdParty.js; sourceTree = "<group>"; };
 		64C1C76323DB4E2400FCBA57 /* KnownServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServices.swift; sourceTree = "<group>"; };
 		64C1C76A23E2E33600FCBA57 /* TelSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelSchemeHandler.swift; sourceTree = "<group>"; };
 		64C1C76C23E2E56E00FCBA57 /* UrlHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlHelperTests.swift; sourceTree = "<group>"; };
@@ -328,7 +330,7 @@
 		F057336A20A72F040059032D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HeaderBar.xib; sourceTree = "<group>"; };
 		F065B3D7205FCFFE004EF388 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		F065B3D9205FDFC6004EF388 /* TabBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarDelegate.swift; sourceTree = "<group>"; };
-		F07607F220B44C0300069F7F /* WebEvents.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebEvents.js; sourceTree = "<group>"; };
+		F07607F220B44C0300069F7F /* WebEventsPrivate.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebEventsPrivate.js; sourceTree = "<group>"; };
 		F07607F520B465E400069F7F /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
 		F0B4B8B2204D50E9004E4120 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		F0B4B8B9204D68DC004E4120 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -790,7 +792,8 @@
 		F07607F120B44B6900069F7F /* JavaScript */ = {
 			isa = PBXGroup;
 			children = (
-				F07607F220B44C0300069F7F /* WebEvents.js */,
+				F07607F220B44C0300069F7F /* WebEventsPrivate.js */,
+				647D0C5424694EAC00336949 /* WebEventsThirdParty.js */,
 			);
 			path = JavaScript;
 			sourceTree = "<group>";
@@ -1007,7 +1010,8 @@
 				DB4B658222FAD9E100C8EE99 /* BiometricBreadcrumb.xib in Resources */,
 				139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */,
 				2485C4E4246DA8390014F1C5 /* Pods-NHSOnline.onboardingsandpit.xcconfig in Resources */,
-				F07607F320B44C0300069F7F /* WebEvents.js in Resources */,
+				647D0C5524694EAC00336949 /* WebEventsThirdParty.js in Resources */,
+				F07607F320B44C0300069F7F /* WebEventsPrivate.js in Resources */,
 				C20578082028B94800CDBDC5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

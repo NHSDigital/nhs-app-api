@@ -73,8 +73,7 @@ class BiometricService: BiometricProtocol {
             urlComponents?.queryItems = queryItems
             
             homeViewController.webViewController?.loadPage(url: (urlComponents?.url)!)
-            homeViewController.tabBar.selectedItem = nil
-            homeViewController.selectedTab = nil
+            homeViewController.clearSelectedTab()
         } catch let error as FidoError {
             handleError(error)
         } catch {

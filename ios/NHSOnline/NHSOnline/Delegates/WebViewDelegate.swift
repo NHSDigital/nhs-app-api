@@ -242,13 +242,20 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             return
         }
         
-        guard let rootService = knownServices.getRootServiceByHostAndScheme(
-                host: message.frameInfo.securityOrigin.host, scheme: message.frameInfo.securityOrigin.protocol
-        ) else {
-            return
+        let knownService = knownServices.findMatchingKnownService(message.frameInfo.request.url)
+        
+        if (knownService.javaScriptInteractionMode == .SilverThirdParty){
+            switch message.name {
+            case "goToHomepage":
+                viewController.webViewController?.loadPage(url: config().HomeUrl)
+                clearMenuBarItem()
+                break
+            default:
+                break;
+            }
         }
 
-        if (rootService.javaScriptInteractionMode == .NhsApp) {
+        if (knownService.javaScriptInteractionMode == .NhsApp) {
             switch message.name {
             case "getNotificationsStatus":
                 viewController.getNotificationsStatus()
@@ -364,8 +371,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
 
     func clearMenuBarItem() {
-        self.viewController.tabBar.selectedItem = nil
-        self.viewController.selectedTab = nil
+        self.viewController.clearSelectedTab()
     }
 
     @objc func pageIsNotResponding() {

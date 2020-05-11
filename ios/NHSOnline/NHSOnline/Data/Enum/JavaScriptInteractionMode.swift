@@ -1,6 +1,7 @@
 enum JavaScriptInteractionMode: String, Codable {
     case None
     case NhsApp
+    case SilverThirdParty
     case Unknown
 
     init(from decoder: Decoder) throws {

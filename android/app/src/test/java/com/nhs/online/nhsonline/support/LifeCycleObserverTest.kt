@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.RootService
+import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
@@ -60,6 +61,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         validateSession = false,
                         menuTab = MenuTab.Unknown,
                         viewMode = ViewMode.Unknown,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
                         subServices = null
                 )
@@ -79,6 +81,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         validateSession = true,
                         menuTab = MenuTab.Unknown,
                         viewMode = ViewMode.Unknown,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
                         subServices = null
                 )
@@ -98,6 +101,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         validateSession = false,
                         menuTab = MenuTab.Unknown,
                         viewMode = ViewMode.Unknown,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
                         subServices = null
                 )
@@ -117,6 +121,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         validateSession = false,
                         menuTab = MenuTab.Unknown,
                         viewMode = ViewMode.Unknown,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
                         subServices = null
                 )
@@ -136,6 +141,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         validateSession = true,
                         menuTab = MenuTab.Unknown,
                         viewMode = ViewMode.Unknown,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
                         subServices = null
                 )
@@ -155,6 +161,7 @@ class LifeCycleObserverTest : ResourceMockingClass() {
                         validateSession = true,
                         menuTab = MenuTab.Unknown,
                         viewMode = ViewMode.Unknown,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                         url = url,
                         subServices = null
                 )

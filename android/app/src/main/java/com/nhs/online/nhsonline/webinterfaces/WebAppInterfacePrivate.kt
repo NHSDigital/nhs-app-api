@@ -6,31 +6,31 @@ import android.webkit.JavascriptInterface
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.interfaces.IInteractor
-import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.services.SettingsService
+import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.web.NhsWeb
 
-class WebAppInterface(
+class WebAppInterfacePrivate(
     private val activity: Activity,
-    private val uiInteractor: IInteractor,
     private val nhsWeb: NhsWeb,
+    private val uiInteractor: IInteractor,
     private val settingsService: SettingsService
 ) {
     @JavascriptInterface
     fun attemptBiometricLogin() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering attemptBiometricLogin")
-        activity.runOnUiThread { uiInteractor.showBiometricLoginIfEnabled() }
+        runAction { uiInteractor.showBiometricLoginIfEnabled() }
     }
 
     @JavascriptInterface
     fun clearMenuBarItem() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering clearMenuBarItem")
-        activity.runOnUiThread { uiInteractor.clearMenuBarItem() }
+        runAction { uiInteractor.clearMenuBarItem() }
     }
 
     @JavascriptInterface
     fun configureWebContext(helpUrl: String, retryPath: String) {
-        activity.runOnUiThread {
+        runAction {
             uiInteractor.setHelpUrl(helpUrl)
             uiInteractor.setRetryPath(retryPath)
         }
@@ -39,7 +39,7 @@ class WebAppInterface(
     @JavascriptInterface
     fun dismissProgressBar() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering dismissProgressBar")
-        activity.runOnUiThread { uiInteractor.dismissProgressDialog() }
+        runAction { uiInteractor.dismissProgressDialog() }
     }
 
     @JavascriptInterface
@@ -51,50 +51,48 @@ class WebAppInterface(
     @JavascriptInterface
     fun getNotificationsStatus() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering getNotificationsStatus")
-        activity.runOnUiThread { nhsWeb.getNotificationsStatus() }
+        runAction { nhsWeb.getNotificationsStatus() }
     }
 
     @JavascriptInterface
     fun goToLoginOptions() {
-        activity.runOnUiThread { uiInteractor.showNativeBiometricOptions() }
+        runAction { uiInteractor.showNativeBiometricOptions() }
     }
 
     @JavascriptInterface
     fun hideHeader() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeader")
-        activity.runOnUiThread { uiInteractor.hideHeader() }
+        runAction { uiInteractor.hideHeader() }
     }
 
     @JavascriptInterface
     fun hideHeaderSlim() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeaderSlim")
-        activity.runOnUiThread { uiInteractor.hideHeaderSlim() }
+        runAction { uiInteractor.hideHeaderSlim() }
     }
 
     @JavascriptInterface
     fun hideMenuBar() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideMenuBar")
-        activity.runOnUiThread { uiInteractor.hideMenuBar() }
+        runAction { uiInteractor.hideMenuBar() }
     }
 
     @JavascriptInterface
     fun hideWhiteScreen() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideWhiteScreen")
-        activity.runOnUiThread { uiInteractor.hideBlankScreen() }
+        runAction { uiInteractor.hideBlankScreen() }
     }
 
     @JavascriptInterface
     fun onLogin() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLogin")
-        activity.runOnUiThread { nhsWeb.onWebLoggedIn() }
+        runAction { nhsWeb.onWebLoggedIn() }
     }
 
     @JavascriptInterface
     fun onLogout() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLogout")
-        activity.runOnUiThread {
-            nhsWeb.onWebLoggedOut()
-        }
+        runAction { nhsWeb.onWebLoggedOut() }
     }
 
     @JavascriptInterface
@@ -113,7 +111,7 @@ class WebAppInterface(
     @JavascriptInterface
     fun onSessionExpiring() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onSessionExpiring")
-        activity.runOnUiThread { uiInteractor.showExtendSessionDialogue() }
+        runAction { uiInteractor.showExtendSessionDialogue() }
     }
 
     @JavascriptInterface
@@ -125,54 +123,60 @@ class WebAppInterface(
     @JavascriptInterface
     fun requestPnsToken(trigger: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering requestPnsToken")
-        activity.runOnUiThread { nhsWeb.requestPnsToken(trigger) }
+        runAction { nhsWeb.requestPnsToken(trigger) }
     }
 
     @JavascriptInterface
     fun resetPageFocus() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering resetPageFocus")
-        activity.runOnUiThread { uiInteractor.resetFocusToNhsLogoForAccessibility() }
+        runAction { uiInteractor.resetFocusToNhsLogoForAccessibility() }
     }
 
     @JavascriptInterface
     fun setHelpUrl(url: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName} Entering setHelpUrl")
-        activity.runOnUiThread { uiInteractor.setHelpUrl(url) }
+        runAction { uiInteractor.setHelpUrl(url) }
     }
 
     @JavascriptInterface
     fun setMenuBarItem(index: Int) {
         Log.d(Application.TAG, "${this::class.java.simpleName} Entering setMenuBarItem")
-        activity.runOnUiThread { uiInteractor.setMenuBarItem(index) }
+        runAction { uiInteractor.setMenuBarItem(index) }
     }
 
     @JavascriptInterface
     fun setZoomable(canZoom: Boolean) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering setZoomable")
-        activity.runOnUiThread{ uiInteractor.setZoomable(canZoom) }
+        runAction{ uiInteractor.setZoomable(canZoom) }
     }
 
     @JavascriptInterface
     fun showHeader() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
-        activity.runOnUiThread { uiInteractor.showHeader() }
+        runAction { uiInteractor.showHeader() }
     }
 
     @JavascriptInterface
     fun showHeaderSlim() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
-        activity.runOnUiThread { uiInteractor.showHeaderSlim() }
+        runAction { uiInteractor.showHeaderSlim() }
     }
 
     @JavascriptInterface
     fun showMenuBar() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showMenuBar")
-        activity.runOnUiThread { uiInteractor.showMenuBar() }
+        runAction { uiInteractor.showMenuBar() }
     }
 
     @JavascriptInterface
     fun startDownload(base64Data: String, fileName: String, mimeType: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering startDownload")
-        activity.runOnUiThread{ uiInteractor.startDownload(base64Data, fileName, mimeType) }
+        runAction{ uiInteractor.startDownload(base64Data, fileName, mimeType) }
+    }
+
+    private fun runAction(action: () -> Unit){
+        if(nhsWeb.javaScriptInteractionMode == JavaScriptInteractionMode.NhsApp){
+            activity.runOnUiThread(action)
+        }
     }
 }

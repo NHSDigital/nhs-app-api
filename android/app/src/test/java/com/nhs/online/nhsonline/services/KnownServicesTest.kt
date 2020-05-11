@@ -3,6 +3,7 @@ package com.nhs.online.nhsonline.services
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.RootService
 import com.nhs.online.nhsonline.services.knownservices.SubService
+import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import org.junit.Assert
@@ -162,15 +163,15 @@ class KnownServicesTest {
 
     private fun mockKnownServices(): KnownServices {
         val testSubServices = listOf(
-                SubService(requiresAssertedLoginIdentity = false, validateSession = false, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, path = null, queryString = "foo=bar"),
-                SubService(requiresAssertedLoginIdentity = false, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, path = "/path", queryString = null),
-                SubService(requiresAssertedLoginIdentity = false, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, path = "/path/valid-subpath", queryString = null),
-                SubService(requiresAssertedLoginIdentity = true, validateSession = false, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, path = "/path", queryString = "foo=bar"),
-                SubService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, path = null, queryString = "foo=bar&bar=ram")
+                SubService(requiresAssertedLoginIdentity = false, validateSession = false, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, path = null, queryString = "foo=bar"),
+                SubService(requiresAssertedLoginIdentity = false, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, path = "/path", queryString = null),
+                SubService(requiresAssertedLoginIdentity = false, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, path = "/path/valid-subpath", queryString = null),
+                SubService(requiresAssertedLoginIdentity = true, validateSession = false, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, path = "/path", queryString = "foo=bar"),
+                SubService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, path = null, queryString = "foo=bar&bar=ram")
         )
 
         val rootServices = listOf(
-                RootService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, url = "https://test.com", subServices = testSubServices)
+                RootService(requiresAssertedLoginIdentity = true, validateSession = true, menuTab = MenuTab.Unknown, viewMode = ViewMode.Unknown, javaScriptInteractionMode = JavaScriptInteractionMode.Unknown, url = "https://test.com", subServices = testSubServices)
         )
 
         return KnownServices(rootServices)

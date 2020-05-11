@@ -11,6 +11,7 @@ import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.knownservices.RootService
 import com.nhs.online.nhsonline.services.knownservices.SubService
+import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import org.junit.Assert.assertEquals
@@ -102,6 +103,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 "\"validateSession\":true," +
                 "\"menuTab\":\"NotValidValue\"," +
                 "\"viewMode\":\"NotValidValue\"," +
+                "\"javaScriptInteractionMode\":\"NotValidValue\"," +
                 "\"url\":\"www.example.com\"," +
                 "\"subServices\":null" +
                 "}]" +
@@ -121,6 +123,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                                         validateSession = true,
                                         menuTab = MenuTab.Unknown,
                                         viewMode = ViewMode.Unknown,
+                                        javaScriptInteractionMode = JavaScriptInteractionMode.Unknown,
                                         url = "www.example.com",
                                         subServices = null
                                 )
@@ -140,6 +143,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 "\"validateSession\":true," +
                 "\"menuTab\":\"None\"," +
                 "\"viewMode\":\"AppTab\"," +
+                "\"javaScriptInteractionMode\":\"NhsApp\"," +
                 "\"url\":\"www.example.com\"," +
                 "\"subServices\":null" +
                 "}]" +
@@ -159,6 +163,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                                         validateSession = true,
                                         menuTab = MenuTab.None,
                                         viewMode = ViewMode.AppTab,
+                                        javaScriptInteractionMode = JavaScriptInteractionMode.NhsApp,
                                         url = "www.example.com",
                                         subServices = null
                                 )
@@ -178,12 +183,14 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                 "\"validateSession\":true," +
                 "\"menuTab\":\"None\"," +
                 "\"viewMode\":\"AppTab\"," +
+                "\"javaScriptInteractionMode\":\"NhsApp\"," +
                 "\"url\":\"www.example.com\"," +
                 "\"subServices\": [{" +
                 "\"requiresAssertedLoginIdentity\":true," +
                 "\"validateSession\":false," +
                 "\"menuTab\":\"Appointments\"," +
                 "\"viewMode\":\"WebView\"," +
+                "\"javaScriptInteractionMode\":\"None\"," +
                 "\"path\":\"/path\"," +
                 "\"queryString\":null" +
                 "}]" +
@@ -204,6 +211,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                                         validateSession = true,
                                         menuTab = MenuTab.None,
                                         viewMode = ViewMode.AppTab,
+                                        javaScriptInteractionMode = JavaScriptInteractionMode.NhsApp,
                                         url = "www.example.com",
                                         subServices = listOf(
                                                 SubService(
@@ -211,6 +219,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
                                                         validateSession = false,
                                                         menuTab = MenuTab.Appointments,
                                                         viewMode = ViewMode.WebView,
+                                                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
                                                         path = "/path",
                                                         queryString = null
                                                 )

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.content.res.Resources
 import android.net.Uri
-import android.os.Handler
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
@@ -19,6 +18,7 @@ import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
 import com.nhs.online.nhsonline.services.knownservices.RootService
 import com.nhs.online.nhsonline.services.knownservices.SubService
+import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
@@ -273,6 +273,7 @@ class WebClientInterceptorTest {
                         validateSession = true,
                         menuTab = MenuTab.None,
                         viewMode = ViewMode.WebView,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
                         subServices = null
                 )
@@ -304,6 +305,7 @@ class WebClientInterceptorTest {
                         validateSession = false,
                         menuTab = MenuTab.None,
                         viewMode = ViewMode.WebView,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         path = "/conditions",
                         queryString = null
                 )
@@ -376,6 +378,7 @@ class WebClientInterceptorTest {
                         validateSession = true,
                         menuTab = MenuTab.None,
                         viewMode = ViewMode.WebView,
+                        javaScriptInteractionMode = JavaScriptInteractionMode.None,
                         url = url,
                         subServices = null
 

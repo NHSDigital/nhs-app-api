@@ -3,15 +3,10 @@ package com.nhs.online.nhsonline.webclients
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.http.SslError
-import android.os.Handler
 import android.os.Build
+import android.os.Handler
 import android.util.Log
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.webkit.WebResourceError
-import android.webkit.SslErrorHandler
+import android.webkit.*
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
@@ -19,6 +14,7 @@ import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
+import com.nhs.online.nhsonline.services.knownservices.enums.MenuTab
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.utils.UrlHelper
 import com.nhs.online.nhsonline.web.NhsWeb
@@ -112,7 +108,11 @@ class WebClientInterceptor(
             return
         }
 
-        updateHeaderAndNavMenu(sanitizedUrl)
+        var knownService = knownServices.findMatchingKnownService(URL(sanitizedUrl))
+        if (knownService != null) {
+            updateNavMenu(knownService.menuTab)
+            nhsWeb.javaScriptInteractionMode = knownService.javaScriptInteractionMode
+        }
 
         if (shouldHandleUnavailability(sanitizedUrl)) {
             trackWebRequestResponse(view, sanitizedUrl)
@@ -310,14 +310,8 @@ class WebClientInterceptor(
         view?.stopLoading()
     }
 
-    private fun updateHeaderAndNavMenu(url: String?) {
-        url?.let {
-            val serviceInfo = knownServices.findMatchingKnownService(URL(url))
-
-            serviceInfo?.let { info ->
-                uiInteractor.selectNavigationMenuActive(info.menuTab.tabIndex)
-            }
-        }
+    private fun updateNavMenu(menuTab: MenuTab) {
+        uiInteractor.selectNavigationMenuActive(menuTab.tabIndex)
     }
 
     private fun trackWebRequestResponse(view: WebView?, url: String?) {

@@ -11,16 +11,12 @@ class WebViewController: UIViewController, WKUIDelegate {
 
     override func loadView() {
         super.loadView()
-
-        let fileReader = FileReader();
-        let webEventsJSLocation = Bundle.main.path(forResource: "WebEvents", ofType: "js")!
-        let javascript = fileReader.readContentFromLocation(fileLocation: webEventsJSLocation)
-
+        
         let contentController = WKUserContentController()
-        let script = WKUserScript(source: javascript, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        LoadUserScript(name: "WebEventsThirdParty", contentController: contentController)
+        LoadUserScript(name: "WebEventsPrivate", contentController: contentController)
+        
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        contentController.addUserScript(script)
-
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
         config.suppressesIncrementalRendering = true
@@ -32,6 +28,15 @@ class WebViewController: UIViewController, WKUIDelegate {
         view = webView
     }
 
+    func LoadUserScript(name: String, contentController: WKUserContentController){
+      let fileReader = FileReader();
+      let webEventsJSLocation = Bundle.main.path(forResource: name, ofType: "js")!
+      let javascript = fileReader.readContentFromLocation(fileLocation: webEventsJSLocation)
+      
+      let script = WKUserScript(source: javascript, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+      contentController.addUserScript(script)
+    }
+    
     override func viewDidLoad() {
         self.setNeedsStatusBarAppearanceUpdate()
         super.viewDidLoad()
@@ -55,6 +60,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "getNotificationsStatus")
         webView.configuration.userContentController.add(delegate, name: "attemptBiometricLogin")
         webView.configuration.userContentController.add(delegate, name: "clearMenuBarItem")
+        webView.configuration.userContentController.add(delegate, name: "goToHomepage")
         webView.configuration.userContentController.add(delegate, name: "fetchNativeAppVersion")
         webView.configuration.userContentController.add(delegate, name: "goToLoginOptions")
         webView.configuration.userContentController.add(delegate, name: "hideHeaderSlim")
@@ -168,7 +174,7 @@ class WebViewController: UIViewController, WKUIDelegate {
             let urlToReload = UrlHelper.getReloadUrl(url: failedUrl)
             webView.load(URLRequest(url: urlToReload))
         } else {
-            webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
+            webView.load(URLRequest(url: URL(string: self.homeUrl)!))
         }
     }
 

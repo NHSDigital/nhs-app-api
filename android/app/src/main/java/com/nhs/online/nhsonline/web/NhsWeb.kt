@@ -15,24 +15,28 @@ import com.nhs.online.nhsonline.services.NotificationsService
 import com.nhs.online.nhsonline.services.SettingsService
 import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.services.knownservices.KnownServices
+import com.nhs.online.nhsonline.services.knownservices.enums.JavaScriptInteractionMode
 import com.nhs.online.nhsonline.services.knownservices.enums.ViewMode
 import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.support.schemehandlers.MailToSchemeHandler
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.support.schemehandlers.TelSchemeHandler
+import com.nhs.online.nhsonline.webinterfaces.WebAppInterfacePrivate
+import com.nhs.online.nhsonline.webinterfaces.WebAppInterfaceThirdParty
 import com.nhs.online.nhsonline.utils.UrlHelper
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
-import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.Locale
 import java.io.File
 
 private val TAG = NhsWeb::class.java.simpleName
-private const val NATIVE_APP = "nativeApp"
+private const val NATIVE_APP_PRIVATE = "nativeApp"
+private const val NATIVE_APP_THIRDPARTY = "nhsappNative"
+
 
 class NhsWeb(
         private val activity: Activity,
@@ -57,6 +61,7 @@ class NhsWeb(
             ApplicationState(readResourceString(R.string.menuTimeoutSeconds).toLong())
     var isUserLoggedIn = false
     var requiresFullPageLoad = true
+    var javaScriptInteractionMode = JavaScriptInteractionMode.None
     var reloadUrl: String? = null
         set(value) {
             value?.let { url ->
@@ -74,11 +79,13 @@ class NhsWeb(
 
         val webInterceptor =
             WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers, nhsLoginLoggedInPaths)
+
+        val webAppInterfacePrivate = WebAppInterfacePrivate(activity, this,  uiInteractor, settingsService)
+        val webAppInterfaceThirdParty = WebAppInterfaceThirdParty(activity, this, uiInteractor)
+        webView.addJavascriptInterface(webAppInterfacePrivate, NATIVE_APP_PRIVATE)
+        webView.addJavascriptInterface(webAppInterfaceThirdParty, NATIVE_APP_THIRDPARTY)
+
         webView.webViewClient = webInterceptor
-
-        val webInterface = WebAppInterface(activity, uiInteractor, this, settingsService)
-        webView.addJavascriptInterface(webInterface, NATIVE_APP)
-
         webView.webChromeClient = chromeClient
         clearSessionCookies()
         trimCachedFiles()
@@ -86,13 +93,13 @@ class NhsWeb(
 
     fun loadWelcomePage() = loadUrl(readResourceString(R.string.baseURL))
 
+
     fun loadUrl(path: String) {
         Log.d(TAG, "Entering loadUrl")
 
-        val hasFidoLoginError =
-                path.contains(activity.resources.getString(R.string.authRedirectPath)) &&
-                        uiInteractor.canDisplayBiometricLogin() &&
-                        path.contains(activity.resources.getString(R.string.redirectErrorQueryParam))
+        val hasFidoLoginError = path.contains(activity.resources.getString(R.string.authRedirectPath)) &&
+            uiInteractor.canDisplayBiometricLogin() &&
+            path.contains(activity.resources.getString(R.string.redirectErrorQueryParam))
         if (hasFidoLoginError) {
             Log.d(TAG, "Fido login error response url: $path")
             uiInteractor.displayBiometricLoginErrorOccurrence()

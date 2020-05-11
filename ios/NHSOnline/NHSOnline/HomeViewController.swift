@@ -136,8 +136,8 @@ class HomeViewController : UIViewController {
     }
     
     func clearSelectedTab() {
-        tabBar.selectedItem = nil
-        selectedTab = nil
+        self.tabBar.selectedItem = nil
+        self.selectedTab = nil
     }
     
     func isOnBiometricsLogin(webView: WKWebView) -> Bool {
@@ -191,6 +191,7 @@ class HomeViewController : UIViewController {
         webViewController?.knownServiceProvider = self.knownServicesProvider
         webViewController?.configurationServiceProvider = self.configurationServiceProvider
         webViewController?.loadViewIfNeeded()
+
         webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
         webViewController?.view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -440,8 +441,7 @@ class HomeViewController : UIViewController {
     @objc func selectMyAccount(sender : UITapGestureRecognizer) {
         let urlToLoad = createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyAccountUrlPath)
         webViewController?.loadPage(url: urlToLoad)
-        self.tabBar.selectedItem = nil
-        self.selectedTab = nil
+        self.clearSelectedTab()
     }
     
     @objc func selectHelp(sender : UITapGestureRecognizer) {
@@ -458,9 +458,9 @@ class HomeViewController : UIViewController {
     
     @objc func goHome(sender: UITapGestureRecognizer) {
         self.webViewController?.loadPage(url: config().HomeUrl)
-        self.tabBar.selectedItem = nil
-        self.selectedTab = nil
+        self.clearSelectedTab()
     }
+    
     func showWhiteScreen() {
         let v = UIView(frame: UIScreen.main.bounds)
         v.backgroundColor = UIColor.white
@@ -477,8 +477,7 @@ class HomeViewController : UIViewController {
                 self.setVisibilityOfHeaderAndMenuBars(headerType: HeaderType.None)
                 self.showWhiteScreen()
                 self.webViewController?.loadPage(url: config().HomeUrl)
-                self.tabBar.selectedItem = nil
-                self.selectedTab = nil
+                self.clearSelectedTab()
             } else if (backForwardList.backItem?.url.path == config().PreRegistrationInstructionsPath
                 || backForwardList.backItem?.url.path == config().CheckSymptomsUrlPath){
                 self.webViewController?.loadPage(url: backForwardList.backItem?.url.absoluteString ?? config().HomeUrl)

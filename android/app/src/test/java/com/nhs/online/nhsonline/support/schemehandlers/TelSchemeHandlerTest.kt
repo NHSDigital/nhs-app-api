@@ -14,7 +14,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import java.net.URI
 
 @RunWith(RobolectricTestRunner::class)
 class TelSchemeHandlerTest {

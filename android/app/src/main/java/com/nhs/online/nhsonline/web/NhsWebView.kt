@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.webkit.WebView
 
- class NhsWebView : WebView {
+class NhsWebView : WebView {
      constructor(context: Context) : super(context)
      constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
