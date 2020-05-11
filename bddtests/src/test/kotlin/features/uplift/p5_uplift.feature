@@ -15,6 +15,7 @@ Feature: Proof level 5 shutter screens
       | more               | More                      |
       | organ donation     | More                      |
       | your prescriptions | Your repeat prescriptions |
+
   @native
   Scenario Outline: P5 user accesses shutter page and can use the navigation bar
     Given I am a patient logging in natively with proof level 5

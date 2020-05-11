@@ -266,9 +266,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
 
             result.Should().BeEquivalentTo(expectedResult);
         }
-        
+
         [TestMethod]
-        public void MapPrescriptionRequestsGetResponseToPrescriptionMapsTheOrderedByCorrectly()
+        public void MapPrescriptionRequestsGetResponseToPrescription_MapsTheOrderedByCorrectly()
         {
             // Arrange
             var item = new PrescriptionRequestsGetResponse
@@ -277,9 +277,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 {
                     new PrescriptionRequest
                     {
-                        RequestedByDisplayName = "Main user forename Main user surname",
-                        RequestedByForenames = "Main user forename",
-                        RequestedBySurname = "Main user surname",
+                        RequestedByDisplayName = "MainUserForename MainUserSurname",
+                        RequestedByForenames = "MainUserForename MainUserMiddleName",
+                        RequestedBySurname = "MainUserSurname",
                         DateRequested = _fixture.Create<DateTimeOffset>(),
                         RequestedMedicationCourses = new List<RequestedMedicationCourse>
                         {
@@ -303,9 +303,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     },
                     new PrescriptionRequest
                     {
-                        RequestedByDisplayName = "Completed By Proxy",
-                        RequestedByForenames = "Main user forename",
-                        RequestedBySurname = "Main user surname",
+                        RequestedByDisplayName = "ProxyUserForename ProxyUserSurname",
+                        RequestedByForenames = "MainUserForename MainUserMiddleName",
+                        RequestedBySurname = "MainUserSurname",
                         // 2 courses with issued status should be grouped, 1 course with requested status should be standalone.
                         DateRequested = _fixture.Create<DateTimeOffset>(),
                         RequestedMedicationCourses = new List<RequestedMedicationCourse>
@@ -375,7 +375,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     },
                     new PrescriptionItem
                     {
-                        OrderedBy = "Completed By Proxy",
+                        OrderedBy = "ProxyUserForename ProxyUserSurname",
                         OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested,
                         Status = Status.Approved,
                         Courses = new List<CourseEntry>
@@ -392,7 +392,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                     },
                     new PrescriptionItem
                     {
-                        OrderedBy = "Completed By Proxy",
+                        OrderedBy = "ProxyUserForename ProxyUserSurname",
                         OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested,
                         Status = Status.Requested,
                         Courses = new List<CourseEntry>

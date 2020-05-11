@@ -102,7 +102,7 @@ Add the following environment variables:
 | BROWSERSTACK_OS_VERSION       | OS Version to test - the build script defaults this to `8.0`                                                      |
 | APP_PATH                      | Path to uploaded app in BrowserStack - the build script uploads to `$HOSTNAME-android` (e.g. `LPT4128-android`)   |
 | APP_SCHEME                    | Set to `nhsapp`                                                                                                   |
-| AUTO_LOGIN                    | Set to `true`                                                                                                     |
+| AUTOLOGIN                     | Set to `true`                                                                                                     |
 | XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
 | SESSION_EXPIRY_MINUTES        | Set to 3                                                                                                          |
 
@@ -138,7 +138,7 @@ Add the following environment variables:
 | BROWSERSTACK_OS_VERSION       | OS Version to test - the build script defaults this to `12.1`                                                     |
 | APP_PATH                      | Path to uploaded app in BrowserStack - the build script uploads to `$HOSTNAME-ios` (e.g. `LPT4128-ios`)           |
 | APP_SCHEME                    | Set to `nhsapp`                                                                                                   |
-| AUTO_LOGIN                    | Set to `true`                                                                                                     |
+| AUTOLOGIN                     | Set to `true`                                                                                                     |
 | XPATH_PAGE_SOURCE             | Set to `false`                                                                                                    |
 | SESSION_EXPIRY_MINUTES        | Set to 3                                                                                                          |
 

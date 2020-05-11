@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
             _logger.LogInformation($"Mapping {prescriptionGetResponse.PrescriptionRequests?.Count()} prescriptions.");
             _logger.LogInformation($"Mapping {prescriptionGetResponse.MedicationCourses?.Count()} courses.");
-            
+
             foreach (var prescription in prescriptionGetResponse.PrescriptionRequests ?? Enumerable.Empty<PrescriptionRequest>())
             {
                 foreach (var course in prescription.RequestedMedicationCourses ?? Enumerable.Empty<RequestedMedicationCourse>())
@@ -46,13 +46,30 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                     }
                     else
                     {
-                        string checkMainUserName = prescription.RequestedByForenames + ' ' + prescription.RequestedBySurname;
+                        // RequestedByDisplayName only contains forename and last name.
+                        // RequestedByForenames contains forename and middle name(s).
                         string requestedBy = null;
-                        if (!checkMainUserName.Equals(prescription.RequestedByDisplayName,StringComparison.Ordinal))
+
+                        if (string.IsNullOrWhiteSpace(prescription.RequestedByForenames)
+                            || string.IsNullOrWhiteSpace(prescription.RequestedBySurname))
                         {
                             requestedBy = prescription.RequestedByDisplayName;
                         }
-                        
+                        else
+                        {
+                            var forenamesAndMiddleNames =
+                                prescription.RequestedByForenames.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+                            var forename = forenamesAndMiddleNames[0];
+                            var surname = prescription.RequestedBySurname;
+
+                            if (!prescription.RequestedByDisplayName.StartsWith(forename, StringComparison.Ordinal) ||
+                                !prescription.RequestedByDisplayName.EndsWith(surname, StringComparison.Ordinal))
+                            {
+                                requestedBy = prescription.RequestedByDisplayName;
+                            }
+                        }
+
                         allPrescriptionsGrouped.Add(new PrescriptionItem
                         {
                             OrderedBy = requestedBy,

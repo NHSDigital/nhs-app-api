@@ -122,7 +122,7 @@ class SessionExpiryStepDefinitions  {
     @When("^I am idle long enough on a secure page for the session expiry dialog box to appear$")
     fun iAmIdleLongEnoughOnASecurePageForSessionExpiryDialog() {
         sessionExpiry.waitForSessionExpiryModal()
-        val presentOnPage =  sessionExpiry.isSessionExpiryModalVisible()
+        val presentOnPage =  sessionExpiry.isSessionExpiryModalVisibleWithRetry()
         Assert.assertEquals(true, presentOnPage)
         if(sessionExpiry.onMobile()) {
             sessionExpiry.scrollAndroidNativePage()
@@ -137,7 +137,7 @@ class SessionExpiryStepDefinitions  {
 
     @Then("^I see a dialog box prompting to extend the session$")
     fun iSeeTheDialogBoxPromptingToExtendTheSession() {
-        val presentOnPage =  sessionExpiry.isSessionExpiryModalVisible()
+        val presentOnPage =  sessionExpiry.isSessionExpiryModalVisibleWithRetry()
 
         Assert.assertTrue("Session expiry modal visible", presentOnPage)
     }

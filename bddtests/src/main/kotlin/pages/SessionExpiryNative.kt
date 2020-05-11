@@ -12,6 +12,8 @@ import java.time.temporal.ChronoUnit
 const val SCREEN_LOCK_PREVENTION_INTERVAL = 30_000L
 const val SESSION_EXPIRY_MODAL_DISPLAY_DURATION = 60_000L
 const val ADDITIONAL_TIME_FOR_SESSION_TO_EXPIRE = 60_000L
+const val WAIT_INTERVAL: Long = 1000
+const val TIMES_TO_TRY: Int = 10
 
 open class SessionExpiryNative : NativePageObject() {
 
@@ -50,10 +52,26 @@ open class SessionExpiryNative : NativePageObject() {
         logoutButton.click()
     }
 
-     fun isSessionExpiryModalVisible() : Boolean {
+    fun isSessionExpiryModalVisibleWithRetry() : Boolean {
+        var isModalVisible = false
+        var timesLeft = TIMES_TO_TRY
+
+        while (timesLeft >= 0) {
+            Thread.sleep(WAIT_INTERVAL)
+            isModalVisible = isSessionExpiryModalVisible()
+
+            if (isModalVisible) {
+                break
+            }
+            timesLeft--
+        }
+        return isModalVisible
+    }
+
+    fun isSessionExpiryModalVisible() : Boolean {
         return when(onMobile()) {
-           true -> this.isOnPage("For security reasons, we'll log you out of the NHS App in 1 minute.")
-           false -> header.withoutRetrying().elements.count() > 0
+            true -> this.isOnPage("For security reasons, we'll log you out of the NHS App in 1 minute.")
+            false -> header.withoutRetrying().elements.count() > 0
         }
     }
 
@@ -115,7 +133,7 @@ open class SessionExpiryNative : NativePageObject() {
                     .until(delayUntil, ChronoUnit.MILLIS)
                     .coerceAtMost(SCREEN_LOCK_PREVENTION_INTERVAL)
             if (delay <= 0) {
-                break;
+                break
             }
             println("$now: Sleeping ${delay}ms until $delayUntil")
             Thread.sleep(delay)
