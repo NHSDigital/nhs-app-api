@@ -1,5 +1,5 @@
 # Production Dependencies
-FROM nhsapp.azurecr.io/nhsonline-nodejs-build:node8-1.0 AS production_dependencies
+FROM nhsapp.azurecr.io/nhsonline-nodejs-build:node14-1.0 AS production_dependencies
 
 COPY package.json .
 COPY package-lock.json .
@@ -41,7 +41,7 @@ FROM build_dependencies AS test
 COPY . .
 
 # Final image
-FROM nhsapp.azurecr.io/nhsonline-nodejs-runtime:node8-1.0 AS release
+FROM nhsapp.azurecr.io/nhsonline-nodejs-runtime:node14-1.0 AS release
 
 COPY --chown=node:node --from=production_dependencies /data/package.json ./package.json
 COPY --chown=node:node --from=production_dependencies /data/package-lock.json ./package-lock.json
