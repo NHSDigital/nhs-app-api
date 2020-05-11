@@ -302,7 +302,6 @@ web:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 60
-  targetMemoryUtilizationPercentage: 60
   analyticsEnvironment: "development"
   analyticsURL: "//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js"
   hotjarSiteId: "859152"
@@ -332,7 +331,6 @@ api:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
   emisExtendedTimeout: 10
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
@@ -370,7 +368,6 @@ cid:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -402,7 +399,6 @@ logger:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -424,7 +420,6 @@ cdsswiremock:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
@@ -443,7 +438,6 @@ iproxy:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
   environmentVariables:
   n3enabled: false
 
@@ -463,7 +457,6 @@ iproxy_microtest:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
   environmentVariables:
 
 wiremock:
@@ -482,7 +475,6 @@ wiremock:
   cpuRequest: "500m"
   cpuLimit: "2"
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
   environmentVariables:
     - name: WAIT_FOR_TIMEOUT
       value: "60"
@@ -504,7 +496,6 @@ users:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
   mongoDatabaseUserDeviceCollection: devices
   mongoDatabaseUserDeviceAuditCollection: audit_devices
   environmentVariables:
@@ -528,7 +519,6 @@ messages:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
   mongoDatabaseMessagesCollection: messages
   mongoDatabaseMessagesAuditCollection: audit_messages
   environmentVariables:
@@ -552,7 +542,6 @@ info:
   cpuRequest: "125m"
   cpuLimit: "250m"
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
   mongoDatabaseInfoCollection: info
   mongoDatabaseInfoAuditCollection: audit_info
   environmentVariables:

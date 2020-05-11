@@ -20,8 +20,4 @@ spec:
       resource:
         name: cpu
         targetAverageUtilization: {{ $.Values.cdsswiremock.targetCPUUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: memory
-        targetAverageUtilization: {{ $.Values.cdsswiremock.targetMemoryUtilizationPercentage }}
 {{- end }}

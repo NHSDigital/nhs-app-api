@@ -19,7 +19,3 @@ spec:
       resource:
         name: cpu
         targetAverageUtilization: {{ $.Values.cid.targetCPUUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: memory
-        targetAverageUtilization: {{ $.Values.cid.targetMemoryUtilizationPercentage }}

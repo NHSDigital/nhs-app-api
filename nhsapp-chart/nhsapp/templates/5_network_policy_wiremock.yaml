@@ -27,6 +27,18 @@ spec:
         matchLabels:
           role: {{ $.Values.api.role }}
           version: {{ .Chart.AppVersion | quote }}
+    - podSelector:
+        matchLabels:
+          role: {{ $.Values.users.role }}
+          version: {{ .Chart.AppVersion | quote }}
+    - podSelector:
+        matchLabels:
+          role: {{ $.Values.messages.role }}
+          version: {{ .Chart.AppVersion | quote }}
+    - podSelector:
+        matchLabels:
+          role: {{ $.Values.info.role }}
+          version: {{ .Chart.AppVersion | quote }}
     ports:
     - protocol: TCP
       port: {{ $.Values.sidecar_proxy.containerPort }}

@@ -20,8 +20,4 @@ spec:
       resource:
         name: cpu
         targetAverageUtilization: {{ $.Values.users.targetCPUUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: memory
-        targetAverageUtilization: {{ $.Values.users.targetMemoryUtilizationPercentage }}
 {{- end }}

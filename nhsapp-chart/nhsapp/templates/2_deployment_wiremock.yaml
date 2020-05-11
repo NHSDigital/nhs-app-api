@@ -6,6 +6,7 @@ metadata:
   name: {{ template "nhsapp.name" . }}-{{ $.Values.wiremock.role }}-{{ .Chart.AppVersion | replace "." "-" }}
   namespace: {{ $.Values.global.environment }}
   labels:
+    app: {{ template "nhsapp.name" . }}-{{ $.Values.wiremock.role }}
     version: {{ .Chart.AppVersion | quote }}
 spec:
   selector:
