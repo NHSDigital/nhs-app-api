@@ -9,14 +9,20 @@ endef
 
 SSH_CERT := ~/.nhsonline/local-development-certificate/local-development-https.crt
 
-build:	## Build everything (run make from a subdirectory for more granularity)
+build:	## Build web and backend worker
 	$(MAKE) -C backendworker build
 	$(MAKE) -C web build
+
+build-all: build	## Build everything (run make from a subdirectory for more granularity)
+	$(MAKE) -C android build
 	$(MAKE) -C bddtests build
 
-test:	## Unit test everything
+test:	## Unit test web and backend worker
 	$(MAKE) -C backendworker test
 	$(MAKE) -C web test
+
+test-all: test	## Unit test everything
+	$(MAKE) -C android test
 
 clean:	## Delete all docker containers and volumes
 	./buildscripts/clean.sh
