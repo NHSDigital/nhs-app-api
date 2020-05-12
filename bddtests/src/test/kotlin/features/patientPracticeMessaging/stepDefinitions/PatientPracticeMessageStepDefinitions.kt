@@ -138,7 +138,7 @@ open class PatientPracticeMessageStepDefinitions {
 
     @When("^I enter url address for the send message page$")
     fun whenIEnterTheUrlAddressForSendMessagePage() {
-        val fullUrl = Config.instance.url + "/patient-practice-messaging/send-message"
+        val fullUrl = Config.instance.url + "/messages/gp-messages/send-message"
         browser.browseTo(fullUrl)
     }
 
@@ -350,6 +350,12 @@ open class PatientPracticeMessageStepDefinitions {
     @Then("^I see the patient practice messaging urgency contact your gp page$")
     fun iSeeThePatientPracticeMessagingUrgencyContactYourGpPage() {
         patientPracticeMessagingContactYourGpPage.assertIsDisplayed()
+    }
+
+    @Then("^I click the send message link on the message details page and I do not need urgent advice")
+    fun iClickTheLinkOnThePatientPracticeMessageDetailsPage() {
+        patientPracticeMessagingDetailsPage.clickLink("newMessage")
+        patientPracticeMessagingUrgencyPage.chooseNonUrgentAndContinue()
     }
 
     @Then("^I see the patient practice messaging recipients page$")

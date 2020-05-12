@@ -127,7 +127,8 @@ export default {
         : GP_MESSAGES_RECIPIENTS.path);
     },
     backLinkClicked() {
-      redirectTo(this, this.messagingPath);
+      redirectTo(this, this.$store.state.navigation.backLinkOverride ||
+      GP_MESSAGES.path);
     },
   },
 };

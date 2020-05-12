@@ -22,7 +22,22 @@
                            :message-content="message.content"/>
         </div>
       </ul>
+      <div aria-hidden="true" class="nhsuk-u-margin-bottom-3 nhsuk-reply-info-divider"/>
+      <div class="nhsuk-u-padding-left-3 nhsuk-u-margin-bottom-3">
+        <span class="nhsuk-heading-xs nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0">
+          {{ $t('gp_messages.view_details.replyInformation.header') }}
+        </span>
+        <span class="nhsuk-label nhsuk-u-margin-top-0
+              nhsuk-u-padding-bottom-0">
+          {{ $t('gp_messages.view_details.replyInformation.subText') }}
+        </span>
+      </div>
       <menu-item-list id="messageDetailsOptionsList" class="nhsuk-u-margin-bottom-3">
+        <menu-item id="newMessage"
+                   :text="$t('gp_messages.view_details.sendMessageMenuItemText')"
+                   :click-func="sendNewMessageClicked"
+                   header-tag="h2"
+                   href="#"/>
         <menu-item v-if="deleteEnabled"
                    id="deleteMessage"
                    :text="$t('gp_messages.view_details.deleteMenuItemText')"
@@ -49,7 +64,10 @@ import ReceivedMessage from '@/components/gp-messages/ReceivedMessage';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MenuItem from '@/components/MenuItem';
 import MenuItemList from '@/components/MenuItemList';
-import { GP_MESSAGES, GP_MESSAGES_DELETE } from '@/lib/routes';
+import { GP_MESSAGES,
+  GP_MESSAGES_DELETE,
+  GP_MESSAGES_URGENCY,
+  GP_MESSAGES_VIEW_MESSAGE } from '@/lib/routes';
 import { redirectTo, isBlankString } from '@/lib/utils';
 import srjIf from '@/lib/sjrIf';
 import PageDivider from '@/components/widgets/PageDivider';
@@ -112,6 +130,7 @@ export default {
       && this.$store.state.gpMessages.selectedMessageId !== '0') {
       this.$store.dispatch('gpMessages/updateReadStatusAsRead');
     }
+    this.$store.dispatch('navigation/clearBackLinkOverride');
   },
   methods: {
     backButtonClicked() {
@@ -119,6 +138,11 @@ export default {
     },
     deleteClicked() {
       redirectTo(this, GP_MESSAGES_DELETE.path);
+    },
+    sendNewMessageClicked() {
+      this.$store.dispatch('navigation/setBackLinkOverride', GP_MESSAGES_VIEW_MESSAGE.path);
+      this.$store.dispatch('gpMessages/setUrgencyChoice', undefined);
+      redirectTo(this, GP_MESSAGES_URGENCY.path);
     },
   },
 };
@@ -135,4 +159,7 @@ export default {
     list-style-type: none;
   }
 
+  .nhsuk-reply-info-divider {
+    border-top: 1px solid #d8dde0;
+  }
 </style>

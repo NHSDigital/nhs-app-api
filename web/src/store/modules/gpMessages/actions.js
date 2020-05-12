@@ -48,8 +48,6 @@ export default {
       commit(LOADED_RECIPIENTS, false);
     }
 
-    commit(CLEAR);
-
     try {
       const response = await this.app.$http.getV1PatientMessagesRecipients();
 

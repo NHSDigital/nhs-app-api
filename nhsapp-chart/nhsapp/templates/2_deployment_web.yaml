@@ -124,7 +124,7 @@ spec:
           value: "{{ $.Values.web.myRecordDocumentsEnabled }}"
         - name: MY_RECORD_DOCUMENTS_ENABLED_SUPPLIERS
           value: "[{{ join ","  $.Values.web.myRecordDocumentsEnabledSuppliers }}]"
-        - name: PATIENT_PRACTICE_MESSAGING_ENABLED
+        - name: GP_MESSAGES_ENABLED
           value: "{{ $.Values.patientPracticeMessagingEnabled }}"
         volumeMounts:
         - name: internal-ca-public-key

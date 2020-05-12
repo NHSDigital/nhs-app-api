@@ -1350,6 +1350,11 @@ export default {
       unreadMessages: 'Unread messages',
       unreadMessage: 'Unread message',
       deleteMenuItemText: 'Delete conversation',
+      replyInformation: {
+        header: 'You cannot reply to this message',
+        subText: 'To discuss this message further, send a new message or phone your GP surgery.',
+      },
+      sendMessageMenuItemText: 'Send a new message',
       view: 'View',
       download: 'Download',
       attachment: 'Attachment',

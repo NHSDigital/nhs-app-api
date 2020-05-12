@@ -20,6 +20,9 @@ export default {
   setBackLinkOverride({ commit }, backLinkOverride) {
     commit(SET_BACK_LINK_OVERRIDE, backLinkOverride);
   },
+  clearBackLinkOverride({ commit }) {
+    commit(SET_BACK_LINK_OVERRIDE, undefined);
+  },
   setRouteCrumb({ commit }, crumbSetName) {
     commit(SET_ROUTE_CRUMB, crumbSetName);
   },

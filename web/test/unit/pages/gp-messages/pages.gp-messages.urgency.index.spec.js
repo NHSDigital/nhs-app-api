@@ -11,6 +11,7 @@ describe('gp messages urgency page', () => {
   const mountPage = ({
     isNativeApp = true,
     messageRecipients = [],
+    backLinkOverride = '/messages/gp-messages',
     urgencyChoice = undefined,
   } = {}) => {
     store = createStore({
@@ -20,6 +21,9 @@ describe('gp messages urgency page', () => {
           messageRecipients,
         },
         device: { isNativeApp },
+        navigation: {
+          backLinkOverride,
+        },
       },
     });
     wrapper = mount(UrgencyPage, {
@@ -46,6 +50,12 @@ describe('gp messages urgency page', () => {
       mountPage({ isNativeApp: false });
       wrapper.vm.backLinkClicked();
       expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages');
+    });
+
+    it('will redirect to the back link override', () => {
+      mountPage({ isNativeApp: false, backLinkOverride: '/messages/gp-messages/urgency' });
+      wrapper.vm.backLinkClicked();
+      expect(redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/urgency');
     });
   });
 

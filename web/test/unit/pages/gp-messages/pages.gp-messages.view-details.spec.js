@@ -1,5 +1,6 @@
 import Message from '@/pages/messages/gp-messages/view-details';
 import { create$T, createStore, mount } from '../../helpers';
+import * as dependency from '@/lib/utils';
 
 describe('patient messaging messages', () => {
   let wrapper;
@@ -198,7 +199,7 @@ describe('patient messaging messages', () => {
     deleteEnabled = true,
     updateEnabled = true,
     selectedId = undefined,
-    loaded = false } = {}) => {
+    loaded = true } = {}) => {
     store = createStore({
       state: {
         gpMessages: {
@@ -229,6 +230,7 @@ describe('patient messaging messages', () => {
 
   beforeEach(() => {
     redirect = jest.fn();
+    dependency.redirectTo = jest.fn();
   });
 
   describe('fetch', () => {
@@ -245,7 +247,7 @@ describe('patient messaging messages', () => {
 
     describe('selected message id is undefined', () => {
       beforeEach(async () => {
-        mountPage();
+        mountPage({ loaded: false });
         await wrapper.vm.$options.fetch({ store, redirect });
       });
 
@@ -261,34 +263,34 @@ describe('patient messaging messages', () => {
 
   describe('mounted', () => {
     it('will dispatch update read status', () => {
-      mountPage({ messages: messageDetailsNoReplies, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsNoReplies, selectedId: '1' });
       expect(store.dispatch).toHaveBeenCalledWith('gpMessages/updateReadStatusAsRead');
     });
   });
 
   describe('template', () => {
     it('will show the delete button if the delete functionality is enabled', () => {
-      mountPage({ messages: messageDetailsNoReplies, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsNoReplies, selectedId: '1' });
       expect(wrapper.find('#deleteMessage').exists()).toBe(true);
     });
 
     it('will hide the delete button if the delete functionality is disabled', () => {
-      mountPage({ messages: messageDetailsNoReplies, deleteEnabled: false, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsNoReplies, deleteEnabled: false, selectedId: '1' });
       expect(wrapper.find('#deleteMessage').exists()).toBe(false);
     });
 
     it('will show the page divider if there are unread messages', () => {
-      mountPage({ messages: messageDetailsUnreadReplies, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsUnreadReplies, selectedId: '1' });
       expect(wrapper.find('#receivedMessagesDivider').exists()).toBe(true);
     });
 
     it('will not show the page divider if there are only read messages', () => {
-      mountPage({ messages: messageDetailsReadReplies, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsReadReplies, selectedId: '1' });
       expect(wrapper.find('#receivedMessagesDivider').exists()).toBe(false);
     });
 
     it('will show two read replies', () => {
-      mountPage({ messages: messageDetailsReadReplies, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsReadReplies, selectedId: '1' });
 
       expect(wrapper.find('#initialSentMessage0').exists()).toBe(true);
       expect(wrapper.find('#readMessageReplyPanel0').exists()).toBe(true);
@@ -297,7 +299,7 @@ describe('patient messaging messages', () => {
     });
 
     it('will show one read one unread replies', () => {
-      mountPage({ messages: messageDetailsMixedReadReplies, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsMixedReadReplies, selectedId: '1' });
 
       expect(wrapper.find('#initialSentMessage0').exists()).toBe(true);
       expect(wrapper.find('#readMessageReplyPanel0').exists()).toBe(true);
@@ -307,18 +309,29 @@ describe('patient messaging messages', () => {
     });
 
     it('will show initial as received if from supplier', () => {
-      mountPage({ messages: messageDetailsInitialFromSupplier, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsInitialFromSupplier, selectedId: '1' });
 
       expect(wrapper.find('#initialMessageReplyPanel0').exists()).toBe(true);
     });
 
     it('will show correct message panels if one reply is from the patient', () => {
-      mountPage({ messages: messageDetailsInitialFromSupplierWithPatientReply, toggle: true, selectedId: '1', loaded: true });
+      mountPage({ messages: messageDetailsInitialFromSupplierWithPatientReply, selectedId: '1' });
 
       expect(wrapper.find('#initialMessageReplyPanel0').exists()).toBe(true);
       expect(wrapper.find('#readMessageReplyPanel0').exists()).toBe(true);
       expect(wrapper.find('#readMessageReplyPanel1').exists()).toBe(false);
       expect(wrapper.find('#unreadReplySentMessage0').exists()).toBe(true);
+    });
+
+    it('will show the new message menu item', () => {
+      mountPage({ messages: messageDetailsReadReplies, selectedId: '1', loaded: true });
+      expect(wrapper.find('#newMessage').exists()).toBe(true);
+    });
+
+    it('will go to the urgency page when the new message menu item is clicked', () => {
+      mountPage({ messages: messageDetailsReadReplies, selectedId: '1', loaded: true });
+      wrapper.vm.sendNewMessageClicked();
+      expect(dependency.redirectTo).toHaveBeenCalledWith(wrapper.vm, '/messages/gp-messages/urgency');
     });
   });
 });

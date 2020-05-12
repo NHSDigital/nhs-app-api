@@ -87,6 +87,26 @@ Feature: Patient to practice messaging
     And I click send message
     Then I see my new message after it has been sent
 
+  Scenario: A patient can send a patient practice message to their GP from the message details page
+    Given I am an EMIS user who can access patient practice messaging
+    And I am logged in
+    And I have patient practice messages in my inbox, some of which are unread
+    When I follow the Messages link from the home page
+    Then the Messages Hub page is displayed
+    And I click on the patient practice Messages link on the Messages Hub page
+    Then the patient to practice inbox page is displayed
+    When I select a patient practice message in my inbox
+    Then I see my patient practice message along with the replies from the GP
+    When I click the send message link on the message details page and I do not need urgent advice
+    Then I see the patient practice messaging recipients page
+    And I see a list of patient practice messaging recipients
+    When I click on a regular recipient
+    Then I am on the send message page
+    And I insert a subject
+    And I insert a message
+    And I click send message
+    Then I see my new message after it has been sent
+
   Scenario Outline: A TPP patient can send a patient practice message to a <Recipient Type> recipient
     Given I am a TPP user who can access patient practice messaging
     And I am logged in

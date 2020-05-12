@@ -1860,6 +1860,13 @@ export const backLinkOverrides = {
     ignoreStore: true,
     defaultPath: routes.MESSAGES.path,
   },
+  [routes.GP_MESSAGES_URGENCY.name]: {
+    defaultPath: routes.GP_MESSAGES.path,
+  },
+  [routes.GP_MESSAGES_VIEW_MESSAGE.name]: {
+    ignoreStore: true,
+    defaultPath: routes.GP_MESSAGES.path,
+  },
   [routes.SWITCH_PROFILE.name]: {
     ignoreStore: true,
     defaultPath: routes.INDEX.path,
