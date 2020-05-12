@@ -33,7 +33,6 @@ run-others: run-deps	## Run the other integration tests
 
 $(eval $(call expand_run_options_docker_images,run-local))
 run-local: run-deps	## Run in docker with ports open
-	./buildscripts/02_integration_test_code_analysis.sh
 	RUN_LOCAL_BDD=1 ./buildscripts/03_integration_test_run_tranche.sh
 
 $(eval $(call expand_run_options_docker_images,run-native-android))

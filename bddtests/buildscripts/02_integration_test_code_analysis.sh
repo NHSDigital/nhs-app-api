@@ -31,6 +31,6 @@ runAnalysis() {
     bash -c "./gradlew --no-daemon ${GRADLE_TASKS[*]}" || die "Integration Tests Code Analysis Failed"
 }
 
-if [ "$SKIP_ANALYSIS" != 1 ]; then
+if [ "$SKIP_ANALYSIS" != 1 ] && [ "$RUN_LOCAL_BDD" != 1 ]; then
   runAnalysis
 fi
