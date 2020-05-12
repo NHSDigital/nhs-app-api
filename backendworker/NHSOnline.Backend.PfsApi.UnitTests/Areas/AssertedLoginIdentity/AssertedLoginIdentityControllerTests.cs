@@ -37,8 +37,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
        [TestInitialize]
         public void TestInitialize()
         {
-            _p9UserSession = new P9UserSession("csrfToken", new CitizenIdUserSession(), new EmisUserSession(), "im1token");
-            _p5UserSession = new P5UserSession("csrfToken", new CitizenIdUserSession());
+            _p9UserSession = new P9UserSession(
+                "csrfToken",
+                new CitizenIdUserSession{ OdsCode = "A12345" },
+                new EmisUserSession(),
+                "im1token");
+
+            _p5UserSession = new P5UserSession(
+                "csrfToken",
+                new CitizenIdUserSession{ OdsCode = "B23456"});
 
             _mockAssertedLoginIdentityService = new Mock<IAssertedLoginIdentityService>();
             _mockAuditor = new Mock<IAuditor>();
@@ -116,7 +123,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 .Returns(new CreateJwtResult.Success(expectedResponse));
 
             var auditStub = ArrangeAudit();
-            var request = new CreateJwtRequest();
+            var request = new CreateJwtRequest
+            {
+                Action = "",
+                ProviderId = "pkb",
+                ProviderName = "Patients Know Best",
+                JumpOffId = "appointments",
+                IntendedRelyingPartyUrl = "https://www.patientknowbest.com/foo"
+            };
 
             // Act
             var result = await _systemUnderTest.Post(request, _p9UserSession);
@@ -139,8 +153,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
             }
 
             _mockLogger.VerifyLogger(LogLevel.Information,
-                $"Created Asserted Login Identity: ProviderId={request.ProviderId} " +
-                    $"ProviderName={request.ProviderName} " +
+                $"Created Asserted Login Identity: " +
+                    $"OdsCode={_p9UserSession.OdsCode} " +
+                    $"ProviderId={request.ProviderId} " +
+                    $"ProviderName=\"{request.ProviderName}\" " +
                     $"JumpOffId={request.JumpOffId} " +
                     $"IntendedRelyingPartyUrl={request.IntendedRelyingPartyUrl}", Times.Once());
         }
@@ -153,7 +169,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
             _mockAssertedLoginIdentityService
                 .Setup(x => x.CreateJwtToken(_p5UserSession.CitizenIdUserSession.IdTokenJti))
                 .Returns(new CreateJwtResult.Success(expectedResponse));
-            var request = new CreateJwtRequest();
+            var request = new CreateJwtRequest
+            {
+                Action = "",
+                ProviderId = "pkb",
+                ProviderName = "Patients Know Best",
+                JumpOffId = "appointments",
+                IntendedRelyingPartyUrl = "https://www.patientknowbest.com/foo"
+            };
 
             // Act
             var result = await _systemUnderTest.Post(request, _p5UserSession);
@@ -166,8 +189,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.AssertedLoginIdentity
                 .Subject.Should().Be(expectedResponse);
 
             _mockLogger.VerifyLogger(LogLevel.Information,
-                $"Created Asserted Login Identity: ProviderId={request.ProviderId} " +
-                $"ProviderName={request.ProviderName} " +
+                $"Created Asserted Login Identity: " +
+                $"OdsCode={_p5UserSession.OdsCode} " +
+                $"ProviderId={request.ProviderId} " +
+                $"ProviderName=\"{request.ProviderName}\" " +
                 $"JumpOffId={request.JumpOffId} " +
                 $"IntendedRelyingPartyUrl={request.IntendedRelyingPartyUrl}", Times.Once());
         }

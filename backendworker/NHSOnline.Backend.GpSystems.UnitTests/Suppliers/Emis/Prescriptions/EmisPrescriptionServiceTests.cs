@@ -57,13 +57,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             _patientLinkToken = _fixture.Create<string>();
             _linkedAccountPatientId = Guid.NewGuid();
             _linkedAccountLinkToken = _fixture.Create<string>();
-            
+
             _sampleSuccessStatusCodes = new List<HttpStatusCode>()
             {
                 HttpStatusCode.OK
             };
-            
-            
+
+
             _mockLogger = _fixture.Freeze<Mock<ILogger<EmisPrescriptionService>>>();
 
             _emisUserSession = new EmisUserSession
@@ -551,7 +551,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 },
                 Courses = new List<Course>(),
             };
-            
+
 
             PrescriptionRequestsGetResponse capturedItemToMap = null;
             _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<PrescriptionRequestsGetResponse>())).Returns(response)
@@ -567,13 +567,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                          e.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal) &&
                          e.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)),
                 date, toDate));
-            
-              
+
+
             var expectedLogMessage =
-                $"Prescriptions Status Data: Approved Status Prescriptions = 2 / 4 " + 
-                $"Rejected Status Prescriptions = 1 / 4 " +
-                $"Requested Status Prescriptions = 1 / 4";
-            
+                $"Prescriptions Status Data: Approved Status Prescriptions=\"2 / 4\" " +
+                $"Rejected Status Prescriptions=\"1 / 4\" " +
+                $"Requested Status Prescriptions=\"1 / 4\"";
+
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
 
             result.Should().BeAssignableTo<GetPrescriptionsResult.Success>()

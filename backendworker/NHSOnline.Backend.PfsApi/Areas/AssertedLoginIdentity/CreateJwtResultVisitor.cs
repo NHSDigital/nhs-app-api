@@ -15,15 +15,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
         private readonly ILogger _logger;
         private readonly IMetricLogger _metricLogger;
         private readonly CreateJwtRequest _request;
+        private readonly string _odsCode;
 
         public CreateJwtResultVisitor(
             ILogger logger,
             IMetricLogger metricLogger,
-            CreateJwtRequest request)
+            CreateJwtRequest request,
+            string odsCode)
         {
             _logger = logger;
             _metricLogger = metricLogger;
             _request = request;
+            _odsCode = odsCode;
         }
 
         public async Task<IActionResult> Visit(CreateJwtResult.Success result)
@@ -57,10 +60,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
         {
             var kvp = new Dictionary<string, string>
             {
+                { "OdsCode", _odsCode },
                 { "ProviderId", _request.ProviderId },
                 { "ProviderName", _request.ProviderName },
                 { "JumpOffId", _request.JumpOffId },
-                { "IntendedRelyingPartyUrl", _request.IntendedRelyingPartyUrl },
+                { "IntendedRelyingPartyUrl", _request.IntendedRelyingPartyUrl }
             };
             _logger.LogInformationKeyValuePairs("Created Asserted Login Identity", kvp);
         }

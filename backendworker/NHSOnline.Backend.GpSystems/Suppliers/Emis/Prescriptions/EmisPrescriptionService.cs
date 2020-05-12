@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         public EmisPrescriptionService(
             ILogger<EmisPrescriptionService> logger,
             EmisConfigurationSettings settings,
-            IEmisClient emisClient, 
+            IEmisClient emisClient,
             IEmisPrescriptionMapper emisPrescriptionMapper)
         {
             _logger = logger;
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 {
                     try
                     {
-                        var (prescriptionListResponseFiltered, prescriptionsCount) = 
+                        var (prescriptionListResponseFiltered, prescriptionsCount) =
                             GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
 
 
@@ -69,22 +69,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                             if (mappedPrescriptionList.Prescriptions.Any())
                             {
                                 int totalPrescriptions = mappedPrescriptionList.Prescriptions.Count();
-                                
+
                                 var countOfApprovedPrescriptions = mappedPrescriptionList.Prescriptions.Count(prescription => prescription.Status.Value == Status.Approved);
                                 var countOfRejectedPrescriptions = mappedPrescriptionList.Prescriptions.Count(prescription => prescription.Status.Value == Status.Rejected);
                                 var countOfRequestedPrescriptions = mappedPrescriptionList.Prescriptions.Count(prescription => prescription.Status.Value == Status.Requested);
-                              
+
                                 var kvp = new Dictionary<string, string>
                                 {
-                                    { "Approved Status Prescriptions ", $" {countOfApprovedPrescriptions} / {totalPrescriptions}" },
-                                    { "Rejected Status Prescriptions ", $" {countOfRejectedPrescriptions} / {totalPrescriptions}" },
-                                    { "Requested Status Prescriptions ", $" {countOfRequestedPrescriptions} / {totalPrescriptions}" }
+                                    { "Approved Status Prescriptions", $"{countOfApprovedPrescriptions} / {totalPrescriptions}" },
+                                    { "Rejected Status Prescriptions", $"{countOfRejectedPrescriptions} / {totalPrescriptions}" },
+                                    { "Requested Status Prescriptions", $"{countOfRequestedPrescriptions} / {totalPrescriptions}" }
                                 };
-                                
+
                                 _logger.LogInformationKeyValuePairs("Prescriptions Status Data", kvp);
                             }
                         }
-                        
+
                         return new GetPrescriptionsResult.Success(mappedPrescriptionList, prescriptionsCount);
                     }
                     catch (Exception e)
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             }
         }
 
-        private (PrescriptionRequestsGetResponse prescriptionListResponseFiltered, FilteringCounts prescriptionsCount) 
+        private (PrescriptionRequestsGetResponse prescriptionListResponseFiltered, FilteringCounts prescriptionsCount)
             GetPrescriptionsWithoutRepeatCourses(PrescriptionRequestsGetResponse prescriptionsResponse)
         {
             var prescriptionsReceivedCount = prescriptionsResponse.PrescriptionRequests.Count();
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
                 totalCoursesRunningTotal += repeatCoursesInPrescription.Count;
             }
-            
+
             var prescriptionsWithRepeatableCourses = prescriptionsReceivedCount - filteredPrescriptionsCount;
             var prescriptionsReturnedToUserCount = prescriptionsWithRepeatCourses.Count;
 

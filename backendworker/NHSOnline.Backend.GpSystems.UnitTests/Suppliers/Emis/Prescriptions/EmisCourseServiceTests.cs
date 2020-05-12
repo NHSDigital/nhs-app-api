@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         private static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
         private static readonly Uri BaseUri = new Uri("http://emis_base_url/");
         private const string CertificatePath = "CertificatePath";
-        private const string CertificatePassphrase = "CerticiatePassphrase";       
+        private const string CertificatePassphrase = "CerticiatePassphrase";
         private const int CoursesMaxCoursesLimit = 100;
         private const int EmisExtendedHttpTimeoutSeconds = 6;
         private const int DefaultHttpTimeoutSeconds = 2;
@@ -57,10 +57,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             _mockLogger = _fixture.Freeze<Mock<ILogger<EmisCourseService>>>();
 
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
-            
+
             _emisPrescriptionMapper = _fixture.Freeze<Mock<IEmisPrescriptionMapper>>();
-            _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath, 
-                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit, 
+            _settings = new EmisConfigurationSettings(BaseUri, DefaultEmisApplicationId, DefaultEmisVersion, CertificatePath,
+                CertificatePassphrase, EmisExtendedHttpTimeoutSeconds, DefaultHttpTimeoutSeconds, CoursesMaxCoursesLimit, PrescriptionsMaxCoursesSoftLimit,
                 Environment);
             _fixture.Inject(_settings);
             _systemUnderTest = _fixture.Create<EmisCourseService>();
@@ -194,7 +194,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                         MedicationCourseGuid = Guid.NewGuid().ToString(),
                     });
             }
-            
+
             var coursesResponse = new CoursesGetResponse
             {
                 Courses = medicationCourses,
@@ -312,8 +312,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             capturedItemToMap.Courses.ElementAt(2).Name.Should().Be("c");
             capturedItemToMap.Courses.ElementAt(3).Name.Should().Be("d");
         }
-        
-        [TestMethod] 
+
+        [TestMethod]
         public async Task Get_CoursesSuccessfullyLogsOutWhetherCertainDatesArePopulated()
         {
             // Arrange
@@ -352,7 +352,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                         Name = "Course 3"
                     },
                     new MedicationCourse
-                    {                        
+                    {
                         MostRecentIssueDate = new DateTimeOffset(new DateTime(2000, 1, 2)),
                         ReviewDate = new DateTimeOffset(new DateTime(2022, 1, 20)),
                         NextIssueDate = null,
@@ -391,12 +391,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             getCoursesResult.Response.Should().Be(response);
 
             capturedItemToMap.Courses.Should().HaveCount(4);
-            
+
             var expectedLogMessage =
-                $"Prescription date data logging: MostRecentIssueDate populated = 3 / 4 " + 
-                $"NextIssueDate populated = 3 / 4 " +
-                $"ReviewDate populated = 3 / 4";
-            
+                $"Prescription date data logging: MostRecentIssueDate populated=\"3 / 4\" " +
+                $"NextIssueDate populated=\"3 / 4\" " +
+                $"ReviewDate populated=\"3 / 4\"";
+
             _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
 

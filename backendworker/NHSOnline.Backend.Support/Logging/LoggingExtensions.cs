@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Support.Logging
         {
             logger.LogDebug($"Entering {methodName}");
         }
-        
+
         public static void LogExit<T>(this ILogger<T> logger, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "")
         {
             logger.LogDebug($"Exiting {methodName}");
@@ -49,10 +49,11 @@ namespace NHSOnline.Backend.Support.Logging
             logger.LogError(exception, "Exception thrown");
             logger.LogInnerException(exception);
         }
-        
+
         public static void LogInformationKeyValuePairs(this ILogger logger, string title, IDictionary<string, string> kvp)
         {
-            var items = kvp.Select(x => $"{x.Key}={x.Value}");
+            var items = kvp.Select(x =>
+                $"{x.Key}={x.Value.EnquoteStringIfItContainsWhitespace()}");
             var message = $"{title}: {string.Join(" ", items)}";
             logger.LogInformation(message);
         }
@@ -82,7 +83,7 @@ namespace NHSOnline.Backend.Support.Logging
 
         public static void LogModelStateValidationFailure<T>(this ILogger<T> logger, ModelStateDictionary modelState)
         {
-            logger.LogWarning("Model state validation failed: {0}", 
+            logger.LogWarning("Model state validation failed: {0}",
                 modelState.Values.SelectMany(x=>x.Errors).Select(x=>x.ErrorMessage));
         }
 

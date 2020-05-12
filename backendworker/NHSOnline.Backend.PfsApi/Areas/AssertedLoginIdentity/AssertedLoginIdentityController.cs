@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateJwtRequest model, [UserSession] UserSession userSession)
+        public async Task<IActionResult> Post([FromBody] CreateJwtRequest model, [UserSession] P5UserSession userSession)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity
                 var assertedLoginSessionVisitor = new AssertedLoginSessionVisitor(model, _auditor, _assertedLoginIdentityService);
                 var result = await userSession.Accept(assertedLoginSessionVisitor);
 
-                return await result.Accept(new CreateJwtResultVisitor(_logger, _metricLogger, model));
+                return await result.Accept(new CreateJwtResultVisitor(_logger, _metricLogger, model, userSession.OdsCode));
             }
             finally
             {

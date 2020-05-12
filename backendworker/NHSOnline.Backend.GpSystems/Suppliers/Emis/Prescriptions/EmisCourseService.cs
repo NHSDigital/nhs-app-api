@@ -20,9 +20,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
 
         public EmisCourseService(
-            ILogger<EmisCourseService> logger, 
-            EmisConfigurationSettings settings, 
-            IEmisClient emisClient, 
+            ILogger<EmisCourseService> logger,
+            EmisConfigurationSettings settings,
+            IEmisClient emisClient,
             IEmisPrescriptionMapper emisPrescriptionMapper)
         {
             _logger = logger;
@@ -36,16 +36,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         public async Task<GetCoursesResult> GetCourses(GpLinkedAccountModel gpLinkedAccountModel)
         {
             var emisUserSession = (EmisUserSession)gpLinkedAccountModel.GpUserSession;
-            
+
             try
             {
                 EmisRequestParameters emisRequestParameters = gpLinkedAccountModel.BuildEmisRequestParameters(_logger);
-                
+
                 _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Courses for user");
-                
+
                 var coursesResponse = await _emisClient.CoursesGet(emisRequestParameters);
-                
+
                 _logger.LogDebug("Fetch Courses for user complete");
 
                 if (coursesResponse.HasSuccessResponse)
@@ -60,32 +60,32 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                             var mostRecentIssueCount = courses.Count(c => c.MostRecentIssueDate.HasValue);
                             var nextIssueDateCount = courses.Count(c => c.NextIssueDate.HasValue);
                             var reviewDateCount = courses.Count(c => c.ReviewDate.HasValue);
-                        
+
                             var kvp = new Dictionary<string, string>
                             {
-                                { "MostRecentIssueDate populated ", $" {mostRecentIssueCount} / {totalCourses}" },
-                                { "NextIssueDate populated ",  $" {nextIssueDateCount} / {totalCourses}" },
-                                { "ReviewDate populated ", $" {reviewDateCount} / {totalCourses}" }
+                                { "MostRecentIssueDate populated", $"{mostRecentIssueCount} / {totalCourses}" },
+                                { "NextIssueDate populated",  $"{nextIssueDateCount} / {totalCourses}" },
+                                { "ReviewDate populated", $"{reviewDateCount} / {totalCourses}" }
                             };
 
-                            _logger.LogInformationKeyValuePairs("Prescription date data logging", kvp); 
+                            _logger.LogInformationKeyValuePairs("Prescription date data logging", kvp);
                         }
 
                         _logger
                             .LogDebug("Filtering courses from successful emis response so we are left with only repeat courses which can be requested");
 
-                        coursesResponse.Body.Courses = 
+                        coursesResponse.Body.Courses =
                             coursesResponse.Body.Courses
                             .Where(x => x.PrescriptionType == PrescriptionType.Repeat && x.CanBeRequested)
                             .OrderBy(x => x.Name);
 
                         var numberOfRepeatCourses = coursesResponse.Body.Courses.Count();
 
-                        if (_settings.CoursesMaxCoursesLimit.HasValue) 
-                        { 
-                            coursesResponse.Body.Courses = 
+                        if (_settings.CoursesMaxCoursesLimit.HasValue)
+                        {
+                            coursesResponse.Body.Courses =
                                 coursesResponse.Body.Courses
-                                    .Take(_settings.CoursesMaxCoursesLimit.Value); 
+                                    .Take(_settings.CoursesMaxCoursesLimit.Value);
                         }
 
                         var numberOfCoursesAfterFiltering = coursesResponse.Body.Courses.Count();
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                         };
 
                         _logger.LogDebug($"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
-                        
+
                         var courseListResponse = _emisPrescriptionMapper.Map(coursesResponse.Body);
                         courseListResponse.SpecialRequestNecessity = emisUserSession.PrescriptionSpecialRequestNecessity;
 
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                         return new GetCoursesResult.InternalServerError();
                     }
                 }
-                
+
                 _logger.LogEmisUnknownError(coursesResponse);
                 return GetCorrectErrorResult(coursesResponse);
             }
@@ -129,17 +129,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
         private GetCoursesResult GetCorrectErrorResult(
             EmisClient.EmisApiResponse response)
-        {  
+        {
             if (response.HasForbiddenResponse())
             {
                 _logger.LogWarning("The emis prescriptions service is not enabled");
                 _logger.LogEmisWarningResponse(response);
                 return new GetCoursesResult.Forbidden();
             }
-            
+
             _logger.LogError("Emis system is currently unavailable");
             _logger.LogEmisErrorResponse(response);
-            return new GetCoursesResult.BadGateway();       
+            return new GetCoursesResult.BadGateway();
         }
     }
 }
