@@ -22,6 +22,7 @@ class BrowserstackAndroidDriver : DriverSource {
     override fun newDriver(): WebDriver {
         val driver: AndroidDriver<WebElementFacade> = AndroidDriver(URL(Config.instance.browserstackUrl), caps())
         driver.manage().timeouts().implicitlyWait(TIMEOUT, TimeUnit.SECONDS)
+        driver.unlockDevice()
         return driver
     }
 
