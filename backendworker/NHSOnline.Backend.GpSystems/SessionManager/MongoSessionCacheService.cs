@@ -167,18 +167,36 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
         private sealed class RenameUserSessionSerializationBinder : ISerializationBinder
         {
+            private static readonly string P5UserSessionAssemblyName = typeof(P5UserSession).Assembly.FullName;
+            private static readonly string P9UserSessionAssemblyName = typeof(P9UserSession).Assembly.FullName;
+
             private readonly DefaultSerializationBinder _defaultBinder = new DefaultSerializationBinder();
 
             public Type BindToType(string assemblyName, string typeName)
                 => typeName switch
                 {
-                    "P9UserSession" => typeof(P9UserSession),
-                    "P5UserSession" => typeof(P5UserSession),
+                    nameof(P9UserSession) => typeof(P9UserSession),
+                    nameof(P5UserSession) => typeof(P5UserSession),
                     _ => _defaultBinder.BindToType(assemblyName, typeName)
                 };
 
             public void BindToName(Type serializedType, out string assemblyName, out string typeName)
-                => _defaultBinder.BindToName(serializedType, out assemblyName, out typeName);
+            {
+                if (serializedType == typeof(P5UserSession))
+                {
+                    assemblyName = P5UserSessionAssemblyName;
+                    typeName = nameof(P5UserSession);
+                }
+                else if (serializedType == typeof(P9UserSession))
+                {
+                    assemblyName = P9UserSessionAssemblyName;
+                    typeName = nameof(P9UserSession);
+                }
+                else
+                {
+                    _defaultBinder.BindToName(serializedType, out assemblyName, out typeName);
+                }
+            }
         }
     }
 }

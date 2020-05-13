@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Moq;
+using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
@@ -44,6 +45,42 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
             _mockMongoDatabase
                 .Setup(x => x.GetCollection<BsonDocument>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>()))
                 .Returns(_mockMongoCollection.Object);
+        }
+
+        [TestMethod]
+        public async Task CreateUserSession_P9UserSession_SetsTypeNameAsP9UserSession()
+        {
+            var userSession = new P9UserSession(string.Empty, new CitizenIdUserSession(), new TppUserSession(), string.Empty);
+
+            ArrangeNoEncryption();
+
+            var json = await CreateSessionAndCaptureJson(userSession);
+
+            JObject
+                .Parse(json)
+                .SelectToken("$type")
+                .Should().NotBeNull()
+                .And.BeOfType<JValue>()
+                .Which.Value.Should().BeOfType<string>()
+                .Which.Should().StartWith("P9UserSession, ");
+        }
+
+        [TestMethod]
+        public async Task CreateUserSession_P5UserSession_SetsTypeNameAsP5UserSession()
+        {
+            var userSession = new P5UserSession(string.Empty, new CitizenIdUserSession());
+
+            ArrangeNoEncryption();
+
+            var json = await CreateSessionAndCaptureJson(userSession);
+
+            JObject
+                .Parse(json)
+                .SelectToken("$type")
+                .Should().NotBeNull()
+                .And.BeOfType<JValue>()
+                .Which.Value.Should().BeOfType<string>()
+                .Which.Should().StartWith("P5UserSession, ");
         }
 
         [TestMethod]
@@ -175,9 +212,39 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.SessionManager
         }
 
         [TestMethod]
+        public async Task GetUserSession_StoredP9UserSessionBasedOnFullName_ReturnsP9UserSession()
+        {
+            var json = CreateSessionJsonWithTypeName("NHSOnline.Backend.Support.Session.P9UserSession");
+
+            ArrangeNoEncryption();
+            ArrangeSessionData(json);
+
+            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var session = await sut.GetUserSession("");
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure().Should().BeOfType<P9UserSession>("P9UserSession should be deserialised");
+        }
+
+        [TestMethod]
         public async Task GetUserSession_StoredP5UserSessionBasedOnName_ReturnsP5UserSession()
         {
             var json = CreateSessionJsonWithTypeName("P5UserSession");
+
+            ArrangeNoEncryption();
+            ArrangeSessionData(json);
+
+            var sut = new MongoSessionCacheService(_mockCipherService.Object, _mockLogger.Object, _mockMongoClient.Object, _mockConfig.Object);
+            var session = await sut.GetUserSession("");
+
+            session.HasValue.Should().BeTrue("session should be returned");
+            session.ValueOrFailure().Should().BeOfType<P5UserSession>("P5UserSession should be deserialised");
+        }
+
+        [TestMethod]
+        public async Task GetUserSession_StoredP5UserSessionBasedOnFullName_ReturnsP5UserSession()
+        {
+            var json = CreateSessionJsonWithTypeName("NHSOnline.Backend.Support.Session.P5UserSession");
 
             ArrangeNoEncryption();
             ArrangeSessionData(json);
