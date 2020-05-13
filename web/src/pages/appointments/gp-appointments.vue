@@ -4,7 +4,7 @@
                      :id="generateErrorId()"
                      message-type="error"
                      override-style="plain"
-                     aria-live="polite">
+                     aria-live="off">
       <error-title title="appointments.error.title.unavailable" />
       <error-paragraph from="appointments.error.403.line1" />
       <error-paragraph from="appointments.error.403.line2" />

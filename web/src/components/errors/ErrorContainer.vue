@@ -1,7 +1,7 @@
 <template>
   <div data-purpose="error-container"
        :class="[this.$style.msg, {[this.$style.plain]: isPlain}, 'nhsuk-width-container--full']"
-       aria-live="polite">
+       :aria-live="ariaLive">
     <h2 v-if="!isPlain" :class="['nhsuk-heading-m', $style.icon]">
       {{ $t('messageIconText.error') }}
     </h2>
@@ -15,6 +15,10 @@
 export default {
   name: 'ErrorContainer',
   props: {
+    ariaLive: {
+      type: String,
+      default: 'polite',
+    },
     overrideStyle: {
       type: String,
       default: 'none',
