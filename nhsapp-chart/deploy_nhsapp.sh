@@ -296,9 +296,10 @@ DEPLOYMENT_SUCCESS=$?
 
 info "Deployment Completed"
 
-if [[ "$TARGET_ZONE" == production || "$TARGET_ENVIRONMENT" == "staging" ]]; then
-	[[ "$TARGET_ZONE" == production ]] && info "Target zone is Production, not triggering SJR deployment."
-	[[ "$TARGET_ENVIRONMENT" == "staging" ]] && info "Target environment is Staging, not triggering SJR deployment."
+if [[ "$TARGET_ZONE" == production ]]; then
+	info "Target zone is production, not triggering SJR deployment."
+elif [[ "$TARGET_ENVIRONMENT" == "staging" ]]; then
+	info "Target environment is staging, not triggering SJR deployment."
 else
 	info "Deploying SJR into namespace $TARGET_ENVIRONMENT"
   trigger_sjr "$SJR_IMAGE_TAG" "$SJRCONFIG_IMAGE_TAG"
