@@ -50,6 +50,8 @@ namespace NHSOnline.Backend.PfsApi
             var sessionId = context.Principal.Claims
                 .FirstOrDefault(x => Constants.ClaimTypes.SessionId.Equals(x.Type, StringComparison.Ordinal))?.Value;
 
+            _logger.LogInformation($"Session cookie present, retrieving sessionid={sessionId}");
+
             var token = context.Request.Headers["X-CSRF-TOKEN"];
 
             return  await _gpSessionManager.RetrieveSession(sessionId, token);
