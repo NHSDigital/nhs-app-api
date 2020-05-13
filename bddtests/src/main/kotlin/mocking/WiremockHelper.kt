@@ -9,11 +9,11 @@ import org.apache.http.client.methods.CloseableHttpResponse
 import org.apache.http.client.methods.HttpDelete
 import org.apache.http.impl.client.HttpClients
 
-open class WiremockHelper(val configuration: MockingConfiguration) {
+class WiremockHelper(val configuration: MockingConfiguration) {
 
     private val gson = Gson()
 
-    protected fun postMapping(mapping: Mapping): Response {
+    fun postMapping(mapping: Mapping): Response {
         return SerenityRest.given()
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .and()
@@ -29,7 +29,7 @@ open class WiremockHelper(val configuration: MockingConfiguration) {
         deleteWiremockDetails(endpoint = "requests")
     }
 
-    protected fun getRequests(): Response {
+    fun getRequests(): Response {
         return SerenityRest
             .expect()
             .statusCode(HttpStatus.SC_OK)
@@ -54,5 +54,4 @@ open class WiremockHelper(val configuration: MockingConfiguration) {
         println("  Status code: ${response.statusLine.statusCode}")
         println("  Reason:      ${response.statusLine.reasonPhrase}")
     }
-
 }

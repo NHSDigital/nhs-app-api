@@ -2,8 +2,8 @@ package mocking.citizenId.login
 
 import mocking.GsonFactory
 import mocking.citizenId.CitizenIdMappingBuilder
-import mocking.citizenId.models.UserInfo
 import mocking.citizenId.models.GpIntegrationCredentials
+import mocking.citizenId.models.UserInfo
 import mocking.models.Mapping
 import models.IdentityProofingLevel
 import models.Patient

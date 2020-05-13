@@ -51,7 +51,7 @@ class AuthenticationStepDefinitionsBackend {
 
     @Given("^I have invalid OAuth details$")
     fun iHaveInvalidOAuthDetails() {
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             tokenRequest(codeVerifier!!, authCode, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
                     .respondWithBadRequest()
         }
@@ -62,16 +62,16 @@ class AuthenticationStepDefinitionsBackend {
         val supplier = Supplier.EMIS
         val patient = Patient.getDefault(supplier)
         SerenityHelpers.setPatient(patient)
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             tokenRequest(codeVerifier!!,
                     authCode,
                     GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
                     .respondWithServerError()
         }
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             userInfoRequest(patient.accessToken).respondWithServerError()
         }
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             signingKeyRequest().respondWithSuccess(SucceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)

@@ -55,7 +55,7 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
     fun registrationSetup(registration: OrganDonationRegistrationRequest,
                                   action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
         OrganDonationSerenityHelpers.ORGAN_DONATION_DECISION.set(registration)
-        mockingClient.forOrganDonation { action(decisionBuilder(registration)) }
+        mockingClient.forOrganDonation.mock { action(decisionBuilder(registration)) }
     }
 }
 

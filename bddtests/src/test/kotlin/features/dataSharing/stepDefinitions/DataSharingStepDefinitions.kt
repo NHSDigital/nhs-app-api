@@ -37,7 +37,7 @@ class DataSharingStepDefinitions {
         SerenityHelpers.setGpSupplier(supplier)
         CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(patient)
-        mockingClient.forNdop { postTokenToNdop().respondWithNdopMockPage() }
+        mockingClient.forNdop.mock { postTokenToNdop().respondWithNdopMockPage() }
     }
 
     @When("^I click the '(.*)' contents link on the Data Sharing page$")

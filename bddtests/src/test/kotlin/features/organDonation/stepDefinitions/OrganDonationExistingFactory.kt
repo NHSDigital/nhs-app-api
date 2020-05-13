@@ -26,7 +26,7 @@ class OrganDonationExistingFactory (var patient: Patient, val gpSystem: Supplier
 
     fun appointedRepresentative() : Resource {
         val registration = OrganDonationRegistrationDataBuilder.appointRepresentative(patient)
-        mockingClient.forOrganDonation {
+        mockingClient.forOrganDonation.mock {
             lookupOrganDonationRegistration(patient).respondWithSuccess(registration)
         }
         DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
@@ -58,7 +58,7 @@ class OrganDonationExistingFactory (var patient: Patient, val gpSystem: Supplier
     }
 
     private fun existing(registration: Resource) {
-        mockingClient.forOrganDonation {
+        mockingClient.forOrganDonation.mock {
             lookupOrganDonationRegistration(patient).respondWithSuccess(registration)
         }
         DemographicsFactory.getForSupplier(gpSystem).enabled(patient)

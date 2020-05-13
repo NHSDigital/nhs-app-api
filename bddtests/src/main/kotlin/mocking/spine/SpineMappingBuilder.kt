@@ -5,7 +5,7 @@ import mocking.spine.ePS.EPSMappingBuilder
 import mocking.spine.ePS.EPSMappingBuilder111ItemDetail
 import mocking.spine.ePS.EPSMappingBuilder111ItemSummary
 
-open class SpineMappingBuilder(method: String, relativePath: String = "", soapAction: String = "")
+open class SpineMappingBuilder(method: String = "GET", relativePath: String = "", soapAction: String = "")
     : MappingBuilder(method, "/spine$relativePath") {
 
     companion object {

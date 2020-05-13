@@ -17,7 +17,7 @@ class OrganDonationErrorStepDefinitionsBackend {
     @Given("^I am a (\\w+) api user registered with OD but Reference Data returns '(\\d+)' error$")
     fun iAmRegisteredWithOrganDonationButReferenceDataThrowsError(gpSystem: String, errorCode: Int) {
         val supplier = Supplier.valueOf(gpSystem)
-        OrganDonationFactory(supplier).mockingClient.forOrganDonation {
+        OrganDonationFactory(supplier).mockingClient.forOrganDonation.mock {
             referenceData().respondWithError(errorCode)
         }
     }

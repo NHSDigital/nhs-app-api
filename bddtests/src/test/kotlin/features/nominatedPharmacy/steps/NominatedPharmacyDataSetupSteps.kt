@@ -29,7 +29,7 @@ open class NominatedPharmacyDataSetupSteps {
         val responseStringForUpdatedPharmacy =
                 GetNominatedPharmacyRequestBuilder.getResponse(nhsNumber, surname, dateOfBirth)
 
-        mockingClient.forSpine {
+        mockingClient.forSpine.mock {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pdsquery/QUPA_IN000008UK02")
                     .respondWithSuccess(responseStringForUpdatedPharmacy)
                     .inScenario("changeNominatedPharmacy")
@@ -54,7 +54,7 @@ open class NominatedPharmacyDataSetupSteps {
         val responseStringForUpdatedPharmacy =
                 GetNominatedPharmacyRequestBuilder.getResponse(personalDetails, odsCode, arrayOf("P1"))
 
-        mockingClient.forSpine {
+        mockingClient.forSpine.mock {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pdsquery/QUPA_IN000008UK02")
                     .respondWithSuccess(responseStringForUpdatedPharmacy)
                     .inScenario("changeNominatedPharmacy")
@@ -109,7 +109,7 @@ open class NominatedPharmacyDataSetupSteps {
     }
 
     private fun setupNominatedPharmacyWithResponseString(responseStringForUpdatedPharmacy: String, odsCode: String) {
-        mockingClient.forSpine {
+        mockingClient.forSpine.mock {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pdsquery/QUPA_IN000008UK02")
                     .respondWithSuccess(responseStringForUpdatedPharmacy)
                     .inScenario("changeNominatedPharmacy")
@@ -125,7 +125,7 @@ open class NominatedPharmacyDataSetupSteps {
     }
 
     fun setupWiremockForNominatedPharmacyWhenSpineFails() {
-        mockingClient.forSpine {
+        mockingClient.forSpine.mock {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pdsquery/QUPA_IN000008UK02")
                     .respondWithServiceUnavailable()
 
@@ -164,7 +164,7 @@ open class NominatedPharmacyDataSetupSteps {
                         organisation.NACSCode,
                         arrayOf(pharmacyType))
 
-        mockingClient.forSpine {
+        mockingClient.forSpine.mock {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pds/PRPA_IN000203UK03")
                     .respondWithAccepted()
                     .inScenario("changeNominatedPharmacy")
@@ -176,7 +176,7 @@ open class NominatedPharmacyDataSetupSteps {
                     }
         }
 
-        mockingClient.forSpine {
+        mockingClient.forSpine.mock {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pdsquery/QUPA_IN000008UK02")
                     .respondWithSuccess(responseStringForUpdatedPharmacy)
                     .inScenario("changeNominatedPharmacy")

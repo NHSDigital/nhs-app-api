@@ -11,29 +11,29 @@ class CitizenIdStubs(private val mockingClient: MockingClient) {
 
     fun createFor(patient: Patient) {
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             initialLoginRequest(patient,".*", Config.instance.cidClientId,"matches")
                     .respondWithLoginPage()
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             createAccountRequest()
                     .respondWithLoginPage()
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             completeLoginRequest(patient,patient.name.surname)
                     .respondWithRedirectResponse()
         }
 
         val idToken = IdTokenBuilder().getSignedToken(patient).serialize()
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             signingKeyRequest()
                     .respondWithSuccess(SucceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             val codeVerifier = patient.codeVerifier
             val authCode = patient.authCode
             tokenRequest(codeVerifier, authCode, ".*", customTokenRequest = TokenRequest(codeVerifier,
@@ -42,7 +42,7 @@ class CitizenIdStubs(private val mockingClient: MockingClient) {
                     .respondWithSuccess(patient.accessToken, idToken = idToken)
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             userInfoRequest(patient.accessToken).respondWithSuccess(patient)
         }
     }

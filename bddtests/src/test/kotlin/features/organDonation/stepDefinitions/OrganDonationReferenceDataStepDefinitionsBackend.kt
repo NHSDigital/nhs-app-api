@@ -18,7 +18,7 @@ class OrganDonationReferenceDataStepDefinitionsBackend {
             "return data$")
     fun iAmRegisteredWithOrganDonationAndReferenceDataWillBeSuccessful(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        OrganDonationFactory(supplier).mockingClient.forOrganDonation {
+        OrganDonationFactory(supplier).mockingClient.forOrganDonation.mock {
             referenceData().respondWithSuccess(OrganDonationReferenceDataBuilder.build())
         }
     }

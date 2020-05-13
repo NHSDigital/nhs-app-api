@@ -20,7 +20,7 @@ const val HEADER_CLIENT_ID_VALUE = "ODR-26-NHSAP"
 
 const val ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT = 10201
 
-open class OrganDonationMappingBuilder(method: String, relativePath: String = "")
+open class OrganDonationMappingBuilder(method: String = "POST", relativePath: String = "")
     : MappingBuilder(method, Config.instance.updatedOrganDonation + relativePath) {
     protected val errorResponseCodingSystem = "http://www.nhsbt.nhs.uk/fhir/STU3/ValueSet/ODR-ErrorOrWarningCode-1"
 

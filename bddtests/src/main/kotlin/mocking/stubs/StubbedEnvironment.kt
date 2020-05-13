@@ -17,7 +17,7 @@ class StubbedEnvironment {
     fun generateStubs()
     {
         val mockingClient = MockingClient.instance
-        mockingClient.clearWiremock()
+        mockingClient.wiremockHelper.clearWiremock()
         mockingClient.favicon()
 
         resetSerenityVariables()

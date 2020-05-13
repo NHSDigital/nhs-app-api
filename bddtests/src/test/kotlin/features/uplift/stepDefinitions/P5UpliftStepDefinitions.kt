@@ -34,8 +34,7 @@ class P5UpliftStepDefinitions : HybridPageObject() {
 
   @Given("^I am a patient with proof level 5$")
   fun iAmAPatientWithProofLevel5() {
-    val supplier = Supplier.valueOf("EMIS")
-    mockingClient.clearWiremock()
+    val supplier = Supplier.EMIS
     mockingClient.favicon()
 
     val patient = Patient.getDefault(supplier).copy(identityProofingLevel = IdentityProofingLevel.P5)
@@ -51,8 +50,7 @@ class P5UpliftStepDefinitions : HybridPageObject() {
   fun iAmAPatientLoggingInNativelyWithProofLevel5() {
     GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
 
-    val supplier = Supplier.valueOf("EMIS")
-    mockingClient.clearWiremock()
+    val supplier = Supplier.EMIS
     mockingClient.favicon()
 
     val patient = Patient.getDefault(supplier).copy(identityProofingLevel = IdentityProofingLevel.P5)

@@ -30,7 +30,7 @@ class RefreshTokenStepDefinitions {
         val refreshedAccessToken = AccessTokenBuilder().getSignedToken(patient).serialize()
         AuthorizationSerenityHelpers.REFRESHED_ACCESS_TOKEN.set(refreshedAccessToken)
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             refreshTokenRequest(SessionConstants.RefreshToken)
                     .respondWithSuccess(accessToken = refreshedAccessToken)
         }
@@ -39,7 +39,7 @@ class RefreshTokenStepDefinitions {
     @Given("^I am an API user who wishes to refresh their access token but NhsLogin will fail$")
     fun givenIAmAnApiUserWhoWishesToRefreshTheirAccessTokenAndNhsLoginFails() {
         setupPatient()
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             refreshTokenRequest(SessionConstants.RefreshToken)
                     .respondWithServerError()
         }

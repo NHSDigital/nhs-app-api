@@ -27,7 +27,7 @@ class OrganDonationFactory(val gpSystem: Supplier) {
         CitizenIdSessionCreateJourney().createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
 
-        mockingClient.forOrganDonation {
+        mockingClient.forOrganDonation.mock {
             referenceData().respondWithSuccess(OrganDonationReferenceDataBuilder.build())
         }
     }
@@ -35,7 +35,7 @@ class OrganDonationFactory(val gpSystem: Supplier) {
     fun lookUpRegistrationWithSuccessfulDemographics(patient: Patient? = null,
                                                      action: (OrganDonationLookupRegistrationBuilder) -> Mapping) {
         val patientToUse = patient ?: setupPatient()
-        mockingClient.forOrganDonation {
+        mockingClient.forOrganDonation.mock {
             action(lookupOrganDonationRegistration(patientToUse))
         }
         DemographicsFactory.getForSupplier(gpSystem).enabled(patientToUse)
@@ -44,7 +44,7 @@ class OrganDonationFactory(val gpSystem: Supplier) {
     fun demographicsTimeout() {
         val patient = setupPatient()
         val registration = OrganDonationRegistrationDataBuilder.optOut(patient)
-        mockingClient.forOrganDonation {
+        mockingClient.forOrganDonation.mock {
             lookupOrganDonationRegistration(patient).respondWithSuccess(registration)
         }
         DemographicsFactory.getForSupplier(gpSystem).enabledButTimesOut(patient)
@@ -53,7 +53,7 @@ class OrganDonationFactory(val gpSystem: Supplier) {
     fun demographicsInternalError() {
         val patient = setupPatient()
         val registration = OrganDonationRegistrationDataBuilder.optOut(patient)
-        mockingClient.forOrganDonation {
+        mockingClient.forOrganDonation.mock {
             lookupOrganDonationRegistration(patient).respondWithSuccess(registration)
         }
         DemographicsFactory.getForSupplier(gpSystem).throwInternalError(patient)
@@ -85,6 +85,6 @@ class OrganDonationFactory(val gpSystem: Supplier) {
         val withdrawRegistration = OrganDonationWithdrawRequest.withdrawDecision(patient)
         SerenityHelpers.setSerenityVariableIfNotAlreadySet(
                 OrganDonationSerenityHelpers.ORGAN_DONATION_WITHDRAWAL, withdrawRegistration)
-        mockingClient.forOrganDonation { action(withdrawOrganDonationRegistration(withdrawRegistration)) }
+        mockingClient.forOrganDonation.mock { action(withdrawOrganDonationRegistration(withdrawRegistration)) }
     }
 }

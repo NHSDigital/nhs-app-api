@@ -21,7 +21,7 @@ class CitizenIdSessionCreateJourney {
     fun createFor(patient: Patient, alternativeUser:Boolean = false) {
         if (!GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.isTrueOrFalse() || alternativeUser) {
             val accessToken = createMockingSteps(patient, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
-            mockingClient.forCitizenId {
+            mockingClient.forCitizenId.mock {
                 userInfoRequest(accessToken).respondWithSuccess(patient)
             }
             GlobalSerenityHelpers.CITIZEN_ID_SESSION_CREATED.set(true)
@@ -31,7 +31,7 @@ class CitizenIdSessionCreateJourney {
     fun createInvalidFor(patient: Patient) {
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         val idToken = mockingStepsInitialise(patient, redirectUri)
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             tokenRequest(patient.codeVerifier, patient.authCode, redirectUri)
                     .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
         }
@@ -41,7 +41,7 @@ class CitizenIdSessionCreateJourney {
         val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
         val idToken = mockingStepsInitialise(patient, redirectUri)
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             tokenRequest(patient.codeVerifier, patient.authCode, redirectUri)
                     .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
                     .delayedBy(java.time.Duration.ofSeconds(DELAY_BY))
@@ -49,24 +49,24 @@ class CitizenIdSessionCreateJourney {
     }
 
     private fun mockingStepsInitialise(patient: Patient, redirectUri: String): String {
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             initialLoginRequest(patient, redirectUri, Config.instance.cidClientId)
                     .respondWithLoginPage()
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             createAccountRequest()
                     .respondWithLoginPage()
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             completeLoginRequest(patient)
                     .respondWithRedirectResponse()
         }
 
         val idToken = ""
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             signingKeyRequest()
                     .respondWithSuccess(SucceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
@@ -76,7 +76,7 @@ class CitizenIdSessionCreateJourney {
     fun createInvalidAuthenticationTokenFor(patient: Patient) {
         val accessToken = createMockingSteps(patient, GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail())
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             userInfoRequest(accessToken).respondWithSuccess(patient
                     .copy(im1ConnectionToken =
                     Im1ConnectionToken("Invalid", "invalid")))
@@ -84,22 +84,22 @@ class CitizenIdSessionCreateJourney {
     }
 
     private fun createMockingSteps(patient: Patient, redirectUri :String): String {
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             initialLoginRequest(patient, redirectUri, Config.instance.cidClientId)
                     .respondWithLoginPage()
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             UpliftLoginRequestBuilder(patient, redirectUri, Config.instance.cidClientId)
                     .respondWithUpliftPage()
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             createAccountRequest()
                     .respondWithLoginPage()
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             completeLoginRequest(patient)
                     .respondWithRedirectResponse()
         }
@@ -107,17 +107,17 @@ class CitizenIdSessionCreateJourney {
         val idToken = IdTokenBuilder().getSignedToken(patient).serialize()
         val accessToken = patient.accessToken
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             configurationRequest()
                     .respondWithSuccess(SuccessResponse())
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             signingKeyRequest()
                     .respondWithSuccess(SucceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
 
-        mockingClient.forCitizenId {
+        mockingClient.forCitizenId.mock {
             tokenRequest(patient.codeVerifier, patient.authCode, redirectUri)
                     .respondWithSuccess(accessToken = accessToken, idToken = idToken)
         }

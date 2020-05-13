@@ -29,7 +29,7 @@ class OrganDonationErrorStepDefinitions {
         CitizenIdSessionCreateJourney().createFor(factory.patient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(factory.patient)
 
-        factory.mockingClient.forOrganDonation {
+        factory.mockingClient.forOrganDonation.mock {
             referenceData().respondWithError(errorCode)
         }
     }
@@ -41,13 +41,13 @@ class OrganDonationErrorStepDefinitions {
         CitizenIdSessionCreateJourney().createFor(factory.patient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(factory.patient)
         val existingRegistration = factory.existing.optIn()
-        factory.mockingClient.forOrganDonation {
+        factory.mockingClient.forOrganDonation.mock {
             referenceData().respondWithError(errorCode)
                     .inScenario(ERROR_SCENARIO)
                     .whenScenarioStateIs(Scenario.STARTED)
                     .willSetStateTo(ERROR_SCENARIO_WILL_SUCCEED)}
 
-        factory.mockingClient.forOrganDonation {
+        factory.mockingClient.forOrganDonation.mock {
             referenceData().respondWithSuccess(OrganDonationReferenceDataBuilder.build())
                     .inScenario(ERROR_SCENARIO)
                     .whenScenarioStateIs(ERROR_SCENARIO_WILL_SUCCEED)}

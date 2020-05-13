@@ -20,7 +20,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
         val updateSoapAction = "urn:nhs:names:services:pdsquery/QUPA_IN000008UK02"
 
         // Get nominated pharmacy ods code
-        mockingClient.forSpine {
+        mockingClient.forSpine.mock {
             PdsNominatedPharmacyBuilder(updateSoapAction)
                     .respondWithSuccess(getResponse("FC177", pharmacyTypes))
                     .inScenario(changeNominatedPharmacy)
@@ -28,7 +28,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
                     .willSetStateTo(pharmacyUpdatedScenario) }
 
         // Get nominated pharmacy ods code (2nd Time after update )
-        mockingClient.forSpine {
+        mockingClient.forSpine.mock {
             PdsNominatedPharmacyBuilder(updateSoapAction)
                     .respondWithSuccess(getResponse("FK275", pharmacyTypes))
                     .inScenario(changeNominatedPharmacy)
@@ -36,7 +36,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
         }
 
         // Update nominated pharmacy ods code
-        mockingClient.forSpine {
+        mockingClient.forSpine.mock {
             PdsNominatedPharmacyBuilder("urn:nhs:names:services:pds/PRPA_IN000203UK03")
                     .respondWithAccepted() }
 

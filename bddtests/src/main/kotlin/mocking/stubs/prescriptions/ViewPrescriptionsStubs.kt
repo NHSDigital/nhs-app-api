@@ -129,13 +129,13 @@ class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
                         }
 
         mapSpinePrescriptionTrackingStubs.listResponse().forEach { scenario ->
-            mockingClient.forSpine {
+            mockingClient.forSpine.mock {
                 scenario.getResponse(itemSummary.prescriptionTrackingRequest())
             }
         }
 
         mapSpinePrescriptionDetailStubs.listResponse().forEach { scenario ->
-            mockingClient.forSpine {
+            mockingClient.forSpine.mock {
                 scenario.getResponse(
                         itemDescription
                                 .prescriptionDetailTrackingRequest(scenario.forMatcher))

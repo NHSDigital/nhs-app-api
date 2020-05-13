@@ -2,7 +2,6 @@ package features.sharedSteps
 
 import config.Config
 import constants.Supplier
-import cucumber.api.java.After
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -28,7 +27,6 @@ import pages.withNormalisedText
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.set
-import webdrivers.browserstack.BrowserstackLocalService
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
 
@@ -49,15 +47,9 @@ open class SharedStepDefinitions {
     lateinit var webHeader: WebHeader
     private val mockingClient = MockingClient.instance
 
-    @After
-    fun stopBrowserstackIfRunning() {
-        BrowserstackLocalService.stop()
-    }
-
     @Given("^I am an? (.*) patient$")
     fun initialisePatientAndGpSystem(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        mockingClient.clearWiremock()
         mockingClient.favicon()
 
         val patient = Patient.getDefault(supplier)
@@ -77,7 +69,6 @@ open class SharedStepDefinitions {
         GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidNativeRedirectUri)
 
         val supplier = Supplier.valueOf(gpSystem)
-        mockingClient.clearWiremock()
         mockingClient.favicon()
 
         val patient = Patient.getDefault(supplier)
@@ -96,8 +87,7 @@ open class SharedStepDefinitions {
         GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
         GlobalSerenityHelpers.LOGIN_REDIRECT_URI.set(Config.instance.cidNativeRedirectUri)
 
-        val supplier = Supplier.valueOf("EMIS")
-        mockingClient.clearWiremock()
+        val supplier = Supplier.EMIS
         mockingClient.favicon()
 
         val patient = Patient.getDefault(supplier)

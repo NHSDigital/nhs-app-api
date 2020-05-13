@@ -16,6 +16,7 @@ import utils.GlobalSerenityHelpers
 import utils.contains
 import utils.getOrNull
 import utils.set
+import webdrivers.browserstack.BrowserstackLocalService
 import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
@@ -40,7 +41,7 @@ class SetupAndTeardown {
         MongoDBConnection.collections().forEach { connection -> connection.clearCache() }
 
         val workerClient = WorkerClient()
-        mockingClient.clearWiremock()
+        mockingClient.wiremockHelper.clearWiremock()
 
         setSessionVariable(MockingClient::class).to(mockingClient)
         setSessionVariable(WorkerClient::class).to(workerClient)
@@ -61,6 +62,11 @@ class SetupAndTeardown {
 
             throw e
         }
+    }
+
+    @After
+    fun stopBrowserstackIfRunning() {
+        BrowserstackLocalService.stop()
     }
 
     private fun assertNoConsoleLogs(scenario: Scenario) {

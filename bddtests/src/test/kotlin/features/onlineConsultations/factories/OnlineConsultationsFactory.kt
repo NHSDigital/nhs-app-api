@@ -8,73 +8,73 @@ class OnlineConsultationsFactory {
    private val onlineConsultationsMappingBuilder = OnlineConsultationsMappingBuilder()
 
     fun setupOnlineConsultationsData() {
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.isValidRequest().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.termsAndConditionsRequest().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.conditionsRequest().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.selfOrChildRequest().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.genderRequest().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.urgencyQuestion().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.emergencyEndOfConsultationConfiguration().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.emergencyQuestion().respondWithSuccess()
         }
     }
 
     fun setupOnlineConsultationsDataNonEmergency() {
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.isValidRequest().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.termsAndConditionsRequest().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.conditionsRequest().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.selfOrChildRequest().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.urgencyQuestion().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.genderRequest().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.howWeCanHelpQuestion().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.dobQuestion().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.alcoholQuestion().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.imageQuestion().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.quantityQuestion().respondWithSuccess()
         }
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.carePlan().respondWithSuccess()
         }
     }
 
     fun setupOnlineConsultationsDataIsNotValid() {
-        mockingClient.forOnlineConsultations {
+        mockingClient.forOnlineConsultations.mock {
             onlineConsultationsMappingBuilder.isValidRequest(false).respondWithSuccess()
         }
     }
