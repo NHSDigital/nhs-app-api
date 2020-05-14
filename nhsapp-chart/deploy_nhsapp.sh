@@ -32,7 +32,10 @@ function trigger_sjr() {
 	"demo")
 		BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_Namespaces_3Demo_2DeploySjrAppRepo"
 	;;
-	"stubbed"*)
+	"onboardingsandpit")
+                BUILD_CONFIG_ID="NHSOnline_Deployment_2NonLiveSubscription_Development_System_5OnboardingSandpit_2DeploySjrAppRepo"
+        ;;
+        "stubbed"*)
 		BUILD_CONFIG_ID="NHSOnline_Deployment_3LiveSubscription_2Staging_Namespaces_3Stubbed_2DeploySjrAppRepo"
 	;;
 	"staging")

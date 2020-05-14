@@ -29,6 +29,7 @@ parameters:
       - scratch20
       - scratch21
       - previewRelease
+      - onboardingsandpit
 
   - name: iosTarget
     displayName: iOS native app target
@@ -58,6 +59,7 @@ parameters:
       - Scratch20
       - Scratch21
       - Preview
+      - Onboardingsandpit
 
   - name: intTestsRunAndroidNative
     displayName: Run Android Native Integration Tests

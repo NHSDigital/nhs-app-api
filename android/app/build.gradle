@@ -205,6 +205,11 @@ android {
             applicationIdSuffix ".scratch21"
             manifestPlaceholders = [appName: "NHS App Scratch 21"]
         }
+        onboardingsandpit {
+            initWith debug
+            applicationIdSuffix ".onboardingsandpit"
+            manifestPlaceholders = [appName: "NHS App Onboarding Sandpit"]
+        }
     }
     testOptions {
         unitTests {

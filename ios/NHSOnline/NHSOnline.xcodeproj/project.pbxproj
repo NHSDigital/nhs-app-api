@@ -29,6 +29,9 @@
 		14ED9E4D234B58480015C767 /* UINavigationControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED9E4C234B58480015C767 /* UINavigationControllerExtensions.swift */; };
 		14F7C8D7229E806B00550918 /* WebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */; };
 		14FD70C32282E02B0072B280 /* ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14FD70C22282E02B0072B280 /* ApplicationState.swift */; };
+		2485C4DB246DA4740014F1C5 /* Onboardingsandpit.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 2485C4DA246DA4730014F1C5 /* Onboardingsandpit.xcconfig */; };
+		2485C4DF246DA56E0014F1C5 /* Pods-NHSOnlineTests.onboardingsandpit.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 2485C4DE246DA56E0014F1C5 /* Pods-NHSOnlineTests.onboardingsandpit.xcconfig */; };
+		2485C4E4246DA8390014F1C5 /* Pods-NHSOnline.onboardingsandpit.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 2485C4E3246DA8390014F1C5 /* Pods-NHSOnline.onboardingsandpit.xcconfig */; };
 		2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */; };
 		2E0CFB24223DC714002ABFA1 /* BaseSchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */; };
 		2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */; };
@@ -177,6 +180,10 @@
 		14F7C8D6229E806B00550918 /* WebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewDelegateTests.swift; sourceTree = "<group>"; };
 		14FD70C22282E02B0072B280 /* ApplicationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationState.swift; sourceTree = "<group>"; };
 		19AB5F83EAB8FEAAC9B43F9C /* Pods-NHSOnlineTests.preview.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.preview.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.preview.xcconfig"; sourceTree = "<group>"; };
+		2485C4DA246DA4730014F1C5 /* Onboardingsandpit.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Onboardingsandpit.xcconfig; sourceTree = "<group>"; };
+		2485C4DE246DA56E0014F1C5 /* Pods-NHSOnlineTests.onboardingsandpit.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnlineTests.onboardingsandpit.xcconfig"; path = "Target Support Files/Pods-NHSOnlineTests/Pods-NHSOnlineTests.onboardingsandpit.xcconfig"; sourceTree = "<group>"; };
+		2485C4E3246DA8390014F1C5 /* Pods-NHSOnline.onboardingsandpit.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-NHSOnline.onboardingsandpit.xcconfig"; path = "Target Support Files/Pods-NHSOnline/Pods-NHSOnline.onboardingsandpit.xcconfig"; sourceTree = "<group>"; };
+		2485C4E5246DABBF0014F1C5 /* NHSOnlineOnboardingsandpit.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = NHSOnlineOnboardingsandpit.entitlements; sourceTree = "<group>"; };
 		2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlers.swift; sourceTree = "<group>"; };
 		2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSchemeHandlers.swift; sourceTree = "<group>"; };
 		2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailToSchemeHandler.swift; sourceTree = "<group>"; };
@@ -373,6 +380,7 @@
 		105BB9752178DC1700571671 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
+				2485C4DA246DA4730014F1C5 /* Onboardingsandpit.xcconfig */,
 				14F1A8A1238C264D00826714 /* Scratch17.xcconfig */,
 				14F1A8A0238C264D00826714 /* Scratch18.xcconfig */,
 				14F1A89F238C264D00826714 /* Scratch19.xcconfig */,
@@ -524,6 +532,8 @@
 		7282DE3DA4E658F6DCAAB637 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				2485C4E3246DA8390014F1C5 /* Pods-NHSOnline.onboardingsandpit.xcconfig */,
+				2485C4DE246DA56E0014F1C5 /* Pods-NHSOnlineTests.onboardingsandpit.xcconfig */,
 				509B1B7167BF888B536DAFEC /* Pods-NHSOnlineTests.development.xcconfig */,
 				D98271DFF053EF4BE2AB2451 /* Pods-NHSOnlineTests.browserstacklocal.xcconfig */,
 				6B08E80BF14ACD10D0843B6A /* Pods-NHSOnlineTests.browserstacktc.xcconfig */,
@@ -589,6 +599,7 @@
 		8A55006E23D89AF600795739 /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
+				2485C4E5246DABBF0014F1C5 /* NHSOnlineOnboardingsandpit.entitlements */,
 				2EC60A6C23194F94004094F3 /* NHSOnline.entitlements */,
 				8A55008323D89E9C00795739 /* NHSOnlineStaging.entitlements */,
 				8A55006D23D898B900795739 /* NHSOnlinePreview.entitlements */,
@@ -987,12 +998,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				107EA7B721CCE3CC006C675B /* nativeAppAssets in Resources */,
+				2485C4DF246DA56E0014F1C5 /* Pods-NHSOnlineTests.onboardingsandpit.xcconfig in Resources */,
 				C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */,
 				F057336920A72F040059032D /* HeaderBar.xib in Resources */,
 				C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */,
 				F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */,
+				2485C4DB246DA4740014F1C5 /* Onboardingsandpit.xcconfig in Resources */,
 				DB4B658222FAD9E100C8EE99 /* BiometricBreadcrumb.xib in Resources */,
 				139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */,
+				2485C4E4246DA8390014F1C5 /* Pods-NHSOnline.onboardingsandpit.xcconfig in Resources */,
 				F07607F320B44C0300069F7F /* WebEvents.js in Resources */,
 				C20578082028B94800CDBDC5 /* Main.storyboard in Resources */,
 			);
@@ -3172,6 +3186,113 @@
 			};
 			name = Debug;
 		};
+		2485C4E0246DA6E20014F1C5 /* Onboardingsandpit */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_DISPLAY_NAME = Onboardingsandpit;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.Onboardingsandpit;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+			};
+			name = Onboardingsandpit;
+		};
+		2485C4E1246DA6E20014F1C5 /* Onboardingsandpit */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2485C4DA246DA4730014F1C5 /* Onboardingsandpit.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				APP_DISPLAY_NAME = Onboardingsandpit;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NHSOnline/Entitlements/NHSOnlineOnboardingsandpit.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = NHSOnline/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.onboardingsandpit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Onboardingsandpit;
+		};
+		2485C4E2246DA6E20014F1C5 /* Onboardingsandpit */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2485C4DE246DA56E0014F1C5 /* Pods-NHSOnlineTests.onboardingsandpit.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				INFOPLIST_FILE = NHSOnlineTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = online.nhs.com.NHSOnlineTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NHSOnline.app/NHSOnline";
+			};
+			name = Onboardingsandpit;
+		};
 		4703497A21945FB300F72D05 /* Preview */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 105BB9A42186FA3E00571671 /* Defaults.xcconfig */;
@@ -4253,6 +4374,7 @@
 				105BB9A12179C11000571671 /* Scratch10 */,
 				C2466F4B2243ED3B006C336F /* Scratch11 */,
 				1381D46421BFFC2F00B54300 /* Scratch12 */,
+				2485C4E0246DA6E20014F1C5 /* Onboardingsandpit */,
 				1A18792122E07BD500F2BACC /* Debug */,
 				C2466F4E2243ED50006C336F /* Scratch13 */,
 				C2466F512243ED64006C336F /* Scratch14 */,
@@ -4268,7 +4390,7 @@
 				987E7B40214AF7DB00433F9C /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Scratch12;
+			defaultConfigurationName = Onboardingsandpit;
 		};
 		C20578272028B94800CDBDC5 /* Build configuration list for PBXNativeTarget "NHSOnline" */ = {
 			isa = XCConfigurationList;
@@ -4288,6 +4410,7 @@
 				105BB9A22179C11000571671 /* Scratch10 */,
 				C2466F4C2243ED3B006C336F /* Scratch11 */,
 				1381D46521BFFC2F00B54300 /* Scratch12 */,
+				2485C4E1246DA6E20014F1C5 /* Onboardingsandpit */,
 				1A18792222E07BD500F2BACC /* Debug */,
 				C2466F4F2243ED50006C336F /* Scratch13 */,
 				C2466F522243ED64006C336F /* Scratch14 */,
@@ -4303,7 +4426,7 @@
 				987E7B41214AF7DB00433F9C /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Scratch12;
+			defaultConfigurationName = Onboardingsandpit;
 		};
 		C205782A2028B94800CDBDC5 /* Build configuration list for PBXNativeTarget "NHSOnlineTests" */ = {
 			isa = XCConfigurationList;
@@ -4323,6 +4446,7 @@
 				105BB9A32179C11000571671 /* Scratch10 */,
 				C2466F4D2243ED3B006C336F /* Scratch11 */,
 				1381D46621BFFC2F00B54300 /* Scratch12 */,
+				2485C4E2246DA6E20014F1C5 /* Onboardingsandpit */,
 				1A18792322E07BD500F2BACC /* Debug */,
 				C2466F502243ED50006C336F /* Scratch13 */,
 				C2466F532243ED64006C336F /* Scratch14 */,
@@ -4338,7 +4462,7 @@
 				987E7B42214AF7DB00433F9C /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Scratch12;
+			defaultConfigurationName = Onboardingsandpit;
 		};
 /* End XCConfigurationList section */
 	};

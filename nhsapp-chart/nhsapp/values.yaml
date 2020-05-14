@@ -741,6 +741,50 @@ knownservices_config: {
       "validateSession": false
     },
     {
+      "id": "cid-sandpit-account",
+      "url": "https://account.sandpit.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
+      "id": "cid-sandpit-auth",
+      "url": "https://auth.sandpit.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
+      "id": "cid-sandpit-uaf",
+      "url": "https://uaf.sandpit.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
+      "id": "cid-sandpit-access",
+      "url": "https://access.sandpit.signin.nhs.uk",
+      "subServices": null,
+      "javaScriptInteractionMode": "None",
+      "menuTab": "None",
+      "viewMode": "WebView",
+      "showThirdPartyWarning": false,
+      "requiresAssertedLoginIdentity": false,
+      "validateSession": false
+    },
+    {
       "id": "nhs-web-app",
       "url": "https://WebAppBaseUrl",
       "javaScriptInteractionMode": "NhsApp",

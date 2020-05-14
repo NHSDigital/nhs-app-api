@@ -111,7 +111,11 @@ spec:
           value: "https://www-{{ $.Values.global.environment }}.{{ $.Values.zone }}.{{ $.Values.domain }}"
           {{- end }}
         - name: CORS_AUTHORITY
+          {{- if $.Values.akamaiEnv }}
+          value: "https://*.{{ $.Values.akamaiEnv }}"
+          {{- else }}
           value: "https://*.{{ $.Values.domain }}"
+          {{- end }}
         - name: PORT
           value: "{{ $.Values.api.containerPort }}"
         - name: ASPNETCORE_URLS
@@ -350,7 +354,11 @@ spec:
         - name: AUDIT_COSMOS_URI
           value: https://nhsapp-{{ $.Values.zone }}.documents.azure.com:{{ $.Values.cosmosDBDefaultPort }}
         - name: ConfigurationSettings__CookieDomain
+          {{- if $.Values.akamaiEnv }}
+          value: .{{ $.Values.akamaiEnv }}
+          {{- else }}
           value: .{{ $.Values.domain }}
+          {{- end }}
         - name: ConfigurationSettings__EmisExtendedHttpTimeoutSeconds
           value: "{{ $.Values.api.emisExtendedTimeout }}"
         - name: AUDIT_COSMOS_KEY
