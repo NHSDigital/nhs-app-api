@@ -23,7 +23,7 @@ Feature: Proof level 5 shutter screens
     When I retrieve the '<Page>' page directly
     Then the page title is '<Page Title>'
     And I am asked to prove my identity to access '<Page>'
-    Then the navbar is working
+    And the navbar is working
     Examples:
     | Page               | Page Title                |
     | appointment hub    | Appointments              |

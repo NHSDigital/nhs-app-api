@@ -21,7 +21,7 @@ Feature: Patients Know Best Appointments
     Then I see the home page
     Given I navigate to the hospital and other appointments page
     Then the Hospital Appointments page is displayed
-    Then the link to PKB View Appointments is not available on the Appointments page
+    And the link to PKB View Appointments is not available on the Appointments page
 
   Scenario: The menu item 'View Appointments' is not visible on desktop
     Given I am a user who can view Appointments from Patients Know Best
@@ -29,7 +29,7 @@ Feature: Patients Know Best Appointments
     Then I see the home page
     Given I navigate to the hospital and other appointments page
     Then the Hospital Appointments page is displayed
-    Then the link to PKB View Appointments is not available on the Appointments page
+    And the link to PKB View Appointments is not available on the Appointments page
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a EMIS patient

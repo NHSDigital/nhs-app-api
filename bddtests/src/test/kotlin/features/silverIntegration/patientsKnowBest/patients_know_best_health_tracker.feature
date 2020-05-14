@@ -9,7 +9,7 @@ Feature: Patients Know Best Health Tracker
     When I navigate to the health record hub page
     Then I see the health records hub page
     And I click the menu item 'Track your health'
-    Then I am redirected to the redirector page with the header 'Track your health'
+    And I am redirected to the redirector page with the header 'Track your health'
     And the warning message on the Redirector page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Track your health' on the Health Record Hub
@@ -18,14 +18,14 @@ Feature: Patients Know Best Health Tracker
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    Then the link to Track your health is not available on the health record hub page
+    And the link to Track your health is not available on the health record hub page
 
   Scenario: The menu item 'Track your health' is not visible on desktop
     Given I am a user who can view health tracker from Patients Know Best
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    Then I do not see the PKB menu item 'Track your health'
+    And I do not see the PKB menu item 'Track your health'
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view health tracker from Patients Know Best

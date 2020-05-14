@@ -7,7 +7,7 @@ Feature: Demographics Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I click continue
     And I see header text is Your GP medical record
-    Then I see the Your details heading on My Record - Medical Record v1
+    And I see the Your details heading on My Record - Medical Record v1
     And I see the patient information details - Medical Record v1
     And I see my record button on the nav bar is highlighted
 
@@ -24,5 +24,5 @@ Feature: Demographics Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Your details section on My Record - Medical Record v1
+    And I click the Your details section on My Record - Medical Record v1
     Then I do not see patient information details - Medical Record v1

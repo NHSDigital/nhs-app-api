@@ -8,7 +8,7 @@ Feature: View prescriptions error cases
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions times out
     Given I am patient using the <GP System> GP System
     And I am logged in
-    Given The prescriptions endpoint is timing out
+    And The prescriptions endpoint is timing out
     When I retrieve the 'Your Prescriptions' page directly
     And I wait for 20 seconds
     Then I see the appropriate error message for a prescription timeout

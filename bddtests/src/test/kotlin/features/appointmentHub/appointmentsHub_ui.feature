@@ -9,4 +9,4 @@ Feature: Appointments Hub Frontend
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
-    Then the Your Appointments page is displayed
+    And the Your Appointments page is displayed

@@ -35,7 +35,7 @@ Feature: Redirector
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
     And I click the Messages and online consultations link on the Messages Hub page
-    Then I am redirected to the redirector page with the header 'Messages and online consultations'
+    And I am redirected to the redirector page with the header 'Messages and online consultations'
     When I click the 'Back' breadcrumb
     Then I see the more page header
     When I retrieve the 'home' page directly
@@ -58,5 +58,5 @@ Feature: Redirector
     When I click the 'Continue' button on the redirector page with a url starting with 'https://nhsapp-test.devstacks.pkb.io/nhs-login/login?phrPath=%2Fauth%2FgetInbox.action%3Ftab%3Dmessages&assertedLoginIdentity='
     Then I am navigated to a third party site
     When I navigate to the More page
-    When I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Flibrary%252FmanageLibrary.action'
+    And I navigate to the redirector page with a url of '/redirector?redirect_to=https%3A%2F%2Fnhsapp-test.devstacks.pkb.io%2Fnhs-login%2Flogin%3FphrPath%3D%252Flibrary%252FmanageLibrary.action'
     Then I am navigated to a third party site

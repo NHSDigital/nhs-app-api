@@ -109,7 +109,7 @@ Feature: View prescriptions Frontend
   @nativesmoketest
   Scenario Outline: The <GP System> User clicks on the Prescriptions button and the service is disabled at a GP Practice level
     Given I am patient using the <GP System> GP System
-    Given prescriptions is disabled at a GP Practice level
+    And prescriptions is disabled at a GP Practice level
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
     Then I see a message informing me that I don't currently have access to this service

@@ -9,7 +9,7 @@ Feature: Test Results Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results section on My Record - Medical Record v1
+    And I click the Test results section on My Record - Medical Record v1
     Then I see test results with multiple child values some of which have ranges - Medical Record v1
 
   Scenario: An EMIS user has a test result with an unknown date - Medical Record v1
@@ -19,7 +19,7 @@ Feature: Test Results Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results section on My Record - Medical Record v1
+    And I click the Test results section on My Record - Medical Record v1
     And I click a test result - Medical Record v1
     Then I see 3 test results - Medical Record v1
     And The third test result record has an unknown date - Medical Record v1
@@ -31,7 +31,7 @@ Feature: Test Results Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results section on My Record - Medical Record v1
+    And I click the Test results section on My Record - Medical Record v1
     Then I see 6 test results - Medical Record v1
 
   Scenario: An exception occurs retrieving test result detail - Medical Record v1
@@ -42,7 +42,7 @@ Feature: Test Results Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results section on My Record - Medical Record v1
+    And I click the Test results section on My Record - Medical Record v1
     And I click a test result - Medical Record v1
     Then I see the appropriate error message for retrieving test result detail
 
@@ -53,7 +53,7 @@ Feature: Test Results Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results section on My Record - Medical Record v1
+    And I click the Test results section on My Record - Medical Record v1
     Then I see an error occurred message with Test results on My Record - Medical Record v1
     Examples:
       | GP System |
@@ -68,7 +68,7 @@ Feature: Test Results Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I select a test result - Medical Record v1
+    And I select a test result - Medical Record v1
     Then I see header text is Your GP medical record
     And I see the test result content - Medical Record v1
 
@@ -80,7 +80,7 @@ Feature: Test Results Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I select a test result - Medical Record v1
+    And I select a test result - Medical Record v1
     Then I see header text is Your GP medical record
     And there are no wrongly displayed HTML entities - Medical Record v1
 

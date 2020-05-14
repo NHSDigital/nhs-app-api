@@ -9,7 +9,7 @@ Feature: Patients Know Best Care Plans
     When I navigate to the health record hub page
     Then I see the health records hub page
     And I click the menu item 'Care plans'
-    Then I am redirected to the redirector page with the header 'Care plans'
+    And I am redirected to the redirector page with the header 'Care plans'
     And the warning message on the Redirector page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Care plans' on the Health Record Hub page
@@ -18,14 +18,14 @@ Feature: Patients Know Best Care Plans
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    Then the link to Care plans is not available on the health record hub page
+    And the link to Care plans is not available on the health record hub page
 
   Scenario: The menu item 'Care plans' is not visible on desktop
     Given I am a user who can view care plans from Patients Know Best
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    Then I do not see the PKB menu item 'Care plans'
+    And I do not see the PKB menu item 'Care plans'
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view care plans from Patients Know Best

@@ -13,7 +13,7 @@ Feature: No Javascript Frontend - Medical Record v1
     Then I see the Medical Record Warning page
     When I click continue
     Then I see the medical record page - Medical Record v1
-    Then I see one or more drug type allergies record displayed - Medical Record v1
+    And I see one or more drug type allergies record displayed - Medical Record v1
     And I see Consultations records displayed - Medical Record v1
     And I see test result information - Medical Record v1
 
@@ -76,7 +76,7 @@ Feature: No Javascript Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the diagnosis section
+    And I click the diagnosis section
     Then I see diagnosis information - Medical Record v1
 
   Scenario: A VISION user can view examinations information without Javascript - Medical Record v1
@@ -88,7 +88,7 @@ Feature: No Javascript Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Examinations section on My Record - Medical Record v1
+    And I click the Examinations section on My Record - Medical Record v1
     Then I see examinations information - Medical Record v1
 
   Scenario: A VISION user can view procedures information without Javascript - Medical Record v1
@@ -100,5 +100,5 @@ Feature: No Javascript Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Procedures section on My Record - Medical Record v1
+    And I click the Procedures section on My Record - Medical Record v1
     Then I see procedures information - Medical Record v1

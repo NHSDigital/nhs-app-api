@@ -72,7 +72,7 @@ Feature: Combined Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Acute (short-term) medications section on My Record - Medical Record v1
+    And I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see an error occurred message with Acute (short-term) medications on My Record - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
     Then I see an error occurred message with Repeat medications: current on My Record - Medical Record v1
@@ -91,7 +91,7 @@ Feature: Combined Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Acute (short-term) medications section on My Record - Medical Record v1
+    And I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
     Then I see current repeat medication information - Medical Record v1
@@ -112,7 +112,7 @@ Feature: Combined Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations section on My Record - Medical Record v1
+    And I click the Immunisations section on My Record - Medical Record v1
     Then I see an error occurred message with Immunisations on My Record - Medical Record v1
     When I click the Health conditions section on My Record - Medical Record v1
     Then I see health condition records displayed - Medical Record v1
@@ -129,7 +129,7 @@ Feature: Combined Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations section on My Record - Medical Record v1
+    And I click the Immunisations section on My Record - Medical Record v1
     Then I see immunisation records displayed - Medical Record v1
     When I click the Health conditions section on My Record - Medical Record v1
     Then I see health condition records displayed - Medical Record v1
@@ -146,7 +146,7 @@ Feature: Combined Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations section on My Record - Medical Record v1
+    And I click the Immunisations section on My Record - Medical Record v1
     Then I see an error occurred message with Immunisations on My Record - Medical Record v1
     When I click the Health conditions section on My Record - Medical Record v1
     Then I see an error occurred message with Health conditions on My Record - Medical Record v1

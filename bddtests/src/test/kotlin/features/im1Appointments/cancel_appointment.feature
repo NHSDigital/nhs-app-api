@@ -21,7 +21,7 @@ Feature: Cancel Appointments Frontend
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
+    And I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
     And there is a cancellation reasons drop-down
@@ -34,7 +34,7 @@ Feature: Cancel Appointments Frontend
     Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
+    And I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
     And there is a cancellation reasons drop-down
@@ -43,7 +43,7 @@ Feature: Cancel Appointments Frontend
     Given I have upcoming appointments before cutoff time for TPP
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
+    And I select a "Cancel this appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
     And cancellation reasons drop-down is hidden
@@ -52,7 +52,7 @@ Feature: Cancel Appointments Frontend
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
+    And I select a "Cancel this appointment" link
     And I select "Cancel appointment" button
     Then I will receive a cancellation validation error
     Examples:
@@ -65,7 +65,7 @@ Feature: Cancel Appointments Frontend
     Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
+    And I select a "Cancel this appointment" link
     And I select "Cancel appointment" button
     Then I will receive a cancellation validation error
 
@@ -75,7 +75,7 @@ Feature: Cancel Appointments Frontend
     When I retrieve the 'Your GP Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
-    When I select "Cancel appointment" button
+    And I select "Cancel appointment" button
     Then the Appointment Cancel success page is displayed
     And I select the back to home link on the appointments page
     @smoketest
@@ -97,7 +97,7 @@ Feature: Cancel Appointments Frontend
     When I retrieve the 'Your GP Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select the cancellation reason
-    When I select "Cancel appointment" button
+    And I select "Cancel appointment" button
     Then the Appointment Cancel success page is displayed
     And I select the back to home link on the appointments page
 
@@ -134,9 +134,9 @@ Feature: Cancel Appointments Frontend
     Given <GP System> user is not allowed to cancel appointments with '<Reason>'
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
+    And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
-    When I select "Cancel appointment" button
+    And I select "Cancel appointment" button
     Then I see an appropriate error message when not allowed to cancel
     When I click the error 'Back' link
     Then the Your Appointments page is displayed
@@ -149,9 +149,9 @@ Feature: Cancel Appointments Frontend
     Given <GP System> prevents cancellation of previously booked appointment with '<Reason>' because it is already cancelled
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
+    And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
-    When I select "Cancel appointment" button
+    And I select "Cancel appointment" button
     Then I see an appropriate error message when it is already cancelled
     When I click the error 'Back' link
     Then the Your Appointments page is displayed
@@ -164,8 +164,8 @@ Feature: Cancel Appointments Frontend
     Given TPP prevents cancellation of previously booked appointment because it is too late
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
-    When I select "Cancel appointment" button
+    And I select a "Cancel this appointment" link
+    And I select "Cancel appointment" button
     Then I see an appropriate error message when it is too late to cancel
     When I click the error 'Back' link
     Then the Your Appointments page is displayed
@@ -175,9 +175,9 @@ Feature: Cancel Appointments Frontend
     Given VISION returns corrupt data when cancelling appointment with '<Reason>'
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
+    And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
-    When I select "Cancel appointment" button
+    And I select "Cancel appointment" button
     Then I see appropriate submit error message when there is an error with '<Prefix>'
     When I click the error 'Back' link
     Then the Your Appointments page is displayed
@@ -190,9 +190,9 @@ Feature: Cancel Appointments Frontend
     Given EMIS returns unknown exception when cancelling appointment with '<Reason>'
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
+    And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
-    When I select "Cancel appointment" button
+    And I select "Cancel appointment" button
     Then I see appropriate submit error message when there is an error with '<Prefix>'
     When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
     Then a new tab has been opened by the link
@@ -205,9 +205,9 @@ Feature: Cancel Appointments Frontend
     Given  <GP System> will time out when trying to cancel with '<Reason>'
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
-    When I select a "Cancel this appointment" link
+    And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
-    When I select "Cancel appointment" button
+    And I select "Cancel appointment" button
     Then I see appropriate submit error message when there is an error with '<Prefix>'
     When I click the error 'Contact us' link with a url of 'https://www.nhs.uk/contact-us/nhs-app-contact-us'
     Then a new tab has been opened by the link

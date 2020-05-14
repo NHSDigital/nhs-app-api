@@ -9,7 +9,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2
 
   Scenario: A VISION user has no test results - Medical Record v2
@@ -19,7 +19,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
 
   Scenario: A VISION user encounters an error navigating directly to Test Results - Medical Record V2
@@ -29,7 +29,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I retrieve the 'Gp Medical Record Test Results Detail' page directly
+    And I retrieve the 'Gp Medical Record Test Results Detail' page directly
     Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2
 
   Scenario: An EMIS user has one test result with one value - Medical Record v2
@@ -39,7 +39,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     Then I see one test result with one value - Medical Record v2
 
   Scenario: An EMIS user receiving a corrupt response for test results sees an error - Medical Record v2
@@ -49,7 +49,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
 
   Scenario: An EMIS user has one test result with one value and a range - Medical Record v2
@@ -59,7 +59,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     Then I see one test result with one value and a range - Medical Record v2
 
   Scenario: An EMIS user has one test result with multiple child values - Medical Record v2
@@ -69,7 +69,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     Then I see one test result with multiple child values - Medical Record v2
 
   Scenario: An EMIS user has test results with multiple child values which have ranges - Medical Record v2
@@ -79,7 +79,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     Then I see test results with multiple child values some of which have ranges - Medical Record v2
 
   Scenario: An EMIS user has a test result with an unknown date - Medical Record v2
@@ -89,7 +89,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     Then I see 3 test results - Medical Record v2
     And The third test result record has an unknown date - Medical Record v2
 
@@ -100,7 +100,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     Then I see 6 test results - Medical Record v2
 
   Scenario: A TPP user will see a error screen when viewing an invalid individual test result - Medical Record v2
@@ -111,7 +111,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     And I click a test result - Medical Record v2
     Then I see the appropriate error message for retrieving test result detail
 
@@ -123,7 +123,7 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     And I click a test result - Medical Record v2
     And I see the test results content - Medical Record v2
 
@@ -135,6 +135,6 @@ Feature: Test Results Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Test results link on my record - Medical Record v2
+    And I click the Test results link on my record - Medical Record v2
     And I click a test result - Medical Record v2
     And there are no wrongly displayed HTML entities - Medical Record v2

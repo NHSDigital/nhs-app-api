@@ -13,7 +13,7 @@
   "no-scenario-outlines-without-examples": "on",
   "name-length": ["off", {"Feature": 120}],
   "no-restricted-tags": ["off", {"tags": ["@watch", "@wip"]}],
-  "use-and": "off",
+  "use-and": "on",
   "no-duplicate-tags": "on",
   "no-superfluous-tags": "off",
   "no-homogenous-tags": "on",

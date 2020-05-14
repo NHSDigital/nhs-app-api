@@ -9,7 +9,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
     Examples:
       | GP System |
@@ -23,7 +23,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2
 
   Scenario Outline: An <GP System> user can view a list of Documents on their record - Medical Record v2
@@ -33,7 +33,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     Examples:
       | GP System |
@@ -47,7 +47,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
 
   Scenario: An EMIS user can view a list of Documents on their record if the size is null
@@ -57,7 +57,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
 
   Scenario: An EMIS user who views a document with no term sees the document date as the header - Medical Record v2
@@ -67,7 +67,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page with the document date as the header
@@ -79,7 +79,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page with the document header
@@ -91,7 +91,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page with comments
@@ -103,7 +103,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page with the letter header
@@ -115,7 +115,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page without actions
@@ -127,7 +127,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page without actions
@@ -143,7 +143,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page without actions
@@ -159,7 +159,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page with actions
@@ -180,7 +180,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page with actions
@@ -198,7 +198,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select an available document
     Then I see the document information page with download action only
@@ -213,7 +213,7 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see a list of documents
     When I select a document that has an invalid id
     Then I see the document information page with actions
@@ -227,5 +227,5 @@ Feature: Documents Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Documents link on my record - Medical Record v2
+    And I click the Documents link on my record - Medical Record v2
     Then I see the expected list of documents displayed with unknown date for the last result

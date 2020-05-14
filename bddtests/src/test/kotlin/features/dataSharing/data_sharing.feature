@@ -11,7 +11,7 @@ Feature: Data Sharing Frontend
     And I retrieve the 'More' page directly
     When I click the Data Sharing link on the More page
     Then the Data Sharing 'Overview' page is displayed
-    Then the content on the Data Sharing 'Overview' page is correct
+    And the content on the Data Sharing 'Overview' page is correct
     When I click the Next button on the Data Sharing page
     Then the content on the Data Sharing 'How confidential patient information is used' page is correct
     When I click the Next button on the Data Sharing page
@@ -66,7 +66,7 @@ Feature: Data Sharing Frontend
     Then the Data Sharing 'Overview' page is displayed
     When I click the 'Make your choice' contents link on the Data Sharing page
     And the Data Sharing 'Make your choice' page is displayed
-    When I click the Start Now button on the Data Sharing page
+    And I click the Start Now button on the Data Sharing page
     Then the NDOP website is displayed
 
   Scenario: A desktop user is directed to the NHS website to find out more information on Data Sharing

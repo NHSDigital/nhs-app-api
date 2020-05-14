@@ -19,14 +19,14 @@ Feature: nominated pharmacy journey
     Then I see the update nominated pharmacy interrupt page loaded
     When I click on the interrupt continue button
     Then I see the choose type page is loaded
-    Then I select high street pharmacy
+    And I select high street pharmacy
     And I click on the choose type continue button
-    Then I see search nominated pharmacy page loaded
+    And I see search nominated pharmacy page loaded
     Given searching for pharmacies with <search text> has 10 results
     When I search for a <search text> and click on search button
     Then I see list of pharmacies displayed on the result page
     And I click on item 4 pharmacy from the list of pharmacies
-    Then I see confirm nominated page with selected pharmacy details
+    And I see confirm nominated page with selected pharmacy details
     When I click on confirm button to change my nominated pharmacy
     Then I see the change success page with my nominated pharmacy details
     When I click on the go to your repeat prescriptions link
@@ -55,11 +55,11 @@ Feature: nominated pharmacy journey
     Then I see the update nominated pharmacy interrupt page loaded
     When I click on the interrupt continue button
     Then I see the choose type page is loaded
-    Then I select online pharmacy
+    And I select online pharmacy
     And I click on the choose type continue button
-    Then I see the dsp interrupt page is loaded
+    And I see the dsp interrupt page is loaded
     And I click on the DSP Interrupt Prescription Home link
-    Then I see prescriptions page loaded
+    And I see prescriptions page loaded
     And I see the nominated pharmacy panel on the prescriptions page
     And I see my nominated pharmacy on the prescriptions page
     Examples:
@@ -84,9 +84,9 @@ Feature: nominated pharmacy journey
     Then I see the update nominated pharmacy interrupt page loaded
     When I click on the interrupt continue button
     Then I see the choose type page is loaded
-    Then I select online pharmacy
+    And I select online pharmacy
     And I click on the choose type continue button
-    Then I see the dsp interrupt page is loaded
+    And I see the dsp interrupt page is loaded
     When I click the link called 'View a list of online-only pharmacies' with a url of 'https://www.nhs.uk/Service-Search/other-services/pharmacies/internetpharmacies'
     Then a new tab has been opened by the link
     Examples:
@@ -111,9 +111,9 @@ Feature: nominated pharmacy journey
     Then I see the update nominated pharmacy interrupt page loaded
     When I click on the interrupt continue button
     Then I see the choose type page is loaded
-    Then I select high street pharmacy
+    And I select high street pharmacy
     And I click on the choose type continue button
-    Then I see search nominated pharmacy page loaded
+    And I see search nominated pharmacy page loaded
     When I search for a <search text> and click on search button
     Then I see an error indicating the postcode is invalid
     Examples:
@@ -138,9 +138,9 @@ Feature: nominated pharmacy journey
     Then I see the update nominated pharmacy interrupt page loaded
     When I click on the interrupt continue button
     Then I see the choose type page is loaded
-    Then I select high street pharmacy
+    And I select high street pharmacy
     And I click on the choose type continue button
-    Then I see search nominated pharmacy page loaded
+    And I see search nominated pharmacy page loaded
     Given searching for pharmacies with <search text> has 0 results
     When I search for a <search text> and click on search button
     Then I see the no results found messages for <search text>
@@ -158,13 +158,13 @@ Feature: nominated pharmacy journey
     And I am logged in
     When I navigate to prescriptions
     Then I see prescriptions page loaded
-    Then I see the nominated pharmacy panel on the prescriptions page
+    And I see the nominated pharmacy panel on the prescriptions page
     And I see that I haven't nominated a pharmacy on the prescriptions page
     When I click on the nominated pharmacy panel
     Then I see the set nominated pharmacy interrupt page loaded
     When I click on the interrupt continue button
     Then I see the choose type page is loaded
-    Then I select high street pharmacy
+    And I select high street pharmacy
     And I click on the choose type continue button
     Given searching for pharmacies with <search text> has 10 results
     When I search for a <search text> and click on search button

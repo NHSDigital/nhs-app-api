@@ -11,7 +11,7 @@ Feature: Messages
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
     And I click on the NHS App Messages link on the Messages Hub page
-    Then the Messages Inbox page is displayed
+    And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
     Then the Messages page is displayed
@@ -35,7 +35,7 @@ Feature: Messages
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
     And I click on the NHS App Messages link on the Messages Hub page
-    Then the Messages Inbox page is displayed
+    And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
     Then the Messages page is displayed
@@ -45,7 +45,7 @@ Feature: Messages
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
     And I click on the NHS App Messages link on the Messages Hub page
-    Then the Messages Inbox page is displayed
+    And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
     Then the Messages page is displayed
@@ -64,7 +64,7 @@ Feature: Messages
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
     And I click on the NHS App Messages link on the Messages Hub page
-    Then the Messages Inbox page is displayed
+    And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
     Then the Messages page is displayed
@@ -82,11 +82,11 @@ Feature: Messages
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
     And I click on the NHS App Messages link on the Messages Hub page
-    Then the Messages Inbox page is displayed
+    And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
     Then the Messages page is displayed
-    Then the email address 'email@address.com' is identified as a link in the message
+    And the email address 'email@address.com' is identified as a link in the message
 
   Scenario: A user can see their messages and follow an incorrect internal link
     Given I am using the native app user agent
@@ -97,7 +97,7 @@ Feature: Messages
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
     And I click on the NHS App Messages link on the Messages Hub page
-    Then the Messages Inbox page is displayed
+    And the Messages Inbox page is displayed
     And the senders and latest messages are displayed on the Messages Inbox page
     When I click on a sender in the Messages Inbox
     Then the Messages page is displayed
@@ -112,7 +112,7 @@ Feature: Messages
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
     And I click on the NHS App Messages link on the Messages Hub page
-    Then the Messages Inbox page is displayed
+    And the Messages Inbox page is displayed
     And a message is displayed indicating that there are no messages in the Messages Inbox
 
   Scenario: A user with messages disabled in service journey rules cannot see their messages
@@ -140,7 +140,7 @@ Feature: Messages
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
     And I click on the NHS App Messages link on the Messages Hub page
-    Then an error with a retry button is displayed indicating that there was a problem getting messages
+    And an error with a retry button is displayed indicating that there was a problem getting messages
     When the messages in the repository can be retrieved successfully
     And I click the 'Try again' button
     Then the Messages Inbox page is displayed
@@ -153,7 +153,7 @@ Feature: Messages
     And I click the Messages link on the More page
     Then the Messages Hub page is displayed
     And I click on the NHS App Messages link on the Messages Hub page
-    Then the senders and latest messages are displayed on the Messages Inbox page
+    And the senders and latest messages are displayed on the Messages Inbox page
     When retrieving the messages from the repository will cause an internal server error
     And I click on a sender in the Messages Inbox
     Then an error with a retry button is displayed indicating that there was a problem getting messages from the sender
@@ -169,4 +169,4 @@ Scenario: A desktop user can see their messages if enabled
   And I click the Messages link on the More page
   Then the Messages Hub page is displayed
   And I click on the NHS App Messages link on the Messages Hub page
-  Then the Messages Inbox page is displayed
+  And the Messages Inbox page is displayed

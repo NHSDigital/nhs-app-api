@@ -35,14 +35,14 @@ Feature: Organ Donation - Reaffirm
     Then the Organ Donation Your Choice page is displayed
     And the some organs option is selected
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Specific Organ Choice page is displayed
+    And the Organ Donation Specific Organ Choice page is displayed
     And my previous decisions are displayed on the Organ Donation Specific Organ Choice page
     When I choose which organs to donate
     And I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Faith And Beliefs page is displayed
     And the previous option on the Organ Donation Faith And Beliefs page is selected
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Decision Additional Details page is displayed
+    And the Organ Donation Decision Additional Details page is displayed
     When I select an ethnicity to record for organ donation
     And  I select a religion to record for organ donation
     And I click the 'Continue' button on an Organ Donation page
@@ -83,14 +83,14 @@ Feature: Organ Donation - Reaffirm
     Then the Organ Donation Your Choice page is displayed
     And the some organs option is selected
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Specific Organ Choice page is displayed
+    And the Organ Donation Specific Organ Choice page is displayed
     When I choose which organs to donate
     And I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Faith And Beliefs page is displayed
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Decision Additional Details page is displayed
+    And the Organ Donation Decision Additional Details page is displayed
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Check Details page is displayed
+    And the Organ Donation Check Details page is displayed
     When I click the 'Back' breadcrumb
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Back' breadcrumb

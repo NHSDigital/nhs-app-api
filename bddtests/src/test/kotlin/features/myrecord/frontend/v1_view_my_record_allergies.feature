@@ -8,7 +8,7 @@ Feature: Allergies Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Allergies and adverse reactions section on My Record - Medical Record v1
+    And I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see a drug and non drug allergy record from VISION - Medical Record v1
 
   Scenario: A TPP user without Summary Care Record access cannot view allergies section - Medical Record v1
@@ -28,12 +28,12 @@ Feature: Allergies Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Allergies and adverse reactions section on My Record - Medical Record v1
+    And I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see a message indicating that I have no information recorded for Allergies and adverse reactions on My Record - Medical Record v1
 
   Scenario: A MICROTEST user can view allergies and adverse reactions section when no allergies are returned - Medical Record v1
     Given I am a MICROTEST user setup to use medical record version 1
-    Given I have 0 Allergies
+    And I have 0 Allergies
     And the my record wiremocks are populated
     And I am logged in
     When I retrieve the 'my record' page directly
@@ -50,7 +50,7 @@ Feature: Allergies Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Allergies and adverse reactions section on My Record - Medical Record v1
+    And I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see an error occurred message with Allergies and adverse reactions on My Record - Medical Record v1
 
   Scenario: An TPP user receiving a bad allergies response sees an error
@@ -60,7 +60,7 @@ Feature: Allergies Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Allergies and adverse reactions section on My Record - Medical Record v1
+    And I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see an error occurred message with Allergies and adverse reactions on My Record - Medical Record v1
 
   Scenario: An EMIS user has multiple allergies with different date display formats - Medical Record v1
@@ -70,7 +70,7 @@ Feature: Allergies Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Allergies and adverse reactions section on My Record - Medical Record v1
+    And I click the Allergies and adverse reactions section on My Record - Medical Record v1
     And I see 5 allergies with different date formats - Medical Record v1
 
   Scenario: A VISION user is shown an appropriate error message when an unknown error occurs retrieving their allergies - Medical Record v1
@@ -80,7 +80,7 @@ Feature: Allergies Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Allergies and adverse reactions section on My Record - Medical Record v1
+    And I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see an error occurred message with Allergies and adverse reactions on My Record - Medical Record v1
 
   Scenario: A MICROTEST user can view allergies and adverse reactions section - Medical Record v1
@@ -101,5 +101,5 @@ Feature: Allergies Frontend - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Allergies and adverse reactions section on My Record - Medical Record v1
+    And I click the Allergies and adverse reactions section on My Record - Medical Record v1
     Then I see the expected allergies displayed with unknown date for the second result - Medical Record v1

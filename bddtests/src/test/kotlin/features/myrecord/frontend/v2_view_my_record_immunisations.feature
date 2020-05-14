@@ -8,7 +8,7 @@ Feature: Immunisations Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations link on my record - Medical Record v2
+    And I click the Immunisations link on my record - Medical Record v2
     Then I see the expected immunisations - Medical Record v2
 
     Examples:
@@ -23,7 +23,7 @@ Feature: Immunisations Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations link on my record - Medical Record v2
+    And I click the Immunisations link on my record - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
 
     Examples:
@@ -38,7 +38,7 @@ Feature: Immunisations Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations link on my record - Medical Record v2
+    And I click the Immunisations link on my record - Medical Record v2
     Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2
 
     Examples:
@@ -53,7 +53,7 @@ Feature: Immunisations Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations link on my record - Medical Record v2
+    And I click the Immunisations link on my record - Medical Record v2
     Then I see the expected immunisations - Medical Record v2
 
   Scenario: A MICROTEST user has no immunisations on their record - Medical Record v2
@@ -64,7 +64,7 @@ Feature: Immunisations Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations link on my record - Medical Record v2
+    And I click the Immunisations link on my record - Medical Record v2
     Then I see a message that this information isn't available through the NHS App - Medical Record v2
 
   Scenario: An EMIS user has a immunisation result with an unknown date - Medical Record v2
@@ -74,7 +74,7 @@ Feature: Immunisations Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations link on my record - Medical Record v2
+    And I click the Immunisations link on my record - Medical Record v2
     Then I see the expected immunisations with an unknown date for the second result - Medical Record v2
 
   Scenario Outline: An <GP System> user receiving a corrupted Immunisations response sees an error - Medical Record v2
@@ -84,7 +84,7 @@ Feature: Immunisations Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations link on my record - Medical Record v2
+    And I click the Immunisations link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
     Examples:
       | GP System |

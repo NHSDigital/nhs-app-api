@@ -57,10 +57,10 @@ Feature: Session Expiry and Extend Frontend
     And I have lost internet connection
     When I am idle long enough for the session expiry dialog box to appear
     Then I navigate to Appointments
-    Then I see a dialog box prompting to extend the session
+    And I see a dialog box prompting to extend the session
     When I click to extend the session
     Then I see the connection error screen
-    Then I am idle for a short time
+    And I am idle for a short time
     When I navigate to Prescriptions
     Then I am still on the connection error screen
 
@@ -72,7 +72,7 @@ Feature: Session Expiry and Extend Frontend
     And I have lost internet connection
     When I am idle long enough for the session expiry dialog box to appear
     Then I navigate to Appointments
-    Then I see a dialog box prompting to extend the session
+    And I see a dialog box prompting to extend the session
     When I click to log out
     Then I see the login page
     And the dialog box is not visible on the screen
@@ -86,7 +86,7 @@ Feature: Session Expiry and Extend Frontend
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
-    Then I see a dialog box prompting to extend the session
+    And I see a dialog box prompting to extend the session
     When I click to extend the session
     Then the dialog box is not visible on the screen
     When I click the GP Appointments link
@@ -100,7 +100,7 @@ Feature: Session Expiry and Extend Frontend
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
-    Then I see a dialog box prompting to extend the session
+    And I see a dialog box prompting to extend the session
     When I click to log out
     Then I see the login page
     And the dialog box is not visible on the screen
@@ -113,7 +113,7 @@ Feature: Session Expiry and Extend Frontend
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
-    Then I see a dialog box prompting to extend the session
+    And I see a dialog box prompting to extend the session
     When I am idle long enough for the session to expire
     Then I see the login page with the session expiry notification
     And the dialog box is not visible on the screen
@@ -232,10 +232,10 @@ Feature: Session Expiry and Extend Frontend
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
-    Then I lock the device
+    And I lock the device
     When I am idle long enough for the session expiry dialog box to appear
     Then I unlock the device
-    Then I see a dialog box prompting to extend the session
+    And I see a dialog box prompting to extend the session
     When I click to extend the session
     Then the dialog box is not visible on the screen
     And I see the header
@@ -247,14 +247,14 @@ Feature: Session Expiry and Extend Frontend
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
-    Then I lock the device
+    And I lock the device
     When I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
-    Then I scroll the device
-    Then I unlock the device
-    Then I scroll the device
-    Then I am idle for a short time
-    Then I see a dialog box prompting to extend the session
+    And I scroll the device
+    And I unlock the device
+    And I scroll the device
+    And I am idle for a short time
+    And I see a dialog box prompting to extend the session
     When I click to log out
     Then I see the login page
     And the dialog box is not visible on the screen
@@ -266,11 +266,11 @@ Feature: Session Expiry and Extend Frontend
     Then I lock the device
     When I am idle long enough for the session expiry dialog box to appear
     Then I unlock the device
-    Then I am idle for a short time
-    Then I see a dialog box prompting to extend the session
+    And I am idle for a short time
+    And I see a dialog box prompting to extend the session
     When I am idle long enough for the session to expire
     Then the dialog box is not visible on the screen
-    Then I see the login page with the session expiry notification
+    And I see the login page with the session expiry notification
     And the dialog box is not visible on the screen
 
   @manual
@@ -278,15 +278,15 @@ Feature: Session Expiry and Extend Frontend
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     Then I navigate to Appointments
-    Then I lock the device
+    And I lock the device
     When I am idle long enough for the session to expire
     Then I unlock the device
-    Then I see the login page with the session expiry notification
+    And I see the login page with the session expiry notification
 
   Scenario Outline: The <GP System> GP practice session has expired and user selects the prescriptions button
     Given I am patient using the <GP System> GP System natively
     And I am logged in
-    Given the GP System session has expired when viewing prescriptions
+    And the GP System session has expired when viewing prescriptions
     When I navigate to prescriptions
     Then I see the login page with the session expiry notification
     Examples:

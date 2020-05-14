@@ -70,7 +70,7 @@ Feature: Appointments Service With Javascript Disabled
     When I retrieve the 'Your GP Appointments' page directly
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of <Reason>
-    When I select "Cancel appointment" button
+    And I select "Cancel appointment" button
     Then the Your Appointments page is displayed
     And a "Cancellation confirmed" message is displayed
     Examples:

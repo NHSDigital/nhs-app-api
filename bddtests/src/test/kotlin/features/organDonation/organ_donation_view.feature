@@ -128,7 +128,7 @@ Feature: Organ Donation View Frontend
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I see an appropriate Organ Donation error message with a retry option
-    When I click the 'Try again' button
+    And I click the 'Try again' button
     And the decision to opt in to organ donation with all organs is displayed
     Examples:
       | Error Code |
@@ -150,7 +150,7 @@ Feature: Organ Donation View Frontend
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I see an appropriate Organ Donation error message with a retry option
-    When I click the 'Try again' button on an Organ Donation page
+    And I click the 'Try again' button on an Organ Donation page
     And the decision to opt in to organ donation with all organs is displayed
     Examples:
       | Error Code |

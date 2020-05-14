@@ -5,7 +5,7 @@ Feature: Logged out home page content
     Given I am on the login logged-out page
     And I see a list of other services I can use without logging in
     Then I click the link called '<link title>' with a url of '<link>'
-    Then a new tab has been opened by the link
+    And a new tab has been opened by the link
     Examples:
       | link title | link |
       | Check if you have coronavirus symptoms | https://111.nhs.uk/service/COVID-19/ |

@@ -8,7 +8,7 @@ Feature: Recalls Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Recalls link on my record - Medical Record v2
+    And I click the Recalls link on my record - Medical Record v2
     Then I see the expected recalls - Medical Record v2
 
   Scenario: A MICROTEST user has no recalls on their record - Medical Record v2
@@ -19,5 +19,5 @@ Feature: Recalls Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Recalls link on my record - Medical Record v2
+    And I click the Recalls link on my record - Medical Record v2
     Then I see a message that this information isn't available through the NHS App - Medical Record v2

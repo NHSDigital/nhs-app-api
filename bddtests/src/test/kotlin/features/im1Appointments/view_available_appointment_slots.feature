@@ -304,4 +304,4 @@ Feature: View Available Appointment Slots Frontend
     When I retrieve the 'Appointment Booking' page directly
     Then I retrieve the 'Your Prescriptions' page directly
     And I wait for 5 seconds
-    Then I don't see filters for available slots
+    And I don't see filters for available slots

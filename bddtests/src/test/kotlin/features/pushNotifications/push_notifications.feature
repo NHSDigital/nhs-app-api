@@ -9,7 +9,7 @@ Feature: Push Notifications
     When I navigate to the Account page
     Then the Account Settings are available
     And I click the Notifications link on the Account page
-    Then the Notifications Settings page is displayed
+    And the Notifications Settings page is displayed
     And the notifications toggle is displayed as off
     When I change the notifications toggle to on
     Then the notifications toggle is displayed as on
@@ -22,7 +22,7 @@ Feature: Push Notifications
     When I navigate to the Account page
     Then the Account Settings are available
     And I click the Notifications link on the Account page
-    Then the Notifications Settings page is displayed
+    And the Notifications Settings page is displayed
     And the notifications toggle is displayed as off
     When I change the notifications toggle to on
     Then the notifications toggle is displayed as on
@@ -46,7 +46,7 @@ Feature: Push Notifications
     And I am logged in
     When I navigate to the Account page
     Then the Account page is displayed
-    Then there are no Account Settings available
+    And there are no Account Settings available
     When I browse to the pages at the following urls I see the home page
       | /account/notifications |
 

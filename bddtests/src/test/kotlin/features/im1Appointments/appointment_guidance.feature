@@ -32,6 +32,6 @@ Feature: Guidance prior to booking an appointment
     And I am logged in
     When I retrieve the 'Your GP Appointments' page directly
     And I click through to the online consultations Appointment Guidance page
-    When I select the Appointment Guidance Check symptoms menu item
+    And I select the Appointment Guidance Check symptoms menu item
     Then the Symptoms page is displayed
     And the Symptoms page header and navigation menu are correct

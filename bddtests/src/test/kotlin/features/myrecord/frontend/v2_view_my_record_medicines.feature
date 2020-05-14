@@ -8,7 +8,7 @@ Feature: Medicines Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Medicines link on my record - Medical Record v2
+    And I click the Medicines link on my record - Medical Record v2
     Then I see the medical record v2 medicines page
     When I click the Acute medicines link - Medical Record v2
     Then I see the expected acute medicines - Medical Record v2
@@ -41,7 +41,7 @@ Feature: Medicines Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Medicines link on my record - Medical Record v2
+    And I click the Medicines link on my record - Medical Record v2
     Then I see the medical record v2 medicines page
     When I click the Acute medicines link - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
@@ -66,7 +66,7 @@ Feature: Medicines Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Medicines link on my record - Medical Record v2
+    And I click the Medicines link on my record - Medical Record v2
     Then I see the medical record v2 medicines page
     When I click the Acute medicines link - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
@@ -92,7 +92,7 @@ Feature: Medicines Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-      When I click the Medicines link on my record - Medical Record v2
+      And I click the Medicines link on my record - Medical Record v2
       Then I see the medical record v2 medicines page
       When I click the Acute medicines link - Medical Record v2
       Then I see a message that I have no information recorded for a specific record - Medical Record v2

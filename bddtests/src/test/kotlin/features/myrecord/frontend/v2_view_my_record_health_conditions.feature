@@ -8,7 +8,7 @@ Feature: Health Conditions Frontend - Medical Record V2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Health conditions link on my record - Medical Record v2
+    And I click the Health conditions link on my record - Medical Record v2
     Then I see the expected health conditions - Medical Record v2
 
     Examples:
@@ -23,7 +23,7 @@ Feature: Health Conditions Frontend - Medical Record V2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Health conditions link on my record - Medical Record v2
+    And I click the Health conditions link on my record - Medical Record v2
     Then I see a message that I have no information recorded for a specific record - Medical Record v2
 
     Examples:
@@ -38,7 +38,7 @@ Feature: Health Conditions Frontend - Medical Record V2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Health conditions link on my record - Medical Record v2
+    And I click the Health conditions link on my record - Medical Record v2
     Then I see a message indicating that I have no access to view this section on My Record - Medical Record v2
 
     Examples:
@@ -53,7 +53,7 @@ Feature: Health Conditions Frontend - Medical Record V2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Health conditions link on my record - Medical Record v2
+    And I click the Health conditions link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
 
     Examples:
@@ -68,7 +68,7 @@ Feature: Health Conditions Frontend - Medical Record V2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Health conditions link on my record - Medical Record v2
+    And I click the Health conditions link on my record - Medical Record v2
     Then I see an error occurred message on My Record - Medical Record v2
 
     Examples:
@@ -83,7 +83,7 @@ Feature: Health Conditions Frontend - Medical Record V2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Health conditions link on my record - Medical Record v2
+    And I click the Health conditions link on my record - Medical Record v2
     Then I see the expected health conditions - Medical Record v2
 
   Scenario: A MICROTEST user has no health conditions on their record - Medical Record v2
@@ -94,7 +94,7 @@ Feature: Health Conditions Frontend - Medical Record V2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Health conditions link on my record - Medical Record v2
+    And I click the Health conditions link on my record - Medical Record v2
     Then I see a message that this information isn't available through the NHS App - Medical Record v2
 
   Scenario: An EMIS user has a health condition result with an unknown date - Medical Record v2
@@ -104,5 +104,5 @@ Feature: Health Conditions Frontend - Medical Record V2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Health conditions link on my record - Medical Record v2
+    And I click the Health conditions link on my record - Medical Record v2
     Then I see the problem with unknown date displayed last - Medical Record v2

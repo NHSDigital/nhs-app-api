@@ -5,4 +5,4 @@ Feature: Health record hub page accessibility
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    Then the HEALTH_RECORD_HUB page is saved to disk
+    And the HEALTH_RECORD_HUB page is saved to disk

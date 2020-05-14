@@ -13,7 +13,7 @@ Feature: Medical record hub page
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    Then I see the PKB menu item 'Care plans'
+    And I see the PKB menu item 'Care plans'
 
   Scenario: A user can access the medical record hub page if PKB Health Tracker is available
     Given I am using the native app user agent
@@ -21,7 +21,7 @@ Feature: Medical record hub page
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
-    Then I see the PKB menu item 'Track your health'
+    And I see the PKB menu item 'Track your health'
 
   Scenario: The GP medical record button redirects to GP medical record page
     Given I am using the native app user agent
@@ -30,7 +30,7 @@ Feature: Medical record hub page
     When I navigate to the health record hub page
     Then I see the health records hub page
     And I click the menu item 'GP medical record'
-    Then I see the 'GP medical record' page
+    And I see the 'GP medical record' page
 
   Scenario: Proxy users are redirected to the sensitive information acceptance screen
     Given I am an EMIS user with linked profiles
@@ -38,5 +38,5 @@ Feature: Medical record hub page
     When I select the linked profiles link from the home page
     And I select a linked profile
     And I click the Switch to this profile button for the proxy user
-    When I navigate to MY_RECORD
+    And I navigate to MY_RECORD
     Then I see 'Your GP medical record' page

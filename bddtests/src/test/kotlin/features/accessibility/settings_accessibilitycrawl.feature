@@ -13,7 +13,7 @@
       And I am logged in
       When I navigate to the Manage cookies page
       Then the Cookies page is displayed
-      Then the Cookies page is saved to disk
+      And the Cookies page is saved to disk
 
     Scenario: The notifications page is captured
       Given I am using the native app user agent
@@ -22,7 +22,7 @@
       When I navigate to the Account page
       Then the Account Settings are available
       And I click the Notifications link on the Account page
-      Then the Notifications Settings page is displayed
+      And the Notifications Settings page is displayed
       When I change the notifications toggle to on
       Then the notifications toggle is displayed as on
-      Then the Notifications page is saved to disk
+      And the Notifications page is saved to disk

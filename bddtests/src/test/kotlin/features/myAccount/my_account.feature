@@ -7,7 +7,7 @@ Feature: View My Account Page
     And I am logged in
     And I click the settings icon
     Then the Account page is displayed
-    Then none of the menu buttons are highlighted
+    And none of the menu buttons are highlighted
 
   @nativesmoketest
   Scenario: The app version is on the My Account Page
@@ -15,14 +15,14 @@ Feature: View My Account Page
     And I am logged in
     And I click the settings icon
     Then the Account page is displayed
-    Then I see the current app version
+    And I see the current app version
 
   Scenario: A patient can see the linked accounts and cookies link
     Given I am a EMIS patient
     And I am logged in
     And I click the settings icon
     Then the Account page is displayed
-    Then the Linked Profiles link is displayed
+    And the Linked Profiles link is displayed
     And the Cookies link is displayed
 
   Scenario: A patient can navigate to the Terms of use page
@@ -69,5 +69,5 @@ Feature: View My Account Page
     Given I am logged in as a EMIS user with no linked profiles
     And I click the settings icon
     Then the Account page is displayed
-    Then the Linked Profiles link is not displayed
+    And the Linked Profiles link is not displayed
     And the Cookies link is displayed

@@ -11,7 +11,7 @@ Feature: Book Telephone Appointments Frontend
       | symptoms to enter                   | yes       |
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    When I have selected a telephone appointment slot to book
+    And I have selected a telephone appointment slot to book
     Then the Appointment Slot page is displayed
     And I do not see any phone numbers to select
     And I see a text input to enter phone number
@@ -23,7 +23,7 @@ Feature: Book Telephone Appointments Frontend
     # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
     # Will need removing/altering when either a fix is complete or story to add appointment details to the
     # success page is done.
-    Then the Appointment Hub page is displayed
+    And the Appointment Hub page is displayed
     # And I can see the booked telephone appointment and it has a cancel link
     Examples:
       | GP System |
@@ -40,7 +40,7 @@ Feature: Book Telephone Appointments Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
     And the Appointment Slot page is displayed
-    When I enter symptoms
+    And I enter symptoms
     And I click the 'Confirm and book appointment' button
     Then a message is displayed indicating a phone number is required
     Examples:
@@ -57,7 +57,7 @@ Feature: Book Telephone Appointments Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
     And the Appointment Slot page is displayed
-    When I click the 'Confirm and book appointment' button
+    And I click the 'Confirm and book appointment' button
     Then a message is displayed indicating a phone number is required
     And an error is displayed that "Describe your symptoms" is mandatory
     Examples:
@@ -74,7 +74,7 @@ Feature: Book Telephone Appointments Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
     And the Appointment Slot page is displayed
-    When I click the 'Confirm and book appointment' button
+    And I click the 'Confirm and book appointment' button
     Then a message is displayed indicating a phone number is required
     Examples:
       | GP System |
@@ -92,7 +92,7 @@ Feature: Book Telephone Appointments Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
     And the Appointment Slot page is displayed
-    When I enter symptoms
+    And I enter symptoms
     And I click the 'Confirm and book appointment' button
     Then a message is displayed indicating a phone number is required
     Examples:
@@ -108,7 +108,7 @@ Feature: Book Telephone Appointments Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
     And the Appointment Slot page is displayed
-    When I click the 'Confirm and book appointment' button
+    And I click the 'Confirm and book appointment' button
     And a message is displayed indicating a phone number is required
     Examples:
       | GP System |
@@ -125,7 +125,7 @@ Feature: Book Telephone Appointments Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
     And the Appointment Slot page is displayed
-    When I select the radio button for an alternative phone number to those stored
+    And I select the radio button for an alternative phone number to those stored
     And I enter symptoms
     And I click the 'Confirm and book appointment' button
     Then a message is displayed indicating a phone number is required
@@ -143,7 +143,7 @@ Feature: Book Telephone Appointments Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
     And the Appointment Slot page is displayed
-    When I select the radio button for an alternative phone number to those stored
+    And I select the radio button for an alternative phone number to those stored
     And I click the 'Confirm and book appointment' button
     Then a message is displayed indicating a phone number is required
     Examples:
@@ -180,7 +180,7 @@ Feature: Book Telephone Appointments Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
     And the Appointment Slot page is displayed
-    When I select the radio button for an alternative phone number to those stored
+    And I select the radio button for an alternative phone number to those stored
     And I enter whitespace instead of a phone number for the appointment
     And I enter symptoms
     And I click the 'Confirm and book appointment' button
@@ -201,7 +201,7 @@ Feature: Book Telephone Appointments Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
     And I enter a phone number for the appointment
-    When I click the 'Confirm and book appointment' button
+    And I click the 'Confirm and book appointment' button
     Then an error is displayed that "Describe your symptoms" is mandatory
     Examples:
       | GP System |
@@ -217,13 +217,13 @@ Feature: Book Telephone Appointments Frontend
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
     And I enter a phone number for the appointment
-    When I click the 'Confirm and book appointment' button
+    And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
     And I select the back to home link on the appointments page
     # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
     # Will need removing/altering when either a fix is complete or story to add appointment details to the
     # success page is done.
-    Then the Appointment Hub page is displayed
+    And the Appointment Hub page is displayed
     # And I can see the booked telephone appointment and it has a cancel link
     Examples:
       | GP System |
@@ -237,7 +237,7 @@ Feature: Book Telephone Appointments Frontend
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
-    When I select a telephone number to book an appointment
+    And I select a telephone number to book an appointment
     And I click the 'Confirm and book appointment' button
     Then an error is displayed that "Describe your symptoms" is mandatory
     Examples:
@@ -253,14 +253,14 @@ Feature: Book Telephone Appointments Frontend
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
-    When I select a telephone number to book an appointment
+    And I select a telephone number to book an appointment
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
     And I select the back to home link on the appointments page
     # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
     # Will need removing/altering when either a fix is complete or story to add appointment details to the
     # success page is done.
-    Then the Appointment Hub page is displayed
+    And the Appointment Hub page is displayed
     # And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
   Scenario Outline: A <GP System> user receives an error if a telephone number is manually entered, but no reason entered, but a reason is required
@@ -271,7 +271,7 @@ Feature: Book Telephone Appointments Frontend
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
-    When I select the radio button for an alternative phone number to those stored
+    And I select the radio button for an alternative phone number to those stored
     And I enter a phone number for the appointment
     And I click the 'Confirm and book appointment' button
     Then an error is displayed that "Describe your symptoms" is mandatory
@@ -288,7 +288,7 @@ Feature: Book Telephone Appointments Frontend
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have selected a telephone appointment slot to book
-    When I select the radio button for an alternative phone number to those stored
+    And I select the radio button for an alternative phone number to those stored
     And I enter a phone number for the appointment
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success page is displayed
@@ -296,5 +296,5 @@ Feature: Book Telephone Appointments Frontend
     # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
     # Will need removing/altering when either a fix is complete or story to add appointment details to the
     # success page is done.
-    Then the Appointment Hub page is displayed
+    And the Appointment Hub page is displayed
     # And the booked appointment before cutoff time is correctly displayed with ability to cancel

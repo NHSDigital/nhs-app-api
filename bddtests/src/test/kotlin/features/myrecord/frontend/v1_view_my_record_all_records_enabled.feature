@@ -58,7 +58,7 @@ Feature: All records enabled - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Acute (short-term) medications section on My Record - Medical Record v1
+    And I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
     Then I see current repeat medication information - Medical Record v1
@@ -80,7 +80,7 @@ Feature: All records enabled - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Acute (short-term) medications section on My Record - Medical Record v1
+    And I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
     Then I see current repeat medication information - Medical Record v1
@@ -105,7 +105,7 @@ Feature: All records enabled - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Acute (short-term) medications section on My Record - Medical Record v1
+    And I click the Acute (short-term) medications section on My Record - Medical Record v1
     Then I see acute medication information - Medical Record v1
     When I click the Repeat medications: current section on My Record - Medical Record v1
     Then I see current repeat medication information - Medical Record v1
@@ -126,7 +126,7 @@ Feature: All records enabled - Medical Record v1
     When I retrieve the 'my record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Examinations section on My Record - Medical Record v1
+    And I click the Examinations section on My Record - Medical Record v1
     Then I see examinations information - Medical Record v1
     And I click on the Back link on the Medical Record page - Medical Record v1
     When I click the Diagnosis section on My Record - Medical Record v1

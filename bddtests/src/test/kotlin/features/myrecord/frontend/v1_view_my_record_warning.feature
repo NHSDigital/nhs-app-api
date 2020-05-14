@@ -43,7 +43,7 @@ Feature: Warning Frontend - Medical Record v1
     Then I see the medical record page - Medical Record v1
     When I navigate away from the medical record page
     Then I return to my medical record page
-    Then I see the medical record page - Medical Record v1
+    And I see the medical record page - Medical Record v1
 
   Scenario: An EMIS user accepts record and then logs out and back in and is shown the warning page - Medical Record v1
     Given I am a EMIS user setup to use medical record version 1
@@ -54,4 +54,4 @@ Feature: Warning Frontend - Medical Record v1
     When I use the header link to log out of the website
     Then I see the login page
     And I am on the Medical Record Warning page
-    Then I see the Medical Record Warning page
+    And I see the Medical Record Warning page

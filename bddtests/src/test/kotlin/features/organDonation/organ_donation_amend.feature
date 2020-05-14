@@ -40,7 +40,7 @@ Feature: Organ Donation Amend Frontend
     Then the Organ Donation Faith And Beliefs page is displayed
     And the previous option on the Organ Donation Faith And Beliefs page is selected
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Decision Additional Details page is displayed
+    And the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
@@ -61,7 +61,7 @@ Feature: Organ Donation Amend Frontend
     Then the Organ Donation Your Choice page is displayed
     And the all organs option is selected
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Faith And Beliefs page is displayed
+    And the Organ Donation Faith And Beliefs page is displayed
     And the previous option on the Organ Donation Faith And Beliefs page is selected
     When I select an option in sharing my organ donation faith and beliefs
     And I click the 'Continue' button on an Organ Donation page
@@ -102,14 +102,14 @@ Feature: Organ Donation Amend Frontend
     When I choose to amend my Organ Donation decision
     Then the amend Organ Donation Choice Page is displayed
     And I choose to donate my organs
-    Then the Organ Donation Your Choice page is displayed
+    And the Organ Donation Your Choice page is displayed
     And the some organs option is selected
     When I select the option to donate all my organs
     And I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Faith And Beliefs page is displayed
     And the previous option on the Organ Donation Faith And Beliefs page is selected
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Decision Additional Details page is displayed
+    And the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
@@ -127,17 +127,17 @@ Feature: Organ Donation Amend Frontend
     When I choose to amend my Organ Donation decision
     Then the amend Organ Donation Choice Page is displayed
     And I choose to donate my organs
-    Then the Organ Donation Your Choice page is displayed
+    And the Organ Donation Your Choice page is displayed
     And the some organs option is selected
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Specific Organ Choice page is displayed
+    And the Organ Donation Specific Organ Choice page is displayed
     And my previous decisions are displayed on the Organ Donation Specific Organ Choice page
     When I choose which organs to donate
     And I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Faith And Beliefs page is displayed
     And the previous option on the Organ Donation Faith And Beliefs page is selected
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Decision Additional Details page is displayed
+    And the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
@@ -155,17 +155,17 @@ Feature: Organ Donation Amend Frontend
     When I choose to amend my Organ Donation decision
     Then the amend Organ Donation Choice Page is displayed
     And I choose to donate my organs
-    Then the Organ Donation Your Choice page is displayed
+    And the Organ Donation Your Choice page is displayed
     And the some organs option is selected
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Specific Organ Choice page is displayed
+    And the Organ Donation Specific Organ Choice page is displayed
     And my previous decisions are displayed on the Organ Donation Specific Organ Choice page
     When I choose which organs to donate
     And I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Faith And Beliefs page is displayed
     And the previous option on the Organ Donation Faith And Beliefs page is selected
     And I click the 'Continue' button on an Organ Donation page
-    Then the Organ Donation Decision Additional Details page is displayed
+    And the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
@@ -183,7 +183,7 @@ Feature: Organ Donation Amend Frontend
     When I choose to amend my Organ Donation decision
     Then the amend Organ Donation Choice Page is displayed
     And I choose to donate my organs
-    Then the Organ Donation Your Choice page is displayed
+    And the Organ Donation Your Choice page is displayed
     When I select the option to donate all my organs
     And I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Faith And Beliefs page is displayed
@@ -209,7 +209,7 @@ Feature: Organ Donation Amend Frontend
     When I choose to amend my Organ Donation decision
     Then the amend Organ Donation Choice Page is displayed
     And I choose to donate my organs
-    Then the Organ Donation Your Choice page is displayed
+    And the Organ Donation Your Choice page is displayed
     When I select the option to donate some of my organs
     And I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Specific Organ Choice page is displayed
@@ -274,7 +274,7 @@ Feature: Organ Donation Amend Frontend
     And I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     And I see an appropriate Organ Donation error message with a retry option
-    When I click the 'Try again' button on an Organ Donation page
+    And I click the 'Try again' button on an Organ Donation page
     And the Organ Donation View Registration page is displayed
     Examples:
       | Error Code |

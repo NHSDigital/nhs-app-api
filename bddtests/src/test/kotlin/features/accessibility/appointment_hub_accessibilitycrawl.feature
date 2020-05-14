@@ -6,7 +6,7 @@
       And I am logged in
       When I retrieve the 'Appointment Hub' page directly
       Then the Appointments Hub page is displayed
-      Then the Appointment_Hub page is saved to disk
+      And the Appointment_Hub page is saved to disk
       When I click the 'Hospital and other services' link on the Appointments Hub
       Then the Hospital Appointments page is displayed
-      Then the Manage_Your_Referrals page is saved to disk
+      And the Manage_Your_Referrals page is saved to disk

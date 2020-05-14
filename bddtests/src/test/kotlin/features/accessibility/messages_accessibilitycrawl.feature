@@ -9,15 +9,15 @@
       When I follow the Messages link from the home page
       And I click on the NHS App Messages link on the Messages Hub page
       Then the Messages Inbox page is displayed
-      Then the MessagesInbox page is saved to disk
+      And the MessagesInbox page is saved to disk
       When I click on a sender in the Messages Inbox
       Then the Messages page is displayed
-      Then the Messages_ReadAndUnread page is saved to disk
+      And the Messages_ReadAndUnread page is saved to disk
       When I click the 'Back' breadcrumb
       Then the Messages Inbox page is displayed
       When I click on a sender in the Messages Inbox
       Then the Messages page is displayed
-      Then the Messages_Read page is saved to disk
+      And the Messages_Read page is saved to disk
 
     Scenario: The messages page is captured with no messages
       Given I am using the native app user agent
@@ -27,4 +27,4 @@
       And I click on the NHS App Messages link on the Messages Hub page
       Then the Messages Inbox page is displayed
       And a message is displayed indicating that there are no messages in the Messages Inbox
-      Then the Messages_NoMessages page is saved to disk
+      And the Messages_NoMessages page is saved to disk

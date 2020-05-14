@@ -74,7 +74,7 @@ Feature: Book Appointments With Javascript Disabled
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
     And the Appointment Slot page is displayed
-    When I enter symptoms
+    And I enter symptoms
     And I click the 'Confirm and book appointment' button
     Then the focus will go back to empty phone number input box
     Examples:
@@ -95,7 +95,7 @@ Feature: Book Appointments With Javascript Disabled
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
     And the Appointment Slot page is displayed
-    When I click the 'Confirm and book appointment' button
+    And I click the 'Confirm and book appointment' button
     Then the focus will go back to empty phone number input box
     Examples:
       | GP System |
@@ -115,7 +115,7 @@ Feature: Book Appointments With Javascript Disabled
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
     And the Appointment Slot page is displayed
-    When I click the 'Confirm and book appointment' button
+    And I click the 'Confirm and book appointment' button
     Then the focus will go back to empty phone number input box
     Examples:
       | GP System |
@@ -161,7 +161,7 @@ Feature: Book Appointments With Javascript Disabled
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
     And I enter a phone number for the appointment
-    When I click the 'Confirm and book appointment' button
+    And I click the 'Confirm and book appointment' button
     Then the focus will go back to empty booking reason input box
     Examples:
       | GP System |
@@ -181,7 +181,7 @@ Feature: Book Appointments With Javascript Disabled
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
     And I enter a phone number for the appointment
-    When I click the 'Confirm and book appointment' button
+    And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success message is displayed
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
@@ -220,7 +220,7 @@ Feature: Book Appointments With Javascript Disabled
     And I have selected a time when multiple slots are available
     Then the Appointment Slot page is displayed
     And  I click the 'Confirm and book appointment' button
-    Then the focus will go back to empty booking reason input box
+    And the focus will go back to empty booking reason input box
     Examples:
       | GP System |
       | EMIS      |

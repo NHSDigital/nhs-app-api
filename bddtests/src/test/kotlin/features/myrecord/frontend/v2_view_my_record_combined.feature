@@ -35,7 +35,7 @@ Feature: Combined Frontend - Medical Record v2
     And the GP Practice has six test results
     And the GP practice returns bad consultations data
     When I am on the Medical Record Warning page
-    When I retrieve the 'gp medical record' page directly
+    And I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
     Then I see the medical record v2 page
@@ -63,10 +63,10 @@ Feature: Combined Frontend - Medical Record v2
     When I retrieve the 'gp medical record' page directly
     Then I see the Medical Record Warning page
     When I click continue
-    When I click the Immunisations link on my record - Medical Record v2
+    And I click the Immunisations link on my record - Medical Record v2
     Then I see the expected immunisations - Medical Record v2
     When I click the Back link
-    When I click the Health conditions link on my record - Medical Record v2
+    And I click the Health conditions link on my record - Medical Record v2
     Then I see the expected health conditions - Medical Record v2
     Examples:
       | GP System |

@@ -25,7 +25,7 @@ Feature: Book Appointments Frontend
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
-    When I have selected a time when multiple slots are available
+    And I have selected a time when multiple slots are available
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
@@ -34,7 +34,7 @@ Feature: Book Appointments Frontend
     # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
     # Will need removing/altering when either a fix is complete or story to add appointment details to the
     # success page is done.
-    Then the Appointment Hub page is displayed
+    And the Appointment Hub page is displayed
     # And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
@@ -72,7 +72,7 @@ Feature: Book Appointments Frontend
     # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
     # Will need removing/altering when either a fix is complete or story to add appointment details to the
     # success page is done.
-    Then the Appointment Hub page is displayed
+    And the Appointment Hub page is displayed
     # And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
@@ -98,7 +98,7 @@ Feature: Book Appointments Frontend
     # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
     # Will need removing/altering when either a fix is complete or story to add appointment details to the
     # success page is done.
-    Then the Appointment Hub page is displayed
+    And the Appointment Hub page is displayed
     # And the booked appointment is correctly displayed without ability to cancel
 
   #400
@@ -142,7 +142,7 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     And I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then a message is displayed indicating that user has reached maximum appointment limit
+    And a message is displayed indicating that user has reached maximum appointment limit
     When I click the error 'Back' link
     Then the Your Appointments page is displayed
     Examples:
@@ -158,7 +158,7 @@ Feature: Book Appointments Frontend
     Then the Appointment Slot page is displayed
     And I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then a message is displayed indicating that user has reached maximum appointment limit
+    And a message is displayed indicating that user has reached maximum appointment limit
 
   #500
   Scenario Outline: <GP System> user sees appropriate error message when it returns corrupt data
@@ -245,7 +245,7 @@ Feature: Book Appointments Frontend
     # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
     # Will need removing/altering when either a fix is complete or story to add appointment details to the
     # success page is done.
-    Then the Appointment Hub page is displayed
+    And the Appointment Hub page is displayed
     # And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
   Scenario: An EMIS user can book an appointment with describing symptoms
@@ -262,7 +262,7 @@ Feature: Book Appointments Frontend
     # NHSO-8593: Changes below linked to this bug that caused an infinite loop on the back link in native
     # Will need removing/altering when either a fix is complete or story to add appointment details to the
     # success page is done.
-    Then the Appointment Hub page is displayed
+    And the Appointment Hub page is displayed
     # And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
     # Positive submission cases

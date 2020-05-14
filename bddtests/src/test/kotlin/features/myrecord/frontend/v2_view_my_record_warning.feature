@@ -43,7 +43,7 @@ Feature: Warning Frontend - Medical Record v2
     Then I see the medical record v2 page
     When I navigate away from the medical record page
     Then I return to my medical record page
-    Then I am redirected to the 'health record hub' page
+    And I am redirected to the 'health record hub' page
 
   Scenario: An EMIS user accepts record and then logs out and back in and is shown the warning page - Medical Record v2
     Given I am a EMIS user setup to use medical record version 2

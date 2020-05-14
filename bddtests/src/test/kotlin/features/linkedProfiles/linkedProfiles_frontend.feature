@@ -11,7 +11,7 @@ Feature: Login with proxy access
     And I click the proxy warning
     Then the switch profiles page is displayed
     And the correct proxy user details are displayed
-    Then I click the Switch to my profile button for the main user
+    And I click the Switch to my profile button for the main user
     And I see the home page
     And I do not see the yellow banner
 
@@ -30,9 +30,9 @@ Feature: Login with proxy access
     And the yellow banner contains details for the user I am acting on behalf of
     And I do not see the home page links
     And I click on the Appointments link on the header
-    Then the Appointments Hub page is displayed
+    And the Appointments Hub page is displayed
     And I click the GP Appointments link
-    Then the appointments shutter page is displayed
+    And the appointments shutter page is displayed
     Examples:
       | Gp Provider | Appointments Provider |
       | EMIS        | INFORMATICA           |
@@ -57,7 +57,7 @@ Feature: Login with proxy access
     And there are <Gp Provider> appointments available to book with a reason
     And I have no booked appointments for <Gp Provider>
     And I click on the Appointments link on the header
-    Then the page title is "Your GP appointments"
+    And the page title is "Your GP appointments"
     Examples:
       | Gp Provider | Appointments Provider |
       | EMIS        | ECONSULT              |
@@ -84,7 +84,7 @@ Feature: Login with proxy access
     And my GP Practice is EPS enabled
     And I have a P1 typed nominated pharmacy
     And I navigate to prescriptions
-    Then I see prescriptions page loaded
+    And I see prescriptions page loaded
     And I do not see the nominated pharmacy panel
     Examples:
       | Appointments Provider |
@@ -100,8 +100,8 @@ Feature: Login with proxy access
     When I select the linked profiles link from the home page
     Then the linked profiles page is displayed
     And linked profiles are displayed
-    Then I select a linked profile with appointments enabled false, prescriptions enabled false and medical record enabled false
-    Then details for the selected linked profile are displayed
+    And I select a linked profile with appointments enabled false, prescriptions enabled false and medical record enabled false
+    And details for the selected linked profile are displayed
     When I click the Switch to this profile button for the proxy user
     Then I see the home page
     When I click the settings icon
@@ -116,13 +116,13 @@ Feature: Login with proxy access
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
-    Then the appointments shutter page is displayed
+    And the appointments shutter page is displayed
     When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'https://111.nhs.uk/service/COVID-19/'
     Then a new tab has been opened by the link
 
   Scenario Outline: A <GP System> user proxying on behalf of another will see the confirmation page after booking a repeat prescription
     Given I am logged in as a <GP System> user with linked profiles and appointments provider IM1
-    Given the scenario is submit prescription
+    And the scenario is submit prescription
     Then I see the home page
     And I see the linked profiles link
     When I select the linked profiles link from the home page
@@ -135,7 +135,7 @@ Feature: Login with proxy access
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I navigate to prescriptions
-    Then I see prescriptions page loaded
+    And I see prescriptions page loaded
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     When I click Confirm and order repeat prescription
@@ -160,9 +160,9 @@ Feature: Login with proxy access
     And there are <Gp System> appointments available to book with a reason
     And I have no booked appointments for <Gp System>
     And I click on the Appointments link on the header
-    Then the Appointments Hub page is displayed
+    And the Appointments Hub page is displayed
     And I click the GP Appointments link
-    Then the page title is "Your GP appointments"
+    And the page title is "Your GP appointments"
     When I select "Book an appointment" button
     Then I am on the Appointments Guidance page
     When I select the Book an Appointment button on the guidance page
@@ -189,9 +189,9 @@ Feature: Login with proxy access
     Then I see the home page
     And EMIS is available to cancel a previously booked appointment before cutoff time because No longer required
     And I click on the Appointments link on the header
-    Then the Appointments Hub page is displayed
+    And the Appointments Hub page is displayed
     And I click the GP Appointments link
-    Then the page title is "Your GP appointments"
+    And the page title is "Your GP appointments"
     And I select a "Cancel this appointment" link
     And I select a cancellation reason of No longer required
     When I select "Cancel appointment" button
@@ -210,9 +210,9 @@ Feature: Login with proxy access
     Then I see the home page
     And TPP is available to cancel a previously booked appointment before cutoff time because No longer required
     And I click on the Appointments link on the header
-    Then the Appointments Hub page is displayed
+    And the Appointments Hub page is displayed
     And I click the GP Appointments link
-    Then the page title is "Your GP appointments"
+    And the page title is "Your GP appointments"
     And I select a "Cancel this appointment" link
     When I select "Cancel appointment" button
     Then The appointment cancellation success page is shown
@@ -241,7 +241,7 @@ Feature: Login with proxy access
     And I click the proxy warning
     Then the switch profiles page is displayed
     And the correct proxy user details are displayed
-    Then I click the Switch to my profile button for the main user
+    And I click the Switch to my profile button for the main user
     And I see the home page
     And I do not see the yellow banner
 
@@ -272,12 +272,12 @@ Feature: Login with proxy access
 
   Scenario: An TPP user sees shutter pages when proxying and trying to access services without permissions
     Given I am logged in as a TPP user with linked profiles but no access to core services and appointments provider IM1
-    Given the scenario is submit prescription
+    And the scenario is submit prescription
     Then I see the home page
     And I see the linked profiles link
     When I select the linked profiles link from the home page
-    When I select a linked profile
-    When I click the Switch to this profile button for the proxy user
+    And I select a linked profile
+    And I click the Switch to this profile button for the proxy user
     And prescriptions is disabled for the proxy account at a GP Practice level
     And the GP Practice has disabled proxy access to summary care record functionality
     And the GP Practice has disabled proxy access to dcr events functionality for TPP
@@ -295,6 +295,6 @@ Feature: Login with proxy access
     When I navigate to Appointments
     Then the Appointments Hub page is displayed
     And I click the GP Appointments link
-    Then the appointments shutter page is displayed
+    And the appointments shutter page is displayed
     When I click the link called 'Use the 111 coronavirus service to find out what to do' with a url of 'https://111.nhs.uk/service/COVID-19/'
     Then a new tab has been opened by the link

@@ -8,7 +8,7 @@ Feature: Patient Verification Backend
     Given I have valid credentials for a <GP System> patient with one NHS Number
     When I verify patient data using the v1 endpoint
     Then I receive a "OK" success code
-    Then I receive the expected NHS Number
+    And I receive the expected NHS Number
 
     Examples:
       | GP System |
@@ -21,7 +21,7 @@ Feature: Patient Verification Backend
     Given I have valid credentials for a <GP System> patient with multiple NHS Numbers
     When I verify patient data using the v1 endpoint
     Then I receive a "OK" success code
-    Then I receive the expected NHS Numbers
+    And I receive the expected NHS Numbers
 
     Examples:
       | GP System |

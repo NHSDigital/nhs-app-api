@@ -33,7 +33,7 @@ Feature: Organ Donation Lookup Backend
     And I have logged in and have a valid session cookie
     When I request my organ donation details
     Then I receive a "OK" success code
-    Then I receive organ donation details with an 'OptIn' decision
+    And I receive organ donation details with an 'OptIn' decision
     And I receive the users demographics details
     Examples:
       | GP System |

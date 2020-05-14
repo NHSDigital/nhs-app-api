@@ -124,7 +124,7 @@ Feature: Organ Donation Frontend
     And I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
-    When I choose to not donate my organs
+    And I choose to not donate my organs
     Then the Organ Donation Decision Additional Details page is displayed
     When I select an ethnicity to record for organ donation
     And I select a religion to record for organ donation
@@ -142,7 +142,7 @@ Feature: Organ Donation Frontend
     And I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
-    When I choose to not donate my organs
+    And I choose to not donate my organs
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Check Details page is displayed
@@ -159,7 +159,7 @@ Feature: Organ Donation Frontend
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Check Details' page
-    When I click the link called 'privacy statement' with a url of 'https://www.organdonation.nhs.uk/app/app-privacy/'
+    And I click the link called 'privacy statement' with a url of 'https://www.organdonation.nhs.uk/app/app-privacy/'
     Then a new tab has been opened by the link
 
   Scenario: A user can register to be a blood donor on the organ donation View Registration page
@@ -168,7 +168,7 @@ Feature: Organ Donation Frontend
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Confirmation' page
-    When I click the link called 'Register to be a blood donor' with a url of 'https://www.blood.co.uk/'
+    And I click the link called 'Register to be a blood donor' with a url of 'https://www.blood.co.uk/'
     Then a new tab has been opened by the link
 
   Scenario: A user can navigate back through the opt out journey
@@ -262,7 +262,7 @@ Feature: Organ Donation Frontend
     When I select the option to donate all my organs
     And I click the 'Continue' button on an Organ Donation page
     Then the Organ Donation Faith And Beliefs page is displayed
-    Then a validation message is shown if a user attempts to continue without selecting a faith and belief option
+    And a validation message is shown if a user attempts to continue without selecting a faith and belief option
 
   Scenario: A user is shown a validation message if they attempt to continue opting in without selecting 'All' or 'Some'
     Given I am using the native app user agent
@@ -342,11 +342,11 @@ Feature: Organ Donation Frontend
     And I am a EMIS user who wishes to register as opt out, but OD returns recoverable <Error Code> error
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
-    When I follow the opt-out journey to the 'Check Details' page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I follow the opt-out journey to the 'Check Details' page
+    And I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     And I see an appropriate Organ Donation error message with a retry option
-    When I click the 'Try again' button on an Organ Donation page
+    And I click the 'Try again' button on an Organ Donation page
     And the Organ Donation View Registration page is displayed
     Examples:
       | Error Code |
@@ -358,7 +358,7 @@ Feature: Organ Donation Frontend
     And I am logged in
     When I retrieve the 'Organ Donation' page directly
     And I follow the opt-out journey to the 'Check Details' page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button on an Organ Donation page
     And I see an appropriate Organ Donation error message without a retry option
     Examples:
@@ -371,7 +371,7 @@ Feature: Organ Donation Frontend
       And I am logged in
       When I retrieve the 'Organ Donation' page directly
       And I follow the opt-out journey to the 'Check Details' page
-      When I confirm that my details are accurate, and accept the privacy statement for organ donation
+      And I confirm that my details are accurate, and accept the privacy statement for organ donation
       And I click the 'Submit my decision' button on an Organ Donation page
       And I wait for 15 seconds
       And I see an appropriate Organ Donation decision processing message without a retry option
@@ -382,7 +382,7 @@ Feature: Organ Donation Frontend
       And I am logged in
       When I retrieve the 'Organ Donation' page directly
       And I follow the opt-out journey to the 'Check Details' page
-      When I confirm that my details are accurate, and accept the privacy statement for organ donation
+      And I confirm that my details are accurate, and accept the privacy statement for organ donation
       And I click the 'Submit my decision' button on an Organ Donation page
       Then the 'Submit my decision' button has the 'disabled' attribute
 

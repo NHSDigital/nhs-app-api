@@ -13,9 +13,9 @@ Feature: Session Expiry and Extend for Desktop
     And a booked appointment can be cancelled
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    When I am idle long enough for the session expiry dialog box to appear
+    And I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
-    Then I see a dialog box prompting to extend the session
+    And I see a dialog box prompting to extend the session
     When I click to extend the session
     Then the dialog box is not visible on the screen
     And I have filtered such that there is one time displayed that represents multiple slots
@@ -29,9 +29,9 @@ Feature: Session Expiry and Extend for Desktop
     Given there are EMIS appointments available to book
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    When I am idle long enough for the session expiry dialog box to appear
+    And I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
-    Then I see a dialog box prompting to extend the session
+    And I see a dialog box prompting to extend the session
     When I click to log out
     Then I see the login page
     And the dialog box is not visible on the screen
@@ -40,9 +40,9 @@ Feature: Session Expiry and Extend for Desktop
     Given there are EMIS appointments available to book
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
-    When I am idle long enough for the session expiry dialog box to appear
+    And I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
-    Then I see a dialog box prompting to extend the session
+    And I see a dialog box prompting to extend the session
     When I am idle long enough for the session to expire
     Then I see the login page with the session expiry notification
     And the dialog box is not visible on the screen
@@ -53,11 +53,11 @@ Feature: Session Expiry and Extend for Desktop
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
-    Then I see a dialog box prompting to extend the session
-    Then I check that 'Stay logged in' is in focus
-    Then I press the tab key
-    Then I check that 'Log out' is in focus
-    Then I press the tab key
-    Then I check that 'Stay logged in' is in focus
-    Then I press the tab key
-    Then I check that 'Log out' is in focus
+    And I see a dialog box prompting to extend the session
+    And I check that 'Stay logged in' is in focus
+    And I press the tab key
+    And I check that 'Log out' is in focus
+    And I press the tab key
+    And I check that 'Stay logged in' is in focus
+    And I press the tab key
+    And I check that 'Log out' is in focus

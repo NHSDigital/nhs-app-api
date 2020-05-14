@@ -20,7 +20,7 @@ Feature: Prescriptions submission Frontend
     When I click Confirm and order repeat prescription
     Then I see the Prescription Ordered success page
     And I click the Back to my prescriptions link
-    Then I see the Repeat prescription page with 6 prescriptions
+    And I see the Repeat prescription page with 6 prescriptions
 
 # These tests navigate directly to the pages where the features are to be tested, to save time.
 
@@ -33,10 +33,10 @@ Feature: Prescriptions submission Frontend
     And I select 5 repeatable prescriptions to order
     And I enter text "As soon as possible please" for special request
     And I click Continue on the Order a repeat prescription page
-    When I click Confirm and order repeat prescription
+    And I click Confirm and order repeat prescription
     Then I see the Prescription Ordered success page
     And I click the Back to my prescriptions link
-    Then I see the Repeat prescription page with 6 prescriptions
+    And I see the Repeat prescription page with 6 prescriptions
     Examples:
       | GP System |
       | EMIS      |
@@ -51,10 +51,10 @@ Feature: Prescriptions submission Frontend
     When I retrieve the 'Your Prescriptions' page directly
     And I select 1 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
-    When I click Confirm and order repeat prescription
+    And I click Confirm and order repeat prescription
     Then I see the Prescription Ordered success page
     And I click the Back to my prescriptions link
-    Then I see the Repeat prescription page with 2 prescriptions
+    And I see the Repeat prescription page with 2 prescriptions
     Examples:
     | GP System |
     | EMIS      |
@@ -74,7 +74,7 @@ Feature: Prescriptions submission Frontend
     And I select 1 repeatable prescriptions to order
     And I enter text "<script>" for special request
     And I click Continue on the Order a repeat prescription page
-    When I click Confirm and order repeat prescription
+    And I click Confirm and order repeat prescription
     Then I see a message indicating there was an error sending my order
 
   @nativesmoketest

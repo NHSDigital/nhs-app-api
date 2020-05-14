@@ -106,7 +106,7 @@ Scenario: User browses to url when logged in
     Given I am a EMIS patient
     And I am not logged in
     When I browse to the <Url> and see the login page
-    When I login
+    And I login
     Then I am on the relevant <Page> page
     Examples:
       | Url                                         | Page                           |

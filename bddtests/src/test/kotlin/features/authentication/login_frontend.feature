@@ -40,7 +40,7 @@ Feature: Login frontend
     And I click the 'Continue with NHS login' button
     Then the page title is 'Before you start'
     And I click the 'Continue' button
-    Then the page contains the header 'Integration Test Patient'
+    And the page contains the header 'Integration Test Patient'
 
   Scenario: A user does not see the native instructions
     Given I am a patient using the native app
@@ -160,7 +160,7 @@ Feature: Login frontend
   @pending
   Scenario: Any user can click the help icon on the login page
     Given I am at the login page
-    Given I see the help icon on the login page
+    And I see the help icon on the login page
     When I click the help icon on the login page
     Then a new tab has been opened by the link
 
