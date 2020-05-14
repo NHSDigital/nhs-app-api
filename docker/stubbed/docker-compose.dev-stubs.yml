@@ -1,0 +1,7 @@
+version: "3.4"
+
+services:
+
+  stubs.local.bitraft.io:
+    image: ${STUBS_DOCKER_REGISTRY:-local}/nhsonline-dev-stubs:${STUBS_DOCKER_TAG:-latest}
+    command: --local-response-templating

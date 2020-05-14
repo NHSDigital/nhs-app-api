@@ -7,7 +7,7 @@ define AdditionalHelp
 @echo '    Set to "host" to route all traffic for that container to the host machine so the process can be run and debugged on the host'
 endef
 
-SSH_CERT := ~/.nhsonline/local-development-certificate/local-development-https.crt
+SSL_CERT := ~/.nhsonline/local-development-certificate/local-development-https.crt
 
 build:	## Build web and backend worker
 	$(MAKE) -C backendworker build
@@ -40,15 +40,18 @@ $(eval $(call expand_run_options_docker_images,run))
 run: run-deps	## Run in docker
 	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml
 
+$(eval $(call expand_run_options_docker_images,run-dev-stubs))
+$(call expand_run_options_docker_image,run-dev-stubs,STUBS)
 run-dev-stubs:	## Run in docker with dev stubs
-	$(MAKE) -C bddtests run-dev-stubs
+	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.dev-stubs.yml
 
 $(eval $(call expand_run_options_docker_images,run-perf-stubs))
-run-perf-stubs: $(SSH_CERT)	 ## Run performance stubs in docker
-	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/performance/docker-compose.yml
+$(call expand_run_options_docker_image,run-perf-stubs,STUBS)
+run-perf-stubs:	 ## Run performance stubs in docker
+	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/stubbed/docker-compose.yml docker/stubbed/docker-compose.minimock.yml
 
 $(eval $(call expand_run_options_docker_images,run-https))
-run-https: $(SSH_CERT)	## Run in docker with https
+run-https: $(SSL_CERT)	## Run in docker with https
 	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/https/docker-compose.yml
 
 $(eval $(call expand_run_options_docker_images,run-android))
@@ -56,7 +59,7 @@ run-android:	## Run in docker for android
 	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/android/docker-compose.yml
 
 $(eval $(call expand_run_options_docker_images,run-android-https))
-run-android-https: $(SSH_CERT)	## Run in docker with https for android
+run-android-https: $(SSL_CERT)	## Run in docker with https for android
 	./buildscripts/run_docker_compose.sh docker-compose.yml docker-compose.ports.yml docker/https/docker-compose.yml docker/android/docker-compose.yml docker/android/docker-compose.https.yml
 
 run-localbdd:	## Run in docker with stubs so BDD tests can be run locally
@@ -74,7 +77,7 @@ $(eval $(call expand_run_options_docker_images,validate_local_images))
 validate_local_images:
 	./buildscripts/validate_local_images.sh
 
-$(SSH_CERT):
+$(SSL_CERT):
 	./buildscripts/create-certificate.sh
 
 .PHONY: run run-dev-stubs run-https run-android run-android-https run-localbdd run-bdd run-deps validate_local_secrets validate_local_images

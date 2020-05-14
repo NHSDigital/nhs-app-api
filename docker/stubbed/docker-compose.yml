@@ -1,0 +1,55 @@
+version: "3.4"
+
+secrets:
+  tpp_cert:
+    file: "./docker/stubbed/certs/TestCert.pfx"
+  tpp_cert_password:
+    file: "./docker/stubbed/certs/TestCert.password"
+  microtest_cert:
+    file: "./docker/stubbed/certs/TestCert.pfx"
+  microtest_cert_password:
+    file: "./docker/stubbed/certs/TestCert.password"
+  nhslogin_private_key:
+    file: "./docker/stubbed/certs/private_key.pem"
+  nhslogin_rsapass:
+    file: "./docker/stubbed/certs/private_key.password"
+
+services:
+
+  web.local.bitraft.io:
+    env_file:
+      - ./docker/stubbed/env/gplookup_connectivity.env
+      - ./docker/stubbed/env/web.env
+
+  pfs.local.bitraft.io:
+    env_file:
+      - ./docker/stubbed/env/emis_connectivity.env
+      - ./docker/stubbed/env/gplookup_connectivity.env
+      - ./docker/stubbed/env/microtest_connectivity.env
+      - ./docker/stubbed/env/nhslogin_connectivity.env
+      - ./docker/stubbed/env/onlineconsultationsproviders_connectivity.env
+      - ./docker/stubbed/env/organdonation_connectivity.env
+      - ./docker/stubbed/env/spine_connectivity.env
+      - ./docker/stubbed/env/tpp_connectivity.env
+      - ./docker/stubbed/env/vision_connectivity.env
+
+  users.local.bitraft.io:
+    env_file:
+      - ./docker/stubbed/env/nhslogin_connectivity.env
+
+  cid.local.bitraft.io:
+    env_file:
+      - ./docker/stubbed/env/emis_connectivity.env
+      - ./docker/stubbed/env/microtest_connectivity.env
+      - ./docker/stubbed/env/tpp_connectivity.env
+      - ./docker/stubbed/env/vision_connectivity.env
+
+  messages.local.bitraft.io:
+    env_file:
+      - ./docker/stubbed/env/nhslogin_connectivity.env
+
+  userinfo.local.bitraft.io:
+    env_file:
+      - ./docker/stubbed/env/nhslogin_connectivity.env
+
+  stubs.local.bitraft.io:

@@ -2,6 +2,6 @@ version: "3.4"
 
 services:
 
-  minimock.local.bitraft.io:
+  stubs.local.bitraft.io:
     ports:
       - "8080:8080"
