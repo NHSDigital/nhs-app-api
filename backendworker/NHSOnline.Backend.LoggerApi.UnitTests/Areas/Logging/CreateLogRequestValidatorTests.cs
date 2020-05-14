@@ -1,6 +1,4 @@
 using System;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,24 +7,20 @@ using NHSOnline.Backend.LoggerApi.Areas.Logging.Models;
 using Moq;
 
 namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging
-{   
+{
     [TestClass]
     public class CreateLogRequestValidatorTests
     {
-        private IFixture _fixture;
         private Mock<ILogger> _logger;
         private CreateLogRequestValidator _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization());
-
             _logger = new Mock<ILogger>();
             _systemUnderTest = new CreateLogRequestValidator(_logger.Object);
         }
-        
+
         [TestMethod]
         public void IsPostValid_ReturnsTrue_IfLogRequestIsValid()
         {
@@ -35,17 +29,17 @@ namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging
             {
                 Level = Level.Error,
                 Message = "test log message",
-                TimeStamp = DateTimeOffset.Now      
+                TimeStamp = DateTimeOffset.Now
             };
-            
+
             // Act
-           
+
             var isValid = _systemUnderTest.ValidateAndSanitize(createLogRequest);
-            
+
             // Assert
             isValid.Should().Be(true);
         }
-        
+
         [TestMethod]
         public void IsPostValid_ReturnsFalse_IfLogMessageIsNull()
         {
@@ -54,12 +48,12 @@ namespace NHSOnline.Backend.LoggerApi.UnitTests.Areas.Logging
             {
                 Level = Level.Debug,
                 Message = "",
-                TimeStamp = new DateTimeOffset()    
+                TimeStamp = new DateTimeOffset()
             };
-            
+
             // Act
             var isValid = _systemUnderTest.ValidateAndSanitize(createLogRequest);
-            
+
             // Assert
             isValid.Should().Be(false);
         }
