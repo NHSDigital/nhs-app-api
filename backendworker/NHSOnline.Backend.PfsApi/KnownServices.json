@@ -14,13 +14,24 @@
     {
       "id": "111",
       "url": "https://111.nhs.uk",
-      "subServices": null,
       "javaScriptInteractionMode": "None",
       "menuTab": "None",
       "viewMode": "WebView",
       "showThirdPartyWarning": false,
       "requiresAssertedLoginIdentity": false,
-      "validateSession": false
+      "validateSession": false,
+      "subServices": [
+        {
+          "path": "/isolation-note",
+          "queryString": null,
+          "javaScriptInteractionMode": "None",
+          "menuTab": "None",
+          "viewMode": "AppTab",
+          "showThirdPartyWarning": false,
+          "requiresAssertedLoginIdentity": false,
+          "validateSession": false
+        }
+      ]
     },
     {
       "id": "111-corona",
