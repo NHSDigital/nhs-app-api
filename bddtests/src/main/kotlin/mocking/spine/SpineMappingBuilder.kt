@@ -1,7 +1,6 @@
 package mocking.spine
 
 import mocking.MappingBuilder
-import mocking.spine.ePS.EPSMappingBuilder
 import mocking.spine.ePS.EPSMappingBuilder111ItemDetail
 import mocking.spine.ePS.EPSMappingBuilder111ItemSummary
 
@@ -20,6 +19,6 @@ open class SpineMappingBuilder(method: String = "GET", relativePath: String = ""
 
     }
 
-    var itemSummary = EPSMappingBuilder111ItemSummary(EPSMappingBuilder.configuration)
-    var itemDescription = EPSMappingBuilder111ItemDetail(EPSMappingBuilder.configuration)
+    var itemSummary = EPSMappingBuilder111ItemSummary()
+    var itemDescription = EPSMappingBuilder111ItemDetail()
 }

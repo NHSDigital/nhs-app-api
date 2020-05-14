@@ -4,14 +4,13 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.sharedSteps.BrowserSteps
-import mocking.MockingClient
 import mongodb.MongoDBConnection
 import mongodb.MongoRepositoryUserDevice
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import pages.ErrorPage
 import pages.account.NotificationsSettingsPage
-import org.junit.Assert.assertEquals
 import utils.GlobalSerenityHelpers
 import utils.clearList
 import utils.getOrFail
@@ -21,7 +20,6 @@ class PushNotificationsStepDefinitions {
     @Steps
     lateinit var browser: BrowserSteps
 
-    private val mockingClient = MockingClient.instance
     val errorPage = ErrorPage()
 
     private lateinit var notificationsSettingsPage: NotificationsSettingsPage

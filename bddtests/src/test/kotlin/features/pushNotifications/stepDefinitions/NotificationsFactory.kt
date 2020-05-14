@@ -4,7 +4,6 @@ import constants.Supplier
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import mocking.AccessTokenBuilder
-import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
@@ -18,8 +17,6 @@ import worker.models.userDevices.InvalidUserDevice
 import java.util.*
 
 class NotificationsFactory {
-
-    private val mockingClient = MockingClient.instance
 
     fun setUpUser(supplier: Supplier? = null, patient: Patient? = null): Patient {
         val patientToUse = patient ?: ServiceJourneyRulesMapper.findPatientForConfiguration(supplier,

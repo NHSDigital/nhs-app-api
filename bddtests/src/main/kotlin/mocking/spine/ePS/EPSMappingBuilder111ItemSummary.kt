@@ -1,9 +1,8 @@
 package mocking.spine.ePS
 
-import mocking.spine.SpineConfiguration
 import mocking.spine.ePS.prescriptions.EPS111ItemSummaryBuilder
 
-class EPSMappingBuilder111ItemSummary(private var configuration: SpineConfiguration?) {
+class EPSMappingBuilder111ItemSummary {
 
     fun prescriptionTrackingRequest() = EPS111ItemSummaryBuilder (
             null,

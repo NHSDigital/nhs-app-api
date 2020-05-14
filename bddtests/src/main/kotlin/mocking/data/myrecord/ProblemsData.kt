@@ -10,7 +10,6 @@ import org.joda.time.DateTime
 
 object ProblemsData {
     private const val PROBLEMS_NUMBER = 3
-    private const val DATE_FOR_PROBLEM_RECORDS = "2018-05-15T09:52:44.927"
     private const val DATE_FOR_PROBLEM_YEAR = 2018
     private const val DATE_FOR_PROBLEM_MONTH = 5
     private const val DATE_FOR_PROBLEM_DAY = 14

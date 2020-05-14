@@ -1,7 +1,6 @@
 package mocking.stubs.appointments
 
 import mocking.emis.models.SlotTypeStatus
-import mocking.emis.models.TelephoneAppointmentDetails
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import java.util.*
@@ -87,7 +86,6 @@ class AppointmentSlotFacadeBuilder {
     private lateinit var channel: SlotTypeStatus
     private lateinit var slotDetails: String
     private lateinit var telephoneNumber: String
-    private lateinit var telephoneAppointmentDetails: TelephoneAppointmentDetails
 
     fun slotId(value: Int): AppointmentSlotFacadeBuilder {
         slotId = value

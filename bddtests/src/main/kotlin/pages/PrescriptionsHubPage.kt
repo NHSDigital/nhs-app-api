@@ -5,10 +5,6 @@ import net.thucydides.core.annotations.DefaultUrl
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/")
 open class PrescriptionsHubPage : HybridPageObject() {
 
-    private val viewOrdersTitle = "View your orders"
-    private val viewOrdersDescription =
-            "See repeat prescriptions you have ordered"
-
     private val pageTitle = HybridPageElement(
             webDesktopLocator = "//h1[contains(text(),\"Prescriptions\")]",
             androidLocator = null,

@@ -43,12 +43,6 @@ class AppointmentGuidancePage : HybridPageObject() {
             page = this
     )
 
-    private val content = HybridPageElement(
-            webDesktopLocator = "//*[@data-purpose='info']",
-            androidLocator = null,
-            page = this
-    )
-
     fun checkGuidanceBodyForOnlineConsultations() {
         menuCheckSymptomsButton.assertSingleElementPresent()
         gpAdminMenuItem.assertSingleElementPresent()

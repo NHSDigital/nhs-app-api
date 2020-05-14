@@ -84,10 +84,6 @@ class LoginPage : HybridPageObject() {
     }
 
     private fun pageHeadingIsDisplayed() = pageHeading.isDisplayed
-    private fun loginOrCreateAccountButtonIsDisplayed() = loginOrCreateAccountButton.isDisplayed
-    private fun otherServicesDivIsDisplayed() = otherServicesDiv.isDisplayed
-    private fun beforeYouStartDivIsDisplayed() = beforeYouStartDiv.isDisplayed
-    private fun downloadAppPanelIsDisplayed() = downloadAppPanel.isDisplayed
 
     fun helpIconIsVisible() = helpIcon.isVisible
 

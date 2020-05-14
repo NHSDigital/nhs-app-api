@@ -33,7 +33,7 @@ class TestResultResponseDataBuilder {
 
         val childValueData = mutableListOf<TestResultValue>()
         if (childValueCount != 0) {
-            for(i in 1..childValueCount){
+            (1..childValueCount).forEach { _ ->
                 childValueData.add(testResultValueData)
             }
         }

@@ -117,12 +117,10 @@ class AppointmentsSlotsExampleForFiltering : AppointmentsSlotsExample() {
 
     private fun generateAppointmentDates(numberOfAppointments: Int): List<AppointmentDate> {
         val createdAppointmentDates: ArrayList<AppointmentDate> = ArrayList()
-        for (i in 1..numberOfAppointments) {
+        (1..numberOfAppointments).forEach { _ ->
             createdAppointmentDates.add(AppointmentDate(nextAppointmentDateToSet))
             nextAppointmentDateToSet = nextAppointmentDateToSet.plusHours(HOURLY_INCREMENT.toLong())
         }
         return createdAppointmentDates
     }
-
-
 }

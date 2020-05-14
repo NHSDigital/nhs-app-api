@@ -53,8 +53,4 @@ open class OrganDonationFaithAndBeliefsPage : OrganDonationBasePage() {
                 .button("Continue")
         expected.assert(this)
     }
-
-    private var questionContent =
-            "I would like NHS staff to speak to my family and anyone else appropriate about how organ donation " +
-                    "can go ahead in line with my faith or beliefs."
 }

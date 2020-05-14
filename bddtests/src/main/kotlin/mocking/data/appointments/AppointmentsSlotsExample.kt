@@ -39,8 +39,6 @@ open class AppointmentsSlotsExample {
 
     protected val currentTime = LocalDateTime.now()!!
     private var currentDateToAdd = currentTime
-    private val remainingDatesForThisWeek = setWeek()
-    val datesForNextWeek = setWeek()
 
     private val tomorrowDate = LocalDateTime.now().plusDays(1)
     private val nextWeekDate = LocalDateTime.now().plusDays( DAYS_IN_WEEK)

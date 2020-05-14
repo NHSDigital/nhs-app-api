@@ -30,16 +30,4 @@ class AnalyticsStepDefinitions {
         val jsExecutor = homePage.driver as JavascriptExecutor
         return jsExecutor.executeScript("return window.digitalData") as Any
     }
-
-    private fun String.runCommand(): String {
-        return ProcessBuilder(split(" "))
-                .redirectOutput(ProcessBuilder.Redirect.PIPE)
-                .redirectError(ProcessBuilder.Redirect.INHERIT)
-                .start()
-                .inputStream
-                .bufferedReader()
-                .readText()
-
-
-    }
 }

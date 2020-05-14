@@ -8,7 +8,6 @@ import java.time.OffsetDateTime
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-private const val QUERY_NHS_NUMBER = "nhsNumber"
 private const val QUERY_FROM_DATE = "earliestDate"
 private const val QUERY_TO_DATE = "latestDate"
 private const val QUERY_PRESCRIPTION_STATUS = "prescriptionStatus"

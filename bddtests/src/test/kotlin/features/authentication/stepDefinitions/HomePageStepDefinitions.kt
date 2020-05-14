@@ -176,16 +176,6 @@ class HomePageStepDefinitions {
         prescriptionsHubPage.assertPrescriptionsHubIsDisplayed()
     }
 
-    private fun followMessagesLink() {
-        homeSteps.homePage.messagesLink.click()
-    }
-
-    private fun followPrescriptionLink() {
-        homeSteps.homePage.orderRepeatPrescriptionLink.click()
-        prescriptionsHubPage.assertPrescriptionsHubIsDisplayed()
-        navBar.isHighlighted(NavBarNative.NavBarType.PRESCRIPTIONS)
-    }
-
     private fun followMedicalRecordLink(linkElement: HybridPageElement) {
         linkElement.click()
         recordWarning.thenISeeRecordWarningPageOpened()

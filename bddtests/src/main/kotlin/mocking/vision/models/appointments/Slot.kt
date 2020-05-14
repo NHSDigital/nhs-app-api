@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
 import javax.xml.bind.annotation.XmlElement
 
+@Suppress("UnusedPrivateMember", "Required for xml serialisation")
 @XmlAccessorType(XmlAccessType.FIELD)
 data class Slot(
         @XmlAttribute(name = "id") private var id: String,

@@ -14,7 +14,6 @@ import mocking.emis.models.SessionHolder
 import mocking.emis.models.SessionType
 import mocking.emis.models.TelephoneAppointmentDetails
 import models.Patient
-import models.Slot
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,8 +32,6 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
     val timeZone = TimeZone.getTimeZone("Europe/London")
     override val dateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
     override val defaultPatient = Patient.getDefault(Supplier.EMIS)
-
-    private val expectedMyAppointment = Slot(slotType = SessionType.Timed.toString())
 
     val locations = arrayListOf(
             Location(locationId = LOCATION_ID_SURGERY, locationName = "Main Surgery"),

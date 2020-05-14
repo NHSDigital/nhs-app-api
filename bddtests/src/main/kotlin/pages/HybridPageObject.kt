@@ -8,20 +8,15 @@ import org.junit.Assert
 import org.openqa.selenium.By
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.NoSuchElementException
-import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebDriverException
-import org.openqa.selenium.support.ui.FluentWait
 import pages.sharedElements.BannerObject
 import utils.PageLogging
 import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
-import java.time.Duration
 import java.util.*
 
-const val DEFAULT_SPINNER_WAIT: Long = 4000
 const val DEFAULT_MOBILE_WAIT: Long = 5000
-const val POOLING_FREQUENCY: Long = 100
 const val WEB_CONTEXT: String = "webview"
 
 open class HybridPageObject : PageObject() {
@@ -41,25 +36,6 @@ open class HybridPageObject : PageObject() {
             iOSLocator = "//*[@class='nuxt-progress']",
             page = this
     )
-
-    private fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT) {
-
-        actOnTheElement { elem ->
-            try {
-                FluentWait<WebElementFacade>(elem)
-                        .withTimeout(Duration.ofSeconds(seconds))
-                        .pollingEvery(Duration.ofMillis(POOLING_FREQUENCY))
-                        .until {
-                            !it.isPresent || !it.isCurrentlyVisible
-                        }
-
-            } catch (e: NoSuchElementException) {
-                // continue
-            } catch (e: StaleElementReferenceException) {
-                // continue
-            }
-        }
-    }
 
     fun findAllByXpath(xpath: String): List<WebElementFacade> {
         switchWebview()

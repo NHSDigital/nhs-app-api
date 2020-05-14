@@ -28,11 +28,6 @@ class YourAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    private val successMessage = HybridPageElement(
-            webDesktopLocator = "//*[@data-purpose='success']",
-            page = this
-    )
-
     private val actualNoUpcomingText = HybridPageElement(
             webDesktopLocator = "//*[@data-purpose='upcoming-info']",
             page = this

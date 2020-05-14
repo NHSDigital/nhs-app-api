@@ -59,7 +59,7 @@ object ImmunisationsData {
         var response = "<![CDATA[<root><patient>"
         val responseStringEnd = "</patient></root>]]>"
 
-        for(i in 1..count) {
+        (1..count).forEach { _ ->
             response += immunisation
         }
 
@@ -68,13 +68,6 @@ object ImmunisationsData {
 
     fun getVisionImmunisationsDataWithNoImmunisations(): String {
         val response = "<![CDATA[<root><patient>"
-        val responseStringEnd = "</patient></root>]]>"
-
-        return response + responseStringEnd
-    }
-
-    fun getBadVisionImmunisationsDataWithNoImmunisations(): String {
-        val response = "<![BADDATA[<root><patient>"
         val responseStringEnd = "</patient></root>]]>"
 
         return response + responseStringEnd
