@@ -4,6 +4,7 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.myrecord.factories.DocumentStatus
 import features.myrecord.factories.DocumentsFactory
 import models.ExpectedDocument
 import org.junit.Assert
@@ -69,14 +70,14 @@ open class V2MedicalRecordDocumentsStepDefinitions {
     fun theGpPracticeHasMultipleLargeDocuments() {
         DocumentsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabledWithDocuments(SerenityHelpers.getPatient(), true)
+                .enabledWithDocuments(SerenityHelpers.getPatient(), DocumentStatus.IsLarge)
     }
 
     @Given("^the GP Practice has documents with invalid types$")
     fun theGpPracticeHasDocumentsWithInvalidTypes() {
         DocumentsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabledWithDocuments(SerenityHelpers.getPatient(), hasInvalidType = true)
+                .enabledWithDocuments(SerenityHelpers.getPatient(), DocumentStatus.HasInvalidType)
     }
 
     @Given("^the GP Practice has multiple documents with no name or term$")
@@ -90,14 +91,14 @@ open class V2MedicalRecordDocumentsStepDefinitions {
     fun theGpPracticeHasMultipleNoViewableDocuments() {
         DocumentsFactory
             .getForSupplier(SerenityHelpers.getGpSupplier())
-            .enabledWithDocuments(SerenityHelpers.getPatient(), hasNonViewableType = true)
+            .enabledWithDocuments(SerenityHelpers.getPatient(), DocumentStatus.HasNonViewableType)
     }
 
     @Given("^the GP practice has a file that is still uploading$")
     fun theGpPracticeHasAFileThatIsStillUploading() {
         DocumentsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabledWithDocuments(SerenityHelpers.getPatient(), stillUploading = true)
+                .enabledWithDocuments(SerenityHelpers.getPatient(),DocumentStatus.StillUploading)
     }
 
     @Given("^the GP Practice has multiple letters with no name or term$")
@@ -112,7 +113,7 @@ open class V2MedicalRecordDocumentsStepDefinitions {
         theGpPracticeHasMultipleDocuments()
         DocumentsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
-                .enabledWithDocuments(SerenityHelpers.getPatient(), mockUnavailableDocument = true)
+                .enabledWithDocuments(SerenityHelpers.getPatient(), DocumentStatus.MockUnavailableDocument)
     }
 
     @Given("^the EMIS GP Practice has three document results where the first record has no date$")

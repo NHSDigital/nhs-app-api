@@ -3,6 +3,8 @@ package mocking.data.patientPracticeMessaging
 import mocking.patientPracticeMessaging.MessageResponseModel
 import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
 import mocking.patientPracticeMessaging.DateAndFormat
+import mocking.patientPracticeMessaging.MessageDetails
+import mocking.patientPracticeMessaging.MessageReply
 import mocking.patientPracticeMessaging.Recipient
 import mocking.tpp.models.TppRecipient
 import mocking.tpp.models.Message
@@ -41,11 +43,12 @@ object TppMessagingData {
 
         val conversationId = UUID.randomUUID().toString()
 
-        messages.add(MessageHelpers().createMessage(
+        messages.add(MessageBuilder(
                 conversationId,
                 conversationId,
-                expectedDates[0].date,
-                incoming = "y")
+                expectedDates[0].date)
+                .isIncoming( "y")
+                .build()
         )
 
         PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID.set(
@@ -55,13 +58,14 @@ object TppMessagingData {
             val read = if (hasUnread) "n" else "y"
             val date = DateHelpers().getExpectedFormattedMessageDate(dateObject.date, dateObject.format)
 
-            messages.add(MessageHelpers().createMessage(
+            messages.add(MessageBuilder(
                     "${UUID.randomUUID()}",
                     conversationId,
-                    dateObject.date,
-                    read,
-                    if (hasAttachment) "123456433546" else null,
-                    "n"))
+                    dateObject.date)
+                    .isRead(read)
+                    .binaryDataId(if (hasAttachment) "123456433546" else null)
+                    .isIncoming("n")
+                    .build())
 
             date
         }
@@ -106,10 +110,10 @@ object TppMessagingData {
 
         val conversationId = UUID.randomUUID().toString()
 
-        messages.add(MessageHelpers().createMessage(
+        messages.add(MessageBuilder(
                 conversationId,
                 conversationId,
-                expectedInboxDates[0].date))
+                expectedInboxDates[0].date).build())
 
         PatientPracticeMessagingSerenityHelpers.INITIAL_MESSAGE_ID.set(
                 conversationId)
@@ -136,21 +140,24 @@ object TppMessagingData {
         val replyList = replies.filter{
             messageObject -> messageObject.conversationId != messageObject.messageId}
                 .map {
-                    MessageHelpers().createMessageReply(
-                        it.sender,
-                        it.sent,
-                        it.read !== "y",
-                        it.messageText,
-                        it.incoming == "y"
+                    MessageReply(
+                            sender = it.sender,
+                            sentDateTime = it.sent,
+                            isUnread = it.read !== "y",
+                            replyContent = it.messageText,
+                            outboundMessage = it.incoming == "y",
+                            isLegacy = null
                     )
                 }
 
-        val messageDetails = MessageHelpers().createMessageDetails(
-                message.messageId,
-                listOf(Recipient(message.sender)),
-                replyList,
-                message.messageText,
-                message.sent)
+        val messageDetails = MessageDetails(
+                messageId = message.messageId,
+                recipients = listOf(Recipient(message.sender)),
+                messageReplies = replyList,
+                content = message.messageText,
+                sentDateTime = message.sent,
+                subject = null,
+                clientApplicationName = null)
 
         return MessageResponseModel(messageDetails)
     }

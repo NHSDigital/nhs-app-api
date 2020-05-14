@@ -57,9 +57,10 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         setSerenityVariable(SerenityVariable.EXPECTED_DOCUMENTS, arrayListOf<ExpectedDocument>(expectedDocuments[0]))
     }
 
-    override fun enabledWithDocuments(patient: Patient, isLarge: Boolean, mockUnavailableDocument: Boolean,
-                                      hasInvalidType: Boolean, stillUploading: Boolean, hasNonViewableType: Boolean) {
-        var documents = DocumentsData.getDefaultDocumentsData(hasInvalidType = hasInvalidType)
+    override fun enabledWithDocuments(patient: Patient, documentStatus: DocumentStatus?) {
+        var documents = DocumentsData.getDefaultDocumentsData(
+                hasInvalidType = documentStatus == DocumentStatus.HasInvalidType)
+        val isLarge = documentStatus == DocumentStatus.IsLarge
         var expectedDocuments = getExpectedDocumentsFromEmisDocuments(
                 isLarge, documents.medicalRecord.documents, true)
 
@@ -73,18 +74,18 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         val availableDocument = expectedDocuments[0]
         setSerenityVariable(SerenityVariable.AVAILABLE_DOCUMENT, availableDocument)
 
-        if (mockUnavailableDocument) {
+        if (documentStatus == DocumentStatus.MockUnavailableDocument) {
             val unavailableDocument = expectedDocuments[DEFAULT_NUMBER_OF_DOCUMENTS - 1]
             setSerenityVariable(SerenityVariable.UNAVAILABLE_DOCUMENT, unavailableDocument)
         }
 
         mockingClient.forEmis {
             myRecord.documentsRequest(EmisMockDefaults.patientEmis)
-                .respondWithSuccess(documents)
+                    .respondWithSuccess(documents)
         }
         mockingClient.forEmis {
             myRecord.documentRequest(EmisMockDefaults.patientEmis, availableDocument.id)
-                .respondWithSuccess(DocumentData.getDefaultDocumentData())
+                    .respondWithSuccess(DocumentData.getDefaultDocumentData())
         }
     }
 

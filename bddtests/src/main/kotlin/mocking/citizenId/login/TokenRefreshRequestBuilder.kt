@@ -50,13 +50,12 @@ class TokenRefreshRequestBuilder(refreshToken: String = SessionConstants.Refresh
         return stringBuilder.toString()
     }
 
-    fun respondWithSuccess(
-            accessToken: String,
-            expiresIn: String = "90",
-            scope: String = "openid profile nhs_app_credentials gp_integration_credentials",
-            tokenType: String = "Bearer",
-            idToken: String = "",
-            refreshToken: String = SessionConstants.RefreshToken ): Mapping {
+    fun respondWithSuccess(accessToken: String): Mapping {
+        val expiresIn = "90"
+        val scope = "openid profile nhs_app_credentials gp_integration_credentials"
+        val tokenType = "Bearer"
+        val idToken = ""
+        val refreshToken = SessionConstants.RefreshToken
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(SucceededResponse(accessToken, tokenType, expiresIn, scope, idToken, refreshToken))
         }

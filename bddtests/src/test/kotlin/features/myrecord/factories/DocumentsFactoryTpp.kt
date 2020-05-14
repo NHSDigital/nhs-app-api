@@ -39,17 +39,14 @@ class DocumentsFactoryTpp: DocumentsFactory() {
         TODO("not implemented")
     }
 
-    override fun enabledWithDocuments(patient: Patient,
-        isLarge: Boolean,
-        mockUnavailableDocument: Boolean,
-        hasInvalidType: Boolean,
-        stillUploading: Boolean,
-        hasNonViewableType: Boolean) {
+    override fun enabledWithDocuments(patient: Patient, documentStatus: DocumentStatus?) {
         setExpectedAndAvailableDocs(
                 patient,
-                TppDcrDocumentData.getMultipleDcrEventsForTppDcrDocuments(hasInvalidType, hasNonViewableType))
+                TppDcrDocumentData.getMultipleDcrEventsForTppDcrDocuments(
+                        documentStatus == DocumentStatus.HasInvalidType,
+                        documentStatus == DocumentStatus.HasNonViewableType))
 
-        setExpectedBinaryResponse(patient, isLarge, hasInvalidType, stillUploading, hasNonViewableType)
+        setExpectedBinaryResponse(patient, documentStatus)
     }
 
     override fun enabledWithDocumentsWithNoNameOrTerm(patient: Patient, isLarge: Boolean) {
@@ -57,7 +54,7 @@ class DocumentsFactoryTpp: DocumentsFactory() {
                 patient,
                 TppDcrDocumentData.getMultipleDcrEventsForTppDcrDocuments())
 
-        setExpectedBinaryResponse(patient, isLarge)
+        setExpectedBinaryResponse(patient, if(isLarge) DocumentStatus.IsLarge else null)
     }
 
     override fun enabledWithLettersWithNoNameOrTerm(patient: Patient, isLarge: Boolean) {
@@ -65,7 +62,7 @@ class DocumentsFactoryTpp: DocumentsFactory() {
                 patient,
                 TppDcrDocumentData.getMultipleLetterDcrEventsForTppDcrDocuments())
 
-        setExpectedBinaryResponse(patient, isLarge)
+        setExpectedBinaryResponse(patient, if(isLarge) DocumentStatus.IsLarge else null)
     }
 
     override fun enabledWithDocumentsWithUnknownDate(patient: Patient, isLarge: Boolean) {
@@ -108,12 +105,8 @@ class DocumentsFactoryTpp: DocumentsFactory() {
                 expectedDocuments.first())
     }
 
-    private fun setExpectedBinaryResponse(patient: Patient,
-        isLarge: Boolean,
-        hasInvalidType: Boolean = false,
-        stillUploading: Boolean = false,
-        hasNonViewableType: Boolean = false) {
-        if (isLarge) {
+    private fun setExpectedBinaryResponse(patient: Patient, documentStatus: DocumentStatus?) {
+        if (documentStatus == DocumentStatus.IsLarge) {
             mockingClient.forTpp {
                 myRecord.documentRequest(patient.tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.FILE_SIZE_TOO_LARGE,
@@ -122,7 +115,7 @@ class DocumentsFactoryTpp: DocumentsFactory() {
             return
         }
 
-        if (stillUploading) {
+        if (documentStatus == DocumentStatus.StillUploading) {
             mockingClient.forTpp {
                 myRecord.documentRequest(patient.tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.FILE_STILL_UPLOADING,
@@ -131,9 +124,9 @@ class DocumentsFactoryTpp: DocumentsFactory() {
             return
         }
 
-        val documentData = when {
-            hasInvalidType -> TppDocumentData.getDocumentData("tga")
-            hasNonViewableType -> TppDocumentData.getDocumentData("pdf")
+        val documentData = when(documentStatus) {
+            DocumentStatus.HasInvalidType -> TppDocumentData.getDocumentData("tga")
+            DocumentStatus.HasNonViewableType -> TppDocumentData.getDocumentData("pdf")
             else -> TppDocumentData.getDocumentData()
         }
 
