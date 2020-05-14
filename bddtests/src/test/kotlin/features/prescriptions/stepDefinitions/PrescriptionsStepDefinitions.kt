@@ -5,7 +5,6 @@ import cucumber.api.DataTable
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
@@ -20,6 +19,7 @@ import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFact
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
@@ -30,12 +30,11 @@ import org.junit.Assert.assertTrue
 import pages.prescription.ViewOrdersPrescriptionsPage
 import pages.prescription.RepeatPrescriptionConfirmationPage
 import pages.prescription.RepeatPrescriptionsPage
-import utils.GlobalSerenityHelpers
+import utils.ProxySerenityHelpers
 import utils.SerenityHelpers
+import utils.getOrFail
 import utils.getOrNull
 import utils.set
-import utils.getOrFail
-import utils.ProxySerenityHelpers
 import java.time.OffsetDateTime
 
 private const val PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY = 6L
@@ -94,19 +93,6 @@ open class PrescriptionsStepDefinitions {
         val supplier = Supplier.valueOf(gpSystem)
         SerenityHelpers.setGpSupplier(supplier)
         val currentPatient = Patient.getDefault(supplier)
-        SerenityHelpers.setPatient(currentPatient)
-        CitizenIdSessionCreateJourney().createFor(currentPatient)
-        SessionCreateJourneyFactory.getForSupplier(supplier).createFor(currentPatient)
-        PrescriptionsDataSetup.initialize(supplier)
-    }
-
-    @Given("^I am patient using the (.*) GP System natively$")
-    fun givenIAmAPatientUsingGPSystemNatively(gpSystem: String) {
-        GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(true)
-        val supplier = Supplier.valueOf(gpSystem)
-        SerenityHelpers.setGpSupplier(supplier)
-        val currentPatient = Patient.getDefault(supplier)
-        SerenityHelpers.setPatient( currentPatient)
         SerenityHelpers.setPatient(currentPatient)
         CitizenIdSessionCreateJourney().createFor(currentPatient)
         SessionCreateJourneyFactory.getForSupplier(supplier).createFor(currentPatient)

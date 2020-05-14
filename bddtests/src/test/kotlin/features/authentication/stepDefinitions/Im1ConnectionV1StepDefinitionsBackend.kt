@@ -17,7 +17,6 @@ import models.Patient
 import models.PatientAge
 import models.patients.EmisPatients
 import net.serenitybdd.core.Serenity
-import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
 import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
@@ -32,7 +31,7 @@ import worker.models.patient.Im1ConnectionToken
 import worker.models.session.UserSessionRequest
 
 class Im1ConnectionV1StepDefinitionsBackend {
-    private val mockingClient = MockingClient.instance
+    val mockingClient = MockingClient.instance
 
     @Given("^I have a new (.+) patient with Nhs Numbers of (.*)$")
     fun iHaveValidPatientDataToRegisterNewAccount(gpSystem: String, nhsNumbers: String) {
@@ -97,11 +96,10 @@ class Im1ConnectionV1StepDefinitionsBackend {
     @Given("^I have a (.+) user's IM1 credentials with an Account ID not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithAnAccountIdNotInTheExpectedFormat(gpSystem: String) {
         val supplier = Supplier.valueOf(gpSystem)
-        val patient:Patient
-        if (supplier == Supplier.VISION) {
-            patient = Patient.getDefault(supplier).copy(rosuAccountId = "10496")
+        val patient =if (supplier == Supplier.VISION) {
+            Patient.getDefault(supplier).copy(rosuAccountId = "10496")
         } else {
-            patient = Patient.getDefault(supplier).copy(accountId = INVALID_VALUE)
+            Patient.getDefault(supplier).copy(accountId = INVALID_VALUE)
         }
         AuthenticationFactory.getForSupplier(supplier).patientWithAccountIDInWrongFormat(patient)
         setIm1Request(patient)
@@ -144,7 +142,6 @@ class Im1ConnectionV1StepDefinitionsBackend {
                     .respondWithAlreadyLinked()
         }
         setIm1Request(patient)
-        setSessionVariable("HttpExceptionExpected").to(true)
     }
 
     private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {
@@ -164,7 +161,6 @@ class Im1ConnectionV1StepDefinitionsBackend {
         val patient = Patient.getDefault(Supplier.VISION)
         AuthenticationFactoryVision.createInvalidTestForVision(patient, errorText)
         setIm1Request(patient)
-        setSessionVariable("HttpExceptionExpected").to(true)
     }
 
     @Given("^I have data for a Vision patient but the configuration request fails with invalid request")
@@ -172,7 +168,6 @@ class Im1ConnectionV1StepDefinitionsBackend {
         val patient = Patient.getDefault(Supplier.VISION)
         AuthenticationFactoryVision.configurationRequestInvalid(patient)
         setIm1Request(patient)
-        setSessionVariable("HttpExceptionExpected").to(true)
     }
 
     private fun setIm1Request(patient:Patient) {

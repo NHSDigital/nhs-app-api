@@ -2,7 +2,6 @@ package features.patientPracticeMessaging.stepDefinitions
 
 import config.Config
 import constants.Supplier
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -10,62 +9,40 @@ import features.patientPracticeMessaging.factories.PracticePatientMessagingFacto
 import features.serviceJourneyRules.factories.SJRJourneyType
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.sharedSteps.BrowserSteps
+import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import mocking.MockingClient
 import mocking.patientPracticeMessaging.MessageReply
 import mocking.patientPracticeMessaging.MessageResponseModel
-import mocking.patientPracticeMessaging.Recipient
 import mocking.patientPracticeMessaging.PatientPracticeMessagingSerenityHelpers
+import mocking.patientPracticeMessaging.Recipient
 import models.ExpectedMessage
+import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertNotNull
-import pages.ErrorPage
+import pages.assertIsVisible
 import pages.patientPracticeMessaging.PatientPracticeMessagingContactYourGpPage
 import pages.patientPracticeMessaging.PatientPracticeMessagingDetailsPage
 import pages.patientPracticeMessaging.PatientPracticeMessagingPage
 import pages.patientPracticeMessaging.PatientPracticeMessagingRecipientsPage
 import pages.patientPracticeMessaging.PatientPracticeMessagingUrgencyPage
 import utils.SerenityHelpers
-import net.thucydides.core.annotations.Steps
-import pages.assertIsVisible
-import pages.patientPracticeMessaging.PatientPracticeDownloadAttachmentPage
-import pages.patientPracticeMessaging.PatientPracticeMessagingDeletePage
-import pages.patientPracticeMessaging.PatientPracticeMessagingDeleteSuccessPage
-import pages.patientPracticeMessaging.PracticePatientMessagingCreateMessagePage
 import utils.getOrNull
 import utils.setIfNotAlreadySet
 import worker.models.patientPracticeMessaging.CreateMessageRequest
 
 const val RACE_CONDITION_WAIT: Long = 60
 
-open class PatientPracticeMessageStepDefinitions {
+class PatientPracticeMessageStepDefinitions {
     private lateinit var patientPracticeMessagingPage: PatientPracticeMessagingPage
     private lateinit var patientPracticeMessagingDetailsPage: PatientPracticeMessagingDetailsPage
     private lateinit var patientPracticeMessagingUrgencyPage: PatientPracticeMessagingUrgencyPage
     private lateinit var patientPracticeMessagingContactYourGpPage: PatientPracticeMessagingContactYourGpPage
     private lateinit var patientPracticeMessagingRecipientsPage: PatientPracticeMessagingRecipientsPage
-    private lateinit var patientPracticeMessagingDeletePage: PatientPracticeMessagingDeletePage
-    private lateinit var patientPracticeMessagingDeleteSuccessPage: PatientPracticeMessagingDeleteSuccessPage
-    private lateinit var patientPracticeMessagingDownloadAttachmentPage: PatientPracticeDownloadAttachmentPage
-    private lateinit var errorPage: ErrorPage
-
-    private val expectedCareCardContent = arrayListOf(
-            Pair("signs of a heart attack", "signs of a heart attack - pain like a very tight band, heavy weight or " +
-                    "squeezing in the centre of your chest"),
-            Pair("signs of a stroke", "signs of a stroke - face drooping on one side, cannot hold both arms up, " +
-                    "difficulty speaking"),
-            Pair("severe difficulty breathing", "severe difficulty breathing - gasping, not being able to get words " +
-                    "out, choking or lips turning blue"),
-            Pair("heavy bleeding", "heavy bleeding - that will not stop"),
-            Pair("severe injuries", "severe injuries - or deep cuts after a serious accident"),
-            Pair("seizure (fit)", "seizure (fit) - someone is shaking or jerking because of a fit, or is unconscious " +
-                    "(cannot be woken up)"))
-    private lateinit var patientPracticePatientMessagingCreateMessagePage: PracticePatientMessagingCreateMessagePage
 
     @Steps
     lateinit var browser: BrowserSteps
 
-    var mockingClient = MockingClient.instance
+    private var mockingClient = MockingClient.instance
 
     @Given("^I am an? (.*) user who can access patient practice messaging$")
     fun iAmAUserWishingToViewTheirMessages(gpSystem: String) {
@@ -93,7 +70,6 @@ open class PatientPracticeMessageStepDefinitions {
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .enabled(SerenityHelpers.getPatient())
     }
-
 
     @Given("^the Patient has no access to patient practice messaging$")
     fun thePatientHasNoAccessToPracticePatientMessaging() {
@@ -128,51 +104,12 @@ open class PatientPracticeMessageStepDefinitions {
                         unitRecipient = unitRecipient)
     }
 
-
     @Given("^that attachment is invalid$")
     fun thePatientHasPatientPracticeMessagesInTheirInboxWithUnreadMessagesWithInvalidAttachment() {
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .enabledWithInvalidAttachmentOnMessage(SerenityHelpers.getPatient())
     }
-
-    @When("^I enter url address for the send message page$")
-    fun whenIEnterTheUrlAddressForSendMessagePage() {
-        val fullUrl = Config.instance.url + "/messages/gp-messages/send-message"
-        browser.browseTo(fullUrl)
-    }
-
-    @When("^I click on the view link$")
-    fun iClickOnTheViewLink() {
-        patientPracticeMessagingDetailsPage.clickLink("viewLink")
-    }
-
-    @When("^I click on the download link$")
-    fun iClickOnTheDownloadLink() {
-        patientPracticeMessagingDetailsPage.clickLink("downloadLink")
-    }
-
-    @When("^I click on the download button$")
-    fun iClickOnTheDownloadButton() {
-        patientPracticeMessagingDownloadAttachmentPage.downloadButtonClicked()
-    }
-
-    @Then("^I see the download information page$")
-    fun iSeeTheDownloadInformationPage() {
-        patientPracticeMessagingDownloadAttachmentPage.assertDownloadButtonDisplayed()
-        patientPracticeMessagingDownloadAttachmentPage.assertInformationParagraph()
-    }
-
-    @Then("^the attachment has been downloaded$")
-    fun attachmentHasBeenDownloaded() {
-        patientPracticeMessagingDownloadAttachmentPage.hasAttachmentDownloaded("Attachment_14 April 2020")
-    }
-
-    @Then("^I see the invalid attachment message$")
-    fun iSeeInvalidAttachmentMessage() {
-        patientPracticeMessagingDownloadAttachmentPage.assertInvalidMessage()
-    }
-
 
     @Given("^I have patient practice messages in my inbox$")
     fun thePatientHasPatientPracticeMessagesInTheirInbox() {
@@ -212,58 +149,20 @@ open class PatientPracticeMessageStepDefinitions {
                 .patientHasNoMessages(SerenityHelpers.getPatient())
     }
 
-    @Given("^there is an unknown error getting patient practice messages$")
-    fun givenThereIsAnUnknownErrorGettingPatientPracticeMessages() {
-        PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .unknownErrorWithPatientPracticeMessaging(SerenityHelpers.getPatient())
+    @When("^I enter url address for the send message page$")
+    fun whenIEnterTheUrlAddressForSendMessagePage() {
+        val fullUrl = Config.instance.url + "/messages/gp-messages/send-message"
+        browser.browseTo(fullUrl)
     }
 
-    @Given("^there is a forbidden error getting patient practice messages$")
-    fun givenThereIsAForbiddenErrorGettingPatientPracticeMessages() {
-        PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .forbiddenErrorWithPatientPracticeMessaging(SerenityHelpers.getPatient())
+    @When("^I click on the view link$")
+    fun iClickOnTheViewLink() {
+        patientPracticeMessagingDetailsPage.clickLink("viewLink")
     }
 
-    @Given("^The patient receives an error trying to send a message to their practice")
-    fun thePatientReceivesAnErrorWhenTryingToSendAMessage() {
-        val createMessageRequest = CreateMessageRequest("Test Results",
-                "When will my test results be ready", "Recipient 1")
-        PracticePatientMessagingFactory.getForSupplier(SerenityHelpers.getGpSupplier())
-                .errorSendingAMessage(SerenityHelpers.getPatient(), createMessageRequest)
-    }
-
-    @Then("^I am on the send message page")
-    fun iAmOnTheSendMessagePage() {
-        val expectedRecipients = PatientPracticeMessagingSerenityHelpers
-                .AVAILABLE_RECIPIENTS
-                .getOrNull<List<Recipient>>()!!
-        patientPracticePatientMessagingCreateMessagePage.assertHeaderContainsRecipient(expectedRecipients[0].name!!)
-
-        when(SerenityHelpers.getGpSupplier()){
-            Supplier.EMIS -> {
-                patientPracticePatientMessagingCreateMessagePage.assertDisplayed(true)
-            }
-            Supplier.TPP -> {
-                patientPracticePatientMessagingCreateMessagePage.assertDisplayed(false)
-            }
-            else -> throw NotImplementedError()
-        }
-    }
-
-    @When("^I insert a subject")
-    fun iInsertSubjectText() {
-        val subject = PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE.getOrNull<CreateMessageRequest>()!!.subject
-        patientPracticePatientMessagingCreateMessagePage.insertSubjectText(
-                subject!!)
-    }
-
-    @When("^I insert a message")
-    fun iInsertMessageText() {
-        val messageBody = PatientPracticeMessagingSerenityHelpers.SENT_MESSAGE.getOrNull<CreateMessageRequest>()!!
-                .messageBody
-        patientPracticePatientMessagingCreateMessagePage.insertMessageText(messageBody)
+    @When("^I click on the download link$")
+    fun iClickOnTheDownloadLink() {
+        patientPracticeMessagingDetailsPage.clickLink("downloadLink")
     }
 
     @When("^I click on a (.*) recipient$")
@@ -282,45 +181,11 @@ open class PatientPracticeMessageStepDefinitions {
         }
     }
 
-
-    @When("^I leave the message and subject fields blank")
-    fun iDoNotInsertSubjectAndMessageText() {
-        patientPracticePatientMessagingCreateMessagePage.insertMessageText("")
-
-        if (SerenityHelpers.getGpSupplier() == Supplier.EMIS) {
-            patientPracticePatientMessagingCreateMessagePage.insertSubjectText("")
-        }
-    }
-
-    @When("^I click send message")
-    fun iClickSendMessage() {
-        patientPracticePatientMessagingCreateMessagePage.sendMessage()
-    }
-
-    @Then("I see validation errors for subject and message")
-    fun iSeeValidationErrorsForSubjectAndMessage(){
-        patientPracticePatientMessagingCreateMessagePage.assertValidationErrorsDisplayed()
-    }
-
-    @Given("^there is an unknown error getting patient practice message details$")
-    fun givenThereIsAnErrorGettingPatientPracticeMessagesDetails() {
-        PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .errorWithPatientPracticeMessagingMessageDetails(SerenityHelpers.getPatient())
-    }
-
     @When("I have no recipients for patient practice messaging$")
     fun iHaveNoRecipients() {
         PracticePatientMessagingFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())
                 .noRecipients(SerenityHelpers.getPatient())
-    }
-
-    @And("^there is a bad request deleting the patient practice conversation$")
-    fun givenThereIsABadRequestDeletingThePatientPracticeConversation() {
-        PracticePatientMessagingFactory
-                .getForSupplier(SerenityHelpers.getGpSupplier())
-                .errorWithPatientPracticeMessagingConversationDelete(SerenityHelpers.getPatient())
     }
 
     @When("^I select a patient practice message in my inbox$")
@@ -345,6 +210,11 @@ open class PatientPracticeMessageStepDefinitions {
     fun iChooseThatIDoNotNeedUrgentAdviceViaPatientPracticeMessaging() {
         patientPracticeMessagingPage.clickSendAMessageButton()
         patientPracticeMessagingUrgencyPage.chooseNonUrgentAndContinue()
+    }
+
+    @When("^I select delete conversation on the view conversation page$")
+    fun iClickOnDeleteConversationFromViewDetailsScreen() {
+        patientPracticeMessagingDetailsPage.clickDeleteConversation()
     }
 
     @Then("^I see the patient practice messaging urgency contact your gp page$")
@@ -373,7 +243,7 @@ open class PatientPracticeMessageStepDefinitions {
     fun iSeeAMessageExplainingPatientPracticeMessagingIsNotForUrgentAdvice() {
         patientPracticeMessagingContactYourGpPage.assertMessagingPurposeText()
         patientPracticeMessagingContactYourGpPage.assertWhatToDoNextText()
-        patientPracticeMessagingContactYourGpPage.assertCareCardContent(expectedCareCardContent)
+        patientPracticeMessagingContactYourGpPage.assertCareCardContent()
     }
 
     @Then("^the patient to practice inbox page is displayed$")
@@ -415,44 +285,6 @@ open class PatientPracticeMessageStepDefinitions {
     @Then("^I see a message indicating that I have no patient practice messages$")
     fun theMessageIndicatingNoPatientPracticeMessagesIsDisplayed() {
         patientPracticeMessagingPage.assertNoMessagesTextDisplayed()
-    }
-
-    @Then("^I see the appropriate forbidden error for patient practice messaging$")
-    fun iSeeTheAppropriateForbiddenErrorForPatientPracticeMessaging(){
-        errorPage.assertPageHeader("Service unavailable")
-        errorPage.assertNoSubHeader()
-        errorPage.assertHeaderText("You are not currently able to use messaging.")
-        errorPage.assertMessageText("Contact your GP surgery for more information. For urgent medical advice, " +
-                "go to 111.nhs.uk or call 111.")
-    }
-
-    @Then("^I see the appropriate error for (.*) patient practice message\\(s\\)$")
-    fun iSeeTheAppropriateErrorForPatientPracticeMessage(action: String) {
-        when (action) {
-            "deleting" -> {
-                errorPage.assertPageHeader("Error deleting conversation")
-                errorPage.assertNoSubHeader()
-                errorPage.assertHeaderText("Sorry, we could not delete your conversation")
-                errorPage.assertMessageText("Try again now.")
-                errorPage.assertHasButton("Try again")
-            }
-            "getting" -> {
-                errorPage.assertPageHeader("Message Error")
-                errorPage.assertNoSubHeader()
-                errorPage.assertHeaderText("There is a problem getting your message")
-                errorPage.assertMessageText("Try again now. If the problem " +
-                        "continues and you need this information now, " +
-                        "contact the person directly.")
-                errorPage.assertHasButton("Try again")
-            }
-            "listing" -> {
-                errorPage.assertPageHeader("Messages Error")
-                errorPage.assertNoSubHeader()
-                errorPage.assertHeaderText("There is a problem getting your messages")
-                errorPage.assertMessageText("Try again now.")
-                errorPage.assertHasButton("Try again")
-            }
-        }
     }
 
     @Then("^I see my new message after it has been sent")
@@ -539,37 +371,12 @@ open class PatientPracticeMessageStepDefinitions {
         patientPracticeMessagingRecipientsPage.assertRecipients(expectedRecipients)
     }
 
-    @When("^I select delete conversation on the view conversation page$")
-    fun iClickOnDeleteConversationFromViewDetailsScreen() {
-        patientPracticeMessagingDetailsPage.clickDeleteConversation()
-    }
-
-    @Then("^I am prompted to confirm my intention to delete the conversation$")
-    fun iSeeTheDeleteInfoPage() {
-        patientPracticeMessagingDeletePage.assertDisplayed()
-    }
-
-    @When("^I click delete conversation on the delete page to confirm my decision$")
-    fun iClickDeleteConversationOnDeletePage() {
-        patientPracticeMessagingDeletePage.clickDeleteConversation()
-    }
-
-    @Then("^I see a page indicating my patient practice message has been deleted$")
-    fun iSeeTheDeleteSuccessPage() {
-        Thread.sleep(RACE_CONDITION_WAIT)
-        patientPracticeMessagingDeleteSuccessPage.assertDisplayed()
-    }
-
-    @When("^I click go back to patient practice messages$")
-    fun iClickToGoBackToPatientPracticeMessages() {
-        patientPracticeMessagingDeleteSuccessPage.clickBackToMessages()
-    }
-
     @Then("^the message is marked as read$")
     fun theMessageIsMarkedAsRead() =
             mockingClient.assertRequestWasMade(
                     "/tpp/",
                     headers = mapOf("type" to "MessageMarkAsRead"))
+
 
     private fun clickMessageBySerenityVariable(messageToClick: PatientPracticeMessagingSerenityHelpers) {
         assertNotNull("Expected the value for the serenity variable 'messageToClick' to not be null",

@@ -20,6 +20,24 @@ class PatientPracticeMessagingContactYourGpPage: HybridPageObject() {
 
     private val careCardLocator = "//div[@id='phoneYourGpCareCard']"
 
+    private val expectedCareCardContent by lazy {
+        arrayListOf(
+                Pair("signs of a heart attack",
+                        "signs of a heart attack - pain like a very tight band, heavy weight or " +
+                        "squeezing in the centre of your chest"),
+                Pair("signs of a stroke",
+                        "signs of a stroke - face drooping on one side, cannot hold both arms up, " +
+                        "difficulty speaking"),
+                Pair("severe difficulty breathing",
+                        "severe difficulty breathing - gasping, not being able to get words " +
+                        "out, choking or lips turning blue"),
+                Pair("heavy bleeding", "heavy bleeding - that will not stop"),
+                Pair("severe injuries", "severe injuries - or deep cuts after a serious accident"),
+                Pair("seizure (fit)",
+                        "seizure (fit) - someone is shaking or jerking because of a fit, or is unconscious " +
+                        "(cannot be woken up)"))
+    }
+
     private var messagingPurposeParagraph = HybridPageElement(
             "//p[@id='infoMessagingPurpose']",
             page = this,
@@ -73,7 +91,7 @@ class PatientPracticeMessagingContactYourGpPage: HybridPageObject() {
                 whatToDoNextParagraph.textValue)
     }
 
-    fun assertCareCardContent(expectedCareCardContent: List<Pair<String, String>>) {
+    fun assertCareCardContent() {
         careCard.waitForElement().assertIsVisible()
 
         val actualSymptoms = arrayListOf<Pair<String, String>>()

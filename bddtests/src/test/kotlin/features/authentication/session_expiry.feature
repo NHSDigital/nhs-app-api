@@ -276,7 +276,8 @@ Feature: Session Expiry and Extend Frontend
     And I see the login page with the session expiry notification
 
   Scenario Outline: The <GP System> GP practice session has expired and user selects the prescriptions button
-    Given I am patient using the <GP System> GP System natively
+    Given I am patient using the <GP System> GP System
+    And I am using the native app user agent
     And I am logged in
     And the GP System session has expired when viewing prescriptions
     When I navigate to prescriptions

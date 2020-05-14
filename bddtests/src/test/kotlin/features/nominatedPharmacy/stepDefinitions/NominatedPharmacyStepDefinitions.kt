@@ -6,22 +6,18 @@ import cucumber.api.java.en.When
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
 import features.nominatedPharmacy.steps.NominatedPharmacyDataSetupSteps
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
-import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
+import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import models.nominatedPharmacy.Postcode
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import pages.PrescriptionsHubPage
 import pages.isVisible
-import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
-import pages.nominatedPharmacy.SearchNominatedPharmacyPage
-import pages.nominatedPharmacy.NominatedPharmacyPage
 import pages.nominatedPharmacy.ConfirmNominatedPharmacyPage
-import pages.nominatedPharmacy.NominatedPharmacyResultsPage
 import pages.nominatedPharmacy.NominatedPharmacyChangeSuccessPage
-import pages.nominatedPharmacy.NominatedPharmacyInterruptPage
+import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
+import pages.nominatedPharmacy.NominatedPharmacyPage
+import pages.nominatedPharmacy.NominatedPharmacyResultsPage
 import pages.prescription.ViewOrdersPrescriptionsPage
 import pages.text
 import utils.SerenityHelpers
@@ -29,8 +25,6 @@ import utils.getOrFail
 import utils.set
 
 class NominatedPharmacyStepDefinitions {
-
-    private lateinit var searchNominatedPharmacyPage: SearchNominatedPharmacyPage
 
     private lateinit var nominatedPharmacyPage: NominatedPharmacyPage
 
@@ -43,8 +37,6 @@ class NominatedPharmacyStepDefinitions {
     private lateinit var prescriptionsHubPage: PrescriptionsHubPage
 
     private lateinit var nominatedPharmacyChangeSuccessPage: NominatedPharmacyChangeSuccessPage
-
-    private lateinit var nominatedPharmacyInterruptPage: NominatedPharmacyInterruptPage
 
     private lateinit var nominatedPharmacyChooseTypePage: NominatedPharmacyChooseTypePage
 
@@ -122,25 +114,6 @@ class NominatedPharmacyStepDefinitions {
         prescriptionsHubPage.nominatedPharmacyLink.click()
     }
 
-    @When("^I search for a (.*) and click on search button$")
-    fun iSearchForATextAndClickOnSearch(searchText: String) {
-        searchNominatedPharmacyPage.enterSearchText(searchText)
-        searchNominatedPharmacyPage.searchButton.click()
-    }
-
-    @Then("^I see an error indicating the postcode is invalid$")
-    fun iSeeThePostCodeIsInvalidErrorMessage() {
-        Assert.assertTrue(searchNominatedPharmacyPage.isInvalidPostcodeErrorVisible())
-    }
-
-    @Then("^I see the no results found messages for (.*)$")
-    fun iSeeNoResultsFoundMessage(searchText: String) {
-        Assert.assertTrue(searchNominatedPharmacyPage.isNoResultsFoundHeaderVisible(searchText))
-        Assert.assertTrue(searchNominatedPharmacyPage.isNoResultsFoundMessageVisible(searchText))
-        Assert.assertTrue(searchNominatedPharmacyPage.isSearchAgainVisible())
-    }
-
-
     @When("^I click on item (\\d+) pharmacy from the list of pharmacies$")
     fun iClickOnAPharmacyFromTheListOfPharmacies(positionInTheList: Int) {
         val index = positionInTheList - 1
@@ -170,7 +143,7 @@ class NominatedPharmacyStepDefinitions {
 
         nominatedPharmacyChangeSuccessPage.isLoaded()
 
-        assertEquals(
+        Assert.assertEquals(
                 "Organisation name is not correct",
                 myNominatedPharmacy.OrganisationName, nominatedPharmacyChangeSuccessPage.pharmacyName.text)
 
@@ -202,7 +175,7 @@ class NominatedPharmacyStepDefinitions {
         val phoneNumber = myNominatedPharmacy.primaryPhone()
 
         if (phoneNumber != null) {
-            assertEquals(
+            Assert.assertEquals(
                     "Phone number is not correct",
                     "Telephone: " + phoneNumber, nominatedPharmacyChangeSuccessPage.pharmacyPhoneNumber.text)
         }
@@ -215,7 +188,7 @@ class NominatedPharmacyStepDefinitions {
 
     @Then("^I see the nominated pharmacy panel on the prescriptions hub page$")
     fun iSeeTheNominatedPharmacyBanner() {
-        assertTrue(
+        Assert.assertTrue(
                 "Nominated pharmacy panel is visible", prescriptionsHubPage.nominatedPharmacyLink.isVisible)
     }
 
@@ -225,14 +198,14 @@ class NominatedPharmacyStepDefinitions {
                 .MY_NOMINATED_PHARMACY
                 .getOrFail<NhsAzureSearchOrganisationItem>()
 
-        assertEquals(
+        Assert.assertEquals(
                 "Nominated pharmacy name is not correct",
                 updatedPharmacy.OrganisationName, prescriptionsHubPage.pharmacyName.text)
     }
 
     @Then("^I see the help text for no set nominated pharmacy$")
     fun iSeeTheHelpTextForNoSetNominatedPharmacy() {
-        assertEquals(
+        Assert.assertEquals(
                 "Help text for no set pharmacy is missing",
                 "You do not have a nominated pharmacy.",
                 viewOrdersPrescriptionsPage.noSetNominatedPharmacyHelpText.text)
@@ -244,14 +217,14 @@ class NominatedPharmacyStepDefinitions {
                 .MY_NOMINATED_PHARMACY
                 .getOrFail<NhsAzureSearchOrganisationItem>()
 
-        assertEquals(
+        Assert.assertEquals(
                 "Nominated pharmacy name is not correct",
                 updatedPharmacy.OrganisationName, viewOrdersPrescriptionsPage.getNominatedPharmacyName())
     }
 
     @Then("^I see that I haven't nominated a pharmacy on the prescriptions page$")
     fun iSeeThatIHaventNominatedAPharmacyOnThePrescriptionsPage() {
-        assertEquals("Choose a pharmacy for your prescriptions to be sent to",
+        Assert.assertEquals("Choose a pharmacy for your prescriptions to be sent to",
                 prescriptionsHubPage.pharmacyName.text)
     }
 
@@ -272,30 +245,9 @@ class NominatedPharmacyStepDefinitions {
 
     @Then("^I see the change my nominated pharmacy link$")
     fun iSeeChangePharmacyLink() {
-        assertTrue(
+        Assert.assertTrue(
                 "Change my nominated pharmacy link is not visible",
                 nominatedPharmacyPage.changePharmacyLink.isVisible)
-    }
-
-    @Then("^I see search nominated pharmacy page loaded$")
-    fun iSeeSearchNominatedPharmacyLoaded() {
-        searchNominatedPharmacyPage.isLoaded()
-    }
-
-    @Then("^I see the update nominated pharmacy interrupt page loaded$")
-    fun iSeeUpdateNominatedPharmacyInterruptPageIsLoaded() {
-        nominatedPharmacyInterruptPage.isLoaded(
-                "Any outstanding prescriptions may still arrive at your current nominated pharmacy")
-    }
-
-    @Then("^I see the set nominated pharmacy interrupt page loaded$")
-    fun iSeeSetNominatedPharmacyInterruptPageIsLoaded() {
-        nominatedPharmacyInterruptPage.isLoaded("The pharmacy you choose is where your prescriptions will be sent")
-    }
-
-    @Then("^I click on the interrupt continue button$")
-    fun iClickOnTheInterruptContinueButton() {
-        nominatedPharmacyInterruptPage.continueButton.click()
     }
 
     @Then("^I see the no results found page$")
@@ -313,17 +265,17 @@ class NominatedPharmacyStepDefinitions {
         val searchResults = nominatedPharmacyResultsPage.getPharmacies()
 
         expectedData.forEachIndexed { index, dataItem ->
-            assertEquals(
+            Assert.assertEquals(
                     "Pharmacy name is not correct",
                     dataItem.OrganisationName, searchResults[index].pharmacyName)
-            assertEquals(
+            Assert.assertEquals(
                     "Pharmacy address is not correct",
                     dataItem.Address1, searchResults[index].address)
 
             val phoneNumberData = dataItem.primaryPhone()
             val phoneNumber = "Telephone: $phoneNumberData"
             if (phoneNumberData != null) {
-                assertEquals(
+                Assert.assertEquals(
                         "Phone number is not correct",
                         phoneNumber, searchResults[index].phoneNumber)
             }
@@ -337,7 +289,7 @@ class NominatedPharmacyStepDefinitions {
         val selectedPharmacy = NominatedPharmacySerenityHelpers
                 .PHARMACY_TO_BE_NOMINATED
                 .getOrFail<NhsAzureSearchOrganisationItem>()
-        assertEquals(
+        Assert.assertEquals(
                 "Organisation name is not correct",
                 selectedPharmacy.OrganisationName, confirmNominatedPharmacyPage.pharmacyName.text)
 
@@ -369,7 +321,7 @@ class NominatedPharmacyStepDefinitions {
         val phoneNumber = selectedPharmacy.primaryPhone()
 
         if (phoneNumber != null) {
-            assertEquals(
+            Assert.assertEquals(
                     "Phone number is not correct",
                     "Telephone: " + phoneNumber, confirmNominatedPharmacyPage.pharmacyPhoneNumber.text)
         }
@@ -380,7 +332,7 @@ class NominatedPharmacyStepDefinitions {
                 .MY_NOMINATED_PHARMACY
                 .getOrFail<NhsAzureSearchOrganisationItem>()
 
-        assertEquals(
+        Assert.assertEquals(
                 "Pharmacy name is not correct",
                 selectedPharmacy.OrganisationName, nominatedPharmacyPage.pharmacyName.text)
 
@@ -412,7 +364,7 @@ class NominatedPharmacyStepDefinitions {
         val phoneNumber = selectedPharmacy.primaryPhone()
 
         if (phoneNumber != null) {
-            assertEquals(
+            Assert.assertEquals(
                     "Phone number is not correct",
                     "Telephone: " + phoneNumber, nominatedPharmacyPage.pharmacyPhoneNumber.text)
         }
@@ -436,10 +388,10 @@ class NominatedPharmacyStepDefinitions {
 
     @Then("^I see how to change dispensing practice instruction$")
     fun iSeeHowToChangeDispensingPractise() {
-        assertTrue("Instruction 1 to change pharmacy is not visible",
+        Assert.assertTrue("Instruction 1 to change pharmacy is not visible",
                 nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine1.isVisible)
 
-        assertTrue("Instruction 2 to change pharmacy is not visible",
+        Assert.assertTrue("Instruction 2 to change pharmacy is not visible",
                 nominatedPharmacyPage.cannotChangeDispensingPractiseInformationLine2.isVisible)
     }
 }
