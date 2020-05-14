@@ -28,54 +28,35 @@ const val ONE = 1L
 const val TWO = 2L
 const val THREE = 3L
 const val SEVEN = 7L
-
 class DateHelpers {
 
+    private val dateFormatting = mapOf(
+            MessageDateFormat.INBOX_TIME_12_HR to DateTimeFormats.frontendTimeFormat,
+            MessageDateFormat.DETAILS_TODAY to "'Sent today at '${DateTimeFormats.frontendTimeFormat}",
+            MessageDateFormat.INBOX_MIDDAY to "'Midday'",
+            MessageDateFormat.DETAILS_TODAY_AT_MIDDAY to "'Sent today at midday'",
+            MessageDateFormat.INBOX_MIDNIGHT to "'Midnight'",
+            MessageDateFormat.DETAILS_TODAY_AT_MIDNIGHT to "'Sent today at midnight'",
+            MessageDateFormat.INBOX_YESTERDAY to "'Yesterday'",
+            MessageDateFormat.DETAILS_YESTERDAY to "'Sent yesterday at '${DateTimeFormats.frontendTimeFormat}",
+            MessageDateFormat.INBOX_LAST_WEEK to DateTimeFormats.fullDayOfWeek,
+            MessageDateFormat.INBOX_BEFORE_LAST_WEEK to DateTimeFormats.frontendBasicDateFormat,
+            MessageDateFormat.DETAILS_YESTERDAY_AT_MIDDAY to "'Sent yesterday at midday'",
+            MessageDateFormat.DETAILS_YESTERDAY_AT_MIDNIGHT to "'Sent yesterday at midnight'")
+
     fun getExpectedFormattedMessageDate(date: ZonedDateTime, format: MessageDateFormat): String {
-        val formattedDate: String
-
-        when (format) {
-            MessageDateFormat.INBOX_TIME_12_HR -> {
-                formattedDate = DateTimeFormatter
-                        .ofPattern(DateTimeFormats.frontendTimeFormat, Locale.UK)
-                        .format(date)
-            }
-            MessageDateFormat.DETAILS_TODAY -> {
-                formattedDate = DateTimeFormatter
-                        .ofPattern("'Sent today at '${DateTimeFormats.frontendTimeFormat}", Locale.UK)
-                        .format(date)
-
-            }
-            MessageDateFormat.INBOX_MIDDAY -> { formattedDate = "Midday" }
-            MessageDateFormat.DETAILS_TODAY_AT_MIDDAY -> { formattedDate = "Sent today at midday" }
-            MessageDateFormat.INBOX_MIDNIGHT -> { formattedDate = "Midnight" }
-            MessageDateFormat.DETAILS_TODAY_AT_MIDNIGHT -> { formattedDate = "Sent today at midnight" }
-            MessageDateFormat.INBOX_YESTERDAY -> { formattedDate = "Yesterday" }
-            MessageDateFormat.DETAILS_YESTERDAY -> {
-                formattedDate = DateTimeFormatter
-                        .ofPattern("'Sent yesterday at '${DateTimeFormats.frontendTimeFormat}", Locale.UK)
-                        .format(date)
-            }
-            MessageDateFormat.INBOX_LAST_WEEK -> {
-                formattedDate = DateTimeFormatter
-                        .ofPattern(DateTimeFormats.fullDayOfWeek, Locale.UK)
-                        .format(date)
-            }
-            MessageDateFormat.INBOX_BEFORE_LAST_WEEK -> {
-                formattedDate = DateTimeFormatter
-                        .ofPattern(DateTimeFormats.frontendBasicDateFormat, Locale.UK)
-                        .format(date)
-            }
-            MessageDateFormat.DETAILS_YESTERDAY_AT_MIDDAY -> { formattedDate = "Sent yesterday at midday" }
-            MessageDateFormat.DETAILS_YESTERDAY_AT_MIDNIGHT -> { formattedDate = "Sent yesterday at midnight" }
-            else -> {
-                formattedDate = DateTimeFormatter
-                        .ofPattern("'Sent '${DateTimeFormats.frontendBasicDateFormat}'" +
-                                           " at '${DateTimeFormats.frontendTimeFormat}", Locale.UK)
-                        .format(date)
-            }
-        }
-
+        val dateFormat = getFormat(format)
+        val formattedDate = DateTimeFormatter
+                .ofPattern(dateFormat, Locale.UK)
+                .format(date)
         return formattedDate.replace("AM", "am").replace("PM", "pm")
+    }
+
+    private fun getFormat(format: MessageDateFormat): String {
+        if (dateFormatting.containsKey(format)) {
+            return dateFormatting[format]!!
+        }
+        return "'Sent '${DateTimeFormats.frontendBasicDateFormat}'" +
+                " at '${DateTimeFormats.frontendTimeFormat}"
     }
 }
