@@ -17,7 +17,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
         response.patientId = ""
         response.person =  mutableListOf<Person>()
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.authenticateRequest(
                     TppMockDefaults.tppAuthenticateRequest(patient))
                     .respondWithSuccess(response)
@@ -57,7 +57,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
     }
 
     override fun validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds: Long) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.authenticateRequest(
                     TppMockDefaults.tppAuthenticateRequest(patient))
                     .respondWithSuccess(AuthenticateReply())
@@ -66,7 +66,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
     }
 
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.authenticateRequest(
                     TppMockDefaults.tppAuthenticateRequest(patient))
                     // respond with error.  Unconfirmed format.
@@ -78,7 +78,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
     }
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.authenticateRequest(
                     TppMockDefaults.tppAuthenticateRequest(patient))
                     // respond with error.  Unconfirmed format.
@@ -89,7 +89,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory(Supplier.TPP) {
     }
 
     private fun createInvalidLinkageTest(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.linkAccountRequest(patient).respondWithInvalidLinkageCredentials()
         }
     }

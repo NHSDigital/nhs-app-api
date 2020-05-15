@@ -49,7 +49,8 @@ class BookAppoinmentStubs(private val mockingClient: MockingClient, private val 
             val facade = BookAppointmentSlotFacade(patient!!.userPatientLinkToken,
                                                    appointmentBookingSlotForMatcher,
                                                    scenario.forMatcher)
-            mockingClient.forEmis { scenario.getResponse(appointments.bookAppointmentSlotRequest(patient, facade)) }
+            mockingClient.forEmis.mock {
+                scenario.getResponse(appointments.bookAppointmentSlotRequest(patient, facade)) }
         }
     }
 
@@ -86,7 +87,7 @@ class BookAppoinmentStubs(private val mockingClient: MockingClient, private val 
                     appointmentBookingSlotForMatcher,
                     scenario.forMatcher)
 
-            mockingClient.forTpp { scenario.getResponse(appointments.bookAppointmentSlotRequest(
+            mockingClient.forTpp.mock { scenario.getResponse(appointments.bookAppointmentSlotRequest(
                     TppStubsPatientFactory.goodPatientTPP, facade))}
         }
     }

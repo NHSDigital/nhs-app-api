@@ -23,7 +23,7 @@ open class V1MedicalRecordTppDcrEventStepDefinitions {
 
     @Given("^the GP Practice has multiple dcr events for TPP$")
     fun givenTheGpPracticeHasMultipleDcrEventsForTpp() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
         }
@@ -31,7 +31,7 @@ open class V1MedicalRecordTppDcrEventStepDefinitions {
 
     @Given("^the GP Practice has disabled dcr events functionality for TPP$")
     fun givenThePatientDoesNotHaveAccessToDcrEventsForTPP() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                             "You don&apos;t have access to this online service. " +
@@ -43,7 +43,7 @@ open class V1MedicalRecordTppDcrEventStepDefinitions {
 
     @Given("^the GP Practice has disabled proxy access to dcr events functionality for TPP$")
     fun givenTheProxyPatientDoesNotHaveAccessToDcrEventsForTPP() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(ProxySerenityHelpers.getPatientOrProxy().tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                             "You don&apos;t have access to this online service. " +
@@ -55,7 +55,7 @@ open class V1MedicalRecordTppDcrEventStepDefinitions {
 
     @Given("^an error occurred retrieving the dcr events from TPP$")
     fun givenAnErrorOccurredRetrievingDcrEventsFromTPP() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(SerenityHelpers.getPatient().tppUserSession!!)
                     .respondWithServiceNotAvailableException()
         }

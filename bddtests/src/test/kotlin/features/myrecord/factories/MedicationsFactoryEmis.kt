@@ -9,21 +9,21 @@ class MedicationsFactoryEmis: MedicationsFactory(){
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.medicationsRequest(patient)
                     .respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
         }
     }
 
     override fun respondWithBadData(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.medicationsRequest(patient)
                     .respondWithCorruptedContent("Bad Data")
         }
     }
 
     override fun enabledWithRecords(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.medicationsRequest(patient).respondWithSuccess(
                     MedicationsData.getEmisMedicationData())
         }

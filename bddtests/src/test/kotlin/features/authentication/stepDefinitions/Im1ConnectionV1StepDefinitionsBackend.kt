@@ -136,8 +136,9 @@ class Im1ConnectionV1StepDefinitionsBackend {
     @Given("^I have data for an EMIS patient that has already been associated with the application in the GP system$")
     fun iHaveDataForAnEMISPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
         val patient = Patient.getDefault(Supplier.EMIS)
-        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock { authentication.endUserSessionRequest()
+                .respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis.mock {
             authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))
                     .respondWithAlreadyLinked()
         }

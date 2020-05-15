@@ -59,14 +59,14 @@ class PrescriptionsErrorStepDefinitions {
 
     @Given("The prescription submission endpoint is throwing a server error")
     fun butThePrescriptionSubmissionEndpointIsThrowingAServerError() {
-        mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
+        mockingClient.forEmis.mock { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
                 .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {}) }
     }
 
     @Given("The prescription submission endpoint is throwing an already ordered exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnAlreadyOrderedException() {
         val patient = SerenityHelpers.getPatient()
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             prescriptions.prescriptionSubmission(patient, null)
                     .respondWithError(Error(ErrorResponseCodeTpp.MEDICATION_UNAVAILABLE,
                             "One of the medications requested is no longer available",
@@ -77,7 +77,7 @@ class PrescriptionsErrorStepDefinitions {
     @Given("The prescription submission endpoint is throwing an invalid guid exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnInvalidGuidException() {
         val patient = SerenityHelpers.getPatient()
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(patient, null)
+        mockingClient.forTpp.mock { prescriptions.prescriptionSubmission(patient, null)
                 .respondWithError(Error(ErrorResponseCodeTpp.MEDICATION_UNAVAILABLE,
                         "There was an error processing your request",
                         "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }

@@ -85,7 +85,7 @@ class AuthenticationStepDefinitions {
         //Whereas the usual TppSessionCreateJourneyFactory.createFor includes the logOff request,
         //createAuthenticateRequest does not.
         TppSessionCreateJourneyFactory().createAuthenticateRequest(patient)
-        mockingClient.forTpp { authentication.logOffRequest().respondWithError() }
+        mockingClient.forTpp.mock { authentication.logOffRequest().respondWithError() }
 
         browser.goToApp()
         login.using(patient)

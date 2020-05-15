@@ -13,8 +13,8 @@ import utils.getOrFail
 
 class CancelAppointmentsStubs(private val mockingClient: MockingClient, private val patient: Patient ?= null) {
 
-    fun generateStubs(supplier: Supplier){
-        when(supplier){
+    fun generateStubs(supplier: Supplier) {
+        when (supplier) {
             Supplier.EMIS -> generateEMISStubs()
             Supplier.TPP -> generateTPPStubs()
             else -> throw IllegalArgumentException("$supplier not implemented")
@@ -25,13 +25,15 @@ class CancelAppointmentsStubs(private val mockingClient: MockingClient, private 
         val mapCancelAppointmentStubs =
                 InputResponse<String, ICancelAppointmentsBuilder>()
                         .addResponse(cancellationReasonMatcher) { builder
-                            -> builder.respondWithSuccess() }
+                            ->
+                            builder.respondWithSuccess()
+                        }
 
         mapCancelAppointmentStubs.listResponse().forEach { scenario ->
             val facade = CancelAppointmentSlotFacade(patient!!.userPatientLinkToken,
-                                                     cancellationSlotMatcher,
-                                                     scenario.forMatcher)
-            mockingClient.forEmis { scenario.getResponse(appointments.cancelAppointmentRequest(patient, facade)) }
+                    cancellationSlotMatcher,
+                    scenario.forMatcher)
+            mockingClient.forEmis.mock { scenario.getResponse(appointments.cancelAppointmentRequest(patient, facade)) }
         }
     }
 
@@ -47,7 +49,9 @@ class CancelAppointmentsStubs(private val mockingClient: MockingClient, private 
             val facade = CancelAppointmentSlotFacade(goodPatientTPP.userPatientLinkToken,
                     SerenitySessionSlotId.APPOINTMENTONE.getOrFail(),
                     scenario.forMatcher)
-            mockingClient.forTpp { scenario.getResponse(appointments.cancelAppointmentRequest(goodPatientTPP, facade)) }
+            mockingClient.forTpp.mock {
+                scenario.getResponse(appointments.cancelAppointmentRequest(goodPatientTPP, facade))
+            }
         }
     }
 }

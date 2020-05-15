@@ -38,14 +38,14 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
     }
 
     private fun generateEmisMocks(patient: Patient) {
-        client.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        client.forEmis.mock { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
 
-        client.forEmis {
+        client.forEmis.mock {
             authentication.sessionRequest(patient)
                     .respondWithSuccess(patient, associationType = AssociationType.Self)
         }
 
-        client.forEmis {
+        client.forEmis.mock {
             myRecord.demographicsRequest(patient)
                     .respondWithSuccess(patient,
                             patientIdentifiers =
@@ -59,7 +59,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
         }
 
         client
-                .forEmis {
+                .forEmis.mock {
                     authentication.meApplicationsRequest(patient,
                             LinkApplicationRequestModel(
                                     surname = patient.name.surname,
@@ -72,14 +72,14 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                             )
                     ).respondWithSuccess(patient.connectionToken)
                 }
-        client.forEmis {
+        client.forEmis.mock {
             practiceSettingsRequest(patient).respondWithSuccess(SettingsResponseModel())
         }
     }
 
     private fun generateTppMocks(patient: Patient) {
 
-        client.forTpp {
+        client.forTpp.mock {
                 authentication.linkAccountRequest(patient).respondWithSuccess(
                                 LinkAccountReply(
                                         passphrase = patient.passphrase,
@@ -89,7 +89,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                         )
         }
 
-        client.forTpp {
+        client.forTpp.mock {
             authentication.authenticateRequest(
                     Authenticate(
                             apiVersion = TppMockDefaults.TPP_API_VERSION,

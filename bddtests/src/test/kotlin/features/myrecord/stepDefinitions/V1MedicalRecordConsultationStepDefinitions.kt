@@ -48,7 +48,7 @@ open class V1MedicalRecordConsultationStepDefinitions {
     @Given("^the EMIS GP Practice has two consultations where the first record has no date$")
     fun givenTheEmisPracticeHasAConsultationWithNoDate(){
         val patient = SerenityHelpers.getPatient()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.consultationsRequest(patient)
                     .respondWithSuccess(ConsultationsData.getTwoConsultationsWhereTheFirstRecordHasNoDate())
         }

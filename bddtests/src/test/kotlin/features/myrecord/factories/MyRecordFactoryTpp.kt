@@ -17,7 +17,7 @@ class MyRecordFactoryTpp: MyRecordFactory() {
     private val patientOverviewFactory by lazy {PatientOverviewFactoryTpp()}
 
     override fun disabled(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                             "Requested record access is disabled by the practice",
@@ -27,12 +27,12 @@ class MyRecordFactoryTpp: MyRecordFactory() {
 
     override fun enabledWithBlankRecord(patient: Patient) {
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
         }
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
         }
@@ -40,7 +40,7 @@ class MyRecordFactoryTpp: MyRecordFactory() {
         val startDate = OffsetDateTime.now()
         val endDate = startDate.minusDays(END_DATE)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
         }
@@ -52,12 +52,12 @@ class MyRecordFactoryTpp: MyRecordFactory() {
     }
 
     override fun enabledWithAllRecords(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithSuccess(patientOverviewFactory.getTppPatientOverviewData())
         }
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
         }

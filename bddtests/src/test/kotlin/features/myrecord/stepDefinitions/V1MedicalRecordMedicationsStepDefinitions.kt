@@ -42,13 +42,13 @@ open class V1MedicalRecordMedicationsStepDefinitions {
 
         when (gpSystem) {
             Supplier.EMIS -> {
-                mockingClient.forEmis {
+                mockingClient.forEmis.mock {
                     myRecord.medicationsRequest(patient)
                             .respondWithExceptionWhenNotEnabled()
                 }
             }
             Supplier.TPP -> {
-                mockingClient.forTpp {
+                mockingClient.forTpp.mock {
                     myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                                     "Requested record access is disabled by the practice",
@@ -61,7 +61,7 @@ open class V1MedicalRecordMedicationsStepDefinitions {
 
     @Given("^the EMIS GP Practice has acute medication results where the first record has no date$")
     fun theEmisGpPracticeHasAcuteMedicationResultsWhereTheFirstRecordHasNoDate() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.medicationsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(MedicationsData.getEmisAcuteMedicationsResponseWhereTheFirstResultHasNoDate())
         }
@@ -98,7 +98,7 @@ open class V1MedicalRecordMedicationsStepDefinitions {
 
     @Given("^the EMIS GP Practice has current repeat medication results where the first record has no date$")
     fun theEmisGpPracticeHasCurrentRepeatMedicationResultsWhereTheFirstRecordHasNoDate() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.medicationsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(MedicationsData.
                             getEmisCurrentRepeatMedicationsResponseWhereTheFirstResultHasNoDate())
@@ -130,7 +130,7 @@ open class V1MedicalRecordMedicationsStepDefinitions {
 
     @Given("^the EMIS GP Practice has discontinued repeat medication results where the first record has no date$")
     fun theEmisGpPracticeHasDiscontinuedRepeatMedicationResultsWhereTheFirstRecordHasNoDate() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.medicationsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(MedicationsData.
                             getEmisDiscontinuedRepeatMedicationsResponseWhereTheFirstResultHasNoDate())

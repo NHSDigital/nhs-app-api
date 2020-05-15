@@ -5,6 +5,6 @@ import mocking.models.Mapping
 
 class MockingClientAppointmentMappingFactoryEmis: MockingClientAppointmentMappingFactory(){
     override fun requestMapping(mapper: IAppointmentMappingBuilder.() -> Mapping) {
-        mockingClient.forEmis { mapper(appointments) }
+        mockingClient.forEmis.mock { mapper(appointments) }
     }
 }

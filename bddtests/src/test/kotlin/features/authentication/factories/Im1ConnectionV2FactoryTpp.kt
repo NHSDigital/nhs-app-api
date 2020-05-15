@@ -24,7 +24,7 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
 
     override fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration?) {
         authenticate()
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.linkAccountRequest(patient).respondWithSuccess(
                     LinkAccountReply(
                             accountId = patient.accountId,
@@ -43,7 +43,7 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
                 "Mocked TPP Error"
         )
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.linkAccountRequest(patient).respondWithError(error, httpStatusCode)
         }
     }
@@ -54,19 +54,19 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
     override fun linkagePost(linkageInformationFacade: LinkageInformationFacade,
                             action: (IErrorMappingBuilder)->    Mapping) {
         val linkAccount = LinkAccount.forPatient(Patient.getDefault(gpSystem))
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             action( authentication.linkageKeyPOSTRequest(linkAccount))
         }
     }
 
     override fun successfulLinkagePost(linkageInformationFacade: LinkageInformationFacade) {
         val linkAccount = LinkAccount.forPatient(Patient.getDefault(gpSystem))
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.linkageKeyPOSTRequest(linkAccount).respondWithSuccessfullyCreated(linkageInformationFacade)
                     .inScenario("LinkageCreation")
                     .willSetStateTo("Linkage key created")
         }
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.linkAccountRequest(patient).respondWithSuccess(
                     LinkAccountReply(
                             accountId = patient.accountId,
@@ -82,7 +82,7 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
     override fun linkageGet(linkageInformationFacade: LinkageInformationFacade,
                             action: (IErrorMappingBuilder)->    Mapping) {
         val linkAccount = LinkAccount.forPatient(Patient.getDefault(gpSystem))
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             action( authentication.linkageKeyGetRequest(linkAccount))
         }
     }
@@ -92,13 +92,13 @@ class Im1ConnectionV2FactoryTpp:  Im1ConnectionV2Factory(Supplier.TPP) {
         //TPP is hardcoded to always return 'NotFound'
         val linkAccount = LinkAccount.forPatient(Patient.getDefault(gpSystem))
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.linkageKeyGetRequest(linkAccount).respondWithNotFound()
         }
     }
 
     private fun authenticate() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.authenticateRequest(
                     Authenticate(
                             apiVersion = TppMockDefaults.TPP_API_VERSION,

@@ -46,14 +46,14 @@ class AuthReturnStepDefinitions {
         this.patient = EmisPatients.montelFrye
 
         CitizenIdSessionCreateJourney().createFor(patient)
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId)
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             practiceSettingsRequest(patient)
                     .respondWithSuccess( SettingsResponseModel())
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.sessionRequest(patient).respondWithServerError()
         }
         browser.goToApp()

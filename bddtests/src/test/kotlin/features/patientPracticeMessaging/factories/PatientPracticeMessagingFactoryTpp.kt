@@ -26,7 +26,7 @@ const val UNREAD_COUNT = 4
 class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
 
     override fun disabled(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             patientPracticeMessaging.viewMessagesRequest(patient.tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                                             "Im1 messaging access is disabled by the practice",
@@ -35,7 +35,7 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
     }
 
     override fun enabled(patient: Patient){
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             val listServicesAccessReply = TppListServiceAccessesData()
                     .enableService(TppConstants.Im1MessagingListServiceAccessDescription,
                                    TppConstants.Im1MessagingListServiceAccessCode,
@@ -50,23 +50,23 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
                                                      hasAttachment: Boolean, unitRecipient: Boolean) {
         val messagesFromData = TppMessagingData.getDefaultTppMessages(hasUnread, hasAttachment)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             patientPracticeMessaging.viewMessagesRequest(patient.tppUserSession!!)
                     .respondWithSuccess(messagesFromData)
         }
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             patientPracticeMessaging.requestRecipientsRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppMessagingData.getDefaultTppRecipients())
         }
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             patientPracticeMessaging.markMessagesAsReadRequest(patient.tppUserSession!!)
                 .respondWithSuccess(MessageMarkAsReadReply())
         }
 
         if (hasAttachment) {
-            mockingClient.forTpp {
+            mockingClient.forTpp.mock {
                 patientPracticeMessaging
                         .attachmentRequest(patient.tppUserSession!!)
                         .respondWithSuccess(TppDocumentData.getDocumentData("jpg"))
@@ -96,7 +96,7 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
     }
 
     override fun enabledWithInvalidAttachmentOnMessage(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             patientPracticeMessaging
                     .attachmentRequest(patient.tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.FILE_SIZE_TOO_LARGE,
@@ -108,13 +108,13 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
 
         val messagesFromData = TppMessagingData.getTppMessagesInitialFromGp()
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             patientPracticeMessaging
                     .viewMessagesRequest(patient.tppUserSession!!)
                     .respondWithSuccess(messagesFromData)
         }
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             patientPracticeMessaging.markMessagesAsReadRequest(patient.tppUserSession!!)
                 .respondWithSuccess(MessageMarkAsReadReply())
         }
@@ -145,7 +145,7 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
     }
 
     override fun patientHasNoMessages(patient: Patient) {
-        mockingClient.forTpp{
+        mockingClient.forTpp.mock{
             patientPracticeMessaging.viewMessagesRequest(patient.tppUserSession!!)
                 .respondWithSuccess(
                     MessagesViewReply( Message = mutableListOf())
@@ -180,7 +180,7 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
     }
 
     override fun forbiddenErrorWithPatientPracticeMessaging(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             patientPracticeMessaging.viewMessagesRequest(patient.tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                                             "Im1 messaging access is disabled by the practice",
@@ -208,7 +208,7 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
     }
 
     override fun noRecipients(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             patientPracticeMessaging.requestRecipientsRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppMessagingData.getTppEmptyRecipients())
         }
@@ -241,7 +241,7 @@ class PatientPracticeMessagingFactoryTpp: PracticePatientMessagingFactory() {
         val recipient = if (unitRecipient) recipients[1] else recipients[0]
         val createMessageRequest = CreateMessageRequest(messageBody = "This is a message",
                                                         recipient = recipient.recipientIdentifier!!)
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             patientPracticeMessaging.createMessageRequest(SerenityHelpers.getPatient().tppUserSession!!,
                                                           createMessageRequest)
                     .respondWithSuccess(MessageCreateReply())

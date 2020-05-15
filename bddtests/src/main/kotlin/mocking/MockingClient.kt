@@ -6,7 +6,6 @@ import mocking.defaults.EmisMockDefaults
 import mocking.emis.EmisMappingRouter
 import mocking.favicon.FaviconMappingBuilder
 import mocking.microtest.MicrotestMappingRouter
-import mocking.models.Mapping
 import mocking.ndop.NdopMappingBuilder
 import mocking.onlineConsultations.OnlineConsultationsMappingBuilder
 import mocking.organDonation.OrganDonationMappingBuilder
@@ -19,7 +18,7 @@ import java.lang.Thread.sleep
 
 private const val DEFAULT_REQUEST_ASSERT_DELAY_IN_MS = 500L
 
-class MockingClient(private val configuration: MockingConfiguration) {
+class MockingClient(configuration: MockingConfiguration) {
 
     val wiremockHelper = WiremockSetup(configuration)
 
@@ -32,20 +31,8 @@ class MockingClient(private val configuration: MockingConfiguration) {
     val forNdop = ExternalSupplierMockingClient(NdopMappingBuilder(), wiremockHelper)
     val forMicrotest = ExternalSupplierMockingClient(MicrotestMappingRouter(), wiremockHelper)
     val forVision = ExternalSupplierMockingClient(VisionMappingRouter(), wiremockHelper)
-
-    fun forEmis(resolver: EmisMappingRouter.() -> Mapping) {
-        val router = EmisMappingRouter(configuration.emisConfiguration)
-        val mapping: Mapping = router.resolver()
-
-        wiremockHelper.postMapping(mapping)
-    }
-
-    fun forTpp(resolver: TppMappingRouter.() -> Mapping) {
-        val router = TppMappingRouter()
-        val mapping: Mapping = router.resolver()
-
-        wiremockHelper.postMapping(mapping)
-    }
+    val forEmis = ExternalSupplierMockingClient(EmisMappingRouter(configuration.emisConfiguration), wiremockHelper)
+    val forTpp = ExternalSupplierMockingClient(TppMappingRouter(), wiremockHelper)
 
     fun favicon() = wiremockHelper.postMapping(FaviconMappingBuilder().respondWithNotFound())
 

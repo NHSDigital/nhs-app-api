@@ -23,7 +23,7 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         val startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
         val endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithCorruptedContent("Bad Data")
         }
@@ -35,7 +35,7 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         val startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
         val endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                             "Requested record access is disabled by the practice",
@@ -49,7 +49,7 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         var startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
         var endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
         }
@@ -57,7 +57,7 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         startDate = today.minusDays(START_DATE_FOR_RANGE_TWO)
         endDate = today.minusDays(END_DATE_FOR_RANGE_TWO)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
         }
@@ -65,7 +65,7 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         startDate = today.minusDays(START_DATE_FOR_RANGE_THREE)
         endDate = today
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
         }
@@ -76,7 +76,7 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         var startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
         var endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithSuccess(TestResultsData
                             .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_ONE))
@@ -85,7 +85,7 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         startDate = today.minusDays(START_DATE_FOR_RANGE_TWO)
         endDate = today.minusDays(END_DATE_FOR_RANGE_TWO)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithSuccess(TestResultsData
                             .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_TWO))
@@ -94,7 +94,7 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         startDate = today.minusDays(START_DATE_FOR_RANGE_THREE)
         endDate = today
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithSuccess(TestResultsData
                             .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_THREE))
@@ -107,7 +107,7 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         val startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
         val endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithServiceNotAvailableException()
         }
@@ -119,7 +119,7 @@ class TestResultsFactoryTpp : TestResultsFactory(){
         val startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
         val endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                             "You don&apos;t have access to this online service. " +

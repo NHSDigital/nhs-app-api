@@ -155,7 +155,7 @@ open class CoursesStepDefinitions {
         response.inputRequirements.prescribingComment = necessityOption.text
 
         val currentPatient = SerenityHelpers.getPatient()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             practiceSettingsRequest(currentPatient)
                     .respondWithSuccess(response)
         }

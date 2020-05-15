@@ -18,14 +18,14 @@ class DocumentsFactoryTpp: DocumentsFactory() {
         val errorMsg = "You don't have access to this online service"
         val disabledTppError = Error(errorCode = ErrorResponseCodeTpp.NO_ACCESS,
                                      userFriendlyMessage = errorMsg)
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(patient.tppUserSession!!)
                     .respondWithError(disabledTppError)
         }
     }
 
     override fun enabledWithNoDocuments(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppDcrDocumentData.getMultipleDcrEventsForTppWithNoDocuments())
         }
@@ -95,7 +95,7 @@ class DocumentsFactoryTpp: DocumentsFactory() {
                 V2MedicalRecordDocumentsStepDefinitions.SerenityVariable.EXPECTED_DOCUMENTS,
                 expectedDocuments)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(patient.tppUserSession!!)
                     .respondWithSuccess(docs)
         }
@@ -107,7 +107,7 @@ class DocumentsFactoryTpp: DocumentsFactory() {
 
     private fun setExpectedBinaryResponse(patient: Patient, documentStatus: DocumentStatus?) {
         if (documentStatus == DocumentStatus.IsLarge) {
-            mockingClient.forTpp {
+            mockingClient.forTpp.mock {
                 myRecord.documentRequest(patient.tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.FILE_SIZE_TOO_LARGE,
                         "File exceeds 2MB"))
@@ -116,7 +116,7 @@ class DocumentsFactoryTpp: DocumentsFactory() {
         }
 
         if (documentStatus == DocumentStatus.StillUploading) {
-            mockingClient.forTpp {
+            mockingClient.forTpp.mock {
                 myRecord.documentRequest(patient.tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.FILE_STILL_UPLOADING,
                         "File has not finished uploading"))
@@ -130,7 +130,7 @@ class DocumentsFactoryTpp: DocumentsFactory() {
             else -> TppDocumentData.getDocumentData()
         }
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.documentRequest(patient.tppUserSession!!)
                 .respondWithSuccess(documentData)
         }

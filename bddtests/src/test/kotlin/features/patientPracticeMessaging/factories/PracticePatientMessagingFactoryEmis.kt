@@ -17,53 +17,53 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
         val response = SettingsResponseModel()
         response.services.practicePatientCommunicationSupported = true
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             practiceSettingsRequest(patient)
                     .respondWithSuccess(response)
         }
     }
 
     override fun disabled(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.viewMyMessagesRequest(patient)
                     .respondWithExceptionWhenNotEnabled()
         }
     }
 
     override fun patientHasNoMessages(patient: Patient){
-        mockingClient.forEmis{
+        mockingClient.forEmis.mock{
             messaging.viewMyMessagesRequest(patient)
                     .respondWithSuccess(MessagesResponseModel(mutableListOf()))
         }
     }
 
     override fun unknownErrorWithPatientPracticeMessaging(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.viewMyMessagesRequest(patient).respondWithBadRequest()
         }
     }
 
     override fun forbiddenErrorWithPatientPracticeMessaging(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.viewMyMessagesRequest(patient).respondWithForbidden()
         }
     }
 
     override fun errorWithPatientPracticeMessagingMessageDetails(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.viewConversationRequest(patient).respondWithBadRequest()
         }
     }
 
     override fun noRecipients(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.getRecipientsRequest(patient)
                     .respondWithSuccess(EmisMessagingData.getEmptyRecipients())
         }
     }
 
     override fun errorWithPatientPracticeMessagingConversationDelete(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.deleteConversationRequest(patient).respondWithBadRequest()
         }
     }
@@ -78,13 +78,13 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
     }
 
     override fun patientSuccessfullySendsAMessage(patient: Patient, createMessageRequest: CreateMessageRequest) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.sendMessageRequest(patient, createMessageRequest).respondWithSuccess()
         }
     }
 
     override fun errorSendingAMessage(patient: Patient, createMessageRequest: CreateMessageRequest) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.sendMessageRequest(patient, createMessageRequest).respondWithBadRequest()
         }
     }
@@ -118,27 +118,27 @@ class PracticePatientMessagingFactoryEmis: PracticePatientMessagingFactory() {
             .setIfNotAlreadySet(createMessageRequest)
 
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.viewMyMessagesRequest(patient)
                     .respondWithSuccess(messages)
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.viewConversationRequest(patient)
                     .respondWithSuccess(messageDetails)
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.updateReadStatusRequest(patient)
                     .respondWithSuccess(EmisMessagingData.getUpdatedResponse())
         }
-        mockingClient.forEmis{
+        mockingClient.forEmis.mock{
             messaging.getRecipientsRequest(patient)
                     .respondWithSuccess(recipients)
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.sendMessageRequest(patient, createMessageRequest)
                     .respondWithSuccess()
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             messaging.deleteConversationRequest(patient)
                     .respondWithSuccess(EmisMessagingData.getDeleteResponse())
         }

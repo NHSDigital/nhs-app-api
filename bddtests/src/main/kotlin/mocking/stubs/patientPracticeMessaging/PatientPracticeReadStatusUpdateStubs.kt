@@ -17,7 +17,7 @@ class PatientPracticeReadStatusUpdateStubs (private val mockingClient: MockingCl
                             builder.respondWithSuccess(messagesDataLoader)
                         }
         mapEMISPatientPracticeMessageRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(messaging.updateReadStatusRequest(scenario.forMatcher)) }
+            mockingClient.forEmis.mock { scenario.getResponse(messaging.updateReadStatusRequest(scenario.forMatcher)) }
         }
     }
 }

@@ -28,13 +28,13 @@ class ViewTestResultsStubsTpp(private val mockingClient : MockingClient) {
                         }
 
         mapTppTestResultsStubs.listResponse().forEach { scenario ->
-            mockingClient.forTpp { scenario.getResponse(myRecord.testResultsViewRequest(scenario.forMatcher,
+            mockingClient.forTpp.mock { scenario.getResponse(myRecord.testResultsViewRequest(scenario.forMatcher,
                     startDate.minusDays(START_DIFF_ONE), startDate.minusDays(END_DIFF_ONE)))}
 
-            mockingClient.forTpp { scenario.getResponse(myRecord.testResultsViewRequest(scenario.forMatcher,
+            mockingClient.forTpp.mock { scenario.getResponse(myRecord.testResultsViewRequest(scenario.forMatcher,
                     startDate.minusDays(START_DIFF_TWO), startDate.minusDays(END_DIFF_TWO)))}
 
-            mockingClient.forTpp { scenario.getResponse(myRecord.testResultsViewRequest(scenario.forMatcher,
+            mockingClient.forTpp.mock { scenario.getResponse(myRecord.testResultsViewRequest(scenario.forMatcher,
                     startDate.minusDays(START_DIFF_THREE), startDate.minusDays(END_DIFF_THREE)))}
         }
     }

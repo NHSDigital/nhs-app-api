@@ -12,7 +12,7 @@ import java.time.Duration
 class DemographicsFactoryTpp: DemographicsFactory() {
     override fun disabled(patient: Patient) {
         try {
-            mockingClient.forTpp {
+            mockingClient.forTpp.mock {
                 myRecord.patientSelectedPost(patient.tppUserSession!!)
                         .respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
             }
@@ -22,14 +22,14 @@ class DemographicsFactoryTpp: DemographicsFactory() {
     }
 
     override fun enabled(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientSelectedPost(patient.tppUserSession!!)
                     .respondWithSuccess(DemographicsData.getTppDemographicsData(patient))
         }
     }
 
     override fun enabledViaProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientSelectedPost(
                     actingOnBehalfOf.tppUserSession!!)
                     .respondWithSuccess(DemographicsData.getTppDemographicsData(actingOnBehalfOf))
@@ -37,7 +37,7 @@ class DemographicsFactoryTpp: DemographicsFactory() {
     }
 
     override fun enabledButTimesOut(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientSelectedPost(patient.tppUserSession!!)
                     .respondWithSuccess(DemographicsData.getTppDemographicsData(patient)).delayedBy(Duration.ofSeconds
                     (StubbedEnvironment.TIMEOUT_DELAY))
@@ -45,21 +45,21 @@ class DemographicsFactoryTpp: DemographicsFactory() {
     }
 
     override fun throwInternalError(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientSelectedPost(patient.tppUserSession!!)
                     .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR,0){}
         }
     }
 
     override fun throwForbiddenError(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientSelectedPost(patient.tppUserSession!!)
                     .respondWith(HttpStatus.SC_FORBIDDEN,0){}
         }
     }
 
     override fun throwBadGateway(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientSelectedPost(patient.tppUserSession!!)
                     .respondWith(HttpStatus.SC_BAD_GATEWAY,0){}
         }

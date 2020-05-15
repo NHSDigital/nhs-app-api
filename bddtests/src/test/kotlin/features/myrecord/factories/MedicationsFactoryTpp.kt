@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 class MedicationsFactoryTpp: MedicationsFactory() {
     override fun respondWithBadData(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithCorruptedContent()
         }
@@ -19,14 +19,14 @@ class MedicationsFactoryTpp: MedicationsFactory() {
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithSuccess(getTppDefaultMedicationsModel())
         }
     }
 
     override fun enabledWithRecords(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithSuccess(getTppMedicationData())
         }

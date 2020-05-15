@@ -49,7 +49,7 @@ class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
         val linkAccount = LinkAccount.forPatient(Patient.getDefault(gpSystem))
 
         if (response != null) {
-            mockingClient.forTpp {
+            mockingClient.forTpp.mock {
                 response(authentication.linkageKeyPOSTRequest(linkAccount))
             }
         }
@@ -70,7 +70,7 @@ class LinkageFactoryTpp:  LinkageFactory(Supplier.TPP) {
         val linkAccount = LinkAccount.forPatient(Patient.getDefault(gpSystem))
 
         if (response != null) {
-            mockingClient.forTpp {
+            mockingClient.forTpp.mock {
                 response(authentication.linkageKeyGetRequest(linkAccount))
             }
         }

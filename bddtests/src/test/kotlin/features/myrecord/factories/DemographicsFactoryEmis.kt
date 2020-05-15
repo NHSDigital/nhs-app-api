@@ -11,7 +11,7 @@ import java.time.Duration
 class DemographicsFactoryEmis: DemographicsFactory() {
     override fun disabled(patient: Patient) {
         try {
-            mockingClient.forEmis {
+            mockingClient.forEmis.mock {
                 myRecord.demographicsRequest(patient).respondWithExceptionWhenNotEnabled()
             }
         } catch (httpException: NhsoHttpException) {
@@ -20,14 +20,14 @@ class DemographicsFactoryEmis: DemographicsFactory() {
     }
 
     override fun enabled(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.demographicsRequest(patient)
                     .respondWithSuccess(DemographicsData.getEmisDemographicData(patient))
         }
     }
 
     override fun enabledViaProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.demographicsRequest(
                     actingOnBehalfOf,
                     sessionId = callingPatient.sessionId,
@@ -38,7 +38,7 @@ class DemographicsFactoryEmis: DemographicsFactory() {
     }
 
     override fun enabledButTimesOut(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.demographicsRequest(patient)
                     .respondWithSuccess(DemographicsData.getEmisDemographicData(patient)).delayedBy(Duration.ofSeconds
             (StubbedEnvironment.TIMEOUT_DELAY))
@@ -46,7 +46,7 @@ class DemographicsFactoryEmis: DemographicsFactory() {
     }
 
     override fun throwInternalError(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.demographicsRequest(patient)
                     .respondWithStandardError(HttpStatus.SC_INTERNAL_SERVER_ERROR,
                             HttpStatus.SC_INTERNAL_SERVER_ERROR)
@@ -54,7 +54,7 @@ class DemographicsFactoryEmis: DemographicsFactory() {
     }
 
     override fun throwForbiddenError(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.demographicsRequest(patient)
                     .respondWithStandardError(HttpStatus.SC_FORBIDDEN,
                             HttpStatus.SC_FORBIDDEN)
@@ -62,7 +62,7 @@ class DemographicsFactoryEmis: DemographicsFactory() {
     }
 
     override fun throwBadGateway(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.demographicsRequest(patient)
                     .respondWithStandardError(HttpStatus.SC_BAD_GATEWAY,
                             HttpStatus.SC_BAD_GATEWAY)

@@ -19,7 +19,7 @@ class PatientOverviewTpp(private val mockingClient: MockingClient) {
                         }
 
         mapTPPAllergiesRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forTpp { scenario.getResponse(TppViewPatientOverviewBuilder(goodPatientUserSession)) }
+            mockingClient.forTpp.mock { scenario.getResponse(TppViewPatientOverviewBuilder(goodPatientUserSession)) }
         }
 
     }

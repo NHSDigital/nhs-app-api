@@ -21,8 +21,7 @@ import java.time.OffsetDateTime
 
 class PrescriptionsFactoryEmis: PrescriptionsFactory() {
     override fun disableForProxy(callingPatient: Patient, actingOnBehalfOf: Patient) {
-        mockingClient
-                .forEmis {
+        mockingClient.forEmis.mock {
                     prescriptions.prescriptionsRequestViaProxy(callingPatient, actingOnBehalfOf)
                             .respondWithPrescriptionsNotEnabled()
                 }
@@ -33,7 +32,7 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory() {
 
     override fun setupWireMockAndCreateDataGpSpecific() {
         val response = CourseRequestsGetResponse(coursesData())
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.coursesRequest(ProxySerenityHelpers.getPatientOrProxy()).respondWithSuccess(response)
         }
     }
@@ -52,8 +51,7 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory() {
         val linkedProfile = SerenityHelpers.getValueOrNull<Patient>(GlobalSerenityHelpers.SWITCHED_LINKED_ACCOUNT)
         val currentPatient =  linkedProfile ?: SerenityHelpers.getPatient()
         val duration = if (delay != null) Duration.ofSeconds(delay) else null
-        mockingClient
-                .forEmis {
+        mockingClient.forEmis.mock {
                     prescriptions.prescriptionsRequest(currentPatient, fromdate, toDate)
                             .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
                             .delayedBy(duration)
@@ -71,14 +69,14 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory() {
         val courses = coursesData()
         val patient = ProxySerenityHelpers.getPatientOrProxy()
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.coursesRequest(patient)
                     .respondWithSuccess(CourseRequestsGetResponse(courses))
                     .inScenario(scenarioTitle)
                     .whenScenarioStateIs(currentScenarioState)
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.repeatPrescriptionSubmissionRequest(patient)
                     .respondWithCreated()
                     .inScenario(scenarioTitle)
@@ -94,7 +92,7 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory() {
                 orderedCourses = courses.toMutableList(),
                 oldPrescriptions = emisPrescriptionMap[Scenario.STARTED]!!)
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.prescriptionsRequest(patient)
                     .respondWithSuccess(emisPrescriptionMap[currentScenarioState]!!)
                     .inScenario(scenarioTitle)
@@ -105,45 +103,42 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory() {
     }
 
     override fun gpSessionHasExpired() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.prescriptionsRequest(ProxySerenityHelpers.getPatientOrProxy())
                     .respondWithEmisNotAuthorised()
         }
     }
 
     override fun disableAtGPLevel() {
-        mockingClient
-                .forEmis {
+        mockingClient.forEmis.mock {
                     prescriptions.prescriptionsRequest(ProxySerenityHelpers.getPatientOrProxy())
                             .respondWithPrescriptionsNotEnabled()
                 }
     }
 
     override fun prescriptionsEndpointTimeout(patient: Patient) {
-        mockingClient
-                .forEmis {
+        mockingClient.forEmis.mock {
                     prescriptions.prescriptionsRequest(patient)
                             .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                 }
     }
 
     override fun prescriptionsEndpointThrowServerError(patient: Patient) {
-        mockingClient
-                .forEmis {
+        mockingClient.forEmis.mock {
                     prescriptions.prescriptionsRequest(patient)
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
     }
 
     override fun coursesEndpointTimeout(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.coursesRequest(patient)
                     .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
         }
     }
 
     override fun coursesEndpointThrowingServerError(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.coursesRequest(patient)
                     .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
         }

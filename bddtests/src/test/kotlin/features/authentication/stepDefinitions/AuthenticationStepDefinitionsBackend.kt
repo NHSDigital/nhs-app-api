@@ -81,8 +81,8 @@ class AuthenticationStepDefinitionsBackend {
     fun iHaveValidOAuthDetailsAndEmisUserSessionEndpointFails() {
         val supplier = Supplier.EMIS
         CitizenIdSessionCreateJourney().createFor(EmisMockDefaults.patientEmis)
-        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithServerError() }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock { authentication.endUserSessionRequest().respondWithServerError() }
+        mockingClient.forEmis.mock {
             authentication.sessionRequest(Patient.getDefault(supplier))
                     .respondWithSuccess(Patient.getDefault(supplier), associationType)
         }
@@ -92,11 +92,12 @@ class AuthenticationStepDefinitionsBackend {
     fun iHaveValidOAuthDetailsAndEmisSessionEndpointFails() {
         val supplier = Supplier.EMIS
         CitizenIdSessionCreateJourney().createFor(EmisMockDefaults.patientEmis)
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.endUserSessionRequest()
                     .respondWithSuccess(Patient.getDefault(supplier).endUserSessionId)
         }
-        mockingClient.forEmis { authentication.sessionRequest(Patient.getDefault(supplier)).respondWithServerError() }
+        mockingClient.forEmis.mock {
+            authentication.sessionRequest(Patient.getDefault(supplier)).respondWithServerError() }
     }
 
     @Given("^I have valid OAuth details and (.*) is not available$")

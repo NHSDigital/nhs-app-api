@@ -51,7 +51,7 @@ class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
                         }
 
         mapTPPViewPrescriptionRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forTpp { scenario.getResponse(prescriptions.listRepeatMedication(scenario.forMatcher)) }
+            mockingClient.forTpp.mock { scenario.getResponse(prescriptions.listRepeatMedication(scenario.forMatcher)) }
         }
     }
 
@@ -93,7 +93,7 @@ class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
                         }
 
         mapEMISViewPrescriptionRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(prescriptions.prescriptionsRequest(scenario.forMatcher)) }
+            mockingClient.forEmis.mock { scenario.getResponse(prescriptions.prescriptionsRequest(scenario.forMatcher)) }
         }
     }
 

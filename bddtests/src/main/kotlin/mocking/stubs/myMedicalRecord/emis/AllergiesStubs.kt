@@ -33,7 +33,7 @@ class AllergiesStubs(private val mockingClient: MockingClient) {
                         }
 
         mapEMISAllergiesRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(myRecord.allergiesRequest(scenario.forMatcher)) }
+            mockingClient.forEmis.mock { scenario.getResponse(myRecord.allergiesRequest(scenario.forMatcher)) }
         }
 
     }

@@ -71,7 +71,7 @@ class OrderRepeatPrescriptionsStubs(private val patient: Patient,
 
         mapEMISBookRepeatPrescriptionRequestStubs.listResponse().forEach { scenario ->
             val facade = PrescriptionSubmissionRequest(uuid!!, scenario.forMatcher)
-            mockingClient.forEmis {
+            mockingClient.forEmis.mock {
                 scenario.getResponse(prescriptions.repeatPrescriptionSubmissionRequest(patient, facade))
             }
         }
@@ -92,7 +92,7 @@ class OrderRepeatPrescriptionsStubs(private val patient: Patient,
 
         mapTPPBookRepeatPrescriptionRequestStubs.listResponse().forEach { scenario ->
             val messageResponse = RequestMedicationReply(message = scenario.forMatcher)
-            mockingClient.forTpp {
+            mockingClient.forTpp.mock {
                 scenario.getResponse(prescriptions.prescriptionSubmission(patient=patient, drugIds = null,
                         notes= messageResponse))
             }

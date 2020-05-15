@@ -34,7 +34,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Given("^an error occurs retrieving the test result detail$")
     fun givenAnErrorOccursGettingTestResultDetailForTpp() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
                     TestResultsData.mockTestResultId)
                     .respondWithServiceNotAvailableException()
@@ -43,7 +43,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Given("^the test result details are retrieved successfully$")
     fun successGettingTestResultDetailForTpp() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
                     TestResultsData.mockTestResultId)
                     .respondWithSuccess(TestResultsData
@@ -53,7 +53,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Given("^the GP Practice has test result details$")
     fun givenTestResultDetailIsRetrievedSuccessfully() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
                     TestResultsData.mockTestResultId)
                     .respondWithSuccess(TestResultsData.getTestResultDetail())
@@ -62,7 +62,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Given("^the GP Practice has test result details with HTML entities$")
     fun givenTestResultDetailWithHTMLEntitiesIsRetrievedSuccessfully() {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.testResultsDetailRequest(SerenityHelpers.getPatient().tppUserSession!!,
                     TestResultsData.mockTestResultId)
                     .respondWithSuccess(TestResultsData.getTestResultDetailWithHTMLEntities())
@@ -77,7 +77,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Given("^the GP Practice has a single test result with multiple child values with no ranges for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithNoRangesForEmis() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData
                             .getTestResultWithChildValueCountAndRangePresent(
@@ -87,7 +87,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Given("^the GP Practice has a single test result with single child values with no ranges for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRangesForEmis() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData
                             .getTestResultWithChildValueCountAndRangePresent(
@@ -104,7 +104,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Given("^the EMIS GP Practice has three test results where the second record has no date$")
     fun givenTheEmisGpPracticeHasATestResultWithNoDate() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData.getThreeTestResultsWhereTheSecondRecordHasNoDate())
         }
@@ -112,7 +112,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Given("^the GP Practice has a single test result with multiple child values with ranges for EMIS$")
     fun givenTheGpPracticeHasTwoTestResultsWithMultipleChildValuesWithRangesFor() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData
                             .getTestResultWithChildValueCountAndRangePresent(NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_TWO))
@@ -121,7 +121,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Given("^the GP Practice has a single test result with single child value with A range for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithRangesFor() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData
                             .getTestResultWithChildValueCountAndRangePresent(NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ONE))
@@ -131,7 +131,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
     @Given("^the GP Practice has test results enabled " +
             "and a single test result exists with no child values or range for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRangeFor() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData
                             .getTestResultWithChildValueCountAndRangePresent(
@@ -141,7 +141,7 @@ open class V1MedicalRecordTestResultsStepDefinitions {
 
     @Given("^the GP Practice has a single test result with no child values and range for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesAndARangeFor() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(TestResultsData
                             .getTestResultWithChildValueCountAndRangePresent(NUMBER_OF_CHILD_VALUES_COUNT_EQUALS_ZERO))

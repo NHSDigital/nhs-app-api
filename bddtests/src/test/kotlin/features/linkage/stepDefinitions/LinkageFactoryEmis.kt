@@ -81,7 +81,7 @@ class LinkageFactoryEmis : LinkageFactory(Supplier.EMIS) {
 
 
         if (response != null) {
-            mockingClient.forEmis {
+            mockingClient.forEmis.mock {
                 response(authentication.linkageKeyPOSTRequest(
                         AddNhsUserRequest(
                                 linkageInformationFacade.odsCode,
@@ -96,7 +96,7 @@ class LinkageFactoryEmis : LinkageFactory(Supplier.EMIS) {
     private fun successfulPost(linkageInformationFacade: LinkageInformationFacade):
             (EmisLinkagePOSTBuilder) -> Mapping {
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade))
                     .respondWithSuccessfullyRetrievedFirstTime(verificationResponse(linkageInformationFacade))
         }
@@ -149,13 +149,13 @@ class LinkageFactoryEmis : LinkageFactory(Supplier.EMIS) {
         // end user session setup always required
         endUserSessionSetup()
         val response = responseFromMap(linkageToGetRequestResponse, linkageResult)
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             response!!(authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade)))
         }
     }
 
     private fun endUserSessionSetup() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.endUserSessionRequest().respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
         }
     }

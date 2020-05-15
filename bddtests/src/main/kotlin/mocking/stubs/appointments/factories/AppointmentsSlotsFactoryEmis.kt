@@ -35,7 +35,7 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory(Supplier.EMIS) {
         assertTrue("Appointment message incorrectly being stubbed: $appointmentsMessage.",
                 guidanceMessageOut!!.isNotEmpty() == appointmentsMessage!!.isNotEmpty())
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             practiceSettingsRequest(ProxySerenityHelpers.getPatientOrProxy())
                     .respondWithSuccess(settingsResponse)
         }
@@ -51,12 +51,12 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory(Supplier.EMIS) {
         appointmentMapper.requestMapping {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             mapping(appointments.appointmentSlotsMetaRequest(patient, startDate, endDate))
         }
         val messages = Messages(appointmentsMessage = null)
         val settingsResponse = SettingsResponseModel(messages = messages)
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             practiceSettingsRequest(patient)
                     .respondWithSuccess(settingsResponse)
         }
@@ -74,7 +74,7 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory(Supplier.EMIS) {
 
     override fun generateSpecificUserData() {
         val patient = ProxySerenityHelpers.getPatientOrProxy()
-        mockingClient.forEmis { authentication.demographicsRequest(patient)
+        mockingClient.forEmis.mock { authentication.demographicsRequest(patient)
                 .respondWithSuccess(EmisDemographicsResponse(patient, arrayOf())) }
     }
 }

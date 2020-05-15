@@ -20,7 +20,7 @@ class ViewDetailedTestResultsStubsTpp(private val mockingClient :MockingClient) 
                         }
 
         mapTppTestResultsStubs.listResponse().forEach { scenario ->
-            mockingClient.forTpp { scenario.getResponse(myRecord.testResultsDetailRequest(scenario.forMatcher,
+            mockingClient.forTpp.mock { scenario.getResponse(myRecord.testResultsDetailRequest(scenario.forMatcher,
                     TEST_RESULT_ID)) }
         }
     }

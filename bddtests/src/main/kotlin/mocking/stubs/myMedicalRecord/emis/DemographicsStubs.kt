@@ -31,7 +31,7 @@ class DemographicsStubs (private val mockingClient: MockingClient) {
                         }
 
         mapEMISConsultationsRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(myRecord.demographicsRequest(scenario.forMatcher)) }
+            mockingClient.forEmis.mock { scenario.getResponse(myRecord.demographicsRequest(scenario.forMatcher)) }
         }
     }
 }

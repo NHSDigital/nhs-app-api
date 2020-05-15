@@ -18,7 +18,7 @@ class PatientPracticeConversationStubs(private val mockingClient: MockingClient)
                             builder.respondWithSuccess(messagesDataLoader)
                         }
         mapEMISPatientPracticeMessageRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(messaging.viewConversationRequest(scenario.forMatcher)) }
+            mockingClient.forEmis.mock { scenario.getResponse(messaging.viewConversationRequest(scenario.forMatcher)) }
         }
     }
 }

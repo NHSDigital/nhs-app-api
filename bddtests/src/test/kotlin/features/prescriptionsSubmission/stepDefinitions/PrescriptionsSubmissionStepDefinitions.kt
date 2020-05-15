@@ -130,7 +130,7 @@ open class PrescriptionsSubmissionStepDefinitions {
             "when submitting the repeat prescription")
     fun emisRespondsWithErrorIndicatingAnIncludedCourseHasAlreadyBeenOrderedWhenSubmittingRepeatPrescription() {
         val currentPatient = SerenityHelpers.getPatient()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithAlreadyAPendingRequestInTheLast30Days()
         }
@@ -139,7 +139,7 @@ open class PrescriptionsSubmissionStepDefinitions {
     @Given("^Emis responds with an error indicating a course is invalid")
     fun emisRespondsWithAnErrorIndicatingACourseIsInvalid() {
         val currentPatient = SerenityHelpers.getPatient()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithBadRequestErrorIndicatingACourseIsInvalid()
         }
@@ -148,7 +148,7 @@ open class PrescriptionsSubmissionStepDefinitions {
     @Given("^EMIS responds with a Created success code when submitting the repeat prescription")
     fun emisRespondsWithACreatedSuccessCodeWhenSubmittingRepeatPrescription() {
         val currentPatient = SerenityHelpers.getPatient()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithCreated()
         }
@@ -158,7 +158,7 @@ open class PrescriptionsSubmissionStepDefinitions {
             "prescription")
     fun emisRespondsWithAnErrorIndicatingPrescriptionsIsNotEnabled() {
         val currentPatient = SerenityHelpers.getPatient()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithPrescriptionsNotEnabled()
         }
@@ -167,7 +167,7 @@ open class PrescriptionsSubmissionStepDefinitions {
     @Given("^EMIS takes longer than 30 seconds to respond when a repeat prescription is submitted")
     fun emisTakesTooLongToRespondWhenARepeatPrescriptionIsSubmitted() {
         val currentPatient = SerenityHelpers.getPatient()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithCreated().delayedBy(Duration.ofSeconds(WAIT_TIME_GREATER_THAN_THIRTY_SECS))
         }
@@ -236,7 +236,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         when (currentProvider) {
             Supplier.EMIS -> {
                 val data = prescriptionLoader.data as PrescriptionRequestsGetResponse
-                mockingClient.forEmis {
+                mockingClient.forEmis.mock {
                     prescriptions.prescriptionsRequest(currentPatient)
                             .respondWithSuccess(data)
                             .inScenario(scenarioTitle)
@@ -249,7 +249,7 @@ open class PrescriptionsSubmissionStepDefinitions {
                 map[Scenario.STARTED] = data
             }
             Supplier.TPP -> {
-                mockingClient.forTpp {
+                mockingClient.forTpp.mock {
                     prescriptions.listRepeatMedication(currentPatient)
                             .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
                 }
@@ -300,7 +300,7 @@ open class PrescriptionsSubmissionStepDefinitions {
     @Then("EMIS responds with an unknown internal server error when a repeat prescription is submitted")
     fun emisRespondsWithAnUnknownInternalServerErrorWhenARepeatPrescriptionIsSubmitted() {
         val currentPatient = SerenityHelpers.getPatient()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithGenericInternalServerError()
         }

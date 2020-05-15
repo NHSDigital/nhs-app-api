@@ -56,7 +56,7 @@ open class V1MedicalRecordImmunisationStepDefinitions {
 
     @Given("^the EMIS GP Practice has two immunisation results where the first record has no date$")
     fun givenTheEmisGpPracticeHasAnImmunisationResultWithNoDate() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.immunisationsRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(ImmunisationsData.getTwoImmunisationResultsWhereTheFirstRecordHasNoDate())
         }

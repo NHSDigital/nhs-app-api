@@ -23,7 +23,7 @@ class AppointmentsSlotsFactoryTpp : AppointmentsSlotsFactory(Supplier.TPP) {
         Serenity.setSessionVariable(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
                 .to(guidanceMessage)
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             requestMessages
                     .appointmentMessageRequest(ProxySerenityHelpers.getPatientOrProxy())
                     .respondWithSuccess(guidanceMessage)

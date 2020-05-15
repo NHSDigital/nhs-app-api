@@ -80,19 +80,16 @@ class PrescriptionsDataSetup {
         fun disabled(currentPatient: Patient, currentProvider: Supplier) {
             when (currentProvider) {
                 Supplier.EMIS -> {
-                    mockingClient
-                            .forEmis {
+                    mockingClient.forEmis.mock {
                                 prescriptions.prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
                             }
 
-                    mockingClient
-                            .forEmis {
+                    mockingClient.forEmis.mock {
                                 prescriptions.coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
                             }
                 }
                 Supplier.TPP -> {
-                    mockingClient
-                            .forTpp {
+                    mockingClient.forTpp.mock {
                                 prescriptions.listRepeatMedication(currentPatient)
                                         .respondWithError(
                                                 Error(ErrorResponseCodeTpp.NO_ACCESS,

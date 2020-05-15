@@ -9,7 +9,7 @@ import worker.models.myrecord.ConsultationItem
 class ConsultationsFactoryTpp: ConsultationsFactory() {
 
     override fun disabled(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(patient.tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                             "You don&apos;t have access to this online service. " +
@@ -21,7 +21,7 @@ class ConsultationsFactoryTpp: ConsultationsFactory() {
     }
 
     override fun enabledWithRecords(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
         }
@@ -32,7 +32,7 @@ class ConsultationsFactoryTpp: ConsultationsFactory() {
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(patient.tppUserSession!!)
                     .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
 
@@ -40,14 +40,14 @@ class ConsultationsFactoryTpp: ConsultationsFactory() {
     }
 
     override fun errorRetrieving(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(patient.tppUserSession!!)
                     .respondWithServiceNotAvailableException()
         }
     }
 
     override fun recordWithBadConsultationsData(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.patientRecordRequest(patient.tppUserSession!!)
                     .respondWithCorruptedContent()
         }

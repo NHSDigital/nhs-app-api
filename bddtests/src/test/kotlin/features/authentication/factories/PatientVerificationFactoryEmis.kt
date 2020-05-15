@@ -40,9 +40,10 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) 
                 endUserSessionId = "zVGrzHH7YUPeEBRk1nat1D"
         )
 
-        mockingClient.forEmis { authentication.sessionRequest(patient).respondWithUserNotRegistered() }
-        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock { authentication.sessionRequest(patient).respondWithUserNotRegistered() }
+        mockingClient.forEmis.mock { authentication.endUserSessionRequest()
+                .respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis.mock {
             myRecord.demographicsRequest(patient).respondWithSuccess(patient,
                     patientIdentifiers = arrayOf(
                             PatientIdentifier(
@@ -76,15 +77,15 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) 
                     identifierType = IdentifierType.NhsNumber)
         }.toTypedArray()
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.endUserSessionRequest()
                     .respondWithSuccess(patient.endUserSessionId)
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.sessionRequest(patient)
                     .respondWithSuccess(patient, AssociationType.Self)
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.demographicsRequest(patient)
                     .respondWithSuccess(patient, nhsNumbers)
         }
@@ -97,14 +98,14 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) 
 
     override fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String) {
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             practiceSettingsRequest(patient).respondWith(
                     HttpStatus.SC_OK, resolve = {}, milliSecondDelay = 0)
         }
 
         when (expectedResponse) {
             "Success" -> {
-                mockingClient.forEmis {
+                mockingClient.forEmis.mock {
                     authentication.demographicsRequest(patient).respondWithSuccess(patient,
                             patientIdentifiers = arrayOf(
                                     PatientIdentifier(
@@ -116,21 +117,21 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) 
                 }
             }
             "bad gateway" -> {
-                mockingClient.forEmis {
+                mockingClient.forEmis.mock {
                     authentication.demographicsRequest(patient)
                             .respondWithExceptionWhenNotEnabled()
                             .whenScenarioStateIs("sessionStarted")
                 }
             }
             "gateway timeout" -> {
-                mockingClient.forEmis {
+                mockingClient.forEmis.mock {
                     authentication.demographicsRequest(patient).respondWith(
                             HttpStatus.SC_OK, resolve = {}, milliSecondDelay = 0)
                             .delayedBy(seconds = Duration.ofSeconds(REQUEST_DELAY))
                 }
             }
             "unauthorized" -> {
-                mockingClient.forEmis {
+                mockingClient.forEmis.mock {
                     authentication.demographicsRequest(patient)
                             .respondWith(HttpStatus.SC_UNAUTHORIZED,
                                     resolve = {}, milliSecondDelay = 0)
@@ -145,7 +146,7 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory(Supplier.EMIS) 
 
     override fun gpSystemNotAvailable() {
         val patient = EmisMockDefaults.patientEmis
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.endUserSessionRequest()
                     .respondWithServiceUnavailable()
         }

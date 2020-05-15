@@ -54,12 +54,12 @@ open class V1MedicalRecordAllergiesStepDefinitions {
 
         when (gpSystem) {
             Supplier.EMIS ->
-                mockingClient.forEmis {
+                mockingClient.forEmis.mock {
                     myRecord.allergiesRequest(patient)
                             .respondWithSuccess(AllergiesData.getEmisAllergyRecordsWithDifferentDateParts())
                 }
             Supplier.TPP -> {
-                mockingClient.forTpp {
+                mockingClient.forTpp.mock {
                     myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                             .respondWithSuccess(AllergiesData.getTppAllergiesData(NUMBER_OF_ALLERGIES))
                 }
@@ -70,7 +70,7 @@ open class V1MedicalRecordAllergiesStepDefinitions {
 
     @Given("^the EMIS GP Practice has two allergies results where the first record has no date$")
     fun givenTheEMISGPPracticeHasTwoAllergiesResultsWhereTheFirstRecordHasNoDate() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.allergiesRequest(SerenityHelpers.getPatient())
                     .respondWithSuccess(AllergiesData.getEmisAllergyRecordsWhereTheFirstRecordHasNoEffectiveDate())
         }

@@ -18,7 +18,8 @@ class PatientPracticeDeleteConversationStubs(private val mockingClient: MockingC
                             builder.respondWithSuccess(messageDeleteResponseLoader)
                         }
         mapEMISPatientPracticeMessageDeleteRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(messaging.deleteConversationRequest(scenario.forMatcher)) }
+            mockingClient.forEmis.mock {
+                scenario.getResponse(messaging.deleteConversationRequest(scenario.forMatcher)) }
         }
     }
 }

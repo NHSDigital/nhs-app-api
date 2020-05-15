@@ -40,7 +40,7 @@ class TestResultsStubs(private val mockingClient: MockingClient) {
                         }
 
         mapEMISTestResultsStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(myRecord.testResultsRequest(scenario.forMatcher)) }
+            mockingClient.forEmis.mock { scenario.getResponse(myRecord.testResultsRequest(scenario.forMatcher)) }
         }
     }
 }

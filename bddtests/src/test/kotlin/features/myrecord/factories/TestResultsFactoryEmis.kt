@@ -7,35 +7,35 @@ import worker.models.myrecord.TestResultItem
 private const val NUMBER_OF_TEST_RESULTS_EQUALS_SIX = 6
 class TestResultsFactoryEmis : TestResultsFactory(){
     override fun disabled(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(patient)
                     .respondWithExceptionWhenNotEnabled()
         }
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(patient)
                     .respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
         }
     }
 
     override fun enabledWithRecords(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(patient)
                     .respondWithSuccess(TestResultsData.getTestResultsForEmis(NUMBER_OF_TEST_RESULTS_EQUALS_SIX))
         }
     }
 
     override fun errorRetrieving(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(patient)
                     .respondWithNonDataAccessException()
         }
     }
 
     override fun respondWithACorruptedResponse(patient: Patient){
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(patient)
                     .respondWithCorruptedContent("Bad Data")
         }
@@ -43,7 +43,7 @@ class TestResultsFactoryEmis : TestResultsFactory(){
 
     override fun noAccess(patient: Patient) {
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(patient)
                     .respondWithExceptionWhenNotEnabled()
         }

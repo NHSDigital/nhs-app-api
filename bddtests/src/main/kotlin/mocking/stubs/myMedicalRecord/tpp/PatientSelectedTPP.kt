@@ -22,7 +22,7 @@ class PatientSelectedTPP(private val mockingClient: MockingClient)
                         }
 
         mapTPPAllergiesRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forTpp { scenario.getResponse(TppPatientSelectedBuilder(scenario.forMatcher)) }
+            mockingClient.forTpp.mock { scenario.getResponse(TppPatientSelectedBuilder(scenario.forMatcher)) }
         }
 
     }

@@ -53,7 +53,7 @@ class TppSessionCreateJourneyFactory : SessionCreateJourneyFactory() {
     }
 
     fun createAuthenticateRequest(patient: Patient) {
-        client.forTpp {
+        client.forTpp.mock {
             authentication.authenticateRequest(authenticateRequest(patient))
                     .respondWithSuccess(authenticationReply(patient))
         }
@@ -61,7 +61,7 @@ class TppSessionCreateJourneyFactory : SessionCreateJourneyFactory() {
 
     override fun createFor(patient: Patient, defaultPracticeSettings:Boolean) {
         createAuthenticateRequest(patient)
-        client.forTpp { authentication.logOffRequest().respondWithSuccess() }
+        client.forTpp.mock { authentication.logOffRequest().respondWithSuccess() }
     }
 
     private fun createPerson(patient: Patient): Person {

@@ -8,14 +8,14 @@ import worker.models.myrecord.Date
 class AllergiesFactoryEmis: AllergiesFactory() {
 
     override fun disabled(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.allergiesRequest(patient)
                     .respondWithExceptionWhenNotEnabled()
         }
     }
 
     override fun enabledWithRecords(patient: Patient, count: Int) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.allergiesRequest(patient)
                     .respondWithSuccess(AllergiesData.getEmisAllergiesData(count))
         }
@@ -29,7 +29,7 @@ class AllergiesFactoryEmis: AllergiesFactory() {
     }
 
     override fun respondWithCorruptedContent(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.allergiesRequest(patient)
                     .respondWithCorruptedContent()
         }

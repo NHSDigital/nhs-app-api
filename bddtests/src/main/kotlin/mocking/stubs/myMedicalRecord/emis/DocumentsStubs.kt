@@ -31,7 +31,7 @@ class DocumentsStubs (private val mockingClient: MockingClient) {
                         }
 
         mapEMISDocumentsStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(myRecord.documentsRequest(scenario.forMatcher)) }
+            mockingClient.forEmis.mock { scenario.getResponse(myRecord.documentsRequest(scenario.forMatcher)) }
         }
     }
 }

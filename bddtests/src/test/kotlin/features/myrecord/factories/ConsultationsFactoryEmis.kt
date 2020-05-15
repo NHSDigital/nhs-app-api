@@ -7,13 +7,13 @@ import worker.models.myrecord.ConsultationItem
 class ConsultationsFactoryEmis: ConsultationsFactory() {
 
     override fun disabled(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.consultationsRequest(patient).respondWithExceptionWhenNotEnabled()
         }
     }
 
     override fun enabledWithRecords(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.consultationsRequest(patient)
                     .respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
         }
@@ -24,20 +24,20 @@ class ConsultationsFactoryEmis: ConsultationsFactory() {
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.consultationsRequest(patient)
                     .respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
         }
     }
 
     override fun errorRetrieving(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.consultationsRequest(patient).respondWithNonDataAccessException()
         }
     }
 
     override fun recordWithBadConsultationsData(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.consultationsRequest(patient)
                     .respondWithCorruptedContent("Bad Data")
         }

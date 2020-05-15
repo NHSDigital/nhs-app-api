@@ -9,7 +9,7 @@ import worker.models.myrecord.AllergyItem
 class AllergiesFactoryTpp: AllergiesFactory() {
 
     override fun disabled(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                             "Requested record access is disabled by the practice",
@@ -20,14 +20,14 @@ class AllergiesFactoryTpp: AllergiesFactory() {
 
     override fun enabledWithRecords(patient: Patient, count: Int) {
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithSuccess(AllergiesData.getTppAllergiesData(count))
         }
     }
 
     override fun respondWithCorruptedContent(patient: Patient) {
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithCorruptedContent()
         }

@@ -68,7 +68,7 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
                 person =  mutableListOf<Person>()
         )
 
-        mockingClient.forTpp { authentication.authenticateRequest(authenticateRequest)
+        mockingClient.forTpp.mock { authentication.authenticateRequest(authenticateRequest)
                 .respondWithSuccess(tppAuthenticateReplyResponse) }
 
 
@@ -92,7 +92,7 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
                 uuid = "47788ae4-10e9-4f2c-9043-e08d285b67b6"
         )
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.authenticateRequest(
                     TppMockDefaults.tppAuthenticateRequest(SerenityHelpers.getPatient()))
                 .respondWithError(tppNonExistingAccountIdErrorResponse) }
@@ -116,13 +116,13 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
     override fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String) {
         when (expectedResponse) {
             "Success" -> {
-                mockingClient.forTpp {
+                mockingClient.forTpp.mock {
                     authentication.patientSelectedPost(patient.tppUserSession!!)
                             .respondWithSuccess(DemographicsData.getTppDemographicsData(patient))
                 }
             }
             "bad gateway" -> {
-                mockingClient.forTpp {
+                mockingClient.forTpp.mock {
                     authentication.patientSelectedPost(patient.tppUserSession!!)
                             .respondWithError(Error(ErrorResponseCodeTpp.UNKNOWN_ERROR,
                                     "Error occurred when trying to extend session",
@@ -130,7 +130,7 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
                 }
             }
             "gateway timeout" -> {
-                mockingClient.forTpp {
+                mockingClient.forTpp.mock {
                     authentication.patientSelectedPost(patient.tppUserSession!!)
                             .respondWithSuccess(DemographicsData.getTppDemographicsData(patient))
                             .delayedBy(Duration.ofSeconds(REQUEST_DELAY))
@@ -138,7 +138,7 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
                 }
             }
             "unauthorized" -> {
-                mockingClient.forTpp {
+                mockingClient.forTpp.mock {
                     authentication.patientSelectedPost(patient.tppUserSession!!)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                                     "Not Authorized to return record",
@@ -154,7 +154,7 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory(Supplier.TPP){
 
     override fun gpSystemNotAvailable() {
         val patient = SerenityHelpers.getPatient()
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.authenticateRequest(Authenticate())
                     .respondWithServiceUnavailable()
         }

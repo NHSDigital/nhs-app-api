@@ -16,71 +16,71 @@ import mocking.microtest.myRecord.TestResultOptions
 class MyRecordFactoryEmis: MyRecordFactory() {
 
     override fun disabled(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.allergiesRequest(patient).respondWithExceptionWhenNotEnabled()
         }
     }
 
     override fun disabledForProxy(patient: Patient, actingOnBehalfOf: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecordProxy.allergiesRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecordProxy.immunisationsRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecordProxy.testResultsRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecordProxy.problemsRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecordProxy.consultationsRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecordProxy.medicationsRequest(patient, actingOnBehalfOf).responseErrorForbiddenService()
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecordProxy.documentsRequestAsProxy(patient, actingOnBehalfOf).responseErrorForbiddenService()
         }
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(patient)
                     .respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.immunisationsRequest(patient)
                     .respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.allergiesRequest(patient).respondWithSuccess(AllergiesData.getEmisDefaultAllergyModel())
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.medicationsRequest(patient)
                     .respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.problemsRequest(patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.consultationsRequest(patient)
                     .respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentsRequest(patient)
                     .respondWithSuccess(DocumentsData.getNoDocumentData())
         }
@@ -96,37 +96,37 @@ class MyRecordFactoryEmis: MyRecordFactory() {
     }
 
     override fun enabledWithAllRecords(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.testResultsRequest(patient)
                     .respondWithSuccess(TestResultsData.getTestResultsForEmis(NUMBER_OF_TEST_RESULT_RECORDS))
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.immunisationsRequest(patient)
                     .respondWithSuccess(ImmunisationsData.getValidImmunisationsData())
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.allergiesRequest(patient)
                     .respondWithSuccess(AllergiesData.getEmisAllergiesData(NUMBER_OF_ALLERGY_RECORDS))
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.medicationsRequest(patient)
                     .respondWithSuccess(MedicationsData.getEmisMedicationData())
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.problemsRequest(patient)
                     .respondWithSuccess(ProblemsData.getProblemsData())
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.consultationsRequest(patient)
                     .respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentsRequest(patient)
                     .respondWithSuccess(DocumentsData.getDefaultDocumentsData())
         }

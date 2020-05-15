@@ -22,8 +22,7 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
         endUserSessionRequest()
         sessionRequest()
         demographicsRequest()
-        mockingClient
-                .forEmis {
+        mockingClient.forEmis.mock {
                     authentication.meApplicationsRequest(patient,
                             LinkApplicationRequestModel(
                                     surname = patient.name.surname,
@@ -39,18 +38,19 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
     }
 
     private fun endUserSessionRequest() {
-        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis.mock {
+            authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
     }
 
     private fun sessionRequest() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.sessionRequest(patient)
                     .respondWithSuccess(patient, associationType = AssociationType.Self)
         }
     }
 
     private fun demographicsRequest() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.demographicsRequest(patient)
                     .respondWithSuccess(patient,
                             patientIdentifiers =
@@ -68,8 +68,7 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
         endUserSessionRequest()
         sessionRequest()
         demographicsRequest()
-        mockingClient
-                .forEmis {
+        mockingClient.forEmis.mock {
                     authentication.meApplicationsRequest(patient,
                             LinkApplicationRequestModel(
                                     surname = linkageFacade.surname,
@@ -90,7 +89,7 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
                             action: (IErrorMappingBuilder) -> Mapping) {
         // end user session setup always required
         endUserSessionSetup()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             action(authentication.linkageKeyPOSTRequest(
                     AddNhsUserRequest(
                             linkageInformationFacade.odsCode,
@@ -104,14 +103,14 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
                             action: (IErrorMappingBuilder) -> Mapping) {
         // end user session setup always required
         endUserSessionSetup()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             action(authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade)))
         }
     }
 
     override fun successfulLinkageGet(linkageInformationFacade: LinkageInformationFacade) {
         endUserSessionSetup()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade))
                     .respondWithSuccessfullyRetrieved(verificationResponse(linkageInformationFacade))
         }
@@ -119,7 +118,7 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
 
     fun successfulGetFirstTime(linkageInformationFacade: LinkageInformationFacade) {
         endUserSessionSetup()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade))
                     .respondWithSuccessfullyRetrievedFirstTime(verificationResponse(linkageInformationFacade))
         }
@@ -127,7 +126,7 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
 
     override fun successfulLinkagePost(linkageInformationFacade: LinkageInformationFacade) {
         endUserSessionSetup()
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.linkageKeyPOSTRequest(
                     AddNhsUserRequest(
                             linkageInformationFacade.odsCode,
@@ -137,7 +136,7 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
                     .inScenario("LinkageCreation")
                     .willSetStateTo("Linkage key created")
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade))
                     .respondWithSuccessfullyRetrieved(verificationResponse(linkageInformationFacade))
                     .inScenario("LinkageCreation")
@@ -146,7 +145,7 @@ class Im1ConnectionV2FactoryEmis : Im1ConnectionV2Factory(Supplier.EMIS) {
     }
 
     private fun endUserSessionSetup() {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.endUserSessionRequest().respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
         }
     }

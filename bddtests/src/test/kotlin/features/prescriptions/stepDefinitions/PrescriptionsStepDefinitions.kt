@@ -186,8 +186,7 @@ open class PrescriptionsStepDefinitions {
                prescriptionLoaderConfig,
                 true)
 
-        mockingClient
-                .forEmis {
+        mockingClient.forEmis.mock {
                     prescriptions.prescriptionsRequest(
                             EmisMockDefaults.patientEmis,
                             expectedDefaultFromDate,
@@ -220,8 +219,7 @@ open class PrescriptionsStepDefinitions {
         when (currentProvider) {
             Supplier.EMIS -> {
 
-                mockingClient
-                        .forEmis {
+                mockingClient.forEmis.mock {
                             prescriptions.prescriptionsRequest(
                                     EmisMockDefaults.patientEmis,
                                     expectedDefaultFromDate,
@@ -231,8 +229,7 @@ open class PrescriptionsStepDefinitions {
             }
             Supplier.TPP -> {
 
-                mockingClient
-                        .forTpp {
+                mockingClient.forTpp.mock {
                             prescriptions.listRepeatMedication(currentPatient)
                                     .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
                         }
@@ -274,8 +271,7 @@ open class PrescriptionsStepDefinitions {
             }
         }
 
-        mockingClient
-                .forEmis {
+        mockingClient.forEmis.mock {
                     prescriptions.prescriptionsRequest(
                             EmisMockDefaults.patientEmis,
                             expectedDefaultFromDate, toDate)

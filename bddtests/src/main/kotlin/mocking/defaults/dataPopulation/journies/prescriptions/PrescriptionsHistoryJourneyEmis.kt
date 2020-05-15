@@ -19,8 +19,7 @@ class PrescriptionsHistoryJourneyEmis: PrescriptionsHistoryJourney() {
                 PrescriptionsData.loadPrescriptionsData(ONE_PRESCRIPTION, ONE_COURSE, ONE_REPEAT, true, false),
                 PrescriptionsData.loadPrescriptionsData(ONE_PRESCRIPTION, ONE_COURSE, ONE_REPEAT, false, false)
         )
-        client
-                .forEmis {
+        client.forEmis.mock {
                     prescriptions.prescriptionsRequest(patient)
                             .respondWithSuccess(PrescriptionsData.addResponses(prescriptionsToCreate))
                 }

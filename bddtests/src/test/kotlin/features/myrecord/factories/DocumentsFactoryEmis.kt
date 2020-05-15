@@ -17,14 +17,14 @@ private const val DATE_FOR_DOCUMENT_DAY = 18
 class DocumentsFactoryEmis: DocumentsFactory() {
 
     override fun disabled(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentsRequest(patient)
                 .respondWithExceptionWhenNotEnabled()
         }
     }
 
     override fun enabledWithNoDocuments(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentsRequest(EmisMockDefaults.patientEmis)
                 .respondWithSuccess(DocumentsData.getNoDocumentData())
         }
@@ -33,7 +33,7 @@ class DocumentsFactoryEmis: DocumentsFactory() {
     override fun enabledWithNullPageCount() {
         val documents = DocumentsData.getDefaultDocumentsData()
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentsRequest(EmisMockDefaults.patientEmis)
                     .respondWithNullPageCount()
         }
@@ -47,7 +47,7 @@ class DocumentsFactoryEmis: DocumentsFactory() {
     override fun enabledWithNullSize() {
         val documents = DocumentsData.getDefaultDocumentsData(hasSize = false)
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentsRequest(EmisMockDefaults.patientEmis)
                     .respondWithSuccess(documents)
         }
@@ -79,11 +79,11 @@ class DocumentsFactoryEmis: DocumentsFactory() {
             setSerenityVariable(SerenityVariable.UNAVAILABLE_DOCUMENT, unavailableDocument)
         }
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentsRequest(EmisMockDefaults.patientEmis)
                     .respondWithSuccess(documents)
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentRequest(EmisMockDefaults.patientEmis, availableDocument.id)
                     .respondWithSuccess(DocumentData.getDefaultDocumentData())
         }
@@ -101,11 +101,11 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         val availableDocument = expectedDocuments[0]
         setSerenityVariable(SerenityVariable.AVAILABLE_DOCUMENT, availableDocument)
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentsRequest(EmisMockDefaults.patientEmis)
                     .respondWithSuccess(documents)
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentRequest(EmisMockDefaults.patientEmis, availableDocument.id)
                     .respondWithSuccess(DocumentData.getDefaultDocumentData())
         }
@@ -128,11 +128,11 @@ class DocumentsFactoryEmis: DocumentsFactory() {
         val availableDocument = expectedDocuments[0]
         setSerenityVariable(SerenityVariable.AVAILABLE_DOCUMENT, availableDocument)
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentsRequest(EmisMockDefaults.patientEmis)
                     .respondWithSuccess(documents)
         }
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.documentRequest(EmisMockDefaults.patientEmis, availableDocument.id)
                     .respondWithSuccess(DocumentData.getDefaultDocumentData())
         }

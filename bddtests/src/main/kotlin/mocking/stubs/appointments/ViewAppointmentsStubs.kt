@@ -45,7 +45,8 @@ class ViewAppointmentsStubs(private val mockingClient: MockingClient) {
                                         .delayedBy(Duration.ofSeconds(TIMEOUT_DELAY)) }
 
         mapViewAppointmentStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis{ scenario.getResponse(appointments.viewMyAppointmentsRequest(scenario.forMatcher)) }
+            mockingClient.forEmis.mock{
+                scenario.getResponse(appointments.viewMyAppointmentsRequest(scenario.forMatcher)) }
         }
     }
 
@@ -59,9 +60,9 @@ class ViewAppointmentsStubs(private val mockingClient: MockingClient) {
                             builder.respondWithSuccess(appointmentsBody) }
 
         mapViewAppointmentStubs.listResponse().forEach { scenario ->
-            mockingClient.forTpp { scenario.getResponse(appointments.viewMyAppointmentsRequest(scenario.forMatcher,
+            mockingClient.forTpp.mock { scenario.getResponse(appointments.viewMyAppointmentsRequest(scenario.forMatcher,
                     IMyAppointmentsBuilder.AppointmentType.UPCOMING_ONLY)) }
-            mockingClient.forTpp { scenario.getResponse(appointments.viewMyAppointmentsRequest(scenario.forMatcher,
+            mockingClient.forTpp.mock { scenario.getResponse(appointments.viewMyAppointmentsRequest(scenario.forMatcher,
                     IMyAppointmentsBuilder.AppointmentType.PAST_ONLY))}
         }
         SerenitySessionSlotId.APPOINTMENTONE.set(CANCEL_APPOINTMENT_SLOT_ID)

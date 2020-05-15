@@ -14,7 +14,7 @@ class Im1ConnectionV2GetFactoryTpp : Im1ConnectionV2GetFactory(Supplier.TPP) {
                 errorCode,
                 "Mocked TPP Error"
         )
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.linkAccountRequest(patient).respondWithError(error, httpStatusCode)
         }
     }
@@ -35,7 +35,7 @@ class Im1ConnectionV2GetFactoryTpp : Im1ConnectionV2GetFactory(Supplier.TPP) {
                 )
         )
 
-        mockingClient.forTpp {
+        mockingClient.forTpp.mock {
             authentication.authenticateRequest(authenticateRequest)
                     .respondWithError(httpStatusCode, errorCode, message)
         }

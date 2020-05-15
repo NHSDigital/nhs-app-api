@@ -13,7 +13,7 @@ class AppointmentsBookingFactoryEmis : AppointmentsBookingFactory(Supplier.EMIS)
     override fun requiresBookingReason(boolean: Boolean) {
         val inputRequirements = InputRequirements(appointmentBookingReason = NecessityOption.MANDATORY.text)
         val settingsResponse = SettingsResponseModel(inputRequirements = inputRequirements)
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             practiceSettingsRequest(ProxySerenityHelpers.getPatientOrProxy())
                     .respondWithSuccess(settingsResponse)
         }

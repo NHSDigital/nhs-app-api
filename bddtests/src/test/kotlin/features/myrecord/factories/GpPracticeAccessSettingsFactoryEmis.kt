@@ -7,7 +7,7 @@ import models.Patient
 
 class GpPracticeAccessSettingsFactoryEmis: GpPracticeAccessSettingsFactory() {
     override fun enabled(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.meSettingsRequest(patient = patient)
                     .respondWithSuccess(
                             MeSettingsResponseModel(
@@ -24,7 +24,7 @@ class GpPracticeAccessSettingsFactoryEmis: GpPracticeAccessSettingsFactory() {
             callingPatient: Patient,
             actingOnBehalfOf: Patient,
             featuresEnabled: FeaturesEnabledFacade) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             authentication.meSettingsRequest(
                     patient = actingOnBehalfOf,
                     sessionId = callingPatient.sessionId,

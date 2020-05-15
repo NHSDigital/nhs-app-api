@@ -8,42 +8,42 @@ class ProblemsFactoryEmis : ProblemsFactory(){
 
     override fun disabled(patient: Patient) {
 
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.problemsRequest(patient)
                     .respondWithExceptionWhenNotEnabled()
         }
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.problemsRequest(patient)
                     .respondWithSuccess(ProblemsData.getDefaultProblemModel())
         }
     }
 
     override fun enabledWithRecords(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.problemsRequest(patient)
                     .respondWithSuccess(ProblemsData.getProblemsData())
         }
     }
 
     override fun errorRetrieving(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.problemsRequest(patient)
                     .respondWithNonDataAccessException()
         }
     }
 
     override fun badDataResponse(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.problemsRequest(patient)
                     .respondWithCorruptedContent("Bad Data")
         }
     }
 
     override fun noAccess(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.problemsRequest(patient)
                     .respondWithExceptionWhenNotEnabled()
         }
@@ -54,7 +54,7 @@ class ProblemsFactoryEmis : ProblemsFactory(){
     }
 
     override fun secondProblemHasNoDate(patient: Patient) {
-        mockingClient.forEmis {
+        mockingClient.forEmis.mock {
             myRecord.problemsRequest(patient)
                     .respondWithSuccess(ProblemsData.getEmisProblemRecordsWhereTheSecondRecordHasNoEffectiveDate())
         }

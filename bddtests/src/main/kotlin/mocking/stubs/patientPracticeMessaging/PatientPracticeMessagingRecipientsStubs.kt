@@ -15,7 +15,7 @@ class PatientPracticeMessagingRecipientsStubs(private val mockingClient: Mocking
             builder -> builder.respondWithSuccess(recipientsData)
         }
         stubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis {
+            mockingClient.forEmis.mock {
                 scenario.getResponse(messaging.getRecipientsRequest(scenario.forMatcher))
             }
         }
