@@ -1,6 +1,5 @@
 package features.authentication.stepDefinitions
 
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -16,11 +15,11 @@ import features.sharedSteps.BrowserSteps
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.assertSingleElementPresent
-import pages.navigation.NavBarNative
 import pages.AppointmentHubPage
 import pages.HybridPageElement
 import pages.PrescriptionsHubPage
+import pages.assertSingleElementPresent
+import pages.navigation.NavBarNative
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -146,14 +145,7 @@ class HomePageStepDefinitions {
         }
     }
 
-    @And("I see the medical record page for EMIS")
-    fun iSeeMedicalRecordForEmis() {
-        homeSteps.homePage.viewMedicalRecordLink.click()
-        recordWarning.thenISeeRecordWarningPageOpened()
-        navBar.isHighlighted(NavBarNative.NavBarType.MY_RECORD)
-    }
-
-    @And("I do not see the home page links")
+    @Then("I do not see the home page links")
     fun iDoNotSeeTheHomePageLinks() {
         homeSteps.homePage.assertHomePageLinksNotPresent()
     }

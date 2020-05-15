@@ -1,6 +1,5 @@
 package features.linkedProfiles.stepDefinitions
 
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
@@ -33,7 +32,7 @@ class SwitchProfileStepDefinitions {
         switchProfilePage.isLoaded(selectedPatient.profile.formattedFullName())
     }
 
-    @And("^the correct proxy user details are displayed$")
+    @Then("^the correct proxy user details are displayed$")
     fun correctProxyUserDetailsAreDisplayed() {
         val displayedProxyDetails = switchProfilePage.getDisplayedProxyDetails()
         checkDisplayedValuesAreCorrect(displayedProxyDetails)

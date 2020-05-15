@@ -1,6 +1,5 @@
 package features.nominatedPharmacy.stepDefinitions
 
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -12,13 +11,13 @@ import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationReply
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.nominatedPharmacy.ConfirmOnlineNominatedPharmacyPage
+import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
+import pages.nominatedPharmacy.NominatedPharmacyDspInterruptPage
+import pages.nominatedPharmacy.NominatedPharmacyOnlineOnlyChoicesPage
 import pages.nominatedPharmacy.NominatedPharmacyOnlineOnlySearchPage
 import pages.nominatedPharmacy.NominatedPharmacyResultsPage
-import pages.nominatedPharmacy.NominatedPharmacyChooseTypePage
-import pages.nominatedPharmacy.NominatedPharmacyOnlineOnlyChoicesPage
-import pages.nominatedPharmacy.ConfirmOnlineNominatedPharmacyPage
 import pages.nominatedPharmacy.OnlineNominatedPharmacyChangeSuccessPage
-import pages.nominatedPharmacy.NominatedPharmacyDspInterruptPage
 import pages.text
 import utils.getOrFail
 import utils.set
@@ -83,6 +82,33 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
                 .getOrFail<NhsAzureSearchOrganisationItem>()
         nominatedPharmacyDataSetupSteps.setupWiremockForNominatedPharmacyPostUpdate("P1", sessionData)
         nominatedPharmacyOnlineConfirmPage.confirmButton.click()
+    }
+
+    @When("^I click on the DSP Interrupt Prescription Home link$")
+    fun iClickTheDspInterruptPrescriptionHomeLink() {
+        nominatedPharmacyDspInterruptPage.prescriptionsHomeLink.click()
+    }
+
+    @When("^I click on item (\\d+) pharmacy from the list of online pharmacies$")
+    fun iClickOnAPharmacyFromTheListOfOnlinePharmacies(positionInTheList: Int) {
+        val index = positionInTheList - 1
+
+        val clickedOnlinePharmacy = nominatedPharmacyResultsPage.getOnlinePharmacies()[index]
+        // Finds all of the search results that are displayed on screen
+        val sessionData = NominatedPharmacySerenityHelpers
+                .SEARCH_RESULTS
+                .getOrFail<NhsAzureSearchOrganisationReply>().value
+
+        // Does a comparison on the sessionData and populates the SerenityHelper with the correct
+        // pharmacy result based on pharmacyName matching
+        val result = (sessionData.find { it.OrganisationName.equals(clickedOnlinePharmacy.pharmacyName)})
+        if (result != null) {
+            NominatedPharmacySerenityHelpers.PHARMACY_TO_BE_NOMINATED.set(result)
+        } else {
+            Assert.fail("Selected pharmacy not found in the session data")
+        }
+        //Performs click action on the pharmacy result to navigate to next page in flow
+        nominatedPharmacyResultsPage.selectPharmacyAtIndex(index)
     }
 
     @Then("^I see confirm nominated page with selected online pharmacy details$")
@@ -224,33 +250,6 @@ class NominatedPharmacyOnlineOnlyStepDefinitions {
     @Then("^I see the dsp interrupt page is loaded$")
     fun iSeeDspInterruptPageIsLoaded() {
         nominatedPharmacyDspInterruptPage.isLoaded()
-    }
-
-    @And("^I click on the DSP Interrupt Prescription Home link$")
-    fun iClickTheDspInterruptPrescriptionHomeLink() {
-        nominatedPharmacyDspInterruptPage.prescriptionsHomeLink.click()
-    }
-
-    @When("^I click on item (\\d+) pharmacy from the list of online pharmacies$")
-    fun iClickOnAPharmacyFromTheListOfOnlinePharmacies(positionInTheList: Int) {
-        val index = positionInTheList - 1
-
-        val clickedOnlinePharmacy = nominatedPharmacyResultsPage.getOnlinePharmacies()[index]
-        // Finds all of the search results that are displayed on screen
-        val sessionData = NominatedPharmacySerenityHelpers
-                .SEARCH_RESULTS
-                .getOrFail<NhsAzureSearchOrganisationReply>().value
-
-        // Does a comparison on the sessionData and populates the SerenityHelper with the correct
-        // pharmacy result based on pharmacyName matching
-        val result = (sessionData.find { it.OrganisationName.equals(clickedOnlinePharmacy.pharmacyName)})
-        if (result != null) {
-            NominatedPharmacySerenityHelpers.PHARMACY_TO_BE_NOMINATED.set(result)
-        } else {
-            Assert.fail("Selected pharmacy not found in the session data")
-        }
-        //Performs click action on the pharmacy result to navigate to next page in flow
-        nominatedPharmacyResultsPage.selectPharmacyAtIndex(index)
     }
 
     @Then("^I see list of random online pharmacies displayed on the result page$")

@@ -2,7 +2,6 @@ package features.sharedSteps
 
 import config.Config
 import constants.Supplier
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -117,7 +116,7 @@ open class SharedStepDefinitions {
         home.waitForLoginToCompleteSuccessfully()
     }
 
-    @And("^I login$")
+    @When("^I login$")
     fun iLogin() {
         val patient = SerenityHelpers.getPatient()
         DemographicsFactory
@@ -127,14 +126,13 @@ open class SharedStepDefinitions {
         login.using(patient)
     }
 
-    @And("Azure organisation search is working")
+    @Given("Azure organisation search is working")
     fun azureOrganisationSearchIsWorking() {
         mockingClient.forAzure.forSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(null)
                     .respondWithSuccess(NhsAzureSearchData.getOrganisationWithinRange())
         }
     }
-
 
     @Given("^I have (enabled|disabled) javascript$")
     fun iHaveEnabledDisabledJavascript(status: String) {

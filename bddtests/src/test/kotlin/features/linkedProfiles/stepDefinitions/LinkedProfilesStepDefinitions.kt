@@ -1,7 +1,6 @@
 package features.linkedProfiles.stepDefinitions
 
 import constants.Supplier
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -23,8 +22,8 @@ import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mockingFacade.linkedProfiles.FeaturesEnabledFacade
 import mockingFacade.linkedProfiles.LinkedProfileFacade
 import models.Patient
-import models.patients.PatientHandler
 import models.linkedProfiles.LinkedProfileOption
+import models.patients.PatientHandler
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.HomePage
@@ -177,7 +176,7 @@ class LinkedProfilesStepDefinitions {
         home.linkedProfilesLink.click()
     }
 
-    @And("^linked profiles are displayed$")
+    @Then("^linked profiles are displayed$")
     fun linkedProfilesAreDisplayed() {
         val patient = SerenityHelpers.getPatient()
         val displayedLinkedProfiles = linkedProfilesPage.getDisplayedLinkedProfiles()
