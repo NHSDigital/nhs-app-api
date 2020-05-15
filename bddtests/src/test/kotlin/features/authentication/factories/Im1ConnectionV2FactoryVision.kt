@@ -19,7 +19,7 @@ class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory(Supplier.VISION) {
 
     override fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration?) {
         configuration()
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
                 authentication.getRegisterRequest(
                         VisionMockDefaults.getVisionUserSession(patient),
                         patient)
@@ -33,7 +33,7 @@ class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory(Supplier.VISION) {
 
     override fun errorIm1Register(httpStatusCode: Int, errorCode: String, message: String?) {
         configuration()
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             authentication.getRegisterRequest(
                     VisionMockDefaults.getVisionUserSession(patient),
                     patient)
@@ -45,7 +45,7 @@ class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory(Supplier.VISION) {
 
     override fun linkagePost(linkageInformationFacade: LinkageInformationFacade,
                              action: (IErrorMappingBuilder)-> Mapping) {
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             action( authentication.linkageKeyPostRequest(
                     linkageInformationFacade.odsCode,
                     linkageKeyPostRequest(linkageInformationFacade)))
@@ -54,7 +54,7 @@ class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory(Supplier.VISION) {
 
     override fun linkageGet(linkageInformationFacade: LinkageInformationFacade,
                             action: (IErrorMappingBuilder)->  Mapping) {
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             action( authentication.linkageKeyGetRequest(
                     linkageInformationFacade.odsCode,
                     linkageInformationFacade.nhsNumber))
@@ -62,7 +62,7 @@ class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory(Supplier.VISION) {
     }
 
     override fun successfulLinkageGet(linkageInformationFacade: LinkageInformationFacade) {
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             authentication.linkageKeyGetRequest(linkageInformationFacade.odsCode,
                     linkageInformationFacade.nhsNumber).respondWithSuccessfullyRetrieved(
                     successfulLinkageResponse(linkageInformationFacade))
@@ -71,7 +71,7 @@ class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory(Supplier.VISION) {
     }
 
     override fun successfulLinkagePost(linkageInformationFacade: LinkageInformationFacade) {
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             authentication.linkageKeyPostRequest(linkageInformationFacade.odsCode,
                     linkageKeyPostRequest(linkageInformationFacade))
                     .respondWithSuccessfullyCreated(
@@ -98,8 +98,7 @@ class Im1ConnectionV2FactoryVision : Im1ConnectionV2Factory(Supplier.VISION) {
     }
 
     private fun configuration(){
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession(
                                     patient.rosuAccountId,

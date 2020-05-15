@@ -10,7 +10,7 @@ import java.time.Duration
 class Im1ConnectionV2FactoryMicrotest : Im1ConnectionV2Factory(Supplier.MICROTEST) {
 
     override fun successfulIm1Register(linkageFacade: LinkageInformationFacade, delay: Duration?) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient)
                     .respondWithSuccess()
         }
@@ -25,7 +25,7 @@ class Im1ConnectionV2FactoryMicrotest : Im1ConnectionV2Factory(Supplier.MICROTES
     }
 
     override fun successfulLinkageGet(linkageInformationFacade: LinkageInformationFacade) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient)
                     .respondWithSuccess()
         }
@@ -35,7 +35,7 @@ class Im1ConnectionV2FactoryMicrotest : Im1ConnectionV2Factory(Supplier.MICROTES
 
     override fun linkageGet(linkageInformationFacade: LinkageInformationFacade,
                             action: (IErrorMappingBuilder)-> Mapping) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             action(demographics.demographicsRequest(patient))
         }
     }

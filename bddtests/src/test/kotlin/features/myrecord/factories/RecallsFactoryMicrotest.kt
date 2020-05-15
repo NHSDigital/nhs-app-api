@@ -30,7 +30,7 @@ class RecallsFactoryMicrotest: RecallsFactory(){
     }
 
     override fun respondWithCorruptedResponse() {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             myRecord.myRecordRequest(SerenityHelpers.getPatient())
                     .respondWithCorruptedContent("Bad Data")
         }

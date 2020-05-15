@@ -13,8 +13,7 @@ class PrescriptionsHistoryJourneyVision: PrescriptionsHistoryJourney() {
         )
 
         VisionPrescriptionLoader.loadData(prescriptionLoaderConfig)
-        client
-                .forVision {
+        client.forVision.mock {
                     prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithSuccess(VisionPrescriptionLoader.data)
                 }

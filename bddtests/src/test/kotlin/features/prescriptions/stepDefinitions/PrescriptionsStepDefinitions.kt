@@ -239,8 +239,7 @@ open class PrescriptionsStepDefinitions {
             }
             Supplier.VISION -> {
 
-                mockingClient
-                        .forVision {
+                mockingClient.forVision.mock {
                             prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
@@ -248,7 +247,7 @@ open class PrescriptionsStepDefinitions {
             Supplier.MICROTEST -> {
 
                 mockingClient
-                        .forMicrotest {
+                        .forMicrotest.mock {
                             prescriptions.getPrescriptionHistoryRequest(currentPatient, expectedDefaultFromDate)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistoryGetResponse)
                         }

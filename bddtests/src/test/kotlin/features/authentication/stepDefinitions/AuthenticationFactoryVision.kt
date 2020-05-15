@@ -10,8 +10,7 @@ import java.time.Duration
 class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
 
     override fun patientWithIncompleteResponse(patient: Patient) {
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithCorruptedContent()
                 }
@@ -50,8 +49,7 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
     }
 
     override fun validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds: Long) {
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithSuccess(VisionMockDefaults.visionConfigurationResponse)
                             .delayedBy(Duration.ofSeconds(delayBySeconds))
@@ -59,15 +57,14 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
     }
 
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithInvalidUserCredentials()
                 }
     }
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             authentication.getConfigurationRequest(
                     VisionMockDefaults.getVisionUserSession(patient))
                     .respondWithServiceUnavailable()
@@ -86,14 +83,14 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
         }
 
         fun createInvalidTestForVision(patient: Patient, typeOfError: String) {
-            mockingClient.forVision {
+            mockingClient.forVision.mock {
                 authentication.getRegisterRequest(
                         VisionMockDefaults.getVisionUserSession(patient),
                         patient)
                         .respondWithError(typeOfError)
             }
 
-            mockingClient.forVision {
+            mockingClient.forVision.mock {
                 authentication.getConfigurationRequest(
                         VisionMockDefaults.getVisionUserSession(patient))
                         .respondWithSuccess(
@@ -102,7 +99,7 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
         }
 
         fun configurationRequestInvalid(patient: Patient) {
-            mockingClient.forVision {
+            mockingClient.forVision.mock {
                 authentication.getRegisterRequest(
                         VisionMockDefaults.getVisionUserSession(patient),
                         patient)
@@ -112,7 +109,7 @@ class AuthenticationFactoryVision : AuthenticationFactory(Supplier.VISION) {
                                         apiToken = patient.apiKey)
                         )
             }
-            mockingClient.forVision {
+            mockingClient.forVision.mock {
                 authentication.getConfigurationRequest(
                         VisionMockDefaults.getVisionUserSession(patient))
                         .respondWithInvalidRequest()

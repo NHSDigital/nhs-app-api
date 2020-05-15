@@ -29,8 +29,7 @@ class VisionSessionCreateJourneyFactory : SessionCreateJourneyFactory() {
                 References(locationsForPatient, ownersForPatient)
         )
 
-        client
-                .forVision {
+        client.forVision.mock {
                     authentication.getConfigurationRequest(
                             VisionUserSession.fromPatient(patient))
                             .respondWithSuccess(configuration)

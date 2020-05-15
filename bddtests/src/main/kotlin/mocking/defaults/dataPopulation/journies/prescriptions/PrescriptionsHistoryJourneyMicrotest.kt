@@ -11,8 +11,7 @@ class PrescriptionsHistoryJourneyMicrotest : PrescriptionsHistoryJourney() {
                 noPrescriptions = 1, noCourses = 1, noRepeats = 1
         )
         MicrotestPrescriptionLoader.loadData(prescriptionLoaderConfig)
-        client
-                .forMicrotest {
+        client.forMicrotest.mock {
                     prescriptions.getPrescriptionHistoryRequest(patient)
                             .respondWithSuccess(MicrotestPrescriptionLoader.data)
                 }

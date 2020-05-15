@@ -9,7 +9,7 @@ import org.apache.http.client.methods.CloseableHttpResponse
 import org.apache.http.client.methods.HttpDelete
 import org.apache.http.impl.client.HttpClients
 
-class WiremockHelper(val configuration: MockingConfiguration) {
+class WiremockSetup(val configuration: MockingConfiguration) {
 
     private val gson = Gson()
 

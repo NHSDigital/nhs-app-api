@@ -6,7 +6,7 @@ import models.Patient
 class AuthenticationFactoryMicrotest : AuthenticationFactory(Supplier.MICROTEST) {
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient).respondWithServiceUnavailable()
         }
     }
@@ -52,7 +52,7 @@ class AuthenticationFactoryMicrotest : AuthenticationFactory(Supplier.MICROTEST)
     }
 
     override fun patientWithIncompleteResponse(patient: Patient) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient).respondWithCorruptedContent()
         }
     }

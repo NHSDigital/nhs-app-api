@@ -2,10 +2,10 @@ package mocking
 
 import mocking.models.Mapping
 
-class ExternalSupplierMockingClient<T>(private val mappingBuilder :  T, private val wiremockHelper: WiremockHelper){
+class ExternalSupplierMockingClient<T>(private val mappingBuilder :  T, private val wiremockSetup: WiremockSetup){
 
     fun mock(resolver: T.() -> Mapping) {
         val mapping = mappingBuilder.resolver()
-        wiremockHelper.postMapping(mapping)
+        wiremockSetup.postMapping(mapping)
     }
 }

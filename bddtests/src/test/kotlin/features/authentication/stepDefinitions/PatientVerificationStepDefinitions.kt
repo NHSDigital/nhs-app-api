@@ -60,8 +60,7 @@ class PatientVerificationStepDefinitions {
     fun visionRespondsWithASecurityHeaderError() {
         PatientVerificationSerenityHelpers.ConnectionToken.set(VisionMockDefaults.patientVision.connectionToken)
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession.fromPatient(Patient.getDefault(Supplier.VISION)))
                             .respondWithSecurityHeaderError()
@@ -73,8 +72,7 @@ class PatientVerificationStepDefinitions {
         PatientVerificationSerenityHelpers.ConnectionToken.set(VisionMockDefaults.patientVision.connectionToken)
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
 
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession.fromPatient(Patient.getDefault(Supplier.VISION)))
                             .respondWithInvalidRequest()
@@ -86,8 +84,7 @@ class PatientVerificationStepDefinitions {
         val patient =  Patient.getDefault(Supplier.VISION)
         PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(
                             VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithUnknownError()
@@ -99,8 +96,7 @@ class PatientVerificationStepDefinitions {
         val patient =  Patient.getDefault(Supplier.VISION)
         PatientVerificationSerenityHelpers.ConnectionToken.set(patient.connectionToken)
         PatientVerificationSerenityHelpers.NationalPracticeCode.set(patient.odsCode)
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(
                             VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithRecordCurrentlyUnavailableError()

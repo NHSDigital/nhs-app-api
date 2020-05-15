@@ -134,8 +134,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
     private fun generateVisionMocks(patient: Patient) {
 
 
-        client
-                .forVision {
+        client.forVision.mock {
                     authentication.getRegisterRequest(
                             VisionMockDefaults.getVisionUserSession(patient),
                             patient)
@@ -146,8 +145,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                             )
                 }
 
-        client
-                .forVision {
+        client.forVision.mock {
                     authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession(
                                     patient.rosuAccountId,

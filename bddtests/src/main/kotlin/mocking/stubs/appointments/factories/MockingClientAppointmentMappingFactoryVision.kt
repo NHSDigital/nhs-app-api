@@ -5,6 +5,6 @@ import mocking.models.Mapping
 
 class MockingClientAppointmentMappingFactoryVision: MockingClientAppointmentMappingFactory(){
     override fun requestMapping(mapper: IAppointmentMappingBuilder.() -> Mapping) {
-        mockingClient.forVision { mapper(appointments) }
+        mockingClient.forVision.mock { mapper(appointments) }
     }
 }

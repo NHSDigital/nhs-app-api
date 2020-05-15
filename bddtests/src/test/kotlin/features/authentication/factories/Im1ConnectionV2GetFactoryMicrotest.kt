@@ -12,12 +12,12 @@ class Im1ConnectionV2GetFactoryMicrotest : Im1ConnectionV2GetFactory(Supplier.MI
         SerenityHelpers.setPatient(patient)
 
         if (httpStatusCode == HttpStatus.SC_BAD_GATEWAY)
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient).respondWithServiceUnavailable()
         }
 
         else if (httpStatusCode == HttpStatus.SC_FORBIDDEN || httpStatusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-            mockingClient.forMicrotest {
+            mockingClient.forMicrotest.mock {
                 demographics.demographicsRequest(patient).respondWithInternalServerError()
             }
         else {

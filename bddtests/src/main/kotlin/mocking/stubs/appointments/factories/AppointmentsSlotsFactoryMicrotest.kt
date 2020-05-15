@@ -26,7 +26,7 @@ class AppointmentsSlotsFactoryMicrotest : AppointmentsSlotsFactory(Supplier.MICR
         appointmentMapper.requestMapping {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             mapping(appointments.appointmentSlotsRequest(patient, startDate, endDate))
         }
     }

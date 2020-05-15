@@ -34,7 +34,7 @@ class PatientVerificationFactoryMicrotest: PatientVerificationFactory(Supplier.M
                 .map { number -> PatientIdentifier(number, IdentifierType.NhsNumber) }
                 .toTypedArray())
 
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient)
                     .respondWithSuccess()
         }
@@ -52,7 +52,7 @@ class PatientVerificationFactoryMicrotest: PatientVerificationFactory(Supplier.M
         val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
 
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient)
                     .respondWithInternalServerError()
         }
@@ -65,7 +65,7 @@ class PatientVerificationFactoryMicrotest: PatientVerificationFactory(Supplier.M
         val patient = MicrotestMockDefaults.patient
         SerenityHelpers.setPatient(patient)
 
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient).respondWithServiceUnavailable()
         }
 

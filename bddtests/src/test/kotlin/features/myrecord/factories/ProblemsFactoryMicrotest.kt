@@ -9,7 +9,7 @@ import worker.models.myrecord.ProblemLineItem
 
 class ProblemsFactoryMicrotest: ProblemsFactory(){
     override fun badDataResponse(patient: Patient) {
-            mockingClient.forMicrotest {
+            mockingClient.forMicrotest.mock {
                 myRecord.myRecordRequest(patient)
                         .respondWithCorruptedContent("Bad Data")
             }

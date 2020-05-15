@@ -21,7 +21,7 @@ private const val DEFAULT_REQUEST_ASSERT_DELAY_IN_MS = 500L
 
 class MockingClient(private val configuration: MockingConfiguration) {
 
-    val wiremockHelper = WiremockHelper(configuration)
+    val wiremockHelper = WiremockSetup(configuration)
 
     val forAzure = AzureMockingClient(wiremockHelper)
 
@@ -30,6 +30,8 @@ class MockingClient(private val configuration: MockingConfiguration) {
     val forOrganDonation = ExternalSupplierMockingClient(OrganDonationMappingBuilder(), wiremockHelper)
     val forOnlineConsultations = ExternalSupplierMockingClient(OnlineConsultationsMappingBuilder(), wiremockHelper)
     val forNdop = ExternalSupplierMockingClient(NdopMappingBuilder(), wiremockHelper)
+    val forMicrotest = ExternalSupplierMockingClient(MicrotestMappingRouter(), wiremockHelper)
+    val forVision = ExternalSupplierMockingClient(VisionMappingRouter(), wiremockHelper)
 
     fun forEmis(resolver: EmisMappingRouter.() -> Mapping) {
         val router = EmisMappingRouter(configuration.emisConfiguration)
@@ -40,20 +42,6 @@ class MockingClient(private val configuration: MockingConfiguration) {
 
     fun forTpp(resolver: TppMappingRouter.() -> Mapping) {
         val router = TppMappingRouter()
-        val mapping: Mapping = router.resolver()
-
-        wiremockHelper.postMapping(mapping)
-    }
-
-    fun forVision(resolver: VisionMappingRouter.() -> Mapping) {
-        val router = VisionMappingRouter()
-        val mapping: Mapping = router.resolver()
-
-        wiremockHelper.postMapping(mapping)
-    }
-
-    fun forMicrotest(resolver: MicrotestMappingRouter.() -> Mapping) {
-        val router = MicrotestMappingRouter()
         val mapping: Mapping = router.resolver()
 
         wiremockHelper.postMapping(mapping)

@@ -101,8 +101,7 @@ class PrescriptionsDataSetup {
                             }
                 }
                 Supplier.VISION -> {
-                    mockingClient
-                            .forVision {
+                    mockingClient.forVision.mock {
                                 authentication.getConfigurationRequest(
                                         VisionMockDefaults.visionUserSessionPrescriptionDisabled)
                                         .respondWithSuccess(VisionMockDefaults

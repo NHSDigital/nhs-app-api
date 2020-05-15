@@ -255,14 +255,14 @@ open class PrescriptionsSubmissionStepDefinitions {
                 }
             }
             Supplier.VISION -> {
-                mockingClient.forVision {
+                mockingClient.forVision.mock {
                     prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
                             .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                 }
             }
             Supplier.MICROTEST -> {
                 val data = prescriptionLoader.data as PrescriptionHistoryGetResponse
-                mockingClient.forMicrotest {
+                mockingClient.forMicrotest.mock {
                     prescriptions.getPrescriptionHistoryRequest(currentPatient)
                             .respondWithSuccess(data)
                             .inScenario(scenarioTitle)

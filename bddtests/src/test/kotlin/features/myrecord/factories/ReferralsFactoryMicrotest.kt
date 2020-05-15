@@ -29,7 +29,7 @@ class ReferralsFactoryMicrotest: ReferralsFactory() {
     }
 
     override fun respondWithCorruptedReponse() {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             myRecord.myRecordRequest(SerenityHelpers.getPatient())
                     .respondWithCorruptedContent("Bad Data")
         }

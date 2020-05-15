@@ -7,8 +7,7 @@ class Im1ConnectionV2GetFactoryVision : Im1ConnectionV2GetFactory(Supplier.VISIO
 
     override fun errorIm1Verify(httpStatusCode: Int, errorCode: String,
                                 message: String?) {
-        mockingClient
-            .forVision {
+        mockingClient.forVision.mock {
                 authentication.getConfigurationRequest(
                     visionUserSession = VisionUserSession(
                             patient.rosuAccountId,

@@ -11,7 +11,7 @@ import java.time.Duration
 class DemographicsFactoryVision: DemographicsFactory() {
     override fun disabled(patient: Patient) {
         try {
-            mockingClient.forVision {
+            mockingClient.forVision.mock {
                 myRecord.demographicsRequest(visionUserSession = VisionUserSession.fromPatient(patient)
                 ).respondWithAccessDeniedError()
             }
@@ -21,7 +21,7 @@ class DemographicsFactoryVision: DemographicsFactory() {
     }
 
     override fun enabled(patient: Patient) {
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             myRecord.demographicsRequest(visionUserSession =
             VisionUserSession.fromPatient(patient)).
                     respondWithSuccess(VisionMockDefaults.visionDemographicsResponse)
@@ -34,7 +34,7 @@ class DemographicsFactoryVision: DemographicsFactory() {
     }
 
     override fun enabledButTimesOut(patient: Patient) {
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             myRecord.demographicsRequest(visionUserSession =
             VisionUserSession.fromPatient(patient)).
                     respondWithSuccess(VisionMockDefaults.visionDemographicsResponse)
@@ -43,7 +43,7 @@ class DemographicsFactoryVision: DemographicsFactory() {
     }
 
     override fun throwInternalError(patient: Patient) {
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             myRecord.demographicsRequest( VisionUserSession.fromPatient(patient))
                     .respondWithUnknownError()
         }

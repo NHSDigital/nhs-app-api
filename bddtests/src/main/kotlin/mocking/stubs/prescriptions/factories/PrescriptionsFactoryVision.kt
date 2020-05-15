@@ -31,8 +31,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory() {
                                                toDate: OffsetDateTime) {
         val duration = if (delay != null) Duration.ofSeconds(delay) else null
         val currentPatient = SerenityHelpers.getPatient()
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     prescriptions.getPrescriptionHistoryRequest(
                             VisionMockDefaults.getVisionUserSession(currentPatient))
                             .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
@@ -54,7 +53,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory() {
                 courses.repeat.map { NewPrescriptionRepeat(it.getRepeatCourseId()!!) },
                 "")
 
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             prescriptions.orderNewPrescriptionRequest(VisionMockDefaults.visionUserSession, request)
                     .respondWithSuccess(OrderNewPrescriptionResponse.Ok)
                     .inScenario(scenarioTitle)
@@ -71,7 +70,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory() {
 
         getPrescriptionsLoader.loadData(prescriptionLoaderConfig)
         val newPrescriptions = getPrescriptionsLoader.data as PrescriptionHistory
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
                     .respondWithSuccess(newPrescriptions)
                     .inScenario(scenarioTitle)
@@ -83,7 +82,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory() {
     override fun setupWireMockAndCreateDataGpSpecific() {
         val userSession = VisionUserSession.fromPatient(ProxySerenityHelpers.getPatientOrProxy())
 
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             prescriptions.getEligibleRepeatsRequest(userSession)
                     .respondWithSuccess(getCoursesLoader.data as EligibleRepeats)
         }
@@ -94,8 +93,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory() {
     }
 
     override fun disableAtGPLevel() {
-        mockingClient
-            .forVision {
+        mockingClient.forVision.mock {
                 authentication.getConfigurationRequest(
                         VisionMockDefaults.visionUserSessionPrescriptionDisabled)
                         .respondWithSuccess(VisionMockDefaults
@@ -103,32 +101,28 @@ class PrescriptionsFactoryVision: PrescriptionsFactory() {
             }}
 
     override fun prescriptionsEndpointTimeout(patient: Patient) {
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                 }
     }
 
     override fun prescriptionsEndpointThrowServerError(patient: Patient) {
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
     }
 
     override fun coursesEndpointTimeout(patient: Patient) {
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     prescriptions.getEligibleRepeatsRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                 }
     }
 
     override fun coursesEndpointThrowingServerError(patient: Patient) {
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     prescriptions.getEligibleRepeatsRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }

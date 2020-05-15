@@ -24,7 +24,7 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory() {
 
     override fun setupWireMockAndCreateDataGpSpecific() {
         val response = coursesData()
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             prescriptions.getCoursesRequest(
                     ProxySerenityHelpers.getPatientOrProxy()).respondWithSuccess(CoursesGetResponse(response))
         }
@@ -45,7 +45,7 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory() {
         val currentPatient = SerenityHelpers.getPatient()
         val duration = if (delay != null) Duration.ofSeconds(delay) else null
         mockingClient
-                .forMicrotest {
+                .forMicrotest.mock {
                     prescriptions.getPrescriptionHistoryRequest(currentPatient, fromdate)
                             .respondWithSuccess(prescriptionLoader.data as PrescriptionHistoryGetResponse)
                             .delayedBy(duration)
@@ -62,14 +62,14 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory() {
         val courses = coursesData()
         val patient = ProxySerenityHelpers.getPatientOrProxy()
 
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             prescriptions.getCoursesRequest(patient)
                     .respondWithSuccess(CoursesGetResponse(courses))
                     .inScenario(scenarioTitle)
                     .whenScenarioStateIs(currentScenarioState)
         }
 
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             prescriptions.repeatPrescriptionSubmissionRequest(patient)
                     .respondWithCreated()
                     .inScenario(scenarioTitle)
@@ -86,7 +86,7 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory() {
                 orderedCourses = courses.toMutableList(),
                 oldPrescriptionHistory = microtestPrescriptionMap[Scenario.STARTED]!!)
 
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             prescriptions.getPrescriptionHistoryRequest(patient)
                     .respondWithSuccess(microtestPrescriptionMap[currentScenarioState]!!)
                     .inScenario(scenarioTitle)
@@ -98,7 +98,7 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory() {
 
     override fun prescriptionsEndpointTimeout(patient: Patient) {
         mockingClient
-                .forMicrotest {
+                .forMicrotest.mock {
                     prescriptions.getPrescriptionHistoryRequest(patient)
                             .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                 }
@@ -106,21 +106,21 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory() {
 
     override fun prescriptionsEndpointThrowServerError(patient: Patient) {
         mockingClient
-                .forMicrotest {
+                .forMicrotest.mock {
                     prescriptions.getPrescriptionHistoryRequest(patient)
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
     }
 
     override fun coursesEndpointTimeout(patient: Patient) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             prescriptions.getCoursesRequest(patient)
                     .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
         }
     }
 
     override fun coursesEndpointThrowingServerError(patient: Patient) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             prescriptions.getCoursesRequest(patient)
                     .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
         }
@@ -132,21 +132,21 @@ class PrescriptionsFactoryMicrotest: PrescriptionsFactory() {
 
     override fun disableAtGPLevel() {
         mockingClient
-                .forMicrotest {
+                .forMicrotest.mock {
                     prescriptions.getPrescriptionHistoryRequest(ProxySerenityHelpers.getPatientOrProxy())
                             .respondWithForbiddenError()
                 }
     }
 
     override fun orderPrescriptionReturnsConflictResponse() {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             prescriptions.repeatPrescriptionSubmissionRequest(ProxySerenityHelpers.getPatientOrProxy())
                     .respondWithConflictError()
         }
     }
 
     override fun prescriptionsOrderEndpointPartiallySuccessful(partialSuccess: PartialSuccessFacade) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             prescriptions.repeatPrescriptionSubmissionRequest(ProxySerenityHelpers.getPatientOrProxy())
                     .respondWithPartiallySuccessful(partialSuccess)
                     .whenScenarioStateIs(Scenario.STARTED)

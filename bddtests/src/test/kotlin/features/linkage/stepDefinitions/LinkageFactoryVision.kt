@@ -50,7 +50,7 @@ class LinkageFactoryVision : LinkageFactory(Supplier.VISION) {
         val response = responseFromMap(linkageToPostRequestResponse, linkageResult)
 
         if (response != null) {
-            mockingClient.forVision {
+            mockingClient.forVision.mock {
                 response(VisionLinkagePOSTBuilder(
                         linkageInformationFacade.odsCode,
                         linkageKeyPostRequest(linkageInformationFacade)))
@@ -87,7 +87,7 @@ class LinkageFactoryVision : LinkageFactory(Supplier.VISION) {
         val response = responseFromMap(linkageToGetRequestResponse, linkageResult)
 
         if (response != null) {
-            mockingClient.forVision {
+            mockingClient.forVision.mock {
                 response(VisionLinkageGETBuilder(linkageInformationFacade.odsCode, linkageInformationFacade.nhsNumber))
             }
         }

@@ -4,14 +4,14 @@ import mocking.models.Mapping
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationMappingBuilder
 import mocking.nhsAzureSearchService.NhsAzureSearchPostcodesMappingBuilder
 
-class AzureMockingClient(private val wiremockHelper: WiremockHelper) {
+class AzureMockingClient(private val wiremockSetup: WiremockSetup) {
 
     fun forSearchOrganisation(method: String = "POST", resolver:
     NhsAzureSearchOrganisationMappingBuilder.() -> Mapping) {
         val mappingBuilder = NhsAzureSearchOrganisationMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
-        wiremockHelper.postMapping(mapping)
+        wiremockSetup.postMapping(mapping)
     }
 
     fun forSearchPostcodes(method: String = "GET", resolver:
@@ -19,6 +19,6 @@ class AzureMockingClient(private val wiremockHelper: WiremockHelper) {
         val mappingBuilder = NhsAzureSearchPostcodesMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
-        wiremockHelper.postMapping(mapping)
+        wiremockSetup.postMapping(mapping)
     }
 }

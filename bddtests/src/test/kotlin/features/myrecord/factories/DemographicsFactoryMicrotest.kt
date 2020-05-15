@@ -11,7 +11,7 @@ class DemographicsFactoryMicrotest: DemographicsFactory() {
     }
 
     override fun enabled(patient: Patient) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient).respondWithSuccess()
         }
     }
@@ -21,7 +21,7 @@ class DemographicsFactoryMicrotest: DemographicsFactory() {
     }
 
     override fun enabledButTimesOut(patient: Patient) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient)
                     .respondWithSuccess()
                     .delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
@@ -29,21 +29,21 @@ class DemographicsFactoryMicrotest: DemographicsFactory() {
     }
 
     override fun throwInternalError(patient: Patient) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient)
                     .respondWithInternalServerError()
         }
     }
 
     override fun throwForbiddenError(patient: Patient) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient)
                     .respondWithForbiddenError()
         }
     }
 
     override fun throwBadGateway(patient: Patient) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient)
                     .respondWithBadGateway()
         }

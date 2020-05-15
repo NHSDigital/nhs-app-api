@@ -12,22 +12,22 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
     }
 
     override fun enabledWithBlankRecord(patient: Patient) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient).respondWithSuccess()
         }
 
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             myRecord.myRecordRequest(patient).respondWithSuccess(MicrotestMyRecordData.getEmptyMicrotestMyRecord())
         }
     }
 
     override fun enabledWithData(
             patient: Patient, myRecordModuleCounts: MyRecordModuleCounts, testResultOptions: TestResultOptions) {
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient).respondWithSuccess()
         }
 
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             myRecord.myRecordRequest(patient)
                     .respondWithSuccess(
                             MicrotestMyRecordData.getPopulatedMicrotestMyRecord(myRecordModuleCounts, testResultOptions)
@@ -36,11 +36,11 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
     }
 
     override fun enabledWithAllRecords(patient: Patient){
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             demographics.demographicsRequest(patient).respondWithSuccess()
         }
 
-        mockingClient.forMicrotest {
+        mockingClient.forMicrotest.mock {
             myRecord.myRecordRequest(patient)
                     .respondWithSuccess(MicrotestMyRecordData.getPopulatedMicrotestMyRecord(
                             MyRecordModuleCounts(), TestResultOptions())
@@ -50,7 +50,7 @@ class MyRecordFactoryMicrotest: MyRecordFactory() {
 
     override fun respondWithForbidden(patient: Patient) {
         mockingClient
-                .forMicrotest {
+                .forMicrotest.mock {
                     myRecord.myRecordRequest(patient)
                             .respondWith(HttpStatus.SC_FORBIDDEN, resolve = {})
                 }

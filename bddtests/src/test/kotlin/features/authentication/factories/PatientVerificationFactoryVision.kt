@@ -21,8 +21,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory(Supplier.VISI
     override fun validPatientWithNoNhsNumber() {
         val patient =  Patient.getDefault(gpSystem)
 
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession.fromPatient(patient))
                             .respondWithSuccess(configuration = Configuration(account = Account(patient.patientId,
@@ -52,8 +51,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory(Supplier.VISI
         val patient = VisionMockDefaults.patientVision
         val nonExistingConnectionToken = "{\"rosuAccountid\":\"999999999\",\"apiKey\":\"nonexistingapikey\"}"
 
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession(
                                     "999999999",
@@ -71,8 +69,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory(Supplier.VISI
         val patient = VisionMockDefaults.patientVision
         val nonExistingConnectionToken = "{\"rosuAccountid\":\"999999999\",\"apiKey\":\"nonexistingapikey\"}"
 
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession(
                                     "999999999",
@@ -88,8 +85,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory(Supplier.VISI
 
     private fun visionValidCredentialsWithNHSNumbers(nhsNumbers: Array<String>){
         val patient = VisionMockDefaults.patientVision
-        mockingClient
-                .forVision {
+        mockingClient.forVision.mock {
                     authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession(
                                     patient.rosuAccountId,
@@ -115,7 +111,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory(Supplier.VISI
 
     override fun gpSystemNotAvailable() {
         val patient = VisionMockDefaults.patientVision
-        mockingClient.forVision {
+        mockingClient.forVision.mock {
             authentication.getConfigurationRequest(
                     VisionMockDefaults.getVisionUserSession(patient))
                     .respondWithServiceUnavailable()
