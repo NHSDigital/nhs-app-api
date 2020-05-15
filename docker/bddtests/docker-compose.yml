@@ -1,34 +1,26 @@
 version: "3.4"
 
 secrets:
-  tpp_cert:
-    file: "./bddtests/dummysecrets/tpp_client_cert.pfx"
-  tpp_cert_password:
-    file: "./bddtests/dummysecrets/tpp_client_cert.password"
   session_encryption_key:
-    file: "./bddtests/dummysecrets/session_encryption_key"
-  microtest_cert:
-    file: "./bddtests/dummysecrets/microtest_client_cert.pfx"
-  microtest_cert_password:
-    file: "./bddtests/dummysecrets/microtest_client_cert.password"
+    file: "./docker/bddtests/secrets/session_encryption_key"
   nhsapp_api_key:
-    file: "./bddtests/dummysecrets/nhsapp_api_key"
-  nhslogin_private_key:
-    file: "./bddtests/dummysecrets/nhslogin_ext_private_key.pem"
-  nhslogin_rsapass:
-    file: "./bddtests/dummysecrets/nhslogin_ext_rsapass.password"
+    file: "./docker/bddtests/secrets/nhsapp_api_key"
   organ_donation_cert:
-    file: "./bddtests/dummysecrets/organ_donation_cert.pfx"
+    file: "./docker/stubbed/certs/TestCert.pfx"
   organ_donation_cert_password:
-    file: "./bddtests/dummysecrets/organ_donation_cert.password"
+    file: "./docker/stubbed/certs/TestCert.password"
   spine_cert:
-    file: "./bddtests/dummysecrets/spine_client_cert.pfx"
+    file: "./docker/stubbed/certs/TestCert.pfx"
   spine_cert_password:
-    file: "./bddtests/dummysecrets/spine_client_cert.password"
+    file: "./docker/stubbed/certs/TestCert.password"
   azure_notification_hub_key:
     file: "~/.nhsonline/secrets/azure_notification_hub_key_bdd"
   gp_lookup_api_key:
-    file: "./bddtests/dummysecrets/gp_lookup_api_key"
+    file: "./docker/bddtests/secrets/gp_lookup_api_key"
+  ndop_cert:
+    file: "./docker/stubbed/certs/TestCert.pfx"
+  ndop_cert_password:
+    file: "./docker/stubbed/certs/TestCert.password"
 
 services:
 
@@ -39,48 +31,21 @@ services:
   pfs.local.bitraft.io:
     env_file:
       - ./docker/bddtests/env/emis_connectivity.env
-      - ./docker/bddtests/env/gplookup_connectivity.env
-      - ./docker/bddtests/env/microtest_connectivity.env
-      - ./docker/bddtests/env/nhslogin_connectivity.env
-      - ./docker/bddtests/env/onlineconsultationsproviders_connectivity.env
-      - ./docker/bddtests/env/organdonation_connectivity.env
-      - ./docker/bddtests/env/session_database.env
-      - ./docker/bddtests/env/spine_connectivity.env
-      - ./docker/bddtests/env/tpp_connectivity.env
-      - ./docker/bddtests/env/vision_connectivity.env
+      - ./docker/bddtests/env/ndop_connectivity.env
       - ./docker/bddtests/env/proxy_access.env
       - ./docker/bddtests/env/pfs.env
-    volumes:
-      - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
+    secrets:
+      - ndop_cert
+      - ndop_cert_password
 
   cid.local.bitraft.io:
     env_file:
       - ./docker/bddtests/env/emis_connectivity.env
-      - ./docker/bddtests/env/microtest_connectivity.env
-      - ./docker/bddtests/env/nhslogin_connectivity.env
-      - ./docker/bddtests/env/session_database.env
-      - ./docker/bddtests/env/tpp_connectivity.env
-      - ./docker/bddtests/env/vision_connectivity.env
       - ./docker/bddtests/env/proxy_access.env
-    volumes:
-      - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
 
   users.local.bitraft.io:
     env_file:
-      - ./docker/bddtests/env/nhslogin_connectivity.env
       - ./docker/bddtests/env/notificationhub_connectivity.env
-
-  userinfo.local.bitraft.io:
-    env_file:
-      - ./docker/bddtests/env/nhslogin_connectivity.env
-    volumes:
-      - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
-
-  messages.local.bitraft.io:
-    env_file:
-      - ./docker/bddtests/env/nhslogin_connectivity.env
-    volumes:
-      - ./bddtests/src/main/kotlin/mocking/dummycerts:/app/bddcerts
 
   mongo_seed:
     env_file:

@@ -20,11 +20,11 @@ function cleanup_docker_containers () {
 function set_docker_compose_files_args () {
   local DOCKER_COMPOSE_FILES PORT_FILE
 
-  DOCKER_COMPOSE_FILES=(../docker-compose.yml ../docker/bddtests/docker-compose.yml "${DOCKER_COMPOSE_FILES_TRANCHE[@]}")
+  DOCKER_COMPOSE_FILES=(../docker-compose.yml ../docker/stubbed/docker-compose.yml ../docker/bddtests/docker-compose.yml "${DOCKER_COMPOSE_FILES_TRANCHE[@]}")
 
   if [ "$RUN_LOCAL_BDD" == 1 ]
   then
-    DOCKER_COMPOSE_FILES+=(../docker-compose.ports.yml ../docker/bddtests/docker-compose.ports.yml)
+    DOCKER_COMPOSE_FILES+=(../docker-compose.ports.yml)
     for PORT_FILE in $(env | grep _DOCKER_PORTS | sed 's#^.*_DOCKER_PORTS=#../docker/#'); do
       DOCKER_COMPOSE_FILES+=("$PORT_FILE")
     done

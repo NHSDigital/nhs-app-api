@@ -33,14 +33,24 @@ class MessagesApi {
             return null
         }
 
-        fun post(request: MessageRequest, nhsLoginId: String,
-                 includeApiKey :Boolean = true) {
+        fun postSetup(
+                request: MessageRequest,
+                nhsLoginId: String,
+                includeApiKey :Boolean = true) = post(request, nhsLoginId, includeApiKey, true)
+
+        fun post(request: MessageRequest,
+                 nhsLoginId: String,
+                 includeApiKey :Boolean = true,
+                 propagateException: Boolean = false) {
             try {
                 Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                         .messages
                         .post(request, nhsLoginId, includeApiKey)
             } catch (httpException: NhsoHttpException) {
                 SerenityHelpers.setHttpException(httpException)
+                if (propagateException) {
+                    throw httpException
+                }
             }
         }
 

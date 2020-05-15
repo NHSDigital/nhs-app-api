@@ -43,12 +43,10 @@ class MessagesFactory {
         CitizenIdSessionCreateJourney().createFor(patientToUse)
         SessionCreateJourneyFactory.getForSupplier(SerenityHelpers.getGpSupplier())
                 .createFor(patientToUse)
-        MongoDBConnection.MessagesCollection.clearCache()
         MessagesSerenityHelpers.TARGET_SENDER.set(senderOne)
     }
 
     fun setUpMultipleMessagesInCache() {
-        MongoDBConnection.MessagesCollection.clearCache()
         val nhsLoginId = SerenityHelpers.getPatient().subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
 
@@ -78,7 +76,6 @@ class MessagesFactory {
     }
 
     fun setUpMultipleMessagesWithContentInCache(table: DataTable) {
-        MongoDBConnection.MessagesCollection.clearCache()
         val nhsLoginId = SerenityHelpers.getPatient().subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
 
@@ -103,14 +100,13 @@ class MessagesFactory {
     }
 
     fun setUpSingleUnreadMessage() {
-        MongoDBConnection.MessagesCollection.clearCache()
         val patient = SerenityHelpers.getPatient()
         val nhsLoginId = patient.subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
         val authToken = patient.accessToken
 
         val messageToPost = MessageRequest(senderOne, "Message One", 1)
-        MessagesApi.post(messageToPost, nhsLoginId)
+        MessagesApi.postSetup(messageToPost, nhsLoginId)
         val response = MessagesApi.getFromSender(authToken, senderOne)!!.single()
         MessagesSerenityHelpers.MESSAGE_ID.set(response.messages.single().id)
         MessagesSerenityHelpers.EXPECTED_MESSAGE.set(messageToPost)
@@ -125,7 +121,6 @@ class MessagesFactory {
     }
 
     fun setUpInvalidMessageInCache(){
-        MongoDBConnection.MessagesCollection.clearCache()
         val nhsLoginId = SerenityHelpers.getPatient().subject
         MessagesSerenityHelpers.EXPECTED_NHS_LOGIN_ID.set(nhsLoginId)
         MongoDBConnection.MessagesCollection.clearAndInsertJson(listOf(asInvalidJson(nhsLoginId, senderOne)))

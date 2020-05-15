@@ -79,6 +79,12 @@ services:
           if [ -f "$$NHSLOGIN_KEY_PASSWORD" ]; then
             export NHSLOGIN_KEY_PASSWORD=$$(<$$NHSLOGIN_KEY_PASSWORD)
           fi
+          if [ -f "$$NDOP_CERTIFICATE_PASSWORD" ]; then
+            export NDOP_CERTIFICATE_PASSWORD=$$(<$$NDOP_CERTIFICATE_PASSWORD)
+          fi
+          if [ -f "$$VISION_CERT_PASSPHRASE" ]; then
+            export VISION_CERT_PASSPHRASE=$$(<$$VISION_CERT_PASSPHRASE)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.PfsApi.dll
@@ -87,7 +93,6 @@ services:
       - ./docker/gplookup_connectivity.env
       - ./docker/im1cache_database.env
       - ./docker/microtest_connectivity.env
-      - ./docker/nhslogin_connectivity_ext.env
       - ./docker/organdonation_connectivity.env
       - ./docker/session_database.env
       - ./docker/sjr_connectivity.env
@@ -125,6 +130,9 @@ services:
           if [ -f "$$MICROTEST_CERT_PASSPHRASE" ]; then
             export MICROTEST_CERT_PASSPHRASE=$$(<$$MICROTEST_CERT_PASSPHRASE)
           fi
+          if [ -f "$$VISION_CERT_PASSPHRASE" ]; then
+            export VISION_CERT_PASSPHRASE=$$(<$$VISION_CERT_PASSPHRASE)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.CidApi.dll
@@ -132,6 +140,7 @@ services:
       - ./docker/emis_connectivity.env
       - ./docker/im1cache_database.env
       - ./docker/microtest_connectivity.env
+      - ./docker/session_database.env
       - ./docker/sjr_connectivity.env
       - ./docker/tpp_connectivity.env
       - ./docker/vision_connectivity.env
@@ -144,6 +153,7 @@ services:
       - tpp_cert_password
       - microtest_cert
       - microtest_cert_password
+      - session_encryption_key
 
   servicejourneyrulesapi.config:
     image: ${SJRCONFIG_DOCKER_REGISTRY:-local}/nhsonline-service-journey-dev-config:${SJRCONFIG_DOCKER_TAG:-latest}
@@ -169,14 +179,18 @@ services:
           if [ -f "$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY" ]; then
             export AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY=$$(<$$AZURE_NOTIFICATION_HUB_SHARED_ACCESS_KEY)
           fi
+          if [ -f "$$NHSLOGIN_KEY_PASSWORD" ]; then
+            export NHSLOGIN_KEY_PASSWORD=$$(<$$NHSLOGIN_KEY_PASSWORD)
+          fi
           exec $$*
       - "--"
     command: dotnet NHSOnline.Backend.UsersApi.dll
     env_file:
-      - ./docker/nhslogin_connectivity_ext.env
       - ./docker/notificationhub_connectivity.env
       - ./docker/users.env
     secrets:
+      - nhslogin_private_key
+      - nhslogin_rsapass
       - azure_notification_hub_key
 
   userinfo.local.bitraft.io:
@@ -188,14 +202,18 @@ services:
           if [ -f "$$NHSAPP_API_KEY" ]; then
             export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
           fi
+          if [ -f "$$NHSLOGIN_KEY_PASSWORD" ]; then
+            export NHSLOGIN_KEY_PASSWORD=$$(<$$NHSLOGIN_KEY_PASSWORD)
+          fi
           exec $$*
       - "--"
-    command: dotnet NHSOnline.Backend.UserInfoApi.dll    
+    command: dotnet NHSOnline.Backend.UserInfoApi.dll
     env_file:
-      - ./docker/nhslogin_connectivity_ext.env
       - ./docker/userinfo.env
     secrets:
       - nhsapp_api_key
+      - nhslogin_private_key
+      - nhslogin_rsapass
 
   messages.local.bitraft.io:
     image: ${MESSAGESAPI_DOCKER_REGISTRY:-local}/nhsonline-backendmessagesapi:${MESSAGESAPI_DOCKER_TAG:-latest}
@@ -206,14 +224,18 @@ services:
           if [ -f "$$NHSAPP_API_KEY" ]; then
             export NHSAPP_API_KEY=$$(<$$NHSAPP_API_KEY)
           fi
+          if [ -f "$$NHSLOGIN_KEY_PASSWORD" ]; then
+            export NHSLOGIN_KEY_PASSWORD=$$(<$$NHSLOGIN_KEY_PASSWORD)
+          fi
           exec $$*
       - "--"
-    command: dotnet NHSOnline.Backend.MessagesApi.dll      
+    command: dotnet NHSOnline.Backend.MessagesApi.dll
     env_file:
-      - ./docker/nhslogin_connectivity_ext.env
       - ./docker/messages.env
     secrets:
       - nhsapp_api_key
+      - nhslogin_private_key
+      - nhslogin_rsapass
 
   log.local.bitraft.io:
     image: ${LOGAPI_DOCKER_REGISTRY:-local}/nhsonline-clientloggerapi:${LOGAPI_DOCKER_TAG:-latest}
