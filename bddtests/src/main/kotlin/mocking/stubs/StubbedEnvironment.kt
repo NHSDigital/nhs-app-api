@@ -1,6 +1,10 @@
 package mocking.stubs
+
 import mocking.MockingClient
 import models.Patient
+import net.serenitybdd.core.Serenity
+import utils.GlobalSerenityHelpers
+import utils.set
 
 class StubbedEnvironment {
     companion object {
@@ -15,7 +19,16 @@ class StubbedEnvironment {
         val mockingClient = MockingClient.instance
         mockingClient.clearWiremock()
         mockingClient.favicon()
+
+        resetSerenityVariables()
         EmisStubbedEnvironment(mockingClient).generateStubs()
+
+        resetSerenityVariables()
         TppStubbedEnvironment(mockingClient).generateStubs()
+    }
+
+    private fun resetSerenityVariables() {
+        Serenity.getCurrentSession().clear()
+        GlobalSerenityHelpers.MOCK_NATIVE_LOGIN.set(false)
     }
 }
