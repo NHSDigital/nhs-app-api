@@ -7,12 +7,12 @@ metadata:
     app: {{ template "nhsapp.name" . }}-{{ $.Values.info.role }}
     role: {{ $.Values.info.role }}
     version: {{ .Chart.AppVersion | quote }}
-  name: {{ template "nhsapp.name" . }}-{{ $.Values.info.role }}-{{ .Chart.AppVersion }}
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.info.role }}-{{ .Chart.AppVersion | replace "." "-" }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1beta1
     kind: Deployment
-    name: {{ template "nhsapp.name" . }}-{{ $.Values.info.role }}-{{ .Chart.AppVersion }}
+    name: {{ template "nhsapp.name" . }}-{{ $.Values.info.role }}-{{ .Chart.AppVersion | replace "." "-" }}
   minReplicas: {{ $.Values.info.minReplicas }}
   maxReplicas: {{ $.Values.info.maxReplicas }}
   metrics:

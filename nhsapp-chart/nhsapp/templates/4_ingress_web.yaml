@@ -41,7 +41,7 @@ spec:
           - backend:
               serviceName: {{ template "nhsapp.name" . }}-{{ $.Values.web.role }}-{{ .Chart.AppVersion | replace "." "-" }}
               servicePort: {{ $.Values.sidecar_proxy.containerPort }}
-            path: /_nuxt/{{ $.Values.appImageTag | toString | replace "." "-" }}
+            path: /_nuxt/{{ $.Values.web.image_tag | replace "." "-" }}
   tls:
     - hosts:
         - www-{{ $.Values.global.environment | replace "." "-" }}.{{ $.Values.zone }}.{{ $.Values.domain }}

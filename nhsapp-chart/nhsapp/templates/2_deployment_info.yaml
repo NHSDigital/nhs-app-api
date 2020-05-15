@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "nhsapp.name" . }}-{{ $.Values.info.role }}-{{ .Chart.AppVersion }}
+  name: {{ template "nhsapp.name" . }}-{{ $.Values.info.role }}-{{ .Chart.AppVersion | replace "." "-" }}
   namespace: {{ $.Values.global.environment }}
   labels:
     app: {{ template "nhsapp.name" . }}-{{ $.Values.info.role }}
