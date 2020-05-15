@@ -13,24 +13,24 @@
             {{ $t('web.home.beforeYouStartBullets.two') }}
           </li>
         </ul>
-        <details id="age-info" class="nhsuk-details">
-          <summary class="nhsuk-details__summary">
-            <span class="nhsuk-details__summary-text">
-              {{ $t('web.home.aged13To15InformationTitle') }}
-            </span>
-          </summary>
-          <div class="nhsuk-details__text">
-            <p>{{ $t('web.home.aged13To15Description') }}</p>
-          </div>
-        </details>
+        <collapsible-details id="age-info">
+          <template slot="header">
+            {{ $t('web.home.aged13To15InformationTitle') }}
+          </template>
+          <p>{{ $t('web.home.aged13To15Description') }}</p>
+        </collapsible-details>
       </div>
     </div>
   </div>
 </template>
 <script>
+import CollapsibleDetails from '@/components/CollapsibleDetails';
 
 export default {
   name: 'PreRegistrationInformation',
+  components: {
+    CollapsibleDetails,
+  },
   props: {
     shouldShowHeader: {
       type: Boolean,

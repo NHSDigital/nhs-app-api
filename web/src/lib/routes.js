@@ -1828,6 +1828,19 @@ const routes = {
     },
     helpUrl: `${baseNhsAppHelpUrl}prescriptions/`,
   },
+  USER_RESEARCH: {
+    name: 'user-research',
+    path: '/user-research',
+    proofLevel: proofLevel.P5,
+    crumb: {
+      nativeDisabled: true,
+      i18nKey: 'userResearch',
+      get defaultCrumb() {
+        return [];
+      },
+    },
+    helpUrl: baseNhsAppHelpUrl,
+  },
 };
 
 /**
@@ -2042,6 +2055,7 @@ export const {
   UPLIFT_GP_MEDICAL_RECORD,
   UPLIFT_MORE,
   UPLIFT_PRESCRIPTIONS,
+  USER_RESEARCH,
 } = routes;
 
 export default routes;

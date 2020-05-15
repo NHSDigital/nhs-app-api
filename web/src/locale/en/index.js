@@ -1506,6 +1506,33 @@ export default {
       unreadMessages: 'Unread messages',
     },
   },
+  user_research: {
+    contactYou: 'We would like to contact you about taking part in user research to improve the NHS App and connected services.',
+    whatIsInvolved: {
+      header: 'What\'s involved?',
+      addYou: 'We\'ll add you to our user research panel and email you a short survey to fill in about you and your health. Your answers will help make sure you get invited to user research that\'s relevant to you.',
+      signUp: {
+        label: 'Once you\'re signed up, you might be asked to:',
+        benefits: [
+          'try out new features',
+          'answer more questions by email',
+          'talk to our researchers about your experience of using the app',
+        ],
+        isOptional: 'You can always say no to an invite and you can leave the user research panel at any time.',
+      },
+      restriction: {
+        prefix: 'Your information will only be used to contact you about the NHS App user research panel. It will not be shared with anyone else and you can unsubscribe at any time. ',
+        linkText: 'Read our privacy policy',
+        suffix: ' to find out how we use and protect your data.',
+      },
+    },
+    question: {
+      label: 'Can we contact you to take part in NHS App user research?',
+      yes: 'Yes, you can contact me about taking part in user research',
+      no: 'No, do not contact me',
+    },
+    continue: 'Continue',
+  },
   common: {
     or: 'OR',
   },
@@ -1623,6 +1650,7 @@ export default {
     gpMessagesAttachmentUnavailable: 'This file is not available in the NHS App',
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
     preRegistrationInformation: 'Before you start',
+    userResearch: 'Help improve the NHS App',
   },
   pageTitles: {
     home: 'Home',
@@ -1714,6 +1742,7 @@ export default {
     gpMessagesRecipients: 'Select who to message',
     nominatedPharmacyChooseType: 'Choose a type of pharmacy',
     preRegistrationInformation: 'Before you start',
+    userResearch: 'Help improve the NHS App',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',

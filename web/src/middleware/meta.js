@@ -117,6 +117,7 @@ import {
   UPLIFT_GP_MEDICAL_RECORD,
   UPLIFT_MORE,
   UPLIFT_PRESCRIPTIONS,
+  USER_RESEARCH,
 } from '@/lib/routes';
 
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
@@ -647,6 +648,10 @@ export default function ({ route, store, app }) {
     case TESTRESULTID.name:
       route.meta.headerKey = 'pageHeaders.testResult';
       route.meta.pageTitleKey = 'pageTitles.testResult';
+      break;
+    case USER_RESEARCH.name:
+      route.meta.headerKey = 'pageHeaders.userResearch';
+      route.meta.pageTitleKey = 'pageTitles.userResearch';
       break;
     default:
       route.meta.headerKey = 'errors.404.header';

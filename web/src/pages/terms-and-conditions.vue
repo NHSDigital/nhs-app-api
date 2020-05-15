@@ -7,7 +7,6 @@
   </div>
 </template>
 <script>
-/* eslint-disable import/extensions */
 import TermsConditions from '@/components/TermsConditions';
 import UpdatedTermsConditions from '@/components/UpdatedTermsConditions';
 

@@ -30,7 +30,6 @@
 </template>
 
 <script>
-/* eslint-disable no-underscore-dangle */
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
@@ -143,6 +142,4 @@ export default {
     padding: 0;
   }
 }
-
-
 </style>
