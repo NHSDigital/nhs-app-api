@@ -4,6 +4,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.onlineConsultations.factories.OnlineConsultationsFactory
 import mocking.onlineConsultations.constants.OnlineConsultationConstants
+import pages.avoidChromeWebDriverServiceCrash
 import pages.onlineConsultations.OnlineConsultationsPage
 import pages.onlineConsultations.OnlineConsultationsUnavailablePage
 import utils.SerenityHelpers
@@ -40,6 +41,8 @@ open class OnlineConsultationsStepDefinitions {
 
     @When("^I select my gender and click continue$")
     fun iSelectMyGender(){
+        //Please do not delete until NHSO-8407 and NHSO-8408 are completed
+        onlineConsultationsPage.avoidChromeWebDriverServiceCrash()
         answerQuestionAndContinue(elementId = OnlineConsultationConstants.MALE_GENDER_CHOICE)
     }
 
