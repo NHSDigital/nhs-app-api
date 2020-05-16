@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRules.Common;
@@ -7,23 +6,19 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems
 {
-
     public class OdsCodeLookup : IOdsCodeLookup
     {
-        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<OdsCodeLookup> _logger;
         private readonly IServiceJourneyRulesClient _serviceJourneyRulesClient;
 
         public OdsCodeLookup(
-            IGpSystemFactory gpSystemFactory,
             ILogger<OdsCodeLookup> logger,
             IServiceJourneyRulesClient serviceJourneyRulesClient)
         {
-            _gpSystemFactory = gpSystemFactory ?? throw new ArgumentNullException(nameof(gpSystemFactory));
             _logger = logger;
             _serviceJourneyRulesClient = serviceJourneyRulesClient;
-        }  
-        
+        }
+
         public async Task<Option<Supplier>> LookupSupplier(string odsCode)
         {
             _logger.LogInformation("Looking up ODS Code {odsCode}", odsCode);

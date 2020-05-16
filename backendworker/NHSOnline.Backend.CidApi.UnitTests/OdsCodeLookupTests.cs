@@ -19,8 +19,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests
     {
         private IFixture _fixture;
         private ILogger<OdsCodeLookup> _logger;
-        private Mock<IGpSystem> _mockGpSystem;
-        private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IServiceJourneyRulesClient> _serviceJourneyRulesClient;
         private string _odsCode;
 
@@ -31,13 +29,6 @@ namespace NHSOnline.Backend.CidApi.UnitTests
             _odsCode = _fixture.Create<string>();
             _logger = Mock.Of<ILogger<OdsCodeLookup>>();
             _serviceJourneyRulesClient = _fixture.Freeze<Mock<IServiceJourneyRulesClient>>();
-            
-            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
-
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
-            _mockGpSystemFactory
-                .Setup(x => x.CreateGpSystem(Supplier.Emis))
-                .Returns(_mockGpSystem.Object);
         }
 
         [DataTestMethod]
@@ -47,8 +38,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests
         public async Task LookupSupplier_NullOrEmptyOdsCode_ReturnsOptionNone(string odsCode)
         {
             // Arrange
-            var systemUnderTest = new OdsCodeLookup(_mockGpSystemFactory.Object, _logger, _serviceJourneyRulesClient.Object);
-            
+            var systemUnderTest = new OdsCodeLookup(_logger, _serviceJourneyRulesClient.Object);
+
             // Act
             var result = await systemUnderTest.LookupSupplier(odsCode);
 
@@ -63,11 +54,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests
             _serviceJourneyRulesClient.Setup(x => x.GetServiceJourneyRules(_odsCode))
                 .ReturnsAsync(new ServiceJourneyRulesApiObjectResponse<ServiceJourneyRulesResponse>(HttpStatusCode.NotFound));
 
-            var systemUnderTest = new OdsCodeLookup(_mockGpSystemFactory.Object, _logger, _serviceJourneyRulesClient.Object);
+            var systemUnderTest = new OdsCodeLookup(_logger, _serviceJourneyRulesClient.Object);
 
             // Act
             var result = await systemUnderTest.LookupSupplier(_odsCode);
-            
+
             // Assert
             result.HasValue.Should().BeFalse();
         }
@@ -82,11 +73,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests
                     Body = new ServiceJourneyRulesResponse { Journeys = new Journeys { Supplier = Supplier.Unknown } }
                 });
 
-            var systemUnderTest = new OdsCodeLookup(_mockGpSystemFactory.Object, _logger, _serviceJourneyRulesClient.Object);
+            var systemUnderTest = new OdsCodeLookup(_logger, _serviceJourneyRulesClient.Object);
 
             // Act
             var result = await systemUnderTest.LookupSupplier(_odsCode);
-            
+
             // Assert
             result.HasValue.Should().BeFalse();
         }
@@ -103,7 +94,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests
                     Body = new ServiceJourneyRulesResponse { Journeys = new Journeys { Supplier = supplier } }
                 });
 
-            var systemUnderTest = new OdsCodeLookup(_mockGpSystemFactory.Object, _logger, _serviceJourneyRulesClient.Object);
+            var systemUnderTest = new OdsCodeLookup(_logger, _serviceJourneyRulesClient.Object);
 
             var actual = await systemUnderTest.LookupSupplier(_odsCode);
             // Assert
