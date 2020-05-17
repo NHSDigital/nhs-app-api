@@ -2,27 +2,26 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.GpSystems
+namespace NHSOnline.Backend.GpSystems.Appointments
 {
     public interface IAppointmentCancellationReasonLogger
     {
         void CaptureCancellationReasons(GpUserSession gpUserSession, AppointmentsResult result);
     }
-    
+
     public class AppointmentCancellationReasonLogger : IAppointmentCancellationReasonLogger
     {
-        private static readonly ConcurrentDictionary<string, CancellationReasonsValue> CapturedCancellationReasons = 
+        private static readonly ConcurrentDictionary<string, CancellationReasonsValue> CapturedCancellationReasons =
             new ConcurrentDictionary<string, CancellationReasonsValue>();
-        
+
         private class CancellationReasonsInformation
         {
             public string[] CancellationReasons { get; }
-            
+
             public string Supplier { get; }
-            
+
             public string OdsCode { get; }
 
             public CancellationReasonsInformation(string[] cancellationReasons, string supplier, string odsCode)
@@ -36,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems
         private class CancellationReasonsValue
         {
             public DateTime CurrentDate { get; }
-            
+
             public int ReasonCount { get; }
 
             public CancellationReasonsValue(DateTime currentDate, int reasonCount)

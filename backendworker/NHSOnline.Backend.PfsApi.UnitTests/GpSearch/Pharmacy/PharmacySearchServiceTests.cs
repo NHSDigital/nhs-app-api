@@ -11,8 +11,8 @@ using GeoCoordinatePortable;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
+using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
-using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
@@ -302,14 +302,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             mappedOrganisations.Count().Should().Be(isValidContactMechanism ? 1 : 0);
         }
 
-        
-     
+
+
         [TestMethod]
         public async Task SearchOnlineOnlyPharmacies_WhenCalledWithOnlineName_ReturnsListOfPharmacies()
         {
             // Arrange
-            const int numberOfPharmaciesToGenerate = 20; 
-            
+            const int numberOfPharmaciesToGenerate = 20;
+
             var pharmacies = Enumerable.Repeat(new Organisation { URL = "www.test.com"}, numberOfPharmaciesToGenerate).ToList();
 
             var pharmacyResponse = new
@@ -349,8 +349,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             response.Response.Pharmacies.Should().Equal(pharmacyDetailsList);
             mappedOrganisations.Count().Should().Be(_gpLookupConfig.Object.OnlinePharmacySearchResultLimit);
         }
-        
-        
+
+
         [TestMethod]
         public async Task SearchOnlineOnlyPharmacies_WhenCalledWithOnlineName_FiltersResultsWithNoContactDetailsAndUpdatesPharmacyCount()
         {
@@ -370,11 +370,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                             new ContactInformation
                             {
                                 OrganisationContactMethodType = ResponseEnums.OrganisationContactMethodType.Telephone,
-                                OrganisationContactValue = "0100234987"       
+                                OrganisationContactValue = "0100234987"
                             }
                         }
                     )
-                });    
+                });
             }
 
             // some pharmacies only have one piece of information (and will not be filtered)
@@ -382,7 +382,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             pharmacies[5].URL = null;
             pharmacies[6].Contacts = "";
             pharmacies[7].Contacts = null;
-            
+
             // these 4 pharmacies will have no information (and will be filtered)
             pharmacies[8].URL = "";
             pharmacies[8].Contacts = "";
@@ -392,7 +392,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             pharmacies[10].Contacts = null;
             pharmacies[11].URL = null;
             pharmacies[11].Contacts = "";
-           
+
             var pharmacyResponse = new
                 GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
                 {
@@ -447,7 +447,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                     p.Select.Equals("OrganisationName,URL,Contacts,NACSCode", StringComparison.Ordinal))))
                 .Returns(Task.FromResult(response));
         }
-        
+
         private void SetupGpClientForOnlinePharmacySearchByName(GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> response, string searchTerm)
         {
             _gpLookupClient

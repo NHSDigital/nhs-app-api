@@ -1,6 +1,6 @@
 using System.Xml;
 
-namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client.Response
 {
     internal sealed class NationalIdBuilder
     {

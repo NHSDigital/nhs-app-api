@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
+namespace NHSOnline.Backend.PfsApi.GpSearch.Models
 {
     public class IsGpPracticeEpsEnabledResponse
     {

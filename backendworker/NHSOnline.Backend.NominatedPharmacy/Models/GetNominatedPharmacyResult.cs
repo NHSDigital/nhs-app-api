@@ -1,5 +1,4 @@
 using System.Net;
-using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Models
 {

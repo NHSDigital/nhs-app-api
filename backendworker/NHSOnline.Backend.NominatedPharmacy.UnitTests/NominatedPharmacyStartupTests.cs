@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients;
+using NHSOnline.Backend.NominatedPharmacy.Envelope;
 using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
 
 namespace NHSOnline.Backend.NominatedPharmacy.UnitTests

@@ -13,6 +13,7 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
 using NHSOnline.Backend.NominatedPharmacy.Clients;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
+using NHSOnline.Backend.NominatedPharmacy.Envelope;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.GetNominatedPharmacyTypes;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
 

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using GeoCoordinatePortable;
 using static NHSOnline.Backend.PfsApi.GpSearch.ResponseEnums;
 using System.Collections.Generic;
+using NHSOnline.Backend.NominatedPharmacy.Models;
+using OpeningTime = NHSOnline.Backend.NominatedPharmacy.Models.OpeningTime;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
@@ -42,7 +43,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 TelephoneNumber = pharmacy.GetContactsArray().FirstOrDefault(x => x.OrganisationContactMethodType == OrganisationContactMethodType.Telephone)?.OrganisationContactValue,
                 OpeningTimes = pharmacy.GetOpeningTimesArray()
                     .Where(x => x.IsOpen && x.WeekDay.HasValue)
-                    .Select(x => new Models.OpeningTime
+                    .Select(x => new OpeningTime
                     {
                         Day = x.WeekDay?.ToString(),
                         Time = x.Times,

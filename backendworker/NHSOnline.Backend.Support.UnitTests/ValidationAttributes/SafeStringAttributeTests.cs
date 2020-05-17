@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Support.ValidationAttributes;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.Support.UnitTests.ValidationAttributes
 {
@@ -49,7 +48,7 @@ namespace NHSOnline.Backend.Support.UnitTests.ValidationAttributes
             // Assert
             result.Should().Be(ValidationResult.Success);
         }
-        
+
         [TestMethod]
         public void IsValid_ReturnsError_WhenValueIsNotString()
         {

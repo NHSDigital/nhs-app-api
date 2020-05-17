@@ -6,10 +6,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.Areas.Configuration;
-using static NHSOnline.Backend.Support.Constants;
 using NHSOnline.Backend.PfsApi.Devices;
+using static NHSOnline.Backend.Support.Constants;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
+namespace NHSOnline.Backend.PfsApi.UnitTests.Configuration
 {
     [TestClass]
     public class SupportedDeviceServiceTests
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
                 Name = SupportedDeviceNames.Android,
                 NativeAppVersion = MinimumSupportedAndroidVersion,
             };
-            
+
             var settings = new DeviceConfigurationSettings
             {
                 MinimumSupportedAndroidVersion = "1.blah",

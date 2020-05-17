@@ -10,6 +10,7 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using RichardSzalay.MockHttp;
 using System.Xml.Linq;
+using NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client.Response;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Client
 {

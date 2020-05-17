@@ -7,12 +7,12 @@ using System.Globalization;
 using Microsoft.Extensions.Logging;
 using GeoCoordinatePortable;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
-using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using System.Collections.Generic;
+using NHSOnline.Backend.NominatedPharmacy.Models;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 {
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             _logger.LogEnter();
 
             searchTerm = OrganisationSearchUtility.SanitizeOnlinePharmacyNameSearch(searchTerm);
-            
+
             var isValid = new ValidateAndLog(_logger)
                 .IsNotNullOrWhitespace(searchTerm, nameof(searchTerm))
                 .IsValid();
@@ -103,20 +103,20 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             {
                 return new PharmacySearchResult.BadRequest();
             }
-           
+
             searchTerm = OrganisationSearchUtility.PrepareSearch(searchTerm, false);
-            
+
             var query = CreateOnlinePharmacyOnlySearchQuery(searchTerm);
             try
             {
                 var searchResults = await _gpLookupClient.OrganisationSearch(query);
-                
+
                 var pharmacySearchResponse = _nhsSearchResultChecker.CheckPharmacies(searchResults);
 
                 if (pharmacySearchResponse.StatusCode == HttpStatusCode.OK)
                 {
                     var contactablePharmacies = PickContactableOnlinePharmacies(pharmacySearchResponse.Pharmacies);
-                    
+
                     var nonContactablePharmaciesCount = pharmacySearchResponse.Pharmacies.Count - contactablePharmacies.Count();
                     var pharmacies = Enumerable.Empty<PharmacyDetails>();
 
@@ -129,9 +129,9 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                         _logger.LogError(e, $"Error during mapping list of {nameof(Organisation)} to list of {nameof(PharmacyDetailsResponse)}");
                         return new PharmacySearchResult.InternalServerError();
                     }
-                    
+
                     return new PharmacySearchResult.Success(
-                        pharmacies, 
+                        pharmacies,
                         pharmacySearchResponse.PharmacyCount - nonContactablePharmaciesCount);
                 }
 
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             finally
             {
                 _logger.LogExit();
-            }        
+            }
         }
 
         public async Task<PharmacySearchResult> Search(string searchTerm)
@@ -307,7 +307,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                 searchData.SearchFields = "OrganisationName";
                 searchData.Top = _gpLookupConfig.OnlinePharmacySearchResultLimit;
             }
-            
+
             return searchData;
         }
     }

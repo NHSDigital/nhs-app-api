@@ -1,4 +1,4 @@
-namespace NHSOnline.Backend.PfsApi.Filters
+namespace NHSOnline.Backend.ServiceJourneyRulesApi.Models
 {
     public enum JourneyFeature
     {

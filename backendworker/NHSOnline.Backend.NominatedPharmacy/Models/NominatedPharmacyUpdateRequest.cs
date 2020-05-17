@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
+using NHSOnline.Backend.NominatedPharmacy.Envelope;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
 using NHSOnline.Backend.Support;
 
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
         }
 
         private string GetEbXmlBody()
-        {   
+        {
             var envelope = UpdatePharmacySOAPEnvelope.BuildSOAPEnvelope(
                 _messageId.ToString(),
                 _hl7Time,
@@ -272,7 +272,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
                 Device = CreateDevice(extension)
             };
         }
-        
+
         public static NominatedPharmacyTypes.CommunicationFunctionRcv CreateCommunicationFunctionRcv(string extension)
         {
             return new NominatedPharmacyTypes.CommunicationFunctionRcv

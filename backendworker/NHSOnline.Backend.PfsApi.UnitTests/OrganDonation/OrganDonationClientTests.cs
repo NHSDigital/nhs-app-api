@@ -8,7 +8,6 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
@@ -62,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         public async Task PostLookup_ReturnsValidResponse()
         {
             var expectedResponse = _fixture.Create<RegistrationLookupResponse>();
-            
+
             _mockHttpHandler
                 .WhenOrganDonation(HttpMethod.Post, SearchPath)
                 .Respond(System.Net.Mime.MediaTypeNames.Application.Json, JsonConvert.SerializeObject(expectedResponse));
@@ -126,7 +125,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             response.StatusCode.Should().Be(errorCode);
             response.Body.Should().BeNull();
         }
-        
+
         [TestMethod]
         public async Task PostRegistration_ReturnsValidResponse()
         {

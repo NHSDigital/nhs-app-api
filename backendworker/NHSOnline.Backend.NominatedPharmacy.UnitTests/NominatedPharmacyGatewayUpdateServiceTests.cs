@@ -6,12 +6,11 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
+namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 {
     [TestClass]
     public class NominatedPharmacyGatewayUpdateServiceTests

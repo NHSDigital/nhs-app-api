@@ -5,10 +5,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
-using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using NHSOnline.Backend.NominatedPharmacy.Models;
 using GeoCoordinatePortable;
-using OpeningTime = NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models.OpeningTime;
+using OpeningTime = NHSOnline.Backend.NominatedPharmacy.Models.OpeningTime;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 {

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
+using NHSOnline.Backend.NominatedPharmacy.Envelope;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.GetNominatedPharmacyTypes;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Clients

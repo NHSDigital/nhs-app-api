@@ -1,7 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.NominatedPharmacy.Models;
-using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
@@ -11,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         {
             return new OkObjectResult(new PharmacyDetailsResponse
             {
-                PharmacyDetails = result.PharmacyDetails,   
+                PharmacyDetails = result.PharmacyDetails,
                 NominatedPharmacyEnabled = true
             });
         }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models
+namespace NHSOnline.Backend.NominatedPharmacy.Models
 {
     public class PharmacySearchResultResponse
     {

@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
 
-namespace NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions
+namespace NHSOnline.Backend.NominatedPharmacy.Envelope
 {
     public class NominatedPharmacyEnvelopeService : INominatedPharmacyEnvelopeService
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
-using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
 {
@@ -20,13 +20,13 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
                     PharmacyCount = pharmacyCount,
                 };
             }
-            
+
             public override T Accept<T>(IPharmacySearchResponseVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
-        
+
         public class InvalidPostcode : PharmacySearchResult
         {
             public override T Accept<T>(IPharmacySearchResponseVisitor<T> visitor)
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
                 return visitor.Visit(this);
             }
         }
-        
+
         public class PostcodeResultFailure : PharmacySearchResult
         {
             public HttpStatusCode StatusCode { get; }
@@ -43,14 +43,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
             {
                 StatusCode = statusCode;
             }
-            
+
             public override T Accept<T>(IPharmacySearchResponseVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
-        
-        
+
+
         public class BadRequest : PharmacySearchResult
         {
             public override T Accept<T>(IPharmacySearchResponseVisitor<T> visitor)
@@ -58,23 +58,23 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy
                 return visitor.Visit(this);
             }
         }
-        
+
         public class InternalServerError : PharmacySearchResult
-        {      
+        {
             public override T Accept<T>(IPharmacySearchResponseVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
-        
+
         public class ModelValidationError : PharmacySearchResult
-        {      
+        {
             public override T Accept<T>(IPharmacySearchResponseVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
-        
+
         public class UnsafeSearchTerm : PharmacySearchResult
         {
             public override T Accept<T>(IPharmacySearchResponseVisitor<T> visitor)

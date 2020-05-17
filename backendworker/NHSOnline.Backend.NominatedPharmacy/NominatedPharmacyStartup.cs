@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.NominatedPharmacy.Clients;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
-using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
+using NHSOnline.Backend.NominatedPharmacy.Envelope;
 
 namespace NHSOnline.Backend.NominatedPharmacy
 {
@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             serviceCollection.AddSingleton<SpineHttpClientHandler>();
             serviceCollection.AddHttpClient<NominatedPharmacyHttpClient>()
                 .ConfigurePrimaryHttpMessageHandler<SpineHttpClientHandler>();
-            
+
             serviceCollection.AddTransient<INominatedPharmacyService, NominatedPharmacyService>();
             serviceCollection.AddSingleton<INominatedPharmacyClient, NominatedPharmacyClient>();
             serviceCollection.AddSingleton<INominatedPharmacyPDSClient, NominatedPharmacyPDSClient>();
