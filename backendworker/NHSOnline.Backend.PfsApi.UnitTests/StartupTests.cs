@@ -9,7 +9,6 @@ using System;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Support.Settings;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests
 {

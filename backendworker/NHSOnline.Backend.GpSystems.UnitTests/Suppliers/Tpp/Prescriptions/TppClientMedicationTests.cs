@@ -6,9 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
@@ -25,8 +23,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         private ITppClientRequest<(TppRequestParameters, RepeatPrescriptionRequest), RequestMedicationReply> SystemUnderTest { get; set; }
 
         private MockHttpMessageHandler MockHttpHandler => Context.MockHttpHandler;
-        private Mock<ILogger<TppClientRequestExecutor>> MockLogger => Context.MockLogger;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -53,7 +50,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
                 CourseIds = new List<string> { "1234", "1234" },
                 SpecialRequest = "test"
             };
-            
+
             var requestMedicationRequestModel = new RequestMedication
             {
                 UnitId = tppRequestParameters.OdsCode,

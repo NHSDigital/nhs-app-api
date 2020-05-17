@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.Support.Session;

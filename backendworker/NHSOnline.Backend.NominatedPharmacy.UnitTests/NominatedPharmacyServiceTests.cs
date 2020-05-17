@@ -12,7 +12,6 @@ using Moq;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.GetNominatedPharmacyTypes;
@@ -64,7 +63,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             // Arrange
             _userSession.CitizenIdUserSession.FamilyName = "Smith";
             _userSession.CitizenIdUserSession.DateOfBirth = DateTime.ParseExact("19900101", "yyyyMMdd", CultureInfo.InvariantCulture);
- 
+
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
@@ -108,7 +107,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                                 },
                                                                 PlayedOtherProviderPatients =
                                                                     new List<PlayedOtherProviderPatient>(),
-                                                                
+
                                                                 COCTMT000203UK02PartOfWhole = new COCTMT000203UK02PartOfWhole
                                                                 {
                                                                     PartPerson = new PartPerson
@@ -126,7 +125,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                                         }
                                                                     }
                                                                 }
-                                                            }, 
+                                                            },
                                                             Id = new Id
                                                             {
                                                                 Extension = NhsNumberTrimmed
@@ -188,8 +187,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
             string[] formats = { "yyyyMMdd" };
             bool parsedSuccessfully = DateTime.TryParseExact(dateOfBirth, formats,
-                CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDob);            
-            
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDob);
+
             if (parsedSuccessfully)
             {
                 _userSession.CitizenIdUserSession.DateOfBirth = parsedDob;
@@ -262,7 +261,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                                             }
                                                                         }
                                                                     },
-                                                                                                                                
+
                                                                 COCTMT000203UK02PartOfWhole = new COCTMT000203UK02PartOfWhole
                                                                 {
                                                                     PartPerson = new PartPerson
@@ -316,13 +315,13 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             result.GetNominatedPharmacyResponse.PharmacyOdsCode.Should().Be(expectedPharmacyOdsCodeInResult);
             result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().Be(expectedIsNominatedPharmacyEnabledValue);
         }
-        
+
         [DataTestMethod]
         [DataRow("Smith", "Smith", "20000101", "20000101", NhsNumberTrimmed, true)]
         [DataRow("Smith", "SMITH", "20000101", "20000101", NhsNumberTrimmed, true)]
         [DataRow("Smith", "Jones", "20000101", "20000101", NhsNumberTrimmed, false)] // family name does not match
         [DataRow("Smith", "Smith", "20000101", "20000102", NhsNumberTrimmed, false)] // date of birth does not match
-        [DataRow("Smith", "Smith", "20000101", "20000101", RandomNhsNumber,  false)] // nhs number does not match    
+        [DataRow("Smith", "Smith", "20000101", "20000101", RandomNhsNumber,  false)] // nhs number does not match
         [DataRow("Smith",  null,   "20000101", "20000101", NhsNumberTrimmed, false)] // family name is not returned
         [DataRow("Smith", "Smith", "20000101",  null,      NhsNumberTrimmed, false)] // date of birth is not returned
         [DataRow("Smith", "Smith", "20000101", "20000101", null,             false)] // nhs number is not returned
@@ -413,7 +412,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                                             }
                                                                         }
                                                                     },
-                                                                                                                                
+
                                                                 COCTMT000203UK02PartOfWhole = new COCTMT000203UK02PartOfWhole
                                                                 {
                                                                     PartPerson = new PartPerson
@@ -435,7 +434,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                             Id = new Id
                                                             {
                                                                 Extension = expectedNhsNumber
-                                                            }                                                   
+                                                            }
                                                         }
                                                     },
                                                     PertinentInformation = new PertinentInformation
@@ -462,12 +461,12 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             var result = await _systemUnderTest.GetNominatedPharmacy(NhsNumber, _userSession.CitizenIdUserSession);
 
             // Assert
-            _nominatedPharmacyClient.Verify();        
+            _nominatedPharmacyClient.Verify();
             result.GetNominatedPharmacyResponse.HttpStatusCode.Should().Be(HttpStatusCode.OK);
             result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().Be(expectedIsNominatedPharmacyEnabledValue);
         }
 
-        
+
 
         [TestMethod]
         public async Task NominatedPharmacyGet_ReturnsFalseWhenNhsNumberReturnedDoesNotMatch()
@@ -512,7 +511,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                             {
                                                                 PlayedOtherProviderPatients =
                                                                     new List<PlayedOtherProviderPatient>()
-                                                            }, 
+                                                            },
                                                             Id = new Id
                                                             {
                                                                 Extension = RandomNhsNumber
@@ -549,7 +548,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             result.GetNominatedPharmacyResponse.PharmacyOdsCode.Should().Be(null);
             result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().BeFalse();
         }
-        
+
         [DataRow("SS")]
         [DataRow("T")]
         [DataRow("")]
@@ -597,7 +596,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                             {
                                                                 PlayedOtherProviderPatients =
                                                                     new List<PlayedOtherProviderPatient>()
-                                                            }, 
+                                                            },
                                                             Id = new Id
                                                             {
                                                                 Extension = NhsNumberTrimmed
@@ -606,7 +605,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                             {
                                                                 Code = code
                                                             }
-                                                        }   
+                                                        }
                                                     },
                                                     PertinentInformation = new PertinentInformation
                                                     {
@@ -638,7 +637,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             result.GetNominatedPharmacyResponse.PharmacyOdsCode.Should().Be(null);
             result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().BeFalse();
         }
-         
+
         [TestMethod]
         public async Task NominatedPharmacyUpdate_Returns400_WhenUpdateClientFails()
         {
@@ -736,7 +735,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         {
             // Arrange
             const string ExpectedPharmacyOdsCodeInResult = null;
-            
+
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPAIN000008UK02>(
@@ -747,7 +746,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
                                    StringComparison.OrdinalIgnoreCase))
                 ))
-                .Returns(Task.FromResult(GetNominatedPharmacyApiObjectResponse(pharmacyCodes)))               
+                .Returns(Task.FromResult(GetNominatedPharmacyApiObjectResponse(pharmacyCodes)))
                 .Verifiable();
 
             // Act
@@ -760,7 +759,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             result.GetNominatedPharmacyResponse.PharmacyOdsCode.Should().Be(ExpectedPharmacyOdsCodeInResult);
             result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         public async Task
             NominatedPharmacyGet_ReturnsUnsuccessfulResponseWhenPharmacySearchFailsDueToClientFailure()
@@ -769,29 +768,29 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.IsAny<QUPAIN000008UK02>()
-                )).Returns(Task.FromResult(GetUnsuccessfulNominatedPharmacyApiObjectResponse()))               
+                )).Returns(Task.FromResult(GetUnsuccessfulNominatedPharmacyApiObjectResponse()))
                 .Verifiable();
 
             // Act
             var result = await _systemUnderTest.GetNominatedPharmacy(NhsNumber, _userSession.CitizenIdUserSession);
-            
+
             // Assert
             _nominatedPharmacyClient.Verify();
             result.Should().BeAssignableTo<GetNominatedPharmacyResult.PharmacyRetrievalFailure>();
             result.GetNominatedPharmacyResponse.HttpStatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
-            result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().BeFalse();        
+            result.GetNominatedPharmacyResponse.HaveAllChecksPassed.Should().BeFalse();
         }
-        
+
         [TestMethod]
         public async Task NominatedPharmacyGet_ReturnsInternalServerError_WhenClientThrowsException()
         {
             // Arrange
             string NhSNumber = "ABC123";
-            
+
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.IsAny<QUPAIN000008UK02>()
-                )).Throws<Exception>()         
+                )).Throws<Exception>()
                 .Verifiable();
 
             // Act
@@ -813,7 +812,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                 }
             };
         }
-           
+
         private static NominatedPharmacyApiObjectResponse<QUPAIN000009UK03Response>
             GetNominatedPharmacyApiObjectResponse(string[] pharmacyCodes)
         {
@@ -867,11 +866,11 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                 }
             };
         }
-        
+
         private static List<PlayedOtherProviderPatient> GetPatientCareProvisionEvents(string[] pharmacyCodes)
         {
             var playedOtherProviderPatientList = new List<PlayedOtherProviderPatient>();
-            
+
             foreach (var pharmacyCode in pharmacyCodes)
             {
                 if (!pharmacyCode.IsNullOrEmpty())

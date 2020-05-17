@@ -492,7 +492,7 @@ namespace NHSOnline.Backend.PfsApi
         /// Additionally registers the configuration object directly with the DI container, so can be retrieved without referencing IOptions.
         ///
         /// </summary>
-        /// <typeparam name="T">The type of options being configured</typeparam>
+        /// <typeparam name="TOptions">The type of options being configured</typeparam>
         /// <param name="services">The <see cref="IServiceCollection "/> to add the services</param>
         /// <param name="configuration">The configuration being bound.</param>
         /// <returns></returns>

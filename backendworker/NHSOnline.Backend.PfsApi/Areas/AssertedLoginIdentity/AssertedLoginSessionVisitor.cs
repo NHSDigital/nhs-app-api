@@ -1,10 +1,7 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity;
 using NHSOnline.Backend.PfsApi.AssertedLoginIdentity.Models;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.PfsApi.Areas.AssertedLoginIdentity

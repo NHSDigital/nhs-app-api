@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
         private Mock<IMicrotestClient> _mockMicrotestClient;
         private Mock<IIm1CacheKeyGenerator> _im1CacheKeyGenerator;
         private Mock<IIm1CacheService> _im1CacheService;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
             _mockMicrotestClient = _fixture.Freeze<Mock<IMicrotestClient>>();
             _systemUnderTest = _fixture.Create<MicrotestLinkageService>();
             _im1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
-            
+
             _im1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
         }
 
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
             _mockMicrotestClient.Setup(x => x.DemographicsGet(request.OdsCode, request.NhsNumber))
                 .Returns(Task.FromResult(response));
             var cacheKey = _fixture.Create<string>();
-            
+
             _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(
                     It.IsAny<string>(), request.OdsCode, It.IsAny<string>()))
                 .Returns(cacheKey);
@@ -100,7 +100,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
         {
             // Arrange
             var request = _fixture.Create<GetLinkageRequest>();
-            var response = new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.InternalServerError);
 
             _mockMicrotestClient.Setup(x => x.DemographicsGet(request.OdsCode, request.NhsNumber))
                 .Throws((Exception)Activator.CreateInstance(demographicsException));

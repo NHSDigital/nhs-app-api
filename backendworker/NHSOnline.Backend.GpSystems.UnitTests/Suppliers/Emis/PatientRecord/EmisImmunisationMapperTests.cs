@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("immunisationsGetResponse");
         }
-        
+
         [TestMethod]
         public void MapImmunisationRequestsGetResponseToImmunisationListResponse_WithNullTerm_GivesEmptyResponse()
         {
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                 {
                     DatePart = "testDatePart",
                     Value = new DateTime(2019, 6, 15, 3, 30, 0)
-                }   
+                }
             });
             var mappedImmunisationList = _systemUnderTest.Map(new MedicationRootObject
             {
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             });
             mappedImmunisationList.Data.Should().BeEmpty();
         }
-        
+
         [TestMethod]
         public void MapImmunisationRequestsGetResponseToImmunisationListResponse_WithNullEffectiveDate_ReturnsResultValuesWithEmptyDate()
         {
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     Immunisations = immunisations
                 }
             });
-            
+
             // Assert
             var firstMappedImmunisation = mappedImmunisationList.Data.First();
             firstMappedImmunisation.Term.Should().Be("testImmunisation");
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
             // Arrange
             var immunisations = new List<Immunisation>
             {
-                new Immunisation { Term = "testImmunisation", EffectiveDate = new EffectiveDate { } }
+                new Immunisation { Term = "testImmunisation", EffectiveDate = new EffectiveDate() }
             };
 
             // Act

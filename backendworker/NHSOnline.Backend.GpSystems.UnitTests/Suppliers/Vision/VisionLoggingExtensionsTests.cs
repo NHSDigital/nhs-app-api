@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -23,7 +22,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         private Mock<ILogger<VisionSessionService>> _logger;
         private IFixture _fixture;
         private static Regex _guidRegex;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {

@@ -5,7 +5,6 @@ using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.PfsApi.Filters;
 using NHSOnline.Backend.PfsApi.Ndop;
 using NHSOnline.Backend.PfsApi.Session;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.AspNet;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Session;

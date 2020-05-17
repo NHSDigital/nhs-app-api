@@ -282,7 +282,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             var result = await _systemUnderTest.GetLinkedAccount(_emisUserSession, proxyAccountToUse.Id);
 
             // Assert
-            var successResult = result.Should().BeOfType<LinkedAccountAccessSummaryResult.BadGateway>();
+            result.Should().BeOfType<LinkedAccountAccessSummaryResult.BadGateway>();
             _demographicsService.Verify();
             _emisClient.Verify();
         }
@@ -435,10 +435,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             successResult.ValidAccounts.Count().Should().Be(1);
 
             var expectedLogMessage =
-                $"Linked_profiles_count={3}, " +
-                $"excluded_for_not_having_NHS_number={1}, " +
-                $"excluding_for_having_different_ODS_code={1}, " +
-                $"valid_and_being_returned: {1}";
+                "Linked_profiles_count=3, " +
+                "excluded_for_not_having_NHS_number=1, " +
+                "excluding_for_having_different_ODS_code=1, " +
+                "valid_and_being_returned: 1";
             _logger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
 
             var validEmisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(1);

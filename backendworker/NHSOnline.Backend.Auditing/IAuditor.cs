@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Auditing

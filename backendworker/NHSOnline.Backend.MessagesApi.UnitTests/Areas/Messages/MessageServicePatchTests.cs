@@ -45,23 +45,23 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 
             _mockMessagesValidationService = _fixture.Freeze<Mock<IMessagesValidationService>>();
 
-            _mockMessageToUserMessageJsonPatch = 
-                _fixture.Freeze<Mock<IMapper<JsonPatchDocument<Message>, JsonPatchDocument<UserMessage>>>>(); 
+            _mockMessageToUserMessageJsonPatch =
+                _fixture.Freeze<Mock<IMapper<JsonPatchDocument<Message>, JsonPatchDocument<UserMessage>>>>();
             _fixture.Freeze<Mock<IMapper<List<UserMessage>, MessagesResponse>>>();
             _fixture.Freeze<Mock<IMapper<List<SummaryMessage>, MessagesResponse>>>();
-            
+
             var mockLogger = _fixture.Freeze<Mock<ILogger<MessageService>>>();
             var accessTokenString = JwtToken.Generate(new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, _fixture.Create<string>()),
                 new Claim("nhs_number", _fixture.Create<string>())
             });
-            
+
             _accessToken = AccessToken.Parse(mockLogger.Object, accessTokenString);
-            
+
             _systemUnderTest = _fixture.Create<MessageService>();
         }
-        
+
         [TestMethod]
         [DataRow("add", "/read", "/readTime")]
         public async Task Patch_Updated(string operation, string messagePath, string userMessagePath)
@@ -73,8 +73,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             var userMessageJsonPatch = new JsonPatchDocument<UserMessage>();
             userMessageJsonPatch.Operations.Add(new Operation<UserMessage>(operation, userMessagePath, null, nowTime));
             UserMessage updatedMessage = null;
-            
-            _mockMessagesValidationService.Setup(x => 
+
+            _mockMessagesValidationService.Setup(x =>
                     x.IsPatchRequestValid(jsonPatchDoc, _userMessageId))
                 .Returns(true);
 
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _mockMessageRepository.Setup(x => x.UpdateOne(It.IsAny<UserMessage>()))
                 .Callback<UserMessage>(u => updatedMessage = u)
                 .Returns(Task.CompletedTask);
-            
+
             // Act
             var result = await _systemUnderTest.PatchMessage(jsonPatchDoc, _accessToken, _userMessageId);
 
@@ -104,11 +104,11 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             // Arrange
             var jsonPatchDoc = new JsonPatchDocument<Message>();
             jsonPatchDoc.Operations.Add(new Operation<Message>(operation, path, null, "Test"));
-            
-            _mockMessagesValidationService.Setup(x => 
+
+            _mockMessagesValidationService.Setup(x =>
                     x.IsPatchRequestValid(jsonPatchDoc, _userMessageId))
                 .Returns(true);
-            
+
             // Act
             var result = await _systemUnderTest.PatchMessage(jsonPatchDoc, _accessToken, _userMessageId);
 
@@ -117,18 +117,17 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _mockMessageToUserMessageJsonPatch.VerifyAll();
             result.Should().BeAssignableTo<MessagePatchResult.BadRequest>();
         }
-        
+
         [TestMethod]
         public async Task Patch_MessageDoesNotExists_ReturnsNotFound()
         {
             // Arrange
             var jsonPatchDoc = new JsonPatchDocument<Message>();
-            UserMessage message = null;
             _mockMessageRepository
                 .Setup(x => x.FindOne(It.IsAny<string>(),It.IsAny<string>()))
-                .ReturnsAsync(message);
-            
-            _mockMessagesValidationService.Setup(x => 
+                .ReturnsAsync((UserMessage)null);
+
+            _mockMessagesValidationService.Setup(x =>
                     x.IsPatchRequestValid(jsonPatchDoc, _userMessageId))
                 .Returns(true);
 
@@ -140,7 +139,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _mockMessagesValidationService.VerifyAll();
             result.Should().BeAssignableTo<MessagePatchResult.NotFound>();
         }
-        
+
         [TestMethod]
         public async Task Patch_RepositoryThrowsMongoException_ReturnsInternalServerError()
         {
@@ -149,8 +148,8 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _mockMessageRepository
                 .Setup(x => x.FindOne(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<ArgumentException>();
-            
-            _mockMessagesValidationService.Setup(x => 
+
+            _mockMessagesValidationService.Setup(x =>
                     x.IsPatchRequestValid(jsonPatchDoc, _userMessageId))
                 .Returns(true);
 
@@ -162,7 +161,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             _mockMessagesValidationService.VerifyAll();
             result.Should().BeAssignableTo<MessagePatchResult.InternalServerError>();
         }
-        
+
         [TestMethod]
         public async Task Patch_RepositoryThrowsMongoException_ReturnsBadGateway()
         {
@@ -170,25 +169,25 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
             var jsonPatchDoc = new JsonPatchDocument<Message>();
             _mockMessageRepository.Setup(x => x.UpdateOne(It.IsAny<UserMessage>()))
                 .Throws(new MongoException("Test"));
-            
-            _mockMessagesValidationService.Setup(x => 
+
+            _mockMessagesValidationService.Setup(x =>
                     x.IsPatchRequestValid(jsonPatchDoc, _userMessageId))
                 .Returns(true);
 
             // Act
             var result = await _systemUnderTest.PatchMessage(jsonPatchDoc, _accessToken, _userMessageId);
-            
+
             // Assert
             _mockMessagesValidationService.VerifyAll();
             _mockMessageRepository.VerifyAll();
             result.Should().BeAssignableTo<MessagePatchResult.BadGateway>();
         }
-        
+
         [TestMethod]
         public async Task Patch_RequestFailsValidation_ReturnsBadRequest()
         {
             // Arrange
-            _mockMessagesValidationService.Setup(x => 
+            _mockMessagesValidationService.Setup(x =>
                     x.IsPatchRequestValid(It.IsAny<JsonPatchDocument<Message>>(), It.IsAny<string>()))
                 .Returns(false);
 
@@ -197,7 +196,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                     _fixture.Create<JsonPatchDocument<Message>>(),
                     _accessToken,
                 _fixture.Create<string>());
-            
+
             // Assert
             _mockMessagesValidationService.VerifyAll();
             result.Should().BeAssignableTo<MessagePatchResult.BadRequest>();

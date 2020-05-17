@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Hl7.Fhir.Model;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

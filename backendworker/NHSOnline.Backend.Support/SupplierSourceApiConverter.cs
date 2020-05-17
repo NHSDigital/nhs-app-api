@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Support
         private static Dictionary<Supplier, SourceApi> LoadSupplierToSourceApiMap()
             => typeof(Supplier)
                 .GetFields()
-                .Select(f => (f.Name, CustomAttributeExtensions.GetCustomAttribute<SourceApiAttribute>((MemberInfo) f)?.SourceApi))
+                .Select(f => (f.Name, CustomAttributeExtensions.GetCustomAttribute<SourceApiAttribute>(f)?.SourceApi))
                 .Where(t => t.SourceApi != null)
                 .ToDictionary(t => (Supplier) Enum.Parse(typeof(Supplier), t.Name), t => t.SourceApi.Value);
     }

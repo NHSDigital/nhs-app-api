@@ -173,10 +173,6 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Notifications.Azure
             var registrationId = _fixture.Create<string>();
             var registerDeviceRequest = _fixture.Create<RegisterDeviceRequest>();
 
-            var existingRegistrations = _fixture.Build<AppleRegistrationDescriptionTestWrapper>()
-                .Without(x => x.ExtensionData)
-                .CreateMany(3);
-
             var registrationDescription = _fixture.Build<AppleRegistrationDescriptionTestWrapper>()
                 .With(x => x.DeviceToken, registerDeviceRequest.DevicePns)
                 .Without(x => x.ExtensionData)

@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;

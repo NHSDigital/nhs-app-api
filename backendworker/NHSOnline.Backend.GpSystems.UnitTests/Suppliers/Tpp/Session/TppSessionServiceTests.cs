@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Session;
@@ -46,8 +45,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         private ServiceProvider _serviceProvider;
 
         private TppSessionService _systemUnderTest;
-
-        private Mock<ILogger<TppSessionService>> TppSessionServiceLogger => _serviceProvider.MockLogger<TppSessionService>();
 
         [TestInitialize]
         public void TestInitialize()

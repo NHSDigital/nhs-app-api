@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.Support.Session;
@@ -11,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         Task<OrganDonationResponse<RegistrationLookupResponse>> PostLookup(
                 RegistrationLookupRequest request,
                 P9UserSession userSession);
-        
+
         Task<OrganDonationResponse<OrganDonationBasicResponse>> PostRegistration(
                 RegistrationRequest request,
                 P9UserSession userSession);

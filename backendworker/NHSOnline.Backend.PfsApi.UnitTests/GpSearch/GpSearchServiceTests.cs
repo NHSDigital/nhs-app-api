@@ -22,7 +22,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
         private Mock<IGpLookupClient> _gpLookupClient;
         private IGpLookupConfig _gpLookupConfig;
         private INhsSearchResultChecker _nhsSearchResultChecker;
-        private IPostcodeParser _postcodeParser;
         private ILogger<NhsSearchResultChecker> _nhsResultCheckerLogger;
 
         [TestInitialize]
@@ -34,9 +33,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             _gpLookupConfig = _fixture.Freeze<IGpLookupConfig>();
             _nhsResultCheckerLogger = _fixture.Freeze<ILogger<NhsSearchResultChecker>>();
             _nhsSearchResultChecker = new NhsSearchResultChecker(_nhsResultCheckerLogger);
-            _postcodeParser = new PostcodeParser();
 
-            _gpSearchService = new GpSearchService(_logger, _gpLookupClient.Object, _gpLookupConfig, _nhsSearchResultChecker);     
+            _gpSearchService = new GpSearchService(_logger, _gpLookupClient.Object, _gpLookupConfig, _nhsSearchResultChecker);
         }
 
         [TestMethod]

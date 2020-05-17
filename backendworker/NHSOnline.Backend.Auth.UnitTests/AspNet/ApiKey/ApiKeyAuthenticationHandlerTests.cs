@@ -66,7 +66,6 @@ namespace NHSOnline.Backend.Auth.UnitTests.AspNet.ApiKey
             // Arrange
             var context = new DefaultHttpContext();
             context.Request.Headers.Add("X-Api-Key", "InvalidValue");
-            var secureApiKey = new SecureApiKey("testOwner", "ValidValue");
             _principalProvider.Setup(x => x.Execute(It.IsAny<string>())).ReturnsAsync((SecureApiKey) null);
 
             await _handler.InitializeAsync(

@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-        } 
+        }
 
         [TestMethod]
         public void MapAllergyRequestsGetResponseToAllergyListResponse_WithNullResponse_ThrowsArgumentNullException()
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     },
                 }
             };
-            
+
             // Act
             var result = new EmisAllergyMapper().Map(item);
 
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     new AllergyItem
                     {
                         Name = item.MedicalRecord.Allergies.ElementAt(0).Term,
-                        Date = new MyRecordDate { 
+                        Date = new MyRecordDate {
                             Value = item.MedicalRecord.Allergies.ElementAt(0).EffectiveDate.Value,
                             DatePart = item.MedicalRecord.Allergies.ElementAt(0).EffectiveDate.DatePart
                          }
@@ -127,7 +127,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     new AllergyItem
                     {
                         Name = item.MedicalRecord.Allergies.ElementAt(0).Term,
-                        Date = new MyRecordDate { }
+                        Date = new MyRecordDate()
                     }
                 }
             };
@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         new Allergy
                         {
                             Term = _fixture.Create<string>(),
-                            EffectiveDate = new EffectiveDate { }
+                            EffectiveDate = new EffectiveDate()
                         },
                     },
                 }

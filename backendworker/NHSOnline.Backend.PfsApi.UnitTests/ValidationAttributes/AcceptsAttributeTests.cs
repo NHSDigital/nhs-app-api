@@ -7,8 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Support.ValidationAttributes;
-//using NHSOnline.Backend.PfsApi.ValidationAttributes;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.ValidationAttributes
 {

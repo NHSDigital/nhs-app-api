@@ -64,14 +64,14 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = _expectedNhsNumbers
             };
-            
+
             _verifyPatientIm1ConnectionV2SuccessfulResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = _expectedNhsNumbers,
                 OdsCode = MicrotestOdsCode
             };
-            
+
             _expectedSuccessfulVerifyV2Response = new PatientIm1ConnectionResponse
             {
                 ConnectionToken = DefaultConnectionToken,
@@ -91,11 +91,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             _tokenValidationService = new Mock<ITokenValidationService>();
             _tokenValidationService.Setup(x => x.IsValidConnectionTokenFormat(It.IsAny<string>())).Returns(true);
-            
+
             _retrieveLinkageKeysService = new Mock<IRetrieveLinkageKeysService>();
 
             _odsCodeMassager = new Mock<IOdsCodeMassager>();
-            
+
 
             _im1ErrorCodes = new Mock<Im1ConnectionErrorCodes>();
 
@@ -108,12 +108,12 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public void Constructor_NullOdsCodeLookup_Throws()
         {
             // Act
-            Action act = () => new Im1ConnectionController( 
+            Action act = () => new Im1ConnectionController(
                 _logger.Object,
                 _auditor.Object,
-                _odsCodeMassager.Object, 
+                _odsCodeMassager.Object,
                 _retrieveLinkageKeysService.Object,
-                _im1ErrorCodes.Object, 
+                _im1ErrorCodes.Object,
                 _errorCodes.Object,
                 null);
 
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         {
             // Act
             var result = await _systemUnderTest.Get(null, DefaultOdsCode);
-            
+
             // Assert
             result.Should().BeOfType<BadRequestResult>();
             _auditor.VerifyNoOtherCalls();
@@ -137,7 +137,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         {
             // Act
             var result = await _systemUnderTest.Get(string.Empty, DefaultOdsCode);
-            
+
             // Assert
             result.Should().BeOfType<BadRequestResult>();
             _auditor.VerifyNoOtherCalls();
@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         {
             // Act
             var result = await _systemUnderTest.Get(DefaultConnectionToken, null);
-            
+
             // Assert
             result.Should().BeOfType<BadRequestResult>();
             _auditor.VerifyNoOtherCalls();
@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         {
             // Act
             var result = await _systemUnderTest.Get(DefaultConnectionToken, string.Empty);
-            
+
             // Assert
             result.Should().BeOfType<BadRequestResult>();
             _auditor.VerifyNoOtherCalls();
@@ -176,7 +176,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
                 new Im1ConnectionVerifyResult.Success(_verifySuccessfulResponse));
-            
+
             var gpSystemMock = MockGpSystem(im1ConnectionService);
             _gpSystemResolver.Setup(x => x.ResolveFromOdsCode(odsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
@@ -206,7 +206,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
                 new Im1ConnectionVerifyResult.Success(_verifyPatientIm1ConnectionV2SuccessfulResponse));
-            
+
             var gpSystemMock = MockGpSystem(im1ConnectionService);
             _gpSystemResolver
                 .Setup(x => x.ResolveFromOdsCode(odsCode))
@@ -251,7 +251,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             // Arrange
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
             request.OdsCode = DefaultOdsCode;
-          
+
             _odsCodeMassager
                 .Setup(x => x.CheckOdsCode(DefaultOdsCode))
                 .Returns(DefaultOdsCode);
@@ -276,7 +276,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var model = _fixture.Create<PatientIm1ConnectionRequest>();
             model.OdsCode = odsCode;
-            
+
             var verifyResponse = new GpSystems.Im1Connection.Models.PatientIm1ConnectionResponse()
             {
                 ConnectionToken = DefaultConnectionToken,
@@ -303,17 +303,17 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
                 new Im1ConnectionVerifyResult.Success(verifyResponse));
-            
+
             var gpSystemMock = MockGpSystem(im1ConnectionService);
 
             _gpSystemResolver
                 .Setup(x => x.ResolveFromOdsCode(odsCode))
                 .ReturnsAsync(Option.Some(gpSystemMock.Object));
-            
+
             im1ConnectionService
                 .Setup(x => x.Register(model))
                 .ReturnsAsync(new Im1ConnectionRegisterResult.Success(registerResponse));
-            
+
             _systemUnderTest = CreateIm1ConnectionController();
 
             // Act
@@ -345,12 +345,12 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             //Assert
             AssertErrorWithStatusCode(
-                result, 
+                result,
                 StatusCodes.Status501NotImplemented,
                 Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
                 "Invalid Details. Invalid parameters: odsCode");
         }
-        
+
         [TestMethod]
         public async Task GetV2_MicrotestDemographicsFailsWithInternalServerError_ReturnsForbidden()
         {
@@ -362,7 +362,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
                 new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.NoMatchFoundForGivenDemographics));
-            
+
             var gpSystemMock = MockGpSystem(im1ConnectionService);
             _gpSystemResolver
                 .Setup(x => x.ResolveFromOdsCode(odsCode))
@@ -375,12 +375,12 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             //Assert
             AssertErrorWithStatusCode(
-                result, 
+                result,
                 StatusCodes.Status404NotFound,
                 Im1ConnectionErrorCodes.ExternalCode.PatientNotFound,
                 "Patient not found");
         }
-        
+
         [TestMethod]
         public async Task GetV2_MicrotestDemographicsFails_ReturnsBadGateway()
         {
@@ -392,7 +392,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
                 new Im1ConnectionVerifyResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.ConnectionToServiceFailed));
-            
+
             var gpSystemMock = MockGpSystem(im1ConnectionService);
             _gpSystemResolver
                 .Setup(x => x.ResolveFromOdsCode(odsCode))
@@ -405,7 +405,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             //Assert
             AssertErrorWithStatusCode(
-                result, 
+                result,
                 StatusCodes.Status502BadGateway,
                 Im1ConnectionErrorCodes.ExternalCode.UpstreamError,
                 "Upstream Error");
@@ -424,7 +424,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             _tokenValidationService
               .Setup(x => x.IsValidConnectionTokenFormat("123"))
               .Returns(false);
-            
+
             var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
 
             _gpSystemResolver
@@ -438,7 +438,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             //Assert
             AssertErrorWithStatusCode(
-                result, 
+                result,
                 StatusCodes.Status400BadRequest,
                 Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
                 "Invalid Details. Invalid parameters: connectionToken");
@@ -456,7 +456,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             //Assert
             AssertErrorWithStatusCode(
-                result, 
+                result,
                 StatusCodes.Status400BadRequest,
                 Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
                 "Invalid Details. Invalid parameters: connectionToken, odsCode");
@@ -473,7 +473,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             // Assert
             AssertErrorWithStatusCode(
-                result, 
+                result,
                 StatusCodes.Status400BadRequest,
                 Im1ConnectionErrorCodes.ExternalCode.InvalidDetails,
                 "Invalid Details. Invalid parameters: OdsCode");
@@ -483,7 +483,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public async Task PostV2_NoGpSystem_Returns501()
         {
             var model = ValidIm1RegistrationRequest();
-            
+
             _odsCodeMassager
                 .Setup(x => x.CheckOdsCode(model.OdsCode))
                 .Returns(model.OdsCode);
@@ -505,12 +505,12 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         public async Task PostV2_NoLinkageNeeded_ReturnsSuccess()
         {
             var model = ValidIm1RegistrationRequest();
-            
+
             _odsCodeMassager
                 .Setup(x => x.CheckOdsCode(model.OdsCode))
                 .Returns(model.OdsCode);
-            
-            var expectedResponse = new GpSystems.Im1Connection.Models.CreateIm1ConnectionResponse()
+
+            var expectedResponse = new CreateIm1ConnectionResponse()
             {
                 ConnectionToken = DefaultConnectionToken,
                 NhsNumbers = new []{new PatientNhsNumber { NhsNumber = "1112223333" }}
@@ -519,7 +519,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             mockIm1ConnectionService
                 .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
                 .ReturnsAsync(new Im1ConnectionRegisterResult.Success(expectedResponse));
-            
+
             var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
             _gpSystemResolver
                 .Setup(x => x.ResolveFromOdsCode(DefaultOdsCode))
@@ -539,16 +539,16 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         {
             // Arrange
             var model = ValidIm1RegistrationRequest();
-            
+
             _odsCodeMassager
                 .Setup(x => x.CheckOdsCode(model.OdsCode))
                 .Returns(model.OdsCode);
-            
+
             var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
             mockIm1ConnectionService
                 .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
                 .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnknownError));
-            
+
             var gpSystemMock = MockGpSystem(mockIm1ConnectionService);
             _gpSystemResolver
                 .Setup(x => x.ResolveFromOdsCode(DefaultOdsCode))
@@ -571,7 +571,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             // Arrange
             var model = ValidIm1RegistrationRequest();
             model.LinkageKey = null;
-            
+
             _odsCodeMassager
                 .Setup(x => x.CheckOdsCode(model.OdsCode))
                 .Returns(model.OdsCode);
@@ -591,7 +591,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             mockIm1ConnectionService
                 .Setup(x => x.Register(It.IsAny<PatientIm1ConnectionRequest>()))
                 .ReturnsAsync(new Im1ConnectionRegisterResult.ErrorCase(Im1ConnectionErrorCodes.InternalCode.UnknownError));
-            
+
             // Act
             var result = await _systemUnderTest.Post(model);
 
@@ -609,7 +609,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             // Arrange
             var model = ValidIm1RegistrationRequest();
             model.LinkageKey = null;
-            
+
             _odsCodeMassager
                 .Setup(x => x.CheckOdsCode(model.OdsCode))
                 .Returns(model.OdsCode);
@@ -648,7 +648,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             // Arrange
             var model = ValidIm1RegistrationRequest();
             model.LinkageKey = null;
-            
+
             _odsCodeMassager
                 .Setup(x => x.CheckOdsCode(model.OdsCode))
                 .Returns(model.OdsCode);
@@ -709,7 +709,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 
             return new Im1ConnectionController(
                 _logger.Object,
-                _auditor.Object, 
+                _auditor.Object,
                 _odsCodeMassager.Object,
                 _retrieveLinkageKeysService.Object,
                 _im1ErrorCodes.Object,

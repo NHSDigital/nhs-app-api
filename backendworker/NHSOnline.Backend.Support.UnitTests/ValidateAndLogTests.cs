@@ -5,7 +5,6 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Moq;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.Support.UnitTests
 {

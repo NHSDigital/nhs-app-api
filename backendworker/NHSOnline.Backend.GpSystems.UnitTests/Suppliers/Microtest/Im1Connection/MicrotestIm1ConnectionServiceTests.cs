@@ -32,14 +32,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Im1Connectio
         private Mock<IMicrotestClient> _microtestClientInterface;
 
         private IFixture _fixture;
-        private MicrotestIm1ConnectionService _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
-            _systemUnderTest = _fixture.Create<MicrotestIm1ConnectionService>();
 
             _im1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
 
@@ -176,8 +173,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Im1Connectio
         public async Task Verify_ReturnsBadGateway_WhenDemographicsResultsInHttpRequestException()
         {
             // Arrange
-            var response =
-                new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.Forbidden);
             _microtestClientInterface.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new HttpRequestException("This is a test exception"));
 
@@ -193,8 +188,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Im1Connectio
         public async Task Verify_ThrowsException_WhenDemographicsResultsInUnexpectedException()
         {
             // Arrange
-            var response =
-                new MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.Forbidden);
             _microtestClientInterface.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new OperationCanceledException());
 
@@ -239,7 +232,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Im1Connectio
 
             _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey))
                 .Returns(cacheKey);
-            var connectionToken = _fixture.Create<MicrotestConnectionToken>();
             _im1CacheService.Setup(x => x.GetIm1ConnectionToken<MicrotestConnectionToken>(cacheKey))
                 .Returns(Task.FromResult(Option.None<MicrotestConnectionToken>()));
 
@@ -261,7 +253,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Im1Connectio
 
             _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey))
                 .Returns(cacheKey);
-            var connectionToken = _fixture.Create<MicrotestConnectionToken>();
             _im1CacheService.Setup(x => x.GetIm1ConnectionToken<MicrotestConnectionToken>(cacheKey))
                 .Throws(new OperationCanceledException());
 

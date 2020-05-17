@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
     public class EmisTestResultMapperTests
     {
         private EmisTestResultMapper _systemUnderTest;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("testResultRequestsGetResponse");
         }
-        
+
         [TestMethod]
         public void MapTestResultsRequestsGetResponseToTestResultsListResponse_WithNullDateValue_GivesATestResultWithEmptyDate()
         {
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                         Term = "testTerm",
                         TextValue = "testTextVal",
                         NumericUnits = "cc",
-                        EffectiveDate = new EffectiveDate { },
+                        EffectiveDate = new EffectiveDate(),
                     }
                 }
             };
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.PatientRecord
                     NumericUnits = "cc",
                 }
             });
-            
+
             // Act
             var mappedTestResultsList = _systemUnderTest.Map(new MedicationRootObject
             {

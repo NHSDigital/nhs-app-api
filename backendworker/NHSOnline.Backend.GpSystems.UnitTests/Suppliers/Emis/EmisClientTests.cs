@@ -181,7 +181,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         [TestMethod]
         public async Task MeSettingsGet_ReturnsUserSettingsGetResponse_WhenValidlyRequested()
         {
-            var userPatientLinkToken = _fixture.Create<string>();
             var sessionId = _fixture.Create<string>();
             var endUserSessionId = _fixture.Create<string>();
             var expectedResponse = _fixture.Create<MeSettingsGetResponse>();

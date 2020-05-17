@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -24,7 +23,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
         private Mock<object> _mockSender;
         private Mock<X509Certificate> _mockCertificate;
         private Mock<X509Chain> _mockChain;
-        
+
         private const string Path = "Certificate/Certs/mycert.pfx";
         private const string Passphrase = "password1";
 
@@ -34,7 +33,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockCertificateServiceLogger = _fixture.Freeze<Mock<ILogger<CertificateService>>>();
             _mockConfiguration = _fixture.Freeze<Mock<IConfiguration>>();
-            
+
             _mockSender = _fixture.Freeze<Mock<object>>();
             _mockCertificate = _fixture.Freeze<Mock<X509Certificate>>();
             _mockChain = _fixture.Freeze<Mock<X509Chain>>();

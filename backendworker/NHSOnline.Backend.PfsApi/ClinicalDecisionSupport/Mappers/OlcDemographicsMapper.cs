@@ -34,19 +34,6 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.Mappers
                 DateOfBirth = source.DateOfBirth
             };
         }
-        private static Name MapName(OlcDemographics demographics)
-        {
-            var name = demographics.Name != null
-                ? new Name
-                {
-                    Title = demographics.Name.Title,
-                    GivenName = demographics.Name.GivenName,
-                    Surname = demographics.Name.Surname
-                }
-                : null;
-
-            return name;
-        }
 
         private Name MapName(DemographicsResponse demographicsResponse)
         {

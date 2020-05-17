@@ -128,7 +128,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
         public async Task<LinkedAccountsResult> GetLinkedAccounts(GpUserSession gpUserSession)
         {
             var emisUserSession = (EmisUserSession)gpUserSession;
-            LinkedAccountsBreakdownSummary summary = new LinkedAccountsBreakdownSummary();
             bool hasAnyNhsNumberBeenUpdatedInSession = false;
 
             var linkedAccounts = Enumerable.Empty<LinkedAccount>();

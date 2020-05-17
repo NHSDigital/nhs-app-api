@@ -8,7 +8,6 @@ using Moq;
 using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 {
@@ -44,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
 
             // Act
             var result = _systemUnderTest.Map(addNhsUserRequest, addNhsUserResponse);
-            
+
             // Assert
             result.Should().BeEquivalentTo(expectedResponse);
         }

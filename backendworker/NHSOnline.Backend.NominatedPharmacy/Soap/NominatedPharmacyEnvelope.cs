@@ -12,18 +12,15 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
     {
         private const string SoapEnv = "SOAP-ENV";
 
-        private readonly INominatedPharmacyConfigurationSettings _config;
-
         public XmlDocument Envelope { get; set; }
 
         public NominatedPharmacyEnvelope(IServiceDefinition serviceDefinition, INominatedPharmacyConfigurationSettings config)
         {
             XmlDocument xmlDocument = BuildCoreXml(serviceDefinition, config);
-            
+
             var nsmgr = new XmlNamespaceManager(xmlDocument.NameTable);
             nsmgr.AddNamespace("SOAP-ENV", "http://schemas.xmlsoap.org/soap/envelope/");
 
-            _config = config;
             Envelope = xmlDocument;
         }
 
@@ -55,7 +52,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
                     writer.WriteStartElement(Wsa, "From", null);
                     writer.WriteElementString(Wsa, "Address", null, config.PdsTraceConfigurationSettings.FromAddress);
                     writer.WriteEndElement();
-                    
+
                     writer.WriteStartElement(hl7, "communicationFunctionRcv", null);
                     writer.WriteStartElement(hl7, "device", null);
                     writer.WriteStartElement(hl7, "id", null);
@@ -64,7 +61,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                     writer.WriteEndElement();
-                    
+
                     writer.WriteStartElement(hl7, "communicationFunctionSnd", null);
                     writer.WriteStartElement(hl7, "device", null);
                     writer.WriteStartElement(hl7, "id", null);

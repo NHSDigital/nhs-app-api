@@ -61,14 +61,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Messages
                 }
             };
 
-            var expectedResult = new PatientPracticeMessageRecipients()
-            {
-                MessageRecipients = new List<MessageRecipient>
-                {
-                    _expectedRecipientOne, _expectedRecipientTwo
-                }
-            };
-
             var result = _mapper.Map(recipientsResponse);
 
             result.MessageRecipients.Count.Should().Be(2);

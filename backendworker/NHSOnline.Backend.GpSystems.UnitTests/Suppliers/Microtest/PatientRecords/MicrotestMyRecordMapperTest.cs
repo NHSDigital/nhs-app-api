@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             // Assert
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("patientRecordGetResponse");
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_MapAllergySuccessfully()
         {
@@ -213,8 +213,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Allergies.Data.ElementAt(1).Should().BeEquivalentTo(BuildAllergyItem(allergy3));
             result.Allergies.Data.ElementAt(2).Should().BeEquivalentTo(BuildAllergyItem(allergy1));
         }
-        
-        [TestMethod] 
+
+        [TestMethod]
         public void MapPatientRecordGetResponse_MapEncounterSuccessfully()
         {
             //Arrange
@@ -229,19 +229,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     {
                         BuildMicrotestEncounter(
                             "O/E – Systolic BP reading",
-                            "2019-05-02", 
-                            "No Units Recorded", 
+                            "2019-05-02",
+                            "No Units Recorded",
                             "120" )
                     }
                 },
             };
-            
+
             var expectedResult = new MyRecordResponse
             {
                 Encounters = new Encounters
                 {
                     Data = new List<EncounterItem>
-                    { 
+                    {
                         BuildEncounterItem(item.EncounterData.Encounters.ElementAt(0))
                     }
                 }
@@ -257,7 +257,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Encounters.Should().BeEquivalentTo(expectedResult.Encounters);
             result.Encounters.HasUndeterminedAccess.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
@@ -266,7 +266,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             //Arrange
             var encounter1 = BuildMicrotestEncounter(description, "2019-05-02", "120", "No unit recorded");
             var encounter2 = BuildMicrotestEncounter("O/E - Systolic BP reading", "2019-05-02", "120", "No unit recorded");
-                
+
             var item = new PatientRecordGetResponse
             {
                 EncounterData = new EncounterData()
@@ -291,7 +291,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Encounters.Data.ElementAt(0).Should().BeEquivalentTo(BuildEncounterItem(encounter2));
             result.Encounters.HasUndeterminedAccess.Should().BeFalse();
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_DetailedRecordAccessShouldBeFalseWhenNoEncountersReturned()
         {
@@ -315,14 +315,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.HasDetailedRecordAccess.Should().BeFalse();
             result.Encounters.HasUndeterminedAccess.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_DetailedRecordAccessShouldBeFalseWhenEncountersAreAllFilteredOut()
         {
             //Arrange
             var encounter1 = BuildMicrotestEncounter("", "2019-05-02", "120", "No unit recorded");
             var encounter2 = BuildMicrotestEncounter(null,  "2019-05-02", "120", "No unit recorded");
-            
+
             var item = new PatientRecordGetResponse
             {
                 EncounterData = new EncounterData()
@@ -346,7 +346,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Encounters.Data.Should().HaveCount(0);
             result.Encounters.HasUndeterminedAccess.Should().BeFalse();
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_ShouldOrderEncountersInDescendingOrder()
         {
@@ -354,7 +354,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             var encounter1 = BuildMicrotestEncounter("O/E - Systolic BP reading","2017-01-02", "120", "No unit recorded");
             var encounter2 = BuildMicrotestEncounter("O/E - Systolic BP reading","2019-05-20", "110", "No unit recorded");
             var encounter3 = BuildMicrotestEncounter("O/E - Systolic BP reading","2018-10-28", "100", "No unit recorded");
-            
+
             var item = new PatientRecordGetResponse
             {
                 EncounterData = new EncounterData
@@ -381,7 +381,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Encounters.Data.ElementAt(1).Should().BeEquivalentTo(BuildEncounterItem(encounter3));
             result.Encounters.Data.ElementAt(2).Should().BeEquivalentTo(BuildEncounterItem(encounter1));
         }
-        
+
         [DataTestMethod]
         [DataRow("")]
         [DataRow("word")]
@@ -416,8 +416,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Encounters.Data.ElementAt(0).RecordedOn.DatePart.Should().BeEquivalentTo("Unknown");
             result.Encounters.Data.ElementAt(1).RecordedOn.DatePart.Should().BeEquivalentTo(BuildEncounterItem(encounter2).RecordedOn.DatePart);
         }
-        
-        [TestMethod] 
+
+        [TestMethod]
         public void MapPatientRecordGetResponse_MapReferralSuccessfully()
         {
             //Arrange
@@ -432,13 +432,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     {
                         BuildMicrotestReferral(
                             "2019-10-10",
-                            "Blood chemistry", 
-                            "Refer to chiropodist", 
+                            "Blood chemistry",
+                            "Refer to chiropodist",
                             "None" )
                     }
                 },
             };
-            
+
             //Expected Result
             var expectedResult = new MyRecordResponse
             {
@@ -461,7 +461,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Referrals.Should().BeEquivalentTo(expectedResult.Referrals);
             result.Referrals.HasUndeterminedAccess.Should().BeFalse();
         }
-        
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
@@ -470,7 +470,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             //Arrange
             var referral1 = BuildMicrotestReferral("2019-10-10", description, "Refer to chiropodist", "None");
             var referral2 = BuildMicrotestReferral("2019-08-20", "Occupations", "Referred to vascular surgeon", "None");
-                
+
             var item = new PatientRecordGetResponse
             {
                 ReferralData = new ReferralData
@@ -495,7 +495,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Referrals.Data.ElementAt(0).Should().BeEquivalentTo(BuildReferralItem(referral2));
             result.Referrals.HasUndeterminedAccess.Should().BeFalse();
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_DetailedRecordAccessShouldBeFalseWhenNoReferralsReturned()
         {
@@ -519,14 +519,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.HasDetailedRecordAccess.Should().BeFalse();
             result.Referrals.HasUndeterminedAccess.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_DetailedRecordAccessShouldBeFalseWhenReferralsAreAllFilteredOut()
         {
             //Arrange
             var referral1 = BuildMicrotestReferral("2019-05-02", "", "Chiropody", "None");
             var referral2 = BuildMicrotestReferral("2019-05-02",  null, "Occupations", "None");
-            
+
             var item = new PatientRecordGetResponse
             {
                 ReferralData = new ReferralData
@@ -550,8 +550,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Referrals.Data.Should().HaveCount(0);
             result.Referrals.HasUndeterminedAccess.Should().BeFalse();
         }
-        
-           
+
+
         [TestMethod]
         public void MapPatientRecordGetResponse_ShouldOrderReferralsInDescendingOrder()
         {
@@ -559,7 +559,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             var referral1 = BuildMicrotestReferral("2017-01-02","Blood chemistry 1", "Refer to chiropodist", "None");
             var referral2 = BuildMicrotestReferral("2019-05-20","Occupations", "Refer to vascular surgeon", "None");
             var referral3 = BuildMicrotestReferral("2018-10-28","Blood chemistry 2", "Refer to chiropodist", "None");
-            
+
             var item = new PatientRecordGetResponse
             {
                 ReferralData = new ReferralData
@@ -586,7 +586,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Referrals.Data.ElementAt(1).Should().BeEquivalentTo(BuildReferralItem(referral3));
             result.Referrals.Data.ElementAt(2).Should().BeEquivalentTo(BuildReferralItem(referral1));
         }
-        
+
         [DataTestMethod]
         [DataRow("")]
         [DataRow("word")]
@@ -595,7 +595,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             //Arrange
             var referral1 = BuildMicrotestReferral(recordDate,"Occupations", "Refer to vascular surgeon", "None");
             var referral2 = BuildMicrotestReferral("2018-10-28","Blood chemistry 2", "Refer to chiropodist", "None");
-            
+
             var item = new PatientRecordGetResponse
             {
                 ReferralData = new ReferralData
@@ -621,7 +621,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Referrals.Data.ElementAt(0).RecordDate.DatePart.Should().BeEquivalentTo(BuildReferralItem(referral2).RecordDate.DatePart);
             result.Referrals.Data.ElementAt(1).RecordDate.DatePart.Should().BeEquivalentTo("Unknown");
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapSingleMedicationPerSection()
         {
@@ -1034,7 +1034,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.HasSummaryRecordAccess.Should().BeFalse();
             result.Medications.HasUndeterminedAccess.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_CanSuccessfullyMapSingleImmunisationItem()
         {
@@ -1286,7 +1286,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     Data = new List<ProblemItem>
                     {
                         BuildProblemItem(microtestProblem.StartDate,"27 March 2022",microtestProblem.Rubric)
-                    } 
+                    }
                 }
             };
 
@@ -1329,7 +1329,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     Data = new List<ProblemItem>
                     {
                         BuildProblemItem(microtestProblem.StartDate,"27 March 2022",microtestProblem.Rubric)
-                    } 
+                    }
                 }
             };
 
@@ -1488,7 +1488,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             var microtestRecordResponse = new PatientRecordGetResponse
             {
-                TestResultData = BuildMicrotestTestResult(new List<InrResult> {inrResult}, new List<PathResult> {})
+                TestResultData = BuildMicrotestTestResult(new List<InrResult> {inrResult}, new List<PathResult>())
             };
 
             //Expect
@@ -1522,7 +1522,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
 
             var microtestRecordResponse = new PatientRecordGetResponse
             {
-                TestResultData = BuildMicrotestTestResult(new List<InrResult> {}, new List<PathResult> {pathResult})
+                TestResultData = BuildMicrotestTestResult(new List<InrResult>(), new List<PathResult> {pathResult})
             };
 
             //Expect
@@ -1555,15 +1555,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             var microtestRecordResponse = new PatientRecordGetResponse
             {
                 TestResultData = BuildMicrotestTestResult(new List<InrResult>(), new List<PathResult>())
-            };
-
-            //Expect
-            var expectedResult = new MyRecordResponse
-            {
-                TestResults = new TestResults
-                {
-                    Data = new List<TestResultItem>()
-                }
             };
 
             //Act
@@ -1668,12 +1659,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     new List<InrResult>(), new List<PathResult> {pathResult1, pathResult2})
             };
 
-            //Expect
-            var expectedResult = new MyRecordResponse
-            {
-                TestResults = new TestResults()
-            };
-
             //Act
             var result = _mapper.Map(microtestRecordResponse);
 
@@ -1684,8 +1669,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.TestResults.HasUndeterminedAccess.Should().BeFalse();
         }
 
-
-        
         [TestMethod]
         public void MapPatientRecordGetResponse_MapOrderedMedicalHistoryWhenReturnsSuccessfully()
         {
@@ -1721,7 +1704,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     }
                 }
             };
-            
+
             // Act
             var result = _mapper.Map(item);
 
@@ -1732,7 +1715,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.MedicalHistories.HasUndeterminedAccess.Should().BeFalse();
             result.HasDetailedRecordAccess.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_DoesntMapMedicalHistoryWhenRubricIsEmpty()
         {
@@ -1763,11 +1746,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     Data = new List<MedicalHistoryItem>
                     {
                         BuildMedicalHistoryItem(item.MedicalHistoryData.MedicalHistories.ElementAt(2)),
-                        BuildMedicalHistoryItem(item.MedicalHistoryData.MedicalHistories.ElementAt(1))                    
+                        BuildMedicalHistoryItem(item.MedicalHistoryData.MedicalHistories.ElementAt(1))
                     }
                 }
             };
-            
+
             // Act
             var result = _mapper.Map(item);
 
@@ -1778,7 +1761,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.MedicalHistories.HasUndeterminedAccess.Should().BeFalse();
             result.HasDetailedRecordAccess.Should().BeTrue();
         }
-        
+
         [TestMethod]
         public void MapPatientRecordGetResponse_DoesntMapMedicalHistoryWhenAllRubricAreEmpty()
         {
@@ -1799,7 +1782,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     }
                 }
             };
-            
+
             // Act
             var result = _mapper.Map(item);
 
@@ -1809,8 +1792,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.MedicalHistories.HasUndeterminedAccess.Should().BeFalse();
             result.HasDetailedRecordAccess.Should().BeFalse();
         }
-        
-        
+
+
         [TestMethod]
         public void MapPatientRecordGetResponse_MapMedicalHistoryWhenNoDataIsReturned()
         {
@@ -1858,8 +1841,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Recalls.Data.Should().HaveCount(0);
             result.Recalls.HasUndeterminedAccess.Should().BeTrue();
             result.HasDetailedRecordAccess.Should().BeFalse();
-        } 
-        
+        }
+
         [TestMethod]
         public void MapPatientRecordGetResponse_MapSingleRecallCorrectly()
         {
@@ -1877,7 +1860,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     }
                 },
             };
-            
+
             var expectedResult = new MyRecordResponse
             {
                 Recalls = new Recalls
@@ -1899,8 +1882,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             result.Recalls.HasUndeterminedAccess.Should().BeFalse();
             result.HasDetailedRecordAccess.Should().BeTrue();
         }
-        
-        
+
+
         [TestMethod]
         public void MapPatientRecordGetResponse_MapMultipleRecordsOrderedCorrectly()
         {
@@ -1920,7 +1903,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     }
                 },
             };
-            
+
             var expectedResult = new MyRecordResponse
             {
                 Recalls = new Recalls
@@ -1940,13 +1923,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
             // Assert
             result.Should().NotBeNull();
             result.Recalls.Data.Should().HaveCount(3);
-            result.Recalls.Should().BeEquivalentTo(expectedResult.Recalls,r => r.WithStrictOrdering());;
+            result.Recalls.Should().BeEquivalentTo(expectedResult.Recalls,r => r.WithStrictOrdering());
             result.Recalls.HasUndeterminedAccess.Should().BeFalse();
             result.HasDetailedRecordAccess.Should().BeTrue();
         }
-        
-        
-        
+
         private static MedicalHistoryItem BuildMedicalHistoryItem(MedicalHistory medicalHistory)
         {
             return new MedicalHistoryItem
@@ -1955,8 +1936,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 Rubric = medicalHistory.Rubric,
                 Description = medicalHistory.Description
             };
-        }       
-  
+        }
+
         private static AllergyItem BuildAllergyItem(Allergy allergy)
         {
             return new AllergyItem
@@ -1984,7 +1965,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     Value = DateTime.TryParse(encounter.RecordedOn, out var encounterDate)
                         ? encounterDate
                         : (DateTimeOffset?) null,
-                    DatePart = "Unknown"  
+                    DatePart = "Unknown"
                 }
             };
         }
@@ -2001,11 +1982,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                     Value = DateTime.TryParse(referral.RecordDate, out var referralDate)
                         ? referralDate
                         : (DateTimeOffset?) null,
-                    DatePart = "Unknown"  
+                    DatePart = "Unknown"
                 }
             };
         }
-        
+
         private static MedicationItem BuildMedicationItem(Medication item)
         {
             var medicationLineItems = new List<MedicationLineItem>();
@@ -2171,7 +2152,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 Value = value
             };
         }
-        
+
         private static Referral BuildMicrotestReferral(string recordDate, string description, string speciality, string ubrn)
         {
             return new Referral
@@ -2182,7 +2163,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.PatientRecor
                 Ubrn = ubrn
             };
         }
-        
+
         private static MedicalHistory BuildMicrotestMedicalHistory(string startDate, string rubric, string desc)
         {
             return new MedicalHistory()

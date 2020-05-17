@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Microsoft.Azure.Documents.SystemFunctions;
 using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
 

@@ -108,12 +108,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             return await Task.FromResult(new LinkedAccountsResult.Success(linkedAccounts, false));
         }
 
-        private static TppProxyUserSession GetLinkedAccountFromGpUserSession(TppUserSession tppUserSession, Guid linkedAccountId)
-         {
-             var proxy = tppUserSession.ProxyPatients.FirstOrDefault(x => x.Id == linkedAccountId);
-             return proxy;
-         }
-
         public async Task<LinkedAccountAccessSummaryResult> GetLinkedAccount(GpUserSession gpUserSession, Guid id)
         {
             var response = new GetAccountAccessSummaryResponse

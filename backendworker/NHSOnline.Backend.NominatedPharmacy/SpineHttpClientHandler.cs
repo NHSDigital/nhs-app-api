@@ -7,17 +7,14 @@ namespace NHSOnline.Backend.NominatedPharmacy
 {
     public class SpineHttpClientHandler : HttpClientHandler
     {
-        private readonly ILogger<SpineHttpClientHandler> _logger;
         public SpineHttpClientHandler(
             SpineLdapConfigurationSettings spineLdapConfigurationSettings,
             ILogger<SpineHttpClientHandler> logger,
             ICertificateService certificateService)
         {
-
-            _logger = logger;
             ServerCertificateCustomValidationCallback =
                     certificateService.ServerCertificateValidationHandler;
-            
+
             var path = spineLdapConfigurationSettings.CertPath;
             var password = spineLdapConfigurationSettings.CertPassword;
             logger.LogInformation($"SPINE_CERTIFICATE_PATH: {path}");
@@ -27,7 +24,6 @@ namespace NHSOnline.Backend.NominatedPharmacy
             {
                 ClientCertificates.Add(certificate);
             }
-
         }
     }
 }

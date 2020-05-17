@@ -1,4 +1,3 @@
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 
 namespace NHSOnline.Backend.GpSystems.SessionManager
