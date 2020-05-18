@@ -1,14 +1,13 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
+using NHSOnline.Backend.Support.Repository;
 
 namespace NHSOnline.Backend.UserInfoApi.Repository
 {
     public interface IInfoRepository
     {
-        Task<PostInfoResult> Create(UserAndInfo userAndInfo);
-        Task<UserAndInfo> FindByNhsLoginId(string nhsLoginId);
-        Task<IEnumerable<UserAndInfo>> FindByOdsCode(string odsCode);
-        Task<IEnumerable<UserAndInfo>> FindByNhsNumber(string nhsNumber);
+        Task<RepositoryCreateResult<UserAndInfo>> Create(UserAndInfo userAndInfo);
+        Task<RepositoryFindResult<UserAndInfo>> FindByNhsLoginId(string nhsLoginId);
+        Task<RepositoryFindResult<UserAndInfo>> FindByOdsCode(string odsCode);
+        Task<RepositoryFindResult<UserAndInfo>> FindByNhsNumber(string nhsNumber);
     }
 }

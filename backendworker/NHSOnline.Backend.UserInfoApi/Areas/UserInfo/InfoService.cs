@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Repository;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
 using NHSOnline.Backend.UserInfoApi.Repository;
 
@@ -38,12 +36,9 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
                     }
                 };
 
-                return await _infoRepository.Create(userInfo);
-            }
-            catch (MongoException e)
-            {
-                _logger.LogError($"Info Posting has failed with exception: {e}");
-                return new PostInfoResult.BadGateway();
+                var repositoryResult =  await _infoRepository.Create(userInfo);
+
+                return repositoryResult.Accept(new PostRepositoryResultVisitor());
             }
             catch (Exception e)
             {
@@ -63,17 +58,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             try
             {
                 var result = await _infoRepository.FindByNhsLoginId(accessToken.Subject);
-                if (result != null)
-                {
-                    return new GetInfoResult.Found(result);
-                }
-
-                return new GetInfoResult.NotFound();
-            }
-            catch (MongoException e)
-            {
-                _logger.LogError($"Info Get has failed with exception: {e}");
-                return new GetInfoResult.BadGateway();
+                return result.Accept(new GetInfoRepositoryResultVisitor());
             }
             catch (Exception e)
             {
@@ -96,7 +81,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             return await GetInfoRecords(repo => repo.FindByOdsCode(odsCode));
         }
 
-        private async Task<GetInfoResult> GetInfoRecords(Func<IInfoRepository, Task<IEnumerable<UserAndInfo>>> find)
+        private async Task<GetInfoResult> GetInfoRecords(Func<IInfoRepository, Task<RepositoryFindResult<UserAndInfo>>> find)
         {
             _logger.LogEnter();
             try
@@ -105,16 +90,11 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 
                 if (result != null)
                 {
-                    return new GetInfoResult.FoundMultiple(result.Select(r=>r.NhsLoginId));
+                    return result.Accept(new GetRepositoryResultVisitor());
                 }
 
                 _logger.LogError("Unexpected response from repository, null object returned");
                 return new GetInfoResult.InternalServerError();
-            }
-            catch (MongoException e)
-            {
-                _logger.LogError($"Info Get has failed with exception: {e}");
-                return new GetInfoResult.BadGateway();
             }
             catch (Exception e)
             {

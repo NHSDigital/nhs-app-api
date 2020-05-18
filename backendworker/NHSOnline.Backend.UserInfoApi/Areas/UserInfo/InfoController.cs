@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 
                 var result = await _infoService.GetInfo(accessToken);
 
-                return result.Accept(new GetInfoResultVisitor());
+                return result.Accept(new GetMeInfoResultVisitor());
             }
             catch (Exception e)
             {

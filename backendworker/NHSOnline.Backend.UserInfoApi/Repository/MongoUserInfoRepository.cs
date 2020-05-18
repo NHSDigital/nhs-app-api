@@ -1,17 +1,15 @@
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Repository;
-using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
 
 namespace NHSOnline.Backend.UserInfoApi.Repository
 {
     [SuppressMessage("Microsoft.Globalization", "CA1309",
         Justification = "Method �CompareOrdinal� is not supported on Mongo Driver")]
-    internal class MongoUserInfoRepository : MongoRepository<IMongoConfiguration, UserAndInfo>, IInfoRepository
+    internal class MongoUserInfoRepository : MongoRepositoryBase<IMongoConfiguration, UserAndInfo>, IInfoRepository
     {
         private readonly ILogger<MongoUserInfoRepository> _logger;
 
@@ -20,12 +18,12 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
             IApiMongoClient<IMongoConfiguration> mongoClient,
             IMongoConfiguration mongoConfiguration
         )
-            : base(mongoClient, mongoConfiguration)
+            : base(mongoClient, mongoConfiguration, logger)
         {
             _logger = logger;
         }
 
-        public async Task<PostInfoResult> Create(UserAndInfo userAndInfo)
+        public async Task<RepositoryCreateResult<UserAndInfo>> Create(UserAndInfo userAndInfo)
         {
             try
             {
@@ -35,8 +33,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
                     .IsNotNull(userAndInfo, nameof(userAndInfo), ValidateAndLog.ValidationOptions.ThrowError)
                     .IsValid();
 
-                await CreateOrUpdateOne(d => d.NhsLoginId == userAndInfo.NhsLoginId, userAndInfo);
-                return new PostInfoResult.Created(userAndInfo.Info);
+                return await CreateOrUpdateOne(d => d.NhsLoginId == userAndInfo.NhsLoginId, userAndInfo);
             }
             finally
             {
@@ -44,7 +41,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
             }
         }
 
-        public async Task<UserAndInfo> FindByNhsLoginId(string nhsLoginId)
+        public async Task<RepositoryFindResult<UserAndInfo>> FindByNhsLoginId(string nhsLoginId)
         {
             try
             {
@@ -56,7 +53,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
 
                 using (_logger.WithTimer("Find user info in Mongo"))
                 {
-                    return await FindOne(d => d.NhsLoginId == nhsLoginId);
+                    return await Find(d => d.NhsLoginId == nhsLoginId);
                 }
             }
             finally
@@ -65,7 +62,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
             }
         }
 
-        public async Task<IEnumerable<UserAndInfo>> FindByOdsCode(string odsCode)
+        public async Task<RepositoryFindResult<UserAndInfo>> FindByOdsCode(string odsCode)
         {
             try
             {
@@ -86,7 +83,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
             }
         }
         
-        public async Task<IEnumerable<UserAndInfo>> FindByNhsNumber(string nhsNumber)
+        public async Task<RepositoryFindResult<UserAndInfo>> FindByNhsNumber(string nhsNumber)
         {
             try
             {
@@ -98,7 +95,7 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
 
                 using (_logger.WithTimer("Find user info in Mongo"))
                 {
-                    return await Find(d => d.Info.NhsNumber == nhsNumber);
+                    return  await Find(d => d.Info.NhsNumber == nhsNumber);
                 }
             }
             finally
@@ -107,4 +104,5 @@ namespace NHSOnline.Backend.UserInfoApi.Repository
             }
         }
     }
+    
 }

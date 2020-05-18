@@ -1,8 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
 
-namespace NHSOnline.Backend.UsersApi.Repository
+namespace NHSOnline.Backend.UsersApi.Areas.Devices.Models
 {
     public class Device
     {

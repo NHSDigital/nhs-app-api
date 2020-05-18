@@ -9,26 +9,11 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 
         public class Found : GetInfoResult
         {
-            public UserAndInfo UserInfo { get; }
+            public IEnumerable<UserAndInfo> UserInfoRecords { get; }
 
-            public Found(UserAndInfo userInfo)
+            public Found(IEnumerable<UserAndInfo> userInfo)
             {
-                UserInfo = userInfo;
-            }
-
-            public override T Accept<T>(IGetInfoResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class FoundMultiple : GetInfoResult
-        {
-            public IEnumerable<string> NhsLoginIds { get; }
-
-            public FoundMultiple(IEnumerable<string> userInfo)
-            {
-                NhsLoginIds = userInfo;
+                UserInfoRecords = userInfo;
             }
 
             public override T Accept<T>(IGetInfoResultVisitor<T> visitor)

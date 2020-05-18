@@ -8,12 +8,12 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 
         public class Created : PostInfoResult
         {
-            public Created(Info record)
+            public Created(UserAndInfo record)
             {
                 Record = record;
             }
 
-            public Info Record { get; }
+            public UserAndInfo Record { get; }
             public override T Accept<T>(IInfoResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);

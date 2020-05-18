@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +13,7 @@ using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
+using NHSOnline.Backend.UserInfoApi.Repository;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
@@ -44,9 +47,14 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             // Arrange
             var odsCode = "ods code";
-            var nhsLoginIds = new[] { "login id 1", "login id 2" };
+            var nhsLoginId1 = "nhsLoginId1";
+            var nhsLoginId2 = "nhsLoginId2";
+            var userInfoRecords = new[]
+            {
+                new UserAndInfo { NhsLoginId = nhsLoginId1 }, new UserAndInfo { NhsLoginId = nhsLoginId2 }
+            };
             _mockInfoService.Setup(x => x.GetInfoByOdsCode(odsCode))
-                .ReturnsAsync(new GetInfoResult.FoundMultiple(nhsLoginIds));
+                .ReturnsAsync(new GetInfoResult.Found(userInfoRecords));
 
             // Act
             var result = await _systemUnderTest.Get(odsCode, null);
@@ -54,7 +62,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             // Assert
             _mockInfoService.VerifyAll();
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeEquivalentTo(nhsLoginIds);
+                .Subject.Value.Should().BeEquivalentTo(new List<string> { nhsLoginId1, nhsLoginId2 });
         }
 
         [TestMethod]
@@ -62,9 +70,14 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
         {
             // Arrange
             var nhsNumber = "NHS number";
-            var nhsLoginIds = new[] { "login id 1", "login id 2" };
+            var nhsLoginId1 = "nhsLoginId1";
+            var nhsLoginId2 = "nhsLoginId2";
+            var userInfoRecords = new[]
+            {
+                new UserAndInfo { NhsLoginId = nhsLoginId1 }, new UserAndInfo { NhsLoginId = nhsLoginId2 }
+            };
             _mockInfoService.Setup(x => x.GetInfoByNhsNumber(nhsNumber))
-                .ReturnsAsync(new GetInfoResult.FoundMultiple(nhsLoginIds));
+                .ReturnsAsync(new GetInfoResult.Found(userInfoRecords));
 
             // Act
             var result = await _systemUnderTest.Get(null, nhsNumber);
@@ -72,11 +85,11 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             // Assert
             _mockInfoService.VerifyAll();
             result.Should().BeAssignableTo<OkObjectResult>()
-                .Subject.Value.Should().BeEquivalentTo(nhsLoginIds);
+                .Subject.Value.Should().BeEquivalentTo(new List<string> { nhsLoginId1, nhsLoginId2 });
         }
 
         [TestMethod]
-        public async Task Get_WithNhsNumber_NotFound_ReturnsNotFound()
+        public async Task Get_WithNhsNumber_NotFound_ReturnsEmptyList()
         {
             // Arrange
             var nhsNumber = "NHS number";
@@ -88,13 +101,13 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
 
             // Assert
             _mockInfoService.VerifyAll();
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
-            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeEquivalentTo(new List<string>());
         }
 
 
         [TestMethod]
-        public async Task Get_WithOdsCode_NotFound_ReturnsNotFound()
+        public async Task Get_WithOdsCode_NotFound_ReturnsEmptyList()
         {
             // Arrange
             var odsCode = "ods code";
@@ -106,8 +119,8 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
 
             // Assert
             _mockInfoService.VerifyAll();
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>();
-            statusCodeResult.Subject.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+            result.Should().BeAssignableTo<OkObjectResult>()
+                .Subject.Value.Should().BeEquivalentTo(new List<string>());
         }
 
         [TestMethod]

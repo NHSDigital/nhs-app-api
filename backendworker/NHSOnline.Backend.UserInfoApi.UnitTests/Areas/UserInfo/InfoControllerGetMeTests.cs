@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             // Arrange
             var userInfo = new UserAndInfo();
             _mockInfoService.Setup(x => x.GetInfo(It.IsAny<AccessToken>()))
-                .ReturnsAsync(new GetInfoResult.Found(userInfo));
+                .ReturnsAsync(new GetInfoResult.Found(new []{userInfo}));
 
             // Act
             var result = await _systemUnderTest.Get();

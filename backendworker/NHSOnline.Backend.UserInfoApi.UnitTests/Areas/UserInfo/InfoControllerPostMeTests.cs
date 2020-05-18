@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
             };
             MockUserProfileSetup(userProfile);
             _mockInfoService.Setup(x => x.Send(It.IsAny<AccessToken>(), userProfile))
-                .ReturnsAsync(new PostInfoResult.Created(new Info()));
+                .ReturnsAsync(new PostInfoResult.Created(new UserAndInfo()));
 
             // Act
             var result = await _systemUnderTest.Post();

@@ -1,15 +1,14 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Moq;
 using NHSOnline.Backend.Support.Repository;
-using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
 using NHSOnline.Backend.UserInfoApi.Repository;
 using UnitTestHelper;
 
@@ -77,11 +76,21 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
                         default))
                 .ReturnsAsync(_fixture.Create<Mock<ReplaceOneResult>>().Object);
 
+            var mongoReplaceResult = new ReplaceOneResult.Acknowledged(1, 1, new BsonString("MockUpsertedId"));
+
+          mongoCollectionMock.Setup(
+                  x => x.ReplaceOneAsync(
+                      It.IsAny<FilterDefinition<UserAndInfo>>(),
+                      It.IsAny<UserAndInfo>(),
+                      It.IsAny<ReplaceOptions>(),
+                      It.IsAny<CancellationToken>()))
+              .ReturnsAsync(mongoReplaceResult);
+
             // Act
             var result = await _systemUnderTest.Create(userInfo);
 
             // Assert
-            result.Should().BeAssignableTo<PostInfoResult.Created>();
+            result.Should().BeAssignableTo<RepositoryCreateResult<UserAndInfo>.Created>();
         }
 
         [TestMethod]
@@ -101,11 +110,12 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
 
             // Assert
             _mongoCollectionMock.VerifyAll();
-            result.Should().BeEquivalentTo(userInfo);
+            result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>()
+                .Subject.Records.Should().BeEquivalentTo(userInfo);
         }
 
         [TestMethod]
-        public async Task FindByNhsLoginId_WhenRecordDoesNotExist_ShouldNotReturnRecord()
+        public async Task FindByNhsLoginId_WhenRecordDoesNotExist_ReturnsNotFound()
         {
             // Arrange
             var cursorMock = MongoHelper.CreateCursorMockFindNone<UserAndInfo>(_fixture);
@@ -120,7 +130,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
 
             // Assert
             _mongoCollectionMock.VerifyAll();
-            result.Should().BeNull();
+            result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.NotFound>();
         }
 
         [TestMethod]
@@ -142,11 +152,12 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
 
             // Assert
             _mongoCollectionMock.VerifyAll();
-            result.Should().BeEquivalentTo(expectedResults);
+            result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>()
+                .Subject.Records.Should().BeEquivalentTo(expectedResults);
         }
 
         [TestMethod]
-        public async Task FindByNhsNumber_WhenRecordDoesNotExist_ReturnsEmpty()
+        public async Task FindByNhsNumber_WhenRecordDoesNotExist_ReturnsNotFound()
         {
             // Arrange
             var cursorMock = MongoHelper.CreateCursorMockFindNone<UserAndInfo>(_fixture);
@@ -161,7 +172,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
 
             // Assert
             _mongoCollectionMock.VerifyAll();
-            result.Should().BeEquivalentTo(Enumerable.Empty<UserAndInfo>());
+            result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.NotFound>();
         }
 
         [TestMethod]
@@ -183,11 +194,13 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
 
             // Assert
             _mongoCollectionMock.VerifyAll();
-            result.Should().BeEquivalentTo(expectedResults);
+
+            result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.Found>().Subject.Records
+                .Should().BeEquivalentTo(expectedResults);
         }
 
         [TestMethod]
-        public async Task FindByOdsCode_WhenRecordDoesNotExist_ReturnsEmpty()
+        public async Task FindByOdsCode_WhenRecordDoesNotExist_ReturnsNotFound()
         {
             // Arrange
             var cursorMock = MongoHelper.CreateCursorMockFindNone<UserAndInfo>(_fixture);
@@ -202,7 +215,7 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
 
             // Assert
             _mongoCollectionMock.VerifyAll();
-            result.Should().BeEquivalentTo(Enumerable.Empty<UserAndInfo>());
+            result.Should().BeAssignableTo<RepositoryFindResult<UserAndInfo>.NotFound>();
         }
     }
 }
