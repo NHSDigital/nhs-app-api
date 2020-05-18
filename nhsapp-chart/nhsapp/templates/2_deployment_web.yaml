@@ -130,6 +130,10 @@ spec:
           value: "[{{ join ","  $.Values.web.myRecordDocumentsEnabledSuppliers }}]"
         - name: GP_MESSAGES_ENABLED
           value: "{{ $.Values.patientPracticeMessagingEnabled }}"
+        {{- if $.Values.userResearchEnabled }}
+        - name: USER_RESEARCH_ENABLED
+          value: "true"
+        {{- end }}
         volumeMounts:
         - name: internal-ca-public-key
           mountPath: /usr/local/share/ca-certificates

@@ -148,6 +148,8 @@ const config = {
     DEBOUNCE_SHORT: 500,
     DEBOUNCE_MEDIUM: 2000,
     DEBOUNCE_LONG: 5000,
+    // Feature toggles
+    USER_RESEARCH_ENABLED: false,
   },
 };
 

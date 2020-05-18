@@ -95,6 +95,8 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import TermsConditionsMixin from '@/components/TermsConditionsMixin';
+import { USER_RESEARCH } from '@/lib/routes';
+import { isFalsy, redirectTo } from '@/lib/utils';
 
 export default {
   name: 'TermsConditions',
@@ -123,19 +125,27 @@ export default {
     },
     async onConfirmButtonClicked() {
       this.hasTriedToContinue = true;
-      if (this.areTermsAccepted) {
-        const consentRequest = {
-          ConsentGiven: true,
-          AnalyticsCookieAccepted: this.isAnalyticsCookieAccepted,
-        };
 
-        await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
-
-        if (this.$store.state.termsAndConditions.areAccepted) {
-          this.conditionalRedirect();
-        }
-      } else {
+      if (!this.areTermsAccepted) {
         window.scrollTo(0, 0);
+        return;
+      }
+
+      const consentRequest = {
+        ConsentGiven: true,
+        AnalyticsCookieAccepted: this.isAnalyticsCookieAccepted,
+      };
+
+      await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
+
+      if (!this.$store.state.termsAndConditions.areAccepted) {
+        return;
+      }
+
+      if (isFalsy(this.$store.app.$env.USER_RESEARCH_ENABLED)) {
+        this.conditionalRedirect();
+      } else {
+        redirectTo(this, USER_RESEARCH.path, this.$route.query);
       }
     },
     getErrorState() {

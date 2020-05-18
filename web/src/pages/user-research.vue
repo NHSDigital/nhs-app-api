@@ -28,7 +28,7 @@
                  :header="$t('user_research.question.label')"
                  header-size="m"
                  :radios="choices"/>
-    <primary-button @click.stop.prevent="onClick">
+    <primary-button @click.stop.prevent="conditionalRedirect">
       {{ $t('user_research.continue') }}
     </primary-button>
   </div>
@@ -38,8 +38,7 @@
 import CollapsibleDetails from '@/components/CollapsibleDetails';
 import PrimaryButton from '@/components/PrimaryButton';
 import RadioGroup from '@/components/RadioGroup';
-import { INDEX } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
+import TermsConditionsMixin from '@/components/TermsConditionsMixin';
 
 export default {
   layout: 'termsAndConditions',
@@ -48,6 +47,7 @@ export default {
     PrimaryButton,
     RadioGroup,
   },
+  mixins: [TermsConditionsMixin],
   data() {
     return {
       choices: [
@@ -57,11 +57,6 @@ export default {
       privacyPolicyUrl: this.$store.app.$env.PRIVACY_POLICY_URL,
       selectedValue: undefined,
     };
-  },
-  methods: {
-    onClick() {
-      redirectTo(this, INDEX.path);
-    },
   },
 };
 </script>

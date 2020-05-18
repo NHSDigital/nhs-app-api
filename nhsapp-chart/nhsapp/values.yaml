@@ -28,6 +28,7 @@ clusterDNSNameservers:
 
 biometricsEnabled: true
 webBiometricsEnabled: false
+userResearchEnabled: true
 
 # PFS Providers
 tppEnabled: false
