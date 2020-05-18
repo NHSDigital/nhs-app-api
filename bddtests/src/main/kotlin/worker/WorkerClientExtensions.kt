@@ -1,11 +1,10 @@
 package worker
 
-import config.Config
-import org.apache.http.client.methods.HttpRequestBase
+import org.apache.http.client.utils.URIBuilder
 
-fun HttpRequestBase.addExternalSystemApiKey(includeApiKey: Boolean) {
-    if (includeApiKey) {
-        val key = Config.instance.nhsAppApiKey
-        this.addHeader("X-Api-Key", key)
+fun URIBuilder.setParameterIfNotNull(key: String, value: String?): URIBuilder {
+    if (value!=null) {
+        this.addParameter(key, value)
     }
+    return this
 }

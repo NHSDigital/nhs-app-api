@@ -4,19 +4,13 @@ import mocking.data.myrecord.DemographicsData
 import mocking.stubs.StubbedEnvironment
 import models.Patient
 import org.apache.http.HttpStatus
-import utils.SerenityHelpers
-import worker.NhsoHttpException
 import java.time.Duration
 
 class DemographicsFactoryEmis: DemographicsFactory() {
     override fun disabled(patient: Patient) {
-        try {
             mockingClient.forEmis.mock {
                 myRecord.demographicsRequest(patient).respondWithExceptionWhenNotEnabled()
             }
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
     }
 
     override fun enabled(patient: Patient) {

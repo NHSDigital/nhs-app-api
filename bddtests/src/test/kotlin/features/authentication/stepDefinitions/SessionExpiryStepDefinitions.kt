@@ -19,7 +19,6 @@ import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.session.UserSessionRequest
 
@@ -57,7 +56,7 @@ class SessionExpiryStepDefinitions  {
         val patientConfig = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .getPatientLinkedAccountsConfiguration()
 
-        LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.set(patientConfig.id)
+        LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.set(patientConfig?.id)
 
         PatientVerificationFactory.getForSupplier(supplier)
                 .setSessionExtendMockResponse(patient, expectedResponse)
@@ -73,14 +72,10 @@ class SessionExpiryStepDefinitions  {
 
     @When("^I try to extend my session$")
     fun iTryToExtendMySession() {
-        try {
-            val response = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .session.postSessionConnection(LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail())
-            SerenityHelpers.setHttpResponse(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val response = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .session.postSessionConnection(LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail())
+        SerenityHelpers.setHttpResponse(response)
     }
 
     @When("^I am idle long enough for the session to expire$")

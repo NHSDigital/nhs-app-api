@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+//import pages.gpMedicalRecord.MedicalRecordHubPage
 import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -17,15 +18,13 @@ import mocking.microtest.myRecord.TestResultOptions
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-//import pages.gpMedicalRecord.MedicalRecordHubPage
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
-import utils.SerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
 import utils.ProxySerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
@@ -169,14 +168,10 @@ open class MedicalRecordStepDefinitions {
 
     @When("^I request my record data$")
     fun whenIRequestMyRecordData() {
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .myRecord.getMyRecord(patientId)
-            Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .myRecord.getMyRecord(patientId)
+        Serenity.setSessionVariable(MyRecordResponse::class).to(result)
     }
 
     @When("^I navigate away from the medical record page$")

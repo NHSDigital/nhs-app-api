@@ -4,19 +4,17 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.stubs.appointments.factories.AppointmentsBookingFactory
-import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.defaultTelephoneNumber
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory
+import mocking.stubs.appointments.factories.AppointmentsBookingFactory.Companion.defaultTelephoneNumber
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
 import org.junit.Assert.assertEquals
 import utils.LinkedProfilesSerenityHelpers
 import utils.ProxySerenityHelpers
-import utils.SerenityHelpers
 import utils.getOrNull
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentBookRequest
 import java.time.Duration
@@ -239,16 +237,10 @@ open class AppointmentsBookingStepDefinitionsBackend {
     }
 
     private fun submitAppointmentRequest(workerAppointmentRequest: AppointmentBookRequest) {
-
         val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
-
-        try {
-            val workerClient = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-            val sessionCookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)
-            val result = workerClient.appointments.postAppointment(patientId, workerAppointmentRequest, sessionCookie)
-            Serenity.setSessionVariable("Http Status Code").to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val workerClient = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+        val sessionCookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)
+        val result = workerClient.appointments.postAppointment(patientId, workerAppointmentRequest, sessionCookie)
+        Serenity.setSessionVariable("Http Status Code").to(result)
     }
 }

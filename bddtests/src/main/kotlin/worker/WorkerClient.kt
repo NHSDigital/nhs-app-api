@@ -5,14 +5,12 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import config.Config
 import org.apache.http.client.HttpClient
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase
 import org.apache.http.client.protocol.HttpClientContext
 import org.apache.http.impl.client.BasicCookieStore
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.impl.cookie.BasicClientCookie
 import org.apache.http.protocol.BasicHttpContext
 import org.apache.http.protocol.HttpContext
-import java.net.URI
 
 class WorkerClient(config:Config = Config.instance) {
     private val _client: HttpClient
@@ -61,20 +59,6 @@ class WorkerClient(config:Config = Config.instance) {
             localContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore)
 
             return localContext
-        }
-    }
-
-    class HttpDeleteWithBody constructor() : HttpEntityEnclosingRequestBase() {
-        companion object {
-            const val METHOD_NAME = "DELETE"
-        }
-
-        constructor(uri: String) : this() {
-            setURI(URI.create(uri))
-        }
-
-        override fun getMethod(): String {
-            return METHOD_NAME
         }
     }
 }

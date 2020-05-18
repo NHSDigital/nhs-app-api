@@ -120,7 +120,7 @@ open class CancelAppointmentSteps {
         val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                 .appointments.getMyAppointments(patientId, LocalDateTime.now().toString())
 
-        return result.cancellationReasons
+        return result!!.cancellationReasons
     }
 
     @Step

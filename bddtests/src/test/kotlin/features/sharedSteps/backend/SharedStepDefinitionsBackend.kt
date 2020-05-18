@@ -1,7 +1,6 @@
 package features.sharedSteps.backend
 
 import constants.Supplier
-import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import features.myrecord.factories.DemographicsFactory
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -55,7 +54,7 @@ open class SharedStepDefinitionsBackend{
 
         val patientConfig = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .getPatientLinkedAccountsConfiguration()
-        LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.set(patientConfig.id)
+        LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.set(patientConfig?.id)
     }
 
     @Given("^I am a user with proof level 5 and have a valid session cookie$")
@@ -67,7 +66,7 @@ open class SharedStepDefinitionsBackend{
         iHaveLoggedInAndHaveAValidSessionCookie()
     }
 
-    @But("the patient id sent in the request is not valid")
+    @Given("the patient id sent in the request is not valid")
     fun thePatientIdSendInTheRequestIsNotValid() {
         LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.set(UUID.randomUUID().toString())
     }

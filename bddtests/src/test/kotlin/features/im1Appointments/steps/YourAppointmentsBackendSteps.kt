@@ -9,9 +9,7 @@ import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import utils.LinkedProfilesSerenityHelpers
-import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.MyAppointmentsResponse
 import java.text.SimpleDateFormat
@@ -26,16 +24,11 @@ open class YourAppointmentsBackendSteps {
         dateTimeFormat.timeZone = timeZone
         val fromDate = dateTimeFormat.format(Calendar.getInstance().time)
         val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-        try {
-            val result = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.getMyAppointments(patientId, fromDate)
-            println(result)
-            Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-            println(httpException)
-        }
+        val result = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .appointments.getMyAppointments(patientId, fromDate)
+        println(result)
+        Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
     }
 
     @Step

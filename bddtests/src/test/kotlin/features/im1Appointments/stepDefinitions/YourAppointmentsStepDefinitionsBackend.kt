@@ -4,21 +4,20 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import features.im1Appointments.steps.YourAppointmentsBackendSteps
 import mocking.data.appointments.AppointmentSlotsTelephoneExample
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
+import mocking.stubs.appointments.factories.MyAppointmentsFactory
 import mockingFacade.appointments.MyAppointmentsFacade
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import org.apache.http.HttpStatus
 import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.models.appointments.MyAppointmentsResponse
 import java.time.LocalDateTime
 
 class YourAppointmentsStepDefinitionsBackend {
@@ -229,17 +228,14 @@ class YourAppointmentsStepDefinitionsBackend {
     fun whenTheAPICallFailsWithCsrfTokenOf(provider: String, csrfToken: String) {
         Assert.assertEquals("Test setup incorrect: Step only implemented for EMIS", "EMIS",
                 provider.toUpperCase())
-
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-            val result = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.setCsrfToken(csrfToken).getMyAppointments(patientId, LocalDateTime.now().toString())
-            Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
-            Assert.fail("The API did not fail with invalid token.")
-        } catch (exception: NhsoHttpException) {
-            SerenityHelpers.setHttpException(exception)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val result = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .appointments.setCsrfToken(csrfToken).getMyAppointments(patientId, LocalDateTime.now().toString())
+        Assert.assertNull("Expected no response", result)
+        Assert.assertEquals("Expected status",
+                HttpStatus.SC_UNAUTHORIZED,
+                SerenityHelpers.getHttpException()?.statusCode)
     }
 
     @Then("^I will only receive upcoming appointments$")

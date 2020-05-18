@@ -10,10 +10,9 @@ import mocking.data.myrecord.ImmunisationsData
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import pages.myrecord.MedicalRecordV1Page
-import utils.SerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 import java.time.LocalDate
@@ -64,15 +63,11 @@ open class V1MedicalRecordImmunisationStepDefinitions {
 
     @When("^I get the users immunisations$")
     fun whenIGetTheUsersImmunisations() {
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .myRecord.getMyRecord(patientId)
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .myRecord.getMyRecord(patientId)
 
-            Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        Serenity.setSessionVariable(MyRecordResponse::class).to(result)
     }
 
     @Then("^I receive \"(.*)\" immunisations as part of the my record object$")

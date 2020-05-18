@@ -16,7 +16,6 @@ import utils.SerenityHelpers
 import utils.getOrFail
 import utils.getOrNull
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.authorization.RefreshAccessTokenResponse
 import javax.servlet.http.Cookie
@@ -47,14 +46,10 @@ class RefreshTokenStepDefinitions {
 
     @When("^I call the refresh access token endpoint$")
     fun whenICallTheRefreshAccessTokenEndpoint() {
-        try {
             val workerClient = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
             val sessionCookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)
             val result = workerClient.authentication.postRefreshAccessToken(sessionCookie)
             AuthorizationSerenityHelpers.REFRESH_TOKEN_RESPONSE.set(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
     }
 
     @Then("^I receive a refreshed access token$")

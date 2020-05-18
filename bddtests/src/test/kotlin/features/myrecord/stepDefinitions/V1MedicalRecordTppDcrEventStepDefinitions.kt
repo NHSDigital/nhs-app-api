@@ -9,11 +9,10 @@ import mocking.data.myrecord.TppDcrData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
-import utils.SerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
 import utils.ProxySerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
@@ -63,15 +62,11 @@ open class V1MedicalRecordTppDcrEventStepDefinitions {
 
     @When("^I get the users dcr event data$")
     fun whenIGetTheUsersMyRecordData() {
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .myRecord.getMyRecord(patientId)
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .myRecord.getMyRecord(patientId)
 
-            Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        Serenity.setSessionVariable(MyRecordResponse::class).to(result)
     }
 
     @Then("^I receive \"(.*)\" dcr events as part of the my record object$")

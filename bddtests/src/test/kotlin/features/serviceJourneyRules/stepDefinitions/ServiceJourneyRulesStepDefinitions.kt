@@ -5,20 +5,19 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.defaults.TppMockDefaults.Companion.TPP_ODS_CODE_NO_SJR_CONFIGURATION
 import features.serviceJourneyRules.factories.ServiceJourneyRulesConfiguration
 import features.serviceJourneyRules.factories.ServiceJourneyRulesMapper
 import features.serviceJourneyRules.mappers.PublicHealthNotificationsMapper
-import features.sharedSteps.backend.SharedStepDefinitionsBackend
+import mocking.defaults.TppMockDefaults.Companion.TPP_ODS_CODE_NO_SJR_CONFIGURATION
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
-import net.serenitybdd.core.Serenity.sessionVariableCalled
+import net.serenitybdd.core.Serenity
 import org.junit.Assert
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.serviceJourneyRules.AppointmentsProvider
 import worker.models.serviceJourneyRules.ConsultationsProvider
@@ -27,6 +26,7 @@ import worker.models.serviceJourneyRules.MessagesProvider
 import worker.models.serviceJourneyRules.PrescriptionsProvider
 import worker.models.serviceJourneyRules.SecondaryAppointmentsProvider
 import worker.models.serviceJourneyRules.ServiceJourneyRulesResponse
+import worker.models.session.UserSessionRequest
 
 class ServiceJourneyRulesStepDefinitions {
     @Given("^I am a user whose ODS Code does not have specific journey configuration set up$")
@@ -72,24 +72,24 @@ class ServiceJourneyRulesStepDefinitions {
 
     @When("^I request the service journey rules for my ODS Code$")
     fun iRequestTheServiceJourneyRulesForODSCode() {
-        try {
-            val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .serviceJourneyRules
-                    .getServiceJourneyRulesConfiguration()
-
-            ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE.set(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .serviceJourneyRules
+                .getServiceJourneyRulesConfiguration()
+        ServiceJourneyRulesSerenityHelpers.SERVICE_JOURNEY_RULES_RESPONSE.set(response)
     }
 
     @When("^I login but service journey rules has no configuration for my GP practice")
     fun whenILoginButServiceJourneyRulesHasNoConfigurationForMyGPPractice() {
-        try {
-            SharedStepDefinitionsBackend().iHaveLoggedInAndHaveAValidSessionCookie()
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val gpSystem = SerenityHelpers.getGpSupplier()
+        val patient = SerenityHelpers.getPatient()
+        val redirectUri = GlobalSerenityHelpers.LOGIN_REDIRECT_URI.getOrFail<String>()
+        CitizenIdSessionCreateJourney().createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem).createFor(patient)
+        Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
+                .postSessionConnection(UserSessionRequest(
+                        authCode = patient.authCode,
+                        codeVerifier = patient.codeVerifier,
+                        redirectUrl = redirectUri))
     }
 
     @Then("^the service journey rules response will have appointments set to (\\w+)$")

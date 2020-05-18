@@ -1,14 +1,12 @@
 package features.myrecord.factories
 
 import constants.Supplier
-import mocking.SupplierSpecificFactory
 import mocking.MockingClient
+import mocking.SupplierSpecificFactory
 import models.Patient
 import net.serenitybdd.core.Serenity
 import utils.LinkedProfilesSerenityHelpers
-import utils.SerenityHelpers
 import utils.getOrNull
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MedicationsData
 import worker.models.myrecord.MyRecordResponse
@@ -28,16 +26,10 @@ abstract class MedicationsFactory {
     abstract fun respondWithBadData(patient: Patient)
 
     fun getResult() {
-
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
-
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .myRecord.getMyRecord(patientId)
-            Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .myRecord.getMyRecord(patientId)
+        Serenity.setSessionVariable(MyRecordResponse::class).to(result)
     }
 
     companion object : SupplierSpecificFactory<MedicationsFactory>() {

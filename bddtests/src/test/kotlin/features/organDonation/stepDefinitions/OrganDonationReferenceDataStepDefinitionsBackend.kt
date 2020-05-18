@@ -8,8 +8,6 @@ import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.organDonation.models.ReferenceDataResponse
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
-import utils.SerenityHelpers
-import worker.NhsoHttpException
 import worker.WorkerClient
 
 class OrganDonationReferenceDataStepDefinitionsBackend {
@@ -25,14 +23,10 @@ class OrganDonationReferenceDataStepDefinitionsBackend {
 
     @When("^I request the Organ Donation Reference Data$")
     fun iRequestOrganDonationReferenceData() {
-        try {
-            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .organDonation
-                    .getOrganDonationReferenceData()
-            Serenity.setSessionVariable(ReferenceDataResponse::class).to(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .organDonation
+                .getOrganDonationReferenceData()
+        Serenity.setSessionVariable(ReferenceDataResponse::class).to(response)
     }
 
     @Then("^I receive Organ Donation Reference Data$")

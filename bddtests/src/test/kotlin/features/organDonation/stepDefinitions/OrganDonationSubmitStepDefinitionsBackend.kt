@@ -16,10 +16,8 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
-import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.organdonation.OrganDonationRegistrationResponse
 
@@ -30,8 +28,9 @@ class OrganDonationSubmitStepDefinitionsBackend {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
-        factory.create { registration->registration.optOut {
-            request -> request.respondWithSuccess("NewOrganDonationId") }}
+        factory.create { registration ->
+            registration.optOut { request -> request.respondWithSuccess("NewOrganDonationId") }
+        }
     }
 
     @Given("^I am a (.*) api user who wants to opt-in to organ donation$")
@@ -39,19 +38,21 @@ class OrganDonationSubmitStepDefinitionsBackend {
         val supplier = Supplier.valueOf(gpSystem)
         val factory = OrganDonationFactory(supplier)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
-        factory.create { registration->registration.optIn {
-            request -> request.respondWithSuccess("NewOrganDonationId") }}
+        factory.create { registration ->
+            registration.optIn { request -> request.respondWithSuccess("NewOrganDonationId") }
+        }
     }
 
     @Given("^I am a user with proof level 5 who wants to opt-in to organ donation$")
     fun iAmAUserWithProofLevel5WhoWantsToOptInToOrganDonation() {
         val gpSystem = Supplier.EMIS
-        val patient =  Patient.getDefault(gpSystem).copy(identityProofingLevel = IdentityProofingLevel.P5)
+        val patient = Patient.getDefault(gpSystem).copy(identityProofingLevel = IdentityProofingLevel.P5)
         CitizenIdSessionCreateJourney().createFor(patient)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
         val factory = OrganDonationFactory(gpSystem)
-        factory.create { registration->registration.optIn {
-            request -> request.respondWithSuccess("NewOrganDonationId") }}
+        factory.create { registration ->
+            registration.optIn { request -> request.respondWithSuccess("NewOrganDonationId") }
+        }
     }
 
     @Given("^I am a (\\w+) api user who wants to donate some but not all organs$")
@@ -69,32 +70,23 @@ class OrganDonationSubmitStepDefinitionsBackend {
     fun iSubmitMyDecisionToOrganDonation() {
         val registration = OrganDonationSerenityHelpers.ORGAN_DONATION_DECISION
                 .getOrFail<OrganDonationRegistrationRequest>()
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-
-            val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .organDonation
-                    .postRegistration(registration, patientId)
-            setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .organDonation
+                .postRegistration(registration, patientId)
+        setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
     }
 
     @When("^I submit my updated decision to organ donation$")
     fun iSubmitMyUpdatedDecisionToOrganDonation() {
         val registration = OrganDonationSerenityHelpers.ORGAN_DONATION_DECISION
                 .getOrFail<OrganDonationRegistrationRequest>()
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
 
-            val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .organDonation
-                    .putRegistration(registration, patientId)
-            setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .organDonation
+                .putRegistration(registration, patientId)
+        setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
     }
 
     @When("^I submit a request to set my organ donation preferences with all organs and my faiths and beliefs decision")
@@ -102,32 +94,22 @@ class OrganDonationSubmitStepDefinitionsBackend {
         val registration = OrganDonationSerenityHelpers.ORGAN_DONATION_DECISION
                 .getOrFail<OrganDonationRegistrationRequest>()
         registration.registration.faithDeclaration = "Yes"
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-
-            val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .organDonation
-                    .postRegistration(registration, patientId)
-            setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .organDonation
+                .postRegistration(registration, patientId)
+        setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
     }
 
     @When("^I submit my organ donation withdraw decision$")
     fun iSubmitMyOrganDonationWithdrawDecision() {
         val withdrawalRequestBody = OrganDonationSerenityHelpers.ORGAN_DONATION_WITHDRAWAL
                 .getOrFail<OrganDonationWithdrawRequest>()
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-
-            val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .organDonation
-                    .deleteRegistration(withdrawalRequestBody, patientId)
-            setSessionVariable(OrganDonationWithdrawalResponse::class).to(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .organDonation
+                .deleteRegistration(withdrawalRequestBody, patientId)
+        setSessionVariable(OrganDonationWithdrawalResponse::class).to(response)
     }
 
     @Then("^I receive my registration id from organ donation$")

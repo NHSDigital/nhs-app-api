@@ -9,7 +9,6 @@ import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.demographics.Demographics
 
@@ -45,15 +44,10 @@ open class DemographicsStepDefinitions {
 
     @When("^I get the users demographic data$")
     fun whenIGetTheUsersDemographicsDataFor() {
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .myRecord.getDemographics(patientId)
-
-            Serenity.setSessionVariable(Demographics::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .myRecord.getDemographics(patientId)
+        Serenity.setSessionVariable(Demographics::class).to(result)
     }
 
     @Then("^I receive the demographic object$")

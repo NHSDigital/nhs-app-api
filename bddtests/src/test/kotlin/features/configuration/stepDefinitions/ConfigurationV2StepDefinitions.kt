@@ -4,10 +4,8 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
-import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.configuration.ConfigurationV2Response
 
@@ -15,15 +13,10 @@ class ConfigurationV2StepDefinitions {
 
     @When("^I get the v2 configuration$")
     fun iGetTheV2Configuration() {
-        try {
-            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .configuration
-                    .getConfigurationv2()
-
-            ConfigurationSerenityHelpers.CONFIGURATION_RESPONSE.set(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .configuration
+                .getConfigurationv2()
+        ConfigurationSerenityHelpers.CONFIGURATION_RESPONSE.set(response)
     }
 
     @Then("^the v2 configuration response will have a nhsLoginLoggedInPaths property$")

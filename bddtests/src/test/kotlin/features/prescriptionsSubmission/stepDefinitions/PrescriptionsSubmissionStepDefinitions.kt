@@ -2,14 +2,12 @@ package features.prescriptionsSubmission.stepDefinitions
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import constants.Supplier
-import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.courses.stepDefinitions.CoursesStepDefinitions
 import features.nominatedPharmacy.NominatedPharmacySerenityHelpers
 import features.prescriptions.PrescriptionSerenityHelpers
-import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.MicrotestPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
@@ -25,6 +23,7 @@ import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.microtest.prescriptions.PrescriptionHistoryGetResponse
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationItem
 import mocking.stubs.pds.ViewSpinePdsStubs
+import mocking.stubs.prescriptions.factories.PrescriptionsFactory
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.vision.models.PrescriptionHistory
 import mockingFacade.prescriptions.PartialSuccessFacade
@@ -45,7 +44,6 @@ import utils.assertTrueWithRetry
 import utils.getOrFail
 import utils.getOrNull
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.Duration
@@ -280,15 +278,11 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     @When("I submit the repeat prescription")
     fun whenISubmitTheRepeatPrescription() {
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-            val response = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.postPrescriptionsConnection(patientId, prescriptionSubmissionRequest)
-            SerenityHelpers.setHttpResponse(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val response = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .prescriptions.postPrescriptionsConnection(patientId, prescriptionSubmissionRequest)
+        SerenityHelpers.setHttpResponse(response)
     }
 
     @When("I click Confirm and order repeat prescription")
@@ -306,7 +300,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         }
     }
 
-    @But("GP system responds with a conflict error when a repeat prescription is submitted")
+    @Given("GP system responds with a conflict error when a repeat prescription is submitted")
     fun gpSystemRespondsWithConflictErrorWhenARepeatPrescriptionIsSubmitted() {
         PrescriptionsFactory
                 .getForSupplier(SerenityHelpers.getGpSupplier())

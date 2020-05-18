@@ -19,7 +19,6 @@ import utils.SerenityHelpers
 import utils.getOrFail
 import utils.getOrNull
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.serviceJourneyRules.AppointmentsProvider
@@ -132,19 +131,11 @@ class AuthenticationStepDefinitionsBackend {
 
     @When("^I create a user session$")
     fun iCreateUserSession() {
-        try {
-            val response = WorkerClient().authentication.postSessionConnection(
-                    UserSessionRequest(authCode = this.authCode,
-                            codeVerifier = this.codeVerifier!!,
-                            redirectUrl = Config.instance.cidRedirectUri))
-            AuthenticationSerenityHelpers.USER_SESSION_RESPONSE.set(response)
-        } catch (httpException: NhsoHttpException) {
-            setErrorResponse(httpException)
-        }
-    }
-
-    private fun setErrorResponse(errorResponse: NhsoHttpException) {
-        SerenityHelpers.setHttpException(errorResponse)
+        val response = WorkerClient().authentication.postSessionConnection(
+                UserSessionRequest(authCode = this.authCode,
+                        codeVerifier = this.codeVerifier!!,
+                        redirectUrl = Config.instance.cidRedirectUri))
+        AuthenticationSerenityHelpers.USER_SESSION_RESPONSE.set(response)
     }
 
     @Then("^I receive a response$")

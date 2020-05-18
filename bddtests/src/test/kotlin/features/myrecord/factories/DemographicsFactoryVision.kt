@@ -4,19 +4,13 @@ import mocking.defaults.VisionMockDefaults
 import mocking.stubs.StubbedEnvironment
 import mocking.vision.models.VisionUserSession
 import models.Patient
-import utils.SerenityHelpers
-import worker.NhsoHttpException
 import java.time.Duration
 
 class DemographicsFactoryVision: DemographicsFactory() {
     override fun disabled(patient: Patient) {
-        try {
-            mockingClient.forVision.mock {
-                myRecord.demographicsRequest(visionUserSession = VisionUserSession.fromPatient(patient)
-                ).respondWithAccessDeniedError()
-            }
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
+        mockingClient.forVision.mock {
+            myRecord.demographicsRequest(visionUserSession = VisionUserSession.fromPatient(patient)
+            ).respondWithAccessDeniedError()
         }
     }
 

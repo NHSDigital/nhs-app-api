@@ -12,7 +12,6 @@ import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
@@ -59,43 +58,28 @@ class Im1ConnectionV2StepDefinitions {
 
     @When("^I register the user's IM1 credentials using the v2 endpoint$")
     fun iRegisterAUsersIMCredentialsUsingV2Endpoint() {
-
         val request = Im1ConnectionSerenityHelpers.Im1ConnectionRequest.getOrFail<Im1ConnectionRequest>();
-        try {
-            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication
-                    .postIm1ConnectionV2(request)
-            Im1ConnectionSerenityHelpers.Im1ConnectionResponse.set(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .authentication
+                .postIm1ConnectionV2(request)
+        Im1ConnectionSerenityHelpers.Im1ConnectionResponse.set(response)
     }
 
     @When("I verify patient data using the v2 endpoint")
     fun whenIVerifyPatientData() {
         val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
         val odsCode = PatientVerificationSerenityHelpers.NationalPracticeCode.getOrFail<String>()
-
-        try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication.getIm1ConnectionV2(connectionToken, odsCode)
-            Serenity.setSessionVariable(Im1ConnectionResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .authentication.getIm1ConnectionV2(connectionToken, odsCode)
+        Serenity.setSessionVariable(Im1ConnectionResponse::class).to(result)
     }
 
     @When("I verify patient data without sending the ODS Code using the v2 endpoint")
     fun whenIVerifyPatientDataWithoutSendingTheOdsCode() {
         val connectionToken = PatientVerificationSerenityHelpers.ConnectionToken.getOrFail<String>()
-
-        try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication.getIm1ConnectionV2(connectionToken, null)
-            Serenity.setSessionVariable(Im1ConnectionResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .authentication.getIm1ConnectionV2(connectionToken, null)
+        Serenity.setSessionVariable(Im1ConnectionResponse::class).to(result)
     }
 
     @Then("^the Im1 connection response has the expected connection token$")

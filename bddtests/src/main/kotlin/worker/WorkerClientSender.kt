@@ -8,13 +8,14 @@ import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.protocol.HttpContext
-import utils.SerenityHelpers.Companion.setHttpResponse
+import utils.GlobalSerenityHelpers
 import utils.SerenityHelpers
+import utils.set
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.SocketTimeoutException
 
-class WorkerClientSender{
+class WorkerClientSender {
 
     private var _client: HttpClient
     private var csrfToken = ""
@@ -44,42 +45,42 @@ class WorkerClientSender{
     }
 
     fun sendAsync(request: HttpUriRequest, context: HttpContext? = null): HttpResponse? {
-        // If we have a token, use it
         if (this.csrfToken.isNotEmpty()) {
             request.addHeader("X-CSRF-TOKEN", csrfToken)
         }
 
-        if(connectionTimeoutSeconds != null) {
-            val requestConfigBuilder = RequestConfig.custom()
-                    .setConnectionRequestTimeout(connectionTimeoutSeconds!!)
-                    .setConnectTimeout(connectionTimeoutSeconds!!)
-                    .setSocketTimeout(connectionTimeoutSeconds!!)
-                    .build()
-
-            _client = HttpClientBuilder
-                    .create()
-                    .setDefaultRequestConfig(requestConfigBuilder)
-                    .build()
+        if (connectionTimeoutSeconds != null) {
+            setTimeoutOnClient()
         }
 
-        var response: HttpResponse
-
-        try {
-            response = if (context != null) _client.execute(request, context) else _client.execute(request)
-        } catch(ex: SocketTimeoutException) {
+        val response = try {
+            if (context != null) _client.execute(request, context) else _client.execute(request)
+        } catch (ex: SocketTimeoutException) {
             return null
         }
         SerenityHelpers.setHttpResponse(response)
+        val isSuccessful = isSuccessful(response)
+        return if (!isSuccessful) {
+            GlobalSerenityHelpers.HTTP_EXCEPTION.set(NhsoHttpException(request, response))
+            null
+        } else response
+    }
 
-        if (response.statusLine.statusCode != HttpStatus.SC_OK &&
-                response.statusLine.statusCode != HttpStatus.SC_CREATED &&
-                response.statusLine.statusCode != HttpStatus.SC_NO_CONTENT) {
-            // Exception is thrown here to ensure that the
-            // tests fail at the appropriate location and not further down the line
-            // when values are not as expected.  This makes it easier to debug.
-            throw NhsoHttpException(request, response)
-        } else {
-            return response
-        }
+    private fun isSuccessful(response: HttpResponse):Boolean {
+        val successfulStatusCodes = arrayListOf(HttpStatus.SC_OK, HttpStatus.SC_CREATED, HttpStatus.SC_NO_CONTENT)
+        return successfulStatusCodes.contains(response.statusLine.statusCode)
+    }
+
+    private fun setTimeoutOnClient() {
+        val requestConfigBuilder = RequestConfig.custom()
+                .setConnectionRequestTimeout(connectionTimeoutSeconds!!)
+                .setConnectTimeout(connectionTimeoutSeconds!!)
+                .setSocketTimeout(connectionTimeoutSeconds!!)
+                .build()
+
+        _client = HttpClientBuilder
+                .create()
+                .setDefaultRequestConfig(requestConfigBuilder)
+                .build()
     }
 }

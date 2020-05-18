@@ -14,7 +14,6 @@ import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
 import worker.WorkerClient
 import java.time.Duration
 
@@ -79,16 +78,10 @@ class AppointmentsCancellingStepDefinitionsBackend {
         )
 
         val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-
-        try {
-            val response = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.deleteAppointment(patientId, body)
-
-            SerenityHelpers.setHttpResponse(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val response = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .appointments.deleteAppointment(patientId, body)
+        SerenityHelpers.setHttpResponse(response)
     }
 
     @When("^I send a cancellation request to the API with an invalid cancellation reason$")
@@ -100,15 +93,10 @@ class AppointmentsCancellingStepDefinitionsBackend {
         )
 
         val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-
-        try {
-            val response = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.deleteAppointment(patientId, body)
-            SerenityHelpers.setHttpResponse(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val response = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .appointments.deleteAppointment(patientId, body)
+        SerenityHelpers.setHttpResponse(response)
     }
 
     @Then("^I will receive a successful response$")

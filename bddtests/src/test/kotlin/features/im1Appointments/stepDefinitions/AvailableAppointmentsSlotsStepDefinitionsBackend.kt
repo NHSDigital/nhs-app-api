@@ -4,16 +4,15 @@ import constants.Supplier
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import features.myrecord.factories.DemographicsFactory
 import mocking.data.appointments.AppointmentsSlotsExample
+import mocking.stubs.appointments.factories.AppointmentsSlotsFactory
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
 import utils.SerenityHelpers
 import utils.getOrNull
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
@@ -84,19 +83,13 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
         }
 
         val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
-
-        try {
-
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.getAppointmentSlots(
-                    patientId,
-                    fromDate,
-                    toDate,
-                    cookie)
-            Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .appointments.getAppointmentSlots(
+                        patientId,
+                        fromDate,
+                        toDate,
+                        cookie)
+        Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)
     }
 
     @Then("^(\\d{1}) telephone number\\(s\\) are retrieved$")

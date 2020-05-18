@@ -123,12 +123,10 @@ class EndpointStepDefinitions  {
     private fun <T> submitRequest(responseKey: String,
                                   exceptionKey: String,
                                   request: (WorkerClient) -> T) {
-        try {
-            val workerClient = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-            val result = request.invoke(workerClient)
-            Serenity.setSessionVariable(responseKey).to(result)
-        } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(exceptionKey).to(httpException)
-        }
+        val workerClient = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+        val result = request.invoke(workerClient)
+        Serenity.setSessionVariable(responseKey).to(result)
+        val errorResponse = SerenityHelpers.getHttpException()
+        Serenity.setSessionVariable(exceptionKey).to(errorResponse)
     }
 }

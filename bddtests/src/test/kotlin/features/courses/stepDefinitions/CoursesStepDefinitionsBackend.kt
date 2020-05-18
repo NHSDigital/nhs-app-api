@@ -5,9 +5,7 @@ import cucumber.api.java.en.When
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
-import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.courses.CoursesListResponse
 
@@ -15,16 +13,11 @@ class CoursesStepDefinitionsBackend {
 
     @When("I get the users courses with a valid cookie")
     fun whenIGetTheUsersCoursesWithAnValidCookie() {
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-            val result = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.getCoursesConnection(patientId)
-
-            Serenity.setSessionVariable(CoursesListResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val result = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .prescriptions.getCoursesConnection(patientId)
+        Serenity.setSessionVariable(CoursesListResponse::class).to(result)
     }
 
     @Then("^I receive a list of (\\d+) repeating prescriptions that can be requested$")

@@ -49,10 +49,6 @@ class SerenityHelpers {
             return newMockingClient
         }
 
-        fun setHttpException(httpException: NhsoHttpException) {
-            GlobalSerenityHelpers.HTTP_EXCEPTION.set(httpException)
-        }
-
         fun clearHttpException() {
             GlobalSerenityHelpers.HTTP_EXCEPTION.set(null)
         }
@@ -61,7 +57,7 @@ class SerenityHelpers {
             return GlobalSerenityHelpers.HTTP_EXCEPTION.getOrNull()
         }
 
-        fun setHttpResponse(response: HttpResponse) {
+        fun setHttpResponse(response: HttpResponse?) {
             GlobalSerenityHelpers.HTTP_RESPONSE.set(response)
         }
 

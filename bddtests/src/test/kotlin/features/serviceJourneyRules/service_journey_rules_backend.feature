@@ -2,6 +2,7 @@
 @backend
 Feature: Service Journey Rules Backend
   #This endpoint is GPSystem agnostic
+
   Scenario: A user fetching the service journey rules for an ODS code not configured will receive a 404
     Given I am a user whose ODS Code does not have specific journey configuration set up
     When I login but service journey rules has no configuration for my GP practice

@@ -385,7 +385,7 @@ style:
     values: 'TODO:,FIXME:,STOPSHIP:'
   ForbiddenImport:
     active: true
-    imports: 'cucumber.api.java.en.And'
+    imports: 'cucumber.api.java.en.And, cucumber.api.java.en.But'
   FunctionOnlyReturningConstant:
     active: false
     ignoreOverridableFunction: true

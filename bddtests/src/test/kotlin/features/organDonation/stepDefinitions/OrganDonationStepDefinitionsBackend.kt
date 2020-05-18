@@ -9,10 +9,9 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.apache.http.HttpStatus
 import org.junit.Assert
-import utils.SerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.organdonation.OrganDonationSearchResponse
 import worker.models.organdonation.OrganDonationState
@@ -68,15 +67,11 @@ class OrganDonationStepDefinitionsBackend {
 
     @When("^I request my organ donation details$")
     fun iRequestMyOrganDonationDetails() {
-        try {
             val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
             val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .organDonation
                     .getOrganDonationConnection(patientId)
             setSessionVariable(OrganDonationSearchResponse::class).to(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
     }
 
     @Then("^I receive organ donation details with an '(.*)' decision$")

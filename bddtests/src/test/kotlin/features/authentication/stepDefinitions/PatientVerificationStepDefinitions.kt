@@ -7,8 +7,8 @@ import cucumber.api.java.en.When
 import features.authentication.factories.PatientVerificationFactory
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
-import mocking.emis.demographics.PatientIdentifier
 import mocking.defaults.VisionMockDefaults
+import mocking.emis.demographics.PatientIdentifier
 import mocking.vision.models.VisionUserSession
 import models.NhsNumberFormatter
 import models.Patient
@@ -18,7 +18,6 @@ import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.patient.Im1ConnectionResponse
 
@@ -176,13 +175,9 @@ class PatientVerificationStepDefinitions {
     }
 
     private fun whenIVerifyPatientData(connectionToken: String?, odsCode: String?) {
-        try {
-            val result = sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication.getIm1Connection(connectionToken, odsCode)
-            setSessionVariable(Im1ConnectionResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val result = sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .authentication.getIm1Connection(connectionToken, odsCode)
+        setSessionVariable(Im1ConnectionResponse::class).to(result)
     }
 
     @Then("I receive the expected NHS Numbers?$")

@@ -6,11 +6,9 @@ import cucumber.api.java.en.When
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import utils.LinkedProfilesSerenityHelpers
-import utils.SerenityHelpers
 import utils.getOrFail
 import utils.getOrNull
 import utils.set
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptions.PrescriptionsListResponse
 import java.time.OffsetDateTime
@@ -23,42 +21,29 @@ class PrescriptionsStepDefinitionsBackend {
     @When("I request the users prescriptions with a valid cookie")
     fun whenIRequestTheUsersPrescriptionsWithAValidCookie() {
         val formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(fromDateKey)
-
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
-            val sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-            val response = sessionVariable.prescriptions.getPrescriptionsConnection(patientId,
-                    if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate)
-            PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
+        val sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+        val response = sessionVariable.prescriptions.getPrescriptionsConnection(patientId,
+                if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate)
+        PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
     }
 
     @When("^I request prescriptions for the last 6 months$")
     fun iRequestPrescriptionsForTheLastSixMonths() {
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
-            val fromDate = PrescriptionsSerenityHelpers.FROM_DATE.getOrNull<String>()
-            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.getPrescriptionsConnection(patientId, fromDate)
-            PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrNull<String>()
+        val fromDate = PrescriptionsSerenityHelpers.FROM_DATE.getOrNull<String>()
+        val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .prescriptions.getPrescriptionsConnection(patientId, fromDate)
+        PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
     }
 
     @When("^I request prescriptions for the last 6 months with an invalid cookie$")
     fun iRequestPrescriptionsForTheLastSixMonthsWithAnInvalidCookie() {
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-            val fromDate = PrescriptionsSerenityHelpers.FROM_DATE.getOrNull<String>()
-            val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.getPrescriptionsConnection(patientId, fromDate, WorkerClient.getHttpContext(true))
-            PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val fromDate = PrescriptionsSerenityHelpers.FROM_DATE.getOrNull<String>()
+        val response = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .prescriptions.getPrescriptionsConnection(patientId, fromDate, WorkerClient.getHttpContext(true))
+        PrescriptionsSerenityHelpers.PRESCRIPTIONS_LIST_RESPONSE.set(response)
     }
 
     @Then("I receive a list of (\\d+) prescriptions")

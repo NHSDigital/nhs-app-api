@@ -9,10 +9,9 @@ import mocking.data.myrecord.ConsultationsData
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import pages.myrecord.MedicalRecordV1Page
-import utils.SerenityHelpers
 import utils.LinkedProfilesSerenityHelpers
+import utils.SerenityHelpers
 import utils.getOrFail
-import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
@@ -72,16 +71,10 @@ open class V1MedicalRecordConsultationStepDefinitions {
 
     @When("I get the users consultations")
     fun whenIGetTheUsersConsultations() {
-        try {
-            val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
-
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .myRecord.getMyRecord(patientId)
-
-            Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
+        val patientId = LinkedProfilesSerenityHelpers.MAIN_PATIENT_ID.getOrFail<String>()
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .myRecord.getMyRecord(patientId)
+        Serenity.setSessionVariable(MyRecordResponse::class).to(result)
     }
 
     @Then("I receive \"(.*)\" consultations as part of the my record object")
