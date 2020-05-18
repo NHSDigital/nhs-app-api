@@ -25,6 +25,8 @@
         $t('user_research.whatIsInvolved.restriction.suffix') }}
     </p>
     <radio-group v-model="selectedValue"
+                 :header="$t('user_research.question.label')"
+                 header-size="m"
                  :radios="choices"/>
     <primary-button @click.stop.prevent="onClick">
       {{ $t('user_research.continue') }}

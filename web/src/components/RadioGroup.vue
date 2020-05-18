@@ -1,9 +1,12 @@
 <template>
-  <error-group :show-error="showError">
+  <error-group :show-error="showError" class="nhsuk-form-group">
     <component :is="container"
                class="nhsuk-fieldset nhsuk-form-group--error">
-      <legend v-if="header" class="nhsuk-fieldset__legend">
-        {{ header }}
+      <legend v-if="header"
+              :class="['nhsuk-fieldset__legend', `nhsuk-fieldset__legend--${headerSize}`]">
+        <h1 class="nhsuk-fieldset__heading">
+          {{ header }}
+        </h1>
       </legend>
       <error-message v-if="errorMessage && showError">
         {{ errorMessage }}
@@ -49,6 +52,11 @@ export default {
     header: {
       type: String,
       default: '',
+    },
+    headerSize: {
+      type: String,
+      default: 'xs',
+      validator: value => ['xs', 's', 'm', 'l', 'xl'].includes(value),
     },
     inline: {
       type: Boolean,
@@ -105,11 +113,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.nhsuk-fieldset{
- margin-bottom: 16px;
-}
-
-</style>
-
