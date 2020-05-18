@@ -36,9 +36,6 @@ services:
       - ./docker/stubbed/env/spine_connectivity.env
       - ./docker/stubbed/env/tpp_connectivity.env
       - ./docker/stubbed/env/vision_connectivity.env
-    secrets:
-      - vision_cert
-      - vision_cert_password
 
   users.local.bitraft.io:
     env_file:
@@ -50,9 +47,6 @@ services:
       - ./docker/stubbed/env/microtest_connectivity.env
       - ./docker/stubbed/env/tpp_connectivity.env
       - ./docker/stubbed/env/vision_connectivity.env
-    secrets:
-      - vision_cert
-      - vision_cert_password
 
   messages.local.bitraft.io:
     env_file:

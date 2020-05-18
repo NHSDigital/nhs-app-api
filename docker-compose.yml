@@ -1,18 +1,16 @@
 version: "3.4"
 
 secrets:
-  tpp_cert:
-    file: "~/.nhsonline/secrets/tpp_client_cert.pfx"
-  tpp_cert_password:
-    file: "~/.nhsonline/secrets/tpp_client_cert.password"
-  session_encryption_key:
-    file: "~/.nhsonline/secrets/session_encryption_key"
   azure_notification_hub_key:
     file: "~/.nhsonline/secrets/azure_notification_hub_key"
   microtest_cert:
     file: "~/.nhsonline/secrets/microtest_client_cert.pfx"
   microtest_cert_password:
     file: "~/.nhsonline/secrets/microtest_client_cert.password"
+  gp_lookup_api_key:
+    file: "~/.nhsonline/secrets/gp_lookup_api_key"
+  nhsapp_api_key:
+    file: "~/.nhsonline/secrets/nhsapp_api_key"
   nhslogin_private_key:
     file: "~/.nhsonline/secrets/nhslogin_ext_private_key.pem"
   nhslogin_rsapass:
@@ -21,14 +19,20 @@ secrets:
     file: "~/.nhsonline/secrets/organ_donation_cert.pfx"
   organ_donation_cert_password:
     file: "~/.nhsonline/secrets/organ_donation_cert.password"
+  session_encryption_key:
+    file: "~/.nhsonline/secrets/session_encryption_key"
   spine_cert:
     file: "~/.nhsonline/secrets/spine_client_cert.pfx"
   spine_cert_password:
     file: "~/.nhsonline/secrets/spine_client_cert.password"
-  gp_lookup_api_key:
-    file: "~/.nhsonline/secrets/gp_lookup_api_key"
-  nhsapp_api_key:
-    file: "~/.nhsonline/secrets/nhsapp_api_key"
+  tpp_cert:
+    file: "~/.nhsonline/secrets/tpp_client_cert.pfx"
+  tpp_cert_password:
+    file: "~/.nhsonline/secrets/tpp_client_cert.password"
+  vision_cert:
+    file: "~/.nhsonline/secrets/vision_client_cert.pfx"
+  vision_cert_password:
+    file: "~/.nhsonline/secrets/vision_client_cert.password"
 
 
 services:
@@ -105,18 +109,20 @@ services:
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io
     secrets:
-      - tpp_cert
-      - tpp_cert_password
+      - gp_lookup_api_key
       - microtest_cert
       - microtest_cert_password
-      - organ_donation_cert
-      - organ_donation_cert_password
       - nhslogin_private_key
       - nhslogin_rsapass
+      - organ_donation_cert
+      - organ_donation_cert_password
+      - session_encryption_key
       - spine_cert
       - spine_cert_password
-      - session_encryption_key
-      - gp_lookup_api_key
+      - tpp_cert
+      - tpp_cert_password
+      - vision_cert
+      - vision_cert_password
 
   cid.local.bitraft.io:
     image: ${CIDAPI_DOCKER_REGISTRY:-local}/nhsonline-backendcidapi:${CIDAPI_DOCKER_TAG:-latest}
@@ -149,11 +155,13 @@ services:
     depends_on:
       - servicejourneyrulesapi.local.bitraft.io
     secrets:
-      - tpp_cert
-      - tpp_cert_password
       - microtest_cert
       - microtest_cert_password
       - session_encryption_key
+      - tpp_cert
+      - tpp_cert_password
+      - vision_cert
+      - vision_cert_password
 
   servicejourneyrulesapi.config:
     image: ${SJRCONFIG_DOCKER_REGISTRY:-local}/nhsonline-service-journey-dev-config:${SJRCONFIG_DOCKER_TAG:-latest}
