@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             where TUserSession: UserSession
         {
             var stepTasks = deleteSteps
-                .Select(step => BeingExecuteStep(step, httpContext, userSession))
+                .Select(step => BeginExecuteStep(step, httpContext, userSession))
                 .ToArray();
 
             var results = await Task.WhenAll(stepTasks);
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.PfsApi.Session
             return new DeleteUserSessionResult.Failure();
         }
 
-        private Task<bool> BeingExecuteStep<TUserSession>(
+        private Task<bool> BeginExecuteStep<TUserSession>(
             IUserSessionDeleteStep<TUserSession> step,
             HttpContext httpContext,
             TUserSession userSession)
