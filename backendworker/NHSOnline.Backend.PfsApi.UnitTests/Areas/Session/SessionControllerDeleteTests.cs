@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         {
             // Arrange
             var userSession = CreateP9UserSession(supplier: Supplier.Emis, nhsNumber: "123 456 7890", accessToken: "AccToken", key: "SessionKey");
-            ArrangeCloseAndDeleteGpUserSession(userSession, new CloseSessionResult.Success());
+            ArrangeCloseAndDeleteGpUserSession(userSession.GpUserSession, new CloseSessionResult.Success());
             ArrangeDeleteCachedUserSession("SessionKey");
             var auditStub = ArrangeAudit();
 
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         {
             // Arrange
             var userSession = CreateP9UserSession(supplier: Supplier.Emis, nhsNumber: "123 456 7890", accessToken: "AccToken", key: "SessionKey");
-            ArrangeCloseAndDeleteGpUserSession(userSession, new CloseSessionResult.Failure());
+            ArrangeCloseAndDeleteGpUserSession(userSession.GpUserSession, new CloseSessionResult.Failure());
             ArrangeDeleteCachedUserSession("SessionKey");
             var auditStub = ArrangeAudit();
 
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         {
             // Arrange
             var userSession = CreateP9UserSession(supplier: Supplier.Emis, nhsNumber: "123 456 7890", accessToken: "AccToken", key: "SessionKey");
-            ArrangeCloseAndDeleteGpUserSession(userSession, new CloseSessionResult.Success());
+            ArrangeCloseAndDeleteGpUserSession(userSession.GpUserSession, new CloseSessionResult.Success());
             ArrangeDeleteCachedUserSession("SessionKey", false);
             var auditStub = ArrangeAudit();
 
@@ -193,10 +193,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .ReturnsAsync(result ?? true);
         }
 
-        private void ArrangeCloseAndDeleteGpUserSession(P9UserSession userSession, CloseSessionResult result = null)
+        private void ArrangeCloseAndDeleteGpUserSession(GpUserSession gpUserSession, CloseSessionResult result = null)
         {
             Context.MockGpSessionManager
-                .Setup(x => x.CloseAndDeleteSession(userSession))
+                .Setup(x => x.CloseSession(gpUserSession))
                 .ReturnsAsync(result ?? new CloseSessionResult.Success());
         }
 

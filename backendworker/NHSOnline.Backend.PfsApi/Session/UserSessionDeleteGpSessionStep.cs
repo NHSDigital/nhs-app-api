@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.PfsApi.Session
 
         public async Task<bool> Delete(HttpContext httpContext, P9UserSession userSession)
         {
-            var closeSessionResult = await _gpSessionManager.CloseAndDeleteSession(userSession);
+            var closeSessionResult = await _gpSessionManager.CloseSession(userSession.GpUserSession);
 
             return closeSessionResult.Accept(new CloseSessionResultVisitor());
         }

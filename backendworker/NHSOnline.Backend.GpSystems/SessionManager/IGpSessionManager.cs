@@ -2,8 +2,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.Session;
-
 
 namespace NHSOnline.Backend.GpSystems.SessionManager
 {
@@ -15,9 +13,6 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
 
         Task<RecreateSessionResult> RecreateSession(string patientId);
 
-        Task<CloseSessionResult> CloseAndDeleteSession(P9UserSession userSession);
-
         Task<CloseSessionResult> CloseSession(GpUserSession gpUserSession);
-
     }
 }

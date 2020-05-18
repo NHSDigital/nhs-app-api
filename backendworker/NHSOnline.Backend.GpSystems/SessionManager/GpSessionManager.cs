@@ -89,17 +89,6 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             return new RecreateSessionResult.Failure();
         }
 
-        public async Task<CloseSessionResult> CloseAndDeleteSession(P9UserSession userSession)
-        {
-            var logoffSessionResult = await CloseSession(userSession.GpUserSession);
-
-            if (logoffSessionResult is CloseSessionResult.Success)
-            {
-                return await DeleteSession(userSession.Key);
-            }
-            return new CloseSessionResult.Failure();
-        }
-
         public async Task<CloseSessionResult> CloseSession(GpUserSession gpUserSession)
         {
             try
@@ -117,35 +106,6 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
             {
                 _logger.LogError(e,$"Deleting the GP supplier failed with error: {e.Message}");
                 return new CloseSessionResult.Failure();
-            }
-        }
-
-        private async Task<CloseSessionResult> DeleteSession(string key)
-        {
-            try
-            {
-                var sessionDeleted = await _sessionCacheService.DeleteUserSession(key);
-
-                LogDeleteSessionResult(sessionDeleted, key);
-
-                return new CloseSessionResult.Success();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Delete session failed with error: {e.Message}");
-                return new CloseSessionResult.Failure();
-            }
-        }
-
-        private void LogDeleteSessionResult(bool sessionDeleted, string key)
-        {
-            if (sessionDeleted)
-            {
-                _logger.LogInformation("Successfully deleted the session from the cache.");
-            }
-            else
-            {
-                _logger.LogError($"No active session was found for {key} in session cache");
             }
         }
 
