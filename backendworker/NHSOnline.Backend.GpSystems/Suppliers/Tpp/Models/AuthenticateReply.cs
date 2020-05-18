@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
         public User User { get; set; }
 
         public Registration Registration { get; set; }
-        
+
         [XmlElement("Person")]
         public List<Person> People { get; set; } = new List<Person>();
 
@@ -46,6 +46,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models
         {
             return People.Where(x =>
                 x.PatientId != null && !OnlineUserId.Equals(x.PatientId, StringComparison.Ordinal));
+        }
+
+        public SiteDetails GetSiteDetails(string patientId)
+        {
+            return Registration.PatientAccess
+                    .FirstOrDefault(x => x.PatientId == patientId)?.SiteDetails;
         }
     }
 }

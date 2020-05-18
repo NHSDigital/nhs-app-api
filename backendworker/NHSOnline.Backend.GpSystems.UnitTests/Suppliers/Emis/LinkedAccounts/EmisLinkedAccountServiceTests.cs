@@ -432,37 +432,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.LinkedAccounts
             // Assert
             var successResult = result.Should().BeOfType<LinkedAccountsResult.Success>().Subject;
             successResult.Should().NotBeNull();
-            successResult.ValidAccounts.Count().Should().Be(1);
+            successResult.ValidAccounts.Count().Should().Be(2);
 
             var expectedLogMessage =
-                "Linked_profiles_count=3, " +
-                "excluded_for_not_having_NHS_number=1, " +
-                "excluding_for_having_different_ODS_code=1, " +
-                "valid_and_being_returned: 1";
+                $"Linked_profiles_count=3, " +
+                $"excluded_for_not_having_NHS_number=1, " +
+                $"has_different_ODS_code=1, " +
+                $"valid_and_being_returned: 2";
             _logger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
 
-            var validEmisProxyPatient = _emisUserSession.ProxyPatients.ElementAt(1);
-            var demographicsResponseForValidUser = demographicsResponses[validEmisProxyPatient.Id];
-            var validLinkedAccountDetail = successResult.ValidAccounts.ElementAt(0);
-
-            var validPatientData = new[]
+            foreach (var returnedValidLinkedAccount in successResult.ValidAccounts)
             {
-                new
-                {
-                    Patient = validEmisProxyPatient,
-                    DemographicsResponse = demographicsResponseForValidUser,
-                    LinkedAccountDetail = validLinkedAccountDetail,
-                },
-            };
+                var emisProxyPatient = _emisUserSession.ProxyPatients.
+                    FirstOrDefault(x => x.Id == returnedValidLinkedAccount.Id);
 
-            foreach (var patientData in validPatientData)
-            {
-                patientData.Patient.NhsNumber.Should().Be(patientData.DemographicsResponse.NhsNumber);
-                patientData.LinkedAccountDetail.Id.Should().Be(patientData.Patient.Id);
-                patientData.LinkedAccountDetail.FullName.Should().Be(patientData.DemographicsResponse.PatientName);
-                patientData.LinkedAccountDetail.GivenName.Should().Be(patientData.DemographicsResponse.NameParts.Given);
+                var demographicDataForValidUser = demographicsResponses[emisProxyPatient.Id];
+
+                returnedValidLinkedAccount.Id.Should().Be(emisProxyPatient.Id);
+                returnedValidLinkedAccount.FullName.Should().Be(demographicDataForValidUser.PatientName);
+                returnedValidLinkedAccount.GivenName.Should().Be(demographicDataForValidUser.NameParts.Given);
+                emisProxyPatient.NhsNumber.Should().Be(demographicDataForValidUser.NhsNumber);
             }
-
             _demographicsService.VerifyAll();
         }
 

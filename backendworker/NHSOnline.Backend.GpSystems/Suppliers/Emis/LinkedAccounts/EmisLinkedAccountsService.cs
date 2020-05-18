@@ -263,16 +263,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.LinkedAccounts
                 }
             }
 
+            var validAndMismatchingAccounts = new List<LinkedAccount>();
+            validAndMismatchingAccounts.AddRange(validAccounts);
+            validAndMismatchingAccounts.AddRange(mismatchingOdsCodes);
+
             _logger.LogInformation($"Linked_profiles_count={linkedAccounts.Count()}, " +
                                    $"excluded_for_not_having_NHS_number={withoutNhsNumbers.Count}, " +
-                                   $"excluding_for_having_different_ODS_code={mismatchingOdsCodes.Count}, " +
-                                   $"valid_and_being_returned: {validAccounts.Count}");
+                                   $"has_different_ODS_code={mismatchingOdsCodes.Count}, " +
+                                   $"valid_and_being_returned: {validAndMismatchingAccounts.Count}");
 
             return new LinkedAccountsBreakdownSummary
             {
-                ValidAccounts = validAccounts,
+                ValidAccounts = validAndMismatchingAccounts,
                 AccountsWithNoNhsNumber = withoutNhsNumbers,
-                AccountsWithMismatchingOdsCode = mismatchingOdsCodes,
             };
         }
     }

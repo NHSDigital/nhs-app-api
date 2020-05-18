@@ -502,8 +502,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                 .ForEach(x => x.NationalId = null);
 
             var expectedValidPeople = authenticateReply.People
-                .Skip(ofWhichHaveDifferentAddress)
-                .Skip(ofWhichShouldHaveNoNhsNumber);
+                .Where(x => x.NationalId != null).ToList();
 
             // Act
             var result = _systemUnderTest.ExtractValidProxyPatients(authenticateReply);
@@ -516,11 +515,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.LinkedAccounts
                 LogLevel.Information,
                 $"Linked_profiles_count={numberOfLinkedAccounts}, " +
                 $"excluded_for_not_having_NHS_number={ofWhichShouldHaveNoNhsNumber}, " +
-                $"excluding_for_having_different_ODS_code={ofWhichHaveDifferentAddress}, " +
-                $"valid_and_being_returned: {expectedNumberOfValidPatients}",
+                $"has_different_ODS_code={ofWhichHaveDifferentAddress}, " +
+                $"valid_and_being_returned: {expectedNumberOfValidPatients + ofWhichHaveDifferentAddress}",
                 Times.Once());
 
-            result.Count.Should().Be(expectedNumberOfValidPatients);
+            result.Count.Should().Be(expectedNumberOfValidPatients + ofWhichHaveDifferentAddress);
             result.Should().BeEquivalentTo(expectedValidPeople);
         }
     }

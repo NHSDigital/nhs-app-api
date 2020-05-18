@@ -74,6 +74,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
                 }
 
                 var tppUserSession = userSession.ValueOrFailure();
+                _tppLinkedAccountsService.LogMismatchingPractices(authenticateReply.Body, tppUserSession.ProxyPatients);
 
                 // The PatientSelected call is only required if
                 // more than 1 person is found in the response.

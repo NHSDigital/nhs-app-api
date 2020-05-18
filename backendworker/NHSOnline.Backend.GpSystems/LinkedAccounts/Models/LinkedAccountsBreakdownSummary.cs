@@ -8,7 +8,5 @@ namespace NHSOnline.Backend.GpSystems.LinkedAccounts.Models
         public IEnumerable<LinkedAccount> ValidAccounts { get; set; } = Enumerable.Empty<LinkedAccount>();
 
         public IEnumerable<LinkedAccount> AccountsWithNoNhsNumber { get; set; } = Enumerable.Empty<LinkedAccount>();
-
-        public IEnumerable<LinkedAccount> AccountsWithMismatchingOdsCode { get; set; } = Enumerable.Empty<LinkedAccount>();
     }
 }

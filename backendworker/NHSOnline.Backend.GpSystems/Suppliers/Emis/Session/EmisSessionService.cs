@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                     patientName = FormatName(sessionResponse.Body);
 
-                    LogProxyInformation(sessionResponse.Body);
+                    LogProxyInformation(session, sessionResponse.Body);
 
                     if (string.IsNullOrWhiteSpace(patientName))
                     {
@@ -220,7 +220,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             }
         }
 
-        private void LogProxyInformation(SessionsPostResponse sessionsPostResponse)
+        private void LogProxyInformation(EmisUserSession emisUserSession, SessionsPostResponse sessionsPostResponse)
         {
             var userPatientLinks = sessionsPostResponse.ExtractLinkedPatients().ToList();
             var selfPatient = sessionsPostResponse.ExtractSelfPatient();
@@ -229,6 +229,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
             _logger.LogInformation(
                 $"User has linked_accounts={userPatientLinks.Count}, with different_ods_codes_to_user={differentOdsCode}");
+
+            foreach (var proxyPatient in emisUserSession.ProxyPatients)
+            {
+                if (!string.Equals(emisUserSession.OdsCode,proxyPatient.OdsCode, StringComparison.Ordinal))
+                {
+                    _logger.LogInformation(
+                        $"Proxy Patient with Guid {proxyPatient.Id} has different " +
+                        $"OdsCode {proxyPatient.OdsCode} from main user {emisUserSession.OdsCode}");
+                }
+            }
         }
 
         private static string FormatName(SessionsPostResponse sessionResponse)

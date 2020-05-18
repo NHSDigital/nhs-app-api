@@ -188,6 +188,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
                     var siteDetailsForProxyPatient =
                         linkedPatientAccessItems
                             .FirstOrDefault(x => x.PatientId == patient.PatientId)?.SiteDetails;
+
                     var hasSamePracticeDetailsAsMainUser =
                         HasSamePracticeAsMainUser(selfPatient.SiteDetails, siteDetailsForProxyPatient);
 
@@ -208,32 +209,58 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.LinkedAccounts
             _logger.LogInformation(
                 $"User has linked_accounts={allLinkedPatients.Count()}, with different_ods_codes_to_user={differentPracticeAddressCount}");
 
+            var validPatientsAndMismatchingOdsCodes = new List<Person>();
+            validPatientsAndMismatchingOdsCodes.AddRange(validPatients);
+            validPatientsAndMismatchingOdsCodes.AddRange(mismatchingOdsCodes);
+
             _logger.LogInformation($"Linked_profiles_count={allLinkedPatients.Count()}, " +
                                    $"excluded_for_not_having_NHS_number={withoutNhsNumbers.Count}, " +
-                                   $"excluding_for_having_different_ODS_code={mismatchingOdsCodes.Count}, " +
-                                   $"valid_and_being_returned: {validPatients.Count}");
+                                   $"has_different_ODS_code={mismatchingOdsCodes.Count}, " +
+                                   $"valid_and_being_returned: {validPatientsAndMismatchingOdsCodes.Count}");
 
-            return validPatients;
+            return validPatientsAndMismatchingOdsCodes;
         }
 
-        private bool HasSamePracticeAsMainUser(SiteDetails mainUserSiteDetails, SiteDetails proxyUserSiteDetails)
+        public void LogMismatchingPractices(AuthenticateReply authenticateReply, ICollection<TppProxyUserSession> proxyPatients)
+        {
+            var mainUserSiteDetails = authenticateReply.GetSiteDetails(authenticateReply.User.Person.PatientId);
+
+            foreach (var proxyPatient in proxyPatients)
+            {
+                var proxyUserSiteDetails = authenticateReply.GetSiteDetails(proxyPatient.PatientId);
+
+                var unitNameMatch = string.Equals(mainUserSiteDetails.UnitName,
+                    proxyUserSiteDetails.UnitName, StringComparison.Ordinal);
+
+                var addressMatch = string.Equals(mainUserSiteDetails.Address?.Address,
+                    proxyUserSiteDetails.Address?.Address, StringComparison.Ordinal);
+
+                if (!unitNameMatch && !addressMatch)
+                {
+                    _logger.LogInformation(
+                        $"Proxy Patient with Guid {proxyPatient.Id} has different unit name and address " +
+                        $"{proxyUserSiteDetails.UnitName}, {proxyUserSiteDetails.Address?.Address} from main user" +
+                        $" {mainUserSiteDetails.UnitName}, {mainUserSiteDetails.Address?.Address}");
+                }
+                else if (!unitNameMatch)
+                {
+                    _logger.LogInformation(
+                        $"Proxy Patient with Guid {proxyPatient.Id} has different unit name " +
+                        $"{proxyUserSiteDetails.UnitName} from main user {mainUserSiteDetails.UnitName}");
+                }
+                else if (!addressMatch)
+                {
+                    _logger.LogInformation(
+                        $"Proxy Patient with Guid {proxyPatient.Id} has different address " +
+                        $"{proxyUserSiteDetails.Address?.Address} from main user {mainUserSiteDetails.Address?.Address}");
+                }
+            }
+        }
+
+        private static bool HasSamePracticeAsMainUser(SiteDetails mainUserSiteDetails, SiteDetails proxyUserSiteDetails)
         {
             var unitNameMatch = string.Equals(mainUserSiteDetails.UnitName, proxyUserSiteDetails.UnitName, StringComparison.Ordinal);
             var addressMatch = string.Equals(mainUserSiteDetails.Address?.Address, proxyUserSiteDetails.Address?.Address, StringComparison.Ordinal);
-
-            if (!unitNameMatch && !addressMatch)
-            {
-                _logger.LogInformation("Practice mismatch - different unit name and address");
-            }
-            else if (!unitNameMatch)
-            {
-                _logger.LogInformation("Practice mismatch - different unit name");
-            }
-            else if (!addressMatch)
-            {
-                _logger.LogInformation("Practice mismatch - different address");
-            }
-
             return unitNameMatch && addressMatch;
         }
 
