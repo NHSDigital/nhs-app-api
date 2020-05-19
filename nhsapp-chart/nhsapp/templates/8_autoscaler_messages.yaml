@@ -10,7 +10,7 @@ metadata:
   name: {{ template "nhsapp.name" . }}-{{ $.Values.messages.role }}-{{ .Chart.AppVersion | replace "." "-" }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1beta1
+    apiVersion: apps/v1
     kind: Deployment
     name: {{ template "nhsapp.name" . }}-{{ $.Values.messages.role }}-{{ .Chart.AppVersion | replace "." "-" }}
   minReplicas: {{ $.Values.messages.minReplicas }}

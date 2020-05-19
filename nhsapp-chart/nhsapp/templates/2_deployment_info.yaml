@@ -89,11 +89,7 @@ spec:
         - name: AUDIT_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.info.mongoDatabaseInfoAuditCollection }}
         - name: USERINFO_MONGO_DATABASE_NAME
-        {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
-        {{- else }}
-          value: {{ $.Values.global.environment }}-mongo
-        {{- end }}
         - name: USERINFO_MONGO_DATABASE_COLLECTION
           value: {{ $.Values.info.mongoDatabaseInfoCollection }}
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.cidStubbed)) }}

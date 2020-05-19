@@ -408,7 +408,7 @@ iproxy:
   containerPort: 8443
   role: iproxy
   image: nhsonline-nginx
-  image_tag: "v1.16.1"
+  image_tag: "v1.18.0"
   imagePullPolicy: IfNotPresent
   minAvailable: 0
   minReplicas: 1
@@ -426,7 +426,7 @@ iproxy_microtest:
   containerPort: 8443
   role: iproxy-microtest
   image: nhsonline-nginx-microtest
-  image_tag: "v1.16.1"
+  image_tag: "v1.18.0"
   imagePullPolicy: IfNotPresent
   minAvailable: 0
   minReplicas: 1

@@ -67,11 +67,7 @@ spec:
               name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
               key: key
         - name: SESSION_MONGO_DATABASE_NAME
-          {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}
-          {{- else }}
-          value: {{ $.Values.global.environment }}
-          {{- end }}
         volumeMounts:
         - name: session-key
           mountPath: "/secrets/session-key"

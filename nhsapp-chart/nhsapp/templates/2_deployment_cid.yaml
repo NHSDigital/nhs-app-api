@@ -236,22 +236,14 @@ spec:
         - name: SERVICE_JOURNEY_RULES_BASE_URL
           value: "https://nhsapp-sjr-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}"
         - name: AUDIT_COSMOS_DATABASE_ID
-          {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}
-          {{- else }}
-          value: {{ $.Values.global.environment }}
-          {{- end }}
         - name: MONGO_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
               name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
               key: key
         - name: SESSION_MONGO_DATABASE_NAME
-        {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}
-        {{- else }}
-          value: {{ $.Values.global.environment }}
-        {{- end }}
         {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.microtestStubbed)) }}
         - name: MICROTEST_CERT_PATH
           value: "/etc/nginx/ssl_microtest/microtest.pfx"

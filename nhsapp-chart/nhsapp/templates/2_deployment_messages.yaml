@@ -72,11 +72,7 @@ spec:
               name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
               key: key
         - name: MESSAGES_MONGO_DATABASE_NAME
-        {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
-        {{- else }}
-          value: {{ $.Values.global.environment }}-mongo
-        {{- end }}
         - name: MESSAGES_MONGO_DATABASE_MESSAGES_COLLECTION
           value: {{ $.Values.messages.mongoDatabaseMessagesCollection }}
         - name: CITIZEN_ID_AUTHENTICATION_TYPE

@@ -343,28 +343,16 @@ spec:
               name: cosmosdbkey-{{ .Chart.AppVersion }}
               key: key
         - name: AUDIT_COSMOS_DATABASE_ID
-          {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}
-          {{- else }}
-          value: {{ $.Values.global.environment }}
-          {{- end }}
         - name: CONSENT_MONGO_DATABASE_NAME
-          {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
-          {{- else }}
-          value: {{ $.Values.global.environment }}-mongo
-          {{- end }}
         - name: MONGO_CONNECTION_STRING
           valueFrom:
             secretKeyRef:
               name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
               key: key
         - name: SESSION_MONGO_DATABASE_NAME
-        {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}
-        {{- else }}
-          value: {{ $.Values.global.environment }}
-        {{- end }}
         {{- if $.Values.appInsightsEnabled }}
         - name: APPINSIGHTS_INSTRUMENTATIONKEY
           valueFrom:

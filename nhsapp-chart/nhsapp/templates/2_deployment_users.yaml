@@ -71,11 +71,7 @@ spec:
               name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
               key: key
         - name: USERS_MONGO_DATABASE_NAME
-        {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
-        {{- else }}
-          value: {{ $.Values.global.environment }}-mongo
-        {{- end }}
         - name: USERS_MONGO_DATABASE_USER_DEVICE_COLLECTION
           value: {{ $.Values.users.mongoDatabaseUserDeviceCollection }}
         - name: AZURE_NOTIFICATION_HUB_PATH
