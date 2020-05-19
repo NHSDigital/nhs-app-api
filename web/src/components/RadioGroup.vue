@@ -4,9 +4,7 @@
                class="nhsuk-fieldset nhsuk-form-group--error">
       <legend v-if="header"
               :class="['nhsuk-fieldset__legend', `nhsuk-fieldset__legend--${headerSize}`]">
-        <h1 class="nhsuk-fieldset__heading">
-          {{ header }}
-        </h1>
+        {{ header }}
       </legend>
       <error-message v-if="errorMessage && showError">
         {{ errorMessage }}
