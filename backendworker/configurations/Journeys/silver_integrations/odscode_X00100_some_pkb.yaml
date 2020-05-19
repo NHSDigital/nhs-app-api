@@ -1,0 +1,16 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "X00100"
+journeys:
+  silverIntegrations:
+    healthTrackers:
+      - pkb
+    libraries:
+      - pkb
+    medicines:
+      - pkb
+    messages:
+      - pkb
+      - testSilverThirdPartyProvider
+    secondaryAppointments:
+      - pkb
