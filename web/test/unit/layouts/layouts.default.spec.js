@@ -101,7 +101,7 @@ const createDefaultPageForLoginScreen = ($store) => {
   });
 };
 
-const createStore = (isNativeApp, journey = 'silverIntegration', enabled = true) => ({
+const createStore = (isNativeApp, journey = 'myRecordHub', enabled = true) => ({
   app: {
     $cookies: mockCookies(),
     $env: {
@@ -112,7 +112,7 @@ const createStore = (isNativeApp, journey = 'silverIntegration', enabled = true)
   subscribe: jest.fn(),
   getters: {
     'errors/showApiError': false,
-    [`serviceJourneyRules/${journey}Enabled`]: () => (enabled),
+    [`serviceJourneyRules/${journey}Enabled`]: enabled,
   },
   state: {
     appVersion: {
@@ -246,10 +246,10 @@ describe('default.vue - is native', () => {
     );
 
     it.each([
-      [GP_MEDICAL_RECORD, 'silverIntegration', true, true],
-      [GP_MEDICAL_RECORD, 'silverIntegration', false, false],
-      [MYRECORD_GP_AT_HAND, 'silverIntegration', true, true],
-      [MYRECORD_GP_AT_HAND, 'silverIntegration', false, false],
+      [GP_MEDICAL_RECORD, 'myRecordHub', true, true],
+      [GP_MEDICAL_RECORD, 'myRecordHub', false, false],
+      [MYRECORD_GP_AT_HAND, 'myRecordHub', true, true],
+      [MYRECORD_GP_AT_HAND, 'myRecordHub', false, false],
     ])(
       'will toggle breadcrumb pages with SJR rule', (page, journey, enabled, expectedResult) => {
         const $sjrStore = createStore(true, journey, enabled);

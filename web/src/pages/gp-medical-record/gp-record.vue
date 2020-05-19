@@ -160,7 +160,7 @@ export default {
            this.$store.getters['myRecord/patientDetailsExist']);
     },
     hasAgreedToMedicalWarning() {
-      return agreedToMedicalWarning();
+      return agreedToMedicalWarning('agreedToMedicalWarning');
     },
   },
   updated() {

@@ -41,7 +41,6 @@ import MenuItemList from '@/components/MenuItemList';
 import ThirdPartyJumpOffButton from '@/components/ThirdPartyJumpOffButton';
 import sjrIf from '@/lib/sjrIf';
 import jumpOffProperties from '@/lib/third-party-providers/jump-off-configuration';
-import agreedToMedicalWarning from '@/lib/sessionStorage';
 
 export default {
   layout: 'nhsuk-layout',
@@ -76,9 +75,6 @@ export default {
   computed: {
     gpMedicalRecordPath() {
       return GP_MEDICAL_RECORD.path;
-    },
-    hasAgreedToMedicalWarning() {
-      return agreedToMedicalWarning('agreedToMedicalWarning');
     },
   },
   updated() {

@@ -1,6 +1,6 @@
 Feature: Medical record hub page
 
-  Scenario: Redirect to GP medical record page if it's the only available option
+  Scenario: Redirect to GP medical record page if I don't have access to PKB care plans or health tracker
     Given I am using the native app user agent
     And I am an EMIS patient with no access to PKB
     And I am logged in

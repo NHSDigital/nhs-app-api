@@ -21,6 +21,7 @@ const {
   NOMINATED_PHARMACY_ENABLED,
   NOTIFICATIONS_ENABLED,
   SILVER_INTEGRATION_ENABLED,
+  MY_RECORD_HUB_ENABLED,
   DOCUMENTS_ENABLED,
   IM1MESSAGING_ENABLED,
   DELETE_GP_MESSAGES_ENABLED,
@@ -95,6 +96,10 @@ export default {
   },
   [SILVER_INTEGRATION_ENABLED](state) {
     return ({ provider, serviceType }) => get(`rules.silverIntegrations.${serviceType}`)(state).includes(provider);
+  },
+  [MY_RECORD_HUB_ENABLED](state) {
+    return get('rules.silverIntegrations.carePlans')(state).includes('pkb') ||
+      get('rules.silverIntegrations.healthTrackers')(state).includes('pkb');
   },
   [DOCUMENTS_ENABLED](state) {
     return get('rules.documents')(state);

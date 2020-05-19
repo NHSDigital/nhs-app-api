@@ -82,12 +82,8 @@ const sjrRedirectRules = {
     },
   },
   silverIntegrationsHealthRecordHubCarePlansEnabledRedirect: {
-    journey: 'silverIntegration',
+    journey: 'myRecordHub',
     url: '/gp-medical-record',
-    context: {
-      provider: 'pkb',
-      serviceType: 'carePlans',
-    },
   },
 };
 
@@ -702,7 +698,6 @@ const routes = {
           $store,
           journey: rule.journey,
           disabled: true,
-          context: rule.context,
         });
       },
       i18nKey: 'myRecord',
@@ -738,7 +733,6 @@ const routes = {
           $store,
           journey: rule.journey,
           disabled: true,
-          context: rule.context,
         });
       },
       i18nKey: 'myRecordGpAtHand',

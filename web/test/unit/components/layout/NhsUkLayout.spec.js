@@ -49,11 +49,11 @@ const createPage = ($store, route = INDEX) => {
   });
 };
 
-const createLayoutStore = (isNativeApp, silverIntegrationEnabled = true) => createStore({
+const createLayoutStore = (isNativeApp, enabled = true) => createStore({
   $cookies: mockCookies(),
   getters: {
     'errors/showApiError': false,
-    'serviceJourneyRules/silverIntegrationEnabled': () => silverIntegrationEnabled,
+    'serviceJourneyRules/myRecordHubEnabled': enabled,
   },
   state: {
     appVersion: {
