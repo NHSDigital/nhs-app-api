@@ -1,7 +1,7 @@
 <template>
   <div v-if="isVisible" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="isStandardError" :id="$style.serverError" class="pull-content">
-      <message-dialog :override-style="overrideStyle" message-type="error" aria-live="polite">
+      <message-dialog :override-style="overrideStyle" message-type="error" :aria-live="ariaLive">
         <message-text :is-header="true"
                       :unindent="isPlainNativeError"
                       :override-style="overrideStyle"
@@ -97,6 +97,12 @@ export default {
     NativeApp,
   },
   mixins: [ErrorMessageMixin],
+  props: {
+    ariaLive: {
+      type: String,
+      default: 'polite',
+    },
+  },
   computed: {
     additionalInfo() {
       return getMessage(this, 'additionalInfo');
@@ -190,9 +196,7 @@ export default {
   },
   methods: {
     setFocus() {
-      if (this.$store.state.device.isNativeApp) {
-        NativeApp.resetPageFocus();
-      } else if (this.$refs.retryFormRef) {
+      if (this.$refs.retryFormRef) {
         this.$refs.retryFormRef.focus();
       }
     },

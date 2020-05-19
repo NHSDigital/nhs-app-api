@@ -25,7 +25,7 @@
               <div :class="[getColumnClass,
                             'nhsuk-u-padding-top-3', 'nhsuk-u-padding-bottom-6']">
                 <connection-error :with-title="true"/>
-                <api-error :with-title="true"/>
+                <api-error :with-title="true" aria-live="off"/>
                 <flash-message/>
                 <slot/>
               </div>
