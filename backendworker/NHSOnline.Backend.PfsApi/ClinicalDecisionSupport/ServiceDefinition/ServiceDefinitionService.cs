@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.ClinicalDecisionSupport.ServiceDefinition
             _serviceDefinitionIsValidQuery = serviceDefinitionIsValidQuery;
         }
 
-        public async Task<ServiceDefinitionResult> GetServiceDefinitionById(
+        public async Task<ServiceDefinitionResult> GetServiceDefinition(
             string providerKey,
             string serviceDefinitionId,
             string serviceDefinitionDescription,

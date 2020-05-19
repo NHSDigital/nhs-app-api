@@ -141,7 +141,7 @@
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionById_WhenQueryThrowsException_ReturnsBadRequest()
+         public async Task GetServiceDefinition_WhenQueryThrowsException_ReturnsBadRequest()
          {
              // Arrange
              MockCreateInitialServiceDefinitionEvaluateParameters();
@@ -155,14 +155,14 @@
                  .Throws<HttpRequestException>();
 
              // Act
-             var response = await _service.GetServiceDefinitionById(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadRequest>();
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionById_WhenQueryReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
+         public async Task GetServiceDefinition_WhenQueryReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
          {
              // Arrange
              MockCreateInitialServiceDefinitionEvaluateParameters();
@@ -178,14 +178,14 @@
                  .ReturnsAsync(_httpResponse);
 
              // Act
-             var response = await _service.GetServiceDefinitionById(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionById_WhenQueryReturnsNullContent_ReturnsBadGateway()
+         public async Task GetServiceDefinition_WhenQueryReturnsNullContent_ReturnsBadGateway()
          {
              // Arrange
              MockCreateInitialServiceDefinitionEvaluateParameters();
@@ -201,7 +201,7 @@
                  .ReturnsAsync(_httpResponse);
 
              // Act
-             var response = await _service.GetServiceDefinitionById(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -211,7 +211,7 @@
          [DataRow("")]
          [DataRow("  ")]
          [DataRow(BundleJsonContent)]
-         public async Task GetServiceDefinitionById_WhenQueryReturnsNonServiceDefinitionContent_ReturnsBadGateway(string content)
+         public async Task GetServiceDefinition_WhenQueryReturnsNonServiceDefinitionContent_ReturnsBadGateway(string content)
          {
              // Arrange
              MockCreateInitialServiceDefinitionEvaluateParameters();
@@ -227,7 +227,7 @@
                  .ReturnsAsync(_httpResponse);
 
              // Act
-             var response = await _service.GetServiceDefinitionById(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.BadGateway>();
@@ -236,7 +236,7 @@
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionById_WhenResponseParsedSuccessfully_SanitizesResponseAndReturnsSuccess()
+         public async Task GetServiceDefinition_WhenResponseParsedSuccessfully_SanitizesResponseAndReturnsSuccess()
          {
              // Arrange
              MockCreateInitialServiceDefinitionEvaluateParameters();
@@ -252,7 +252,7 @@
                  .ReturnsAsync(_httpResponse);
 
              // Act
-             var response = await _service.GetServiceDefinitionById(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
+             var response = await _service.GetServiceDefinition(Provider, ServiceDefinitionId, ServiceDefinitionDescription, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<ServiceDefinitionResult.Success>();

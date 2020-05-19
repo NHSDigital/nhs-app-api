@@ -31,29 +31,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             _logger = logger;
         }
 
-        // When removing v1 endpoints, ensure to remove the associated CensorFilter from appSettings.json
-        [HttpGet]
-        [ApiVersion("1"), ApiVersionRoute("service-definition/{provider}/{id}")]
-        public async Task<IActionResult> GetServiceDefinitionByIdV1(
-            [FromRoute(Name = "id")] string serviceDefinitionId,
-            [FromRoute(Name = "provider")] string provider,
-            [UserSession] P9UserSession userSession)
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                return await GetServiceDefinitionById(provider, serviceDefinitionId, ServiceDefinitionType.Unknown, userSession);
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
         [HttpPost]
         [ApiVersion("2"), ApiVersionRoute("cdss/service-definition/{provider}")]
-        public async Task<IActionResult> GetServiceDefinitionByIdV2(
+        public async Task<IActionResult> GetServiceDefinition(
             [FromBody] ServiceDefinitionMetaData metaData,
             [FromRoute(Name = "provider")] string provider,
             [UserSession] P9UserSession userSession)
@@ -64,7 +44,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                 if (ModelState.IsValid)
                 {
-                    return await GetServiceDefinitionById(provider, metaData.Id, metaData.Type, userSession);
+                    var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[metaData.Type];
+
+                    _logger.LogInformation($"Starting online consultation for {description}. ODSCode: {userSession.GpUserSession.OdsCode}");
+
+                    return (await _service.GetServiceDefinition(provider, metaData.Id, description, userSession))
+                        .Accept(new ServiceDefinitionResultVisitor());
                 }
 
                 _logger.LogModelStateValidationFailure(ModelState);
@@ -79,37 +64,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         }
 
         [HttpPost]
-        [ApiVersion("1"), ApiVersionRoute("service-definition/{provider}/{id}/$evaluate")]
-        public async Task<IActionResult> EvaluateServiceDefinitionV1(
-            [FromRoute(Name = "provider")] string provider,
-            [FromRoute(Name = "id")] string serviceDefinitionId,
-            [FromBody] Parameters parameters,
-            [FromQuery] bool demographicsConsentGiven,
-            [UserSession] P9UserSession userSession)
-        {
-            try
-            {
-                _logger.LogEnter();
-
-                if (parameters != null)
-                {
-                    return await EvaluateServiceDefinition(provider, serviceDefinitionId, ServiceDefinitionType.Unknown,
-                        userSession, parameters, demographicsConsentGiven);
-                }
-
-                _logger.LogError("Parameters cannot be null");
-
-                return new ServiceDefinitionResult.BadRequest().Accept(new ServiceDefinitionResultVisitor());
-            }
-            finally
-            {
-                _logger.LogExit();
-            }
-        }
-
-        [HttpPost]
         [ApiVersion("2"), ApiVersionRoute("cdss/service-definition/{provider}/evaluate")]
-        public async Task<IActionResult> EvaluateServiceDefinitionV2(
+        public async Task<IActionResult> EvaluateServiceDefinition(
             [FromRoute(Name = "provider")] string provider,
             [FromBody] Parameters parameters,
             [FromQuery] bool demographicsConsentGiven,
@@ -130,7 +86,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
 
                 if (!(metaData is null))
                 {
-                    return await EvaluateServiceDefinition(provider, metaData.Id, metaData.Type, userSession, parameters, demographicsConsentGiven);
+                    var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[metaData.Type];
+
+                    _logger.LogInformation($"Evaluating for {description}. ODSCode: {userSession.GpUserSession.OdsCode}");
+
+                    return (await _service.EvaluateServiceDefinition(
+                            provider,
+                            metaData.Id,
+                            description,
+                            parameters,
+                            "true".Equals(Request.Headers[Constants.HttpHeaders.JavascriptDisabled],
+                                StringComparison.Ordinal),
+                            demographicsConsentGiven,
+                            userSession))
+                        .Accept(new ServiceDefinitionResultVisitor());
                 }
 
                 _logger.LogInformation($"{nameof(_fhirParameterHelpers.RemoveServiceDefinitionMetadataFromParameters)} returned null metaData");
@@ -144,15 +113,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         }
 
         [HttpGet]
-        [ApiVersion("1"), ApiVersionRoute("service-definition/provider-name/{provider}")]
-        public IActionResult GetProviderNameV1([FromRoute(Name = "provider")] string provider)
-        {
-            return GetProviderDetailsV2(provider);
-        }
-
-        [HttpGet]
         [ApiVersion("2"), ApiVersionRoute("cdss/service-definition/{provider}/details")]
-        public IActionResult GetProviderDetailsV2([FromRoute(Name = "provider")] string provider)
+        public IActionResult GetProviderDetails([FromRoute(Name = "provider")] string provider)
         {
             try
             {
@@ -167,17 +129,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
         }
 
         [HttpGet]
-        [ApiVersion("1"), ApiVersionRoute("service-definition/{provider}/$isValid")]
-        public async Task<IActionResult> GetServiceDefinitionIsValidV1(
-            [FromRoute(Name = "provider")] string provider,
-            [UserSession] P9UserSession userSession)
-        {
-            return await GetServiceDefinitionIsValidV2(provider, userSession);
-        }
-
-        [HttpGet]
         [ApiVersion("2"), ApiVersionRoute("cdss/service-definition/{provider}/isValid")]
-        public async Task<IActionResult> GetServiceDefinitionIsValidV2(
+        public async Task<IActionResult> GetServiceDefinitionIsValid(
             [FromRoute(Name = "provider")] string provider,
             [UserSession] P9UserSession userSession)
         {
@@ -194,14 +147,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.ServiceDefinition
             }
         }
 
-        private async Task<IActionResult> GetServiceDefinitionById(string provider, string serviceDefinitionId, ServiceDefinitionType type, P9UserSession userSession)
+        private async Task<IActionResult> GetServiceDefinition(string provider, string serviceDefinitionId, ServiceDefinitionType type, P9UserSession userSession)
         {
             var description = ClinicalDecisionSupportConstants.ServiceDefinitionDescriptions[type];
 
             _logger.LogInformation($"Starting online consultation for {description}. " +
                                    $"ODSCode: {userSession.GpUserSession.OdsCode}");
 
-            return (await _service.GetServiceDefinitionById(provider, serviceDefinitionId, description, userSession))
+            return (await _service.GetServiceDefinition(provider, serviceDefinitionId, description, userSession))
                 .Accept(new ServiceDefinitionResultVisitor());
         }
 

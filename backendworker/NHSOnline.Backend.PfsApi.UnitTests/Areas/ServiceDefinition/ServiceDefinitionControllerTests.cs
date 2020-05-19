@@ -67,205 +67,10 @@
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionByIdV1_WhenCalled_ThenStartingConsultationWithUnknownDescriptionIsLogged()
+         public async Task GetServiceDefinition_WhenCalled_ThenStartingConsultationWithUnknownDescriptionIsLogged()
          {
              // Arrange
-             MockServiceGetServiceDefinitionById(new ServiceDefinitionResult.Success("this is a service definition"), _userSession);
-
-             // Act
-             await _systemUnderTest.GetServiceDefinitionByIdV1(ServiceDefinitionId, Provider, _userSession);
-
-             // Assert
-             _mockLogger.VerifyLogger(
-                 LogLevel.Information,
-                 $"Starting online consultation for {ServiceDefinitionDescriptionV1}. ODSCode: {_userSession.GpUserSession.OdsCode}",
-                 Times.Once());
-         }
-
-         [TestMethod]
-         public async Task GetServiceDefinitionByIdV1_WhenServiceGetServiceDefinitionByIdReturnsSuccessfulResult_ThenResultIsReturnedAndStatusCodeIs200()
-         {
-             // Arrange
-             MockServiceGetServiceDefinitionById(new ServiceDefinitionResult.Success("this is another service definition"), _userSession);
-
-             // Act
-             var response =
-                 await _systemUnderTest.GetServiceDefinitionByIdV1(ServiceDefinitionId, Provider, _userSession);
-
-             // Assert
-             var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
-             result.StatusCode.Should().Be(200);
-             result.Value.Should().Be("this is another service definition");
-         }
-
-         [TestMethod]
-         public async Task EvaluateServiceDefinitionV1_WhenBodyIsNull_ThenBadRequestIsReturned()
-         {
-             // Act
-             var response = await _systemUnderTest.EvaluateServiceDefinitionV1(
-                 Provider,
-                 ServiceDefinitionId,
-                 null,
-                 false,
-                 _userSession);
-
-             // Assert
-             response.Should().BeAssignableTo<BadRequestResult>()
-                 .Subject.StatusCode.Should().Be(400);
-         }
-
-         [TestMethod]
-         public async Task EvaluateServiceDefinitionV1_WhenCalled_ThenEvaluatingConsultationIsLogged()
-         {
-             // Arrange
-             MockServiceEvaluateServiceDefinition(new ServiceDefinitionResult.Success("this is an evaluate response"),
-                 _userSession, _evaluateParameters);
-
-             // Act
-             await _systemUnderTest.EvaluateServiceDefinitionV1(
-                 Provider,
-                 ServiceDefinitionId,
-                 _evaluateParameters,
-                 false,
-                 _userSession);
-
-             // Assert
-             VerifyEvaluationWithOdsCodeIsLogged(ServiceDefinitionDescriptionV1);
-         }
-
-         [TestMethod]
-         public async Task EvaluateServiceDefinitionV1_WhenServiceEvaluateReturnsSuccessfulResult_ThenResultIsReturnedAndStatusCodeIs200()
-         {
-             // Arrange
-             MockServiceEvaluateServiceDefinition(new ServiceDefinitionResult.Success("this is another evaluate response"),
-                 _userSession, _evaluateParameters);
-
-             // Act
-             var response = await _systemUnderTest.EvaluateServiceDefinitionV1(
-                 Provider,
-                 ServiceDefinitionId,
-                 _evaluateParameters,
-                 false,
-                 _userSession);
-
-             // Assert
-             var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
-             result.StatusCode.Should().Be(200);
-             result.Value.Should().Be("this is another evaluate response");
-         }
-
-         [TestMethod]
-         public async Task EvaluateServiceDefinitionV1_WhenRequestHasJSDisabledHeader_ThenServiceEvaluateIsCalledWithAddJSDisabledHeaderTrue()
-         {
-             // Arrange
-             MockServiceEvaluateServiceDefinition(new ServiceDefinitionResult.Success("this is yet another evaluate response"),
-                 _userSession, _evaluateParameters, jsDisabled: true);
-
-             // Act
-             _mockHttpContext
-                 .Setup(x => x.Request.Headers[Constants.HttpHeaders.JavascriptDisabled])
-                 .Returns("true");
-
-             await _systemUnderTest.EvaluateServiceDefinitionV1(Provider, ServiceDefinitionId,
-                 _evaluateParameters, false, _userSession);
-
-             // Assert
-             _mockServiceDefinitionService.Verify();
-         }
-
-         [TestMethod]
-         [DataRow(true)]
-         [DataRow(false)]
-         public async Task EvaluateServiceDefinitionV1_WhenDemographicsConsentQueryIsSet_ThenValueIsPassedToServiceEvaluate(bool demographicsConsentGiven)
-         {
-             // Arrange
-             MockServiceEvaluateServiceDefinition(new ServiceDefinitionResult.Success("this is yet again another evaluate response"),
-                _userSession, _evaluateParameters, demographicsConsentGiven: demographicsConsentGiven);
-
-             // Act
-             await _systemUnderTest.EvaluateServiceDefinitionV1(Provider, ServiceDefinitionId, _evaluateParameters,
-                 demographicsConsentGiven, _userSession);
-
-             // Assert
-             _mockServiceDefinitionService.Verify();
-         }
-
-         [TestMethod]
-         public async Task GetServiceDefinitionIsValidV1_WhenServiceIsValidReturnsSuccessWithValidTrue_Then204IsReturned()
-         {
-             // Arrange
-             MockServiceGetServiceDefinitionIsValid(new ServiceDefinitionIsValidResult.Valid(), _userSession);
-
-             // Act
-             var response = await _systemUnderTest.GetServiceDefinitionIsValidV1(Provider, _userSession);
-
-             // Assert
-             response.Should().BeAssignableTo<StatusCodeResult>().Subject
-                 .StatusCode.Should().Be(204);
-         }
-
-         [TestMethod]
-         public async Task GetServiceDefinitionIsValidV1_WhenServiceIsValidReturnsSuccessWithValidFalse_Then580IsReturned()
-         {
-             // Arrange
-             MockServiceGetServiceDefinitionIsValid(new ServiceDefinitionIsValidResult.Invalid(), _userSession);
-
-             // Act
-             var response = await _systemUnderTest.GetServiceDefinitionIsValidV1(Provider, _userSession);
-
-             // Assert
-             response.Should().BeAssignableTo<StatusCodeResult>().Subject
-                 .StatusCode.Should().Be(580);
-         }
-
-         [TestMethod]
-         public async Task GetServiceDefinitionIsValidV1_WhenServiceIsValidReturnsBadRequest_ThenBadRequestIsReturned()
-         {
-             // Arrange
-             MockServiceGetServiceDefinitionIsValid(new ServiceDefinitionIsValidResult.BadRequest(), _userSession);
-
-             // Act
-             var response = await _systemUnderTest.GetServiceDefinitionIsValidV1(Provider, _userSession);
-
-             // Assert
-             response.Should().BeAssignableTo<StatusCodeResult>().Subject
-                .StatusCode.Should().Be(400);
-         }
-
-         [TestMethod]
-         public async Task GetServiceDefinitionIsValidV1_WhenServiceIsValidReturnsBadGateway_ThenBadGatewayIsReturned()
-         {
-             // Arrange
-             MockServiceGetServiceDefinitionIsValid(new ServiceDefinitionIsValidResult.BadGateway(), _userSession);
-
-             // Act
-             var response = await _systemUnderTest.GetServiceDefinitionIsValidV1(Provider, _userSession);
-
-             // Assert
-             response.Should().BeAssignableTo<StatusCodeResult>().Subject
-                .StatusCode.Should().Be(502);
-         }
-
-         [TestMethod]
-         public void GetProviderNameV1_WhenServiceReturnsProviderName_ThenProviderNameIsReturned()
-         {
-             // Arrange
-             MockServiceGetProviderName(new ServiceDefinitionResult.Success(ProviderName));
-
-             // Act
-             var response = _systemUnderTest.GetProviderNameV1(Provider);
-
-             // Assert
-             var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
-             result.StatusCode.Should().Be(200);
-             result.Value.Should().Be(ProviderName);
-         }
-
-         [TestMethod]
-         public async Task GetServiceDefinitionByIdV2_WhenCalled_ThenStartingConsultationWithUnknownDescriptionIsLogged()
-         {
-             // Arrange
-             MockServiceGetServiceDefinitionById(new ServiceDefinitionResult.Success("this is a v2 service definition"),
+             MockServiceGetServiceDefinition(new ServiceDefinitionResult.Success("this is a v2 service definition"),
                  _userSession, description: ServiceDefinitionDescriptionV2);
              var serviceDefinitionMetaData = new ServiceDefinitionMetaData
              {
@@ -274,7 +79,7 @@
              };
 
              // Act
-             await _systemUnderTest.GetServiceDefinitionByIdV2(serviceDefinitionMetaData,
+             await _systemUnderTest.GetServiceDefinition(serviceDefinitionMetaData,
                  Provider, _userSession);
 
              // Assert
@@ -285,10 +90,10 @@
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionByIdV2_WhenServiceGetServiceDefinitionByIdReturnsSuccessfulResult_ThenResultIsReturnedAndStatusCodeIs200()
+         public async Task GetServiceDefinition_WhenServiceGetServiceDefinitionReturnsSuccessfulResult_ThenResultIsReturnedAndStatusCodeIs200()
          {
              // Arrange
-             MockServiceGetServiceDefinitionById(new ServiceDefinitionResult.Success("this is a v2 service definition"),
+             MockServiceGetServiceDefinition(new ServiceDefinitionResult.Success("this is a v2 service definition"),
                  _userSession, description: ServiceDefinitionDescriptionV2);
              var serviceDefinitionMetaData = new ServiceDefinitionMetaData
              {
@@ -297,7 +102,7 @@
              };
 
              // Act
-             var response = await _systemUnderTest.GetServiceDefinitionByIdV2(serviceDefinitionMetaData,
+             var response = await _systemUnderTest.GetServiceDefinition(serviceDefinitionMetaData,
                  Provider, _userSession);
 
              // Assert
@@ -307,10 +112,10 @@
          }
 
          [TestMethod]
-         public async Task EvaluateServiceDefinitionV2_WhenBodyIsNull_ThenBadRequestIsReturned()
+         public async Task EvaluateServiceDefinition_WhenBodyIsNull_ThenBadRequestIsReturned()
          {
              // Act
-             var response = await _systemUnderTest.EvaluateServiceDefinitionV2(
+             var response = await _systemUnderTest.EvaluateServiceDefinition(
                  Provider,
                  null,
                  false,
@@ -322,7 +127,7 @@
          }
 
          [TestMethod]
-         public async Task EvaluateServiceDefinitionV2_WhenCalled_ThenEvaluatingConsultationIsLogged()
+         public async Task EvaluateServiceDefinition_WhenCalled_ThenEvaluatingConsultationIsLogged()
          {
              // Arrange
              AddServiceDefinitionMetaDataToParameters();
@@ -332,7 +137,7 @@
                  _userSession, _evaluateParameters, description: ServiceDefinitionDescriptionV2);
 
              // Act
-             await _systemUnderTest.EvaluateServiceDefinitionV2(
+             var response = await _systemUnderTest.EvaluateServiceDefinition(
                  Provider,
                  _evaluateParameters,
                  false,
@@ -343,7 +148,7 @@
          }
 
          [TestMethod]
-         public async Task EvaluateServiceDefinitionV2_WhenServiceEvaluateReturnsSuccessfulResult_ThenResultIsReturnedAndStatusCodeIs200()
+         public async Task EvaluateServiceDefinition_WhenServiceEvaluateReturnsSuccessfulResult_ThenResultIsReturnedAndStatusCodeIs200()
          {
              // Arrange
              AddServiceDefinitionMetaDataToParameters();
@@ -353,7 +158,7 @@
                  _userSession, _evaluateParameters, description: ServiceDefinitionDescriptionV2);
 
              // Act
-             var response = await _systemUnderTest.EvaluateServiceDefinitionV2(
+             var response = await _systemUnderTest.EvaluateServiceDefinition(
                  Provider,
                  _evaluateParameters,
                  false,
@@ -366,7 +171,7 @@
          }
 
          [TestMethod]
-         public async Task EvaluateServiceDefinitionV2_WhenRequestHasJSDisabledHeader_ThenServiceEvaluateIsCalledWithAddJSDisabledHeaderTrue()
+         public async Task EvaluateServiceDefinition_WhenRequestHasJSDisabledHeader_ThenServiceEvaluateIsCalledWithAddJSDisabledHeaderTrue()
          {
              // Arrange
              AddServiceDefinitionMetaDataToParameters();
@@ -380,7 +185,7 @@
                  .Setup(x => x.Request.Headers[Constants.HttpHeaders.JavascriptDisabled])
                  .Returns("true");
 
-             await _systemUnderTest.EvaluateServiceDefinitionV2(Provider, _evaluateParameters,
+             await _systemUnderTest.EvaluateServiceDefinition(Provider, _evaluateParameters,
                  false, _userSession);
 
              // Assert
@@ -390,7 +195,7 @@
          [TestMethod]
          [DataRow(true)]
          [DataRow(false)]
-         public async Task EvaluateServiceDefinitionV2_WhenDemographicsConsentQueryIsSet_ThenValueIsPassedToServiceEvaluate(
+         public async Task EvaluateServiceDefinition_WhenDemographicsConsentQueryIsSet_ThenValueIsPassedToServiceEvaluate(
              bool demographicsConsentGiven)
          {
              // Arrange
@@ -401,7 +206,7 @@
                  _userSession, _evaluateParameters, description: ServiceDefinitionDescriptionV2, demographicsConsentGiven: demographicsConsentGiven);
 
              // Act
-             await _systemUnderTest.EvaluateServiceDefinitionV2(Provider, _evaluateParameters,
+             await _systemUnderTest.EvaluateServiceDefinition(Provider, _evaluateParameters,
                  demographicsConsentGiven, _userSession);
 
              // Assert
@@ -409,13 +214,13 @@
          }
 
          [DataTestMethod]
-         public async Task GetServiceDefinitionIsValidV2_WhenServiceIsValidReturnsSuccessWithValidTrue_Then204IsReturned()
+         public async Task GetServiceDefinitionIsValid_WhenServiceIsValidReturnsSuccessWithValidTrue_Then204IsReturned()
          {
              // Arrange
              MockServiceGetServiceDefinitionIsValid(new ServiceDefinitionIsValidResult.Valid(), _userSession);
 
              // Act
-             var response = await _systemUnderTest.GetServiceDefinitionIsValidV2(Provider, _userSession);
+             var response = await _systemUnderTest.GetServiceDefinitionIsValid(Provider, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<StatusCodeResult>().Subject
@@ -423,13 +228,13 @@
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionIsValidV2_WhenServiceIsValidReturnsSuccessWithValidFalse_Then580IsReturned()
+         public async Task GetServiceDefinitionIsValid_WhenServiceIsValidReturnsSuccessWithValidFalse_Then580IsReturned()
          {
              // Arrange
              MockServiceGetServiceDefinitionIsValid(new ServiceDefinitionIsValidResult.Invalid(), _userSession);
 
              // Act
-             var response = await _systemUnderTest.GetServiceDefinitionIsValidV2(Provider, _userSession);
+             var response = await _systemUnderTest.GetServiceDefinitionIsValid(Provider, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<StatusCodeResult>().Subject
@@ -437,13 +242,13 @@
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionIsValidV2_WhenServiceIsValidReturnsBadRequest_ThenBadRequestIsReturned()
+         public async Task GetServiceDefinitionIsValid_WhenServiceIsValidReturnsBadRequest_ThenBadRequestIsReturned()
          {
              // Arrange
              MockServiceGetServiceDefinitionIsValid(new ServiceDefinitionIsValidResult.BadRequest(), _userSession);
 
              // Act
-             var response = await _systemUnderTest.GetServiceDefinitionIsValidV2(Provider, _userSession);
+             var response = await _systemUnderTest.GetServiceDefinitionIsValid(Provider, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<StatusCodeResult>().Subject
@@ -451,13 +256,13 @@
          }
 
          [TestMethod]
-         public async Task GetServiceDefinitionIsValidV2_WhenServiceIsValidReturnsBadGateway_ThenBadGatewayIsReturned()
+         public async Task GetServiceDefinitionIsValid_WhenServiceIsValidReturnsBadGateway_ThenBadGatewayIsReturned()
          {
              // Arrange
              MockServiceGetServiceDefinitionIsValid(new ServiceDefinitionIsValidResult.BadGateway(), _userSession);
 
              // Act
-             var response = await _systemUnderTest.GetServiceDefinitionIsValidV2(Provider, _userSession);
+             var response = await _systemUnderTest.GetServiceDefinitionIsValid(Provider, _userSession);
 
              // Assert
              response.Should().BeAssignableTo<StatusCodeResult>().Subject
@@ -465,13 +270,13 @@
          }
 
          [TestMethod]
-         public void GetProviderDetailsV2_WhenServiceReturnsProviderDetails_ThenProviderDetailsAreReturned()
+         public void GetProviderDetails_WhenServiceReturnsProviderDetails_ThenProviderDetailsAreReturned()
          {
              // Arrange
              MockServiceGetProviderName(new ServiceDefinitionResult.Success(ProviderName));
 
              // Act
-             var response = _systemUnderTest.GetProviderDetailsV2(Provider);
+             var response = _systemUnderTest.GetProviderDetails(Provider);
 
              // Assert
              var result = response.Should().BeAssignableTo<OkObjectResult>().Subject;
@@ -490,11 +295,11 @@
                  .Verifiable();
          }
 
-         private void MockServiceGetServiceDefinitionById(ServiceDefinitionResult result, P9UserSession userSession, string provider = Provider, string serviceDefinitionId = ServiceDefinitionId,
+         private void MockServiceGetServiceDefinition(ServiceDefinitionResult result, P9UserSession userSession, string provider = Provider, string serviceDefinitionId = ServiceDefinitionId,
              string description = ServiceDefinitionDescriptionV1)
          {
              Expression<Func<IServiceDefinitionService, Task<ServiceDefinitionResult>>> expectedGetByIdMatch =
-                 s => s.GetServiceDefinitionById(provider, serviceDefinitionId, description, userSession);
+                 s => s.GetServiceDefinition(provider, serviceDefinitionId, description, userSession);
 
              _mockServiceDefinitionService
                  .Setup(expectedGetByIdMatch)
