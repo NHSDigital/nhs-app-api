@@ -7,6 +7,8 @@ parameters:
     default: browserstack
     values:
       - browserstack
+      - onboardingsandpit
+      - previewRelease
       - scratch1
       - scratch2
       - scratch3
@@ -28,8 +30,6 @@ parameters:
       - scratch19
       - scratch20
       - scratch21
-      - previewRelease
-      - onboardingsandpit
 
   - name: iosTarget
     displayName: iOS native app target
@@ -37,6 +37,8 @@ parameters:
     default: BrowserStack
     values:
       - BrowserStack
+      - Onboardingsandpit
+      - Preview
       - Scratch1
       - Scratch2
       - Scratch3
@@ -58,8 +60,6 @@ parameters:
       - Scratch19
       - Scratch20
       - Scratch21
-      - Preview
-      - Onboardingsandpit
 
   - name: intTestsRunAndroidNative
     displayName: Run Android Native Integration Tests
