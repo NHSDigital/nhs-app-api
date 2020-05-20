@@ -8,7 +8,9 @@
     <content-header id="content-header"
                     :show-bread-crumb="false"
                     :show-content-header="true"/>
-    <main :class="[this.$style.homeMain, !$store.state.device.isNativeApp && $style.desktopWeb]">
+    <main id="maincontent"
+          ref="mainContent"
+          :class="[this.$style.homeMain, !$store.state.device.isNativeApp && $style.desktopWeb]">
       <div class="nhsuk-width-container">
         <div class="nhsuk-grid-row">
           <div class="nhsuk-grid-column-two-thirds
