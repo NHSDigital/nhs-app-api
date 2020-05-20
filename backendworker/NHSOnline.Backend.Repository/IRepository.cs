@@ -15,6 +15,11 @@ namespace NHSOnline.Backend.Repository
             TRecord record,
             string recordName);
 
+        public Task<RepositoryUpdateResult<TRecord>> Update(
+            Expression<Func<TRecord, bool>> filter,
+            UpdateRecordBuilder<TRecord> updates,
+            string recordName);
+
         public Task<RepositoryFindResult<TRecord>> Find(
             Expression<Func<TRecord, bool>> filter,
             string recordName);

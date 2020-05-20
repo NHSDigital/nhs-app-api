@@ -13,6 +13,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
         Task<MessagesResult> GetSummaryMessages(AccessToken accessToken);
         
-        Task<MessagePatchResult> PatchMessage(JsonPatchDocument<Message> messagePatchDocument, AccessToken accessToken, string messageId);
+        Task<MessagePatchResult> UpdateMessage(JsonPatchDocument<Message> messagePatchDocument, AccessToken accessToken, string messageId);
     }
 }

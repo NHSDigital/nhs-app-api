@@ -1,15 +1,18 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
+using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.MessagesApi.Repository
 {
     public interface IMessageRepository
     {
-        Task Create(UserMessage userMessage);
-        Task<List<UserMessage>> Find(string nhsLoginId, string sender);
-        Task<List<SummaryMessage>> Summary(string nhsLoginId);
-        Task<UserMessage> FindOne(string nhsLoginId, string messageId);
-        Task UpdateOne(UserMessage userMessage);
+        Task<RepositoryCreateResult<UserMessage>> Create(UserMessage userMessage);
+        Task<RepositoryFindResult<UserMessage>> FindMessagesFromSender(string nhsLoginId, string sender);
+        Task<RepositoryFindResult<UserMessage>> FindAllForUser(string nhsLoginId);
+        Task<RepositoryFindResult<UserMessage>> FindMessage(string nhsLoginId, string messageId);
+
+        Task<RepositoryUpdateResult<UserMessage>> UpdateOne(string nhsLoginId, string messageId,
+            UpdateRecordBuilder<UserMessage> updates);
     }
 }

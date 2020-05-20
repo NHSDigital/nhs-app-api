@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
                 var accessToken = HttpContext.GetAccessToken(_logger);
 
-                var messageResult = await _messageService.PatchMessage(patchDocument, accessToken, messageId);
+                var messageResult = await _messageService.UpdateMessage(patchDocument, accessToken, messageId);
 
                 return messageResult.Accept(new MessagePatchResultVisitor());
             }

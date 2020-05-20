@@ -44,5 +44,13 @@ namespace NHSOnline.Backend.Repository
                 return visitor.Visit(this);
             }
         }
+
+        public class NoChange : RepositoryUpdateResult<TRecord>
+        {
+            public override TOut Accept<TOut>(IRepositoryUpdateResultVisitor<TRecord, TOut> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

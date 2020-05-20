@@ -66,6 +66,40 @@ namespace NHSOnline.Backend.Repository
             }
         }
 
+        public async Task<RepositoryUpdateResult<TRecord>> Update(
+            Expression<Func<TRecord, bool>> filter,
+            UpdateRecordBuilder<TRecord> updates,
+            string recordName)
+        {
+            try
+            {
+                var result = await UpdateRecords(filter, updates.Build(), recordName);
+                if (result.IsAcknowledged && result.ModifiedCount > 0)
+                {
+                    _logger.LogInformation($"Mongo Update {recordName} Successful.");
+                    return new RepositoryUpdateResult<TRecord>.Updated();
+                }
+
+                if (result.IsAcknowledged && result.MatchedCount <= 0)
+                {
+                    _logger.LogInformation($"Mongo Update {recordName} failed to find record.");
+                    return new RepositoryUpdateResult<TRecord>.NotFound();
+                }
+
+                _logger.LogError(
+                    $"Mongo Update {recordName} Failed. " +
+                    $"IsAcknowledged: {result.IsAcknowledged}, " +
+                    $"ModifiedCount: {result.ModifiedCount}, " +
+                    $"MatchedCount: {result.MatchedCount}");
+                return new RepositoryUpdateResult<TRecord>.NoChange();
+            }
+            catch (MongoException exception)
+            {
+                _logger.LogError(exception, $"Mongo Failure. Update {recordName}");
+                return new RepositoryUpdateResult<TRecord>.RepositoryError(exception);
+            }
+        }
+
         public async Task<RepositoryFindResult<TRecord>> Find(Expression<Func<TRecord, bool>> filter, string recordName)
         {
             try
@@ -156,6 +190,16 @@ namespace NHSOnline.Backend.Repository
             {
                 var records = await GetCollection().FindAsync(filter);
                 return records.ToList();
+            }
+        }
+
+        private async Task<UpdateResult> UpdateRecords(Expression<Func<TRecord, bool>> filter,
+            UpdateDefinition<TRecord> updates,
+            string logMessage)
+        {
+            using (_logger.WithTimer(logMessage))
+            {
+                return await GetCollection().UpdateManyAsync(filter, updates);
             }
         }
 

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Mappers;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 
@@ -13,17 +13,13 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
     [TestClass]
     public class MessagesResponseMapperTests
     {
-        private IFixture _fixture;
         private MessagesResponseMapper _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new MessagesApiCustomization());
 
-            _systemUnderTest = _fixture.Create<MessagesResponseMapper>();
+            _systemUnderTest = new MessagesResponseMapper(new Mock<ILogger<MessagesResponseMapper>>().Object);
         }
 
         [TestMethod]
@@ -31,23 +27,26 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
         {
             // Arrange
             const string sender = "test sender";
-            var currentMessage = _fixture.Build<UserMessage>()
-                .With(x => x.Sender, sender)
-                .With(x => x.SentTime, DateTime.UtcNow)
-                .With(x => x.ReadTime, DateTime.UtcNow)
-                .Create();
+            var currentMessage = new UserMessage
+            {
+                Sender = sender,
+                SentTime = DateTime.UtcNow,
+                ReadTime = DateTime.UtcNow
+            };
 
-            var oldestMessage = _fixture.Build<UserMessage>()
-                .With(x => x.Sender, sender)
-                .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(-10))
-                .With(x => x.ReadTime, default(DateTime?))
-                .Create();
+            var oldestMessage = new UserMessage
+            {
+                Sender = sender,
+                SentTime = DateTime.UtcNow.AddSeconds(-10),
+                ReadTime = default(DateTime?)
+            };
 
-            var latestMessage = _fixture.Build<UserMessage>()
-                .With(x => x.Sender, sender)
-                .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(10))
-                .With(x => x.ReadTime, default(DateTime?))
-                .Create();
+            var latestMessage = new UserMessage
+            {
+                Sender = sender,
+                SentTime = DateTime.UtcNow.AddSeconds(10),
+                ReadTime = default(DateTime?)
+            };
 
             // Act
             var result = _systemUnderTest.Map(new List<UserMessage> { currentMessage, oldestMessage, latestMessage });
@@ -88,17 +87,11 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
         public void Map_WithSummaryMessages_MapsToResponse()
         {
             // Arrange
-            var currentMessage = _fixture.Build<SummaryMessage>()
-                .With(x => x.SentTime, DateTime.UtcNow)
-                .Create();
+            var currentMessage = new SummaryMessage { SentTime = DateTime.UtcNow };
 
-            var oldestMessage = _fixture.Build<SummaryMessage>()
-                .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(-10))
-                .Create();
+            var oldestMessage = new SummaryMessage { SentTime = DateTime.UtcNow.AddSeconds(-10) };
 
-            var latestMessage = _fixture.Build<SummaryMessage>()
-                .With(x => x.SentTime, DateTime.UtcNow.AddSeconds(10))
-                .Create();
+            var latestMessage = new SummaryMessage { SentTime = DateTime.UtcNow.AddSeconds(10) };
 
             // Act
             var result = _systemUnderTest.Map(new List<SummaryMessage>
@@ -159,7 +152,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages.Mappers
                 Version = m.Version,
                 Body = m.Body,
                 Read = m.ReadTime.HasValue,
-                SentTime = m.SentTime,
+                SentTime = m.SentTime
             }).ToList();
     }
 }

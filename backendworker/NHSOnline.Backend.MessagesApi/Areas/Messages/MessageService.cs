@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Auth.CitizenId.Models;
-using MongoDB.Driver;
 using NHSOnline.Backend.MessagesApi.Areas.Messages.Models;
 using NHSOnline.Backend.MessagesApi.Repository;
 using NHSOnline.Backend.Support;
@@ -20,30 +17,20 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
         private readonly ILogger<MessagesController> _logger;
         private readonly IMapper<List<UserMessage>, MessagesResponse> _userMessagesToResponseMapper;
         private readonly IMapper<List<SummaryMessage>, MessagesResponse> _summaryMessagesToResponseMapper;
-        private readonly IMapper<JsonPatchDocument<Message>, JsonPatchDocument<UserMessage>> _messageToUserMessagePatchMapper;
         private readonly IMessagesValidationService _validator;
 
-        
-        private static readonly Dictionary<string,List<OperationType>> OperationsWhiteList = 
-            new Dictionary<string, List<OperationType>>
-            {
-                {"/READ", new List<OperationType>{OperationType.Add}}
-            };
-        
         public MessageService
         (
             IMessageRepository messageRepository,
             ILogger<MessagesController> logger,
             IMapper<List<UserMessage>, MessagesResponse> userMessagesToResponseMapper,
             IMapper<List<SummaryMessage>, MessagesResponse> summaryMessagesToResponseMapper,
-            IMapper<JsonPatchDocument<Message>, JsonPatchDocument<UserMessage>> messageToUserMessagePatchMapper, 
             IMessagesValidationService validator)
         {
             _messageRepository = messageRepository;
             _logger = logger;
             _userMessagesToResponseMapper = userMessagesToResponseMapper;
             _summaryMessagesToResponseMapper = summaryMessagesToResponseMapper;
-            _messageToUserMessagePatchMapper = messageToUserMessagePatchMapper;
             _validator = validator;
         }
 
@@ -52,12 +39,12 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             try
             {
                 _logger.LogEnter();
-                
+
                 if (!_validator.IsMessageRequestValid(addMessageRequest, nhsLoginId))
                 {
                     return new MessageResult.BadRequest();
                 }
-                
+
                 var userMessage = new UserMessage
                 {
                     NhsLoginId = nhsLoginId,
@@ -67,14 +54,8 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
                     SentTime = DateTime.UtcNow
                 };
 
-                await _messageRepository.Create(userMessage);
-               
-                return new MessageResult.Success();
-            }
-            catch (MongoException e)
-            {
-                _logger.LogError($"Message Posting has failed with exception: {e}");
-                return new MessageResult.BadGateway();
+                var result = await _messageRepository.Create(userMessage);
+                return result.Accept(new RepositoryCreateResultVisitor());
             }
             catch (Exception e)
             {
@@ -93,14 +74,9 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
             try
             {
-                var messages = await _messageRepository.Find(accessToken.Subject, sender);
+                var result = await _messageRepository.FindMessagesFromSender(accessToken.Subject, sender);
 
-                return MapResult(_userMessagesToResponseMapper, messages);
-            }
-            catch (MongoException e)
-            {
-                _logger.LogError($"Sender Messages Get has failed with exception: {e}");
-                return new MessagesResult.BadGateway();
+                return result.Accept(new RepositoryFindMessageResultVisitor(_userMessagesToResponseMapper));
             }
             catch (Exception e)
             {
@@ -119,14 +95,10 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
 
             try
             {
-                var summaryMessages = await _messageRepository.Summary(accessToken.Subject);
+                var result = await _messageRepository.FindAllForUser(accessToken.Subject);
 
-                return MapResult(_summaryMessagesToResponseMapper, summaryMessages);
-            }
-            catch (MongoException e)
-            {
-                _logger.LogError($"Summary Messages Get has failed with exception: {e}");
-                return new MessagesResult.BadGateway();
+                return result.Accept(
+                    new RepositoryFindMessagesResultToSummaryMessageVisitor(_summaryMessagesToResponseMapper));
             }
             catch (Exception e)
             {
@@ -139,34 +111,27 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             }
         }
 
-        public async Task<MessagePatchResult> PatchMessage(JsonPatchDocument<Message> messagePatchDocument,AccessToken accessToken, string messageId)
+        public async Task<MessagePatchResult> UpdateMessage(JsonPatchDocument<Message> messagePatchDocument,
+            AccessToken accessToken, string messageId)
         {
             _logger.LogEnter();
 
             try
-            { 
-                if (!_validator.IsPatchRequestValid(messagePatchDocument, messageId)
-                || !ValidatePatchOperations(messagePatchDocument.Operations))
+            {
+                if (!_validator.IsPatchRequestValid(messagePatchDocument, messageId))
                 {
                     return new MessagePatchResult.BadRequest();
                 }
-                
-                var userMessage = await _messageRepository.FindOne(accessToken.Subject, messageId);
-                if (userMessage != null)
+
+                var mapperStep = new UpdateMessageMapperStep(_logger).Map(messagePatchDocument);
+                if (mapperStep.ProcessFinishedEarly(out var messageUpdateResult))
                 {
-                    var userMessagePatchDocument = _messageToUserMessagePatchMapper.Map(messagePatchDocument);
-                    
-                    userMessagePatchDocument.ApplyTo(userMessage);
-                    
-                    await _messageRepository.UpdateOne(userMessage);
-                    return new MessagePatchResult.Updated();
+                    return messageUpdateResult;
                 }
-                return new MessagePatchResult.NotFound();
-            } 
-            catch (MongoException e)
-            {
-                _logger.LogError($"Message Get has failed with exception: {e}");
-                return new MessagePatchResult.BadGateway(); 
+
+                var updateResult =
+                    await _messageRepository.UpdateOne(accessToken.Subject, messageId, mapperStep.Result);
+                return updateResult.Accept(new RepositoryUpdateMessageResultVisitor());
             }
             catch (Exception e)
             {
@@ -177,35 +142,6 @@ namespace NHSOnline.Backend.MessagesApi.Areas.Messages
             {
                 _logger.LogExit();
             }
-        }
-
-        private static bool ValidatePatchOperations(List<Operation<Message>> operations)
-        {
-            foreach (var operation in operations)
-            {
-                var path = operation.path.ToUpperInvariant();
-                if (!OperationsWhiteList.ContainsKey(path))
-                {
-                    return false;
-                }
-                if (!OperationsWhiteList[path].Contains(operation.OperationType))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        private static MessagesResult MapResult<TSource>(IMapper<TSource, MessagesResponse> mapper, TSource source)
-        {
-            var response = mapper.Map(source);
-
-            if (response.Any())
-            {
-                return new MessagesResult.Some(response);
-            }
-
-            return new MessagesResult.None();
         }
     }
 }

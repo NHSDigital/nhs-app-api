@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
@@ -21,7 +18,6 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
 {
     public class MessageServiceGetTests
     {
-        private IFixture _fixture;
         private MessageService _systemUnderTest;
         private Mock<IMessageRepository> _mockMessageRepository;
         private Mock<IMapper<List<UserMessage>, MessagesResponse>> _mockUserMessagesToResponseMapper;
@@ -31,24 +27,25 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization())
-                .Customize(new MessagesApiCustomization());
-
-            _mockMessageRepository = _fixture.Freeze<Mock<IMessageRepository>>();
-            var mockLogger = _fixture.Freeze<Mock<ILogger<MessageService>>>();
+            _mockMessageRepository = new Mock<IMessageRepository>();
+            var mockLogger = new Moq.Mock<Microsoft.Extensions.Logging.ILogger<MessagesController>>();
             var accessTokenString = JwtToken.Generate(new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, _fixture.Create<string>()),
-                new Claim("nhs_number", _fixture.Create<string>())
+                new Claim(JwtRegisteredClaimNames.Sub, "NhsLoginId"),
+                new Claim("nhs_number", "nhsNumber")
             });
-            
-            _mockUserMessagesToResponseMapper = _fixture.Freeze<Mock<IMapper<List<UserMessage>, MessagesResponse>>>();
-            _mockSummaryMessagesToResponseMapper =
-                _fixture.Freeze<Mock<IMapper<List<SummaryMessage>, MessagesResponse>>>();
+
+            _mockUserMessagesToResponseMapper = new Mock<IMapper<List<UserMessage>, MessagesResponse>>();
+            _mockSummaryMessagesToResponseMapper =new Mock<IMapper<List<SummaryMessage>, MessagesResponse>>();
 
             _accessToken = AccessToken.Parse(mockLogger.Object, accessTokenString);
-            _systemUnderTest = _fixture.Create<MessageService>();
+
+            _systemUnderTest = new MessageService(
+                _mockMessageRepository.Object,
+                mockLogger.Object,
+                _mockUserMessagesToResponseMapper.Object,
+                _mockSummaryMessagesToResponseMapper.Object,
+                new Moq.Mock<IMessagesValidationService>().Object);
         }
         
         
@@ -56,11 +53,11 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task GetMessages_Some()
         {
             // Arrange
-            var response = _fixture.Create<MessagesResponse>();
+            var response = new MessagesResponse();
             _mockUserMessagesToResponseMapper.Setup(x => x.Map(It.IsAny<List<UserMessage>>())).Returns(response);
 
             // Act
-            var result = await _systemUnderTest.GetMessages(_accessToken, _fixture.Create<string>());
+            var result = await _systemUnderTest.GetMessages(_accessToken, "sender");
 
             // Assert
             _mockUserMessagesToResponseMapper.VerifyAll();
@@ -76,7 +73,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .Returns(new MessagesResponse());
 
             // Act
-            var result = await _systemUnderTest.GetMessages(_accessToken, _fixture.Create<string>());
+            var result = await _systemUnderTest.GetMessages(_accessToken, "sender");
 
             // Assert
             _mockUserMessagesToResponseMapper.VerifyAll();
@@ -91,7 +88,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
                 .Throws<ArgumentException>();
 
             // Act
-            var result = await _systemUnderTest.GetMessages(_accessToken, _fixture.Create<string>());
+            var result = await _systemUnderTest.GetMessages(_accessToken, "sender");
 
             // Assert
             _mockUserMessagesToResponseMapper.VerifyAll();
@@ -102,11 +99,11 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task GetMessages_RepositoryThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            _mockMessageRepository.Setup(x => x.Find(It.IsAny<string>(), It.IsAny<string>()))
+            _mockMessageRepository.Setup(x => x.FindMessagesFromSender(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<ArgumentException>();
 
             // Act
-            var result = await _systemUnderTest.GetMessages(_accessToken, _fixture.Create<string>());
+            var result = await _systemUnderTest.GetMessages(_accessToken, "sender");
 
             // Assert
             _mockMessageRepository.VerifyAll();
@@ -117,11 +114,11 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task GetMessages_RepositoryThrowsMongoException_ReturnsBadGateway()
         {
             // Arrange
-            _mockMessageRepository.Setup(x => x.Find(It.IsAny<string>(), It.IsAny<string>()))
+            _mockMessageRepository.Setup(x => x.FindMessagesFromSender(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new MongoException("test"));
 
             // Act
-            var result = await _systemUnderTest.GetMessages(_accessToken, _fixture.Create<string>());
+            var result = await _systemUnderTest.GetMessages(_accessToken, "sender");
 
             // Assert
             _mockMessageRepository.VerifyAll();
@@ -132,7 +129,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task GetSummaryMessages_Some()
         {
             // Arrange
-            var response = _fixture.Create<MessagesResponse>();
+            var response = new MessagesResponse();
             _mockSummaryMessagesToResponseMapper.Setup(x => x.Map(It.IsAny<List<SummaryMessage>>())).Returns(response);
 
             // Act
@@ -178,7 +175,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task GetSummaryMessages_RepositoryThrowsException_ReturnsInternalServerError()
         {
             // Arrange
-            _mockMessageRepository.Setup(x => x.Summary(It.IsAny<string>())).Throws<ArgumentException>();
+            _mockMessageRepository.Setup(x => x.FindAllForUser(It.IsAny<string>())).Throws<ArgumentException>();
 
             // Act
             var result = await _systemUnderTest.GetSummaryMessages(_accessToken);
@@ -192,7 +189,7 @@ namespace NHSOnline.Backend.MessagesApi.UnitTests.Areas.Messages
         public async Task GetSummaryMessages_RepositoryThrowsMongoException_ReturnsBadGateway()
         {
             // Arrange
-            _mockMessageRepository.Setup(x => x.Summary(It.IsAny<string>()))
+            _mockMessageRepository.Setup(x => x.FindAllForUser(It.IsAny<string>()))
                 .Throws(new MongoException("test"));
 
             // Act

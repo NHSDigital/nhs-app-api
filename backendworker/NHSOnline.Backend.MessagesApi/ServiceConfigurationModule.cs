@@ -19,10 +19,10 @@ namespace NHSOnline.Backend.MessagesApi
             
             services.AddSingleton<IMessagesValidationService, MessagesValidationService>();
             services.AddSingleton<IMessageService, MessageService>();
-            services.AddSingleton<IMessageRepository, MongoMessageRepository>();
+            services.AddSingleton<IRepository<UserMessage>, MongoRepositoryBase<IMongoConfiguration, UserMessage>>();
+            services.AddSingleton<IMessageRepository, MessageRepository>();
             services.AddSingleton<IMapper<List<UserMessage>, MessagesResponse>, MessagesResponseMapper>();
             services.AddSingleton<IMapper<List<SummaryMessage>, MessagesResponse>, MessagesResponseMapper>();
-            services.AddSingleton<IMapper<JsonPatchDocument<Message>, JsonPatchDocument<UserMessage>>, JsonPatchDocumentMapper>();
             
             base.ConfigureServices(services, configuration);
         }
