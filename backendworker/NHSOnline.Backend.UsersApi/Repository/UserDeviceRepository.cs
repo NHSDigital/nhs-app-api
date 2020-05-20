@@ -8,22 +8,23 @@ using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.UsersApi.Repository
 {
-    internal class MongoUserDeviceRepository : MongoRepository<IMongoConfiguration, UserDevice>, IUserDeviceRepository
+    internal class UserDeviceRepository : IUserDeviceRepository
     {
-        private readonly ILogger<MongoUserDeviceRepository> _logger;
+        private readonly ILogger<UserDeviceRepository> _logger;
+        private readonly IRepository<UserDevice> _repository;
+        private const string RecordName = nameof(UserDevice);
 
-        public MongoUserDeviceRepository
+        public UserDeviceRepository
         (
-            ILogger<MongoUserDeviceRepository> logger,
-            IApiMongoClient<IMongoConfiguration> mongoClient,
-            IMongoConfiguration mongoConfiguration
+            ILogger<UserDeviceRepository> logger,
+            IRepository<UserDevice> repository
         )
-            : base(mongoClient, mongoConfiguration)
         {
             _logger = logger;
+            _repository = repository;
         }
 
-        public async Task Create(UserDevice userDevice)
+        public async Task<RepositoryCreateResult<UserDevice>> Create(UserDevice userDevice)
         {
             try
             {
@@ -33,10 +34,8 @@ namespace NHSOnline.Backend.UsersApi.Repository
                     .IsNotNull(userDevice, nameof(userDevice), ThrowError)
                     .IsValid();
 
-                using (_logger.WithTimer("Add user device to Mongo"))
-                {
-                    await InsertOne(userDevice);
-                }
+                return await _repository.Create(userDevice, RecordName);
+
             }
             finally
             {
@@ -45,8 +44,8 @@ namespace NHSOnline.Backend.UsersApi.Repository
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1309", Justification =
-            "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
-        public async Task<UserDevice> Find(string nhsLoginId, string deviceId)
+            "Method ‘CompareOrdinal’ is not supported in repository")]
+        public async Task<RepositoryFindResult<UserDevice>> Find(string nhsLoginId, string deviceId)
         {
             try
             {
@@ -57,10 +56,10 @@ namespace NHSOnline.Backend.UsersApi.Repository
                     .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
                     .IsValid();
 
-                using (_logger.WithTimer("Find user device on Mongo"))
-                {
-                    return await FindOne(d => d.NhsLoginId == nhsLoginId && d.DeviceId == deviceId);
-                }
+
+                return await _repository.Find(d => d.NhsLoginId == nhsLoginId && d.DeviceId == deviceId,
+                    RecordName);
+
             }
             finally
             {
@@ -69,8 +68,8 @@ namespace NHSOnline.Backend.UsersApi.Repository
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1309", Justification =
-            "Method ‘CompareOrdinal’ is not supported on Mongo Driver")]
-        public async Task Delete(string nhsLoginId, string deviceId)
+            "Method ‘CompareOrdinal’ is not supported in repository")]
+        public async Task<RepositoryDeleteResult<UserDevice>> Delete(string nhsLoginId, string deviceId)
         {
             try
             {
@@ -81,10 +80,8 @@ namespace NHSOnline.Backend.UsersApi.Repository
                     .IsNotNull(nhsLoginId, nameof(nhsLoginId), ThrowError)
                     .IsValid();
 
-                using (_logger.WithTimer("Delete user device on Mongo"))
-                {
-                    await DeleteOne(d => d.NhsLoginId == nhsLoginId && d.DeviceId == deviceId);
-                }
+                return await _repository.Delete(d => d.NhsLoginId == nhsLoginId && d.DeviceId == deviceId,
+                    RecordName);
             }
             finally
             {

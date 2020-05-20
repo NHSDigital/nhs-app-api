@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 
                 var repositoryResult =  await _infoRepository.Create(userInfo);
 
-                return repositoryResult.Accept(new PostRepositoryResultVisitor());
+                return repositoryResult.Accept(new RepositoryCreateResultVisitor());
             }
             catch (Exception e)
             {
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             try
             {
                 var result = await _infoRepository.FindByNhsLoginId(accessToken.Subject);
-                return result.Accept(new GetInfoRepositoryResultVisitor());
+                return result.Accept(new RepositoryGetInfoRecordResultVisitor());
             }
             catch (Exception e)
             {
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 
                 if (result != null)
                 {
-                    return result.Accept(new GetRepositoryResultVisitor());
+                    return result.Accept(new RepositoryGetAllInfoRecordsResultVisitor());
                 }
 
                 _logger.LogError("Unexpected response from repository, null object returned");

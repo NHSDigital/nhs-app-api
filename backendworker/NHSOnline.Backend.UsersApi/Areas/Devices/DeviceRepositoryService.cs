@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UsersApi.Areas.Devices.Models;
@@ -47,13 +46,8 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
 
             try
             {
-                await _deviceRepository.Create(userDevice);
-                return new DeviceRegistrationResult.Created(userDevice);
-            }
-            catch (MongoException e)
-            {
-                _logger.LogError($"User Device Registration failed with exception: {e}");
-                return new DeviceRegistrationResult.BadGateway();
+                var result = await _deviceRepository.Create(userDevice);
+                return result.Accept(new RepositoryCreateResultVisitor());
             }
             catch (Exception e)
             {
@@ -73,19 +67,8 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
             try
             {
                 var deviceId = _deviceIdGenerator.Generate(accessToken, devicePns);
-                var userDevice = await _deviceRepository.Find(accessToken.Subject, deviceId);
-
-                if (userDevice != null)
-                {
-                    return new SearchDeviceResult.Found(userDevice);
-                }
-
-                return new SearchDeviceResult.NotFound();
-            }
-            catch (MongoException e)
-            {
-                _logger.LogError($"User Device find failed with exception: {e}");
-                return new SearchDeviceResult.BadGateway();
+                var repositoryResult = await _deviceRepository.Find(accessToken.Subject, deviceId);
+                return repositoryResult.Accept(new RepositoryGetResultVisitor());
             }
             catch (Exception e)
             {
@@ -104,13 +87,8 @@ namespace NHSOnline.Backend.UsersApi.Areas.Devices
 
             try
             {
-                await _deviceRepository.Delete(accessToken.Subject, deviceId);
-                return new DeleteDeviceResult.Success(deviceId);
-            }
-            catch (MongoException e)
-            {
-                _logger.LogError($"User Device deletion failed with exception: {e}");
-                return new DeleteDeviceResult.BadGateway();
+                var result = await _deviceRepository.Delete(accessToken.Subject, deviceId);
+                return result.Accept(new RepositoryDeleteResultVisitor(deviceId));
             }
             catch (Exception e)
             {

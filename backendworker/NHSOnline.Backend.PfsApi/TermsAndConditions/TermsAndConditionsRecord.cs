@@ -4,7 +4,7 @@ using NHSOnline.Backend.Repository;
 namespace NHSOnline.Backend.PfsApi.TermsAndConditions
 {
     [BsonIgnoreExtraElements]
-    public class TermsAndConditionsRecord: MongoRecord
+    public class TermsAndConditionsRecord: RepositoryRecord
     {
         [BsonElement]
         public string NhsLoginId { get; set; }

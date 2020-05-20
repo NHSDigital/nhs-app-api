@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -15,10 +16,10 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
 {
     [TestClass]
-    public class MongoUserInfoRepositoryTests
+    public class UserInfoRepositoryTests
     {
         private IFixture _fixture;
-        private MongoUserInfoRepository _systemUnderTest;
+        private UserInfoRepository _systemUnderTest;
         private Mock<IApiMongoClient<IMongoConfiguration>> _mockMongoClient;
         private Mock<IMongoCollection<UserAndInfo>> _mongoCollectionMock;
 
@@ -38,7 +39,12 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Repository
             _mockMongoClient.Setup(x => x.GetDatabase(It.IsAny<string>(), null))
                 .Returns(mongoDatabaseMock.Object);
 
-            _systemUnderTest = _fixture.Create<MongoUserInfoRepository>();
+            var repository = new MongoRepositoryBase<IMongoConfiguration, UserAndInfo>(
+                _mockMongoClient.Object,
+                new Mock<IMongoConfiguration>().Object,
+                new Mock<ILogger<MongoRepositoryBase<IMongoConfiguration, UserAndInfo>>>().Object);
+
+            _systemUnderTest = new UserInfoRepository(new Mock<ILogger<UserInfoRepository>>().Object, repository);
         }
 
         [TestMethod]

@@ -3,7 +3,7 @@ using NHSOnline.Backend.UserInfoApi.Repository;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 {
-    internal class PostRepositoryResultVisitor : IRepositoryCreateResultVisitor<UserAndInfo, PostInfoResult>
+    internal class RepositoryCreateResultVisitor : IRepositoryCreateResultVisitor<UserAndInfo, PostInfoResult>
     {
         public PostInfoResult Visit(RepositoryCreateResult<UserAndInfo>.Created result)
         {

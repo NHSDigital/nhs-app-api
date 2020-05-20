@@ -1,14 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Repository
 {
-    public abstract class MongoRepositoryBase<TConfig, TRecord>
-        where TRecord : MongoRecord
+    public class MongoRepositoryBase<TConfig, TRecord> : IRepository<TRecord>
+        where TRecord : RepositoryRecord
         where TConfig : IMongoConfiguration
     {
         private readonly IMongoClient _mongoClient;
@@ -16,7 +18,8 @@ namespace NHSOnline.Backend.Repository
         private readonly string _databaseName;
         private readonly string _collectionName;
 
-        protected MongoRepositoryBase(IApiMongoClient<TConfig> mongoClient, TConfig mongoConfiguration, ILogger logger)
+        public MongoRepositoryBase(IApiMongoClient<TConfig> mongoClient, TConfig mongoConfiguration,
+            ILogger<MongoRepositoryBase<TConfig, TRecord>> logger)
         {
             _mongoClient = mongoClient;
             _logger = logger;
@@ -24,77 +27,135 @@ namespace NHSOnline.Backend.Repository
             _collectionName = mongoConfiguration.CollectionName;
         }
 
-        protected async Task<RepositoryCreateResult<TRecord>> CreateOrUpdateOne(Expression<Func<TRecord, bool>> filter, TRecord record)
+        public async Task<RepositoryCreateResult<TRecord>> Create(TRecord record, string recordName)
         {
             try
             {
-                record.Timestamp = DateTime.UtcNow;
-                var result = await GetCollection().ReplaceOneAsync(filter, record, new ReplaceOptions { IsUpsert = true });
-                if (result.IsAcknowledged)
-                {
-                    _logger.LogInformation("Mongo Create Successful.");
-                    return new RepositoryCreateResult<TRecord>.Created(record);
-                }
-                _logger.LogError($"Mongo Failure. ReplaceOneAsync with Upsert. IsAcknowledged: {result.IsAcknowledged}");
-                return new RepositoryCreateResult<TRecord>.InternalServerError();
+                await CreateRecord(record, recordName);
+                return new RepositoryCreateResult<TRecord>.Created(record);
             }
             catch (MongoException exception)
             {
-                _logger.LogError($"Mongo Failure. Exception Caught: {exception}");
+                _logger.LogError(exception, $"Mongo Failure. Create {recordName}.");
                 return new RepositoryCreateResult<TRecord>.RepositoryError(exception);
             }
         }
 
-        protected async Task<RepositoryFindResult<TRecord>> Find(Expression<Func<TRecord, bool>> filter)
+        public async Task<RepositoryCreateResult<TRecord>> CreateOrUpdate(Expression<Func<TRecord, bool>> filter,
+            TRecord record, string recordName)
         {
             try
             {
-                var records = await GetCollection().FindAsync(filter);
-                var recordList = records.ToList();
-                if (recordList.Any())
+                var result = await CreateOrUpdateRecords(filter, record, recordName);
+                if (result.IsAcknowledged)
                 {
-                    return new RepositoryFindResult<TRecord>.Found(recordList);
+                    _logger.LogInformation($"Mongo Create or Update {recordName} Successful.");
+                    return new RepositoryCreateResult<TRecord>.Created(record);
                 }
+
+                _logger.LogError(
+                    $"Mongo Failure. Create or Update {recordName}. " +
+                    $"ReplaceOneAsync with Upsert. " +
+                    $"IsAcknowledged: {result.IsAcknowledged}");
+                return new RepositoryCreateResult<TRecord>.InternalServerError();
+            }
+            catch (MongoException exception)
+            {
+                _logger.LogError(exception, $"Mongo Failure. Create or update {recordName}.");
+                return new RepositoryCreateResult<TRecord>.RepositoryError(exception);
+            }
+        }
+
+        public async Task<RepositoryFindResult<TRecord>> Find(Expression<Func<TRecord, bool>> filter, string recordName)
+        {
+            try
+            {
+                var records = await FindRecords(filter, recordName);
+
+                if (records.Any())
+                {
+                    _logger.LogInformation($"Mongo Find {recordName} Successful. " +
+                                           $"Count: {records.Count}");
+                    return new RepositoryFindResult<TRecord>.Found(records);
+                }
+
+                _logger.LogInformation($"Mongo Find {recordName} Successful. " +
+                                       "No records found");
                 return new RepositoryFindResult<TRecord>.NotFound();
             }
             catch (MongoException exception)
             {
-                _logger.LogError($"Mongo Failure. Exception Caught: {exception}");
+                _logger.LogError(exception, $"Mongo Failure. Find {recordName}.");
                 return new RepositoryFindResult<TRecord>.RepositoryError(exception);
             }
         }
 
-        protected async Task<RepositoryUpdateResult<TRecord>> UpdateOne(
-            Expression<Func<TRecord, bool>> filter,
-            string path,
-            string newValue)
+        public async Task<RepositoryDeleteResult<TRecord>> Delete(Expression<Func<TRecord, bool>> filter,
+            string recordName)
         {
             try
             {
-                var update = Builders<TRecord>.Update.Set(path, newValue);
-                var result = await GetCollection().UpdateOneAsync(filter, update);
-                if (result.IsAcknowledged && result.ModifiedCount > 0)
+                var result = await DeleteRecords(filter, recordName);
+
+                if (result.IsAcknowledged && result.DeletedCount > 0)
                 {
-                    _logger.LogInformation("Mongo Update Successful.");
-                    return new RepositoryUpdateResult<TRecord>.Updated();
+                    _logger.LogInformation($"Mongo Delete {recordName} Successful. " +
+                                           $"DeletedCount: {result.DeletedCount}");
+                    return new RepositoryDeleteResult<TRecord>.Deleted();
                 }
-                if (result.IsAcknowledged && result.MatchedCount <= 0)
+
+                if (result.IsAcknowledged && result.DeletedCount == 0)
                 {
-                    _logger.LogInformation("Mongo Update Failed to find record.");
-                    return new RepositoryUpdateResult<TRecord>.NotFound();
+                    _logger.LogInformation($"Mongo Delete {recordName} failed to find record.");
+                    return new RepositoryDeleteResult<TRecord>.NotFound();
                 }
 
                 _logger.LogError(
-                    "Mongo Update Failed. " +
+                    $"Mongo Failure. Delete {recordName}. " +
                     $"IsAcknowledged: {result.IsAcknowledged}, " +
-                    $"ModifiedCount: {result.ModifiedCount}, " +
-                    $"MatchedCount: {result.MatchedCount}");
-                return new RepositoryUpdateResult<TRecord>.InternalServerError();
+                    $"DeletedCount: {result.DeletedCount}");
+                return new RepositoryDeleteResult<TRecord>.InternalServerError();
             }
             catch (MongoException exception)
             {
-                _logger.LogError($"Mongo Failure. Exception Caught: {exception}");
-                return new RepositoryUpdateResult<TRecord>.RepositoryError(exception);
+                _logger.LogError(exception, $"Mongo Failure. Delete {recordName}.");
+                return new RepositoryDeleteResult<TRecord>.RepositoryError(exception);
+            }
+        }
+
+        private async Task CreateRecord(TRecord record, string recordName)
+        {
+            using (_logger.WithTimer($"Mongo Create {recordName}."))
+            {
+                record.Timestamp = DateTime.UtcNow;
+                await GetCollection().InsertOneAsync(record);
+            }
+        }
+
+        private async Task<ReplaceOneResult> CreateOrUpdateRecords(Expression<Func<TRecord, bool>> filter,
+            TRecord record, string recordName)
+        {
+            using (_logger.WithTimer($"Mongo Create Or Update {recordName}."))
+            {
+                record.Timestamp = DateTime.UtcNow;
+                return await GetCollection().ReplaceOneAsync(filter, record, new ReplaceOptions { IsUpsert = true });
+            }
+        }
+
+        private async Task<DeleteResult> DeleteRecords(Expression<Func<TRecord, bool>> filter, string recordName)
+        {
+            using (_logger.WithTimer($"Mongo Delete {recordName}."))
+            {
+                return await GetCollection().DeleteOneAsync(filter);
+            }
+        }
+
+        private async Task<List<TRecord>> FindRecords(Expression<Func<TRecord, bool>> filter, string recordName)
+        {
+            using (_logger.WithTimer($"Mongo Find {recordName}."))
+            {
+                var records = await GetCollection().FindAsync(filter);
+                return records.ToList();
             }
         }
 

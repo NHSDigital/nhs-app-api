@@ -8,7 +8,7 @@ using MongoDB.Driver;
 namespace NHSOnline.Backend.Repository
 {
     public abstract class MongoRepository<TConfig, TRecord>
-        where TRecord : MongoRecord
+        where TRecord : RepositoryRecord
         where TConfig : IMongoConfiguration
     {
         private readonly IMongoClient _mongoClient;
@@ -27,9 +27,6 @@ namespace NHSOnline.Backend.Repository
             record.Timestamp = DateTime.UtcNow;
             await GetCollection().InsertOneAsync(record);
         }
-
-        protected async Task DeleteOne(Expression<Func<TRecord, bool>> filter)
-            => await GetCollection().DeleteOneAsync(filter);
 
         protected async Task<TRecord> FindOne(Expression<Func<TRecord, bool>> filter)
         {

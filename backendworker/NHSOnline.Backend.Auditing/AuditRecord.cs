@@ -6,7 +6,7 @@ using NHSOnline.Backend.Repository;
 namespace NHSOnline.Backend.Auditing
 {
     [Serializable]
-    public class AuditRecord : MongoRecord
+    public class AuditRecord : RepositoryRecord
     {
         public AuditRecord(
             DateTime timestamp,

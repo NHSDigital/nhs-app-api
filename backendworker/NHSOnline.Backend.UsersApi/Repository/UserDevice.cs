@@ -4,7 +4,7 @@ using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.UsersApi.Repository
 {
-    public class UserDevice : MongoRecord
+    public class UserDevice : RepositoryRecord
     {
         [BsonElement]
         public string NhsLoginId { get; set; }

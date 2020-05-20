@@ -6,7 +6,7 @@ using NHSOnline.Backend.Repository;
 
 namespace NHSOnline.Backend.MessagesApi.Areas.Messages.Models
 {
-    public class UserMessage : MongoRecord
+    public class UserMessage : RepositoryRecord
     {
         [BsonId(IdGenerator = typeof(ObjectIdGenerator))]
         public ObjectId Id { get; set; }

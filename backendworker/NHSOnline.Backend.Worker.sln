@@ -114,7 +114,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Metrics.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Auditing.UnitTestsSupport", "NHSOnline.Backend.Auditing.UnitTestsSupport\NHSOnline.Backend.Auditing.UnitTestsSupport.csproj", "{F552102A-DFE4-42AC-8FDD-48E19F935C81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Repository", "NHSOnline.Backend.Repository\NHSOnline.Backend.Repository.csproj", "{5B34F719-CD0C-40FF-BDA5-B6BD58D1F122}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Repository", "NHSOnline.Backend.Repository\NHSOnline.Backend.Repository.csproj", "{5B34F719-CD0C-40FF-BDA5-B6BD58D1F122}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

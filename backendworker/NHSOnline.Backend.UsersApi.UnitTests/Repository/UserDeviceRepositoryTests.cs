@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using Moq;
@@ -14,10 +15,10 @@ using UnitTestHelper;
 namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
 {
     [TestClass]
-    public class MongoUserDeviceRepositoryTests
+    public class UserDeviceRepositoryTests
     {
         private IFixture _fixture;
-        private MongoUserDeviceRepository _systemUnderTest;
+        private UserDeviceRepository _systemUnderTest;
         private Mock<IMongoCollection<UserDevice>> _mongoCollectionMock;
 
         [TestInitialize]
@@ -36,7 +37,12 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
             mockMongoClient.Setup(x => x.GetDatabase(It.IsAny<string>(), null))
                 .Returns(mongoDatabaseMock.Object);
 
-            _systemUnderTest = _fixture.Create<MongoUserDeviceRepository>();
+            var repository = new MongoRepositoryBase<IMongoConfiguration, UserDevice>(
+                mockMongoClient.Object,
+                new Mock<IMongoConfiguration>().Object,
+                new Mock<ILogger<MongoRepositoryBase<IMongoConfiguration, UserDevice>>>().Object);
+
+            _systemUnderTest = new UserDeviceRepository(new Mock<ILogger<UserDeviceRepository>>().Object, repository);
         }
 
         [TestMethod]
@@ -84,9 +90,9 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
 
             // Assert
             _mongoCollectionMock.VerifyAll();
-            result.Should().Be(userDevice);
+            result.Should().BeOfType<RepositoryFindResult<UserDevice>.Found>()
+                .Subject.Records.Should().BeEquivalentTo(userDevice);
         }
-
 
         [TestMethod]
         public async Task Find_WhenDeviceIdRecordDoesNotExist_ShouldNotReturnRecord()
@@ -104,7 +110,7 @@ namespace NHSOnline.Backend.UsersApi.UnitTests.Repository
 
             // Assert
             _mongoCollectionMock.VerifyAll();
-            result.Should().BeNull();
+            result.Should().BeAssignableTo<RepositoryFindResult<UserDevice>.NotFound>();
         }
 
         [TestMethod]

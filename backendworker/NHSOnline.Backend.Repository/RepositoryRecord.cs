@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace NHSOnline.Backend.Repository
 {
-    public abstract class MongoRecord
+    public abstract class RepositoryRecord
     {
         [BsonElement("_ts")]
         public DateTime Timestamp { get; set; }

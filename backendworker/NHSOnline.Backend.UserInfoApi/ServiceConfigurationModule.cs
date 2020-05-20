@@ -36,8 +36,9 @@ namespace NHSOnline.Backend.UserInfoApi
             services.AddSingleton<ICitizenIdSigningKeysService, CitizenIdSigningKeysService>();
 
             services.AddSingleton(typeof(IApiMongoClient<>), typeof(ApiMongoClient<>));
+            services.AddSingleton<IRepository<UserAndInfo>, MongoRepositoryBase<IMongoConfiguration, UserAndInfo>>();
             services.AddSingleton<IInfoService, InfoService>();
-            services.AddSingleton<IInfoRepository, MongoUserInfoRepository>();
+            services.AddSingleton<IInfoRepository, UserInfoRepository>();
 
             base.ConfigureServices(services, configuration);
         }
