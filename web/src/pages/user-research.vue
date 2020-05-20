@@ -1,5 +1,15 @@
 <template>
   <div>
+    <message-dialog v-if="showError" message-type="error" role="alert" tabindex="-1">
+      <message-text data-purpose="error-heading">
+        {{ $t('user_research.errorMessage.header') }}
+      </message-text>
+      <message-list data-purpose="reason-error">
+        <li>
+          {{ $t('user_research.errorMessage.text') }}
+        </li>
+      </message-list>
+    </message-dialog>
     <p>{{ $t('user_research.contactYou') }}</p>
     <collapsible-details>
       <template slot="header">
@@ -24,11 +34,13 @@
              $t('user_research.whatIsInvolved.restriction.linkText') }}</a>{{
         $t('user_research.whatIsInvolved.restriction.suffix') }}
     </p>
-    <radio-group v-model="selectedValue"
-                 :header="$t('user_research.question.label')"
+    <radio-group :header="$t('user_research.question.label')"
                  header-size="m"
-                 :radios="choices"/>
-    <primary-button @click.stop.prevent="conditionalRedirect">
+                 :show-error="showError"
+                 :error-message="$t('user_research.errorMessage.text')"
+                 :radios="choices"
+                 @select="onSelection"/>
+    <primary-button @click.stop.prevent="onContinue">
       {{ $t('user_research.continue') }}
     </primary-button>
   </div>
@@ -36,14 +48,21 @@
 
 <script>
 import CollapsibleDetails from '@/components/CollapsibleDetails';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageList from '@/components/widgets/MessageList';
+import MessageText from '@/components/widgets/MessageText';
 import PrimaryButton from '@/components/PrimaryButton';
 import RadioGroup from '@/components/RadioGroup';
 import TermsConditionsMixin from '@/components/TermsConditionsMixin';
+import isBoolean from 'lodash/fp/isBoolean';
 
 export default {
   layout: 'termsAndConditions',
   components: {
     CollapsibleDetails,
+    MessageDialog,
+    MessageList,
+    MessageText,
     PrimaryButton,
     RadioGroup,
   },
@@ -54,9 +73,27 @@ export default {
         { label: this.$t('user_research.question.yes'), value: true },
         { label: this.$t('user_research.question.no'), value: false },
       ],
+      hasTriedToContinue: false,
       privacyPolicyUrl: this.$store.app.$env.PRIVACY_POLICY_URL,
       selectedValue: undefined,
     };
+  },
+  computed: {
+    showError() {
+      return this.hasTriedToContinue && !isBoolean(this.selectedValue);
+    },
+  },
+  methods: {
+    onContinue() {
+      this.hasTriedToContinue = true;
+
+      if (!this.showError) {
+        this.conditionalRedirect();
+      }
+    },
+    onSelection(value) {
+      this.selectedValue = value;
+    },
   },
 };
 </script>

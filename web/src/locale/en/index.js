@@ -1533,6 +1533,10 @@ export default {
       no: 'No, do not contact me',
     },
     continue: 'Continue',
+    errorMessage: {
+      header: 'There is a problem',
+      text: 'Select yes or no',
+    },
   },
   common: {
     or: 'OR',
