@@ -66,6 +66,8 @@ open class ResourceMockingClass {
             on { getString(R.string.admin_help_header) } doReturn "GP help without an appointment"
             on { getString(R.string.browser_unavailable) } doReturn "Browser is disabled"
             on { getInteger(R.integer.webClientRequestTimeoutMillis) } doReturn 20000
+            on { getString(R.string.fido_auth_response) } doReturn "fidoAuthResponse"
+            on { getString(R.string.login_auth_code_path) } doReturn "/authcode"
         }
 
         return mock {

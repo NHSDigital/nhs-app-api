@@ -141,6 +141,9 @@
 
     <string name="fingerprints_not_enabled_message">You can get help with missing fingerprints on Android devices.</string>
 
+    <string name="fido_auth_response">fidoAuthResponse</string>
+    <string name="login_auth_code_path">/authcode</string>
+
     <!--Fingerprint Login generic error contents-->
     <string name="fingerprint_login_error_title">Something went wrong</string>
     <string name="fingerprint_login_error_description">It wasn\'t your fault. Try logging in again.</string>

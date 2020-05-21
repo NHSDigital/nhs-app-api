@@ -235,7 +235,7 @@ class WebClientInterceptor(
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageFinished")
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageFinished > url $url")
         if (shouldHandleUnavailability(url)) {
             cancelTrackingWebRequestResponse()
         }
@@ -249,6 +249,15 @@ class WebClientInterceptor(
         super.onPageFinished(view, url)
 
         hideKnownServicesSpinner(url)
+
+        // TODO: Needs a better way of handling dismissal of the progress dialog
+        //       Currently leaves the app too tied to a specific path from Login
+        //       but is needed to dismiss the progress dialog without a delay before the page transition to login
+        if (!url!!.contains(context.resources.getString(R.string.fido_auth_response)) &&
+                !(url!!.contains(URL(context.resources.getString(R.string.nhsLoginSuffix)).host) &&
+                url!!.contains(context.resources.getString(R.string.login_auth_code_path)))) {
+            uiInteractor.dismissProgressDialog()
+        }
         
         uiInteractor.dismissSplashScreen()
     }

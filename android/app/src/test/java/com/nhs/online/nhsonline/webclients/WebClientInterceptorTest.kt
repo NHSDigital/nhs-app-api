@@ -520,7 +520,7 @@ class WebClientInterceptorTest {
         val tmpWebView = createWebView()
         webInterceptor.onPageFinished(tmpWebView, url)
 
-        verify(uiInteractorMock, times(1)).dismissProgressDialog()
+        verify(uiInteractorMock, times(2)).dismissProgressDialog()
     }
 
     @Test
@@ -553,7 +553,7 @@ class WebClientInterceptorTest {
         val tmpWebView = createWebView()
         webInterceptor.onPageFinished(tmpWebView, url)
 
-        verify(uiInteractorMock, never()).dismissProgressDialog()
+        verify(uiInteractorMock, times(1)).dismissProgressDialog()
     }
 
     @Test
