@@ -5449,6 +5449,39 @@
             description: "An unexpected error occurred processing the request."
           502: 
             description: "An unexpected error occurred processing the request."
+    /v1/api/users/me/info/userresearch: 
+      post: 
+        security: 
+          - 
+            nhsLoginBearerAuth: []
+        tags: 
+          - "user-info"
+        summary: "Records the current user's User Research preferences"
+        description: "Records the current user's User Research preferences"
+        requestBody: 
+          x-name: "UserResearchRequest"
+          required: true
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                required: 
+                  - "preference"
+                properties: 
+                  preference: 
+                    type: "string"
+                    enum: 
+                      - "optIn"
+                      - "optOut"
+        responses: 
+          204: 
+            description: "Successful operation. User Research preference updated."
+          401: 
+            description: "Access token is missing or invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "An unexpected error occurred processing the request."
     /v1/api/users/info: 
       get: 
         tags: 

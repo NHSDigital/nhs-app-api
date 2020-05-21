@@ -1,25 +1,34 @@
 import UserResearch from '@/pages/user-research';
-import { mount } from '../helpers';
+import { createStore, mount } from '../helpers';
 
-const mountUserResearch = ({ methods }) => mount(UserResearch, {
+const mountUserResearch = ({ methods, $http }) => mount(UserResearch, {
+  $store: createStore({
+    $http,
+    state: {
+      device: {
+        isNativeApp: false,
+      },
+    },
+  }),
   $style: {
     error: 'error',
   },
   methods,
-  state: {
-    device: {
-      isNativeApp: false,
-    },
-  },
 });
 
 describe('user research', () => {
   let wrapper;
   let conditionalRedirect;
+  let $http;
 
   beforeEach(() => {
     conditionalRedirect = jest.fn();
+    $http = {
+      postV1ApiUsersMeInfoUserresearch: jest.fn(() => Promise.resolve()),
+    };
+
     wrapper = mountUserResearch({
+      $http,
       methods: {
         conditionalRedirect,
       },
@@ -40,7 +49,7 @@ describe('user research', () => {
     describe('click', () => {
       const clickButton = () => button.trigger('click');
 
-      describe('when selection not made', () => {
+      describe('selection not made', () => {
         beforeEach(() => {
           clickButton();
         });
@@ -59,13 +68,11 @@ describe('user research', () => {
       });
 
       describe.each([
-        ['Yes', true],
-        ['No', false],
-      ])('when `%s` radio button is selected', (_, value) => {
-        let radioButton;
-
+        ['Yes', 'optIn'],
+        ['No', 'optOut'],
+      ])('`%s` radio button is selected', (_, value) => {
         beforeEach(() => {
-          radioButton = wrapper.find(`#radioButton-${value}`);
+          const radioButton = wrapper.find(`#radioButton-${value}`);
           radioButton.trigger('click');
           clickButton();
         });
@@ -78,7 +85,29 @@ describe('user research', () => {
           expect(wrapper.find('.error-message').exists()).toBe(false);
         });
 
+        it('will post user research preference', () => {
+          expect($http.postV1ApiUsersMeInfoUserresearch).toBeCalledWith({
+            userResearchRequest: { preference: value },
+            ignoreError: true,
+          });
+        });
+
         it('will call conditional redirect', () => {
+          expect(conditionalRedirect).toBeCalled();
+        });
+      });
+
+      describe('post user research fails', () => {
+        beforeEach(() => {
+          const error = { response: { status: 500 } };
+          $http.postV1ApiUsersMeInfoUserresearch.mockImplementation(() => Promise.reject(error));
+
+          const radioButton = wrapper.find('#radioButton-optIn');
+          radioButton.trigger('click');
+          clickButton();
+        });
+
+        it('will still call conditional redirect', () => {
           expect(conditionalRedirect).toBeCalled();
         });
       });

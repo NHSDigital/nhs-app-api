@@ -55,7 +55,7 @@ import MessageText from '@/components/widgets/MessageText';
 import PrimaryButton from '@/components/PrimaryButton';
 import RadioGroup from '@/components/RadioGroup';
 import TermsConditionsMixin from '@/components/TermsConditionsMixin';
-import isBoolean from 'lodash/fp/isBoolean';
+import isUndefined from 'lodash/fp/isUndefined';
 
 export default {
   layout: 'termsAndConditions',
@@ -71,8 +71,8 @@ export default {
   data() {
     return {
       choices: [
-        { label: this.$t('user_research.question.yes'), value: true },
-        { label: this.$t('user_research.question.no'), value: false },
+        { label: this.$t('user_research.question.yes'), value: 'optIn' },
+        { label: this.$t('user_research.question.no'), value: 'optOut' },
       ],
       hasTriedToContinue: false,
       privacyPolicyUrl: this.$store.app.$env.PRIVACY_POLICY_URL,
@@ -81,15 +81,24 @@ export default {
   },
   computed: {
     showError() {
-      return this.hasTriedToContinue && !isBoolean(this.selectedValue);
+      return this.hasTriedToContinue && isUndefined(this.selectedValue);
     },
   },
   methods: {
-    onContinue() {
+    async onContinue() {
       this.hasTriedToContinue = true;
 
       if (!this.showError) {
-        this.conditionalRedirect();
+        try {
+          await this.$store.app.$http.postV1ApiUsersMeInfoUserresearch({
+            userResearchRequest: { preference: this.selectedValue },
+            ignoreError: true,
+          });
+        } catch {
+          // do nothing
+        } finally {
+          this.conditionalRedirect();
+        }
       }
     },
     onSelection(value) {

@@ -34,7 +34,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserAndInfoResponse"
+                $ref: '#/components/schemas/UserAndInfoResponse'
         "401":
           $ref: '#/components/responses/UnauthorizedErrorAccessToken'
         "404":
@@ -68,7 +68,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/NhsLoginIdCollectionResponse"
+                $ref: '#/components/schemas/NhsLoginIdCollectionResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -77,6 +77,31 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
         "502":
           $ref: '#/components/responses/UnexpectedError'
+  /users/me/info/userresearch:
+    post:
+      security:
+        - nhsLoginBearerAuth: []
+      tags:
+        - user-info
+      summary: Records the current user's User Research preferences
+      description: Records the current user's User Research preferences
+      requestBody:
+        x-name: UserResearchRequest
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserResearchRequest'
+      responses:
+        "204":
+          description: Successful operation. User Research preference updated.
+        "401":
+          $ref: '#/components/responses/UnauthorizedErrorAccessToken'
+        "500":
+          $ref: '#/components/responses/UnexpectedError'
+        "502":
+          $ref: '#/components/responses/UnexpectedError'
+
 components:
   securitySchemes:
     nhsLoginBearerAuth:
@@ -111,6 +136,16 @@ components:
           type: string
         betaTester:
           type: boolean
+    UserResearchRequest:
+      type: object
+      required: 
+        - preference
+      properties:
+        preference:
+          type: string
+          enum:
+            - optIn
+            - optOut
     NhsLoginIdCollectionResponse:
       type: array
       description: Array of nhsloginIds

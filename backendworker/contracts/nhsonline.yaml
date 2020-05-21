@@ -83,6 +83,8 @@ paths:
     $ref: ./nhsonline.messages.yaml#/paths/~1users~1{nhsLoginId}~1messages
   /v1/api/users/me/info:
     $ref: ./nhsonline.userinfo.yaml#/paths/~1users~1me~1info
+  /v1/api/users/me/info/userresearch:
+    $ref: ./nhsonline.userinfo.yaml#/paths/~1users~1me~1info~1userresearch
   /v1/api/users/info:
     $ref: ./nhsonline.userinfo.yaml#/paths/~1users~1info
   /v1/api/log:
