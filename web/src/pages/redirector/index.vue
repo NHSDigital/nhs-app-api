@@ -9,8 +9,10 @@
           <strong>{{ providerName() }}</strong>.
         </p>
 
-        <a :href="buttonHref" :class="['nhsuk-button', 'nhsuk-button--reverse']"
-           @click="setSessionStorage">
+        <a :href="buttonHref"
+           :class="['nhsuk-button', 'nhsuk-button--reverse',
+                    buttonDisabled ? 'nhsuk-button--disabled': '']"
+           @click="buttonClick">
           {{ $t('thirdPartyProviders.warningConjunctions.button') }}
         </a>
 
@@ -54,6 +56,7 @@ export default {
       redirectPath: '',
       redirectPathAndQuery: '',
       buttonHref: '',
+      buttonDisabled: false,
       sessionStorageName: '',
       thirdPartyServiceContent: '',
     };
@@ -146,8 +149,13 @@ export default {
           this.$router.push(INDEX.path);
         });
     },
-    setSessionStorage() {
-      sessionStorage.setItem(this.sessionStorageName, true);
+    buttonClick(event) {
+      if (this.buttonDisabled) {
+        event.preventDefault();
+      } else {
+        this.buttonDisabled = true;
+        sessionStorage.setItem(this.sessionStorageName, true);
+      }
     },
     appendAssertedLoginIdentity(uri, response) {
       if (uri.indexOf('?') !== -1) {

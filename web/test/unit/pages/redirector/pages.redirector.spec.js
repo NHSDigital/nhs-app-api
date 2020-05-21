@@ -204,7 +204,7 @@ describe('redirector page', () => {
       expect(wrapper.vm.shouldShowWarning).toEqual(true);
     });
 
-    it('will call router push on button click', () => {
+    it('will call `postV1PatientAssertedLoginIdentity` on button click', () => {
       const expectedRequest = { assertedLoginIdentityRequest: {
         IntendedRelyingPartyUrl: 'http://www.url.com/nhs-login/login?phrPath=/auth/getInbox.action?tab=messages',
         JumpOffId: 'messages',
@@ -215,6 +215,14 @@ describe('redirector page', () => {
       continueButton.trigger('click');
 
       expect($http.postV1PatientAssertedLoginIdentity).toHaveBeenCalledWith(expectedRequest);
+    });
+
+    it('will disable button on button click', () => {
+      const continueButton = wrapper.find('a.nhsuk-button');
+      continueButton.trigger('click');
+
+      expect(wrapper.vm.buttonDisabled).toEqual(true);
+      expect(wrapper.find('a.nhsuk-button.nhsuk-button--disabled').exists()).toBe(true);
     });
 
     it('text computed properties should not be empty strings', () => {
