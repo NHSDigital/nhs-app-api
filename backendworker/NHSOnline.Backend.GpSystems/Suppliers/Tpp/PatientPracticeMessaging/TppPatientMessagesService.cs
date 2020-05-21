@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Messages;
 using NHSOnline.Backend.GpSystems.Messages.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientPracticeMessaging;
-using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -17,8 +18,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
     {
         private static readonly Type GET_MESSAGES_SUCCESS_TYPE = typeof(GetPatientMessagesResult.Success);
         private static readonly Type GET_MESSAGES_FORBIDDEN_TYPE = typeof(GetPatientMessagesResult.Forbidden);
+        private static readonly Regex IdentifierRegex = new Regex(Constants.Regex.IdentifierRegex);
 
-        private readonly ILogger<TppPatientRecordService> _logger;
+        private readonly ILogger<TppPatientMessagesService> _logger;
         private readonly ITppClientRequest<TppUserSession, MessageRecipientsReply> _listRecipientsRequest;
         private readonly IGetPatientPracticeMessagingRecipientsTaskChecker _messageRecipientsTaskChecker;
         private readonly ITppClientRequest<TppUserSession, MessagesViewReply> _viewMessageRequest;
@@ -30,15 +32,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
             MessageCreateReply> _messagesCreateMessagePost;
 
         public TppPatientMessagesService(
-            ILogger<TppPatientRecordService> logger,
+            ILogger<TppPatientMessagesService> logger,
             ITppClientRequest<TppUserSession, MessageRecipientsReply> listRecipientsRequest,
             IGetPatientPracticeMessagingRecipientsTaskChecker messageRecipientsTaskChecker,
             ITppPatientMessagesMapper messagesViewMapper,
             ITppClientRequest<TppUserSession, MessagesViewReply> viewMessageRequest,
             ITppClientRequest<(TppRequestParameters, List<string>), MessagesMarkAsReadReply> markMessageAsReadRequest,
             ITppPatientMessagesUnreadIdsMapper unreadMessagesWrapper,
-            ITppClientRequest<(TppUserSession tppUserSession, string recipientIdentifier,
-                string messageText), MessageCreateReply> messagesCreateMessagePost)
+            ITppClientRequest<(TppUserSession tppUserSession, string recipientIdentifier, string messageText),
+                MessageCreateReply> messagesCreateMessagePost)
         {
             _logger = logger;
             _listRecipientsRequest = listRecipientsRequest;
@@ -310,7 +312,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientPracticeMessaging
 
                 _logger.LogDebug($"Mapping messaging recipients response to {nameof(MessageRecipient)} instances");
 
-                return _messageRecipientsTaskChecker.Check(messageRecipients);
+                var result = _messageRecipientsTaskChecker.Check(messageRecipients);
+
+                var invalidMessageRecipients = result.MessageRecipients
+                        .Where(x => !IdentifierRegex.IsMatch(x.RecipientIdentifier)).ToList();
+
+                if (invalidMessageRecipients.Any())
+                {
+                    result.MessageRecipients = result.MessageRecipients.Except(invalidMessageRecipients).ToList();
+
+                    foreach (var recipient in invalidMessageRecipients)
+                    {
+                        _logger.LogWarning($"Retrieved a MessageRecipient from ODSCode {tppUserSession.OdsCode} " +
+                                           $"with an invalid RecipientIdentifier {recipient.RecipientIdentifier} - " +
+                                           "removing from list of valid message recipients");
+                    }
+                }
+                return result;
             }
             catch (Exception e)
             {
