@@ -12,6 +12,8 @@ git clone https://nhsapp@dev.azure.com/nhsapp/NHS%20App/_git/nhsapp
 
 ## Build code
 
+Before running this for the first time, read the `Azure DevOps Feeds` section below to configure your local environment.
+
 ```bash
 make build
 ```
@@ -27,6 +29,8 @@ make test
 ```
 
 ## Running code
+
+Before running any of the below options for the first time, read the `Secrets` section below to configure your local environment.
 
 ### Run the latest develop (no need to build locally)
 
@@ -88,7 +92,7 @@ To start a CI built application version ready to run the Integration tests again
 make run-localbdd TAG=[tag]
 ```
 
-Where \[tag\] is the CI tag to run, e.g. develop, 3355 (for a PR), or 08cafda6ed4f1ce3bd24ac3ec98810a27ee6f62c (for a specific commit). By default the latest version of any remote images will be pulled before running. To override this behaviour add `NO_PULL=1` to the make command.
+Where \[tag\] is the CI tag to run, e.g. develop, `3355` (for a PR), or `08cafda6ed4f1ce3bd24ac3ec98810a27ee6f62c` (for a specific commit). By default the latest version of any remote images will be pulled before running. To override this behaviour add `NO_PULL=1` to the make command.
 
 Run make with no arguments for more details on the available options.
 
@@ -106,11 +110,118 @@ The Makefile in the `bddtests` contains additional targets for common configurat
 
 The following can be specified with `make run-bdd` to customise the behaviour
 
-| Option           | Description                                                                                                           |
-| ---------------  | -----------                                                                                                           |
-| RUN_LOCAL_BDD=1  | Starts the containers configured as specified but with ports exposed to allow local running of the Integration tests. |
-| SKIP_ANALYSIS=1  | Bypasses the gradle code analysis step.                                                                               |
-| TAG=[dockertag]  | Pull images with the specified \[dockertag\] to run the tests against.                                                |
+| Option             | Description                                                                                                           |
+| ---------------    | -----------                                                                                                           |
+| `RUN_LOCAL_BDD=1`  | Starts the containers configured as specified but with ports exposed to allow local running of the Integration tests. |
+| `SKIP_ANALYSIS=1`  | Bypasses the gradle code analysis step.                                                                               |
+| `TAG=[dockertag]`  | Pull images with the specified \[dockertag\] to run the tests against.                                                |
+
+## Azure DevOps Feeds
+
+NPM, NuGet and some Gradle packages (Android/BDD Tests) are pulled from DevOps feeds. These proxy internet sources, prevent tampering of packages and avoid build failures during downtime of services such as NPM.
+
+### Personal Access Token
+
+You require a token to access the feeds, to generate a new one:
+
+- Login in Azure DevOps
+- Go to `User Settings` (top-right beside help)
+- Click `Personal access tokens`
+- Click `New Token`
+- Configure `Name` and `Expiration`
+- Ensure `Scopes` is set to `Custom defined`
+- Check `Packaging > Read`
+- Click `Create`
+- Add the new token to your password manager
+
+### NPM Config
+
+*Used in: bddtests, backendworker contracts and web*
+
+- Create a new file:
+
+    - `${HOME}/.npmrc ` (OSX/Linux)
+    - `%USERPROFILE%\.npmrc` (Windows)
+
+- Add the following content:
+
+    ```c
+    //pkgs.dev.azure.com/nhsapp/70d4deb2-d387-4e09-b546-da927c2186b9/_packaging/nhsapp-npm-registry/npm/registry/:username=nhsapp
+    //pkgs.dev.azure.com/nhsapp/70d4deb2-d387-4e09-b546-da927c2186b9/_packaging/nhsapp-npm-registry/npm/registry/:_password=<BASE_64_ENCODED_TOKEN>
+    //pkgs.dev.azure.com/nhsapp/70d4deb2-d387-4e09-b546-da927c2186b9/_packaging/nhsapp-npm-registry/npm/registry/:email=<HSCIC_EMAIL>
+
+    //pkgs.dev.azure.com/nhsapp/70d4deb2-d387-4e09-b546-da927c2186b9/_packaging/nhsapp-npm-registry/npm/:username=nhsapp
+    //pkgs.dev.azure.com/nhsapp/70d4deb2-d387-4e09-b546-da927c2186b9/_packaging/nhsapp-npm-registry/npm/:_password=<BASE_64_ENCODED_TOKEN>
+    //pkgs.dev.azure.com/nhsapp/70d4deb2-d387-4e09-b546-da927c2186b9/_packaging/nhsapp-npm-registry/npm/:email=<HSCIC_EMAIL>
+    ```
+
+- Securely create a Base64 encoded version of your personal access token:
+
+    - Create a new file anywhere named `token`, containing your plain text token
+    - Open a bash terminal in the directory containing the above file
+    - Run:
+
+        ```bash
+        cat token | base64 > token.b64 && rm -f token
+        ```
+    - Copy your encoded token by opening `token.b64`
+
+- Fill in the placeholders `<BASE_64_ENCODED_TOKEN>` & `<HSCIC_EMAIL>`
+
+### NuGet Config
+
+*Used in: Backendworker*
+
+- Create a new file:
+
+    - `${HOME}/.nuget/NuGet/NuGet.Config` (OSX/Linux)
+    - `%APPDATA%\NuGet\NuGet.Config` (Windows)
+
+- Add the following content:
+
+    ```xml
+    <?xml version="1.0" encoding="utf-8"?>
+    <configuration>
+    <packageSources>
+        <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+    </packageSources>
+    <packageSourceCredentials>
+        <nhsapp-nuget-feed>
+            <add key="Username" value="nhsapp" />
+            <add key="ClearTextPassword" value="<TOKEN>" />
+        </nhsapp-nuget-feed>
+    </packageSourceCredentials>
+    </configuration>%    
+    ```
+
+- Fill in the placeholder `<TOKEN>`
+
+## Maven/Gradle Config 
+
+*Used in: android, bddtests*
+
+- Create a new file:
+
+    - `${HOME}/.m2/settings.xml` (OSX/Linux)
+    - `%USERPROFILE%\.m2\settings.xml` (Windows)
+
+- Add the following content:
+
+    ```xml  
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+      <servers>
+          <server>
+          <id>nhsapp</id>
+          <username>nhsapp</username>
+          <password>TOKEN</password>
+          </server>
+      </servers>
+    </settings>
+    ```
+
+- Fill in the placeholder `TOKEN`
 
 ## Secrets
 

@@ -37,3 +37,13 @@ npm test
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Running NPM Audit
+
+We point to an NPM registry proxy in DevOps, because of this running the NPM audit command is a little different.
+
+```bash
+npm run audit
+```
+
+*Note: try to avoid using the `--fix` option as you will need to manually change `https://registry.npmjs.org` URLs in the `package-lock.json` file to `https://pkgs.dev.azure.com/nhsapp/70d4deb2-d387-4e09-b546-da927c2186b9/_packaging/nhsapp-npm-registry/npm/registry` after running it*

@@ -70,7 +70,7 @@ Feature: Prescriptions submission Frontend
     And I am logged in
     When I retrieve the 'Your Prescriptions' page directly
     And I select 1 repeatable prescriptions to order
-    And I enter text "<script>" for special request
+    And I enter a html script tag as text for special request
     And I click Continue on the Order a repeat prescription page
     And I click Confirm and order repeat prescription
     Then I see a message indicating there was an error sending my order

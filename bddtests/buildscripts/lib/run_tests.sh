@@ -1,6 +1,10 @@
 #! /usr/bin/env bash
 
+validate_maven_settings
+
 validate_azure_notification_hub_key
+
+validate_npm_settings
 
 cleanup_docker_containers
 
@@ -11,6 +15,10 @@ pull_docker_images
 start_services_under_test
 
 rebuild_image_with_user "${DOCKER_IMAGE}"
+
+configure_npmrc_and_m2_volumes
+
+set -x
 
 docker run \
   --name "${DOCKER_PROJECT_NAME}_test_runner" \

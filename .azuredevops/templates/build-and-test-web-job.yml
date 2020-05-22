@@ -4,26 +4,37 @@ jobs:
     steps:
       - template: set-branch-tag-steps.yml
       - template: docker-login-steps.yml
+      - template: npm-authenticate.yml
+
+      - task: ShellScript@2
+        displayName: Run web security audit
+        inputs:
+          scriptPath: web/buildscripts/01_run_security_audit.sh
+
+      - task: ShellScript@2
+        displayName: Run web security tests
+        inputs:
+          scriptPath: web/buildscripts/02_run_security_tests.sh
 
       - task: ShellScript@2
         displayName: Restore web packages
         inputs:
-          scriptPath: web/buildscripts/01_restore_dependencies.sh
+          scriptPath: web/buildscripts/03_restore_dependencies.sh
 
       - task: ShellScript@2
         displayName: Run web linting
         inputs:
-          scriptPath: web/buildscripts/02_run_lint.sh
+          scriptPath: web/buildscripts/04_run_lint.sh
 
       - task: ShellScript@2
         displayName: Build web
         inputs:
-          scriptPath: web/buildscripts/03_build.sh
+          scriptPath: web/buildscripts/05_build.sh
 
       - task: ShellScript@2
         displayName: Run web unit tests
         inputs:
-          scriptPath: web/buildscripts/04_run_unit_tests.sh
+          scriptPath: web/buildscripts/06_run_unit_tests.sh
 
       - task: Bash@3
         displayName: Check for test container
@@ -39,7 +50,7 @@ jobs:
         displayName: Retrieve web unit test results and coverage
         condition: and(succeededOrFailed(), eq(variables['unit.tests.container.exists'], 'True'))
         inputs:
-          scriptPath: web/buildscripts/05_extract_test_results.sh
+          scriptPath: web/buildscripts/07_extract_test_results.sh
 
       - template: check-for-output-steps.yml
         parameters:
@@ -81,11 +92,6 @@ jobs:
             echo "##vso[task.setvariable variable=unit.tests.coverage.exists;isOutput=true]$UNIT_TESTS_COVERAGE_EXISTS"
 
       - task: ShellScript@2
-        displayName: Run security scan
-        inputs:
-          scriptPath: web/buildscripts/06_test_security_scan.sh
-
-      - task: ShellScript@2
         displayName: Build web docker image
         inputs:
-          scriptPath: web/buildscripts/07_build_docker_image.sh
+          scriptPath: web/buildscripts/08_build_docker_image.sh

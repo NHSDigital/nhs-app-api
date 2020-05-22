@@ -31,7 +31,6 @@ docker-compose.override.yml
 # user settings file
 *.DotSettings.user
 
-
 # Build process files
 web-unit-test-results.xml
 web-unit-test-coverage.xml

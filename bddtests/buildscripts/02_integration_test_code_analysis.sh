@@ -5,14 +5,14 @@ set -e
 cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
 
 # shellcheck source=lib/set_env.sh
-. "buildscripts/lib/set_env.sh"
+source "buildscripts/lib/set_env.sh"
 
 # shellcheck source=lib/functions.sh
-. "buildscripts/lib/functions.sh"
+source "buildscripts/lib/functions.sh"
 
 GRADLE_TASKS=()
 
-configureEnv() {
+configure_env() {
   if [ -z "$TF_BUILD" ]; then
     GRADLE_TASKS+=(clean)
   fi
@@ -21,16 +21,26 @@ configureEnv() {
   GRADLE_TASKS+=(lintGherkin)
 }
 
-runAnalysis() {
-  configureEnv
+run_analysis() {
+  validate_maven_settings
+
+  validate_npm_settings
+
+  configure_env
+
   rebuild_image_with_user "${DOCKER_IMAGE_GRADLE}"
+
+  configure_npmrc_and_m2_volumes
 
   docker run --rm \
     "${DOCKER_ARGS[@]}" \
     "${DOCKER_IMAGE_GRADLE}" \
-    bash -c "./gradlew --no-daemon ${GRADLE_TASKS[*]}" || die "Integration Tests Code Analysis Failed"
+    bash -c "\
+      set -e; \
+      ./gradlew --no-daemon ${GRADLE_TASKS[*]} \
+    " || die "Integration Tests Code Analysis Failed"
 }
 
 if [ "$SKIP_ANALYSIS" != 1 ] && [ "$RUN_LOCAL_BDD" != 1 ]; then
-  runAnalysis
+  run_analysis
 fi

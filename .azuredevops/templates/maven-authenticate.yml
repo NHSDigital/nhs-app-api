@@ -1,0 +1,5 @@
+steps:
+  - task: MavenAuthenticate@0
+    displayName: 'Maven Authenticate'
+    inputs:
+      artifactsFeeds: nhsapp

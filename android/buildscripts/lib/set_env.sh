@@ -1,18 +1,15 @@
 #! /usr/bin/env bash
 
-MVN_CONFIG_PATH="${HOME}/.m2/settings.xml"
+# shellcheck source=../../../buildscripts/lib/set_env.sh
+source "../buildscripts/lib/set_env.sh"
+
 GRADLE_PATH="${HOME}/.gradle"
 
-DOCKER_ARGS=(--rm)
-DOCKER_ROOT="/"
-REPO_ROOT=$(cd ..; pwd)
-
 if [[ $(uname -s) =~ ^MING.* ]]; then
-  MVN_CONFIG_PATH="${USERPROFILE}/.m2/settings.xml"
   GRADLE_PATH="${USERPROFILE}/.gradle"
-  DOCKER_ROOT="//"
-  REPO_ROOT=$(cd ..; pwd -W)
 fi
+
+DOCKER_ARGS=(--rm)
 
 if [ -n "${TF_BUILD}" ]; then
   # cache gradle files when running in devops
@@ -21,7 +18,7 @@ if [ -n "${TF_BUILD}" ]; then
 fi
 
 DOCKER_ARGS+=(-v "${REPO_ROOT}:${DOCKER_ROOT}data/repo")
-DOCKER_ARGS+=(-v "${MVN_CONFIG_PATH}:${DOCKER_ROOT}root/.m2/settings.xml")
+DOCKER_ARGS+=(-v "${MVN_CFG_PATH}:${DOCKER_ROOT}root/.m2/settings.xml")
 
 DOCKER_ARGS+=(-w "${DOCKER_ROOT}data/repo/android")
 

@@ -1,47 +1,52 @@
 #! /usr/bin/env bash
+PATH="${PATH}:node_modules/.bin"
 
-TEXT_FILE="target/site/Gherkin-Report.txt"
-HTML_REPORT="target/site/Gherkin-Report.html"
+OUTPUT_PATH="target/site"
+TEXT_FILE="${OUTPUT_PATH}/Gherkin-Report.txt"
+HTML_REPORT="${OUTPUT_PATH}/Gherkin-Report.html"
 
-echo "" > $TEXT_FILE
-echo "" > $HTML_REPORT
+function generate_html() {
+  local textReport=$(<"${TEXT_FILE}")
 
-function generateHTMLUpper() {
-  {
-  echo "<html>"
-  echo "<head>"
-  echo "</head>"
-  echo "<body>"
-  echo "<h1 style=\"color: #5e9ca0;\">Gherkin Linter Report</h1>"
-   } >> $HTML_REPORT
-  }
+  if [ -z "${textReport}" ]; then
+    textReport="-- No linting issues found --"
+  fi
 
-function stripAndClean() {
-   cat $1 | awk '{gsub(/\[0\;4m/,"");gsub(/\[24m/,"");gsub(/\[38\;5\;243m/,"");gsub(/\[0m/,"")}4' | awk '{if ($1~/\//) { print $0 "<br/>" } else { print "Line " $1; $1 = ""; print " - Error: " $0 "<br/>"}}' >> $HTML_REPORT
+  local html=`cat <<EOF
+    <html>
+      <head>
+        <title>BDD Gherkin Linter Report</title>
+      </head>
+
+      <body>
+        <h1 style="color: #5e9ca0;">BDD Gherkin Linter Report</h1>
+        <pre>${textReport}</pre>
+      </body>
+    </html>
+EOF
+`
+
+  echo "${html}" > "${HTML_REPORT}"
 }
 
-function generateHTMLower() {
-  {
-  echo "</body>"
-  echo "</html>"
-   } >> $HTML_REPORT
-  }
+function clean_output() {
+  mkdir -p "${OUTPUT_PATH}"
 
-if [ ! -f $TEXT_FILE ]; then
-  echo "File '$TEXT_FILE' not found!"
-  exit 1
-fi
+  rm -f "${TEXT_FILE}" "${HTML_FILE}"
+}
 
-if [ ! -f $TEXT_FILE ]; then
-  echo "File '$TEXT_FILE' not found!"
-  exit 1
-fi
+function lint() {
+  clean_output
 
+  gherkin-lint 'src/test/kotlin/features/**/*' 2>&1 \
+    | strip-ansi \
+    | tee "${TEXT_FILE}"
 
-node_modules/.bin/gherkin-lint 'src/test/kotlin/features/**/*' 2>&1 | tee $TEXT_FILE
-RESULT=${PIPESTATUS[0]}
-generateHTMLUpper
-cat $TEXT_FILE | grep -e ".*0;" -e "0m$" | stripAndClean
-generateHTMLower
+  RESULT=${PIPESTATUS[0]}
 
-exit $RESULT
+  generate_html
+
+  exit $RESULT
+}
+
+lint

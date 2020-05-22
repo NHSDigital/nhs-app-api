@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
+# shellcheck source=../../../buildscripts/lib/set_env.sh
+source "../buildscripts/lib/set_env.sh"
+
 export DOCKER_COMPOSE_FILES_TRANCHE=()
 export TRANCHE_RUN_ADDITIONAL_ARGS=()
 export TRANCHE_RUN_SETUP=
@@ -24,20 +27,20 @@ export DOCKER_IMAGE=${DOCKER_IMAGE_CHROME}
 export BROWSER=${BROWSER:-chromeheadless}
 
 DOCKER_ARGS=()
-WORKING_DIR=$(pwd)
-GRADLE_PATH="$HOME/.gradle"
-DOCKER_ROOT="/"
+WORKING_DIR="${REPO_ROOT}/bddtests"
+GRADLE_PATH="${HOME}/.gradle"
+DOCKER_USER="browser"
 
 if [[ $(uname -s) =~ ^MING.* ]]; then
-  WORKING_DIR=$(pwd -W)
   GRADLE_PATH="${USERPROFILE}/.gradle"
-  DOCKER_ROOT="//"
 fi
 
 if [ -n "${TF_BUILD}" ]; then
   # cache gradle files when running in devops
   mkdir -p "${GRADLE_PATH}"
+  
   DOCKER_ARGS+=(-v "${GRADLE_PATH}:${DOCKER_ROOT}data/.gradle")
+  DOCKER_USER="${USER}"
 fi
 
 DOCKER_ARGS+=(-v "${WORKING_DIR}:${DOCKER_ROOT}data/repo")

@@ -86,7 +86,6 @@ Feature: Create Session Backend
     Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
     When I create a user session
     Then I receive a "Gateway Timeout" error with service desk reference prefixed "<Prefix>"
-
     Examples:
       | GP System | Prefix |
       | EMIS      | ze     |
@@ -95,7 +94,13 @@ Feature: Create Session Backend
 
   # covered in Manual Regression Test pack
   @manual
-  Scenario: session fails to be saved in cache
+  Scenario Outline: <GP System> session fails to be saved in cache
     Given I have valid OAuth details and the <GP System> session fails to be saved in cache
     When I create a user session
     Then I receive a "Server Error" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |

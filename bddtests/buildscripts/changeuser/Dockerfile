@@ -19,4 +19,6 @@ RUN chown -R ${USER_NAME} /data
 USER ${USER_NAME}
 WORKDIR /data
 
+RUN mkdir ~/.m2
+
 CMD "bash"

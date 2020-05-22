@@ -1,0 +1,11 @@
+steps:
+  - task: Bash@3
+    displayName: Create User NPM Config
+    inputs:
+      targetType: 'inline'
+      script: cp .azuredevops/.npmrc ~/
+
+  - task: npmAuthenticate@0
+    displayName: 'NPM Authenticate'
+    inputs:
+      workingFile: /home/vsts/.npmrc

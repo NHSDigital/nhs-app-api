@@ -1,5 +1,4 @@
-
-
+#! /usr/bin/env bash
 export IMAGE_NAMES=(nhsonline-web nhsonline-backendpfsapi nhsonline-backendcidapi nhsonline-backendservicejourneyrulesapi nhsonline-backendusersapi nhsonline-backenduserinfoapi nhsonline-backendmessagesapi)
 export IMAGE_SETTING_NAMES=(WEB PFSAPI CIDAPI SJRCONFIG SJRAPI USERSAPI USERINFOAPI LOGAPI MESSAGESAPI)
 
@@ -25,8 +24,24 @@ export MESSAGESAPI_LAUNCH_SETTINGS=backendworker/NHSOnline.Backend.MessagesApi/P
 export MESSAGESAPI_SERVICE_NAME=messages.local.bitraft.io
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1; pwd)"
+
+NPMRC_PATH="${HOME}/.npmrc"
+MVN_CFG_PATH="${HOME}/.m2/settings.xml"
+
+DOCKER_ROOT="/"
+
 if [[ $(uname -s) =~ ^MING.* ]]; then
   REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1; pwd -W)"
+
+  NPMRC_PATH="${USERPROFILE}/.npmrc"
+  MVN_CFG_PATH="${USERPROFILE}/.m2/settings.xml"
+
+  DOCKER_ROOT="//"
 fi
 
 export REPO_ROOT
+export NPMRC_PATH
+export MVN_CFG_PATH
+export DOCKER_ROOT
+
+export DOCKER_BUILDKIT=1

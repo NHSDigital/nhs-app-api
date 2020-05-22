@@ -5,6 +5,8 @@
   "description": "NHS Online Web",
   "main": "index.js",
   "scripts": {
+    "audit": "npm-audit-ci-wrapper --threshold=high --ignore-dev-dependencies --registry='https://registry.npmjs.org/'",
+    "outdated": "npm outdated || printf '\\nWARN: Outdated packages detected\\n\\n'",
     "build": "npm run swagger-node && npm run transpile && nuxt build",
     "dev": "npm run swagger-node && npm run transpile && nuxt",
     "generate": "npm run swagger-node && nuxt generate",
@@ -150,6 +152,7 @@
     "mockdate": "2.0.5",
     "node-glob": "1.2.0",
     "node-sass": "4.14.1",
+    "npm-audit-ci-wrapper": "2.5.4",
     "sass-loader": "7.1.0"
   }
 }

@@ -1,8 +1,12 @@
 defaultTasks 'clean','prepare','test','aggregate'
 
 repositories {
-     mavenCentral()
+    maven {
+        url 'https://pkgs.dev.azure.com/nhsapp/_packaging/nhsapp/maven/v1'
+        name 'nhsapp'
+    }
 }
+
 buildscript {
     ext.kotlin_version = '1.3.50'
     ext.serenity_version = '2.0.70'
@@ -16,28 +20,36 @@ buildscript {
     }
 
     dependencies {
-        classpath "net.serenity-bdd:serenity-gradle-plugin:$serenity_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.moowork.gradle:gradle-node-plugin:1.3.1"
         classpath "gradle.plugin.ua.eshepelyuk:ManifestClasspath:1.0.0"
         classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detekt_version"
         classpath "io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version"
-        classpath "com.moowork.gradle:gradle-node-plugin:1.3.1"
+        classpath "net.linguica.gradle:maven-settings-plugin:0.5"
+        classpath "net.serenity-bdd:serenity-gradle-plugin:$serenity_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
+
 group 'org.nhsonline.tests'
 version '1.0-SNAPSHOT'
+
 apply plugin: 'kotlin'
+
+apply plugin: "com.moowork.node"
+apply plugin: "io.gitlab.arturbosch.detekt"
+apply plugin: "net.linguica.maven-settings"
 apply plugin: 'net.serenity-bdd.aggregator'
 apply plugin: 'ua.eshepelyuk.ManifestClasspath'
-apply plugin: "io.gitlab.arturbosch.detekt"
-apply plugin: "com.moowork.node"
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
 configurations {
     cucumberRuntime {
         extendsFrom testRuntime
     }
 }
+
 dependencies {
     compile "org.slf4j:slf4j-simple:1.7.7"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
@@ -57,14 +69,17 @@ dependencies {
     compile "org.mongodb:mongo-java-driver:$mongodb_version"
     compile "com.microsoft.azure:azure-cosmosdb:2.2.0"
 }
+
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.allWarningsAsErrors = true
 }
+
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.allWarningsAsErrors = true
 }
+
 detekt {
     version = "1.0.0.RC8"
     defaultProfile {
@@ -76,6 +91,7 @@ detekt {
         baseline = file("reports/baseline.xml")
     }
 }
+
 task mock(type: JavaExec) {
     dependsOn assemble, compileKotlin
     classpath = jar.outputs.files
@@ -83,6 +99,7 @@ task mock(type: JavaExec) {
     classpath += sourceSets.test.runtimeClasspath
     systemProperties System.properties
     main = "mocking.defaults.MockDataPopulate"
+
     if (System.getProperty("mockArgs") != null) {
         args Eval.me(System.getProperty("mockArgs"))
     }
@@ -99,7 +116,7 @@ task pally(type: JavaExec) {
 }
 
 node {
-    version = '10.16.2'
+    version = '14.2.0'
     download = true
 }
 

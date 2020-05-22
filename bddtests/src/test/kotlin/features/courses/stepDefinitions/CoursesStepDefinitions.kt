@@ -167,6 +167,12 @@ open class CoursesStepDefinitions {
                 .to(repeatPrescriptions.typeTextIntoSpecialRequestTextArea(text))
     }
 
+    @When("I enter a html script tag as text for special request")
+    fun iEnterTextForSpecialRequest() {
+        Serenity.setSessionVariable("specialRequestText")
+                .to(repeatPrescriptions.typeTextIntoSpecialRequestTextArea("<script>"))
+    }
+
     @When("I click 'Order a new repeat prescription'")
     fun iClickOrderARepeatPrescription() {
         prescriptionsHubPage.clickOrderARepeatPrescriptionButton()

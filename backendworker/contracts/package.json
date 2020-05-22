@@ -1,0 +1,12 @@
+{
+  "name": "contracts",
+  "version": "1.0.0",
+  "scripts": {
+    "bundleContracts": "npm install && swagger-cli bundle --dereference nhsonline.yaml | json2yaml > ../../web/contracts/index.yaml"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "json2yaml": "1.1.0",
+    "swagger-cli": "4.0.2"
+  }
+}
