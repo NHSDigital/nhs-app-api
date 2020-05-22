@@ -1,5 +1,6 @@
 import linkifyIt from 'linkify-it';
 import { stripHtml } from '@/lib/utils';
+import 'url-polyfill';
 
 let linkifyInternal;
 
