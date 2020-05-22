@@ -7,10 +7,10 @@
     </div>
     <content-header id="content-header"
                     :show-bread-crumb="false"
-                    :show-content-header="true"/>
+                    :show-content-header="true"
+                    class="nhsuk-u-margin-bottom-3"/>
     <main id="maincontent"
-          ref="mainContent"
-          :class="[this.$style.homeMain, !$store.state.device.isNativeApp && $style.desktopWeb]">
+          ref="mainContent">
       <div class="nhsuk-width-container">
         <div class="nhsuk-grid-row">
           <div class="nhsuk-grid-column-two-thirds
@@ -24,8 +24,7 @@
         </div>
       </div>
     </main>
-    <div v-if="shouldShowFooter"
-         :class="$style['footer-container-desktop']">
+    <div v-if="shouldShowFooter">
       <web-footer/>
     </div>
   </div>
@@ -127,21 +126,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../style/main";
-@import "../style/pulltorefresh";
-@import "../style/elements";
-</style>
-
-<style lang="scss">
   @import "~nhsuk-frontend/packages/nhsuk";
-</style>
-
-<style module lang="scss" scoped>
-@import "../style/home";
-
-.homeMain {
-  &.desktopWeb {
-    padding: 0;
-  }
-}
 </style>
