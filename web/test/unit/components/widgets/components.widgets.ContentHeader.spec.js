@@ -248,8 +248,8 @@ describe('ContentHeader.vue', () => {
     });
 
     each([
-      'appointments-admin-help',
-      'appointments-gp-advice',
+      'appointments-gp-appointments-admin-help',
+      'appointments-gp-appointments-gp-advice',
     ]).it('showYellowBanner will return true when demographics answered', (routeName) => {
       getter['session/isProxying'] = false;
       wrapper = mountAs({
@@ -263,7 +263,7 @@ describe('ContentHeader.vue', () => {
       expect(wrapper.vm.showYellowBanner).toEqual(true);
     });
 
-    each(['appointments-admin-help', 'appointments-gp-advice'])
+    each(['appointments-gp-appointments-admin-help', 'appointments-gp-appointments-gp-advice'])
       .it('showYellowBanner will return false when demographics not answered', (routeName) => {
         getter['session/isProxying'] = false;
         wrapper = mountAs({

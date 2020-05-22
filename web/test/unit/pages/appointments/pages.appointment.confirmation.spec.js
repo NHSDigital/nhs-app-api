@@ -1,6 +1,6 @@
 import * as dependency from '@/lib/utils';
 import Channel from '@/lib/channel';
-import Confirmation from '@/pages/appointments/confirmation';
+import Confirmation from '@/pages/appointments/gp-appointments/confirmation';
 import Necessity from '@/lib/necessity';
 import { GP_APPOINTMENTS } from '@/lib/routes';
 import { createStore, mount } from '../../helpers';

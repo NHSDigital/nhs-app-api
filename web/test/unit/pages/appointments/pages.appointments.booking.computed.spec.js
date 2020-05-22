@@ -1,4 +1,4 @@
-import BookingPage from '@/pages/appointments/booking';
+import BookingPage from '@/pages/appointments/gp-appointments/booking';
 import { createStore, mount } from '../../helpers';
 
 const availableAppointments = (options = {}) => ({

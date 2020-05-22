@@ -245,8 +245,8 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/forms";
-@import "../../style/info";
-@import "../../style/desktopWeb/inputcontrol";
+@import "../../../style/forms";
+@import "../../../style/info";
+@import "../../../style/desktopWeb/inputcontrol";
 
 </style>

@@ -24,7 +24,7 @@ import SwitchProfileButton from '@/components/switch-profile/SwitchProfileButton
 import get from 'lodash/fp/get';
 import { APPOINTMENTS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 
 export default {
   name: 'CancellingSuccess',

@@ -1,6 +1,6 @@
 import { mount, createRouter } from '../../../helpers';
 import each from 'jest-each';
-import AdminHelpPage from '@/pages/appointments/admin-help/index';
+import AdminHelpPage from '@/pages/appointments/gp-appointments/admin-help/index';
 import { noJsParameterName } from '@/lib/noJs';
 import getAnswerFromRequestBody from '@/lib/online-consultations/noJs';
 import { isAnswerValid } from '@/lib/online-consultations/answer-validators';

@@ -8,8 +8,8 @@ open class PageUrl {
         val map: HashMap<String, String> =
                 hashMapOf(
                         "home" to "/",
-                        "appointment booking" to "/appointments/booking",
-                        "appointment guidance" to "/appointments/booking-guidance",
+                        "appointment booking" to "/appointments/gp-appointments/booking",
+                        "appointment guidance" to "/appointments/gp-appointments/booking-guidance",
                         "appointment hub" to "/appointments",
                         "your gp appointments" to "/appointments/gp-appointments",
                         "hospital and other appointments" to "/appointments/hospital-appointments",

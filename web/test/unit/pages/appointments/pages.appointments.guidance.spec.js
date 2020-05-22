@@ -1,6 +1,6 @@
 import AppointmentGuidanceMenu from '@/components/appointments/AppointmentGuidanceMenu';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import BookingGuidancePage from '@/pages/appointments/booking-guidance';
+import BookingGuidancePage from '@/pages/appointments/gp-appointments/booking-guidance';
 import { createStore, mount, createRouter } from '../../helpers';
 import { APPOINTMENT_BOOKING, GP_APPOINTMENTS, SYMPTOMS } from '@/lib/routes';
 

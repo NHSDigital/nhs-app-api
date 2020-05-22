@@ -1,6 +1,6 @@
 import each from 'jest-each';
 import * as dependency from '@/lib/utils';
-import AppointmentsCancellingPage from '@/pages/appointments/cancelling';
+import AppointmentsCancellingPage from '@/pages/appointments/gp-appointments/cancelling';
 import { APPOINTMENT_CANCELLING_SUCCESS } from '@/lib/routes';
 import { createStore, mount } from '../../helpers';
 

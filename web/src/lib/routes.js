@@ -218,8 +218,8 @@ const routes = {
     sjrRedirectRules: [sjrRedirectRules.silverIntegrationsSecondaryAppointmentsDisabledRedirect],
   },
   APPOINTMENT_ADMIN_HELP: {
-    name: 'appointments-admin-help',
-    path: '/appointments/admin-help',
+    name: 'appointments-gp-appointments-admin-help',
+    path: '/appointments/gp-appointments/admin-help',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     warningBanner: true,
@@ -236,8 +236,8 @@ const routes = {
     sjrRedirectRules: [sjrRedirectRules.adminHelpDisabledRedirect],
   },
   APPOINTMENT_GP_ADVICE: {
-    name: 'appointments-gp-advice',
-    path: '/appointments/gp-advice',
+    name: 'appointments-gp-appointments-gp-advice',
+    path: '/appointments/gp-appointments/gp-advice',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     warningBanner: true,
@@ -254,8 +254,8 @@ const routes = {
     sjrRedirectRules: [sjrRedirectRules.gpAdviceDisabledRedirect],
   },
   APPOINTMENT_BOOKING: {
-    name: 'appointments-booking',
-    path: '/appointments/booking',
+    name: 'appointments-gp-appointments-booking',
+    path: '/appointments/gp-appointments/booking',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
@@ -267,8 +267,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   APPOINTMENT_BOOKING_GUIDANCE: {
-    name: 'appointments-booking-guidance',
-    path: '/appointments/booking-guidance',
+    name: 'appointments-gp-appointments-booking-guidance',
+    path: '/appointments/gp-appointments/booking-guidance',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
@@ -297,8 +297,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   APPOINTMENT_CANCELLING: {
-    name: 'appointments-cancelling',
-    path: '/appointments/cancelling',
+    name: 'appointments-gp-appointments-cancelling',
+    path: '/appointments/gp-appointments/cancelling',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
@@ -310,8 +310,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   APPOINTMENT_CANCELLING_SUCCESS: {
-    name: 'appointments-cancelling-success',
-    path: '/appointments/cancelling-success',
+    name: 'appointments-gp-appointments-cancelling-success',
+    path: '/appointments/gp-appointments/cancelling-success',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
@@ -329,8 +329,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   APPOINTMENT_CONFIRMATIONS: {
-    name: 'appointments-confirmation',
-    path: '/appointments/confirmation',
+    name: 'appointments-gp-appointments-confirmation',
+    path: '/appointments/gp-appointments/confirmation',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {
@@ -342,8 +342,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}appointments/`,
   },
   APPOINTMENT_BOOKING_SUCCESS: {
-    name: 'appointments-booking-success',
-    path: '/appointments/booking-success',
+    name: 'appointments-gp-appointments-booking-success',
+    path: '/appointments/gp-appointments/booking-success',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/appointments',
     crumb: {

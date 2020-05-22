@@ -309,7 +309,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/accessibility";
+@import "../../../style/accessibility";
 
 div:focus {
   outline: none !important;

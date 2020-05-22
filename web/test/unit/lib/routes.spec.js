@@ -44,8 +44,8 @@ describe('routes', () => {
   describe('backLinkOverrides', () => {
     each([
       ['account-cookies', '/account', true],
-      ['appointments-booking-success', '/appointments', true],
-      ['appointments-cancelling-success', '/appointments', true],
+      ['appointments-gp-appointments-booking-success', '/appointments', true],
+      ['appointments-gp-appointments-cancelling-success', '/appointments', true],
       ['linked-profiles-shutter-appointments', '/appointments', true],
       ['linked-profiles-shutter-prescriptions', '/', true],
       ['organ-donation', '/more', undefined],
@@ -81,7 +81,7 @@ describe('routes', () => {
     });
 
     it('should return the corresponding route object for a given name.', () => {
-      expect(findByName('appointments-booking-guidance')).toEqual(APPOINTMENT_BOOKING_GUIDANCE);
+      expect(findByName('appointments-gp-appointments-booking-guidance')).toEqual(APPOINTMENT_BOOKING_GUIDANCE);
     });
   });
 
@@ -106,8 +106,8 @@ describe('routes', () => {
       expect(findByName('appointments').helpUrl).toBe(appointmentsHelpUrl);
       expect(findByName('prescriptions').helpUrl).toBe(prescriptionsHelpUrl);
       expect(findByName('my-record').helpUrl).toBe(recordHelpUrl);
-      expect(findByName('appointments-admin-help').helpUrl).toBe(onlineConsultationsHelpUrl);
-      expect(findByName('appointments-gp-advice').helpUrl).toBe(onlineConsultationsHelpUrl);
+      expect(findByName('appointments-gp-appointments-admin-help').helpUrl).toBe(onlineConsultationsHelpUrl);
+      expect(findByName('appointments-gp-appointments-gp-advice').helpUrl).toBe(onlineConsultationsHelpUrl);
       expect(findByName('my-record').helpUrl).toBe(recordHelpUrl);
       expect(findByName('messages').helpUrl).toBe(messagingHelpUrl);
       expect(findByName('messages-app-messaging').helpUrl).toBe(messagingHelpUrl);

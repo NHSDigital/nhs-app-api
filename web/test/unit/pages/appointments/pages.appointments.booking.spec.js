@@ -1,5 +1,5 @@
 import each from 'jest-each';
-import BookingPage from '@/pages/appointments/booking';
+import BookingPage from '@/pages/appointments/gp-appointments/booking';
 import { createStore, mount } from '../../helpers';
 
 const createBookingPage = ({ $route, $store, data }) => mount(BookingPage, {
