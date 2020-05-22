@@ -10,20 +10,25 @@ source buildscripts/lib/functions_logging.sh
 clean() {
   info "Clean started"
 
-  containers=$(docker ps -a -q)
-  volumes=$(docker volume ls -q)
+  CONTAINERS=()
+  while IFS='' read -r line; do CONTAINERS+=("$line"); done < <(docker ps -a -q)
 
-  if [ -n "${containers}" ]; then
+  if [ ${#CONTAINERS[@]} -ne 0 ]; then
     info "Docker containers found, removing..."
 
-    docker rm -f ${containers}
+    docker rm -f "${CONTAINERS[@]}"
   fi
 
-  if [ -n "${volumes}" ]; then
-    info "Docker volumes found, removing..."
+  LOCAL_IMAGES=()
+  while IFS='' read -r line; do LOCAL_IMAGES+=("$line"); done < <(docker image list --filter=reference=local/nhsonline* -q)
 
-    docker volume rm -f ${volumes}
+  if [ ${#LOCAL_IMAGES[@]} -ne 0 ]; then
+    info "Docker local images found, removing..."
+
+    docker rmi -f "${LOCAL_IMAGES[@]}"
   fi
+
+  docker system prune --volumes --force
 
   info "Clean finished"
 }
