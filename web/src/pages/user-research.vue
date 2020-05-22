@@ -36,6 +36,7 @@
     </p>
     <radio-group :header="$t('user_research.question.label')"
                  header-size="m"
+                 class="nhsuk-u-margin-bottom-4"
                  :show-error="showError"
                  :error-message="$t('user_research.errorMessage.text')"
                  :radios="choices"
