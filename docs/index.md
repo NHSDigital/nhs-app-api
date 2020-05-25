@@ -19,6 +19,7 @@
 
 * [GP Integration Utils](gp-integration-utils.md) - Postman and SOAPUI files for use with external APIs.
 * [Utils](utils.md) - scripts that are useful during development
+* [Testing IE11 / Edge on OSX](ie11-edge-osx-setup.md) - Guide to testing using Internet Explorer & Edge locally on OSX
 
 ## Functionality Documentation
 * [Known Services](known-services.md)
