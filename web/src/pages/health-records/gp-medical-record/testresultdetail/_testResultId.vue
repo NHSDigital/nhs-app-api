@@ -25,7 +25,7 @@
 <script>
 import Card from '@/components/widgets/card/Card';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
-import DesktopGenericBackLink from '../../../components/widgets/DesktopGenericBackLink';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import { TESTRESULTS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
@@ -61,5 +61,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../../style/_textstyles';
+  @import '../../../../style/_textstyles';
 </style>

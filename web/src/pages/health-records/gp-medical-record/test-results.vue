@@ -145,7 +145,7 @@ export default {
         : defaultValue;
     },
     getTestResultPath(testResultId) {
-      return `/gp-medical-record/testresultdetail/${testResultId}`;
+      return `/health-records/gp-medical-record/testresultdetail/${testResultId}`;
     },
   },
 };

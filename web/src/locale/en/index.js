@@ -967,17 +967,67 @@ export default {
       returnToPrescriptionsText: 'Go back to your prescriptions',
     },
   },
-  gp_medical_record: {
-    testResults: {
+  health_records: {
+    gp_medical_record: {
+      testResults: {
+        errors: {
+          502: {
+            pageTitle: 'Test result details data error',
+            pageHeader: 'Test result details data error',
+            header: 'There\'s been a problem getting details of your test results',
+            subheader: '',
+            message: {
+              text: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+              label: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+            },
+            retryButtonText: '',
+          },
+          504: {
+            pageHeader: 'Medical record error',
+            header: 'There\'s been a problem getting your medical record information',
+            subheader: '',
+            message: {
+              text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+              label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+            },
+            retryButtonText: 'Try again',
+          },
+        },
+      },
+      testresultdetail: {
+        backButton: 'Back',
+        testResultTitle: 'Test result',
+        noTestResultData: 'There is no detail to display for this test result.',
+        errors: {
+          502: {
+            pageTitle: 'Test result details data error',
+            pageHeader: 'Test result details data error',
+            header: 'There\'s been a problem getting details of your test results',
+            subheader: '',
+            message: {
+              text: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+              label: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+            },
+            retryButtonText: '',
+          },
+        },
+      },
       errors: {
+        pageHeader: 'Medical record error',
+        header: 'There\'s been a problem getting your medical record information',
+        subheader: '',
+        message: {
+          text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
+        retryButtonText: '',
         502: {
-          pageTitle: 'Test result details data error',
-          pageHeader: 'Test result details data error',
-          header: 'There\'s been a problem getting details of your test results',
+          pageHeader: 'Medical record error',
+          header: 'There\'s been a problem getting your medical record information',
           subheader: '',
           message: {
-            text: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-            label: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+            text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+            label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
           },
           retryButtonText: '',
         },
@@ -991,54 +1041,6 @@ export default {
           },
           retryButtonText: 'Try again',
         },
-      },
-    },
-    testresultdetail: {
-      backButton: 'Back',
-      testResultTitle: 'Test result',
-      noTestResultData: 'There is no detail to display for this test result.',
-      errors: {
-        502: {
-          pageTitle: 'Test result details data error',
-          pageHeader: 'Test result details data error',
-          header: 'There\'s been a problem getting details of your test results',
-          subheader: '',
-          message: {
-            text: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-            label: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-          },
-          retryButtonText: '',
-        },
-      },
-    },
-    errors: {
-      pageHeader: 'Medical record error',
-      header: 'There\'s been a problem getting your medical record information',
-      subheader: '',
-      message: {
-        text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-        label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-      },
-      retryButtonText: '',
-      502: {
-        pageHeader: 'Medical record error',
-        header: 'There\'s been a problem getting your medical record information',
-        subheader: '',
-        message: {
-          text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-        },
-        retryButtonText: '',
-      },
-      504: {
-        pageHeader: 'Medical record error',
-        header: 'There\'s been a problem getting your medical record information',
-        subheader: '',
-        message: {
-          text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
-        },
-        retryButtonText: 'Try again',
       },
     },
   },

@@ -192,7 +192,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/medrecordcontent';
+  @import '../../../style/medrecordcontent';
 
   .user-info {
     display: inline-block;

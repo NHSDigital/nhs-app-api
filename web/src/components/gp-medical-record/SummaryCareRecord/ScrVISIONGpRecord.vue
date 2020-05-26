@@ -9,7 +9,7 @@
                  getAriaLabel($t('my_record.allergiesAndAdverseReactions.sectionHeader'),
                               record.allergies.data.length)"
                :click-func="goToUrl"
-               :click-param="'/gp-medical-record/allergies-and-reactions'"
+               :click-param="allergiesAndReactionsPath"
                :count="record.allergies.data.length"/>
 
     <menu-item id="medicines"

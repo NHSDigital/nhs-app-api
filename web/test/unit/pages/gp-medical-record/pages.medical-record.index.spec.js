@@ -1,4 +1,4 @@
-import HealthRecords from '@/pages/gp-medical-record';
+import HealthRecords from '@/pages/health-records';
 import { createStore, mount, createRouter } from '../../helpers';
 
 describe('healthRecords', () => {

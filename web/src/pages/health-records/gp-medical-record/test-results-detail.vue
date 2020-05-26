@@ -25,7 +25,7 @@
 import get from 'lodash/fp/get';
 import Card from '@/components/widgets/card/Card';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
 import { GP_MEDICAL_RECORD } from '@/lib/routes';
@@ -66,7 +66,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/_textstyles';
+  @import '../../../style/_textstyles';
   .vision-test-results {
     min-width: 50em;
   }

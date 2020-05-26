@@ -1,6 +1,6 @@
 import each from 'jest-each';
 import { mount, createRouter, createStore } from '../../../helpers';
-import DocumentInformation from '@/pages/gp-medical-record/documents/_id';
+import DocumentInformation from '@/pages/health-records/gp-medical-record/documents/_id';
 import { DOCUMENT_DETAIL } from '@/lib/routes';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
 

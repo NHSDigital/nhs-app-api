@@ -72,26 +72,26 @@ Feature: Authorisation occurs during each URL visit
       | /symptoms                                   |
       | /terms-and-conditions                       |
 
-Scenario: User browses to url when logged in
-  Given I am a EMIS patient
-  And I am about to directly access every page
-  And I am logged in
-  And I see the home page
-  When I browse to the pages at the following urls I see the relevant page
-    | /account                                    | /account                       |
-    | /appointments                               | /appointments                  |
-    | /appointments/booking-guidance              | /appointments/booking-guidance |
-    | /appointments/booking                       | /appointments/booking          |
-    | /                                           | /                              |
-    | /gp-medical-record/gp-record                | /gp-medical-record/gp-record   |
-    | /prescriptions                              | /prescriptions                 |
-    | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
-    | /prescriptions/confirm-prescription-details | /prescriptions                 |
-    | /symptoms                                   | /symptoms                      |
-    | /terms-and-conditions                       | /                              |
-    | /logout                                     | /login                         |
+  Scenario: User browses to url when logged in
+    Given I am a EMIS patient
+    And I am about to directly access every page
+    And I am logged in
+    And I see the home page
+    When I browse to the pages at the following urls I see the relevant page
+      | /account                                    | /account                       |
+      | /appointments                               | /appointments                  |
+      | /appointments/booking-guidance              | /appointments/booking-guidance |
+      | /appointments/booking                       | /appointments/booking          |
+      | /                                           | /                              |
+      | /health-records/gp-record                   | /health-records/gp-record      |
+      | /prescriptions                              | /prescriptions                 |
+      | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
+      | /prescriptions/confirm-prescription-details | /prescriptions                 |
+      | /symptoms                                   | /symptoms                      |
+      | /terms-and-conditions                       | /                              |
+      | /logout                                     | /login                         |
 
-@bug @NHSO-8672
+  @bug @NHSO-8672
   #To be merged into the above test once the bug is fixed
   Scenario: User browses to url when logged in - Appointments Bug NHSO-8672
     Given I am a EMIS patient
@@ -99,8 +99,8 @@ Scenario: User browses to url when logged in
     And I am logged in
     And I see the home page
     When I browse to the pages at the following urls I see the relevant page
-      | /appointments/cancelling                    | /appointments/gp-appointments  |
-      | /appointments/confirmation                  | /appointments/gp-appointments  |
+      | /appointments/cancelling   | /appointments/gp-appointments |
+      | /appointments/confirmation | /appointments/gp-appointments |
 
   Scenario Outline: User has never logged in and attempts to navigate to a restricted <Url> is taken to the <Page> after login
     Given I am a EMIS patient
@@ -109,16 +109,16 @@ Scenario: User browses to url when logged in
     And I login
     Then I am on the relevant <Page> page
     Examples:
-      | Url                                         | Page                           |
-      | /appointments                               | /appointments                  |
-      | /                                           | /                              |
-      | /gp-medical-record/gp-record                | /gp-medical-record/gp-record   |
-      | /prescriptions                              | /prescriptions                 |
-      | /prescriptions/confirm-prescription-details | /prescriptions                 |
-      | /symptoms                                   | /symptoms                      |
-      | /terms-and-conditions                       | /                              |
-      | /logout                                     | /login                         |
-      | /redirector                                 | /                              |
-      | /redirector?redirect_to=appointments        | /appointments                  |
-      | /nonexistent                                | /                              |
+      | Url                                         | Page                              |
+      | /appointments                               | /appointments                     |
+      | /                                           | /                                 |
+      | /health-records/gp-medical-record           | /health-records/gp-medical-record |
+      | /prescriptions                              | /prescriptions                    |
+      | /prescriptions/confirm-prescription-details | /prescriptions                    |
+      | /symptoms                                   | /symptoms                         |
+      | /terms-and-conditions                       | /                                 |
+      | /logout                                     | /login                            |
+      | /redirector                                 | /                                 |
+      | /redirector?redirect_to=appointments        | /appointments                     |
+      | /nonexistent                                | /                                 |
 

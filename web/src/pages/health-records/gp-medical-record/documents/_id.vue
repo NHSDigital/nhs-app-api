@@ -219,7 +219,7 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-  @import '../../../style/textstyles';
+  @import '../../../../style/textstyles';
   @import '~nhsuk-frontend/packages/core/settings/typography';
   @import '~nhsuk-frontend/packages/core/settings/globals';
 

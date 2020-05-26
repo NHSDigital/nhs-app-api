@@ -162,7 +162,7 @@ open class MedicalRecordStepDefinitions {
 
     @When("^I enter url address for my record directly into the url$")
     fun whenIEnterUrlAddressForMyRecordDirectlyIntoTheUrl() {
-        val fullUrl = Config.instance.url + "/gp-medical-record/gp-record/"
+        val fullUrl = Config.instance.url + "/health-records/gp-medical-record/"
         browser.browseTo(fullUrl)
     }
 

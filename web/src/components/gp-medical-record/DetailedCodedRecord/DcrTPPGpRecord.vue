@@ -9,7 +9,7 @@
                  getAriaLabel($t('my_record.testResults.sectionHeader.tpp'),
                               record.testResults.data.length)"
                :click-func="goToUrl"
-               :click-param="'/gp-medical-record/test-results'"
+               :click-param="testResultsPath"
                :count="record.testResults.data.length"/>
 
     <menu-item id="events"

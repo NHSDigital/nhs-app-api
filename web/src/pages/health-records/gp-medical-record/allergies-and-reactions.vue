@@ -93,8 +93,8 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import "../../style/colours";
-@import "../../style/desktopWeb/accessibility";
+@import "../../../style/colours";
+@import "../../../style/desktopWeb/accessibility";
 a {
   display: inline-block;
   &:focus {

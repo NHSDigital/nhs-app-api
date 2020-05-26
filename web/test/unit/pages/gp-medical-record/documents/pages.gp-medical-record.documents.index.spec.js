@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import DocumentsPage from '@/pages/gp-medical-record/documents/index';
+import DocumentsPage from '@/pages/health-records/gp-medical-record/documents/index';
 import { createStore, shallowMount } from '../../../helpers';
 
 let page;

@@ -40,7 +40,7 @@
 import orderBy from 'lodash/fp/orderBy';
 import Card from '@/components/widgets/card/Card';
 import DcrErrorNoAccessGpRecord from '@/components/gp-medical-record/SharedComponents/DCRErrorNoAccessGpRecord';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import Glossary from '@/components/Glossary';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import ReloadRecordMixin from '@/components/gp-medical-record/ReloadRecordMixin';
@@ -93,8 +93,8 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import "../../style/colours";
-@import "../../style/desktopWeb/accessibility";
+@import "../../../style/colours";
+@import "../../../style/desktopWeb/accessibility";
 a {
   display: inline-block;
   &:focus {

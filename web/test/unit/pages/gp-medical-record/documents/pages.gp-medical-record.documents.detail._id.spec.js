@@ -1,5 +1,5 @@
 import each from 'jest-each';
-import DocumentPage from '@/pages/gp-medical-record/documents/detail/_id';
+import DocumentPage from '@/pages/health-records/gp-medical-record/documents/detail/_id';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
 import { createStore, shallowMount } from '../../../helpers';
 import hasAgreedToMedicalWarning from '@/lib/sessionStorage';
@@ -24,7 +24,7 @@ const mountPage = () => {
   });
 };
 
-describe('gp-medical-record documents', () => {
+describe('health-records documents', () => {
   dummyMetaTag = document.createElement('meta');
   document.getElementsByName = jest.fn().mockReturnValue([dummyMetaTag]);
   beforeEach(() => {
@@ -50,10 +50,10 @@ describe('gp-medical-record documents', () => {
     beforeEach(() => redirect.mockClear());
 
     describe('redirect', () => {
-      it('will redirect to gp-medical-record > gp-record if not accepted terms and not hasAgreedToMedicalWarning', async () => {
+      it('will redirect to health-records > gp-record if not accepted terms and not hasAgreedToMedicalWarning', async () => {
         hasAgreedToMedicalWarning.mockReturnValue(false);
         await DocumentPage.asyncData({ redirect, store: $store });
-        expect(redirect).toHaveBeenCalledWith('/gp-medical-record/gp-record');
+        expect(redirect).toHaveBeenCalledWith('/health-records/gp-medical-record');
       });
       it('will load document and not redirect if toggle on and accepted terms even if type and name not set', async () => {
         $store.state.myRecord.hasAcceptedTerms = true;
@@ -74,7 +74,7 @@ describe('gp-medical-record documents', () => {
   describe('computed', () => {
     it('will return the document path', () => {
       mountPage();
-      expect(page.vm.documentPath).toEqual('/gp-medical-record/documents/document-id');
+      expect(page.vm.documentPath).toEqual('/health-records/gp-medical-record/documents/document-id');
     });
   });
   describe('created', () => {

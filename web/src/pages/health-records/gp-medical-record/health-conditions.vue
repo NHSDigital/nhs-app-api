@@ -51,7 +51,7 @@
 
 <script>
 import orderBy from 'lodash/fp/orderBy';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import MedicalRecordCardGroupItem from '@/components/gp-medical-record/SharedComponents/MedicalRecordCardGroupItem';
 import Card from '@/components/widgets/card/Card';
 import { GP_MEDICAL_RECORD } from '@/lib/routes';

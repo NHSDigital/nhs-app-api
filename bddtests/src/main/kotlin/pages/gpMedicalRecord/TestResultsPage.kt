@@ -6,7 +6,7 @@ import org.openqa.selenium.By
 import pages.HybridPageObject
 import pages.myrecord.RecordItem
 
-@DefaultUrl("http://web.local.bitraft.io:3000/gp-medical-record/test-results")
+@DefaultUrl("http://web.local.bitraft.io:3000/health-records/test-results")
 class TestResultsPage : HybridPageObject() {
 
     private val testResultsParentXpath = "//div[@data-purpose='record-item']"

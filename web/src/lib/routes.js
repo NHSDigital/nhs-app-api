@@ -1,4 +1,4 @@
-import { get, find } from 'lodash/fp';
+import { find, get } from 'lodash/fp';
 import proofLevel from './proofLevel';
 import sjrIf from './sjrIf';
 
@@ -31,7 +31,7 @@ const sjrRedirectRules = {
   },
   gpAtHandMedicalRecordRedirectV2: {
     journey: 'gpAtHandGpMedicalRecordV2',
-    url: '/gp-medical-record/gp-at-hand',
+    url: '/health-records/gp-at-hand',
   },
   gpAtHandPrescriptionsRedirect: {
     journey: 'gpAtHandPrescriptions',
@@ -39,7 +39,7 @@ const sjrRedirectRules = {
   },
   gpMedicalRecordRedirectV2: {
     journey: 'gpMedicalRecordV2',
-    url: '/gp-medical-record/gp-record',
+    url: '/health-records/gp-medical-record',
   },
   im1AppointmentRedirect: {
     journey: 'im1Appointments',
@@ -47,7 +47,7 @@ const sjrRedirectRules = {
   },
   im1GpMedicalRecordRedirectV2: {
     journey: 'im1GpMedicalRecordV2',
-    url: '/gp-medical-record/gp-record',
+    url: '/health-records/gp-medical-record',
   },
   im1MessagingDisabledRedirect: {
     journey_disabled: 'im1Messaging',
@@ -79,7 +79,7 @@ const sjrRedirectRules = {
   },
   silverIntegrationsHealthRecordHubCarePlansEnabledRedirect: {
     journey: 'myRecordHub',
-    url: '/gp-medical-record',
+    url: '/health-records',
   },
 };
 
@@ -153,8 +153,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}account/`,
   },
   ACUTE_MEDICINES: {
-    name: 'gp-medical-record-medicines-acute-medicines',
-    path: '/gp-medical-record/medicines/acute-medicines',
+    name: 'health-records-gp-medical-record-medicines-acute-medicines',
+    path: '/health-records/gp-medical-record/medicines/acute-medicines',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -419,8 +419,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}app-login/`,
   },
   CURRENT_MEDICINES: {
-    name: 'gp-medical-record-medicines-current-medicines',
-    path: '/gp-medical-record/medicines/current-medicines',
+    name: 'health-records-gp-medical-record-medicines-current-medicines',
+    path: '/health-records/gp-medical-record/medicines/current-medicines',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -444,8 +444,8 @@ const routes = {
     helpUrl: baseNhsAppHelpUrl,
   },
   CONSULTATIONS: {
-    name: 'gp-medical-record-consultations',
-    path: '/gp-medical-record/consultations',
+    name: 'health-records-gp-medical-record-consultations',
+    path: '/health-records/gp-medical-record/consultations',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -529,8 +529,8 @@ const routes = {
     }],
   },
   EVENTS: {
-    name: 'gp-medical-record-events',
-    path: '/gp-medical-record/events',
+    name: 'health-records-events',
+    path: '/health-records/events',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -542,8 +542,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   DISCONTINUED_MEDICINES: {
-    name: 'gp-medical-record-medicines-discontinued-medicines',
-    path: '/gp-medical-record/medicines/discontinued-medicines',
+    name: 'health-records-gp-medical-record-medicines-discontinued-medicines',
+    path: '/health-records/gp-medical-record/medicines/discontinued-medicines',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -683,8 +683,8 @@ const routes = {
     ],
   },
   GP_MEDICAL_RECORD: {
-    name: 'gp-medical-record-gp-record',
-    path: '/gp-medical-record/gp-record',
+    name: 'health-records-gp-medical-record',
+    path: '/health-records/gp-medical-record',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -704,8 +704,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   HEALTH_RECORDS: {
-    name: 'gp-medical-record',
-    path: '/gp-medical-record',
+    name: 'health-records',
+    path: '/health-records',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -740,8 +740,8 @@ const routes = {
     sjrRedirectRules: [sjrRedirectRules.im1MyRecordRedirect],
   },
   GP_MEDICAL_RECORD_GP_AT_HAND: {
-    name: 'gp-medical-record-gp-at-hand',
-    path: '/gp-medical-record/gp-at-hand',
+    name: 'health-records-gp-at-hand',
+    path: '/health-records/gp-at-hand',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -767,8 +767,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   ALLERGIESANDREACTIONS: {
-    name: 'gp-medical-record-allergies-and-reactions',
-    path: '/gp-medical-record/allergies-and-reactions',
+    name: 'health-records-gp-medical-record-allergies-and-reactions',
+    path: '/health-records/gp-medical-record/allergies-and-reactions',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -780,8 +780,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   ENCOUNTERS: {
-    name: 'gp-medical-record-encounters',
-    path: '/gp-medical-record/encounters',
+    name: 'health-records-gp-medical-record-encounters',
+    path: '/health-records/gp-medical-record/encounters',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -793,8 +793,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   TESTRESULTS: {
-    name: 'gp-medical-record-test-results',
-    path: '/gp-medical-record/test-results',
+    name: 'health-records-gp-medical-record-test-results',
+    path: '/health-records/gp-medical-record/test-results',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -806,8 +806,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   TESTRESULTSDETAIL: {
-    name: 'gp-medical-record-test-results-detail',
-    path: '/gp-medical-record/test-results-detail',
+    name: 'health-records-gp-medical-record-test-results-detail',
+    path: '/health-records/gp-medical-record/test-results-detail',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -819,8 +819,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   TESTRESULTID: {
-    name: 'gp-medical-record-testresultdetail-testResultId',
-    path: '/gp-medical-record/testresultdetail/:testResultId',
+    name: 'health-records-gp-medical-record-testresultdetail-testResultId',
+    path: '/health-records/gp-medical-record/testresultdetail/:testResultId',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -832,8 +832,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   IMMUNISATIONS: {
-    name: 'gp-medical-record-immunisations',
-    path: '/gp-medical-record/immunisations',
+    name: 'health-records-gp-medical-record-immunisations',
+    path: '/health-records/gp-medical-record/immunisations',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -845,8 +845,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   DIAGNOSIS_V2: {
-    name: 'gp-medical-record-diagnosis',
-    path: '/gp-medical-record/diagnosis',
+    name: 'health-records-gp-medical-record-diagnosis',
+    path: '/health-records/gp-medical-record/diagnosis',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -858,8 +858,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   EXAMINATIONS_V2: {
-    name: 'gp-medical-record-examinations',
-    path: '/gp-medical-record/examinations',
+    name: 'health-records-gp-medical-record-examinations',
+    path: '/health-records/gp-medical-record/examinations',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -871,8 +871,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   PROCEDURES_V2: {
-    name: 'gp-medical-record-procedures',
-    path: '/gp-medical-record/procedures',
+    name: 'health-records-gp-medical-record-procedures',
+    path: '/health-records/gp-medical-record/procedures',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -884,8 +884,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   MEDICINES: {
-    name: 'gp-medical-record-medicines',
-    path: '/gp-medical-record/medicines-index',
+    name: 'health-records-gp-medical-record-medicines',
+    path: '/health-records/gp-medical-record/medicines-index',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -897,8 +897,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   MEDICAL_HISTORY: {
-    name: 'gp-medical-record-medical-history',
-    path: '/gp-medical-record/medical-history',
+    name: 'health-records-gp-medical-record-medical-history',
+    path: '/health-records/gp-medical-record/medical-history',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -975,8 +975,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   DOCUMENTS: {
-    name: 'gp-medical-record-documents',
-    path: '/gp-medical-record/documents',
+    name: 'health-records-gp-medical-record-documents',
+    path: '/health-records/gp-medical-record/documents',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -989,8 +989,8 @@ const routes = {
     sjrRedirectRules: [sjrRedirectRules.documentsDisabledRedirect],
   },
   DOCUMENT: {
-    name: 'gp-medical-record-documents-id',
-    path: '/gp-medical-record/documents/:id',
+    name: 'health-records-gp-medical-record-documents-id',
+    path: '/health-records/gp-medical-record/documents/:id',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -1002,8 +1002,8 @@ const routes = {
     sjrRedirectRules: [sjrRedirectRules.documentsDisabledRedirect],
   },
   DOCUMENT_DETAIL: {
-    name: 'gp-medical-record-documents-detail-id',
-    path: '/gp-medical-record/documents/detail/:id',
+    name: 'health-records-gp-medical-record-documents-detail-id',
+    path: '/health-records/gp-medical-record/documents/detail/:id',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     shouldShowContentHeader: false,
@@ -1600,8 +1600,8 @@ const routes = {
     }],
   },
   RECALLS: {
-    name: 'gp-medical-record-recalls',
-    path: '/gp-medical-record/recalls',
+    name: 'health-records-gp-medical-record-recalls',
+    path: '/health-records/gp-medical-record/recalls',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -1613,8 +1613,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   REFERRALS: {
-    name: 'gp-medical-record-referrals',
-    path: '/gp-medical-record/referrals',
+    name: 'health-records-gp-medical-record-referrals',
+    path: '/health-records/gp-medical-record/referrals',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
@@ -1626,8 +1626,8 @@ const routes = {
     helpUrl: `${baseNhsAppHelpUrl}record/`,
   },
   HEALTH_CONDITIONS: {
-    name: 'gp-medical-record-health-conditions',
-    path: '/gp-medical-record/health-conditions',
+    name: 'health-records-gp-medical-record-health-conditions',
+    path: '/health-records/gp-medical-record/health-conditions',
     proofLevel: proofLevel.P9,
     upliftPath: '/uplift/gp-medical-record',
     crumb: {
