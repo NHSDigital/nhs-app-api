@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -43,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                 var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);
 
                 var response = await _bookAppointmentSlot.Post((tppRequestParameters, bookingDates, request));
-                return InterpretAppointmentsPostResponse(response);
+                return InterpretAppointmentsPostResponse(response, request);
             }
             catch (HttpRequestException exception)
             {
@@ -56,10 +57,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             }
         }
 
-        private AppointmentBookResult InterpretAppointmentsPostResponse(TppApiObjectResponse<BookAppointmentReply> response)
+        private AppointmentBookResult InterpretAppointmentsPostResponse(TppApiObjectResponse<BookAppointmentReply> response, AppointmentBookRequest request)
         {
             if (response.HasSuccessResponse)
             {
+                _logger.LogAppointmentReasonInformation(request.BookingReason);
                 return new AppointmentBookResult.Success();
             }
 

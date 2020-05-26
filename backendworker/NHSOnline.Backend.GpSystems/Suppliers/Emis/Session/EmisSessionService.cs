@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -193,6 +194,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
 
                     session.Name = patientName;
 
+                    LogAppointmentsAndPrescriptionsNecessityValues(session);
+
                     _logger.LogInformation($"Enabled services for practice {session.OdsCode}: {practiceResponse?.Body?.Services}");
                 }
                 catch (HttpRequestException e)
@@ -218,6 +221,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Session
             {
                 _logger.LogExit();
             }
+        }
+
+        private void LogAppointmentsAndPrescriptionsNecessityValues(EmisUserSession session)
+        {
+            var kvp = new Dictionary<string, string>
+            {
+                { "Appointments Booking Reason Necessity Value", $"{session.AppointmentBookingReasonNecessity} " },
+                { "Prescriptions Special Request Necessity Value",  $"{session.PrescriptionSpecialRequestNecessity}" }
+            };
+
+            _logger.LogInformationKeyValuePairs("Necessity Values for User Session", kvp);
         }
 
         private void LogProxyInformation(EmisUserSession emisUserSession, SessionsPostResponse sessionsPostResponse)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -39,8 +40,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 var response = await _emisClient.AppointmentsPost(
                     emisRequestParameters,
                     request);
-
-                return InterpretAppointmentsPostResponse(response);
+                
+                return InterpretAppointmentsPostResponse(response, request);
             }
             catch (HttpRequestException exception)
             {
@@ -54,10 +55,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         }
 
         private AppointmentBookResult InterpretAppointmentsPostResponse(
-            EmisClient.EmisApiResponse response)
+            EmisClient.EmisApiResponse response, AppointmentBookRequest request)
         {
             if (response.HasSuccessResponse)
             {
+                _logger.LogAppointmentReasonInformation(request.BookingReason);
                 return new AppointmentBookResult.Success();
             }
 
@@ -90,7 +92,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             _logger.LogEmisErrorResponse(response);
             return new AppointmentBookResult.BadGateway();
         }
-
         private bool TelephoneNumberIsBlank(EmisClient.EmisApiResponse response)
         {
             var check = response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,

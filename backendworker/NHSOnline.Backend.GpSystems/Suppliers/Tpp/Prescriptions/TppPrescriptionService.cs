@@ -113,7 +113,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 {
                     return InterpretOrderPrescriptionError(response);
                 }
-
+                
+                _logger.LogSpecialRequestInformation(repeatPrescriptionRequest.SpecialRequest);
                 _logger.LogDebug($"Prescription order placed successfully");
                 return new OrderPrescriptionResult.Success();
 
@@ -128,7 +129,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 _logger.LogExit();
             }
         }
-
         private async Task LogPrescriptionMessaging(GpLinkedAccountModel gpLinkedAccountModel)
         {
             var tppRequestParameters = gpLinkedAccountModel.BuildTppRequestParameters(_logger);

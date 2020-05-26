@@ -57,6 +57,32 @@ namespace NHSOnline.Backend.Support.Logging
             var message = $"{title}: {string.Join(" ", items)}";
             logger.LogInformation(message);
         }
+        
+        public static void LogAppointmentReasonInformation(this ILogger logger, string bookingReason)
+        {
+            bookingReason = bookingReason ?? string.Empty;
+            var kvp = new Dictionary<string, string>
+            {
+                { "More than one character in booking reason", $"{bookingReason.Length >= 1}" },
+                { "Characters entered in booking reason",  $"{bookingReason.Length }" }
+            };
+
+            logger.LogInformationKeyValuePairs("Appointments Booking Reason Info", kvp);
+        }
+        
+        public static void LogSpecialRequestInformation(this ILogger logger, string requestComment)
+        {
+            requestComment = requestComment ?? string.Empty;
+            var moreThanOneCharacter = requestComment.Length >= 1;
+            
+            var kvp = new Dictionary<string, string>
+            {
+                { "More than one character in special request", $"{moreThanOneCharacter}" },
+                { "Characters entered in special request",  $"{requestComment.Length }" }
+            };
+
+            logger.LogInformationKeyValuePairs("Special Request Prescriptions", kvp);
+        }
 
         public static void LogVersion(this ILogger logger, HttpContext context, string apiAppName, string apiAppVersion)
         {

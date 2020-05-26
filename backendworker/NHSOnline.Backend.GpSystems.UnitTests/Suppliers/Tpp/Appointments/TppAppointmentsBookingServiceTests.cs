@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
@@ -16,6 +17,8 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Client;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Temporal;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 {
@@ -26,11 +29,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private const string SlotId = "347ac20000000000";
         private const string StartTime = "2017-07-12T09:10:00+00:00";
         private const string EndTime = "2017-07-12T09:20:00+00:00";
-
         private IFixture _fixture;
+        private Mock<ILogger<TppAppointmentsBookingService>> _mockLogger;
+        private TppUserSession _tppUserSession;
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
-        private TppUserSession _tppUserSession;
         private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
         private Mock<ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply>> _mockBookAppointmentSlot;
@@ -39,18 +42,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         public void TestInitialize()
         {
             _patientId = Guid.NewGuid();
-
+            _mockBookAppointmentSlot = new Mock<ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply>>();
+ 
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
-            _mockBookAppointmentSlot = _fixture
-                .Freeze<Mock<ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply>>>();
-
+            _mockBookAppointmentSlot = _fixture.Freeze<Mock<ITppClientRequest<(TppRequestParameters, BookingDates, AppointmentBookRequest), BookAppointmentReply>>>();
+            _mockLogger = _fixture.Freeze<Mock<ILogger<TppAppointmentsBookingService>>>();
             _tppUserSession = _fixture.Create<TppUserSession>();
             _tppUserSession.Id = _patientId;
-
             _gpLinkedAccountModel = new GpLinkedAccountModel(_tppUserSession, _patientId);
             _systemUnderTest = _fixture.Create<TppAppointmentsService>();
-
             _request = new AppointmentBookRequest
             {
                 BookingReason = BookingReason,
@@ -74,10 +74,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
+            
+            var moreThanOneCharacter = _request.BookingReason.Length >= 1;
+            var expectedLogMessage =
+                $"Appointments Booking Reason Info: More than one character in booking reason={moreThanOneCharacter} " +
+                $"Characters entered in booking reason={_request.BookingReason.Length}";
 
             // Assert
             _mockBookAppointmentSlot.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.Success>();
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
 
         [TestMethod]

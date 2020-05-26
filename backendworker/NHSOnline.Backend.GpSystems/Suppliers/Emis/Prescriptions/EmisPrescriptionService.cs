@@ -185,17 +185,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
             var prescriptionsAttemptingToOrderCount = repeatPrescriptionRequest.CourseIds.Count();
             _logger.LogInformation($"Attempting to order {prescriptionsAttemptingToOrderCount} prescriptions");
-
+            
             try
             {
                 _logger.LogEnter();
                 _logger.LogInformation("Beginning Place Prescription Request");
-
+                
                 var response = await _emisClient.PrescriptionsPost(
                     emisRequestParameters.SessionId, emisRequestParameters.EndUserSessionId, postRequest);
 
                 if (response.HasSuccessResponse)
                 {
+                    _logger.LogSpecialRequestInformation(postRequest.RequestComment);
                     _logger.LogDebug($"Prescription order placed successfully. {repeatPrescriptionRequest.CourseIds.Count()} ordered.");
                     return new OrderPrescriptionResult.Success();
                 }

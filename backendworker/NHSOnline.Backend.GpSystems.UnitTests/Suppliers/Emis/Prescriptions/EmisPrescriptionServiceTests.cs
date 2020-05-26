@@ -695,6 +695,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.VerifyAll();
 
+            
+            var moreThanOneCharacter = _repeatPrescriptionRequest.SpecialRequest.Length >= 1;
+            var expectedLogMessage =
+                $"Special Request Prescriptions: More than one character in special request={moreThanOneCharacter} " +
+                $"Characters entered in special request={_repeatPrescriptionRequest.SpecialRequest.Length}";
+            
+            // Assert
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
             result.Should().BeAssignableTo<OrderPrescriptionResult.Success>()
                 .Subject.Should().NotBeNull();
         }

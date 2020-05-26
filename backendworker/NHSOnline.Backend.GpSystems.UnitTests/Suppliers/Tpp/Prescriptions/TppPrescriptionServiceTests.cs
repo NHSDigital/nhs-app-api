@@ -436,7 +436,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             capturedRequestMedication.Medications.ElementAt(0).DrugId.Should().Be(request.CourseIds.ElementAt(0));
             capturedRequestMedication.Medications.ElementAt(1).DrugId.Should().Be(request.CourseIds.ElementAt(1));
             capturedRequestMedication.Medications.ForEach(x => x.Type.Should().Be("Repeat"));
+            var moreThanOneCharacter = capturedRequestMedication.Notes.Length >= 1;
+            var expectedLogMessage =
+                $"Special Request Prescriptions: More than one character in special request={moreThanOneCharacter} " +
+                $"Characters entered in special request={capturedRequestMedication.Notes.Length}";
+            // Assert
             result.Should().BeAssignableTo<OrderPrescriptionResult.Success>();
+            _logger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
 
         [TestMethod]

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
@@ -17,6 +18,8 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Strategies.ResponseSuccessOutcome;
 using NHSOnline.Backend.Support;
+using UnitTestHelper;
+using Appointment = NHSOnline.Backend.GpSystems.Appointments.Models.Appointment;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 {
@@ -30,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private const int ProvidedAppointmentSlotInPast = -1152;
         private const int RequiredFieldValueMissing = -1014;
         private const int OnlineUserMaxAppointmentBookCount = -1156;
-
+        private Mock<ILogger<EmisAppointmentsBookingService>> _logger;
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
         private IAppointmentsService _systemUnderTest;
@@ -38,7 +41,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private EmisUserSession _emisUserSession;
         private Guid _patientId;
         private GpLinkedAccountModel _gpLinkedAccountModel;
-
         private List<HttpStatusCode> _sampleSuccessStatusCodes;
 
         [TestInitialize]
@@ -56,9 +58,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession, _patientId);
 
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
-
+            _logger = _fixture.Freeze<Mock<ILogger<EmisAppointmentsBookingService>>>();
             _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
-
             _request = new AppointmentBookRequest
             {
                 BookingReason = BookingReason,
@@ -84,13 +85,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
 
             MockEmisClientAppointmentPostMethod(response);
-
             // Act
             var result = await _systemUnderTest.Book(_gpLinkedAccountModel, _request);
 
+            var moreThanOneCharacter = _request.BookingReason.Length >= 1;
+            var expectedLogMessage =
+                $"Appointments Booking Reason Info: More than one character in booking reason={moreThanOneCharacter} " +
+                $"Characters entered in booking reason={_request.BookingReason.Length}";
+            
             // Assert
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.Success>();
+            _logger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
         }
 
         [TestMethod]
