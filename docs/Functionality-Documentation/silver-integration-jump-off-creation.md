@@ -18,28 +18,28 @@ Each silver integration rule describes a feature (appointments, medicines, healt
 
 If an entirely new silver integration rule is required, for a new feature that does not yet exist in the Silver integrations, the following areas of the code will need to be extended:
 
-* backendworker / configurations / journeys / all_defaults.yaml - to set default value for the new rule (likely an empty array).
-* backendworker / configurations / journeys / silver_integrations / (files) - to set appropriate values for the new rule for test practices.
-* backendworker / ServiceJourneyRulesApi.Models / SilverIntegrations
-* backendworker / ServiceJourneyRulesApi.Models / (add new Provider class)
-* backendworker / ServiceJourneyRulesApi / RuleConfiguration / Utils / Steps / ValidateOdsJourneys - to validate presence of the new rule for each ODS code
-* backendworker / ServiceJourneyRulesApi / Schemas / Journeys / configuration_schema.json
-* backendworker / ServiceJourneyRulesApi.Models.UnitTests / SilverIntegrationsBuilder
-* backendworker / ServiceJourneyRulesApi.UnitTests / MergeOdsJourneysTests
-* backendworker / ServiceJourneyRulesApi.UnitTests / ValidateOdsJourneysTests
-* web / src / store / modules / sjr / mutation_types.js
+* `backendworker/configurations/journeys/all_defaults.yam`l - to set default value for the new rule (likely an empty array).
+* `backendworker/configurations/journeys/silver_integrations/(files)` - to set appropriate values for the new rule for test practices.
+* `backendworker/ServiceJourneyRulesApi.Models/SilverIntegrations`
+* `backendworker/ServiceJourneyRulesApi.Models/(add new Provider class)`
+* `backendworker/ServiceJourneyRulesApi/RuleConfiguration/Utils/Steps/ValidateOdsJourneys` - to validate presence of the new rule for each ODS code
+* `backendworker/ServiceJourneyRulesApi/Schemas/Journeys/configuration_schema.json`
+* `backendworker/ServiceJourneyRulesApi.Models.UnitTests/SilverIntegrationsBuilder`
+* `backendworker/ServiceJourneyRulesApi.UnitTests/MergeOdsJourneysTests`
+* `backendworker/ServiceJourneyRulesApi.UnitTests/ValidateOdsJourneysTests`
+* `web/src/store/modules/sjr/mutation_types.js`
 
 Conversely, if a suitable silver integration rule already exists, and a new enum value simply requires adding for the new provider, the changes are limited to:
 
-* backendworker / configurations / journeys / silver_integrations / (files) - to set appropriate values for the new provider for test practices.
-* backendworker / ServiceJourneyRulesApi.Models / (provider class for feature) - to add the new provider enum to the relevant feature.
-* backendworker / ServiceJourneyRulesApi / Schemas / Journeys / configuration_schema.json
+* `backendworker/configurations/journeys/silver_integrations/(files)` - to set appropriate values for the new provider for test practices.
+* `backendworker/ServiceJourneyRulesApi.Models/(provider class for feature)` - to add the new provider enum to the relevant feature.
+* `backendworker/ServiceJourneyRulesApi/Schemas/Journeys/configuration_schema.json`
 
 Production service journey rules should be updated at the appropriate time in the nhsapp-journeyrules repository - https://dev.azure.com/nhsapp/NHS%20App/_git/nhsapp-journeyrules
 
 ### Known Services
 
-See additional [Known Services documentation](/known-services.md)
+See additional [Known Services documentation](known-services.md)
 
 Known Services configures the behaviour of third party URLs surfaced within the NHS App. This is generally configured at a domain-level, i.e. per third-party provider. _If the relevant third-party provider already exists, you may not require any changes here._
 
