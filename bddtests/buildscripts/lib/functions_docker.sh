@@ -121,7 +121,7 @@ function rebuild_image_with_user() {
 }
 
 function configure_npmrc_and_m2_volumes () {
-  if [[ "${BROWSER}" =~ ^browserstack_* ]]; then
+  if [ -z "${TF_BUILD}" ] && [[ "${BROWSER}" =~ ^browserstack_* ]]; then
     DOCKER_USER="browserstack"
   fi
 

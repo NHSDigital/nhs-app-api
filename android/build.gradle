@@ -6,7 +6,7 @@ buildscript {
         mavenLocal()
         google()
         jcenter()
-         maven {
+        maven {
             url 'https://pkgs.dev.azure.com/nhsapp/_packaging/nhsapp/maven/v1'
             name 'nhsapp'
         }
