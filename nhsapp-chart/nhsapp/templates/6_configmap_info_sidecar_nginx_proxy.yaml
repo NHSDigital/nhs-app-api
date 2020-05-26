@@ -69,7 +69,7 @@ data:
             access_log /var/log/nginx/access.log splunk_logs;
 
              location ~* ^/v[1,2]/api/users/me/info {
-                rewrite ^/v[1,2]/api/users/me/info $1/api/me/info break; 
+                rewrite ^(/v[1,2]/api)/users/(.*) $1/$2 break;
                 proxy_pass http://application;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
@@ -79,7 +79,7 @@ data:
             }
 
              location ~* ^/v[1,2]/api/users/info {
-                rewrite ^/v[1,2]/api/users/info $1/api/info break;
+                rewrite ^(/v[1,2]/api)/users/(.*) $1/$2 break;
                 proxy_pass http://application;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;

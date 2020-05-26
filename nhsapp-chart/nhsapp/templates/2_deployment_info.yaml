@@ -55,6 +55,8 @@ spec:
 {{- with $.Values.info.environmentVariables }}
 {{ toYaml . | trim | indent 8 }}
 {{- end }}
+        - name: AUDIT_SINK_TYPE
+          value: MONGO
         - name: PORT
           value: "{{ $.Values.info.containerPort }}"
         - name: INPUT_FOLDER_PATH
