@@ -14,17 +14,9 @@ Feature: Patients Know Best Shared Links
     And the warning message on the Redirector page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Shared links' on the more page
-    Given I am using the native app user agent
-    And I am a user who cannot view Shared Links from Patients Know Best
+    Given I am a user who cannot view Shared Links from Patients Know Best
     And I am logged in
     And I navigate to the More page
-    Then I am on the More Page
-    And the link to Shared links is not available on the More page
-
-  Scenario: The menu item 'Shared links' is not visible on desktop
-    Given I am a user who can view Shared Links from Patients Know Best
-    And I am logged in
-    When I navigate to the More page
     Then I am on the More Page
     And the link to Shared links is not available on the More page
 

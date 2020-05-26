@@ -61,7 +61,6 @@ export default {
   },
   data() {
     return {
-      isNativeApp: this.$store.state.device.isNativeApp,
       isProxying: this.$store.getters['session/isProxying'],
       isProofLevel9: this.$store.getters['session/isProofLevel9'],
       im1MessagingPath: GP_MESSAGES.path,
@@ -98,7 +97,7 @@ export default {
       return this.im1MessagingSjrEnabled && this.$store.state.practiceSettings.im1MessagingEnabled;
     },
     pkbEnabled() {
-      return this.hasPkbMessages && this.isNativeApp && !this.isProxying && this.isProofLevel9;
+      return this.hasPkbMessages && !this.isProxying && this.isProofLevel9;
     },
     testProviderEnabled() {
       return this.hasTestProviderMessages && this.isProofLevel9;

@@ -98,7 +98,7 @@ export default {
       });
     },
     showPkbSharedLinks() {
-      return this.hasPkbSharedLinks && this.isNativeApp && !this.isProxying;
+      return this.hasPkbSharedLinks && !this.isProxying;
     },
   },
   mounted() {

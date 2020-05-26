@@ -15,7 +15,7 @@
                        'healthRecordHubPage.gpMedicalRecord.subheader',
                        'healthRecordHubPage.gpMedicalRecord.body')"
                      :prevent-default="preventDefault()"/>
-          <third-party-jump-off-button v-if="showPkbCarePlans && !isProxying && isNativeApp"
+          <third-party-jump-off-button v-if="showPkbCarePlans && !isProxying"
                                        id="btn_care_plans"
                                        provider-id="pkb"
                                        :jump-off-type="thirdPartyProvider.pkb.carePlans.type"

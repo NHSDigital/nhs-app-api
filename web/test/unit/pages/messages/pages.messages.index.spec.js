@@ -11,7 +11,6 @@ const mountPage = ({
   sjrIm1MessagingEnabled = true,
   practiceIm1MessagingEnabled = true,
   context = true,
-  isNativeApp = true,
   isProxying = false,
   isProofLevel9 = true,
 } = {}) => {
@@ -19,9 +18,7 @@ const mountPage = ({
   $store = createStore({
     state: {
       practiceSettings: { im1MessagingEnabled: practiceIm1MessagingEnabled },
-      device: {
-        isNativeApp,
-      },
+      device: { isNativeApp: false },
       knownServices: {
         knownServices: [{
           id: 'pkb',
@@ -100,7 +97,7 @@ describe('messages page', () => {
   });
 
   describe('pkb messages link', () => {
-    describe('pkb messaging enabled and is native', () => {
+    describe('pkb messaging enabled', () => {
       beforeEach(() => {
         mountPage();
       });
@@ -109,7 +106,7 @@ describe('messages page', () => {
       });
     });
 
-    describe('pkb messaging enabled, is native but is proxying', () => {
+    describe('pkb messaging enabled, but is proxying', () => {
       beforeEach(() => {
         mountPage({
           isProxying: true,
@@ -120,21 +117,9 @@ describe('messages page', () => {
       });
     });
 
-    describe('pkb enabled but is desktop', () => {
+    describe('pkb enabled but is proxying', () => {
       beforeEach(() => {
         mountPage({
-          isNativeApp: false,
-        });
-      });
-      it('will not show link', () => {
-        expect(wrapper.find('#btn_pkb_messages_and_consultations').exists()).toBe(false);
-      });
-    });
-
-    describe('pkb enabled but is desktop but is proxying', () => {
-      beforeEach(() => {
-        mountPage({
-          isNativeApp: false,
           isProxying: true,
         });
       });
@@ -154,7 +139,7 @@ describe('messages page', () => {
       });
     });
 
-    describe('pkb messaging disabled and is native', () => {
+    describe('pkb messaging disabled', () => {
       beforeEach(() => {
         mountPage({
           context: false,

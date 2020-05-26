@@ -45,9 +45,9 @@ describe('healthRecords', () => {
     const getGpMedicalRecordLink = wrapperObj =>
       wrapperObj.find('#btn_gp_medical_record');
 
-    describe('pkb care plans enabled and is native', () => {
+    describe('pkb care plans enabled', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: true });
+        wrapper = mountAs({ context: true });
       });
 
       it('will show link', () => {
@@ -55,28 +55,22 @@ describe('healthRecords', () => {
       });
     });
 
-    describe('pkb enabled but is desktop', () => {
-      it('will not show link', () => {
+    describe('pkb care plans is disabled', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: false });
+      });
+
+      it('will show link', () => {
         expect(getGpMedicalRecordLink(wrapper).exists()).toBe(true);
       });
     });
 
-    describe('pkb messaging is disabled', () => {
+    describe('pkb care plans enabled, but proxying', () => {
       beforeEach(() => {
-        wrapper = mountAs({ isNativeApp: true });
+        wrapper = mountAs({ context: true, isProxying: true });
       });
 
-      it('will not show link', () => {
-        expect(getGpMedicalRecordLink(wrapper).exists()).toBe(true);
-      });
-    });
-
-    describe('is pkb enabled, native and proxying', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
-      });
-
-      it('will not show link', () => {
+      it('will show link', () => {
         expect(getGpMedicalRecordLink(wrapper).exists()).toBe(true);
       });
     });
@@ -86,9 +80,9 @@ describe('healthRecords', () => {
     const getPkbCarePlansLink = wrapperObj =>
       wrapperObj.find('#btn_care_plans');
 
-    describe('pkb care plans enabled and is native', () => {
+    describe('pkb care plans enabled', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: true });
+        wrapper = mountAs({ context: true });
       });
 
       it('will show link', () => {
@@ -96,15 +90,9 @@ describe('healthRecords', () => {
       });
     });
 
-    describe('pkb enabled but is desktop', () => {
-      it('will not show link', () => {
-        expect(getPkbCarePlansLink(wrapper).exists()).toBe(false);
-      });
-    });
-
-    describe('pkb messaging is disabled', () => {
+    describe('pkb care plans is disabled', () => {
       beforeEach(() => {
-        wrapper = mountAs({ isNativeApp: true });
+        wrapper = mountAs({ context: false });
       });
 
       it('will not show link', () => {
@@ -112,9 +100,9 @@ describe('healthRecords', () => {
       });
     });
 
-    describe('is pkb enabled, native and proxying', () => {
+    describe('pkb care plans enabled but proxying', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
+        wrapper = mountAs({ context: true, isProxying: true });
       });
 
       it('will not show link', () => {
@@ -127,7 +115,7 @@ describe('healthRecords', () => {
     const getPkbHealthTrackersLink = wrapperObj =>
       wrapperObj.find('#btn_health_trackers');
 
-    describe('pkb care plans enabled and is native', () => {
+    describe('pkb health trackers enabled', () => {
       beforeEach(() => {
         wrapper = mountAs({ context: true, isNativeApp: true });
       });
@@ -137,13 +125,17 @@ describe('healthRecords', () => {
       });
     });
 
-    describe('pkb enabled but is desktop', () => {
+    describe('pkb health trackers is enabled, but is desktop', () => {
+      beforeEach(() => {
+        wrapper = mountAs({ context: true, isNativeApp: false });
+      });
+
       it('will not show link', () => {
         expect(getPkbHealthTrackersLink(wrapper).exists()).toBe(false);
       });
     });
 
-    describe('pkb messaging is disabled', () => {
+    describe('pkb health trackers is disabled', () => {
       beforeEach(() => {
         wrapper = mountAs({ isNativeApp: true });
       });
@@ -153,7 +145,7 @@ describe('healthRecords', () => {
       });
     });
 
-    describe('is pkb enabled, native and proxying', () => {
+    describe('pkb health trackers enabled, but proxying', () => {
       beforeEach(() => {
         wrapper = mountAs({ context: true, isNativeApp: true, isProxying: true });
       });

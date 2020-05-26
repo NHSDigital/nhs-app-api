@@ -91,9 +91,9 @@ describe('more', () => {
     const getPkbSharedLinksLink = wrapperObj =>
       wrapperObj.find('#btn_pkb_shared_links');
 
-    describe('pkb shared links enabled, native, not proxying', () => {
+    describe('pkb shared links enabled, not proxying', () => {
       beforeEach(() => {
-        wrapper = mountAs({ isNativeApp: true, isProxying: false });
+        wrapper = mountAs({ isProxying: false });
       });
 
       it('will show link', () => {
@@ -101,19 +101,9 @@ describe('more', () => {
       });
     });
 
-    describe('pkb shared links enabled, desktop, not proxying', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ isNativeApp: false, isProxying: false });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbSharedLinksLink(wrapper).exists()).toBe(false);
-      });
-    });
-
     describe('pkb shared links disabled', () => {
       beforeEach(() => {
-        wrapper = mountAs({ context: false, isNativeApp: true, isProxying: false });
+        wrapper = mountAs({ context: false, isProxying: false });
       });
 
       it('will not show link', () => {
@@ -121,9 +111,9 @@ describe('more', () => {
       });
     });
 
-    describe('pkb shared links enabled, native, proxying', () => {
+    describe('pkb shared links enabled, proxying', () => {
       beforeEach(() => {
-        wrapper = mountAs({ isNativeApp: true, isProxying: true });
+        wrapper = mountAs({ isProxying: true });
       });
 
       it('will not show link', () => {

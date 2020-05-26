@@ -15,21 +15,12 @@ Feature: Patients Know Best Messages
     And the warning message on the Redirector page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Messages and online consultations' on the more page
-    Given I am using the native app user agent
-    And I am a user who cannot view Messages and Online Consultations from Patients Know Best
+    Given I am a user who cannot view Messages and Online Consultations from Patients Know Best
     And I am logged in
     And I navigate to the More page
     Then I am on the More Page
     And I click the Messages link on the More page
     And the Messages Hub page is displayed
-    And the link to Messages and consultations is not available on the Messages Hub page
-
-  Scenario: The menu item 'Messages and online consultations' is not visible on desktop
-    Given I am a user who can view Messages and Online Consultations from Patients Know Best
-    And I am logged in
-    When I navigate to the More page
-    And I click the Messages link on the More page
-    Then the Messages Hub page is displayed
     And the link to Messages and consultations is not available on the Messages Hub page
 
   Scenario: A user can follow the link to Find out more about personal health records

@@ -14,16 +14,7 @@ Feature: Patients Know Best Appointments
     And the warning message on the Redirector page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Appointments' on the appointments page
-    Given I am using the native app user agent
-    And I am a user who cannot view Appointments from Patients Know Best
-    And I am logged in
-    Then I see the home page
-    Given I navigate to the hospital and other appointments page
-    Then the Hospital Appointments page is displayed
-    And the link to PKB View Appointments is not available on the Appointments page
-
-  Scenario: The menu item 'View Appointments' is not visible on desktop
-    Given I am a user who can view Appointments from Patients Know Best
+    Given I am a user who cannot view Appointments from Patients Know Best
     And I am logged in
     Then I see the home page
     Given I navigate to the hospital and other appointments page

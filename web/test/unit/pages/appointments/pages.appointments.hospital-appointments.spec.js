@@ -8,7 +8,6 @@ describe('hospital appointments hub', () => {
 
   const mountAs = ({
     isProxy = false,
-    isNativeApp = false,
     apptsProviders = [],
     context = false,
   } = {}) => {
@@ -23,9 +22,7 @@ describe('hospital appointments hub', () => {
             },
           },
         },
-        device: {
-          isNativeApp,
-        },
+        device: { isNativeApp: false },
         knownServices: {
           knownServices: [{
             id: 'ers',
@@ -88,9 +85,9 @@ describe('hospital appointments hub', () => {
   describe('view pkb appointments', () => {
     const getPkbAppointmentsLink = wrapperObj => wrapperObj.find('#btn_pkb_appointments');
 
-    describe('sjr pkb secondary appointments disabled but proxy false and isNative true', () => {
+    describe('sjr pkb secondary appointments disabled but proxy false', () => {
       beforeEach(() => {
-        wrapper = mountAs({ apptsProviders: [], isProxy: false, isNativeApp: true });
+        wrapper = mountAs({ apptsProviders: [], isProxy: false });
       });
 
       it('will not show link', () => {
@@ -98,19 +95,9 @@ describe('hospital appointments hub', () => {
       });
     });
 
-    describe('sjr pkb secondary appointments enabled but proxy true and is native app true', () => {
+    describe('sjr pkb secondary appointments enabled but proxy true', () => {
       beforeEach(() => {
-        wrapper = mountAs({ apptsProviders: ['pkb'], isProxy: true, isNativeApp: true });
-      });
-
-      it('will not show link', () => {
-        expect(getPkbAppointmentsLink(wrapper).exists()).toBe(false);
-      });
-    });
-
-    describe('sjr pkb secondary appointments enabled and proxy false but native app false', () => {
-      beforeEach(() => {
-        wrapper = mountAs({ apptsProviders: ['pkb'], isProxy: false, isNativeApp: false });
+        wrapper = mountAs({ apptsProviders: ['pkb'], isProxy: true });
       });
 
       it('will not show link', () => {
@@ -121,7 +108,7 @@ describe('hospital appointments hub', () => {
     describe('sjr pkb secondary appointments enabled and proxy false', () => {
       let pkbAppointmentsLink;
       it('will show link', () => {
-        wrapper = mountAs({ apptsProviders: ['pkb'], context: true, isProxy: false, isNativeApp: true });
+        wrapper = mountAs({ apptsProviders: ['pkb'], context: true, isProxy: false });
         pkbAppointmentsLink = getPkbAppointmentsLink(wrapper);
         expect(pkbAppointmentsLink.exists()).toBe(true);
       });

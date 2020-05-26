@@ -13,19 +13,11 @@ Feature: Patients Know Best Care Plans
     And the warning message on the Redirector page explains the service is from Patients Know Best
 
   Scenario: A user without access to PKB cannot see the menu item 'Care plans' on the Health Record Hub page
-    Given I am using the native app user agent
-    And I am a user who cannot view care plans from Patients Know Best
+    Given I am a user who cannot view care plans from Patients Know Best
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
     And the link to Care plans is not available on the health record hub page
-
-  Scenario: The menu item 'Care plans' is not visible on desktop
-    Given I am a user who can view care plans from Patients Know Best
-    And I am logged in
-    When I navigate to the health record hub page
-    Then I see the health records hub page
-    And I do not see the PKB menu item 'Care plans'
 
   Scenario: A user can follow the link to Find out more about personal health records
     Given I am a user who can view care plans from Patients Know Best

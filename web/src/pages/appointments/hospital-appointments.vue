@@ -39,7 +39,6 @@ export default {
   },
   data() {
     return {
-      isNativeApp: this.$store.state.device.isNativeApp,
       isProxying: this.$store.getters['session/isProxying'],
       thirdPartyProvider: jumpOffProperties.thirdPartyProvider,
     };
@@ -69,7 +68,7 @@ export default {
       return this.hasErsAppointments && !this.isProxying;
     },
     showPkbAppointments() {
-      return this.hasPkbAppointments && this.isNativeApp && !this.isProxying;
+      return this.hasPkbAppointments && !this.isProxying;
     },
   },
   mounted() {
