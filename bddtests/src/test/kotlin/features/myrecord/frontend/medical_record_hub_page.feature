@@ -14,7 +14,8 @@ Feature: Medical record hub page
     And I see the PKB menu item 'Care plans'
 
   Scenario: A user can access the medical record hub page if PKB Health Tracker is available
-    Given I am an EMIS patient and I have access to Patients Know Best Health Tracker
+    Given I am using the native app user agent
+    And I am an EMIS patient and I have access to Patients Know Best Health Tracker
     And I am logged in
     When I navigate to the health record hub page
     Then I see the health records hub page
