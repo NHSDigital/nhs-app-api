@@ -4,7 +4,7 @@ WORKDIR /src
 
 COPY . .
 
-RUN --mount=type=secret,id=nuget,dst=/root/.nuget/NuGet/NuGet.Config dotnet restore
+RUN --mount=type=secret,id=nuget,dst=/root/.nuget/NuGet/NuGet.Config dotnet restore --locked-mode
 
 FROM dependencies as built
 ARG COMMIT_ID

@@ -8,7 +8,6 @@
     <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    <RestoreLockedMode>true</RestoreLockedMode>
   </PropertyGroup>
 
   <ItemGroup>

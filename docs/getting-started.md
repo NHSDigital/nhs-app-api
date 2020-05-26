@@ -155,16 +155,15 @@ You require a token to access the feeds, to generate a new one:
     //pkgs.dev.azure.com/nhsapp/70d4deb2-d387-4e09-b546-da927c2186b9/_packaging/nhsapp-npm-registry/npm/:email=<HSCIC_EMAIL>
     ```
 
-- Securely create a Base64 encoded version of your personal access token:
+- Create a Base64 encoded version of your personal access token:
 
-    - Create a new file anywhere named `token`, containing your plain text token
     - Open a bash terminal in the directory containing the above file
     - Run:
 
         ```bash
-        cat token | base64 > token.b64 && rm -f token
+        echo -n "<TOKEN>" | base64
         ```
-    - Copy your encoded token by opening `token.b64`
+    - Copy your encoded token
 
 - Fill in the placeholders `<BASE_64_ENCODED_TOKEN>` & `<HSCIC_EMAIL>`
 
@@ -182,16 +181,17 @@ You require a token to access the feeds, to generate a new one:
     ```xml
     <?xml version="1.0" encoding="utf-8"?>
     <configuration>
-    <packageSources>
+      <packageSources>
         <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
-    </packageSources>
-    <packageSourceCredentials>
+      </packageSources>
+
+      <packageSourceCredentials>
         <nhsapp-nuget-feed>
-            <add key="Username" value="nhsapp" />
-            <add key="ClearTextPassword" value="<TOKEN>" />
+          <add key="Username" value="nhsapp" />
+          <add key="ClearTextPassword" value="<TOKEN>" />
         </nhsapp-nuget-feed>
-    </packageSourceCredentials>
-    </configuration>%    
+      </packageSourceCredentials>
+    </configuration>  
     ```
 
 - Fill in the placeholder `<TOKEN>`

@@ -6,6 +6,7 @@ This guide will help you setup a local environment for testing the NHS App on In
 
 - Ensure you have around 20GB of free space (you can delete the zip and `ova` files after setup to reclaim space)
 - Install VirtualBox from [here](https://www.virtualbox.org/)
+- Install Oracle VM VirtualBox Extension Pack from [here](https://www.virtualbox.org/wiki/Downloads)
 - Download the free Microsoft Edge VM (VirtualBox) from [here](https://az792536.vo.msecnd.net/vms/VMBuild_20190311/VirtualBox/MSEdge/MSEdge.Win10.VirtualBox.zip)
 - Connect to your VPN
 - Start the local NHS App environment (and/or local instances of web etc.)
