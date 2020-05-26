@@ -9,5 +9,7 @@
         public bool EnableVision { get; set; }
 
         public bool EnableMicrotest { get; set; }
+
+        public bool EnableFake { get; set; }
     }
 }

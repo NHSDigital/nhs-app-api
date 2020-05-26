@@ -31,5 +31,14 @@ namespace NHSOnline.Backend.GpSystems.SessionManager
                 StatusCode = StatusCodes.Status502BadGateway
             };
         }
+
+        public SessionLogoffResultVisitorOutput Visit(SessionLogoffResult.InternalServerError result)
+        {
+            return new SessionLogoffResultVisitorOutput
+            {
+                SessionWasDeleted = false,
+                StatusCode = StatusCodes.Status500InternalServerError
+            };
+        }
     }
 }

@@ -306,7 +306,7 @@
         "notifications": { "enum": [ "true", "false" ] },
         "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
         "silverIntegrations": { "$ref": "#/definitions/silverIntegrations" },
-        "supplier": { "enum": [ "Emis", "Tpp", "Vision", "Microtest" ] },
+        "supplier": { "enum": [ "Emis", "Fake", "Tpp", "Vision", "Microtest" ] },
         "userInfo": { "enum": ["true", "false"]  },
         "documents": { "enum": ["true", "false"]  },
         "im1Messaging": { "$ref": "#/definitions/im1MessagingJourney" }

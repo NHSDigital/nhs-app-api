@@ -16,13 +16,24 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
         public static IServiceCollection RegisterVisionPfsServices(this IServiceCollection services)
         {
             services.RegisterVisionBaseServices();
+
             services.RegisterVisionAppointmentsServices();
-            services.RegisterVisionEnvelopeServices();
-            services.RegisterVisionPrescriptionsServices();
-            services.RegisterVisionPatientRecordServices();
-            services.RegisterVisionSessionServices();
-            services.RegisterVisionPrescriptionsServices();
             services.RegisterVisionDemographicsServices();
+            services.RegisterVisionEnvelopeServices();
+            services.RegisterVisionPatientRecordServices();
+            services.RegisterVisionPrescriptionsServices();
+            services.RegisterVisionSessionServices();
+
+            return services;
+        }
+
+        public static IServiceCollection RegisterVisionCidServices(this IServiceCollection services)
+        {
+            services.RegisterVisionBaseServices();
+
+            services.RegisterVisionEnvelopeServices();
+            services.RegisterVisionIm1ConnectionServices();
+            services.RegisterVisionLinkageServices();
 
             return services;
         }
@@ -36,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             services.AddSingleton<IVisionClient, VisionClient>();
 
             services.AddTransient<VisionTokenValidationService>();
-            
+
             services.AddTransient<VisionPFSHttpRequestIdentifier>();
             services.AddTransient<VisionLinkageHttpRequestIdentifier>();
             services.AddSingleton<VisionHttpClientHandler>();
@@ -50,16 +61,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 .ConfigurePrimaryHttpMessageHandler<VisionHttpClientHandler>()
                 .AddHttpMessageHandler<HttpTimeoutHandler<VisionLinkageHttpRequestIdentifier>>()
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<VisionLinkageHttpRequestIdentifier>>();
-
-            return services;
-        }
-
-        public static IServiceCollection RegisterVisionCidServices(this IServiceCollection services)
-        {
-            services.RegisterVisionBaseServices();
-            services.RegisterVisionEnvelopeServices();
-            services.RegisterVisionLinkageServices();
-            services.RegisterVisionIm1ConnectionServices();
 
             return services;
         }

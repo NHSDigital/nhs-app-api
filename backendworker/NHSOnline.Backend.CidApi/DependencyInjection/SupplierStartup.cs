@@ -29,16 +29,17 @@ namespace NHSOnline.Backend.CidApi.DependencyInjection
                 { "GP_PROVIDER_ENABLED_VISION", (config, enabled) => config.EnableVision = enabled },
                 { "GP_PROVIDER_ENABLED_TPP", (config, enabled) => config.EnableTpp = enabled },
                 { "GP_PROVIDER_ENABLED_MICROTEST", (config, enabled) => config.EnableMicrotest = enabled },
+                { "GP_PROVIDER_ENABLED_FAKE", (config, enabled) => config.EnableFake = enabled },
             };
 
             _logger.LogInformation("Registering GP services");
 
             var enableGpSupplierConfig = new EnableGpSupplierConfiguration();
-            
+
             foreach (var config in gpSupplierConfig)
             {
                 var configValue = _configuration.GetOrWarn(config.Key, _logger);
-                
+
                 if (bool.TryParse(configValue, out var enableGpSupplier))
                 {
                     _logger.LogInformation($"GP supplier config { config.Key } value: { enableGpSupplier }");
@@ -50,7 +51,7 @@ namespace NHSOnline.Backend.CidApi.DependencyInjection
 
                 config.Value(enableGpSupplierConfig, enableGpSupplier);
             }
-            
+
             _gpSystemRegistrationService.RegisterCidServices(services, enableGpSupplierConfig);
         }
     }

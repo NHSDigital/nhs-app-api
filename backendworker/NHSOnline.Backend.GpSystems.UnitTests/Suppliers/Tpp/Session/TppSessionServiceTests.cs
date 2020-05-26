@@ -529,9 +529,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         public async Task Logoff_WhenCalledWithHttpError_ReturnsBadGateway()
         {
             // Arrange
-            var reply = LogoffReply();
-            reply.StatusCode = HttpStatusCode.BadGateway;
-
             _mockLogOff
                 .Setup(x => x.Post(It.IsAny<TppRequestParameters>()))
                 .Throws<HttpRequestException>()

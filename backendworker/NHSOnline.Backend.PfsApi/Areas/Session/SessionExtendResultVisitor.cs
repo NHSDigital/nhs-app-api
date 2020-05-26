@@ -22,5 +22,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
                 StatusCode = StatusCodes.Status502BadGateway
             };
         }
+
+        public SessionExtendResultVisitorOutput Visit(SessionExtendResult.InternalServerError result)
+        {
+            return new SessionExtendResultVisitorOutput
+            {
+                SessionWasExtended = false,
+                StatusCode = StatusCodes.Status500InternalServerError
+            };
+        }
     }
 }

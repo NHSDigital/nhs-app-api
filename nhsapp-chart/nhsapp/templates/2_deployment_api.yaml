@@ -152,6 +152,10 @@ spec:
         - name: GP_PROVIDER_ENABLED_EMIS
           value: "true"
         {{- end }}
+        {{- if $.Values.fakeGpSystemEnabled }}
+        - name: GP_PROVIDER_ENABLED_FAKE
+          value: "true"
+        {{- end }}
         {{- if $.Values.microtestEnabled }}
         - name: GP_PROVIDER_ENABLED_MICROTEST
           value: "true"

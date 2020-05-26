@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _emisUserSession = _fixture.Create<EmisUserSession>();
             _gpLinkedAccountModel = new GpLinkedAccountModel(_emisUserSession);
             _emisRequestParameters = new EmisRequestParameters(_emisUserSession);
-            
+
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _sampleSuccessStatusCodes = new List<HttpStatusCode>
             {
@@ -49,13 +49,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
         [TestMethod]
         public async Task Extend_WhenClientReturnsSuccess_ReturnsSuccess()
-        {    
+        {
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK, RequestsForSuccessOutcome.DemographicsGet, _sampleSuccessStatusCodes);
 
             _mockEmisClient
                 .Setup(x => x.DemographicsGet(
-                    It.Is<EmisRequestParameters>(p => MatchTppRequestParameters(p))))
+                    It.Is<EmisRequestParameters>(p => MatchEmisRequestParameters(p))))
                 .ReturnsAsync(response)
                 .Verifiable();
 
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             _mockEmisClient
                 .Setup(x => x.DemographicsGet(
-                    It.Is<EmisRequestParameters>(p => MatchTppRequestParameters(p))))
+                    It.Is<EmisRequestParameters>(p => MatchEmisRequestParameters(p))))
                 .ReturnsAsync(response)
                 .Verifiable();
 
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             // Arrange
             _mockEmisClient
                 .Setup(x => x.DemographicsGet(
-                    It.Is<EmisRequestParameters>(p => MatchTppRequestParameters(p))))
+                    It.Is<EmisRequestParameters>(p => MatchEmisRequestParameters(p))))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             _mockEmisClient.Verify();
         }
 
-        private bool MatchTppRequestParameters(EmisRequestParameters p) =>
+        private bool MatchEmisRequestParameters(EmisRequestParameters p) =>
             p.SessionId.Equals(_emisRequestParameters.SessionId, StringComparison.Ordinal) &&
             p.EndUserSessionId.Equals(_emisRequestParameters.EndUserSessionId, StringComparison.Ordinal) &&
             p.UserPatientLinkToken.Equals(_emisRequestParameters.UserPatientLinkToken, StringComparison.Ordinal);

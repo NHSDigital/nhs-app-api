@@ -8,8 +8,9 @@ namespace NHSOnline.Backend.GpSystems.Session
         Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber);
 
         Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession);
-        
-        Task<GpSessionRecreateResult> Recreate(string connectionToken, string odsCode, string nhsNumber, string patientId);
+
+        Task<GpSessionRecreateResult> Recreate(string connectionToken, string odsCode, string nhsNumber,
+            string patientId);
 
     }
 }

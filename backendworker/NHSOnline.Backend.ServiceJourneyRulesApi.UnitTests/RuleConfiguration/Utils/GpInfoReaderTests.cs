@@ -76,6 +76,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         [DataRow("THE PHOENIX PARTNERSHIP", GpInfoSupplier.Tpp)]
         [DataRow("IN PRACTICE SYSTEMS LTD", GpInfoSupplier.Vision)]
         [DataRow("MICROTEST LTD", GpInfoSupplier.Microtest)]
+        [DataRow("FAKE SUPPLIER", GpInfoSupplier.Fake)]
         [DataRow("Test", GpInfoSupplier.Unknown)]
         public void GetGpInfo_WhenCalledWithValidFileName_MatchesGpSupplierEnumValue
             (string gpSupplier, GpInfoSupplier expectedSupplierEnumValue)

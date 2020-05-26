@@ -17,13 +17,25 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
         public static IServiceCollection RegisterEmisPfsServices(this IServiceCollection services)
         {
             services.RegisterEmisBaseServices();
+
             services.RegisterEmisAppointmentsServices();
-            services.RegisterEmisPrescriptionsServices();
-            services.RegisterEmisPatientRecordServices();
             services.RegisterEmisDemographicsServices();
-            services.RegisterEmisPfsSessionServices();
             services.RegisterEmisLinkedAccountsServices();
             services.RegisterEmisPatientMessagesServices();
+            services.RegisterEmisPatientRecordServices();
+            services.RegisterEmisPfsSessionServices();
+            services.RegisterEmisPrescriptionsServices();
+
+            return services;
+        }
+
+        public static IServiceCollection RegisterEmisCidServices(this IServiceCollection services)
+        {
+            services.RegisterEmisBaseServices();
+
+            services.RegisterEmisCidSessionServices();
+            services.RegisterEmisIm1ConnectionServices();
+            services.RegisterEmisLinkageServices();
 
             return services;
         }
@@ -35,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
             services.AddSingleton<IGpSystem, EmisGpSystem>();
             services.AddSingleton<IEmisClient, EmisClient>();
-            
+
             services.AddHttpClient<EmisHttpClient>()
                 .ConfigurePrimaryHttpMessageHandler<EmisHttpClientHandler>()
                 .AddHttpMessageHandler<HttpTimeoutHandler<EmisHttpRequestIdentifier>>()
@@ -44,16 +56,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             services.AddTransient<IEmisEnumMapper, EmisEnumMapper>();
 
             services.AddTransient<EmisTokenValidationService>();
-
-            return services;
-        }
-
-        public static IServiceCollection RegisterEmisCidServices(this IServiceCollection services)
-        {
-            services.RegisterEmisBaseServices();
-            services.RegisterEmisIm1ConnectionServices();
-            services.RegisterEmisLinkageServices();
-            services.RegisterEmisCidSessionServices();
 
             return services;
         }

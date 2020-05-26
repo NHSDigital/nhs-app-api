@@ -5,5 +5,7 @@ namespace NHSOnline.Backend.GpSystems.Session
         T Visit(SessionExtendResult.Success result);
 
         T Visit(SessionExtendResult.BadGateway result);
+
+        T Visit(SessionExtendResult.InternalServerError result);
     }
 }

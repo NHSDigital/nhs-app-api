@@ -19,13 +19,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         public static IServiceCollection RegisterTppPfsServices(this IServiceCollection services)
         {
             services.RegisterBaseServices();
-            services.RegisterTppPrescriptionsServices();
+
             services.RegisterTppAppointmentsServices();
             services.RegisterTppDemographicsServices();
-            services.RegisterTppPatientRecordServices();
-            services.RegisterTppPatientPracticeMessagingServices();
-            services.RegisterTppSessionServices();
             services.RegisterTppLinkedAccountsServices();
+            services.RegisterTppPatientPracticeMessagingServices();
+            services.RegisterTppPatientRecordServices();
+            services.RegisterTppPrescriptionsServices();
+            services.RegisterTppSessionServices();
 
             return services;
         }
@@ -33,8 +34,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         public static IServiceCollection RegisterTppCidServices(this IServiceCollection services)
         {
             services.RegisterBaseServices();
-            services.RegisterTppLinkageServices();
             services.RegisterTppIm1ConnectionServices();
+            services.RegisterTppLinkageServices();
 
             return services;
         }

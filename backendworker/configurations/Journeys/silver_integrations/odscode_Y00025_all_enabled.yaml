@@ -1,0 +1,21 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  odsCode: "Y00025"
+journeys:
+  silverIntegrations:
+    carePlans:
+      - pkb
+    consultations:
+      - pkb
+    healthTrackers:
+      - pkb
+    libraries:
+      - pkb
+    medicines:
+      - pkb
+    messages:
+      - pkb
+      - testSilverThirdPartyProvider
+    secondaryAppointments:
+      - ers
+      - pkb

@@ -15,17 +15,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         public static IServiceCollection RegisterMicrotestPfsServices(this IServiceCollection services)
         {
             services.RegisterMicrotestBaseServices();
+
             services.RegisterMicrotestAppointmentsServices();
-            services.RegisterMicrotestSessionServices();
             services.RegisterMicrotestDemographicsServices();
             services.RegisterMicrotestPatientRecordServices();
             services.RegisterMicrotestPrescriptionsServices();
+            services.RegisterMicrotestSessionServices();
+
             return services;
         }
 
         public static IServiceCollection RegisterMicrotestCidServices(this IServiceCollection services)
         {
             services.RegisterMicrotestBaseServices();
+
             services.RegisterMicrotestIm1ConnectionServices();
             services.RegisterMicrotestLinkageServices();
 

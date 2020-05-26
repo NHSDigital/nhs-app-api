@@ -21,5 +21,13 @@ namespace NHSOnline.Backend.GpSystems.Session
                 return visitor.Visit(this);
             }
         }
+
+        public class InternalServerError : SessionExtendResult
+        {
+            public override T Accept<T>(ISessionExtendResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

@@ -41,5 +41,13 @@ namespace NHSOnline.Backend.GpSystems.Session
                 return visitor.Visit(this);
             }
         }
+
+        public class InternalServerError : SessionLogoffResult
+        {
+            public override T Accept<T>(ISessionLogoffResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

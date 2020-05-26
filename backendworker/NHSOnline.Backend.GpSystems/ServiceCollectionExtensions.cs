@@ -3,6 +3,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Im1Connection;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.GpSystems.Suppliers.Fake;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
@@ -15,7 +16,7 @@ namespace NHSOnline.Backend.GpSystems
         public static IServiceCollection RegisterPfsGpSystemsServices(this IServiceCollection services, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
         {
             services.RegisterBaseGpSystemsServices();
-            
+
             if (enableGpSupplierConfiguration.EnableEmis)
             {
                 services.RegisterEmisPfsServices();
@@ -30,19 +31,24 @@ namespace NHSOnline.Backend.GpSystems
             {
                 services.RegisterVisionPfsServices();
             }
-            
+
             if (enableGpSupplierConfiguration.EnableMicrotest)
             {
                 services.RegisterMicrotestPfsServices();
             }
 
+            if (enableGpSupplierConfiguration.EnableFake)
+            {
+                services.RegisterFakePfsServices();
+            }
+
             return services;
         }
-        
+
         public static IServiceCollection RegisterCidGpSystemsServices(this IServiceCollection services, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
         {
             services.RegisterBaseGpSystemsServices();
-            
+
             if (enableGpSupplierConfiguration.EnableEmis)
             {
                 services.RegisterEmisCidServices();
@@ -57,10 +63,15 @@ namespace NHSOnline.Backend.GpSystems
             {
                 services.RegisterVisionCidServices();
             }
-            
+
             if (enableGpSupplierConfiguration.EnableMicrotest)
             {
                 services.RegisterMicrotestCidServices();
+            }
+
+            if (enableGpSupplierConfiguration.EnableFake)
+            {
+                services.RegisterFakeCidServices();
             }
 
             return services;

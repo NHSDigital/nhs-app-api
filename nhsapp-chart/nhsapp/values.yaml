@@ -63,6 +63,8 @@ emisProtocol: https
 emisIPTrust: "13.73.180.243/32"
 emisApplicationID: "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7"
 
+fakeGpSystemEnabled: false
+
 organDonationIPTrust: "13.73.176.25/32"
 organDonationEnabled: false
 organDonationProtocol: https
