@@ -10,7 +10,7 @@ paths:
         - nhsLoginBearerAuth: []
       tags:
         - user-info
-      summary: Stores the current users info 
+      summary: Stores the current users info
       description: Using the access token, will store the current users info
       responses:
         "201":
@@ -26,7 +26,7 @@ paths:
         - nhsLoginBearerAuth: []
       tags:
         - user-info
-      summary: Gets the current users info 
+      summary: Gets the current users info
       description: Finds the user info, based on the access token
       responses:
         "200":
@@ -47,7 +47,7 @@ paths:
     get:
       tags:
         - user-info
-      summary: Gets user info based on NHS Number or ODS Code 
+      summary: Gets user info based on NHS Number or ODS Code
       description: Finds the user info, based on the parameters. Either nhsNumber or odsCode must be provided
       parameters:
         - in: query
@@ -95,6 +95,8 @@ paths:
       responses:
         "204":
           description: Successful operation. User Research preference updated.
+        "400":
+          $ref: '#/components/responses/BadRequest'
         "401":
           $ref: '#/components/responses/UnauthorizedErrorAccessToken'
         "500":

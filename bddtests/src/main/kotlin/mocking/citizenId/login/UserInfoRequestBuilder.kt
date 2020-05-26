@@ -32,6 +32,7 @@ class UserInfoRequestBuilder(
                 GivenName = patient.name.firstName,
                 FamilyName = patient.name.surname,
                 Subject = patient.subject,
+                Email = patient.contactDetails.emailAddress,
                 IdentityProofingLevel = patient.identityProofingLevel.UserInfoValue
         )
 

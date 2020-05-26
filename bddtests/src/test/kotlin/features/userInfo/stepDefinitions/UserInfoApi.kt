@@ -4,13 +4,22 @@ import net.serenitybdd.core.Serenity
 import utils.SerenityHelpers
 import utils.set
 import worker.WorkerClient
+import worker.models.userInfo.UserResearchPreferenceRequest
 
 class UserInfoApi {
     companion object {
+
         fun postUserInfoWithGivenToken(authToken: String?) {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .userInfo.postUserInfo(authToken)
+            SerenityHelpers.setHttpResponse(response)
+        }
+
+        fun postUserResearch(authToken: String?, preference: String) {
+            val response = Serenity
+                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .userInfo.postUserResearchPreference(authToken, UserResearchPreferenceRequest(preference))
             SerenityHelpers.setHttpResponse(response)
         }
 

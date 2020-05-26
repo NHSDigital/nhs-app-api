@@ -4,7 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.sharedSteps.InvalidAccessTokenTester
-import mongodb.MongoDBConnection
 import org.junit.Assert
 import utils.SerenityHelpers
 import utils.getOrFail
@@ -23,11 +22,6 @@ class UserInfoGetStepDefinitionsBackend {
     fun iAmAnApiUserWithoutStoredDetailsWishingToGetMyDetails() {
         val factory = UserInfoFactory()
         factory.setUpUser()
-    }
-
-    @Given ("^the user info repository has been emptied$")
-    fun theUserInfoRepositoryHasBeenEmptied(){
-        MongoDBConnection.UserInfoCollection.clearCache()
     }
 
     @When("^I get user info details from the user info endpoint$")

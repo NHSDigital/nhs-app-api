@@ -30,5 +30,7 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
 
         [JsonProperty("identity_proofing_level")]
         public string IdentityProofingLevel { get; set; }
+
+        public string Email { get; set; }
     }
 }

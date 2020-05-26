@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing.UnitTestsSupport;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.PfsApi.Areas.Session.Models;
 using NHSOnline.Backend.PfsApi.CitizenId;
@@ -16,7 +17,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
-using NHSOnline.Backend.PfsApi.UnitTests.Audit;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session

@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing.UnitTestsSupport;
 using NHSOnline.Backend.PfsApi.Areas.Session;
 using NHSOnline.Backend.GpSystems.SessionManager;
-using NHSOnline.Backend.PfsApi.UnitTests.Audit;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Session;
 

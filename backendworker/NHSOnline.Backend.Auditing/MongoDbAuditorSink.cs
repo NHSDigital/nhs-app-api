@@ -7,37 +7,29 @@ using NHSOnline.Backend.Support.Repository;
 
 namespace NHSOnline.Backend.Auditing
 {
-    public class MongoDbAuditorSink : IAuditSink
+    public class MongoDbAuditorSink : MongoRepository<MongoDbAuditSinkConfiguration, AuditRecord>, IAuditSink
     {
-        private readonly IApiMongoClient<MongoDbAuditSinkConfiguration> _client;
         private readonly ILogger<MongoDbAuditorSink> _logger;
-        private readonly string _databaseName;
-        private readonly string _collectionName;
 
-        public MongoDbAuditorSink(IApiMongoClient<MongoDbAuditSinkConfiguration> client,
+        public MongoDbAuditorSink(
+            IApiMongoClient<MongoDbAuditSinkConfiguration> client,
             MongoDbAuditSinkConfiguration mongoConfiguration,
-            ILogger<MongoDbAuditorSink> logger)
+            ILogger<MongoDbAuditorSink> logger
+        ) : base(client, mongoConfiguration)
         {
-            _client = client;
             _logger = logger;
-            
-            _databaseName = mongoConfiguration.DatabaseName;
-            _collectionName = mongoConfiguration.CollectionName;
         }
-        
+
         public async Task WriteAudit(AuditRecord auditRecord)
         {
             _logger.LogEnter();
 
             using (_logger.WithTimer("Add audit entry to MongoDB"))
             {
-                await GetCollection().InsertOneAsync(auditRecord);
+                await InsertOne(auditRecord);
             }
-            
+
             _logger.LogExit();
         }
-        
-        private IMongoCollection<AuditRecord> GetCollection()
-            => _client.GetDatabase(_databaseName).GetCollection<AuditRecord>(_collectionName);
     }
 }

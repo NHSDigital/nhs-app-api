@@ -15,6 +15,6 @@ namespace NHSOnline.Backend.Support
         OrganDonation = 7,
         UserInfo = 8,
         OnlineConsultations = 9,
-        OLCStubs = 10
+        Qualtrics = 10
     }
 }

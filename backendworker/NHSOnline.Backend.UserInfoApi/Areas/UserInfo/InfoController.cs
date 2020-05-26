@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.AspNet;
 using NHSOnline.Backend.Auth.AspNet.ApiKey;
 using NHSOnline.Backend.Auth.CitizenId;
@@ -12,28 +13,35 @@ using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
+using NHSOnline.Backend.UserInfoApi.Areas.UserResearch;
+using NHSOnline.Backend.UserInfoApi.Areas.UserResearch.Models;
 
 namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
 {
     public class InfoController : Controller
     {
         private readonly IInfoService _infoService;
+        private readonly IUserResearchService _userResearchService;
         private readonly ICitizenIdService _citizenIdService;
         private readonly IMapper<UserProfile, InfoUserProfile> _userProfileMapper;
         private readonly ILogger<InfoController> _logger;
+        private readonly IAuditor _auditor;
 
         public InfoController
         (
             IInfoService infoService,
+            IUserResearchService userResearchService,
             ICitizenIdService citizenIdService,
             IMapper<UserProfile, InfoUserProfile> userProfileMapper,
-            ILogger<InfoController> logger
-        )
+            ILogger<InfoController> logger,
+            IAuditor auditor)
         {
             _infoService = infoService;
+            _userResearchService = userResearchService;
             _citizenIdService = citizenIdService;
             _userProfileMapper = userProfileMapper;
             _logger = logger;
+            _auditor = auditor;
         }
 
         [HttpPost]
@@ -76,11 +84,8 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             try
             {
                 _logger.LogEnter();
-
                 var accessToken = HttpContext.GetAccessToken(_logger);
-
                 var result = await _infoService.GetInfo(accessToken);
-
                 return result.Accept(new GetMeInfoResultVisitor());
             }
             catch (Exception e)
@@ -120,6 +125,47 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo
             catch (Exception e)
             {
                 _logger.LogError($"Failed to get user info with exception: {e}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/me/info/userresearch")]
+        public async Task<IActionResult> PostUserResearchPreference([FromBody] UserResearchRequest userResearchRequest)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                if (!ModelState.IsValid)
+                {
+                    return new BadRequestObjectResult(ModelState);
+                }
+
+                if (userResearchRequest.Preference == UserResearchPreference.OptOut)
+                {
+                    return new NoContentResult();
+                }
+
+                var accessToken = HttpContext.GetAccessToken(_logger);
+                var userProfile = await GetUserProfile(accessToken);
+                var result = await _auditor.Audit()
+                    .AccessToken(accessToken)
+                    .NhsNumber(userProfile.NhsNumber)
+                    .Supplier(Supplier.Qualtrics)
+                    .Operation(AuditingOperations.UserResearchPreferencePost)
+                    .Details("Attempting to create Session")
+                    .Execute(async () => await _userResearchService.Post(userProfile, accessToken));
+
+                return result.Accept(new PostUserResearchResultVisitor());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to patch info with exception: {e}");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally

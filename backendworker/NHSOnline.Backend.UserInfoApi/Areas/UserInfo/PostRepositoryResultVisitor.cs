@@ -1,4 +1,3 @@
-using System;
 using NHSOnline.Backend.Support.Repository;
 using NHSOnline.Backend.UserInfoApi.Repository;
 

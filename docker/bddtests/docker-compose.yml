@@ -21,6 +21,8 @@ secrets:
     file: "./docker/stubbed/certs/TestCert.pfx"
   ndop_cert_password:
     file: "./docker/stubbed/certs/TestCert.password"
+  qualtrics_api_key:
+    file: "./docker/bddtests/secrets/qualtrics_api_key"
 
 services:
 

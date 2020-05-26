@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Auditing
 
         public MongoDbAuditSinkConfiguration(IConfiguration configuration, ILogger<MongoDbAuditSinkConfiguration> logger)
         {
-            ConnectionString = configuration.GetOrThrow("DEVICES_MONGO_CONNECTION_STRING", logger);
+            ConnectionString = configuration.GetOrThrow("AUDIT_MONGO_CONNECTION_STRING", logger);
             DatabaseName = configuration.GetOrThrow("AUDIT_MONGO_DATABASE_NAME", logger);
             CollectionName = configuration.GetOrThrow("AUDIT_MONGO_DATABASE_COLLECTION", logger);
         }

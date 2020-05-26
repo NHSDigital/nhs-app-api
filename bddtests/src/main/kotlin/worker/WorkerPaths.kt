@@ -22,6 +22,7 @@ object WorkerPaths {
     const val userDevices = "/v1/api/users/devices"
     const val userMessages = "/v1/api/users/$userPlaceholder/messages"
     const val userMeInfo = "/v1/api/users/me/info"
+    const val userMeUserResearch= "/v1/api/users/me/info/userResearch"
     const val userInfo = "/v1/api/users/info"
     const val configuration = "/v1/configuration"
     const val configurationV2 = "/v2/configuration"

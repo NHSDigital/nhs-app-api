@@ -80,5 +80,6 @@ namespace NHSOnline.Backend.Auditing
         public const string CreateAssertedLoginIdentityToken = "AssertedLoginIdentity_CreateJwt";
         public const string PostRefreshPatientAccessTokenRequest = "PatientRefreshAccessToken_Request";
         public const string PostRefreshPatientAccessTokenResponse = "PatientRefreshAccessToken_Response";
+        public const string UserResearchPreferencePost = "UserResearchPreference_Post";
     }
 }

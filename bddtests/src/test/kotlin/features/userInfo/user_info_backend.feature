@@ -7,7 +7,7 @@ Feature: User Info Backend
     And I have logged in and have a valid session cookie
     When I post to the user info endpoint
     Then I receive a "Created" success code
-    And a user info record is created
+    And a user info record has been created
     And the user info record will have my NHS Login ID
     And the user info record will have my ODS Code
     And the user info record will have my NHS Number
@@ -17,7 +17,7 @@ Feature: User Info Backend
     And I have logged in and have a valid session cookie
     When I post to the user info endpoint
     Then I receive a "Created" success code
-    And a user info record is created
+    And a user info record has been created
     And the user info record will have my NHS Login ID
     And the user info record will have my ODS Code
     And the user info record will not have NHS Number

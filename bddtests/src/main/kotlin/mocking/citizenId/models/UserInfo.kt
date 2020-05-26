@@ -25,5 +25,8 @@ data class UserInfo (
         var Birthdate: String,
 
         @SerializedName("identity_proofing_level")
-        var IdentityProofingLevel: String?
+        var IdentityProofingLevel: String?,
+
+        @SerializedName("email")
+        val Email: String
 )

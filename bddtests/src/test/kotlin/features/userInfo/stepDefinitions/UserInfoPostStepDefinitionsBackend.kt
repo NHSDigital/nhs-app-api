@@ -54,8 +54,8 @@ class UserInfoPostStepDefinitionsBackend {
         }
     }
 
-    @Then("^a user info record is created$")
-    fun aUserInfoRecordIsCreated() {
+    @Then("^a user info record has been created$")
+    fun aUserInfoRecordHasBeenCreated() {
         MongoDBConnection.UserInfoCollection.assertNumberOfDocuments(1)
         val userInfo = MongoDBConnection.UserInfoCollection
                 .getValues<MongoRepositoryUserAndInfo>(MongoRepositoryUserAndInfo::class.java)
@@ -70,10 +70,10 @@ class UserInfoPostStepDefinitionsBackend {
         val patient = SerenityHelpers.getPatient()
         val userAndInfoRecord = UserInfoSerenityHelpers.MONGO_USER_INFO_RECORD.getOrFail<MongoRepositoryUserAndInfo>()
 
-        val current = getPatientValue(patient, detail)
-        val expected = getRecordValue(userAndInfoRecord, detail)
+        val expected = getExpectedValue(patient, detail)
+        val recorded = getRecordValue(userAndInfoRecord, detail)
 
-        assertEquals("$detail.", expected, current)
+        assertEquals("$detail.", expected, recorded)
     }
 
     @Then("^the user info record will not have (.*)$")
@@ -101,7 +101,7 @@ class UserInfoPostStepDefinitionsBackend {
         }
     }
 
-    private fun getPatientValue(patient: Patient, detail: String): String {
+    private fun getExpectedValue(patient: Patient, detail: String): String {
         return when (detail) {
             RecordDetail.NhsLoginId.text -> patient.subject
             RecordDetail.OdsCode.text -> patient.odsCode

@@ -245,7 +245,6 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         [TestMethod]
         [DataRow(Supplier.Unknown, "Unknown")]
         [DataRow(Supplier.Emis, "Emis")]
-        [DataRow(Supplier.Microsoft, "Microsoft")]
         public async Task Execute_Supplier_AuditsSupplier(Supplier supplier, string expectedSupplier)
         {
             var mockAuditSink = new Mock<IAuditSink>();
@@ -270,7 +269,6 @@ namespace NHSOnline.Backend.Auditing.UnitTests
         [TestMethod]
         [DataRow(Supplier.Unknown, "Unknown")]
         [DataRow(Supplier.Emis, "Emis")]
-        [DataRow(Supplier.Microsoft, "Microsoft")]
         public async Task Execute_StartWithOperation_AuditsSupplierFromUserSessionInScope(Supplier supplier, string expectedSupplier)
         {
             var mockAuditSink = new Mock<IAuditSink>();

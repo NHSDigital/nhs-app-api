@@ -1,12 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.Audit
+namespace NHSOnline.Backend.Auditing.UnitTestsSupport
 {
-    internal sealed class AuditBuilderStub: IAuditBuilder, IAuditBuilderSupplier, IAuditBuilderDetails, IAuditBuilderExecute
+    public sealed class AuditBuilderStub: IAuditBuilder, IAuditBuilderSupplier, IAuditBuilderDetails, IAuditBuilderExecute
     {
         public string AccessTokenString { get; set; }
         public AccessToken AccessToken { get; set; }
@@ -14,7 +15,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Audit
         public Supplier Supplier { get; set; }
         public string Operation { get; set; }
         public string Details { get; set; }
-        public object[] Parameters { get; set; }
+        public List<object> Parameters { get; set; }
         public string ResponseDetails { get; set; }
 
         IAuditBuilderNhsNumber IAuditBuilderAccessToken.AccessToken(string accessToken)
@@ -56,7 +57,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Audit
         IAuditBuilderExecute IAuditBuilderDetails.Details(string details, params object[] parameters)
         {
             Details = details;
-            Parameters = parameters;
+            Parameters = parameters.ToList();
             return this;
         }
 

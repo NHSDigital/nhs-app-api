@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Auditing;
 using NHSOnline.Backend.Auth.CitizenId;
 using NHSOnline.Backend.Auth.CitizenId.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo;
 using NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Models;
+using NHSOnline.Backend.UserInfoApi.Areas.UserResearch;
 using NHSOnline.Backend.UserInfoApi.Repository;
 using UnitTestHelper;
 
@@ -29,9 +31,11 @@ namespace NHSOnline.Backend.UserInfoApi.UnitTests.Areas.UserInfo
 
             _systemUnderTest = new InfoController(
                 _mockInfoService.Object,
+                new Mock<IUserResearchService>().Object,
                 new Mock<ICitizenIdService>().Object,
                 new Mock<IMapper<UserProfile, InfoUserProfile>>().Object,
-                new Mock<ILogger<InfoController>>().Object)
+                new Mock<ILogger<InfoController>>().Object,
+                new Mock<IAuditor>().Object)
             {
                 ControllerContext = new ControllerContext
                 {

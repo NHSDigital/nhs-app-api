@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using NHSOnline.Backend.Support.Repository;
 using NHSOnline.Backend.UserInfoApi.Repository;
 

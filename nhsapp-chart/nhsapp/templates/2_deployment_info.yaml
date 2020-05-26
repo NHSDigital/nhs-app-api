@@ -76,6 +76,19 @@ spec:
             secretKeyRef:
               name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
               key: key
+        - name: AUDIT_MONGO_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdb-mongodb-connection-string-{{ .Chart.AppVersion }}
+              key: key
+        - name: AUDIT_MONGO_DATABASE_NAME
+        {{- if $.Values.cosmosDBName }}
+          value: {{ $.Values.cosmosDBName }}-mongo
+        {{- else }}
+          value: {{ $.Values.global.environment }}-mongo
+        {{- end }}
+        - name: AUDIT_MONGO_DATABASE_COLLECTION
+          value: {{ $.Values.info.mongoDatabaseInfoAuditCollection }}
         - name: USERINFO_MONGO_DATABASE_NAME
         {{- if $.Values.cosmosDBName }}
           value: {{ $.Values.cosmosDBName }}-mongo
@@ -102,6 +115,17 @@ spec:
         {{- end }}
         - name: CITIZEN_ID_CLIENT_ID
           value: "{{ $.Values.cidClientID }}"
+        {{- if (and ($.Values.environmentStubbed) ($.Values.environmentStubbed.emisStubbed)) }}
+        - name: QUALTRICS_BASE_URL
+          value: "https://nhsapp-wiremock-{{ .Chart.AppVersion | replace "." "-" }}.{{ $.Values.global.environment }}.svc.cluster.local:{{ $.Values.sidecar_proxy.containerPort }}/qualtrics/"
+        {{- else }}
+        - name: QUALTRICS_BASE_URL
+          value: "{{ $.Values.qualtricsBaseUrl }}"
+        {{- end }}
+        - name: QUALTRICS_DIRECTORY_ID
+          value: "{{ $.Values.qualtricsDirectoryId }}"
+        - name: QUALTRICS_MAILING_LIST_ID
+          value: "{{ $.Values.qualtricsMailingListId }}"
         - name: NHSLOGIN_KEY_PATH
           value: "/secrets/nhslogin-key/nhslogin.pem"
         - name: NHSLOGIN_KEY_PASSWORD
@@ -113,6 +137,11 @@ spec:
           valueFrom:
             secretKeyRef:
               name: nhsapp-api-key-{{ .Chart.AppVersion }}
+              key: apikey
+        - name: QUALTRICS_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: qualtrics-api-key-{{ .Chart.AppVersion }}
               key: apikey
         volumeMounts:
         - name: nhslogin-key

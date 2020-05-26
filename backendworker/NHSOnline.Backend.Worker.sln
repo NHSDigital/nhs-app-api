@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\citizenId_v2.yaml = contracts\citizenId_v2.yaml
 		contracts\nhsonline.appointments.yaml = contracts\nhsonline.appointments.yaml
 		contracts\nhsonline.assertedloginidentity.yaml = contracts\nhsonline.assertedloginidentity.yaml
+		contracts\nhsonline.authorization.yaml = contracts\nhsonline.authorization.yaml
 		contracts\nhsonline.cdss_v2.yaml = contracts\nhsonline.cdss_v2.yaml
 		contracts\nhsonline.configuration.yaml = contracts\nhsonline.configuration.yaml
 		contracts\nhsonline.configuration_v2.yaml = contracts\nhsonline.configuration_v2.yaml
@@ -40,11 +41,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.yaml = contracts\nhsonline.yaml
 		contracts\ReadMe.md = contracts\ReadMe.md
 		contracts\servicejourneyrules.yaml = contracts\servicejourneyrules.yaml
-		contracts\nhsonline.authorization.yaml = contracts\nhsonline.authorization.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F3286FE-0E62-411C-A0A2-4C9AEFE54EC1}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
 		ProductionCode.ruleset = ProductionCode.ruleset
 		TestCode.ruleset = TestCode.ruleset
 	EndProjectSection
@@ -110,6 +111,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Metrics", "NHSOnline.Backend.Metrics\NHSOnline.Backend.Metrics.csproj", "{3126A4FE-A9FA-4A7C-BEB3-294F02D42B43}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Metrics.UnitTests", "NHSOnline.Backend.Metrics.UnitTests\NHSOnline.Backend.Metrics.UnitTests.csproj", "{BE1CBCA0-F28B-4423-9C27-7B805EAC3875}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Auditing.UnitTestsSupport", "NHSOnline.Backend.Auditing.UnitTestsSupport\NHSOnline.Backend.Auditing.UnitTestsSupport.csproj", "{F552102A-DFE4-42AC-8FDD-48E19F935C81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -237,6 +240,10 @@ Global
 		{BE1CBCA0-F28B-4423-9C27-7B805EAC3875}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE1CBCA0-F28B-4423-9C27-7B805EAC3875}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE1CBCA0-F28B-4423-9C27-7B805EAC3875}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F552102A-DFE4-42AC-8FDD-48E19F935C81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F552102A-DFE4-42AC-8FDD-48E19F935C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F552102A-DFE4-42AC-8FDD-48E19F935C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F552102A-DFE4-42AC-8FDD-48E19F935C81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -78,7 +78,6 @@ Feature: Service Journey Rules Backend
     Then I receive an "Ok" success code
     And the service journey rules response will have medical record version set to 2
 
-  @target
   Scenario: A user can see the configuration for silver service integrations in SJR
     Given I am a user where the journey configurations are:
       | Journey                                    | Value                              |

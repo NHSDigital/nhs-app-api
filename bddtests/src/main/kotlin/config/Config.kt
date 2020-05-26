@@ -60,6 +60,10 @@ class Config private constructor() {
 
     val nhsAppApiKey:String
 
+    val qualtricsBaseUrl:String
+    val qualtricsDirectoryId:String
+    val qualtricsMailingList:String
+
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
         wiremockUrl = envOrDefault("wiremockUrl", "http://stubs.local.bitraft.io:8080")
@@ -127,6 +131,10 @@ class Config private constructor() {
         nhsAppApiKey = envOrDefault("NHSAPP_API_KEY", "testnhssearchservicekey")
 
         accessibilityOutputFolder = envOrDefault("ACCESSIBILITY_OUTPUT_FOLDER", "accessibilityoutput")
+
+        qualtricsBaseUrl = envOrDefault("QUALTRICS_BASE_URL", "http://stubs.local.bitraft.io:8080/qualtrics/")
+        qualtricsDirectoryId = envOrDefault("QUALTRICS_DIRECTORY_ID", "MockQualtricsDirectoryId")
+        qualtricsMailingList = envOrDefault("QUALTRICS_MAILING_LIST_ID","MockQualtricsMailingListId")
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {

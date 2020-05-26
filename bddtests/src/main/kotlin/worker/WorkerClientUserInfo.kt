@@ -5,11 +5,20 @@ import config.Config
 import org.apache.http.HttpResponse
 import org.apache.http.client.utils.URIBuilder
 import worker.models.userInfo.UserAndInfoResponse
+import worker.models.userInfo.UserResearchPreferenceRequest
 
 class WorkerClientUserInfo(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
     fun postUserInfo(authToken: String?): HttpResponse? {
         val httpPost = RequestBuilder.post(config.apiBackendUrl + WorkerPaths.userMeInfo)
+                .addAuthorizationIfNotNull(authToken)
+
+        return httpPost.send(sender)
+    }
+
+    fun postUserResearchPreference(authToken: String?, preference: UserResearchPreferenceRequest): HttpResponse? {
+        val httpPost = RequestBuilder.post(config.apiBackendUrl + WorkerPaths.userMeUserResearch)
+                .addBody(preference, gson)
                 .addAuthorizationIfNotNull(authToken)
 
         return httpPost.send(sender)

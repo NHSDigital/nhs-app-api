@@ -18,6 +18,7 @@ namespace NHSOnline.Backend.Auth.CitizenId.Models
         public string GivenName => _userInfo.GivenName;
         public string FamilyName => _userInfo.FamilyName;
         public string IdentityProofingLevel => _userInfo.IdentityProofingLevel;
+        public string Email => _userInfo.Email;
 
         public string AccessToken { get; }
         public string RefreshToken { get; }

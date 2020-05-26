@@ -43,4 +43,8 @@ services:
       - ./docker/stubbed/env/tpp_connectivity.env
       - ./docker/stubbed/env/vision_connectivity.env
 
+  userinfo.local.bitraft.io:
+    env_file:
+      - ./docker/stubbed/env/qualtrics_connectivity.env
+
   stubs.local.bitraft.io:

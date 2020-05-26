@@ -20,12 +20,11 @@ namespace NHSOnline.Backend.UserInfoApi
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<CitizenIdHttpRequestIdentifier>();
+            services.AddTransient<IMapper<UserProfile, InfoUserProfile>, InfoUserProfileMapper>();
 
             services.AddHttpClient<CitizenIdHttpClient>()
                 .AddHttpMessageHandler<HttpTimeoutHandler<CitizenIdHttpRequestIdentifier>>()
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<CitizenIdHttpRequestIdentifier>>();
-
-            services.AddTransient<IMapper<UserProfile, InfoUserProfile>, InfoUserProfileMapper>();
 
             services.AddScoped<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();

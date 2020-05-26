@@ -28,7 +28,8 @@ namespace NHSOnline.Backend.UserInfoApi.Areas.UserInfo.Mappers
             return new InfoUserProfile
             {
                 NhsNumber = proofLevel == ProofLevel.P9 ? source.NhsNumber : null,
-                OdsCode = source.OdsCode
+                OdsCode = source.OdsCode,
+                Email = source.Email
             };
         }
     }

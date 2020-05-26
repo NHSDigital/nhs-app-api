@@ -5480,6 +5480,8 @@
         responses: 
           204: 
             description: "Successful operation. User Research preference updated."
+          400: 
+            description: "Bad request. Supplied request is invalid."
           401: 
             description: "Access token is missing or invalid."
           500: 

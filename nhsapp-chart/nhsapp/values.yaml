@@ -551,6 +551,8 @@ info:
   environmentVariables:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Production"
+    - name: AUDIT_SINK_TYPE
+      value: MONGO
 
 global:
   environment: default

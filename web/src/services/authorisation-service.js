@@ -83,7 +83,7 @@ class AuthorisationService {
     const myState = this.newState(this.cryptoGenerateRandom);
     const redirectUri = this.getRedirectUri(isNativeApp);
     const request = {
-      scope: 'openid profile nhs_app_credentials gp_integration_credentials profile_extended',
+      scope: 'openid profile email nhs_app_credentials gp_integration_credentials profile_extended',
       clientId: this.cidClientId,
       redirectUri,
       responseType: 'code',
